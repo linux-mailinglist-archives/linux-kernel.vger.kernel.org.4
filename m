@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039E46DBA73
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379546DBA74
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDHLgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 07:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S230171AbjDHLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 07:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDHLg3 (ORCPT
+        with ESMTP id S230096AbjDHLgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 07:36:29 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D91AF3C
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:36:28 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id xi5so2291393ejb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 04:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680953787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6KMCVN4L9ldklrxsAVU+YsdQxCGvFHVbNDAEiVGPna8=;
-        b=bM8PxqxodCpdHWxRqzqVx0Cgn3TYN3yuyV7ntN6AyozvP5C6fZxPV//yW/PQZGufix
-         3bQ3dAkqukP444e1E1NvWps5tw8nZM35cW0mZCcRnT/eTOamXjchwMWIxbJdUVd1TSzp
-         WCHojVUaIZd5Moav5opWP6rDgbROlmEKDPRByOEk9joJFq2m/NMzyL4xsSrMqbIi3KNS
-         rVJ+qLuZJL+Xh5lIRsF0yhYpQG3OGvtjTQpeUPkBvOIgLl5KWsFwrBfrCn3Fnb24sw24
-         r7zdvV87LMmkpOq1XpW/CpoFHoylIONBitJbZFY1CCjOF5wD3eNTXtUP0UMAGZ2/Bniw
-         PqDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680953787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KMCVN4L9ldklrxsAVU+YsdQxCGvFHVbNDAEiVGPna8=;
-        b=aNmquV1TGBUTFPhnY+4xlCmSNsqPocCKhfz0WwhMYxx4IxGa+TUp35TY31x+rVzOEj
-         /ElKFaxD7UHDoPi7/E1VW/NNbPcKcOop+wuJLB8q2DQa0H8at9RC3ZplsausAEjBRNBC
-         noSZZAcLLnILpP32s5LdlAW2SRFDb7VlIVsiD3gRHBb/0A9K8mi6Sy0L7t6zzFdilh8Q
-         QVmNrLi61AMpkxG3dh9buFgpYKXdTIwCtrmvE6s8pbXGb1uhFwSrZUZocngfRN2QDSc6
-         lOjZzMOkYsWBZ7UgEGpSnlTvZi0nS9atZ2ygTnrPs9CFwMTpJwqHrYFneRPnVdzMJR/f
-         NhNQ==
-X-Gm-Message-State: AAQBX9enV5x3ZDb0wOgdWDaMOBpO6KbCPEySKZcWTp0Q/b6IYtzPfTpW
-        T9qAXzFD9tUUEtlQWCXDgKZDf4hEexR8KCxEyYQ=
-X-Google-Smtp-Source: AKy350ZjUl26qCzn/b2R5qoeTLSeScfNvPyM4mr4GcK4curXt7xM05OURsWwQqKojqOFAxaux0orWw==
-X-Received: by 2002:a17:907:2157:b0:914:4277:f3e1 with SMTP id rk23-20020a170907215700b009144277f3e1mr2016161ejb.53.1680953786790;
-        Sat, 08 Apr 2023 04:36:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4c06:aac9:100f:9d7f? ([2a02:810d:15c0:828:4c06:aac9:100f:9d7f])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090629cb00b00949173c1dcfsm3090237eje.18.2023.04.08.04.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Apr 2023 04:36:26 -0700 (PDT)
-Message-ID: <70dd6449-06d2-7182-9922-ddc3476ba472@linaro.org>
-Date:   Sat, 8 Apr 2023 13:36:25 +0200
+        Sat, 8 Apr 2023 07:36:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08472C650
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:36:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A8761015
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 11:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE407C433D2;
+        Sat,  8 Apr 2023 11:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680953801;
+        bh=4sWQWQ7rAvQiBV0KZjcJLfMpSVh8t/1nW509H8PVZ8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q5eCVM4YdR4u9Zd9ZN/81iyIWgsj7OFYpAZcpUKATtBUEHcDLJMYsnWFNySFnybOk
+         nirTCXwyHtEioB5I4NfT6KlzlDtuqihqkDNIiqhqGnY91jItMCo1cbQ8R9DEutwu9x
+         /SEBE/JmAwOLZqDiSXIktNwygWiXzpiQ7gYd3NZIuQBYTTZTzn/4ZO5OepOrwff1+x
+         HOjx3m/9p/JgmBiYsRdw0Jx8hAT9ZcjycMUkWnXsuqXCkpvv7eN/S5f1oPa2QX/18q
+         EbA4e/IMFcpiFS2RQaj6gBQLXVrkT7EWe4aXJsdjqVcSZ9O5g30+ZufJ1bM9Cc2den
+         8haKM88E6MgNw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pl6s2-006uXl-JP;
+        Sat, 08 Apr 2023 12:36:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 0/8] Add multiport support for DWC3 controllers
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>,
-        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
-References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
- <20230408014251.6cyjwuvsgu7dmz53@synopsys.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230408014251.6cyjwuvsgu7dmz53@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 08 Apr 2023 12:36:38 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 2/2] irqchip: irq-ti-sci-inta: Add direct mapped
+ interrupts
+In-Reply-To: <d9d6dc1b-cc1d-d823-8777-3a8d6d2328f7@ti.com>
+References: <20230327-irq-affinity-upstream-v2-0-1474e518f1cb@ti.com>
+ <20230327-irq-affinity-upstream-v2-2-1474e518f1cb@ti.com>
+ <87ile664i1.wl-maz@kernel.org> <d9d6dc1b-cc1d-d823-8777-3a8d6d2328f7@ti.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <c42185ee1b224fd7814b6e336a3fc3f5@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2023 03:42, Thinh Nguyen wrote:
->> Krishna Kurapati (8):
->>   dt-bindings: usb: Add bindings for multiport properties on DWC3
->>     controller
->>   usb: dwc3: core: Access XHCI address space temporarily to read port
->>     info
->>   usb: dwc3: core: Skip setting event buffers for host only controllers
->>   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->>   usb: dwc3: qcom: Add multiport controller support for qcom wrapper
->>   arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
->>   arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
->>     ports
->>   arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
->>     controller
->>
->>  .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
->>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  47 +++
->>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 ++
->>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  58 +++
->>  drivers/usb/dwc3/core.c                       | 373 ++++++++++++++----
->>  drivers/usb/dwc3/core.h                       |  71 +++-
->>  drivers/usb/dwc3/drd.c                        |  13 +-
->>  drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
->>  8 files changed, 523 insertions(+), 102 deletions(-)
->>
->> -- 
->> 2.40.0
->>
+On 2023-04-08 12:27, Raghavendra, Vignesh wrote:
+> Hi,
 > 
-> Please check if your patches and mailing client. Looks like they are
-> corrupted.
+> On 4/8/2023 4:10 PM, Marc Zyngier wrote:
+>>> +static unsigned int ti_sci_inta_direct_events_am62x[] = {
+>>> +	/* CPSW etherenti DMA events */
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4627),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4635),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4643),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4651),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4659),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4667),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4675),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4683),
+>>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 5651),
+>>> +};
+>>> +
+>>> +static struct ti_sci_inta_soc_data soc_data_am62x = {
+>>> +	.events_list = ti_sci_inta_direct_events_am62x,
+>>> +	.events_list_size = ARRAY_SIZE(ti_sci_inta_direct_events_am62x),
+>>> +};
+>> I don't think these tables belong in a driver, and they are bound to
+>> grow without any obvious limits.
+> 
+> Fair point.
+> 
+>> You have firmware tables that can express these things. Surely they 
+>> can be put to a good use.
+> 
+> By firmware tables you mean device tree?
 
-All patches look from patch-syntax and apply fine. What is exactly
-corrupted?
+That, or any other machine-specific mean. From what I get of these
+systems, they already make heavy use of some runtime firmware to get
+things configured. That side could also provide setup information.
 
-Best regards,
-Krzysztof
+I don't mind either way, as long as we don't end-up with forever
+growing in-kernel tables that are just board files in disguise.
 
+           M.
+-- 
+Jazz is not dead. It just smells funny...
