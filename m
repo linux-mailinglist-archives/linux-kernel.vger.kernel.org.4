@@ -2,147 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A153B6DBBF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BEC6DBBF3
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjDHPdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 11:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S230032AbjDHPg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjDHPdD (ORCPT
+        with ESMTP id S229557AbjDHPg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 11:33:03 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2097.outbound.protection.outlook.com [40.107.95.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7CAF38;
-        Sat,  8 Apr 2023 08:33:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KwrhbHlZPazQ/LrjUTr+44NnVFd/LKe2hICPGeJEkXZvuylDXMb39ERsIPoR87iDdhE74sELRCrUPXYir/EK+K0vnQ8MjTRNPA9xC7CBPcx7z7IppC7EomnrQfZ9ENtmF55vqZBBq+t2anOzw4LTD/u3ArUtkQSlBJch09yidKt9q50EgPpRS7OSz7/mplldjLS0sDxybNXD1G2xMNzEe+lq0JgHynBiFWL5JtAUVSB/Dspw/HwGITBTB0PLvN89eakRGiqybVHsqHdeF+yz+2ZmJYZoSZDkCb1csMcvC99dRDQ6BPzsLg1MMHf04dLe1qwUx/htOsSQz5B5ZFBxnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L6PREcIi3qWQyeAU7KUGTBxrNTEKkCkFGjHSr7W5pVE=;
- b=UPmd5gZBsZDRYXmYGcSzF1bhPiPAg9/rTQElF5tjPqA27lNROrcUWOiEE3dK8RL1xHeNM35CnYfiCjF7tYsHeMEyKBAGjCmhjUU2CAMNZghKIRWI3qwz9V/Etrqyn/alwqlIBBFQUpjl+TeiBg0vlw7S50Qvb9MqL3LTZ05q+6Hgk7MLp3UB+XPOW5HAb76xJIxTBlP2rRkZeRV6XBItYX188X47NvUAJ3CLwfJ2iMdvTLUYQE7O5IX8UFJl/A5R8z04j5jM9ZvMn8knf7mbxC3BlwBNTEKonGpnilIWWqfT3OmBqIk0XfSyLZtrNuSsRb9u+nMZVIWauBQB8YthVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 8 Apr 2023 11:36:27 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C563EBDFB;
+        Sat,  8 Apr 2023 08:36:25 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id h24so1351999plr.1;
+        Sat, 08 Apr 2023 08:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L6PREcIi3qWQyeAU7KUGTBxrNTEKkCkFGjHSr7W5pVE=;
- b=J16X4/WMN+3wBlYzoGwtwBvGTaXOGyWEpF197a6tnepGel/KZO790+WxjgazF3D0hSm/n7p05HAdYOE3zTEyCXHLeDzZW6BFBH7hG3BBqWIpEQBdjJqiRRmZGzW+tXpoO0pUG9M98J9CFl9w79fGaGuMHmehFfGHi3Mgq0KBQ+M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5422.namprd13.prod.outlook.com (2603:10b6:510:128::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Sat, 8 Apr
- 2023 15:32:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::89d1:63f2:2ed4:9169]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::89d1:63f2:2ed4:9169%5]) with mapi id 15.20.6277.036; Sat, 8 Apr 2023
- 15:32:59 +0000
-Date:   Sat, 8 Apr 2023 17:32:51 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
-        loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
-        johannes@sipsolutions.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        error27@gmail.com, kernel-janitors@vger.kernel.org,
-        vegard.nossum@oracle.com
-Subject: Re: [PATCH net] net: wwan: iosm: Fix error handling path in
- ipc_pcie_probe()
-Message-ID: <ZDGJI8Q6lWCJdEMR@corigine.com>
-References: <20230408065607.1633970-1-harshit.m.mogalapalli@oracle.com>
+        d=gmail.com; s=20210112; t=1680968185; x=1683560185;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f5t3AuDYeankzi6hnhNs+aHg6q95No4+4bEk6pENF0Y=;
+        b=C+YUX5zusn1dVa9qof4WQPQuMIHS7lI3S5bdu7dI3qOBWTFtPsktKhsJY6B8n3Sju5
+         Lz74r/IwP5He8AP/z+aBrY0l6hjJTFpncGpwf4zb4468mSV+p1Hd9LEXvEaj9RhHxfWN
+         HTVVqwdFg2U+5+n6gEvckqB6In76Yyfin1Xd8Oq2ErIz/GUHxuXn38dUWbYOdmLuAZvw
+         B8jFnVy+o9jeAi0yYZQscUtEU99bLXkrgBT4P4cnTNtdm9Lf7+3kjR7GMmGiepg4yFuq
+         uo0CVKFYtynX7K7DUjvlbJesCQOAPOs+yUl7yaNM1so8O+dSQm76mrhHIUcV0geILUQl
+         ArtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680968185; x=1683560185;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f5t3AuDYeankzi6hnhNs+aHg6q95No4+4bEk6pENF0Y=;
+        b=MbL1Kch0SBs70ze9NB+PgoJuCo8+Hq6GweAxQKOL1GehE7+CCPJm3jd77DhpLoZl63
+         8KMUPn7kTjXY7qAPrx0NGFQwsaL/NJxx+IkCqUflI216f5LQG9ZDvua6BxVxhTej/ofl
+         5vA2Y2N6EHu9JeUg/A5q5DmcsGbqJcRr8YxMyFxXmLVEqHV17UTo5kafbaCp0TalOM+q
+         UxzpGipBKykSPjoIj3ssXq4uIpztkDFa5OhHCHyDUpLsUYLdJrmCImdK7c1fmSk9Z2v7
+         cA1gUWnIAk2Ltcws5Pb5dnpcNEN10Rb0DQUUjeztDYt4vRSU6RzVzEORL+Stgs5k8kmK
+         yneQ==
+X-Gm-Message-State: AAQBX9e0HdY3LwpXEUpPrcef2WG97W1G8lIgiAr6U2pfY3NnCAMlKMki
+        IqN7JHkGwRNTeeX5kP3bUVEmdOyv0Wc=
+X-Google-Smtp-Source: AKy350ZWZhZXxy91AQ5uHFcuvy0B45VlYPZ4Vph09MaCSI++TffO9x6BpQAiYEl4ehCZB+qnUxHPFA==
+X-Received: by 2002:a17:90b:4c0a:b0:244:af8c:295e with SMTP id na10-20020a17090b4c0a00b00244af8c295emr7295429pjb.26.1680968185200;
+        Sat, 08 Apr 2023 08:36:25 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r5-20020a17090b050500b0023b3a9fa603sm6291700pjz.55.2023.04.08.08.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 08:36:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 8 Apr 2023 08:36:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 3/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+Message-ID: <e8b3489a-8386-4557-8f28-3465bd1589d0@roeck-us.net>
+References: <20230322114623.2278920-1-lakshmiy@us.ibm.com>
+ <20230322114623.2278920-4-lakshmiy@us.ibm.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408065607.1633970-1-harshit.m.mogalapalli@oracle.com>
-X-ClientProxiedBy: AS4P190CA0047.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:656::11) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 49681a8c-4688-48bd-3523-08db38468830
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2y0mO4GuYO7ofzJh2SggNYfNb1wMhAVxRvDyh0ulI6fPZrUzLzy06ePsUd8+JafRKjqB9F/raKxG0t4/WJMoB8dA4fomf8Jk5KN5ZfaEdyPz7Oe5GbAqu/bYzU4MMK9758QxfNxR9aVSjJS3VRg5FKAw8iNBiNpHb0JzO6+PtTEpvMXHq+TG9Nz5fvPDbHeD9jd9QI+owWvElGjKGcvKNHeE4B4fOFo9lSDC4TzUr+sXM8Yf6slOIzJBQBc3NYa1VEW1yfkqllk5hLIOcM4NIpH+UxjXmFBtjhCMFEPs72xFZi7PMLrzLVjLvZ2vUU7XF70GDvO0o9O+ktnJmKod/uaViku+S0SQI3axkJNfVeDGH+pUpdNc6VwMt3QtYlbUHNKnIjOIWT61SmCH61rVDbDOsDvg3gBKEsxkrDopjn7ScRRpx+hSHJZ00Wt63QgCsmBsFJiIaSgPMSfOeSJHjcXVr1caIohfi0o+4rQ6UZ8yVWDouC8A9vQP5PPCNLrp5Dpln482ORs8Lx1dB8WJH4W9d4Rl6bibMSn4SVUR5n5JylENuB+Balbx87GQZI5z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(136003)(39840400004)(396003)(451199021)(478600001)(2616005)(186003)(83380400001)(36756003)(38100700002)(86362001)(6506007)(6512007)(6486002)(6666004)(4326008)(6916009)(66476007)(8676002)(66946007)(66556008)(7416002)(8936002)(2906002)(4744005)(41300700001)(5660300002)(44832011)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N7YkBL/03Oi8r9X1GLtPMO4DpvrlW4cbjCu9zxOfZZBCqp0zTLduKntD5Tbj?=
- =?us-ascii?Q?2iCvD9yRLPxEiuifQb8fkKVSIbCoZ4+pshDzXmzXFhyV8/VPmj2hui5D6WQV?=
- =?us-ascii?Q?DU56wkg6e0+Y2JMDQfPGDjySI3Lw7DQrZwJv2uajsxsTiAcUeRYulectFYqc?=
- =?us-ascii?Q?ezmsg/k1Olv08AZptqqP3fCwZvoK1GM+oVLbjnbgvDg3jvBxg5j6T62Gz0fY?=
- =?us-ascii?Q?bk4w3OqmgKeaQi0assr7GWGYZcqbGHN1PkDHJy2R69+H+Ga5+J3xZMHkrkCT?=
- =?us-ascii?Q?Ib8mKZKdbbP9TWP40RJJqGpTu8CJy+48CRrTCENL+T75D9p9AQg6ADfFvX8a?=
- =?us-ascii?Q?JshLla6DIMvK2eOX1EZ6jgm2TRfdsbSptyIKSuyg91rkgrB82afWmDpBW18K?=
- =?us-ascii?Q?4UDc30IK2wix+LXPOzzh61v0mCtG8PT8tkm44VQSEp904Je2QtUHx2fdGlyM?=
- =?us-ascii?Q?Oqj4abjkwomQ0pDl+8E1cqT3IMG1sUUGo4DXA0CVD18y5KkwrBIduq5dTKli?=
- =?us-ascii?Q?F7gQZs01dIKoxJyNmDCbhEjBDZPhtmyIWemdOMQEzI1EK6VE5YznaXsbZQLV?=
- =?us-ascii?Q?PBX7luDXMtm8L7baQHKfdmcU79yss0K41kjJoFhW4SanuNE8WEPsWY2jc4xS?=
- =?us-ascii?Q?UDx0Oz6rpRzksoxyqvS0BhjMPQa+ldPQztyqkkimut12J43orYLTM0yC2kxQ?=
- =?us-ascii?Q?rBthBZkcvGeZdZ/P2dBb2VzuwDIo4M/Py7NYGnn05WJBBMNDM7j3n9IfqXHg?=
- =?us-ascii?Q?F8KIYYcu0A9ZEnFm9iydL0qf7vMZBmgMhipJ8loOd/2JiDAJeDN6p8hmKnT9?=
- =?us-ascii?Q?o08bKCu/FZbSaLfFg2R+12dLkIH8JB6x+szkQ8ADmTA9wtTy+1Y9KK3tMZHv?=
- =?us-ascii?Q?54A6rAvjIL8De5PL5DF1dKjZN/e7zIMOwXjYY9G8KWSnoOShrtpEBW9woB/R?=
- =?us-ascii?Q?RrlvcfoyVkOearfd1/M8t4Zv4Gj0ARnGHvMbeIk1oVVfF1lIa5QlAqi3mWU+?=
- =?us-ascii?Q?yAO70TSjTSn2BEoo3fl2WGg3OxzUfo/GEczz6z7hCh57ZcVCtQd+OCurWlNi?=
- =?us-ascii?Q?5lWoePjhBPcCkgEEyiK/jWmf938GLYpP5vTU6dATLI5fflMfaZ8NVxUsjIN9?=
- =?us-ascii?Q?ZdNyiCDEV0iZqBCHEOtDKPDOqWb+9mYJWRd1rf0cKduhpI+sgDl/7daGcB45?=
- =?us-ascii?Q?FDcHHJRayQsIszJmZ1H09QzbvxOz/a4r3Ob8Tv8AE4+ra68Yd4YYUiAAdNMu?=
- =?us-ascii?Q?LXwOdNXqr9wVHZJ4Cxby1c3XbOMKoYbqy74Y2qSyq3zbklXIRol5Q6JXvpdu?=
- =?us-ascii?Q?H0iVudlz67n4HAXOCAsxf4wtzN/CxExI9auYGumRoYLV9mksBNUe77/hqz08?=
- =?us-ascii?Q?6FQjeZYI2hGbBPN7kpjMGGGicjg+peVU/j3q0ZzF6fcXXhLb30MFjm4AI96y?=
- =?us-ascii?Q?sUyfztKq3HjviLEMT5BNLl7bTRcvdL60rnu8T04XeWEIbskVy7Y5SGxmxMVw?=
- =?us-ascii?Q?9fyKbNQRlU2WO3fJ/znJxqyKPRNEQPPYHLfqtZEbAht4MG8rrV5Hm+M5mxTm?=
- =?us-ascii?Q?sNW6oUCqxskDNA5WdUYWQa9thBdJWeIxc4S8sHqoJ0gUjx4qyhGhaBwnQuz1?=
- =?us-ascii?Q?pO0GV0Cp0A71SikNXXt3wkxY/RZiCJymbNXszCU+mcH9LfUMMZbMiuVo4Map?=
- =?us-ascii?Q?Wn9ukQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49681a8c-4688-48bd-3523-08db38468830
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2023 15:32:58.9088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7HnkH5mZ22HWb9XY5ab4s0lLyMc+bNmXgObbXjpmPmn4MxdihoVmNeKTeByHdiUhcC3sJBgxg2d23dGpLhp91nQaL9rZJynShqH2j1HzJrE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5422
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322114623.2278920-4-lakshmiy@us.ibm.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 11:56:07PM -0700, Harshit Mogalapalli wrote:
-> Smatch reports:
-> 	drivers/net/wwan/iosm/iosm_ipc_pcie.c:298 ipc_pcie_probe()
-> 	warn: missing unwind goto?
+On Wed, Mar 22, 2023 at 06:46:21AM -0500, Lakshmi Yadlapati wrote:
+> Add the driver to support ACBEL FSG032 power supply.
 > 
-> When dma_set_mask fails it directly returns without disabling pci
-> device and freeing ipc_pcie. Fix this my calling a correct goto label
-> 
-> As dma_set_mask returns either 0 or -EIO, we can use a goto label, as
-> it finally returns -EIO.
-> 
-> Renamed the goto label as name of the label before this patch is not
-> relevant after this patch.
-
-nit: I agree that it's nice to name the labels after what they unwind,
-rather than where they are called from. But now both schemes
-are used in this function.
-> 
-> Fixes: 035e3befc191 ("net: wwan: iosm: fix driver not working with INTEL_IOMMU disabled")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 > ---
-> This is based on static analysis, only compile tested.
+>  drivers/hwmon/pmbus/Kconfig        |  9 +++
+>  drivers/hwmon/pmbus/Makefile       |  1 +
+>  drivers/hwmon/pmbus/acbel-fsg032.c | 96 ++++++++++++++++++++++++++++++
+>  3 files changed, 106 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 59d9a7430499..270b6336b76d 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -27,6 +27,15 @@ config SENSORS_PMBUS
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called pmbus.
+>  
+> +config SENSORS_ACBEL_FSG032
+> +	tristate "ACBEL FSG032 Power Supply"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for the ACBEL
+> +	  FSG032 Power Supply.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called acbel-fsg032.
+> +
+>  config SENSORS_ADM1266
+>  	tristate "Analog Devices ADM1266 Sequencer"
+>  	select CRC8
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 3ae019916267..84ee960a6c2d 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -5,6 +5,7 @@
+>  
+>  obj-$(CONFIG_PMBUS)		+= pmbus_core.o
+>  obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+> +obj-$(CONFIG_SENSORS_ACBEL_FSG032) += acbel-fsg032.o
+>  obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+>  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+>  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+> diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
+> new file mode 100644
+> index 000000000000..7bfa0bf048db
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/acbel-fsg032.c
+> @@ -0,0 +1,96 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright 2023 IBM Corp.
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/fs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include "pmbus.h"
+> +
+> +struct acbel_fsg032 {
+> +	struct i2c_client *client;
+> +};
 
-I agree with your analysis.
+Not used anywhere and pointless.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> +
+> +static const struct i2c_device_id acbel_fsg032_id[] = {
+> +	{ "acbel_fsg032" },
+> +	{}
+> +};
+> +
+> +static struct pmbus_driver_info acbel_fsg032_info = {
+> +	.pages = 1,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +		   PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
+> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
+> +		   PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP |
+> +		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_FAN12,
+> +};
+> +
+> +static int acbel_fsg032_probe(struct i2c_client *client)
+> +{
+> +	struct acbel_fsg032 *psu;
+> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+> +	struct device *dev = &client->dev;
+> +	int rc;
+> +
+> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> +	if (rc < 0) {
+> +		dev_err(dev, "Failed to read PMBUS_MFR_ID\n");
+> +		return rc;
+> +	}
+> +	if (strncmp(buf, "ACBEL", 5)) {
+> +		buf[rc] = '\0';
+> +		dev_err(dev, "Manufacturer '%s' not supported\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> +	if (rc < 0) {
+> +		dev_err(dev, "Failed to read PMBUS_MFR_MODEL\n");
+> +		return rc;
+> +	}
+> +
+> +	if (strncmp(buf, "FSG032", 6)) {
+> +		buf[rc] = '\0';
+> +		dev_err(dev, "Model '%s' not supported\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = pmbus_do_probe(client, &acbel_fsg032_info);
+> +	if (rc)
+> +		return rc;
+> +	/*
+> +         * Don't fail the probe if there isn't enough memory for debugfs.
+> +         */
+> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
+> +	if (!psu)
+> +		return 0;
+
+'psu is not used anywhere and allocating it is pointless. I am quite sure
+that I did bring that up before.
+
+Guenter
