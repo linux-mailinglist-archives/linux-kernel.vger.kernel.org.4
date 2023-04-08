@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0B26DBB5C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10EA6DBB5D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjDHOCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 10:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S229933AbjDHOCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 10:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDHOCe (ORCPT
+        with ESMTP id S229540AbjDHOCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Apr 2023 10:02:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BA5EFAD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDC8EF92
         for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 07:02:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE58E6158A
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C00886158D
         for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 14:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05325C433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F25CC4339B;
         Sat,  8 Apr 2023 14:02:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680962548;
-        bh=NusFkGGWy7tIEkNWULQ6KBnE8wGN/lVCtwr0E9TzwQg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pO/pIvD2PjueXcAu2so/kjWoFvOlM5xiFp8zr3VFHPLpltcX9OBx6J2UF2ds5zytp
-         VGv1Suoz542kqv9dBdu5X0C3E782Bf/1AdmkxLG6HU7jO/9ouYJV7PxtVw+u7WRrU4
-         7D4fMbwS9Fm8i0wf1emUw+YSdBuv7nHxRRRiSAPWwu84BeQCX3p0C4oTMGsG3pB7gz
-         yZ28di557tAyV8SYe8e8pneb9ljOtQuyx8m2ePhmZnbKE2U87z4bDvlEXhBm9DZqYZ
-         goT6anqZyWlak2+LYC3D+jrOyZIDJBKl98PfA7SPmdSLl16LjOBCbLD2Nto+ZTOvHa
-         JqkET6L+RqSTw==
+        bh=j6cuKCL8daQ4YjtlzqbN7C113FAR+BvOj+ptz+yrr+s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BX/RaH8wjzhP+zDsQEIBv8GZ4xZ7X4mioXuKhKe09FxtjmZw1MbKvEe+4cJX11164
+         zT8nNldgw3qrmW2ILjuldN3n4yIg1Q3BqREGSUOziM2poySlU/asXG2dRboejZY7Xb
+         ItUV3ybPI4TzXgMucWgjWKwgCCegPlgbxmoT4JeqqI2NvjQQ4Q7oO3YHYi9v3PTRkd
+         uV4Cfn8CnygHmlr+ElnS6fD8+addmvf5qzPVHzE82H9BDNRNvhPplCbdZ/lBWbb6ZU
+         LH1fKgYzYnbmiEKcwl1N7xXVLrzKkQ+/SRTJ8m52a0cGCptW4L8rG8STOscdKXd90t
+         tNDwrcynHh5WA==
 Received: by pali.im (Postfix)
-        id 795FC7B7; Sat,  8 Apr 2023 16:02:25 +0200 (CEST)
+        id A90771BE4; Sat,  8 Apr 2023 16:02:25 +0200 (CEST)
 From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Nicholas Piggin <npiggin@gmail.com>
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 00/13] powerpc/85xx: p2020: Create one unified machine description
-Date:   Sat,  8 Apr 2023 16:01:09 +0200
-Message-Id: <20230408140122.25293-1-pali@kernel.org>
+Subject: [PATCH v5 01/13] powerpc/85xx: Remove DBG() macro
+Date:   Sat,  8 Apr 2023 16:01:10 +0200
+Message-Id: <20230408140122.25293-2-pali@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230408140122.25293-1-pali@kernel.org>
+References: <20230408140122.25293-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,79 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series unifies all P2020 boards and machine descriptions into
-one generic unified P2020 machine description. With this generic machine
-description, kernel can boot on any P2020-based board with correct DTS
-file.
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Tested on CZ.NIC Turris 1.1 board which has Freescale P2020 processor.
-Kernel during booting correctly detects P2020 and prints:
-[    0.000000] Hardware name: Turris 1.1 e500v2 0x80211051 Freescale P2020
+DBG() macro is defined at three places while used only
+one time at one place.
 
-This patch series depends on another patch series "powerpc/fsl_uli1575: Cleanups":
-https://lore.kernel.org/linuxppc-dev/20230408132151.8902-1-pali@kernel.org/t/#u
-(it was split from this one in v5)
+Replace its only use by a pr_debug() and remove the macro.
 
-Changes in v5:
-* Split fsl_uli1575 patches to separate patch series as this one started to be too big.
-* Fix commit messages
-* Reduce includes
-* Rebase on top of powerpc/next (b0bbe5a2915201e3231e788d716d39dc54493b03)
-* Test all patches again on CZ.NIC Turris 1.1 board with P2020 processor
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/platforms/85xx/mpc85xx_ds.c  | 10 +---------
+ arch/powerpc/platforms/85xx/mpc85xx_mds.c |  7 -------
+ arch/powerpc/platforms/85xx/mpc85xx_rdb.c |  9 ---------
+ 3 files changed, 1 insertion(+), 25 deletions(-)
 
-Changes in v4:
-* Added several preparatory cleanup patchs
-* Minimised churn by not duplicating helpers at the first place
-* Split main patch in two
-* Dropped patchs 1 and 2
-* Untested beyond basic build test
-
-Changes in v3:
-* Use 'if (IS_ENABLED(CONFIG_PPC_I8259))' instead of '#ifdef CONFIG_PPC_I8259'
-* Simplify p2020_probe()
-* Patches generated by -M and -C git options
-
-Link to v2: https://lore.kernel.org/linuxppc-dev/20221224211425.14983-1-pali@kernel.org/
-
-Changes in v2:
-* Added patch "p2020: Move i8259 code into own function" (separated from the next one)
-* Renamed CONFIG_P2020 to CONFIG_PPC_P2020
-* Fixed descriptions
-
-Link to v1: https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
-
-Christophe Leroy (6):
-  powerpc/85xx: Remove DBG() macro
-  powerpc/85xx: mpc85xx_{ds/rdb} compact the call to mpic_alloc()
-  powerpc/85xx: mpc85xx_{ds/rdb} replace BUG_ON() by WARN_ON()
-  powerpc/85xx: mpc85xx_{ds/rdb} replace prink by pr_xxx macro
-  powerpc/85xx: Remove #ifdefs CONFIG_PPC_I8259 in mpc85xx_ds
-  powerpc/85xx: Remove #ifdef CONFIG_QUICC_ENGINE in mpc85xx_rdb
-
-Pali Rohár (7):
-  powerpc/85xx: p2020: Move all P2020 DS machine descriptions to p2020.c
-  powerpc/85xx: p2020: Move all P2020 RDB machine descriptions to
-    p2020.c
-  powerpc/85xx: mpc85xx_ds: Move i8259 code into own file
-  powerpc/85xx: p2020: Unify .setup_arch and .init_IRQ callbacks
-  powerpc/85xx: p2020: Define just one machine description
-  powerpc/85xx: p2020: Enable boards by new config option
-    CONFIG_PPC_P2020
-  powerpc: dts: turris1x.dts: Remove "fsl,P2020RDB-PC" compatible string
-
- arch/powerpc/boot/dts/turris1x.dts         |  2 +-
- arch/powerpc/platforms/85xx/Kconfig        | 22 +++++-
- arch/powerpc/platforms/85xx/Makefile       |  4 +-
- arch/powerpc/platforms/85xx/mpc85xx.h      |  6 ++
- arch/powerpc/platforms/85xx/mpc85xx_8259.c | 63 ++++++++++++++++
- arch/powerpc/platforms/85xx/mpc85xx_ds.c   | 87 +++-------------------
- arch/powerpc/platforms/85xx/mpc85xx_mds.c  |  7 --
- arch/powerpc/platforms/85xx/mpc85xx_rdb.c  | 63 +++-------------
- arch/powerpc/platforms/85xx/p2020.c        | 81 ++++++++++++++++++++
- 9 files changed, 191 insertions(+), 144 deletions(-)
- create mode 100644 arch/powerpc/platforms/85xx/mpc85xx_8259.c
- create mode 100644 arch/powerpc/platforms/85xx/p2020.c
-
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_ds.c b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
+index c474da3eeea8..25edfe1b8ae1 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_ds.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
+@@ -34,14 +34,6 @@
+ 
+ #include "mpc85xx.h"
+ 
+-#undef DEBUG
+-
+-#ifdef DEBUG
+-#define DBG(fmt, args...) printk(KERN_ERR "%s: " fmt, __func__, ## args)
+-#else
+-#define DBG(fmt, args...)
+-#endif
+-
+ #ifdef CONFIG_PPC_I8259
+ static void mpc85xx_8259_cascade(struct irq_desc *desc)
+ {
+@@ -98,7 +90,7 @@ void __init mpc85xx_ds_pic_init(void)
+ 		return;
+ 	}
+ 
+-	DBG("mpc85xxds: cascade mapped to irq %d\n", cascade_irq);
++	pr_debug("mpc85xxds: cascade mapped to irq %d\n", cascade_irq);
+ 
+ 	i8259_init(cascade_node, 0);
+ 	of_node_put(cascade_node);
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_mds.c b/arch/powerpc/platforms/85xx/mpc85xx_mds.c
+index 28a04928250f..0546f19416c2 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_mds.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_mds.c
+@@ -49,13 +49,6 @@
+ 
+ #include "mpc85xx.h"
+ 
+-#undef DEBUG
+-#ifdef DEBUG
+-#define DBG(fmt...) udbg_printf(fmt)
+-#else
+-#define DBG(fmt...)
+-#endif
+-
+ #if IS_BUILTIN(CONFIG_PHYLIB)
+ 
+ #define MV88E1111_SCR	0x10
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+index aa24793ad25c..acc4145adcf7 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
+@@ -29,15 +29,6 @@
+ 
+ #include "mpc85xx.h"
+ 
+-#undef DEBUG
+-
+-#ifdef DEBUG
+-#define DBG(fmt, args...) printk(KERN_ERR "%s: " fmt, __func__, ## args)
+-#else
+-#define DBG(fmt, args...)
+-#endif
+-
+-
+ void __init mpc85xx_rdb_pic_init(void)
+ {
+ 	struct mpic *mpic;
 -- 
 2.20.1
 
