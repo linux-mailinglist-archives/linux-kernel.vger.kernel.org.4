@@ -2,130 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED8D6DB8C6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 06:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13486DB8D6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 06:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjDHEUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 00:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S229835AbjDHE2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 00:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjDHEUf (ORCPT
+        with ESMTP id S229719AbjDHE2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 00:20:35 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682A0D339;
-        Fri,  7 Apr 2023 21:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680927632; x=1712463632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DmpCSj8SP1ZVtC2HmfIxZ2NLHp5pIODh4po/Vmc5e54=;
-  b=liddjKIUbyX3caRlT3buB7tL/ISdJO5W4mCRM0JyyqhDJUucK3wSqMfm
-   BS3DnPE8x2XfVbdlrA/Rvc6i3sACUetIOdh8MzcKrRaFlnAf5ZPgywIvl
-   un0kQSEYQzqHvp7vFEy6skKYakVk96FsdhcvjCv0EiTxyFXf8JBRLPqXu
-   HQ2UI2gd3p1ENpJWdTvCGgN3Vd0XQrIqd5/6DtrbEjZ6fB+K2GuEOQ4Uw
-   O+7MdGHO2eEjuAOF9bBSTENSfUxVlfz+0O6JKws2qH5DWVTF+Bb9ffMuu
-   V68XWHE5+cg8dnWhqZD9ZY5NtG06SfBmT8GGEWAT2j50Mi85/fj6CNUYj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="323481967"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="323481967"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 21:20:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665095719"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="665095719"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2023 21:20:28 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pl03v-000TIr-2m;
-        Sat, 08 Apr 2023 04:20:27 +0000
-Date:   Sat, 8 Apr 2023 12:19:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "David E. Box" <david.e.box@linux.intel.com>,
-        srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
-        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org,
-        rjw@rjwysocki.net
-Cc:     oe-kbuild-all@lists.linux.dev, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
-Message-ID: <202304081211.S3RRROve-lkp@intel.com>
-References: <20230408022629.727721-1-david.e.box@linux.intel.com>
+        Sat, 8 Apr 2023 00:28:04 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96938B456;
+        Fri,  7 Apr 2023 21:28:02 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 19BA7213B640; Fri,  7 Apr 2023 21:28:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19BA7213B640
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680928082;
+        bh=W+0x2OvkEBqnZiWb8C8jsuH6ZwkjR30+p5rTEImjBuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cOUImu6FQ4W41G/6fzFr2LxrANh36hnC+OtlWuglGa6LH4AGOo7kMb6SnFwBaykD5
+         gVsLTzOwA/A/CSxNWbBwWUaJynpijxctsqe5DvJdgZ2w54y015KNwb+xHIO6N6JlnP
+         kHXbFwSfJ31TNnygZRrw11QVd+nTXG8u+8FtyYaA=
+Date:   Fri, 7 Apr 2023 21:28:02 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v4 2/5] x86/hyperv: Add VTL specific structs and
+ hypercalls
+Message-ID: <20230408042802.GA14345@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
+ <1680598864-16981-3-git-send-email-ssengar@linux.microsoft.com>
+ <20230406135113.GB1317@skinsburskii.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408022629.727721-1-david.e.box@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230406135113.GB1317@skinsburskii.localdomain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Thu, Apr 06, 2023 at 06:51:13AM -0700, Stanislav Kinsburskii wrote:
+> On Tue, Apr 04, 2023 at 02:01:01AM -0700, Saurabh Sengar wrote:
+> > Add structs and hypercalls required to enable VTL support on x86.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> > ---
+> >  arch/x86/include/asm/hyperv-tlfs.h | 75 ++++++++++++++++++++++++++++++
+> >  include/asm-generic/hyperv-tlfs.h  |  4 ++
+> >  2 files changed, 79 insertions(+)
+> > 
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index 0b73a809e9e1..0b0b4e9a4318 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -713,6 +713,81 @@ union hv_msi_entry {
+> >  	} __packed;
+> >  };
+> >  
+> > +struct hv_x64_segment_register {
+> > +	__u64 base;
+> 
+> Ideally they arch-size types naming should be consistent: either with underscores or
+> without.
+> The majority of cases in this file are without underscores.
 
-kernel test robot noticed the following build warnings:
+Although I am fine either way, I think in a non-uapi file "without underscore" is prefered.
+I can change this in next version.
 
-[auto build test WARNING on 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
-base:   4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
-patch link:    https://lore.kernel.org/r/20230408022629.727721-1-david.e.box%40linux.intel.com
-patch subject: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230408/202304081211.S3RRROve-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
-        git checkout 04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081211.S3RRROve-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/x86/intel/pmc/mtl.c:52:6: warning: no previous prototype for 'mtl_set_device_d3' [-Wmissing-prototypes]
-      52 | void mtl_set_device_d3(unsigned int device)
-         |      ^~~~~~~~~~~~~~~~~
+Regards,
+Saurabh
 
 
-vim +/mtl_set_device_d3 +52 drivers/platform/x86/intel/pmc/mtl.c
-
-    48	
-    49	#define MTL_GNA_PCI_DEV	0x7e4c
-    50	#define MTL_IPU_PCI_DEV	0x7d19
-    51	#define MTL_VPU_PCI_DEV	0x7d1d
-  > 52	void mtl_set_device_d3(unsigned int device)
-    53	{
-    54		struct pci_dev *pcidev;
-    55	
-    56		pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, device, NULL);
-    57		if (pcidev) {
-    58			if (!device_trylock(&pcidev->dev)) {
-    59				pci_dev_put(pcidev);
-    60				return;
-    61			}
-    62			if (!pcidev->dev.driver) {
-    63				dev_info(&pcidev->dev, "Setting to D3hot\n");
-    64				pci_set_power_state(pcidev, PCI_D3hot);
-    65			}
-    66			device_unlock(&pcidev->dev);
-    67			pci_dev_put(pcidev);
-    68		}
-    69	}
-    70	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
+> 
+> > +	__u32 limit;
+> > +	__u16 selector;
+> > +	union {
+> > +		struct {
+> > +			__u16 segment_type : 4;
+> > +			__u16 non_system_segment : 1;
+> > +			__u16 descriptor_privilege_level : 2;
+> > +			__u16 present : 1;
+> > +			__u16 reserved : 4;
+> > +			__u16 available : 1;
+> > +			__u16 _long : 1;
+> > +			__u16 _default : 1;
+> > +			__u16 granularity : 1;
+> > +		} __packed;
+> > +		__u16 attributes;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_x64_table_register {
+> > +	__u16 pad[3];
+> > +	__u16 limit;
+> > +	__u64 base;
+> > +} __packed;
+> > +
+> > +struct hv_init_vp_context {
+> > +	u64 rip;
+> > +	u64 rsp;
+> > +	u64 rflags;
+> > +
+> > +	struct hv_x64_segment_register cs;
+> > +	struct hv_x64_segment_register ds;
+> > +	struct hv_x64_segment_register es;
+> > +	struct hv_x64_segment_register fs;
+> > +	struct hv_x64_segment_register gs;
+> > +	struct hv_x64_segment_register ss;
+> > +	struct hv_x64_segment_register tr;
+> > +	struct hv_x64_segment_register ldtr;
+> > +
+> > +	struct hv_x64_table_register idtr;
+> > +	struct hv_x64_table_register gdtr;
+> > +
+> > +	u64 efer;
+> > +	u64 cr0;
+> > +	u64 cr3;
+> > +	u64 cr4;
+> > +	u64 msr_cr_pat;
+> > +} __packed;
+> > +
+> > +union hv_input_vtl {
+> > +	u8 as_uint8;
+> > +	struct {
+> > +		u8 target_vtl: 4;
+> > +		u8 use_target_vtl: 1;
+> > +		u8 reserved_z: 3;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_enable_vp_vtl {
+> > +	u64				partition_id;
+> > +	u32				vp_index;
+> > +	union hv_input_vtl		target_vtl;
+> > +	u8				mbz0;
+> > +	u16				mbz1;
+> > +	struct hv_init_vp_context	vp_context;
+> > +} __packed;
+> > +
+> > +struct hv_get_vp_from_apic_id_in {
+> > +	u64 partition_id;
+> > +	union hv_input_vtl target_vtl;
+> > +	u8 res[7];
+> > +	u32 apic_ids[];
+> > +} __packed;
+> > +
+> >  #include <asm-generic/hyperv-tlfs.h>
+> >  
+> >  #endif
+> > diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> > index b870983596b9..87258341fd7c 100644
+> > --- a/include/asm-generic/hyperv-tlfs.h
+> > +++ b/include/asm-generic/hyperv-tlfs.h
+> > @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
+> >  /* Declare the various hypercall operations. */
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+> > +#define HVCALL_ENABLE_VP_VTL			0x000f
+> >  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+> >  #define HVCALL_SEND_IPI				0x000b
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+> > @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
+> >  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+> >  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+> >  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> > +#define HVCALL_START_VP				0x0099
+> > +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+> >  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> > @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
+> >  #define HV_STATUS_INVALID_PORT_ID		17
+> >  #define HV_STATUS_INVALID_CONNECTION_ID		18
+> >  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> > +#define HV_STATUS_VTL_ALREADY_ENABLED		134
+> >  
+> >  /*
+> >   * The Hyper-V TimeRefCount register and the TSC
+> > -- 
+> > 2.34.1
