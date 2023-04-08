@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635EE6DBB99
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C486DBB9B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjDHOd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 10:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S230038AbjDHOfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 10:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDHOd1 (ORCPT
+        with ESMTP id S229739AbjDHOfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 10:33:27 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2099.outbound.protection.outlook.com [40.107.237.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE124271E;
-        Sat,  8 Apr 2023 07:33:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7nW07TYBwW+uzZaItaoab0qAiHnDg5XkQGvDU41hbWAGD6xCm/Njvf8r+GtdZkMrX4gCgjD28yXdYHwerM0nJ4SfdXryB0wJr+TLWQdukioC7z772WCXLxM888SYhv89ZVGKOWdxo1If2HbTYdDx2UTjfVkU3EaMDS/EK0/2Jai9MNfS51GpPO5Ed2SMJW3iZyZZ3tOoCg3H8PdyAzXsI1GrEyys1/yLXatJtydmrZaaoz7/jRRfda3wU/m+xC96OS5BWKU2g12mKqZCGiLiCnYDA9wBDe8NGtzaYig0Ia2lH2dDZpgaWOhrPfhXAqhr1V8kgb+V7PtFb8WIgfWjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1pKSpoRryPwo29q9PUMKIlEJ8mc6tu1G3f9+v5PVxKY=;
- b=VMJNNN/32spro7zqVMQCiidbbNwn7tCcijaRFfyUjaXE5/ZCsmb71zKFhM6ccCTzYq9kxxvNQiic889paDsrkJdrw8e0LSqhDuiE9ssvEj1ysnQwQ48x31AuNIpCQ2ibfZfKe/16dU7PN4ooGuEth5txY29sgxTwK9lDkrfoWhNZE0onwbOJ6S108kmJd6+npHheTu0yEdumH+wIkeAzGzo871OlIqruWKkLuXmN3rNMqXJJ6D2DfSalSGb7q8L+TdwPb35n7G6A98lJylQdr5kL1k4ncTLIdAkoyuf/rrkhPP3VWeu/sXIQZN+7CWkLxs1zKPSKjAnoKiqlRaTuCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1pKSpoRryPwo29q9PUMKIlEJ8mc6tu1G3f9+v5PVxKY=;
- b=LzMSOKFCHTPjbhoUW0NFwrQ+HjVYBQFmd5qaanzKwrGAM8T5VnCdcsLr3N9xVH9tlEfuR0CBbZdKGiT/a4T/i0fnOY2ZxxEFibwd04s339iXb0pAG/cr0Osyj8RbCoBbilntesR+zTc21Hp61/9wbqDWDRNERgGX1pOM04tAtqw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by BY3PR13MB4867.namprd13.prod.outlook.com (2603:10b6:a03:360::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Sat, 8 Apr
- 2023 14:33:21 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::8e7a:5558:6bfc:85f9]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::8e7a:5558:6bfc:85f9%3]) with mapi id 15.20.6277.036; Sat, 8 Apr 2023
- 14:33:21 +0000
-Date:   Sat, 8 Apr 2023 16:33:12 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Sai Krishna <saikrishnag@marvell.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
-        gakula@marvell.com, richardcochran@gmail.com, lcherian@marvell.com,
-        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com
-Subject: Re: [net PATCH v2 1/7] octeontx2-af: Secure APR table update with
- the lock
-Message-ID: <ZDF7KFavZuM2SoGO@corigine.com>
-References: <20230407122344.4059-1-saikrishnag@marvell.com>
- <20230407122344.4059-2-saikrishnag@marvell.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407122344.4059-2-saikrishnag@marvell.com>
-X-ClientProxiedBy: AM3PR04CA0137.eurprd04.prod.outlook.com (2603:10a6:207::21)
- To BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
+        Sat, 8 Apr 2023 10:35:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF31C66C
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 07:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680964477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DkwXScb6wJOf3gN1DF0csk3W5arFQbdl8U7x7u5uuJY=;
+        b=I3iL7D8sj8OAkv9cl4y/a4x8x6xSFR/bTpC0bZgcBI9RJyobbeVEo/hZzXXCyKKrszQxAc
+        BrTlAeUZP4dmkKok+nrl7tC8+r9vRkj/xgr5StdTQ3oQEJmko6ggXVV6uIlLem/5K88GjT
+        Z3M5ct3Eeg0BUpPfCO/oUcepJLUFQo0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-480-57ZpoIqzMnCikc13uxzetg-1; Sat, 08 Apr 2023 10:34:36 -0400
+X-MC-Unique: 57ZpoIqzMnCikc13uxzetg-1
+Received: by mail-qk1-f199.google.com with SMTP id 69-20020a370c48000000b007468cffa4e2so642144qkm.10
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 07:34:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680964475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkwXScb6wJOf3gN1DF0csk3W5arFQbdl8U7x7u5uuJY=;
+        b=VyOEDk8oCUHf610WV7hTmDmVrXuoCqKBj5ZxJ1vcAjeaAKIOJsJwGW38+TslXYZTeX
+         p6Pyc334lfvZ1p3+HrQUs4t1p/KoybyCVGVl2EBnREQ98KxNe+v8SbErwNDHs5fkW9hv
+         ufvcuDtSvDRuPW147E8MPo0NlB6SHnkhP93WyTZg6Zi5QptZZ7XD74n+wEzr8JVNQ1np
+         xNiDwY1ltKkRy/8aVvu5XtFyccWlq2EmUV3eNjAl6rAvLEAmF6lM/VOO5PS66MklTRQ4
+         VzMNYSL/8LugNZWT6njyKJp/kU+hNXabUx6Mut/bZtBArrr5rRC1zE9fpo8N7rJpmqyN
+         0oXQ==
+X-Gm-Message-State: AAQBX9eenw603ojrGeXgLaXOSQbQF7CfOLGJkv58L8zmsmg1p3JPxbru
+        iBfMPzit/MJvQ7nFfC4k2OQb7c269q+cWrQA9Ng2rdFW+PPSNvgRZROycs6PxoMw8+fTeVy+eNa
+        YhtuA8h65LOm7ndCJp8rD/3WJ
+X-Received: by 2002:a05:622a:4c7:b0:3e4:dcb4:169 with SMTP id q7-20020a05622a04c700b003e4dcb40169mr9743249qtx.16.1680964475600;
+        Sat, 08 Apr 2023 07:34:35 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aAR7H0F5jPDDVc1edXP9xa5hxjAFdJuVIN8Z1zdzOziO42c3nt/PGgaPOuNhsa12OAr9APPw==
+X-Received: by 2002:a05:622a:4c7:b0:3e4:dcb4:169 with SMTP id q7-20020a05622a04c700b003e4dcb40169mr9743220qtx.16.1680964475319;
+        Sat, 08 Apr 2023 07:34:35 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id g129-20020a37b687000000b0074865a9cb34sm2052931qkf.28.2023.04.08.07.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 07:34:35 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] watchdog: imx2_wdt: set variables imx_wdt* storage-class-specifier to static
+Date:   Sat,  8 Apr 2023 10:34:28 -0400
+Message-Id: <20230408143428.2704141-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|BY3PR13MB4867:EE_
-X-MS-Office365-Filtering-Correlation-Id: f696b953-b280-4547-fa1a-08db383e339f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /e0UcylOIvFqLA8vHuyrcOkfYpJD1DRbHM6xMyXMjkfUgalh3N21T9Y+lKN7PtzjCydEW/psor+3G817wJB+VutxX5fdCfD//wHXxLLkCYXmdUT27KLs29kH5SSf0Gm3c4KhDxVX0W8FIjO47zgpk/oCKcn1vwMb2Ea4Qfd/1+o6xpv4+N7INhDt4aJYbXgFPaI2OUHWlbnsQJV2+qhrbu/m4tG0ncWMo90UbrhEYmEObElCc032FHt5HtAOuagynLdlft82ru5OU2oWvKuqw/yLK/vig0wA8PqKgwEHk2V5OM0KzE2hCzpc2SrzYM5V65gfdbxkPxSyE1ZK4IxbHkHjAeD7VLjtLGUo8K/UH+mA4eJUeO8ELhiMT4rEhYSPsYyk3xWJbOlQc46i9m9GnSWj0DbXfaM/VZu348L1MCab+tgXJUumhmHPEmvnY1zn1W8gIDnuP7GiHMSVMcN9W2HddFCPucjEea9rBZGtrcoJmSLPgZV3Ad3l7U5Fsh24K9JpluXdMr4QsIkWmvhayhbjLpKcpPdBYwUOWikA01S5U20sy+CNiMnTsoMv8+XQWv2z8AvH/ST2LFdEf8xti6JAp+2qi88ym4xvPKle73Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39840400004)(366004)(346002)(451199021)(478600001)(86362001)(83380400001)(36756003)(38100700002)(2616005)(6666004)(6486002)(4744005)(2906002)(44832011)(316002)(186003)(6512007)(6506007)(7416002)(66476007)(8676002)(6916009)(41300700001)(8936002)(5660300002)(66556008)(15650500001)(4326008)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kYYUGBO9DHp68G3c1ZHs5qNHbsUZyKeRCOx91Gxwvptbv33PW7koHXOAsdv8?=
- =?us-ascii?Q?qxOWd27QF55ckb4DdPuEqNM8uyfwptAkmVh/VGQXbPLPyyqHRRp7bwbQkifU?=
- =?us-ascii?Q?5hajEIUOf9nHWuwWu7TuiIDOVGfNMPgwe6guivS5WJmkUR5jxiduDOiAP0oL?=
- =?us-ascii?Q?/6F0NiORzxgKTRHwcpulRWfWOMytLdroKXvbK4WM/zhnFQZTKze+Chw4TctZ?=
- =?us-ascii?Q?VYU1ugytEJV9fD3d/dJfhj+bm5muSvA62S1cUOB4MkYKLX8BdNn2RjbQ4kZC?=
- =?us-ascii?Q?a1lNe2pOqcd5grKFDnVwyJP/Wz+Cqqltjeit4NRViD9U5mOf2viqv3fv+nE8?=
- =?us-ascii?Q?NPJyPVIj/D0DFXO3sRsWVBAeuGBXZW4n9RV6ybpc0usuaaptFMsY13OhG67J?=
- =?us-ascii?Q?mBp5RU212jJzuls2A39a3hG1LwcdejmfRvCIye3J5KXZThB2tgwbb7orooz+?=
- =?us-ascii?Q?DeDS2HThEHJCB5e2ftvH17prWFmxQBiACA+EhEGccs+ziA+hqa4A4Kd0jQ9v?=
- =?us-ascii?Q?ljeemQPG9N4bIjHDWs7scEDVWA62r+iy2jDEjuSwUkWUI8OScEl9ZkzFO9cL?=
- =?us-ascii?Q?acMUmY+z+X0TtJwNti9a8Ej6GPAwTrm8WgujAa5qrMbEdTtWgG3+2PwE2HZJ?=
- =?us-ascii?Q?6q00fZVIVRwNSX5cvHTbbLINuBn8K6dgO8wlrpgrkAU6JDCxEumX8RbNeUw7?=
- =?us-ascii?Q?9S1tQLA+V5vS3cTs6rvWJTRP8JjGEdhOL0t7HGsHI4YBT5kSsXix5nqt9wTE?=
- =?us-ascii?Q?7ZY/gZ4SodL/pN6xtvSFm46PB483smKxh6Kc3564Q3KMqdZiG93b6v0yBEgQ?=
- =?us-ascii?Q?URN4tPy4STn4eufqL/XILuGKqFaeWes0f3sDl5GZpLLBTegQ3uV6+aUt3Ayz?=
- =?us-ascii?Q?nYciTayMJqSRjgB/I21aRYZE5xxXVv8ViZiBLlm11KYQVLwN0qvqkMsun7Dz?=
- =?us-ascii?Q?XHhAZ89J3HMRNADBOHaizBPo4rlQaywq7J+ao2KSz2mf4z/Ta75VMNKDBhPa?=
- =?us-ascii?Q?3N2gmd88SLR81jt79aTV6hWxQXSXmjCInvsx3/zBPk4RMCiIU8FnFue9ojrV?=
- =?us-ascii?Q?+VbH/r4DVI8GOCrYooFkfHH+p0Wf9t1NzIc2p9imgkfiKTlvPVspx7CNBn7r?=
- =?us-ascii?Q?dlIdkpwq8QJrCFY/b83yPh+OsxQDFKz2LA/ekveHASF/jwhMfxGuL8+LI5lk?=
- =?us-ascii?Q?PtTWr5ocSkYpNFNgRxQl5+ZOjZeRcsIPHbi3Z5/VR3ywfhrlH7Q5e7ousq1B?=
- =?us-ascii?Q?/bvoAAwE8BllHc/3yycysLA6pwGrRTIqapSNeJ8qi5ZyXHkPM2xQNWBmhufr?=
- =?us-ascii?Q?4b9yyt62r9VAYpFyX4oP0cgbyrHiLhZhTlXoJDK1xiV+0rllqD3MSNxYebIO?=
- =?us-ascii?Q?uwwfHopNZXmdvHlLNIcMasdg2uw6uTyY8lYVUp38suFvOTmrjixtfJf+Hry6?=
- =?us-ascii?Q?BEJR953lsUPh1OC1TdS7wq6KH+OLzR3bwEm4rs2tRnhbQ7/ipBMn67O3L/yQ?=
- =?us-ascii?Q?TJPyQzcw04WjrLh6Jf5HN1lyLuRkGwIXO9Q+RIfksXIUs2CqcD+4tnBW0K+g?=
- =?us-ascii?Q?m/zM8l92myTyOOYcwVmn8HTdnk1gd56eguT/x3ZIJRLUTtuQt53byFmqRGXg?=
- =?us-ascii?Q?oUaE8HUcsWS5FpB2VKNjDRA0Ygj9pNTYtcxfnjRUJpQP8QY/bJXDPXnCAbFd?=
- =?us-ascii?Q?3KPB7w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f696b953-b280-4547-fa1a-08db383e339f
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2023 14:33:20.9724
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M9MC1fcidUzswDUgWENcVdIhuTeMCQJUdFh5us3Yngudvej0uT470iGrA6KwHHTCz6xt8pnj5bZtobfrpWBwBRr9OtqOWrHD84kD81An/7A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4867
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 05:53:38PM +0530, Sai Krishna wrote:
-> From: Geetha sowjanya <gakula@marvell.com>
-> 
-> APR table contains the lmtst base address of PF/VFs.
-> These entries are updated by the PF/VF during the
-> device probe. Due to race condition while updating the
-> entries are getting corrupted. Hence secure the APR
-> table update with the lock.
+smatch reports
+drivers/watchdog/imx2_wdt.c:442:22: warning: symbol
+  'imx_wdt' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:446:22: warning: symbol
+  'imx_wdt_legacy' was not declared. Should it be static?
 
-Hi Sai, Geetha,
+These variables are only used in one file so should be static.
 
-I think it would be useful to describe what races with
-rvu_mbox_handler_lmtst_tbl_setup().
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/watchdog/imx2_wdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-...
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index 19ab7b3d286b..6fcc3596103c 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -439,11 +439,11 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+ 			 imx2_wdt_resume);
+ 
+-struct imx2_wdt_data imx_wdt = {
++static struct imx2_wdt_data imx_wdt = {
+ 	.wdw_supported = true,
+ };
+ 
+-struct imx2_wdt_data imx_wdt_legacy = {
++static struct imx2_wdt_data imx_wdt_legacy = {
+ 	.wdw_supported = false,
+ };
+ 
+-- 
+2.27.0
+
