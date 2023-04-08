@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130C36DBAA7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C384A6DBAAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjDHLuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 07:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S231130AbjDHLwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 07:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjDHLuZ (ORCPT
+        with ESMTP id S230500AbjDHLwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 07:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B885FF2B
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:50:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1478F60E07
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 11:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FEDC433EF;
-        Sat,  8 Apr 2023 11:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680954598;
-        bh=IBQG+8dg4afwdGQ+6tWzzbepfyfrQnecV2o+6V5mv7I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=v6ZUVq0To67B3suEzLaV6VIR0xssPCh2qrYRLaGz2iytQhjuhnH0is0xxvWJTgG44
-         xC1uZ0oUhfuwO7DKJW5gJHt+1ZmcnAPngkHe6ocEIKqSQ3kU3wwHFyry3f5w3u2I7L
-         jHc9cIdHp83r3bUB7rZs2ua3kOpkiroT9co10rmw=
-Date:   Sat, 8 Apr 2023 13:49:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Char/Misc driver updates for 6.3-rc6
-Message-ID: <ZDFU437akoy8b8cX@kroah.com>
+        Sat, 8 Apr 2023 07:52:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46FA113C3;
+        Sat,  8 Apr 2023 04:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680954711; x=1712490711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aIahBj4lSfFWJhyMp6/dry0v3wiGin821aomnhMZTsk=;
+  b=JcsgssDV/goVzEFJpuOSEHG4YiFVxyz1IMm4MWUvD8bkKCyTyphZm9tT
+   gIqQDIW8zcHYVx2K6Ffh0qFccI6UudzyEFgXA0tr/Exfi+pMRpKePLsQ0
+   Nh4+LN+dKeUFjj6FPYomKBeXNebz+josuT+sADdFheoA1BbWD0MnmWAdf
+   T3L/0POGbZm9/QuZatnkhlnOk4f0W1lz+LgyMfr7yjofwog0Tk4ZcPQka
+   FTVR4oV2UvBHlmQ0VG3KFzB4QxoFOPqfhe86sRZuyqBTLAj1a9J3lUa/R
+   gFviv4E2SFrvjS7QA+KOjXhFttxKF4G3bMqvRhTZK41B7YzXfhId7/Gwt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="327225575"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="327225575"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 04:50:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811658027"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="811658027"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2023 04:50:47 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl75i-000ThB-27;
+        Sat, 08 Apr 2023 11:50:46 +0000
+Date:   Sat, 8 Apr 2023 19:50:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
+        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org,
+        rjw@rjwysocki.net
+Cc:     oe-kbuild-all@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
+Message-ID: <202304081931.gFShEdFu-lkp@intel.com>
+References: <20230408022629.727721-1-david.e.box@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230408022629.727721-1-david.e.box@linux.intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+Hi David,
 
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+kernel test robot noticed the following build warnings:
 
-are available in the Git repository at:
+[auto build test WARNING on 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.3-rc6
+url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
+base:   4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
+patch link:    https://lore.kernel.org/r/20230408022629.727721-1-david.e.box%40linux.intel.com
+patch subject: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
+config: x86_64-randconfig-s023-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081931.gFShEdFu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
+        git checkout 04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/intel/pmc/
 
-for you to fetch changes up to 4bffd2c7a3fc165fc70bc69211b8e6436f41a5c3:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081931.gFShEdFu-lkp@intel.com/
 
-  Merge tag 'iio-fixes-for-6.3a' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-linus (2023-03-28 13:30:55 +0200)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/intel/pmc/mtl.c:52:6: sparse: sparse: symbol 'mtl_set_device_d3' was not declared. Should it be static?
 
-----------------------------------------------------------------
-Char/Misc driver fixes for 6.3-rc6
-
-Here are a small set of various small driver changes for 6.3-rc6.
-Included in here are:
-  - iio driver fixes for reported problems.
-  - coresight hwtracing bugfix for reported problem
-  - small counter driver bugfixes
-
-All have been in linux-next for a while with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      iio: adc: qcom-spmi-adc5: Fix the channel name
-
-Arnd Bergmann (1):
-      iio: adis16480: select CONFIG_CRC32
-
-Greg Kroah-Hartman (3):
-      Merge tag 'counter-fixes-6.3a' of git://git.kernel.org/pub/scm/linux/kernel/git/wbg/counter into char-misc-linus
-      Merge tag 'coresight-fixes-v6.3' of git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux into char-misc-linus
-      Merge tag 'iio-fixes-for-6.3a' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-linus
-
-Ian Ray (1):
-      drivers: iio: adc: ltc2497: fix LSB shift
-
-Kai-Heng Feng (1):
-      iio: light: cm32181: Unregister second I2C client if present
-
-Lars-Peter Clausen (1):
-      iio: adc: ti-ads7950: Set `can_sleep` flag for GPIO chip
-
-Mehdi Djait (1):
-      iio: accel: kionix-kx022a: Get the timestamp from the driver's private data in the trigger_handler
-
-Mårten Lindahl (1):
-      iio: light: vcnl4000: Fix WARN_ON on uninitialized lock
-
-Nuno Sá (4):
-      iio: buffer: correctly return bytes written in output buffers
-      iio: buffer: make sure O_NONBLOCK is respected
-      iio: adc: ad7791: fix IRQ flags
-      iio: adc: max11410: fix read_poll_timeout() usage
-
-Patrik Dahlström (1):
-      iio: adc: palmas_gpadc: fix NULL dereference on rmmod
-
-Steve Clevenger (1):
-      coresight-etm4: Fix for() loop drvdata->nr_addr_cmp range bug
-
-Suzuki K Poulose (1):
-      coresight: etm4x: Do not access TRCIDR1 for identification
-
-William Breathitt Gray (3):
-      iio: dac: cio-dac: Fix max DAC write value check for 12-bit
-      counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
-      counter: 104-quad-8: Fix Synapse action reported for Index signals
-
- drivers/counter/104-quad-8.c                       | 31 +++++++---------------
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 24 +++++++----------
- drivers/hwtracing/coresight/coresight-etm4x.h      | 20 +++++---------
- drivers/iio/accel/kionix-kx022a.c                  |  2 +-
- drivers/iio/adc/ad7791.c                           |  2 +-
- drivers/iio/adc/ltc2497.c                          |  6 ++---
- drivers/iio/adc/max11410.c                         | 22 ++++++++++-----
- drivers/iio/adc/palmas_gpadc.c                     |  2 +-
- drivers/iio/adc/qcom-spmi-adc5.c                   | 10 ++++++-
- drivers/iio/adc/ti-ads7950.c                       |  1 +
- drivers/iio/dac/cio-dac.c                          |  4 +--
- drivers/iio/imu/Kconfig                            |  1 +
- drivers/iio/industrialio-buffer.c                  | 21 ++++++++-------
- drivers/iio/light/cm32181.c                        | 12 +++++++++
- drivers/iio/light/vcnl4000.c                       |  3 ++-
- 15 files changed, 84 insertions(+), 77 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
