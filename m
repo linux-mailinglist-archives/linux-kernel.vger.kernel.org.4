@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FD96DB96C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB41E6DB96B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjDHHz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S230331AbjDHHzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 03:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjDHHzE (ORCPT
+        with ESMTP id S229924AbjDHHzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Apr 2023 03:55:04 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D05FF07;
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76321FF19;
         Sat,  8 Apr 2023 00:54:40 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w19so402335oiv.13;
+Received: by mail-oo1-xc2c.google.com with SMTP id f7-20020a4ab647000000b0054101f316c7so3442260ooo.13;
         Sat, 08 Apr 2023 00:54:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680940469;
+        d=gmail.com; s=20210112; t=1680940472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SnSCuSd2GDwIObMZY9AnCzoNvpOGG9vzBuYvI79rp0M=;
-        b=MK/2j344qMj13ANxSzPNK12+eQ/5CsqbseP3MDQEaGz8chUqKeXXY4OhkMnz62bNZJ
-         at6Tk8ff3ubUC2SddJlys22XFzceNFnjx2fOpZ22hwvM7MvktVCMOuyCZClgWKUnDlPL
-         K/VVBZmdj8BiB3ty6VwGqx9QlVc71YWPavRd0JR7jHfpobdaSeaaa00rZ/C0LDzlsoUX
-         wkPP/wmcBCYJu9hd7Jxo7RY1bDkU0p9rCdKqoRxyOmC3nvqP6rRT7w2irpWwuTyPJDye
-         Gm4511sd3JIfb//tbYlSHYLFaguCDpq0vYuOufPo5UtwXgA0F13Zl6EYJyjzlsqvIP0b
-         M9Xw==
+        bh=w7f1ZJtQ7GVMBkDWdLfo+KU/tSEuvyaRTAOcNqcasmo=;
+        b=AHns2xsd72x2hzUF8tVoMr+YvL6brrpf82BA2x+ZNUu1iZKDGBC/cON1n5EL89JQBX
+         ojJ1NLxsgtjEUMkWUOGJh4Tmfi7MjSbOzSdRjoX+cFe5LGz2qNRBdcAvNyYAwr5MICTI
+         Ll0PKzZO6ioZcpDFvqwV6mQSGT2KbN+N6r3VW6HFbDvFZYfF3VQyMvRRtTazxbTCGKd1
+         XnbKY4yqbEhcP8Wzp9wojyyVPt228OVOEgWptOrBZ5hfrbyJKonDaiARRcTt1mHobiFi
+         l/TOojBi0NHOLARSdWm7xC9xkbn2LN1wgKqj3hHnyQrKQdCIS7a5gbLPAESw7+NYoSLy
+         j+TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680940469;
+        d=1e100.net; s=20210112; t=1680940472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SnSCuSd2GDwIObMZY9AnCzoNvpOGG9vzBuYvI79rp0M=;
-        b=wfW0nRXfPt5yppbTN+wKEPe2N2GSL9fjTndsDJ2TLU4IGzSx8aCXS7NgE+kbQRS23o
-         TG3YbcqKXrYv1T4TYtFSZFLeMKTtjTnC603D7y3DjwLLYYUmyGRfsgrvQyUYE+/J6fOr
-         fXc5aNP5QhhJfIpLHQEp+1YtYjMnxlXvS78LjIPrlZ7/wSVlXmlkGoLvirrzD5/yPmj7
-         t5xJK8BRh/GJKWioDg0nNkSy+RKiytyyj9uy5ijhgZWnxHadI0MlO83ztwzShkZZVo2J
-         I0nNVbQYAfif0H0snDxk+8sam3jyuLu67jRGbTDvxz6mRqhVCQE1rpR6+zihSb/+CmEa
-         aTzA==
-X-Gm-Message-State: AAQBX9dkVpxTr/5pRrsTONwebOOoBiD8suvMHyV2oP2CbDRmcyKbcvcL
-        FOr9HpYM6FARfvXyRGK1XMSug0LrGfM=
-X-Google-Smtp-Source: AKy350YJ1LApfrwPn1qru0jNNOvAOCBzO1vIdegbe9cgMStJkBdtv68FrfBPy0k2Ug3rdqgnHXJL0g==
-X-Received: by 2002:aca:2110:0:b0:386:94a8:f9af with SMTP id 16-20020aca2110000000b0038694a8f9afmr1823701oiz.52.1680940469675;
-        Sat, 08 Apr 2023 00:54:29 -0700 (PDT)
+        bh=w7f1ZJtQ7GVMBkDWdLfo+KU/tSEuvyaRTAOcNqcasmo=;
+        b=egaUS/r+zvSrd3GgecHPNUgYezkHRafbLCmDO/YWaW6H/amZJuUspS1T4ZkeRYbGG7
+         vF5dhPK0uNmZmY5h5aNhCCeNQzSSmBmXx99Pk+pMQcG7BH7P7NEIyELAQbCzwkU+uKbH
+         NyolvoTNk7zHyjfLqlaEQW+cfSRX97qta48A3NdUhLm2sHxXZomIvJW4j8pOMscqEs8U
+         /LntpEbrtXzSd6IaGrGPeHtHijI+AL+02d4xqqaHIXrK5jmRJTxzDOvJO2RmMwEWQXzG
+         utleblJx5xZmb2aECdHcnohEeKq86SZk2i0kOSBpM0Bp0W8bHWBnFePlWmYy0vEccvro
+         syxw==
+X-Gm-Message-State: AAQBX9fku461Fz5sF17/45c5D7+n5DZx3ys+EHZm4mlQda57XCBL0Ktz
+        N5WhHlqcEo3gmLNgV6UYQ+5FfShSowY=
+X-Google-Smtp-Source: AKy350a2hKfgP+151U0qph5fxpj4WNaTaRL2dIcaSsdHCeqEiUCC5GdlsDnv9Ire6LCobwhhBg21eg==
+X-Received: by 2002:a4a:8963:0:b0:537:f9d4:a44c with SMTP id g32-20020a4a8963000000b00537f9d4a44cmr508363ooi.5.1680940472423;
+        Sat, 08 Apr 2023 00:54:32 -0700 (PDT)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.26
+        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 00:54:29 -0700 (PDT)
+        Sat, 08 Apr 2023 00:54:32 -0700 (PDT)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -57,13 +57,10 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 12/13] rust: sync: introduce `CondVar`
-Date:   Sat,  8 Apr 2023 04:53:39 -0300
-Message-Id: <20230408075340.25237-12-wedsonaf@gmail.com>
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: [PATCH v3 13/13] rust: sync: introduce `LockedBy`
+Date:   Sat,  8 Apr 2023 04:53:40 -0300
+Message-Id: <20230408075340.25237-13-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230408075340.25237-1-wedsonaf@gmail.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
@@ -81,275 +78,204 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-This is the traditional condition variable or monitor synchronisation
-primitive. It is implemented with C's `wait_queue_head_t`.
+This allows us to have data protected by a lock despite not being
+wrapped by it. Access is granted by providing evidence that the lock is
+held by the caller.
 
-It allows users to release a lock and go to sleep while guaranteeing
-that notifications won't be missed. This is achieved by enqueuing a wait
-entry before releasing the lock.
-
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Waiman Long <longman@redhat.com>
 Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
-v1 -> v2: Use the new `current` macro
-v2 -> v3: Use new Opaque::ffi_init from Benno's series
+v1 -> v2: Added build_assert to rule out zero-sized types
+v2 -> v3: Improve comments around panics and support for ZSTs
 
- rust/bindings/bindings_helper.h |   1 +
- rust/helpers.c                  |   7 ++
- rust/kernel/sync.rs             |   2 +
- rust/kernel/sync/condvar.rs     | 174 ++++++++++++++++++++++++++++++++
- rust/kernel/sync/lock.rs        |   1 -
- 5 files changed, 184 insertions(+), 1 deletion(-)
- create mode 100644 rust/kernel/sync/condvar.rs
+ rust/kernel/sync.rs           |   2 +
+ rust/kernel/sync/lock.rs      |   2 +-
+ rust/kernel/sync/locked_by.rs | 147 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 rust/kernel/sync/locked_by.rs
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 03656a44a83f..50e7a76d5455 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/slab.h>
- #include <linux/refcount.h>
-+#include <linux/wait.h>
- #include <linux/sched.h>
- 
- /* `bindgen` gets confused at certain things. */
-diff --git a/rust/helpers.c b/rust/helpers.c
-index 96441744030e..8ff2559c1572 100644
---- a/rust/helpers.c
-+++ b/rust/helpers.c
-@@ -24,6 +24,7 @@
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
- #include <linux/sched/signal.h>
-+#include <linux/wait.h>
- 
- __noreturn void rust_helper_BUG(void)
- {
-@@ -76,6 +77,12 @@ void rust_helper_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
- }
- EXPORT_SYMBOL_GPL(rust_helper_spin_unlock_irqrestore);
- 
-+void rust_helper_init_wait(struct wait_queue_entry *wq_entry)
-+{
-+	init_wait(wq_entry);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_init_wait);
-+
- int rust_helper_signal_pending(struct task_struct *t)
- {
- 	return signal_pending(t);
 diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index c997ff7e951e..431402180aa8 100644
+index 431402180aa8..d219ee518eff 100644
 --- a/rust/kernel/sync.rs
 +++ b/rust/kernel/sync.rs
-@@ -8,9 +8,11 @@
- use crate::types::Opaque;
- 
+@@ -10,10 +10,12 @@ use crate::types::Opaque;
  mod arc;
-+mod condvar;
+ mod condvar;
  pub mod lock;
++mod locked_by;
  
  pub use arc::{Arc, ArcBorrow, UniqueArc};
-+pub use condvar::CondVar;
+ pub use condvar::CondVar;
  pub use lock::{mutex::Mutex, spinlock::SpinLock};
++pub use locked_by::LockedBy;
  
  /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
-diff --git a/rust/kernel/sync/condvar.rs b/rust/kernel/sync/condvar.rs
+ #[repr(transparent)]
+diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+index c365bc909dff..84d8d7d01aaa 100644
+--- a/rust/kernel/sync/lock.rs
++++ b/rust/kernel/sync/lock.rs
+@@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
+     _pin: PhantomPinned,
+ 
+     /// The data protected by the lock.
+-    data: UnsafeCell<T>,
++    pub(crate) data: UnsafeCell<T>,
+ }
+ 
+ // SAFETY: `Lock` can be transferred across thread boundaries iff the data it protects can.
+diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.rs
 new file mode 100644
-index 000000000000..ef882e2af746
+index 000000000000..ab0ecb013f54
 --- /dev/null
-+++ b/rust/kernel/sync/condvar.rs
-@@ -0,0 +1,174 @@
++++ b/rust/kernel/sync/locked_by.rs
+@@ -0,0 +1,147 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! A condition variable.
-+//!
-+//! This module allows Rust code to use the kernel's [`struct wait_queue_head`] as a condition
-+//! variable.
++//! A wrapper for data protected by a lock that does not wrap it.
 +
-+use super::{lock::Backend, lock::Guard, LockClassKey};
-+use crate::{bindings, init::PinInit, pin_init, str::CStr, types::Opaque};
-+use core::marker::PhantomPinned;
-+use macros::pin_data;
++use super::{lock::Backend, lock::Lock};
++use core::{cell::UnsafeCell, ptr};
 +
-+/// Creates a [`CondVar`] initialiser with the given name and a newly-created lock class.
-+#[macro_export]
-+macro_rules! new_condvar {
-+    ($($name:literal)?) => {
-+        $crate::sync::CondVar::new($crate::optional_name!($($name)?), $crate::static_lock_class!())
-+    };
-+}
-+
-+/// A conditional variable.
++/// Allows access to some data to be serialised by a lock that does not wrap it.
 +///
-+/// Exposes the kernel's [`struct wait_queue_head`] as a condition variable. It allows the caller to
-+/// atomically release the given lock and go to sleep. It reacquires the lock when it wakes up. And
-+/// it wakes up when notified by another thread (via [`CondVar::notify_one`] or
-+/// [`CondVar::notify_all`]) or because the thread received a signal. It may also wake up
-+/// spuriously.
++/// In most cases, data protected by a lock is wrapped by the appropriate lock type, e.g.,
++/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for cases when this is not
++/// possible. For example, if a container has a lock and some data in the contained elements needs
++/// to be protected by the same lock.
 +///
-+/// Instances of [`CondVar`] need a lock class and to be pinned. The recommended way to create such
-+/// instances is with the [`pin_init`](crate::pin_init) and [`new_condvar`] macros.
++/// [`LockedBy`] wraps the data in lieu of another locking primitive, and only allows access to it
++/// when the caller shows evidence that the 'external' lock is locked. It panics if the evidence
++/// refers to the wrong instance of the lock.
 +///
 +/// # Examples
 +///
-+/// The following is an example of using a condvar with a mutex:
++/// The following is an example for illustrative purposes: `InnerDirectory::bytes_used` is an
++/// aggregate of all `InnerFile::bytes_used` and must be kept consistent; so we wrap `InnerFile` in
++/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This allows us to enforce at
++/// compile-time that access to `InnerFile` is only granted when an `InnerDirectory` is also
++/// locked; we enforce at run time that the right `InnerDirectory` is locked.
 +///
 +/// ```
-+/// use kernel::sync::{CondVar, Mutex};
-+/// use kernel::{new_condvar, new_mutex};
++/// use kernel::sync::{LockedBy, Mutex};
 +///
-+/// #[pin_data]
-+/// pub struct Example {
-+///     #[pin]
-+///     value: Mutex<u32>,
-+///
-+///     #[pin]
-+///     value_changed: CondVar,
++/// struct InnerFile {
++///     bytes_used: u64,
 +/// }
 +///
-+/// /// Waits for `e.value` to become `v`.
-+/// fn wait_for_vaue(e: &Example, v: u32) {
-+///     let mut guard = e.value.lock();
-+///     while *guard != v {
-+///         e.value_changed.wait_uninterruptible(&mut guard);
++/// struct File {
++///     _ino: u32,
++///     inner: LockedBy<InnerFile, InnerDirectory>,
++/// }
++///
++/// struct InnerDirectory {
++///     /// The sum of the bytes used by all files.
++///     bytes_used: u64,
++///     _files: Vec<File>,
++/// }
++///
++/// struct Directory {
++///     _ino: u32,
++///     inner: Mutex<InnerDirectory>,
++/// }
++///
++/// /// Prints `bytes_used` from both the directory and file.
++/// fn print_bytes_used(dir: &Directory, file: &File) {
++///     let guard = dir.inner.lock();
++///     let inner_file = file.inner.access(&guard);
++///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
++/// }
++///
++/// /// Increments `bytes_used` for both the directory and file.
++/// fn inc_bytes_used(dir: &Directory, file: &File) {
++///     let mut guard = dir.inner.lock();
++///     guard.bytes_used += 10;
++///
++///     let file_inner = file.inner.access_mut(&mut guard);
++///     file_inner.bytes_used += 10;
++/// }
++///
++/// /// Creates a new file.
++/// fn new_file(ino: u32, dir: &Directory) -> File {
++///     File {
++///         _ino: ino,
++///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }),
 +///     }
 +/// }
-+///
-+/// /// Increments `e.value` and notifies all potential waiters.
-+/// fn increment(e: &Example) {
-+///     *e.value.lock() += 1;
-+///     e.value_changed.notify_all();
-+/// }
-+///
-+/// /// Allocates a new boxed `Example`.
-+/// fn new_example() -> Result<Pin<Box<Example>>> {
-+///     Box::pin_init(pin_init!(Example {
-+///         value <- new_mutex!(0),
-+///         value_changed <- new_condvar!(),
-+///     }))
-+/// }
 +/// ```
-+///
-+/// [`struct wait_queue_head`]: ../../../include/linux/wait.h
-+#[pin_data]
-+pub struct CondVar {
-+    #[pin]
-+    pub(crate) wait_list: Opaque<bindings::wait_queue_head>,
-+
-+    /// A condvar needs to be pinned because it contains a [`struct list_head`] that is
-+    /// self-referential, so it cannot be safely moved once it is initialised.
-+    #[pin]
-+    _pin: PhantomPinned,
++pub struct LockedBy<T: ?Sized, U: ?Sized> {
++    owner: *const U,
++    data: UnsafeCell<T>,
 +}
 +
-+// SAFETY: `CondVar` only uses a `struct wait_queue_head`, which is safe to use on any thread.
-+#[allow(clippy::non_send_fields_in_send_ty)]
-+unsafe impl Send for CondVar {}
++// SAFETY: `LockedBy` can be transferred across thread boundaries iff the data it protects can.
++unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
 +
-+// SAFETY: `CondVar` only uses a `struct wait_queue_head`, which is safe to use on multiple threads
-+// concurrently.
-+unsafe impl Sync for CondVar {}
++// SAFETY: `LockedBy` serialises the interior mutability it provides, so it is `Sync` as long as the
++// data it protects is `Send`.
++unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
 +
-+impl CondVar {
-+    /// Constructs a new condvar initialiser.
-+    #[allow(clippy::new_ret_no_self)]
-+    pub fn new(name: &'static CStr, key: &'static LockClassKey) -> impl PinInit<Self> {
-+        pin_init!(Self {
-+            _pin: PhantomPinned,
-+            // SAFETY: `slot` is valid while the closure is called and both `name` and `key` have
-+            // static lifetimes so they live indefinitely.
-+            wait_list <- Opaque::ffi_init(|slot| unsafe {
-+                bindings::__init_waitqueue_head(slot, name.as_char_ptr(), key.as_ptr())
-+            }),
-+        })
-+    }
-+
-+    fn wait_internal<T: ?Sized, B: Backend>(&self, wait_state: u32, guard: &mut Guard<'_, T, B>) {
-+        let wait = Opaque::<bindings::wait_queue_entry>::uninit();
-+
-+        // SAFETY: `wait` points to valid memory.
-+        unsafe { bindings::init_wait(wait.get()) };
-+
-+        // SAFETY: Both `wait` and `wait_list` point to valid memory.
-+        unsafe {
-+            bindings::prepare_to_wait_exclusive(self.wait_list.get(), wait.get(), wait_state as _)
-+        };
-+
-+        // SAFETY: No arguments, switches to another thread.
-+        guard.do_unlocked(|| unsafe { bindings::schedule() });
-+
-+        // SAFETY: Both `wait` and `wait_list` point to valid memory.
-+        unsafe { bindings::finish_wait(self.wait_list.get(), wait.get()) };
-+    }
-+
-+    /// Releases the lock and waits for a notification in interruptible mode.
++impl<T, U: ?Sized> LockedBy<T, U> {
++    /// Constructs a new instance of [`LockedBy`].
 +    ///
-+    /// Atomically releases the given lock (whose ownership is proven by the guard) and puts the
-+    /// thread to sleep, reacquiring the lock on wake up. It wakes up when notified by
-+    /// [`CondVar::notify_one`] or [`CondVar::notify_all`], or when the thread receives a signal.
-+    /// It may also wake up spuriously.
-+    ///
-+    /// Returns whether there is a signal pending.
-+    #[must_use = "wait returns if a signal is pending, so the caller must check the return value"]
-+    pub fn wait<T: ?Sized, B: Backend>(&self, guard: &mut Guard<'_, T, B>) -> bool {
-+        self.wait_internal(bindings::TASK_INTERRUPTIBLE, guard);
-+        crate::current!().signal_pending()
-+    }
-+
-+    /// Releases the lock and waits for a notification in uninterruptible mode.
-+    ///
-+    /// Similar to [`CondVar::wait`], except that the wait is not interruptible. That is, the
-+    /// thread won't wake up due to signals. It may, however, wake up supirously.
-+    pub fn wait_uninterruptible<T: ?Sized, B: Backend>(&self, guard: &mut Guard<'_, T, B>) {
-+        self.wait_internal(bindings::TASK_UNINTERRUPTIBLE, guard)
-+    }
-+
-+    /// Calls the kernel function to notify the appropriate number of threads with the given flags.
-+    fn notify(&self, count: i32, flags: u32) {
-+        // SAFETY: `wait_list` points to valid memory.
-+        unsafe {
-+            bindings::__wake_up(
-+                self.wait_list.get(),
-+                bindings::TASK_NORMAL,
-+                count,
-+                flags as _,
-+            )
-+        };
-+    }
-+
-+    /// Wakes a single waiter up, if any.
-+    ///
-+    /// This is not 'sticky' in the sense that if no thread is waiting, the notification is lost
-+    /// completely (as opposed to automatically waking up the next waiter).
-+    pub fn notify_one(&self) {
-+        self.notify(1, 0);
-+    }
-+
-+    /// Wakes all waiters up, if any.
-+    ///
-+    /// This is not 'sticky' in the sense that if no thread is waiting, the notification is lost
-+    /// completely (as opposed to automatically waking up the next waiter).
-+    pub fn notify_all(&self) {
-+        self.notify(0, 0);
++    /// It stores a raw pointer to the owner that is never dereferenced. It is only used to ensure
++    /// that the right owner is being used to access the protected data. If the owner is freed, the
++    /// data becomes inaccessible; if another instance of the owner is allocated *on the same
++    /// memory location*, the data becomes accessible again: none of this affects memory safety
++    /// because in any case at most one thread (or CPU) can access the protected data at a time.
++    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
++        Self {
++            owner: owner.data.get(),
++            data: UnsafeCell::new(data),
++        }
 +    }
 +}
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index a2c654ec5bd3..c365bc909dff 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -179,7 +179,6 @@ pub struct Guard<'a, T: ?Sized, B: Backend> {
- unsafe impl<T: Sync + ?Sized, B: Backend> Sync for Guard<'_, T, B> {}
- 
- impl<T: ?Sized, B: Backend> Guard<'_, T, B> {
--    #[allow(dead_code)]
-     pub(crate) fn do_unlocked(&mut self, cb: impl FnOnce()) {
-         // SAFETY: The caller owns the lock, so it is safe to unlock it.
-         unsafe { B::unlock(self.lock.state.get(), &self.state) };
++
++impl<T: ?Sized, U> LockedBy<T, U> {
++    /// Returns a reference to the protected data when the caller provides evidence (via a
++    /// reference) that the owner is locked.
++    ///
++    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&U` that matches
++    /// the data protected by the lock without actually holding it.
++    ///
++    /// # Panics
++    ///
++    /// Panics if `owner` is different from the data protected by the lock used in
++    /// [`new`](LockedBy::new).
++    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
++        // Detect the usage of SZTs, which are supported, at compile time.
++        crate::build_assert!(core::mem::size_of::<U>() > 0);
++        if !ptr::eq(owner, self.owner) {
++            panic!("mismatched owners");
++        }
++
++        // SAFETY: `owner` is evidence that the owner is locked.
++        unsafe { &*self.data.get() }
++    }
++
++    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
++    /// mutable owner) that the owner is locked mutably.
++    ///
++    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&mut U` that
++    /// matches the data protected by the lock without actually holding it.
++    ///
++    /// Showing a mutable reference to the owner is sufficient because we know no other references
++    /// can exist to it.
++    ///
++    /// # Panics
++    ///
++    /// Panics if `owner` is different from the data protected by the lock used in
++    /// [`new`](LockedBy::new).
++    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
++        // Detect the usage of SZTs, which are supported, at compile time.
++        crate::build_assert!(core::mem::size_of::<U>() > 0);
++        if !ptr::eq(owner, self.owner) {
++            panic!("mismatched owners");
++        }
++
++        // SAFETY: `owner` is evidence that there is only one reference to the owner.
++        unsafe { &mut *self.data.get() }
++    }
++}
 -- 
 2.34.1
 
