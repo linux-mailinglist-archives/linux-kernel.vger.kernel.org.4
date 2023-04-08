@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6646DB7F2
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 03:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402806DB7F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 03:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjDHBOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 21:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S229568AbjDHBQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 21:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDHBOl (ORCPT
+        with ESMTP id S229437AbjDHBQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 21:14:41 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B13CA39
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1680916477;
-        bh=SKER2uGKY5pCWg9GHljQXxLwWcywFOD3A1hiQAR0JM0=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=RoNlSmPcl6aoxGM3I6P1LQz+m8CVxPmEfB83kanFJvdf6H/93nmq3vbG1oKFb6gtz
-         IVqytQEXmXTjSZs/XGbaKwvGNHNiiNxK2qx41SCY8LqgnvnYbBpjsjEdq+OFv3sH92
-         iXykkBic1/UlHUcTx0H/+Ox/Uh8v4UmqoRxse304DsZ6/eSMJUrjq6BBLn032DBO54
-         DLgZFKh4OCeE0BM2oy+tTNI1X/OGPfoQZvIW6DErXqpoEsPXVRxbjNnWNXNOd3/fOK
-         WSVC7roFmt1jZxNHe32GOoADdIzUaXLq4mENZVo7uFkXvJ8139PTHL9bRjNGMw5L63
-         T/rw6lHaJisQA==
-Received: from [192.222.149.5] (192-222-149-5.qc.cable.ebox.net [192.222.149.5])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Ptchs1ZHGzty1;
-        Fri,  7 Apr 2023 21:14:37 -0400 (EDT)
-Message-ID: <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
-Date:   Fri, 7 Apr 2023 21:14:36 -0400
+        Fri, 7 Apr 2023 21:16:08 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726ADCA0E;
+        Fri,  7 Apr 2023 18:16:02 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4048E24E3F4;
+        Sat,  8 Apr 2023 09:15:50 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 8 Apr
+ 2023 09:15:50 +0800
+Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 8 Apr
+ 2023 09:15:48 +0800
+Message-ID: <b8764e20-f983-177c-63c5-36bb3b57ba9e@starfivetech.com>
+Date:   Sat, 8 Apr 2023 09:15:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
+Subject: Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive
+ JH7110 SoC
 Content-Language: en-US
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
-In-Reply-To: <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Pedro Moreira <pmmoreir@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+References: <20230407110356.8449-1-samin.guo@starfivetech.com>
+ <20230407110356.8449-6-samin.guo@starfivetech.com>
+ <CAJM55Z9jCdPASsk+fw_j+9QH3+Kj28tpCA4PgW_nB_ce7qWL8w@mail.gmail.com>
+From:   Guo Samin <samin.guo@starfivetech.com>
+In-Reply-To: <CAJM55Z9jCdPASsk+fw_j+9QH3+Kj28tpCA4PgW_nB_ce7qWL8w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,236 +74,262 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-07 19:50, Mathieu Desnoyers wrote:
-[...]
-> 
-> Let's introduce task (Y) which has mm == src_task->mm and task (N) which 
-> has
-> mm != src_task->mm for the rest of the discussion.
-> 
-> Let's consider the scheduling state transitions we want to consider here.
-> There are two scheduler state transitions on context switch we care about:
-> 
-> (TSA) Store to rq->curr with transition from (N) to (Y)
-> 
-> (TSB) Store to rq->curr with transition from (Y) to (N)
-> 
-> On the migrate-from side, there is one transition we care about:
-> 
-> (TMA) cmpxchg to *pcpu_cid to set the LAZY flag
-> 
-> There is also a transition to UNSET state which can be performed from all
-> sides (scheduler, migrate-from). It is performed with a cmpxchg everywhere
-> which guarantees that only a single thread will succeed:
-> 
-> (TMB) cmpxchg to *pcpu_cid to mark UNSET
-> 
-> Just to be clear (at the risk of repeating myself), what we do _not_ want
-> to happen is a transition to UNSET when a thread is actively using the cid
-> (property (1)). And ideally we do not want to leak a cid after migrating 
-> the
-> last task from a cpu (property (2)).
-> 
-> Let's looks at the relevant combinations of TSA/TSB, and TMA transitions.
-> 
-> Scenario A) (TSA)+(TMA) (from next task perspective)
-> 
-> CPU0                                                 CPU1
-> 
-> Context switch CS-1                                  Migrate-from
->    - store to rq->curr: (N)->(Y) (TSA)                - cmpxchg to 
-> *pcpu_id to LAZY (TMA)
->       *** missing barrier ?? ***                        (implied barrier 
-> after cmpxchg)
->    - prepare_task_switch()
->      - switch_mm_cid()
->        - mm_cid_get (next)
->          - READ_ONCE(*pcpu_cid)                       - 
-> rcu_dereference(src_rq->curr)
-> 
-> This Dekker ensures that either task (Y) is observed by the 
-> rcu_dereference() or the LAZY
-> flag is observed by READ_ONCE(), or both are observed.
-> 
-> If task (Y) store is observed by rcu_dereference(), it means that there 
-> is still
-> an active task on the cpu. Migrate-from will therefore not transition to 
-> UNSET, which
-> fulfills property (1). That observed task will itself eventually need a 
-> migrate-from
-> to be migrated away from that cpu, which fulfills property (2).
-> 
-> If task (Y) is not observed, but the lazy flag is observed by 
-> READ_ONCE(), it will
-> move its state to UNSET, which clears the percpu cid perhaps uselessly 
-> (which is not
-> an issue for correctness). Because task (Y) is not observed, CPU1 can 
-> move ahead to
-> set the state to UNSET. Because moving state to UNSET is done with a 
-> cmpxchg expecting
-> that the old state has the LAZY flag set, only one thread will 
-> successfully UNSET.
-> 
-> If both states (LAZY flag and task (Y)) are observed, the thread on CPU0 
-> will observe
-> the LAZY flag and transition to UNSET (perhaps uselessly), and CPU1 will 
-> observe task
-> (Y) and do nothing more, which is fine.
-> 
-> What we are effectively preventing with this Dekker is a scenario where 
-> neither LAZY
-> flag nor store (Y) are observed, which would fail property (1) because 
-> this would
-> UNSET a cid which is actively used.
-> 
-> 
-> Scenario B) (TSB)+(TMA) (from prev task perspective)
-> 
-> CPU0                                                 CPU1
-> 
-> Context switch CS-1                                  Migrate-from
->    - store to rq->curr: (Y)->(N) (TSB)                - cmpxchg to 
-> *pcpu_id to LAZY (TMA)
->      *** missing barrier ?? ***                         (implied barrier 
-> after cmpxchg)
->    - prepare_task_switch()
->      - switch_mm_cid()
->        - cid_put_lazy() (prev)
->          - READ_ONCE(*pcpu_cid)                       - 
-> rcu_dereference(src_rq->curr)
-> 
-> This Dekker ensures that either task (N) is observed by the 
-> rcu_dereference() or the LAZY
-> flag is observed by READ_ONCE(), or both are observed.
-> 
-> If rcu_dereference observes (N) but LAZY is not observed, migrate-from 
-> will take care to
-> advance the state to UNSET, thus fulfilling property (2). Because (Y) is 
-> not running anymore
-> property (1) is fulfilled.
-> 
-> If rcu_dereference does not observe (N), but LAZY is observed, 
-> migrate-from does not
-> advance to UNSET because it observes (Y), but LAZY flag will make the 
-> task on CPU0
-> take care of advancing the state to UNSET, thus fulfilling property (2).
-> 
-> If both (N) and LAZY are observed, both migrate-from and CPU0 will try 
-> to advance the
-> state to UNSET, but only one will succeed its cmpxchg.
-> 
-> What we are effectively preventing with this Dekker is a scenario where 
-> neither LAZY
-> flag nor store (N) are observed, which would fail property (2) because 
-> it would leak
-> a cid on a cpu that has no task left using the mm.
-> 
-> So based on my analysis, we are indeed missing a barrier between store 
-> to rq->curr and
-> load of the per-mm/cpu cid within context_switch().
-> 
-> Am I missing something ? How can we provide this barrier with minimal 
-> overhead ?
+ Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive JH7110 SoC
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+to: Samin Guo <samin.guo@starfivetech.com>
+data: 2023/4/8
 
-Here is the barrier placement I have in mind to minimize the impact:
+> On Fri, 7 Apr 2023 at 13:05, Samin Guo <samin.guo@starfivetech.com> wrote:
+>>
+>> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
+>>
+>> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+>> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>> ---
+>>  MAINTAINERS                                   |   1 +
+>>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+>>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 123 ++++++++++++++++++
+>>  4 files changed, 137 insertions(+)
+>>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 6b6b67468b8f..46b366456cee 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19910,6 +19910,7 @@ M:      Emil Renner Berthing <kernel@esmil.dk>
+>>  M:     Samin Guo <samin.guo@starfivetech.com>
+>>  S:     Maintained
+>>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+>> +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>>
+>>  STARFIVE JH7100 CLOCK DRIVERS
+>>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> index f77511fe4e87..5f5a997f21f3 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
+>>           for the stmmac device driver. This driver is used for
+>>           arria5 and cyclone5 FPGA SoCs.
+>>
+>> +config DWMAC_STARFIVE
+>> +       tristate "StarFive dwmac support"
+>> +       depends on OF && (ARCH_STARFIVE || COMPILE_TEST)
+>> +       select MFD_SYSCON
+>> +       default m if ARCH_STARFIVE
+>> +       help
+>> +         Support for ethernet controllers on StarFive RISC-V SoCs
+>> +
+>> +         This selects the StarFive platform specific glue layer support for
+>> +         the stmmac device driver. This driver is used for StarFive JH7110
+>> +         ethernet controller.
+>> +
+>>  config DWMAC_STI
+>>         tristate "STi GMAC support"
+>>         default ARCH_STI
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> index 057e4bab5c08..8738fdbb4b2d 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     += dwmac-oxnas.o
+>>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        += dwmac-qcom-ethqos.o
+>>  obj-$(CONFIG_DWMAC_ROCKCHIP)   += dwmac-rk.o
+>>  obj-$(CONFIG_DWMAC_SOCFPGA)    += dwmac-altr-socfpga.o
+>> +obj-$(CONFIG_DWMAC_STARFIVE)   += dwmac-starfive.o
+>>  obj-$(CONFIG_DWMAC_STI)                += dwmac-sti.o
+>>  obj-$(CONFIG_DWMAC_STM32)      += dwmac-stm32.o
+>>  obj-$(CONFIG_DWMAC_SUNXI)      += dwmac-sunxi.o
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>> new file mode 100644
+>> index 000000000000..4963d4008485
+>> --- /dev/null
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>> @@ -0,0 +1,123 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * StarFive DWMAC platform driver
+>> + *
+>> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + *
+>> + */
+>> +
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +#include "stmmac_platform.h"
+>> +
+>> +struct starfive_dwmac {
+>> +       struct device *dev;
+>> +       struct clk *clk_tx;
+>> +};
+>> +
+>> +static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+>> +{
+>> +       struct starfive_dwmac *dwmac = priv;
+>> +       unsigned long rate;
+>> +       int err;
+>> +
+>> +       rate = clk_get_rate(dwmac->clk_tx);
+> 
+> Hi Samin,
+> 
+> I'm not sure why you added this line in this revision. If it's just to
+> not call clk_set_rate on the uninitialized rate, I'd much rather you
+> just returned early and don't call clk_set_rate at all in case of
+> errors.
+> 
+>> +
+>> +       switch (speed) {
+>> +       case SPEED_1000:
+>> +               rate = 125000000;
+>> +               break;
+>> +       case SPEED_100:
+>> +               rate = 25000000;
+>> +               break;
+>> +       case SPEED_10:
+>> +               rate = 2500000;
+>> +               break;
+>> +       default:
+>> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+>> +               break;
+> 
+> That is skip the clk_get_rate above and just change this break to a return.
+> 
 
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 2a243616f222..f20fc0600fcc 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -37,6 +37,11 @@ static inline void mmgrab(struct mm_struct *mm)
-  	atomic_inc(&mm->mm_count);
-  }
-  
-+static inline void smp_mb__after_mmgrab(void)
-+{
-+	smp_mb__after_atomic();
-+}
-+
-  extern void __mmdrop(struct mm_struct *mm);
-  
-  static inline void mmdrop(struct mm_struct *mm)
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 9e0fa4193499..8d410c0dcb39 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5117,7 +5117,6 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
-  	sched_info_switch(rq, prev, next);
-  	perf_event_task_sched_out(prev, next);
-  	rseq_preempt(prev);
--	switch_mm_cid(prev, next);
-  	fire_sched_out_preempt_notifiers(prev, next);
-  	kmap_local_sched_out();
-  	prepare_task(next);
-@@ -5273,6 +5272,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
-  	 *
-  	 * kernel ->   user   switch + mmdrop() active
-  	 *   user ->   user   switch
-+	 *
-+	 * switch_mm_cid() needs to be updated if the barriers provided
-+	 * by context_switch() are modified.
-  	 */
-  	if (!next->mm) {                                // to kernel
-  		enter_lazy_tlb(prev->active_mm, next);
-@@ -5302,6 +5304,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
-  		}
-  	}
-  
-+	/* switch_mm_cid() requires the memory barriers above. */
-+	switch_mm_cid(prev, next);
-+
-  	rq->clock_update_flags &= ~(RQCF_ACT_SKIP|RQCF_REQ_SKIP);
-  
-  	prepare_lock_switch(rq, next, rf);
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
-  
-  static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
-  {
-+	/*
-+	 * Provide a memory barrier between rq->curr store and load of
-+	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
-+	 *
-+	 * Should be adapted if context_switch() is modified.
-+	 */
-+	if (!next->mm) {                                // to kernel
-+		/*
-+		 * user -> kernel transition does not guarantee a barrier, but
-+		 * we can use the fact that it performs an atomic operation in
-+		 * mmgrab().
-+		 */
-+		if (prev->mm)                           // from user
-+			smp_mb__after_mmgrab();
-+		/*
-+		 * kernel -> kernel transition does not change rq->curr->mm
-+		 * state. It stays NULL.
-+		 */
-+	} else {                                        // to user
-+		/*
-+		 * kernel -> user transition does not provide a barrier
-+		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
-+		 * Provide it here.
-+		 */
-+		if (!prev->mm)                          // from kernel
-+			smp_mb();
-+		/*
-+		 * user -> user transition guarantees a memory barrier through
-+		 * switch_mm().
-+		 */
-+	}
-  	if (prev->mm_cid_active) {
-  		mm_cid_put_lazy(prev);
-  		prev->mm_cid = -1;
+Hi Emil,
 
-Thanks,
+We used the solution you mentioned before V3, but Arun Ramadoss doesn't think that's great.
+(https://patchwork.kernel.org/project/linux-riscv/patch/20230106030001.1952-6-yanhong.wang@starfivetech.com)
 
-Mathieu
+
+> +static void starfive_eth_plat_fix_mac_speed(void *priv, unsigned int
+> speed)
+> +{
+> +	struct starfive_dwmac *dwmac = priv;
+> +	unsigned long rate;
+> +	int err;
+> +
+> +	switch (speed) {
+> +	case SPEED_1000:
+> +		rate = 125000000;
+> +		break;
+> +	case SPEED_100:
+> +		rate = 25000000;
+> +		break;
+> +	case SPEED_10:
+> +		rate = 2500000;
+> +		break;
+> +	default:
+> +		dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> +		return;
+
+Do we need to return value, since it is invalid speed. But the return
+value of function is void.(Arun Ramadoss)
+
+
+So in v9, after discussing with Jakub Kicinski, the clk_set_rate was used to initialize the rate.
+(It is a reference to Intel's scheme:    dwmac-intel-plat.c: kmb_eth_fix_mac_speed)
+(https://patchwork.kernel.org/project/linux-riscv/patch/20230328062009.25454-6-samin.guo@starfivetech.com)
+
+
+Best regards,
+Samin
+>> +       }
+>> +
+>> +       err = clk_set_rate(dwmac->clk_tx, rate);
+>> +       if (err)
+>> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+>> +}
+>> +
+>> +static int starfive_dwmac_probe(struct platform_device *pdev)
+>> +{
+>> +       struct plat_stmmacenet_data *plat_dat;
+>> +       struct stmmac_resources stmmac_res;
+>> +       struct starfive_dwmac *dwmac;
+>> +       struct clk *clk_gtx;
+>> +       int err;
+>> +
+>> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
+>> +       if (err)
+>> +               return dev_err_probe(&pdev->dev, err,
+>> +                                    "failed to get resources\n");
+>> +
+>> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+>> +       if (IS_ERR(plat_dat))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(plat_dat),
+>> +                                    "dt configuration failed\n");
+>> +
+>> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
+>> +       if (!dwmac)
+>> +               return -ENOMEM;
+>> +
+>> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
+>> +       if (IS_ERR(dwmac->clk_tx))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
+>> +                                    "error getting tx clock\n");
+>> +
+>> +       clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
+>> +       if (IS_ERR(clk_gtx))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(clk_gtx),
+>> +                                    "error getting gtx clock\n");
+>> +
+>> +       /* Generally, the rgmii_tx clock is provided by the internal clock,
+>> +        * which needs to match the corresponding clock frequency according
+>> +        * to different speeds. If the rgmii_tx clock is provided by the
+>> +        * external rgmii_rxin, there is no need to configure the clock
+>> +        * internally, because rgmii_rxin will be adaptively adjusted.
+>> +        */
+>> +       if (!device_property_read_bool(&pdev->dev, "starfive,tx-use-rgmii-clk"))
+>> +               plat_dat->fix_mac_speed = starfive_dwmac_fix_mac_speed;
+>> +
+>> +       dwmac->dev = &pdev->dev;
+>> +       plat_dat->bsp_priv = dwmac;
+>> +       plat_dat->dma_cfg->dche = true;
+>> +
+>> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>> +       if (err) {
+>> +               stmmac_remove_config_dt(pdev, plat_dat);
+>> +               return err;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static const struct of_device_id starfive_dwmac_match[] = {
+>> +       { .compatible = "starfive,jh7110-dwmac" },
+>> +       { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
+>> +
+>> +static struct platform_driver starfive_dwmac_driver = {
+>> +       .probe  = starfive_dwmac_probe,
+>> +       .remove = stmmac_pltfr_remove,
+>> +       .driver = {
+>> +               .name = "starfive-dwmac",
+>> +               .pm = &stmmac_pltfr_pm_ops,
+>> +               .of_match_table = starfive_dwmac_match,
+>> +       },
+>> +};
+>> +module_platform_driver(starfive_dwmac_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
+>> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
+>> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
+>> --
+>> 2.17.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Best regards,
+Samin
