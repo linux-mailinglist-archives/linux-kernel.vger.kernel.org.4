@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EAC6DBC04
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDCC6DBC09
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDHPvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 11:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S230199AbjDHPzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjDHPvo (ORCPT
+        with ESMTP id S230168AbjDHPzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 11:51:44 -0400
+        Sat, 8 Apr 2023 11:55:03 -0400
 Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8110FEFB9
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 08:51:37 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1842f69fe1fso1365339fac.11
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 08:51:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B8FF0F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 08:55:02 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-18436e0b673so692698fac.0
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 08:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680969097;
+        d=gmail.com; s=20210112; t=1680969302;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xbMqxWkswZ+j8vnTKs/LDwFFKDpT5yB5iqVFJaXrdK0=;
-        b=f47is1vb+JbkCQQfIXJ2m/c93n99bT/X424DtFyIruIHTQ6UWgZpe2Viw/V4xL2pLT
-         gOIi7DNETja0ezD/QuncBUzcOum0e4Pb/g6Lkewu6wb0UdDlJzpWuIRCmOeuYtGE0EJK
-         5pkSmr0Y7HXrWawBdYBZZ8SHURQMA9w88I7UbDbUT9YCfFPSEl81eU6jkCh+ge06inVv
-         P3jkP3n22C9zEmL6z3NzsfyYyGoMDv6e3LeHnDm73MVI25MmB+x92HuypFZQlricaw2x
-         rn3Qo1qtu/5/94Xt2XEasV2gWuDj3BEpokdA5OtJfXV6FTOEmjCabGcAXmSbFfvt2Wpb
-         kTfg==
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qy8lyv752rLSQxtmaTVe33r7tclcAkx2q5NW4/xJORo=;
+        b=e6uhBnJsqB06TyLLKmDh7aoOo+UXoCrgiHLDjXiIDmKTxcG2YwF0juYTNF/w/yAy0d
+         9BJCq5Joe5K1JKC+JhVf8chBQKU23tfajOqGCLXnn27B9JYV6DWib77rNFORLTELvsEF
+         4OODo8tns8pnGKShfhsRdZfV/M5RSx8qRCLUeLSqqafKKooBx4yYl0iZIVFP3GDyIFFL
+         Xf/cUYv/6z2oJgpIRvV+UdgvyhbNleexPY0tx9y7vPoZWPxjeWgQnQG4pjbvlf929bEy
+         kujZDFbilIauPWjJfMenZ/Fq9EMGbct5h8rAWCeRc/IW3qNkoJnDayX+HOeFhQ/1gXDE
+         2K2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680969097;
+        d=1e100.net; s=20210112; t=1680969302;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xbMqxWkswZ+j8vnTKs/LDwFFKDpT5yB5iqVFJaXrdK0=;
-        b=eRevl3o6K/v7ZzZyTA25GG/hUoNIMJiH8gkpkpqIFDLrHkF5cVszt1MeRKszvTqiHr
-         G7qOOXDwL9m6Kow2sAbYwsARd/VwxtWMEYIcn3j5eQJG916y5N6rBOVW5VSvFNz7r5OX
-         UZybG1VRJpsXcDhclqeM5NS194wrkbV0GISIMRd9d0KnGvwcBI9mF8lWaxJOoOGH5clY
-         r1UcKw+ImUacPmKrbB52JjXRg5o1GwcUEbCdh/4UUbnBieEoZ3VS9y/v/SIwq1e8k7/J
-         rbnyV1sy9UUhbtclzuMJN7OvIkVRaEIdqMQAg4tbiCiUzKHu/5zto7IhHkMS3mRLEru1
-         XlZA==
-X-Gm-Message-State: AAQBX9e2x94pYPxRgz93pbpnEa1zDFHzkg8pvZKi62ZDfeEcUPOV73ND
-        h0Z+ZZhyr8q2s1d9N5QdbqO1bE0RZG0SrEB6Stw=
-X-Google-Smtp-Source: AKy350baogKz7qZ8DoqJQN/5M78y5On02n0InjTOAKSGKWAb3fNiOkPdlXCbi9UZCyTTVpjaYDSiWJOCsgNgFn6RMbQ=
-X-Received: by 2002:a05:6870:4184:b0:184:1a2c:83df with SMTP id
- y4-20020a056870418400b001841a2c83dfmr2001463oac.4.1680969096727; Sat, 08 Apr
- 2023 08:51:36 -0700 (PDT)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qy8lyv752rLSQxtmaTVe33r7tclcAkx2q5NW4/xJORo=;
+        b=n2fAYXYtRRPx1XnreUepwdjIyA7C4tRxDO3iNajMUHxY5kxE11dfaLK0yblPOJohcg
+         +WCJkfwqZ9eQy5PAFdBpiAwofZqKRYn7Zc8OlHpmUiZSJdK/jLQEnnkYZtuBvLXyIT/L
+         5Ue/edNCj+x9hl0xtJHX9pJvkMgmP/O/yyUkPL7WuITHxrzCgDBZWvBjLZQ3cYzI6Htq
+         Sy8RZbgo+6nGf4l53xarzfsJ1bW9B4YCh4JLWnpyDoI8L7zF5r/4AryV2/fh9fJlz2UI
+         VZO4mzaiQo4C6+sFjesdH1a8NEsuw9/Fymrp9pnoFDDe4Z3hYRyHOvlKwIngNlNVWI4K
+         gnxw==
+X-Gm-Message-State: AAQBX9eKsgbe3hoUV8qAqmDiIqAFg6FqI0j0zM5Njek8Yu4A+f+hlrIW
+        aC9EYTfhjj3ovvOLlnEpqZAXwDnhoCQ8L+HO4cE=
+X-Google-Smtp-Source: AKy350YeCnGipgLlIYmeOzKhB8PNdMc6GFsIzRyuB71hbGiH93MgujdxhipQHcSXmdMoG3OmdatgSMerS6MLBcsrYIk=
+X-Received: by 2002:a05:6870:12cf:b0:17a:b713:63e9 with SMTP id
+ 15-20020a05687012cf00b0017ab71363e9mr1113212oam.4.1680969301826; Sat, 08 Apr
+ 2023 08:55:01 -0700 (PDT)
 MIME-Version: 1.0
+References: <CANX2M5ayFcJsq7P2-mPAt0rvmfjYB9PaL0E2K7mKUxUC=TCTwA@mail.gmail.com>
+ <323c1b8d-c778-3175-79a0-5adcc0b470b9@kernel.org>
+In-Reply-To: <323c1b8d-c778-3175-79a0-5adcc0b470b9@kernel.org>
 From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
-Date:   Sat, 8 Apr 2023 08:51:26 -0700
-Message-ID: <CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com>
-Subject: Possible incorrect handling of fault injection inside KMSAN instrumentation
-To:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
+Date:   Sat, 8 Apr 2023 08:54:51 -0700
+Message-ID: <CANX2M5Yfisi9yPps61=RvvyaNNgJFVGeMv1LSP9LpE=-JcHYeg@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel paging request in n_tty_open
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
         Marius Fleischer <fleischermarius@googlemail.com>,
         Priyanka Bose <its.priyanka.bose@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,112 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Feb 12, 2023 at 10:18=E2=80=AFPM Jiri Slaby <jirislaby@kernel.org> =
+wrote:
+> COuld you explain how this assignment can ever fail? ldata is either
+> allocated correctly (non-NULL) and the assignment cannot fail or not
+> (NULL) and the assignment cannot fail (as it doesn't happen).
 
-We would like to report a =E2=80=9Cpotential=E2=80=9D bug in the KMSAN inst=
-rumentation
-which has been found during the root-cause analysis of another bug
-discovered by our modified version of syzkaller.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-description: Possible incorrect handling of fault injection inside
-KMSAN instrumentation
-affected file: mm/kmsan/shadow.c
-kernel version: 6.2.0-rc5
-kernel commit: 41c66f47061608dc1fd493eebce198f0e74cc2d7
-git tree: kmsan
-kernel config: https://syzkaller.appspot.com/text?tag=3DKernelConfig&x=3Da9=
-a22da1efde3af6.
-The config has Fault Injection (FI) turned on, which is important in
-this case.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-We reported the =E2=80=9Csupposed=E2=80=9D bug discovered by our fuzzer her=
-e:
-https://groups.google.com/u/1/g/syzkaller/c/_83qwErVKlA. Initially, we
-presumed that the vzalloc() call (refer to Jiri Slaby=E2=80=99s comment on
-that thread) fails due to fault injection (refer to the reproducer
-attached). However, we were confused to see that the allocation
-failure triggers a crash, though clearly the driver code checks for
-allocation failures. Nonetheless, we reported the crash to the
-developers. Following Jiri=E2=80=99s comments, who evidently had the same
-impression as ours, we started investigating. Below is our
-observation.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-TL;DR:
-
-kmsan's allocation of shadow or origin memory in
-kmsan_vmap_pages_range_noflush() fails silently due to fault injection
-(FI). KMSAN sort of =E2=80=9Cswallows=E2=80=9D the allocation failure, and =
-moves on.
-When either of them is later accessed while updating the metadata,
-there are no checks to test the validity of the respective pointers,
-which results in a page fault.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-Detail explanation:
-
-- In drivers/tty/n_tty.c:1879 (n_tty_open) , the driver calls vzalloc
-to allocate memory for ldata.
-
-- This triggers the KMSAN instrumentation to allocate the
-corresponding shadow and origin memory in mm/kmsan/shadow.c:236
-(kmsan_vmap_pages_range_noflush) .
-
-- This allocation of the shadow memory fails (through fault
-injection). KMSAN checks for failure, frees the allocated memory and
-returns. Note: There is no return value signaling the error.
-Additionally, the pages for shadow and origin memory are not mapped at
-the addresses where KMSAN expects them to be (in fact, there are no
-pages that could be mapped at all since the allocation failed).
-
-- The allocation of the actual memory for the driver is successful.
-Therefore, vzalloc (from 1.) returns a valid pointer (not NULL).
-
-- After checking that the allocation succeeded
-(drivers/tty/n_tty.c:1880), the driver tries to dereference ldata and
-write to one of the fields at drivers/tty/n_tty.c:1883 (n_tty_open).
-
-- This triggers the KMSAN instrumentation to update the shadow/origin
-memory according to the write by calling
-__msan_metadata_ptr_for_store_8  which subsequently calls
-mm/kmsan/shadow.c:81 (kmsan_get_shadow_origin_ptr).
-
-- Since the address that the driver is trying to access is with the
-vmalloc range, this function will only calculate the offset of this
-pointer from the base of the vmalloc range and add this to the base of
-the shadow/origin memory range to retrieve the pointer for the
-corresponding shadow/origin memory. Note: there are no checks ensuring
-that this memory is actually mapped.
-
-- Next, after the return of __msan_metadata_ptr_for_store_8 , the
-instrumentation will try to update the shadow memory (or origin, we
-are not entirely confident which of the two. We think it is the
-shadow, but it also does not really change anything). Since this
-memory is not mapped, it leads to the crash.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-Our conclusions/Questions:
-
-- Should KMSAN fail silently? Probably not. Otherwise, the
-instrumentation always needs to check whether shadow/origin memory
-exists.
-
-- Should KMSAN even be tested using fault injection? We are not sure.
-On one hand, the primary purpose of FI should be testing the
-application code. But also, inducing faults inside instrumentation
-clearly helps to find mistakes in that, too.
-
-- What is a fix for this? Should a failure in the KMSAN
-instrumentation be propagated up so that the kernel allocator
-(vzalloc() in this case) can =E2=80=9Cpretend=E2=80=9D to fail, too?
+Sorry for the late reply. We just reported our understanding of the
+issue here: https://groups.google.com/u/1/g/syzkaller/c/BsxSggrhEMw
 
 --=20
 Thanks and Regards,
