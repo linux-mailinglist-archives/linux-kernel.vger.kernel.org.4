@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0799F6DBAE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07356DBAE2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjDHM1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 08:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S231222AbjDHM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 08:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjDHM1H (ORCPT
+        with ESMTP id S231302AbjDHM1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Apr 2023 08:27:07 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B961024E;
-        Sat,  8 Apr 2023 05:26:44 -0700 (PDT)
-Date:   Sat, 08 Apr 2023 12:26:22 +0000
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D55113D3
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 05:26:44 -0700 (PDT)
+Date:   Sat, 08 Apr 2023 12:26:27 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680956799; x=1681215999;
-        bh=urI1ZTtOSmU+vvBI5jLuXdUyX7F1fydhihApnsXkfuk=;
+        s=protonmail3; t=1680956797; x=1681215997;
+        bh=YjWJqyzY7rAxB/8T748G6J4lTdaIt8uzOIDk7TzSA8o=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=ZTwQwHt1PVXtCb1HW9Zvd04Z1teTcHsADLp4vudwGRIZkQKxZsedjCCbm7TQog6kE
-         8Mkdcc3E9RtHlWOgyl0NMb15Vfppir4DYJrxPYeN2JKrCnTyVeESFpQungF7Bx3PvZ
-         ioHU3csjoMbQFcNhvx8FHRP3I5EDALOOQO2qeWnl8WMZXhioRLppeWtWZG7zzL41df
-         mHOzOQbZ5HkE0VeXR4jxJ6lghjJ1N2WUq9UAloiSxAnhW3e+tIAousLOlb6ZxP20WU
-         9V+/Zbuf5B/mJGS+gdxdNlhi1LZVD+aSFMgCVId33Q2vrviiZMJQxBTNcXRvNgsCoE
-         2p12dCL4o+AyA==
+        b=yJI2kW0bjVdmWEnbNqeuak4+eblElCb6I+DrB69qGiFObCyFe0TNVXjzucDlFNfcK
+         3bupOg9//vx2vp7dkOSCF/7fSzWBPsZ6rM0VjUUWWqwgg13oNwCa0BPDHmwfDRcAM1
+         v7j1UjxhQC+1Bhd/tolmiWccVVkd5w8EfZucU5lUATEn29hvrg/wxMfs1xxmIbjcL9
+         7NDlY7T9dbpyw2VtJf9MIwzk6OrFWsJIAE1ohjuam3cgORImgEicR5MQjUBIKwLUQO
+         7fMRssbNsGuEAuaium3EN9Put5zzj7l/cq0v+MDqWGwKa2Kmzr/itMLg2LJhzRXouk
+         fnINbVCzhYZjg==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,8 +39,8 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <a.hindborg@samsung.com>
-Subject: [PATCH v7 13/15] rust: types: add `Opaque::ffi_init`
-Message-ID: <20230408122429.1103522-14-y86-dev@protonmail.com>
+Subject: [PATCH v7 14/15] rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
+Message-ID: <20230408122429.1103522-15-y86-dev@protonmail.com>
 In-Reply-To: <20230408122429.1103522-1-y86-dev@protonmail.com>
 References: <20230408122429.1103522-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,97 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function allows to easily initialize `Opaque` with the pin-init
-API. `Opaque::ffi_init` takes a closure and returns a pin-initializer.
-This pin-initiailizer calls the given closure with a pointer to the
-inner `T`.
+`UniqueArc::try_new_uninit` calls `Arc::try_new(MaybeUninit::uninit())`.
+This results in the uninitialized memory being placed on the stack,
+which may be arbitrarily large due to the generic `T` and thus could
+cause a stack overflow for large types.
 
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
+Change the implementation to use the pin-init API which enables in-place
+initialization. In particular it avoids having to first construct and
+then move the uninitialized memory from the stack into the final location.
+
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Cc: Alice Ryhl <aliceryhl@google.com>
-Cc: Andreas Hindborg <a.hindborg@samsung.com>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 ---
- rust/kernel/init.rs  |  9 +++++++++
- rust/kernel/types.rs | 20 ++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ rust/kernel/lib.rs      |  1 -
+ rust/kernel/sync/arc.rs | 16 +++++++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index ffd539e2f5ef..a1298c8bbda0 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -177,6 +177,14 @@
- //! }
- //! ```
- //!
-+//! For the special case where initializing a field is a single FFI-functi=
-on call that cannot fail,
-+//! there exist the helper function [`Opaque::ffi_init`]. This function in=
-itialize a single
-+//! [`Opaque`] field by just delegating to the supplied closure. You can u=
-se these in combination
-+//! with [`pin_init!`].
-+//!
-+//! For more information on how to use [`pin_init_from_closure()`], take a=
- look at the uses inside
-+//! the `kernel` crate. The [`sync`] module is a good starting point.
-+//!
- //! [`sync`]: kernel::sync
- //! [pinning]: https://doc.rust-lang.org/std/pin/index.html
- //! [structurally pinned fields]:
-@@ -187,6 +195,7 @@
- //! [`impl PinInit<T, E>`]: PinInit
- //! [`impl Init<T, E>`]: Init
- //! [`Opaque`]: kernel::types::Opaque
-+//! [`Opaque::ffi_init`]: kernel::types::Opaque::ffi_init
- //! [`pin_data`]: ::macros::pin_data
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 821bd067151c..2d7606135ef6 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -28,7 +28,6 @@
+ #[cfg(not(CONFIG_RUST))]
+ compile_error!("Missing kernel configuration for conditional compilation")=
+;
 
+-#[allow(unused_extern_crates)]
+ // Allow proc-macros to refer to `::kernel` inside the `kernel` crate (thi=
+s crate).
+ extern crate self as kernel;
+
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index 43a53fbe175d..d05caa723718 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -18,7 +18,8 @@
  use crate::{
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index ff2b2fac951d..3a46ec1a00cd 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -2,6 +2,7 @@
-
- //! Kernel types.
-
-+use crate::init::{self, PinInit};
+     bindings,
+     error::{self, Error},
+-    init::{InPlaceInit, Init, PinInit},
++    init::{self, InPlaceInit, Init, PinInit},
++    try_init,
+     types::{ForeignOwnable, Opaque},
+ };
  use alloc::boxed::Box;
- use core::{
-     cell::UnsafeCell,
-@@ -234,6 +235,25 @@ impl<T> Opaque<T> {
-         Self(MaybeUninit::uninit())
-     }
+@@ -30,6 +31,7 @@ use core::{
+     pin::Pin,
+     ptr::NonNull,
+ };
++use macros::pin_data;
 
-+    /// Creates a pin-initializer from the given initializer closure.
-+    ///
-+    /// The returned initializer calls the given closure with the pointer =
-to the inner `T` of this
-+    /// `Opaque`. Since this memory is uninitialized, the closure is not a=
-llowed to read from it.
-+    ///
-+    /// This function is safe, because the `T` inside of an `Opaque` is al=
-lowed to be
-+    /// uninitialized. Additionally, access to the inner `T` requires `uns=
-afe`, so the caller needs
-+    /// to verify at that point that the inner value is valid.
-+    pub fn ffi_init(init_func: impl FnOnce(*mut T)) -> impl PinInit<Self> =
-{
-+        // SAFETY: We contain a `MaybeUninit`, so it is OK for the `init_f=
-unc` to not fully
-+        // initiailize the `T`.
-+        unsafe {
-+            init::pin_init_from_closure::<_, ::core::convert::Infallible>(=
-move |slot| {
-+                init_func(Self::raw_get(slot));
-+                Ok(())
-+            })
-+        }
-+    }
-+
-     /// Returns a raw pointer to the opaque data.
-     pub fn get(&self) -> *mut T {
-         UnsafeCell::raw_get(self.0.as_ptr())
+ /// A reference-counted pointer to an instance of `T`.
+ ///
+@@ -122,6 +124,7 @@ pub struct Arc<T: ?Sized> {
+     _p: PhantomData<ArcInner<T>>,
+ }
+
++#[pin_data]
+ #[repr(C)]
+ struct ArcInner<T: ?Sized> {
+     refcount: Opaque<bindings::refcount_t>,
+@@ -502,9 +505,16 @@ impl<T> UniqueArc<T> {
+
+     /// Tries to allocate a new [`UniqueArc`] instance whose contents are =
+not initialised yet.
+     pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocErro=
+r> {
+-        Ok(UniqueArc::<MaybeUninit<T>> {
++        // INVARIANT: The refcount is initialised to a non-zero value.
++        let inner =3D Box::try_init::<AllocError>(try_init!(ArcInner {
++            // SAFETY: There are no safety requirements for this FFI call.
++            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
++            data <- init::uninit::<T, AllocError>(),
++        }? AllocError))?;
++        Ok(UniqueArc {
+             // INVARIANT: The newly-created object has a ref-count of 1.
+-            inner: Arc::try_new(MaybeUninit::uninit())?,
++            // SAFETY: The pointer from the `Box` is valid.
++            inner: unsafe { Arc::from_inner(Box::leak(inner).into()) },
+         })
+     }
+ }
 --
 2.39.2
 
