@@ -2,104 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9926DBBB6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BD46DBBBA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjDHPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S229953AbjDHPF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDHPD1 (ORCPT
+        with ESMTP id S229456AbjDHPF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 11:03:27 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133CCBDD9;
-        Sat,  8 Apr 2023 08:03:23 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id B399144C1018;
-        Sat,  8 Apr 2023 15:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B399144C1018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1680966200;
-        bh=t1fiAMRSQhtjcs8sVxjX6AYa5QPz2gjw1esPovs3cBk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LmuvIOak/kR6GTg1EiNJXRG0Ssbm5A0mWma2jI0ID1tEG9ZWf7V/vs+H5ObNHZqYE
-         PVv8aejVaH+Expty948yBeYI688dHCrEGtbbXKa6ua84bEEdf5oA6gokf0ny3HGXpW
-         vkpOz/ChfBll2umS83d7obn9usI2thUidpyobKQ4=
+        Sat, 8 Apr 2023 11:05:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0472BCC0A
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 08:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680966313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w9sryqDLxXFtiPfudnwB2Hm3EkTYwVipdp4/U/AgJig=;
+        b=RcOPCeKgx8JjcoOFSF1luYPGl/HTMvhAhhamhjwJ6/EhPfDkniaDRvYA79NUwO8TQ/euo+
+        w5dnoTijSfV1pAlXlXlrddTcrkfsQRHFGdl0NhK3cwZLEo2b/xrADofevtmCcK87qeenY1
+        FXApBzQO/C2ZwMNn0weJCYJgRsnT2/M=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-483-YTWJ9M8BNWS9V83mesHm3g-1; Sat, 08 Apr 2023 11:05:11 -0400
+X-MC-Unique: YTWJ9M8BNWS9V83mesHm3g-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-502a69a6ec3so1690071a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 08:05:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680966310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w9sryqDLxXFtiPfudnwB2Hm3EkTYwVipdp4/U/AgJig=;
+        b=K1SHlKXEshEmc6kBviB18RyCUJX9db197sc5U5UhSc9xNrAZdlt6Wme+V4T4U2XC/A
+         HXQtJ8+ODZhRoEn0jYWGAfhFUdy30r+PQ4CxJLaqSAF2XSPGROBIPckqj1Qka87dHjhQ
+         Wap2+HfGsZlirDdn11MOeNVNWAlUSB54O4iBWw56sPgWRxMfe4UYI4QojSVRULOn6rqR
+         3IG57ZwiaoTrhOM5pfKp3/OkCCQ9fWCnljE62gZAGk37jz9oGrn9tAjAg2A46lMjP0bG
+         Q7Eav9xyxw4mN+b6rTe9dFriagQWDBY0BIcIXpcsiCLdVMvLO+urebckL5W4OhWblNyv
+         255A==
+X-Gm-Message-State: AAQBX9fPRR2ZYvJy19pp2260Y2j3RoZ4qouFbiSI1O0ExfYxUfS69Nm2
+        O5Lh0kVw33UQHkd1YZ+QT+kaZiY0IdbmzSQKyZclqXMiulhbOrQ9C9lzc3+NqIQREwXEB2sRkQu
+        w/rekeTpaviD0f+ZaaB2/1wppLmTaIE6+fKe/bLyE
+X-Received: by 2002:aa7:d590:0:b0:4fd:2675:3785 with SMTP id r16-20020aa7d590000000b004fd26753785mr1389704edq.22.1680966310623;
+        Sat, 08 Apr 2023 08:05:10 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YEXZM04gfrG0zUHYkHUTtzon3Nz0PuH2lQDJcHf0ICTIe5pJAzOGzTF1m/FMXP9xJ9r7stdvgILRdsVA9Ke24=
+X-Received: by 2002:aa7:d590:0:b0:4fd:2675:3785 with SMTP id
+ r16-20020aa7d590000000b004fd26753785mr1389692edq.22.1680966310343; Sat, 08
+ Apr 2023 08:05:10 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sat, 08 Apr 2023 18:03:20 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5 01/27] x86/boot: Align vmlinuz sections on page size
-In-Reply-To: <20230405171333.GDZC2sPc3D7rDdK6TH@fat_crate.local>
-References: <cover.1678785672.git.baskov@ispras.ru>
- <159597c484778da5e59c3a5728669f131f800b5a.1678785672.git.baskov@ispras.ru>
- <20230405171333.GDZC2sPc3D7rDdK6TH@fat_crate.local>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <de70f11174e8f8e294071b70542e23f5@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230408081934.54002-1-chenaotian2@163.com>
+In-Reply-To: <20230408081934.54002-1-chenaotian2@163.com>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Sat, 8 Apr 2023 11:04:58 -0400
+Message-ID: <CAK-6q+j4aDoA2KG3Qzxg2XMu6nPxUuExuBw=sQ3+VqJuB5cj0A@mail.gmail.com>
+Subject: Re: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
+To:     Chen Aotian <chenaotian2@163.com>
+Cc:     alex.aring@gmail.com, stefan@datenfreihafen.org,
+        miquel.raynal@bootlin.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-05 20:13, Borislav Petkov wrote:
+Hi,
 
-Sorry for delayed reply.
+On Sat, Apr 8, 2023 at 4:22=E2=80=AFAM Chen Aotian <chenaotian2@163.com> wr=
+ote:
+>
+> After replacing e->info, it is necessary to free the old einfo.
+>
+> Fixes: f25da51fdc38 ("ieee802154: hwsim: add replacement for fakelb")
+> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> Signed-off-by: Chen Aotian <chenaotian2@163.com>
+> ---
+>
+> V1 -> V2:
+> * Using rcu_replace_pointer() is better then rcu_dereference()
+>   and rcu_assign_pointer().
+>
+>  drivers/net/ieee802154/mac802154_hwsim.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ieee802154/mac802154_hwsim.c b/drivers/net/ieee8=
+02154/mac802154_hwsim.c
+> index 8445c2189..6ffcadb9d 100644
+> --- a/drivers/net/ieee802154/mac802154_hwsim.c
+> +++ b/drivers/net/ieee802154/mac802154_hwsim.c
+> @@ -685,7 +685,7 @@ static int hwsim_del_edge_nl(struct sk_buff *msg, str=
+uct genl_info *info)
+>  static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *inf=
+o)
+>  {
+>         struct nlattr *edge_attrs[MAC802154_HWSIM_EDGE_ATTR_MAX + 1];
+> -       struct hwsim_edge_info *einfo;
+> +       struct hwsim_edge_info *einfo, *einfo_old;
+>         struct hwsim_phy *phy_v0;
+>         struct hwsim_edge *e;
+>         u32 v0, v1;
+> @@ -723,8 +723,10 @@ static int hwsim_set_edge_lqi(struct sk_buff *msg, s=
+truct genl_info *info)
+>         list_for_each_entry_rcu(e, &phy_v0->edges, list) {
+>                 if (e->endpoint->idx =3D=3D v1) {
+>                         einfo->lqi =3D lqi;
+> -                       rcu_assign_pointer(e->info, einfo);
+> +                       einfo_old =3D rcu_replace_pointer(e->info, einfo,
+> +                                                       lock_is_held(&hws=
+im_phys_lock));
 
-> On Tue, Mar 14, 2023 at 01:13:28PM +0300, Evgeniy Baskov wrote:
->> To protect sections on page table level each section needs to be
->> aligned on page size (4KB).
-> 
-> Protect against what?
+I think lockdep_is_held() should be correct here.
 
-Protect against invalid memory accesses, mainly caused by bugs, I guess.
-I meant just applying tight memory attributes, sorry for the
-bad wording. I will change it in the next version.
+- Alex
 
-> 
->> Set sections alignment in linker script for the kernel decompressor
->> (boot/compressed/vmlinux.lds.S).
-> 
-> Do not talk about *what* the patch is doing in the commit message - 
-> that
-> should be obvious from the diff itself. Rather, concentrate on the 
-> *why*
-> it needs to be done.
-
-Makes sense. I'll try to improve it before resubmitting.
-
-> 
->> Also introduce symbols that can be used to reference compressed
->> kernel blob section later in the later patches.
-> 
-> Introduce those with the respective patch that uses them. This one is
-> adding section alignment only and that's all that it should do.
-
-Oh, good point, will do.
-
-> 
-> Thx.
-
-Thanks,
-Evgeniy Baskov
