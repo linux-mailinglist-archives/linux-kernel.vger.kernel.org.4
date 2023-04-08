@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBB96DBA20
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18DC6DBA21
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjDHKmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S229686AbjDHKnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjDHKls (ORCPT
+        with ESMTP id S229456AbjDHKnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:41:48 -0400
+        Sat, 8 Apr 2023 06:43:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A25113D7
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:41:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C82EF96
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:42:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93A82611A1
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 10:39:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C7EC433D2;
-        Sat,  8 Apr 2023 10:39:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E2D60F61
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 10:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C31C433EF;
+        Sat,  8 Apr 2023 10:40:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680950370;
-        bh=PMR7OGvaOZO2q56kuA4FHiNMoQYG4vYI/XacVJ58yME=;
+        s=k20201202; t=1680950457;
+        bh=m8ilFxdsCznzMJ+asDJJkOkNv6yH4u5xRqwg6cI8ZE4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EPqLcy+bw5POAs9FNRtOz6nqFcvTcKYLKk/ysdv3Bkuy2nBhbi6k/gKYaztPILPkq
-         5oIsRxvSWE9sSVxHq95y72j4sTRHOK3bRIFcxQLALDpfGZJf59TNVdUUoekBGoNVWq
-         T3Q0WIhU30rx1LeMklSvcqgptQIB2muI/kOmz/PZKZCXzMJ2Yt8AHZr1PU0Ws/Gg9Z
-         IsQRytBwRcON0onLUoZ0dQp7FDVDS8lwwwQREMu+55903cNRxRbyM+PbXDCVz4rBAB
-         /HCnzqAAAvsprqxMnQlcwrEWGjaA/1dDH/fTIM3CpPLa6Av17SGfekIe4STUX0QFKu
-         3RuFN7k3D8wfA==
+        b=U8g6xRLchn8jADVBQJm6+fWpPivvXt1eKuh4MNcZelBE9S5n0YYQAiN1w4e+4w0wQ
+         c63PztmXG4D4Sb8GbHTQFdwSer6ZzO1+eGqSAUcQED20YvU748t+uv5TZx7wtHdeIQ
+         cgl4oh8d9oZz7Zhix4kPpAdo8oruGkJ55awKwyqbTzI6vPv1RDSLEaWXom08swKA2L
+         XpNJKvhguG02K7Dne8SJC60e/tvGzkqS0eJ169D9A7laIE+djbmnXFEo5Pzdv1thwO
+         mj+ufaaK/CkH09WXj0PSPUzYbHZrhLbgsIL49HrliQW5GpUXn0TarQ/ScPxVhJMuNH
+         WF83l0cDGMxjw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1pl5yh-006u4Z-Jt;
-        Sat, 08 Apr 2023 11:39:27 +0100
-Date:   Sat, 08 Apr 2023 11:39:27 +0100
-Message-ID: <87jzym64kg.wl-maz@kernel.org>
+        id 1pl607-006u5C-33;
+        Sat, 08 Apr 2023 11:40:55 +0100
+Date:   Sat, 08 Apr 2023 11:40:54 +0100
+Message-ID: <87ile664i1.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -47,10 +47,10 @@ Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 1/2] irqchip: irq-ti-sci-inta: Allocates VINTs at probe
-In-Reply-To: <20230327-irq-affinity-upstream-v2-1-1474e518f1cb@ti.com>
+Subject: Re: [PATCH RFC v2 2/2] irqchip: irq-ti-sci-inta: Add direct mapped interrupts
+In-Reply-To: <20230327-irq-affinity-upstream-v2-2-1474e518f1cb@ti.com>
 References: <20230327-irq-affinity-upstream-v2-0-1474e518f1cb@ti.com>
-        <20230327-irq-affinity-upstream-v2-1-1474e518f1cb@ti.com>
+        <20230327-irq-affinity-upstream-v2-2-1474e518f1cb@ti.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -69,19 +69,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 16:04:26 +0100,
+On Mon, 27 Mar 2023 16:04:27 +0100,
 Vignesh Raghavendra <vigneshr@ti.com> wrote:
 > 
-> Simplify driver by allocating all VINTs at probe instead of
-> allocating on IRQ request. This will allow dedicating few VINTs as
-> direct IRQs without aggregation in future.
+> Certain high throughput peripherals such as ethernet etc may need
+> dedicated IRQ lines so the IRQ load can be balanced across cores using
+> IRQ affinity controls. Current driver aggregates multiple events/IRQ to
+> single wired IRQ line/VINT thus making it impossible to migrate events
+> selectively.
+> In order to overcome this limitation, reserve a set of VINTs as direct
+> interrupts and map them to events that are known to generate high IRQ
+> load. Use SoC specific table to determine such events.
+> 
+> This allows affinity management at parent irqchip level (GIC or
+> ti-sci-intr + GIC).
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/irqchip/irq-ti-sci-inta.c | 149 +++++++++-
+>  1 file changed, 147 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-ti-sci-inta.c b/drivers/irqchip/irq-ti-sci-inta.c
+> index a3a22edbe0f0..db098bd95edc 100644
+> --- a/drivers/irqchip/irq-ti-sci-inta.c
+> +++ b/drivers/irqchip/irq-ti-sci-inta.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/irqchip/chained_irq.h>
+>  #include <linux/soc/ti/ti_sci_inta_msi.h>
+>  #include <linux/soc/ti/ti_sci_protocol.h>
+> +#include <linux/sys_soc.h>
+>  #include <asm-generic/msi.h>
+>  
+>  #define TI_SCI_DEV_ID_MASK	0xffff
+> @@ -40,6 +41,20 @@
+>  #define VINT_STATUS_OFFSET	0x18
+>  #define VINT_STATUS_MASKED_OFFSET	0x20
+>  
+> +#define DEV_DMASS0_INTAGGR_0 28
+> +#define DEV_DMASS0_PKTDMA_0 30
+> +
+> +/**
+> + * struct ti_sci_inta_soc_data - Description of SoC specific data
+> + * @events_list:		Pointer to array of events requiring direct IRQ
+> + *                              mapping
+> + * @events_list_size:		size of event_list array
+> + */
+> +struct ti_sci_inta_soc_data {
+> +	unsigned int *events_list;
+> +	int events_list_size;
+> +};
+> +
+>  /**
+>   * struct ti_sci_inta_event_desc - Description of an event coming to
+>   *				   Interrupt Aggregator. This serves
+> @@ -64,6 +79,7 @@ struct ti_sci_inta_event_desc {
+>   * @events:		Array of event descriptors assigned to this vint.
+>   * @parent_virq:	Linux IRQ number that gets attached to parent
+>   * @vint_id:		TISCI vint ID
+> + * @reserved:		Indicate if this VINT is reserved for direct mapping
+>   */
+>  struct ti_sci_inta_vint_desc {
+>  	struct irq_domain *domain;
+> @@ -72,6 +88,7 @@ struct ti_sci_inta_vint_desc {
+>  	struct ti_sci_inta_event_desc events[MAX_EVENTS_PER_VINT];
+>  	unsigned int parent_virq;
+>  	u16 vint_id;
+> +	bool reserved;
+>  };
+>  
+>  /**
+> @@ -81,6 +98,8 @@ struct ti_sci_inta_vint_desc {
+>   * @vint:		TISCI resource pointer representing IA interrupts.
+>   * @global_event:	TISCI resource pointer representing global events.
+>   * @vint_list:		List of the vints active in the system
+> + * @resv_vint_list:	List of the direct vints active in the system.
+> + * @resv_events:	Pointer to list of direct events
+>   * @vint_mutex:		Mutex to protect vint_list
+>   * @base:		Base address of the memory mapped IO registers
+>   * @pdev:		Pointer to platform device.
+> @@ -97,12 +116,15 @@ struct ti_sci_inta_vint_desc {
+>   *			identifier to let sysfw know where it has to program the
+>   *			Global Event number.
+>   * @num_vints:		Number of VINT lines allocated to this IA.
+> + * @num_resv_vints:	Number of VINT lines reserved for direct mapping.
+>   */
+>  struct ti_sci_inta_irq_domain {
+>  	const struct ti_sci_handle *sci;
+>  	struct ti_sci_resource *vint;
+>  	struct ti_sci_resource *global_event;
+>  	struct list_head vint_list;
+> +	struct list_head resv_vint_list;
+> +	unsigned int *resv_events;
+>  	/* Mutex to protect vint list */
+>  	struct mutex vint_mutex;
+>  	void __iomem *base;
+> @@ -112,6 +134,7 @@ struct ti_sci_inta_irq_domain {
+>  	int unmapped_cnt;
+>  	u16 *unmapped_dev_ids;
+>  	int num_vints;
+> +	int num_resv_vints;
+>  };
+>  
+>  #define to_vint_desc(e, i) container_of(e, struct ti_sci_inta_vint_desc, \
+> @@ -265,7 +288,11 @@ static int ti_sci_inta_alloc_parent_irqs(struct irq_domain *domain)
+>  		}
+>  		vint_desc->parent_virq = parent_virq;
+>  
+> -		list_add_tail(&vint_desc->list, &inta->vint_list);
+> +		if (i < inta->num_resv_vints)
+> +			list_add_tail(&vint_desc->list, &inta->resv_vint_list);
+> +		else
+> +			list_add_tail(&vint_desc->list, &inta->vint_list);
+> +
+>  		irq_set_chained_handler_and_data(vint_desc->parent_virq,
+>  						 ti_sci_inta_irq_handler, vint_desc);
+>  	}
+> @@ -390,8 +417,58 @@ static void ti_sci_inta_free_irq(struct ti_sci_inta_event_desc *event_desc,
+>  	ti_sci_release_resource(inta->global_event, event_desc->global_event);
+>  	event_desc->global_event = TI_SCI_RESOURCE_NULL;
+>  	event_desc->hwirq = 0;
+> +	vint_desc->reserved = false;
+> +}
+> +
+> +/**
+> + * ti_sci_inta_alloc_direct_irq - Allocate non-aggregated events/IRQs
+> + * @data: Pointer to corresponding irq_data
+> + *
+> + * Returns allocated event_desc, ERR_PTR otherwise.
+> + */
+> +static struct ti_sci_inta_event_desc *ti_sci_inta_alloc_direct_irq(struct irq_data *data)
+> +{
+> +	struct ti_sci_inta_irq_domain *inta = data->domain->host_data;
+> +	struct ti_sci_inta_event_desc *event_desc = NULL;
+> +	struct ti_sci_inta_vint_desc *vint_desc;
+> +
+> +	mutex_lock(&inta->vint_mutex);
+> +	list_for_each_entry(vint_desc, &inta->resv_vint_list, list) {
+> +		if (vint_desc->reserved)
+> +			continue;
+> +
+> +		vint_desc->reserved = true;
+> +		event_desc = ti_sci_inta_alloc_event(vint_desc, 0, data->hwirq);
+> +		if (IS_ERR(event_desc))
+> +			goto unlock;
+>  
+> +		data->parent_data = irq_get_irq_data(vint_desc->parent_virq);
+> +		break;
+> +	}
+> +unlock:
+>  	mutex_unlock(&inta->vint_mutex);
+> +
+> +	return event_desc;
+> +}
+> +
+> +/**
+> + * ti_sci_inta_direct_irq - Allocate non-aggregated events/IRQs
+> + * @data: Pointer to corresponding irq_data
+> + *
+> + * Returns true if this IRQ is to be direct mapped on given platform,
+> + * false otherwise.
+> + */
+> +static bool ti_sci_inta_direct_irq(struct irq_data *data)
+> +{
+> +	struct ti_sci_inta_irq_domain *inta = data->domain->host_data;
+> +	int i;
+> +
+> +	for (i = 0; i < inta->num_resv_vints; i++) {
+> +		if (data->hwirq == inta->resv_events[i])
+> +			return true;
+> +	}
+> +
+> +	return false;
+>  }
+>  
+>  /**
+> @@ -408,7 +485,11 @@ static int ti_sci_inta_request_resources(struct irq_data *data)
+>  {
+>  	struct ti_sci_inta_event_desc *event_desc;
+>  
+> -	event_desc = ti_sci_inta_alloc_irq(data->domain, data->hwirq);
+> +	if (ti_sci_inta_direct_irq(data))
+> +		event_desc = ti_sci_inta_alloc_direct_irq(data);
+> +	else
+> +		event_desc = ti_sci_inta_alloc_irq(data->domain, data->hwirq);
+> +
+>  	if (IS_ERR(event_desc))
+>  		return PTR_ERR(event_desc);
+>  
+> @@ -485,6 +566,15 @@ static void ti_sci_inta_ack_irq(struct irq_data *data)
+>  static int ti_sci_inta_set_affinity(struct irq_data *d,
+>  				    const struct cpumask *mask_val, bool force)
+>  {
+> +	int ret;
+> +
+> +	if (d->parent_data) {
+> +		ret =  irq_chip_set_affinity_parent(d, mask_val, force);
+> +		irq_data_update_effective_affinity(d, mask_val);
+> +
+> +		return ret;
+> +	}
+> +
+>  	return -EINVAL;
+>  }
+>  
+> @@ -627,9 +717,54 @@ static int ti_sci_inta_get_unmapped_sources(struct ti_sci_inta_irq_domain *inta)
+>  	return 0;
+>  }
+>  
+> +static unsigned int ti_sci_inta_direct_events_am62x[] = {
+> +	/* CPSW etherenti DMA events */
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4627),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4635),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4643),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4651),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4659),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4667),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4675),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4683),
+> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 5651),
+> +};
+> +
+> +static struct ti_sci_inta_soc_data soc_data_am62x = {
+> +	.events_list = ti_sci_inta_direct_events_am62x,
+> +	.events_list_size = ARRAY_SIZE(ti_sci_inta_direct_events_am62x),
+> +};
 
-I think this is going in the wrong direction. Eager allocation is
-wasting memory, slowing down boot, and in general a bad idea.
-
-Why can't you just pre-allocate *one* interrupt that serves as a
-chained handler for everything, and then use the rest of the interrupt
-space for "direct" interrupts?
+I don't think these tables belong in a driver, and they are bound to
+grow without any obvious limits. You have firmware tables that can
+express these things. Surely they can be put to a good use.
 
 	M.
 
