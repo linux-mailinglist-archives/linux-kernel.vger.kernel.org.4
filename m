@@ -2,143 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152756DB7E2
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 02:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DF16DB7E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 03:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjDHAtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 20:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S229502AbjDHBAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 21:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDHAtF (ORCPT
+        with ESMTP id S229437AbjDHBAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 20:49:05 -0400
+        Fri, 7 Apr 2023 21:00:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF4EAF3E;
-        Fri,  7 Apr 2023 17:49:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27AEE1BB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:00:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE49E65593;
-        Sat,  8 Apr 2023 00:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1E4C433EF;
-        Sat,  8 Apr 2023 00:49:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3ACEB64AC5
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 01:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B849EC4339B;
+        Sat,  8 Apr 2023 01:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680914943;
-        bh=U+av11hX25u4IyfwQg9yYQJu8Wq0oTxiwzajUtWOdug=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Eh67NABHplIbkUbYYBKerJOwmtmuxB+0NXLRY8qJfAOTSbEGAlkWRKyZky8RSOukJ
-         XRQO676cLTHlP0F3grhPGpLCSVKtt6XPdhaikuOK3q5WgEjnBTBTP2i1mkOVnYefHG
-         LLBSbjJYXSk8pI/Svugkvv8Q9TmvP8T63FecQ8S2uChQfQv6/Hs7XHB1fZOfD204T4
-         9PATU+SOBEmo8Pbm5zAkECjHOQuSzSIkA/W0a3k178VFY2PJqYSvErW1/YveIaGAaw
-         FvvwjaAAjV6CsKFUfdrselqRH25KB+4lwafgh7x++zY4BMIzBI+rq3W/5K3BF14Pqq
-         L161KXqHEFmKg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BCC7615404B5; Fri,  7 Apr 2023 17:49:02 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 17:49:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-Subject: Re: Litmus test names
-Message-ID: <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
- <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
- <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
+        s=k20201202; t=1680915646;
+        bh=9vLXjx0bZMseT0zJHK4962YmSv0A40msCDS1GhEa2Is=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=crKpCvLiEj8G/fazCQZ0aBerTQL1NSg1GQ9TRDij22IMuf1qnprdhxHJ01FsIAUbC
+         x9JsdSJzHUdaj8dERqn1/bYDIQyyml7OHk7KPNWgikcQz1UZPPl70dL4e+xqQG3GId
+         k+9xXdSk3tpbrV4OTP84HVJyvA3qxdBetfi297jFav+WhB6G6r/qLv7BWKVTon6lfs
+         TmYsEoYEqviaAolI88R5wFiLK3urw9kD+MNfIM04LX92H6S9Z8bblO1V99SbuoxdYv
+         kiwIsm7z2vpuCGP4eDRmQ0nvDhil4sUqiw2cZ+WwXF/6kjNHxvYG0S1k/S8ww1YLT9
+         sSkRZ97b8IjFw==
+Message-ID: <35d38e44-fcac-f19a-7ac0-ad3232bc8e5c@kernel.org>
+Date:   Sat, 8 Apr 2023 09:00:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7] f2fs: support errors=remount-ro|continue|panic
+ mountoption
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+References: <20230326062128.1423340-1-chao@kernel.org>
+ <ZDCCkJiVhvLec9c4@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZDCCkJiVhvLec9c4@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
+On 2023/4/8 4:52, Jaegeuk Kim wrote:
+>> +		if (irq_context)
 > 
-> 
-> On 4/7/2023 2:12 AM, Joel Fernandes wrote:
-> > 
-> > 
-> > > On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > 
-> > > ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
-> > > > Paul:
-> > > > 
-> > > > I just saw that two of the files in
-> > > > tools/memory-model/litmus-tests have
-> > > > almost identical names:
-> > > > 
-> > > >  Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > >  Z6.0+pooncelock+poonceLock+pombonce.litmus
-> > > > 
-> > > > They differ only by a lower-case 'l' vs. a capital 'L'.  It's
-> > > > not at all
-> > > > easy to see, and won't play well in case-insensitive filesystems.
-> > > > 
-> > > > Should one of them be renamed?
-> > > 
-> > > Quite possibly!
-> > > 
-> > > The "L" denotes smp_mb__after_spinlock().  The only code difference
-> > > between these is that Z6.0+pooncelock+poonceLock+pombonce.litmus has
-> > > smp_mb__after_spinlock() and Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > does not.
-> > > 
-> > > Suggestions for a better name?  We could capitalize all the letters
-> > > in LOCK, I suppose...
-> 
-> I don't think capitalizing LOCK is helpful.
+> 		if (irq_context && !shutdown)?
 
-Greek font, then?  (Sorry, couldn't resist...)
+Yes, let me update in v8.
 
-> To be honest, almost all the names are extremely cryptic to newcomers like
-> me (like, what does Z6.0 mean? Is it some magic incantation?).
-> And that's not something that's easy to fix.
-
-All too true on all counts.  Some of the names abbreviate the litmus
-test itself, and there are multiple encodings depending one who/what
-generated the test in question.  Others of the names relate to who came
-up with them or the code from which they are derived.
-
-New allegedly universal naming schemes have a rather short half-life.
-
-What would be cool would be a way to structurally compare litmus tests.
-I bet that there are quite a few duplicates, for example.
-
-> The only use case I can think of for spending time improving the names is
-> that sometimes you wanna say something like "oh, this is like
-> Z6.0+pooncelock+pooncelockmb+pombonce". And then people can look up what
-> that is.
-> For that, it's important that the names are easy to disambiguate by humans,
-> and I think Joel's suggestion is an improvement.
-> (and it also fixes the issue brought up by Alan about case-insensitive file
-> systems)
-> 
-> > 
-> > Z6.0+pooncelock+pooncelockmb+pombonce.litmus ?
-
-I am OK with this one, but then again, I was also OK with the original
-Z6.0+pooncelock+poonceLock+pombonce.litmus.  ;-)
-
-Would someone like to to a "git mv" send the resulting patch?
-
-							Thanx, Paul
+Thanks,
