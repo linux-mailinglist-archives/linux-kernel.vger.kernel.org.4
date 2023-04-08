@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32286DBA2A
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9376A6DBA27
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjDHKrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S229938AbjDHKrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjDHKrE (ORCPT
+        with ESMTP id S229924AbjDHKrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:47:04 -0400
+        Sat, 8 Apr 2023 06:47:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706631026B;
-        Sat,  8 Apr 2023 03:46:24 -0700 (PDT)
-Date:   Sat, 08 Apr 2023 10:45:14 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C33B4C17;
+        Sat,  8 Apr 2023 03:46:27 -0700 (PDT)
+Date:   Sat, 08 Apr 2023 10:45:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680950715;
+        s=2020; t=1680950716;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=g8toMptRbl0YAh2qmk/dW1vdH5vnrI9650hQda4a4V0=;
-        b=EdsN/SaK7hU6KX168e0EcRRM1WW+ohT04xMfh/7srQUjAvBCv2cs5k77OFRt521faexs/O
-        QYC6IlXDcUpkSgy4MnSmmLDLusKPeFq7PsY5F2v62IEi2bQNWlDUhcrhAnhl+Q4vYDr3aq
-        ZAIm2MKCDgRWt201wyTUYTL8bMjihXnEYP0aZAK1Y/8/0QoCkDMIGAnIi1wpw7MO4nw7er
-        ewn/Z4y3gsK4b6Sf3wxto0jTrLdP3wcdfwYrRTrpFHmEN3kiYbwnO3iK8b45Cg1iAXI/eO
-        Wjyqjy+G+N2CU3S0133auBn2zgDfq1CymT7pNMav/UVpUjlgt/v0Bw33XbLF3w==
+        bh=2aWNdqWCH6ooG7ZKCY8CAmB8Wk506YvYsyDSFqRjWL0=;
+        b=2uf8x+Al4PhQgvInEDLMteVLg2UdgF1YLfOJ7GL3LYqyRTg1DP/IxYIu5A+goI7Qmv9fXV
+        1TOlVSTkZys69TIEbVeWATSf8qSWtUxDZzfOK+d9bTMWR1En5NF0f/en4tl6bf3oQuVbKC
+        dSewnGyyoLGjbNS1EcyR+x5WnMQe9anfWtnhaZYpajMVW5kQ4iFaF23Hhawy64q09KjL7w
+        cxh9x6JLnYvINTixi9tgAuThPsu0w9FsmKWYhcOnNx6r388KZTUUwk6PSkvmar5a3NQH/+
+        7Nr3clHpzlKwn1ymt72MwzlxUgcQsN0mV0nt5/0a6/efZJ4EgjXp5HWesS+oqQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680950715;
+        s=2020e; t=1680950716;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=g8toMptRbl0YAh2qmk/dW1vdH5vnrI9650hQda4a4V0=;
-        b=08HVg8MSbBAaCDG65JqNC9/Wia+cKdgmvlSle8z5kS2MKUMMar3sEp116ptBQsSinR8Cpe
-        ygESDen4CBT2ZaCg==
+        bh=2aWNdqWCH6ooG7ZKCY8CAmB8Wk506YvYsyDSFqRjWL0=;
+        b=XywPNYzKt5qoF8plW89y4YstY9GNgyqI4/cmdMr7sorJbjiD42e689Cn6evI3hfiYaCG+1
+        lShr76qa4+jZGjDw==
 From:   "irqchip-bot for Jianmin Lv" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/loongson-pch-pic: Fix
- registration of syscore_ops
+Subject: [irqchip: irq/irqchip-next] irqchip/loongson-eiointc: Fix returned
+ value on parsing MADT
 Cc:     stable@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20230407083453.6305-5-lvjianmin@loongson.cn>
-References: <20230407083453.6305-5-lvjianmin@loongson.cn>
+In-Reply-To: <20230407083453.6305-2-lvjianmin@loongson.cn>
+References: <20230407083453.6305-2-lvjianmin@loongson.cn>
 MIME-Version: 1.0
-Message-ID: <168095071449.404.65013102195860563.tip-bot2@tip-bot2>
+Message-ID: <168095071596.404.15580990145239593807.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,40 +66,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     c84efbba46901b187994558ee0edb15f7076c9a7
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c84efbba46901b187994558ee0edb15f7076c9a7
+Commit-ID:     112eaa8fec5ea75f1be003ec55760b09a86799f8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/112eaa8fec5ea75f1be003ec55760b09a86799f8
 Author:        Jianmin Lv <lvjianmin@loongson.cn>
-AuthorDate:    Fri, 07 Apr 2023 16:34:52 +08:00
+AuthorDate:    Fri, 07 Apr 2023 16:34:49 +08:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Sat, 08 Apr 2023 11:29:18 +01:00
 
-irqchip/loongson-pch-pic: Fix registration of syscore_ops
+irqchip/loongson-eiointc: Fix returned value on parsing MADT
 
-When support suspend/resume for loongson-pch-pic, the syscore_ops
-is registered twice in dual-bridges machines where there are two
-pch-pic IRQ domains. Repeated registration of an same syscore_ops
-broke syscore_ops_list, so the patch will corret it.
+In pch_pic_parse_madt(), a NULL parent pointer will be
+returned from acpi_get_vec_parent() for second pch-pic domain
+related to second bridge while calling eiointc_acpi_init() at
+first time, where the parent of it has not been initialized
+yet, and will be initialized during second time calling
+eiointc_acpi_init(). So, it's reasonable to return zero so
+that failure of acpi_table_parse_madt() will be avoided, or else
+acpi_cascade_irqdomain_init() will return and initialization of
+followed pch_msi domain will be skipped.
 
-Fixes: 1ed008a2c331 ("irqchip/loongson-pch-pic: Add suspend/resume support")
+Although it does not matter when pch_msi_parse_madt() returns
+-EINVAL if no invalid parent is found, it's also reasonable to
+return zero for that.
+
 Cc: stable@vger.kernel.org
 Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230407083453.6305-5-lvjianmin@loongson.cn
+Link: https://lore.kernel.org/r/20230407083453.6305-2-lvjianmin@loongson.cn
 ---
- drivers/irqchip/irq-loongson-pch-pic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-loongson-eiointc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-index 437f1af..64fa67d 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -311,7 +311,8 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
- 	pch_pic_handle[nr_pics] = domain_handle;
- 	pch_pic_priv[nr_pics++] = priv;
+diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+index d15fd38..62a632d 100644
+--- a/drivers/irqchip/irq-loongson-eiointc.c
++++ b/drivers/irqchip/irq-loongson-eiointc.c
+@@ -343,7 +343,7 @@ static int __init pch_pic_parse_madt(union acpi_subtable_headers *header,
+ 	if (parent)
+ 		return pch_pic_acpi_init(parent, pchpic_entry);
  
--	register_syscore_ops(&pch_pic_syscore_ops);
-+	if (nr_pics == 1)
-+		register_syscore_ops(&pch_pic_syscore_ops);
+-	return -EINVAL;
++	return 0;
+ }
  
- 	return 0;
+ static int __init pch_msi_parse_madt(union acpi_subtable_headers *header,
+@@ -355,7 +355,7 @@ static int __init pch_msi_parse_madt(union acpi_subtable_headers *header,
+ 	if (parent)
+ 		return pch_msi_acpi_init(parent, pchmsi_entry);
  
+-	return -EINVAL;
++	return 0;
+ }
+ 
+ static int __init acpi_cascade_irqdomain_init(void)
