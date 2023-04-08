@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984CD6DB90F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 07:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98526DB911
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 07:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjDHF1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 01:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S229748AbjDHFbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 01:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDHF07 (ORCPT
+        with ESMTP id S229457AbjDHFbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 01:26:59 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC994C31
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 22:26:33 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a4f8e5d190so1905445ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 22:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680931593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l9Ug1/tPy8825Ij6g3Q1xr/XLB0Q00SXY0Q+3fkJ87I=;
-        b=Yb3hSRf2FsUFXMLYYdY9LMwFMyWb8qrW/uxnioGRwu+ZnGIYTc8KU1p8nH4W5OTqbM
-         BOJf2IueXnELAbFsVGUxTJ2nvJLbionN6t0/S6kDlLw1tsaAcpSY4nTeHwXcYwF2Xqa4
-         A4oeAHjLyOD5q7faetdPAjnXuqoiriwCFIDv0skoViXZCv4coseA4zh4D4yN8+EEMBrq
-         CNJMgm4SPaKqQT1eY18lt8w8Y15kjsW88cClXT23pEgzGgJlcFecZ2JT4tizdxTAArpl
-         mCHHViiS3ujfnW19hJ5p1wlTtNHRjEaNmXjJPulxvPHjTnKc2ZpvjABhG/nsST6E7/R/
-         3Kow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680931593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l9Ug1/tPy8825Ij6g3Q1xr/XLB0Q00SXY0Q+3fkJ87I=;
-        b=XvesW8pSKeO2okyn8w8mu3IF+9S2Nu/j+JPyAV1BwVv/iDY6wDuTixDsTaIjIHVc1c
-         bXrKbnxXLIHiU+9jN8sPxUxb1QrozdC5TngoB2EI7jotlHEYwlAR2kPNcw1WnYMlP8XF
-         F7j23h8FeVFezhcwGifY41Stc92QzIULXneNbNlPdv1Oe2SfMbmQBSMkmjorzneWOUdA
-         qp+F96LbVcCZMz1OpELbESSQYqSd/R6roGeB0tio8xOUgZgIgQh9TYlAulHS3O0nWQwh
-         MCAJPLno0tdhVtiueCUylQrSIRHnivJ2YM+ATWcb3oOht/0hO95WKpLkp/a6dQsHwM9t
-         GG8A==
-X-Gm-Message-State: AAQBX9fUyUWGrQ6JaUyfaGDFu+CNFIg37iQ0ROiPk6ybAHf8+N8kLjUE
-        hcJnSMIy/0c5D2Xo2YTupuFp+A==
-X-Google-Smtp-Source: AKy350b6rxsMthHttFIFvHXUtFDFD45Cs8NNVldbiRe3+CV6zEPtKKyeg6QyZduXHD/Sk8B/19VOZQ==
-X-Received: by 2002:a17:90a:2c0c:b0:244:a41a:f658 with SMTP id m12-20020a17090a2c0c00b00244a41af658mr1430858pjd.4.1680931592790;
-        Fri, 07 Apr 2023 22:26:32 -0700 (PDT)
-Received: from [10.200.9.10] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id cm24-20020a17090afa1800b0023af4eb597csm5459137pjb.52.2023.04.07.22.26.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 22:26:32 -0700 (PDT)
-Message-ID: <9bd50ce2-0ac8-a5dc-a584-0610891c7805@bytedance.com>
-Date:   Sat, 8 Apr 2023 13:26:25 +0800
+        Sat, 8 Apr 2023 01:31:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB36CC66C;
+        Fri,  7 Apr 2023 22:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680931896; x=1712467896;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/LYeyFsXqvORZJLlT+nzpX9FMrn9jcR1VIBaRG2zbf8=;
+  b=GsNBmvhGT5Nvw5PDwjrjwO42DKRmXf6t6Su7R3xMHF9bdXqnBfnKNcPg
+   XFJaqfiL9x8Efv6cjmmha7K9qpgiMyFz68LtMCS4s9t0FOf+DxORlkQ85
+   UPkU2U3Oi/t0T7Gm35UHghUu2XIA0M0wzL3smF0i7EM6H1CpbOlu8TQqa
+   GZjWN87zun8WRWxiey4WXvDSPioYOKg5F79CceFFNosvv/9EOMj7K1IuR
+   vsvVUSp0KJe4u4kqO7MMCulgrFmY4FudQqNy+vAbhzGtzo6bK3S9RZO/8
+   MHilSXI5KsEDIOHFhz/0T4vgOnND83vZWUG5QJyUBZ8cX//VBrMWHMUxi
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="429400783"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="429400783"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 22:31:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665103064"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="665103064"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2023 22:31:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl1Ai-000TNj-2o;
+        Sat, 08 Apr 2023 05:31:32 +0000
+Date:   Sat, 8 Apr 2023 13:31:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
+        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org,
+        rjw@rjwysocki.net
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
+Message-ID: <202304081356.jXr7C3fH-lkp@intel.com>
+References: <20230408022629.727721-1-david.e.box@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 1/2] x86: make profile_pc() use arch_stack_walk()
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     peterz@infradead.org, keescook@chromium.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
-        tglx@linutronix.de, rostedt@goodmis.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Andi Kleen <ak@linux.intel.com>
-References: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
- <20230330081552.54178-2-zhengqi.arch@bytedance.com>
- <20230408045619.m5zfbispodf4zjvz@treble>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230408045619.m5zfbispodf4zjvz@treble>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230408022629.727721-1-david.e.box@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi David,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
+base:   4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
+patch link:    https://lore.kernel.org/r/20230408022629.727721-1-david.e.box%40linux.intel.com
+patch subject: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
+config: i386-randconfig-a003-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081356.jXr7C3fH-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
+        git checkout 04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/pmc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081356.jXr7C3fH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/intel/pmc/mtl.c:52:6: warning: no previous prototype for function 'mtl_set_device_d3' [-Wmissing-prototypes]
+   void mtl_set_device_d3(unsigned int device)
+        ^
+   drivers/platform/x86/intel/pmc/mtl.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void mtl_set_device_d3(unsigned int device)
+   ^
+   static 
+   1 warning generated.
 
 
-On 2023/4/8 12:56, Josh Poimboeuf wrote:
-> On Thu, Mar 30, 2023 at 04:15:51PM +0800, Qi Zheng wrote:
->> The profile_pc() try to get pc by doing a trick to read
->> the contents of the stack. This may cause false positives
->> for KASAN, like the following:
->>
->>   BUG: KASAN: stack-out-of-bounds in profile_pc+0x5b/0x90
->>   Read of size 8 at addr ffff8881062a7a00 by task id/130040
-> 
-> I don't think this was actually a false positive.  The !FRAME_POINTER
-> code in profile_pc() has been badly broken for many years.
-> 
-> BTW, there was a similar patch here:
-> 
->    https://lore.kernel.org/lkml/20230224021858.120078-1-chenzhongjin@huawei.com/
+vim +/mtl_set_device_d3 +52 drivers/platform/x86/intel/pmc/mtl.c
 
-Ah.
-
-> 
-> I thought CONFIG_PROFILING was obsolete but Andi said previously he
-> wants to keep it for at least boot-time profiling.
-> 
-> Andi did suggest removing the lock profiling hacks, which means all the
-> profile_pc() implementations can just be removed in favor of the generic
-> instruction_pointer().
-
-That's great, and I see Chen Zhongjin will send a new patch for this,
-let him continue this work. :)
-
-> 
+    48	
+    49	#define MTL_GNA_PCI_DEV	0x7e4c
+    50	#define MTL_IPU_PCI_DEV	0x7d19
+    51	#define MTL_VPU_PCI_DEV	0x7d1d
+  > 52	void mtl_set_device_d3(unsigned int device)
+    53	{
+    54		struct pci_dev *pcidev;
+    55	
+    56		pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, device, NULL);
+    57		if (pcidev) {
+    58			if (!device_trylock(&pcidev->dev)) {
+    59				pci_dev_put(pcidev);
+    60				return;
+    61			}
+    62			if (!pcidev->dev.driver) {
+    63				dev_info(&pcidev->dev, "Setting to D3hot\n");
+    64				pci_set_power_state(pcidev, PCI_D3hot);
+    65			}
+    66			device_unlock(&pcidev->dev);
+    67			pci_dev_put(pcidev);
+    68		}
+    69	}
+    70	
 
 -- 
-Thanks,
-Qi
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
