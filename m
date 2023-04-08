@@ -2,120 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49B46DB8AB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 05:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499126DB8BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 06:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDHD7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 23:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S229509AbjDHEJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 00:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjDHD66 (ORCPT
+        with ESMTP id S229475AbjDHEJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 23:58:58 -0400
-Received: from s.wrqvtzvf.outbound-mail.sendgrid.net (s.wrqvtzvf.outbound-mail.sendgrid.net [149.72.126.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01FDD330
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 20:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
-        h=from:subject:references:mime-version:content-type:in-reply-to:to:cc:
-        content-transfer-encoding:cc:content-type:from:subject:to;
-        s=org; bh=9fXf41jSfeH8npS2SnXtOfP5uik6JpmwKRQ6ipNjZhg=;
-        b=mMH1/aZlfkigrD7oqZwotDQVo/b4Gps6GU01Cot3KtnizHwlc1YMxH8vHOuUfqdnuCGC
-        SGn+ixiHfYx6Bu2utFfKxDrVH2vcBFJQhabWRRsDqH0GXi020AkfwMnGjmS+a/ErGhtW1Y
-        4uBWi3DmmdxfeSR2TygKP3Kzcy8nlBWo4=
-Received: by filterdrecv-7457b4c9b5-zkl2v with SMTP id filterdrecv-7457b4c9b5-zkl2v-1-6430E67E-6
-        2023-04-08 03:58:54.271893053 +0000 UTC m=+3903964.849135075
-Received: from localhost (unknown)
-        by geopod-ismtpd-6 (SG) with ESMTP
-        id XJJ8jxPtQIa9xN2G75nh4A
-        Sat, 08 Apr 2023 03:58:53.421 +0000 (UTC)
-Date:   Sat, 08 Apr 2023 03:58:54 +0000 (UTC)
-From:   James Seo <james@equiv.tech>
-Subject: Re: [PATCH v2] hwmon: add HP WMI Sensors driver
-Message-ID: <ZDDmewAgPi/4jpcX@equiv.tech>
-References: <20230406152321.42010-1-james@equiv.tech>
- <2257deba-187b-82d2-181c-f1fed08a2ff7@gmx.de>
- <ZC+sgnuy5bssD1DN@vb-22lts>
- <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
+        Sat, 8 Apr 2023 00:09:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A05DD332
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 21:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680926971; x=1712462971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I85LnZNyBLif63Nt+7CkFxtYuaxsLLp2R4nv7/uIJo0=;
+  b=gVhUzqjd5NArC8z3TuEA318jy5CESv/V2+QQ155tXlewVj0vXNVgaD6B
+   L564+CU5xUgqvqSVc6zIPOn9/YrCoEK374KaNo6P5e07LLDPwV0e2GPdW
+   FUgHz1T/tiCl+lTtQDE/cQj7oGf5PFR16H4WZf9syA0dsL3GCw4RFKmt+
+   jx9YXlkpYgqzkQ9x5Me0vygTuBtDGfpqK7qCO0NO7JLEXain76Kv5GNa1
+   2iFARWL2nZUkVA9zo7/GIb3M988cxzIiaJ+byJPOMk2xLI6RIyopJXUtq
+   0j27MLrhCLhxqMVVp652uPY1zye+7Tr8qu97aUsbWL52RsjOV5EI521EP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341861521"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="341861521"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 21:09:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="831368603"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="831368603"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Apr 2023 21:09:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkztH-000TIP-1p;
+        Sat, 08 Apr 2023 04:09:27 +0000
+Date:   Sat, 8 Apr 2023 12:09:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 2/2] drm/nouveau/kms: Add INHERIT ioctl to nvkm/nvif for
+ reading IOR state
+Message-ID: <202304081129.AMXCmyn2-lkp@intel.com>
+References: <20230407222133.1425969-2-lyude@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e256d281-49a5-2d9a-7def-fd68e177e926@roeck-us.net>
-X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
- =?us-ascii?Q?WsEyzZr62PnJ8E17NJhhMO0lG3ycUBe69Gwm5XP?=
- =?us-ascii?Q?UVOGIf7x=2FfnTSULP9ZVcTc=2FVMlX41+BWNk1aAfb?=
- =?us-ascii?Q?WMk78u45ClkgQzWopc48ZH4Rs=2F0BNxmbi4xb48H?=
- =?us-ascii?Q?kKMGsqU1rOoQAuH3VBeCplEmsM7UjOQdMUeGpbv?=
- =?us-ascii?Q?LQyLTJ9ltU0BCbICnMdVUatvXGu3HcSvvCD+OT?=
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20230407222133.1425969-2-lyude@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+Hi Lyude,
 
-On Fri, Apr 07, 2023 at 05:54:48AM -0700, Guenter Roeck wrote:
-> On 4/6/23 22:39, James Seo wrote:
->> Hi,
->> 
->>> is it guaranteed that faulty sensors wont become operational later?
->>> Also filtering out such sensors would make the support for the hwmon_temp_fault and
->>> hwmon_fan_fault attributes meaningless.
->> 
->> Good point. I can't be certain, but the MOF does seem to imply that
->> sensors can indeed be faulty on just a temporary basis.
->> 
-> 
-> Your current code would explicitly exclude faulty fans from being listed,
-> which does not exactly sound like a good idea.
+kernel test robot noticed the following build warnings:
 
-True enough. I recall my reasoning being that faulty sensors would
-still be visible in debugfs. I should have seen the problem then.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> I'll filter out only the sensors that are "Not Connected" at probe
->> time. My thinking is, even if these might turn into connected sensors
->> later, that would mean the user is e.g. hot-plugging a fan (!), and
->> keeping them could result in a large number (~10 on my Z420) of
->> pointless extra channels. And this would also match the behavior of
->> HP's official utility.
->> 
-> Ultimately that is an implementation decision. Are the sensors hot-pluggable ?
+url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/drm-nouveau-kms-Add-INHERIT-ioctl-to-nvkm-nvif-for-reading-IOR-state/20230408-062329
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230407222133.1425969-2-lyude%40redhat.com
+patch subject: [PATCH 2/2] drm/nouveau/kms: Add INHERIT ioctl to nvkm/nvif for reading IOR state
+config: arm64-buildonly-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081129.AMXCmyn2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a3d963915cf6f2d87b57146f7bc57a6a89d90cf6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lyude-Paul/drm-nouveau-kms-Add-INHERIT-ioctl-to-nvkm-nvif-for-reading-IOR-state/20230408-062329
+        git checkout a3d963915cf6f2d87b57146f7bc57a6a89d90cf6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
-HP's WMI object specification allows sensors to be hot-pluggable in
-principle. I can't definitively say more than that due to a lack of
-test hardware (that whitepaper I referenced is from 2005, after all).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081129.AMXCmyn2-lkp@intel.com/
 
-So I think the answer is that it depends on the board and the WMI
-implementation. That's also what I meant in my reply to Armin when I
-said that I couldn't be certain whether faulty sensors can recover.
+All warnings (new ones prefixed by >>):
 
-But I take your point that the driver should be able to handle it if
-the board can.
+>> drivers/gpu/drm/nouveau/dispnv50/disp.c:2554:1: warning: no previous prototype for function 'nv50_display_read_hw_state' [-Wmissing-prototypes]
+   nv50_display_read_hw_state(struct nouveau_drm *drm)
+   ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2553:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2618:1: warning: no previous prototype for function 'nv50_display_create' [-Wmissing-prototypes]
+   nv50_display_create(struct drm_device *dev)
+   ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2617:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 warnings generated.
 
-> If so, how does HP's utility handle the insertion or removal of a sensor (fan) ?
 
-HP's utility just pretty-prints a snapshot of what is in WMI at the
-moment when the user clicks a button, and then only for the sensors
-that were connected when the utility was first started. It doesn't do
-anything special to handle insertion or removal beyond that.
+vim +/nv50_display_read_hw_state +2554 drivers/gpu/drm/nouveau/dispnv50/disp.c
 
-> Either case, it is ok with me if disconnected sensors are not listed.
-> Not listing faulty sensors seems like a bad idea, though.
-> 
-> Guenter
+  2551	
+  2552	/* Read back the currently programmed display state */
+  2553	void
+> 2554	nv50_display_read_hw_state(struct nouveau_drm *drm)
+  2555	{
+  2556		struct drm_device *dev = drm->dev;
+  2557		struct drm_encoder *encoder;
+  2558		struct drm_modeset_acquire_ctx ctx;
+  2559		struct nv50_disp *disp = nv50_disp(dev);
+  2560		int ret;
+  2561	
+  2562		DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, 0, ret);
+  2563	
+  2564		drm_for_each_encoder(encoder, dev) {
+  2565			if (encoder->encoder_type == DRM_MODE_ENCODER_DPMST)
+  2566				continue;
+  2567	
+  2568			nv50_display_read_hw_or_state(dev, disp, nouveau_encoder(encoder));
+  2569		}
+  2570	
+  2571		DRM_MODESET_LOCK_ALL_END(dev, ctx, ret);
+  2572	}
+  2573	
 
-Acknowledged. Faulty sensors will be listed in the next version.
-
-Thanks for reviewing. Further suggestions or concerns from you or
-anyone else reading this are both welcome and appreciated.
-
-James
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
