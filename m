@@ -2,158 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9616DBC7B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800286DBC7D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjDHSzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 14:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S229497AbjDHS6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 14:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDHSzp (ORCPT
+        with ESMTP id S229448AbjDHS6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 14:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0D93C1;
-        Sat,  8 Apr 2023 11:55:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 537F060C3A;
-        Sat,  8 Apr 2023 18:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9EEC4339B;
-        Sat,  8 Apr 2023 18:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680980142;
-        bh=lh3grPdy6EB2X5Jq3Oc6U3TqpizfIftGvgsJOhiCeA0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bnwPo/ofXmZzW79/jKVNSnd2DQYNay9ibBKql+JdmJkaghCHIqOkzlYvoh2K1i5It
-         hItcj4ySVpDCyT9Q4vghUOetqdX9qVDdnTzuqDo9WFs4Zobv20NSavS1tnvEn8S2+o
-         v68adhcKKGkLymgMffEEK3/SzONPemNrzWxCLjCdHs9Il8/xyRtx2ucE1GK2AEEVvH
-         /CpchsKqYC/7ofFfjBUkoP39H1aAj6Auw+FSJMPEx5j79NeyecHqHdwpQOj4wL/3Ql
-         NVDpc0dtexm6xYteVbRBOwMbciwh4XBpkj2q56zBBFzy80ur5SzcWwrVZzNcI3hCF7
-         wdDEEaHd9o0Sw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A7591403EB; Sat,  8 Apr 2023 15:55:39 -0300 (-03)
-Date:   Sat, 8 Apr 2023 15:55:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        David Lamparter <equinox@diac24.net>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Domenico Andreoli <cavok@debian.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: ANNOUNCE: pahole v1.25 (Unspecified type, Atomic types, BTF for
- optimized functions)
-Message-ID: <ZDG4qxirpIfmbiip@kernel.org>
+        Sat, 8 Apr 2023 14:58:36 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D99741;
+        Sat,  8 Apr 2023 11:58:34 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Pv45k1Hz5z9xFGX;
+        Sun,  9 Apr 2023 02:49:14 +0800 (CST)
+Received: from [10.45.159.72] (unknown [10.45.159.72])
+        by APP1 (Coremail) with SMTP id LxC2BwAnsAs3uTFkERIJAg--.354S2;
+        Sat, 08 Apr 2023 19:58:10 +0100 (CET)
+Message-ID: <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
+Date:   Sat, 8 Apr 2023 20:57:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: Litmus test names
+To:     Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
+ <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
+ <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
+ <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
+ <20230408164956.GA680332@google.com>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20230408164956.GA680332@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAnsAs3uTFkERIJAg--.354S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1DWry8Jw1Duw48KryDWrg_yoW8Kw48pF
+        yUKFsxGws8Jr4Fqwn7tw4Duw4IyanrJw1UZ3WDXr15ZFyqqr98KF1UWr909Fyjvrs3XFWD
+        Jr4Uta47AFy5ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.1 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-  
-	The v1.25 release of pahole and its friends is out, fixing the
-handling of DW_TAG_unspecified type in assembly functions that came with
-binutils 2.40, allowing the BTF encoding of optimized functions (ending in
-.constprop, .isra), excluding from BTF optimized functions not following
-the calling convention, support for DW_TAG_atomic_type, support the
-DW_TAG_LLVM_annotation BTF equivalent (BTF_KIND_TYPE_TAG) on the BTF
-loader and for now suppressing it when pretty printing, etc.
 
-Main git repo:
+On 4/8/2023 6:49 PM, Joel Fernandes wrote:
+> On Fri, Apr 07, 2023 at 05:49:02PM -0700, Paul E. McKenney wrote:
+>> On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
+>>>
+>>> On 4/7/2023 2:12 AM, Joel Fernandes wrote:
+>>>>
+>>>>> On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>>>>>
+>>>>> ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
+>>>>>> Paul:
+>>>>>>
+>>>>>> I just saw that two of the files in
+>>>>>> tools/memory-model/litmus-tests have
+>>>>>> almost identical names:
+>>>>>>
+>>>>>>   Z6.0+pooncelock+pooncelock+pombonce.litmus
+>>>>>>   Z6.0+pooncelock+poonceLock+pombonce.litmus
+>>>>>>
+>>>>>> They differ only by a lower-case 'l' vs. a capital 'L'.  It's
+>>>>>> not at all
+>>>>>> easy to see, and won't play well in case-insensitive filesystems.
+>>>>>>
+>>>>>> Should one of them be renamed?
+>>>>>
+> FWIW, if I move that smp_mb_after..() a step lower, that also makes the test
+> work (see below).
+>
+> If you may look over quickly my analysis of why this smp_mb_after..() is
+> needed, it is because what I marked as a and d below don't have an hb
+> relation right?
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+I think a and d have an hb relation due to the
+a ->po-rel X ->rfe Y ->acq-po d
+edges (where X and Y are the unlock/lock events I annotated in your 
+example below).
 
-Mirror git repo:
+Generally, an mb_unlock_lock isn't used to give you hb, but to turn some 
+(coe/fre) ; hb* edges into pb edges
 
-   https://github.com/acmel/dwarves.git
+In this case, that would probably be
+f ->fre a ->hb* f   (where a ->hb* f comes from a ->hb* d ->hb e ->hb f)
+By adding the mb_unlock_lock_po in one of the right places, this becomes 
+f ->pb f,
+thus forbidden.
 
-tarball + gpg signature:
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.sign
+Have fun,
+jonas
 
-	For 1.26 the immediate plan is to fixup the merge conflicts with
-the branch that adds support for dwz compressed DWARF files that is
-available at:
 
-  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=alt_dwarf
+>
+> (*
+>    b ->rf c
+>
+>    d ->co e
+>
+>    e ->hb f
+>
+>    basically the issue is a ->po b ->rf c ->po d    does not imply a ->hb d
+> *)
+>
+> P0(int *x, int *y, spinlock_t *mylock)
+> {
+> 	spin_lock(mylock);
+> 	WRITE_ONCE(*x, 1); // a
+> 	WRITE_ONCE(*y, 1); // b
+> 	spin_unlock(mylock); // X
+> }
+>
+> P1(int *y, int *z, spinlock_t *mylock)
+> {
+> 	int r0;
+>
+> 	spin_lock(mylock); // Y
+> 	r0 = READ_ONCE(*y); // c
+> 	smp_mb__after_spinlock(); // moving this a bit lower also works fwiw.
+> 	WRITE_ONCE(*z, 1);  // d
+> 	spin_unlock(mylock);
+> }
+>
+> P2(int *x, int *z)
+> {
+> 	int r1;
+>
+> 	WRITE_ONCE(*z, 2);  // e
+> 	smp_mb();
+> 	r1 = READ_ONCE(*x); // f
+> }
+>
+> exists (1:r0=1 /\ z=2 /\ 2:r1=0)
+>
+>
+>> Would someone like to to a "git mv" send the resulting patch?
+> Yes I can do that in return as I am thankful in advance for the above
+> discussion. ;)
+>
+> thanks,
+>
+>   - Joel
+>
 
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
-
-Best Regards,
-
-- Arnaldo
-
-DWARF loader:
-
-- Support for DW_TAG_unspecified_type more generally, that in binutils 2.40 is used
-  for assembly functions, resulting in BTF encoding problems when building the Linux
-  kernel.
-
-- Make sure struct member offsets are in ascending order. This is part of the set of
-  changes to support encoding BTF for Rust for use with the Linux kernel, where the
-  BTF verifier considers invalid offset unordered struct members.
-
-- Support C atomic types (DW_TAG_atomic_type), that are not used in the Linux kernel but
-  is present in user space components such as Open VSwitch.
-
-BTF loader:
-
-- Initial support for DW_TAG_LLVM_annotation, used for BTF type tags, to encode things
-  like __rcu, __user annotations in the Linux kernel. This is still in flux with changes
-  in how these are encoded that resulted from the discussion to support this in gcc in
-  addition to in clang, where it was first designed.
-
-BTF encoder:
-
-- Exclude functions with the same name (static functions in different CUs),
-  inconsistent prototypes or not following calling convention.
-
-- Allow generation of BTF for optimized functions, those that end with a .isra*
-  suffix (inter procedural scalar replacement of aggregates) or .constprop*
-  (constant propagation).
-
-Pretty printer:
-
-- For now the DW_TAG_LLVM_annotation tags are being suppressed, so the output from
-  BTF and DWARF matches, further work is planned to support it so that the output
-  matches the original source code and can be recompilable, resulting in the same
-  DWARF info.
-
-- Support C atomic types, allowing the generation of source code that can be
-  compiled with resulting DWARF info matching the original source code.
-
-pahole:
-
-- Support --lang=/--lang_exclude=asm, the DW_LANG_ define for assembly is out
-  of order, special case it to support asking for CUs written in assembly to be
-  selected or excluded.
-
-- Support suppressing the atomic type modifiers/attributes.
-
-- Allow filtering out functions optimized by the compiler, where the calling convention isn't
-  the one expected by BPF or arguments are optimized out.
-
-- Support --compile from DWARF in addition to from BTF, this allows user space components
-  such as Open VSwitch to use pahole to generate compilable code for its data structures.
-
-btfdiff:
-
-- Exclude RUST CUs, as those are not yet being BTF encoded.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
