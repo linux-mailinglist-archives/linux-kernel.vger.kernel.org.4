@@ -2,110 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B01F6DBC71
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9616DBC7B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDHSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 14:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229484AbjDHSzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 14:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDHSZB (ORCPT
+        with ESMTP id S229448AbjDHSzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 14:25:01 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CEF8689;
-        Sat,  8 Apr 2023 11:25:00 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 6-20020a9d0106000000b006a177038dfeso14205778otu.7;
-        Sat, 08 Apr 2023 11:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680978300;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
-        b=gzDts5q0CNK6aNvIaGy8bjFLBbnMG9p8cNk01Z5ybEt1Ac2fqxvhsL+ev7UKPbPgsQ
-         Ud6jJtmqURe2yNpIlyx5i7ytzeLnjRsRxAoogNyFZN5Rk7Mp/nO1uEB0tNS1wVlzX0qO
-         MSAPPQU2ywrrAxsUHgt0NzOG+8kN+U7NXJ1LhSPcEUk2z4ZiIIx4vyhmd9ZN0B/HOdKc
-         Dv+vfXs/joypJUkSpYTXTS4n4lm/YLiQY6OwIR1C6djuVRH9V6y9zoN1rQAQF8UqsF8i
-         j5gk6NCXXV4C0BI885dIhpKri6y36zMVWlaoR8H5D0QdYORnDnANC1oaRmGPxIxK96UQ
-         9o/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680978300;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
-        b=fO67P5NcQ9AKo2VyNSvXZ6gf8sbnKwF0lORvASERWaSV6NTQm35mOXk18j1Au6HMLT
-         hBB4rDfjgjX08ng2lA+0LsrrTEBhWtTPDgqqM1BFS3GXsx9UuH7QhaV22p+gQhaIJAGh
-         dSTi8TgQ3HnpsZBY1scCsQFRUWyNU6aEK3Lz0goRWXtyVy+XEjYxB2oDV/Am59LZ1uMg
-         NiFg82yfNCk8z825V66PD1emmi4Blag2B8kf2g2O0hrhq/OZEqphSpNWYMP4D8sZz2v2
-         F6uUJRXhFnrqNMYGNjhVUYtFWA67KfkURJzgxsOFMmBVUffEQiNOcBEFRzQwa+yvETcl
-         DP5Q==
-X-Gm-Message-State: AAQBX9fcqKot+vluElhTf1ft0q/dCqf5uMgUaBh0IOJOM/qNpOs1N4I0
-        Xcwlyc17BPAQ41sgqS5kCpk=
-X-Google-Smtp-Source: AKy350YVWWK5LVrcIXkGkfiCOeOtBJu5JBLuctbC9AAS/sN/aoOr5liabuPstmjtoZ5nP3Uz6zCHZg==
-X-Received: by 2002:a9d:7443:0:b0:6a1:21fc:653b with SMTP id p3-20020a9d7443000000b006a121fc653bmr2280347otk.14.1680978299895;
-        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id b17-20020a9d7551000000b006a3bc285eeesm2670716otl.68.2023.04.08.11.24.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
-Message-ID: <c0f47367-6352-e55d-1a87-fe2960a84838@gmail.com>
-Date:   Sat, 8 Apr 2023 15:24:53 -0300
+        Sat, 8 Apr 2023 14:55:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0D93C1;
+        Sat,  8 Apr 2023 11:55:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 537F060C3A;
+        Sat,  8 Apr 2023 18:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9EEC4339B;
+        Sat,  8 Apr 2023 18:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680980142;
+        bh=lh3grPdy6EB2X5Jq3Oc6U3TqpizfIftGvgsJOhiCeA0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bnwPo/ofXmZzW79/jKVNSnd2DQYNay9ibBKql+JdmJkaghCHIqOkzlYvoh2K1i5It
+         hItcj4ySVpDCyT9Q4vghUOetqdX9qVDdnTzuqDo9WFs4Zobv20NSavS1tnvEn8S2+o
+         v68adhcKKGkLymgMffEEK3/SzONPemNrzWxCLjCdHs9Il8/xyRtx2ucE1GK2AEEVvH
+         /CpchsKqYC/7ofFfjBUkoP39H1aAj6Auw+FSJMPEx5j79NeyecHqHdwpQOj4wL/3Ql
+         NVDpc0dtexm6xYteVbRBOwMbciwh4XBpkj2q56zBBFzy80ur5SzcWwrVZzNcI3hCF7
+         wdDEEaHd9o0Sw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A7591403EB; Sat,  8 Apr 2023 15:55:39 -0300 (-03)
+Date:   Sat, 8 Apr 2023 15:55:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     dwarves@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        David Lamparter <equinox@diac24.net>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Domenico Andreoli <cavok@debian.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.25 (Unspecified type, Atomic types, BTF for
+ optimized functions)
+Message-ID: <ZDG4qxirpIfmbiip@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
-Content-Language: en-US
-To:     Andrea Righi <andrea.righi@canonical.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        Eric Curtin <ecurtin@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Neal Gompa <neal@gompa.dev>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230407070517.204676-1-andrea.righi@canonical.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 04:05, Andrea Righi wrote:
-> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
-> to enable RUST.
-> 
-> With this constraint we don't need is_rust_module.sh anymore, because
-> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
-> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
-> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
-> isn't used as well.
-> 
-> In any case is_rust_module.sh is obsolete and we can just drop it.
-> 
-> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> ---
->  [...]
+Hi,
+  
+	The v1.25 release of pahole and its friends is out, fixing the
+handling of DW_TAG_unspecified type in assembly functions that came with
+binutils 2.40, allowing the BTF encoding of optimized functions (ending in
+.constprop, .isra), excluding from BTF optimized functions not following
+the calling convention, support for DW_TAG_atomic_type, support the
+DW_TAG_LLVM_annotation BTF equivalent (BTF_KIND_TYPE_TAG) on the BTF
+loader and for now suppressing it when pretty printing, etc.
 
-Go on
+Main git repo:
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+Mirror git repo:
+
+   https://github.com/acmel/dwarves.git
+
+tarball + gpg signature:
+
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.25.tar.sign
+
+	For 1.26 the immediate plan is to fixup the merge conflicts with
+the branch that adds support for dwz compressed DWARF files that is
+available at:
+
+  https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=alt_dwarf
+
+	Thanks a lot to all the contributors and distro packagers, you're on the
+CC list, I appreciate a lot the work you put into these tools,
+
+Best Regards,
+
+- Arnaldo
+
+DWARF loader:
+
+- Support for DW_TAG_unspecified_type more generally, that in binutils 2.40 is used
+  for assembly functions, resulting in BTF encoding problems when building the Linux
+  kernel.
+
+- Make sure struct member offsets are in ascending order. This is part of the set of
+  changes to support encoding BTF for Rust for use with the Linux kernel, where the
+  BTF verifier considers invalid offset unordered struct members.
+
+- Support C atomic types (DW_TAG_atomic_type), that are not used in the Linux kernel but
+  is present in user space components such as Open VSwitch.
+
+BTF loader:
+
+- Initial support for DW_TAG_LLVM_annotation, used for BTF type tags, to encode things
+  like __rcu, __user annotations in the Linux kernel. This is still in flux with changes
+  in how these are encoded that resulted from the discussion to support this in gcc in
+  addition to in clang, where it was first designed.
+
+BTF encoder:
+
+- Exclude functions with the same name (static functions in different CUs),
+  inconsistent prototypes or not following calling convention.
+
+- Allow generation of BTF for optimized functions, those that end with a .isra*
+  suffix (inter procedural scalar replacement of aggregates) or .constprop*
+  (constant propagation).
+
+Pretty printer:
+
+- For now the DW_TAG_LLVM_annotation tags are being suppressed, so the output from
+  BTF and DWARF matches, further work is planned to support it so that the output
+  matches the original source code and can be recompilable, resulting in the same
+  DWARF info.
+
+- Support C atomic types, allowing the generation of source code that can be
+  compiled with resulting DWARF info matching the original source code.
+
+pahole:
+
+- Support --lang=/--lang_exclude=asm, the DW_LANG_ define for assembly is out
+  of order, special case it to support asking for CUs written in assembly to be
+  selected or excluded.
+
+- Support suppressing the atomic type modifiers/attributes.
+
+- Allow filtering out functions optimized by the compiler, where the calling convention isn't
+  the one expected by BPF or arguments are optimized out.
+
+- Support --compile from DWARF in addition to from BTF, this allows user space components
+  such as Open VSwitch to use pahole to generate compilable code for its data structures.
+
+btfdiff:
+
+- Exclude RUST CUs, as those are not yet being BTF encoded.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
