@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6466F6DBA06
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724466DBA09
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjDHKPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S229776AbjDHKSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDHKPY (ORCPT
+        with ESMTP id S229756AbjDHKSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:15:24 -0400
+        Sat, 8 Apr 2023 06:18:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29371C15F;
-        Sat,  8 Apr 2023 03:15:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE689FF37;
+        Sat,  8 Apr 2023 03:17:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B73CC60A6C;
-        Sat,  8 Apr 2023 10:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A752C433D2;
-        Sat,  8 Apr 2023 10:15:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6666D60B2C;
+        Sat,  8 Apr 2023 10:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5091C433EF;
+        Sat,  8 Apr 2023 10:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680948915;
-        bh=pzDyD8tzAlAD9Jp5Dut6PZOwqm6w5Ddo7OcNDD0eZCY=;
+        s=k20201202; t=1680949062;
+        bh=OS7M6JsgPcLSen82d+Ovfck6eKq2zAt8J1ftQXEqbWg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SAMygo/kshU4hIim9jlXUqAl5D227Cv8aqj5/rvKHz/uEUe2jhCg4hpUlvvqoEch+
-         l8WlToW3+8OKsKt+Tozb2EzrUye9K2qU6mr/RUusAJQ9wEfnFD4zPJYjfS6VOTpAZl
-         xCvX88xn/8wrMr0EThCItNYiEO98INci+EY3egQ5ZnjUlIq7mrj3whJeaWN+OggxEP
-         gzo5gKYXDQsFnJBQgD3iN/H+hq5YNb91AXuOrNwgfL5HlczqvbgATHBS7coPu6PVpa
-         w7SV7X1dL9fBJxk1D4r9d8QZDpYu+UhwWywjdjfQ46zRy1j7H46aMkajZrqspje3VN
-         EC/CcbCDvoZFg==
-Date:   Sat, 8 Apr 2023 11:30:29 +0100
+        b=FkGEXPTV+Rr6JPZUGqxWFt4BBeJfZjs3X1y0XKPFtqvJxhwtwi8lL4AoIs+BNfP6O
+         2tqWiclqYrdZaN5y0or8mPVxoIdqRmus7zk8xchyi0mTCQCGk1rRrb8C+L6ZCvB+Qt
+         ai51HNu5RTcK4xr6v/2KawCx7PkB1sMYnolnv8rM9LNLYUV97vNIGGG6OWaFbYWoJ+
+         wnnWfCl3ByueNfZsA+OPNE6kOOtomRtcrMEV8wNNES4e0PjS+80MYGsRuRlFiYRnwx
+         pTxicKU9FDINBQWuZykzIcPFLfzcfIlXPEEkaFdlyaPLhdtfdwf5ttv5lN1poK0hzI
+         ZmxDk07C4kKtA==
+Date:   Sat, 8 Apr 2023 11:32:58 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -41,11 +41,11 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jagath Jog J <jagathjog1996@gmail.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] iio: add documentation for iio_chan_info_enum
-Message-ID: <20230408113029.35429440@jic23-huawei>
-In-Reply-To: <884c8f386541ac572939b8993df7aea6ad99613b.1677331779.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 3/3] doc: Make sysfs-bus-iio doc more exact
+Message-ID: <20230408113258.15a39576@jic23-huawei>
+In-Reply-To: <41eafb0caa510cddf650cf5ff940639a184f3005.1677331779.git.mazziesaccount@gmail.com>
 References: <cover.1677331779.git.mazziesaccount@gmail.com>
-        <884c8f386541ac572939b8993df7aea6ad99613b.1677331779.git.mazziesaccount@gmail.com>
+        <41eafb0caa510cddf650cf5ff940639a184f3005.1677331779.git.mazziesaccount@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,124 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Feb 2023 15:55:25 +0200
+On Sat, 25 Feb 2023 15:56:16 +0200
 Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> Values in the iio_chan_info_enum are crucial for understanding the
-> characteristics of an IIO channel and the data delivered via IIO channel.
-> Give a hand to developers who do their first set of IIO drivers.
+> A few IIC channel descriptions explained used units as:
+IIO?
+> data is in foo "that can be processed into an" [unit] value. The "can be
+> processed into" is quite broad statement as it does not really explain
+> what this processing means. This makes units pretty much useless.
 > 
-> Add some documentation to these channel specifiers.
+> After discussion with Jonathan, it seems the units for these channels
+> should also be well-defined as for all other channels. The processing
+> means the standard scale and offset application that is used throughout
+> the IIO. Let's make it more obvious by stating that the units are [unit]
+> after scale ane offset are applied.
 > 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> ---
-> Please note that I did only add documentation for entries I am familiar
-> with. I did still add doc placeholders for all of the enum entries to
-> ease seeing which entries could still be documented. Hopefully this
-> encourages people to add missing pieces of documentation.
+Excellent. Thanks for doing this. I'll pick this patch up now.
 
-Good to hear the optimism :) 
+Applied to the togreg branch of iio.git and pushed out as testing
+(in this case to be mostly ignored by 0-day ;)
 
-I'll add it to my activities for boring journeys (with good internet
-as probably need datasheets).  Note I'm reviewing this on a train
-(having ignored it for a few weeks ;)
+Jonathan
 
 > ---
->  include/linux/iio/types.h | 46 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 45 insertions(+), 1 deletion(-)
+>  Documentation/ABI/testing/sysfs-bus-iio | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
-> index 82faa98c719a..c8e3288ca24b 100644
-> --- a/include/linux/iio/types.h
-> +++ b/include/linux/iio/types.h
-> @@ -35,7 +35,51 @@ enum iio_available_type {
->  	IIO_AVAIL_LIST,
->  	IIO_AVAIL_RANGE,
->  };
-> -
-> +/**
-> + * enum iio_chan_info_enum - Information related to a IIO channel
-> + *
-> + * Many IIO channels have extra properties. Typically these properties can be
-"extra" glosses over the fact that some of these almost always exist.
-E.g. raw.
-
-IIO channels have a range of properties that may be read from userspace
-(via sysfs attributes) or from other drivers using the in kernel IIO consumer
-interfaces.  These properties are read / written using the read_raw...
-
-
-> + * read / written by user using the read_raw or write_raw callbacks in the
-> + * struct iio_info.
-> + *
-> + * @IIO_CHAN_INFO_RAW:		Raw channel data as provided by device. Scale
-> + *				and offset are often required to convert these
-> + *				values to meaningful units.
-
-to base units as defined in the IIO ABI (link)
-
-> + * @IIO_CHAN_INFO_PROCESSED:	Processed data. Typically driver performs
-> + *				computations to convert device data to more
-> + *				meaningfull processed values.
-
-Typically a driver performs computations to convert device data to the 
-base units defined in the IIO ABI (link)
-
-> + * @IIO_CHAN_INFO_SCALE:	Scale to be applied to data in order to convert
-> + *				it to units mandated by the channel type.
-> + * @IIO_CHAN_INFO_OFFSET:	Offset to be applied to data in order to convert
-> + *				it to units mandated by the channel type.
-
-Add ordering info.  "Applied before scale."
-
-> + * @IIO_CHAN_INFO_CALIBSCALE:
-> + * @IIO_CHAN_INFO_CALIBBIAS:
-> + * @IIO_CHAN_INFO_PEAK:		Peak value (TODO: Since measurement start?)
-
-IIRC not that consistent. Some devices have it from device reset (so start), some
-do it on a short time scale (thing of a voltage channel measuring a sine wave -
-instantaneous reading is the current voltage, peak can be the peak in the cycle).
-Others again do it on an 'event detection basis'. 
-Sometimes constructive ambiguity can be handy in documentation ;)
-
-> + * @IIO_CHAN_INFO_PEAK_SCALE:	Scale to be applied to the peak value in order
-> + *				to convert it to units mandated by the channel
-> + *				type.
-> + * @IIO_CHAN_INFO_QUADRATURE_CORRECTION_RAW:
-> + * @IIO_CHAN_INFO_AVERAGE_RAW:	Average of raw values (TODO: Since measurement
-> + *				start or just for some undefined time?)
-
-Again, not that tightly defined (IIRC).  Average of raw values over a device specific time period.
-
-> + * @IIO_CHAN_INFO_SAMP_FREQ:	Sampling frequency for device.
-> + * @IIO_CHAN_INFO_FREQUENCY:
-> + * @IIO_CHAN_INFO_PHASE:
-> + * @IIO_CHAN_INFO_HARDWAREGAIN:	Amplification applied by the hardware.
-Given how often this is done wrong I'd love to call out something like:
-"SCALE should be used for control if the HARDWAREGAIN directly affects the
- channel RAW measurement". Examples of HARDWAREGAIN include amplification of
- the light signal in a time of flight sensor."
-
-
-> + * @IIO_CHAN_INFO_HYSTERESIS:
-> + * @IIO_CHAN_INFO_HYSTERESIS_RELATIVE:
-> + * @IIO_CHAN_INFO_INT_TIME:	Integration time. Time during which the data is
-> + *				accumulated by the device.
-
-Unit? (seconds I think).
-
-> + * @IIO_CHAN_INFO_ENABLE:
-> + * @IIO_CHAN_INFO_CALIBHEIGHT:
-> + * @IIO_CHAN_INFO_CALIBWEIGHT:
-> + * @IIO_CHAN_INFO_DEBOUNCE_COUNT:
-> + * @IIO_CHAN_INFO_DEBOUNCE_TIME:
-> + * @IIO_CHAN_INFO_CALIBEMISSIVITY:
-> + * @IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> + * @IIO_CHAN_INFO_THERMOCOUPLE_TYPE:
-> + * @IIO_CHAN_INFO_CALIBAMBIENT:
-> + * @IIO_CHAN_INFO_ZEROPOINT:
-> + */
->  enum iio_chan_info_enum {
->  	IIO_CHAN_INFO_RAW = 0,
->  	IIO_CHAN_INFO_PROCESSED,
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+> index 6ba34c0d9789..b435c6f065ae 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-iio
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio
+> @@ -1807,8 +1807,8 @@ What:		/sys/bus/iio/devices/iio:deviceX/out_resistanceX_raw
+>  KernelVersion:	4.3
+>  Contact:	linux-iio@vger.kernel.org
+>  Description:
+> -		Raw (unscaled no offset etc.) resistance reading that can be processed
+> -		into an ohm value.
+> +		Raw (unscaled no offset etc.) resistance reading.
+> +		Units after application of scale and offset are ohms.
+>  
+>  What:		/sys/bus/iio/devices/iio:deviceX/heater_enable
+>  KernelVersion:	4.1.0
+> @@ -1894,8 +1894,9 @@ What:		/sys/bus/iio/devices/iio:deviceX/in_electricalconductivity_raw
+>  KernelVersion:	4.8
+>  Contact:	linux-iio@vger.kernel.org
+>  Description:
+> -		Raw (unscaled no offset etc.) electric conductivity reading that
+> -		can be processed to siemens per meter.
+> +		Raw (unscaled no offset etc.) electric conductivity reading.
+> +		Units after application of scale and offset are siemens per
+> +		meter.
+>  
+>  What:		/sys/bus/iio/devices/iio:deviceX/in_countY_raw
+>  KernelVersion:	4.10
+> @@ -1952,7 +1953,7 @@ KernelVersion:	4.18
+>  Contact:	linux-iio@vger.kernel.org
+>  Description:
+>  		Raw (unscaled) phase difference reading from channel Y
+> -		that can be processed to radians.
+> +		Units after application of scale and offset are radians.
+>  
+>  What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentration_pm1_input
+>  What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentrationY_pm1_input
 
