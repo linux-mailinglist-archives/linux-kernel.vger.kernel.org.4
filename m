@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE0A6DBCCD
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 21:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A006DBCD6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 21:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjDHTnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 15:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S229713AbjDHTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 15:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDHTnn (ORCPT
+        with ESMTP id S229448AbjDHTu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 15:43:43 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595CD9030;
-        Sat,  8 Apr 2023 12:43:42 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3383VKtL010821;
-        Sat, 8 Apr 2023 19:43:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=AtS8zjXakwrxxJgPfeR+XZVojVzYcJTQIzBrMyrACHc=;
- b=CEA1kwYQIQ6DPeGxyYJ19CKXoQ6VUp73LYMPUQw2BQNzRMtlcFo/J6QQAFPPcNiY2wwP
- FpQ6dxQZI5sUkOLz5JpWT8seKIoaDfBOrRa8rev38NYuJaVzyuM9PqT0B+/hBEFiYPbw
- Ah+iAtVMjgBjtX0eL9PozfHn31oN+i8C+CTS5gGl04Z54u/iiGmTRMx4qwYMXpN360qB
- QLPUioeB4mS3+LQpLW6SnoSspMOWUJDH1ZGC28JOG9gP5iX/1emyXQkFI8fZWj1Kc/Tv
- zAQMWmOHSYcU51QI1fyNpe6htB5kHSpyG2SThGB93vHfrYJHkYm5fc/E/zvyXDEDrij2 hA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0e78p7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Apr 2023 19:43:27 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 338ISV3s007788;
-        Sat, 8 Apr 2023 19:43:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ptxq2x9m8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 08 Apr 2023 19:43:26 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 338JhQbv017594;
-        Sat, 8 Apr 2023 19:43:26 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ptxq2x9m0-1;
-        Sat, 08 Apr 2023 19:43:26 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
-        loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
-        johannes@sipsolutions.net, simon.horman@corigine.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, error27@gmail.com,
-        kernel-janitors@vger.kernel.org, vegard.nossum@oracle.com,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH net V2] net: wwan: iosm: Fix error handling path in ipc_pcie_probe()
-Date:   Sat,  8 Apr 2023 12:43:21 -0700
-Message-Id: <20230408194321.1647805-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Sat, 8 Apr 2023 15:50:59 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Apr 2023 12:50:57 PDT
+Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12A510DD
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 12:50:57 -0700 (PDT)
+Received: from [10.36.2.154] (unknown [46.212.121.255])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.turbocat.net (Postfix) with ESMTPSA id C831D260025;
+        Sat,  8 Apr 2023 21:43:22 +0200 (CEST)
+Message-ID: <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org>
+Date:   Sat, 8 Apr 2023 21:43:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-08_10,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304080178
-X-Proofpoint-ORIG-GUID: fC7E-TYjb7qbvc4q31wAUD1kF4K7nw6i
-X-Proofpoint-GUID: fC7E-TYjb7qbvc4q31wAUD1kF4K7nw6i
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+Content-Language: en-US
+From:   Hans Petter Selasky <hps@selasky.org>
+In-Reply-To: <20230406215615.122099-1-daniel.almeida@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-	drivers/net/wwan/iosm/iosm_ipc_pcie.c:298 ipc_pcie_probe()
-	warn: missing unwind goto?
+On 4/6/23 23:56, Daniel Almeida wrote:
+> Hi all, this is my first attempt at adding Rust support to the
+> media subsystem.
+> 
+> 
+> Please let me know your thoughts.
+> 
 
-When dma_set_mask fails it directly returns without disabling pci
-device and freeing ipc_pcie. Fix this my calling a correct goto label
+Hi Daniel,
 
-As dma_set_mask returns either 0 or -EIO, we can use a goto label, as
-it finally returns -EIO.
+I think V4L2 should be written in primarily one language.
 
-Add a set_mask_fail goto label which stands consistent with other goto
-labels in this function..
+At first, I think Rust for V4L2 has no benefits for media drivers, 
+webcams, DVB-S/T/T2, pointing tablets and so on. You assume that all 
+code is running inside the kernel and needs to be perfect. But I think 
+you could just aswell implement the next USB webcam V4L2 driver in Perl 
+for that sake.
 
-Fixes: 035e3befc191 ("net: wwan: iosm: fix driver not working with INTEL_IOMMU disabled")
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is based on static analysis, only compile tested.
+The reason for my point of view, is that I think most of the drivers in 
+media/ should run in user-space, and not inside the kernel. The driver 
+is killed when the device is detached, and all lost memory is reclaimed, 
+automagically. Then there exist proper methods to lock-down all 
+interfaces and file handles, so that device drivers will not do any 
+harm, even if exploited. For example the Capsicum library, I'm using 
+FreeBSD.
 
-v1 --> v2: Address comment by Simon Horman(better goto label name)
----
- drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Debugging stuff using GDB in user-space, is so much more convenient than 
+debugging stuff inside the kernel. And the development time is much faster.
 
-diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-index 5bf5a93937c9..04517bd3325a 100644
---- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-+++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-@@ -295,7 +295,7 @@ static int ipc_pcie_probe(struct pci_dev *pci,
- 	ret = dma_set_mask(ipc_pcie->dev, DMA_BIT_MASK(64));
- 	if (ret) {
- 		dev_err(ipc_pcie->dev, "Could not set PCI DMA mask: %d", ret);
--		return ret;
-+		goto set_mask_fail;
- 	}
- 
- 	ipc_pcie_config_aspm(ipc_pcie);
-@@ -323,6 +323,7 @@ static int ipc_pcie_probe(struct pci_dev *pci,
- imem_init_fail:
- 	ipc_pcie_resources_release(ipc_pcie);
- resources_req_fail:
-+set_mask_fail:
- 	pci_disable_device(pci);
- pci_enable_fail:
- 	kfree(ipc_pcie);
--- 
-2.38.1
+The example of secure V4L2 programming is already here:
+https://github.com/hselasky/webcamd
 
+I would rather like more drive on that, than flowing down the Rust 
+stream. Rust is cool, Java is cool, VM's are cool. The only bad about 
+cool things, is that they are so slow. For many years I completely 
+avoided C++ code for the sake it is very slow to compile, compared to 
+bare C code. And when looking at how Firefox is building using Rust, I 
+am a little worried, why we need so much code in there!
+
+Engineering energy would be much more focused, if hardware vendors could 
+agree more about what binary formats to use for their device protocols, 
+than changing the coding language, so that now anyone can be let loose 
+to program in the Linux kernel without risking any damage.
+
+The goal for Linux driver development should be fewer drivers and not 
+more. I'm glad if not everyone out there can do my job writing C-code 
+for device drivers. We don't need more people to mess around there 
+simply. I don't want Linux to become the next Microsoft, with gigabytes 
+of drivers which are never used for anything.
+
+The webcamd daemon already is close to 6 MBytes big on amd64 on FreeBSD. 
+Inside there is support for 510 drivers (counting =y keywords), built 
+straight off Linus Torvalds:
+
+cat config | grep CONFIG | grep "=y" | wc -l
+      510
+
+ls -l `which webcamd`
+-r-xr-xr-x  1 root  wheel  5915016 Mar 30 19:09 /usr/local/sbin/webcamd
+
+The USB video class is great, instead of tons of GSPCA devices, then 
+yeah, we don't need to drag around so much legacy binaries, just to make 
+everyone happy. What did Apple do? Custom PCI webcam devices? Why can't 
+they just stick with virtual USB devices, and then have a dual 
+configured device, one config for their own HD codec, and one config for 
+people like me, just needing the framebuffer.
+
+You asked for a comment and now you got one!
+
+--HPS
