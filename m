@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF1A6DB96D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3496DB967
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjDHHyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S230077AbjDHHy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 03:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjDHHye (ORCPT
+        with ESMTP id S230144AbjDHHyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 03:54:34 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE204FF39;
-        Sat,  8 Apr 2023 00:54:15 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id e9so367457oig.7;
-        Sat, 08 Apr 2023 00:54:15 -0700 (PDT)
+        Sat, 8 Apr 2023 03:54:35 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7842810271;
+        Sat,  8 Apr 2023 00:54:17 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id f14so18831052oiw.10;
+        Sat, 08 Apr 2023 00:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680940454;
+        d=gmail.com; s=20210112; t=1680940457;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dBxUeM8crjQUn0jyMS6RnqsghfeEHmI+/co92h1YSAk=;
-        b=l+eOLhyIOXbDPYc+MMNtiUiw/U72JUbsHkAopXReimehmfMU4o2ydiiZd7ufpKdK9f
-         zZhiUB0hGWmcEJcFhNRImfT/GmX7CVEWCfgDPUpwSMoKQxOPjljK3e6VvlrwSrrfq5i9
-         4+hQMfEeO12aXDEDRRNzHSU4WVE/1UplKV96axp5Fvk0JyzN0N64tYtgij+P4s6vn5vT
-         boKZF6PCb9M7if2o0T0ap1ZSF53DLBWcaOmJbsaLlMuFTihmBdqwjsY/6J5LaddKxlFK
-         4PTdOuIT2D4aUboHDnd/wA50h2qaX9gTy8uYOuSdDQpvDJL5XeZBRCmszXFhpRif2Zro
-         izWA==
+        bh=S9xdueeJy7MgLea0ONmd9MZ1VHllI6hHaQJbmcDSqvw=;
+        b=gJPOyjdIa5tq77ALNTMPC2MFBLNhcROzoktPdDzydEf5g6t1f171CYPi/W6bF+1MJA
+         a7NXuCM6eOUDRd0+M6o9IbTb5d1+Ssh0ZyPyZOhZTATdSu0gI96WjxXek3wDqz426r0N
+         BEVi2tBlRqofAlJGtL2hom7owEyLzCBRWf9nXyjfmnNZggAFYy1B5ON4uCvSkTV4QcnX
+         WiweHjRDLZsMoexiXJ0Wu81iJvxLmeSud9t01K9xmEllmRb7Z69Rfl/cDqpmlDM6L+8W
+         +nwO42Zzn23IcAXkzJKO87F4ge9Vi62WpmBykdaxoF3gnyFjTQ9aHrxOvPWhls9kQY+7
+         q6kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680940454;
+        d=1e100.net; s=20210112; t=1680940457;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dBxUeM8crjQUn0jyMS6RnqsghfeEHmI+/co92h1YSAk=;
-        b=VSzsxVIeIx5aibyYKeLOzSbqxII1PtQXaULT0Z2rzKD2oW7Lq2FyXo/NdinS/QujS9
-         2WznpOXMCw3I2KWOI1gECXIT/4Ep7lYPF2Tk+6vkW35HzkIXsyRi8MmUn7E5SawjVDDN
-         pSfnSAVpw0Ubkh6Y2RuRro6v8geGd11NqGS6B6rpX9owAf8bDfZ9+UpSudUs9eV6jUzx
-         CUBCKlM9ebs2r6l2P+iehOlXoHRVhYCHPkA1V1UA70E3znhC0m0T011ivDoSjLzL9HgF
-         62jgKzdB1rPuM4K+1hnc9wanZ9JN/QGhmYCs/nekw4dTUugs7CFNeiVsE64v8uVGPUBJ
-         dSFw==
-X-Gm-Message-State: AAQBX9eb/sjMlee2hS/fOzIdxNcMw7PqoEFo3cIBLtBu9ZHWezSY6V0/
-        jmhFYFeMMTJIfuiyV/mnlPluCCL19v22Pg==
-X-Google-Smtp-Source: AKy350Zaz9hiixp4oGyPkzDpJ7mv0VsFxW8o4OKvSNmczoAR1lNS/c5kil/oVoc6qvGWDvvUtgYhpw==
-X-Received: by 2002:a05:6808:aba:b0:38b:8d27:ff52 with SMTP id r26-20020a0568080aba00b0038b8d27ff52mr2016970oij.53.1680940454290;
-        Sat, 08 Apr 2023 00:54:14 -0700 (PDT)
+        bh=S9xdueeJy7MgLea0ONmd9MZ1VHllI6hHaQJbmcDSqvw=;
+        b=j/fOvvVHSxF8HFbZ3Rd04MOq3ocrXJceYPLzy+gJ3k3h1MyAfRh5VWKjsY+q7i0AFk
+         4xJERmHnZ5Wl02gZBkTyLVq5kuXwyewDYNpQHyr3N9vPjmhkOccs4qaYzs+y+FG+LgG4
+         O6siY+XQJZV1YOytY9Pr8raDi5o1S+5w8Dz5oyGuq+B+jh2pB2yY0ViN9a2jmtNUOfDB
+         +VRc7B8khbbB3qQnnnWNEUcbWdJuiLPpbVoGkCMufCT8PIT+w1cocvy0H2maj0aCR/Xj
+         sytq7pQNJolomk5xwpkrsuz/M1395mVFpOkR2DIPovtD7tSPVcBRePZT6eptXS/f3/0U
+         V2SQ==
+X-Gm-Message-State: AAQBX9dI68dO8vTUccKuxKKeYpblF/N94Necvm9AD6V1Wn0/Pzb0ePcP
+        I5YCFJPCQ3V6VllaiS56xL+a9fJ3l8o=
+X-Google-Smtp-Source: AKy350aByny0Ua7+HLInjCklu0BXubtnbbdwM9B/AA9HVLWv2BDeGGNMGXCSAcgEacOQdoUCAP1nZQ==
+X-Received: by 2002:a05:6808:16a7:b0:386:9af9:96db with SMTP id bb39-20020a05680816a700b003869af996dbmr2027862oib.38.1680940457034;
+        Sat, 08 Apr 2023 00:54:17 -0700 (PDT)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.11
+        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 00:54:14 -0700 (PDT)
+        Sat, 08 Apr 2023 00:54:16 -0700 (PDT)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -57,13 +57,10 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 07/13] rust: lock: implement `IrqSaveBackend` for `SpinLock`
-Date:   Sat,  8 Apr 2023 04:53:34 -0300
-Message-Id: <20230408075340.25237-7-wedsonaf@gmail.com>
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: [PATCH v3 08/13] rust: introduce `ARef`
+Date:   Sat,  8 Apr 2023 04:53:35 -0300
+Message-Id: <20230408075340.25237-8-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230408075340.25237-1-wedsonaf@gmail.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
@@ -81,119 +78,145 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-This allows Rust code to use the `lock_irqsave` variant of spinlocks.
+This is an owned reference to an object that is always ref-counted. This
+is meant to be used in wrappers for C types that have their own ref
+counting functions, for example, tasks, files, inodes, dentries, etc.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Waiman Long <longman@redhat.com>
 Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
 v1 -> v2: No changes
 v2 -> v3: No changes
 
- rust/helpers.c                    | 16 +++++++++++++
- rust/kernel/sync/lock/spinlock.rs | 38 ++++++++++++++++++++++++++-----
- 2 files changed, 48 insertions(+), 6 deletions(-)
+ rust/kernel/types.rs | 107 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 107 insertions(+)
 
-diff --git a/rust/helpers.c b/rust/helpers.c
-index 05694e3f8f70..e42f5b446f92 100644
---- a/rust/helpers.c
-+++ b/rust/helpers.c
-@@ -59,6 +59,22 @@ void rust_helper_spin_unlock(spinlock_t *lock)
- }
- EXPORT_SYMBOL_GPL(rust_helper_spin_unlock);
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index 3a46ec1a00cd..73709ce1f0a1 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -6,8 +6,10 @@ use crate::init::{self, PinInit};
+ use alloc::boxed::Box;
+ use core::{
+     cell::UnsafeCell,
++    marker::PhantomData,
+     mem::MaybeUninit,
+     ops::{Deref, DerefMut},
++    ptr::NonNull,
+ };
  
-+unsigned long rust_helper_spin_lock_irqsave(spinlock_t *lock)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(lock, flags);
-+
-+	return flags;
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_spin_lock_irqsave);
-+
-+void rust_helper_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
-+{
-+	spin_unlock_irqrestore(lock, flags);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_spin_unlock_irqrestore);
-+
- refcount_t rust_helper_REFCOUNT_INIT(int n)
- {
- 	return (refcount_t)REFCOUNT_INIT(n);
-diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-index a52d20fc9755..34dec09a97c0 100644
---- a/rust/kernel/sync/lock/spinlock.rs
-+++ b/rust/kernel/sync/lock/spinlock.rs
-@@ -61,6 +61,8 @@ macro_rules! new_spinlock {
- /// assert_eq!(e.c, 10);
- /// assert_eq!(e.d.lock().a, 20);
- /// assert_eq!(e.d.lock().b, 30);
-+/// assert_eq!(e.d.lock_irqsave().a, 20);
-+/// assert_eq!(e.d.lock_irqsave().b, 30);
- /// ```
- ///
- /// The following example shows how to use interior mutability to modify the contents of a struct
-@@ -79,6 +81,12 @@ macro_rules! new_spinlock {
- ///     guard.a += 10;
- ///     guard.b += 20;
- /// }
-+///
-+/// fn example2(m: &SpinLock<Example>) {
-+///     let mut guard = m.lock_irqsave();
-+///     guard.a += 10;
-+///     guard.b += 20;
-+/// }
- /// ```
- ///
- /// [`spinlock_t`]: ../../../../include/linux/spinlock.h
-@@ -90,7 +98,7 @@ pub struct SpinLockBackend;
- // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
- unsafe impl super::Backend for SpinLockBackend {
-     type State = bindings::spinlock_t;
--    type GuardState = ();
-+    type GuardState = Option<core::ffi::c_ulong>;
- 
-     unsafe fn init(
-         ptr: *mut Self::State,
-@@ -105,12 +113,30 @@ unsafe impl super::Backend for SpinLockBackend {
-     unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
-         // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
-         // memory, and that it has been initialised before.
--        unsafe { bindings::spin_lock(ptr) }
-+        unsafe { bindings::spin_lock(ptr) };
-+        None
+ /// Used to transfer ownership to and from foreign (non-Rust) languages.
+@@ -268,6 +270,111 @@ impl<T> Opaque<T> {
      }
+ }
  
--    unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
--        // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that the
--        // caller is the owner of the mutex.
--        unsafe { bindings::spin_unlock(ptr) }
-+    unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState) {
-+        match guard_state {
-+            // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that
-+            // the caller is the owner of the mutex.
-+            Some(flags) => unsafe { bindings::spin_unlock_irqrestore(ptr, *flags) },
-+            // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that
-+            // the caller is the owner of the mutex.
-+            None => unsafe { bindings::spin_unlock(ptr) },
++/// Types that are _always_ reference counted.
++///
++/// It allows such types to define their own custom ref increment and decrement functions.
++/// Additionally, it allows users to convert from a shared reference `&T` to an owned reference
++/// [`ARef<T>`].
++///
++/// This is usually implemented by wrappers to existing structures on the C side of the code. For
++/// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) to create reference-counted
++/// instances of a type.
++///
++/// # Safety
++///
++/// Implementers must ensure that increments to the reference count keep the object alive in memory
++/// at least until matching decrements are performed.
++///
++/// Implementers must also ensure that all instances are reference-counted. (Otherwise they
++/// won't be able to honour the requirement that [`AlwaysRefCounted::inc_ref`] keep the object
++/// alive.)
++pub unsafe trait AlwaysRefCounted {
++    /// Increments the reference count on the object.
++    fn inc_ref(&self);
++
++    /// Decrements the reference count on the object.
++    ///
++    /// Frees the object when the count reaches zero.
++    ///
++    /// # Safety
++    ///
++    /// Callers must ensure that there was a previous matching increment to the reference count,
++    /// and that the object is no longer used after its reference count is decremented (as it may
++    /// result in the object being freed), unless the caller owns another increment on the refcount
++    /// (e.g., it calls [`AlwaysRefCounted::inc_ref`] twice, then calls
++    /// [`AlwaysRefCounted::dec_ref`] once).
++    unsafe fn dec_ref(obj: NonNull<Self>);
++}
++
++/// An owned reference to an always-reference-counted object.
++///
++/// The object's reference count is automatically decremented when an instance of [`ARef`] is
++/// dropped. It is also automatically incremented when a new instance is created via
++/// [`ARef::clone`].
++///
++/// # Invariants
++///
++/// The pointer stored in `ptr` is non-null and valid for the lifetime of the [`ARef`] instance. In
++/// particular, the [`ARef`] instance owns an increment on the underlying object's reference count.
++pub struct ARef<T: AlwaysRefCounted> {
++    ptr: NonNull<T>,
++    _p: PhantomData<T>,
++}
++
++impl<T: AlwaysRefCounted> ARef<T> {
++    /// Creates a new instance of [`ARef`].
++    ///
++    /// It takes over an increment of the reference count on the underlying object.
++    ///
++    /// # Safety
++    ///
++    /// Callers must ensure that the reference count was incremented at least once, and that they
++    /// are properly relinquishing one increment. That is, if there is only one increment, callers
++    /// must not use the underlying object anymore -- it is only safe to do so via the newly
++    /// created [`ARef`].
++    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
++        // INVARIANT: The safety requirements guarantee that the new instance now owns the
++        // increment on the refcount.
++        Self {
++            ptr,
++            _p: PhantomData,
 +        }
 +    }
 +}
 +
-+// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
-+// variant of the C lock acquisition functions to disable interrupts and retrieve the original
-+// interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
-+// in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
-+unsafe impl super::IrqSaveBackend for SpinLockBackend {
-+    unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
-+        // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
-+        // memory, and that it has been initialised before.
-+        Some(unsafe { bindings::spin_lock_irqsave(ptr) })
-     }
- }
++impl<T: AlwaysRefCounted> Clone for ARef<T> {
++    fn clone(&self) -> Self {
++        self.inc_ref();
++        // SAFETY: We just incremented the refcount above.
++        unsafe { Self::from_raw(self.ptr) }
++    }
++}
++
++impl<T: AlwaysRefCounted> Deref for ARef<T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: The type invariants guarantee that the object is valid.
++        unsafe { self.ptr.as_ref() }
++    }
++}
++
++impl<T: AlwaysRefCounted> From<&T> for ARef<T> {
++    fn from(b: &T) -> Self {
++        b.inc_ref();
++        // SAFETY: We just incremented the refcount above.
++        unsafe { Self::from_raw(NonNull::from(b)) }
++    }
++}
++
++impl<T: AlwaysRefCounted> Drop for ARef<T> {
++    fn drop(&mut self) {
++        // SAFETY: The type invariants guarantee that the `ARef` owns the reference we're about to
++        // decrement.
++        unsafe { T::dec_ref(self.ptr) };
++    }
++}
++
+ /// A sum type that always holds either a value of type `L` or `R`.
+ pub enum Either<L, R> {
+     /// Constructs an instance of [`Either`] containing a value of type `L`.
 -- 
 2.34.1
 
