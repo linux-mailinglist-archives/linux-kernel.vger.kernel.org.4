@@ -2,131 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063B86DC081
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 17:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB70A6DC08F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 17:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjDIPMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 11:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S229604AbjDIPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 11:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDIPMw (ORCPT
+        with ESMTP id S229445AbjDIPW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 11:12:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567BC3A8B
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 08:12:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94a34c299d8so15677966b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 08:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681053168; x=1683645168;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+F3m/Z1uNGrSrVyh1TkFgL4DP+S57DCP37l7qhIJQgc=;
-        b=M1RAi9Y3eZ4oDqaOiEgfRPTe/gFBcbz7h93AcksETsvCtZ04/kx4YmzrlzVm/ifNwu
-         MCw6qFNZE7iA5jmtIVXIcNLwlYMfAi+E63iZ93a7Ytms3b22G4ePknBKZDCe+Q3pVkql
-         VM66Rosv6gKKASVmYOozZKyL7ALolz7ckIviCyEpfJJcHpmBjXQlOJhnvWxONOHzuNq7
-         scmSYOLPLqzOiUxkLdmhX3OVRXmtY4LC3F4GQqyt245bn44/7xEuG+Q40g6EMBzvI5ZE
-         b10UhGc13YUmGnL/gaddvWvVTW/vT9WxZWfMni2/nzZA6tFS+e030DPw0NAtdCbY0GTD
-         iE1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681053168; x=1683645168;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+F3m/Z1uNGrSrVyh1TkFgL4DP+S57DCP37l7qhIJQgc=;
-        b=Ehg7/N2DAJdxJrTr+3TAnCfKokgblf7eHzbDRHbk1mmgi9uyb67s2NiEG+ewrAjqic
-         B368T92tHPxBw3BgSmhlTOEqhrwbTYHACtjHCzpXOifK2v0ZAKTure325mFW80+dLPJe
-         EECvFWg9HWTMIz5TNXJBC5AQRSa+Tr753qrBFupJ2dsQsT2+c93A4NwWQAHYrDVcZ/qw
-         F2Z+glZyQ/FT+VCSvwGlWc4mU95lMlF+Y199oN1G2eup621JH26rMhATunLHuGhcOniO
-         3IyWV06WUTDMMkd1hcnerxOYfqt4yHTYdY5P7bMzERuXhr8YzDN5kAteqYWZdsrSJK20
-         9HAg==
-X-Gm-Message-State: AAQBX9cjLQ4Q/GuFKROeLBwT80z5q0s79Ssq56Ybim1XbCQE5ijPuIId
-        16NB9+NzHpBZ6wAKNHovltI=
-X-Google-Smtp-Source: AKy350aXdP/4zcTH5rfZ8DrW36jFFGlRTxXaKkWpBLRu6s7JDmhShcva6dhqne+aieO/JmSVru2nIQ==
-X-Received: by 2002:a17:906:10c7:b0:947:f415:db23 with SMTP id v7-20020a17090610c700b00947f415db23mr4727852ejv.1.1681053167642;
-        Sun, 09 Apr 2023 08:12:47 -0700 (PDT)
-Received: from [192.168.0.103] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id dd20-20020a1709069b9400b009475bf82935sm4177550ejc.31.2023.04.09.08.12.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 08:12:47 -0700 (PDT)
-Message-ID: <004210bd-0ed1-58d5-0315-47499c850444@gmail.com>
-Date:   Sun, 9 Apr 2023 17:12:45 +0200
+        Sun, 9 Apr 2023 11:22:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E802D4A;
+        Sun,  9 Apr 2023 08:22:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B564060C08;
+        Sun,  9 Apr 2023 15:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EE2C433D2;
+        Sun,  9 Apr 2023 15:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681053774;
+        bh=JoFbzbecQMar72QvO0uBIMm1UiIbJWJem2Ie54x9qbA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ESnq4grFoKkT4WAbHlcu94zOs2tgO4EKL0auznMVcvldsb9SuYy0kJPvOZWsLb5+X
+         ZVBGj9jj2B9melGWpNTqh6CJqzokKZFxLNGokUTE7Q9KbzLXbBkuuJrE0aw3B9+4cR
+         fXbEEBHNndTwwFzevhNcaroQm50QPgFUdni4i1ii/x/nLWMvTi5N67rwqobmJ6y3IA
+         oqRUa5pENSBGdmF5o6+cTQ2LxoOc2wAmJtrWLQlHpH03x9E3PI/mX6i4Yj9M9XP1pv
+         k628DafFoMZXLLlfuKJApX8XgTAxPD/vW8yOA36uHZ1BWoGK3VOMQcbzDLFz1O1bAs
+         QxzLSBDS2+gow==
+Date:   Sun, 9 Apr 2023 17:22:47 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
+ writes
+Message-ID: <20230409-genick-pelikan-a1c534c2a3c1@brauner>
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+ <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] staging: rtl8192e: Fix comparison to NULL of variable
- rf_set_sens
-To:     Yogesh Hegde <yogi.kernel@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <ZDK5UvVHa96ejEfU@Zephyrus-G14>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <ZDK5UvVHa96ejEfU@Zephyrus-G14>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/9/23 15:10, Yogesh Hegde wrote:
-> Fix comparision to NULL of variable rf_set_sens as per Linux kernel
-> coding-style. These issues were reported by checkpatch.pl.
+On Fri, Apr 07, 2023 at 09:29:29AM -0400, Jeff Layton wrote:
+> > > > > 
+> > > > > I would ditch the original proposal in favor of this 2-line patch shown here:
+> > > > > 
+> > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
+> > 
+> > We should cool it with the quick hacks to fix things. :)
+> > 
 > 
-> CHECK: Comparison to NULL could be written "priv->rf_set_sens"
-> CHECK: Comparison to NULL could be written "!priv->rf_set_sens"
+> Yeah. It might fix this specific testcase, but I think the way it uses
+> the i_version is "gameable" in other situations. Then again, I don't
+> know a lot about IMA in this regard.
 > 
-> Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
-> ---
->   drivers/staging/rtl8192e/rtl8192e/rtl_wx.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> When is it expected to remeasure? If it's only expected to remeasure on
+> a close(), then that's one thing. That would be a weird design though.
 > 
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-> index cb28288a618b..a67edb81a820 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-> @@ -311,7 +311,7 @@ static int _rtl92e_wx_get_range(struct net_device *dev,
->   	/* ~130 Mb/s real (802.11n) */
->   	range->throughput = 130 * 1000 * 1000;
->   
-> -	if (priv->rf_set_sens != NULL)
-> +	if (priv->rf_set_sens)
->   		/* signal level threshold range */
->   		range->sensitivity = priv->max_sens;
->   
-> @@ -813,7 +813,7 @@ static int _rtl92e_wx_get_sens(struct net_device *dev,
->   {
->   	struct r8192_priv *priv = rtllib_priv(dev);
->   
-> -	if (priv->rf_set_sens == NULL)
-> +	if (!priv->rf_set_sens)
->   		return -1; /* we have not this support for this radio */
->   	wrqu->sens.value = priv->sens;
->   	return 0;
-> @@ -831,7 +831,7 @@ static int _rtl92e_wx_set_sens(struct net_device *dev,
->   		return 0;
->   
->   	mutex_lock(&priv->wx_mutex);
-> -	if (priv->rf_set_sens == NULL) {
-> +	if (!priv->rf_set_sens) {
->   		err = -1; /* we have not this support for this radio */
->   		goto exit;
->   	}
+> > > > > 
+> > > > > 
+> > > > 
+> > > > Ok, I think I get it. IMA is trying to use the i_version from the
+> > > > overlayfs inode.
+> > > > 
+> > > > I suspect that the real problem here is that IMA is just doing a bare
+> > > > inode_query_iversion. Really, we ought to make IMA call
+> > > > vfs_getattr_nosec (or something like it) to query the getattr routine in
+> > > > the upper layer. Then overlayfs could just propagate the results from
+> > > > the upper layer in its response.
+> > > > 
+> > > > That sort of design may also eventually help IMA work properly with more
+> > > > exotic filesystems, like NFS or Ceph.
+> > > > 
+> > > > 
+> > > > 
+> > > 
+> > > Maybe something like this? It builds for me but I haven't tested it. It
+> > > looks like overlayfs already should report the upper layer's i_version
+> > > in getattr, though I haven't tested that either:
+> > > 
+> > > -----------------------8<---------------------------
+> > > 
+> > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+> > > 
+> > > IMA currently accesses the i_version out of the inode directly when it
+> > > does a measurement. This is fine for most simple filesystems, but can be
+> > > problematic with more complex setups (e.g. overlayfs).
+> > > 
+> > > Make IMA instead call vfs_getattr_nosec to get this info. This allows
+> > > the filesystem to determine whether and how to report the i_version, and
+> > > should allow IMA to work properly with a broader class of filesystems in
+> > > the future.
+> > > 
+> > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > 
+> > So, I think we want both; we want the ovl_copyattr() and the
+> > vfs_getattr_nosec() change:
+> > 
+> > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
+> >     is in line what we do with all other inode attributes. IOW, the
+> >     overlayfs inode's i_version counter should aim to mirror the
+> >     relevant layer's i_version counter. I wouldn't know why that
+> >     shouldn't be the case. Asking the other way around there doesn't
+> >     seem to be any use for overlayfs inodes to have an i_version that
+> >     isn't just mirroring the relevant layer's i_version.
+> 
+> It's less than ideal to do this IMO, particularly with an IS_I_VERSION
+> inode.
+> 
+> You can't just copy up the value from the upper. You'll need to call
+> inode_query_iversion(upper_inode), which will flag the upper inode for a
+> logged i_version update on the next write. IOW, this could create some
+> (probably minor) metadata write amplification in the upper layer inode
+> with IS_I_VERSION inodes.
 
+I'm likely just missing context and am curious about this so bear with me. Why
+do we need to flag the upper inode for a logged i_version update? Any required
+i_version interactions should've already happened when overlayfs called into
+the upper layer. So all that's left to do is for overlayfs' to mirror the
+i_version value after the upper operation has returned.
 
-I would like you to do more.
-I you search for rf_set_sens you will see that it is declared as a function.
-But there is no definition of the function which will cause an oops when 
-this function is called.
+ovl_copyattr() - which copies the inode attributes - is always called after the
+operation on the upper inode has finished. So the additional query seems odd at
+first glance. But there might well be a good reason for it. In my naive
+approach I would've thought that sm along the lines of:
 
-Because there is no definition of the function the priv->rf_set_sens 
-will result always NULL
+diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+index 923d66d131c1..8b089035b9b3 100644
+--- a/fs/overlayfs/util.c
++++ b/fs/overlayfs/util.c
+@@ -1119,4 +1119,5 @@ void ovl_copyattr(struct inode *inode)
+        inode->i_mtime = realinode->i_mtime;
+        inode->i_ctime = realinode->i_ctime;
+        i_size_write(inode, i_size_read(realinode));
++       inode_set_iversion_raw(inode, inode_peek_iversion_raw(realinode));
+ }
 
-Bye Philipp
+would've been sufficient.
+
+Since overlayfs' does explicitly disallow changes to the upper and lower trees
+while overlayfs is mounted it seems intuitive that it should just mirror the
+relevant layer's i_version.
+
+If we don't do this, then we should probably document that i_version doesn't
+have a meaning yet for the inodes of stacking filesystems.
+
+> 
+> 
+> > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
+> >     Currently, ima assumes that it will get the correct i_version from
+> >     an inode but that just doesn't hold for stacking filesystem.
+> > 
+> > While (1) would likely just fix the immediate bug (2) is correct and
+> > _robust_. If we change how attributes are handled vfs_*() helpers will
+> > get updated and ima with it. Poking at raw inodes without using
+> > appropriate helpers is much more likely to get ima into trouble.
+> 
+> This will fix it the right way, I think (assuming it actually works),
+> and should open the door for IMA to work properly with networked
+> filesystems that support i_version as well.
+> 
+> Note that there Stephen is correct that calling getattr is probably
+> going to be less efficient here since we're going to end up calling
+> generic_fillattr unnecessarily, but I still think it's the right thing
+> to do.
+> 
+> If it turns out to cause measurable performance regressions though,
+> maybe we can look at adding a something that still calls ->getattr if it
+> exists but only returns the change_cookie value.
+
+Sounds good to me.
