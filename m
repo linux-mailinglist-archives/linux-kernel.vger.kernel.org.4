@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C16DC0CA
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 19:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7A86DC0CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 19:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjDIRKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 13:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S229598AbjDIRKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 13:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDIRKF (ORCPT
+        with ESMTP id S229583AbjDIRKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 13:10:05 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C7E30E1
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 10:10:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id y4so3091837ljq.9
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 10:10:04 -0700 (PDT)
+        Sun, 9 Apr 2023 13:10:38 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E60130EC
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 10:10:37 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id bd22so5661230ljb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 10:10:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681060202;
+        d=linaro.org; s=google; t=1681060235;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5uCMXg3qktyRsiu4kaOaI9ivh//X7GtEehAzDrbc2ME=;
-        b=TzTEX6yDh1XKr7Lf6+zCMXYxsCPludeRQxOSZIvW7IcRjb75zyNKUmXp/uNv+HRS13
-         YaxahZU6eQKmbNgo6kJ9bFWfrvTIkDRJA0EPArnsb2D5YE0mNTyfJoQ2aBYCt6vJZW6K
-         FJSL/Sz0DRYzXQ8T1I2uFZjdOivJulBQTyVcynYBTVtjR3YmpYWUEqm+S6UP1v3lnGac
-         2bUuBkOiBq8+uEHvdMsHGdqw7WDztqGufjwog3QrvtC2Y9YD+ar7dxfHDvKALRgT2OsI
-         DjRiaBLinsAKY66cFU04BjAWuCQ5AIAfdvQd/nFh/JcQP70nISV0r/gW7rklPKAfg6zL
-         mxTQ==
+        bh=QqN5vgtmzxPJB8D1iXb0mZavhJ/16WwLHBHQdEhshG8=;
+        b=UubL+kDMhJ8ZZV8GrkKlNeoK+Fgt9uODY9F/4uOfgJW1A7AczaW3whACUvO6pEmwYL
+         jH/0/DU8xR3P3IFAxdvU3PfgvQQfMQRIvuHMCd+GWd1M7cVq8svh1KU7OJ6S6Yd8hzKJ
+         LcFtLa+10I9bSR/uYcw3XGlxwpHrwY0N0ED4PvVoUyjPy8yRRjdy9b34d50DZhlcu0/O
+         uKK9hPlXunfaTg7ZuGUc3CUlpRr5GPsRF8QKFH8ePIziJpJqtooL750bCFce8owaF5gF
+         SjMiMgmIFJCJij3mQZmX3gomoJq2biZif2JfXMdNvFyWe1uITBGFskXbGw+Ae+Wh43OZ
+         WgbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681060202;
+        d=1e100.net; s=20210112; t=1681060235;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5uCMXg3qktyRsiu4kaOaI9ivh//X7GtEehAzDrbc2ME=;
-        b=CAA8xBiu7+VJJnaX8xvqFpbkR6+tT6i23GPsu+HDFziIzefDfwTmyOcHyC10bcrB0W
-         lHq8xPtY5X4I+DTjRJp3kVK91mbViV7O5Y7uqhFty3Ik4zjEsvzF7eoxSIIvDCh7TEyg
-         m/BmkzDhk6FSeX7bzc6ugbwwZorznzTzT1Rp3pStPT1FQOyMKyp/RZ54D2mhEIZ5rU13
-         XbQCOB5fmmntyWW0kF2iYZ80nHMnhXnwhw+VYMnfOxHw8nExDoNFYGg9JKPJHC5ZaTtq
-         5Rl4TPhsPLYpIVUKryK4cTU+Ft4IWTyhCywNXHlUw9u8yQEbo7Q+JJtLnWYo7ebNKwW6
-         LE/Q==
-X-Gm-Message-State: AAQBX9ccPpx5/qEosdMzWmIwQI0GS4v7oDd+jnca1cha9UsQzwQBhisa
-        X3FnpCNtUQ1YH7+Hn7gpW6C35A==
-X-Google-Smtp-Source: AKy350bhaQbNkHbZKI6ZhxOOPajs7ZcQwLq5npTcqkh7MGlNK5WWLXvyyDDc1hKZq8WdvocVH2qQ0g==
-X-Received: by 2002:a2e:3812:0:b0:2a4:fe3d:d4b2 with SMTP id f18-20020a2e3812000000b002a4fe3dd4b2mr2179483lja.17.1681060202404;
-        Sun, 09 Apr 2023 10:10:02 -0700 (PDT)
+        bh=QqN5vgtmzxPJB8D1iXb0mZavhJ/16WwLHBHQdEhshG8=;
+        b=jXJyOyvPGlH2ztd8l9KkFg7QnHt3lFjfWcbAUVMKgxqg2dLyA5SHxWJEgZ+49SdRqt
+         gE+ZGRLbu8L3sqapFeUMMp6zNn5TYRcDzV5uXfglqvq5yizSb/XyUAKOrDLfDeD2MZ6i
+         cFAVxfEfeD5VAy47ZuIuO/ZjLNQhTjQeKnE+506uT1u4ADniGg5WoerYGGct7eFl641m
+         D6QC/eHjqK24tBysHs4cF2wZeB+ov6Zkd8WnZ7tQeeUMVLQ2jnWOK27O7Jdpjma1k4zp
+         AhAnvPQH7zWO8zsRj0Q098iYZDp/EHpV7xvsPfBXquVVIr0tVfCUQVpYqY08V3BZLc/k
+         yL8w==
+X-Gm-Message-State: AAQBX9d0RCqAr2osSReBQtvg9T3vLUFR+Is5BAIBcOPlpPzfM+e4tIJH
+        txSYFu4QnTCIVCibE96TuhuYbg==
+X-Google-Smtp-Source: AKy350bH1RgV7K/b9fCo/Px2MsMXTrmdymWA/1p7u4u57HbI73GPv8Bg4+mkj+1aXbwv6CFc/u6xXA==
+X-Received: by 2002:a2e:9447:0:b0:299:ac61:4e78 with SMTP id o7-20020a2e9447000000b00299ac614e78mr2182673ljh.10.1681060235588;
+        Sun, 09 Apr 2023 10:10:35 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id z14-20020a2e9b8e000000b00298a81f5d70sm1849710lji.136.2023.04.09.10.10.01
+        by smtp.gmail.com with ESMTPSA id s17-20020a2e9c11000000b002a773ce93casm364538lji.137.2023.04.09.10.10.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 10:10:01 -0700 (PDT)
-Message-ID: <ccbf905b-2c0b-e5e2-1ee2-485d3af52247@linaro.org>
-Date:   Sun, 9 Apr 2023 20:10:01 +0300
+        Sun, 09 Apr 2023 10:10:35 -0700 (PDT)
+Message-ID: <0f7f2f1d-3b05-ebf1-33fc-e5904200737d@linaro.org>
+Date:   Sun, 9 Apr 2023 20:10:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/3] venus: fix EOS handling in decoder stop command
+Subject: Re: [PATCH v2 2/3] venus: enable sufficient sequence change support
+ for vp9
 Content-Language: en-GB
 To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
         linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
@@ -64,9 +65,9 @@ To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Viswanath Boma <quic_vboma@quicinc.com>
 References: <1680848758-3947-1-git-send-email-quic_dikshita@quicinc.com>
- <1680848758-3947-4-git-send-email-quic_dikshita@quicinc.com>
+ <1680848758-3947-3-git-send-email-quic_dikshita@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1680848758-3947-4-git-send-email-quic_dikshita@quicinc.com>
+In-Reply-To: <1680848758-3947-3-git-send-email-quic_dikshita@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -80,9 +81,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 07/04/2023 09:25, Dikshita Agarwal wrote:
-> Use firmware version based check to assign correct
-> device address for EOS buffer to fix the EOS handling
-> with different firmware version.
+> VP9 supports resolution change at interframe.
+> Currenlty, if sequence change is detected at interframe and
+> resources are sufficient, sequence change event is not raised
+> by firmware to driver until the next keyframe.
+> This change add the HFI to notify the sequence change in this
+> case to driver.
 > 
 > Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 > Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
@@ -92,24 +96,56 @@ Order of sign-offs is incorrect. The SoB of the sender should be the
 last one.
 
 > Tested-by: Nathan Hebert <nhebert@chromium.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->   drivers/media/platform/qcom/venus/vdec.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/media/platform/qcom/venus/hfi_cmds.c   | 1 +
+>   drivers/media/platform/qcom/venus/hfi_helper.h | 2 ++
+>   drivers/media/platform/qcom/venus/vdec.c       | 8 ++++++++
+>   3 files changed, 11 insertions(+)
 > 
+> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> index 930b743..e2539b5 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> @@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
+>   		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
+>   		break;
+>   	}
+> +	case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
+>   	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
+>   		struct hfi_enable *in = pdata;
+>   		struct hfi_enable *en = prop_data;
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index d2d6719..2e03b6e 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -469,6 +469,8 @@
+>   #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH			0x1003007
+>   #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT			0x1003009
+>   #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE			0x100300a
+> +#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
+> +								0x100300b
+>   
+>   /*
+>    * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
 > diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index f0394b9..c59b34f 100644
+> index 4ceaba3..f0394b9 100644
 > --- a/drivers/media/platform/qcom/venus/vdec.c
 > +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+> @@ -671,6 +671,14 @@ static int vdec_set_properties(struct venus_inst *inst)
+>   			return ret;
+>   	}
 >   
->   		fdata.buffer_type = HFI_BUFFER_INPUT;
->   		fdata.flags |= HFI_BUFFERFLAG_EOS;
-> -		if (IS_V6(inst->core))
-> +		if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
->   			fdata.device_addr = 0;
->   		else
->   			fdata.device_addr = 0xdeadb000;
+> +	/* Enabling sufficient sequence change support for VP9 */
+> +	if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
+> +		ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
+> +		ret = hfi_session_set_property(inst, ptype, &en);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
+>   	conceal = ctr->conceal_color & 0xffff;
+>   	conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
 
 -- 
 With best wishes
