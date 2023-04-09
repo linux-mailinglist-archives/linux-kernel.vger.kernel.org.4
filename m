@@ -2,166 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BE06DC09D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475456DC0AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjDIQAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 12:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S229513AbjDIQlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 12:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDIQAA (ORCPT
+        with ESMTP id S229445AbjDIQln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 12:00:00 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5804C30FA;
-        Sun,  9 Apr 2023 08:59:57 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id z16so1577583oib.9;
-        Sun, 09 Apr 2023 08:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681055996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OKSx+BThSiB9jUyMzJ/mVQaX8wNZeNkLCwm7ggA60Lo=;
-        b=I8xNdWVHMLyxojtPZ7QS+y0Q1R2JpZ+SlKbyhW63/HECNN4q3aFFVyrBsT34WK2PmY
-         HBx7SjD62wgjmgZJFZkMsAQEEOQLHXxrKhAiouSya3YduwrWOs11E8lB15a0JxxrR4zy
-         C3RurE3rwJXewaN4A0bUyIpdrSMBgUyivBFKgw2Wp0yU3g04zgaXNyXgC7ULnXQBsg1m
-         LiPKKgghnYhrrQeQXNaQy8yBT48bcskfxrNxFpD/87Tyehui3YeeU666M5x9R8y2CdTW
-         XtJzjh5paWEJKLwyDeVIaHPcW60HeVtiuy6u6NlGnFyg/7l7H5tcRt+HuawSZwLwfYl1
-         WFkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681055996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OKSx+BThSiB9jUyMzJ/mVQaX8wNZeNkLCwm7ggA60Lo=;
-        b=Mhro+j0K9io2Tx91O9SB4J0S00aZbsfemiWXj0yaTEhQG3w+3qo6K3u5a13wjt9gTF
-         x86TO6BU+msPNQ/8h1zHWZNgHkdh01TB9jL2TlLVJJANYNqlvC1YbGawQp+fDQCGHAno
-         mI6F7BCQ/CRyoD8JZG67DfIX9NfHsgRWA7hAIO7AbhKEy2/IbVtYVv/DG2l8/pFeaLZL
-         lISN3GP2NGy2E9wdya0SUJJRTaxBJR7rq8/ajR3wZCTiW2adW8p+UknJQ4+q359eqp2g
-         VdVYUavwbwAHFjbw2x+uhd28oLMOVoCU/D5cKK+NEwGGZ2eltKb+TmRxvUeHm58nTrwu
-         DN/w==
-X-Gm-Message-State: AAQBX9dIMGdS5SFSHtgtqebYicwx91kfNvzMaI5x7VlPJLphyu2KCVMT
-        0ypvxFE9Am2mviSgISW+61p00kpNXHvuvHGNKsk=
-X-Google-Smtp-Source: AKy350ZaZjhvnKfo1yDx5wAVpP/ZXGLLNI1FUxzWsAm6DKPw50DEDVYlVUIM2GJ4EBeKyJ/M4yDf7ZYqzK/buWBmAs4=
-X-Received: by 2002:aca:171a:0:b0:386:e7e7:d93d with SMTP id
- j26-20020aca171a000000b00386e7e7d93dmr2328119oii.5.1681055996599; Sun, 09 Apr
- 2023 08:59:56 -0700 (PDT)
+        Sun, 9 Apr 2023 12:41:43 -0400
+X-Greylist: delayed 1572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Apr 2023 09:41:42 PDT
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54AD3AA0;
+        Sun,  9 Apr 2023 09:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=sdepJt36gVqn4e9O8k96DKAcVGbB3Ag8s1S8ozt6leE=; b=wjx+ZV2adD5NJnDN6wA4IAXFzq
+        MjT7yYfOHgjdIbZHbukuMC/U8i2J8Dt2lsBlh0xtX0+c2TM937j17BwY15wBeb4aeYBymI05yVWNj
+        2MDvrL/GPbzuf0EOnJd+0vkbBxhM8zoQC6nchKr7uI+dp8+R+sDeU0DBGEeOjK9npdSo0Lxb6hU5R
+        tJ+B4RNXvqd/whwA5AmcrJvr+2Uz2cxWgVuCrj+hIrGp8cqDAzwBeD5cnBD5FN1siBHmuBlLBUHBy
+        pDRziWgJyHSt+lGg0/XtQv+Ir2uUMm2DsMmi2gQr3u15AI+Lr3awxWuWL3uRgR5hpOIk/iTu7cwjr
+        8y5BOPBA==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1plXh5-009uJS-Ht; Sun, 09 Apr 2023 17:15:07 +0100
+Date:   Sun, 9 Apr 2023 17:15:07 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [net-next PATCH v6 13/16] ARM: dts: qcom: ipq8064-rb3011: Drop
+ unevaluated properties in switch nodes
+Message-ID: <ZDLki3CYBxQ+uqUJ@earth.li>
+References: <20230327141031.11904-1-ansuelsmth@gmail.com>
+ <20230327141031.11904-14-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <20230406215917.1475704-1-robdclark@gmail.com> <20230406215917.1475704-3-robdclark@gmail.com>
- <CACvgo50FEYhdpp3nqX-AyAvLK8hJnK2xynTtLnCb9A+GSeHCvg@mail.gmail.com>
-In-Reply-To: <CACvgo50FEYhdpp3nqX-AyAvLK8hJnK2xynTtLnCb9A+GSeHCvg@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Sun, 9 Apr 2023 08:59:45 -0700
-Message-ID: <CAF6AEGuyu5AoCTneqZQLasTfb5YEotVr35hSBvYhRTMaTbYPUw@mail.gmail.com>
-Subject: Re: [RFC 2/2] drm/msm: Add memory stats to fdinfo
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Christopher Healy <healych@amazon.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327141031.11904-14-ansuelsmth@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 8, 2023 at 5:28=E2=80=AFAM Emil Velikov <emil.l.velikov@gmail.c=
-om> wrote:
->
-> On Thu, 6 Apr 2023 at 22:59, Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Use the new helper to export stats about memory usage.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/gpu/drm/msm/msm_drv.c | 26 +++++++++++++++++++++++++-
-> >  drivers/gpu/drm/msm/msm_gpu.c |  2 --
-> >  2 files changed, 25 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_dr=
-v.c
-> > index 9b6f17b1261f..385776f6a531 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@ -1043,17 +1043,40 @@ static const struct drm_ioctl_desc msm_ioctls[]=
- =3D {
-> >         DRM_IOCTL_DEF_DRV(MSM_SUBMITQUEUE_QUERY, msm_ioctl_submitqueue_=
-query, DRM_RENDER_ALLOW),
-> >  };
-> >
-> > +enum drm_gem_object_status gem_status(struct drm_gem_object *obj)
-> > +{
-> > +       struct msm_gem_object *msm_obj =3D to_msm_bo(obj);
-> > +       enum drm_gem_object_status status =3D 0;
-> > +
-> > +       if (!dma_resv_test_signaled(obj->resv, dma_resv_usage_rw(true))=
-)
-> > +               status |=3D DRM_GEM_OBJECT_ACTIVE;
-> > +
-> > +       if (msm_obj->pages)
-> > +               status |=3D DRM_GEM_OBJECT_RESIDENT;
-> > +
-> > +       if (msm_obj->madv =3D=3D MSM_MADV_DONTNEED)
-> > +               status |=3D DRM_GEM_OBJECT_PURGEABLE;
-> > +
-> > +       return status;
-> > +}
-> > +
-> >  static void msm_fop_show_fdinfo(struct seq_file *m, struct file *f)
-> >  {
-> >         struct drm_file *file =3D f->private_data;
-> >         struct drm_device *dev =3D file->minor->dev;
-> >         struct msm_drm_private *priv =3D dev->dev_private;
-> > +       struct msm_file_private *ctx =3D file->driver_priv;
-> >         struct drm_printer p =3D drm_seq_file_printer(m);
-> >
-> >         if (!priv->gpu)
-> >                 return;
-> >
-> > -       msm_gpu_show_fdinfo(priv->gpu, file->driver_priv, &p);
-> > +       drm_printf(&p, "drm-driver:\t%s\n", dev->driver->name);
-> > +       drm_printf(&p, "drm-client-id:\t%u\n", ctx->seqno);
-> > +
-> > +       msm_gpu_show_fdinfo(priv->gpu, ctx, &p);
-> > +
-> > +       drm_print_memory_stats(file, &p, gem_status);
-> >  }
-> >
-> >  static const struct file_operations fops =3D {
-> > @@ -1067,6 +1090,7 @@ static const struct drm_driver msm_driver =3D {
-> >                                 DRIVER_RENDER |
-> >                                 DRIVER_ATOMIC |
-> >                                 DRIVER_MODESET |
-> > +                               DRIVER_SYNCOBJ_TIMELINE |
->
-> This line should probably be its own patch. AFAICT it was supported
-> since ab723b7a992a19b843f798b183f53f7472f598c8, although explicitly
-> kept disabled until there's userspace/turnip support.
+On Mon, Mar 27, 2023 at 04:10:28PM +0200, Christian Marangi wrote:
+> IPQ8064 MikroTik RB3011UiAS-RM DT have currently unevaluted properties
+> in the 2 switch nodes. The bindings #address-cells and #size-cells are
+> redundant and cause warning for 'Unevaluated properties are not
+> allowed'.
+> 
+> Drop these bindings to mute these warning as they should not be there
+> from the start.
 
-ahh, yes, that wasn't intended to be part of this patch, just a local
-thing I happened to be testing
+Looks legit (and no particular reason it needs to wait for the rest of
+the series).
 
-BR,
--R
+Reviewed-By: Jonathan McDowell <noodles@earth.li>
+Tested-By: Jonathan McDowell <noodles@earth.li>
 
-> With the above line removed, the patch is:
-> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
->
-> HTH
-> Emil
+> Cc: Jonathan McDowell <noodles@earth.li>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> index f908889c4f95..47a5d1849c72 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> @@ -38,8 +38,6 @@ mdio0: mdio-0 {
+>  
+>  		switch0: switch@10 {
+>  			compatible = "qca,qca8337";
+> -			#address-cells = <1>;
+> -			#size-cells = <0>;
+>  
+>  			dsa,member = <0 0>;
+>  
+> @@ -105,8 +103,6 @@ mdio1: mdio-1 {
+>  
+>  		switch1: switch@14 {
+>  			compatible = "qca,qca8337";
+> -			#address-cells = <1>;
+> -			#size-cells = <0>;
+>  
+>  			dsa,member = <1 0>;
+>  
+> -- 
+> 2.39.2
+> 
+
+J.
+
+-- 
+Are you happy with your wash?
