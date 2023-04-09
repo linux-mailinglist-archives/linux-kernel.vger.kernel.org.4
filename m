@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7101D6DBF65
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 11:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1A96DBF8D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 12:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjDIJ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 05:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S229510AbjDIKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 06:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDIJ7Q (ORCPT
+        with ESMTP id S229445AbjDIKw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 05:59:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D88F40E2;
-        Sun,  9 Apr 2023 02:59:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2BA601BE;
-        Sun,  9 Apr 2023 09:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDC4C433D2;
-        Sun,  9 Apr 2023 09:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681034354;
-        bh=QmmQZdyjYCnNGuNTcKRnoJE/jVdQdVNviwZvG55h2Q4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hJicAWxL6JCHkBqEmC6nykPChOjUKu/hDMd9rLBf1O5+ByNu7F5XL679NjFJpceBi
-         UYo5sMr4g9ci4Xl/kr4TaHZFv3V2mdhq1LrWTyljU3sStjdDU8frBg9ZuZKWAkVAfm
-         cXLrh0IduBoaiuWTfJ1m/LBEUv7TI2/DKxnUt//m8nFzgkLvNOOU/rWurhiebZbIGx
-         7b0B9SMJjZ4f+Dde8HM44Fiqfx7fHl8MtyhMGbVQGL1k+owPxazEjozpJDLJzhjHYk
-         q6wQ1gMUswoHFxWmM59PFGRDvxFZ+zK3tbYDlhbMHrc9ANsP1k5Mn4cPg4CW8pkgbe
-         iQKVonAy1hH3Q==
-Date:   Sun, 9 Apr 2023 12:59:10 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Matan Barak <matanb@mellanox.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Yishai Hadas <yishaih@mellanox.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] IB/uverbs: Adjustments for create_qp()
-Message-ID: <20230409095910.GG14869@unreal>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <8f785de5-ebe2-edd9-2155-f440acacc643@web.de>
- <01af2ec9-4758-1fe6-0d74-b30b95c3e9a5@web.de>
+        Sun, 9 Apr 2023 06:52:29 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB5549DE
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 03:52:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VfcswfY_1681037541;
+Received: from 30.13.186.222(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfcswfY_1681037541)
+          by smtp.aliyun-inc.com;
+          Sun, 09 Apr 2023 18:52:24 +0800
+Message-ID: <013084a3-8a80-9825-66b9-e4bd6674169e@linux.alibaba.com>
+Date:   Sun, 9 Apr 2023 18:52:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01af2ec9-4758-1fe6-0d74-b30b95c3e9a5@web.de>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 2/7] erofs: initialize packed inode after root inode is
+ assigned
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230407141710.113882-1-jefflexu@linux.alibaba.com>
+ <20230407141710.113882-3-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230407141710.113882-3-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 06:10:14PM +0200, Markus Elfring wrote:
-> Date: Thu, 6 Apr 2023 17:50:05 +0200
+
+
+On 2023/4/7 22:17, Jingbo Xu wrote:
+> As commit 8f7acdae2cd4 ("staging: erofs: kill all failure handling in
+> fill_super()"), move the initialization of packed inode after root
+> inode is assigned, so that the iput() in .put_super() is adequate as
+> the failure handling.
 > 
-> A few update suggestions were taken into account
-> from static source code analysis.
+> Otherwise, iput() is also needed in .kill_sb(), in case of the mounting
+> fails halfway.
 > 
-> Markus Elfring (2):
->   Improve exception handling
->   Delete a duplicate check
 
-Like I said it before,
-NACK to any RDMA patches from you.
+Fixes: b15b2e307c3a ("erofs: support on-disk compressed fragments data")
 
-To make it very clear, if you send any patches to RDMA, please add the
-following line:
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-Nacked-by Leon Romanovsky <leon@kernel.org>
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-Thanks
+Thanks,
+Gao Xiang
