@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0376DC079
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 16:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9736DC075
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 16:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjDIOyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 10:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S229592AbjDIOt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 10:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDIOyG (ORCPT
+        with ESMTP id S229548AbjDIOt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 10:54:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136973A87;
-        Sun,  9 Apr 2023 07:54:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F9E60B9F;
-        Sun,  9 Apr 2023 14:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601D6C433EF;
-        Sun,  9 Apr 2023 14:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681052045;
-        bh=sR52KGMqxK6Vt6XY9CUVOsj3Fqld4NSi7ibY6IQOrls=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c7+bCLim2D3xhHj9JAL0ZLjWdWnrvkOKClHaZBXuRTJFRMzoD8+7yJCMn65AyhspJ
-         r/A8d6GIy75OYca0Ddu2CRsJQzfb6/ttOugEx92E3i+u0hQF7CJlv+1l3c9fZPqdEt
-         7kehPv01N4jrHKBwDghBZA5gWap3UGFm7P19NLQqAQ8yPSo9/PdcSqmei6+punbR02
-         CoFynNaG9cf9QaRFNCKr+yGod6Ajoewn/kCBzpR0egG9Qggebl5e+fCbE/rXiCX3Fj
-         ZnH3QCzmboEVdeLxLQf1TQ0lx3TKAr4NuZVb4F7OwoSB27ubtdDp1gvW2MJytgEgAm
-         vH/w1ohaBirdw==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Tom Rini <trini@konsulko.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev
-Subject: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-Date:   Sun,  9 Apr 2023 23:53:57 +0900
-Message-Id: <20230409145358.2538266-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Sun, 9 Apr 2023 10:49:27 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD1535AC
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 07:49:25 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id sg7so18591502ejc.9
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 07:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1681051764;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=65LSbWKUrmCArl+LXVPE7dMWtbfbmdZlWVztuN2QWX0=;
+        b=b0gnqKuPzGxBDzcrGs8eDqLRGoQBwJSNtdIQW7jdBZj187QJuJhpCg5slpnkGD2r1g
+         JBtHIXOz0t36TBewgWRcItyvOujSFDwZ4lsvBJxvlDfbjOAzNYSah373BzCo29W5s/mJ
+         zqP+1d9/mJ0YA/jQzKcOVnEmCysltQfFGuw2M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681051764;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=65LSbWKUrmCArl+LXVPE7dMWtbfbmdZlWVztuN2QWX0=;
+        b=K7mIhFHfhCLL+6gvlf4WwGJM75X10gixjT420hY046vo5rs0sMD7AlyqoQ+cKmMJ6F
+         0lv6Q5TEXo+D8g001K0ViA2NpzELQ4KB5vb5H/skCq8qEoSmJNxHNw/8OFU1y6viBecy
+         +aEeEW5BFWdbun36R+z4Hkv6l5QRRBi+tIh3xWs3R0mkdYctydHx/ElFK0904ox+705h
+         E4j/4K59SMyYaO4LACvvb5gLCVqtGq2Xvel1BeiEsgKLOLekT9Nn+8UVJpYyGRoHUjP7
+         LIMmA4Ja/h771CWf8FOReKCG/SjCCS1DLbCn/rdJNkCY8FLbYLfG36SIGDo5npLQmDuO
+         pxYg==
+X-Gm-Message-State: AAQBX9cVWWsWrra6HWEy70Rs7L7zLBLA6joie5keH9919ycCP8+92gN+
+        hlzndxmFMijgjw2U8w9xYfV5OYi+h05XidA7SbNRCQ==
+X-Google-Smtp-Source: AKy350Y//avkrDNCiYLj+3hant+G2KKsf7lq85OXJkIr+RhU38AdQal5f9HWvuw7i/JuxgMRJVbuorj3x81kC4LvY7A=
+X-Received: by 2002:a17:907:a68a:b0:92e:7a67:668a with SMTP id
+ vv10-20020a170907a68a00b0092e7a67668amr2381028ejc.0.1681051763891; Sun, 09
+ Apr 2023 07:49:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406212136.19716-1-kal.conley@dectris.com>
+In-Reply-To: <20230406212136.19716-1-kal.conley@dectris.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Sun, 9 Apr 2023 16:54:05 +0200
+Message-ID: <CAHApi-=CZcRcD+knw6TgFxEnk+16bN4nPJKLVbfmsHHL7crtnQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] xsk: Elide base_addr comparison in xp_unaligned_validate_desc
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
-not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> +       addr = xp_unaligned_add_offset_to_addr(desc->addr);
+> +
 
-As a result, the linker script is preprocessed with predefined macros
-for the build host instead of the target.
-
-Assuming you use an x86 build machine, compare the following:
-
- $ clang -dM -E -x c /dev/null
- $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
-
-There is no actual problem presumably because our linker scripts do not
-rely on such predefined macros, but it is better to define correct ones.
-
-Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
-will be processed with the proper target triple.
-
-Reported-by: Tom Rini <trini@konsulko.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Makefile.clang | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 70b354fa1cb4..93ca059cc3b8 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -38,6 +38,5 @@ CLANG_FLAGS	+= -Werror=unknown-warning-option
- CLANG_FLAGS	+= -Werror=ignored-optimization-argument
- CLANG_FLAGS	+= -Werror=option-ignored
- CLANG_FLAGS	+= -Werror=unused-command-line-argument
--KBUILD_CFLAGS	+= $(CLANG_FLAGS)
--KBUILD_AFLAGS	+= $(CLANG_FLAGS)
-+KBUILD_CPPFLAGS	+= $(CLANG_FLAGS)
- export CLANG_FLAGS
--- 
-2.37.2
-
+I guess this assignment should simply be combined with the variable
+declaration. This will shorten the function by an additional two lines
+of code.
