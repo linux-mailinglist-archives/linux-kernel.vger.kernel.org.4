@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0AE6DC1F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 00:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7BA6DC1FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 01:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjDIWoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 18:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S229597AbjDIXQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 19:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDIWox (ORCPT
+        with ESMTP id S229445AbjDIXQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 18:44:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C2630F7
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 15:44:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 9 Apr 2023 19:16:07 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B08C2694;
+        Sun,  9 Apr 2023 16:16:04 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD5DF60B20
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 22:44:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBC4C433EF;
-        Sun,  9 Apr 2023 22:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681080291;
-        bh=xRIsVFSUrsQQOjJBLZt8laCBY+KJ3A93MXq+5RhRXKA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lu+3r6ogZ93Y2Qb6CJHxlCZAroRkfS1vmFRo9JoT3HT0LGNgDVlK9QVfJ6B7HJqYy
-         VSD2a/+EZ3jYYfArE74vHKFgQISEkHmzd8swc9eOACtmoaRqqyL67k+7JCGHpzCyC+
-         gPR3Fb0ssB0hEN7qMaCqCBNHzROUypmXOv/L8EKCSvnrPQVtLNuDjZOOky82AaS6ZN
-         15anlmmZ+vt5BQlaLfiqL7G+Vueq+7FTLz5qDTTQWX5mhJPNkDWH+datHxT1BiqaU9
-         vT5mvfaTYsbi9Vao7CE0GNhKryEoclMDbMkw6ZOkIPnJdN+iWXjOdMTcM591Lz3Bo8
-         lMTIPFQ2klXWw==
-Date:   Sun, 9 Apr 2023 22:44:48 +0000
-From:   Eric Van Hensbergen <ericvh@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     v9fs@lists.linux.dev, v9fs-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] 9p fixes for 6.3-rc7
-Message-ID: <ZDM/4C0PlbbzV/0R@7e9e31583646>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 43E3D3F373;
+        Sun,  9 Apr 2023 23:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681082161;
+        bh=VzZtUugz5Z6wG4Nk2gp8O0xbsEGnMTB9pV/EotnGfmo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=SCNIsjnDSDqBX2UE3SsBX1YgQF+fLFVKC3LFmoNlZGeg4Kbzwh2BePsQv5PnqkrXm
+         bIDjex7IKcHuVN+2hfu00qjiet4r93pZHBGJvLzWsqYeLSsfJs+jh14YkYAR4ieJeT
+         RAR8fh7ox7Ty9pPjkNrHDZ1q3a7kvUVOKWWwXXq4JguwkgzqCukaKpR/NT4m4s1sda
+         U8KpH4TuNxruw3dYPdbb5MUVwFf0mw/ojLYxbd5hZxqyydhZJHHbe7r0wJcPJcPgMR
+         PG9/GBeSULITEJlzLWI2tDXOsnGETECAdfzxKdIgflz9VJsExiFRLVXdmCjScGJ6v+
+         roOdJg95kvUnw==
+Message-ID: <763073bf-44db-701e-c100-c392cb11e958@canonical.com>
+Date:   Sun, 9 Apr 2023 16:15:58 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6iTrNcIrToWOugJ"
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] apparmor: Return directly after a failed kzalloc() in two
+ functions
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org,
+        linux-security-module@vger.kernel.org, apparmor@lists.ubuntu.com,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+References: <6cbcf640-55e5-2f11-4a09-716fe681c0d2@web.de>
+ <d33ebeca-0900-8c6c-ac44-f301daf24a5b@web.de>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <d33ebeca-0900-8c6c-ac44-f301daf24a5b@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/29/23 03:12, Markus Elfring wrote:
+> Date: Wed, 29 Mar 2023 11:50:44 +0200
+> 
+> 1. Return directly after a call of the function “kzalloc” failed
+>     at the beginning in these function implementations.
+> 
+> 2. Omit extra initialisations (for a few local variables)
+>     which became unnecessary with this refactoring.
+> 
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
---p6iTrNcIrToWOugJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+thanks, I have pulled this into the apparmor tree
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> ---
+>   security/apparmor/crypto.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/apparmor/crypto.c b/security/apparmor/crypto.c
+> index b498ed302461..6724e2ff6da8 100644
+> --- a/security/apparmor/crypto.c
+> +++ b/security/apparmor/crypto.c
+> @@ -28,15 +28,15 @@ unsigned int aa_hash_size(void)
+>   char *aa_calc_hash(void *data, size_t len)
+>   {
+>   	SHASH_DESC_ON_STACK(desc, apparmor_tfm);
+> -	char *hash = NULL;
+> -	int error = -ENOMEM;
+> +	char *hash;
+> +	int error;
+> 
+>   	if (!apparmor_tfm)
+>   		return NULL;
+> 
+>   	hash = kzalloc(apparmor_hash_size, GFP_KERNEL);
+>   	if (!hash)
+> -		goto fail;
+> +		return ERR_PTR(-ENOMEM);
+> 
+>   	desc->tfm = apparmor_tfm;
+> 
+> @@ -62,7 +62,7 @@ int aa_calc_profile_hash(struct aa_profile *profile, u32 version, void *start,
+>   			 size_t len)
+>   {
+>   	SHASH_DESC_ON_STACK(desc, apparmor_tfm);
+> -	int error = -ENOMEM;
+> +	int error;
+>   	__le32 le32_version = cpu_to_le32(version);
+> 
+>   	if (!aa_g_hash_policy)
+> @@ -73,7 +73,7 @@ int aa_calc_profile_hash(struct aa_profile *profile, u32 version, void *start,
+> 
+>   	profile->hash = kzalloc(apparmor_hash_size, GFP_KERNEL);
+>   	if (!profile->hash)
+> -		goto fail;
+> +		return -ENOMEM;
+> 
+>   	desc->tfm = apparmor_tfm;
+> 
+> --
+> 2.40.0
+> 
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git tags/9p-6.3-fixes-rc7
-
-for you to fetch changes up to 347dca97f75d461ac2ac256b68e495dfc6f14d61:
-
-  Update email address and mailing list for v9fs (2023-04-02 23:53:41 +0000)
-
-----------------------------------------------------------------
-These are some collected fixes for the 6.3-rc series that have been
-passed our 9p regression tests and been in for-next for at least a week.
-They include a fix for a KASAN reported problem in the extended attribute
-handling code and a use after free in the xen transport.  It also includes
-some updates for the MAINTAINERS file including the transition of our
-development mailing list from sourceforge.net to lists.linux.dev.
-
-Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-
-----------------------------------------------------------------
-Eric Van Hensbergen (1):
-      Update email address and mailing list for v9fs
-
-Ivan Orlov (1):
-      9P FS: Fix wild-memory-access write in v9fs_get_acl
-
-Zheng Wang (1):
-      9p/xen : Fix use after free bug in xen_9pfs_front_remove due to race condition
-
- MAINTAINERS        | 6 +++---
- fs/9p/xattr.c      | 8 +++++---
- net/9p/trans_xen.c | 4 ++++
- 3 files changed, 12 insertions(+), 6 deletions(-)
-
---
-Thanks,
-    -eric
-
-
---p6iTrNcIrToWOugJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElpbw0ZalkJikytFRiP/V+0pf/5gFAmQzP+AACgkQiP/V+0pf
-/5ii2hAAjfk8de0uwQsZqnoBcsnvPIHBq5RyIrSF6XT+fG6FBMmxuz1pgY8jnn7V
-g4jQt+jlWiPdjDRQ2O51eGVlk+bybnaQaljEfoJ0gT5Y5rxSTMJB8shQCvpf3Mkk
-x1W3qSCe1CQWCiA1QBz2nwDBBcKmSNkCxkOyvc/1tqAKZNzp0+BYwNR+Y4dmnK29
-l6+pK3udZe++CbRDUv5as0k1F4CtNzyH7gyOD1Lb5gJvzhpN9RqdKOnR1IXSaJrD
-E4QPL2bnII0U0w6TAz4a0cZ5oPGNEJDBPRSccIY+ulCRELBdYbhce2wV7SjIk/0l
-/2frC/0OV8T2c9rF6QSQHZDaKjSQ0xoYvL1AZjcDOnFCcKU7olGOo3eRaLaC7Ax1
-DLbOFtOuWnvh6fFzbPU3PoKc+G4116e4bgKDMBUhdECFB+aSRGChdKNStTHu6RGP
-X+Yt52406T8KFU1SB5FYrn02hLFa5TMJMEBPFxoyXcowi16Hkoi6J+oTMdLWaLTx
-gWH7prJZBLyVDg7Nm+WZ6MvSMByoAk+I4m0CPSfsHCHdlDKdxdvlJZ6grUPpHTBY
-/jMkKznn/N/nCKNahH0qb8H96qiDEpslGIn8j4GWvXYiv+kG/1rfwDR4jEzrEJ9o
-Dvry0glHuTNK/WmB0b2U+3sCAwxyW0dpfggO0nMZ7ujo3nqQsiQ=
-=sXMH
------END PGP SIGNATURE-----
-
---p6iTrNcIrToWOugJ--
