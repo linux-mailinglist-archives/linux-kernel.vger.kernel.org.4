@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622006DC0B2
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C036DC0B4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjDIQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 12:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S229581AbjDIQsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 12:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDIQro (ORCPT
+        with ESMTP id S229485AbjDIQsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 12:47:44 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711B3C30;
-        Sun,  9 Apr 2023 09:47:39 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-183f4efa98aso9782369fac.2;
-        Sun, 09 Apr 2023 09:47:39 -0700 (PDT)
+        Sun, 9 Apr 2023 12:48:11 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8568D3C39;
+        Sun,  9 Apr 2023 09:48:01 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id w15-20020a056830410f00b006a386a0568dso8793234ott.4;
+        Sun, 09 Apr 2023 09:48:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681058858;
+        d=gmail.com; s=20210112; t=1681058881;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=deA2mG9P5Qv3+gcJzpwWMdasscdax3dDxfQYVedCOVY=;
-        b=ThOz8KWz4qaPGD5i8q2f+g6qAC3p4ylA+XwTKBmZObncjG+iTN/ykrhTtTxNy/5lXM
-         b8NVEiem01hj8FxjdVu2mAmXbe+sAlbUnwkt0zmAipauFOdcI6/QhOxDjMjvhINyvnZO
-         NFdld0vIHVnz7kG0l2i7U+MvHrAjh9efJZR7ZBpsGXh+GJuFfhkHOZhnLsrN9Puv18mH
-         e6Wo4pAVOYLoAiR+EBPKiRs+ctkxOnlXWZyacs7FMXbpCE8SIzhaSoZKyaVcj8gC8erg
-         ocbbeX/Lxrllap4ODS/YQomazLEr7q79RFpViWN8wYZwwCNlQ8i6ghCgB+Dhw/x05D8K
-         IEWg==
+        bh=hr7IpqkVVvaH5bCublyFVgApREgtsWPOkPRTPgJ+F6M=;
+        b=I9abLB1PvolfWqqE8UtbrJ/PP/3MdCP0zMlH1Yr0fFq7V2xIONDjn2GpJfrVcYt1Vt
+         pXtX4dYEx6tgfvlEIdnsvCLoFKfEXCpAJopTgCQhM7ps6m/PRMx7vwG3qMUn0Gp+b3Mr
+         gfF2O8J14VjwLL+zmtWOFma18SL9M5Nulzy605iQl3wS4HEIxQb4QxOEmhsfgP5RWCHb
+         atIwaBA2ZAX99W/ni/enn0fz/Eqi6qbmgFR8jKWBzY6IJWavQcDzC/jRGtU3TqqiH8Cu
+         MvDI4C6dI0KdPL8wvioJ812L0/yi4gKQLgiDmOLPi68iAeCObBNoZuH6W1vHVD1kLM4Q
+         C+Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681058858;
+        d=1e100.net; s=20210112; t=1681058881;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=deA2mG9P5Qv3+gcJzpwWMdasscdax3dDxfQYVedCOVY=;
-        b=Kz9v+AcXQb5bvTgbcMb2HzCi2lqgp+6euwtixE+BVf9oScWvvmKXu9go5FUvGXgCwL
-         8WJta8UdGu+AQ6At3A2xRiKFT1iYcudNnpGph7uRTreqRBugF6hD5cxK9wnqUpn/9Ynz
-         tWFETrdZLt+/QhecsnwKS7G2Q5cQ6IULzXWcyvISdlohioWyqKSQ/SDAcdJsWLSaNcbO
-         993q9SnJaNL8IlaIWd+TlpB1ABzz/EYXfVtB+SUlljG11Ku/l10g8l3G0kNe/Gh/FTAJ
-         8VAEpq7WFEWG0NsunD8Tmv6uGUgALF+zd9/tMlrh67K9Lv6uVr/ugJC5N0xe03Qviv6e
-         A/3w==
-X-Gm-Message-State: AAQBX9f7N57FQh9SFK8SFsn54XfY/jXekSyloO/1nRB4mf8HZ71JQp7b
-        T2nar2fs9r9un8tqaj0nDfY=
-X-Google-Smtp-Source: AKy350aIoRM3P+1KsU7TjpArMkRj0cUkiHp2+VtNTNb2UjmOJoAeIV56CrKY8AY5An8z6hvQS5p+Sg==
-X-Received: by 2002:a05:6870:b003:b0:177:80e4:9a52 with SMTP id y3-20020a056870b00300b0017780e49a52mr4372910oae.6.1681058858329;
-        Sun, 09 Apr 2023 09:47:38 -0700 (PDT)
+        bh=hr7IpqkVVvaH5bCublyFVgApREgtsWPOkPRTPgJ+F6M=;
+        b=CKesR1/iErh3UqvscfMFuIB53xGMJNxDVhPbNL3UjBNBR1fQUZt3lAkxmg4T5OH2yj
+         W2A/eAOe5Wa80WYEV+GzMpfUsNqTXCGXeowaRVUEnOXAdV8TaRJ/TZGpAEi2R7lUuebw
+         GeC/rRnaIrk9CBL2NfYiS/IPoKBNA4btLvLmGvmYfgNm1JPHRCeE36W6raXi5qzNubDg
+         J2JmZ/Kri7lYa3LLYwI9YwaQLMqIEDdj0P1xDtsp/XYnnVkU8LvJyeA5ZBiInDHh7zHe
+         gqosLYC69wBs6KqGXkn0Hm7IRsikqkScorXWwMQm5CC1yq95f6FfpgLfx3HqXo8/UvkZ
+         yEWw==
+X-Gm-Message-State: AAQBX9fbtb+TchZsfjToREq1Ckamj8PAOVejgSoOKLXZ3IvXyf7dGQ+t
+        D8W3ig4w+/e/bTbv6x7MwBUmXfrV1Ow=
+X-Google-Smtp-Source: AKy350bAVagg+2643xuzs3v9IEyzM8C04yBnGY6zpZfCQXpGm60SJNZ/j4XvEbH0ZaPfvp+CawdTHg==
+X-Received: by 2002:a9d:6d01:0:b0:6a3:e0bc:86a9 with SMTP id o1-20020a9d6d01000000b006a3e0bc86a9mr2102900otp.33.1681058880873;
+        Sun, 09 Apr 2023 09:48:00 -0700 (PDT)
 Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id yx21-20020a056871251500b001842bb0a01csm1396748oab.27.2023.04.09.09.47.35
+        by smtp.gmail.com with ESMTPSA id z22-20020a05683010d600b006a119c75ad8sm3503780oto.55.2023.04.09.09.47.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 09:47:37 -0700 (PDT)
-Message-ID: <3a08f406-c71e-c012-a8f3-c2048952e195@gmail.com>
-Date:   Sun, 9 Apr 2023 13:47:34 -0300
+        Sun, 09 Apr 2023 09:48:00 -0700 (PDT)
+Message-ID: <5956fa17-027a-e5fc-5fcf-f80a1544eac6@gmail.com>
+Date:   Sun, 9 Apr 2023 13:47:56 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v3 03/13] rust: lock: introduce `Mutex`
+Subject: Re: [PATCH v3 04/13] locking/spinlock: introduce
+ spin_lock_init_with_key
 To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
         rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -69,9 +70,9 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
- <20230408075340.25237-3-wedsonaf@gmail.com>
+ <20230408075340.25237-4-wedsonaf@gmail.com>
 Content-Language: en-US
-In-Reply-To: <20230408075340.25237-3-wedsonaf@gmail.com>
+In-Reply-To: <20230408075340.25237-4-wedsonaf@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -87,8 +88,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 4/8/23 04:53, Wedson Almeida Filho wrote:
 > From: Wedson Almeida Filho <walmeida@microsoft.com>
 > 
-> This is the `struct mutex` lock backend and allows Rust code to use the
-> kernel mutex idiomatically.
+> Rust cannot call C macros, so it has its own macro to create a new lock
+> class when a spin lock is initialised. This new function allows Rust
+> code to pass the lock class it generates to the C implementation.
 > 
 > Cc: Peter Zijlstra <peterz@infradead.org>
 > Cc: Ingo Molnar <mingo@redhat.com>
@@ -99,186 +101,32 @@ On 4/8/23 04:53, Wedson Almeida Filho wrote:
 > v1 -> v2: No changes
 > v2 -> v3: No changes
 > 
->  rust/helpers.c                 |   7 ++
->  rust/kernel/sync.rs            |   1 +
->  rust/kernel/sync/lock.rs       |   2 +
->  rust/kernel/sync/lock/mutex.rs | 118 +++++++++++++++++++++++++++++++++
->  4 files changed, 128 insertions(+)
->  create mode 100644 rust/kernel/sync/lock/mutex.rs
+>  include/linux/spinlock.h | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 09a4d93f9d62..3010a2ec26e2 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -21,6 +21,7 @@
->  #include <linux/bug.h>
->  #include <linux/build_bug.h>
->  #include <linux/refcount.h>
-> +#include <linux/mutex.h>
+> diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+> index be48f1cb1878..cdc92d095133 100644
+> --- a/include/linux/spinlock.h
+> +++ b/include/linux/spinlock.h
+> @@ -327,12 +327,17 @@ static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
 >  
->  __noreturn void rust_helper_BUG(void)
->  {
-> @@ -28,6 +29,12 @@ __noreturn void rust_helper_BUG(void)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_BUG);
+>  #ifdef CONFIG_DEBUG_SPINLOCK
 >  
-> +void rust_helper_mutex_lock(struct mutex *lock)
+> +static inline void spin_lock_init_with_key(spinlock_t *lock, const char *name,
+> +					   struct lock_class_key *key)
 > +{
-> +	mutex_lock(lock);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
-> +
->  refcount_t rust_helper_REFCOUNT_INIT(int n)
->  {
->  	return (refcount_t)REFCOUNT_INIT(n);
-> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> index 81b0998eaa18..693f0b7f4e4f 100644
-> --- a/rust/kernel/sync.rs
-> +++ b/rust/kernel/sync.rs
-> @@ -11,6 +11,7 @@ mod arc;
->  pub mod lock;
->  
->  pub use arc::{Arc, ArcBorrow, UniqueArc};
-> +pub use lock::mutex::Mutex;
->  
->  /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
->  #[repr(transparent)]
-> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-> index 3fa4eefde740..86669f771ee0 100644
-> --- a/rust/kernel/sync/lock.rs
-> +++ b/rust/kernel/sync/lock.rs
-> @@ -10,6 +10,8 @@ use crate::{bindings, init::PinInit, pin_init, str::CStr, types::Opaque};
->  use core::{cell::UnsafeCell, marker::PhantomData, marker::PhantomPinned};
->  use macros::pin_data;
->  
-> +pub mod mutex;
-> +
->  /// The "backend" of a lock.
->  ///
->  /// It is the actual implementation of the lock, without the need to repeat patterns used in all
-> diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex.rs
-> new file mode 100644
-> index 000000000000..923472f04af4
-> --- /dev/null
-> +++ b/rust/kernel/sync/lock/mutex.rs
-> @@ -0,0 +1,118 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! A kernel mutex.
-> +//!
-> +//! This module allows Rust code to use the kernel's `struct mutex`.
-> +
-> +use crate::bindings;
-> +
-> +/// Creates a [`Mutex`] initialiser with the given name and a newly-created lock class.
-> +///
-> +/// It uses the name if one is given, otherwise it generates one based on the file name and line
-> +/// number.
-> +#[macro_export]
-> +macro_rules! new_mutex {
-> +    ($inner:expr $(, $name:literal)? $(,)?) => {
-> +        $crate::sync::Mutex::new(
-> +            $inner, $crate::optional_name!($($name)?), $crate::static_lock_class!())
-> +    };
+> +	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
 > +}
 > +
-> +/// A mutual exclusion primitive.
-> +///
-> +/// Exposes the kernel's [`struct mutex`]. When multiple threads attempt to lock the same mutex,
-> +/// only one at a time is allowed to progress, the others will block (sleep) until the mutex is
-> +/// unlocked, at which point another thread will be allowed to wake up and make progress.
-> +///
-> +/// Since it may block, [`Mutex`] needs to be used with care in atomic contexts.
-> +///
-> +/// Instances of [`Mutex`] need a lock class and to be pinned. The recommended way to create such
-> +/// instances is with the [`pin_init`](crate::pin_init) and [`new_mutex`] macros.
-> +///
-> +/// # Examples
-> +///
-> +/// The following example shows how to declare, allocate and initialise a struct (`Example`) that
-> +/// contains an inner struct (`Inner`) that is protected by a mutex.
-> +///
-> +/// ```
-> +/// use kernel::{init::InPlaceInit, init::PinInit, new_mutex, pin_init, sync::Mutex};
-> +///
-> +/// struct Inner {
-> +///     a: u32,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// #[pin_data]
-> +/// struct Example {
-> +///     c: u32,
-> +///     #[pin]
-> +///     d: Mutex<Inner>,
-> +/// }
-> +///
-> +/// impl Example {
-> +///     fn new() -> impl PinInit<Self> {
-> +///         pin_init!(Self {
-> +///             c: 10,
-> +///             d <- new_mutex!(Inner { a: 20, b: 30 }),
-> +///         })
-> +///     }
-> +/// }
-> +///
-> +/// // Allocate a boxed `Example`.
-> +/// let e = Box::pin_init(Example::new())?;
-> +/// assert_eq!(e.c, 10);
-> +/// assert_eq!(e.d.lock().a, 20);
-> +/// assert_eq!(e.d.lock().b, 30);
-> +/// ```
-> +///
-> +/// The following example shows how to use interior mutability to modify the contents of a struct
-> +/// protected by a mutex despite only having a shared reference:
-> +///
-> +/// ```
-> +/// use kernel::sync::Mutex;
-> +///
-> +/// struct Example {
-> +///     a: u32,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// fn example(m: &Mutex<Example>) {
-> +///     let mut guard = m.lock();
-> +///     guard.a += 10;
-> +///     guard.b += 20;
-> +/// }
-> +/// ```
-> +///
-> +/// [`struct mutex`]: ../../../../include/linux/mutex.h
-> +pub type Mutex<T> = super::Lock<T, MutexBackend>;
-> +
-> +/// A kernel `struct mutex` lock backend.
-> +pub struct MutexBackend;
-> +
-> +// SAFETY: The underlying kernel `struct mutex` object ensures mutual exclusion.
-> +unsafe impl super::Backend for MutexBackend {
-> +    type State = bindings::mutex;
-> +    type GuardState = ();
-> +
-> +    unsafe fn init(
-> +        ptr: *mut Self::State,
-> +        name: *const core::ffi::c_char,
-> +        key: *mut bindings::lock_class_key,
-> +    ) {
-> +        // SAFETY: The safety requirements ensure that `ptr` is valid for writes, and `name` and
-> +        // `key` are valid for read indefinitely.
-> +        unsafe { bindings::__mutex_init(ptr, name, key) }
-> +    }
-> +
-> +    unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
-> +        // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
-> +        // memory, and that it has been initialised before.
-> +        unsafe { bindings::mutex_lock(ptr) };
-> +    }
-> +
-> +    unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
-> +        // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that the
-> +        // caller is the owner of the mutex.
-> +        unsafe { bindings::mutex_unlock(ptr) };
-> +    }
-> +}
+>  # define spin_lock_init(lock)					\
+>  do {								\
+>  	static struct lock_class_key __key;			\
+>  								\
+> -	__raw_spin_lock_init(spinlock_check(lock),		\
+> -			     #lock, &__key, LD_WAIT_CONFIG);	\
+> +	spin_lock_init_with_key(lock, #lock, &__key);		\
+>  } while (0)
+>  
+>  #else
 
 Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
