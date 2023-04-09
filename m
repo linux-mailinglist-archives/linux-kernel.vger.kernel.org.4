@@ -2,83 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C0A6DBF15
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 09:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D606DBF29
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 10:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjDIHrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 03:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S229503AbjDIIPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 04:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjDIHrN (ORCPT
+        with ESMTP id S229454AbjDIIPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 03:47:13 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC84259EB;
-        Sun,  9 Apr 2023 00:47:10 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1plPlL-00E301-Cu; Sun, 09 Apr 2023 15:47:00 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 09 Apr 2023 15:46:59 +0800
-Date:   Sun, 9 Apr 2023 15:46:59 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Tom Zanussi <tom.zanussi@linux.intel.com>
-Cc:     clabbe@baylibre.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH] crypto: ixp4xx - Do not check word size when compile testing
-Message-ID: <ZDJtc7C6YBgknbTq@gondor.apana.org.au>
-References: <37694343f8b89dc0469d4a1718dad8f5f8c765bd.camel@linux.intel.com>
+        Sun, 9 Apr 2023 04:15:38 -0400
+X-Greylist: delayed 5819 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Apr 2023 01:15:34 PDT
+Received: from out203-205-251-72.mail.qq.com (out203-205-251-72.mail.qq.com [203.205.251.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C44F59E8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 01:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681028131;
+        bh=1BlGx1afgSOPlmGiINyQ3UClfYQu3kEy3LXJFKQ8+FY=;
+        h=From:To:Cc:Subject:Date;
+        b=vj+wv2OOTHRB2r6v3wAsU59CxRx6YlWLk7RhabfXcziok9iht3Ti8bFHE+7cbAauY
+         1G8T7Wa290WaEhFyFoP/tH8jK42JfQzDo0ONUA3M56gLyaMqKVIgEVtDcvYBrEFrNv
+         lnoZPhVi4ygpwLekuUp4hFLJ4yFrLYXnjwIufho0=
+Received: from rtoax.. ([111.199.190.121])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 3DB170ED; Sun, 09 Apr 2023 16:15:27 +0800
+X-QQ-mid: xmsmtpt1681028127ta0a5h3cn
+Message-ID: <tencent_0D62BF818D106C96C26594CAC76BF3281306@qq.com>
+X-QQ-XMAILINFO: Mi0NhBPPe/4R2b23CkWNOcjl6/zGeo8g7OI8JOhvvNufzVBxQ0jK6neRCgu1m5
+         aBnJqPQx16B8w2KUDIsUycPw/kqP+Zm8ZL4x6kXtwmon0hzTcQ1RI2oAEc0bJ5KdwFRRu+0dlkEo
+         txb/5ZSo7AWb7j9O3jgNMMUHK22+83SvlRZ0djb05mP2txPDS/YcGvlr/8aLHEaljN25aUtdBM7t
+         ltlZVinkp4vcedUcCPsRfk1aSgYoJtLinSQmLB09/0RKM3ZJYXpuY1XJiXu4DKbtuIYQrqvceal/
+         D6MCY8Ir3GLHImrbvdZnzNXtUoQQOpyxlmJM91me/zteJVt8uYnhSsEvYlB8snxXWEZyX1Ijcwbi
+         B2EQPW+GWob2hme/A5+2HYyHVXVCrXaFD4thxhY+k/eSUXER5TlLgdKRgaye0ZIoTylhQGho9HRw
+         cftPcqzFQRpiM3OBt7trUa5sEnfo5Z/ufymc+uzcyrQgERSY3VOH4E6dSA5cJAMcsQX4M9nUN7Dg
+         XOYp6x3evulsK3uhcc1r1zBRyFi/TJjCVENFY6wU3ZCpBWJ3rmCn6erq2IK64FVrrrf7vldwv/r2
+         P68uCwlEQGLc/so809fCD3GSh37P0kWIus5dPAIdDMBkVf3UazfwwdotVd2YY5iL5vOFtBxUTfj5
+         q4DPpluLl5acQ67ZcG/TahwibDVyiQAKKLb64GDt6iu/JpcBwcmCi7oh5yFOlqlEr8lzz0+ovyhH
+         EpHWM7hkewFeoZAeHCc19Vhi47Vm8chNOd43rIz8WBMktSjVG2X62i1Aek8BLnKRtXkUNG1CaANH
+         vydtQ5HnxMdHeMFcmD/Q0Cfeuz2FEthh7sB4naa5n3j5TgpKVY5pjuGl2hBQLl1pAGhW38FhAXx5
+         vRc5voteBdRR/ZHv3cY7cKi5RQThSTojAOQRFcNJEedX5pwSOK9S/kvWaeMv19hhuElGhyth8+ld
+         yZAG19VhsFpNqeYNwc+LzKwzW3szYEmCm8goERRJ2C6UI++iXBQA==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     rongtao@cestc.cn, Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nick Terrell <terrelln@fb.com>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] selftests/bpf: trace_helpers.c: Fix segfault
+Date:   Sun,  9 Apr 2023 16:15:25 +0800
+X-OQ-MSGID: <20230409081525.182264-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37694343f8b89dc0469d4a1718dad8f5f8c765bd.camel@linux.intel.com>
-X-Spam-Status: No, score=4.3 required=5.0 tests=HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 02:37:44PM -0500, Tom Zanussi wrote:
-> COMPILE_TEST was added during the move to drivers/crypto/intel/ but
-> shouldn't have been as it triggers a build bug when not compiled by
-> the target compiler.  So remove it to match the original.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304061846.G6cpPXiQ-lkp@intel.com/
-> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-> ---
->  drivers/crypto/intel/ixp4xx/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+From: Rong Tao <rongtao@cestc.cn>
 
-We could also fix it by making the BUILD_BUG_ON conditional:
+When the number of symbols is greater than MAX_SYMS (300000), the access
+array struct ksym syms[MAX_SYMS] goes out of bounds, which will result in
+a segfault.
 
----8<---
-The BUILD_BUG_ON preventing compilation on foreign architectures
-should be disabled when we're doing compile testing.
+Resolve this issue by judging the maximum number and exiting the loop, and
+increasing the default size appropriately. (6.2.9 = 329839 below)
 
-Fixes: 1bc7fdbf2677 ("crypto: ixp4xx - Move driver to...")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304061846.G6cpPXiQ-lkp@intel.com/
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+    $ cat /proc/kallsyms | wc -l
+    329839
 
-diff --git a/drivers/crypto/intel/ixp4xx/ixp4xx_crypto.c b/drivers/crypto/intel/ixp4xx/ixp4xx_crypto.c
-index b63e2359a133..5d640f13ad1c 100644
---- a/drivers/crypto/intel/ixp4xx/ixp4xx_crypto.c
-+++ b/drivers/crypto/intel/ixp4xx/ixp4xx_crypto.c
-@@ -263,7 +263,8 @@ static int setup_crypt_desc(void)
- {
- 	struct device *dev = &pdev->dev;
+    GDB debugging:
+    $ cd linux/samples/bpf
+    $ sudo gdb ./sampleip
+    ...
+    (gdb) r
+    ...
+    Program received signal SIGSEGV, Segmentation fault.
+    0x00007ffff7e2debf in malloc () from /lib64/libc.so.6
+    Missing separate debuginfos, use: dnf debuginfo-install
+    elfutils-libelf-0.189-1.fc37.x86_64 glibc-2.36-9.fc37.x86_64
+    libzstd-1.5.4-1.fc37.x86_64 zlib-1.2.12-5.fc37.x86_64
+    (gdb) bt
+    #0  0x00007ffff7e2debf in malloc () from /lib64/libc.so.6
+    #1  0x00007ffff7e33f8e in strdup () from /lib64/libc.so.6
+    #2  0x0000000000403fb0 in load_kallsyms_refresh() from trace_helpers.c
+    #3  0x00000000004038b2 in main ()
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 09a16a77bae4..a9d589c560d2 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -14,7 +14,7 @@
  
--	BUILD_BUG_ON(sizeof(struct crypt_ctl) != 64);
-+	BUILD_BUG_ON(!IS_ENABLED(CONFIG_COMPILE_TEST) &&
-+		     sizeof(struct crypt_ctl) != 64);
- 	crypt_virt = dma_alloc_coherent(dev,
- 					NPE_QLEN * sizeof(struct crypt_ctl),
- 					&crypt_phys, GFP_ATOMIC);
+ #define DEBUGFS "/sys/kernel/debug/tracing/"
+ 
+-#define MAX_SYMS 300000
++#define MAX_SYMS 400000
+ static struct ksym syms[MAX_SYMS];
+ static int sym_cnt;
+ 
+@@ -44,7 +44,8 @@ int load_kallsyms_refresh(void)
+ 			continue;
+ 		syms[i].addr = (long) addr;
+ 		syms[i].name = strdup(func);
+-		i++;
++		if (++i >= MAX_SYMS)
++			break;
+ 	}
+ 	fclose(f);
+ 	sym_cnt = i;
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.39.2
+
