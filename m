@@ -2,152 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7A86DC0CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 19:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAEA6DC0D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 19:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjDIRKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 13:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S229615AbjDIRO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 13:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDIRKi (ORCPT
+        with ESMTP id S229463AbjDIRO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 13:10:38 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E60130EC
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 10:10:37 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id bd22so5661230ljb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 10:10:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681060235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QqN5vgtmzxPJB8D1iXb0mZavhJ/16WwLHBHQdEhshG8=;
-        b=UubL+kDMhJ8ZZV8GrkKlNeoK+Fgt9uODY9F/4uOfgJW1A7AczaW3whACUvO6pEmwYL
-         jH/0/DU8xR3P3IFAxdvU3PfgvQQfMQRIvuHMCd+GWd1M7cVq8svh1KU7OJ6S6Yd8hzKJ
-         LcFtLa+10I9bSR/uYcw3XGlxwpHrwY0N0ED4PvVoUyjPy8yRRjdy9b34d50DZhlcu0/O
-         uKK9hPlXunfaTg7ZuGUc3CUlpRr5GPsRF8QKFH8ePIziJpJqtooL750bCFce8owaF5gF
-         SjMiMgmIFJCJij3mQZmX3gomoJq2biZif2JfXMdNvFyWe1uITBGFskXbGw+Ae+Wh43OZ
-         WgbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681060235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqN5vgtmzxPJB8D1iXb0mZavhJ/16WwLHBHQdEhshG8=;
-        b=jXJyOyvPGlH2ztd8l9KkFg7QnHt3lFjfWcbAUVMKgxqg2dLyA5SHxWJEgZ+49SdRqt
-         gE+ZGRLbu8L3sqapFeUMMp6zNn5TYRcDzV5uXfglqvq5yizSb/XyUAKOrDLfDeD2MZ6i
-         cFAVxfEfeD5VAy47ZuIuO/ZjLNQhTjQeKnE+506uT1u4ADniGg5WoerYGGct7eFl641m
-         D6QC/eHjqK24tBysHs4cF2wZeB+ov6Zkd8WnZ7tQeeUMVLQ2jnWOK27O7Jdpjma1k4zp
-         AhAnvPQH7zWO8zsRj0Q098iYZDp/EHpV7xvsPfBXquVVIr0tVfCUQVpYqY08V3BZLc/k
-         yL8w==
-X-Gm-Message-State: AAQBX9d0RCqAr2osSReBQtvg9T3vLUFR+Is5BAIBcOPlpPzfM+e4tIJH
-        txSYFu4QnTCIVCibE96TuhuYbg==
-X-Google-Smtp-Source: AKy350bH1RgV7K/b9fCo/Px2MsMXTrmdymWA/1p7u4u57HbI73GPv8Bg4+mkj+1aXbwv6CFc/u6xXA==
-X-Received: by 2002:a2e:9447:0:b0:299:ac61:4e78 with SMTP id o7-20020a2e9447000000b00299ac614e78mr2182673ljh.10.1681060235588;
-        Sun, 09 Apr 2023 10:10:35 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s17-20020a2e9c11000000b002a773ce93casm364538lji.137.2023.04.09.10.10.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 10:10:35 -0700 (PDT)
-Message-ID: <0f7f2f1d-3b05-ebf1-33fc-e5904200737d@linaro.org>
-Date:   Sun, 9 Apr 2023 20:10:34 +0300
+        Sun, 9 Apr 2023 13:14:28 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B787030F8;
+        Sun,  9 Apr 2023 10:14:23 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 4E54132001C6;
+        Sun,  9 Apr 2023 13:14:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Sun, 09 Apr 2023 13:14:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1681060457; x=1681146857; bh=EVicW71akCt/y
+        1tM1F+st9STMxkjr4NI+o/dAkIr1Hg=; b=BqsKBC2SNkqVqZL4/ojSOoypccc/2
+        /s+8VG7Km1OEtSeynHaJ6tykzbwk2N2aodNOGHPSnCrQytK81XUr3WeSetwo7IQv
+        2p9ac0Zpci54Foc/I39kg33J0Bg9NbDWghxbDmVhvj8lT+FCRywypjgn+QavaK5E
+        8g2Ioty3h+Fndpy5YEvFaF6uQ/1dsa4WnH2VYGg2KaznAGTGNQ3qjOogWVWfTu/3
+        +YzWRFjZ3IQCM315l1OzSU8gYyMEqD275TNNzh2U72dcmyxA3CIH8K00vRTX8eZg
+        9yVTX7sHhsJKSX0r/nVyxKOqrwnwW0POnnqOeYYn3qDzmGx+WMZ+U4ysQ==
+X-ME-Sender: <xms:afIyZC2OztArIhuBY9CHGzyWtemBaqkzWYi8q0m72rXIV-szwUiPnQ>
+    <xme:afIyZFETIduFyrY_Rc9wEomr7ueyPN4-4VlkOKQEiY6gXHrdkDseZNxBs5yprb3XJ
+    Fu7ncfwI6d5IZc>
+X-ME-Received: <xmr:afIyZK5XfAjBcYt_AJTJblVPrC-nOxUP9zPDTFz5WlcXyU5LARewtJfDYCKJ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
+    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedtueeggeelgffgveehfeeftefhjeejveeltdfgjeekhefgueehvdeiffeg
+    heffffenucffohhmrghinhepsggvlhhofidrtggrthenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:afIyZD0VA1HM3cgW9FS3P5h0kXAVdDMBNUiuO0N5wWt2Wk3-x8b3pA>
+    <xmx:afIyZFGd5Pk84hlcU1CVoc9DfnbTkAaJJsEkewLyuJ6i3-f6kYrBAw>
+    <xmx:afIyZM9dQJEX8nPy1ZGr28n8UfgFGP80gRNcgW0ijR__xhTNI6mXmQ>
+    <xmx:afIyZHHst-dWFdsoDTxD8UPGy4vu6-gUL0xni820S9bDORxcFRvciQ>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 9 Apr 2023 13:14:16 -0400 (EDT)
+Date:   Sun, 9 Apr 2023 20:14:13 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [BUG] kmemleak in rtnetlink_rcv() triggered by
+ selftests/drivers/net/team in build cdc9718d5e59
+Message-ID: <ZDLyZX545Cw+aLhE@shredder>
+References: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/3] venus: enable sufficient sequence change support
- for vp9
-Content-Language: en-GB
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Viswanath Boma <quic_vboma@quicinc.com>
-References: <1680848758-3947-1-git-send-email-quic_dikshita@quicinc.com>
- <1680848758-3947-3-git-send-email-quic_dikshita@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1680848758-3947-3-git-send-email-quic_dikshita@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 09:25, Dikshita Agarwal wrote:
-> VP9 supports resolution change at interframe.
-> Currenlty, if sequence change is detected at interframe and
-> resources are sufficient, sequence change event is not raised
-> by firmware to driver until the next keyframe.
-> This change add the HFI to notify the sequence change in this
-> case to driver.
+On Sun, Apr 09, 2023 at 01:49:30PM +0200, Mirsad Goran Todorovac wrote:
+> Hi all,
 > 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+> There appears to be a memleak triggered by the selftest drivers/net/team.
 
-Order of sign-offs is incorrect. The SoB of the sender should be the 
-last one.
+Thanks for the report. Not sure it's related to team, see below.
 
-> Tested-by: Nathan Hebert <nhebert@chromium.org>
-> ---
->   drivers/media/platform/qcom/venus/hfi_cmds.c   | 1 +
->   drivers/media/platform/qcom/venus/hfi_helper.h | 2 ++
->   drivers/media/platform/qcom/venus/vdec.c       | 8 ++++++++
->   3 files changed, 11 insertions(+)
 > 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> index 930b743..e2539b5 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> @@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
->   		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
->   		break;
->   	}
-> +	case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
->   	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
->   		struct hfi_enable *in = pdata;
->   		struct hfi_enable *en = prop_data;
-> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-> index d2d6719..2e03b6e 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
-> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-> @@ -469,6 +469,8 @@
->   #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH			0x1003007
->   #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT			0x1003009
->   #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE			0x100300a
-> +#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
-> +								0x100300b
->   
->   /*
->    * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
-> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-> index 4ceaba3..f0394b9 100644
-> --- a/drivers/media/platform/qcom/venus/vdec.c
-> +++ b/drivers/media/platform/qcom/venus/vdec.c
-> @@ -671,6 +671,14 @@ static int vdec_set_properties(struct venus_inst *inst)
->   			return ret;
->   	}
->   
-> +	/* Enabling sufficient sequence change support for VP9 */
-> +	if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
-> +		ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
-> +		ret = hfi_session_set_property(inst, ptype, &en);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
->   	conceal = ctr->conceal_color & 0xffff;
->   	conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
+> # cat /sys/kernel/debug/kmemleak
+> unreferenced object 0xffff8c18def8ee00 (size 256):
+>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
+>   hex dump (first 32 bytes):
+>     00 20 09 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
+>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
+>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
+>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
+>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
+>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
+>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
+>     [<ffffffffc176515e>] 0xffffffffc176515e
 
--- 
-With best wishes
-Dmitry
+Don't know what this is. Might be another issue.
 
+>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
+>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
+>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
+>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
+>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
+>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
+>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
+> unreferenced object 0xffff8c18250d3700 (size 32):
+>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
+>   hex dump (first 32 bytes):
+>     a0 ee f8 de 18 8c ff ff a0 ee f8 de 18 8c ff ff  ................
+>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
+>   backtrace:
+>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
+>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
+>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
+>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
+>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
+>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
+>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
+>     [<ffffffffc176515e>] 0xffffffffc176515e
+>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
+>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
+>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
+>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
+>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
+>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
+>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
+> unreferenced object 0xffff8c1846e16800 (size 256):
+>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
+>   hex dump (first 32 bytes):
+>     00 20 f7 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
+>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
+>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
+>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
+>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
+>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
+>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
+>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
+
+This shows that the issue is related to the bond driver, not team.
+
+>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
+>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
+>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
+>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
+>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
+>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
+>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
+> unreferenced object 0xffff8c184c5ff2a0 (size 32):
+
+This is 'struct vlan_vid_info'
+
+>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
+>   hex dump (first 32 bytes):
+>     a0 68 e1 46 18 8c ff ff a0 68 e1 46 18 8c ff ff  .h.F.....h.F....
+>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
+            ^ VLAN ID 0
+
+>   backtrace:
+>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
+>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
+>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
+>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
+>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
+>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
+>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
+>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
+>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
+>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
+>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
+>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
+>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
+>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
+>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
+>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
+
+VLAN ID 0 is automatically added by the 8021q driver when a net device
+is opened. In this case it's a device being enslaved to a bond. I
+believe the issue was exposed by the new bond test that was added in
+commit 222c94ec0ad4 ("selftests: bonding: add tests for ether type
+changes") as part of v6.3-rc3.
+
+The VLAN is supposed to be removed by the 8021q driver when a net device
+is closed and the bond driver indeed calls dev_close() when a slave is
+removed. However, this function is a NOP when 'IFF_UP' is not set.
+Unfortunately, when a bond changes its type to Ethernet this flag is
+incorrectly cleared in bond_ether_setup(), causing this VLAN to linger.
+As far as I can tell, it's not a new issue.
+
+Temporary fix is [1]. Please test it although we might end up with a
+different fix (needs more thinking and it's already late here).
+
+Reproduced using [2]. You can see in the before/after output how the
+flag is cleared/retained [3].
+
+[1]
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 236e5219c811..50dc068dc259 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1777,14 +1777,15 @@ void bond_lower_state_changed(struct slave *slave)
+ 
+ /* The bonding driver uses ether_setup() to convert a master bond device
+  * to ARPHRD_ETHER, that resets the target netdevice's flags so we always
+- * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE if it was set
++ * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE and IFF_UP
++ * if they were set
+  */
+ static void bond_ether_setup(struct net_device *bond_dev)
+ {
+-	unsigned int slave_flag = bond_dev->flags & IFF_SLAVE;
++	unsigned int flags = bond_dev->flags & (IFF_SLAVE | IFF_UP);
+ 
+ 	ether_setup(bond_dev);
+-	bond_dev->flags |= IFF_MASTER | slave_flag;
++	bond_dev->flags |= IFF_MASTER | flags;
+ 	bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
+ }
+ 
+[2]
+#!/bin/bash
+
+ip link add name t-nlmon type nlmon
+ip link add name t-dummy type dummy
+ip link add name t-bond type bond mode active-backup
+
+ip link set dev t-bond up
+ip link set dev t-nlmon master t-bond
+ip link set dev t-nlmon nomaster
+ip link show dev t-bond
+ip link set dev t-dummy master t-bond
+ip link show dev t-bond
+
+ip link del dev t-bond
+ip link del dev t-dummy
+ip link del dev t-nlmon
+
+[3]
+Before:
+
+12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/netlink
+12: t-bond: <BROADCAST,MULTICAST,MASTER,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether ce:b2:31:0a:53:83 brd ff:ff:ff:ff:ff:ff
+
+After:
+
+12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/netlink
+12: t-bond: <BROADCAST,MULTICAST,MASTER,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 5a:18:e7:85:11:73 brd ff:ff:ff:ff:ff:ff
