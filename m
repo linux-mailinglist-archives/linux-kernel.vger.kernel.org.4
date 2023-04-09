@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061066DC0B9
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516656DC0BD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 18:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjDIQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 12:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S229740AbjDIQti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 12:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDIQtK (ORCPT
+        with ESMTP id S229692AbjDIQtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 12:49:10 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3032D49CF;
-        Sun,  9 Apr 2023 09:48:59 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id c17-20020a4aa4d1000000b005418821052aso1410982oom.6;
-        Sun, 09 Apr 2023 09:48:59 -0700 (PDT)
+        Sun, 9 Apr 2023 12:49:18 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17A46A2;
+        Sun,  9 Apr 2023 09:49:07 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-184518754bfso68341fac.5;
+        Sun, 09 Apr 2023 09:49:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681058938;
+        d=gmail.com; s=20210112; t=1681058946;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ShVq2ADCVfvgmdX2n9FqpBRVYZ0AkpDjoaZsweYGyEM=;
-        b=V81w79oxd3ulj+0F+26TD9hgwJl2xMWEYyYshXlgHMurE9DPBRgJGjmgdDSgi24I8Q
-         CYYmbSaCYaojRpevx13uDvWr2pf9VBmtUVfea2aB98Us9OR6aknT20Htlyj7Np5BLpUl
-         3HYdmoHzGcOg0FHCFbEX0fzGwwF1xX6S0w/qRmNnEVhM3wqThlwq//LaTdiFKgk6B3Kd
-         aPjTKr5PR/hjvOqfMazrrc5UH2ir+JsLiOgpwqG7lrRECbtCjcueVw2oN22yraY+6b2u
-         JQrkpf/f7QS0PFeP4SRt3A6LshHVee1Bt1o05gDWtw8lT7xePRHuefKUlbYx+DumRzfb
-         P3pQ==
+        bh=DICVUfZYlg7r0nNlRNpMmQdzRa8vktIIBq9q8+zULqs=;
+        b=W+15LSdAza08N20QgufShdsDE3YMgIXarC8xdS2yOkiH1bGnsLtCZAcl5JTmNlZ8XZ
+         4DAIA0Tn7IiXLuDqei7jKsxt4WwaGYrUo5eiNJKsdKNngANxl/+DPRhS7ZuMetbv8xjd
+         StscMMpvf/CPItiGUX91SDMezetKoN6nyBSYnyOMI4837qPSaTZ3RP7yKKDrGrWgT2XL
+         4MeWY1yJozLv0kL5YgGLg41yXcbnAFcD5gDxaA0aKNlILNHGcXGM3qSPf9NJlPuHHCGx
+         csQclkaBMd1apoSwzsW20gA7h2q4sv7SDYazb+hFimrnD4HAOWgIVqxP2yuq08FkPVdp
+         lrGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681058938;
+        d=1e100.net; s=20210112; t=1681058946;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShVq2ADCVfvgmdX2n9FqpBRVYZ0AkpDjoaZsweYGyEM=;
-        b=EEA/csuFTb3wFOx8ucbn0OrGJUWE8mXA0w766bRzRs9kPES6L9aNIwMM3UGTyKbrJE
-         iyv5BExKQVsBr4gK2wqcc1Y6rpb5R58G5p4tuYZRU23MUe2EzMzM++hGkeDSgwp924c5
-         niHNOmZKxmCCcjyh6dixIr4Wwmx9zzjy0vJBoalhba8qmBwcmY1VHjjTg1SgaLFPtXJm
-         bjxrd3daKLpdejbWuAvy6eZ+dEB6+NqU3rbGsgtClNIIGl26XO5HRjjdQQRw78PYY3xp
-         iE20/dtLmHXYeK39N0MnHSVruxQT/wPEF3jSbiIhE/hHAy5LEiDbEMFUAEa1w9/KgPxJ
-         BC5g==
-X-Gm-Message-State: AAQBX9eCnMJZuEbR97N4DAksoaC0k3+Z4ITcFtkDOPVcAtPHaOFzJL/I
-        j7v0YHJTvUrinhEaqePeHEM=
-X-Google-Smtp-Source: AKy350btk/hCnNhN1EHuQ1bNiRpWw/zHbruw1IkdBHuupiL/eyaTg9HHk99yUnBn0NNFKG9VSaxLjA==
-X-Received: by 2002:a4a:88cf:0:b0:541:b668:31c5 with SMTP id q15-20020a4a88cf000000b00541b66831c5mr1976534ooh.8.1681058938269;
-        Sun, 09 Apr 2023 09:48:58 -0700 (PDT)
+        bh=DICVUfZYlg7r0nNlRNpMmQdzRa8vktIIBq9q8+zULqs=;
+        b=HmUKREMRh26NwfFgJneU9iYNR63IzXPYdXBoMxUyFPIuOArCYzMH9DxmSiXaKcauOd
+         J+StV8MY15Q/K2c/AgR1oqygchLNwydYbF4B0dpUIYF0468FEjY+oIUTogar4WdZiYWt
+         L3QPk0C+sVIFUFAwv95F/6GAssWg/u5Xy6cCu5kLjNkl5zv1uyLZcL6qSzy45HPtvWMX
+         Y60CbDJAbVo2OBRidkMW3YQ6mxNeMA6CxyglBNPcg55DmLUW9h7B4icOqkS3PkFtRjmJ
+         fgpBBjHUzk8pnUJjsFfCFGeOrxep5mvEJx3b1EF6iX6nN4VK7U5PcRDyTdVkTGxTEf6j
+         wVlQ==
+X-Gm-Message-State: AAQBX9co/K+iI8HA5nrQVtg2gTcj1Sa4QzpWmpJSYFC+CKWDBhwR3FSs
+        BzFa9pgkd7kvkNqOgDwhcJE=
+X-Google-Smtp-Source: AKy350ZrqNL1tEdHRn48TlanYOryefDOgaLc++9b4OJB+s6SD0zWm5P0mKcgx62JN4Usfd/eOgupKg==
+X-Received: by 2002:a05:6870:7394:b0:17a:c102:b449 with SMTP id z20-20020a056870739400b0017ac102b449mr5032408oam.59.1681058946656;
+        Sun, 09 Apr 2023 09:49:06 -0700 (PDT)
 Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id t8-20020a4aadc8000000b00541854d066bsm3709260oon.10.2023.04.09.09.48.55
+        by smtp.gmail.com with ESMTPSA id j2-20020a056830014200b0069faca091acsm3513411otp.54.2023.04.09.09.49.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 09:48:57 -0700 (PDT)
-Message-ID: <8d76bb7f-73d8-cfe9-462c-d02d97f436b0@gmail.com>
-Date:   Sun, 9 Apr 2023 13:48:54 -0300
+        Sun, 09 Apr 2023 09:49:06 -0700 (PDT)
+Message-ID: <3f16d076-c7f9-be33-74e0-2b86fcd5a22d@gmail.com>
+Date:   Sun, 9 Apr 2023 13:49:03 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v3 10/13] rust: introduce `current`
+Subject: Re: [PATCH v3 11/13] rust: lock: add `Guard::do_unlocked`
 To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
         rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -64,13 +64,11 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
+        Wedson Almeida Filho <walmeida@microsoft.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
- <20230408075340.25237-10-wedsonaf@gmail.com>
+ <20230408075340.25237-11-wedsonaf@gmail.com>
 Content-Language: en-US
-In-Reply-To: <20230408075340.25237-10-wedsonaf@gmail.com>
+In-Reply-To: <20230408075340.25237-11-wedsonaf@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -86,166 +84,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 4/8/23 04:53, Wedson Almeida Filho wrote:
 > From: Wedson Almeida Filho <walmeida@microsoft.com>
 > 
-> This allows Rust code to get a reference to the current task without
-> having to increment the refcount, but still guaranteeing memory safety.
+> It releases the lock, executes some function provided by the caller,
+> then reacquires the lock. This is preparation for the implementation of
+> condvars, which will sleep after between unlocking and relocking.
 > 
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
+> We need an explicit `relock` method for primitives like `SpinLock` that
+> have an irqsave variant: we use the guard state to determine if the lock
+> was originally acquired with the regular `lock` function or
+> `lock_irqsave`.
+> 
 > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 > ---
-> v1 -> v2: Make `current` a macro to prevent it from escaping the caller
-> v2 -> v3:
-> - Mention `current` macro in `Task::current`
-> - Hide implementation of `TaskRef` inside `Task::current`
+> v1 -> v2: No changes
+> v2 -> v3: No changes
 > 
->  rust/helpers.c         |  6 +++
->  rust/kernel/prelude.rs |  2 +
->  rust/kernel/task.rs    | 88 +++++++++++++++++++++++++++++++++++++++++-
->  3 files changed, 95 insertions(+), 1 deletion(-)
+>  rust/kernel/sync/lock.rs          | 25 +++++++++++++++++++++++++
+>  rust/kernel/sync/lock/spinlock.rs | 17 +++++++++++++++--
+>  2 files changed, 40 insertions(+), 2 deletions(-)
 > 
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 58a194042c86..96441744030e 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
->  
-> +struct task_struct *rust_helper_get_current(void)
-> +{
-> +	return current;
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_get_current);
-> +
->  void rust_helper_get_task_struct(struct task_struct *t)
->  {
->  	get_task_struct(t);
-> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> index fcdc511d2ce8..c28587d68ebc 100644
-> --- a/rust/kernel/prelude.rs
-> +++ b/rust/kernel/prelude.rs
-> @@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
->  pub use super::{str::CStr, ThisModule};
->  
->  pub use super::init::{InPlaceInit, Init, PinInit};
-> +
-> +pub use super::current;
-> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-> index d70cad131956..5269a562cb1b 100644
-> --- a/rust/kernel/task.rs
-> +++ b/rust/kernel/task.rs
-> @@ -5,7 +5,17 @@
->  //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
->  
->  use crate::{bindings, types::Opaque};
-> -use core::ptr;
-> +use core::{marker::PhantomData, ops::Deref, ptr};
-> +
-> +/// Returns the currently running task.
-> +#[macro_export]
-> +macro_rules! current {
-> +    () => {
-> +        // SAFETY: Deref + addr-of below create a temporary `TaskRef` that cannot outlive the
-> +        // caller.
-> +        unsafe { &*$crate::task::Task::current() }
-> +    };
-> +}
->  
->  /// Wraps the kernel's `struct task_struct`.
+> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+> index 690429561f0e..a2c654ec5bd3 100644
+> --- a/rust/kernel/sync/lock.rs
+> +++ b/rust/kernel/sync/lock.rs
+> @@ -22,6 +22,9 @@ pub mod spinlock;
 >  ///
-> @@ -15,6 +25,42 @@ use core::ptr;
->  ///
->  /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
->  /// that the allocation remains valid at least until the matching call to `put_task_struct`.
-> +///
-> +/// # Examples
-> +///
-> +/// The following is an example of getting the PID of the current thread with zero additional cost
-> +/// when compared to the C version:
-> +///
-> +/// ```
-> +/// let pid = current!().pid();
-> +/// ```
-> +///
-> +/// Getting the PID of the current process, also zero additional cost:
-> +///
-> +/// ```
-> +/// let pid = current!().group_leader().pid();
-> +/// ```
-> +///
-> +/// Getting the current task and storing it in some struct. The reference count is automatically
-> +/// incremented when creating `State` and decremented when it is dropped:
-> +///
-> +/// ```
-> +/// use kernel::{task::Task, types::ARef};
-> +///
-> +/// struct State {
-> +///     creator: ARef<Task>,
-> +///     index: u32,
-> +/// }
-> +///
-> +/// impl State {
-> +///     fn new() -> Self {
-> +///         Self {
-> +///             creator: current!().into(),
-> +///             index: 0,
-> +///         }
-> +///     }
-> +/// }
-> +/// ```
->  #[repr(transparent)]
->  pub struct Task(pub(crate) Opaque<bindings::task_struct>);
->  
-> @@ -27,6 +73,46 @@ unsafe impl Sync for Task {}
->  type Pid = bindings::pid_t;
->  
->  impl Task {
-> +    /// Returns a task reference for the currently executing task/thread.
-> +    ///
-> +    /// The recommended way to get the current task/thread is to use the
-> +    /// [`current`](crate::current) macro because it is safe.
+>  /// - Implementers must ensure that only one thread/CPU may access the protected data once the lock
+>  /// is owned, that is, between calls to `lock` and `unlock`.
+> +/// - Implementers must also ensure that `relock` uses the same locking method as the original
+> +/// lock operation. For example, it should disable interrupts if [`IrqSaveBackend::lock_irqsave`]
+> +/// is used.
+>  pub unsafe trait Backend {
+>      /// The state required by the lock.
+>      type State;
+> @@ -55,6 +58,17 @@ pub unsafe trait Backend {
+>      ///
+>      /// It must only be called by the current owner of the lock.
+>      unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState);
+> +
+> +    /// Reacquires the lock, making the caller its owner.
 > +    ///
 > +    /// # Safety
 > +    ///
-> +    /// Callers must ensure that the returned object doesn't outlive the current task/thread.
-> +    pub unsafe fn current() -> impl Deref<Target = Task> {
-> +        pub struct TaskRef<'a> {
-> +            task: &'a Task,
-> +            _not_send: PhantomData<*mut ()>,
-> +        }
-
-I'd had named this as `CurrentTaskRef`, but since this is not exposed to
-users then there are no problems whatsoever.
-
-> +
-> +        impl Deref for TaskRef<'_> {
-> +            type Target = Task;
-> +
-> +            fn deref(&self) -> &Self::Target {
-> +                self.task
-> +            }
-> +        }
-> +
-> +        impl From<TaskRef<'_>> for crate::types::ARef<Task> {
-> +            fn from(t: TaskRef<'_>) -> Self {
-> +                t.deref().into()
-> +            }
-> +        }
-> +
-> +        // SAFETY: Just an FFI call with no additional safety requirements.
-> +        let ptr = unsafe { bindings::get_current() };
-> +
-> +        TaskRef {
-> +            // SAFETY: If the current thread is still running, the current task is valid. Given
-> +            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
-> +            // (where it could potentially outlive the caller).
-> +            task: unsafe { &*ptr.cast() },
-> +            _not_send: PhantomData,
-> +        }
+> +    /// Callers must ensure that `state` comes from a previous call to [`Backend::lock`] (or
+> +    /// variant) that has been unlocked with [`Backend::unlock`] and will be relocked now.
+> +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
+> +        // SAFETY: The safety requirements ensure that the lock is initialised.
+> +        *guard_state = unsafe { Self::lock(ptr) };
 > +    }
+>  }
+>  
+>  /// The "backend" of a lock that supports the irq-save variant.
+> @@ -164,6 +178,17 @@ pub struct Guard<'a, T: ?Sized, B: Backend> {
+>  // SAFETY: `Guard` is sync when the data protected by the lock is also sync.
+>  unsafe impl<T: Sync + ?Sized, B: Backend> Sync for Guard<'_, T, B> {}
+>  
+> +impl<T: ?Sized, B: Backend> Guard<'_, T, B> {
+> +    #[allow(dead_code)]
+> +    pub(crate) fn do_unlocked(&mut self, cb: impl FnOnce()) {
+> +        // SAFETY: The caller owns the lock, so it is safe to unlock it.
+> +        unsafe { B::unlock(self.lock.state.get(), &self.state) };
+> +        cb();
+> +        // SAFETY: The lock was just unlocked above and is being relocked now.
+> +        unsafe { B::relock(self.lock.state.get(), &mut self.state) };
+> +    }
+> +}
 > +
->      /// Returns the group leader of the given task.
->      pub fn group_leader(&self) -> &Task {
->          // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
+>  impl<T: ?Sized, B: Backend> core::ops::Deref for Guard<'_, T, B> {
+>      type Target = T;
+>  
+> diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
+> index 34dec09a97c0..e2a2f68e6d93 100644
+> --- a/rust/kernel/sync/lock/spinlock.rs
+> +++ b/rust/kernel/sync/lock/spinlock.rs
+> @@ -4,6 +4,7 @@
+>  //!
+>  //! This module allows Rust code to use the kernel's `spinlock_t`.
+>  
+> +use super::IrqSaveBackend;
+>  use crate::bindings;
+>  
+>  /// Creates a [`SpinLock`] initialiser with the given name and a newly-created lock class.
+> @@ -95,7 +96,8 @@ pub type SpinLock<T> = super::Lock<T, SpinLockBackend>;
+>  /// A kernel `spinlock_t` lock backend.
+>  pub struct SpinLockBackend;
+>  
+> -// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
+> +// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. `relock` uses the
+> +// same scheme as `unlock` to figure out which locking method was used originally.
+>  unsafe impl super::Backend for SpinLockBackend {
+>      type State = bindings::spinlock_t;
+>      type GuardState = Option<core::ffi::c_ulong>;
+> @@ -127,13 +129,24 @@ unsafe impl super::Backend for SpinLockBackend {
+>              None => unsafe { bindings::spin_unlock(ptr) },
+>          }
+>      }
+> +
+> +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
+> +        let _ = match guard_state {
+> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
+> +            // initialised.
+> +            None => unsafe { Self::lock(ptr) },
+> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
+> +            // initialised.
+> +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
+> +        };
+> +    }
+>  }
+>  
+>  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
+>  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
+>  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
+>  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
+> -unsafe impl super::IrqSaveBackend for SpinLockBackend {
+> +unsafe impl IrqSaveBackend for SpinLockBackend {
+>      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
+>          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
+>          // memory, and that it has been initialised before.
 
 Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
