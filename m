@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3C26DBE52
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 04:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670846DBE55
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 04:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjDICqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 22:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S229544AbjDIC4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 22:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDICqj (ORCPT
+        with ESMTP id S229459AbjDIC4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 22:46:39 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D4C5B95;
-        Sat,  8 Apr 2023 19:46:32 -0700 (PDT)
-X-UUID: b8d2775cd68011eda9a90f0bb45854f4-20230409
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=RT6t6k0uRnv8KRrBTo9piwxXohY+DCmlYMyknmWtfNY=;
-        b=XlJT9ba5DtASdgzl0yqtzF/plWLN4TQikNU5tYUbcABPolQ5egdmArdBqwZIHvlK2EsoWekcjsTTC0adODFBSrPwRi+5abfhQmB54+hu39rNJWR7seMOmcSXtI8kbAmOtUxpxKbT6NGpsmeTUynfycl0Sr67qftoDmnsQIkgxmU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:0072c493-e98d-4941-995d-dd8cc0cc4503,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:5ac19eb5-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: b8d2775cd68011eda9a90f0bb45854f4-20230409
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-        (envelope-from <tze-nan.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1597067467; Sun, 09 Apr 2023 10:46:26 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Sun, 9 Apr 2023 10:46:24 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Sun, 9 Apr 2023 10:46:24 +0800
-From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <bobule.chang@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <Tze-nan.Wu@mediatek.com>, <stable@vger.kernel.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] ring-buffer: Prevent inconsistent operation on cpu_buffer->resize_disabled
-Date:   Sun, 9 Apr 2023 10:46:15 +0800
-Message-ID: <20230409024616.31099-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
-References: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
+        Sat, 8 Apr 2023 22:56:01 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8605B95
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 19:56:00 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso1544437pjp.5
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 19:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ingics-com.20210112.gappssmtp.com; s=20210112; t=1681008959; x=1683600959;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/lyW7gzXy0Icxsyp+KO+Ap3XL0aoTY3L/d7kHXsuylQ=;
+        b=UgewHHVTLWm/WgAAWdp3/h972nlPYrCJPSjGQ/6Hp0IOEkS7tdz6HwIPJmSOripS4W
+         ntjIplt/5VY8r3V3Nw/2qH3fLCsaLtIJQ2x7pHWaMKYREjzJRlU9DmJdF03MUzIKKLv6
+         +jX+REQrPdQA2Uc/JoLu/7eAnIQoh9BsNAm2mRlNaRA3AU/WwRHC4RdZ5uKMYhYB2bfJ
+         IrED1bz1r6uGwvKyUFETjgcGCGXVRdP05v8GIL0m3EmuqBWj/R2kgSsvVLjDtPMA/ogy
+         Gv+8ae3cep5FdDPlRvhbuXLctDW38A07p6f0hii3YNtt/FQgsluDYzeKnYvlhDLk4QYn
+         kPCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681008959; x=1683600959;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/lyW7gzXy0Icxsyp+KO+Ap3XL0aoTY3L/d7kHXsuylQ=;
+        b=13MHJxzCBBtBW1sGXhzoz6Z3RxC6Ce2uAkYfaeEVff54X9bnyPK0lLUaMdMICScakd
+         51MStOz8Nd1C+Zbk7kkTuiCHy25F7/MIMjo+A3LC4ykav5vV/eYgoCDgvYQmYw7iiN3b
+         951rwscaiXzMTrItgbJa7/4V3ZZY8xpexVS37KTbtQXlOZUX9mkzUlgq6EE8KkZR0K+Y
+         IgWXR+tOgelYqtNhy85Sa9Kh22A6vjkfb/o1lxmJ5Qu8NRoKVooKn6QQneW5w8TkudFt
+         Vm4hk1gP6OrhJc9tzCU8NFBSqIhmFbWU5LDg3AVfHusry3qpvxILkLrczBiENLvsPEIk
+         yxpA==
+X-Gm-Message-State: AAQBX9c1Zc04UtPee17eG1Yf68yxyMyREsywKO4xkcYocfZyXuePQ1cj
+        NHS1YRcohzML/o91+0duPyZLbW/NV3vBT/mhask=
+X-Google-Smtp-Source: AKy350bf+YZUeIZ8g15FiT5Q5ilujlK9Il8+EBEQo5eYpWOXWiduUTlCEdKdtSaWZGrwLVGYTslxSQ==
+X-Received: by 2002:a05:6a20:47dc:b0:d6:a0a1:6c6c with SMTP id ey28-20020a056a2047dc00b000d6a0a16c6cmr7397748pzb.8.1681008959445;
+        Sat, 08 Apr 2023 19:55:59 -0700 (PDT)
+Received: from alpha.. (125-228-203-199.hinet-ip.hinet.net. [125.228.203.199])
+        by smtp.googlemail.com with ESMTPSA id x10-20020aa784ca000000b00627df889420sm5487923pfn.173.2023.04.08.19.55.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 19:55:58 -0700 (PDT)
+From:   Axel Lin <axel.lin@ingics.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
+Subject: [PATCH] regulator: sm5703: Fix missing n_voltages for fixed regulators
+Date:   Sun,  9 Apr 2023 10:55:29 +0800
+Message-Id: <20230409025529.241699-1-axel.lin@ingics.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Write to buffer_size_kb can permanently fail due to cpu_online_mask changed
-between two for_each_online_buffer_cpu loops.
-The number of increasing and decreasing on cpu_buffer->resize_disable
-may be inconsistent, leading that the resize_disabled in some CPUs
-becoming none zero after ring_buffer_reset_online_cpus return.
+Set n_voltages = 1 for fixed regulators.
 
-This issue can be reproduced by "echo 0 > trace" and hotplug cpu at the
-same time. After reproducing success, we can find out buffer_size_kb
-will not be functional anymore.
-
-This patch uses cpus_read_lock() to prevent cpu_online_mask being changed
-between two different "for_each_online_buffer_cpu".
-
-Changes in v2:
-  Use cpus_read_lock() instead of copying cpu_online_mask at the entry of
-  function
-
-Link:
-  https://lore.kernel.org/lkml/20230408052226.25268-1-Tze-nan.Wu@mediatek.com/
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- kernel/trace/ring_buffer.c | 2 ++
+ drivers/regulator/sm5703-regulator.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 76a2d91eecad..44d833252fb0 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5357,6 +5357,7 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- 
- 	/* prevent another thread from changing buffer sizes */
- 	mutex_lock(&buffer->mutex);
-+	cpus_read_lock();
- 
- 	for_each_online_buffer_cpu(buffer, cpu) {
- 		cpu_buffer = buffer->buffers[cpu];
-@@ -5377,6 +5378,7 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- 		atomic_dec(&cpu_buffer->resize_disabled);
- 	}
- 
-+	cpus_read_unlock();
- 	mutex_unlock(&buffer->mutex);
- }
- 
+diff --git a/drivers/regulator/sm5703-regulator.c b/drivers/regulator/sm5703-regulator.c
+index 38e66df378a5..702461cf075e 100644
+--- a/drivers/regulator/sm5703-regulator.c
++++ b/drivers/regulator/sm5703-regulator.c
+@@ -42,6 +42,7 @@ static const int sm5703_buck_voltagemap[] = {
+ 		.type = REGULATOR_VOLTAGE,				\
+ 		.id = SM5703_USBLDO ## _id,				\
+ 		.ops = &sm5703_regulator_ops_fixed,			\
++		.n_voltages = 1,					\
+ 		.fixed_uV = SM5703_USBLDO_MICROVOLT,			\
+ 		.enable_reg = SM5703_REG_USBLDO12,			\
+ 		.enable_mask = SM5703_REG_EN_USBLDO ##_id,		\
+@@ -56,6 +57,7 @@ static const int sm5703_buck_voltagemap[] = {
+ 		.type = REGULATOR_VOLTAGE,				\
+ 		.id = SM5703_VBUS,					\
+ 		.ops = &sm5703_regulator_ops_fixed,			\
++		.n_voltages = 1,					\
+ 		.fixed_uV = SM5703_VBUS_MICROVOLT,			\
+ 		.enable_reg = SM5703_REG_CNTL,				\
+ 		.enable_mask = SM5703_OPERATION_MODE_MASK,		\
 -- 
-2.18.0
+2.34.1
 
