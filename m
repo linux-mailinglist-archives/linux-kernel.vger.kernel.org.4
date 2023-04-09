@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E6A6DBF49
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 10:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D971C6DBF4C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 11:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjDII6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 04:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S229531AbjDIJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 05:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDII6s (ORCPT
+        with ESMTP id S229437AbjDIJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 04:58:48 -0400
+        Sun, 9 Apr 2023 05:02:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2C4C1B;
-        Sun,  9 Apr 2023 01:58:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74724C1B;
+        Sun,  9 Apr 2023 02:02:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E32F601BE;
-        Sun,  9 Apr 2023 08:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D88C433EF;
-        Sun,  9 Apr 2023 08:58:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F45860B8C;
+        Sun,  9 Apr 2023 09:02:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA67C433D2;
+        Sun,  9 Apr 2023 09:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681030726;
-        bh=ZBQa6HSvHmlOsAAI9bKj5LL7zo5aODnHk6E1IvSRNP8=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=K0psEaAlENTLBDgQSrdsQr1gG0H6zeYuLmcSeimr+6nsHBZe+CVwKbnn/xw9RUzYI
-         YBe20g2aysR7jNr7GHyNpFjPW8F790RovaiMfUMXNkpvaLG7GU3behFGsUzgW3XFRC
-         28yV0WWfBnTjkAM+crF3WkQwjmkfNQpwwnb3+vtbenDIEfq/eL5qy6TaaqiK4qgykc
-         0/Qcm1ZontBvazim7p6UQKJKabt+2F+7ro7JxRyOY2sFJ11ReERoZ7qqNpyJ4xDPha
-         cHZK6M1kP90XxDoLPSCvJ+BUVR9xs3Wn0wPnYfN1beensl/9gu//hUSb3lB0cixcd3
-         lFsbzS/8iYPcA==
-Date:   Sun, 09 Apr 2023 09:58:42 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v1_0/4=5D_Convert_SiFive_drive?= =?US-ASCII?Q?rs_from_SOC=5FFOO_dependencies_to_ARCH=5FFOO?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZDEAD5aWhvMxAj8F@infradead.org>
-References: <20230406-undertake-stowing-50f45b90413a@spud> <ZDEAD5aWhvMxAj8F@infradead.org>
-Message-ID: <834F56B9-E394-4F7C-97D8-BAA97F03362E@kernel.org>
+        s=k20201202; t=1681030948;
+        bh=LVtFFA0AXEhOsnryskGF2zy05qjqLGb8A6vGLQS1SBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e890w4A1/yisEf/4re8ZeWrx2Q5nu0WrTNqPYUHGl4NqfUHIBcXlqRqe+zmx0LcTd
+         9TcKQj/8Jar7dsYdPKn/SMvC/nTOJ2IM/rDgKd7QqNa1ei0PvQaktdxsDGSIEx/WPJ
+         VjbaGJMxzh2nGl3gThPP/WOaWtWhvIfFxITlMvwCI7647jyPnJHiYipso/jcim+top
+         FJBTcmpiA4pAaRW2cJjxJ2R9ZIwcPqwb/Ha0QLV5Tw9jeyZOCQb2n4oZYAjB8mxDa3
+         ohFV/FAgyLDUKe1DdBJOEqiTrLWKcrJy0QcDK5opzog27IZP4qMpZ4L0iAVxRFwHQi
+         M3zQi/nLchIag==
+Date:   Sun, 9 Apr 2023 12:02:24 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, mschmidt@redhat.com,
+        Michael Chan <michael.chan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] bnxt_en: Allow to set switchdev mode without
+ existing VFs
+Message-ID: <20230409090224.GE14869@unreal>
+References: <20230406130455.1155362-1-ivecera@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406130455.1155362-1-ivecera@redhat.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -67,30 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 06, 2023 at 03:04:55PM +0200, Ivan Vecera wrote:
+> Remove an inability of bnxt_en driver to set eswitch to switchdev
+> mode without existing VFs by:
+> 
+> 1. Allow to set switchdev mode in bnxt_dl_eswitch_mode_set() so
+>    representors are created only when num_vfs > 0 otherwise just
+>    set bp->eswitch_mode
+> 2. Do not automatically change bp->eswitch_mode during
+>    bnxt_vf_reps_create() and bnxt_vf_reps_destroy() calls so
+>    the eswitch mode is managed only by an user by devlink.
+>    Just set temporarily bp->eswitch_mode to legacy to avoid
+>    re-opening of representors during destroy.
+> 3. Create representors in bnxt_sriov_enable() if current eswitch
+>    mode is switchdev one
+> 
+> Tested by this sequence:
+> 1. Set PF interface up
+> 2. Set PF's eswitch mode to switchdev
+> 3. Created N VFs
+> 4. Checked that N representors were created
+> 5. Set eswitch mode to legacy
+> 6. Checked that representors were deleted
+> 7. Set eswitch mode back to switchdev
+> 8. Checked that representros were re-created
 
+Why do you think that this last item is the right behavior?
+IMHO all configurations which were done after you switched mode
+should be cleared and not recreated while toggling.
 
-On 8 April 2023 06:47:59 IST, Christoph Hellwig <hch@infradead=2Eorg> wrot=
-e:
->On Thu, Apr 06, 2023 at 09:57:46PM +0100, Conor Dooley wrote:
->> From: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->>=20
->> RISC-V's SOC_FOO symbols for micro-archs are going away, and being
->> replaced with the more common ARCH_FOO pattern that is used by other
->> archs (and by vendors with a history outside of RISC-V)=2E
->
->And this is still the wrong way around=2E  This ARCH_ madness must not
->spread=2E  NAK=2E
+Thanks
 
-As I said when you complained last, we asked the arm lads and there was no=
- interest there in doing things differently & that's just one architecture=
-=2E
-Nor was there in adding a SOC_ symbol from some of the people who do more =
-than one ISA=2E
-
-You're welcome to send reverts for my first round of conversions and patch=
-es converting all the ARCH_ stuff RISC-V has to SOC_=2E
-I'll happily ack a complete conversion to SOC_=2E
-I don't care if it is arch or soc, I just want things to be used consisten=
-tly=2E
-
-
+> 9. Deleted all VFs
+> 10. Checked that all representors were deleted as well
+> 11. Checked that current eswitch mode is still switchdev
+> 
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> ---
