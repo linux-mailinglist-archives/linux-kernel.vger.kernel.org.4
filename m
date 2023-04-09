@@ -2,319 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E426DBFA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 13:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891276DBFAC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 13:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjDIL1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 07:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S229531AbjDILmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 07:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDIL1G (ORCPT
+        with ESMTP id S229445AbjDILmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 07:27:06 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3861A40DC
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 04:27:05 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a5126f2518so4062585ad.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 04:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681039624;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HwUXVW1300mZtoHWnTqOH3dDMQDuPQfGANLi31VYxc0=;
-        b=FNZEL6iWY9FLsZWdzyoj8xSmaVuxEzW5ysBayyX8/UC1+QqeR0keM+XEnlTaLjpMKw
-         j8fxXEzTcLfDlpxIgiSv8ayx5bk37fNV8S8avAozPHCGce9921CDZBnlmfHguZHLG4Xh
-         4SEHAC5ccBq8gcXCMWrJPp+7d9sIgtnkYleJ7WddCH9JOrx+ikfF/xExDBgmh5VTSAbX
-         SsBqFmgKI5F00YAEwLDAdnxWUh9ihDfbyj99Z8Wn3p427HYcm5SW/i+O0kt+B+CgQSm8
-         Op7wJhqRmUSf1kQ/aVi6s+Tes8RfwkeFkjLinox2M+v4/y3dK089zEuJrtXF2Sarym5C
-         Im4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681039624;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HwUXVW1300mZtoHWnTqOH3dDMQDuPQfGANLi31VYxc0=;
-        b=Up6JCYNbvLnBgmvFDb6J4Eqfximc18O8AnliHvR1vkSRdXxmrKnuT1+VGBppyYO5RS
-         xYj1TCZN6EZItolodJWnAqMcnc5KVJ//5nH1/Un8F0S4yatuBX38tlbgwGtwGVOwJe6v
-         /c77XZvq7g02VpOyz1WiKcYYGzLmYo45mm3rbFEfY4tnTaHH6UWnOLBL8id3Ax5pheeD
-         n8t/KIkSRyLfAeMTCBgFboJXLYczOv7D/kgyWloY68kdABFHQIR3TKgSzMrPf7rskcy2
-         DGkU152ubYsQPQAyfV6eOVx4Fjq+lFmEbzKMM/O2KbkSWNz3yR2XRUHiM/dxvaexv8U2
-         TNwA==
-X-Gm-Message-State: AAQBX9dTqUpRIpTsqhviY/XXCxuAQgYDPBrOUZfinR1CnyDeaIJCW+IP
-        8Y7F1/FhFoy4Ee3Bsk5VOZ8=
-X-Google-Smtp-Source: AKy350ZIXG8GZw19s66tyTjw2Xh+z1tVvO/66GsGhIeHArJPD+D5b9WfdfXIEU7qYS6337g1iclFoQ==
-X-Received: by 2002:a62:8442:0:b0:628:1a59:4c1 with SMTP id k63-20020a628442000000b006281a5904c1mr9040344pfd.13.1681039624384;
-        Sun, 09 Apr 2023 04:27:04 -0700 (PDT)
-Received: from sumitra.com ([59.95.148.219])
-        by smtp.gmail.com with ESMTPSA id u5-20020a62ed05000000b0062a56e51fd7sm5937006pfh.188.2023.04.09.04.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Apr 2023 04:27:03 -0700 (PDT)
-Date:   Sun, 9 Apr 2023 04:27:04 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: Remove unnecessary blank lines
-Message-ID: <20230409112704.GA264154@sumitra.com>
-References: <20230408155545.GA261160@sumitra.com>
- <052468bd-98db-a564-cf5f-0ea287b1025f@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <052468bd-98db-a564-cf5f-0ea287b1025f@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 9 Apr 2023 07:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3AC3A81
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 04:41:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 721406023E
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 11:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F09C433EF;
+        Sun,  9 Apr 2023 11:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681040517;
+        bh=p7QfkcJc0JHTyy2vOztlcguBu4mFBQBgeipcnN/3uLI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lE2TFbtsJ1eZ+a/+xhE9Pd8p6Dn8lBUeZIhaYGrq397RDmxzLEWld7ikLcoFnMPm0
+         Js2TMHZc8nHtn8dc03KasjfoN+hdZXs/TpH+02mPVXirbNhiuX2R85OQMg0whXzxko
+         NKzzb/FkJPRgv3jkGoCy+Hrji/unJUTEIvrnu/r+JaAnS2LKpVfpcUPMo/wJbut/9m
+         nQVRt3vJZdFae0noYNr3+UbegqxURr+RGlmI8mU9QwcofEXk4ZWW7NmljaJae+V1Fq
+         gAtNkvjMkSRuy40zLtIVjr2NnfJJglliVMttUGrCSIwiYBcBus5ngFJMcFNVo+GnVt
+         JyCwCtPaWsQYg==
+Received: from 82-132-229-215.dab.02.net ([82.132.229.215] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1plTQh-0074UF-GO;
+        Sun, 09 Apr 2023 12:41:55 +0100
+Date:   Sun, 09 Apr 2023 12:41:54 +0100
+Message-ID: <87h6tp5lkt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Gowans <jgowans@amazon.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        KarimAllah Raslan <karahmed@amazon.com>
+Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
+In-Reply-To: <20230317095300.4076497-1-jgowans@amazon.com>
+References: <20230317095300.4076497-1-jgowans@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.229.215
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, karahmed@amazon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 09, 2023 at 09:05:19AM +0200, Philipp Hortmann wrote:
-> On 4/8/23 17:55, Sumitra Sharma wrote:
-> > Remove extra blank lines as suggested by the Linux kernel
-> > coding-style. These issues were reported by checkpatch.
-> > 
-> > CHECK: Blank lines aren't necessary before a close brace '}'
-> > CHECK: Blank lines aren't necessary after an open brace '{'
-> > CHECK: Please don't use multiple blank lines
-> > 
-> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> > ---
-> >   drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 33 ----------------------
-> >   1 file changed, 33 deletions(-)
-> > 
-> > diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> > index cde41111012a..421265261c73 100644
-> > --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> > +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> > @@ -140,26 +140,22 @@ const u8 dm_cck_tx_bb_gain_ch14[CCK_TX_BB_GAIN_TABLE_LEN][8] = {
-> >   /*---------------------------Define Local Constant---------------------------*/
-> > -
-> >   /*------------------------Define global variable-----------------------------*/
-> >   struct dig_t dm_digtable;
-> >   struct drx_path_sel dm_rx_path_sel_table;
-> >   /*------------------------Define global variable-----------------------------*/
-> > -
-> >   /*------------------------Define local variable------------------------------*/
-> >   /*------------------------Define local variable------------------------------*/
-> > -
-> >   /*---------------------Define local function prototype-----------------------*/
-> >   static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev);
-> >   static void _rtl92e_dm_init_bandwidth_autoswitch(struct net_device *dev);
-> >   static	void	_rtl92e_dm_bandwidth_autoswitch(struct net_device *dev);
-> > -
-> >   static	void	_rtl92e_dm_check_tx_power_tracking(struct net_device *dev);
-> >   static void _rtl92e_dm_bb_initialgain_restore(struct net_device *dev);
-> > @@ -180,7 +176,6 @@ static void _rtl92e_dm_check_rx_path_selection(struct net_device *dev);
-> >   static void _rtl92e_dm_init_rx_path_selection(struct net_device *dev);
-> >   static void _rtl92e_dm_rx_path_sel_byrssi(struct net_device *dev);
-> > -
-> >   static void _rtl92e_dm_init_fsync(struct net_device *dev);
-> >   static void _rtl92e_dm_deinit_fsync(struct net_device *dev);
-> > @@ -222,9 +217,7 @@ void rtl92e_dm_init(struct net_device *dev)
-> >   void rtl92e_dm_deinit(struct net_device *dev)
-> >   {
-> > -
-> >   	_rtl92e_dm_deinit_fsync(dev);
-> > -
-> >   }
-> >   void rtl92e_dm_watchdog(struct net_device *dev)
-> > @@ -253,7 +246,6 @@ void rtl92e_dm_watchdog(struct net_device *dev)
-> >   void rtl92e_init_adaptive_rate(struct net_device *dev)
-> >   {
-> > -
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> >   	struct rate_adaptive *pra = &priv->rate_adaptive;
-> > @@ -300,7 +292,6 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
-> >   		return;
-> >   	if (priv->rtllib->state == RTLLIB_LINKED) {
-> > -
-> >   		bshort_gi_enabled = (ht_info->cur_tx_bw40mhz &&
-> >   				     ht_info->bCurShortGI40MHz) ||
-> >   				    (!ht_info->cur_tx_bw40mhz &&
-> > @@ -527,7 +518,6 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
-> >   	priv->rtllib->bdynamic_txpower_enable = false;
-> >   	for (j = 0; j <= 30; j++) {
-> > -
-> >   		tx_cmd.op	= TXCMD_SET_TX_PWR_TRACKING;
-> >   		tx_cmd.length	= 4;
-> >   		tx_cmd.value	= priv->pwr_track >> 24;
-> > @@ -759,20 +749,17 @@ void rtl92e_dm_txpower_tracking_wq(void *data)
-> >   static void _rtl92e_dm_initialize_tx_power_tracking_tssi(struct net_device *dev)
-> >   {
-> > -
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> >   	priv->btxpower_tracking = true;
-> >   	priv->txpower_count       = 0;
-> >   	priv->tx_pwr_tracking_init = false;
-> > -
-> >   }
-> >   static void _rtl92e_dm_init_tx_power_tracking_thermal(struct net_device *dev)
-> >   {
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> > -
-> >   	if (priv->rtllib->FwRWRF)
-> >   		priv->btxpower_tracking = true;
-> >   	else
-> > @@ -802,12 +789,10 @@ static void _rtl92e_dm_check_tx_power_tracking_tssi(struct net_device *dev)
-> >   		return;
-> >   	tx_power_track_counter++;
-> > -
-> >   	if (tx_power_track_counter >= 180) {
-> >   		schedule_delayed_work(&priv->txpower_tracking_wq, 0);
-> >   		tx_power_track_counter = 0;
-> >   	}
-> > -
-> >   }
-> >   static void _rtl92e_dm_check_tx_power_tracking_thermal(struct net_device *dev)
-> > @@ -839,7 +824,6 @@ static void _rtl92e_dm_check_tx_power_tracking_thermal(struct net_device *dev)
-> >   	netdev_info(dev, "===============>Schedule TxPowerTrackingWorkItem\n");
-> >   	schedule_delayed_work(&priv->txpower_tracking_wq, 0);
-> >   	TM_Trigger = 0;
-> > -
-> >   }
-> >   static void _rtl92e_dm_check_tx_power_tracking(struct net_device *dev)
-> > @@ -971,7 +955,6 @@ void rtl92e_dm_restore_state(struct net_device *dev)
-> >   		_rtl92e_dm_tx_power_reset_recovery(dev);
-> >   	_rtl92e_dm_bb_initialgain_restore(dev);
-> > -
-> >   }
-> >   static void _rtl92e_dm_bb_initialgain_restore(struct net_device *dev)
-> > @@ -995,7 +978,6 @@ static void _rtl92e_dm_bb_initialgain_restore(struct net_device *dev)
-> >   	rtl92e_set_bb_reg(dev, rCCK0_CCA, bit_mask,
-> >   			  (u32)priv->initgain_backup.cca);
-> >   	rtl92e_set_bb_reg(dev, UFWP, bMaskByte1, 0x1);
-> > -
-> >   }
-> >   void rtl92e_dm_backup_state(struct net_device *dev)
-> > @@ -1050,7 +1032,6 @@ static void _rtl92e_dm_dig_init(struct net_device *dev)
-> >   static void _rtl92e_dm_ctrl_initgain_byrssi(struct net_device *dev)
-> >   {
-> > -
-> >   	if (!dm_digtable.dig_enable_flag)
-> >   		return;
-> > @@ -1103,7 +1084,6 @@ static void _rtl92e_dm_ctrl_initgain_byrssi_driver(struct net_device *dev)
-> >   	else
-> >   		dm_digtable.cur_sta_connect_state = DIG_STA_DISCONNECT;
-> > -
-> >   	dm_digtable.rssi_val = priv->undecorated_smoothed_pwdb;
-> >   	_rtl92e_dm_initial_gain(dev);
-> >   	_rtl92e_dm_pd_th(dev);
-> > @@ -1111,7 +1091,6 @@ static void _rtl92e_dm_ctrl_initgain_byrssi_driver(struct net_device *dev)
-> >   	if (dm_digtable.dig_algorithm_switch)
-> >   		dm_digtable.dig_algorithm_switch = 0;
-> >   	dm_digtable.pre_sta_connect_state = dm_digtable.cur_sta_connect_state;
-> > -
-> >   }
-> >   static void _rtl92e_dm_ctrl_initgain_byrssi_false_alarm(struct net_device *dev)
-> > @@ -1201,7 +1180,6 @@ static void _rtl92e_dm_ctrl_initgain_byrssi_false_alarm(struct net_device *dev)
-> >   	_rtl92e_dm_ctrl_initgain_byrssi_highpwr(dev);
-> >   }
-> > -
-> >   static void _rtl92e_dm_ctrl_initgain_byrssi_highpwr(struct net_device *dev)
-> >   {
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> > @@ -1399,7 +1377,6 @@ static void _rtl92e_dm_cs_ratio(struct net_device *dev)
-> >   		reset_cnt = priv->reset_count;
-> >   	}
-> > -
-> >   	if ((dm_digtable.precs_ratio_state != dm_digtable.curcs_ratio_state) ||
-> >   	    !initialized || force_write) {
-> >   		if (dm_digtable.curcs_ratio_state == DIG_CS_RATIO_LOWER)
-> > @@ -1481,7 +1458,6 @@ static void _rtl92e_dm_check_edca_turbo(struct net_device *dev)
-> >   						      edca_setting_UL[ht_info->IOTPeer]);
-> >   					priv->bis_cur_rdlstate = false;
-> >   				}
-> > -
-> >   			}
-> >   			priv->bcurrent_turbo_EDCA = true;
-> > @@ -1496,7 +1472,6 @@ static void _rtl92e_dm_check_edca_turbo(struct net_device *dev)
-> >   		}
-> >   	}
-> > -
-> >   dm_CheckEdcaTurbo_EXIT:
-> >   	priv->rtllib->bis_any_nonbepkts = false;
-> >   	lastTxOkCnt = priv->stats.txbytesunicast;
-> > @@ -1536,7 +1511,6 @@ static void _rtl92e_dm_cts_to_self(struct net_device *dev)
-> >   	}
-> >   }
-> > -
-> >   static void _rtl92e_dm_init_wa_broadcom_iot(struct net_device *dev)
-> >   {
-> >   	struct r8192_priv *priv = rtllib_priv((struct net_device *)dev);
-> > @@ -1767,7 +1741,6 @@ static void _rtl92e_dm_rx_path_sel_byrssi(struct net_device *dev)
-> >   						tmp_cck_min_pwdb = cur_cck_pwdb;
-> >   					}
-> >   				}
-> > -
-> >   			}
-> >   		}
-> >   	}
-> > @@ -1833,7 +1806,6 @@ static void _rtl92e_dm_check_rx_path_selection(struct net_device *dev)
-> >   	schedule_delayed_work(&priv->rfpath_check_wq, 0);
-> >   }
-> > -
-> >   static void _rtl92e_dm_init_fsync(struct net_device *dev)
-> >   {
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> > @@ -1851,7 +1823,6 @@ static void _rtl92e_dm_init_fsync(struct net_device *dev)
-> >   	timer_setup(&priv->fsync_timer, _rtl92e_dm_fsync_timer_callback, 0);
-> >   }
-> > -
-> >   static void _rtl92e_dm_deinit_fsync(struct net_device *dev)
-> >   {
-> >   	struct r8192_priv *priv = rtllib_priv(dev);
-> > @@ -1886,7 +1857,6 @@ static void _rtl92e_dm_fsync_timer_callback(struct timer_list *t)
-> >   		else
-> >   			rate_count_diff = rate_count - priv->rate_record;
-> >   		if (rate_count_diff < priv->rate_count_diff_rec) {
-> > -
-> >   			u32 DiffNum = priv->rate_count_diff_rec -
-> >   				      rate_count_diff;
-> >   			if (DiffNum >=
-> > @@ -2027,7 +1997,6 @@ static void _rtl92e_dm_start_sw_fsync(struct net_device *dev)
-> >   	add_timer(&priv->fsync_timer);
-> >   	rtl92e_writel(dev, rOFDM0_RxDetector2, 0x465c12cd);
-> > -
-> >   }
-> >   static void _rtl92e_dm_check_fsync(struct net_device *dev)
-> > @@ -2070,7 +2039,6 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
-> >   			case SW_Fsync:
-> >   			default:
-> >   				break;
-> > -
-> >   			}
-> >   		}
-> >   		if (priv->frame_sync_monitor) {
-> > @@ -2198,7 +2166,6 @@ static void _rtl92e_dm_dynamic_tx_power(struct net_device *dev)
-> >   	}
-> >   	priv->last_dtp_flag_high = priv->dynamic_tx_high_pwr;
-> >   	priv->last_dtp_flag_low = priv->dynamic_tx_low_pwr;
-> > -
-> >   }
-> >   static void _rtl92e_dm_check_txrateandretrycount(struct net_device *dev)
+James,
+
+On Fri, 17 Mar 2023 09:53:00 +0000,
+James Gowans <jgowans@amazon.com> wrote:
 > 
-> Hi,
+> Update the generic handle_fasteoi_irq to cater for the case when the
+> next interrupt comes in while the previous handler is still running.
+> Currently when that happens the irq_may_run() early out causes the next
+> IRQ to be lost. Change the behaviour to mark the interrupt as pending
+> and re-run the handler when handle_fasteoi_irq sees that the pending
+> flag has been set again. This is largely inspired by handle_edge_irq.
 > 
-> Please do not send in patches at almost the same time with exactly the same
-> name. I need to look into the patch to find out which one is which.
+> Generally it should not be possible for the next interrupt to arrive
+> while the previous handler is still running: the next interrupt should
+> only arrive after the EOI message has been sent and the previous handler
+> has returned.
+
+There isn't necessarily an EOI message. On bare metal, EOI of a LPI
+amounts to sweet nothing (see the pseudocode to convince yourself),
+because the physical LPI doesn't have an active state. When
+virtualised, the active state is limited to the state stored in the
+LRs, and isn't propagated anywhere else.
+
+> However, there is a race where if the interrupt affinity
+> is changed while the previous handler is running, then the next
+> interrupt can arrive at a different CPU while the previous handler is
+> still running. In that case there will be a concurrent invoke and the
+> early out will be taken.
 > 
+> For example:
+> 
+>            CPU 0             |          CPU 1
+> -----------------------------|-----------------------------
+> interrupt start              |
+>   handle_fasteoi_irq         | set_affinity(CPU 1)
+>     handler                  |
+>     ...                      | interrupt start
+>     ...                      |   handle_fasteoi_irq -> early out
+>   handle_fasteoi_irq return  | interrupt end
+> interrupt end                |
+> 
+> This issue was observed specifically on an arm64 system with a GIC-v3
+> handling MSIs; GIC-v3 uses the handle_fasteoi_irq handler. The issue is
+> that the global ITS is responsible for affinity but does not know
+> whether interrupts are pending/running, only the CPU-local redistributor
+> handles the EOI. Hence when the affinity is changed in the ITS, the new
+> CPU's redistributor does not know that the original CPU is still running
+> the handler.
 
+You seem to be misunderstanding the architecture.
 
-Hi Philipp 
+The local redistributor doesn't know anything either. A redistributor
+doesn't contain any state about what is currently serviced. At best,
+it knows of the pending state of interrupts, and that about it. This
+is even more true in a VM. Only the CPU knows about this, and there is
+no EOI that ever gets propagated to the redistributor.
 
-I am sorry. I will take care of it.
+> 
+> There are a few uncertainties about this implementation compared to the
+> prior art in handle_edge_irq:
+> 
+> 1. Do we need to mask the IRQ and then unmask it later? I don't think so
+> but it's not entirely clear why handle_edge_irq does this anyway; it's
+> an edge IRQ so not sure why it needs to be masked.
 
-> This patch interfears with one of my patches. So only one can be accepted
-> and the otherone has to rebase. Will see what happens.
->
+Please measure that cost and weep, specially in the context of
+multiple concurrent interrupts serviced by a single ITS (cost of
+locking the command queue, of waiting for a full round trip to the ITS
+for a couple of commands...).
 
-Okay Thank you.
+> 
+> 2. Should the EOI delivery be inside the do loop after every handler
+> run? I think outside the loops is best; only inform the chip to deliver
+> more IRQs once all pending runs have been finished.
+> 
+> 3. Do we need to check that desc->action is still set? I don't know if
+> it can be un-set while the IRQ is still enabled.
+> 
+> 4. There is now more overlap with the handle_edge_eoi_irq handler;
+> should we try to unify these?
+> 
+> Signed-off-by: James Gowans <jgowans@amazon.com>
+> Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: KarimAllah Raslan <karahmed@amazon.com>
+> ---
+>  Documentation/core-api/genericirq.rst | 9 ++++++++-
+>  kernel/irq/chip.c                     | 9 +++++++--
+>  2 files changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/core-api/genericirq.rst b/Documentation/core-api/genericirq.rst
+> index f959c9b53f61..b54485eca8b5 100644
+> --- a/Documentation/core-api/genericirq.rst
+> +++ b/Documentation/core-api/genericirq.rst
+> @@ -240,7 +240,14 @@ which only need an EOI at the end of the handler.
+>  
+>  The following control flow is implemented (simplified excerpt)::
+>  
+> -    handle_irq_event(desc->action);
+> +    if (desc->status & running) {
+> +        desc->status |= pending;
+> +        return;
+> +    }
+> +    do {
+> +        desc->status &= ~pending;
+> +        handle_irq_event(desc->action);
+> +    } while (status & pending);
+>      desc->irq_data.chip->irq_eoi();
+>  
+>  
+> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> index 49e7bc871fec..4e5fc2b7e8a9 100644
+> --- a/kernel/irq/chip.c
+> +++ b/kernel/irq/chip.c
+> @@ -692,8 +692,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	raw_spin_lock(&desc->lock);
+>  
+> -	if (!irq_may_run(desc))
+> +	if (!irq_may_run(desc)) {
+> +		desc->istate |= IRQS_PENDING;
+>  		goto out;
+> +	}
 
-Regards
-Sumitra
+What is currently unclear to me is how we get there on another CPU if
+we're still handling the interrupt, which happens in the critical
+section delineated by desc->lock. So there is some additional state
+change here which you don't seem to be describing.
 
-> Bye Philipp
+>  
+>  	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+>  
+> @@ -711,7 +713,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  	if (desc->istate & IRQS_ONESHOT)
+>  		mask_irq(desc);
+>  
+> -	handle_irq_event(desc);
+> +	do {
+> +		handle_irq_event(desc);
+> +	} while (unlikely((desc->istate & IRQS_PENDING) &&
+> +			!irqd_irq_disabled(&desc->irq_data)));
+>  
+>  	cond_unmask_eoi_irq(desc, chip);
+>  
+
+Why do we need to inflict any of this on all other users of this flow?
+The lack of active state on LPIs is the issue, as it allows a new
+interrupt to be presented to another CPU as soon as the previous one
+has been ACK'ed.
+
+This also has the effect of keeping the handling of the interrupt on
+the original CPU, negating the effects of the change of affinity.
+
+It feels that we should instead resend the interrupt, either by making
+it pending again by generating an INT command to the ITS, or by using
+the SW resend mechanism (which the lack of deactivation requirement
+makes possible).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
