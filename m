@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249376DBFFA
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 15:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5D66DC006
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 15:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjDIN0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 09:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S229604AbjDINdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 09:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDIN0n (ORCPT
+        with ESMTP id S229445AbjDINdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 09:26:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A748F272D
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 06:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OZVpjqYnjuACauM9dYm5rZuanWGcBCJRaWS6vvh56mc=; b=LTidLx3YJKz6L2/YqZcM4/TvJo
-        MxnNdECkcnCpX7TQB9g3+0xKm0yGmLMfeVqPk3hqUEEgaK1iHrqO3ZV20rzx3oKqht5IPVBrgZ7J1
-        Zp+80QvnBGq3CGQMrJoush05Yb1g2w/gHswBAF6MGB1jIjb3n8wDcIBlQE1QEtBwwhKhnNZmLfYsc
-        4mXNBlo6QwYZHHlXKWN6Vr/oqcpx8wossUib3SCfafqiFZ46OVY2i107dIa/N24+gz+WglIER6PWA
-        w8ltEcnX3i7QUsyUJBBb520Ey17L8DmlJC7SPBqxnH834c0mvqL1eZQfcFPJU0coim/x0keU8Biqz
-        dctLkJNg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1plV3q-002jDf-Ec; Sun, 09 Apr 2023 13:26:26 +0000
-Date:   Sun, 9 Apr 2023 14:26:26 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ankur Arora <ankur.a.arora@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        mgorman@suse.de, rostedt@goodmis.org, tglx@linutronix.de,
-        vincent.guittot@linaro.org, jon.grimm@amd.com, bharata@amd.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 5/9] x86/clear_pages: add clear_pages()
-Message-ID: <ZDK9AoX6rRVJZD5s@casper.infradead.org>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-6-ankur.a.arora@oracle.com>
- <20230406082304.GE386572@hirez.programming.kicks-ass.net>
- <878rf4jz1x.fsf@oracle.com>
- <20230407103444.GB430894@hirez.programming.kicks-ass.net>
+        Sun, 9 Apr 2023 09:33:45 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF2526B0;
+        Sun,  9 Apr 2023 06:33:41 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id y6so1485578plp.2;
+        Sun, 09 Apr 2023 06:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681047221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hQhQ7IEhFavcI76vQR7yRcQO09FERz3jOfHL+xsQeDU=;
+        b=iWkjmYaJdPpBHDJQGKaYLICkccLrmez8x4oHYIG8AqjNb4tgpmf3xF2Mf68ylSdqBH
+         +s7GSefa4TyxZA3x63YkRvopEww6DNPUvBAybgZ9vo74rvmqZaU21xP9183SYyzRZPwi
+         AhRDb6OlnIYVdTAgMPgtt10TkWc2Euw9AFkMXSEiMpv8QqL5Hqm+Z8R4+MyajKGVV91R
+         aw91Q+4cberHtnRE1tHtVV2fe72UQx1NHhoSnIxXg1RDcJ8av7KljjqKzOCgcFQpNUVk
+         o9sO9hBveY97ME667smTsR+TH6qUp0aqPeGFbonY04N7onlHSA36C0cEh4YdZA8mp90G
+         Q2eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681047221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hQhQ7IEhFavcI76vQR7yRcQO09FERz3jOfHL+xsQeDU=;
+        b=5IIYQLwOhWID40TnytI5xkNfsHc7P4cT2iEx5HlPT4CfOON13ByHhzz4fHPvM0PhFJ
+         sdH5RB/h+Zqx2F38bpIc16Ghr/XUnDtPCl4Q7hILFBIXPRn9Rq5qyHW+hcp4MHn6DpFp
+         e2Bl3uSuiV1UkeLGH7HD5yOzHGOUVjNrtuGl/FgaISyUIayubUr23yINwoMLZGz76vQU
+         GKMMl5+qhxGTSJJe5uAwGjt1da3uFbPCTYF8EphXNkMl4ptmAiaKNfNg/OwP8I4kSFnV
+         XNIiGDAetm//f8BguavA0UYEBrgvqo2LO2e6btBXDv4e0SmHEmRn5JiYNs1ww3Bw5OxB
+         0uVw==
+X-Gm-Message-State: AAQBX9e0WqoX6JMzWiBQOsQwqnJc0c2XyXoTUYQl70dpOs1f54rbqDWB
+        sKNABPgt02yrWoO2hvm3x/XiXH1HF4W76puTEwQ=
+X-Google-Smtp-Source: AKy350aXJil6ppcZ48yznHNVUhy/Tb2jOwv5ZbxGn8qVXKcqRHYw69kkbFF9FYFSmJyd4Qel6IaGECOMXAs24obCfg8=
+X-Received: by 2002:a17:90a:8c06:b0:23d:30a:692b with SMTP id
+ a6-20020a17090a8c0600b0023d030a692bmr1920225pjo.4.1681047220780; Sun, 09 Apr
+ 2023 06:33:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407103444.GB430894@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230409130229.2670-1-u202212060@hust.edu.cn>
+In-Reply-To: <20230409130229.2670-1-u202212060@hust.edu.cn>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Sun, 9 Apr 2023 21:30:30 +0800
+Message-ID: <CAD-N9QVTmKK533s4kMpdsM6LYGJhkb7pM3NZPo_F5Y-6Azcoww@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: fix inconsistent indenting
+To:     Lanzhe Li <u202212060@hust.edu.cn>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        HUST OS Kernel Contribution 
+        <hust-os-kernel-patches@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 12:34:44PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 06, 2023 at 05:50:18PM -0700, Ankur Arora wrote:
-> > 
-> > Peter Zijlstra <peterz@infradead.org> writes:
-> > 
-> > > On Sun, Apr 02, 2023 at 10:22:29PM -0700, Ankur Arora wrote:
-> > >> Add clear_pages() and define the ancillary clear_user_pages().
-> > >>
-> > >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> > >> ---
-> > >>  arch/x86/include/asm/page.h    | 6 ++++++
-> > >>  arch/x86/include/asm/page_32.h | 6 ++++++
-> > >>  arch/x86/include/asm/page_64.h | 9 +++++++--
-> > >>  3 files changed, 19 insertions(+), 2 deletions(-)
-> > >>
-> > >> diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-> > >> index d18e5c332cb9..03e3c69fc427 100644
-> > >> --- a/arch/x86/include/asm/page.h
-> > >> +++ b/arch/x86/include/asm/page.h
-> > >> @@ -28,6 +28,12 @@ static inline void clear_user_page(void *page, unsigned long vaddr,
-> > >>  	clear_page(page);
-> > >>  }
-> > >>
-> > >> +static inline void clear_user_pages(void *page, unsigned long vaddr,
-> > >> +				    struct page *pg, unsigned int nsubpages)
-> > >> +{
-> > >> +	clear_pages(page, nsubpages);
-> > >> +}
-> > >
-> > > This seems dodgy, clear_user* has slightly different semantics. It needs
-> > > the access_ok() and stac/clac thing on at the very least.
-> > 
-> > That can't be right. On x86, clear_user_page(), copy_user_page() (and
-> > now the multi-page versions) only write to kernel maps of user pages.
-> > That's why they can skip the access_ok(), stac/clac or uacess
-> > exception handling.
-> 
-> Bah, that namespace is a mess :/
+On Sun, Apr 9, 2023 at 9:11=E2=80=AFPM Lanzhe Li <u202212060@hust.edu.cn> w=
+rote:
+>
+> Fixed a wrong indentation before "return".This line uses a 7 space
+> indent instead of a tab.
+>
+> Signed-off-by: Lanzhe Li <u202212060@hust.edu.cn>
 
-What (I think) it's suppsoed to be is that clear_page() works on kernel
-pages that are never seen by userspace while clear_user_page() works
-on kernel mappings of pages the user can definitely see.  This makes
-no difference to x86, but some architectures can skip a lot of cache
-flushing.
+Hi Lanzhe,
+
+Please remember to add v2 and changelog from v1 to v2 next time.
+
++cc hust-os-kernel-patches@googlegroups.com
+
+> ---
+
+v1->v2: change the author to make 'From' and 'Signed-off-by' fields consist=
+ent.
+
+>  net/bluetooth/hci_debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hci_debugfs.c b/net/bluetooth/hci_debugfs.c
+> index b7f682922a16..ec0df2f9188e 100644
+> --- a/net/bluetooth/hci_debugfs.c
+> +++ b/net/bluetooth/hci_debugfs.c
+> @@ -189,7 +189,7 @@ static int uuids_show(struct seq_file *f, void *p)
+>         }
+>         hci_dev_unlock(hdev);
+>
+> -       return 0;
+> +       return 0;
+>  }
+>
+>  DEFINE_SHOW_ATTRIBUTE(uuids);
+> --
+> 2.37.2
+>
