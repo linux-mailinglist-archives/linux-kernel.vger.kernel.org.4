@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6D56DBE4D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 04:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CDB6DBE50
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Apr 2023 04:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjDICWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 22:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S229527AbjDIC2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 22:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjDICWQ (ORCPT
+        with ESMTP id S229446AbjDIC2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 22:22:16 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF7C244A6;
-        Sat,  8 Apr 2023 19:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=M8QCb
-        APQ91Luys/tZ3T5cmD1TCXThdGmPzqhMp80W1Q=; b=UftpdCQaB6QW6KUYb6dVj
-        kCnTqDxxhJfTUiMz74Gw0UcDuNP7PggNk0sDQHUlJfDEDV93YIEq8X2lCfhZeGk8
-        Wj3hEqvTxrZ5rHY+CyA5HYGGyEvaiOEur9jJYgKxISD8cGY0mkVCxhgyNYiPaWtO
-        LkuKB7ou/ymBuG2OWYdVeE=
-Received: from localhost.localdomain (unknown [106.39.149.90])
-        by zwqz-smtp-mta-g2-4 (Coremail) with SMTP id _____wBXFc4RITJk217AAw--.5040S2;
-        Sun, 09 Apr 2023 10:21:05 +0800 (CST)
-From:   Chen Aotian <chenaotian2@163.com>
-To:     alex.aring@gmail.com
-Cc:     stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Chen Aotian <chenaotian2@163.com>,
-        Alexander Aring <aahringo@redhat.com>
-Subject: [PATH wpan v3] ieee802154: hwsim: Fix possible memory leaks
-Date:   Sun,  9 Apr 2023 10:20:48 +0800
-Message-Id: <20230409022048.61223-1-chenaotian2@163.com>
+        Sat, 8 Apr 2023 22:28:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D86559EE;
+        Sat,  8 Apr 2023 19:28:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBCA960B76;
+        Sun,  9 Apr 2023 02:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA72AC433EF;
+        Sun,  9 Apr 2023 02:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681007316;
+        bh=cVM9AQdC8fERYzKAP4b8qgin6kb00dHQoiudcmM67Kc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YL6UoNE4UOqxWO0btsl854aWVZUbhPDqousyhhFcRUd3gvUe2MYZTM1THXsyYnk6m
+         QaRUNoUa3scudLcmgJVehdlZSvAaz+TyZ+totE4haQ+VGoEp+Hw5NmcCzjwUdyqpZo
+         Bqlp0FJ/sjOSUuGgrQcQKQ7h64hAUX5glssIWDVigrtlJs67rm8t7/vBAujOd0+XAT
+         bM3fvFy/JbCkceEjJ+g/qvUbiuJkfPdisBqWBWVjc3yrFK0/AJljic1DUhUM+pvw/5
+         nOll+Zeqp/GdotEfUGhFGabZ2xRjrnFEcuXwoOwIUTtMkJjZZEGVBhWWSy+Xl3TDjl
+         kF/7lKcPl0Y/w==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Dan Carpenter <error27@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [PATCH] tracing: fprobe: Initialize ret valiable to fix smatch error
+Date:   Sun,  9 Apr 2023 11:28:31 +0900
+Message-Id: <168100731160.79534.374827110083836722.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXFc4RITJk217AAw--.5040S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw4DAF1UJw4UuF4UtFWrZrb_yoW8Ar4kpF
-        Wj9asrtr48tr18WayDXa1kAa4SqayrW348urWfKa93ZF12qr409r17GF1Fvr45ArZ7C3Wf
-        AF4qqwnIqw1DArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jOvtZUUUUU=
-X-Originating-IP: [106.39.149.90]
-X-CM-SenderInfo: xfkh0tprwlt0qs6rljoofrz/1tbiHRFLwGI69rXLIwACs2
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After replacing e->info, it is necessary to free the old einfo.
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fixes: f25da51fdc38 ("ieee802154: hwsim: add replacement for fakelb")
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: Chen Aotian <chenaotian2@163.com>
+The commit 39d954200bf6 ("fprobe: Skip exit_handler if entry_handler returns
+!0") introduced a hidden dependency of 'ret' local variable in the
+fprobe_handler(), Smatch warns the `ret` can be accessed without
+initialization.
+
+	kernel/trace/fprobe.c:59 fprobe_handler()
+	error: uninitialized symbol 'ret'.
+
+kernel/trace/fprobe.c
+    49                 fpr->entry_ip = ip;
+    50                 if (fp->entry_data_size)
+    51                         entry_data = fpr->data;
+    52         }
+    53
+    54         if (fp->entry_handler)
+    55                 ret = fp->entry_handler(fp, ip, ftrace_get_regs(fregs), entry_data);
+
+ret is only initialized if there is an ->entry_handler
+
+    56
+    57         /* If entry_handler returns !0, nmissed is not counted. */
+    58         if (rh) {
+
+rh is only true if there is an ->exit_handler.  Presumably if you have
+and ->exit_handler that means you also have a ->entry_handler but Smatch
+is not smart enough to figure it out.
+
+--> 59                 if (ret)
+                           ^^^
+Warning here.
+
+    60                         rethook_recycle(rh);
+    61                 else
+    62                         rethook_hook(rh, ftrace_get_regs(fregs), true);
+    63         }
+    64 out:
+    65         ftrace_test_recursion_unlock(bit);
+    66 }
+
+
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/all/85429a5c-a4b9-499e-b6c0-cbd313291c49@kili.mountain
+Fixes: 39d954200bf6 ("fprobe: Skip exit_handler if entry_handler returns !0")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
+ kernel/trace/fprobe.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-V2 -> V3:
-* lock_is_held() => lockdep_is_held().(thanks for Alexander)
-
-V1 -> V2:
-* Using rcu_replace_pointer() is better then rcu_dereference()
-  and rcu_assign_pointer().
-
- drivers/net/ieee802154/mac802154_hwsim.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ieee802154/mac802154_hwsim.c b/drivers/net/ieee802154/mac802154_hwsim.c
-index 8445c2189..31cba9aa7 100644
---- a/drivers/net/ieee802154/mac802154_hwsim.c
-+++ b/drivers/net/ieee802154/mac802154_hwsim.c
-@@ -685,7 +685,7 @@ static int hwsim_del_edge_nl(struct sk_buff *msg, struct genl_info *info)
- static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
- {
- 	struct nlattr *edge_attrs[MAC802154_HWSIM_EDGE_ATTR_MAX + 1];
--	struct hwsim_edge_info *einfo;
-+	struct hwsim_edge_info *einfo, *einfo_old;
- 	struct hwsim_phy *phy_v0;
- 	struct hwsim_edge *e;
- 	u32 v0, v1;
-@@ -723,8 +723,10 @@ static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
- 	list_for_each_entry_rcu(e, &phy_v0->edges, list) {
- 		if (e->endpoint->idx == v1) {
- 			einfo->lqi = lqi;
--			rcu_assign_pointer(e->info, einfo);
-+			einfo_old = rcu_replace_pointer(e->info, einfo,
-+							lockdep_is_held(&hwsim_phys_lock));
- 			rcu_read_unlock();
-+			kfree_rcu(einfo_old, rcu);
- 			mutex_unlock(&hwsim_phys_lock);
- 			return 0;
- 		}
--- 
-2.25.1
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 9abb3905bc8e..293184227394 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -27,7 +27,7 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+ 	struct rethook_node *rh = NULL;
+ 	struct fprobe *fp;
+ 	void *entry_data = NULL;
+-	int bit, ret;
++	int bit, ret = 0;
+ 
+ 	fp = container_of(ops, struct fprobe, ops);
+ 	if (fprobe_disabled(fp))
 
