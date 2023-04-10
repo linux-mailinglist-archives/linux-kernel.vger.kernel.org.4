@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9526DC405
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB3C6DC408
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjDJHwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 03:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S229744AbjDJHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 03:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDJHwo (ORCPT
+        with ESMTP id S229535AbjDJHxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 03:52:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810383C0A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 00:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681113163; x=1712649163;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Yr48j2bIPY5fAJkFuSojw587VB/8YMUbbc+kU0mekfQ=;
-  b=ehW1Ke8YNasHU8DAH6yqxqgeZDpVMckFOJ/T4wB2X4WMH+YWEwdhc04S
-   kErYOnoXHIqSe7fFmR5FTMKG14JNsYnMLJ47yn/2eUsqrD7PGXvjAs7g4
-   eWn40cFEGmkzLqYsC+0Ah067Kyqvpw6UaO+K2ZErYZQKGpdShDyCvkph3
-   xH0VzuW8vnu0+aDhkmiLUYSrTM+2fSvifrvR9XgCjG1Kbwmt5TPATvo8j
-   nGAGrgmhEQFUZY2PXXStereMSkIle2YKFG/2oHA8+UxGMMGKFdXR385lO
-   bDzBUY5bemDCzGgQmCl/QHL00V/NuEntF/fUgnmgxVTAN9ZAJXfcLkMeX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="345969183"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="345969183"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 00:52:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="681667638"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="681667638"
-Received: from yhuang6-mobl2.sh.intel.com ([10.238.7.50])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 00:52:40 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is inaccessible
-Date:   Mon, 10 Apr 2023 15:52:24 +0800
-Message-Id: <20230410075224.827740-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 10 Apr 2023 03:53:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56AE9;
+        Mon, 10 Apr 2023 00:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C2D61172;
+        Mon, 10 Apr 2023 07:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E496C433D2;
+        Mon, 10 Apr 2023 07:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681113217;
+        bh=hZP1LEVAHrrf65hDXBAJdvxdejUUBgJCmxgpdFyWaPQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rzx1y8wsNaNVEydnhItIOizIuZZI/icVygRId5pRveImMTYDQjM5wNF4jaSoOfzOx
+         GpAh0G9ljR0TJrRddc5svN/Ugpw/cifBJZ/b2EEUOoJ0g4crclnL/yAcVgZKsqZnox
+         tqgF3YP35oGESWEU13u6FeKsuw1uSLxfqRjA+n15CreY6NvhK5p6qv3t6JR82WEoFP
+         fCX2PqaEYwoZ9l+g4xtlHlxULVCLN21Cc7WZ/BpFnTxYQiSPk1/xXZYkn8mdLbNev2
+         /kD01U4APggmCqpftXwX0ULE1laLRbsO3j+I5xpN9z/ODIJR/0i7XwgK6M8brf5uL+
+         bwmhUiAiLyTJA==
+Date:   Mon, 10 Apr 2023 10:53:33 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Gautam Dawar <gdawar@amd.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Gautam Dawar <gautam.dawar@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-net-drivers@amd.com,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
+        koushik.dutta@amd.com
+Subject: Re: [PATCH net-next v4 00/14] sfc: add vDPA support for EF100 devices
+Message-ID: <20230410075333.GM182481@unreal>
+References: <20230407081021.30952-1-gautam.dawar@amd.com>
+ <20230409091325.GF14869@unreal>
+ <CACGkMEur1xkFPxaiVVhnZqHzUdyyqw6a0vw=GHpYKJM7U3cj7Q@mail.gmail.com>
+ <ba8c6139-66c3-a04b-143d-546f9cbccb70@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ba8c6139-66c3-a04b-143d-546f9cbccb70@amd.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0Day/LKP reported a performance regression for commit
-7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
-TLB flushing during page migration is batched.  So, in
-try_to_migrate_one(), ptep_clear_flush() is replaced with
-set_tlb_ubc_flush_pending().  In further investigation, it is found
-that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
-is inaccessible.  In fact, we can optimize in similar way for the
-batched TLB flushing too to improve the performance.
+On Mon, Apr 10, 2023 at 12:03:25PM +0530, Gautam Dawar wrote:
+> 
+> On 4/10/23 07:09, Jason Wang wrote:
+> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
+> > 
+> > 
+> > On Sun, Apr 9, 2023 at 5:13 PM Leon Romanovsky <leon@kernel.org> wrote:
+> > > On Fri, Apr 07, 2023 at 01:40:01PM +0530, Gautam Dawar wrote:
+> > > > Hi All,
+> > > > 
+> > > > This series adds the vdpa support for EF100 devices.
+> > > > For now, only a network class of vdpa device is supported and
+> > > > they can be created only on a VF. Each EF100 VF can have one
+> > > > of the three function personalities (EF100, vDPA & None) at
+> > > > any time with EF100 being the default. A VF's function personality
+> > > > is changed to vDPA while creating the vdpa device using vdpa tool.
+> > > Jakub,
+> > > 
+> > > I wonder if it is not different approach to something that other drivers
+> > > already do with devlink enable knobs (DEVLINK_PARAM_GENERIC_ID_ENABLE_*)
+> > > and auxiliary bus.
+> > I think the auxiliary bus fits here, and I've proposed to use that in
+> > V2 of this series.
+> 
+> Yeah, right and you mentioned that are fine with it if this is done sometime
+> in future to which Martin responded saying the auxbus approach will be
+> considered when re-designing sfc driver for the upcoming projects on the
+> roadmap.
 
-So in this patch, we check pte_accessible() before
-set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
-that the benchmark score of the anon-cow-rand-mt test case of
-vm-scalability test suite can improve up to 2.1% with the patch on a
-Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
+Adding new subsystem access (vDPA) is the right time to move to auxbus.
+This is exactly why it was added to the kernel.
 
-Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu@intel.com
-Link: https://lore.kernel.org/oe-lkp/ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com/
-Fixes: 7e12beb8ca2a ("migrate_pages: batch flushing TLB")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Cc: Nadav Amit <namit@vmware.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: David Hildenbrand <david@redhat.com>
----
- mm/rmap.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+We asked to change drivers for Intel, Pensando, Mellanox and Broadcom
+and they did it. There are no reasons to do it differently for AMD.
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 8632e02661ac..3c7c43642d7c 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1582,7 +1582,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				if (pte_accessible(mm, pteval))
-+					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1963,7 +1964,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				if (pte_accessible(mm, pteval))
-+					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
--- 
-2.39.2
+Thanks
 
+> 
+> Gautam
+> 
+> > 
+> > Thanks
+> > 
+> > > Thanks
+> > > 
