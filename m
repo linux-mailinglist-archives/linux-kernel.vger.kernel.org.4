@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C84A6DC896
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A5C6DC89D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjDJPfH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 11:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S230040AbjDJPgs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 11:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjDJPfE (ORCPT
+        with ESMTP id S229773AbjDJPgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:35:04 -0400
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E965B83;
-        Mon, 10 Apr 2023 08:34:46 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id e7so5224283uav.10;
-        Mon, 10 Apr 2023 08:34:46 -0700 (PDT)
+        Mon, 10 Apr 2023 11:36:46 -0400
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1D14EC7;
+        Mon, 10 Apr 2023 08:36:45 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id z23so3627599uav.8;
+        Mon, 10 Apr 2023 08:36:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681140886; x=1683732886;
+        d=1e100.net; s=20210112; t=1681141005; x=1683733005;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nKwWntZPV9b+u4mbaMyCH2u5m/WMPbO/p7LpAHGAL9k=;
-        b=bYbb6M9+RLLtTjqH1G3zN62rG6ybGFa4cJ/0cyw+F2knl0nmx8KdjBgm61EXggEA1d
-         9j//vQqvWbM4cLNgtdRX48rRn/mStnIpH9cKWaLYk3WsODxLMLDiInj89mJVRBSCN9uG
-         dJXKHw9w26aJUwD7id+loDIXyB2idhXR3196I/0NIvNmf/yKI9J4T65Uamwe/3eCB8pp
-         ILiHzkweLnwS2MFjorzu+Un0LLIf+xPk6GCoMSjLqpMeny+SVqQVoNqQmoSeu0Fu16Ej
-         4HQK7VsuyEcnKiRIituLhrwPaWvI8ct1woDf1TvnAWJbdH7nbTkgfA4K2oSJYv5Xik8j
-         vPEQ==
-X-Gm-Message-State: AAQBX9fXq6RsMwyKcBWjxqLNJDgiMqS6eg6ZsYfMPqqtaIIC/2olbOq4
-        uKZKL55yjv0dj3SIvjJ1FbQlMriF6UU6wvpUDmw=
-X-Google-Smtp-Source: AKy350ZUc+k8BCHWK3Rk5BKP0Xeoehxisof6OZsTAv/T3zERJnBNz5i6+4NjTh5DsnnOKRI41TkfwvB7Zm6CViJFJ2c=
-X-Received: by 2002:a1f:1cd5:0:b0:43f:ef50:b54a with SMTP id
- c204-20020a1f1cd5000000b0043fef50b54amr667488vkc.1.1681140885819; Mon, 10 Apr
- 2023 08:34:45 -0700 (PDT)
+        bh=9mZMaZ5yM1oqShI5ecZeTy++LWeRnqrDt5SHNiRc2dw=;
+        b=4h3B48wV9ux9k1pjzAZbdODKjzzLv00gUyGT5kI/tJX/aR+nJSE3rKFoDenYFbFd6U
+         PYtN2EB0qmwDHAgzhV4Mz96fmOeExCRsWD5r0JtB4c3jQT43V/rlpACzwViBQGIZBKpx
+         omqk4+P8bJeyG+5N+tm3+7V0LEoKsfpwlz+fZcOslHCprQc5eYaURBxyJTKKBI57t1e6
+         YbZmAxpgaLlS8NjYeOgHnEhueAQ5F2PtZihyTYn2Hk1+63tIDwUNDH18NXRnTLJpuq0q
+         SCdpZvFH2eCzz6ixe0X/nREkNyCMyDPhnwg6UETy9klDYVTqK3f+WBXQfQU0sqGAC0i6
+         L2GQ==
+X-Gm-Message-State: AAQBX9esjagkCvwrNdB06ZyaH+pADCHD27zyJY0YML+PYeVLyQDeQjaO
+        dR/qN24exjxNiO85BXtgDB7OKv+5oCLZipBRvQY=
+X-Google-Smtp-Source: AKy350bNKl0reJD3SO/DqgLdgKOPJmlAx2JD3JHd6SAqnqPLXa9KyNikKOvfnDIqNJEjZ9U/6Ef3je8q0/I4luvxHx4=
+X-Received: by 2002:a1f:1750:0:b0:43f:cacf:9f08 with SMTP id
+ 77-20020a1f1750000000b0043fcacf9f08mr1385800vkx.12.1681141003430; Mon, 10 Apr
+ 2023 08:36:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230408055208.1283832-1-irogers@google.com> <20230408055208.1283832-2-irogers@google.com>
-In-Reply-To: <20230408055208.1283832-2-irogers@google.com>
+References: <CAM9d7cgK-P5KuDy7hkAR4j7oB4ydE6Mw3KexqgwPPhJF6MKtXQ@mail.gmail.com>
+ <20230410132239.2062-1-laihangliang1@huawei.com>
+In-Reply-To: <20230410132239.2062-1-laihangliang1@huawei.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 10 Apr 2023 08:34:34 -0700
-Message-ID: <CAM9d7cgfkx6VEazYpJEFZ=OTvJL+875_kHShSET4qyN_t9ixkQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] perf bpf filter: Support pre-5.16 kernels
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
+Date:   Mon, 10 Apr 2023 08:36:31 -0700
+Message-ID: <CAM9d7cjy-XivELAgq49YF9RKxFZ3M+H3V6s6zVboenRT3oRFDA@mail.gmail.com>
+Subject: Re: [PATCH v3] perf top: expand the range of multithreaded phase
+To:     Hangliang Lai <laihangliang1@huawei.com>
+Cc:     acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, brauner@kernel.org,
+        hewenliang4@huawei.com, irogers@google.com, jolsa@kernel.org,
+        linfeilong@huawei.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, liuwenyu7@huawei.com,
+        mark.rutland@arm.com, mingo@redhat.com, yeyunfeng@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -64,11 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 10:52 PM Ian Rogers <irogers@google.com> wrote:
+Hello,
+
+On Mon, Apr 10, 2023 at 6:22 AM Hangliang Lai <laihangliang1@huawei.com> wrote:
 >
-> The mem_hops bits were added in 5.16 with no prior equivalent.
+> In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
+> donw_read and down_write can work to handle concurrency problems. Then top
+> use perf_set_singlethreaded and switch to single threaded phase, assuming
+> that no thread concurrency will happen later.
+> However, a UAF problem could occur in perf top in single threaded phase,
+> The concurrent procedure is like this:
+> display_thread                              process_thread
+> --------------                              --------------
+> thread__comm_len
+>   -> thread__comm_str
+>     -> __thread__comm_str(thread)
+>                                             thread__delete
+>                                              -> comm__free
+>                                               -> comm_str__put
+>                                                -> zfree(&cs->str)
+>     -> thread->comm_len = strlen(comm);
+> Since in single thread phase, perf_singlethreaded is true, down_read and
+> down_write can not work to avoid concurrency problems.
+> This patch put perf_set_singlethreaded to the function tail to expand the
+> multithreaded phase range, make display_thread and process_thread run
+> safe.
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
+> Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
 
 Acked-by: Namhyung Kim <namhyung@kernel.org>
 
@@ -77,55 +98,35 @@ Namhyung
 
 
 > ---
->  tools/perf/util/bpf_skel/sample_filter.bpf.c | 28 ++++++++++++++++++--
->  1 file changed, 26 insertions(+), 2 deletions(-)
+> v2 -> v3
+>  - Sorry for my misunderstanding, patch v3 makes perf_set_multithreaded
+>    unconditional after synthesis and set_singlethread in the end.
 >
-> diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> index 57e3c67d6d37..cffe493af1ed 100644
-> --- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> @@ -24,6 +24,24 @@ struct perf_sample_data___new {
->         __u64 sample_flags;
->  } __attribute__((preserve_access_index));
+>  tools/perf/builtin-top.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> +/* new kernel perf_mem_data_src definition */
-> +union perf_mem_data_src__new {
-> +       __u64 val;
-> +       struct {
-> +               __u64   mem_op:5,       /* type of opcode */
-> +                       mem_lvl:14,     /* memory hierarchy level */
-> +                       mem_snoop:5,    /* snoop mode */
-> +                       mem_lock:2,     /* lock instr */
-> +                       mem_dtlb:7,     /* tlb access */
-> +                       mem_lvl_num:4,  /* memory hierarchy level number */
-> +                       mem_remote:1,   /* remote */
-> +                       mem_snoopx:2,   /* snoop mode, ext */
-> +                       mem_blk:3,      /* access blocked */
-> +                       mem_hops:3,     /* hop level */
-> +                       mem_rsvd:18;
-> +       };
-> +};
-> +
->  /* helper function to return the given perf sample data */
->  static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
->                                     struct perf_bpf_filter_entry *entry)
-> @@ -89,8 +107,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
->                         return kctx->data->data_src.mem_dtlb;
->                 if (entry->part == 7)
->                         return kctx->data->data_src.mem_blk;
-> -               if (entry->part == 8)
-> -                       return kctx->data->data_src.mem_hops;
-> +               if (entry->part == 8) {
-> +                       union perf_mem_data_src__new *data = (void *)&kctx->data->data_src;
-> +
-> +                       if (bpf_core_field_exists(data->mem_hops))
-> +                               return data->mem_hops;
-> +
-> +                       return 0;
-> +               }
->                 /* return the whole word */
->                 return kctx->data->data_src.val;
->         default:
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index d4b5b02bab73..ae96ddaf85c4 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -1273,8 +1273,7 @@ static int __cmd_top(struct perf_top *top)
+>                                     top->evlist->core.threads, true, false,
+>                                     top->nr_threads_synthesize);
+>
+> -       if (top->nr_threads_synthesize > 1)
+> -               perf_set_singlethreaded();
+> +       perf_set_multithreaded();
+>
+>         if (perf_hpp_list.socket) {
+>                 ret = perf_env__read_cpu_topology_map(&perf_env);
+> @@ -1352,6 +1351,7 @@ static int __cmd_top(struct perf_top *top)
+>  out_join_thread:
+>         cond_signal(&top->qe.cond);
+>         pthread_join(thread_process, NULL);
+> +       perf_set_singlethreaded();
+>         return ret;
+>  }
+>
 > --
-> 2.40.0.577.gac1e443424-goog
+> 2.33.0
 >
