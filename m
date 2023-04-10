@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E686DC951
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6976DC952
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjDJQal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S230101AbjDJQbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjDJQaf (ORCPT
+        with ESMTP id S229798AbjDJQb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:30:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D53E54;
-        Mon, 10 Apr 2023 09:30:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AE6660C7A;
-        Mon, 10 Apr 2023 16:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C01C433EF;
-        Mon, 10 Apr 2023 16:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681144233;
-        bh=sR6n/qvfkC94IMl9pOR6cp2mpmZqT/XtG23wRekNYd0=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=tKexRDq2ys+ZWaofhBuFP7xMe0L72F2Y8H1rgFHCDuIJv571NwDZB3lVsQvGO8FUk
-         IF+/lG8vWNKe/V8SBsgocZD18hFuKBVQhIvYZKScATD1zYneSjhBfwibetdAV1uI3Q
-         tG69nwO+B80IyZ07tCamX5MRFtrUYddGBIhz3HbAVAibRA1/kyyhVm96UUPC/in5I1
-         KWksETgQIp4oJz+molYMmqSk0HHsAY/lEePKcPOLi/cXX0hwsxvomA4MSfG/1NCFnE
-         V9JbVrn3Dgc3MUmqUhpZ6SOYMlnkGpV6wqKJHt40F2YdCwui1cUJfRubaQ/oV0qJEw
-         cdOK0SGIYLY3A==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 1F7D31540478; Mon, 10 Apr 2023 09:30:33 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:30:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        rcu@vger.kernel.org, kernel-team@fb.com, rostedt@goodmis.org
-Subject: [GIT PULL] Fix too-short kfree_rcu() grace period for v6.3
-Message-ID: <5c2748db-4811-4d3d-bdd3-0f005ffa275c@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+        Mon, 10 Apr 2023 12:31:27 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603710C2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:31:26 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i25-20020a056e021d1900b00316f1737173so4406197ila.16
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:31:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681144285; x=1683736285;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TZ7f0MxXzRw0b31CctDQOgXS/USnJPA6EoKjXSbeF1s=;
+        b=ohUeJHqHLljtqJVJ+Xz2SWVcmFoDBVGwvCBhCI8pyFCYZab+ph9r3PlDczVTARTnVQ
+         q+qU25xQJt0owIeLP6wuG9M981Tv9wt6WtpktMb3CLG9PM2HhOke6thzhKi817moqcT4
+         tDn4skM5JKcmorpoA3Ok5J3wh2+0/Kga7ZQgrQfoH2kVLVQfzedCGCYwZlXfbRf6tLg5
+         UlKtDTe8hSNmPMCXeW87pyvCxLfFxZXDJlPsXssm/cyCoYPte3Ao41almuA0FGmvqFYL
+         +2x1mSRCI8XMu2LjEke7HDFIi+WbPa157tMfBzikHHylVnuV0Fc9QIrCZG2J4aCDO9Zr
+         NWoA==
+X-Gm-Message-State: AAQBX9cBc4lGvf5/ohZNJcvuLoyTLl/lMGCvNVRI0VKsDEoaLalW9Owx
+        i17uhHHIciY6fj2xREeBQO2G+9JOFxR7KNVQq5SVm8dm2rXvNIk=
+X-Google-Smtp-Source: AKy350aSowdPVChQCOaWJkDGxMdKt7N3l0jHFa+RsNf1n6/+1g8SCBUcKm9rjH9myUSRTs+qI3T7FRZxzUkNZjfPZBkZHNVipfNq
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,URG_BIZ autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:b105:0:b0:40b:d1a2:c058 with SMTP id
+ r5-20020a02b105000000b0040bd1a2c058mr978048jah.2.1681144285698; Mon, 10 Apr
+ 2023 09:31:25 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 09:31:25 -0700
+In-Reply-To: <1d74e8db-682e-4d9a-af69-3ec56835021e@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f727df05f8fde7e5@google.com>
+Subject: Re: [syzbot] [usb?] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+From:   syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, thomas@winischhofer.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
+Hello,
 
-This fixes an old bug rather than a v6.3 regression, but it is starting
-to appear in the wild and has nasty memory-corruption consequences.
-Please consider pulling this for v6.3.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-The following changes since commit d18a04157fc171fd48075e3dc96471bd3b87f0dd:
+Reported-and-tested-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
 
-  rcu: Fix rcu_torture_read ftrace event (2023-03-22 14:05:24 -0700)
+Tested on:
 
-are available in the Git repository at:
+commit:         c9c3395d Linux 6.2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c2c303c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b64e70ff2a55d53
+dashboard link: https://syzkaller.appspot.com/bug?extid=23be03b56c5259385d79
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14649cc3c80000
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/urgent-rcu.2023.04.07a
-
-for you to fetch changes up to 5da7cb193db32da783a3f3e77d8b639989321d48:
-
-  rcu/kvfree: Avoid freeing new kfree_rcu() memory after old grace period (2023-04-06 10:04:23 -0700)
-
-----------------------------------------------------------------
-Urgent RCU pull request for v6.3
-
-This commit fixes a pair of bugs in which an improbable but very real
-sequence of events can cause kfree_rcu() to be a bit too quick about
-freeing the memory passed to it.  It turns out that this pair of bugs
-is about two years old, and so this is not a v6.3 regression.  However:
-(1) It just started showing up in the wild and (2) Its consequences are
-dire, so its fix needs to go in sooner rather than later.
-
-Testing is of course being upgraded, and the upgraded tests detect this
-situation very quickly.  But to the best of my knowledge right now, the
-tests are not particularly urgent and will thus most likely show up in
-the v6.5 merge window (the one after this coming one).
-
-Kudos to Ziwei Dai and his group for tracking this one down the hard way!
-
-----------------------------------------------------------------
-Ziwei Dai (1):
-      rcu/kvfree: Avoid freeing new kfree_rcu() memory after old grace period
-
- kernel/rcu/tree.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+Note: testing is done by a robot and is best-effort only.
