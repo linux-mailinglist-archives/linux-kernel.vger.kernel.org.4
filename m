@@ -2,41 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486006DC4CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54236DC4CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjDJJDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S229773AbjDJJDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjDJJDK (ORCPT
+        with ESMTP id S229630AbjDJJDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:03:10 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A12D30CB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:03:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfkBM0n_1681117383;
-Received: from 30.97.49.25(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfkBM0n_1681117383)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Apr 2023 17:03:04 +0800
-Message-ID: <90d29dc6-39b3-439c-904b-7a2207610d64@linux.alibaba.com>
-Date:   Mon, 10 Apr 2023 17:03:03 +0800
+        Mon, 10 Apr 2023 05:03:38 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A57A19A9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:03:36 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pw30z1SlDz4f3snB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:03:31 +0800 (CST)
+Received: from [10.174.179.189] (unknown [10.174.179.189])
+        by APP4 (Coremail) with SMTP id gCh0CgCnXLDj0DNkTYRoHA--.49143S2;
+        Mon, 10 Apr 2023 17:03:32 +0800 (CST)
+Message-ID: <e64d8888-f00c-d360-b35c-54396c6fff2d@huaweicloud.com>
+Date:   Mon, 10 Apr 2023 17:03:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [syzbot] WARNING in rmqueue
-To:     syzbot <syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com>,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-References: <000000000000ec75b005ee97fbaa@google.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <000000000000ec75b005ee97fbaa@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCHv2] mm: introduce defer free for cma
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
+References: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
+Content-Language: en-US
+From:   Wu Bo <wubo@huaweicloud.com>
+In-Reply-To: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCnXLDj0DNkTYRoHA--.49143S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFyruFWkJry5AFyDXr48Xrb_yoW5ZrW7pF
+        1rGry5ArWrJrnF9rW3ZaykuryYvrs2kFy3KrZ7C343JF9xJFnxXw48C3WUAF1rGrykWF4I
+        qFWYgasF93WUtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: pzxe0q5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -45,81 +68,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/29 16:43, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    b7b275e60bcd Linux 6.1-rc7
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=16a70187880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=aafb3f37cfeb6534c4ac
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dde8a1880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15685e8d880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/d643567f551d/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.3-rc6
-
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 __count_numa_events include/linux/vmstat.h:249 [inline]
-> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 zone_statistics mm/page_alloc.c:3692 [inline]
-> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue_buddy mm/page_alloc.c:3728 [inline]
-> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3853
-> Modules linked in:
-> CPU: 0 PID: 48 Comm: kworker/u5:0 Not tainted 6.1.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Workqueue: erofs_unzipd z_erofs_decompressqueue_work
-> RIP: 0010:rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3837
-> Code: 48 8b 02 65 48 ff 40 20 49 83 f6 05 42 80 3c 2b 00 74 08 4c 89 e7 e8 a4 44 0b 00 49 8b 04 24 65 4a ff 44 f0 10 e9 2a fe ff ff <0f> 0b e9 29 e3 ff ff 48 89 df be 08 00 00 00 e8 31 46 0b 00 f0 41
-> RSP: 0018:ffffc90000b97260 EFLAGS: 00010202
-> RAX: f301f204f1f1f1f1 RBX: ffff88813fffae00 RCX: 000000000000adc2
-> RDX: 1ffff92000172e70 RSI: 1ffff92000172e70 RDI: ffff88813fffae00
-> RBP: ffffc90000b97420 R08: 0000000000000901 R09: 0000000000000009
-> R10: ffffed1027fff5b3 R11: 1ffff11027fff5b2 R12: ffff88813fffc310
-> R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88813fffa700
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f7bec722f10 CR3: 000000004a430000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   get_page_from_freelist+0x4b6/0x7c0 mm/page_alloc.c:4288
->   __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
->   vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
->   __vmalloc_area_node mm/vmalloc.c:3043 [inline]
->   __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3213
->   kvmalloc_node+0x13e/0x180 mm/util.c:606
->   kvmalloc include/linux/slab.h:706 [inline]
->   kvmalloc_array include/linux/slab.h:724 [inline]
->   kvcalloc include/linux/slab.h:729 [inline]
->   z_erofs_decompress_pcluster fs/erofs/zdata.c:1049 [inline]
->   z_erofs_decompress_queue+0x693/0x2c30 fs/erofs/zdata.c:1155
->   z_erofs_decompressqueue_work+0x95/0xe0 fs/erofs/zdata.c:1167
->   process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
->   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
->   kthread+0x266/0x300 kernel/kthread.c:376
->   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->   </TASK>
-> 
-> 
+On 2023/4/10 16:46, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> Continues page blocks are expensive for the system. Introducing defer free
+> mechanism to buffer some which make the allocation easier. The shrinker will
+> ensure the page block can be reclaimed when there is memory pressure.
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> v2: fix build warning and regist shrinker
+> ---
+> ---
+>   mm/cma.c | 151 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+>   mm/cma.h |  11 +++++
+>   2 files changed, 160 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 4a978e0..6d2fd24 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -39,6 +39,10 @@
+>   unsigned cma_area_count;
+>   static DEFINE_MUTEX(cma_mutex);
+>   
+> +static unsigned long cma_defer_free_count(struct shrinker *shrinker,
+> +					struct shrink_control *sc);
+> +static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
+> +					struct shrink_control *sc);
+>   phys_addr_t cma_get_base(const struct cma *cma)
+>   {
+>   	return PFN_PHYS(cma->base_pfn);
+> @@ -153,6 +157,20 @@ static int __init cma_init_reserved_areas(void)
+>   }
+>   core_initcall(cma_init_reserved_areas);
+>   
+> +static unsigned long cma_free_get(struct cma *cma)
+> +{
+> +	unsigned long used;
+> +	unsigned long val;
+> +
+> +	spin_lock_irq(&cma->lock);
+> +	/* pages counter is smaller than sizeof(int) */
+> +	used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
+> +	val = cma->count - ((u64)used << cma->order_per_bit);
+> +	spin_unlock_irq(&cma->lock);
+> +
+> +	return val;
+> +}
+> +
+>   void __init cma_reserve_pages_on_error(struct cma *cma)
+>   {
+>   	cma->reserve_pages_on_error = true;
+> @@ -212,6 +230,13 @@ int __init cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
+>   	cma_area_count++;
+>   	totalcma_pages += (size / PAGE_SIZE);
+>   
+> +	cma->batch = cma->count >> 1;
+> +	cma->shrinker.count_objects = cma_defer_free_count;
+> +	cma->shrinker.scan_objects = cma_defer_free_scan;
+> +	cma->shrinker.seeks = DEFAULT_SEEKS;
+> +	cma->shrinker.batch = 0;
+> +
+> +	register_shrinker(&cma->shrinker, "cma-shrinker");
+>   	return 0;
+>   }
+>   
+> @@ -411,6 +436,46 @@ static void cma_debug_show_areas(struct cma *cma)
+>   static inline void cma_debug_show_areas(struct cma *cma) { }
+>   #endif
+>   
+> +static int cma_defer_area_fetch(struct cma *cma, unsigned long pfn,
+> +		unsigned long count)
+> +{
+> +	struct cma_defer_free_area *area;
+> +	unsigned long new_pfn;
+> +	int ret = -1;
+> +
+> +	if (!atomic64_read(&cma->defer_count))
+> +		return ret;
+> +	if (count <= atomic64_read(&cma->defer_count)) {
+> +		spin_lock_irq(&cma->lock);
+> +		list_for_each_entry(area, &cma->defer_free, list) {
+> +			/*area found for given pfn and count*/
+> +			if (pfn >= area->pfn && count <= area->count) {
+> +				list_del(&area->list);
+> +				/*set bits for allocated pfn*/
+> +				bitmap_set(cma->bitmap, pfn - cma->base_pfn, count);
+> +				kfree(area);
+> +				atomic64_sub(count, &cma->defer_count);
+> +				/*release the rest pfn to cma*/
+> +				if (!list_empty(&cma->defer_free) && (pfn == area->pfn)) {
+There is a null pointer reference here？
+
