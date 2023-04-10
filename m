@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179A96DC7A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FF96DC7A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDJOFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjDJOF3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229684AbjDJOF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 10 Apr 2023 10:05:29 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23541999
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:05:26 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33AE57Yv104760;
-        Mon, 10 Apr 2023 09:05:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681135507;
-        bh=XZIofqlOHF0nUaQCtUAqDHMyrRnDGPp7zEadbeCaack=;
-        h=Date:From:To:CC:Subject;
-        b=ClxEVZ/yBm8BZvzNfSaYqnqXBBeD2WKRz6oL+OnMMyi+4cDO+hDTv8t0HWGR/74M5
-         7j6ALoQLze9uWr5eGoLwoM6ICI4COtF9OHusqRO9AnurKvX7vFhFSX7Gb9gM7EPx0G
-         2PNCrDz35rkgNzlh0VAiF3Ct6YLQZXm0PkloGlSg=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33AE57cR078297
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Apr 2023 09:05:07 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 10
- Apr 2023 09:05:06 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 10 Apr 2023 09:05:06 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33AE56Ha058556;
-        Mon, 10 Apr 2023 09:05:06 -0500
-Date:   Mon, 10 Apr 2023 09:05:06 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [GIT PULL 1/3] soc: ti: Updates for v6.4
-Message-ID: <20230410140506.ucvkwq7vz2h47vyj@stipulate>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbjDJOFZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Apr 2023 10:05:25 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DAA7ED8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:05:16 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so4678253pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681135516;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=35xefQR+/4cQOJ1FT6n3YMdHgJZzmvORO2uADg1HnAI=;
+        b=mRIFjiham65mximqN7+B2rXd1Ce9jTLW3WR+VLNoLeamLaxoKQBmiZppw2YSzblFsS
+         0/rqbULuWhPnQ+soxejFdm2FzI6plMl6Vs3Qaei7ySArDyusyoL1dBpzVAXrauyKrBcm
+         6BPkyOReB1Ec/CVnL/MWUBWSHs9vbfP3DUUA8P28NiHcV9FWTsjriOAP8GNBSoBmus4U
+         Nkr7ZUWbkCDuPD11BuJOYXXBMcsEpEuhK1fiD2QmBGgpe54HMGhfXQMnOwze/2WojsGn
+         olSOuxXDkwyJIMFrtN/oXs8oOHISQC+fyVjDmZU5SkwGuXt/h2/vAEKLBInZjoxaD4fI
+         t7pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681135516;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=35xefQR+/4cQOJ1FT6n3YMdHgJZzmvORO2uADg1HnAI=;
+        b=bUbjiScccMyl02sWP6wdekJBCRlmP9LyLxYQgp9ltfGJX586taNkNz2x8C4dkYH21e
+         kZ7npkaY3t6F6kXK11RsborQcHgqGwUu4yAXRaXicm6slmiJlamEEdsHLhp6Q5GQrbNE
+         z2sSZmdGoZeW7u0zc54s5iy/BuDZX0+5zcEWdWLunj67f09M8wBRMddULQLIWCXpqNeX
+         AVUOkmNHbPQufaHooulxU4hsh4/8CbYLpsRG2gwLZpQ2fjqqU/yn4vcoA9OPThXn4ZWK
+         i9m/a6J5wGyxCBen0gxi39uCy/CUEDhcz8HzgXxmR/uJVlh4/qEcNNdd3zU7J9SD7WMD
+         rNjw==
+X-Gm-Message-State: AAQBX9cHmQCw25hQWTWlAAzG54q7QZiWJpvbHYIigCvGIriqu0E9WwF+
+        g6i7FOtnsO27J9K/FjpJPeo=
+X-Google-Smtp-Source: AKy350ZU0mA2B70AoP/XIJnlEfmhWjqbIKw/JmdLvLJqdkmqI1tXL59/vPRlgN4+op1M+rU4GSj/Jg==
+X-Received: by 2002:a17:902:c9d2:b0:1a0:422f:39d9 with SMTP id q18-20020a170902c9d200b001a0422f39d9mr7356137pld.39.1681135515345;
+        Mon, 10 Apr 2023 07:05:15 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-20.three.co.id. [180.214.232.20])
+        by smtp.gmail.com with ESMTPSA id c24-20020a170902d91800b001a63a2efdf6sm2492807plz.273.2023.04.10.07.05.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 07:05:14 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8F8F81067EC; Mon, 10 Apr 2023 21:05:11 +0700 (WIB)
+Date:   Mon, 10 Apr 2023 21:05:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     zhaoxinchao <ChrisXinchao@outlook.com>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: Fixed incorrect comment for _kmem_cache_create
+ function
+Message-ID: <ZDQXl2wMk271w3xy@debian.me>
+References: <DM6PR22MB1836D8C5348D28989105DADBC5959@DM6PR22MB1836.namprd22.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="754s2zqlbolxrofk"
+        protocol="application/pgp-signature"; boundary="OndvnLYy0dRk1lRx"
 Content-Disposition: inline
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR22MB1836D8C5348D28989105DADBC5959@DM6PR22MB1836.namprd22.prod.outlook.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---754s2zqlbolxrofk
-Content-Type: text/plain; charset=us-ascii
+
+--OndvnLYy0dRk1lRx
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Apr 10, 2023 at 05:01:42PM +0800, zhaoxinchao wrote:
+> - * Returns a ptr to the cache on success, NULL on failure.
+> + * Returns zero on success, others on failure.
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Can you explain what these other return values are? I have skimmed on
+__kmem_cache_create() kerneldoc and the function returns error in that
+case.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
--soc-for-v6.4
-
-for you to fetch changes up to a33bfafd99e0d1e33dfe910f751426f298a218b6:
-
-  soc: ti: Use devm_platform_ioremap_resource() (2023-03-28 06:23:42 -0500)
-
-----------------------------------------------------------------
-TI SoC driver updates for v6.4
-
-* Minor fixups for of_property, using devm_platform_ioremap
-* Fixups for refcount leaks in pm33xx
-* Fixups for k3-ringacc for dmaring_request
-* SoCinfo detection for J784S4 SoC.
-
-----------------------------------------------------------------
-Miaoqian Lin (1):
-      soc: ti: pm33xx: Fix refcount leak in am33xx_pm_probe
-
-Nicolas Frayer (1):
-      soc: ti: k3-ringacc: Add try_module_get() to k3_dmaring_request_dual_=
-ring()
-
-Rob Herring (2):
-      soc: ti: Use of_property_present() for testing DT property presence
-      soc: ti: Use of_property_read_bool() for boolean properties
-
-Siddharth Vadapalli (1):
-      soc: ti: k3-socinfo: Add entry for J784S4 SOC
-
-Yang Li (1):
-      soc: ti: Use devm_platform_ioremap_resource()
-
- drivers/soc/ti/k3-ringacc.c      | 7 +++++++
- drivers/soc/ti/k3-socinfo.c      | 1 +
- drivers/soc/ti/knav_dma.c        | 4 ++--
- drivers/soc/ti/knav_qmss_acc.c   | 2 +-
- drivers/soc/ti/knav_qmss_queue.c | 4 ++--
- drivers/soc/ti/omap_prm.c        | 2 +-
- drivers/soc/ti/pm33xx.c          | 5 +++--
- drivers/soc/ti/wkup_m3_ipc.c     | 6 ++----
- 8 files changed, 19 insertions(+), 12 deletions(-)
 --=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+An old man doll... just what I always wanted! - Clara
 
---754s2zqlbolxrofk
+--OndvnLYy0dRk1lRx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmQ0F4cACgkQ3bWEnRc2
-JJ25rBAAkJ6xgfmuuRlLGvelAiNQdMVbClDtTBQZuBSR7mbghEPYvf16gp4Uu6yx
-slufP5K3dX32s+RRfiKfswWReSC+4lf3trRhFZMyMt80yq/Sf5fp9Zo+1aczeRIT
-VqLI1M37gCzvwqwdQOlJRivMmlPibO6OP11WDg2TZJ677vegSx8rFWOI9faBsLpW
-R4PMDHhszJoEECJYPEyDAoLIeWdEgsT2pSs7yMNkEum9CpImU9Tms/KDmEmTSsm7
-VPETvaoMRJzwRRKCWs4mGnVjFRZN9J1nsyhgL2M1PN+jBuCGTyhRRAcITK6ukDgD
-WfE8ux30tubn4VL6obW5GtV+Jz00A2HyPDNcKmyVaxgVRweLSJb2lohKHeMromnH
-MOwCLAngQif5vuIHNwuIf5k0qYHQfB6UQ+GnspeaY2RWItilpEdbxAKK6CdXGBZn
-LlLuC2bnyIADvWoA61Ef2x99MaYtQ2q9/jolE3r9aBFLPais2yK44K0slVzEogEk
-pL7gKK/4UalzdefBIxkmoAq2dm8VgZTfoHOqzs1Ue5cM0TuLSGdVj9jlzXtqYuBA
-1XIuICy+w/lTEg/kngu7WEsByMmWXpHly/TIMRgy9Sg6eY+vbR8aLZuPRVqox5e3
-HCvZx1a8S7sfVqdTLPxUdbIf3DJg8dE0cjy26v/3lzLLwin0t20=
-=QJZU
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDQXkgAKCRD2uYlJVVFO
+o1TOAQCaJ5kQeoVd3iUY7lCbY47Sv+S10MInRRx2fB65Cqdu7AD9HHLz7PtNCz44
+Vea7Rp9WE9BlVptONwHR+f9BgzzMGgk=
+=liwK
 -----END PGP SIGNATURE-----
 
---754s2zqlbolxrofk--
+--OndvnLYy0dRk1lRx--
