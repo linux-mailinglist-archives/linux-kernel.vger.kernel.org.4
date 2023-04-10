@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73816DC915
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C9E6DC917
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjDJQJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S230152AbjDJQMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDJQJf (ORCPT
+        with ESMTP id S229703AbjDJQMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:09:35 -0400
+        Mon, 10 Apr 2023 12:12:23 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 64D84171D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:32 -0700 (PDT)
-Received: (qmail 139685 invoked by uid 1000); 10 Apr 2023 12:09:31 -0400
-Date:   Mon, 10 Apr 2023 12:09:31 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E219120
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:12:21 -0700 (PDT)
+Received: (qmail 139825 invoked by uid 1000); 10 Apr 2023 12:12:20 -0400
+Date:   Mon, 10 Apr 2023 12:12:20 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
-        Thomas Winischhofer <thomas@winischhofer.net>
+To:     syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>
 Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
-Message-ID: <1d74e8db-682e-4d9a-af69-3ec56835021e@rowland.harvard.edu>
+Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb
+Message-ID: <b3b5e785-625a-4787-80fb-5727c2aab4d7@rowland.harvard.edu>
 References: <00000000000096e4f905f81b2702@google.com>
- <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+ <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+In-Reply-To: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
 X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
         SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -147,28 +146,46 @@ Index: usb-devel/include/linux/usb.h
   * USB Resume Timer: Every Host controller driver should drive the resume
   * signalling on the bus for the amount of time defined by this macro.
 
-Index: usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
+
+Index: usb-devel/drivers/media/radio/radio-shark.c
 ===================================================================
---- usb-devel.orig/drivers/usb/misc/sisusbvga/sisusbvga.c
-+++ usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
-@@ -2778,6 +2778,20 @@ static int sisusb_probe(struct usb_inter
- 	struct usb_device *dev = interface_to_usbdev(intf);
- 	struct sisusb_usb_data *sisusb;
- 	int retval = 0, i;
+--- usb-devel.orig/drivers/media/radio/radio-shark.c
++++ usb-devel/drivers/media/radio/radio-shark.c
+@@ -316,6 +316,16 @@ static int usb_shark_probe(struct usb_in
+ {
+ 	struct shark_device *shark;
+ 	int retval = -ENOMEM;
 +	static const u8 ep_addresses[] = {
-+		SISUSB_EP_GFX_IN | USB_DIR_IN,
-+		SISUSB_EP_GFX_OUT | USB_DIR_OUT,
-+		SISUSB_EP_GFX_BULK_OUT | USB_DIR_OUT,
-+		SISUSB_EP_GFX_LBULK_OUT | USB_DIR_OUT,
-+		SISUSB_EP_BRIDGE_IN | USB_DIR_IN,
-+		SISUSB_EP_BRIDGE_OUT | USB_DIR_OUT,
++		SHARK_IN_EP | USB_DIR_IN,
++		SHARK_OUT_EP | USB_DIR_OUT,
 +		0};
 +
 +	/* Are the expected endpoints present? */
-+	if (!usb_check_bulk_endpoints(intf, ep_addresses)) {
-+		dev_err(&intf->dev, "Invalid USB2VGA device\n");
++	if (!usb_check_int_endpoints(intf, ep_addresses)) {
++		dev_err(&intf->dev, "Invalid radioSHARK device\n");
 +		return -EINVAL;
 +	}
  
- 	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
- 			dev->devnum);
+ 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+ 	if (!shark)
+Index: usb-devel/drivers/media/radio/radio-shark2.c
+===================================================================
+--- usb-devel.orig/drivers/media/radio/radio-shark2.c
++++ usb-devel/drivers/media/radio/radio-shark2.c
+@@ -282,6 +282,16 @@ static int usb_shark_probe(struct usb_in
+ {
+ 	struct shark_device *shark;
+ 	int retval = -ENOMEM;
++	static const u8 ep_addresses[] = {
++		SHARK_IN_EP | USB_DIR_IN,
++		SHARK_OUT_EP | USB_DIR_OUT,
++		0};
++
++	/* Are the expected endpoints present? */
++	if (!usb_check_int_endpoints(intf, ep_addresses)) {
++		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
++		return -EINVAL;
++	}
+ 
+ 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
+ 	if (!shark)
