@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE1C6DC756
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7546DC761
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDJNkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 09:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S229733AbjDJNoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 09:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjDJNjt (ORCPT
+        with ESMTP id S229595AbjDJNoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 09:39:49 -0400
+        Mon, 10 Apr 2023 09:44:44 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6777ABF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:39:48 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pw93d28PcznbVp;
-        Mon, 10 Apr 2023 21:36:13 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA1B4C09;
+        Mon, 10 Apr 2023 06:44:43 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pw99J6VlpznbV5;
+        Mon, 10 Apr 2023 21:41:08 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 10 Apr 2023 21:39:44 +0800
-From:   Peng Zhang <zhangpeng362@huawei.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <mike.kravetz@oracle.com>, <sidhartha.kumar@oracle.com>,
-        <vishal.moola@gmail.com>
-CC:     <muchun.song@linux.dev>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>, ZhangPeng <zhangpeng362@huawei.com>
-Subject: [PATCH v6 6/6] userfaultfd: convert mfill_atomic() to use a folio
-Date:   Mon, 10 Apr 2023 21:39:32 +0800
-Message-ID: <20230410133932.32288-7-zhangpeng362@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230410133932.32288-1-zhangpeng362@huawei.com>
-References: <20230410133932.32288-1-zhangpeng362@huawei.com>
+ 15.1.2507.23; Mon, 10 Apr 2023 21:44:40 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>, <Jonathan.Cameron@Huawei.com>
+Subject: [PATCH v9 0/2] arm64: support batched/deferred tlb shootdown during page reclamation/migration
+Date:   Mon, 10 Apr 2023 21:43:50 +0800
+Message-ID: <20230410134352.4519-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600020.china.huawei.com (7.193.23.147)
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -51,222 +57,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Convert mfill_atomic_pte_copy(), shmem_mfill_atomic_pte() and
-mfill_atomic_pte() to take in a folio pointer.
-Convert mfill_atomic() to use a folio. Convert page_kaddr to kaddr in
-mfill_atomic().
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
 
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- include/linux/shmem_fs.h |  4 ++--
- mm/shmem.c               | 16 ++++++++--------
- mm/userfaultfd.c         | 40 ++++++++++++++++++++--------------------
- 3 files changed, 30 insertions(+), 30 deletions(-)
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
 
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index 3bb8d21edbb3..9e151ba45068 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -158,10 +158,10 @@ extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 				  unsigned long dst_addr,
- 				  unsigned long src_addr,
- 				  uffd_flags_t flags,
--				  struct page **pagep);
-+				  struct folio **foliop);
- #else /* !CONFIG_SHMEM */
- #define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
--			       src_addr, flags, pagep) ({ BUG(); 0; })
-+			       src_addr, flags, foliop) ({ BUG(); 0; })
- #endif /* CONFIG_SHMEM */
- #endif /* CONFIG_USERFAULTFD */
- 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 6c08f5a75d3a..9218c955f482 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2548,7 +2548,7 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 			   unsigned long dst_addr,
- 			   unsigned long src_addr,
- 			   uffd_flags_t flags,
--			   struct page **pagep)
-+			   struct folio **foliop)
- {
- 	struct inode *inode = file_inode(dst_vma->vm_file);
- 	struct shmem_inode_info *info = SHMEM_I(inode);
-@@ -2566,14 +2566,14 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 		 * and now we find ourselves with -ENOMEM. Release the page, to
- 		 * avoid a BUG_ON in our caller.
- 		 */
--		if (unlikely(*pagep)) {
--			put_page(*pagep);
--			*pagep = NULL;
-+		if (unlikely(*foliop)) {
-+			folio_put(*foliop);
-+			*foliop = NULL;
- 		}
- 		return -ENOMEM;
- 	}
- 
--	if (!*pagep) {
-+	if (!*foliop) {
- 		ret = -ENOMEM;
- 		folio = shmem_alloc_folio(gfp, info, pgoff);
- 		if (!folio)
-@@ -2605,7 +2605,7 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 
- 			/* fallback to copy_from_user outside mmap_lock */
- 			if (unlikely(ret)) {
--				*pagep = &folio->page;
-+				*foliop = folio;
- 				ret = -ENOENT;
- 				/* don't free the page */
- 				goto out_unacct_blocks;
-@@ -2616,9 +2616,9 @@ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 			clear_user_highpage(&folio->page, dst_addr);
- 		}
- 	} else {
--		folio = page_folio(*pagep);
-+		folio = *foliop;
- 		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
--		*pagep = NULL;
-+		*foliop = NULL;
- 	}
- 
- 	VM_BUG_ON(folio_test_locked(folio));
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 2f263afb823d..11cfd82c6726 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -133,13 +133,13 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
- 				 unsigned long dst_addr,
- 				 unsigned long src_addr,
- 				 uffd_flags_t flags,
--				 struct page **pagep)
-+				 struct folio **foliop)
- {
- 	void *kaddr;
- 	int ret;
- 	struct folio *folio;
- 
--	if (!*pagep) {
-+	if (!*foliop) {
- 		ret = -ENOMEM;
- 		folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, dst_vma,
- 					dst_addr, false);
-@@ -171,15 +171,15 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
- 		/* fallback to copy_from_user outside mmap_lock */
- 		if (unlikely(ret)) {
- 			ret = -ENOENT;
--			*pagep = &folio->page;
-+			*foliop = folio;
- 			/* don't free the page */
- 			goto out;
- 		}
- 
- 		flush_dcache_folio(folio);
- 	} else {
--		folio = page_folio(*pagep);
--		*pagep = NULL;
-+		folio = *foliop;
-+		*foliop = NULL;
- 	}
- 
- 	/*
-@@ -470,7 +470,7 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
- 						unsigned long dst_addr,
- 						unsigned long src_addr,
- 						uffd_flags_t flags,
--						struct page **pagep)
-+						struct folio **foliop)
- {
- 	ssize_t err;
- 
-@@ -493,14 +493,14 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
- 		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
- 			err = mfill_atomic_pte_copy(dst_pmd, dst_vma,
- 						    dst_addr, src_addr,
--						    flags, pagep);
-+						    flags, foliop);
- 		else
- 			err = mfill_atomic_pte_zeropage(dst_pmd,
- 						 dst_vma, dst_addr);
- 	} else {
- 		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
- 					     dst_addr, src_addr,
--					     flags, pagep);
-+					     flags, foliop);
- 	}
- 
- 	return err;
-@@ -518,7 +518,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	pmd_t *dst_pmd;
- 	unsigned long src_addr, dst_addr;
- 	long copied;
--	struct page *page;
-+	struct folio *folio;
- 
- 	/*
- 	 * Sanitize the command parameters:
-@@ -533,7 +533,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	src_addr = src_start;
- 	dst_addr = dst_start;
- 	copied = 0;
--	page = NULL;
-+	folio = NULL;
- retry:
- 	mmap_read_lock(dst_mm);
- 
-@@ -629,28 +629,28 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 		BUG_ON(pmd_trans_huge(*dst_pmd));
- 
- 		err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
--				       src_addr, flags, &page);
-+				       src_addr, flags, &folio);
- 		cond_resched();
- 
- 		if (unlikely(err == -ENOENT)) {
--			void *page_kaddr;
-+			void *kaddr;
- 
- 			mmap_read_unlock(dst_mm);
--			BUG_ON(!page);
-+			BUG_ON(!folio);
- 
--			page_kaddr = kmap_local_page(page);
--			err = copy_from_user(page_kaddr,
-+			kaddr = kmap_local_folio(folio, 0);
-+			err = copy_from_user(kaddr,
- 					     (const void __user *) src_addr,
- 					     PAGE_SIZE);
--			kunmap_local(page_kaddr);
-+			kunmap_local(kaddr);
- 			if (unlikely(err)) {
- 				err = -EFAULT;
- 				goto out;
- 			}
--			flush_dcache_page(page);
-+			flush_dcache_folio(folio);
- 			goto retry;
- 		} else
--			BUG_ON(page);
-+			BUG_ON(folio);
- 
- 		if (!err) {
- 			dst_addr += PAGE_SIZE;
-@@ -667,8 +667,8 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- out_unlock:
- 	mmap_read_unlock(dst_mm);
- out:
--	if (page)
--		put_page(page);
-+	if (folio)
-+		folio_put(folio);
- 	BUG_ON(copied < 0);
- 	BUG_ON(err > 0);
- 	BUG_ON(!copied && !err);
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+2/2.
+
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+Testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
+
+This support also optimize the page migration more than 50% with support
+of batched TLB flushing [*].
+
+[*] https://lore.kernel.org/linux-mm/20230213123444.155149-1-ying.huang@intel.com/
+
+-v9:
+1. Using a runtime tunable to control batched TLB flush, per Catalin in v7.
+   Sorry for missing this on v8.
+Link: https://lore.kernel.org/all/20230329035512.57392-1-yangyicong@huawei.com/
+
+-v8:
+1. Rebase on 6.3-rc4
+2. Tested the optimization on page migration and mentioned it in the commit
+3. Thanks the review from Anshuman.
+Link: https://lore.kernel.org/linux-mm/20221117082648.47526-1-yangyicong@huawei.com/
+
+-v7:
+1. rename arch_tlbbatch_add_mm() to arch_tlbbatch_add_pending() as suggested, since it
+   takes an extra address for arm64, per Nadav and Anshuman. Also mentioned in the commit.
+2. add tags from Xin Hao, thanks.
+Link: https://lore.kernel.org/lkml/20221115031425.44640-1-yangyicong@huawei.com/
+
+-v6:
+1. comment we don't defer TLB flush on platforms affected by ARM64_WORKAROUND_REPEAT_TLBI
+2. use cpus_have_const_cap() instead of this_cpu_has_cap()
+3. add tags from Punit, Thanks.
+4. default enable the feature when cpus >= 8 rather than > 8, since the original
+   improvement is observed on snapdragon 888 with 8 cores.
+Link: https://lore.kernel.org/lkml/20221028081255.19157-1-yangyicong@huawei.com/
+
+-v5:
+1. Make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends on EXPERT for this stage on arm64.
+2. Make a threshold of CPU numbers for enabling batched TLP flush on arm64
+Link: https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
+
+-v4:
+1. Add tags from Kefeng and Anshuman, Thanks.
+2. Limit the TLB batch/defer on systems with >4 CPUs, per Anshuman
+3. Merge previous Patch 1,2-3 into one, per Anshuman
+Link: https://lore.kernel.org/linux-mm/20220822082120.8347-1-yangyicong@huawei.com/
+
+-v3:
+1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+   of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+2. Add Tested-by from Xin Hao
+Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Anshuman Khandual (1):
+  mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+
+Barry Song (1):
+  arm64: support batched/deferred tlb shootdown during page
+    reclamation/migration
+
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/tlbbatch.h             | 12 ++++
+ arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
+ arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
+ arch/x86/include/asm/tlbflush.h               | 17 ++++-
+ include/linux/mm_types_task.h                 |  4 +-
+ mm/rmap.c                                     | 21 +++---
+ 8 files changed, 139 insertions(+), 20 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
+
 -- 
-2.25.1
+2.24.0
 
