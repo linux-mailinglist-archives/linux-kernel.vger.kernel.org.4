@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6934A6DC695
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1300D6DC698
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjDJMIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S229928AbjDJMIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjDJMIC (ORCPT
+        with ESMTP id S229876AbjDJMIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:08:02 -0400
-Received: from mail-ej1-x663.google.com (mail-ej1-x663.google.com [IPv6:2a00:1450:4864:20::663])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B883819A7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:58 -0700 (PDT)
-Received: by mail-ej1-x663.google.com with SMTP id q23so2534271ejz.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:58 -0700 (PDT)
+        Mon, 10 Apr 2023 08:08:13 -0400
+Received: from mail-ej1-x664.google.com (mail-ej1-x664.google.com [IPv6:2a00:1450:4864:20::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B392135
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:59 -0700 (PDT)
+Received: by mail-ej1-x664.google.com with SMTP id dm2so12115042ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681128477;
+        d=dectris.com; s=google; t=1681128478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xNbic2k37/uJb//jGocyCjKfzDNnw7vJzB+19fgD/vU=;
-        b=lFDITA5hSIO3u8hVF0yCmco2vpi7O1SZ04BShKnCIMBu9qWkXJHcVolsDdPBa0XnUt
-         QBPL+VSVMCKgFgUGuUEsm69+xFRAvRV+4iNWrKhre0ZGaNgVteqGAqqWpvE8mevhZ/sK
-         cob8b+aOSEtLhNj+/1HmHwf0IvR/ENfA/0UlM=
+        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
+        b=Q2uCA/rYj7rnGGIVr7nvTYOk7odfAYvo636/pEv+HqvW9y7UYE8FjoWaQs9c+/rM91
+         C2fy/ZbGeUg43RvatqyjfbA8rgBDJHXonQQJp9PzdHAvkUfid3gpOvSaNPVd8ggssoxg
+         6wDpiHohJhb5g8BTudW428bSJ1jx4tdvWSVpk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681128477;
+        d=1e100.net; s=20210112; t=1681128478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xNbic2k37/uJb//jGocyCjKfzDNnw7vJzB+19fgD/vU=;
-        b=CG13ZPxkerd7ZPI834Bf5AAnRpuhWw8gNijCPN/Wm3Qtt0OVcXq/k78x8KZMu1YDDd
-         WFOALWQIKShrKJTD5wRNSMP+pdtfjSIlm4WCtJZd1debdj5bJepMmCWO1caMPi1EtjP9
-         bJr3xBAIqwnMqIHxYc1sWUyd3CXvXkN70v0vmbbtMWqdjvUtflzcu9rhjj3C9GOF0qqC
-         zxCUwYX1M8ftiVxuv2FQ8JIvg01srXFAV/sky5uyI6mTMYKWl4ig4Voll6qF4oDsVpfG
-         25gDs82VKI8Zy4rMDuf3vPwH3YuBZp21ahZdZEr4XSUra4NPiC17eAjaLXg8tUifCrX1
-         3LbA==
-X-Gm-Message-State: AAQBX9cNPGZdXXFa3P8zRMzppU88SqTx5mdgbAIzelPex292woB2+vPn
-        pAFDXy0uVna5MkbtC6BGpDF3SBGQJDiz3JFfpn3UMDS5mil8
-X-Google-Smtp-Source: AKy350bX+Gw5pkRVI9K7HZRdso4z0tqD2c56eUTXhw9H9zhtDwHal9R9E6C8al4EM8JEj1WzI54XGl0VGR4K
-X-Received: by 2002:a17:907:2d2a:b0:8b1:7eba:de5 with SMTP id gs42-20020a1709072d2a00b008b17eba0de5mr7635152ejc.10.1681128477114;
-        Mon, 10 Apr 2023 05:07:57 -0700 (PDT)
+        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
+        b=pMUyJnIsSSFnx8uVrIMM/VR7eA+UDbTga8DYmOPm6bP1loGik2RsY5UBGDXHMHtqop
+         3gujeSG9itEExBxzU3xnpOQtZ5NdKuQf3lDg1zU0URtwAdBICT16qJP5sF2RhrZ/1gfU
+         t0TmDRvZof+8FyUqIojhN2EnA/6NYcHywoytSuYrzpicRXnwyBhFN3yhxEh+tQiyQDbg
+         HrI0B6yZKhmQgjPOH6qfDTGEqj6oLiEwgKSP3pc3WqwWPbXfDIVUTx+uvVd3jE/ZJ6Bt
+         427qZwn918Ll5kNcUyhuB/3r2E7K3swwXa8gIX5jaEWsf+wYWuYqdjNP624vPtBUb2Ur
+         XUXQ==
+X-Gm-Message-State: AAQBX9d6MtBs+Q+MTjCqRHj0M7U5t2K9TnJVYbOPFqv3a7BLNm/zL8Ar
+        SPkHMvMnXJXinaJGyQLZw2euatX/1ADq5UlkNTzOY7A2y/us
+X-Google-Smtp-Source: AKy350bh8U+DCKOMKHxZHU72nWIasGbehzQFtlvOoJh02OQ5SqO+Q8IVX5KPk+aKOBcZ8KJqNob3Kx4mYrb1
+X-Received: by 2002:a17:906:3ce9:b0:932:40f4:5c44 with SMTP id d9-20020a1709063ce900b0093240f45c44mr6061993ejh.36.1681128478001;
+        Mon, 10 Apr 2023 05:07:58 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id nb39-20020a1709071ca700b008b1fc5abd08sm2089769ejc.56.2023.04.10.05.07.56
+        by smtp-relay.gmail.com with ESMTPS id nb39-20020a1709071ca700b008b1fc5abd08sm2089769ejc.56.2023.04.10.05.07.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 10 Apr 2023 05:07:57 -0700 (PDT)
 X-Relaying-Domain: dectris.com
@@ -67,9 +67,9 @@ To:     Magnus Karlsson <magnus.karlsson@intel.com>,
 Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 3/4] selftests: xsk: Use hugepages when umem->frame_size > PAGE_SIZE
-Date:   Mon, 10 Apr 2023 14:06:28 +0200
-Message-Id: <20230410120629.642955-4-kal.conley@dectris.com>
+Subject: [PATCH bpf-next v5 4/4] selftests: xsk: Add tests for 8K and 9K frame sizes
+Date:   Mon, 10 Apr 2023 14:06:29 +0200
+Message-Id: <20230410120629.642955-5-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230410120629.642955-1-kal.conley@dectris.com>
 References: <20230410120629.642955-1-kal.conley@dectris.com>
@@ -84,27 +84,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HugeTLB UMEMs now support chunk_size > PAGE_SIZE. Set MAP_HUGETLB when
-frame_size > PAGE_SIZE for future tests.
+Add tests:
+- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
+- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
 
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
+ tools/testing/selftests/bpf/xskxceiver.h |  2 ++
+ 2 files changed, 27 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 5a9691e942de..7eccf57a0ccc 100644
+index 7eccf57a0ccc..86797de7fc50 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1289,7 +1289,7 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	void *bufs;
- 	int ret;
- 
--	if (ifobject->umem->unaligned_mode)
-+	if (ifobject->umem->frame_size > sysconf(_SC_PAGESIZE) || ifobject->umem->unaligned_mode)
- 		mmap_flags |= MAP_HUGETLB;
- 
- 	if (ifobject->shared_umem)
+@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+ 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
+ 		testapp_validate_traffic(test);
+ 		break;
++	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
++		if (!hugepages_present(test->ifobj_tx)) {
++			ksft_test_result_skip("No 2M huge pages present.\n");
++			return;
++		}
++		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
++		test->ifobj_tx->umem->frame_size = 8192;
++		test->ifobj_rx->umem->frame_size = 8192;
++		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
++		testapp_validate_traffic(test);
++		break;
+ 	case TEST_TYPE_RX_POLL:
+ 		test->ifobj_rx->use_poll = true;
+ 		test_spec_set_name(test, "POLL_RX");
+@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+ 		if (!testapp_unaligned(test))
+ 			return;
+ 		break;
++	case TEST_TYPE_UNALIGNED_9K_FRAME:
++		if (!hugepages_present(test->ifobj_tx)) {
++			ksft_test_result_skip("No 2M huge pages present.\n");
++			return;
++		}
++		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
++		test->ifobj_tx->umem->frame_size = 9000;
++		test->ifobj_rx->umem->frame_size = 9000;
++		test->ifobj_tx->umem->unaligned_mode = true;
++		test->ifobj_rx->umem->unaligned_mode = true;
++		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
++		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
++		testapp_validate_traffic(test);
++		break;
+ 	case TEST_TYPE_HEADROOM:
+ 		testapp_headroom(test);
+ 		break;
+diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+index 919327807a4e..7f52f737f5e9 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.h
++++ b/tools/testing/selftests/bpf/xskxceiver.h
+@@ -69,12 +69,14 @@ enum test_mode {
+ enum test_type {
+ 	TEST_TYPE_RUN_TO_COMPLETION,
+ 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
++	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
+ 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
+ 	TEST_TYPE_RX_POLL,
+ 	TEST_TYPE_TX_POLL,
+ 	TEST_TYPE_POLL_RXQ_TMOUT,
+ 	TEST_TYPE_POLL_TXQ_TMOUT,
+ 	TEST_TYPE_UNALIGNED,
++	TEST_TYPE_UNALIGNED_9K_FRAME,
+ 	TEST_TYPE_ALIGNED_INV_DESC,
+ 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
+ 	TEST_TYPE_UNALIGNED_INV_DESC,
 -- 
 2.39.2
 
