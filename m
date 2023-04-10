@@ -2,213 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643866DC776
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C49F6DC782
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjDJNxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 09:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S229719AbjDJOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDJNxB (ORCPT
+        with ESMTP id S229503AbjDJOBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 09:53:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389421BE2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:52:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B266960ED3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861BCC433D2;
-        Mon, 10 Apr 2023 13:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681134777;
-        bh=MiBRI1IjJJKvf3dOcpSwiYgL1iNNZCu/5VtsQEm9a1Q=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=khoEVsj5SJ+iGxEz4qgNP57tIqNFyTUdFKRgnRszpdrkbit+r+E0sSSUuiwc/0qbf
-         XqtwtXWF75to1/+aQjRmgf16yaY8DqJhrjHpDcIDFYXfyxwIpNdddTV4PffGZ1uzRW
-         3F2i/HEf7o+MlvKnUvjQr56DyxtZ1Qayv2lskB2gr54+rxfJCHeJ87el/Ub5jQ5E/t
-         nR9xhoAA1Ajuug6/RbuhACpYWtcQ2JO8tQxOcDF6MPO5cLCNVmGJ9ueKRTaU+xKm93
-         f9D7EaGHUjG3AHbN65LvE44rAOiXwLpLw24TvoQt7RoZ5t0WR3OX783FtzHT51wpmt
-         SBO3gESRtT/Sw==
-Message-ID: <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
-Date:   Mon, 10 Apr 2023 21:52:52 +0800
+        Mon, 10 Apr 2023 10:01:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D12246B9;
+        Mon, 10 Apr 2023 07:01:16 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AAT8M2006495;
+        Mon, 10 Apr 2023 14:00:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=G3nZWMcR1fjrAw5s0kSUyc9MWaPzcwcxUerlMeu8HIM=;
+ b=WO2Ls7m4TlorOkAsxKwT+7qg/mfgBzLLg4rzJQhrgGf7CTrpLt6g+D6DB3VbFLq/PUxT
+ WfmKPjbQKwC12ejED9WYfiaUjB2GsmER0EZxa/urWvA2YqGyzilMfhhdiVFJF7DDel/v
+ Mp4xHaRg/l5/NnXoJhnEw9Ri+Cgz1jMMhXETlOt5YSiUQG4giqWG3h5CxkPGaKZloLte
+ w6DufijggJgLDm+fs6dHgQh4GJF3BobAV/N9x7kHpgwovEP3Z+ToK3XDoijm8PyyJEoW
+ 81koCL4zeegI7T6c4OGNqA9pt7z56g7Pr9s90wqRI4aX2SDg1GwmdkVUKr1ix3RmmJB7 xg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvggnrev0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:00:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AE0C6j005185
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:00:12 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 07:00:03 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <geert+renesas@glider.be>, <rafal@milecki.pl>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+Subject: [PATCH V12 0/4] Add minimal boot support for IPQ9574
+Date:   Mon, 10 Apr 2023 19:29:44 +0530
+Message-ID: <20230410135948.11970-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230324071028.336982-1-chao@kernel.org>
- <ZCyZGgf4RSEjyHTF@google.com>
- <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
- <ZC2aA+i5+HpdJ6M2@google.com>
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
- foreground garbage collection
-In-Reply-To: <ZC2aA+i5+HpdJ6M2@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kWhyzsWhFPyIhR-id4R-1Qnd4ViWiYal
+X-Proofpoint-ORIG-GUID: kWhyzsWhFPyIhR-id4R-1Qnd4ViWiYal
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_09,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=574
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 impostorscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100118
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/5 23:55, Jaegeuk Kim wrote:
-> On 04/05, Chao Yu wrote:
->> On 2023/4/5 5:39, Jaegeuk Kim wrote:
->>> Can we do like this?
->>>
->>>   From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
->>> From: Jaegeuk Kim <jaegeuk@kernel.org>
->>> Date: Tue, 4 Apr 2023 14:36:00 -0700
->>> Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
->>>
->>> We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
->>> sctions in time.
->>>
->>> Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
->>> Signed-off-by: Chao Yu <chao@kernel.org>
->>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->>> ---
->>>    fs/f2fs/gc.c | 24 +++++++++++-------------
->>>    1 file changed, 11 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->>> index 56c53dbe05c9..f1d0dd9c5a6c 100644
->>> --- a/fs/f2fs/gc.c
->>> +++ b/fs/f2fs/gc.c
->>> @@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>>    	};
->>>    	unsigned int skipped_round = 0, round = 0;
->>>    	unsigned int upper_secs;
->>> +	bool stop_gc = false;
->>>    	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
->>>    				gc_control->nr_free_secs,
->>> @@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>>    				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
->>>    		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
->>>    			goto go_gc_more;
->>> -		goto stop;
->>> -	}
->>> -
->>> -	/* FG_GC stops GC by skip_count */
->>> -	if (gc_type == FG_GC) {
->>> +		stop_gc = true;
->>
->> I guess below condition is for emergency recycle of prefree segments during
->> foreground GC, in order to avoid exhausting free sections due to to many
->> metadata allocation during CP.
->>
->> 	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
->> 				prefree_segments(sbi)) {
->>
->> But for common case, free_sections() is close to reserved_segments(), and
->> upper_secs + NR_GC_CHECKPOINT_SECS value may be far smaller than free_sections(),
->> so checkpoint may not be trggered as expected, IIUC.
->>
->> So it's fine to just trigger CP in the end of foreground garbage collection?
-> 
-> My major concern is to avoid unnecessary checkpointing given multiple FG_GC
-> requests were pending in parallel. And, I don't want to add so many combination
-> which gives so many corner cases, and feel f2fs_gc() needs to call checkpoint
-> automatically in the worst case scenario only.
+The IPQ9574 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points
 
-Alright.
+This series adds minimal board boot support for ipq9574-rdp433 variant
 
-> 
-> By the way, do we just need to call checkpoint here including FG_GC as well?
+V11 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230404101622.5394-1-quic_devipriy@quicinc.com/
 
-I didn't get it, do you mean?
+Changes in V12:
+	- Detailed change log is added to the respective patches
 
-- f2fs_balance_fs()
-  - f2fs_gc() creates prefree segments but not call checkpoint to reclaim
+Devi Priya (4):
+  dt-bindings: clock: Add ipq9574 clock and reset definitions
+  clk: qcom: Add Global Clock Controller driver for IPQ9574
+  arm64: dts: qcom: Add support for ipq9574 SoC and RDP433 variant
+  arm64: defconfig: Enable IPQ9574 SoC base configs
 
-- f2fs_balance_fs()
-  - f2fs_gc()
-   - detect prefree segments created by last f2fs_balance_fs, then call
-f2fs_write_checkpoint to reclaim
+ .../bindings/clock/qcom,ipq9574-gcc.yaml      |   60 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   |   84 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  263 +
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-ipq9574.c                | 4225 +++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |  213 +
+ include/dt-bindings/reset/qcom,ipq9574-gcc.h  |  164 +
+ 10 files changed, 5021 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq9574.c
+ create mode 100644 include/dt-bindings/clock/qcom,ipq9574-gcc.h
+ create mode 100644 include/dt-bindings/reset/qcom,ipq9574-gcc.h
 
-Or could you please provide a draft patch? :-P
 
-Thanks,
+base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+-- 
+2.17.1
 
-> 
-> 1832
-> 1833         if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
-> 1834                 /*
-> 1835                  * For example, if there are many prefree_segments below given
-> 1836                  * threshold, we can make them free by checkpoint. Then, we
-> 1837                  * secure free segments which doesn't need fggc any more.
-> 1838                  */
-> 1839                 if (prefree_segments(sbi)) {
-> 1840                         ret = f2fs_write_checkpoint(sbi, &cpc);
-> 1841                         if (ret)
-> 1842                                 goto stop;
-> 1843                 }
-> 1844                 if (has_not_enough_free_secs(sbi, 0, 0))
-> 1845                         gc_type = FG_GC;
-> 1846         }
-> 
->>
->> One other concern is for those path as below:
->> - disable_checkpoint
->> - ioc_gc
->> - ioc_gc_range
->> - ioc_resize
->> ...
-> 
-> I think the upper caller should decide to call checkpoint, if they want to
-> reclaim the prefree likewise f2fs_disable_checkpoint.
-> 
->>
->> We've passed gc_type as FG_GC, but the demand here is to migrate block in time,
->> rather than dirtying blocks, and callers don't expect checkpoint in f2fs_gc(),
->> instead the callers will do the checkpoit as it needs.
->>
->> That means it's better to decouple FG_GC and write_checkpoint behavior, so I
->> added another parameter .reclaim_space to just let f2fs_balance_fs() to trigger
->> checkpoit in the end of f2fs_gc().
-> 
->>
->> Thanks,
->>
->>> +	} else if (gc_type == FG_GC) {
->>> +		/* FG_GC stops GC by skip_count */
->>>    		if (sbi->skipped_gc_rwsem)
->>>    			skipped_round++;
->>>    		round++;
->>>    		if (skipped_round > MAX_SKIP_GC_COUNT &&
->>> -				skipped_round * 2 >= round) {
->>> -			ret = f2fs_write_checkpoint(sbi, &cpc);
->>> -			goto stop;
->>> -		}
->>> +				skipped_round * 2 >= round)
->>> +			stop_gc = true;
->>>    	}
->>>    	__get_secs_required(sbi, NULL, &upper_secs, NULL);
->>> @@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>>    				prefree_segments(sbi)) {
->>>    		ret = f2fs_write_checkpoint(sbi, &cpc);
->>>    		if (ret)
->>> -			goto stop;
->>> +			stop_gc = true;
->>>    	}
->>>    go_gc_more:
->>> -	segno = NULL_SEGNO;
->>> -	goto gc_more;
->>> -
->>> +	if (!stop_gc) {
->>> +		segno = NULL_SEGNO;
->>> +		goto gc_more;
->>> +	}
->>>    stop:
->>>    	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
->>>    	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
