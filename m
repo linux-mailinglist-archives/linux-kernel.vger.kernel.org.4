@@ -2,151 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7F16DC4B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE2A6DC4BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjDJI6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
+        id S229789AbjDJI7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDJI6T (ORCPT
+        with ESMTP id S229777AbjDJI7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:58:19 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1AE1BDC;
-        Mon, 10 Apr 2023 01:58:18 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 029C124E2A5;
-        Mon, 10 Apr 2023 16:58:17 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
- 2023 16:58:16 +0800
-Received: from [192.168.125.108] (113.72.145.176) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
- 2023 16:58:15 +0800
-Message-ID: <ac4b10d3-2a9f-b0a2-8004-38357266c861@starfivetech.com>
-Date:   Mon, 10 Apr 2023 16:58:15 +0800
+        Mon, 10 Apr 2023 04:59:48 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4132135
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:59:21 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-517bd9b1589so329046a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681117161;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+SGlHzs1teH/N6Up9WvKqFn1ILr9s+l0miVs+IwrMQ=;
+        b=eZZtAYFFTjiEkTiR8vZBXESKZMi2XGeNqPQ8tEmnMq0rVM29F0wlvi9l9YtDvfcgVO
+         EMtZgHsPSBD+9vmddsLS6zFkFFq8vP5p/aCAh3FGx0FBEDnSCz4zZXW1Ya36flY6d0QJ
+         aN6D3KrwGRLbG7YEY0jh96wTkBKBz9WT3CCEYgKFp1D0/y2fn6ExBjtaZmjIwlRgcNKc
+         +W3Wyj4LABPpkrPy0kQZHNUzW004NqDDoQPgAVHt/ZbH3h6rBG/cSSwFx4WMV41iTBud
+         V5YXEgG8JgiTxluBT6xqHSgZqw3lf3t8dlaqsRYLjNp1r3dqnmjFv2gJqaATrgBx1ZRF
+         x7Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681117161;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8+SGlHzs1teH/N6Up9WvKqFn1ILr9s+l0miVs+IwrMQ=;
+        b=HS4FbL4Mm+2YfruGwKBCHVldfV8Hh2FGoALpiTvAAtNc54iLXCu0VeDcru/9rQ65HH
+         ALG+MS3FzTK+qi2AA5nV32ecItm5PhaBXxuc3RB0JGA0suOjSG4hmvvHo/Ea1kM1zdI5
+         5WEVegESpEovkaSdfMcEcc3mcMzglkVaGfuooi9KPh242MH8mI5lx3lo0B66Qil1mcKx
+         +Bz/RiV7CIzzWP+/rpMXH2xvktBA/W7mO9FYlMKJ1L8iair8UUsJWUW63fe6Uk/7PeXr
+         cWTjtNXoQe9Hnd+4xxcHWRxlWZ7sgWb+2Jfrwuoeiuek8ghmJlatiLZ+MbGO82r7Mv/g
+         Nqow==
+X-Gm-Message-State: AAQBX9esDBOANMSYM4+v3OnbfGpKEcNryL3YqqlqKWPXGrjwPri4yvq5
+        swBqXGFXORglUexTK+yARz86dA==
+X-Google-Smtp-Source: AKy350ZTlBWN6lA5EaT1mWXAvUTpNMvID1mtM5OAyi9bP68VWROpmT01Bnwv83nKnw+b3aU/lLRV0w==
+X-Received: by 2002:a62:6546:0:b0:627:f9ac:8a33 with SMTP id z67-20020a626546000000b00627f9ac8a33mr8746125pfb.13.1681117161097;
+        Mon, 10 Apr 2023 01:59:21 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id s21-20020aa78295000000b0058bacd6c4e8sm7279526pfm.207.2023.04.10.01.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 01:59:20 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH v3 0/2] Fix failure to access u32* argument of tracked function
+Date:   Mon, 10 Apr 2023 16:59:06 +0800
+Message-Id: <20230410085908.98493-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v1 0/3] Add JH7110 PCIe driver support
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-pci@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Kevin Xie <kevin.xie@starfivetech.com>,
-        <daire.mcnamara@microchip.com>
-References: <20230406111142.74410-1-minda.chen@starfivetech.com>
- <20230406-quench-unharmed-2c11b2617e9f@wendy>
- <20230406-coming-stuffed-26f89610959c@wendy>
- <d9dde509-8923-a930-4c82-4bc8bd78ed0d@starfivetech.com>
- <20230407-splatter-greyhound-edc706148337@wendy>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <20230407-splatter-greyhound-edc706148337@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.176]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
+When access traced function arguments with type is u32*, bpf verifier failed.
+Because u32 have typedef, needs to skip modifier. Add btf_type_is_modifier in
+is_int_ptr. Add a selftest to check it.
 
-On 2023/4/7 17:57, Conor Dooley wrote:
-> Hey Minda,
-> 
-> On Fri, Apr 07, 2023 at 10:32:51AM +0800, Minda Chen wrote:
->> On 2023/4/6 19:54, Conor Dooley wrote:
->> > On Thu, Apr 06, 2023 at 12:47:41PM +0100, Conor Dooley wrote:
->> >> On Thu, Apr 06, 2023 at 07:11:39PM +0800, Minda Chen wrote:
->> >> > This patchset adds PCIe driver for the StarFive JH7110 SoC.
->> >> > The patch has been tested on the VisionFive 2 board. The test
->> >> > devices include M.2 NVMe SSD and Realtek 8169 Ethernet adapter.
->> >> 
->> >> I was talking with Daire last week about some changes he's working on
->> >> for the microchip driver, and we seemed to recall an off-list email
->> >> sent to Daire & Bjorn about extracting the common PLDA bits from the
->> >> pcie-microchip-host driver to be used with an (at that point)
->> >> unreleased SoC. Perhaps Bjorn has this in his mailbox somewhere still,
->> >> our corporate mail policy scrubs things from over a year ago & I could
->> >> not find it.
->> >>
->> >> I realised that that may actually have been StarFive, and the driver on
->> >> your GitHub [1] certainly felt very familiar to Daire (he said it was
->> >> very similar to his earlier revisions of his driver).
->> >> 
->> >> I've not looked at a diff between this and the version you ship on
->> >> GitHub, but first a quick inspection it mostly just looks like you
->> >> did s/plda/sifive/ on the file.
->> >> 
->> >> I'm obviously not a PCI maintainer, but if there are common bits between
->> >> the two drivers, extracting common bits seems like a good idea to me...
-> 
->> Thanks. It is pleasure to using same common codes. Does common bits changes
->> will upstream soon?
-> 
-> I don't quite get what you mean. We've got some changes that are in
-> progress here:
-> https://lore.kernel.org/linux-pci/20230111125323.1911373-1-daire.mcnamara@microchip.com/
-> We've been quiet there for a while, but Daire's back looking into Robin's
-> comments in there about the range parsing/window setup at the moment.
-> 
-> I'm not sure if that's what you mean though, since you said "common
-> bits" & Daire was doing that work in a world where there was no jh7110
-> driver in the mix.
-> Extracting common bits would be part of the process of adding a new
-> driver, as I don't think there's any real reason to do so without
-> another in-tree user.
-> 
-OK, I know extracting common bits is microchip new PCIe driver codes changed.
-Just ignore my previous comments.
-Maybe I will try to restructuring the driver code according to corporate e-mail which has been sent one year ago.
->> And I see there are many difference between pcie-microchip-host and our codes.
-> 
-> Right. I'd expect there to be a fair difference between our integrations
-> of the IP, and therefore there'll be a bunch of non-shareable bits.
-> 
-> You need the stg,syscon & phy bits, and the clock/reset handling is
-> clearly different too.
-> 
->> >> https://github.com/starfive-tech/linux/blob/JH7110_VisionFive2_devel/drivers/pci/controller/pcie-plda.c
-> 
-> I had a bit of a read through this again today with Daire to check what
-> the differences actually are and it *looked* like the main,
-> non-implementation related, differences were the extra "event" domain
-> that was created to simplify the driver & the bottom half interrupt
-> handling.
-> That all came out of the review process, so it's likely that some of the
-> same requests would be made of you by the PCI maintainers anyway.
-> 
-Thanks. I will check it and change my codes.
-> As an aside, you should probably run checkpatch --strict on this
-> submission, there's a rake of coding style "issues" in the new code
-> you've added.
-> 
-I do not run checkpatch with "--strict". I will run with it.
-> Cheers,
-> Conor.
+Feng Zhou (2):
+  bpf/btf: Fix is_int_ptr()
+  selftests/bpf: Add test to access u32 ptr argument in tracing program
+
+Changelog:
+v2->v3: Addressed comments from jirka
+- Fix an issue that caused other test items to fail
+Details in here:
+https://lore.kernel.org/all/20230407084608.62296-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Martin KaFai Lau
+- Add a selftest.
+- use btf_type_skip_modifiers.
+Some details in here:
+https://lore.kernel.org/all/20221012125815.76120-1-zhouchengming@bytedance.com/
+
+ kernel/bpf/btf.c                                    |  8 ++------
+ net/bpf/test_run.c                                  |  8 +++++++-
+ .../testing/selftests/bpf/verifier/btf_ctx_access.c | 13 +++++++++++++
+ 3 files changed, 22 insertions(+), 7 deletions(-)
+
+-- 
+2.20.1
+
