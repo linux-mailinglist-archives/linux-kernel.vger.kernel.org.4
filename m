@@ -2,101 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519A86DCA91
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B6A6DCA90
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjDJSO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S230236AbjDJSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjDJSOX (ORCPT
+        with ESMTP id S229711AbjDJSNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:14:23 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DEB1BF8;
-        Mon, 10 Apr 2023 11:14:21 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id cj22so6408911qtb.3;
-        Mon, 10 Apr 2023 11:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681150461; x=1683742461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WgswBvjvPVN9EODWp24b5y7J/5TVQZ53Ui2VNPSM2t0=;
-        b=f0TzmAHcGI1a8pEJQrld2hDmHAvYpBa13m61ZjIPEQly/FYWTybSgywtTR/zqjepSt
-         UYoG3uynRj9B3jpwCdWLHzB4OZbvqKi3XdjwLpAUipDOgvLj0Gt7hfF5ynIHZaHkMrzN
-         3jEWEIEEMy8BQCl6/w+ckTn9vuGe6e2v18mPmHVbAFUIQ5Qq5c2A7YrH/c3mgYmmWmNT
-         mzoRXAgVBKJX4Beu2k61Ku8rBGmBBaid0bu9wSNhVLhGCyHdnZ5eIP9zqf4JK1+GP+ei
-         lv/fPEWlkAzTRuBIkQFxzpSRXvYTyDsfzWXlvRqLDG32RXWZgOVy5j6UV+6uijLDY9+e
-         hJqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681150461; x=1683742461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WgswBvjvPVN9EODWp24b5y7J/5TVQZ53Ui2VNPSM2t0=;
-        b=p4xU9D+l+W8Kxb81Hm4JMm/Sdb+qbIRVSzX0qfwCi8GBBBFShT7Bl59yetAuu79xw6
-         T5ZljbmJ/nUhW0HDVGHarwbio2kIVisMbLIy0O4jiGxRa7tHKxtHyTSp5AeZ06abmqDZ
-         rKmW0zgPIbwa6agWHev7DnNqYmycYtJLnqrOl4GpF5qxJdZlBAiU7Uu/P0O+fPSvJuH8
-         NwVkTrXvt6Us01/iWHcS94ZA4YzVZHS8TqnmLlWmcGQR4toHwxAA5AF1NpuRG+0MGY4a
-         qMz2Sw2wNhS/MXHu5Me8A5KqpyoCrrmfj1V9mqOkunVIvZQGAtCi9xKHHEDYvYEFUbIW
-         s9Yg==
-X-Gm-Message-State: AAQBX9cuQx3KNeEqibrjdzvC8Jpiqqk22ztNKHGjaMjvxGPXmh1Mq+/E
-        3jAPCPV+2LBZtcSiv5Cp6o6Gce6Z2SY=
-X-Google-Smtp-Source: AKy350YZyyHC+BdnkNOp6zIPGk3yJVwnPCrViCa3+pGl4na8+pUJHxzlFnAM++4kCrPskpywtjm2Og==
-X-Received: by 2002:a05:622a:1911:b0:3e4:eb8f:8a7b with SMTP id w17-20020a05622a191100b003e4eb8f8a7bmr29881478qtc.29.1681150460718;
-        Mon, 10 Apr 2023 11:14:20 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id dm6-20020a05620a1d4600b00741a984943fsm3416726qkb.40.2023.04.10.11.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 11:14:19 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9B50327C0054;
-        Mon, 10 Apr 2023 14:14:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 10 Apr 2023 14:14:19 -0400
-X-ME-Sender: <xms:-1E0ZCdbnxHA8Taf3Blp99-BaNCIBjbhU8ChWOn4tVGWLsXpI60Uiw>
-    <xme:-1E0ZMP1qM78QT3RoByQiVnjCsOLX8sk5eDz6JfZ9SLZs7wKDPRDjHbPfUYyDqwSK
-    1-i7Aw6LtevxxID1w>
-X-ME-Received: <xmr:-1E0ZDgu4muTxn4OmczjoDlgJGkZkmP871NT4TevBW1qPjoUoD-XQ3E7SNGnMw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekvddguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:-1E0ZP9pV5U7jlGq-Wd2Kr0NHcyiDI7uOwUz3T2aHotjLv8596THew>
-    <xmx:-1E0ZOv_yjSRor9QXk3wdu4ClCXAB6-F2D7edAPtQwEkBmgGs_ZhAg>
-    <xmx:-1E0ZGG15hMA-D8-rH4jDMN3DXUN8f683As9ccAa48ZJIEhZgcXIxQ>
-    <xmx:-1E0ZL92lzkEqAm9O2UA-sHKhZyAfN640J7uxFLXTgNrSBY4j5vtdg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Apr 2023 14:14:18 -0400 (EDT)
-Date:   Mon, 10 Apr 2023 11:13:02 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: Re: [PATCH v3 13/13] rust: sync: introduce `LockedBy`
-Message-ID: <ZDRRrnPZ0cAfEPTW@boqun-archlinux>
-References: <20230408075340.25237-1-wedsonaf@gmail.com>
- <20230408075340.25237-13-wedsonaf@gmail.com>
- <ZDRLaDEnrLhQmW+F@boqun-archlinux>
+        Mon, 10 Apr 2023 14:13:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16FA1BD6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681150409; x=1712686409;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8GBRU9LWaVgQWgbRBjeCeoZvhh7l+d7u9NegbBgbBfw=;
+  b=HKr2t8ThcIrEcda2EmTwnF3aNpZOMShyrPHvCKWXWol3EckIMZBEXmvx
+   iMDMMHVaSnrw8qXASkdmUEWDNUHenwjMIM6WFv5zhFJOxZfzv/FQg4vyb
+   EwTBlPBbC9TvNXvHjUy9JOjU+Cwbkh7a0ZUJuYPTKv8ICCQzm2hB4fw8f
+   sqHXsA1dpWjsCkhGQDTlGIhdy9j1So6ZSCAjLj5pg3qHwl0a5n2qYlWwn
+   tX08NzBJC9828wSAA3bZ4APkJOCT3FtpRH4IJIl9f3FUgBLwvUv8Xu0Sl
+   Ov8kb/q6Gv4s0XewhmzmAzEthSvBhHAc6PHYHmcGewbnmnfnBBo2p6/U3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408559380"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="408559380"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 11:13:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="799583519"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="799583519"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Apr 2023 11:13:28 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     eranian@google.com, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V3] perf/x86/intel/ds: Flush the PEBS buffer in PEBS enable
+Date:   Mon, 10 Apr 2023 11:13:09 -0700
+Message-Id: <20230410181309.827175-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDRLaDEnrLhQmW+F@boqun-archlinux>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,231 +60,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:46:16AM -0700, Boqun Feng wrote:
-> On Sat, Apr 08, 2023 at 04:53:40AM -0300, Wedson Almeida Filho wrote:
-> > From: Wedson Almeida Filho <walmeida@microsoft.com>
-> > 
-> > This allows us to have data protected by a lock despite not being
-> > wrapped by it. Access is granted by providing evidence that the lock is
-> > held by the caller.
-> > 
-> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> > ---
-> > v1 -> v2: Added build_assert to rule out zero-sized types
-> > v2 -> v3: Improve comments around panics and support for ZSTs
-> > 
-> >  rust/kernel/sync.rs           |   2 +
-> >  rust/kernel/sync/lock.rs      |   2 +-
-> >  rust/kernel/sync/locked_by.rs | 147 ++++++++++++++++++++++++++++++++++
-> >  3 files changed, 150 insertions(+), 1 deletion(-)
-> >  create mode 100644 rust/kernel/sync/locked_by.rs
-> > 
-> > diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> > index 431402180aa8..d219ee518eff 100644
-> > --- a/rust/kernel/sync.rs
-> > +++ b/rust/kernel/sync.rs
-> > @@ -10,10 +10,12 @@ use crate::types::Opaque;
-> >  mod arc;
-> >  mod condvar;
-> >  pub mod lock;
-> > +mod locked_by;
-> >  
-> >  pub use arc::{Arc, ArcBorrow, UniqueArc};
-> >  pub use condvar::CondVar;
-> >  pub use lock::{mutex::Mutex, spinlock::SpinLock};
-> > +pub use locked_by::LockedBy;
-> >  
-> >  /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
-> >  #[repr(transparent)]
-> > diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-> > index c365bc909dff..84d8d7d01aaa 100644
-> > --- a/rust/kernel/sync/lock.rs
-> > +++ b/rust/kernel/sync/lock.rs
-> > @@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
-> >      _pin: PhantomPinned,
-> >  
-> >      /// The data protected by the lock.
-> > -    data: UnsafeCell<T>,
-> > +    pub(crate) data: UnsafeCell<T>,
-> >  }
-> >  
-> >  // SAFETY: `Lock` can be transferred across thread boundaries iff the data it protects can.
-> > diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.rs
-> > new file mode 100644
-> > index 000000000000..ab0ecb013f54
-> > --- /dev/null
-> > +++ b/rust/kernel/sync/locked_by.rs
-> > @@ -0,0 +1,147 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! A wrapper for data protected by a lock that does not wrap it.
-> > +
-> > +use super::{lock::Backend, lock::Lock};
-> > +use core::{cell::UnsafeCell, ptr};
-> > +
-> > +/// Allows access to some data to be serialised by a lock that does not wrap it.
-> > +///
-> > +/// In most cases, data protected by a lock is wrapped by the appropriate lock type, e.g.,
-> > +/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for cases when this is not
-> > +/// possible. For example, if a container has a lock and some data in the contained elements needs
-> > +/// to be protected by the same lock.
-> > +///
-> > +/// [`LockedBy`] wraps the data in lieu of another locking primitive, and only allows access to it
-> > +/// when the caller shows evidence that the 'external' lock is locked. It panics if the evidence
-> > +/// refers to the wrong instance of the lock.
-> > +///
-> > +/// # Examples
-> > +///
-> > +/// The following is an example for illustrative purposes: `InnerDirectory::bytes_used` is an
-> > +/// aggregate of all `InnerFile::bytes_used` and must be kept consistent; so we wrap `InnerFile` in
-> > +/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This allows us to enforce at
-> > +/// compile-time that access to `InnerFile` is only granted when an `InnerDirectory` is also
-> > +/// locked; we enforce at run time that the right `InnerDirectory` is locked.
-> > +///
-> > +/// ```
-> > +/// use kernel::sync::{LockedBy, Mutex};
-> > +///
-> > +/// struct InnerFile {
-> > +///     bytes_used: u64,
-> > +/// }
-> > +///
-> > +/// struct File {
-> > +///     _ino: u32,
-> > +///     inner: LockedBy<InnerFile, InnerDirectory>,
-> > +/// }
-> > +///
-> > +/// struct InnerDirectory {
-> > +///     /// The sum of the bytes used by all files.
-> > +///     bytes_used: u64,
-> > +///     _files: Vec<File>,
-> > +/// }
-> > +///
-> > +/// struct Directory {
-> > +///     _ino: u32,
-> > +///     inner: Mutex<InnerDirectory>,
-> > +/// }
-> > +///
-> > +/// /// Prints `bytes_used` from both the directory and file.
-> > +/// fn print_bytes_used(dir: &Directory, file: &File) {
-> > +///     let guard = dir.inner.lock();
-> > +///     let inner_file = file.inner.access(&guard);
-> > +///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
-> > +/// }
-> > +///
-> > +/// /// Increments `bytes_used` for both the directory and file.
-> > +/// fn inc_bytes_used(dir: &Directory, file: &File) {
-> > +///     let mut guard = dir.inner.lock();
-> > +///     guard.bytes_used += 10;
-> > +///
-> > +///     let file_inner = file.inner.access_mut(&mut guard);
-> > +///     file_inner.bytes_used += 10;
-> > +/// }
-> > +///
-> > +/// /// Creates a new file.
-> > +/// fn new_file(ino: u32, dir: &Directory) -> File {
-> > +///     File {
-> > +///         _ino: ino,
-> > +///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }),
-> > +///     }
-> > +/// }
-> > +/// ```
-> > +pub struct LockedBy<T: ?Sized, U: ?Sized> {
-> > +    owner: *const U,
-> > +    data: UnsafeCell<T>,
-> > +}
-> > +
-> > +// SAFETY: `LockedBy` can be transferred across thread boundaries iff the data it protects can.
-> > +unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
-> > +
-> > +// SAFETY: `LockedBy` serialises the interior mutability it provides, so it is `Sync` as long as the
-> > +// data it protects is `Send`.
-> > +unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
-> > +
-> > +impl<T, U: ?Sized> LockedBy<T, U> {
-> > +    /// Constructs a new instance of [`LockedBy`].
-> > +    ///
-> > +    /// It stores a raw pointer to the owner that is never dereferenced. It is only used to ensure
-> > +    /// that the right owner is being used to access the protected data. If the owner is freed, the
-> > +    /// data becomes inaccessible; if another instance of the owner is allocated *on the same
-> > +    /// memory location*, the data becomes accessible again: none of this affects memory safety
-> > +    /// because in any case at most one thread (or CPU) can access the protected data at a time.
-> > +    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
-> > +        Self {
-> > +            owner: owner.data.get(),
-> 
-> Given we use the address of the `data` as a key to verify holding a
-> lock, I think we should use `Pin<_>` in the function signature, i.e.
-> 
-> 	pub fn new(owner: Pin<&Lock<U, impl Backend>, data: T) -> Self {
-> 	    Self {
-> 	        owner: owner.get_ref().data.get()
-> 		data: UnsafeCell::new(data),
-> 	    }
-> 	}
-> 
-> Thoughts?
-> 
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Nevermind for now, since `Lock` is a pin-inited type, we can revisit
-this later.
+Several similar kernel warnings can be triggered,
 
-Regards,
-Boqun
+  [56605.607840] CPU0 PEBS record size 0, expected 32, config 0
+  cpuc->record_size=208
 
-> Regards,
-> Boqun
-> 
-> > +            data: UnsafeCell::new(data),
-> > +        }
-> > +    }
-> > +}
-> > +
-> > +impl<T: ?Sized, U> LockedBy<T, U> {
-> > +    /// Returns a reference to the protected data when the caller provides evidence (via a
-> > +    /// reference) that the owner is locked.
-> > +    ///
-> > +    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&U` that matches
-> > +    /// the data protected by the lock without actually holding it.
-> > +    ///
-> > +    /// # Panics
-> > +    ///
-> > +    /// Panics if `owner` is different from the data protected by the lock used in
-> > +    /// [`new`](LockedBy::new).
-> > +    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
-> > +        // Detect the usage of SZTs, which are supported, at compile time.
-> > +        crate::build_assert!(core::mem::size_of::<U>() > 0);
-> > +        if !ptr::eq(owner, self.owner) {
-> > +            panic!("mismatched owners");
-> > +        }
-> > +
-> > +        // SAFETY: `owner` is evidence that the owner is locked.
-> > +        unsafe { &*self.data.get() }
-> > +    }
-> > +
-> > +    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
-> > +    /// mutable owner) that the owner is locked mutably.
-> > +    ///
-> > +    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&mut U` that
-> > +    /// matches the data protected by the lock without actually holding it.
-> > +    ///
-> > +    /// Showing a mutable reference to the owner is sufficient because we know no other references
-> > +    /// can exist to it.
-> > +    ///
-> > +    /// # Panics
-> > +    ///
-> > +    /// Panics if `owner` is different from the data protected by the lock used in
-> > +    /// [`new`](LockedBy::new).
-> > +    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
-> > +        // Detect the usage of SZTs, which are supported, at compile time.
-> > +        crate::build_assert!(core::mem::size_of::<U>() > 0);
-> > +        if !ptr::eq(owner, self.owner) {
-> > +            panic!("mismatched owners");
-> > +        }
-> > +
-> > +        // SAFETY: `owner` is evidence that there is only one reference to the owner.
-> > +        unsafe { &mut *self.data.get() }
-> > +    }
-> > +}
-> > -- 
-> > 2.34.1
-> > 
+when the below commands are running in parallel for a while on SPR.
+
+  while true; do perf record --no-buildid -a --intr-regs=AX -e
+  cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
+
+  while true; do perf record -o /tmp/out -W -d -e
+  '{ld_blocks.store_forward:period=1000000,
+  MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
+  -c 1037 ./triad; done
+  *The triad program is just the generation of loads/stores.
+
+The warnings are triggered when an unexpected PEBS record (with a
+different config and size) is found.
+
+A system-wide PEBS event with the large PEBS config may be enabled
+during a context switch. Some PEBS records for the system-wide PEBS may
+be generated while the old task is sched out but the new one hasn't been
+sched in yet. When the new task is sched in, the cpuc->pebs_record_size
+may be updated for the per-task PEBS events. So the existing system-wide
+PEBS records have a different size from the later PEBS records.
+
+The PEBS buffer should be flushed right before the hardware is
+reprogrammed. The new size and threshold should be updated after the old
+buffer has been flushed.
+
+Reported-by: Stephane Eranian <eranian@google.com>
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+
+Changes since V2:
+- Flush the buffer when the hardware is reprogrammed.
+https://lore.kernel.org/lkml/1185d81f-71cc-0428-881a-db4f2cbac823@linux.intel.com/
+
+ arch/x86/events/intel/ds.c | 39 ++++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 3a77f4336df7..4639d4c1e98d 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1257,20 +1257,18 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+ 	if (x86_pmu.intel_cap.pebs_baseline && add) {
+ 		u64 pebs_data_cfg;
+ 
+-		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
+-		if (cpuc->n_pebs == 1) {
++		/* Clear pebs_data_cfg for first PEBS. */
++		if (cpuc->n_pebs == 1)
+ 			cpuc->pebs_data_cfg = 0;
+-			cpuc->pebs_record_size = sizeof(struct pebs_basic);
+-		}
+ 
+ 		pebs_data_cfg = pebs_update_adaptive_cfg(event);
+ 
+-		/* Update pebs_record_size if new event requires more data. */
+-		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
++		/*
++		 * Only update the pebs_data_cfg here. The pebs_record_size
++		 * will be updated later when the new pebs_data_cfg takes effect.
++		 */
++		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
+ 			cpuc->pebs_data_cfg |= pebs_data_cfg;
+-			adaptive_pebs_record_size_update();
+-			update = true;
+-		}
+ 	}
+ 
+ 	if (update)
+@@ -1331,6 +1329,13 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
+ 	wrmsrl(base + idx, value);
+ }
+ 
++static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
++{
++	if (cpuc->n_pebs == cpuc->n_large_pebs &&
++	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
++		intel_pmu_drain_pebs_buffer();
++}
++
+ void intel_pmu_pebs_enable(struct perf_event *event)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -1350,6 +1355,18 @@ void intel_pmu_pebs_enable(struct perf_event *event)
+ 	if (x86_pmu.intel_cap.pebs_baseline) {
+ 		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
+ 		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
++			/*
++			 * A system-wide PEBS event with the large PEBS
++			 * config may still be enabled when switching the
++			 * context. Some PEBS records for the system-wide
++			 * PEBS may be generated while the old event has
++			 * been scheduled out but the new one hasn't been
++			 * scheduled in. It's not enough to only flush the
++			 * buffer when a PEBS event is disable.
++			 */
++			intel_pmu_drain_large_pebs(cpuc);
++			adaptive_pebs_record_size_update();
++			pebs_update_threshold(cpuc);
+ 			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
+ 			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
+ 		}
+@@ -1396,9 +1413,7 @@ void intel_pmu_pebs_disable(struct perf_event *event)
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct hw_perf_event *hwc = &event->hw;
+ 
+-	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+-	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+-		intel_pmu_drain_pebs_buffer();
++	intel_pmu_drain_large_pebs(cpuc);
+ 
+ 	cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
+ 
+-- 
+2.35.1
+
