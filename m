@@ -2,176 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE4C6DC955
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD166DC957
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDJQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S230259AbjDJQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjDJQcS (ORCPT
+        with ESMTP id S230194AbjDJQdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:32:18 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3201710
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:32:17 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id n3-20020a170903110300b001a50ede5078so5422928plh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:32:17 -0700 (PDT)
+        Mon, 10 Apr 2023 12:33:11 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8A31706
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:33:10 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id ay36so2576396qtb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681144337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=itQxv8BbM1PWm+RuQQ5FyL8tOIW1b7TZUP7dqH3kNac=;
-        b=I2sqdKuXsSOipEE4wkgH+zftrLP+ZQEvlfLiYQheAInvKEPAZuSnR3aFGMtEkqbAFR
-         SyTQDDUy726SsM1SPNsqKBd5DzBF+916FXKHv5mv2odD7ZSoowegDCzdulFXqhi5bwKs
-         0RO4A4u5NtsettVc7ORpAWmDOX2qoSbQfU+opLhH6bzUY5O5aHDjyJwinC8E6LxUo64O
-         Xoe//XAX5WmJ3OIV4r6zkDrxkmW/WvGB5Y17zVrOwXrTEFNzp0JMRCwlE39ZCcFTfITD
-         k94FBlTq7vw96Erc4nfik2gQfamsjjgLQyOplvHuAxVx/7xO6C8cRWmO2tQP/Iv4yWGs
-         Itpw==
+        d=chromium.org; s=google; t=1681144389;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOqt5bGY3kNciAf6pRF9TDqG1MXHTnp3S4ERZCDT/DA=;
+        b=l+KzfvBDEuyAAIoEfJbOVyL4AydLp6IS4ij70jql2WrfRurpWWpSTuXVaiRn988yMg
+         iUt/PRbqbH/QwQtpBeea90UmMQ7D8VmcfTSHOzyHlo7LKGFeXWWxkd/SOVAIUKPMLkw5
+         VJ5MGUaNDiQUwQwdFYoq1q2l3GhuUafUSIE1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681144337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=itQxv8BbM1PWm+RuQQ5FyL8tOIW1b7TZUP7dqH3kNac=;
-        b=vXyqRvlX1g03LXuZWwLAM+7BSaA/BXz2useQ/3IyuZufYgKzwdEttx4/g/DSZEpDQi
-         2f1k1OQPMWP1rN8mn8H6IyoE4dokOi53v7IsHlMKCptRTUH4zfVwN8SDO4LuBV/3dPHV
-         r7/Sx6HfVtHhUPMj1pxjzKGfrggwehmi9gqf2S7+tBG5vlbFX1ctTbQ6tk7TpQvaw7Kw
-         nWxb54NL+LIhT5EquHnri24F+agmLE/Qj0FjCK3WAl3DtJrf+vRSbnvtDupiPb28hxIj
-         B4BC2XG0y+qh0sQKckrzXj4/VgcyIvE3OB4IvqZNe+YRCl4XCKbEK0T8LII6Acy1bfMs
-         Mugw==
-X-Gm-Message-State: AAQBX9cqQPKM0Tph7k+kGns2y3cmcdGOLClYLGlfCm6iBk7XLkbqaQrW
-        i2Ffyrj/x0rFyhYcQBH5hpTANn/eORE=
-X-Google-Smtp-Source: AKy350bYR39SqtSRv+Q85bHi/2KjFrjWdeKh6KU41dxqae4MwZtBP8V6ChtQJu17TSE+4pp4qQkXCguhBrg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:641a:0:b0:51b:fa5:7bce with SMTP id
- a26-20020a65641a000000b0051b0fa57bcemr444164pgv.1.1681144337139; Mon, 10 Apr
- 2023 09:32:17 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:32:15 -0700
-In-Reply-To: <20230410031021.4145297-1-alexjlzheng@tencent.com>
-Mime-Version: 1.0
-References: <20230410031021.4145297-1-alexjlzheng@tencent.com>
-Message-ID: <ZDQ6D6BX/3mqhCbW@google.com>
-Subject: Re: [PATCH kvm RESEND] KVM: i8259: Fix poll command
-From:   Sean Christopherson <seanjc@google.com>
-To:     alexjlzheng@gmail.com
-Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinliang Zheng <alexjlzheng@tencent.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        d=1e100.net; s=20210112; t=1681144389;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vOqt5bGY3kNciAf6pRF9TDqG1MXHTnp3S4ERZCDT/DA=;
+        b=hzb7soWBT3SuqEEP+UGTM5FzQK8qH4kVIGiHmsanIVzwLfqFaMhMrZcL0NwBqKRFcq
+         fqV/6ekEMzPNqwOxqnmSEb3HU22gwsER5mnPAB9fdXHKDX4NEf2fyuYptMfyunH7x6B/
+         RklgYl5IIp0B3+e2RwtiUL+RjkkxtfL5ECb98fhWwGI8JxwVt09CO4NIV8JUt2b5h16+
+         VZEFfAR7gTu+hKAAby0ID+NjoVVYZP2O8dg5hMXSNlQyt8xE/vD9LzPdsMebotp3mYY2
+         EizYThMxTeL/O+AYDEIYsckJXhG8JaoUGV8AWIiHHVXJJC0dtYTeaKkw7Y8tJC8x/pW4
+         35Pg==
+X-Gm-Message-State: AAQBX9d9S16nX0O6dsMQfAV9Z6skd7ZP19kIbGRReEgZp+dsCgFuOR91
+        ibk5dcnaxN8lDkc6TfZoqJa8FIwZddIErKSLAt1jCGdgiT0HTvR0
+X-Google-Smtp-Source: AKy350bijpEo3DiDjS2l7xbSnP2q0Igy8MzRljtqCaw/DnIxNffMKuFO1B5yHni8PpSdKIOCenGacJZcwRV8wv4tRe0=
+X-Received: by 2002:ac8:5a95:0:b0:3e3:8e3e:27a4 with SMTP id
+ c21-20020ac85a95000000b003e38e3e27a4mr4164239qtc.4.1681144389150; Mon, 10 Apr
+ 2023 09:33:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230320093259.845178-1-korneld@chromium.org> <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
+ <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com> <CAD=NsqxSDUu3wpfhUCDJgP2TaKb7dudB90snROQpPJPj3fdFgQ@mail.gmail.com>
+In-Reply-To: <CAD=NsqxSDUu3wpfhUCDJgP2TaKb7dudB90snROQpPJPj3fdFgQ@mail.gmail.com>
+From:   =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
+Date:   Mon, 10 Apr 2023 18:32:58 +0200
+Message-ID: <CAD=NsqyAXK0z7XqVy=coSm40zOe0yS+h=oiDD8a-udDT5WKMdw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+To:     "Gong, Richard" <richard.gong@amd.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        gregkh@linuxfoundation.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please don't use RESEND as a ping, just respond to the original patch with a "Ping",
-or any question you might have.  I know Documentation/process/submitting-patches.rst
-says its ok to RESEND after a couple of weeks, but IMO that's overly aggressive
-and just creates noise, e.g. your original patch was in my todo list, I just hadn't
-gotten too it.  If you can't get a response after multiple pings, then by all means
-RESEND, but in the future, please try pinging first.
-
-For the patch context, there's no need to put "kvm" after patch, i.e. [PATCH], or
-in this case [PATCH RESEND].  The "KVM:" namespace in the shortlog provides
-sufficient context.
-
-Regarding the shortlog, if a v2 is needed, ignore the somewhat messy history of
-this file and use "KVM: x86:".
-
-On Mon, Apr 10, 2023, alexjlzheng@gmail.com wrote:
-> From: Jinliang Zheng <alexjlzheng@tencent.com>
-> 
-> According to the hardware manual, when the Poll command is issued, the
-> byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
-> and the highest priority binary code in Bits 2:0. The current pic
-> simulation code is not implemented strictly according to the above
-> expression.
-
-There is way too much going on in this patch for this to be a sufficient description.
-pic_intack() is not a direct replacement for the open coded logic in pic_poll_read(),
-modulo the setting of bit 7.  E.g. there's no explanation for the "addr1 >> 7"
-logic, pic_clear_isr() is conditionally called on auto_eoi, priority_add is now
-modified, pic_update_irq() is no longer called, and so on and so forth.
-
-Maybe the patch is correct and pic_poll_read() was completely broken, but if that's
-the case, the changelog needs to be _much_ more verbose in explaining everything.
-
-> Fix the implementation of poll mode in pic simulation by pic_intack,
-
-Add () when referencing functions by name, i.e. pic_intack().
-
-> and remove redundant pic_poll_read code.
-
-Removing pic_poll() needs to be done in a separate patch.  Removing the helper
-while simultaneously modifying its effective code makes the patch unnecessarily
-difficult to review.
-
-> Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
-> ---
->  arch/x86/kvm/i8259.c | 29 ++++++-----------------------
->  1 file changed, 6 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-> index 4756bcb5724f..bc5b758e8f73 100644
-> --- a/arch/x86/kvm/i8259.c
-> +++ b/arch/x86/kvm/i8259.c
-> @@ -397,35 +397,18 @@ static void pic_ioport_write(void *opaque, u32 addr, u32 val)
->  		}
+On Mon, Apr 10, 2023 at 6:17=E2=80=AFPM Kornel Dul=C4=99ba <korneld@chromiu=
+m.org> wrote:
+>
+> On Mon, Apr 10, 2023 at 5:29=E2=80=AFPM Gong, Richard <richard.gong@amd.c=
+om> wrote:
+> >
+> > On 4/10/2023 12:03 AM, Mario Limonciello wrote:
+> > > On 3/20/23 04:32, Kornel Dul=C4=99ba wrote:
+> > >
+> > >> This fixes a similar problem to the one observed in:
+> > >> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
+> > >> probe").
+> > >>
+> > >> On some systems, during suspend/resume cycle firmware leaves
+> > >> an interrupt enabled on a pin that is not used by the kernel.
+> > >> This confuses the AMD pinctrl driver and causes spurious interrupts.
+> > >>
+> > >> The driver already has logic to detect if a pin is used by the kerne=
+l.
+> > >> Leverage it to re-initialize interrupt fields of a pin only if it's =
+not
+> > >> used by us.
+> > >>
+> > >> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
+> > >> ---
+> > >>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++------------=
+----
+> > >>   1 file changed, 20 insertions(+), 16 deletions(-)
+> > >>
+> > >> diff --git a/drivers/pinctrl/pinctrl-amd.c
+> > >> b/drivers/pinctrl/pinctrl-amd.c
+> > >> index 9236a132c7ba..609821b756c2 100644
+> > >> --- a/drivers/pinctrl/pinctrl-amd.c
+> > >> +++ b/drivers/pinctrl/pinctrl-amd.c
+> > >> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_op=
+s
+> > >> =3D {
+> > >>       .pin_config_group_set =3D amd_pinconf_group_set,
+> > >>   };
+> > >>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> > >> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pi=
+n)
+> > >>   {
+> > >> -    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> > >> +    const struct pin_desc *pd;
+> > >>       unsigned long flags;
+> > >>       u32 pin_reg, mask;
+> > >> -    int i;
+> > >>         mask =3D BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+> > >>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+> > >>           BIT(WAKE_CNTRL_OFF_S4);
+> > >>   -    for (i =3D 0; i < desc->npins; i++) {
+> > >> -        int pin =3D desc->pins[i].number;
+> > >> -        const struct pin_desc *pd =3D pin_desc_get(gpio_dev->pctrl,=
+ pin);
+> > >> -
+> > >> -        if (!pd)
+> > >> -            continue;
+> > >> +    pd =3D pin_desc_get(gpio_dev->pctrl, pin);
+> > >> +    if (!pd)
+> > >> +        return;
+> > >>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> > >> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> > >> +    pin_reg =3D readl(gpio_dev->base + pin * 4);
+> > >> +    pin_reg &=3D ~mask;
+> > >> +    writel(pin_reg, gpio_dev->base + pin * 4);
+> > >> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> > >> +}
+> > >>   -        pin_reg =3D readl(gpio_dev->base + i * 4);
+> > >> -        pin_reg &=3D ~mask;
+> > >> -        writel(pin_reg, gpio_dev->base + i * 4);
+> > >> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> > >> +{
+> > >> +    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> > >> +    int i;
+> > >>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> > >> -    }
+> > >> +    for (i =3D 0; i < desc->npins; i++)
+> > >> +        amd_gpio_irq_init_pin(gpio_dev, i);
+> > >>   }
+> > >>     #ifdef CONFIG_PM_SLEEP
+> > >> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
+> > >>       for (i =3D 0; i < desc->npins; i++) {
+> > >>           int pin =3D desc->pins[i].number;
+> > >>   -        if (!amd_gpio_should_save(gpio_dev, pin))
+> > >> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
+> > >> +            amd_gpio_irq_init_pin(gpio_dev, pin);
+> > >>               continue;
+> > >> +        }
+> > >>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> > >>           gpio_dev->saved_regs[i] |=3D readl(gpio_dev->base + pin * =
+4)
+> > >> & PIN_IRQ_PENDING;
+> > >
+> > > Hello Kornel,
+> > >
+> > > I've found that this commit which was included in 6.3-rc5 is causing =
+a
+> > > regression waking up from lid on a Lenovo Z13.
+> > observed "unable to wake from power button" on AMD based Dell platform.
+> > Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
+> > top of 6.3-rc6 does fix the issue.
+>
+> Whoops, sorry for the breakage.
+> Could you please share the output of "/sys/kernel/debug/gpio" before
+> and after the first suspend/resume cycle.
+Oh and also I'd need to compare the output from this with and without
+this patch reverted.
+> I've looked at the patch again and found a rather silly mistake.
+> Please try the following.
+> Note that I don't have access to hardware with this controller at the
+> moment, so I've only compile tested it.
+>
+> diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.=
+c
+> index 609821b756c2..7e7770152ca8 100644
+> --- a/drivers/pinctrl/pinctrl-amd.c
+> +++ b/drivers/pinctrl/pinctrl-amd.c
+> @@ -899,7 +899,7 @@ static void amd_gpio_irq_init(struct amd_gpio *gpio_d=
+ev)
+>         int i;
+>
+>         for (i =3D 0; i < desc->npins; i++)
+> -               amd_gpio_irq_init_pin(gpio_dev, i);
+> +               amd_gpio_irq_init_pin(gpio_dev, desc->pins[i].number);
 >  }
->  
-> -static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
-> -{
-> -	int ret;
-> -
-> -	ret = pic_get_irq(s);
-> -	if (ret >= 0) {
-> -		if (addr1 >> 7) {
-> -			s->pics_state->pics[0].isr &= ~(1 << 2);
-> -			s->pics_state->pics[0].irr &= ~(1 << 2);
-> -		}
-> -		s->irr &= ~(1 << ret);
-> -		pic_clear_isr(s, ret);
-> -		if (addr1 >> 7 || ret != 2)
-> -			pic_update_irq(s->pics_state);
-> -	} else {
-> -		ret = 0x07;
-> -		pic_update_irq(s->pics_state);
-> -	}
-> -
-> -	return ret;
-> -}
-> -
->  static u32 pic_ioport_read(void *opaque, u32 addr)
->  {
->  	struct kvm_kpic_state *s = opaque;
->  	int ret;
->  
->  	if (s->poll) {
-> -		ret = pic_poll_read(s, addr);
-> +		ret = pic_get_irq(s);
-> +		if (ret >= 0) {
-> +			pic_intack(s, ret);
-> +			ret |= 0x80;
-> +		} else
-
-All branches in an if-elif-else statment need curly braces if any branch needs
-statements (again, ignore the bad "prior art" in this file), i.e.
-
-		if (ret >= 0) {
-			...
-		} else {
-			ret = 0;
-		}
-
-> +			ret = 0;
->  		s->poll = 0;
->  	} else
->  		if ((addr & 1) == 0)
-> -- 
-> 2.37.3
-> 
+>
+>
+> > >
+> > > Reverting it on top of 6.3-rc6 resolves the problem.
+> > >
+> > > I've collected what I can into this bug report:
+> > >
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D217315
+> > >
+> > > Linus Walleij,
+> > >
+> > > It looks like this was CC to stable.  If we can't get a quick solutio=
+n
+> > > we might want to pull this from stable.
+> >
+> > this commit landed into 6.1.23 as well
+> >
+> >          d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on res=
+ume
+> >
+> > >
+> > > Thanks,
+> > >
+> > >
+> > Regards,
+> >
+> > Richard
+> >
