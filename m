@@ -2,48 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385DB6DC684
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946D16DC68A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjDJMFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S229843AbjDJMIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjDJMFE (ORCPT
+        with ESMTP id S229805AbjDJMH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:05:04 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A0C961B4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:05:01 -0700 (PDT)
-Received: from u201911649$hust.edu.cn ( [10.17.52.61] ) by ajax-webmail-app1
- (Coremail) ; Mon, 10 Apr 2023 20:04:21 +0800 (GMT+08:00)
-X-Originating-IP: [10.17.52.61]
-Date:   Mon, 10 Apr 2023 20:04:21 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5oi06ZKm5ram?= <u201911649@hust.edu.cn>
-To:     "daniel lezcano" <daniel.lezcano@linaro.org>,
-        "thomas gleixner" <tglx@linutronix.de>,
-        "bartosz golaszewski" <bgolaszewski@baylibre.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: clocksource: fix memory leak in
- davinci_timer_register
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230322151945.102353-1-flno@hust.edu.cn>
-References: <20230322151945.102353-1-flno@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 10 Apr 2023 08:07:58 -0400
+Received: from mail-ej1-x664.google.com (mail-ej1-x664.google.com [IPv6:2a00:1450:4864:20::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8151359CA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:56 -0700 (PDT)
+Received: by mail-ej1-x664.google.com with SMTP id jg21so11666352ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1681128475;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DOPjxEcfLVsIAdwWOo4TRGdlXCCfnhRjeta1axyXm4Q=;
+        b=DThPq+9oUNJ8egsR9bfIy4/4kIhHduzWkXx9wA78bE7Xs8+sUuVR+b7laqS2pLqGfo
+         Obgs8Cwi8Wlg2gGSiluZkkAdw31JOZ0v5e8TFZg8tHhmbugRldO8Orv9YHv/GRPA1/Yp
+         Pv/MVnV3KTScwJQBIxpdBQG16zoRhcUNThd0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681128475;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DOPjxEcfLVsIAdwWOo4TRGdlXCCfnhRjeta1axyXm4Q=;
+        b=0kg/LYBqAdUm6XEl018Mq+Ij0zASmn3AmwiYEkBZh4NpefeYK7dofx1N3xDq5yObd+
+         MJh1C07MRVE9EetnfPjC0/ArXQvRttVx4UB5OZDJ0fHPBr3pggD+BaIdyhS1ZMrol9M+
+         V6hX5gh25f2Xcz2ZjKP9I9SRkSG+najLL4DeAjSJMgd0VZbru9sr065RNrveNL/tLkc1
+         fRjux30hCHMc9Oo/+kmIJZyTj4eUigWN+Va/Ypj7nNUIWFnRnwRYZIovlQtLn8yM8jWv
+         iOJy2KrHSsBQnDMeRL1uU1WaDyhkWt4VxRvHwohoj6D/aMwryRQlXkjrPqEvvhpSilbE
+         ojiw==
+X-Gm-Message-State: AAQBX9cxebzaQGDtImav4+uW4kzt6a6iQrQxKelMLswvSxTy6/Y28lnR
+        aSM0+sC4fXwK/edudBygfctEMyUx/dPBEeLsIutyVw4vRM4k
+X-Google-Smtp-Source: AKy350YtSHWD1gr86TVtqITsxWTRI7Ge4dTzrbgBtz2vqBIq5KsAHsDIrtDnBCYnJPb/np+SALaeA5hFltkz
+X-Received: by 2002:a17:906:e5b:b0:94a:845c:3528 with SMTP id q27-20020a1709060e5b00b0094a845c3528mr3056395eji.45.1681128474950;
+        Mon, 10 Apr 2023 05:07:54 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id nb39-20020a1709071ca700b008b1fc5abd08sm2089769ejc.56.2023.04.10.05.07.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 05:07:54 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v5 1/4] xsk: Use pool->dma_pages to check for DMA
+Date:   Mon, 10 Apr 2023 14:06:26 +0200
+Message-Id: <20230410120629.642955-2-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230410120629.642955-1-kal.conley@dectris.com>
+References: <20230410120629.642955-1-kal.conley@dectris.com>
 MIME-Version: 1.0
-Message-ID: <192d4b12.39f86.1876b0d8808.Coremail.u201911649@hust.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: FgEQrACnuAlF+zNkQ_RUAg--.32893W
-X-CM-SenderInfo: zxsqimqrrwkmo6kx23oohg3hdfq/1tbiAQkRC17Em468VQAAs0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,45 +80,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CnBpbmc/Cgo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZXMtLS0tLQo+IEZyb206ICJRaW5ydW4gRGFp
-IiA8Zmxub0BodXN0LmVkdS5jbj4KPiBTZW50IFRpbWU6IDIwMjMtMDMtMjIgMjM6MTk6NDUgKFdl
-ZG5lc2RheSkKPiBUbzogIkRhbmllbCBMZXpjYW5vIiA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9y
-Zz4sICJUaG9tYXMgR2xlaXhuZXIiIDx0Z2x4QGxpbnV0cm9uaXguZGU+LCAiQmFydG9zeiBHb2xh
-c3pld3NraSIgPGJnb2xhc3pld3NraUBiYXlsaWJyZS5jb20+Cj4gQ2M6IGh1c3Qtb3Mta2VybmVs
-LXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgIlFpbnJ1biBEYWkiIDxmbG5vQGh1c3QuZWR1LmNu
-PiwgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IFN1YmplY3Q6IFtQQVRDSF0gZHJpdmVy
-czogY2xvY2tzb3VyY2U6IGZpeCBtZW1vcnkgbGVhayBpbiBkYXZpbmNpX3RpbWVyX3JlZ2lzdGVy
-Cj4gCj4gU21hdGNoIHJlcG9ydHM6Cj4gZHJpdmVycy9jbG9ja3NvdXJjZS90aW1lci1kYXZpbmNp
-LmM6MzMyIGRhdmluY2lfdGltZXJfcmVnaXN0ZXIoKQo+IHdhcm46ICdiYXNlJyBmcm9tIGlvcmVt
-YXAoKSBub3QgcmVsZWFzZWQgb24gbGluZXM6IDI3NC4KPiAKPiBGaXggdGhpcyBieSBkZWZpbmlu
-ZyBhIHVuaWZpZWQgZnVuY3Rpb24gZXhpdAo+IHRvIGlvdW5tYXAgJ2Jhc2UnIGFuZCByZXR1cm4g
-Y29ycmVzcG9uZGluZyB2YWx1ZS4KPiAKPiBGaXhlczogNzIxMTU0Zjk3MmFhICgiY2xvY2tzb3Vy
-Y2UvZHJpdmVycy9kYXZpbmNpOiBBZGQgc3VwcG9ydCBmb3IgY2xvY2tldmVudHMiKQo+IFNpZ25l
-ZC1vZmYtYnk6IFFpbnJ1biBEYWkgPGZsbm9AaHVzdC5lZHUuY24+Cj4gLS0tCj4gIGRyaXZlcnMv
-Y2xvY2tzb3VyY2UvdGltZXItZGF2aW5jaS5jIHwgMTQgKysrKysrKysrKy0tLS0KPiAgMSBmaWxl
-IGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvdGltZXItZGF2aW5jaS5jIGIvZHJpdmVycy9jbG9ja3Nv
-dXJjZS90aW1lci1kYXZpbmNpLmMKPiBpbmRleCA5OTk2YzA1NDI1MjAuLmE2ZGQxZGE5ZTZkMSAx
-MDA2NDQKPiAtLS0gYS9kcml2ZXJzL2Nsb2Nrc291cmNlL3RpbWVyLWRhdmluY2kuYwo+ICsrKyBi
-L2RyaXZlcnMvY2xvY2tzb3VyY2UvdGltZXItZGF2aW5jaS5jCj4gQEAgLTI3MCw4ICsyNzAsMTAg
-QEAgaW50IF9faW5pdCBkYXZpbmNpX3RpbWVyX3JlZ2lzdGVyKHN0cnVjdCBjbGsgKmNsaywKPiAg
-CXRpY2tfcmF0ZSA9IGNsa19nZXRfcmF0ZShjbGspOwo+ICAKPiAgCWNsb2NrZXZlbnQgPSBremFs
-bG9jKHNpemVvZigqY2xvY2tldmVudCksIEdGUF9LRVJORUwpOwo+IC0JaWYgKCFjbG9ja2V2ZW50
-KQo+IC0JCXJldHVybiAtRU5PTUVNOwo+ICsJaWYgKCFjbG9ja2V2ZW50KSB7Cj4gKwkJcnYgPSAt
-RU5PTUVNOwo+ICsJCWdvdG8gaW91bm1hcF9iYXNlOwo+ICsJfQo+ICAKPiAgCWNsb2NrZXZlbnQt
-PmRldi5uYW1lID0gInRpbTEyIjsKPiAgCWNsb2NrZXZlbnQtPmRldi5mZWF0dXJlcyA9IENMT0NL
-X0VWVF9GRUFUX09ORVNIT1Q7Cj4gQEAgLTI5Niw3ICsyOTgsNyBAQCBpbnQgX19pbml0IGRhdmlu
-Y2lfdGltZXJfcmVnaXN0ZXIoc3RydWN0IGNsayAqY2xrLAo+ICAJCQkgImNsb2NrZXZlbnQvdGlt
-MTIiLCBjbG9ja2V2ZW50KTsKPiAgCWlmIChydikgewo+ICAJCXByX2VycigiVW5hYmxlIHRvIHJl
-cXVlc3QgdGhlIGNsb2NrZXZlbnQgaW50ZXJydXB0XG4iKTsKPiAtCQlyZXR1cm4gcnY7Cj4gKwkJ
-Z290byBpb3VubWFwX2Jhc2U7Cj4gIAl9Cj4gIAo+ICAJZGF2aW5jaV9jbG9ja3NvdXJjZS5kZXYu
-cmF0aW5nID0gMzAwOwo+IEBAIC0zMjMsMTMgKzMyNSwxNyBAQCBpbnQgX19pbml0IGRhdmluY2lf
-dGltZXJfcmVnaXN0ZXIoc3RydWN0IGNsayAqY2xrLAo+ICAJcnYgPSBjbG9ja3NvdXJjZV9yZWdp
-c3Rlcl9oeigmZGF2aW5jaV9jbG9ja3NvdXJjZS5kZXYsIHRpY2tfcmF0ZSk7Cj4gIAlpZiAocnYp
-IHsKPiAgCQlwcl9lcnIoIlVuYWJsZSB0byByZWdpc3RlciBjbG9ja3NvdXJjZVxuIik7Cj4gLQkJ
-cmV0dXJuIHJ2Owo+ICsJCWdvdG8gaW91bm1hcF9iYXNlOwo+ICAJfQo+ICAKPiAgCXNjaGVkX2Ns
-b2NrX3JlZ2lzdGVyKGRhdmluY2lfdGltZXJfcmVhZF9zY2hlZF9jbG9jaywKPiAgCQkJICAgICBE
-QVZJTkNJX1RJTUVSX0NMS1NSQ19CSVRTLCB0aWNrX3JhdGUpOwo+ICAKPiAgCXJldHVybiAwOwo+
-ICsKPiAraW91bm1hcF9iYXNlOgo+ICsJaW91bm1hcChiYXNlKTsKPiArCXJldHVybiBydjsKPiAg
-fQo+ICAKPiAgc3RhdGljIGludCBfX2luaXQgb2ZfZGF2aW5jaV90aW1lcl9yZWdpc3RlcihzdHJ1
-Y3QgZGV2aWNlX25vZGUgKm5wKQo+IC0tIAo+IDIuMzcuMgo=
+Read pool->dma_pages instead of pool->dma_pages_cnt to check for an
+active DMA mapping. pool->dma_pages needs to be read anyway to access
+the map so this compiles to more efficient code.
+
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ include/net/xsk_buff_pool.h | 2 +-
+ net/xdp/xsk_buff_pool.c     | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index d318c769b445..a8d7b8a3688a 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+ 	if (likely(!cross_pg))
+ 		return false;
+ 
+-	return pool->dma_pages_cnt &&
++	return pool->dma_pages &&
+ 	       !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+ }
+ 
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index b2df1e0f8153..26f6d304451e 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -350,7 +350,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ {
+ 	struct xsk_dma_map *dma_map;
+ 
+-	if (pool->dma_pages_cnt == 0)
++	if (!pool->dma_pages)
+ 		return;
+ 
+ 	dma_map = xp_find_dma_map(pool);
+@@ -364,6 +364,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ 
+ 	__xp_dma_unmap(dma_map, attrs);
+ 	kvfree(pool->dma_pages);
++	pool->dma_pages = NULL;
+ 	pool->dma_pages_cnt = 0;
+ 	pool->dev = NULL;
+ }
+@@ -503,7 +504,7 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
+ 	if (pool->unaligned) {
+ 		xskb = pool->free_heads[--pool->free_heads_cnt];
+ 		xp_init_xskb_addr(xskb, pool, addr);
+-		if (pool->dma_pages_cnt)
++		if (pool->dma_pages)
+ 			xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
+ 	} else {
+ 		xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
+@@ -569,7 +570,7 @@ static u32 xp_alloc_new_from_fq(struct xsk_buff_pool *pool, struct xdp_buff **xd
+ 		if (pool->unaligned) {
+ 			xskb = pool->free_heads[--pool->free_heads_cnt];
+ 			xp_init_xskb_addr(xskb, pool, addr);
+-			if (pool->dma_pages_cnt)
++			if (pool->dma_pages)
+ 				xp_init_xskb_dma(xskb, pool, pool->dma_pages, addr);
+ 		} else {
+ 			xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
+-- 
+2.39.2
+
