@@ -2,200 +2,796 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61E76DC641
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 13:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A836DC643
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 13:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjDJL3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 07:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S229842AbjDJLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 07:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDJL25 (ORCPT
+        with ESMTP id S229585AbjDJLd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 07:28:57 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E3730E0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 04:28:56 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 20so6228785plk.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 04:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1681126135;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ciKrq/Yl42ou0lRDT5MfvrbGiLHmmyRP4TLMhDsCh3E=;
-        b=pHUTQCfUpVOzEVF3sbeGEFofvk8HKR084Iuw9uH3ue1A1DXQkdvSN7E1r/f0nsyBHv
-         12OZBvKgalq4gXCq+/xdu1ZYptVV+6nl4eLwujelCO1/slbckVk5Nds8t2ciDnEmkp6l
-         9iXB1xsuI7Bp3t2r6PGF/ZhXm/YJnGCRdID0OSkNLqwPn41oMdnaqxRyv715xL69+Y4w
-         G2ZKpwHWawQ5Hx4ZMIcJ42tmPn1cS6oWcf74xcoGBFZOM3y2TakpG1YszImHJOseHHZN
-         808esbtEb4eYLyNDVXhHLmPB/930ezbU9cbnW4cHD1wi8L5T+cVl1gB0Ok22EKca4RM/
-         vNwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681126135;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ciKrq/Yl42ou0lRDT5MfvrbGiLHmmyRP4TLMhDsCh3E=;
-        b=ObTUVTM4ccrg810ePJ45F6RJzetV4vzusegmYhVC9HFQ9a1/7pfpLtL8i9pSiFeuWj
-         0tFA+aGDKAhiEE/of7wiBxrl0iQGVo1owc6rOxhk28ErLp6h72wTctYs0RwAi+Yam5HV
-         N0e7sl0oOc8CdK9uf0RvOUEP5EAVPMP4j1XOCZDTgmie4v2T0QB3X5aUGZvLMFSAXB4Y
-         ZdnYieSJNj0BznGxz87CQsMlxBVVvaaOxcsRZzpIDJnsQUDCLJ23oCDqthkznA+qpWpM
-         4ZHflww8TV9Ye7mpX4Z8MWEhYLsby36nUP9XPOnHW459mFC1+VlUoq9el0lgW5KlCb+U
-         2HDw==
-X-Gm-Message-State: AAQBX9f0t8eSBuaUDgs6oXnLmm8Jg7+0XeOhrStuaqTAbIsP0/jsJjvQ
-        NPKRHM8ICO4fbTbF+r7qcStt1w==
-X-Google-Smtp-Source: AKy350ZpKKAzldtZX1peVNJtayz/p4zL8IKT/lEfnP6SxlT3XHUUF2eamZZCkR+RV1yHIP6Ue5NOqQ==
-X-Received: by 2002:a17:902:e852:b0:1a5:684:7fda with SMTP id t18-20020a170902e85200b001a506847fdamr15595169plg.59.1681126135587;
-        Mon, 10 Apr 2023 04:28:55 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1709027c8b00b0019c919bccf8sm7575052pll.86.2023.04.10.04.28.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 04:28:55 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v2 2/2] tools/virtio: fix build caused by virtio_ring changes
-Date:   Mon, 10 Apr 2023 20:28:45 +0900
-Message-Id: <20230410112845.337212-2-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230410112845.337212-1-mie@igel.co.jp>
-References: <20230410112845.337212-1-mie@igel.co.jp>
+        Mon, 10 Apr 2023 07:33:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8EB3C3C;
+        Mon, 10 Apr 2023 04:33:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F416164E;
+        Mon, 10 Apr 2023 11:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E7DC4339E;
+        Mon, 10 Apr 2023 11:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681126404;
+        bh=oMXUFRdW4vFq1r3tmi41WUMsygGI/SbuNH0eEJ2jjaY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WAKMUoB50+od9jgezwiOJFdBh675Yvhzem7b7S5SNjizlqGI0YpM99InKQfTv/z5g
+         ng5tY85sx7xC/uC9T3FzrjqmYCl5qWYRXvtFIr9Xtp9RC1P2fLeO/P3HYf0JF42Kk2
+         pq5zw6fqm/Q9OG8paONpaEMZHNjp06t+LrAIRnpqK/JIfkQS007koVa8kZkU+KV4Ej
+         6Nwm/P2mCEPSWxHI+mjBysNUxvJl91fYdbjX9D8qBzxp+ji9/kjFp6HTX1HEx+6d8K
+         fyGm5AsNFuCmWOc5EQ3AG0cTqbA65LAmEhVS4ToOMt3EzWfbOfObN4Rf55nLWxACyO
+         4KL/8DHqXyS/A==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-94a34d381e1so84361366b.3;
+        Mon, 10 Apr 2023 04:33:24 -0700 (PDT)
+X-Gm-Message-State: AAQBX9deYL1kQXgiI+U/Nqub2leJDTr0+Be6d/zkSGV0GYt/SaE0fvlH
+        j0wWcCDCQsthYOQODCCfGPltI5y0WnZRalFZ2Dw=
+X-Google-Smtp-Source: AKy350bkxa8oGEjXkjGVS9zYy6maOOGIHS75Rbl83aQ0p7zSphRf8UlMk9TTy/Tr+Iybuz28xBvXxdRkiXFa1l7Ti/g=
+X-Received: by 2002:a50:9987:0:b0:4ab:49b9:686d with SMTP id
+ m7-20020a509987000000b004ab49b9686dmr4892170edb.1.1681126402245; Mon, 10 Apr
+ 2023 04:33:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230307021857.1217951-1-chenhuacai@loongson.cn> <CAEr6+EBid3A4ZLYrFuaO1b7UjXZHz2EBAY4+nMayZk0DTFEESg@mail.gmail.com>
+In-Reply-To: <CAEr6+EBid3A4ZLYrFuaO1b7UjXZHz2EBAY4+nMayZk0DTFEESg@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 10 Apr 2023 19:33:10 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4DRxYb8gCnGqLKYA8sNoMA6z2LFkyxM2OrupDGf8+M-Q@mail.gmail.com>
+Message-ID: <CAAhV-H4DRxYb8gCnGqLKYA8sNoMA6z2LFkyxM2OrupDGf8+M-Q@mail.gmail.com>
+Subject: Re: [PATCH] tools/perf: Add basic support for LoongArch
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        Ming Wang <wangming01@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the build dependency for virtio_test. The virtio_ring that is used from
-the test requires container_of_const(). Change to use container_of.h kernel
-header directly and adapt related codes.
+Hi, Jeff,
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- tools/include/linux/types.h   |  1 -
- tools/virtio/linux/compiler.h |  2 ++
- tools/virtio/linux/kernel.h   |  5 +----
- tools/virtio/linux/module.h   |  1 -
- tools/virtio/linux/uaccess.h  | 11 ++---------
- 5 files changed, 5 insertions(+), 15 deletions(-)
+On Fri, Mar 31, 2023 at 9:55=E2=80=AFPM Jeff Xie <xiehuan09@gmail.com> wrot=
+e:
+>
+> Hi,
+>
+> Currently, it seems that only LoongArch does not support libdw.
+> However, libdw has many advantages,
+> and I hope that LoongArch will consider supporting it.  In my opinion,
+> libdw has at least the following advantages:
+>
+> Comprehensive DWARF support: The libdw library provides comprehensive
+> support for the DWARF debugging format.
+> DWARF is the most commonly used debugging information format on the
+> Linux platform, featuring a rich set of capabilities
+> that can describe the complex relationship between source code and
+> compiled executable files. libdw can parse all DWARF features,
+> including type information, line numbers, local and global variables,
+> macro definitions, etc., enabling perf to provide detailed
+> source-code-level performance data.
+>
+> Performance and memory usage: The libdw library was designed with
+> performance and memory usage in mind.
+> It uses efficient algorithms and data structures to parse and store
+> DWARF information, thus reducing performance overhead and memory
+> usage.
+> This is particularly important for performance analysis tools like
+> perf, which need to parse large amounts of debugging information at
+> runtime and minimize the impact on the target program being analyzed.
+>
+> Concise API: The libdw library provides a concise, easy-to-use API
+> that allows developers to easily integrate
+> it into applications like perf. The API follows C programming
+> conventions and can seamlessly cooperate with other
+>
+> I hope  Loonarch can consider supporting libdw in LoongArch, as it
+> would be of great help to our work.
+Thank you for your comments, now I have sent V2 and added libdw support.
+https://lore.kernel.org/loongarch/20230410111823.2538831-1-chenhuacai@loong=
+son.cn/T/#u
 
-diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
-index 051fdeaf2670..f1896b70a8e5 100644
---- a/tools/include/linux/types.h
-+++ b/tools/include/linux/types.h
-@@ -49,7 +49,6 @@ typedef __s8  s8;
- #endif
- 
- #define __force
--#define __user
- #define __must_check
- #define __cold
- 
-diff --git a/tools/virtio/linux/compiler.h b/tools/virtio/linux/compiler.h
-index 2c51bccb97bb..1f3a15b954b9 100644
---- a/tools/virtio/linux/compiler.h
-+++ b/tools/virtio/linux/compiler.h
-@@ -2,6 +2,8 @@
- #ifndef LINUX_COMPILER_H
- #define LINUX_COMPILER_H
- 
-+#include "../../../include/linux/compiler_types.h"
-+
- #define WRITE_ONCE(var, val) \
- 	(*((volatile typeof(val) *)(&(var))) = (val))
- 
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 8b877167933d..6702008f7f5c 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
- 
- #include <linux/compiler.h>
-+#include "../../../include/linux/container_of.h"
- #include <linux/log2.h>
- #include <linux/types.h>
- #include <linux/overflow.h>
-@@ -107,10 +108,6 @@ static inline void free_page(unsigned long addr)
- 	free((void *)addr);
- }
- 
--#define container_of(ptr, type, member) ({			\
--	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
--	(type *)( (char *)__mptr - offsetof(type,member) );})
+Huacai
+>
+>
+> On Tue, Mar 7, 2023 at 10:21=E2=80=AFAM Huacai Chen <chenhuacai@loongson.=
+cn> wrote:
+> >
+> > Add basic support for LoongArch, which is very similar to the MIPS
+> > version.
+> >
+> > Signed-off-by: Ming Wang <wangming01@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  .../loongarch/include/uapi/asm/perf_regs.h    | 40 +++++++++
+> >  .../arch/loongarch/include/uapi/asm/unistd.h  |  9 ++
+> >  tools/perf/Makefile.config                    |  7 ++
+> >  tools/perf/arch/loongarch/Build               |  1 +
+> >  tools/perf/arch/loongarch/Makefile            | 27 ++++++
+> >  .../arch/loongarch/annotate/instructions.c    | 45 ++++++++++
+> >  .../loongarch/entry/syscalls/mksyscalltbl     | 61 +++++++++++++
+> >  .../arch/loongarch/include/dwarf-regs-table.h | 16 ++++
+> >  tools/perf/arch/loongarch/include/perf_regs.h | 88 +++++++++++++++++++
+> >  tools/perf/arch/loongarch/util/Build          |  4 +
+> >  tools/perf/arch/loongarch/util/dwarf-regs.c   | 25 ++++++
+> >  tools/perf/arch/loongarch/util/perf_regs.c    |  6 ++
+> >  .../arch/loongarch/util/unwind-libunwind.c    | 82 +++++++++++++++++
+> >  tools/perf/util/annotate.c                    |  8 ++
+> >  tools/perf/util/dwarf-regs.c                  |  7 ++
+> >  tools/perf/util/env.c                         |  2 +
+> >  tools/perf/util/genelf.h                      |  3 +
+> >  tools/perf/util/syscalltbl.c                  |  4 +
+> >  18 files changed, 435 insertions(+)
+> >  create mode 100644 tools/arch/loongarch/include/uapi/asm/perf_regs.h
+> >  create mode 100644 tools/arch/loongarch/include/uapi/asm/unistd.h
+> >  create mode 100644 tools/perf/arch/loongarch/Build
+> >  create mode 100644 tools/perf/arch/loongarch/Makefile
+> >  create mode 100644 tools/perf/arch/loongarch/annotate/instructions.c
+> >  create mode 100755 tools/perf/arch/loongarch/entry/syscalls/mksyscallt=
+bl
+> >  create mode 100644 tools/perf/arch/loongarch/include/dwarf-regs-table.=
+h
+> >  create mode 100644 tools/perf/arch/loongarch/include/perf_regs.h
+> >  create mode 100644 tools/perf/arch/loongarch/util/Build
+> >  create mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
+> >  create mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
+> >  create mode 100644 tools/perf/arch/loongarch/util/unwind-libunwind.c
+> >
+> > diff --git a/tools/arch/loongarch/include/uapi/asm/perf_regs.h b/tools/=
+arch/loongarch/include/uapi/asm/perf_regs.h
+> > new file mode 100644
+> > index 000000000000..9943d418e01d
+> > --- /dev/null
+> > +++ b/tools/arch/loongarch/include/uapi/asm/perf_regs.h
+> > @@ -0,0 +1,40 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +#ifndef _ASM_LOONGARCH_PERF_REGS_H
+> > +#define _ASM_LOONGARCH_PERF_REGS_H
+> > +
+> > +enum perf_event_loongarch_regs {
+> > +       PERF_REG_LOONGARCH_PC,
+> > +       PERF_REG_LOONGARCH_R1,
+> > +       PERF_REG_LOONGARCH_R2,
+> > +       PERF_REG_LOONGARCH_R3,
+> > +       PERF_REG_LOONGARCH_R4,
+> > +       PERF_REG_LOONGARCH_R5,
+> > +       PERF_REG_LOONGARCH_R6,
+> > +       PERF_REG_LOONGARCH_R7,
+> > +       PERF_REG_LOONGARCH_R8,
+> > +       PERF_REG_LOONGARCH_R9,
+> > +       PERF_REG_LOONGARCH_R10,
+> > +       PERF_REG_LOONGARCH_R11,
+> > +       PERF_REG_LOONGARCH_R12,
+> > +       PERF_REG_LOONGARCH_R13,
+> > +       PERF_REG_LOONGARCH_R14,
+> > +       PERF_REG_LOONGARCH_R15,
+> > +       PERF_REG_LOONGARCH_R16,
+> > +       PERF_REG_LOONGARCH_R17,
+> > +       PERF_REG_LOONGARCH_R18,
+> > +       PERF_REG_LOONGARCH_R19,
+> > +       PERF_REG_LOONGARCH_R20,
+> > +       PERF_REG_LOONGARCH_R21,
+> > +       PERF_REG_LOONGARCH_R22,
+> > +       PERF_REG_LOONGARCH_R23,
+> > +       PERF_REG_LOONGARCH_R24,
+> > +       PERF_REG_LOONGARCH_R25,
+> > +       PERF_REG_LOONGARCH_R26,
+> > +       PERF_REG_LOONGARCH_R27,
+> > +       PERF_REG_LOONGARCH_R28,
+> > +       PERF_REG_LOONGARCH_R29,
+> > +       PERF_REG_LOONGARCH_R30,
+> > +       PERF_REG_LOONGARCH_R31,
+> > +       PERF_REG_LOONGARCH_MAX =3D PERF_REG_LOONGARCH_R31 + 1,
+> > +};
+> > +#endif /* _ASM_LOONGARCH_PERF_REGS_H */
+> > diff --git a/tools/arch/loongarch/include/uapi/asm/unistd.h b/tools/arc=
+h/loongarch/include/uapi/asm/unistd.h
+> > new file mode 100644
+> > index 000000000000..0c743344e92d
+> > --- /dev/null
+> > +++ b/tools/arch/loongarch/include/uapi/asm/unistd.h
+> > @@ -0,0 +1,9 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +/*
+> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#define __ARCH_WANT_SYS_CLONE
+> > +#define __ARCH_WANT_SYS_CLONE3
+> > +
+> > +#include <asm-generic/unistd.h>
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index 3519a0139026..89230ae68721 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -80,6 +80,13 @@ ifeq ($(SRCARCH),arm64)
+> >    LIBUNWIND_LIBS =3D -lunwind -lunwind-aarch64
+> >  endif
+> >
+> > +ifeq ($(SRCARCH),loongarch)
+> > +  NO_PERF_REGS :=3D 0
+> > +  CFLAGS +=3D -I$(OUTPUT)arch/loongarch/include/generated
+> > +  CFLAGS +=3D -I$(OUTPUT)../arch/loongarch/include/uapi
+> > +  LIBUNWIND_LIBS =3D -lunwind -lunwind-loongarch
+> > +endif
+> > +
+> >  ifeq ($(SRCARCH),riscv)
+> >    NO_PERF_REGS :=3D 0
+> >  endif
+> > diff --git a/tools/perf/arch/loongarch/Build b/tools/perf/arch/loongarc=
+h/Build
+> > new file mode 100644
+> > index 000000000000..e4e5f33c84d8
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/Build
+> > @@ -0,0 +1 @@
+> > +perf-y +=3D util/
+> > diff --git a/tools/perf/arch/loongarch/Makefile b/tools/perf/arch/loong=
+arch/Makefile
+> > new file mode 100644
+> > index 000000000000..1229157b09e1
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/Makefile
+> > @@ -0,0 +1,27 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +ifndef NO_DWARF
+> > +PERF_HAVE_DWARF_REGS :=3D 1
+> > +endif
+> > +PERF_HAVE_JITDUMP :=3D 1
+> > +
+> > +#
+> > +# Syscall table generation for perf
+> > +#
+> > +
+> > +out    :=3D $(OUTPUT)arch/loongarch/include/generated/asm
+> > +header :=3D $(out)/syscalls_64.c
+> > +incpath :=3D $(srctree)/tools
+> > +sysdef :=3D $(srctree)/tools/arch/loongarch/include/uapi/asm/unistd.h
+> > +sysprf :=3D $(srctree)/tools/perf/arch/loongarch/entry/syscalls/
+> > +systbl :=3D $(sysprf)/mksyscalltbl
+> > +
+> > +# Create output directory if not already present
+> > +_dummy :=3D $(shell [ -d '$(out)' ] || mkdir -p '$(out)')
+> > +
+> > +$(header): $(sysdef) $(systbl)
+> > +       $(Q)$(SHELL) '$(systbl)' '$(CC)' '$(HOSTCC)' $(incpath) $(sysde=
+f) > $@
+> > +
+> > +clean::
+> > +       $(call QUIET_CLEAN, loongarch) $(RM) $(header)
+> > +
+> > +archheaders: $(header)
+> > diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/=
+perf/arch/loongarch/annotate/instructions.c
+> > new file mode 100644
+> > index 000000000000..ab21bf122135
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/annotate/instructions.c
+> > @@ -0,0 +1,45 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Perf annotate functions.
+> > + *
+> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +static
+> > +struct ins_ops *loongarch__associate_ins_ops(struct arch *arch, const =
+char *name)
+> > +{
+> > +       struct ins_ops *ops =3D NULL;
+> > +
+> > +       if (!strncmp(name, "beqz", 4) ||
+> > +           !strncmp(name, "bnez", 4) ||
+> > +           !strncmp(name, "beq", 3) ||
+> > +           !strncmp(name, "bne", 3) ||
+> > +           !strncmp(name, "blt", 3) ||
+> > +           !strncmp(name, "bge", 3) ||
+> > +           !strncmp(name, "bltu", 4) ||
+> > +           !strncmp(name, "bgeu", 4) ||
+> > +           !strncmp(name, "bl", 2))
+> > +               ops =3D &call_ops;
+> > +       else if (!strncmp(name, "jirl", 4))
+> > +               ops =3D &ret_ops;
+> > +       else if (name[0] =3D=3D 'b')
+> > +               ops =3D &jump_ops;
+> > +       else
+> > +               return NULL;
+> > +
+> > +       arch__associate_ins_ops(arch, name, ops);
+> > +
+> > +       return ops;
+> > +}
+> > +
+> > +static
+> > +int loongarch__annotate_init(struct arch *arch, char *cpuid __maybe_un=
+used)
+> > +{
+> > +       if (!arch->initialized) {
+> > +               arch->associate_instruction_ops =3D loongarch__associat=
+e_ins_ops;
+> > +               arch->initialized =3D true;
+> > +               arch->objdump.comment_char =3D '#';
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > diff --git a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl b/to=
+ols/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+> > new file mode 100755
+> > index 000000000000..c52156f7204d
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+> > @@ -0,0 +1,61 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# Generate system call table for perf. Derived from
+> > +# powerpc script.
+> > +#
+> > +# Author(s):  Ming Wang <wangming01@loongson.cn>
+> > +# Author(s):  Huacai Chen <chenhuacai@loongson.cn>
+> > +# Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > +
+> > +gcc=3D$1
+> > +hostcc=3D$2
+> > +incpath=3D$3
+> > +input=3D$4
+> > +
+> > +if ! test -r $input; then
+> > +       echo "Could not read input file" >&2
+> > +       exit 1
+> > +fi
+> > +
+> > +create_table_from_c()
+> > +{
+> > +       local sc nr last_sc
+> > +
+> > +       create_table_exe=3D`mktemp ${TMPDIR:-/tmp}/create-table-XXXXXX`
+> > +
+> > +       {
+> > +
+> > +       cat <<-_EoHEADER
+> > +               #include <stdio.h>
+> > +               #include "$input"
+> > +               int main(int argc, char *argv[])
+> > +               {
+> > +       _EoHEADER
+> > +
+> > +       while read sc nr; do
+> > +               printf "%s\n" " printf(\"\\t[%d] =3D \\\"$sc\\\",\\n\",=
+ $nr);"
+> > +               last_sc=3D$nr
+> > +       done
+> > +
+> > +       printf "%s\n" " printf(\"#define SYSCALLTBL_LOONGARCH_MAX_ID %d=
+\\n\", $last_sc);"
+> > +       printf "}\n"
+> > +
+> > +       } | $hostcc -I $incpath/include/uapi -o $create_table_exe -x c =
 -
- # ifndef likely
- #  define likely(x)	(__builtin_expect(!!(x), 1))
- # endif
-diff --git a/tools/virtio/linux/module.h b/tools/virtio/linux/module.h
-index 9dfa96fea2b2..5cf39167d47a 100644
---- a/tools/virtio/linux/module.h
-+++ b/tools/virtio/linux/module.h
-@@ -4,4 +4,3 @@
- #define MODULE_LICENSE(__MODULE_LICENSE_value) \
- 	static __attribute__((unused)) const char *__MODULE_LICENSE_name = \
- 		__MODULE_LICENSE_value
--
-diff --git a/tools/virtio/linux/uaccess.h b/tools/virtio/linux/uaccess.h
-index 991dfb263998..cde2c344b260 100644
---- a/tools/virtio/linux/uaccess.h
-+++ b/tools/virtio/linux/uaccess.h
-@@ -6,15 +6,10 @@
- 
- extern void *__user_addr_min, *__user_addr_max;
- 
--static inline void __chk_user_ptr(const volatile void *p, size_t size)
--{
--	assert(p >= __user_addr_min && p + size <= __user_addr_max);
--}
--
- #define put_user(x, ptr)					\
- ({								\
- 	typeof(ptr) __pu_ptr = (ptr);				\
--	__chk_user_ptr(__pu_ptr, sizeof(*__pu_ptr));		\
-+	__chk_user_ptr(__pu_ptr);		\
- 	WRITE_ONCE(*(__pu_ptr), x);				\
- 	0;							\
- })
-@@ -22,7 +17,7 @@ static inline void __chk_user_ptr(const volatile void *p, size_t size)
- #define get_user(x, ptr)					\
- ({								\
- 	typeof(ptr) __pu_ptr = (ptr);				\
--	__chk_user_ptr(__pu_ptr, sizeof(*__pu_ptr));		\
-+	__chk_user_ptr(__pu_ptr);		\
- 	x = READ_ONCE(*(__pu_ptr));				\
- 	0;							\
- })
-@@ -37,7 +32,6 @@ static void volatile_memcpy(volatile char *to, const volatile char *from,
- static inline int copy_from_user(void *to, const void __user volatile *from,
- 				 unsigned long n)
- {
--	__chk_user_ptr(from, n);
- 	volatile_memcpy(to, from, n);
- 	return 0;
- }
-@@ -45,7 +39,6 @@ static inline int copy_from_user(void *to, const void __user volatile *from,
- static inline int copy_to_user(void __user volatile *to, const void *from,
- 			       unsigned long n)
- {
--	__chk_user_ptr(to, n);
- 	volatile_memcpy(to, from, n);
- 	return 0;
- }
--- 
-2.25.1
-
+> > +
+> > +       $create_table_exe
+> > +
+> > +       rm -f $create_table_exe
+> > +}
+> > +
+> > +create_table()
+> > +{
+> > +       echo "static const char *syscalltbl_loongarch[] =3D {"
+> > +       create_table_from_c
+> > +       echo "};"
+> > +}
+> > +
+> > +$gcc -E -dM -x c  -I $incpath/include/uapi $input             \
+> > +       |sed -ne 's/^#define __NR_//p' \
+> > +       |sort -t' ' -k2 -n \
+> > +       |create_table
+> > diff --git a/tools/perf/arch/loongarch/include/dwarf-regs-table.h b/too=
+ls/perf/arch/loongarch/include/dwarf-regs-table.h
+> > new file mode 100644
+> > index 000000000000..4b2291034668
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/include/dwarf-regs-table.h
+> > @@ -0,0 +1,16 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * dwarf-regs-table.h : Mapping of DWARF debug register numbers into
+> > + * register names.
+> > + *
+> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#ifdef DEFINE_DWARF_REGSTR_TABLE
+> > +static const char * const loongarch_regstr_tbl[] =3D {
+> > +       "$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
+> > +       "$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", =
+"$19",
+> > +       "$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", =
+"%29",
+> > +       "$30", "$31",
+> > +};
+> > +#endif
+> > diff --git a/tools/perf/arch/loongarch/include/perf_regs.h b/tools/perf=
+/arch/loongarch/include/perf_regs.h
+> > new file mode 100644
+> > index 000000000000..82d531dcd90f
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/include/perf_regs.h
+> > @@ -0,0 +1,88 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef ARCH_PERF_REGS_H
+> > +#define ARCH_PERF_REGS_H
+> > +
+> > +#include <stdlib.h>
+> > +#include <linux/types.h>
+> > +#include <asm/perf_regs.h>
+> > +
+> > +#define PERF_REGS_MAX PERF_REG_LOONGARCH_MAX
+> > +#define PERF_REG_IP PERF_REG_LOONGARCH_PC
+> > +#define PERF_REG_SP PERF_REG_LOONGARCH_R3
+> > +
+> > +#define PERF_REGS_MASK ((1ULL << PERF_REG_LOONGARCH_MAX) - 1)
+> > +
+> > +static inline const char *__perf_reg_name(int id)
+> > +{
+> > +       switch (id) {
+> > +       case PERF_REG_LOONGARCH_PC:
+> > +               return "PC";
+> > +       case PERF_REG_LOONGARCH_R1:
+> > +               return "$1";
+> > +       case PERF_REG_LOONGARCH_R2:
+> > +               return "$2";
+> > +       case PERF_REG_LOONGARCH_R3:
+> > +               return "$3";
+> > +       case PERF_REG_LOONGARCH_R4:
+> > +               return "$4";
+> > +       case PERF_REG_LOONGARCH_R5:
+> > +               return "$5";
+> > +       case PERF_REG_LOONGARCH_R6:
+> > +               return "$6";
+> > +       case PERF_REG_LOONGARCH_R7:
+> > +               return "$7";
+> > +       case PERF_REG_LOONGARCH_R8:
+> > +               return "$8";
+> > +       case PERF_REG_LOONGARCH_R9:
+> > +               return "$9";
+> > +       case PERF_REG_LOONGARCH_R10:
+> > +               return "$10";
+> > +       case PERF_REG_LOONGARCH_R11:
+> > +               return "$11";
+> > +       case PERF_REG_LOONGARCH_R12:
+> > +               return "$12";
+> > +       case PERF_REG_LOONGARCH_R13:
+> > +               return "$13";
+> > +       case PERF_REG_LOONGARCH_R14:
+> > +               return "$14";
+> > +       case PERF_REG_LOONGARCH_R15:
+> > +               return "$15";
+> > +       case PERF_REG_LOONGARCH_R16:
+> > +               return "$16";
+> > +       case PERF_REG_LOONGARCH_R17:
+> > +               return "$17";
+> > +       case PERF_REG_LOONGARCH_R18:
+> > +               return "$18";
+> > +       case PERF_REG_LOONGARCH_R19:
+> > +               return "$19";
+> > +       case PERF_REG_LOONGARCH_R20:
+> > +               return "$20";
+> > +       case PERF_REG_LOONGARCH_R21:
+> > +               return "$21";
+> > +       case PERF_REG_LOONGARCH_R22:
+> > +               return "$22";
+> > +       case PERF_REG_LOONGARCH_R23:
+> > +               return "$23";
+> > +       case PERF_REG_LOONGARCH_R24:
+> > +               return "$24";
+> > +       case PERF_REG_LOONGARCH_R25:
+> > +               return "$25";
+> > +       case PERF_REG_LOONGARCH_R26:
+> > +               return "$26";
+> > +       case PERF_REG_LOONGARCH_R27:
+> > +               return "$27";
+> > +       case PERF_REG_LOONGARCH_R28:
+> > +               return "$28";
+> > +       case PERF_REG_LOONGARCH_R29:
+> > +               return "$29";
+> > +       case PERF_REG_LOONGARCH_R30:
+> > +               return "$30";
+> > +       case PERF_REG_LOONGARCH_R31:
+> > +               return "$31";
+> > +       default:
+> > +               break;
+> > +       }
+> > +       return NULL;
+> > +}
+> > +
+> > +#endif /* ARCH_PERF_REGS_H */
+> > diff --git a/tools/perf/arch/loongarch/util/Build b/tools/perf/arch/loo=
+ngarch/util/Build
+> > new file mode 100644
+> > index 000000000000..fab48acf21c5
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/util/Build
+> > @@ -0,0 +1,4 @@
+> > +perf-y +=3D perf_regs.o
+> > +
+> > +perf-$(CONFIG_DWARF)     +=3D dwarf-regs.o
+> > +perf-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
+> > diff --git a/tools/perf/arch/loongarch/util/dwarf-regs.c b/tools/perf/a=
+rch/loongarch/util/dwarf-regs.c
+> > new file mode 100644
+> > index 000000000000..7db14897a384
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/util/dwarf-regs.c
+> > @@ -0,0 +1,25 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * dwarf-regs.c : Mapping of DWARF debug register numbers into registe=
+r names.
+> > + *
+> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > + *
+> > + * Derived from MIPS:
+> > + * Copyright (C) 2013 Cavium, Inc.
+> > + */
+> > +
+> > +#include <stdio.h>
+> > +#include <dwarf-regs.h>
+> > +
+> > +static const char *loongarch_gpr_names[32] =3D {
+> > +       "$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
+> > +       "$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", =
+"$19",
+> > +       "$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", =
+"$29",
+> > +       "$30", "$31"
+> > +};
+> > +
+> > +const char *get_arch_regstr(unsigned int n)
+> > +{
+> > +       n %=3D 32;
+> > +       return loongarch_gpr_names[n];
+> > +}
+> > diff --git a/tools/perf/arch/loongarch/util/perf_regs.c b/tools/perf/ar=
+ch/loongarch/util/perf_regs.c
+> > new file mode 100644
+> > index 000000000000..2833e101a7c6
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/util/perf_regs.c
+> > @@ -0,0 +1,6 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include "../../../util/perf_regs.h"
+> > +
+> > +const struct sample_reg sample_reg_masks[] =3D {
+> > +       SMPL_REG_END
+> > +};
+> > diff --git a/tools/perf/arch/loongarch/util/unwind-libunwind.c b/tools/=
+perf/arch/loongarch/util/unwind-libunwind.c
+> > new file mode 100644
+> > index 000000000000..f693167b86ef
+> > --- /dev/null
+> > +++ b/tools/perf/arch/loongarch/util/unwind-libunwind.c
+> > @@ -0,0 +1,82 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <errno.h>
+> > +#include <libunwind.h>
+> > +#include "perf_regs.h"
+> > +#include "../../util/unwind.h"
+> > +#include "util/debug.h"
+> > +
+> > +int libunwind__arch_reg_id(int regnum)
+> > +{
+> > +       switch (regnum) {
+> > +       case UNW_LOONGARCH64_R1:
+> > +               return PERF_REG_LOONGARCH_R1;
+> > +       case UNW_LOONGARCH64_R2:
+> > +               return PERF_REG_LOONGARCH_R2;
+> > +       case UNW_LOONGARCH64_R3:
+> > +               return PERF_REG_LOONGARCH_R3;
+> > +       case UNW_LOONGARCH64_R4:
+> > +               return PERF_REG_LOONGARCH_R4;
+> > +       case UNW_LOONGARCH64_R5:
+> > +               return PERF_REG_LOONGARCH_R5;
+> > +       case UNW_LOONGARCH64_R6:
+> > +               return PERF_REG_LOONGARCH_R6;
+> > +       case UNW_LOONGARCH64_R7:
+> > +               return PERF_REG_LOONGARCH_R7;
+> > +       case UNW_LOONGARCH64_R8:
+> > +               return PERF_REG_LOONGARCH_R8;
+> > +       case UNW_LOONGARCH64_R9:
+> > +               return PERF_REG_LOONGARCH_R9;
+> > +       case UNW_LOONGARCH64_R10:
+> > +               return PERF_REG_LOONGARCH_R10;
+> > +       case UNW_LOONGARCH64_R11:
+> > +               return PERF_REG_LOONGARCH_R11;
+> > +       case UNW_LOONGARCH64_R12:
+> > +               return PERF_REG_LOONGARCH_R12;
+> > +       case UNW_LOONGARCH64_R13:
+> > +               return PERF_REG_LOONGARCH_R13;
+> > +       case UNW_LOONGARCH64_R14:
+> > +               return PERF_REG_LOONGARCH_R14;
+> > +       case UNW_LOONGARCH64_R15:
+> > +               return PERF_REG_LOONGARCH_R15;
+> > +       case UNW_LOONGARCH64_R16:
+> > +               return PERF_REG_LOONGARCH_R16;
+> > +       case UNW_LOONGARCH64_R17:
+> > +               return PERF_REG_LOONGARCH_R17;
+> > +       case UNW_LOONGARCH64_R18:
+> > +               return PERF_REG_LOONGARCH_R18;
+> > +       case UNW_LOONGARCH64_R19:
+> > +               return PERF_REG_LOONGARCH_R19;
+> > +       case UNW_LOONGARCH64_R20:
+> > +               return PERF_REG_LOONGARCH_R20;
+> > +       case UNW_LOONGARCH64_R21:
+> > +               return PERF_REG_LOONGARCH_R21;
+> > +       case UNW_LOONGARCH64_R22:
+> > +               return PERF_REG_LOONGARCH_R22;
+> > +       case UNW_LOONGARCH64_R23:
+> > +               return PERF_REG_LOONGARCH_R23;
+> > +       case UNW_LOONGARCH64_R24:
+> > +               return PERF_REG_LOONGARCH_R24;
+> > +       case UNW_LOONGARCH64_R25:
+> > +               return PERF_REG_LOONGARCH_R25;
+> > +       case UNW_LOONGARCH64_R26:
+> > +               return PERF_REG_LOONGARCH_R26;
+> > +       case UNW_LOONGARCH64_R27:
+> > +               return PERF_REG_LOONGARCH_R27;
+> > +       case UNW_LOONGARCH64_R28:
+> > +               return PERF_REG_LOONGARCH_R28;
+> > +       case UNW_LOONGARCH64_R29:
+> > +               return PERF_REG_LOONGARCH_R29;
+> > +       case UNW_LOONGARCH64_R30:
+> > +               return PERF_REG_LOONGARCH_R30;
+> > +       case UNW_LOONGARCH64_R31:
+> > +               return PERF_REG_LOONGARCH_R31;
+> > +       case UNW_LOONGARCH64_PC:
+> > +               return PERF_REG_LOONGARCH_PC;
+> > +       default:
+> > +               pr_err("unwind: invalid reg id %d\n", regnum);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       return -EINVAL;
+> > +}
+> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> > index db475e44f42f..0cc7710f32da 100644
+> > --- a/tools/perf/util/annotate.c
+> > +++ b/tools/perf/util/annotate.c
+> > @@ -149,6 +149,7 @@ static int arch__associate_ins_ops(struct arch* arc=
+h, const char *name, struct i
+> >  #include "arch/arm/annotate/instructions.c"
+> >  #include "arch/arm64/annotate/instructions.c"
+> >  #include "arch/csky/annotate/instructions.c"
+> > +#include "arch/loongarch/annotate/instructions.c"
+> >  #include "arch/mips/annotate/instructions.c"
+> >  #include "arch/x86/annotate/instructions.c"
+> >  #include "arch/powerpc/annotate/instructions.c"
+> > @@ -211,6 +212,13 @@ static struct arch architectures[] =3D {
+> >                         .comment_char =3D '#',
+> >                 },
+> >         },
+> > +       {
+> > +               .name =3D "loongarch",
+> > +               .init =3D loongarch__annotate_init,
+> > +               .objdump =3D {
+> > +                       .comment_char =3D '#',
+> > +               },
+> > +       },
+> >  };
+> >
+> >  static void ins__delete(struct ins_operands *ops)
+> > diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.=
+c
+> > index 3fa4486742cd..69cfaa5953bf 100644
+> > --- a/tools/perf/util/dwarf-regs.c
+> > +++ b/tools/perf/util/dwarf-regs.c
+> > @@ -14,6 +14,10 @@
+> >  #define EM_AARCH64     183  /* ARM 64 bit */
+> >  #endif
+> >
+> > +#ifndef EM_LOONGARCH
+> > +#define EM_LOONGARCH   258 /* LoongArch */
+> > +#endif
+> > +
+> >  /* Define const char * {arch}_register_tbl[] */
+> >  #define DEFINE_DWARF_REGSTR_TABLE
+> >  #include "../arch/x86/include/dwarf-regs-table.h"
+> > @@ -25,6 +29,7 @@
+> >  #include "../arch/sparc/include/dwarf-regs-table.h"
+> >  #include "../arch/xtensa/include/dwarf-regs-table.h"
+> >  #include "../arch/mips/include/dwarf-regs-table.h"
+> > +#include "../arch/loongarch/include/dwarf-regs-table.h"
+> >
+> >  #define __get_dwarf_regstr(tbl, n) (((n) < ARRAY_SIZE(tbl)) ? (tbl)[(n=
+)] : NULL)
+> >
+> > @@ -56,6 +61,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned=
+ int machine)
+> >                 return __get_dwarf_regstr(xtensa_regstr_tbl, n);
+> >         case EM_MIPS:
+> >                 return __get_dwarf_regstr(mips_regstr_tbl, n);
+> > +       case EM_LOONGARCH:
+> > +               return __get_dwarf_regstr(loongarch_regstr_tbl, n);
+> >         default:
+> >                 pr_err("ELF MACHINE %x is not supported.\n", machine);
+> >         }
+> > diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
+> > index 5b8cf6a421a4..0d5d40cb997b 100644
+> > --- a/tools/perf/util/env.c
+> > +++ b/tools/perf/util/env.c
+> > @@ -435,6 +435,8 @@ static const char *normalize_arch(char *arch)
+> >                 return "mips";
+> >         if (!strncmp(arch, "sh", 2) && isdigit(arch[2]))
+> >                 return "sh";
+> > +       if (!strncmp(arch, "loongarch", 9))
+> > +               return "loongarch";
+> >
+> >         return arch;
+> >  }
+> > diff --git a/tools/perf/util/genelf.h b/tools/perf/util/genelf.h
+> > index 6af062d1c452..5f18d20ea903 100644
+> > --- a/tools/perf/util/genelf.h
+> > +++ b/tools/perf/util/genelf.h
+> > @@ -43,6 +43,9 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, vo=
+id *debug, int nr_debug_ent
+> >  #elif defined(__riscv) && __riscv_xlen =3D=3D 64
+> >  #define GEN_ELF_ARCH   EM_RISCV
+> >  #define GEN_ELF_CLASS  ELFCLASS64
+> > +#elif defined(__loongarch__)
+> > +#define GEN_ELF_ARCH   EM_LOONGARCH
+> > +#define GEN_ELF_CLASS  ELFCLASS64
+> >  #else
+> >  #error "unsupported architecture"
+> >  #endif
+> > diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.=
+c
+> > index a2e906858891..313eccef6cb4 100644
+> > --- a/tools/perf/util/syscalltbl.c
+> > +++ b/tools/perf/util/syscalltbl.c
+> > @@ -38,6 +38,10 @@ static const char **syscalltbl_native =3D syscalltbl=
+_arm64;
+> >  #include <asm/syscalls_n64.c>
+> >  const int syscalltbl_native_max_id =3D SYSCALLTBL_MIPS_N64_MAX_ID;
+> >  static const char **syscalltbl_native =3D syscalltbl_mips_n64;
+> > +#elif defined(__loongarch__)
+> > +#include <asm/syscalls.c>
+> > +const int syscalltbl_native_max_id =3D SYSCALLTBL_LOONGARCH_MAX_ID;
+> > +static const char **syscalltbl_native =3D syscalltbl_loongarch;
+> >  #endif
+> >
+> >  struct syscall {
+> > --
+> > 2.39.1
+> >
+>
+>
+> --
+> Thanks,
+> JeffXie
