@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301856DC245
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39C16DC247
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjDJBN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S229677AbjDJBNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjDJBN1 (ORCPT
+        with ESMTP id S229665AbjDJBNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:13:27 -0400
+        Sun, 9 Apr 2023 21:13:49 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1335A7;
-        Sun,  9 Apr 2023 18:13:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1643A9A;
+        Sun,  9 Apr 2023 18:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=cg1S3XoU3SPVIhEQjqsExfl3vAbSc03YUdI51frBIwo=; b=ihxSGen1Mdtj9zPUVP70jaRoFS
-        jMkwJJ0+UbW1zpkqIlDrT69e58N0usHXr1ZvlWsqdl6eWt1EMfTYMQoi4Lzg+ki0TwsQhuafFw5rV
-        E6LPC8k8x4r8p/UhokWeUrWFZ8mKnkg7kyH+pRsakwcyYw84cpecFtcrYeGoon/neG0UppLClZiat
-        9TgmC11sJRG0itlxR27r2vwQPrEGmrxUY0s44flobNfleMtRncFY1OlWacepG1SYX4ao9xst9+xot
-        2OprWMTPDaqaunoJcEV9Xkon1Pp0YIYzx8hZcIx+HqaO8HaaJ1Y0JInURGhNrIAEZ8AIHa4Os0W3f
-        5moEquOw==;
+        bh=VdW0QiWZs5tGfWPYA1DUgJb23J28q3ZPvcBOi0zT0BE=; b=daWXvKb1EIcxg0HC4CwHgCtg37
+        uOSPNeR3CtfZXI4UL1UQEKRw53ztrrwSN16KQDm0/4UjmKQBs/K4fdMJS1HKBP8Y2lFCOxRQuzvy+
+        X/QkANaB6jdpL1QM2u5V4JiTpYp1CIgii1o//f8tyFp/CHbaSd7E8IL75M0NWjF/wt+vxJviwGu+z
+        iZqE/xoSuYH0mj4H0lD4fmN4yAnheEX/ke1abhcxu8W4roCX4+2RCCDCUDnQYUWYfWqdULe/K6RvQ
+        JbetAX6DydD8As2XFOgUHaCRA9XZNIA9GMa0CZsceZI5KaSgue60KcV8q/9bGl1IQCz+DO4rLq033
+        1oudGLig==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1plg5t-00EPci-1A;
-        Mon, 10 Apr 2023 01:13:17 +0000
+        id 1plg61-00EPd9-31;
+        Mon, 10 Apr 2023 01:13:26 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2] sparc: allow sparc32 alias for archhelp
-Date:   Sun,  9 Apr 2023 18:13:16 -0700
-Message-Id: <20230410011316.26564-1-rdunlap@infradead.org>
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-um@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v3] UML: pata_cs5536: fix build for X86_32 UML with TRACEPOINTS
+Date:   Sun,  9 Apr 2023 18:13:25 -0700
+Message-Id: <20230410011325.26850-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,38 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, entering
-$ make ARCH=sparc32 help
-prints the archhelp text for sparc64.
+Current build of pata_cs5536 for i386 UML fails with:
 
-Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
-to be a recognized alias for 32-bit sparc, also support that
-string in sparc's archhelp by allowing either ARCH=sparc or
-ARCH=sparc32 for sparc32 archhelp.
+ERROR: modpost: "__tracepoint_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "do_trace_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "__tracepoint_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "do_trace_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
 
-Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
+Add the arch/x86/lib/msr.o binary to resolve these undefined symbols.
+
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: linux-ide@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
-v2: rebase/resend; add Masahiro to Cc: list
+v2: change from not building on UML to fixing the build on UML
+v3: add Rev-by: Damien Le Moal
 
- arch/sparc/Makefile |    2 +-
+ arch/x86/um/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
---- a/arch/sparc/Makefile
-+++ b/arch/sparc/Makefile
-@@ -83,7 +83,7 @@ vdso_install:
- KBUILD_IMAGE := $(boot)/zImage
+diff -- a/arch/x86/um/Makefile b/arch/x86/um/Makefile
+--- a/arch/x86/um/Makefile
++++ b/arch/x86/um/Makefile
+@@ -21,7 +21,7 @@ obj-y += checksum_32.o syscalls_32.o
+ obj-$(CONFIG_ELF_CORE) += elfcore.o
  
- # Don't use tabs in echo arguments.
--ifeq ($(ARCH),sparc)
-+ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
- define archhelp
-   echo  '* image        - kernel image ($(boot)/image)'
-   echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
+ subarch-y = ../lib/string_32.o ../lib/atomic64_32.o ../lib/atomic64_cx8_32.o
+-subarch-y += ../lib/cmpxchg8b_emu.o ../lib/atomic64_386_32.o
++subarch-y += ../lib/cmpxchg8b_emu.o ../lib/atomic64_386_32.o ../lib/msr.o
+ subarch-y += ../kernel/sys_ia32.o
+ 
+ else
