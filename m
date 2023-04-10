@@ -2,71 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0447C6DC58D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B6B6DC591
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjDJKKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 06:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S229861AbjDJKKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 06:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDJKKS (ORCPT
+        with ESMTP id S229868AbjDJKK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 06:10:18 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0857B49D8;
-        Mon, 10 Apr 2023 03:10:14 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1ploSt-00EGwm-Fy; Mon, 10 Apr 2023 18:09:36 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 10 Apr 2023 18:09:35 +0800
+        Mon, 10 Apr 2023 06:10:26 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E034EC1;
+        Mon, 10 Apr 2023 03:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681121420; x=1712657420;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8eoxuz0kULjCVGWAEGYIGKMQ5ODOXKen7qD6Fb3jxRI=;
+  b=azgUmcdZ/hJURMyJkeDdPPDxGtWTENvd4Me9Elig3WpG64MNuOLfQ7LK
+   D+DQLtl8E1Nv0J2mcHYsfl+UmkUiF7uHrHnj3T2vE7tY53uSrDmALH+JT
+   rbkdH729mj5nIXakU6atrVx/zjBrQJ+D7jLAz25YtBuTn3IrGxlMlFodk
+   f0vHp4Gcb5tgD+hW0sieFEOTo/z7fhAPEdGdz1yZsp9ukgjAQPcLW7Zfi
+   sKOyEWr46lS/68zJOHQ+CmkmC4ZDDJxCWnvaj2PUbjbsq9/caKXSNPF80
+   9ad03VNq6Mrcr8Nhc33w7zQAQo5hcK0dzCGE67kdz8/07jpuEuRLUUiAd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="340815277"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="340815277"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 03:10:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="752715966"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="752715966"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Apr 2023 03:10:14 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net-next 0/4] XDP Rx HWTS metadata for stmmac driver
 Date:   Mon, 10 Apr 2023 18:09:35 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 4/4] crypto: starfive - Add hash and HMAC support
-Message-ID: <ZDPgXyGZtMZw5G4q@gondor.apana.org.au>
-References: <20230410073752.39506-1-jiajie.ho@starfivetech.com>
- <20230410073752.39506-5-jiajie.ho@starfivetech.com>
- <ZDO/z++4/TE6AiIz@gondor.apana.org.au>
- <6df549e9-d0f6-23ca-882f-527c4e40b553@starfivetech.com>
+Message-Id: <20230410100939.331833-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6df549e9-d0f6-23ca-882f-527c4e40b553@starfivetech.com>
-X-Spam-Status: No, score=4.3 required=5.0 tests=HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 04:43:37PM +0800, Jia Jie Ho wrote:
->
-> The hardware requires user to set a 'final' bit after data transfer completed.
-> This completion is to wait for the interrupt signal from device that the final digest 
-> has been populated to the read registers.
-> 
-> I'll do the finalize_request call directly in the next version.
+Implemented XDP receive hardware timestamp metadata for stmmac driver.
 
-Instead of the IRQ performing a completion, it could instead schedule
-a tasklet and do the callback directly from the tasklet.
+This patchset is tested with tools/testing/selftests/bpf/xdp_hw_metadata.
+Below are the test steps and results.
 
-Actually, the ordering between the IRQ and DMA callback is a bit
-confusing.  Which one is supposed to occur first and how does it
-interact with the other event?
+Command on DUT:
+	sudo ./xdp_hw_metadata <interface name>
 
-Cheers,
+Command on Link Partner:
+	echo -n xdp | nc -u -q1 <destination IPv4 addr> 9091
+	echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+
+Result for port 9091:
+	0x55fdb5f006d0: rx_desc[3]->addr=1000000003bd000 addr=3bd100 comp_addr=3bd000
+	rx_timestamp: 1677762474360150047
+	rx_hash: 0
+	0x55fdb5f006d0: complete idx=515 addr=3bd000
+
+Result for port 9092:
+	found skb hwtstamp = 1677762476.320146161
+
+---
+
+Ong Boon Leong (1):
+  net: stmmac: restructure Rx hardware timestamping function
+
+Song Yoong Siang (3):
+  net: stmmac: introduce wrapper for struct xdp_buff
+  net: stmmac: add Rx HWTS metadata to XDP receive pkt
+  net: stmmac: add Rx HWTS metadata to XDP ZC receive pkt
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  5 ++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 88 ++++++++++++++-----
+ 2 files changed, 73 insertions(+), 20 deletions(-)
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.34.1
+
