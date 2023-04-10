@@ -2,69 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CBB6DCCEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B236DCCEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDJVuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S229893AbjDJVv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjDJVuK (ORCPT
+        with ESMTP id S229507AbjDJVvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:50:10 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23CD198C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:50:08 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-514141c6692so329841a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:50:08 -0700 (PDT)
+        Mon, 10 Apr 2023 17:51:55 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB3F198B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:51:52 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AKBCUf002759;
+        Mon, 10 Apr 2023 21:51:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=CjtgKgQQ3huh7iyEo9U9iX9zy76w5MlaWNSGi1SKyt4=;
+ b=S1QU40ti9yVg+Dhv//M+cdsEfbfqA/eQPTMaR4IhSsadinkwXDWQmtJDf+bFDSgsxs2H
+ 7xxWblvfNnGtTR+4PEoKmpAMKf487xk0dBpoBlcLMfXoAeZV/I1GuHz6p5LNyB21wztS
+ vfh7adUYB4dVi8QiuRTV1PKmQ6n11flBBLP3cqj4zjD42L0YS+8brWepWTfZf2m7ncCj
+ vfnY5siUftcgWqUqjHZ47ZnBdB+tGjOMWWAyRupXtKaQE6jW+LXYddCGSFlGLaujGtIH
+ jKJWSF1E7WjVEjOLU8cut720NcZsH3xmYzgvqrV6SRlrO+I50YbxVwt5oMRfHKqG3Q9S wA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0eq3wpe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Apr 2023 21:51:43 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33ALou6p019926;
+        Mon, 10 Apr 2023 21:51:43 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3puwdmnfmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Apr 2023 21:51:43 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bImYbd8gj9RKJ4evDzo/2klEbBjuFjE0mgoaIWkzYNVU0tXVh2KWZ5YSBVVmW/eNn35XjDbDhG8qX1BWvdpSPQS7x3Hqx8egkI/qtgy1KNQPbrvdRs76n2Opdrv6345Yl6DMczku6Kg23B/IqJSzFzlhr11Uogbf1v/TBG0YbftNutKhQiXeWEgxrwiYQMhdev42pXqqME7bZM6ybW4dMXjJjc0WsxdnfqaEcMpPQmV+tKm7C5StVCRrW1Otq0dj5K/vt0eTIqkpv7f+/KNfvZedNATruLbnHCZCyJQlkVeLxlszwzGVcWYF1KaUOYGZUCLnJ14MtBDfsyXHbo8iwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CjtgKgQQ3huh7iyEo9U9iX9zy76w5MlaWNSGi1SKyt4=;
+ b=Pud8VntJQGoslEXL0a/gekWn7w1LUy2U/dyS4Wf/+ZT8qaCOxy6oAIRT+pDbR23SrnEph9sV+2gcQPWTmZ2kZblhPRU4/5YQZ/jHomoE12YX6BBXebdiXX6pOKrF0zuJwQBTczm2kLqZUNxZaS0kAfA9MMwCFB8SvcFDqnjNdH7+J6nWOS/xfqfD7/8A3rdPvh9qgeiPXANXMQFvXIXODGzam5tl9zJb2wW6y/OUNxZPFdCIe51SbFsEujKVF3S3byfX+c2gIN70cAIlAJlUyu++6NM0lSQ3//LWLGngZ3F8S4x9IoE/LOIQClv+C/cWgf9J8Nsvln9py4wqX/WYqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681163408;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mj8dSCbGPlf0CRd5FNuA/sfSA8tqFa0rbdFYnaL0J0Y=;
-        b=ooZshyiJM9UMbazIhJLtbwAA6XYym8j66UHXKxeDstWut5Z0om8gM2U8Wxsv7usA1j
-         /RDW4i+lw+54YqovzPCcrlvFD5NCURhqkzQMR563bk2Ly9QOz5ySTdTxMQVj88bnxUju
-         3Dzdpb7KWHHAHE0BhKFgGARlvJvvIfMjuqA0VuoHQfC43Hpnrz2IAWW2RnTKFagUXePJ
-         U6P9qyO957ebbuy6n78f7arEMU33C09rdIUe0Q76GW9f9hUnEQf3z+RLkXpYSiJoeHU4
-         mqgH7xOTHOZ4UyZtodRVU/csERu6lokPoNn9lXbhrWIiqNfE65Zi6wLRrRG6OSM00cRs
-         S0TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681163408;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mj8dSCbGPlf0CRd5FNuA/sfSA8tqFa0rbdFYnaL0J0Y=;
-        b=gS4sIraQPi0rZrk5NFgxFj8+yuhtlsrAwMfwXpL33/OsJ6ZY93WesWnVtQTwzTfvRX
-         KJh7VWXxYJz98qM2K7zKnBSS0ohF+vuTpBFjvPp9ajyneZKbq4cYLkp0Q+q88uYk8/vp
-         2GfbGi7Y9va62uCgf6frkva3aCNnQyGk6Vm1Vd/axXqlGJKdgUIHTRbSR/+xY7sG5AMw
-         0gFP2jnEkNP7vQCv+5wr+7Rsm7OwDLWAinIHe74/Eot2gOfQTM+p50rXk3wV2hMNu4di
-         aC89PrtHB4peJhL9kDUcz1wNTy6y+rZbju4YsE2JA95lZD0tTcM5I6Qk7d2QB9m/BvK/
-         Gbiw==
-X-Gm-Message-State: AAQBX9cCu5nMLOyZva1G+bP/MnPvfPh2WE5VzQ1CdA0a23fp8epPzRaJ
-        L0uB1ae55gAg5IlmhrovMTucruMGy0U=
-X-Google-Smtp-Source: AKy350YbhvrLBgazf2oCDb5y29XRCncB+f0XTQue/QJfvSxLioZvcRsgREAZwOBt6wfR46kpVcAihEU1g4Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:b87:b0:626:23a1:7b8a with SMTP id
- g7-20020a056a000b8700b0062623a17b8amr295013pfj.3.1681163408325; Mon, 10 Apr
- 2023 14:50:08 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 14:50:06 -0700
-In-Reply-To: <20230410081438.1750-34-xin3.li@intel.com>
-Mime-Version: 1.0
-References: <20230410081438.1750-1-xin3.li@intel.com> <20230410081438.1750-34-xin3.li@intel.com>
-Message-ID: <ZDSEjhGV9D90J6Bx@google.com>
-Subject: Re: [PATCH v8 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to
- generate FRED stack frames
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        andrew.cooper3@citrix.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com, jiangshanlai@gmail.com,
-        shan.kang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CjtgKgQQ3huh7iyEo9U9iX9zy76w5MlaWNSGi1SKyt4=;
+ b=vln0PfsSmARXBKBC6Heo19QDrJwD4hq7iusDR0+uC+nEsycx63bKKsr7WlHFZ3bBlx1Yt+XKOSa7WsMVewrlCTbm0nIbPIvMCr1RJTKqUSJZsZpkiWqQ6N10ebW+x3d1G/oxk46+GD3zE5P6RRNTCbT9qNxyyYrIWEhr4fpLpic=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ PH0PR10MB5593.namprd10.prod.outlook.com (2603:10b6:510:f5::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.36; Mon, 10 Apr 2023 21:51:41 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::a870:411d:9426:21b3]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::a870:411d:9426:21b3%10]) with mapi id 15.20.6277.036; Mon, 10 Apr
+ 2023 21:51:40 +0000
+Message-ID: <b9f72ee9-328c-9de3-05e7-ea7d1339984b@oracle.com>
+Date:   Mon, 10 Apr 2023 16:51:38 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [RFC PATCH v4] sched: Fix performance regression introduced by
+ mm_cid
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
+        Olivier Dion <odion@efficios.com>
+References: <20230410150150.2179062-1-mathieu.desnoyers@efficios.com>
+From:   michael.christie@oracle.com
+In-Reply-To: <20230410150150.2179062-1-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR11CA0028.namprd11.prod.outlook.com
+ (2603:10b6:5:190::41) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|PH0PR10MB5593:EE_
+X-MS-Office365-Filtering-Correlation-Id: a84bb386-dfc5-48c8-2744-08db3a0dc3fb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J9ACQtdwdPxI05yu/h0Ew9C/wnwzyWzy8ppWN1ADXdoRGV0Hnza6Tp66Wrx969LyyMO/QHr9mZW+lYpu4USZcegtqf4sm+UdLORZzr/4/HlKCF9TchxBsbJp/TsAy7OvQ8vgr2WZVRHrJQI8ZGyyDDYvfqAu4WG1gLY1CmtEAEQ03vNm0y/m7y7cGgIHm+TbN8Y9ahgcINcp5huWI58qGj9Zf90UIDQDxD2lucspv1L0YEBMeVnV9YH/c6jQFT9iqs0rsopEuTeq4f8y48uYgkU6H86FLOJX5hkkyHqgXNTOyz9rJCbrY2hn+D4G+WyIxvMQj+lRKOuzV5HqeqbaeVr7BVnVFcfCzd+m4vf9vL9aBRvdhoMJ1sMOGWcIVwFWseYY9VUQ/NaMgd/vE8C6JF/zrUk4+/T/aUlgxlHSiG3f6oHj6rzTq9W2kDBPqFXt4DwvgVE6NUU3buUNXqMDO0BfciP6YaWuNtp45KM0QmlxATZsmhJRrAbvXOr9yASj91ChudDRWsOKJ5Fvg4sQI8ZU/qKNEebMVG0Q28oFRObwW2OCb/qYCVCHK/9763nRqjuQ7IOEXCHT6JS5SZLdeC6kYn+erFr75y3yTlpxsnpSDFjyPHuIrblISQd/jUBA/PTUedv67zaJmJTg/1lULQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199021)(31686004)(478600001)(31696002)(86362001)(36756003)(83380400001)(38100700002)(2616005)(6486002)(966005)(2906002)(316002)(110136005)(9686003)(6506007)(186003)(54906003)(53546011)(6512007)(26005)(66476007)(8676002)(66556008)(8936002)(5660300002)(41300700001)(4326008)(66946007)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YmRxUHBpbXVMZW55cExZUUVKOHowYUVnTjczelJqQ2tUUzVsVWhHVk5icnMw?=
+ =?utf-8?B?b1RyY3dTcjdXYTVFbksyT1VuUS9jTFF1V2lpNS9rR1dkSWZCSWRmSHJJbGhG?=
+ =?utf-8?B?K1l2Zk9lcFdibURodGZUdkpyN2xkbUtIZVUwUHpHalA4ZHcwWWZKSDlKRzQ3?=
+ =?utf-8?B?MnAyb1owRmdWRFJrcEZPYjhEdjR3V3NlWFBMbmRkWVBaM0RSYy93T1o2TU5I?=
+ =?utf-8?B?YzBDMHNvMFFuUHBTUG92MUJ5TGorY0Y2U0g1RUZpYUhkSm80VmpxbmZHQlhT?=
+ =?utf-8?B?YTlGNVRtZTl5Yi8yNlJWVFkxcGp3d3hwdU5WUkpBQ1d3elFDMExtVGFrYWVj?=
+ =?utf-8?B?cVh3bUhtSk1NWXplbW5TTXp2clowV245TGU0WHV1RzRsYUNidFJBR0pFcVNh?=
+ =?utf-8?B?b2taVzVtTDQreU9lWU9uTCs5VmNaV2ROMFBhZ09mclhTSHlmOEJXVElQVzdM?=
+ =?utf-8?B?aG9ZTXVZNks2YXVxTmpPVndNYTZvdVA1SHd0L1o2blBsb3dOOStoUnU1czVy?=
+ =?utf-8?B?Y1pyWE1zWjdjV002RUQzL3kxVnNURUd6czdZUGEveXBmY2ZqUjREMktyZnpi?=
+ =?utf-8?B?cXZPTWRXZS9zNElTZkp6ZUNUQ1k2N0dMYjB3WVQwZTRzUHlENlE3a3NveWlJ?=
+ =?utf-8?B?bFNQcndrOXluWFFTU2UzVnFlRFRZQi8yQ2J4dnp2OXBaSzYwR0FwUStPdDJF?=
+ =?utf-8?B?blFNUVVGSjBsL25XNUUyMkdYRHo3TXJ4WU1lSDZqUlhCY0pGc1NHSEE2VXZH?=
+ =?utf-8?B?eUpoa3pNQkNjRXZKeDNPd0tQUXNZelpXTHc1ak5TQUtaTzFuNUNBRUNnaUo3?=
+ =?utf-8?B?ZEphMXlVVS83TXYwMUVpdXJxOG1jYnZoSjRyNERDWi9YcCt4TUs4ZlBJZEtX?=
+ =?utf-8?B?Wmh3cmVDd3dGMDB0UEhCQ3VUSGQzZE1YNkZ3YzVrTS92a3VhMWZSbWM2QVMv?=
+ =?utf-8?B?R0RQRU1JK3N0SWVKVVNydlBXbVA5VkdXYTRTSVMyUGl0ZXlNMkljYkw3bHNP?=
+ =?utf-8?B?bnRzaDdMa0d1UG5oSFFRL0xPUjhZTlRPck1lTlhyREJ3QnFGbGU2b09QTUlD?=
+ =?utf-8?B?VG9DeS9vS3pESEVFdmtpZFNSOGtYanhoNGorblZWUHFrbXY2enJ3ZWxnMWpj?=
+ =?utf-8?B?UjZFV1Jidmcwc2Nld3ZveWhvM1JITUdxcGhOa3ljbjhJdmdXSHNma1NvaS8x?=
+ =?utf-8?B?TEZPaHVkcHpjNHA4M3RCVXJOYTdFbjl3NEp6N2VYbHlvYzBBdkdHbTM3aFYz?=
+ =?utf-8?B?cUFFSmpnUmpYdEExMFFOYko0L054RDZkZkgxdG92cHo4NlA0UWZ6aGlDMDFu?=
+ =?utf-8?B?MjNwbGhBQjgyaWVEUnBlVlFnWFBKcmo4c0tGUXFvQmUxeld6WTFiTjJtd3Zm?=
+ =?utf-8?B?UG1nRFhBM3Rxd1FSNHVVazdTeXh1VFYzTGV0U3dxSnV4RjBSTTB2d2M4d2lN?=
+ =?utf-8?B?cEFDM1JwTHZXRDd6aHhqRlV1NmY3QUhmb1ZyMzlGMDNGYzY1REU3RTQrNk5q?=
+ =?utf-8?B?ckd1WFd5cXlidVhRTFk0WE1yMnRKSERiVnU2ZjE0YVlrV2V3bnNtdUZncFFi?=
+ =?utf-8?B?OVpNZFp3SlpyVzZDekZ0VTBBYTJDcVAyc1ZwVUZUMmdXZVFXWVZ6UnE1azYx?=
+ =?utf-8?B?Znl2YjY2MUVveEYxMnJrbWhyTEx0N3JTQTBOdUlLVTFnZ05iTDVMRDNRWklu?=
+ =?utf-8?B?RWxVOFh6T1gzanFKZmRCd1dzcGQycTVRNWx2VDhRSVBINFBPTEFMOG10OURk?=
+ =?utf-8?B?RFgvMnNsSitxZk05YzhnRXhQbHczT1V0ZXh0cnJrdGV1b0xvbCtIM2txbHdV?=
+ =?utf-8?B?TndtMGNtSW1TMEltUWpiR1Y1WW1odjBFcEtWak9aaW1MOUlDK3ZhTVVIMUJ6?=
+ =?utf-8?B?Y2k0eVJkZDdXSXhqamdneFNZOUFHTHVQYk5OSGpraElxMFpyeEFRclUwOGUw?=
+ =?utf-8?B?SU9nMTVpTjVNaXNBdU9LV2JzYTZWby9MTk5HK2dBME02a0RJWUhXNjh1T0ZC?=
+ =?utf-8?B?OFhaK1pZbXJjZFA3cWdMME5hUUxYTmU1Tm5KdVd5blUzZjhTNjhLTktNTVNz?=
+ =?utf-8?B?UHh6SThNRTMxLy9TWWVYbzJteDl4bFZBWHZTaWZXS2tiVFBzWSsyeEgvOWZG?=
+ =?utf-8?B?V1NZM3BZZ05kMFNVdGZwdGwyQWhkY3JZcW53Smc2R3YrcFFPL0VSdGFyeG1u?=
+ =?utf-8?B?NUE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: as75urqHHebg2L4hZuwQA5jqeC0JyYsel7z/AUa3NS//+ZjeeVjAp0ZUSy06WDR0OLzKH4fVIKqKUlZWbR+sQY7ySkGLaC4anUbPLUS3gy6ZcL9/PbSHTpQx1wa7ihY8QUe9kPTAnynYw5602AElO6b6y6bikJZ+xZMEJUhYQldqj3l9GGBpaOyqX/7d21WZNPF7DClXQJW4dNAgYJLeKuYz7KxMSptD+jVceptjTDPSQvJcgsta6zdZzEzrHI+sBVQIgqI8d3pZ26Py5YE0d7oS0YBgLtd+ml4vrDmrH//MIqPrHJHu5+1Pz8LIeHlMD7xz9c6+WXLE4GOg6en+sinY0Is7zwB6/mC9Uw1SHveEJTYIBb75/HGMfOYrLZhMEDVgOoeecJIMbq8C1lW2pgAQaQOjdtgj9xT2IZkgt/S1JhL8Ez6PILIOfD4pmBPOzHFPK6pXKTIVdp+FI3GGZgyTLeikavOzlX6b/k7CYqVZLFhsHrBKRaj8vQmEBpAVc/NfmoIBskcDTlpHmbcePEQS+3aZin2lCRBZoshWPaJ78qStvu+us3dB2Vzr39iAo2z2jHCqWUmYjM6o5KHRH/2sBN4CZDaLAUBEwQgmcSjtvI1dG5xZaj1D+RZRFIsLyTaUoSJlbHYxar6nQeazpgs98/u/lL8too2V+/xNPb4DCWrC+GSRvFKJpf5v7nUzYfTYTyyFEignma/Tp2nl3bujQjtDkUvt28Z84wSZbfXvikR4mUVfypLTH78qrrfymINwWp6HntjEnzJMQEdlJgF/S8kBVrmSEDOqFcmKs7zMwQwwzGlLZhW+24UcJqM0rF+A5kd0RJTm1pMxllHRjO9m2BAGT7cSgWLnxUQbMGc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a84bb386-dfc5-48c8-2744-08db3a0dc3fb
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 21:51:40.2049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /A3F4PpbJqjVnrNfw8idZIDeEw4PkQyLyVOB4m+7y6E7HNlh42J/AO5YEdCOwy6poslN0QGo/w0J2qIeGVWl6NRP/KpXamxi+iIeLoGaFv0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5593
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_16,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100190
+X-Proofpoint-GUID: De4bU0xC4ugJcztNyh2XDxNmWLF4s2aO
+X-Proofpoint-ORIG-GUID: De4bU0xC4ugJcztNyh2XDxNmWLF4s2aO
+X-Spam-Status: No, score=-4.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,253 +159,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"KVM: VMX:" for the shortlog please.
+On 4/10/23 10:01 AM, Mathieu Desnoyers wrote:
+> Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
+> sysbench regression reported by Aaron Lu.
+> 
+> Keep track of the currently allocated mm_cid for each mm/cpu rather than
+> freeing them immediately on context switch. This eliminates most atomic
+> operations when context switching back and forth between threads
+> belonging to different memory spaces in multi-threaded scenarios (many
+> processes, each with many threads). The per-mm/per-cpu mm_cid values are
+> serialized by their respective runqueue locks.
+> 
+> Thread migration is handled by introducing invocation to
+> sched_mm_cid_migrate_from() in set_task_cpu() and to
+> sched_mm_cid_migrate_to() (with destination runqueue lock held) in
+> activate_task() for migrating tasks. set_task_cpu() is invoked with and
+> without source rq lock held: the wakeup path does not hold the source rq
+> lock.
+> 
+> sched_mm_cid_migrate_from() clears the mm_cid from the task's mm per-cpu
+> index corresponding to the source runqueue if it matches the last mm_cid
+> observed by the migrated task. This last mm_cid value is returned as a
+> hint to conditionally clear the mm's per-cpu mm_cid on the destination
+> cpu.
+> 
+> Then, in sched_mm_cid_migrate_to(), if the last mm_cid is smaller than
+> the mm's destination cpu current mm_cid, clear the mm's destination cpu
+> current mm_cid. If the migrated task's mm is in use on the destination
+> cpu, the reclaim of the mm_cid will be done lazily on the next
+> destination cpu context switch, else it is performed immediately.
+> 
+> The source cpu's mm_cid is _not_ simply moved to the destination cpu on
+> migration, because passing ownership of the mm_cid value to the
+> destination cpu while an actively running tasks also has its own
+> mm_cid value (in case of lazy reclaim on next context switch) would
+> over-allocate mm_cid values beyond the number of possible cpus.
+> 
+> Because we want to ensure the mm_cid converges towards the smaller
+> values as migrations happen, the prior optimization that was done when
+> context switching between threads belonging to the same mm is removed,
+> because it could delay the lazy release of the destination runqueue
+> mm_cid after it has been replaced by a migration. Removing this prior
+> optimization is not an issue performance-wise because the introduced
+> per-mm/per-cpu mm_cid tracking also covers this more specific case.
+> 
+> This patch is based on v6.3-rc6 with this patch applied:
+> 
+> ("mm: Fix memory leak on mm_init error handling")
+> 
+> https://lore.kernel.org/lkml/20230330133822.66271-1-mathieu.desnoyers@efficios.com/
+> 
+> Fixes: af7f588d8f73 ("sched: Introduce per-memory-map concurrency ID")
+> Link: https://lore.kernel.org/lkml/20230327080502.GA570847@ziqianlu-desk2/
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Aaron Lu <aaron.lu@intel.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Olivier Dion <odion@efficios.com>
+> Cc: michael.christie@oracle.com
 
-On Mon, Apr 10, 2023, Xin Li wrote:
-> -.macro VMX_DO_EVENT_IRQOFF call_insn call_target
-> +.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=0 nmi=0
->  	/*
->  	 * Unconditionally create a stack frame, getting the correct RSP on the
->  	 * stack (for x86-64) would take two instructions anyways, and RBP can
-> @@ -41,16 +43,55 @@
->  	mov %_ASM_SP, %_ASM_BP
->  
->  #ifdef CONFIG_X86_64
-> +#ifdef CONFIG_X86_FRED
-> +	/*
-> +	 * It's not necessary to change current stack level for handling IRQ/NMI
-> +	 * because the state of the kernel stack is well defined in this place
-> +	 * in the code, and it is known not to be deep in a bunch of nested I/O
-> +	 * layer handlers that eat up the stack.
-> +	 *
-> +	 * Before starting to push a FRED stack frame, FRED reserves a redzone
-> +	 * (for CALL emulation) and aligns RSP to a 64-byte boundary.
-> +	 */
-> +	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
-> +	and $FRED_STACK_FRAME_RSP_MASK, %rsp
-> +
-> +	/*
-> +	 * A FRED stack frame has extra 16 bytes of information pushed at the
-> +	 * regular stack top comparing to an IDT stack frame.
-> +	 */
-> +	push $0		/* Reserved by FRED, must be 0 */
-> +	push $0		/* FRED event data, 0 for NMI and external interrupts */
-> +#else
->  	/*
->  	 * Align RSP to a 16-byte boundary (to emulate CPU behavior) before
->  	 * creating the synthetic interrupt stack frame for the IRQ/NMI.
->  	 */
->  	and  $-16, %rsp
-> -	push $__KERNEL_DS
-> +#endif
-> +
-> +	.if \fred
-> +	.if \nmi
-> +	mov $(2 << 32 | 2 << 48), %rax		/* NMI event type and vector */
-> +	.else
-> +	mov %rdi, %rax
-> +	shl $32, %rax				/* External interrupt vector */
-> +	.endif
-> +	add $__KERNEL_DS, %rax
-> +	bts $57, %rax				/* Set 64-bit mode */
-> +	.else
-> +	mov $__KERNEL_DS, %rax
-> +	.endif
-> +	push %rax
+Hey thanks for fixing this.
 
-This is painfully difficult to read, and the trampolines only add to that pain.
-Using macros instead of magic numbers would alleviate a small amount of pain, but
-but the #ifdefs and .if \fred/\nmi are the real culprits.
+When testing linux-next with vhost devices, without this patch IOPs get stuck at around
+1.3 million IOPs total when using 8 or more devices (you get a worker thread per device)
+per VM. With this patch applied IOPs scale again, and we get up to 2.4M iops when using
+up to 16 devices per VM.
 
->  static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-> @@ -6916,14 +6916,20 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
->  {
->  	u32 intr_info = vmx_get_intr_info(vcpu);
->  	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
-> -	gate_desc *desc = (gate_desc *)host_idt_base + vector;
-> +	unsigned long entry_or_vector;
-> +
-> +#ifdef CONFIG_X86_64
-> +	entry_or_vector = vector;
-> +#else
-> +	entry_or_vector = gate_offset((gate_desc *)host_idt_base + vector);
-> +#endif
+Tested-by: Mike Christie <michael.christie@oracle.com>
 
-And then this is equally gross.  Rather than funnel FRED+legacy into a single
-function only to split them back out, just route FRED into its own asm subroutine.
-The common bits are basically the creation/destruction of the stack frame and the
-CALL itself, i.e. the truly interesting bits are what's different.
 
-Pretty much all of the #ifdeffery goes away, the helpers just need #ifdefs to
-play nice with CONFIG_X86_FRED=n.  E.g. something like the below as a starting
-point (it most definitely doesn't compile, and most definitely isn't 100% correct).
-
----
- arch/x86/kvm/vmx/vmenter.S | 72 ++++++++++++++++++++++++++++++++++++++
- arch/x86/kvm/vmx/vmx.c     | 19 ++++++++--
- 2 files changed, 88 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 631fd7da2bc3..a6929c78e038 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -2,12 +2,14 @@
- #include <linux/linkage.h>
- #include <asm/asm.h>
- #include <asm/bitsperlong.h>
-+#include <asm/fred.h>
- #include <asm/kvm_vcpu_regs.h>
- #include <asm/nospec-branch.h>
- #include <asm/percpu.h>
- #include <asm/segment.h>
- #include "kvm-asm-offsets.h"
- #include "run_flags.h"
-+#include "../../entry/calling.h"
- 
- #define WORD_SIZE (BITS_PER_LONG / 8)
- 
-@@ -31,6 +33,62 @@
- #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
- #endif
- 
-+#ifdef CONFIG_X86_FRED
-+.macro VMX_DO_FRED_EVENT_IRQOFF call_target cs_val
-+	/*
-+	 * Unconditionally create a stack frame, getting the correct RSP on the
-+	 * stack (for x86-64) would take two instructions anyways, and RBP can
-+	 * be used to restore RSP to make objtool happy (see below).
-+	 */
-+	push %_ASM_BP
-+	mov %_ASM_SP, %_ASM_BP
-+
-+	/*
-+	 * Don't check the FRED stack level, the call stack leading to this
-+	 * helper is effectively constant and shallow (relatively speaking).
-+	 *
-+	 * Emulate the FRED-defined redzone and stack alignment (128 bytes and
-+	 * 64 bytes respectively).
-+	 */
-+	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
-+	and $FRED_STACK_FRAME_RSP_MASK, %rsp
-+
-+	/*
-+	* A FRED stack frame has extra 16 bytes of information pushed at the
-+	* regular stack top compared to an IDT stack frame.
-+	*/
-+	push $0         /* Reserved by FRED, must be 0 */
-+	push $0         /* FRED event data, 0 for NMI and external interrupts */
-+	shl $32, %rax
-+	orq $__KERNEL_DS | $FRED_64_BIT_MODE, %ax
-+	push %rax	/* Vector (from the "caller") and DS */
-+
-+	push %rbp
-+	pushf
-+	push \cs_val
-+
-+	push $0 /* FRED error code, 0 for NMI and external interrupts */
-+	PUSH_REGS
-+
-+	/* Load @pt_regs */
-+	movq    %rsp, %_ASM_ARG1
-+
-+	call \call_target
-+
-+	POP_REGS
-+
-+	/*
-+	 * "Restore" RSP from RBP, even though IRET has already unwound RSP to
-+	 * the correct value.  objtool doesn't know the callee will IRET and,
-+	 * without the explicit restore, thinks the stack is getting walloped.
-+	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
-+	 */
-+	mov %_ASM_BP, %_ASM_SP
-+	pop %_ASM_BP
-+	RET
-+.endm
-+#endif
-+
- .macro VMX_DO_EVENT_IRQOFF call_insn call_target
- 	/*
- 	 * Unconditionally create a stack frame, getting the correct RSP on the
-@@ -299,6 +357,14 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 
- SYM_FUNC_END(__vmx_vcpu_run)
- 
-+#ifdef CONFIG_X86_FRED
-+SYM_FUNC_START(vmx_do_fred_nmi_irqoff)
-+	push $FRED_NMI_ERROR_CODE
-+	mov $NMI_VECTOR | $FRED_NMI_SOMETHING, %eax
-+	VMX_DO_FRED_EVENT_IRQOFF call fred_entrypoint_kernel $FRED_NMI_CS_VAL
-+SYM_FUNC_END(vmx_do_nmi_irqoff)
-+#endif
-+
- SYM_FUNC_START(vmx_do_nmi_irqoff)
- 	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
- SYM_FUNC_END(vmx_do_nmi_irqoff)
-@@ -357,6 +423,12 @@ SYM_FUNC_START(vmread_error_trampoline)
- SYM_FUNC_END(vmread_error_trampoline)
- #endif
- 
-+#ifdef CONFIG_X86_FRED
-+SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
-+	mov %_ASM_ARG1, %rax
-+	VMX_DO_FRED_EVENT_IRQOFF call external_interrupt
-+#endif
-+
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
- 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 11080a649f60..42f50b0cc125 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6891,6 +6891,14 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
- 	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
- }
- 
-+#ifdef CONFIG_X86_FRED
-+void vmx_do_fred_interrupt_irqoff(unsigned int vector);
-+void vmx_do_fred_nmi_irqoff(unsigned int vector);
-+#else
-+#define vmx_do_fred_interrupt_irqoff(x) BUG();
-+#define vmx_do_fred_nmi_irqoff(x) BUG();
-+#endif
-+
- void vmx_do_interrupt_irqoff(unsigned long entry);
- void vmx_do_nmi_irqoff(void);
- 
-@@ -6933,14 +6941,16 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
- {
- 	u32 intr_info = vmx_get_intr_info(vcpu);
- 	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
--	gate_desc *desc = (gate_desc *)host_idt_base + vector;
- 
- 	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
- 	    "unexpected VM-Exit interrupt info: 0x%x", intr_info))
- 		return;
- 
- 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
--	vmx_do_interrupt_irqoff(gate_offset(desc));
-+	if (cpu_feature_enabled(X86_FEATURE_FRED))
-+		vmx_do_fred_interrupt_irqoff(vector);
-+	else
-+		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
- 	kvm_after_interrupt(vcpu);
- 
- 	vcpu->arch.at_instruction_boundary = true;
-@@ -7226,7 +7236,10 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 	if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
- 	    is_nmi(vmx_get_intr_info(vcpu))) {
- 		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
--		vmx_do_nmi_irqoff();
-+		if (cpu_feature_enabled(X86_FEATURE_FRED))
-+			vmx_do_fred_nmi_irqoff();
-+		else
-+			vmx_do_nmi_irqoff();
- 		kvm_after_interrupt(vcpu);
- 	}
- 
-
-base-commit: 33d1a64081c98e390e064db18738428d6fb96f95
--- 
 
