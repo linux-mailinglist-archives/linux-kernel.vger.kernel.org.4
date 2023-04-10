@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34E06DCDE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4579B6DCDED
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjDJXN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S229842AbjDJXUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjDJXNh (ORCPT
+        with ESMTP id S229690AbjDJXUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:13:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5473C25;
-        Mon, 10 Apr 2023 16:12:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g3so7342442pja.2;
-        Mon, 10 Apr 2023 16:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681168355; x=1683760355;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w2pu/Q9tC6woWsX5eYA7h2LnjeiP9LM5xH/fnPuGwas=;
-        b=dNuLRTPRYm275ecTGqtgGoYnZrkeoM9tEOTogYbTjT0CHqxmEuf5MmiYbvO54JxQAe
-         NOibCupxxc6IEdjlOqw73QuGuvRpvXd/Q6dAHavE3NOp1CcbeNNZ3tCk9DpoSNAvUNxL
-         ID6GcUPcexcMFqaF0aozjfd/XlxRdZaxDexO2qtzYc0Oe/PSSoP2yEherIbbNM4BE1lo
-         ixdAMbeoS2IJAKOTbYks1eGOBRaxwt+k71uuKEK11cmBcIHjWDAHh4G6bY338TcahGuo
-         Itsq+pbZFpwTlKjhpAqxKEN8/mHyU3V4t1n+ryY8oH9Zfycu/uXnlYJ1iPmnh9d5+noj
-         5YMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681168355; x=1683760355;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2pu/Q9tC6woWsX5eYA7h2LnjeiP9LM5xH/fnPuGwas=;
-        b=Kix+cbIx52upG5O4CTrd9ivvg8+WwkZ/WPGyQzaIXkF3R73QbyMmwmv/ZmnuRwSDrb
-         1kYg7eTbkwf5Szc4GXywcNz9cGjUzL9t1/Mlc0eCSAIB89EBYZfSDG7rsC42Tu1fl7ad
-         o3eHyIjnyG3GIbtMMOk378K5mwKPyecaAg4knoX7jQa5CIK1+ylkKwA4CNB3ufArlfp0
-         L+kAo7Jr6fFOZESApo/wWavXNz4VMbl9LjxkwOqv0hcs5EPU/+O354vPvcEu+x/nENft
-         TssRaHnagP8vrUtA3pslCPPrRDmLJajXXDQvkrLjg/3ZA3zVo1TFgyMCWSbxOumevGCe
-         v9bw==
-X-Gm-Message-State: AAQBX9d+UIPRJImZLFCZ/5TxlTwMe9WpOKoHN08dqsLYFL/GQArnY6I6
-        mTSJXtyWeygGps7C0ZGbyRLXcP12U23/lA==
-X-Google-Smtp-Source: AKy350ZDficuU/593PNroWmP5br0YdTUa+zA2WXrBeWQmOA8nbsKCEndPFwdVXzd19BDpmO36jOeAA==
-X-Received: by 2002:a17:903:338e:b0:1a1:d215:ef0c with SMTP id kb14-20020a170903338e00b001a1d215ef0cmr11579153plb.16.1681168355057;
-        Mon, 10 Apr 2023 16:12:35 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id k21-20020a170902ba9500b001a1ccb37847sm8348645pls.146.2023.04.10.16.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 16:12:34 -0700 (PDT)
-Message-ID: <1f4b874b-bd1e-17ff-51dd-19bf2d73214f@gmail.com>
-Date:   Mon, 10 Apr 2023 16:12:32 -0700
+        Mon, 10 Apr 2023 19:20:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22C1E7C;
+        Mon, 10 Apr 2023 16:20:09 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AN091l026043;
+        Mon, 10 Apr 2023 23:20:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=MEIIiB7asQwxSOKBrgES6n0j3671fTTzzrR6gNjEmX4=;
+ b=ZEEng0sBEpI5RA7fRLSfprilUBvI5YTmKrvf58eWkRqcd+CWkOL2BcfXMMNqCTqPqQ+R
+ JE11LuhsOowNNpqHWgugxUS1orf+SOJqbOW5nEkDiiXBTGV6QKJDYObysUXS51ocuy6N
+ tG4B7J3QEXnNqcCBECHvmdCZgkYtp9gJqRDiped+nYGDePLVIkEJIogxSKObsVj94XjS
+ VizM5cvGJh/zC9lE/YC0H9nWorA1oMZVUFMjjoKLpuR6cZnv6XJrjXVuiQGrzhiPFUSt
+ GeRB3uclj/PMEigz+dQNHggQXbULs1+Op1op1PDaCnFUeqzyFF2GPDyRSAk9M5Qst4hG Dw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvq4dgga4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 23:20:06 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ANK5l6029453
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 23:20:05 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 16:20:05 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v3 0/3] Avoid having pending end transfers on soft disconnect
+Date:   Mon, 10 Apr 2023 16:19:51 -0700
+Message-ID: <20230410231954.437-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Documentation: firmware: Clarify firmware path usage
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20230402135423.3235-1-f.fainelli@gmail.com>
- <87y1mzcq9y.fsf@meer.lwn.net>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <87y1mzcq9y.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: N5xQwHQ1H46g0Ic5uF6749AumOcz5HEF
+X-Proofpoint-GUID: N5xQwHQ1H46g0Ic5uF6749AumOcz5HEF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_16,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=629 adultscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100204
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In case there is a host which takes time to complete a SETUP transaction,
+during the soft disconnect sequence multiple DWC3 EPs will have their
+DWC3_EP_DELAY_STOP flag set w/o issuing the end transfer command.  Once the
+controller halt sequence occurs, the soft disconnect is successful, and
+the subsequent soft connect will attempt to flush the pending end transfers.
 
+Soft disconnect sequence:
+  dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+  dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+  dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+  usb_gadget_disconnect   deactivated=0  connected=0  ret=0
 
-On 4/10/2023 3:43 PM, Jonathan Corbet wrote:
-> Florian Fainelli <f.fainelli@gmail.com> writes:
-> 
->> Newline characters will be taken into account for the firmware search
->> path parameter, warn users about that and provide an example using 'echo
->> -n' such that it clarifies the typical use of that parameter.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>   Documentation/driver-api/firmware/fw_search_path.rst | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/driver-api/firmware/fw_search_path.rst b/Documentation/driver-api/firmware/fw_search_path.rst
->> index a360f1009fa3..d7cb1e8f0076 100644
->> --- a/Documentation/driver-api/firmware/fw_search_path.rst
->> +++ b/Documentation/driver-api/firmware/fw_search_path.rst
->> @@ -22,5 +22,10 @@ can use the file:
->>   
->>   * /sys/module/firmware_class/parameters/path
->>   
->> -You would echo into it your custom path and firmware requested will be
->> -searched for there first.
->> +You would echo into it your custom path and firmware requested will be searched
->> +for there first. Be aware that newline characters will be taken into account
->> +and may not produce the intended effects. For instance you might want to use:
->> +
->> +echo -n /path/to/script > /sys/module/firmware_class/parameters/path
->> +
->> +to ensure that your script is being used.
-> 
-> So I have no problem with applying this, but I have to ask...might it
-> not be better to fix the implementation of that sysfs file to strip
-> surrounding whitespace from the provided path?  This patch has the look
-> of a lesson learned the hard way; rather than codifying this behavior
-> into a feature, perhaps we could just make the next person's life a bit
-> easier...?
+Soft connect bug:
+  BUG: spinlock already unlocked on CPU
+  spin_bug+0x0
+  dwc3_remove_requests+0x278
+  dwc3_ep0_out_start+0xb0
+  __dwc3_gadget_start+0x25c
 
-I was not sure whether it was on purpose or not, Greg, will we break 
-anyone's use case if we strip off \n from the firmware path passed via 
-sysfs?
--- 
-Florian
+The bug occurs due to the flush of the pending end transfers, as the gadget
+start routine is not held with a spinlock.  However, if the DWC3_EP_DELAY_STOP
+is set, it will call the giveback API, which attempts to unlock the dwc->lock.
+Ideally, the DWC3 gadget should not have pending end transfers on a soft
+connect, so fix this by:
+
+ 1. Re-locating the SETUP phase check after stop active transfers, since
+ that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+ for handling of a host that may be unresponsive by using the completion
+ timeout to trigger the stall and restart for EP0.
+
+ 2. Do not call gadget stop until the poll for controller halt is
+ completed.  DEVTEN is cleared as part of gadget stop, so the intention to
+ allow ep0 events to continue while waiting for controller halt is not
+ happening.
+
+Changes in v3:
+- Removed fixes tag in the refactor change
+
+Wesley Cheng (3):
+  usb: dwc3: gadget: Refactor EP0 forced stall/restart into a separate
+    API
+  usb: dwc3: gadget: Stall and restart EP0 if host is unresponsive
+  usb: dwc3: gadget: Execute gadget stop after halting the controller
+
+ drivers/usb/dwc3/gadget.c | 101 ++++++++++++++++++++++----------------
+ 1 file changed, 58 insertions(+), 43 deletions(-)
+
