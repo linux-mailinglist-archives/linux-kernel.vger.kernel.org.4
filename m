@@ -2,192 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFC16DC4DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDC76DC4C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjDJJK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S229935AbjDJJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjDJJKG (ORCPT
+        with ESMTP id S229803AbjDJJAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:10:06 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1E25B8D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:09:39 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id px4so1417458pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681117760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MSW/vLoGfD75WpzekdO7JWqn1GghjgWEvwLppmMteTI=;
-        b=hYpqE1ZnAfLf6ql6mbixsFRaOTytoxhHlG/IsRi5piozB6GCHadHVgkZHi/MWHh1aw
-         JVZf+dpnRkRF/M8rbjRjC9v9b6QTnZdSdDtusilobMO7TqA2ns+hrIoiQIDNPBcsjoFt
-         PqztvrL9TfYl5YuK0T9qQXfv+q2skU3ahXXRKf0WArDmqayzGFaNzi371nrTOFF2zWgx
-         yzAF/ylMrdZnt/pcul37mfXEMrYSd1144oFe7Z7xWshy/jKQBpPiAEMCkmlUcmpCiW54
-         Tg9s8U1VYySj0+GadUqKcGLJINTVok1/o4o2OS/oRHUjq61blM8RWMkaCQSNq6l0BoTd
-         dDTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681117760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MSW/vLoGfD75WpzekdO7JWqn1GghjgWEvwLppmMteTI=;
-        b=QqGob6XlHfEhoopUhMqWfE9bWhYB3yjTm7oEzMrMh087sYa9o84VnnpE5CqXjgQ2tx
-         wFOXLnjdeQZYFmPkcw7MUbit2M5JAwqj5BiiEX3ZrE+y+ueWre35Ck7JjxhMlyqGmr70
-         JcEq/e88avtFqLaP4c6UwHReUTZ3LNMuQFoie0sTHm//RfEiBTYYc0FEMKw5vSWQhHpJ
-         VzO2Df93XD6xU9/d0weopy+/nJA2UNK/z8MWZzMlhaoxcEpRoyCdoLxbVge9YRQ4jvq7
-         N419T0UszvgbTHlcx8+BP+buCSWJoHSBpiTJGwDm21y6nEOTOnNaZIjdtuq6mIUcd6wC
-         oEdg==
-X-Gm-Message-State: AAQBX9csLWH+48ADoAH/fa5lcK/tj7tRbCTNgcFRVFFWeOmuG4ch8H4J
-        jXw88H1o1kWpwxzV5YWFXVDa4Xb665Q973Bxa2ssEQ==
-X-Google-Smtp-Source: AKy350biADeY+M5/Yg8USOFpSbfHD8ZyNkf/ReCOiCJkyuLjXuc/G86xunOsXPSMpawrgRbsqihHuSWzaGiv7+cbql8=
-X-Received: by 2002:a17:903:48b:b0:19a:e3d4:216e with SMTP id
- jj11-20020a170903048b00b0019ae3d4216emr3383113plb.7.1681117760123; Mon, 10
- Apr 2023 02:09:20 -0700 (PDT)
+        Mon, 10 Apr 2023 05:00:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BBC5277
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681117203; x=1712653203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dqF2REshPEPcaWNr3EMg4H0fo/5f+H+KwIw4rUrhjRc=;
+  b=Ed98++yZoNyzl1mjpY8nP6BW+2PWeTk0i32Jqc5Jseg32cAWrt5d3itV
+   gWBf4QTorATadSsYxxhS7UFFwkYhaN0oH37L07jZFBMPaGhnAaA3Jn4Jl
+   SEOw6xCjrnRVAB5m8u8mpbHPGtkm11j+5dFWAyd4nfax9r/A/J9gGojc7
+   9NTPVeTolGiB8uMsXCaXwFRdvs2IcL2A6RLHyDOL1fQtDx0Itn0cfBM0f
+   dUvTjq0F1TnJycqXqcjfLVH9ZJ72WYqLK32iN5hzuFkPlkLfygR+Nrn3n
+   Q+/qqYqeAp9R8dLnn1/nuvf6CR4z7jQEv+6UnpToqWPDI/nW6dNQDEmkG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="342081041"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="342081041"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 02:00:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="688209076"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="688209076"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.28])
+  by orsmga002.jf.intel.com with ESMTP; 10 Apr 2023 01:59:58 -0700
+Date:   Mon, 10 Apr 2023 17:08:45 +0800
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Thomas =?utf-8?B?SGVsbHN0cu+/vW0=?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Christian =?utf-8?B?S++/vW5pZw==?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
+ gem/i915_gem_execbuffer.c
+Message-ID: <ZDPSHYn02GWTSMG4@liuzhao-OptiPlex-7080>
+References: <20230329073220.3982460-1-zhao1.liu@linux.intel.com>
+ <64265ef8725fe_375f7e294a@iweiny-mobl.notmuch>
+ <fdc8a470-1e6b-815d-e367-a9df1b0b14dd@linux.intel.com>
+ <2177327.1BCLMh4Saa@suse>
 MIME-Version: 1.0
-References: <20230410073134.488762-1-badhri@google.com> <2023041028-irritate-starless-a42f@gregkh>
- <CAPTae5KZ0zkaCWrtPYzyX8oTyvDhBhc-hvxyHn9VHZ32UOqJ3g@mail.gmail.com>
- <2023041004-antarctic-hardiness-524e@gregkh> <CAPTae5JFC8WUzjrMeiyw7tYfWpsZUQThrrvG_etx7Fb2KP6y6A@mail.gmail.com>
-In-Reply-To: <CAPTae5JFC8WUzjrMeiyw7tYfWpsZUQThrrvG_etx7Fb2KP6y6A@mail.gmail.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 10 Apr 2023 02:08:43 -0700
-Message-ID: <CAPTae5JfPzmTkzM79Mi8x1qy8PfVMCe_83v9oOU=baRowsrPeA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Add kernel config to wrap around
- tcpm logs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2177327.1BCLMh4Saa@suse>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 2:00=E2=80=AFAM Badhri Jagan Sridharan
-<badhri@google.com> wrote:
->
-> On Mon, Apr 10, 2023 at 1:27=E2=80=AFAM Greg KH <gregkh@linuxfoundation.o=
-rg> wrote:
-> >
-> > On Mon, Apr 10, 2023 at 01:08:55AM -0700, Badhri Jagan Sridharan wrote:
-> > > On Mon, Apr 10, 2023 at 12:45=E2=80=AFAM Greg KH <gregkh@linuxfoundat=
-ion.org> wrote:
-> > > >
-> > > > On Mon, Apr 10, 2023 at 07:31:34AM +0000, Badhri Jagan Sridharan wr=
-ote:
-> > > > > This change adds CONFIG_TCPM_LOG_WRAPAROUND which when set allows=
- the
-> > > > > logs to be wrapped around. Additionally, when set, does not clear
-> > > > > the TCPM logs when dumped.
-> > > > >
-> > > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > > > ---
-> > > > >  drivers/usb/typec/tcpm/Kconfig | 6 ++++++
-> > > > >  drivers/usb/typec/tcpm/tcpm.c  | 9 +++++++--
-> > > > >  2 files changed, 13 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/t=
-cpm/Kconfig
-> > > > > index e6b88ca4a4b9..4dd2b594dfc9 100644
-> > > > > --- a/drivers/usb/typec/tcpm/Kconfig
-> > > > > +++ b/drivers/usb/typec/tcpm/Kconfig
-> > > > > @@ -18,6 +18,12 @@ config TYPEC_TCPCI
-> > > > >       help
-> > > > >         Type-C Port Controller driver for TCPCI-compliant control=
-ler.
-> > > > >
-> > > > > +config TCPM_LOG_WRAPAROUND
-> > > > > +     bool "Enable TCPM log wraparound"
-> > > > > +     help
-> > > > > +       When set, wraps around TCPM logs and does not clear the l=
-ogs when dumped. TCPM logs by
-> > > > > +       default gets cleared when dumped and does not wraparound =
-when full.
-> > > >
-> > > > Kconfig help text needs to be wrapped at the properly width.
-> > >
-> > > I assumed that the width is 100 characters, but it looks like it is
-> > > 80. Will fix it in the next version.
-> > > >
-> > > > And you do not provide any hint here as to why this is not the defa=
-ult
-> > > > option, or why someone would want this.
-> > >
-> > > "TCPM logs by default gets cleared when dumped and does not wraparoun=
-d
-> > > when full." was intended
-> > > to convey why someone would want to set this. Perhaps it's not effect=
-ive.
-> > >
-> > > Does the below look better:
-> > > "TCPM logs by default gets cleared when dumped and does not wraparoun=
-d
-> > > when full. This can be overridden by setting this config.
-> > > When the config is set, TCPM wraps around logs and does not clear the
-> > > logs when dumped."
-> > >
-> > > Also, I could make this default if that's OK with Guenter.
-> > >
-> > > >
-> > > > So, why is this not just the default operation anyway?  Why would y=
-ou
-> > > > ever want the logs cleared?
-> > >
-> > > I remember Guenter mentioning that he was finding it useful to not
-> > > wrap around the logs to fix problems
-> > > during tcpm_register_port (init sequence). IMHO wrapping around the
-> > > logs helps to triage interoperability
-> > > issues uncovered during testing. So both approaches have their own ad=
-vantages.
-> >
-> > But as this is a build-time option, what would cause someone to choose
-> > one over the other, and then when the system is running, they can't
-> > change them?
->
-> During initial phases of bringup, it makes sense to not wrap around
-> the logs, but, once bringup is done its most effective to wraparound
-> so that interop issues reported by the end users can be triaged where
-> TCPM logs are very effective.
-> Also, without wrapping around, the logbuffer logs are completely stale
-> after the user goes through a few USB connect and disconnect cycles
-> till the system is rebooted.
-> If we don't want to pursue the Kconfig option, we should atleast make
-> TCPM default to wrapping the logs around when full so we could
-> maximise the use of the logbuffer contents.
->
+Thanks all for your review!
 
-The other option that I could think of is to expose another debugfs node
-that can be used to control wrapping around the logs in runtime.
+On Fri, Mar 31, 2023 at 05:32:17PM +0200, Fabio M. De Francesco wrote:
+> Date: Fri, 31 Mar 2023 17:32:17 +0200
+> From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Subject: Re: [PATCH v2 9/9] drm/i915: Use kmap_local_page() in
+>  gem/i915_gem_execbuffer.c
+> 
+> On venerd? 31 marzo 2023 13:30:20 CEST Tvrtko Ursulin wrote:
+> > On 31/03/2023 05:18, Ira Weiny wrote:
+> 
+
+[snip]
+
+>  
+> > However I am unsure if disabling pagefaulting is needed or not. Thomas,
+> > Matt, being the last to touch this area, perhaps you could have a look?
+> > Because I notice we have a fallback iomap path which still uses
+> > io_mapping_map_atomic_wc. So if kmap_atomic to kmap_local conversion is
+> > safe, does the iomap side also needs converting to
+> > io_mapping_map_local_wc? Or they have separate requirements?
+> 
+> AFAIK, the requirements for io_mapping_map_local_wc() are the same as for 
+> kmap_local_page(): the kernel virtual address is _only_ valid in the caller 
+> context, and map/unmap nesting must be done in stack-based ordering (LIFO).
+> 
+> I think a follow up patch could safely switch to io_mapping_map_local_wc() / 
+> io_mapping_unmap_local_wc since the address is local to context.
+> 
+> However, not being an expert, reading your note now I suspect that I'm missing 
+> something. Can I ask why you think that page-faults disabling might be 
+> necessary? 
+
+
+About the disabling of pagefault here, could you please talk more about
+it? :-)
+
+From previous discussions and commit history, I didn't find relevant
+information and I lack background knowledge about it...
+
+If we have the reason to diable pagefault, I will fix and refresh the new
+version.
 
 Thanks,
-Badhri
+Zhao
 
-> >
-> > That does not seem good at all.
-> >
-> > Why not just use tracing instead of this odd custom log buffer?  That's
-> > a better solution overall, right?
->
-> Tracing is not enabled by default in most systems. End users don't
-> want to retry and reproduce the failure to collect traces even if they
-> could reproduce it consistently.
-> So tracing was not proving handy here.
->
+> 
 > Thanks,
-> Badhri
->
-> >
-> > thanks,
-> >
-> > greg k-h
+> 
+> Fabio
+> 
+> > Regards,
+> > 
+> > Tvrtko
+> 
+> 
+> 
