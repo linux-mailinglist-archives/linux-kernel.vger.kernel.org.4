@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECFE6DC25F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEE86DC262
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDJBkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S229666AbjDJBpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjDJBkj (ORCPT
+        with ESMTP id S229489AbjDJBpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:40:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74972727
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681090792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y7vvaahi7EtSEdZtxTNRZslDy7MErAqHXrjq5q/UMYw=;
-        b=OFleB525f6g2uw8/UHult48kirtaTH/M0e2gj4ZdUWZeJWu+w0s8QDndPox+3o4KK8FgHr
-        bHUCORx5vjolB1SKPIkRRgFt4C3sQFXSl81WrOTa4SWUaTR2ecZHNmD5Yxqe3HSbwnpHlj
-        8kebWGcpJDPKnnIJHafTP/udUmJ+Kzs=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-wRmUYh3oM06sLt0ipj0U0g-1; Sun, 09 Apr 2023 21:39:50 -0400
-X-MC-Unique: wRmUYh3oM06sLt0ipj0U0g-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1842ab38ebcso2653389fac.19
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 18:39:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681090790; x=1683682790;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y7vvaahi7EtSEdZtxTNRZslDy7MErAqHXrjq5q/UMYw=;
-        b=Vyzbne36iaHFxSXQzYmja2gZvBF5D9oMYf3eBKMZsOrEqPS6kborlf9XnqSFRaDlWE
-         EWIwBBsrxlisyRYxOMF7jH997kbu+DQNfWlzsi5wlzr1c659AttPFQUTG4Wa8o4axwal
-         rTZ+ccFgJs7oLrk66ttbNm8NQYfkME6N+SPTWvilOs0Mb6hbB/ZMG070nNxVXMIZIoRX
-         NXF94l60Lj1qvyI/4rjh5OGKvbviztX7sFn1g6JyHX5FmYZH2FpqqWsX7iJSRo7vGYeJ
-         zreApsFj79gqxxDXOWAs1ovD7UO4Ut7n4SKpAo9yBtYWxYyq3+FqkkktweQNp+r24DRO
-         lBew==
-X-Gm-Message-State: AAQBX9euwTqOKNMNKeNNOKGf+NkXCnJxeG/XzYtf/3t3pNyBd4OtBU86
-        vVRiH3tTZEYilZVWMiy0vDK27NdXZh3Nh2vyTsXSmP+b5jAQOapOIH83HkKP74NmyyiGwh9dwcb
-        S53UmXeqI3kqDWbpT0BZlgZbPT90O34b7iceRdf3V
-X-Received: by 2002:a54:4115:0:b0:36e:f6f5:604c with SMTP id l21-20020a544115000000b0036ef6f5604cmr1609967oic.9.1681090790005;
-        Sun, 09 Apr 2023 18:39:50 -0700 (PDT)
-X-Google-Smtp-Source: AKy350afNrE3GBqcnN6kNnP5S+FQWaWxrFPoCbQFmfTlo/EgX44P29Xg43OeVii5W6AF4zXUT0rOOqPNCrxN/L7OSFk=
-X-Received: by 2002:a54:4115:0:b0:36e:f6f5:604c with SMTP id
- l21-20020a544115000000b0036ef6f5604cmr1609954oic.9.1681090789821; Sun, 09 Apr
- 2023 18:39:49 -0700 (PDT)
+        Sun, 9 Apr 2023 21:45:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5D42D6B;
+        Sun,  9 Apr 2023 18:45:08 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33A00NfE016881;
+        Mon, 10 Apr 2023 01:45:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=/eDvJ3WwsVIP7TqIRtcgiu0u9rMhXfcn1cdYtBrkOOo=;
+ b=hbYChiNaPLIB2CXyT8j6W+77vRKeFQX0veo225dL56KrEgPN8BAUvtRV70ZgV1KFMEu9
+ 3LpA90c+SnU050pAQtUsNRradq8cF2AzDHGJLgSKqan6/F3NN8nanUBH5svz3ANidHNs
+ euAKmQXbfL7t9/vJaV73fVOAojbedihyjjyhtNb9N/k2QV+wB2cWW8/hgiAdyWz9g5iP
+ 70aNbBmkMtNPr8MOhVVZGbkf3ryMunQyiUlOF1YfkdbE0zAhzeyPh8L8DYPbx1mvIQfs
+ ldCIkDe0yQGuA55Gvos7hybE5hJCs6f/MmQeFzhFz9KfuTdvbirP/OJQ7p6tWLnEQ3x/ tw== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj5m2nb7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 01:45:04 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 339Nwavq012404;
+        Mon, 10 Apr 2023 01:45:03 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pu0f9gaep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 01:45:03 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33A1j2EV17760728
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Apr 2023 01:45:02 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E764258059;
+        Mon, 10 Apr 2023 01:45:01 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7E0258043;
+        Mon, 10 Apr 2023 01:45:01 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 10 Apr 2023 01:45:01 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id 466CB74514B; Sun,  9 Apr 2023 20:45:01 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Subject: [PATCH v5 0/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+Date:   Sun,  9 Apr 2023 20:44:40 -0500
+Message-Id: <20230410014445.458385-1-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230407081021.30952-1-gautam.dawar@amd.com> <20230409091325.GF14869@unreal>
-In-Reply-To: <20230409091325.GF14869@unreal>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 10 Apr 2023 09:39:38 +0800
-Message-ID: <CACGkMEur1xkFPxaiVVhnZqHzUdyyqw6a0vw=GHpYKJM7U3cj7Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 00/14] sfc: add vDPA support for EF100 devices
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Gautam Dawar <gautam.dawar@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-net-drivers@amd.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: C0hGy1wwVuXqB8N3XHg25Lg7_1T_TPFo
+X-Proofpoint-ORIG-GUID: C0hGy1wwVuXqB8N3XHg25Lg7_1T_TPFo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-09_18,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=740 clxscore=1015 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304100011
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,31 +84,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 5:13=E2=80=AFPM Leon Romanovsky <leon@kernel.org> wr=
-ote:
->
-> On Fri, Apr 07, 2023 at 01:40:01PM +0530, Gautam Dawar wrote:
-> > Hi All,
-> >
-> > This series adds the vdpa support for EF100 devices.
-> > For now, only a network class of vdpa device is supported and
-> > they can be created only on a VF. Each EF100 VF can have one
-> > of the three function personalities (EF100, vDPA & None) at
-> > any time with EF100 being the default. A VF's function personality
-> > is changed to vDPA while creating the vdpa device using vdpa tool.
->
-> Jakub,
->
-> I wonder if it is not different approach to something that other drivers
-> already do with devlink enable knobs (DEVLINK_PARAM_GENERIC_ID_ENABLE_*)
-> and auxiliary bus.
+Adding new acbel,fsg032 driver and documentation updates.
 
-I think the auxiliary bus fits here, and I've proposed to use that in
-V2 of this series.
+Changes since V4:
+Removed unused structure acbel_fsg032 and psu allocation.
 
-Thanks
+Lakshmi Yadlapati (5):
+  dt-bindings: vendor-prefixes: Add prefix for acbel
+  dt-bindings: trivial-devices: Add acbel,fsg032
+  hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+  docs: hwmon: Add documentaion for acbel-fsg032 PSU
+  ARM: dts: aspeed: p10bmc: Change power supply info
 
->
-> Thanks
->
+ .../devicetree/bindings/trivial-devices.yaml  |  2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ Documentation/hwmon/acbel-fsg032.rst          | 80 +++++++++++++++++
+ Documentation/hwmon/index.rst                 |  1 +
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts  | 12 +--
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/acbel-fsg032.c            | 85 +++++++++++++++++++
+ 8 files changed, 186 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/hwmon/acbel-fsg032.rst
+ create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
+
+-- 
+2.37.2
 
