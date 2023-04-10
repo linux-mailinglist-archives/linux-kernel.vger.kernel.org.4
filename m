@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34036DC945
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB46DC946
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjDJQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S230207AbjDJQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjDJQ0a (ORCPT
+        with ESMTP id S230259AbjDJQ0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:26:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008FB1BD3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:11 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c08e501d2so128909657b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:11 -0700 (PDT)
+        Mon, 10 Apr 2023 12:26:33 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B201BFE
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:19 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id l69-20020a638848000000b00519e800366eso1164671pgd.19
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681143971;
+        d=google.com; s=20210112; t=1681143979;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xp8qLxoPhgd5S79+sqfPyJ+NqpGI+WyWEYYgtfPYRjQ=;
-        b=ZDRXwNY5e5FPtxB9zhgqLDyi3UwHdvrnISVCBcv0Bgsxi+Y+9o3obk/zEQGnouLpQk
-         lyg90YffGBG8iuUJA+NxRopBoHNEPQcLCx6IlQ6+oxDBxTNmXdYmQHs74Y36H3BGGRwQ
-         CGioOAduSeN83A/+TgLA/qDYxAWrXT79qsiZIUpHMFtCydZBQnjQClXUigmkOVblubwD
-         0/ipnMAxCOjXmYoGTCvqjGL9ojwjbbpjYxCWxW/9NilX4fFavuYQIUhzg5tO/9E3SGuw
-         HhzkmZVTGgOEEH3nxxcvN11La1WnERbwiw/wG1813xqPRhdXAF+LurSOOcdY5INZ20Je
-         jD2g==
+        bh=ENoaaMVMubn/KcAmMx1x6HeWtqhy9i1fT7aioBHDXcc=;
+        b=fkdy28z/x/2Y6DzjeJO8cFcorqVS2iQDlBg6nwCCEsLmc0YSKFWRkDDUBgK4Qh1ssz
+         iwDNO8Hd67Ef16nRflOkFUiIt5a51EaDJfN8UTwPD/whOCTFh3F84c8IR+pfECYUKq7g
+         r13FbXs8yGWePJRNzWzgWMNv8kD4JnSxRR/XCbXBwGw2C3tBkdCU1AtzfP0MjS9tH/Hj
+         DoiqwLgdulk6HRVolSVLCb/W+HEc28AwroX6CCqmdX984fjU6q0/20gcNlvwMzy2kJbA
+         AQ5UfAuoCMSmIFeZaNhmzckv86+tjNerhMdEve/6c13D+HEOOq85zJhaNLfcdRtH0s2x
+         bQ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681143971;
+        d=1e100.net; s=20210112; t=1681143979;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xp8qLxoPhgd5S79+sqfPyJ+NqpGI+WyWEYYgtfPYRjQ=;
-        b=g8Dk7/8ldxfP1JGBgLMoser4oSzwvLD4CXnfGuHvIhcX3ZetD4Hubdman6WpVtO0u2
-         nyXtTuwYEGcAGvjenIWDYW1xe5wH38RuU+K+aLmoVEoojLqRPci3u1uGzlWQVi/P5MyZ
-         prytLk3jfmdiafqD3F0qE/d+wqNRR2ghrA8E2qJSzOfeijOYnSSzq2N/5hUGNE+KAwrG
-         6/aBb5IUyND4Z9PJAg/0uYqSdOIZCYiIq5gv0QVWUa9DAqJLhVWkN72JeG7F0eczwQuJ
-         UR+H353N3Oh+lMuWr6wWVJ/qTNgl5Jd1Cl8xirG/dI0yQF9aLJknTDqCZe30VLn3dFO3
-         82qg==
-X-Gm-Message-State: AAQBX9cvEHvli+hWWxKhevb1bBX4CmKxtUJfSARshFGKAQOwImuPu7bG
-        e3QO0hbI4kR7D3S4RO1GGWbNZvhj4G/L
-X-Google-Smtp-Source: AKy350aouxxZ7jU7zNe3eUUa4vRGvDHz2LG7vg0V6RtkPpSG3EqLqVAQ4jykf6wV2keZV3jykI2OBNNYZD2S
+        bh=ENoaaMVMubn/KcAmMx1x6HeWtqhy9i1fT7aioBHDXcc=;
+        b=YCzZR0y0HCxQ4mv2f/+ibmexvmazGX2oWYpNYDy0aRFBcM+xzH2LV5Yj68ufZ99uQe
+         88yFHnzga/ul+StKI7Gbd5wnXgmIjAsVX/oG/PGjsDUWbsX7ls03E/IZsYN2+KLgMg4z
+         IyWwiEPw+0zUh5IP9wyTNSboI6z8NrdjezVBwdB+DTt79w3D/7Y2DirDSbFSypnQG3Wf
+         0fu7ENsoZfZQa+v8m6Pe/EhoeGuUA09PUnLnxsqlE4sRRW1/+68E/gZ/FZkyj+XCq7iR
+         8X7/z9TSNhAmuvJFGTT3nrmACPEZ68HKcg54ZgWAlU63770wlRy30S7FjvZngZ1VXnHO
+         yGQA==
+X-Gm-Message-State: AAQBX9fRirr8D5gzSeCg67+C7uwSc1bDR+V5ijLFSf5rd5GxrSif3PDw
+        31VuCg+wLY0RQJg8rBIpx94UJhoK3QcE
+X-Google-Smtp-Source: AKy350bzXEkhKfRJnIJa5gh4FNDi8DMbaX5c5UaYQ5moE3r6h9mw8wVurekcapCgL+GPU6sq4aikyT8kE+VD
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fc51:6a03:541d:a18d])
- (user=irogers job=sendgmr) by 2002:a81:e401:0:b0:54c:19a6:480 with SMTP id
- r1-20020a81e401000000b0054c19a60480mr5951915ywl.4.1681143971215; Mon, 10 Apr
- 2023 09:26:11 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:25:10 -0700
+ (user=irogers job=sendgmr) by 2002:a63:4466:0:b0:509:4ac5:7f3a with SMTP id
+ t38-20020a634466000000b005094ac57f3amr2582205pgk.0.1681143979133; Mon, 10 Apr
+ 2023 09:26:19 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 09:25:11 -0700
 In-Reply-To: <20230410162511.3055900-1-irogers@google.com>
-Message-Id: <20230410162511.3055900-6-irogers@google.com>
+Message-Id: <20230410162511.3055900-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20230410162511.3055900-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v2 5/6] perf util: Move input_name to util
+Subject: [PATCH v2 6/6] perf util: Move perf_guest/host declarations
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -94,300 +94,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-input_name is the name of the input perf.data file, it is used by data
-convert and ui code. Move it to util to make it more consistent with
-other global state.
+The definitions are in util.c so move the declarations to match.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c     | 2 +-
- tools/perf/builtin-buildid-list.c | 2 +-
- tools/perf/builtin-c2c.c          | 2 +-
- tools/perf/builtin-data.c         | 2 +-
- tools/perf/builtin-evlist.c       | 2 +-
- tools/perf/builtin-kmem.c         | 2 +-
- tools/perf/builtin-kwork.c        | 2 +-
- tools/perf/builtin-mem.c          | 2 +-
- tools/perf/builtin-sched.c        | 2 +-
- tools/perf/builtin-stat.c         | 2 +-
- tools/perf/builtin-timechart.c    | 2 +-
- tools/perf/perf.c                 | 1 -
- tools/perf/perf.h                 | 1 -
- tools/perf/ui/browsers/hists.c    | 2 +-
- tools/perf/util/util.c            | 2 ++
- tools/perf/util/util.h            | 2 ++
- 16 files changed, 16 insertions(+), 14 deletions(-)
+ tools/perf/builtin-diff.c      | 2 +-
+ tools/perf/builtin-kvm.c       | 1 +
+ tools/perf/perf.h              | 4 ----
+ tools/perf/ui/hist.c           | 2 +-
+ tools/perf/util/cs-etm.c       | 1 +
+ tools/perf/util/event.c        | 2 +-
+ tools/perf/util/evlist.c       | 1 +
+ tools/perf/util/parse-events.c | 2 +-
+ tools/perf/util/session.c      | 2 +-
+ tools/perf/util/top.c          | 2 +-
+ tools/perf/util/util.h         | 3 +++
+ 11 files changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 63fd2080b803..63cdf6ea6f6d 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -15,7 +15,6 @@
- #include <linux/zalloc.h>
- #include "util/symbol.h"
- 
--#include "perf.h"
- #include "util/debug.h"
- 
- #include "util/evlist.h"
-@@ -36,6 +35,7 @@
- #include "util/block-range.h"
- #include "util/map_symbol.h"
- #include "util/branch.h"
-+#include "util/util.h"
- 
- #include <dlfcn.h>
- #include <errno.h>
-diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
-index eea28cbcc0b7..c9037477865a 100644
---- a/tools/perf/builtin-buildid-list.c
-+++ b/tools/perf/builtin-buildid-list.c
-@@ -8,7 +8,6 @@
-  * Copyright (C) 2009, Arnaldo Carvalho de Melo <acme@redhat.com>
-  */
- #include "builtin.h"
--#include "perf.h"
- #include "util/build-id.h"
- #include "util/debug.h"
- #include "util/dso.h"
-@@ -18,6 +17,7 @@
- #include "util/session.h"
- #include "util/symbol.h"
- #include "util/data.h"
-+#include "util/util.h"
- #include <errno.h>
- #include <inttypes.h>
- #include <linux/err.h>
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index d3181fee4d3d..6c12f0865860 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -41,10 +41,10 @@
- #include "symbol.h"
- #include "ui/ui.h"
- #include "ui/progress.h"
--#include "../perf.h"
- #include "pmu.h"
- #include "pmu-hybrid.h"
- #include "string2.h"
-+#include "util/util.h"
- 
- struct c2c_hists {
- 	struct hists		hists;
-diff --git a/tools/perf/builtin-data.c b/tools/perf/builtin-data.c
-index b2a9a3b7f68d..ce51cbf6dc97 100644
---- a/tools/perf/builtin-data.c
-+++ b/tools/perf/builtin-data.c
-@@ -3,10 +3,10 @@
- #include <stdio.h>
- #include <string.h>
- #include "builtin.h"
--#include "perf.h"
- #include "debug.h"
- #include <subcmd/parse-options.h>
- #include "data-convert.h"
-+#include "util/util.h"
- 
- typedef int (*data_cmd_fn_t)(int argc, const char **argv);
- 
-diff --git a/tools/perf/builtin-evlist.c b/tools/perf/builtin-evlist.c
-index b1076177c37f..7117656939e7 100644
---- a/tools/perf/builtin-evlist.c
-+++ b/tools/perf/builtin-evlist.c
-@@ -7,7 +7,6 @@
- 
- #include <linux/list.h>
- 
--#include "perf.h"
- #include "util/evlist.h"
- #include "util/evsel.h"
- #include "util/evsel_fprintf.h"
-@@ -18,6 +17,7 @@
- #include "util/debug.h"
- #include <linux/err.h>
- #include "util/tool.h"
-+#include "util/util.h"
- 
- static int process_header_feature(struct perf_session *session __maybe_unused,
- 				  union perf_event *event __maybe_unused)
-diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
-index fcd2ef3bd3f5..2150eeced892 100644
---- a/tools/perf/builtin-kmem.c
-+++ b/tools/perf/builtin-kmem.c
-@@ -1,6 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "builtin.h"
--#include "perf.h"
- 
- #include "util/dso.h"
- #include "util/evlist.h"
-@@ -24,6 +23,7 @@
- 
- #include "util/debug.h"
- #include "util/string2.h"
-+#include "util/util.h"
- 
- #include <linux/kernel.h>
- #include <linux/numa.h>
-diff --git a/tools/perf/builtin-kwork.c b/tools/perf/builtin-kwork.c
-index dc59d75180d1..a9395c52b23b 100644
---- a/tools/perf/builtin-kwork.c
-+++ b/tools/perf/builtin-kwork.c
+diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
+index 22b526766e14..dbb0562d6a4f 100644
+--- a/tools/perf/builtin-diff.c
++++ b/tools/perf/builtin-diff.c
 @@ -6,7 +6,6 @@
+  * DSOs and symbol information, sort them and produce a diff.
   */
- 
  #include "builtin.h"
 -#include "perf.h"
- 
- #include "util/data.h"
- #include "util/evlist.h"
-@@ -20,6 +19,7 @@
- #include "util/string2.h"
- #include "util/callchain.h"
- #include "util/evsel_fprintf.h"
-+#include "util/util.h"
- 
- #include <subcmd/pager.h>
- #include <subcmd/parse-options.h>
-diff --git a/tools/perf/builtin-mem.c b/tools/perf/builtin-mem.c
-index 1e27188b0de1..65465930ef8e 100644
---- a/tools/perf/builtin-mem.c
-+++ b/tools/perf/builtin-mem.c
-@@ -4,7 +4,6 @@
- #include <sys/stat.h>
- #include <unistd.h>
- #include "builtin.h"
--#include "perf.h"
- 
- #include <subcmd/parse-options.h>
- #include "util/auxtrace.h"
-@@ -22,6 +21,7 @@
- #include "util/pmu-hybrid.h"
- #include "util/sample.h"
- #include "util/string2.h"
-+#include "util/util.h"
- #include <linux/err.h>
- 
- #define MEM_OPERATION_LOAD	0x1
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 86e18575c9be..96a0dceadeff 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -1,6 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "builtin.h"
--#include "perf.h"
- #include "perf-sys.h"
- 
- #include "util/cpumap.h"
-@@ -27,6 +26,7 @@
  
  #include "util/debug.h"
  #include "util/event.h"
-+#include "util/util.h"
- 
- #include <linux/kernel.h>
- #include <linux/log2.h>
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 38133afda7fc..341b660f5b8c 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -41,7 +41,6 @@
-  */
- 
- #include "builtin.h"
--#include "perf.h"
- #include "util/cgroup.h"
- #include <subcmd/parse-options.h>
- #include "util/parse-events.h"
-@@ -71,6 +70,7 @@
- #include "util/bpf_counter.h"
- #include "util/iostat.h"
- #include "util/pmu-hybrid.h"
-+#include "util/util.h"
- #include "asm/bug.h"
- 
- #include <linux/time64.h>
-diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timechart.c
-index 6c629e7d370a..bce1cf896f9c 100644
---- a/tools/perf/builtin-timechart.c
-+++ b/tools/perf/builtin-timechart.c
-@@ -24,7 +24,6 @@
- #include "util/thread.h"
- #include "util/callchain.h"
- 
--#include "perf.h"
- #include "util/header.h"
- #include <subcmd/pager.h>
- #include <subcmd/parse-options.h>
-@@ -37,6 +36,7 @@
- #include "util/debug.h"
- #include "util/string2.h"
- #include "util/tracepoint.h"
+@@ -26,6 +25,7 @@
+ #include "util/spark.h"
+ #include "util/block-info.h"
+ #include "util/stream.h"
 +#include "util/util.h"
  #include <linux/err.h>
- #include <traceevent/event-parse.h>
- 
-diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-index 441c354b8304..38cae4721583 100644
---- a/tools/perf/perf.c
-+++ b/tools/perf/perf.c
-@@ -40,7 +40,6 @@
  #include <linux/zalloc.h>
- 
- static int use_pager = -1;
--const char *input_name;
- 
- struct cmd_struct {
- 	const char *cmd;
+ #include <subcmd/pager.h>
+diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+index fb9dc0dc46f9..747d19336340 100644
+--- a/tools/perf/builtin-kvm.c
++++ b/tools/perf/builtin-kvm.c
+@@ -23,6 +23,7 @@
+ #include "util/data.h"
+ #include "util/ordered-events.h"
+ #include "util/kvm-stat.h"
++#include "util/util.h"
+ #include "ui/browsers/hists.h"
+ #include "ui/progress.h"
+ #include "ui/ui.h"
 diff --git a/tools/perf/perf.h b/tools/perf/perf.h
-index 989eb17ec474..49e15e2be49e 100644
+index 49e15e2be49e..c004dd4e65a3 100644
 --- a/tools/perf/perf.h
 +++ b/tools/perf/perf.h
-@@ -8,7 +8,6 @@
+@@ -2,14 +2,10 @@
+ #ifndef _PERF_PERF_H
+ #define _PERF_PERF_H
+ 
+-#include <stdbool.h>
+-
+ #ifndef MAX_NR_CPUS
  #define MAX_NR_CPUS			2048
  #endif
  
--extern const char *input_name;
- extern bool perf_host, perf_guest;
- 
+-extern bool perf_host, perf_guest;
+-
  enum perf_affinity {
-diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
-index 9f9f622325ae..ab70e5f5fad2 100644
---- a/tools/perf/ui/browsers/hists.c
-+++ b/tools/perf/ui/browsers/hists.c
-@@ -29,8 +29,8 @@
- #include "../../util/top.h"
- #include "../../util/thread.h"
- #include "../../util/block-info.h"
-+#include "../../util/util.h"
- #include "../../arch/common.h"
--#include "../../perf.h"
+ 	PERF_AFFINITY_SYS = 0,
+ 	PERF_AFFINITY_NODE,
+diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
+index 5075ecead5f3..f164bd26fc41 100644
+--- a/tools/perf/ui/hist.c
++++ b/tools/perf/ui/hist.c
+@@ -11,7 +11,7 @@
+ #include "../util/sort.h"
+ #include "../util/evsel.h"
+ #include "../util/evlist.h"
+-#include "../perf.h"
++#include "../util/util.h"
  
- #include "../browsers/hists.h"
- #include "../helpline.h"
-diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
-index 089208b51e68..c1fd9ba6d697 100644
---- a/tools/perf/util/util.c
-+++ b/tools/perf/util/util.c
-@@ -28,6 +28,8 @@
-  * XXX We need to find a better place for these things...
-  */
+ /* hist period print (hpp) functions */
  
-+const char *input_name;
-+
- bool perf_singlethreaded = true;
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 944835e16430..103865968700 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -38,6 +38,7 @@
+ #include "tsc.h"
+ #include <tools/libc_compat.h>
+ #include "util/synthetic-events.h"
++#include "util/util.h"
  
- void perf_set_singlethreaded(void)
+ struct cs_etm_auxtrace {
+ 	struct auxtrace auxtrace;
+diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+index 13f7f85e92e1..8ae742e32e3c 100644
+--- a/tools/perf/util/event.c
++++ b/tools/perf/util/event.c
+@@ -33,7 +33,7 @@
+ #include "bpf-event.h"
+ #include "print_binary.h"
+ #include "tool.h"
+-#include "../perf.h"
++#include "util.h"
+ 
+ static const char *perf_event__names[] = {
+ 	[0]					= "TOTAL",
+diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+index cc491a037836..df6af38ca22e 100644
+--- a/tools/perf/util/evlist.c
++++ b/tools/perf/util/evlist.c
+@@ -32,6 +32,7 @@
+ #include "util/pmu.h"
+ #include "util/sample.h"
+ #include "util/bpf-filter.h"
++#include "util/util.h"
+ #include <signal.h>
+ #include <unistd.h>
+ #include <sched.h>
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 0010e5e0ee68..f341995cb04e 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -25,10 +25,10 @@
+ #include "util/parse-branch-options.h"
+ #include "util/evsel_config.h"
+ #include "util/event.h"
+-#include "perf.h"
+ #include "util/parse-events-hybrid.h"
+ #include "util/pmu-hybrid.h"
+ #include "util/bpf-filter.h"
++#include "util/util.h"
+ #include "tracepoint.h"
+ #include "thread_map.h"
+ 
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index 7d8d057d1772..e2806791c76a 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -33,7 +33,7 @@
+ #include "stat.h"
+ #include "tsc.h"
+ #include "ui/progress.h"
+-#include "../perf.h"
++#include "util.h"
+ #include "arch/common.h"
+ #include "units.h"
+ #include <internal/lib.h>
+diff --git a/tools/perf/util/top.c b/tools/perf/util/top.c
+index b8b32431d2f7..be7157de0451 100644
+--- a/tools/perf/util/top.c
++++ b/tools/perf/util/top.c
+@@ -11,7 +11,7 @@
+ #include "parse-events.h"
+ #include "symbol.h"
+ #include "top.h"
+-#include "../perf.h"
++#include "util.h"
+ #include <inttypes.h>
+ 
+ #define SNPRINTF(buf, size, fmt, args...) \
 diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-index 5010abf9e01e..8bd515b67739 100644
+index 8bd515b67739..7c8915d92dca 100644
 --- a/tools/perf/util/util.h
 +++ b/tools/perf/util/util.h
-@@ -18,6 +18,8 @@
- extern const char perf_usage_string[];
- extern const char perf_more_info_string[];
+@@ -20,6 +20,9 @@ extern const char perf_more_info_string[];
  
-+extern const char *input_name;
+ extern const char *input_name;
+ 
++extern bool perf_host;
++extern bool perf_guest;
 +
  /* General helper functions */
  void usage(const char *err) __noreturn;
