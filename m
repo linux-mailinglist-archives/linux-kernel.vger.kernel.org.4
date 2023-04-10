@@ -2,190 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994556DCC01
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59BB6DCC0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjDJUCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S229841AbjDJUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjDJUCu (ORCPT
+        with ESMTP id S229703AbjDJUMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 16:02:50 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9D11FCF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:02:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id d22-20020a17090a111600b0023d1b009f52so8463885pja.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681156968; x=1683748968;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpioAPXxW+v4Q4xUafxth5Qioe7sUCWQU1eCRcCSF4E=;
-        b=OpSVB2xGYnoW5ZPOAmBnJFAuzcl4KWcOCssIXXoleg7BMgFiMKR6onztmHu2iPTwqV
-         nlirkxgXvfjkEPyH+/Rw9CqIAFpt6o0d5KXy01HdZ4VSxoR8Cdr5bJ+/wtCvtRInRhlp
-         Du9/tQ0WN8TytZHVtzCSsUEzJdQ4lnRPIeo8cTdnVr9SKRvHR4szvHAHahSq7IipAsLL
-         l3fiTUSzkx8hBk08XSdL2o0DNbEAqNUDwG56S6yWXYvoXxal+x23wrDXYtE7d3NAUMLw
-         Co11Qx7Q8VwF5wDNnGhH4ztFDGFLUNRgyq4wkQ2HewgSRwUVhVPkscfkT420mVaj04Ub
-         ejqw==
+        Mon, 10 Apr 2023 16:12:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48329E7E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681157507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aF+LN6zHkq+MYwedY1yELa2Syfx18KiVV4p0VX9cRU8=;
+        b=HkzLvOpRQvmcvTVbvOSareO1sEMJJmWskesdKfd3NK/C5ZY/QE0O1/DxjRJ99hAJIOzyYd
+        jUncv0s06pvd1hJXv17dDRpc7MdETHOqLjZCHYostGLlrYJygCLRSsil0J9WqYD43OIlNt
+        2j7ZjkHlZP+z5QlhSciMC24dhu1Ucng=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-390-BfSm2WhuO1eDXneGLL2aFQ-1; Mon, 10 Apr 2023 16:11:46 -0400
+X-MC-Unique: BfSm2WhuO1eDXneGLL2aFQ-1
+Received: by mail-qk1-f198.google.com with SMTP id 127-20020a370685000000b00746a3ab9426so3305852qkg.20
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:11:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681156968; x=1683748968;
+        d=1e100.net; s=20210112; t=1681157504;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HpioAPXxW+v4Q4xUafxth5Qioe7sUCWQU1eCRcCSF4E=;
-        b=Ussz5Fzjm+vFTyqhWvLHnAEuWlBCCiuePNLi3C2Ho+gMBFYWyxysxPB2YfzdMeAoBI
-         /dq01VBW1G70gfOzL3iMOF+QmaBqIY0JRd+VD66QTT5XUCSIwvQFXDrm28ZIVqR6akAk
-         PaGRo5zNh3lBtmaBrRD8vzESH6SGphmbXnAsog3MIh/OidLbkbC3EUd+4FXaq169UWfx
-         PmJofgyEi4pnDQ5AckTO1cuUbPO7g6lOg6ApAISh9ar9ypuDspVtsc7fOKF3WYg7vdyE
-         /NblDZ5Kfl5x74aJo3rx8x3475zyAH9cbjwdlkzEpbWkWb16jXQmq6dmOztc9LZRDSvY
-         rmvg==
-X-Gm-Message-State: AAQBX9chUeNAF4Ln/oiW8OcUBUC4csM3OigItO6TA1BF6F6ldjaBRDPu
-        ZYJVhJyMeX9AA8mGjbCDvdAPng==
-X-Google-Smtp-Source: AKy350b82capCtNuSEsvxElVHvbtJETNgyp2B+atrv+RlVkQiQyDeGAflx7JoQTMQzRsKIJ+MsvcRg==
-X-Received: by 2002:a17:902:c404:b0:1a2:7356:1ecd with SMTP id k4-20020a170902c40400b001a273561ecdmr17301528plk.5.1681156967766;
-        Mon, 10 Apr 2023 13:02:47 -0700 (PDT)
-Received: from google.com ([2620:15c:2d1:203:8e63:90de:efab:9bf6])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902be1300b001a072aedec7sm8201345pls.75.2023.04.10.13.02.46
+        bh=aF+LN6zHkq+MYwedY1yELa2Syfx18KiVV4p0VX9cRU8=;
+        b=6IvtJLkfbQwMeNppG0y2nP8JTOInywu6au5+NIbquLwbmK6RoMBXbw5O12PH3AXMyY
+         /42cwU98nX3zE7pp0WiH6fZR0E0kYd1rSJjEvaQIw3vB9s5l3qr8JzpJ4uJQHiOnzfQy
+         bNDsTfvxJX8lrYAphdtMQdPugozPwFGh2wqviphVaJXtQ9vTtOpOUFYW54QR+PgxsctY
+         aAyjhUW3+CGhcw/AcGA2gKeHIpWEpRVWuvciNFtBjnatZ4xWnnZ/ErSl4908tbif+ohQ
+         zGiBc64Xm76VekiMaglcyCMvmUg5bfvTaTS0EiUi+GXZAe5Rcrn/a0m/Z0iorh7N7DQx
+         mgkQ==
+X-Gm-Message-State: AAQBX9cIlmVrclyMZIZGvu6vBx2k40WNg5SOk9P0l+ScjgXB+JSJK0k+
+        3/mNlGuDOzvcWhhePH9jqXIeuK8p/iRaSRUd0SGINwwo5u+Z8850o5GvVUaO94rcDuoXUpa0gG7
+        JKdOnrk6yf10VQWhjzn15bbAa
+X-Received: by 2002:a05:622a:19a8:b0:3e3:913c:1ca8 with SMTP id u40-20020a05622a19a800b003e3913c1ca8mr530687qtc.22.1681157503812;
+        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZpTbP2PVw2o8uUHr2dWI9RknpdGBALbZPgkbhmGvuYy32zsn/DFIhdrrDx1ewOr2ydR64RMA==
+X-Received: by 2002:a05:622a:19a8:b0:3e3:913c:1ca8 with SMTP id u40-20020a05622a19a800b003e3913c1ca8mr530654qtc.22.1681157503536;
+        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
+Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
+        by smtp.gmail.com with ESMTPSA id n124-20020a374082000000b0074860fcfc00sm3447372qka.136.2023.04.10.13.11.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:02:47 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 13:02:35 -0700
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Michael Kelley <mikelley@microsoft.com>, nathan@kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 01/11] init: Mark [arch_call_]rest_init() __noreturn
-Message-ID: <ZDRrW9+FrGxgw6Ok@google.com>
-References: <cover.1680912057.git.jpoimboe@kernel.org>
- <b24a972397061a67d46ff5a98657e352040f427a.1680912057.git.jpoimboe@kernel.org>
+        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 16:11:45 -0400
+From:   Eric Chanudet <echanude@redhat.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v2 5/7] arm64: dts: qcom: sa8775p: add the pcie smmu node
+Message-ID: <20230410201145.6e2qsl5gtwh7n3k7@echanude>
+References: <20230406200723.552644-1-brgl@bgdev.pl>
+ <20230406200723.552644-6-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b24a972397061a67d46ff5a98657e352040f427a.1680912057.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230406200723.552644-6-brgl@bgdev.pl>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 05:09:54PM -0700, Josh Poimboeuf wrote:
-> Fixes the following warning:
+On Thu, Apr 06, 2023 at 10:07:21PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
->   init/main.o: warning: objtool: start_kernel+0x4ad: unreachable instruction
+> Add the PCIe SMMU node for sa8775p platforms.
 > 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-
-Ha! I was just looking into this, by coincidence.
-https://github.com/ClangBuiltLinux/linux/issues/1815#issuecomment-1489113303
-
-Generally, the compiler can infer when a function does not return, but
-it's not safe to do so when the definition is weak, since the strong
-definition may not be, so the caller must not make optimizations based
-on such an assumption.
-
-https://reviews.llvm.org/D147177 (abandoned, but has more info)
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-(I agree with the first two patches, since those are ones I was just
-looking at.  Unfortunately, some security embargo just lifted on
-https://bugs.chromium.org/p/llvm/issues/detail?id=30 which a clang-16
-change is causing the stack canaries to be set+checked again in
-start_kernel. I'm about to meet with LLVM folks at Intel in 30 minutes
-to discuss walking back some of the changes since I strongly disagree
-with them.  But merging this series will cause boot failures with
-clang-16, and I would appreciate some time to sort this out before this
-series is merged. It's my top priority.)
-
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  arch/s390/kernel/setup.c     | 2 +-
->  include/linux/start_kernel.h | 4 ++--
->  init/main.c                  | 4 ++--
->  tools/objtool/check.c        | 2 ++
->  4 files changed, 7 insertions(+), 5 deletions(-)
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
 > 
-> diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-> index 8ec5cdf9dadc..4259b6c50516 100644
-> --- a/arch/s390/kernel/setup.c
-> +++ b/arch/s390/kernel/setup.c
-> @@ -396,7 +396,7 @@ int __init arch_early_irq_init(void)
->  	return 0;
->  }
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index 2343df7e0ea4..9ab630c7d81b 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
+>  				     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
 >  
-> -void __init arch_call_rest_init(void)
-> +void __init __noreturn arch_call_rest_init(void)
->  {
->  	unsigned long stack;
->  
-> diff --git a/include/linux/start_kernel.h b/include/linux/start_kernel.h
-> index 8b369a41c03c..864921e54c92 100644
-> --- a/include/linux/start_kernel.h
-> +++ b/include/linux/start_kernel.h
-> @@ -9,7 +9,7 @@
->     up something else. */
->  
->  extern asmlinkage void __init start_kernel(void);
-> -extern void __init arch_call_rest_init(void);
-> -extern void __ref rest_init(void);
-> +extern void __init __noreturn arch_call_rest_init(void);
-> +extern void __ref __noreturn rest_init(void);
->  
->  #endif /* _LINUX_START_KERNEL_H */
-> diff --git a/init/main.c b/init/main.c
-> index 4425d1783d5c..161ed956d738 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -683,7 +683,7 @@ static void __init setup_command_line(char *command_line)
->  
->  static __initdata DECLARE_COMPLETION(kthreadd_done);
->  
-> -noinline void __ref rest_init(void)
-> +noinline void __ref __noreturn rest_init(void)
->  {
->  	struct task_struct *tsk;
->  	int pid;
-> @@ -889,7 +889,7 @@ static int __init early_randomize_kstack_offset(char *buf)
->  early_param("randomize_kstack_offset", early_randomize_kstack_offset);
->  #endif
->  
-> -void __init __weak arch_call_rest_init(void)
-> +void __init __weak __noreturn arch_call_rest_init(void)
->  {
->  	rest_init();
->  }
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index cae6ac6ff246..e7442e7ad676 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -202,6 +202,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
->  		"__reiserfs_panic",
->  		"__stack_chk_fail",
->  		"__ubsan_handle_builtin_unreachable",
-> +		"arch_call_rest_init",
->  		"arch_cpu_idle_dead",
->  		"cpu_bringup_and_idle",
->  		"cpu_startup_entry",
-> @@ -217,6 +218,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
->  		"machine_real_restart",
->  		"make_task_dead",
->  		"panic",
-> +		"rest_init",
->  		"rewind_stack_and_make_dead",
->  		"sev_es_terminate",
->  		"snp_abort",
+> +		pcie_smmu: iommu@15200000 {
+> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+> +			reg = <0x0 0x15200000 0x0 0x800000>;
+
+Testing on the board, applying on next-20230406:
+[    1.041869] arm-smmu 15200000.iommu: SMMU address space size (0x80000) differs from mapped region size (0x800000)!
+
+In the downstream sources, the size is 0x80000[1].
+
+On reboot, I also get a synchronous abort, but the second line, from the
+following output on the serial, could indicate the hypervisor is behind
+it:
+
+[   26.906206] arm-smmu 15200000.iommu: disabling translation
+3      33.244434 Injecting instruction/data abort to VM 3, original ESR_EL2 = 0x93800047, fault VA = 0xffff80000a380000, fault IPA = 0x15200000, ELR_EL2 = 0xffffd064f70c9de8
+[   26.942083] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
+[   26.948506] Modules linked in: nvmem_qcom_spmi_sdam qcom_pon spi_geni_qcom nvmem_reboot_mode crct10dif_ce i2c_qcom_geni phy_qcom_qmp_ufs gpucc_sa8775p ufs_qcom socinfo fuse ipv6
+[   26.966702] CPU: 3 PID: 1 Comm: systemd-shutdow Not tainted 6.3.0-rc5-next-20230406-00019-g9d08a3c17f54-dirty #134
+[   26.977315] Hardware name: Qualcomm SA8775P Ride (DT)
+[   26.982505] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   26.989651] pc : arm_smmu_device_shutdown+0x88/0x1d8
+[   26.994773] lr : arm_smmu_device_shutdown+0x70/0x1d8
+[   26.999875] sp : ffff80000805bbf0
+[   27.003283] x29: ffff80000805bbf0 x28: ffff0e69400a0000 x27: 0000000000000000
+[   27.010608] x26: ffffd064f8130f38 x25: 0000000000000001 x24: ffffd064f8eac028
+[   27.017932] x23: ffff0e6940eeb490 x22: ffffd064f8f24f80 x21: ffff0e6940eeb410
+[   27.025254] x20: ffff0e6940808c80 x19: ffff0e6940eeb410 x18: 0000000000000006
+[   27.032579] x17: 0000000000000001 x16: 0000000000000014 x15: ffff80000805b5c0
+[   27.039903] x14: 0000000000000000 x13: ffffd064f8ac19a8 x12: 0000000000000606
+[   27.047226] x11: 0000000000000202 x10: ffffd064f8b199a8 x9 : ffffd064f8ac19a8
+[   27.054549] x8 : 00000000ffffefff x7 : ffffd064f8b199a8 x6 : 80000000fffff000
+[   27.061872] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.069195] x2 : 0000000000000000 x1 : ffff80000a380000 x0 : 0000000000000001
+[   27.076520] Call trace:
+[   27.079041]  arm_smmu_device_shutdown+0x88/0x1d8
+[   27.083787]  platform_shutdown+0x24/0x34
+[   27.087825]  device_shutdown+0x150/0x258
+[   27.091859]  kernel_restart+0x40/0xc0
+[   27.095632]  __do_sys_reboot+0x1f0/0x274
+[   27.099664]  __arm64_sys_reboot+0x24/0x30
+[   27.103786]  invoke_syscall+0x48/0x114
+[   27.107644]  el0_svc_common+0x40/0xf4
+[   27.111410]  do_el0_svc+0x3c/0x9c
+[   27.114822]  el0_svc+0x2c/0x84
+[   27.117969]  el0t_64_sync_handler+0xf4/0x120
+[   27.122357]  el0t_64_sync+0x190/0x194
+[   27.126126] Code: f9400404 b50008e4 f9400681 52800020 (b9000020) 
+[   27.132385] ---[ end trace 0000000000000000 ]---
+
+[1] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/blob/ES2/arch/arm64/boot/dts/qcom/lemans.dtsi#L3498
+
+> +			#iommu-cells = <2>;
+> +			#global-interrupts = <2>;
+> +
+> +			interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+>  		intc: interrupt-controller@17a00000 {
+>  			compatible = "arm,gic-v3";
+>  			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
 > -- 
-> 2.39.2
+> 2.37.2
 > 
-> 
+
+-- 
+Eric Chanudet
+
