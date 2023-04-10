@@ -2,189 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957A26DC563
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378D76DC566
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjDJJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S229801AbjDJJzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjDJJyP (ORCPT
+        with ESMTP id S229849AbjDJJym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:54:15 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CEE2697;
-        Mon, 10 Apr 2023 02:54:14 -0700 (PDT)
+        Mon, 10 Apr 2023 05:54:42 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2114.outbound.protection.outlook.com [40.107.237.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03C33C29;
+        Mon, 10 Apr 2023 02:54:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=idQva2XK1FyZH3KdUFkp8hTV6xOLb5ams/pnb8zvKmU9rVOUqixVFSgLSEbmn7pg/B3yhsxB9mJzP2cAgcDrnlfppJoWVMWrybCgEpYxyiHrwBrYB3D5rdQtGKN8QFrucfiZiP5VGhGO2LmW9/Sq8hGYz8/lwsM5u6evfIPOKAiCoHe/hvzXzwU/hqluUFMmBQdvD47aXytP9DGBbZ+Q0OGH6xF+/msHTNYr/HDrcv9qBz1JtELNOdgFbjrY5iAbOOKFWuRci9k8g66OUAt+pprhaRp+BNyVqX3RaWGh+/UnXTiH2H8Pcmy8gjGf+2VcvIKlyXEfzQMhj/0bwHs6wA==
+ b=VL/z54HXFd3N5t2yTLKNO7bFnI2jyylJpzlhPJdMnF5VQaEbGIsD0XtMoMRTFK0rwWROs/NOdZvxNJGRwFb+CIkN730zYBGY7oRsofDcE8640v+l9KIez1LTo8sK9kGBhlsxwqFa+vsaD5Y1YoL2zKCeeDTWyP67DrMz6BpBboBDfPbvIxpcZH9RudNnN7y2JNrQy/3O9elsD0EsKu6PF6EVP1V1nsDynjiYXXXDYFnJXHOBs1W2EQjvn4qKY2S/gmshiGv1oxMFcN53zIaEWtmaVXkCfyWXPG9xvy8k4DYbZWuWMxJhueRoepYHkVgNuX5TOHlIZIHJk4IaP2t5Jw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WVBp+WOwcNwhJTjY12nhx2kQyTcaRuI6EdTm7u/V+QU=;
- b=c1Yfh93x7OPguuQTO403inKPDVqp7Q94ZY28vG2F6RRVM34hEs7r2wym2zVfzFbdivFukfPmdKZvgPuP90ODpoMcACRQ3O2jGcNvGTJ4ydxANX3niVvV61HuLiQ/ce0f8yuqwt/t9kbIk2vzAGAAvqSjdVBJpQjvs90EmoyoLH2mLiDzn8v9he4DoBHvSK1eIf5OqPh/sZ74rq/rwWojgBfoPTaSekCR1fG6tr7V7PrckHKZ99uqq5/eWiHgzaNl+/tQ4ZPdQySnUTY3uujBh/F+LDy9jAwB4p56JPjeSQaZNsKgfANcZbq8vhK6NXorP2FNEbSX4ubxBZWe3MoyuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=EzRjwIGPeZMRf34Ao+VMns1e3cw+oX5XoAHEqHfn+wE=;
+ b=XV65xQ4c3SPS9yf95uXk7tXZQhsoB8knSAjF2bXAySLorYI6d4goXDZusixqSz3lIsxv/4EnFL11qbc2eoEGGDakSGyS6AhzD/wbnK2P1tD38Bk8n6DDscTZlDhZQyfwcwmEDtRE7CQ8EDehxiIhtYdtg6FCQRnXBvvROND2ojt+kjv7zEw5OsDkL71MnWB5/q4wjHA/aN34wEBuZckTOIrhxG5WDXnrGP055aNq0RqX/B6bLcBdLlRr4p8tE18oqhg/CbJF+IRrHd0VpUnN1BNsi7tp52HSfX79m0KHzl0gIrxjvTbLwgtgMtTudfsF0ZZCwjVM4FRg0Yg29xHCgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WVBp+WOwcNwhJTjY12nhx2kQyTcaRuI6EdTm7u/V+QU=;
- b=AXFsx2mVYJ3nGedKP/g5URCwKIKZR+oIVkr5DnTqpedmkb5dhx2t46otPrGa0+f5plUt+Mm0hstkPUxvKKflNJd5UIgXVvzwSqLROZczlg2s1uMTrtmM0HvBOdbnzHtcgspExtn8S6aQNmxN705F05sHEjDwKwE5tlTLzv3Kh8s=
-Received: from MW4PR02CA0024.namprd02.prod.outlook.com (2603:10b6:303:16d::9)
- by PH0PR12MB8176.namprd12.prod.outlook.com (2603:10b6:510:290::18) with
+ bh=EzRjwIGPeZMRf34Ao+VMns1e3cw+oX5XoAHEqHfn+wE=;
+ b=PFwpxbu4205eMNCu6TbyboPPkuOesVsbTfKdRA0dwOMhgsZ2Q4J8D9VHamf26+Y5pUrogQZmbI8lCzgMsgtDOMJ123aIwTP3pcj9HtgtvgiD9yKXzBfzydq4JuhsS3920J3sVd18uOngow+Po1fcKgIdMg7J9LZ5njlyca6pteA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BN0PR13MB5230.namprd13.prod.outlook.com (2603:10b6:408:159::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 09:54:10 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::2a) by MW4PR02CA0024.outlook.office365.com
- (2603:10b6:303:16d::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
- Transport; Mon, 10 Apr 2023 09:54:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.21 via Frontend Transport; Mon, 10 Apr 2023 09:54:09 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 10 Apr
- 2023 04:54:01 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <joel@joelfernandes.org>,
-        <gautham.shenoy@amd.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH 2/2] amd_pstate: Add ->fast_switch() callback
-Date:   Mon, 10 Apr 2023 09:53:39 +0000
-Message-ID: <20230410095339.14923-1-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410095045.14872-1-wyes.karny@amd.com>
-References: <20230410095045.14872-1-wyes.karny@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Mon, 10 Apr
+ 2023 09:54:35 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169%5]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
+ 09:54:35 +0000
+Date:   Mon, 10 Apr 2023 11:54:27 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Gautam Dawar <gautam.dawar@amd.com>
+Cc:     linux-net-drivers@amd.com, jasowang@redhat.com,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
+        koushik.dutta@amd.com
+Subject: Re: [PATCH net-next v4 02/14] sfc: implement MCDI interface for vDPA
+ operations
+Message-ID: <ZDPc063jzve18fqp@corigine.com>
+References: <20230407081021.30952-1-gautam.dawar@amd.com>
+ <20230407081021.30952-3-gautam.dawar@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407081021.30952-3-gautam.dawar@amd.com>
+X-ClientProxiedBy: AM0PR06CA0117.eurprd06.prod.outlook.com
+ (2603:10a6:208:ab::22) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|PH0PR12MB8176:EE_
-X-MS-Office365-Filtering-Correlation-Id: d590cda1-7a4c-48a4-3ea4-08db39a98833
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB5230:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8ad7eec-5337-4ab9-6ca7-08db39a99706
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DcTzcL+VUuiFmriZQVtctQzRCLS1DxMBCiTHzRp3F67VW9+vchq8ny7ogJNZ82TJFYEPBlzy+zK2t6Wgm01GwIpoWhE43x0sQEFlYlSQkBbDnymqqWfoHO/UHwn21vYRJMW+EeDpVAMzTqmy5ckr5sMrGm6kqNsbXj9juUAGqgXd345kSDNPpLeigZbfn62IRG+TbwWgYb3sFNAM2ULJwhV6eZxw8gv9B0G2TDH/isKajBJIuGgZAFtSdYrH1SAfi1KVlp9e1SdlW2Fm0CB7IeF3tmlh7Riw62RsXoncfd/T+MXldGVImCjBzsS9072HMuFkq/kp5g3u11UUneLK2P5W1ooJ6Im9vpJ45rtx1oUd+QV1WoY9r3uKXW+J6d9Te146g7N1Gm1/ZpjDUoSudKfxs+3HD+zXwjJd7S65OnQZSlPwbj3GibLluSu+fRMCLvCuOpc4f5Y4D4N1JzT1HkcZ9C4kqmHEGcwNnnauh3k4J/E49gCOK3mfxnanhT7ril4tn+4GdVjYs3Mp5uUbZBgbhA6WEE8lFhtoREq6PKffsoX+E+7h+PQu4kn+uI7p75S0Q2GygumPJ7YVMI4ljEipjFMenBZ/Z/CeBe1uHxiTZZGVvQbEMw9gRWx8uclb+59y2cHn4qohzWhPOCHBezZUFn4S1SGFruiWiDcbVoTpBIBVya43J0bNIzndU1yt3hcvwyjUxFZ1dNUSgZYlDYRbSoq3du6Kw9WAme8erqrk76Kj0+FByg8iHkYWa8BM
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8936002)(6666004)(7696005)(40480700001)(40460700003)(44832011)(7416002)(5660300002)(86362001)(70206006)(8676002)(70586007)(4326008)(478600001)(110136005)(316002)(82310400005)(36860700001)(82740400003)(356005)(54906003)(81166007)(2906002)(1076003)(26005)(2616005)(83380400001)(47076005)(426003)(336012)(186003)(41300700001)(36756003)(16526019)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:54:09.8810
+X-Microsoft-Antispam-Message-Info: TtQfsDUspafIQyRIstxYKcNbKIUkR1t0gDPom9mOm5v/SNFOnmyFtFH8BmJxGF1aDGD41NlApzBcktZ+pap3fkhEbwavO/iTbxCTWOrPBenFi1Muoa/XSYMbhflDC5B3nd9W/4cU/BOqxW5ZG/tB1G5QsNMe/qoJEijAEpyibQYF5A/eWp533l9Wh7sdAGvxJCUe5BdxKfCg8l7NGASwLXV5ShMo5XJ45Hgel3uINdnvfUd1EvrE9aWVyMwFJhcwu2xx85aKiL3R6NMngNd4S0fsCoUB0ZW6574UKp6eO1R6e2NPcZ53bNz/H8y/hhoyRn1f376Uy34BFTMX6vn56iGNcRK0ViXDAmDJupl44Khl5Jp8/tTxPk9zfSO8Xe97qEFA4zpMaMHPdTTuqOjz4XBysKR5KHetb+3CYvIVfgL1lq6X35rigxTs5cxigxOMBt1PrwIJcz++RYChkCZJ2xWlZGzX7ALnaUB/Y9NgSmit9lrkzhclZBvjEdIWkjk9guzPJ8lXkl6ibvGyGkFewB2R87uNIKslGCwG+H9fs1fMDvIPiBo2a3xcburutpWT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39840400004)(366004)(346002)(136003)(451199021)(316002)(54906003)(478600001)(36756003)(6512007)(186003)(6506007)(2616005)(6486002)(6666004)(66946007)(6916009)(4326008)(38100700002)(2906002)(66476007)(66556008)(7416002)(8676002)(8936002)(86362001)(41300700001)(44832011)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oAL7PjHYKOL7SrCzg81CLjObGyo8XfF1uxVntJj3+2INlYqbpgaKF+gffMat?=
+ =?us-ascii?Q?oMkGNWabYPgQD6CT0oBIdo8jHC2GhSweF/bEpQWkE7cTGaIR7cRd2Ioj/sXI?=
+ =?us-ascii?Q?Uz5lyBJqZIlxC7SCklN0AhPJIcOjw+hiCYn2KLT6909/QJESHtCZQNOk3IK6?=
+ =?us-ascii?Q?9eUlhOV7lNJht+8TAHoryTYObPYCgp3bvoszKpZbyksKQxxqpojkyd0AFqPU?=
+ =?us-ascii?Q?W8NfLjDRMBlWtNvpcoU6YTaC9TQOK978T581cQD9yWZ5d8jbKxXgDcXopfP5?=
+ =?us-ascii?Q?PBr2nLbYkCr82gwEcwlpT/zVPQghpKfSQnnVWXSnKPHU+hHIcBxesGJEGqwg?=
+ =?us-ascii?Q?2OaL7qx/JN6QOng4sg81KBV6jSmUGRn07ZpONvm5i10Twq133kErdH9Tp8Iu?=
+ =?us-ascii?Q?vGgJp842jDvOR/g1/rF5qcmQyIOPyKUFLKynIxVUwUkVcHoz+yFyEdkYUs4l?=
+ =?us-ascii?Q?yTer+GCRG2D5sFO5ba83YjTyXpvW+jKc8D67JesW9TU3GfUMQL/BlXdeme6D?=
+ =?us-ascii?Q?PQmjETieXRFrYfLLfROMzReI+U4i8PuApyzBRlxdEZOFH2n9PA15Ojt9Q4lZ?=
+ =?us-ascii?Q?de0PbRECkPS/gxpSvhq0zBjHGrRhcl41jx9XZsNpdvXJ2a0lrPdpuR4GBHtn?=
+ =?us-ascii?Q?q9/WzI3ZUXN3f3vIiFbW9dIG2tZGrPoBUS6WrxoHzlIxxNvcrwaBuR+/QXVZ?=
+ =?us-ascii?Q?r6HqFItdTE3rK5eGaQ99x5LgAqcMNXfjGhvLatkqCfIe06JsgWlXJquucyv4?=
+ =?us-ascii?Q?vwmDp71lU9KEI5xPwCBtSXWo3ItC2gSqEeqFpQIO9211c1dRXmhNniWEmMne?=
+ =?us-ascii?Q?hvM/5v03Eehi6InSWmq6zyqr2I5ODY9VuKJLFLVqt+UPy+xLDe4uCF49q8PW?=
+ =?us-ascii?Q?JSqGqStdSTDxMok2VI3mj7ivTdZfMXRqr/wfUP/lQyocEEsrQ+Pt0sJgNNZt?=
+ =?us-ascii?Q?JedmbHvDMNrYQPLjpD7s4aGSM1QDRHnqEbSqmLjwXxOZAKCapYgF+G1MVWxc?=
+ =?us-ascii?Q?pDRaYKPOzVL4szWxijaKNFlJkGRaWyBcOQHHXAQJxx/iorMIYxDNRPa0w6Jf?=
+ =?us-ascii?Q?li4v4MY/PfYxd1v0sotD50PBwtvdQUL+DvaFNrGBxtYeXT3gFpJpP1PbUkb5?=
+ =?us-ascii?Q?4Lj9ohKBAnDltxU5CkGFoAkl/e+0Avtfu/QCNaM7wM8GMFstJRwaYbl1XOUP?=
+ =?us-ascii?Q?DFvAbiIGm0kTZaLLX2UMNyISAWm/KRmg+1OfMk6IpWX3dsVbCn/d/Go/7KWo?=
+ =?us-ascii?Q?JzRNJAUWPyfTUpmFkAw+vk9Wlss9+VNoI9NFAK+dSIHkelMXGhkf2bkDo7vW?=
+ =?us-ascii?Q?cLPlkQLaoiheCMmWBLr/YsBKseY6s6SA5zMQvFQ5hE3G7dwcq/dgSO15YnsQ?=
+ =?us-ascii?Q?OzNX4LZ0mg5QjkaOkFSVYlrP2xMu3PEMfQRfpml6sFG4c+hlFqXG6Viq8cCg?=
+ =?us-ascii?Q?rsqLaNs38bK0JbQ7Vcp4mXSVi6eZZteatg+8C8zZ8kFRT8uIDgafS479PAD1?=
+ =?us-ascii?Q?vJVX2waz9gGluixPSKY3TPtUEu5BFrzRa6/s+BMZbk6C4AfQjWt16WK7FqNP?=
+ =?us-ascii?Q?gJsVZ77xFcyPOly2eP+njmr/iufKvvxPtjnvgDV5ab/grukHxayKCzf1tRNq?=
+ =?us-ascii?Q?BQ7D16nBh8i+AqyOWbJA2liFUwnanOpY1JA1P4xrZKRUVOI9oNnJylWYlbZi?=
+ =?us-ascii?Q?rnvDTw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8ad7eec-5337-4ab9-6ca7-08db39a99706
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:54:35.0985
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d590cda1-7a4c-48a4-3ea4-08db39a98833
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8176
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ELUEowPoN1Fa9k1VMri/IMQoWs/NXWM98pIY7HcOWyTsMIdyT3G3DFtHWNN6GlQTYxB5yOi5S4+jpFBftjDPqtC+2zy9DjqY7by0ukdMljI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB5230
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+On Fri, Apr 07, 2023 at 01:40:03PM +0530, Gautam Dawar wrote:
+> Implement functions to perform vDPA operations like creating and
+> removing virtqueues, getting doorbell register offset etc. using
+> the MCDI interface with FW.
+> 
+> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
 
-Schedutil normally calls the adjust_perf callback for drivers with
-adjust_perf callback available and fast_switch_possible flag set.
-However, when frequency invariance is disabled and schedutil tries to
-invoke fast_switch, and that callback is NULL, it schedules a kthread to
-invoke the target() callback, which could slow down the frequency
-update.
+Hi Gautam,
 
-Prevent the frequency update slow down by implementing the fast_switch
-callback for amd_pstate.
+thanks for your patch.
+I think that I found a minor problem, as described below.
 
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 33 +++++++++++++++++++++++++++------
- 1 file changed, 27 insertions(+), 6 deletions(-)
+...
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 73c7643b2697..b3d594b35c65 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -422,9 +422,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
- 	return 0;
- }
- 
--static int amd_pstate_target(struct cpufreq_policy *policy,
--			     unsigned int target_freq,
--			     unsigned int relation)
-+static int amd_pstate_update_freq(struct cpufreq_policy *policy,
-+				  unsigned int target_freq, bool fast_switch)
- {
- 	struct cpufreq_freqs freqs;
- 	struct amd_cpudata *cpudata = policy->driver_data;
-@@ -443,14 +442,35 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
- 	des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
- 				     cpudata->max_freq);
- 
--	cpufreq_freq_transition_begin(policy, &freqs);
-+	WARN_ON(fast_switch && !policy->fast_switch_enabled);
-+	/*
-+	 * If fast_switch is desired, then there aren't any registered
-+	 * transition notifiers. See comment for
-+	 * cpufreq_enable_fast_switch().
-+	 */
-+	if (!fast_switch)
-+		cpufreq_freq_transition_begin(policy, &freqs);
- 	amd_pstate_update(cpudata, min_perf, des_perf,
--			  max_perf, false);
--	cpufreq_freq_transition_end(policy, &freqs, false);
-+			  max_perf, fast_switch);
-+	if (!fast_switch)
-+		cpufreq_freq_transition_end(policy, &freqs, false);
- 
- 	return 0;
- }
- 
-+static int amd_pstate_target(struct cpufreq_policy *policy,
-+			     unsigned int target_freq,
-+			     unsigned int relation)
-+{
-+	return amd_pstate_update_freq(policy, target_freq, false);
-+}
-+
-+static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
-+				  unsigned int target_freq)
-+{
-+	return amd_pstate_update_freq(policy, target_freq, true);
-+}
-+
- static void amd_pstate_adjust_perf(unsigned int cpu,
- 				   unsigned long _min_perf,
- 				   unsigned long target_perf,
-@@ -1228,6 +1248,7 @@ static struct cpufreq_driver amd_pstate_driver = {
- 	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
- 	.verify		= amd_pstate_verify,
- 	.target		= amd_pstate_target,
-+	.fast_switch    = amd_pstate_fast_switch,
- 	.init		= amd_pstate_cpu_init,
- 	.exit		= amd_pstate_cpu_exit,
- 	.suspend	= amd_pstate_cpu_suspend,
--- 
-2.34.1
+> diff --git a/drivers/net/ethernet/sfc/mcdi_vdpa.c b/drivers/net/ethernet/sfc/mcdi_vdpa.c
 
+...
+
+> +void efx_vdpa_vring_fini(struct efx_vring_ctx *vring_ctx)
+> +{
+> +	kfree(vring_ctx);
+> +}
+> +
+> +int efx_vdpa_get_features(struct efx_nic *efx,
+> +			  enum ef100_vdpa_device_type type,
+> +			  u64 *features)
+> +{
+> +	MCDI_DECLARE_BUF(outbuf, MC_CMD_VIRTIO_GET_FEATURES_OUT_LEN);
+> +	MCDI_DECLARE_BUF(inbuf, MC_CMD_VIRTIO_GET_FEATURES_IN_LEN);
+> +	u32 high_val, low_val;
+> +	ssize_t outlen;
+> +	int rc;
+> +
+> +	if (!efx) {
+> +		pci_err(efx->pci_dev, "%s: Invalid NIC pointer\n", __func__);
+
+efx is NULL but it is dereferenced.
+
+Reported by Smatch as:
+
+drivers/net/ethernet/sfc/mcdi_vdpa.c:72 efx_vdpa_get_features() error: we previously assumed 'efx' could be null (see line 71)
+
+And by Coccinelle as:
+
+drivers/net/ethernet/sfc/mcdi_vdpa.c:72:15-22: ERROR: efx is NULL but dereferenced.
+
+> +		return -EINVAL;
+> +	}
+
+...
