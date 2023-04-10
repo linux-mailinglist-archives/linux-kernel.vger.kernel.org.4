@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676876DC7F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DF06DC7FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjDJOkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S229814AbjDJOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDJOkk (ORCPT
+        with ESMTP id S229503AbjDJOnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:40:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8437730DA;
-        Mon, 10 Apr 2023 07:40:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w11so5015944pjh.5;
-        Mon, 10 Apr 2023 07:40:39 -0700 (PDT)
+        Mon, 10 Apr 2023 10:43:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925C40EE;
+        Mon, 10 Apr 2023 07:43:39 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id ik20so4707415plb.3;
+        Mon, 10 Apr 2023 07:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681137639; x=1683729639;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A31u6jRSepHToKl1ZHJ1t1wEod+/nXxHkMwASeYu3RU=;
-        b=BdufJJlPdoAH4B+HsqoNIN+mXLqOoiFqwUgIFBVcB2aICOtIllUNyANmVmxhfuFIhu
-         z/eOAyChh7PEpmso/t01uSqOjLVFbdX2HI8EqjY+vp/xMuN3YzkNdtwBxQTHqAY+46zU
-         KUH2tJ19k5oYLYRaNw+vTZQVDVHu2jIHyFSOjkHH4/uwRzJOiYqJDuQEHZVIZUm2e4fM
-         sE0rL6CS1YPpnp4Z3GxHAmMugLCG+RUWtdNWJ0lvuPka/TueYgUg24sN9AKBdX/jqJYD
-         uTlTF+umdHbR9/1CucIJbdA+Lv/3ankEad/Ul7BqedxgWM5159+ZqCoSWX1L7IYBFY+M
-         52Mg==
+        d=gmail.com; s=20210112; t=1681137819; x=1683729819;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=fwIV7DuVm1nOlVnpkF6lWlboVFSGaVPDbKwvxQCbryk=;
+        b=EK0ZvlDGwoB+kh/3aP4KlIpOrLeN6TBfbIRQVXWSef2kmde3Q+g7bIh/gnteP6bY2n
+         DgvMDWaiwE+NjtxwBHAZco3cSbggf7w0FvbsO5Ch5Xmhdacs15H9o4NeiS54wVBw3Xo8
+         JG7t/itqF0ZxglJUhXDovga0G1SLMQ97Z2+ZZupIOTPKWNfe+8MrDBvy5TYoD+nE+MS+
+         a8vK2bZuaBge78hJWIpT5tdHE+whzujJnEX6QBn4CA31RZRzl+XdgHyqEjcQdwVDQaQH
+         fDmDbEWQEBf2UMA69NRERtVp0bMYOzh3uTMOP6TfKInkU8Sbf1uDowsm0onI7Y86MxHj
+         Lo+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681137639; x=1683729639;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A31u6jRSepHToKl1ZHJ1t1wEod+/nXxHkMwASeYu3RU=;
-        b=ae6GVrqViwP6tdd3ztiS58f9dYlFJcKyBpdviyxfhul6Q6g4LuuZplrr1de98N4R/z
-         6Ibvg4Iek+p4XW176bPbkt71WHbEhfCqmbrG0gD8N/EeAsF7opEJeg5wm7QehUIz6jjC
-         FhhwVyDfT9wMva9W0466FZIWsE2mf0ofXpUO81DjEwY1wfDQsMv9EWA6RJNX1pXnWMLz
-         Zy0mf4Ob7nNlVfAz9vGQnBKRpQ6RF3dJGDUqL+0xQIui8F3Wgz7vE4+VOr2BgvP3/mO0
-         +YSXNk4Xxc2QIm7W9+GKyhrR+Vawef34RxBBV9OPWPgBfOCtjVN4AsdP6O++Hh0bU3/Q
-         eLgQ==
-X-Gm-Message-State: AAQBX9dYlTN+20TciWWy6Na/L+e2bo9+FxVlnh+xgRxSQQb1UevTAjvl
-        fxyg2i7FbolF7AVVcdkUOuY=
-X-Google-Smtp-Source: AKy350Y/Ji/yq7bdgpV8uPXL50TjXJvKLJJLww0gdapehHa/Bdh/6wQgfykIiZp/C4lj0bQGDDXWdQ==
-X-Received: by 2002:a17:902:e5c7:b0:1a1:7da3:ef5b with SMTP id u7-20020a170902e5c700b001a17da3ef5bmr12986261plf.7.1681137638805;
-        Mon, 10 Apr 2023 07:40:38 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681137819; x=1683729819;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fwIV7DuVm1nOlVnpkF6lWlboVFSGaVPDbKwvxQCbryk=;
+        b=tdmpryzvjQtvT4DHDQw6EQL/hVLdvgz8HWKwbSPJtr3dDMZL0j2CoVQO6rx5lDLus5
+         YcIu0eOd6m2E3I9NuUAzqiQL5o/AC2WRGuAervZdePl5aXcWQGjQ6QUiD4wkytAMokc+
+         fc9sjGRCXQ0TeKWLl3+Q/6/6bwKcf+HkmnLeUSSe3dLTC/JDve54iNWgHzPAGUpBa8GT
+         cZLDjmG8nAiZz8iIZR1u+g57z4FbQj+zBlGep4xi7aaOybaaKHCwqWncrstuQyDfuuO6
+         ZkbOY6GLGjtgKotgXLJkhb5jBd1YkCyZgWJnP0Wxr1aBb3cRzsLFdyUdCqHNxBfPFvY1
+         q7Bw==
+X-Gm-Message-State: AAQBX9c4/Mm0Ri1YHZfWEcRUAKXMB7/UewpdIVpoRgyxFVVUdhCwDUZX
+        mYm8TTxJuooMTKV08ug7BWU=
+X-Google-Smtp-Source: AKy350bGfOZhGowj90WK6W3E2MOxomPFmqUenXUkfU0445gKmqwjIkYQrvdUPiymiYkuKBJCIPWbsQ==
+X-Received: by 2002:a05:6a20:1d62:b0:c7:6f26:ca0 with SMTP id cs34-20020a056a201d6200b000c76f260ca0mr11590556pzb.54.1681137819255;
+        Mon, 10 Apr 2023 07:43:39 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j20-20020a170902759400b0019309be03e7sm7949646pll.66.2023.04.10.07.40.37
+        by smtp.gmail.com with ESMTPSA id fe27-20020a056a002f1b00b00637ca3eada8sm2070223pfb.6.2023.04.10.07.43.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 07:40:38 -0700 (PDT)
+        Mon, 10 Apr 2023 07:43:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7c71d182-2ac5-b01e-2875-5060fb509056@roeck-us.net>
-Date:   Mon, 10 Apr 2023 07:40:36 -0700
+Message-ID: <7b0fbd06-73d0-7fa9-3f03-e788f1df4631@roeck-us.net>
+Date:   Mon, 10 Apr 2023 07:43:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
+Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Remove support
 Content-Language: en-US
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
- <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
- <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
- <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
- <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
- <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
- <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
+To:     William Breathitt Gray <william.gray@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
+        techsupport@winsystems.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fred Eckert <Frede@cmslaser.com>
+References: <20230410143101.182563-1-william.gray@linaro.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-In-Reply-To: <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
+In-Reply-To: <20230410143101.182563-1-william.gray@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
         FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
@@ -91,45 +82,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/23 01:19, Matti Vaittinen wrote:
-> to 6. huhtik. 2023 klo 16.43 Mark Brown (broonie@kernel.org) kirjoitti:
->>
->> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
->>> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
->>>> On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
+On 4/10/23 07:31, William Breathitt Gray wrote:
+> The current maintainer no longer has access to the device for testing,
+> the original user of this driver indicates that they have moved on to
+> another device, and the manufacturer WINSYSTEMS does not appear
+> interested in taking over support for this code.
 > 
->>>> It can also try to avoid
->>>> interacting with hardware if that might not work.
->>
->>> It'd be great to have documentation / specification for sending and/or
->>> handling the regulator events. I don't think we currently have such.
->>> As far as I understand, the notifications can be picked up by all
->>> consumers of a regulator. I am a bit worried about:
->>> a) Situations where notification handlers 'collide' by doing 'actions'
->>> which are unexpected by other handlers
->>
->> I'm not sure what you're expecting there?  A device working with itself
->> shouldn't disrupt any other users.
-> 
-> I have no concrete idea, just a vague uneasy feeling knowing that
-> devices tend to interact with each other. I guess it is more about the
-> amount of uncertainty caused by my lack of knowledge regarding what
-> could be done by these handlers. So, as I already said - if no one
-> else is bothered by this then I definitely don't want to block the
-> series. Still, if the error handling should be kept internal to PMBus
-> - then we should probably either say that consumer drivers must not
-> (forcibly) turn off the supply when receiving these notifications - or
-> not send these notifications from PMBus and allow PMBus to decide
-> error handling internally. (Again, I don't know if any in-tree
-> consumer drivers do turn off the supply regulator in error handlers -
-> but I don't think it is actually forbidden). Or am I just making  a
-> problem that does not exist?
-> 
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-For my part I (still) don't understand why this is considered a problem
-for this driver but not for all the other drivers reporting various
-error conditions to the regulator subsystem. At least some of them
-also have programmable reaction to such error conditions.
+A bit harsh, maybe. Just mark it as orphan for the time being.
+
+I see there are other Winsystems drivers. What are you going to do
+with those ?
 
 Guenter
+
+> ---
+>   MAINTAINERS                     |   6 --
+>   drivers/watchdog/Kconfig        |  10 ---
+>   drivers/watchdog/Makefile       |   1 -
+>   drivers/watchdog/ebc-c384_wdt.c | 142 --------------------------------
+>   4 files changed, 159 deletions(-)
+>   delete mode 100644 drivers/watchdog/ebc-c384_wdt.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90abe83c02f3..3b30b502de93 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22511,12 +22511,6 @@ M:	David Härdeman <david@hardeman.nu>
+>   S:	Maintained
+>   F:	drivers/media/rc/winbond-cir.c
+>   
+> -WINSYSTEMS EBC-C384 WATCHDOG DRIVER
+> -M:	William Breathitt Gray <william.gray@linaro.org>
+> -L:	linux-watchdog@vger.kernel.org
+> -S:	Maintained
+> -F:	drivers/watchdog/ebc-c384_wdt.c
+> -
+>   WINSYSTEMS WS16C48 GPIO DRIVER
+>   M:	William Breathitt Gray <william.gray@linaro.org>
+>   L:	linux-gpio@vger.kernel.org
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index f0872970daf9..7c443d71b01f 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1085,16 +1085,6 @@ config ALIM7101_WDT
+>   
+>   	  Most people will say N.
+>   
+> -config EBC_C384_WDT
+> -	tristate "WinSystems EBC-C384 Watchdog Timer"
+> -	depends on X86
+> -	select ISA_BUS_API
+> -	select WATCHDOG_CORE
+> -	help
+> -	  Enables watchdog timer support for the watchdog timer on the
+> -	  WinSystems EBC-C384 motherboard. The timeout may be configured via
+> -	  the timeout module parameter.
+> -
+>   config EXAR_WDT
+>   	tristate "Exar Watchdog Timer"
+>   	depends on X86
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 9cbf6580f16c..3d12d4ddd5ea 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -105,7 +105,6 @@ obj-$(CONFIG_ADVANTECH_WDT) += advantechwdt.o
+>   obj-$(CONFIG_ADVANTECH_EC_WDT) += advantech_ec_wdt.o
+>   obj-$(CONFIG_ALIM1535_WDT) += alim1535_wdt.o
+>   obj-$(CONFIG_ALIM7101_WDT) += alim7101_wdt.o
+> -obj-$(CONFIG_EBC_C384_WDT) += ebc-c384_wdt.o
+>   obj-$(CONFIG_EXAR_WDT) += exar_wdt.o
+>   obj-$(CONFIG_F71808E_WDT) += f71808e_wdt.o
+>   obj-$(CONFIG_SP5100_TCO) += sp5100_tco.o
+> diff --git a/drivers/watchdog/ebc-c384_wdt.c b/drivers/watchdog/ebc-c384_wdt.c
+> deleted file mode 100644
+> index 8ef4b0df3855..000000000000
+> --- a/drivers/watchdog/ebc-c384_wdt.c
+> +++ /dev/null
+> @@ -1,142 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * Watchdog timer driver for the WinSystems EBC-C384
+> - * Copyright (C) 2016 William Breathitt Gray
+> - */
+> -#include <linux/device.h>
+> -#include <linux/dmi.h>
+> -#include <linux/errno.h>
+> -#include <linux/io.h>
+> -#include <linux/ioport.h>
+> -#include <linux/isa.h>
+> -#include <linux/kernel.h>
+> -#include <linux/module.h>
+> -#include <linux/moduleparam.h>
+> -#include <linux/types.h>
+> -#include <linux/watchdog.h>
+> -
+> -#define MODULE_NAME		"ebc-c384_wdt"
+> -#define WATCHDOG_TIMEOUT	60
+> -/*
+> - * The timeout value in minutes must fit in a single byte when sent to the
+> - * watchdog timer; the maximum timeout possible is 15300 (255 * 60) seconds.
+> - */
+> -#define WATCHDOG_MAX_TIMEOUT	15300
+> -#define BASE_ADDR		0x564
+> -#define ADDR_EXTENT		5
+> -#define CFG_ADDR		(BASE_ADDR + 1)
+> -#define PET_ADDR		(BASE_ADDR + 2)
+> -
+> -static bool nowayout = WATCHDOG_NOWAYOUT;
+> -module_param(nowayout, bool, 0);
+> -MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+> -	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> -
+> -static unsigned timeout;
+> -module_param(timeout, uint, 0);
+> -MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
+> -	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
+> -
+> -static int ebc_c384_wdt_start(struct watchdog_device *wdev)
+> -{
+> -	unsigned t = wdev->timeout;
+> -
+> -	/* resolution is in minutes for timeouts greater than 255 seconds */
+> -	if (t > 255)
+> -		t = DIV_ROUND_UP(t, 60);
+> -
+> -	outb(t, PET_ADDR);
+> -
+> -	return 0;
+> -}
+> -
+> -static int ebc_c384_wdt_stop(struct watchdog_device *wdev)
+> -{
+> -	outb(0x00, PET_ADDR);
+> -
+> -	return 0;
+> -}
+> -
+> -static int ebc_c384_wdt_set_timeout(struct watchdog_device *wdev, unsigned t)
+> -{
+> -	/* resolution is in minutes for timeouts greater than 255 seconds */
+> -	if (t > 255) {
+> -		/* round second resolution up to minute granularity */
+> -		wdev->timeout = roundup(t, 60);
+> -
+> -		/* set watchdog timer for minutes */
+> -		outb(0x00, CFG_ADDR);
+> -	} else {
+> -		wdev->timeout = t;
+> -
+> -		/* set watchdog timer for seconds */
+> -		outb(0x80, CFG_ADDR);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct watchdog_ops ebc_c384_wdt_ops = {
+> -	.start = ebc_c384_wdt_start,
+> -	.stop = ebc_c384_wdt_stop,
+> -	.set_timeout = ebc_c384_wdt_set_timeout
+> -};
+> -
+> -static const struct watchdog_info ebc_c384_wdt_info = {
+> -	.options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT,
+> -	.identity = MODULE_NAME
+> -};
+> -
+> -static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
+> -{
+> -	struct watchdog_device *wdd;
+> -
+> -	if (!devm_request_region(dev, BASE_ADDR, ADDR_EXTENT, dev_name(dev))) {
+> -		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
+> -			BASE_ADDR, BASE_ADDR + ADDR_EXTENT);
+> -		return -EBUSY;
+> -	}
+> -
+> -	wdd = devm_kzalloc(dev, sizeof(*wdd), GFP_KERNEL);
+> -	if (!wdd)
+> -		return -ENOMEM;
+> -
+> -	wdd->info = &ebc_c384_wdt_info;
+> -	wdd->ops = &ebc_c384_wdt_ops;
+> -	wdd->timeout = WATCHDOG_TIMEOUT;
+> -	wdd->min_timeout = 1;
+> -	wdd->max_timeout = WATCHDOG_MAX_TIMEOUT;
+> -
+> -	watchdog_set_nowayout(wdd, nowayout);
+> -	watchdog_init_timeout(wdd, timeout, dev);
+> -
+> -	return devm_watchdog_register_device(dev, wdd);
+> -}
+> -
+> -static struct isa_driver ebc_c384_wdt_driver = {
+> -	.probe = ebc_c384_wdt_probe,
+> -	.driver = {
+> -		.name = MODULE_NAME
+> -	},
+> -};
+> -
+> -static int __init ebc_c384_wdt_init(void)
+> -{
+> -	if (!dmi_match(DMI_BOARD_NAME, "EBC-C384 SBC"))
+> -		return -ENODEV;
+> -
+> -	return isa_register_driver(&ebc_c384_wdt_driver, 1);
+> -}
+> -
+> -static void __exit ebc_c384_wdt_exit(void)
+> -{
+> -	isa_unregister_driver(&ebc_c384_wdt_driver);
+> -}
+> -
+> -module_init(ebc_c384_wdt_init);
+> -module_exit(ebc_c384_wdt_exit);
+> -
+> -MODULE_AUTHOR("William Breathitt Gray <vilhelm.gray@gmail.com>");
+> -MODULE_DESCRIPTION("WinSystems EBC-C384 watchdog timer driver");
+> -MODULE_LICENSE("GPL v2");
+> -MODULE_ALIAS("isa:" MODULE_NAME);
+> 
+> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
 
