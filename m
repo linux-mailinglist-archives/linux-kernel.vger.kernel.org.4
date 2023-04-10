@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11856DCCCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7557E6DCCCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjDJVZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S229886AbjDJV0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjDJVZI (ORCPT
+        with ESMTP id S229507AbjDJV0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:25:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEEA1FCA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681161867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=guIPUS4b/KI5jRIGt0RS4kaJQ4UcCDM9VQ9qZvewB+Q=;
-        b=hhZQ5eYhAFmUcisBOXb9EdX7Gzdn70kQ3y+jNa/TP33fyPf1Hu20nIKl0/Hwi6K75fLvuD
-        invxjP4B7WtKSyCjsi7gq9XvXOXHwz9w38t5tQ5gF8juVseNpWfyF12UGs7QE5Aq3IPTMu
-        Uskv0RdMfyP6hataiF0BkEdn+8hwF1o=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-H7j4fA3XM8OU7YDaZmlhIg-1; Mon, 10 Apr 2023 17:24:27 -0400
-X-MC-Unique: H7j4fA3XM8OU7YDaZmlhIg-1
-Received: by mail-ot1-f70.google.com with SMTP id k18-20020a056830151200b006a11baeb49bso1427435otp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:24:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681161866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=guIPUS4b/KI5jRIGt0RS4kaJQ4UcCDM9VQ9qZvewB+Q=;
-        b=hGJLF311wiDJ2yBGIn3axiMt/BZJbUY48JET+z2e/T9nwCODINKjizXCccT0J0agXF
-         1XE3xi05j8tuBgpYkrZMIWeE1dkdm2gxw3wPxE3e2BHWJmIcUnOYL4I+R1BWsz28WfPg
-         l8QKynN57CwF+Mi3TS4XoWkXdkwxyeBVJLP5GJh97gGNerZXJ0NxHTIyjjkLDsThcYo/
-         fJUzLvR16f7ZvHwTo004Lt2pn9e+RFn2YQW9lR3AVMkY0TdwDf+PCfUm3KJQQvPOuvhD
-         YGfVYBcjm7ChdJXF0iYAY43YdlxEEW3gvSUOj7CgJ6aMQLBcvFsLeB3jABO7KUsPn/NI
-         zzuQ==
-X-Gm-Message-State: AAQBX9fI5t1yUjV4GhgjyhYsNIKkU5Pj4QoB8FP62cewm+NnRL5srSnj
-        oXK6ZwmMk+y+WzL0GD4ELIwJEehI50BF/Tzh2bXHwIIaAl5YGMchHYS0gHZpsGlEeElXrY+O5gA
-        x95gJzVXAN4/tArBy0RRMsp74
-X-Received: by 2002:a05:6808:1a27:b0:38b:c1b4:6af9 with SMTP id bk39-20020a0568081a2700b0038bc1b46af9mr2735732oib.4.1681161866105;
-        Mon, 10 Apr 2023 14:24:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bgc7ZX4XjpSwPu1lYDObg75z6mEqgIGHBCnCkz1NdyheSPE+5IoVPpSan2LLi+1tqeOtiR4Q==
-X-Received: by 2002:a05:6808:1a27:b0:38b:c1b4:6af9 with SMTP id bk39-20020a0568081a2700b0038bc1b46af9mr2735718oib.4.1681161865851;
-        Mon, 10 Apr 2023 14:24:25 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id w127-20020a4a5d85000000b00525398a1144sm5117502ooa.32.2023.04.10.14.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 14:24:25 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 16:24:22 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-Subject: Re: [PATCH net-next v3 08/12] net: stmmac: Pass stmmac_priv in some
- callbacks
-Message-ID: <20230410212422.2rztlqspw5vjtb4d@halaney-x13s>
-References: <20230331214549.756660-1-ahalaney@redhat.com>
- <20230331214549.756660-9-ahalaney@redhat.com>
- <ZChIbc6TnQyZ/Fiu@corigine.com>
- <20230407173453.hsfhbr66254z57ym@halaney-x13s>
+        Mon, 10 Apr 2023 17:26:00 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63FD1724;
+        Mon, 10 Apr 2023 14:25:58 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 47996320005D;
+        Mon, 10 Apr 2023 17:25:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 10 Apr 2023 17:25:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1681161955; x=1681248355; bh=cr
+        TAf9yOGTm4ffk3dkC8Fr9jQPKpoUJV7Nw6WJRp4fI=; b=ZMWHI6FKcSv0sCDgFi
+        uPZrQ1mKE6+TX8kfNP7LfiZnT3/NpXwJU0rxlPterjMJmKoQpmBr05aSjwjSW0Nw
+        wZ8Nd+FwosARAgsTybYy547MeXFcpnoaK0bWMwV6pXKPDObgoSFbaN+3rcQZ3jVu
+        bqgLDARwkwRY+lpPsLJ4hJiCBeumV9+rEOBOFnEnR1111j8qxfwurz6hl0x6C+8S
+        gxUWCaMe4cunKcEBtuGdFpb4/BQ4nibFosDd/YmDJdzGol3ZUJbBHpSN9FcgppuC
+        aCfSkoLD1Lgn5yHPaQdMGPJtaxSBMFZwiAfdwmiNrQYYJZcm5wyp8EjIFIqN6j1n
+        nV5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1681161955; x=1681248355; bh=crTAf9yOGTm4f
+        fk3dkC8Fr9jQPKpoUJV7Nw6WJRp4fI=; b=GGuMnoQcq0Yms+h3gZFnXpEAtQSmf
+        hS8hh1TlPT22Or3+Lsz6ZeIwgXOtPBsHnPEIKKhIsStZwA6yQp9QtlFEwPCX1Mir
+        ajopvaLPpy3R1hnH8fdVl62MO3qfIyTBYXa9iNOR8jozv0AbfBLY7DV8auBX55KQ
+        RnLemdDzFStISulRMlPg1hizZcPm4y683TKTUbC6Mjun5BcsLF/RVWofaSfNj11P
+        ZPgNRCYVB+jja74ymrqVP96NOQRlkotqNkDC5gUWFzTfhz6/F73mXAEk3MGMW4vN
+        UOnVP9Ce00fD1emrHq9UZukPwxgQulpMkYVDgyqaoQKWT99AoF0uVnwGQ==
+X-ME-Sender: <xms:4340ZGoSPHbEjgF66C53lpbVX0885I86ngifQnhgCrQYSX1w2LJOHg>
+    <xme:4340ZEovzX2jd3yslFO-0IPCCEsO9FguqrCQ8KpCvjNdjYEjOsGXbcvVJriQ0Vk1J
+    -w7TgnGo98HJ66pwiM>
+X-ME-Received: <xmr:4340ZLP2caSw_jwecVD8gkLNSLMStsztUI1M_Le_Jmst3sDIC0XN8xGI1vojIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekvddgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigt
+    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
+    frrghtthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteek
+    lefhleelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:4340ZF5IElT4BWljqMlWfF2mXm7ADpwfR0Qsd-RPiAGQ3lcjnoo63g>
+    <xmx:4340ZF4Iua-nECCv6X9y4NnNcwr0J41QIIUTEwLVY1kkM4w3pRFhBQ>
+    <xmx:4340ZFig28qwYamX-F2CUlnSAY_HbBTZIJPzj48QhyhPJReu3C5qUQ>
+    <xmx:4340ZPm4RknNUuIvm7ZHQW4f9SxRLKj5531W9iXktcFZxkd5Pz8iGg>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Apr 2023 17:25:54 -0400 (EDT)
+Date:   Mon, 10 Apr 2023 15:25:53 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Per-process flag set via prctl() to deny module loading?
+Message-ID: <ZDR+4R4AKfnBcMOu@tycho.pizza>
+References: <640c4327-0b40-f964-0b5b-c978683ac9ba@gmail.com>
+ <ZDQQ0B35NcYwQMyy@tycho.pizza>
+ <4017c904-9918-3e0c-b687-f55cfc5c4f4d@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407173453.hsfhbr66254z57ym@halaney-x13s>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4017c904-9918-3e0c-b687-f55cfc5c4f4d@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 12:34:53PM -0500, Andrew Halaney wrote:
-> On Sat, Apr 01, 2023 at 05:06:21PM +0200, Simon Horman wrote:
-> > On Fri, Mar 31, 2023 at 04:45:45PM -0500, Andrew Halaney wrote:
-> > > Passing stmmac_priv to some of the callbacks allows hwif implementations
-> > > to grab some data that platforms can customize. Adjust the callbacks
-> > > accordingly in preparation of such a platform customization.
+On Mon, Apr 10, 2023 at 11:47:16PM +0300, Topi Miettinen wrote:
+> On 10.4.2023 16.36, Tycho Andersen wrote:
+> > On Mon, Apr 10, 2023 at 01:06:00PM +0300, Topi Miettinen wrote:
+> > > I'd propose to add a per-process flag to irrevocably deny any loading of
+> > > kernel modules for the process and its children. The flag could be set (but
+> > > not unset) via prctl() and for unprivileged processes, only when
+> > > NoNewPrivileges is also set. This would be similar to CAP_SYS_MODULE, but
+> > > unlike capabilities, there would be no issues with namespaces since the flag
+> > > isn't namespaced.
 > > > 
-> > > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> > > The implementation should be very simple.
+> > > 
+> > > Preferably the flag, when configured, would be set by systemd, Firejail and
+> > > maybe also container managers. The expectation would be that the permission
+> > > to load modules would be retained only by udev and where SUID needs to be
+> > > allowed (NoNewPrivileges unset).
 > > 
-> > ...
-> > 
-> > >  #define stmmac_reset(__priv, __args...) \
-> > > @@ -223,59 +240,59 @@ struct stmmac_dma_ops {
-> > >  #define stmmac_dma_init(__priv, __args...) \
-> > >  	stmmac_do_void_callback(__priv, dma, init, __args)
-> > >  #define stmmac_init_chan(__priv, __args...) \
-> > > -	stmmac_do_void_callback(__priv, dma, init_chan, __args)
-> > > +	stmmac_do_void_callback(__priv, dma, init_chan, __priv, __args)
-> > 
-> > Hi Andrew,
-> > 
-> > Rather than maintaining these macros can we just get rid of them?
-> > I'd be surprised if things aren't nicer with functions in their place [1].
-> > 
-> > f.e., we now have (__priv, ..., __priv, ...) due to a generalisation
-> >       that seems to take a lot more than it gives.
-> > 
-> > [1] https://lore.kernel.org/linux-arm-kernel/ZBst1SzcIS4j+t46@corigine.com/
-> > 
+> > You can do something like this today via STATIC_USERMODEHELPER without
+> > the need for kernel patches. It is a bit heavyweight for a
+> > general-purpose system though.
 > 
-> Thanks for the pointer. I think that makes sense, I'll take that
-> approach for these functions (and maybe in a follow-up series I'll
-> tackle all of them just because the lack of consistency will eat me up).
-> 
+> So the user mode helper would be launched whenever there is a module request
+> and it would check whether the process is allowed to load modules or not?
 
-I tried taking this approach for a spin, and I'm not so sure about it
-now!
+Yes, exactly.
 
-1. Implementing the functions as static inline requires us to know
-   about stmmac_priv, but that's getting into circular dependency land
-2. You could define them in hwif.c, but then they're not inlined
-3. There's still a good bit of boilerplate that's repeated all over
-   with the approach. Ignoring 1 above, you get something like this:
+> Does it know which process caused the module to be loaded and what were its
+> credentials at that time?
 
-static inline int stmmac_init_chan(struct stmmac_priv *priv,
-				   void __iomem *ioaddr,
-				   struct stmmac_dma_cfg *dma_cfg, u32 chan)
-{
-	if (priv->hw->dma && priv->hw->dma->init_chan) {
-		priv->hw->dma->init_chan(priv, ioaddr, dma_cfg, chan);
-		return 0;
-	}
-	return -EINVAL;
-}
+It doesn't know which process caused the module load, which is kind of
+unfortunate. It looks like you could stick it in the environment in
+kernel/kmod.c:call_modprobe() without breaking too many things,
+though.
 
-that is then repeated for every function... which is making me actually
-appreciate the macros some for reducing boilerplate.
-
-Am I suffering from a case of holiday brain, and 1-3 above are silly
-points with obvious answers, or do they make you reconsider continuing
-with the current approach in hwif.h?
-
-Thanks,
-Andrew
-
+Tycho
