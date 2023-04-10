@@ -2,164 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305246DC773
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643866DC776
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjDJNws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 09:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S229802AbjDJNxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 09:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDJNwr (ORCPT
+        with ESMTP id S229660AbjDJNxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 09:52:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50E749ED
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:52:45 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AAW4tr003065;
-        Mon, 10 Apr 2023 13:52:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LV+H2q/aKt1vPhFe9/snJkWsks6f2YrY0QhTskhacO8=;
- b=ZQABern0eDac+M0yGkPXTczJBKQLHKKdNfChVymFjIiYBqWzpHOSdWyM3tHlmLGfZ8H3
- ZKGIOUVcMsaq3WOt3rO7/+qgDx6mOixsswRLmRrAmaNWQulfLOIaRE46WbvC+KH7Bawg
- gbMlU+rXapRyo8woknZLFofA7oGUDhlWcSBidL92CaZ5nuyMg4RIpQ0NaEgOEt+b9Lgm
- NHa807JKSvgzjH+9gfwe2071CTgt2hlF7iRP84Lilrgt9lB/XhXPuT//QJi0lah2rnFW
- W2HYfkzubofyiuOcSf8LXxF3aOSjFljXIVlKwxGeDrP0j45S0X3tsDPjHJcleeIWSMZ5 AA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pu0nek3br-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 13:52:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ADqTcS004226
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 13:52:29 GMT
-Received: from [10.216.51.131] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 10 Apr
- 2023 06:52:25 -0700
-Message-ID: <8ba3f700-19a6-e7fd-c51f-cd277ff7a439@quicinc.com>
-Date:   Mon, 10 Apr 2023 19:22:22 +0530
+        Mon, 10 Apr 2023 09:53:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389421BE2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:52:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B266960ED3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861BCC433D2;
+        Mon, 10 Apr 2023 13:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681134777;
+        bh=MiBRI1IjJJKvf3dOcpSwiYgL1iNNZCu/5VtsQEm9a1Q=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=khoEVsj5SJ+iGxEz4qgNP57tIqNFyTUdFKRgnRszpdrkbit+r+E0sSSUuiwc/0qbf
+         XqtwtXWF75to1/+aQjRmgf16yaY8DqJhrjHpDcIDFYXfyxwIpNdddTV4PffGZ1uzRW
+         3F2i/HEf7o+MlvKnUvjQr56DyxtZ1Qayv2lskB2gr54+rxfJCHeJ87el/Ub5jQ5E/t
+         nR9xhoAA1Ajuug6/RbuhACpYWtcQ2JO8tQxOcDF6MPO5cLCNVmGJ9ueKRTaU+xKm93
+         f9D7EaGHUjG3AHbN65LvE44rAOiXwLpLw24TvoQt7RoZ5t0WR3OX783FtzHT51wpmt
+         SBO3gESRtT/Sw==
+Message-ID: <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
+Date:   Mon, 10 Apr 2023 21:52:52 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V7 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Content-Language: en-US
-To:     Minchan Kim <minchan@kernel.org>
-CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <willy@infradead.org>, <markhemm@googlemail.com>,
-        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>,
-        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1676378702.git.quic_charante@quicinc.com>
- <631e42b6dffdcc4b4b24f5be715c37f78bf903db.1676378702.git.quic_charante@quicinc.com>
- <ZC9ZYAp8a46dILdO@google.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <ZC9ZYAp8a46dILdO@google.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230324071028.336982-1-chao@kernel.org>
+ <ZCyZGgf4RSEjyHTF@google.com>
+ <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
+ <ZC2aA+i5+HpdJ6M2@google.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
+ foreground garbage collection
+In-Reply-To: <ZC2aA+i5+HpdJ6M2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GsKZKU1VOCfmneiis8sHCcPuJC0Rq_Rk
-X-Proofpoint-ORIG-GUID: GsKZKU1VOCfmneiis8sHCcPuJC0Rq_Rk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_09,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 clxscore=1011
- malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100117
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Minchan for the review!!
-
-On 4/7/2023 5:14 AM, Minchan Kim wrote:
-> On Tue, Feb 14, 2023 at 06:21:50PM +0530, Charan Teja Kalla wrote:
->> Currently fadvise(2) is supported only for the files that doesn't
->> associated with noop_backing_dev_info thus for the files, like shmem,
->> fadvise results into NOP. But then there is file_operations->fadvise()
->> that lets the file systems to implement their own fadvise
->> implementation. Use this support to implement some of the POSIX_FADV_XXX
->> functionality for shmem files.
+On 2023/4/5 23:55, Jaegeuk Kim wrote:
+> On 04/05, Chao Yu wrote:
+>> On 2023/4/5 5:39, Jaegeuk Kim wrote:
+>>> Can we do like this?
+>>>
+>>>   From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
+>>> From: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> Date: Tue, 4 Apr 2023 14:36:00 -0700
+>>> Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
+>>>
+>>> We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
+>>> sctions in time.
+>>>
+>>> Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/gc.c | 24 +++++++++++-------------
+>>>    1 file changed, 11 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>>> index 56c53dbe05c9..f1d0dd9c5a6c 100644
+>>> --- a/fs/f2fs/gc.c
+>>> +++ b/fs/f2fs/gc.c
+>>> @@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>>    	};
+>>>    	unsigned int skipped_round = 0, round = 0;
+>>>    	unsigned int upper_secs;
+>>> +	bool stop_gc = false;
+>>>    	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+>>>    				gc_control->nr_free_secs,
+>>> @@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>>    				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+>>>    		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+>>>    			goto go_gc_more;
+>>> -		goto stop;
+>>> -	}
+>>> -
+>>> -	/* FG_GC stops GC by skip_count */
+>>> -	if (gc_type == FG_GC) {
+>>> +		stop_gc = true;
 >>
->> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
->> advices to shmem files which can be helpful for the clients who may want
->> to manage the shmem pages of the files that are created through
->> shmem_file_setup[_with_mnt](). One usecase is implemented on the
->> Snapdragon SoC's running Android where the graphics client is allocating
->> lot of shmem pages per process and pinning them. When this process is
->> put to background, the instantaneous reclaim is performed on those shmem
->> pages using the logic implemented downstream[3][4]. With this patch, the
->> client can now issue the fadvise calls on the shmem files that does the
->> instantaneous reclaim which can aid the use cases like mentioned above.
+>> I guess below condition is for emergency recycle of prefree segments during
+>> foreground GC, in order to avoid exhausting free sections due to to many
+>> metadata allocation during CP.
 >>
->> This usecase lead to ~2% reduction in average launch latencies of the
->> apps and 10% in total number of kills by the low memory killer running
->> on Android.
+>> 	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
+>> 				prefree_segments(sbi)) {
 >>
->> Some questions asked while reviewing this patch:
->> Q) Can the same thing be achieved with FD mapped to user and use
->> madvise?
->> A) All drivers are not mapping all the shmem fd's to user space and want
->> to manage them with in the kernel. Ex: shmem memory can be mapped to the
->> other subsystems and they fill in the data and then give it to other
->> subsystem for further processing, where, the user mapping is not at all
->> required.  A simple example, memory that is given for gpu subsystem
->> which can be filled directly and give to display subsystem. And the
->> respective drivers know well about when to keep that memory in ram or
->> swap based on may be a user activity.
+>> But for common case, free_sections() is close to reserved_segments(), and
+>> upper_secs + NR_GC_CHECKPOINT_SECS value may be far smaller than free_sections(),
+>> so checkpoint may not be trggered as expected, IIUC.
 >>
->> Q) Should we add the documentation section in Manual pages?
->> A) The man[1] pages for the fadvise() whatever says is also applicable
->> for shmem files. so couldn't feel it correct to add specific to shmem
->> files separately.
->>
->> Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
->> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
->> and this difference will cause confusion?
->> A) man pages [2] says that "POSIX_FADV_DONTNEED attempts to free cached
->> pages associated with the specified region." This means on issuing this
->> FADV, it is expected to free the file cache pages. And it is
->> implementation defined If the dirty pages may be attempted to writeback.
->> And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
->> covers the semantics of MADV_PAGEOUT for file pages and there is no
->> purpose of PAGEOUT for file pages.
->>
->> [1] https://linux.die.net/man/2/fadvise
->> [2] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
->> [3] https://git.codelinaro.org/clo/la/platform/vendor/qcom/opensource/graphics-kernel/-/blob/gfx-kernel.lnx.1.0.r3-rel/kgsl_reclaim.c#L289
->> [4] https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10/mm/shmem.c#4310
->>
->> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+>> So it's fine to just trigger CP in the end of foreground garbage collection?
 > 
-> I am not familar with why the shmem has noop_backing_dev_info
-> but the below code to reclaim shmem pages and POXIS_FADV_DONTNEED
-> semantic looks correct for me.
-> 
-Thanks!!
-> Only nit is the description covers mostly DONTNEED case but not
-> WILLNEED case.Okay. How about adding the below to the end of the 2nd paragraph of the
-commit message:
-Application that does require the reclaimed pages, say when the app put
-to foreground, can issue the POSIX_FADV_WILLNEED to bring back them from
-the swap area. Alternatively the drivers can also use
-shmem_read_mapping_page_gfp() to bring back the reclaimed shmem pages.
+> My major concern is to avoid unnecessary checkpointing given multiple FG_GC
+> requests were pending in parallel. And, I don't want to add so many combination
+> which gives so many corner cases, and feel f2fs_gc() needs to call checkpoint
+> automatically in the worst case scenario only.
 
-@Andrew: I am not sure If this update to commit message requires respin
-of the patchset. Please let me know If it required so.
+Alright.
+
+> 
+> By the way, do we just need to call checkpoint here including FG_GC as well?
+
+I didn't get it, do you mean?
+
+- f2fs_balance_fs()
+  - f2fs_gc() creates prefree segments but not call checkpoint to reclaim
+
+- f2fs_balance_fs()
+  - f2fs_gc()
+   - detect prefree segments created by last f2fs_balance_fs, then call
+f2fs_write_checkpoint to reclaim
+
+Or could you please provide a draft patch? :-P
 
 Thanks,
-Charan
+
+> 
+> 1832
+> 1833         if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
+> 1834                 /*
+> 1835                  * For example, if there are many prefree_segments below given
+> 1836                  * threshold, we can make them free by checkpoint. Then, we
+> 1837                  * secure free segments which doesn't need fggc any more.
+> 1838                  */
+> 1839                 if (prefree_segments(sbi)) {
+> 1840                         ret = f2fs_write_checkpoint(sbi, &cpc);
+> 1841                         if (ret)
+> 1842                                 goto stop;
+> 1843                 }
+> 1844                 if (has_not_enough_free_secs(sbi, 0, 0))
+> 1845                         gc_type = FG_GC;
+> 1846         }
+> 
+>>
+>> One other concern is for those path as below:
+>> - disable_checkpoint
+>> - ioc_gc
+>> - ioc_gc_range
+>> - ioc_resize
+>> ...
+> 
+> I think the upper caller should decide to call checkpoint, if they want to
+> reclaim the prefree likewise f2fs_disable_checkpoint.
+> 
+>>
+>> We've passed gc_type as FG_GC, but the demand here is to migrate block in time,
+>> rather than dirtying blocks, and callers don't expect checkpoint in f2fs_gc(),
+>> instead the callers will do the checkpoit as it needs.
+>>
+>> That means it's better to decouple FG_GC and write_checkpoint behavior, so I
+>> added another parameter .reclaim_space to just let f2fs_balance_fs() to trigger
+>> checkpoit in the end of f2fs_gc().
+> 
+>>
+>> Thanks,
+>>
+>>> +	} else if (gc_type == FG_GC) {
+>>> +		/* FG_GC stops GC by skip_count */
+>>>    		if (sbi->skipped_gc_rwsem)
+>>>    			skipped_round++;
+>>>    		round++;
+>>>    		if (skipped_round > MAX_SKIP_GC_COUNT &&
+>>> -				skipped_round * 2 >= round) {
+>>> -			ret = f2fs_write_checkpoint(sbi, &cpc);
+>>> -			goto stop;
+>>> -		}
+>>> +				skipped_round * 2 >= round)
+>>> +			stop_gc = true;
+>>>    	}
+>>>    	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+>>> @@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>>    				prefree_segments(sbi)) {
+>>>    		ret = f2fs_write_checkpoint(sbi, &cpc);
+>>>    		if (ret)
+>>> -			goto stop;
+>>> +			stop_gc = true;
+>>>    	}
+>>>    go_gc_more:
+>>> -	segno = NULL_SEGNO;
+>>> -	goto gc_more;
+>>> -
+>>> +	if (!stop_gc) {
+>>> +		segno = NULL_SEGNO;
+>>> +		goto gc_more;
+>>> +	}
+>>>    stop:
+>>>    	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+>>>    	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
