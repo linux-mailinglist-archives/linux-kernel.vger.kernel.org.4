@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E63B6DCD8E
+	by mail.lfdr.de (Postfix) with ESMTP id E43206DCD8F
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDJWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S229808AbjDJWjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDJWjI (ORCPT
+        with ESMTP id S229719AbjDJWjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:39:08 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B14C1BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id v6so5687860wrv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:07 -0700 (PDT)
+        Mon, 10 Apr 2023 18:39:09 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6091BF1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:08 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id g5so9090090wrb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112; t=1681166346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dNwzE4KtIR7VA8WEdFR1Y325MnwjNn/HP5LmgOvBXjw=;
-        b=F+gsdJ8fCjBl/In9VkEjngqOT7Yuy4rIlgNTgygFtjvwflyMXmqET1mjhlBYH4h/hK
-         UapCpXSmCP5mAkgUJkJ9xtllBixS1M7NeDhQJzNyzoakQgm7T49tE4pNAEm1YTrWbn8f
-         i0L9R2NTth5sj0N2S1NoFjUb4Z+83LqH5dScPFvzIIZIAZ+zcbO/S2lhE1DNKnh3e/rt
-         G4WcjnxgSToUUhOPlLr1ZtKawVIYKB1ltq9/PZyILVBqdYT+bQr+5IjeCwCazzV9C+Rn
-         HRkjTJ9HhANlIzvKd3TacCbtXRJAs59ZcBBTdJnMu/joEG4yIQZ5+6rigL2hvk2P84Lz
-         pBWw==
+        bh=K2w9r/FCSQOhLas4fRq9UxlUyxuMVk8X58MVQxfpTJY=;
+        b=qgUiirriVGu7ZTWcizKlhTrvCVkKMTVcuahYo/fWk86tr/5Mgb2EeTrIDJ0GjBvcCW
+         JiQrRDBs2nv+Gp54bItYKqJOqXu4v5BssEQSHsFTu/NR2/l0TY4pKKWBf/6BWoNsMxO0
+         Li7LYx6r9FzhoPFoXGvrqt+0IcJ6RqFGtcJX7L1ZDoy3fBYGyPgotTfJKh8WdMj5UWnI
+         CwaEyVqz/CPyu0rFJ9FPZp6CnWr5hcLaPT/rlOYJyexpe9buQN+llXpnXzXBDWbrddWG
+         +X1x/12gIpo8wsaM6riuoH9YxVkne2OwgpmQB/zOFdhe4uJINP+IJ135yPVjBypp93oK
+         0A3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1681166346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dNwzE4KtIR7VA8WEdFR1Y325MnwjNn/HP5LmgOvBXjw=;
-        b=yLXtieJtkaztUXlZG/NE2pRRgWis8r9tG9gvJRbiAbrZgM6gIXaV9caU0KhpIsjKvx
-         F3f0YaXoEpbK1xt7Tp8ubBPZfJl/HJ5lh3l+X0Mcm4YkGL3nV1buuC0W7D+V6JBD69cC
-         TcFN7bJiIj/ZaJBKAjLmlQaGCncmU44Z0xV9IKBE87DWMrCiSpWPDQLdksLVz8j5rF+t
-         4ZyyVWvM0eU8RbKJ10jh3XyWUQHfTdtfkxHSw4OzNSV/PUPNsoK6cdZaex/XMT4fCrTt
-         Bo8FpE6EO0VRTAY5np1tc40BLEF1p5ekgq2ewVZtkj5rdziMYVejOMZEPtzAqbOaXO8o
-         +SHg==
-X-Gm-Message-State: AAQBX9dGUfmfkyputgbWGZtux9JnQbQZgYUT1RwFALzi5slGgafgXtIP
-        6lI3Lpk8I1TK2l1U6heTbmU=
-X-Google-Smtp-Source: AKy350Y/Jw0fJS5n1ttIDBcdNXFNA0aKae15RlsyioYA7N5Vk0r0ouA/4vMJ+EkD1ObVbRm/7DG4ew==
-X-Received: by 2002:adf:f3cf:0:b0:2d5:2c7b:bc5f with SMTP id g15-20020adff3cf000000b002d52c7bbc5fmr8960195wrp.58.1681166345763;
-        Mon, 10 Apr 2023 15:39:05 -0700 (PDT)
+        bh=K2w9r/FCSQOhLas4fRq9UxlUyxuMVk8X58MVQxfpTJY=;
+        b=mB4QSGGBGtuJtAYopC8YD236oqXTUIvvqf9FFqtX2r/wKpUOjmu1fmnNPQKYUew5V2
+         HoCLrGF6SeYN1X6xPTv4AyK24+UWiIwbALPA+NzzlnNzJDpQoWjGu9nRG6my3tsSBQco
+         DFnQj7HsxXiLqJTgaPoFlJ62BEsjaUT4eC4BRWafsEkhNAuhmeUEbIilfK6DbTtHaX/i
+         2FMhwWBuQH5Sv86ijIZrcVuPlS8FWT2bHXCIXjyhf4vBhfzv0QAKRbQbWiS6LQw+poz/
+         gOMWnViJgvVbscOZANqACy9Nvnh7rCXR39s+vu70Ex6XhCXEwQHcQ2M60aCq9Jm6gERx
+         DcXg==
+X-Gm-Message-State: AAQBX9fzVahe1COWSJK5IDwrLXwU1qsnKm2gpInrsxD6ROyStFj+0QQ3
+        WOXJiW30MbXlZtWLg4XibgsAAJJ6HRwlHg==
+X-Google-Smtp-Source: AKy350YR9fr6IYcnFe1oSanOl6H+YPUhDRizE112VA61/3/A/9UbnKcTLtOq4N8oFX8K3PspiyZPBQ==
+X-Received: by 2002:a5d:61c2:0:b0:2ee:c582:a67d with SMTP id q2-20020a5d61c2000000b002eec582a67dmr524431wrv.31.1681166346742;
+        Mon, 10 Apr 2023 15:39:06 -0700 (PDT)
 Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with UTF8SMTPSA id m8-20020adffe48000000b002c55521903bsm12862966wrs.51.2023.04.10.15.39.05
+        by smtp.gmail.com with UTF8SMTPSA id m14-20020a5d6a0e000000b002f01cb41b0bsm5093614wru.60.2023.04.10.15.39.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 15:39:05 -0700 (PDT)
+        Mon, 10 Apr 2023 15:39:06 -0700 (PDT)
 From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To:     alsa-devel@alsa-project.org
 Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
@@ -63,9 +63,9 @@ Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Mark Brown <broonie@kernel.org>, patches@opensource.cirrus.com,
         Richard Fitzgerald <rf@opensource.cirrus.com>,
         Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH 1/3] ASoC: ep93xx: i2s: move enable call to startup callback
-Date:   Tue, 11 Apr 2023 00:39:00 +0200
-Message-Id: <20230410223902.2321834-2-alexander.sverdlin@gmail.com>
+Subject: [PATCH 2/3] ASoC: cs4271: flat regcache, trivial simplifications
+Date:   Tue, 11 Apr 2023 00:39:01 +0200
+Message-Id: <20230410223902.2321834-3-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230410223902.2321834-1-alexander.sverdlin@gmail.com>
 References: <20230410223902.2321834-1-alexander.sverdlin@gmail.com>
@@ -81,83 +81,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make startup/shutdown callbacks symmetric to avoid clock subsystem warnings
-(reproduced with "aplay --dump-hw-params" + ctrl-c):
-
-WARNING: CPU: 0 PID: 102 at drivers/clk/clk.c:1048 clk_core_disable
-lrclk already disabled
-CPU: 0 PID: 102 Comm: aplay Not tainted 6.2.0-rc4 #1
-Hardware name: Generic DT based system
- ...
- clk_core_disable from clk_core_disable_lock
- clk_core_disable_lock from ep93xx_i2s_shutdown
- ep93xx_i2s_shutdown from snd_soc_dai_shutdown
- snd_soc_dai_shutdown from soc_pcm_clean
- soc_pcm_clean from soc_pcm_close
- soc_pcm_close from snd_pcm_release_substream.part.0
- snd_pcm_release_substream.part.0 from snd_pcm_release
- snd_pcm_release from __fput
- __fput from task_work_run
- ...
-
-WARNING: CPU: 0 PID: 102 at drivers/clk/clk.c:907 clk_core_unprepare
-lrclk already unprepared
-CPU: 0 PID: 102 Comm: aplay Tainted: G        W          6.2.0-rc4 #1
-Hardware name: Generic DT based system
- ...
- clk_core_unprepare from clk_unprepare
- clk_unprepare from ep93xx_i2s_shutdown
- ep93xx_i2s_shutdown from snd_soc_dai_shutdown
- snd_soc_dai_shutdown from soc_pcm_clean
- soc_pcm_clean from soc_pcm_close
- soc_pcm_close from snd_pcm_release_substream.part.0
- snd_pcm_release_substream.part.0 from snd_pcm_release
- snd_pcm_release from __fput
- __fput from task_work_run
- ...
+- Switch to REGCACHE_FLAT, the whole overhead of RBTREE is not worth it
+  with non sparse register set in the address range 1..7.
+- Move register width to central location
 
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- sound/soc/cirrus/ep93xx-i2s.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ sound/soc/codecs/cs4271-i2c.c | 1 -
+ sound/soc/codecs/cs4271-spi.c | 1 -
+ sound/soc/codecs/cs4271.c     | 4 ++--
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/cirrus/ep93xx-i2s.c b/sound/soc/cirrus/ep93xx-i2s.c
-index 200d18060f7c..bbbb1065b2f1 100644
---- a/sound/soc/cirrus/ep93xx-i2s.c
-+++ b/sound/soc/cirrus/ep93xx-i2s.c
-@@ -209,6 +209,16 @@ static int ep93xx_i2s_dai_probe(struct snd_soc_dai *dai)
- 	return 0;
- }
+diff --git a/sound/soc/codecs/cs4271-i2c.c b/sound/soc/codecs/cs4271-i2c.c
+index 0e8a7cf0da50..4033be1c3bc1 100644
+--- a/sound/soc/codecs/cs4271-i2c.c
++++ b/sound/soc/codecs/cs4271-i2c.c
+@@ -17,7 +17,6 @@ static int cs4271_i2c_probe(struct i2c_client *client)
  
-+static int ep93xx_i2s_startup(struct snd_pcm_substream *substream,
-+			      struct snd_soc_dai *dai)
-+{
-+	struct ep93xx_i2s_info *info = snd_soc_dai_get_drvdata(dai);
-+
-+	ep93xx_i2s_enable(info, substream->stream);
-+
-+	return 0;
-+}
-+
- static void ep93xx_i2s_shutdown(struct snd_pcm_substream *substream,
- 				struct snd_soc_dai *dai)
- {
-@@ -349,7 +359,6 @@ static int ep93xx_i2s_hw_params(struct snd_pcm_substream *substream,
- 	if (err)
- 		return err;
+ 	config = cs4271_regmap_config;
+ 	config.reg_bits = 8;
+-	config.val_bits = 8;
  
--	ep93xx_i2s_enable(info, substream->stream);
- 	return 0;
- }
+ 	return cs4271_probe(&client->dev,
+ 			    devm_regmap_init_i2c(client, &config));
+diff --git a/sound/soc/codecs/cs4271-spi.c b/sound/soc/codecs/cs4271-spi.c
+index 7ef0a66b7778..4feb80436bd9 100644
+--- a/sound/soc/codecs/cs4271-spi.c
++++ b/sound/soc/codecs/cs4271-spi.c
+@@ -17,7 +17,6 @@ static int cs4271_spi_probe(struct spi_device *spi)
  
-@@ -398,6 +407,7 @@ static int ep93xx_i2s_resume(struct snd_soc_component *component)
- #endif
+ 	config = cs4271_regmap_config;
+ 	config.reg_bits = 16;
+-	config.val_bits = 8;
+ 	config.read_flag_mask = 0x21;
+ 	config.write_flag_mask = 0x20;
  
- static const struct snd_soc_dai_ops ep93xx_i2s_dai_ops = {
-+	.startup	= ep93xx_i2s_startup,
- 	.shutdown	= ep93xx_i2s_shutdown,
- 	.hw_params	= ep93xx_i2s_hw_params,
- 	.set_sysclk	= ep93xx_i2s_set_sysclk,
+diff --git a/sound/soc/codecs/cs4271.c b/sound/soc/codecs/cs4271.c
+index 2021cf442606..188b8b43c524 100644
+--- a/sound/soc/codecs/cs4271.c
++++ b/sound/soc/codecs/cs4271.c
+@@ -689,8 +689,8 @@ const struct regmap_config cs4271_regmap_config = {
+ 
+ 	.reg_defaults = cs4271_reg_defaults,
+ 	.num_reg_defaults = ARRAY_SIZE(cs4271_reg_defaults),
+-	.cache_type = REGCACHE_RBTREE,
+-
++	.cache_type = REGCACHE_FLAT,
++	.val_bits = 8,
+ 	.volatile_reg = cs4271_volatile_reg,
+ };
+ EXPORT_SYMBOL_GPL(cs4271_regmap_config);
 -- 
 2.40.0
 
