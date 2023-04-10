@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0B76DCC89
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0F66DCC8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjDJVEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S229962AbjDJVFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDJVEf (ORCPT
+        with ESMTP id S229938AbjDJVFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:04:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34DD10F6;
-        Mon, 10 Apr 2023 14:04:34 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a23so8424236lfk.4;
-        Mon, 10 Apr 2023 14:04:34 -0700 (PDT)
+        Mon, 10 Apr 2023 17:05:50 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DFF1BC9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:05:44 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50489c7aaaeso1411435a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681160673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ko7QXPbIjeGGHDhMu4npXiL/4qFqfqYW7bib84R6aNU=;
-        b=lpvPFtUOP3XhFCJ7Xk611x6D8hZ+kTQRj1OcX61VyNYNxN/okXXr2n0MjOXIdaRTEX
-         82X3Em+8AMDFbbbRUwRG8a7Xc8Lx6ZScGdRX6NOVgo6/cH1f86RKS1JERLXxS1ee5XPA
-         l0dbCOfG1OLPRgdNiWF/yFY+6oreawyFJAJXcKKVAVFo7+RtnECs3NkVfComi6WdiG/E
-         PHbInMiKfIX1fVzaco+up5yfev/cckrlYksisO9zJeMW2s46ujRMdGzrULItwIOWAlGv
-         FFwrQLY6qXbV7HTnuOXTLPO5fGmROzrgTQDGxMwKcvu4vXJRa3VB2WCbx8Y2YF4vFlGP
-         OE+g==
+        d=linux-foundation.org; s=google; t=1681160743; x=1683752743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d0NfKXzvfN1t0yzQDyXp4Tt6S8OW8LWhha6YniOFGII=;
+        b=cid0oD9qg3LCdEZ9sxXoOqS0JjtK9dp2CxQRy8Au/61Gxq/fjujN2okp7c3DHccUiT
+         0rFEKISM5C9BKoSYD2QsFaqiyv4+fJIQPf3wPqFtSP0ZdvfWDrPzLowWpck4nyawM/L8
+         CPk7KLM+DGBTgm9mU/f4o07x+ef+wRM8OBen0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681160673;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ko7QXPbIjeGGHDhMu4npXiL/4qFqfqYW7bib84R6aNU=;
-        b=d0EHNhGhcbZCeo/EGesQwlkvp+Cm6tZxh6KxiW6axfmBPwxjutSNSAFxmq4aHj/YH7
-         AaIRHascIY5EAXpW6f4K2gaGckw9qiC9pXs6b8X4xRHU1o4ZA9G01eVENL5zMxARXEBi
-         t0gMX0lCtw87jlUdgOn0ADz4Z+ZstAb9DjaS3NAktVw//pS/9IKJRHsDvPeOD34O+tNM
-         J1spThnY5lqrkSuqe4sE5KYCztK9f1gJjh3Zx1UqYCoYvfPbUFCazInC4wm9r7S5EyUi
-         WvRn54ko7V4xkrVfUu763Y5CY4oVll6ZI1Rs90PICfhf8Kbv1lDykZfHhlmFF669CSb2
-         eKXQ==
-X-Gm-Message-State: AAQBX9dAAufEjkgMGKD0aOil/2xx6VT/WvI8V1N7+yLOXLJtA0lp14UK
-        dE7fTUwNfP+3E1zo88AvckqkT9WqHTY=
-X-Google-Smtp-Source: AKy350aaXf7tXMoq/bDIX5RcTUjwlvNj4/ZV58esCJnG/KA/wgu03yQ50TGQoFVlOrSEBxSV3L5hJg==
-X-Received: by 2002:ac2:5929:0:b0:4dc:828f:ef97 with SMTP id v9-20020ac25929000000b004dc828fef97mr3028369lfi.60.1681160672813;
-        Mon, 10 Apr 2023 14:04:32 -0700 (PDT)
-Received: from [192.168.1.13] (81-197-197-13.elisa-laajakaista.fi. [81.197.197.13])
-        by smtp.gmail.com with ESMTPSA id j25-20020a19f519000000b004d093d60f50sm2233167lfb.215.2023.04.10.14.04.32
+        d=1e100.net; s=20210112; t=1681160743; x=1683752743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d0NfKXzvfN1t0yzQDyXp4Tt6S8OW8LWhha6YniOFGII=;
+        b=4n5uAKF5M/HoFlw2diqQ/LEhwc4QDwtQnmPLplxuLHrAmTuS6xIoVIV2BvXrvpk2cB
+         WY2iunnyB2MWLKyaE3QRxF2ZuPR2TFwN6rggFV/1CCh9kUrOQpoc98HXsZKc0uVgw6Ok
+         BkYW12ZTvwR2Ig4+5kqSLqBgx1RWXrMMeA9AZM0hb1dVSYgwK09ahbECEkGpkGDfOsxD
+         3dVoSIqQM13Qf348RhpqDysHWv79xhxqu9B548tkOQKsm1cJvBOyuxQ2Ow+RNq8OudZ7
+         0CtdGZO/bvxF1M/SinBCZrB6ksO5wq5uv1shz+o/lEfuEG+VnD8vHyeWXITeFfxxHHde
+         AuZg==
+X-Gm-Message-State: AAQBX9cFhpcZmynmB68eTF7mSlcv3CtwP2EOVXNOna6CwdcbxOoz88dG
+        8oPd7SmMMzP+WZ02AZFe+m2KrQ59vYkK9wW1/kxyow==
+X-Google-Smtp-Source: AKy350bqp6kVoBXLyZPNXJ/p3ukhGTF35BstCI+OZ57dJYQS8eB37wBJcunDbLaCVYCQEQyHaT+gJQ==
+X-Received: by 2002:aa7:ce0c:0:b0:501:caaf:1e5 with SMTP id d12-20020aa7ce0c000000b00501caaf01e5mr9777121edv.18.1681160742970;
+        Mon, 10 Apr 2023 14:05:42 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id 6-20020a508e46000000b005047847d3e5sm4159129edx.36.2023.04.10.14.05.42
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 14:04:32 -0700 (PDT)
-Message-ID: <52301293-0e21-2885-904b-776b82d5a18d@gmail.com>
-Date:   Tue, 11 Apr 2023 00:04:31 +0300
+        Mon, 10 Apr 2023 14:05:42 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id sh8so15309565ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:05:42 -0700 (PDT)
+X-Received: by 2002:a17:906:dac9:b0:933:1967:a984 with SMTP id
+ xi9-20020a170906dac900b009331967a984mr3287571ejb.15.1681160741972; Mon, 10
+ Apr 2023 14:05:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: Per-process flag set via prctl() to deny module loading?
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-modules <linux-modules@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <640c4327-0b40-f964-0b5b-c978683ac9ba@gmail.com>
- <2023041010-vacation-scribble-ba46@gregkh>
-From:   Topi Miettinen <toiwoton@gmail.com>
-In-Reply-To: <2023041010-vacation-scribble-ba46@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230410153917.1313858-1-pbonzini@redhat.com>
+In-Reply-To: <20230410153917.1313858-1-pbonzini@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Apr 2023 14:05:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
+Message-ID: <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
+Subject: Re: [GIT PULL] KVM changes for Linux 6.3-rc7
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        oliver.upton@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.4.2023 21.37, Greg KH wrote:
-> On Mon, Apr 10, 2023 at 01:06:00PM +0300, Topi Miettinen wrote:
->> I'd propose to add a per-process flag to irrevocably deny any loading of
->> kernel modules for the process and its children. The flag could be set (but
->> not unset) via prctl() and for unprivileged processes, only when
->> NoNewPrivileges is also set. This would be similar to CAP_SYS_MODULE, but
->> unlike capabilities, there would be no issues with namespaces since the flag
->> isn't namespaced.
->>
->> The implementation should be very simple.
-> 
-> Patches are always welcome to be reviewed.
-> 
-> But note, please watch out for processes that cause devices to be found,
-> and then modules to be loaded that way, it's not going to be as simple
-> as you might have imagined...
+On Mon, Apr 10, 2023 at 8:39=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com>=
+ wrote:
+>
+>   https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+>
+> for you to fetch changes up to 0bf9601f8ef0703523018e975d6c1f3fdfcff4b9:
+>
+>   Merge tag 'kvmarm-fixes-6.3-3' of git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/kvmarm/kvmarm into HEAD (2023-04-06 13:34:19 -0400)
 
-A very simple version would only add a simple check like 
-!current->allow_module_load after every !capable(CAP_SYS_MODULE). It 
-wouldn't block all the ways how modules could be caused to be loaded 
-indirectly.
+Nope, not at all.
 
-I think a less simple version could also do the check at __request_module().
+You seem to have tagged the wrong commit. Instead of pointing to that
+"kvmarm fixes" thing, it points to something entirely different.
 
--Topi
+Please double-check what happened.
 
+                Linus
