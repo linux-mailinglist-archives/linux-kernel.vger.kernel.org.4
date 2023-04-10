@@ -2,190 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C9E6DC917
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142B76DC91F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjDJQMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S230082AbjDJQRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDJQMX (ORCPT
+        with ESMTP id S229669AbjDJQRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:12:23 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E219120
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:12:21 -0700 (PDT)
-Received: (qmail 139825 invoked by uid 1000); 10 Apr 2023 12:12:20 -0400
-Date:   Mon, 10 Apr 2023 12:12:20 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in shark_write_reg/usb_submit_urb
-Message-ID: <b3b5e785-625a-4787-80fb-5727c2aab4d7@rowland.harvard.edu>
-References: <00000000000096e4f905f81b2702@google.com>
- <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
+        Mon, 10 Apr 2023 12:17:22 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006F5E74;
+        Mon, 10 Apr 2023 09:17:20 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ABgfSg013580;
+        Mon, 10 Apr 2023 16:17:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=UexAOkJHNJ4msc1Ix/hS5H7CGjrnU8Mihj2dQUk1RPQ=;
+ b=VyLeC3kvdRXx2Zca0nU0RxiRB6FfNqKWqn9OJ4Scoz7IDXmIljQC+D4oHgXoLqfaNtKO
+ jjyU7qfixwVE4WldGVkoxkKd6KjTJGZbqxQ9YQ3eM22ZU6lC3M72yU0qm+GycAaJCyC+
+ CsbtUaDp230tGq6R8XlSJpziyqT45yc/8HcWLukZWCD0Vo5DprwgjosgmYqYU/AdJo0w
+ 9cmXW7R3xuPO4hU1BN+9pn1xxiECtcZIVLCkq2EQtCvqzZ8fxiWsoado4j90GVR2T5TL
+ 0yKwHwqxVgBSjqnVvA4NyVc6IH6DtNsT6juWNDJGTpiaF8/yK6RzdsRfCJYWDH5ZGGP3 vA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvgkggp1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 16:17:16 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AGHGn0029773
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 16:17:16 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 09:17:15 -0700
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v3 0/3] mailbox: Allow direct registration to a channel
+Date:   Mon, 10 Apr 2023 09:16:51 -0700
+Message-ID: <20230410161654.1660757-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e382763c-cf33-4871-a761-1ac85ae36f27@rowland.harvard.edu>
-X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: S9sBbu2aKvxjqHE_lwKeNdUKpe-WPJAH
+X-Proofpoint-ORIG-GUID: S9sBbu2aKvxjqHE_lwKeNdUKpe-WPJAH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_12,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 suspectscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 bulkscore=0 mlxlogscore=729 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304100139
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch has been revised.  Make sure it still works right.
+Two mailbox controllers have channel/client binding mechanisms that are
+controller-specific and not using the devicetree binding mechanisms. Mailbox
+channel/client is conceptually done in two steps: selecting the channel
+and binding the selected to channel to a client. Channel selection is sometimes
+controller specific (pcc and omap are examples). The channel/client binding
+code is all the same.
 
-Alan Stern
+This small series de-duplicates and refactors the channel/client binding
+into a common framework function: "mbox_bind_client" which all of the
+channel selection mechanisms can use.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
+I found this duplicate code while working on the support for Gunyah hypervisor
+message queues [1]. I've only been able to compile-test omap-mailbox and pcc,
+however it is a straightforward conversion here.
 
-Index: usb-devel/drivers/usb/core/usb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/usb.c
-+++ usb-devel/drivers/usb/core/usb.c
-@@ -207,6 +207,82 @@ int usb_find_common_endpoints_reverse(st
- EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
- 
- /**
-+ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
-+ * usb_host_endpoint structure in an interface's current altsetting.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addr: the endpoint address (number and direction) to find
-+ *
-+ * Search the altsetting's list of endpoints for one with the specified address.
-+ *
-+ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
-+ */
-+static const struct usb_host_endpoint *usb_find_endpoint(
-+		const struct usb_interface *intf, unsigned int ep_addr)
-+{
-+	int n;
-+	const struct usb_host_endpoint *ep;
-+
-+	n = intf->cur_altsetting->desc.bNumEndpoints;
-+	ep = intf->cur_altsetting->endpoint;
-+	for (; n > 0; (--n, ++ep)) {
-+		if (ep->desc.bEndpointAddress == ep_addr)
-+			return ep;
-+	}
-+	return NULL;
-+}
-+
-+/**
-+ * usb_check_bulk_endpoints - Check whether an interface's current altsetting
-+ * contains a set of bulk endpoints with the given addresses.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
-+ * direction) to look for
-+ *
-+ * Search for endpoints with the specified addresses and check their types.
-+ *
-+ * Return: %true if all the endpoints are found and are bulk, %false otherwise.
-+ */
-+bool usb_check_bulk_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	for (; *ep_addrs; ++ep_addrs) {
-+		ep = usb_find_endpoint(intf, *ep_addrs);
-+		if (!ep || !usb_endpoint_xfer_bulk(&ep->desc))
-+			return false;
-+	}
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(usb_check_bulk_endpoints);
-+
-+/**
-+ * usb_check_int_endpoints - Check whether an interface's current altsetting
-+ * contains a set of interrupt endpoints with the given addresses.
-+ * @intf: the interface whose current altsetting should be searched
-+ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
-+ * direction) to look for
-+ *
-+ * Search for endpoints with the specified addresses and check their types.
-+ *
-+ * Return: %true if all the endpoints are found and are interrupt,
-+ * %false otherwise.
-+ */
-+bool usb_check_int_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs)
-+{
-+	const struct usb_host_endpoint *ep;
-+
-+	for (; *ep_addrs; ++ep_addrs) {
-+		ep = usb_find_endpoint(intf, *ep_addrs);
-+		if (!ep || !usb_endpoint_xfer_int(&ep->desc))
-+			return false;
-+	}
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
-+
-+/**
-  * usb_find_alt_setting() - Given a configuration, find the alternate setting
-  * for the given interface.
-  * @config: the configuration to search (not necessarily the current config).
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -292,6 +292,11 @@ void usb_put_intf(struct usb_interface *
- #define USB_MAXINTERFACES	32
- #define USB_MAXIADS		(USB_MAXINTERFACES/2)
- 
-+bool usb_check_bulk_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs);
-+bool usb_check_int_endpoints(
-+		const struct usb_interface *intf, const u8 *ep_addrs);
-+
- /*
-  * USB Resume Timer: Every Host controller driver should drive the resume
-  * signalling on the bus for the amount of time defined by this macro.
+[1]: https://lore.kernel.org/all/20230120224627.4053418-9-quic_eberman@quicinc.com/
+
+Chagnes since v2:
+ - Fix warnings in drivers/mailbox/pcc.c reported by lkp@intel.com
+
+Changes since v1:
+ - Rebase to https://git.linaro.org/landing-teams/working/fujitsu/integration.git/log/?h=mailbox-for-next
+ - Add Tested-By from Sudeep (thanks!)
+
+Elliot Berman (3):
+  mailbox: Allow direct registration to a channel
+  mailbox: omap: Use mbox_bind_client
+  mailbox: pcc: Use mbox_bind_client
+
+ drivers/mailbox/mailbox.c      | 96 ++++++++++++++++++++++++----------
+ drivers/mailbox/omap-mailbox.c | 22 ++------
+ drivers/mailbox/pcc.c          | 84 +++++++++++++++--------------
+ include/linux/mailbox_client.h |  1 +
+ 4 files changed, 118 insertions(+), 85 deletions(-)
 
 
-Index: usb-devel/drivers/media/radio/radio-shark.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark.c
-+++ usb-devel/drivers/media/radio/radio-shark.c
-@@ -316,6 +316,16 @@ static int usb_shark_probe(struct usb_in
- {
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
-+	static const u8 ep_addresses[] = {
-+		SHARK_IN_EP | USB_DIR_IN,
-+		SHARK_OUT_EP | USB_DIR_OUT,
-+		0};
-+
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoints(intf, ep_addresses)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK device\n");
-+		return -EINVAL;
-+	}
- 
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
-Index: usb-devel/drivers/media/radio/radio-shark2.c
-===================================================================
---- usb-devel.orig/drivers/media/radio/radio-shark2.c
-+++ usb-devel/drivers/media/radio/radio-shark2.c
-@@ -282,6 +282,16 @@ static int usb_shark_probe(struct usb_in
- {
- 	struct shark_device *shark;
- 	int retval = -ENOMEM;
-+	static const u8 ep_addresses[] = {
-+		SHARK_IN_EP | USB_DIR_IN,
-+		SHARK_OUT_EP | USB_DIR_OUT,
-+		0};
-+
-+	/* Are the expected endpoints present? */
-+	if (!usb_check_int_endpoints(intf, ep_addresses)) {
-+		dev_err(&intf->dev, "Invalid radioSHARK2 device\n");
-+		return -EINVAL;
-+	}
- 
- 	shark = kzalloc(sizeof(struct shark_device), GFP_KERNEL);
- 	if (!shark)
+base-commit: 6ccbe33a39523f6d62b22c5ee99c6695993c935e
+-- 
+2.39.2
+
