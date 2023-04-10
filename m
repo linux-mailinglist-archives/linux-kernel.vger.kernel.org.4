@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CB46DC946
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BE56DC93D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjDJQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S229766AbjDJQZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjDJQ0d (ORCPT
+        with ESMTP id S229722AbjDJQZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:26:33 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B201BFE
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:19 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id l69-20020a638848000000b00519e800366eso1164671pgd.19
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:19 -0700 (PDT)
+        Mon, 10 Apr 2023 12:25:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EFA171D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:25:17 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d83-20020a25e656000000b00b8befc985b5so14050185ybh.22
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681143979;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ENoaaMVMubn/KcAmMx1x6HeWtqhy9i1fT7aioBHDXcc=;
-        b=fkdy28z/x/2Y6DzjeJO8cFcorqVS2iQDlBg6nwCCEsLmc0YSKFWRkDDUBgK4Qh1ssz
-         iwDNO8Hd67Ef16nRflOkFUiIt5a51EaDJfN8UTwPD/whOCTFh3F84c8IR+pfECYUKq7g
-         r13FbXs8yGWePJRNzWzgWMNv8kD4JnSxRR/XCbXBwGw2C3tBkdCU1AtzfP0MjS9tH/Hj
-         DoiqwLgdulk6HRVolSVLCb/W+HEc28AwroX6CCqmdX984fjU6q0/20gcNlvwMzy2kJbA
-         AQ5UfAuoCMSmIFeZaNhmzckv86+tjNerhMdEve/6c13D+HEOOq85zJhaNLfcdRtH0s2x
-         bQ6g==
+        d=google.com; s=20210112; t=1681143917;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zJZt4cv250ETxOLYWhNXH5O28WLGu+lq/P9MQwXS1vc=;
+        b=Q38PWrtfrWbIykKvRvvBdbu2xEQ65qR53Fa294q6h9fTzpEgUOChCN6gZzA6J/2Jrr
+         oqqSni32vEWVPYCbg0h6jm4fUOjfjFak24TvaaKhhhzysF17g2T81sIMcNE/NB6iEZfy
+         +JAuyYt2ZIkrpatZUEADvUNtPERwhA5h4EJXJKEds3rQ3lUQshZ+PSpMj9wQN087+Ou9
+         FPqzzKvhqvM3NpQ0KRI+2RbokVotgwcuON+I3/gS46uHJ5RfnNczmlNKsnPDqRFen6K/
+         toC13G+9g8xUr2c5Iins+M2UhJTrM19tEpB1/wsJwf04OBfN3YoQtNyJepOI8VsojJVK
+         Mzyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681143979;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ENoaaMVMubn/KcAmMx1x6HeWtqhy9i1fT7aioBHDXcc=;
-        b=YCzZR0y0HCxQ4mv2f/+ibmexvmazGX2oWYpNYDy0aRFBcM+xzH2LV5Yj68ufZ99uQe
-         88yFHnzga/ul+StKI7Gbd5wnXgmIjAsVX/oG/PGjsDUWbsX7ls03E/IZsYN2+KLgMg4z
-         IyWwiEPw+0zUh5IP9wyTNSboI6z8NrdjezVBwdB+DTt79w3D/7Y2DirDSbFSypnQG3Wf
-         0fu7ENsoZfZQa+v8m6Pe/EhoeGuUA09PUnLnxsqlE4sRRW1/+68E/gZ/FZkyj+XCq7iR
-         8X7/z9TSNhAmuvJFGTT3nrmACPEZ68HKcg54ZgWAlU63770wlRy30S7FjvZngZ1VXnHO
-         yGQA==
-X-Gm-Message-State: AAQBX9fRirr8D5gzSeCg67+C7uwSc1bDR+V5ijLFSf5rd5GxrSif3PDw
-        31VuCg+wLY0RQJg8rBIpx94UJhoK3QcE
-X-Google-Smtp-Source: AKy350bzXEkhKfRJnIJa5gh4FNDi8DMbaX5c5UaYQ5moE3r6h9mw8wVurekcapCgL+GPU6sq4aikyT8kE+VD
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fc51:6a03:541d:a18d])
- (user=irogers job=sendgmr) by 2002:a63:4466:0:b0:509:4ac5:7f3a with SMTP id
- t38-20020a634466000000b005094ac57f3amr2582205pgk.0.1681143979133; Mon, 10 Apr
- 2023 09:26:19 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:25:11 -0700
-In-Reply-To: <20230410162511.3055900-1-irogers@google.com>
-Message-Id: <20230410162511.3055900-7-irogers@google.com>
+        d=1e100.net; s=20210112; t=1681143917;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zJZt4cv250ETxOLYWhNXH5O28WLGu+lq/P9MQwXS1vc=;
+        b=QfD2hj9qaoMJFOHNfPJ1jy0fHHxtjLOUpu+hcIfq78A/5HJEaXXGvEixsCr55kX9uH
+         wuAWSsbuUc/OmWwLPDVZ3Bo1Xi/VYjneU0JBL+z2ghCCftZoHjdOGYsKAeEMzzuLXR9Q
+         ryni21TfLVK4dHQNGnT1FJ4BqmDvVu0f90+PGIoOm4sepXmu66Dw+nqLatX7SDCwK/rS
+         l+YOPzXP3N1rEqKWbmbBMpL3cz+wIdM2M2uCbq+nvQ9qHmg/CCNIf/JseOy8Agd/Kk5E
+         dA32UT9+HDMr+v0Xox2u5KVX1ihwASIXer3MZ4ycS78RPaXKBA3OmSCPoD8T2q0U5ySO
+         WZZA==
+X-Gm-Message-State: AAQBX9cZYK99xD5OY3Jc0NutAORpaLjne9tHUDr3L6MDnFEsDv6w404G
+        YHgvJaOj0NhW20WKsS2Pw74bhrg=
+X-Google-Smtp-Source: AKy350Yza28bnGsHoOQVOcw77cb7JSctAnu5UcsxyRZ6i3OPX41XxJItWn69Z01NRHFpS7EVaLNUCGM=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a25:cb52:0:b0:a02:a3a6:78fa with SMTP id
+ b79-20020a25cb52000000b00a02a3a678famr5422814ybg.12.1681143917218; Mon, 10
+ Apr 2023 09:25:17 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 09:25:15 -0700
+In-Reply-To: <20230410100939.331833-4-yoong.siang.song@intel.com>
 Mime-Version: 1.0
-References: <20230410162511.3055900-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v2 6/6] perf util: Move perf_guest/host declarations
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Raul Silvera <rsilvera@google.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Chengdong Li <chengdongli@tencent.com>,
-        Denis Nikitin <denik@chromium.org>,
-        "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20230410100939.331833-1-yoong.siang.song@intel.com> <20230410100939.331833-4-yoong.siang.song@intel.com>
+Message-ID: <ZDQ4a9UIVysA6hgd@google.com>
+Subject: Re: [PATCH net-next 3/4] net: stmmac: add Rx HWTS metadata to XDP
+ receive pkt
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Song Yoong Siang <yoong.siang.song@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -94,180 +83,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definitions are in util.c so move the declarations to match.
+On 04/10, Song Yoong Siang wrote:
+> Add receive hardware timestamp metadata support via kfunc to XDP receive
+> packets.
+> 
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  1 +
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 24 +++++++++++++++++--
+>  2 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> index ac8ccf851708..760445275da8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -94,6 +94,7 @@ struct stmmac_rx_buffer {
+>  
+>  struct stmmac_xdp_buff {
+>  	struct xdp_buff xdp;
+> +	ktime_t rx_hwts;
+>  };
+>  
+>  struct stmmac_rx_queue {
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index f7bbdf04d20c..ca183fbfde85 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5307,6 +5307,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  			}
+>  		}
+>  
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/builtin-diff.c      | 2 +-
- tools/perf/builtin-kvm.c       | 1 +
- tools/perf/perf.h              | 4 ----
- tools/perf/ui/hist.c           | 2 +-
- tools/perf/util/cs-etm.c       | 1 +
- tools/perf/util/event.c        | 2 +-
- tools/perf/util/evlist.c       | 1 +
- tools/perf/util/parse-events.c | 2 +-
- tools/perf/util/session.c      | 2 +-
- tools/perf/util/top.c          | 2 +-
- tools/perf/util/util.h         | 3 +++
- 11 files changed, 12 insertions(+), 10 deletions(-)
+[..]
 
-diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
-index 22b526766e14..dbb0562d6a4f 100644
---- a/tools/perf/builtin-diff.c
-+++ b/tools/perf/builtin-diff.c
-@@ -6,7 +6,6 @@
-  * DSOs and symbol information, sort them and produce a diff.
-  */
- #include "builtin.h"
--#include "perf.h"
- 
- #include "util/debug.h"
- #include "util/event.h"
-@@ -26,6 +25,7 @@
- #include "util/spark.h"
- #include "util/block-info.h"
- #include "util/stream.h"
-+#include "util/util.h"
- #include <linux/err.h>
- #include <linux/zalloc.h>
- #include <subcmd/pager.h>
-diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index fb9dc0dc46f9..747d19336340 100644
---- a/tools/perf/builtin-kvm.c
-+++ b/tools/perf/builtin-kvm.c
-@@ -23,6 +23,7 @@
- #include "util/data.h"
- #include "util/ordered-events.h"
- #include "util/kvm-stat.h"
-+#include "util/util.h"
- #include "ui/browsers/hists.h"
- #include "ui/progress.h"
- #include "ui/ui.h"
-diff --git a/tools/perf/perf.h b/tools/perf/perf.h
-index 49e15e2be49e..c004dd4e65a3 100644
---- a/tools/perf/perf.h
-+++ b/tools/perf/perf.h
-@@ -2,14 +2,10 @@
- #ifndef _PERF_PERF_H
- #define _PERF_PERF_H
- 
--#include <stdbool.h>
--
- #ifndef MAX_NR_CPUS
- #define MAX_NR_CPUS			2048
- #endif
- 
--extern bool perf_host, perf_guest;
--
- enum perf_affinity {
- 	PERF_AFFINITY_SYS = 0,
- 	PERF_AFFINITY_NODE,
-diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
-index 5075ecead5f3..f164bd26fc41 100644
---- a/tools/perf/ui/hist.c
-+++ b/tools/perf/ui/hist.c
-@@ -11,7 +11,7 @@
- #include "../util/sort.h"
- #include "../util/evsel.h"
- #include "../util/evlist.h"
--#include "../perf.h"
-+#include "../util/util.h"
- 
- /* hist period print (hpp) functions */
- 
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 944835e16430..103865968700 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -38,6 +38,7 @@
- #include "tsc.h"
- #include <tools/libc_compat.h>
- #include "util/synthetic-events.h"
-+#include "util/util.h"
- 
- struct cs_etm_auxtrace {
- 	struct auxtrace auxtrace;
-diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-index 13f7f85e92e1..8ae742e32e3c 100644
---- a/tools/perf/util/event.c
-+++ b/tools/perf/util/event.c
-@@ -33,7 +33,7 @@
- #include "bpf-event.h"
- #include "print_binary.h"
- #include "tool.h"
--#include "../perf.h"
-+#include "util.h"
- 
- static const char *perf_event__names[] = {
- 	[0]					= "TOTAL",
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index cc491a037836..df6af38ca22e 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -32,6 +32,7 @@
- #include "util/pmu.h"
- #include "util/sample.h"
- #include "util/bpf-filter.h"
-+#include "util/util.h"
- #include <signal.h>
- #include <unistd.h>
- #include <sched.h>
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 0010e5e0ee68..f341995cb04e 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -25,10 +25,10 @@
- #include "util/parse-branch-options.h"
- #include "util/evsel_config.h"
- #include "util/event.h"
--#include "perf.h"
- #include "util/parse-events-hybrid.h"
- #include "util/pmu-hybrid.h"
- #include "util/bpf-filter.h"
-+#include "util/util.h"
- #include "tracepoint.h"
- #include "thread_map.h"
- 
-diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index 7d8d057d1772..e2806791c76a 100644
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@ -33,7 +33,7 @@
- #include "stat.h"
- #include "tsc.h"
- #include "ui/progress.h"
--#include "../perf.h"
-+#include "util.h"
- #include "arch/common.h"
- #include "units.h"
- #include <internal/lib.h>
-diff --git a/tools/perf/util/top.c b/tools/perf/util/top.c
-index b8b32431d2f7..be7157de0451 100644
---- a/tools/perf/util/top.c
-+++ b/tools/perf/util/top.c
-@@ -11,7 +11,7 @@
- #include "parse-events.h"
- #include "symbol.h"
- #include "top.h"
--#include "../perf.h"
-+#include "util.h"
- #include <inttypes.h>
- 
- #define SNPRINTF(buf, size, fmt, args...) \
-diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-index 8bd515b67739..7c8915d92dca 100644
---- a/tools/perf/util/util.h
-+++ b/tools/perf/util/util.h
-@@ -20,6 +20,9 @@ extern const char perf_more_info_string[];
- 
- extern const char *input_name;
- 
-+extern bool perf_host;
-+extern bool perf_guest;
-+
- /* General helper functions */
- void usage(const char *err) __noreturn;
- void die(const char *err, ...) __noreturn __printf(1, 2);
--- 
-2.40.0.577.gac1e443424-goog
+> +		stmmac_get_rx_hwtstamp(priv, p, np, &ctx.rx_hwts);
 
+Do we want to pay this cost for every packet?
+
+The preferred alternative is to store enough state in the
+stmmac_xdp_buff so we can get to this data from stmmac_xdp_rx_timestamp.
+
+I haven't read this code, but tentatively:
+- move priv, p, np into stmmac_xdp_buff, assign them here instead of
+  calling stmmac_get_rx_hwtstamp
+- call stmmac_get_rx_hwtstamp from stmmac_xdp_rx_timestamp with the
+  stored priv, p, np
+
+That would ensure that we won't waste the cycles pulling out the rx
+timestamp for every packet if the higher levels / users don't care.
+
+Would something like this work?
+
+> +
+>  		if (!skb) {
+>  			unsigned int pre_len, sync_len;
+>  
+> @@ -5315,7 +5317,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  
+>  			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
+>  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
+> -					 buf->page_offset, buf1_len, false);
+> +					 buf->page_offset, buf1_len, true);
+>  
+>  			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
+>  				  buf->page_offset;
+> @@ -5411,7 +5413,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  
+>  		shhwtstamp = skb_hwtstamps(skb);
+>  		memset(shhwtstamp, 0, sizeof(struct skb_shared_hwtstamps));
+> -		stmmac_get_rx_hwtstamp(priv, p, np, &shhwtstamp->hwtstamp);
+> +		shhwtstamp->hwtstamp = ctx.rx_hwts;
+>  
+>  		stmmac_rx_vlan(priv->dev, skb);
+>  		skb->protocol = eth_type_trans(skb, priv->dev);
+> @@ -7071,6 +7073,22 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv, bool enable)
+>  	}
+>  }
+>  
+> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
+> +{
+> +	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
+> +
+> +	if (ctx->rx_hwts) {
+> +		*timestamp = ctx->rx_hwts;
+> +		return 0;
+> +	}
+> +
+> +	return -ENODATA;
+> +}
+> +
+> +const struct xdp_metadata_ops stmmac_xdp_metadata_ops = {
+> +	.xmo_rx_timestamp		= stmmac_xdp_rx_timestamp,
+> +};
+> +
+>  /**
+>   * stmmac_dvr_probe
+>   * @device: device pointer
+> @@ -7178,6 +7196,8 @@ int stmmac_dvr_probe(struct device *device,
+>  
+>  	ndev->netdev_ops = &stmmac_netdev_ops;
+>  
+> +	ndev->xdp_metadata_ops = &stmmac_xdp_metadata_ops;
+> +
+>  	ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
+>  			    NETIF_F_RXCSUM;
+>  	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+> -- 
+> 2.34.1
+> 
