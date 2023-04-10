@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0318F6DCBF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAF06DCBFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjDJUBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S229816AbjDJUCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDJUBH (ORCPT
+        with ESMTP id S229683AbjDJUCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 16:01:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0501FC2;
-        Mon, 10 Apr 2023 13:01:06 -0700 (PDT)
+        Mon, 10 Apr 2023 16:02:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFF61FC4;
+        Mon, 10 Apr 2023 13:01:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB466117D;
-        Mon, 10 Apr 2023 20:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5137BC433EF;
-        Mon, 10 Apr 2023 20:01:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FB061F0D;
+        Mon, 10 Apr 2023 20:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDEAC433EF;
+        Mon, 10 Apr 2023 20:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681156865;
-        bh=PR/yeP5ggYJVyJI7BlJL+FFHBpjj8PG7UidZk22cHyY=;
+        s=k20201202; t=1681156918;
+        bh=zS9bDGyb5KIyUvMyO4cCULhWJVvcjPYxsjkGaR6IpEA=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=byarW1i32BvM+CLSKo0WLY02E9BKd5Ebg3Sbbd7e/irTguplkWlbjf5F56AYxSy/F
-         FUQXGkVIkuONmbdMMU/zQH4qoes0EL2SiOcp1SvoR1ky3GV/jNb4XEwx94I/BrJUtp
-         wPpbXCL1P4tNAAopGUs6hXdjPEAROIIZHyzRpThXYsk6oAIsXws/KNcW5AUihAUUHb
-         zAWC+F4U0EYBcWlYGJ/7v8OCzhbsk6wohFX7PnPnve/FvQGEYRrEJNZNmKmdzfvaHM
-         QOgltxlqBH2UgffXDUIjmsx8KTxppevV+qo+Z84MtNHSyS/LGPI54NDS+TwFve2PVE
-         X8Lkg2epPMfvg==
-Message-ID: <44961379683ad0afd30436752d78cc39.sboyd@kernel.org>
+        b=aYYG3s/jYQ4jWxNHds6LtrGf9w8J5k4Vvqa12JyzNH40pMUSkoaD7G6vefRxEYh4i
+         7bXHtbod1W1TP+7Oxmg0von2A6CG43wfOLJvyvMenv2nqXIfby8jvwzHCsF+AnV916
+         mfnxPdX5F6wgMuUhvT41V3aphNJJAw5AD7pX0Hw/eFHIYbmzw1Z3fFiWisyobkxT59
+         UYY9uFsJo//wBAIQAxE/eC3vEXA+mI/CdjjPjXQjI5hgBMyMUr2zJrcS0FOC1LJCX8
+         puAjBrqUsbTZVyHPB8IBW4SFKyoypkoPuUXx2XwpcJk+aB87gQs9mFfQpCj+AhseKM
+         BOJTvcw2zdPDA==
+Message-ID: <d39d2f42e04cf97046d23f0823558e73.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230406-groovy-trustable-15853ac0a130@spud>
-References: <20230406-undertake-stowing-50f45b90413a@spud> <20230406-groovy-trustable-15853ac0a130@spud>
-Subject: Re: [PATCH v1 1/4] clk: sifive: make SiFive clk drivers depend on ARCH_ symbols
+In-Reply-To: <20230406200723.552644-2-brgl@bgdev.pl>
+References: <20230406200723.552644-1-brgl@bgdev.pl> <20230406200723.552644-2-brgl@bgdev.pl>
+Subject: Re: [PATCH v2 1/7] dt-bindings: clock: qcom: describe the GPUCC clock for SA8775P
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-serial@vger.kernel.org
-To:     Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org
-Date:   Mon, 10 Apr 2023 13:01:03 -0700
+        Rob Herring <robh+dt@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>
+Date:   Mon, 10 Apr 2023 13:01:56 -0700
 User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,14 +67,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Conor Dooley (2023-04-06 13:57:47)
-> From: Conor Dooley <conor.dooley@microchip.com>
+Quoting Bartosz Golaszewski (2023-04-06 13:07:17)
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >=20
-> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-> use of such symbols on other architectures, convert the SiFive clk
-> drivers to use the new symbol.
+> Add the compatible for the Qualcomm Graphics Clock control module present
+> on sa8775p platforms. It matches the generic QCom GPUCC description. Add
+> device-specific DT bindings defines as well.
 >=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 
-Applied to clk-next
+Acked-by: Stephen Boyd <sboyd@kernel.org>
