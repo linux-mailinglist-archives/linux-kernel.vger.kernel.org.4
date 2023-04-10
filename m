@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEB96DCE3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31206DCE3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjDJXka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S229939AbjDJXk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDJXkY (ORCPT
+        with ESMTP id S229703AbjDJXkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Apr 2023 19:40:24 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11783211D;
-        Mon, 10 Apr 2023 16:40:23 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id ch3so7394924ybb.4;
-        Mon, 10 Apr 2023 16:40:23 -0700 (PDT)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6BE1BF5;
+        Mon, 10 Apr 2023 16:40:20 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id h12so3319886lfj.8;
+        Mon, 10 Apr 2023 16:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681170022; x=1683762022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NTQtPc1KR8cL03Cu4yvySUtsAqnCh9TcCbpIOpD082E=;
-        b=LvCJtpdvUXGmM5tCLD26vrPYHaTbyVySqbpJLltLM6laOR5DGneYwNdHidQ/0KRQzo
-         fAS5G/mV8BrIRT/7FJPmSRVPu4JmIyI2BIM7LU4APXhshOi0MRmTdq0EJX+ESRyt5Odv
-         DT3aGKmmgweMnnvRcQ+qOHBoiJxHg9DbzjmucNInrCEQrndG/2kJabIALJ5GnVQzi6lF
-         2iehIqncrVGa2AZ70aQbaQHcdWT1zx0wRJ+EW19+YB+HqSfmQ3cCnOyp/WY974BDKMBP
-         uS8ifM14G92fEi8A++D1kZFIrQ0G7OMvvWbO6z8gEYqkFrF3RliA7fV20j/HfJjscxw4
-         33EA==
+        d=gmail.com; s=20210112; t=1681170019; x=1683762019;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fur996rCaWYVGAHkL9B8t6UIa+8lHC0yv4M9nEOrYXo=;
+        b=oCzfxBcreBt29EaLl+71B9b/Q9qgIZXp6nVXJ/ZVkuB6CVfBsRJFo1lAUD3/GAxFV6
+         SVaBq0XwHUQ/TrhgfQF9QOmyhqqd3zQfSd8jl80BrU+bY5s0EnJc9ix5dwLvlaD/tVPf
+         LlFnUsb2/Nmzgv+1PPlABYMwmnZDgH40woWrYLJFXHGmsy9+O5IPZwiwrLfcLIAT3BXS
+         f/VArm7ldvG9/3oB5MrWFo70/hcUl9fJjkMmbD+Ph0W+rED701KZ70PrujsFfwa1BBEb
+         G4pLZhhbAkHpTuhYZCurpub93G9rBQH7Pu7FqbOMgmPVJW9n6yyTfMzEqn6e8EowxiW6
+         yiEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681170022; x=1683762022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NTQtPc1KR8cL03Cu4yvySUtsAqnCh9TcCbpIOpD082E=;
-        b=ynTDW6AAQpuOMsgqkxGCMuU8WtE/z3l2pwjmQmRSNkWEkCk0b+x93CYbV87KhyDP58
-         pIINnhf1a3WudawLr8wBJZVx+MXmCw4K4vw+Ky7D1If5zs/72DMzVkMcpg8kxsuSPTiK
-         7D+5BLGha5X+Zu4JkxQzyGxaQpUnItz0FYTbvlnjeOPPSRpjaunXYD0ZceJ4IAlppEaY
-         lkCyxWPlP4UupDFJxj73X+X2wm3BWpb8GTn1MW2GXC9rKXn7ezZsFgKsIpNmM+N7n5AJ
-         OgWPqQpbJRgizXG0QmDprglVTz8j9n//erBDGnExGQShMqaMGnMqy9HDv+PrM8+9J0F/
-         FHOQ==
-X-Gm-Message-State: AAQBX9dlupK5k9UnSVtt3gg8dTOuLbrGZBuz+o34nsvjkdaokr0iiCCB
-        EzLeuyKCbl075akvIV/ONVDUmbiobhIQNSpMNhk=
-X-Google-Smtp-Source: AKy350byC3UZ5q46Cg3jjcDOCZuOE/5kBZ8jGkWjtaZzjZe5hvjzf3F5KgEQU7es7Q5ChrZQ4u786jZiUPkl5fwvbpA=
-X-Received: by 2002:a25:3157:0:b0:b8e:db4a:a366 with SMTP id
- x84-20020a253157000000b00b8edb4aa366mr4583298ybx.11.1681170022289; Mon, 10
- Apr 2023 16:40:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681170019; x=1683762019;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fur996rCaWYVGAHkL9B8t6UIa+8lHC0yv4M9nEOrYXo=;
+        b=Dh0Cgxsanp57vXlETGGj7L9Y5btRrOsymNHXWkAkjTZQWr1XRPOrPCEhVBa5jiC35I
+         0P0mdAg0cr3LvEy0wpxCwPxHzf+0F0HJ1wMzOyEdFm5TGukBPMBq38mULHZmyLGtaeeW
+         gJCOPguDcvydqUds5I6JKgCJsuTHnTzNxn38+autvBpdw/0kaFr0emvfgBtLeYb3oBfw
+         AYPLvfBEsZYyP1x09ndb9Vb0/SR6wkr8muHg5b7m7YpPGyMEJ25QWmp+ByBgaUnK+YnT
+         FkqDVd9EtLwCS3PwclPSpXhezoVh8qF6ImT7gunhahXkux/bbBEZNWTwfUmndnrsLlF+
+         +0VA==
+X-Gm-Message-State: AAQBX9ctrslQQanDEqvA/YB4HMNP6Ws7AEHhfSWpjJLEmDypCPw08U3O
+        RZLrpfXYgUNkow5FZZz1B9tTsSuFGOg=
+X-Google-Smtp-Source: AKy350Y8vHryK+xbHopzRc1cNjMjYH5S/Wo750TJjWInhOO3WY08PTqXauE7zSAidBeOMTmC84bjeA==
+X-Received: by 2002:ac2:5292:0:b0:4eb:29b0:1ca4 with SMTP id q18-20020ac25292000000b004eb29b01ca4mr3506937lfm.8.1681170018902;
+        Mon, 10 Apr 2023 16:40:18 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id v18-20020ac25612000000b004e9b4a8f738sm2284738lfd.152.2023.04.10.16.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 16:40:18 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 02:40:16 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        sunying@nj.iscas.ac.cn
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greybus-dev@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mips@vger.kernel.org
+Subject: Re: Multiple undefined configuration options are dependent in
+ Kconfig under the v6.3-rc4 drivers directory
+Message-ID: <20230410232725.zwbccyryboxj3bh5@mobilestation>
+References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
+ <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
 MIME-Version: 1.0
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
-In-Reply-To: <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 11 Apr 2023 01:40:11 +0200
-Message-ID: <CANiq72k018LHbL7qqYXuuorD2ayrnTik8WD6MXPZgo5wR6VA9g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-To:     Daniel Almeida <daniel.almeida@collabora.com>
-Cc:     Hans Petter Selasky <hps@selasky.org>, wedsonaf@gmail.com,
-        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -72,19 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 4:10=E2=80=AFPM Daniel Almeida
-<daniel.almeida@collabora.com> wrote:
->
-> and I don't
-> think there
-> are any plans to introduce Rust outside of drivers in the kernel at
-> all, last I
-> heard.
+On Thu, Mar 30, 2023 at 07:34:58AM +0900, Damien Le Moal wrote:
+> On 3/29/23 16:52, 孙滢 wrote:
+> > It has been discovered that the following configuration options are undefined in the current latest version, v6.3-rc4, yet they are being relied upon by other configuration options in multiple Kconfig files:
+> > 
+> > MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in multiple files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, drivers/bus/Kconfig, and drivers/memory/Kconfig.
+> > MFD_MAX597X is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
+> > MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
+> > ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in Kconfig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
+> > ARCH_BCM4908 is undefined, used as a 'depends on' condition in Kconfig file drivers/leds/blink/Kconfig.
+> > MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in Kconfig files drivers/gpio/Kconfig and drivers/reset/Kconfig. 
+> > USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in drivers/staging/greybus/Kconfig and drivers/staging/greybus/arche-platform.c.
 
-This was indeed our original proposal (actually, for "leaf" modules in
-general, not only device drivers), but where the line is drawn is up
-to the kernel maintainers. For instance, some of them have expressed
-interest in potentially having Rust subsystems in the future.
+Please, don't drop the MIPS_BAIKAL_T1 config. It will be defined and
+thus utilized after I submit the SoC CSP support to the MIPS arch.
 
-Cheers,
-Miguel
+-Serge(y)
+
+> > 
+> > If these 7 configuration options are deprecated, it is recommended to remove the dependencies on them in the Kconfig files. 
+> > If they are still useful, it is recommended to define them.
+> 
+> + linux-arm & linux-mips
+> 
+> What about you send patches to fix this ?
+> 
+> > 
+> > 
+> > Best regards,
+> > Ying Sun
+> > Pengpeng Hou
+> > Yanjie Ren
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research
+> 
