@@ -2,164 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB76D6DC8E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC8A6DC8CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjDJP7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 11:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S230087AbjDJP5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDJP7A (ORCPT
+        with ESMTP id S230007AbjDJP5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:59:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAACE63;
-        Mon, 10 Apr 2023 08:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681142325; x=1712678325;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=epNmJmT4mdsPOw/HzfxOribgjhbn4L4BH4c8uTIvlqY=;
-  b=gc2pOgbNhpTR+cAfeCCZM3x5stRMceQ9GDHo5K0y4IOOIkfVTPzgVV+1
-   Z3dTxq/+9GY6ssEFP5YKZKaypWITa3oPSOAAtyOVFrnPNkfhz5KM/Mek1
-   iYxHvdLS2D9dwxZ7WPuqJDiGJVFnNZEA0j/xZ2vVKC4vZOnT1/PeVl4TF
-   W39dW3nxV3vQdEGLS4waFPr9PqMYeAnIYdg49ejrWjzAExusXMY8p2Vxj
-   VYMb33EWSni34x9SmLZGF8ebr8RuAgpzX+7eaqPfqTKFpw2UKQE6LSGGp
-   Zqc54Oxi1cyn/qc7eRzW8zFCTf2QzanqIH+7tkILjtNPJ8d76OXym2+3q
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="343391789"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="343391789"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 08:58:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="777601767"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="777601767"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Apr 2023 08:58:12 -0700
-From:   Song Yoong Siang <yoong.siang.song@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH net-next v2 3/4] net: stmmac: add Rx HWTS metadata to XDP receive pkt
-Date:   Mon, 10 Apr 2023 23:57:21 +0800
-Message-Id: <20230410155722.335908-4-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410155722.335908-1-yoong.siang.song@intel.com>
-References: <20230410155722.335908-1-yoong.siang.song@intel.com>
+        Mon, 10 Apr 2023 11:57:34 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2078.outbound.protection.outlook.com [40.107.223.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3D826B6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:57:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aKd2EQJsB0NccYsPZ23ru2RXr28IDSJ5FTxMHcBheeZNknDPIWNtg/BQgyqNJFC1M2cKlz7CTtZF4HfJIe5f/OrxZkLk6gPB000pixpxbD9+9f29N1rQLIRBYZ6+4CIpZpKySRb9W9+oBZ1gr9gRok5OpIaTQ0epm+jaJoQmdpcyRZUmL1aUPtCmspCO/blcvc1HjcLIBARcOP8ShSlPPAk4otQRYbpAkj/As+7mXRsLFRzaAqwUGVX8V7o0CbNXvowYhyWTtmKALvkw0ANvNNGwqfXwaoN67Ka3RK2eWSx4P1fCw6XvvXn8MUq2gHIyAA40BEqSUIGvw3MmwzWODg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mh6LTT8t0l62e81wt2yeOzxB5C0UdB0/j4+hBnbFyy0=;
+ b=O3WQ74f2qWomDzYGYwiSdjbvYMciJRVY0Jx0+pI1WPtVQaIzMJt+/DQXidQkalrSsJhBTaItk/hsP6G9DL36RPMiOmlHJwh/q2jr/Tf1Z9fSWViQFwTB3XDOmdbgLIEb+h0lOl2MF0pgWvY6hxJRndE7yZbIHSc6dEBotxS4r+f4CuuhupbaZfVjywwPhjQER1DTUr9o/P1ftXTwaywrWurjZGt+DI2wFwYBMMzQE+8VTJd18vIyKyvQTwGv/COvCKB6vwVKAXJYaa4u1/pZ9Sm3AT04O7/qY8DzWMip12ORG4kEIsnRb63MSwxrwAmU+39/2QqxeFa3X9bGNCr/XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linutronix.de smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mh6LTT8t0l62e81wt2yeOzxB5C0UdB0/j4+hBnbFyy0=;
+ b=kYpQcgo1JlWmimJYNmmqjO35w2XLvNUzO8F0rJDiLTvhpc+yHe6YEvR3k9zKaWxv+x3bdIQZHIIDGDcZG60SfynhGF4sTIbedwBMx+y+p8ODWLm492zdoxaLoWd41Cmae6cYduz5NNdpx2IINvEtfPuPi6aFMmeSDstVrCmnnKydkY3y+pq/6+CZCwcuulvyg9V23Qm+BEO1H7tdlMKd4lvdqHwe+47uYM+UsUqjdvsQbyyASa/e9I3uiwdxGjAru8wfRzkl+B4ORKSaMwqcPYLgsWzj+l7eFxwUyjg6/IszBI37n1VhnXuvD0jC+XI1fFSON9Y7Ai7rLBqNTo/DqQ==
+Received: from DS7P222CA0003.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::19) by
+ DS7PR12MB6141.namprd12.prod.outlook.com (2603:10b6:8:9b::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.34; Mon, 10 Apr 2023 15:57:30 +0000
+Received: from DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::6a) by DS7P222CA0003.outlook.office365.com
+ (2603:10b6:8:2e::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
+ Transport; Mon, 10 Apr 2023 15:57:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT056.mail.protection.outlook.com (10.13.173.99) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.27 via Frontend Transport; Mon, 10 Apr 2023 15:57:30 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Apr 2023
+ 08:57:26 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Apr
+ 2023 08:57:26 -0700
+Received: from SDONTHINENI-DESKTOP.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 10 Apr 2023 08:57:25 -0700
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+CC:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, Vikram Sethi <vsethi@nvidia.com>
+Subject: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors management
+Date:   Mon, 10 Apr 2023 10:57:21 -0500
+Message-ID: <20230410155721.3720991-4-sdonthineni@nvidia.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230410155721.3720991-1-sdonthineni@nvidia.com>
+References: <20230410155721.3720991-1-sdonthineni@nvidia.com>
 MIME-Version: 1.0
+X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT056:EE_|DS7PR12MB6141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 722891f6-bc38-4e20-4e46-08db39dc4a82
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3EMqBGKM1l041qQ1mdAZzYD4vGJQ5jA+nJzZVky5s7RWdBfMGJDAutkd/w3TVvLAJGayK0t5TZbsP5dEQqeabmTtLfWv/HccK0dDFx2+TxhDh/JCmxAmY3C8hsxf3jymnXbx8mWwa5u7Eehjt9fOYknmFSj7ojmYcnzlUtrkItDC/UCNT9ykLKG8YYBhSLwD/g90hBHq7F5FNVn4DjKCZ4beL4eK9yZM8F/YOXkc4+6wTRvB6VFVoXNK123EU7pP4hqrpb+rgWaF69AcSaK6WnRk5d0WUxTKbskPC2ZHeUb82G2kYq/7hD7U1IWmEnIAOPW6zqh9I/FmW2vBl7eBz9dtyLYFBJktCyhKKEo0s0EBStVsQb4XnqjFPgCUBWMjtDDa4wYUqNxlZqkpiuuMyJKrPQPCyWVp41TdeGRM4Vs6+LL/BclxnHKtHS1JDrGJjNBe4vXsitx36O2MMUfiDKp4N5fFwCXjF11bSxOQ03WxZROyv7i84SENODVtLfDorB6Ua4H40tCIeHas4vuRA0gnPwItVSf6O+K7W0sSJDovQ6xB378ihURCM+8d2f2ZSbJS/cPwpmEKoKIRH8Y8V+COmzTCUiDrZkzmYeVIeMN7fvviyOoTsVwL4WCjg+cs8OdstyiMMU9cEBVUZnx/gnN/6GzYkMCnKLSdzPTOmiV6Lc7B25hSOaBjUnB/3xMaLMsCMUV41f1unPHo9pzr6AFqiM9vevtvXBN1shXfJg10/2C4IFknB8x+j7O1rPmz
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(66899021)(7696005)(478600001)(86362001)(40480700001)(47076005)(83380400001)(40460700003)(36756003)(82740400003)(7636003)(356005)(2616005)(36860700001)(336012)(426003)(6666004)(107886003)(2906002)(54906003)(110136005)(316002)(186003)(26005)(1076003)(5660300002)(41300700001)(8936002)(82310400005)(8676002)(70586007)(70206006)(4326008);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 15:57:30.7293
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 722891f6-bc38-4e20-4e46-08db39dc4a82
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6141
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add receive hardware timestamp metadata support via kfunc to XDP receive
-packets.
+The current implementation uses a static bitmap and a radix tree
+to manage IRQ allocation and irq_desc pointer store respectively.
+However, the size of the bitmap is constrained by the build time
+macro MAX_SPARSE_IRQS, which may not be sufficient to support the
+high-end servers, particularly those with GICv4.1 hardware, which
+require a large interrupt space to cover LPIs and vSGIs.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+The maple tree is a highly efficient data structure for storing
+non-overlapping ranges and can handle a large number of entries,
+up to ULONG_MAX. It can be utilized for both storing interrupt
+descriptors and identifying available free spaces.
+
+The interrupt descriptors management can be simplified by switching
+to a maple tree data structure, which offers greater flexibility
+and scalability. To support modern servers, the maximum number of
+IRQs has been increased to INT_MAX, which provides a more adequate
+value than the previous limit of NR_IRQS+8192.
+
+Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  1 +
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 24 +++++++++++++++++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ kernel/irq/internals.h |  2 +-
+ kernel/irq/irqdesc.c   | 54 +++++++++++++++++++++++-------------------
+ 2 files changed, 31 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-index ac8ccf851708..760445275da8 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-@@ -94,6 +94,7 @@ struct stmmac_rx_buffer {
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index f3f2090dd2de..7bdb7507efb0 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -12,7 +12,7 @@
+ #include <linux/sched/clock.h>
  
- struct stmmac_xdp_buff {
- 	struct xdp_buff xdp;
-+	ktime_t rx_hwts;
- };
+ #ifdef CONFIG_SPARSE_IRQ
+-# define MAX_SPARSE_IRQS	(NR_IRQS + 8196)
++# define MAX_SPARSE_IRQS	INT_MAX
+ #else
+ # define MAX_SPARSE_IRQS	NR_IRQS
+ #endif
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 9a71fc6f2c5f..d6d8120ffd56 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -12,8 +12,7 @@
+ #include <linux/export.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel_stat.h>
+-#include <linux/radix-tree.h>
+-#include <linux/bitmap.h>
++#include <linux/maple_tree.h>
+ #include <linux/irqdomain.h>
+ #include <linux/sysfs.h>
  
- struct stmmac_rx_queue {
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index f7bbdf04d20c..7f1c0c36de8c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5307,6 +5307,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 			}
- 		}
+@@ -131,17 +130,38 @@ int nr_irqs = NR_IRQS;
+ EXPORT_SYMBOL_GPL(nr_irqs);
  
-+		stmmac_get_rx_hwtstamp(priv, p, np, &ctx.rx_hwts);
+ static DEFINE_MUTEX(sparse_irq_lock);
+-static DECLARE_BITMAP(allocated_irqs, MAX_SPARSE_IRQS);
++static struct maple_tree sparse_irqs = MTREE_INIT_EXT(sparse_irqs,
++					MT_FLAGS_ALLOC_RANGE |
++					MT_FLAGS_LOCK_EXTERN |
++					MT_FLAGS_USE_RCU,
++					sparse_irq_lock);
+ 
+ static int irq_find_free_area(unsigned int from, unsigned int cnt)
+ {
+-	return bitmap_find_next_zero_area(allocated_irqs, MAX_SPARSE_IRQS,
+-					  from, cnt, 0);
++	MA_STATE(mas, &sparse_irqs, 0, 0);
 +
- 		if (!skb) {
- 			unsigned int pre_len, sync_len;
- 
-@@ -5315,7 +5317,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
- 			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
--					 buf->page_offset, buf1_len, false);
-+					 buf->page_offset, buf1_len, true);
- 
- 			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
- 				  buf->page_offset;
-@@ -5411,7 +5413,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		shhwtstamp = skb_hwtstamps(skb);
- 		memset(shhwtstamp, 0, sizeof(struct skb_shared_hwtstamps));
--		stmmac_get_rx_hwtstamp(priv, p, np, &shhwtstamp->hwtstamp);
-+		shhwtstamp->hwtstamp = ctx.rx_hwts;
- 
- 		stmmac_rx_vlan(priv->dev, skb);
- 		skb->protocol = eth_type_trans(skb, priv->dev);
-@@ -7071,6 +7073,22 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv, bool enable)
- 	}
++	if (mas_empty_area(&mas, from, MAX_SPARSE_IRQS, cnt))
++		return -ENOSPC;
++	return mas.index;
  }
  
-+static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
-+{
-+	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
+ static unsigned int irq_find_next_irq(unsigned int offset)
+ {
+-	return find_next_bit(allocated_irqs, nr_irqs, offset);
++	struct irq_desc *desc = mt_next(&sparse_irqs, offset, nr_irqs);
 +
-+	if (ctx->rx_hwts) {
-+		*timestamp = ctx->rx_hwts;
-+		return 0;
-+	}
-+
-+	return -ENODATA;
++	return desc ? irq_desc_get_irq(desc) : nr_irqs;
 +}
 +
-+static const struct xdp_metadata_ops stmmac_xdp_metadata_ops = {
-+	.xmo_rx_timestamp		= stmmac_xdp_rx_timestamp,
-+};
++static void irq_insert_desc(unsigned int irq, struct irq_desc *desc)
++{
++	MA_STATE(mas, &sparse_irqs, irq, irq);
++	WARN_ON(mas_store_gfp(&mas, desc, GFP_KERNEL) != 0);
++}
 +
- /**
-  * stmmac_dvr_probe
-  * @device: device pointer
-@@ -7178,6 +7196,8 @@ int stmmac_dvr_probe(struct device *device,
++static void delete_irq_desc(unsigned int irq)
++{
++	MA_STATE(mas, &sparse_irqs, irq, irq);
++	mas_erase(&mas);
+ }
  
- 	ndev->netdev_ops = &stmmac_netdev_ops;
+ #ifdef CONFIG_SPARSE_IRQ
+@@ -355,26 +375,14 @@ static void irq_sysfs_del(struct irq_desc *desc) {}
  
-+	ndev->xdp_metadata_ops = &stmmac_xdp_metadata_ops;
-+
- 	ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
- 			    NETIF_F_RXCSUM;
- 	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+ #endif /* CONFIG_SYSFS */
+ 
+-static RADIX_TREE(irq_desc_tree, GFP_KERNEL);
+-
+-static void irq_insert_desc(unsigned int irq, struct irq_desc *desc)
+-{
+-	radix_tree_insert(&irq_desc_tree, irq, desc);
+-}
+-
+ struct irq_desc *irq_to_desc(unsigned int irq)
+ {
+-	return radix_tree_lookup(&irq_desc_tree, irq);
++	return mtree_load(&sparse_irqs, irq);
+ }
+ #ifdef CONFIG_KVM_BOOK3S_64_HV_MODULE
+ EXPORT_SYMBOL_GPL(irq_to_desc);
+ #endif
+ 
+-static void delete_irq_desc(unsigned int irq)
+-{
+-	radix_tree_delete(&irq_desc_tree, irq);
+-}
+-
+ #ifdef CONFIG_SMP
+ static void free_masks(struct irq_desc *desc)
+ {
+@@ -517,7 +525,6 @@ static int alloc_descs(unsigned int start, unsigned int cnt, int node,
+ 		irq_sysfs_add(start + i, desc);
+ 		irq_add_debugfs_entry(start + i, desc);
+ 	}
+-	bitmap_set(allocated_irqs, start, cnt);
+ 	return start;
+ 
+ err:
+@@ -557,7 +564,6 @@ int __init early_irq_init(void)
+ 
+ 	for (i = 0; i < initcnt; i++) {
+ 		desc = alloc_desc(i, node, 0, NULL, NULL);
+-		set_bit(i, allocated_irqs);
+ 		irq_insert_desc(i, desc);
+ 	}
+ 	return arch_early_irq_init();
+@@ -612,6 +618,7 @@ static void free_desc(unsigned int irq)
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+ 	desc_set_defaults(irq, desc, irq_desc_get_node(desc), NULL, NULL);
+ 	raw_spin_unlock_irqrestore(&desc->lock, flags);
++	delete_irq_desc(irq);
+ }
+ 
+ static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,
+@@ -624,8 +631,8 @@ static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,
+ 		struct irq_desc *desc = irq_to_desc(start + i);
+ 
+ 		desc->owner = owner;
++		irq_insert_desc(start + i, desc);
+ 	}
+-	bitmap_set(allocated_irqs, start, cnt);
+ 	return start;
+ }
+ 
+@@ -637,7 +644,7 @@ static int irq_expand_nr_irqs(unsigned int nr)
+ void irq_mark_irq(unsigned int irq)
+ {
+ 	mutex_lock(&sparse_irq_lock);
+-	bitmap_set(allocated_irqs, irq, 1);
++	irq_insert_desc(irq, irq_desc + irq);
+ 	mutex_unlock(&sparse_irq_lock);
+ }
+ 
+@@ -781,7 +788,6 @@ void irq_free_descs(unsigned int from, unsigned int cnt)
+ 	for (i = 0; i < cnt; i++)
+ 		free_desc(from + i);
+ 
+-	bitmap_clear(allocated_irqs, from, cnt);
+ 	mutex_unlock(&sparse_irq_lock);
+ }
+ EXPORT_SYMBOL_GPL(irq_free_descs);
 -- 
-2.34.1
+2.25.1
 
