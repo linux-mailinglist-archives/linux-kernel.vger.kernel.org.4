@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F99F6DC2FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 05:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7F76DC300
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 05:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjDJDiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 23:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S229603AbjDJDm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 23:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDJDiM (ORCPT
+        with ESMTP id S229475AbjDJDmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 23:38:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F126269D;
-        Sun,  9 Apr 2023 20:38:11 -0700 (PDT)
-Received: from kwepemm600006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pvvj35wCYzSrPg;
-        Mon, 10 Apr 2023 11:34:15 +0800 (CST)
-Received: from [10.174.177.30] (10.174.177.30) by
- kwepemm600006.china.huawei.com (7.193.23.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 10 Apr 2023 11:38:07 +0800
-Message-ID: <edec17ee-2a10-bdb1-a021-180831bbc57c@huawei.com>
-Date:   Mon, 10 Apr 2023 11:38:07 +0800
+        Sun, 9 Apr 2023 23:42:54 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E364269D;
+        Sun,  9 Apr 2023 20:42:49 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id y69so10357400ybe.2;
+        Sun, 09 Apr 2023 20:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681098168; x=1683690168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vqy+7HgrqhTA3y3Mm7XBf4JyoweihTIc8x6wEhmraPM=;
+        b=GawGlHsoA2kIbqxJQVRZov4meNamppKioPXApj9jwaZlnW0T1h2th4QNPx79j3GiR/
+         F6v4c+2G+5ZB9mjWuIF8KJmB2pClE0SinH6j5NERHHNGptlEAefSQ6hhd4guBykVIjh3
+         HqQYr8Fot0T7HfYUOyxUpJ/zv8Hb0Cr4lB6e3WtQSIPi5ISU3Qx1GOizP/bVfQI7s95e
+         Q8Ffof529tBogs5QxsSKCwHKHnPiY3O+fHpdjkm/dFQn528bnsKmx+/nOrAfCgrCpv0u
+         EzJjf5TWf92RSBwAMvhikLLUtOCx5gg7i03Gwd9RCiOXcX1ZO8vsIe2jm2KuIEylEvlv
+         mt3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681098168; x=1683690168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vqy+7HgrqhTA3y3Mm7XBf4JyoweihTIc8x6wEhmraPM=;
+        b=6wpcwxIfOY0cax/iCFX+KbFGZRxWtg8y5IsEq3jrHz5uwCh8lN6ycRNXBg7pCJ8Z4m
+         1r4Mh/EY9WnSKDIm4xHbyXN1WzoUyYL17MvtINgEpDke8Fr/iHM6so/43J+EugwxUSQi
+         DUWCmqDybt03rRqF+xvXCdu/afYPv9wBsOgGaaH0qKh7pr17cZB/uaK24MIUPWFYk2XI
+         hUFBaQX64tQ3UbeFC36QgDUA9mlVveIYDVE5yMwBg8g8ZoW0AHl1Gk53eyDDC6KrV4PX
+         OpuB//PzuYZYWY8YbEYMfc9OfQSU7L2P/V703OJraqsFLCP1oFftz+nUCLD23Dp/WOSx
+         BcNQ==
+X-Gm-Message-State: AAQBX9eWFFWEP3C14A2BDzGrnEKw0u8cJt27MQ8jDp3SKofi5nQnlk4K
+        V1qin+Yp1ViD8DtewVjm/NWYiCYJsEj/VOk3RJY=
+X-Google-Smtp-Source: AKy350Zg3LyywQHh550qv7aoJJHLaiYrdsf0Yzhcm0fkr1UkhpgZkbYWByN4y3ey5VlDLH0uEnvJF3KwvJHqgdhwgQY=
+X-Received: by 2002:a25:dad3:0:b0:b77:e465:cb16 with SMTP id
+ n202-20020a25dad3000000b00b77e465cb16mr6281632ybf.11.1681098168252; Sun, 09
+ Apr 2023 20:42:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] perf top: expand the range of multithreaded phase
-To:     Hangliang Lai <laihangliang1@huawei.com>, <namhyung@kernel.org>
-CC:     <acme@kernel.org>, <adrian.hunter@intel.com>,
-        <alexander.shishkin@linux.intel.com>, <brauner@kernel.org>,
-        <hewenliang4@huawei.com>, <irogers@google.com>, <jolsa@kernel.org>,
-        <linfeilong@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <mark.rutland@arm.com>,
-        <mingo@redhat.com>, <yeyunfeng@huawei.com>
-References: <CAM9d7cgK-P5KuDy7hkAR4j7oB4ydE6Mw3KexqgwPPhJF6MKtXQ@mail.gmail.com>
- <20230410025808.2008-1-laihangliang1@huawei.com>
-From:   "Wenyu Liu(D)" <liuwenyu7@huawei.com>
-In-Reply-To: <20230410025808.2008-1-laihangliang1@huawei.com>
+References: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
+In-Reply-To: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 10 Apr 2023 05:42:37 +0200
+Message-ID: <CANiq72kVpFMqk82Tx23GmBsLy3mwrPLEfPod=BvXsE-s4MCMUQ@mail.gmail.com>
+Subject: Re: [PATCH 0/4] rust: alloc: vec: Add some missing fallible try_* methods
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        asahi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.30]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600006.china.huawei.com (7.193.23.105)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello，I think Namhyung means only make it multi-threaded unconditionally after the synthesize
+On Fri, Feb 24, 2023 at 10:12=E2=80=AFAM Asahi Lina <lina@asahilina.net> wr=
+ote:
+>
+> Hi everyone!
+>
+> This short series is part of the set of dependencies for the drm/asahi
+> Apple M1/M2 GPU driver.
+>
+> This series imports part of a commit from Miguel in
+> rust-for-linux/linux, which adds missing fallible
+> mutation/allocation methods to `Vec`. These are generally useful to make
+> standard features available to the kernel environment, which does not
+> have infallible allocation.
+>
+> The additions in turn depend on importing two submodules from the Rust
+> stdlib, which I have attributed using the same commit message template
+> used for the original import of this part of the codebase. These
+> versions come from Rust 1.66, but also build on Rust 1.62 (the current
+> version upstream). I added the SPDX identifiers in a separate commit to
+> clearly separate the original code from subsequent changes.
 
-a patch like this:
+I have used the 1.62.0 versions to keep things aligned.
 
----
- tools/perf/builtin-top.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+More importantly, I matched the new fallible methods to those in
+1.62.0, since the commit used to import them was quite old and there
+have been changes since then.
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index d4b5b02bab73..60d00975b881 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1273,8 +1273,7 @@ static int __cmd_top(struct perf_top *top)
-                                    top->evlist->core.threads, true, false,
-                                    top->nr_threads_synthesize);
+Applied to `rust-next`. Thanks!
 
--       if (top->nr_threads_synthesize > 1)
--               perf_set_singlethreaded();
-+       perf_set_multithreaded();
-
-        if (perf_hpp_list.socket) {
-                ret = perf_env__read_cpu_topology_map(&perf_env);
---
-
-Right?
-
-Thanks,
-Wenyu
-
-在 2023/4/10 10:58, Hangliang Lai 写道:
-> Thanks for your reply Kim ,
-> 
-> 
-> 
-> On 2023-04-07 21:21   you  wrote:
-> 
-> 
-> 
->>  Not always, the synthesis can run in a single thread.
-> 
-> 
-> 
-> But I think in machine__synthesize_threads, there are thread_nr threads will be created to do synthesize_threads_worker(tools/perf/util/synthetic-events.c:970)
-> 
-> 
-> 
-> It’s not a single thread part. So we're supposed to call perf_set_multithreaded() before synthesize?
-> 
-> 
-> 
-> Thanks,
-> 
-> Hangliang Lai
-> 
-> 
-> 
+Cheers,
+Miguel
