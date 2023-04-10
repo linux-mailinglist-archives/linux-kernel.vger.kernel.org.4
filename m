@@ -2,194 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEBC6DC5D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BD26DC5E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjDJKol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 06:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S229655AbjDJKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 06:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDJKoj (ORCPT
+        with ESMTP id S229578AbjDJKvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 06:44:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592DB2D49;
-        Mon, 10 Apr 2023 03:44:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681123478; x=1712659478;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=uMDZf5kfQ8PiqQdt72D2Yy7AMh7+FC7V4a40vfjDfS0=;
-  b=Ljlz7SZFo0ROsx9hfNNMtik7/m5OaCwRakfMvGYln5P5k9ckO/GjRY3m
-   9UWXqTmkFsP4oEbOGPsaimWNELnGs2BUB4fNcMleFGJxl7NADZVd/av7u
-   dNoIAP9yDCeAJvuKqEMNDG0wC+eT7/ifx305pKsoViNYicR5U14LbKRR2
-   bGEGbkWSPD9zbpapcJXN/F6dVYlRQlKLJp+QyCOYWFutb/YhTBgUloo2J
-   SEUeWW7BplX4qnXLvfSHK5Qgj5Xm6UDb1SYfRQAxYL401u+RUxAI69W9U
-   4I06ot02/m7Wrmvk6IylGmGbYIv2Xm5NaXTp7bDFZqURSKgJGQl8Mpjjc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="342095271"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="342095271"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 03:44:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="752724044"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="752724044"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Apr 2023 03:44:37 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 10 Apr 2023 03:44:37 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 10 Apr 2023 03:44:37 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 10 Apr 2023 03:44:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UiZf6n8rzWso0mxMuq1BT9XLtXB4dr9IQD0fQu/+3tjexyMVhTBhLW9et+6pSxT1ZpxRupsPpa+5gGKEjUJL1riZcz0fdhnPdFxYPn/hkrtaPWLw+iPYFBzu/CvdCtUf49lxtNPk8AOcCdD1AfHm/olSFVoFIdGSpQzTt4VR1E2GpVI/7gqCno8nPpfLctgGPAjHntOFNnLnkISkccTX6epR4n3q3Ktsgj1TVOZbY928T4dGRcEADGzp6VqsMTAXLFWqSC9bKcJFnPRmq36b9/xP/7s76ONu/xlAK9qk79tjuvUJk8fa0iW5u/M87Y13QQNH48qr8WmsRbjOnw3atg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gwiGe7EvpS53Vyw6MOvKdXn+w+pw24z05Ux3gH6wOcc=;
- b=a6aPXhVmqvK6N03fkib8OsQF5jSRFeehqju2GXco1YZKgpf+PncPfhT6bOkZk6We6E5hjM5ddo9AGgDZuuIblQKrcPbNpk5SqdVEejLbK2pJgfHFRoIMx0rM9ori6MCVy1qSUybOJyuRAuVegcJ5qGpSFvnm5WcmHfftx1KQJfrZ/NTC+N82kquqPcnafK5Jtvwdo3XrpQyNyh2XsEnS2Xq4bDOHn7a69FtQG/hzORI/4euPDoh5tXNAabeO2mpDei5yt+7D8+1pZsV6uFAXgGgbBW68ecHj+uvWo9QLMDMJtrBrrLEJC/tCk+7nrFKEwmf8TzItpeAUrx7AZA49Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com (2603:10b6:3:8::9) by
- CH0PR11MB5505.namprd11.prod.outlook.com (2603:10b6:610:d4::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.34; Mon, 10 Apr 2023 10:44:34 +0000
-Received: from DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::3d44:4cb0:ccca:2afd]) by DM5PR11MB1418.namprd11.prod.outlook.com
- ([fe80::3d44:4cb0:ccca:2afd%7]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
- 10:44:34 +0000
-Date:   Mon, 10 Apr 2023 18:44:34 +0800
-From:   "Ye, Xiang" <xiang.ye@intel.com>
-To:     Oliver Neukum <oneukum@suse.com>
-CC:     Ye Xiang <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Matthias Kaehlcke" <mka@chromium.org>, Lee Jones <lee@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>, <linux-usb@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <srinivas.pandruvada@intel.com>, <heikki.krogerus@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>, <zhifeng.wang@intel.com>,
-        <wentong.wu@intel.com>, <lixu.zhang@intel.com>
-Subject: Re: [PATCH v7 3/6] Documentation: Add ABI doc for attributes of LJCA
- device
-Message-ID: <ZDPoku+k+S65cmeQ@ye-NUC7i7DNHE>
-References: <20230325154711.2419569-1-xiang.ye@intel.com>
- <20230325154711.2419569-4-xiang.ye@intel.com>
- <b1eb8356-4519-4c95-b3ee-afc142b8d17f@suse.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <b1eb8356-4519-4c95-b3ee-afc142b8d17f@suse.com>
-X-ClientProxiedBy: SG2PR02CA0138.apcprd02.prod.outlook.com
- (2603:1096:4:188::12) To DM5PR11MB1418.namprd11.prod.outlook.com
- (2603:10b6:3:8::9)
+        Mon, 10 Apr 2023 06:51:18 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8730F0;
+        Mon, 10 Apr 2023 03:51:17 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so8145273pjl.0;
+        Mon, 10 Apr 2023 03:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681123877; x=1683715877;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+cp0LISv+vmAv0weVi7Q9coFk87WvNHn1cuZazLIFrQ=;
+        b=UWZnw8gSDXYiAJ+8F2FvaYplF/UPRX47cLChbsqgLgkFRS2MVmAOJgXDRZbHY+l4eQ
+         1MsRhefnbEuq7Axvoyuo58h3+0kwmPgC6mLaimjSLyyw3P5CK8kW+AISyfq8GIZ85N2x
+         dvIYSbGiStrSxMF/A/RpeKoO7mb9L9meC9pQbZf38N34/MwmyvQyX/F2eTSLAPXpwu7f
+         QhOeVXFL937ptHt/zK3g80/AM50yxyHDyEoWavE05DyAhDT7dcC9T9PGK1OULuIWdbkL
+         256MpQFzzVHSXt1nzluElYayliiZFFKmaofztVQEtvAmQQr4QUnMzwv+FCHxSiPlqf6G
+         zPQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681123877; x=1683715877;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+cp0LISv+vmAv0weVi7Q9coFk87WvNHn1cuZazLIFrQ=;
+        b=jv+3Tt3Jvs4BOD05rJRmpPZmfjsX2skVCfcxBw3d17IHtDb4r6WzhpVxKt8XQk7pCf
+         GT7dK8cl15qHH8O9WtFIqMeAPgp/53IHADb2z7RiERdlWdkPmxa+3mlpAeq6OorXuJzt
+         ZBiUEsRcS/a3YCZfo9Y2+Y1rntJCM1/QOsos1kC8mVIyYH8XJDdQlsj9jebeif9EVHE1
+         gqcGZfu0TVEoVcUrBzGYvpobgkDX0Ik2JvM8/gSjfkldPK74lJcCVk9c1zuZAR39WsWU
+         Pznc2d6e9X2rmOHn4e4T5mHQQQfE6Qxu1Kfbg0gn0e2OqP1MAOOLryB2J/friPRgfnm3
+         KMQg==
+X-Gm-Message-State: AAQBX9c5n0sonu22imSZMcjZO3bx0Ql1xRmZcpW5z5zFKKSki8BHR489
+        jXGe3rbY2TO7pSZXjFVjSow=
+X-Google-Smtp-Source: AKy350ZuICfQJZzyZu9eJdhs0SVyCK/YqIlcqrfog3QvwFuUCEJL3RvaveYKWc/BuC2HsaZrSqTOVg==
+X-Received: by 2002:a05:6a20:49a8:b0:cb:ec5f:3c5b with SMTP id fs40-20020a056a2049a800b000cbec5f3c5bmr7381349pzb.18.1681123876827;
+        Mon, 10 Apr 2023 03:51:16 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id h4-20020a056a00170400b0062e032b61a6sm7783252pfc.91.2023.04.10.03.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 03:51:16 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V5 00/10] KVM: x86: Add AMD Guest PerfMonV2 PMU support
+Date:   Mon, 10 Apr 2023 18:50:46 +0800
+Message-Id: <20230410105056.60973-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1418:EE_|CH0PR11MB5505:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ef2d7bd-d9e6-4eec-88aa-08db39b09283
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zCGZ5k5a4XEPd1t5DikqipA0uXMhrVOSBde0IcyWZghA5OlMdwFeq4N2uiuU6kgAAOGM75UXO0rpYOgjlk+syVFXNYZclCRA55yjERdKz8a9DtFdAjOI6ivFtaCgsQOBjcm6m8r5yW/s9YnPOvyCaF+vPl5eIe44PYrCsLYEm9sSNQeNGjZ577KbNZqIqAG/gA84EJndxsx9wZGd262cnrq2OHiTVhzylM4UXZSC+pzeZLHmgD6uzEyzkCXZAj4X/PhxoYfj9qiPJeGylcREvjlZz01nW/IPyd5bl2laPkIw7V0H7KspYym/kTfqUYA0IjFuQP+hQzaxiqGgT6uJPCmUAPE2GKeTGAR7ujxPcRs5212ErjmFq5XtPgd549qerAt2b/etbOY1G8vM7qDNlocoxkdQfc7bFWCB/o9D5iVDse55wF/LWwCntLSNCWhSKhypR0CYx/j8H3Sl7l9sxFnwq/IiknPbEPsAdsTgeIqiCmGr2queyFnFuKd5/v15i4BALZsufx9TXSojwzc8V4h0B5BEcfl1EQGZWABKGExxINBvtO+DVXttfV9A2TvT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1418.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(396003)(366004)(346002)(39860400002)(376002)(451199021)(5660300002)(38100700002)(2906002)(7416002)(8936002)(86362001)(8676002)(66476007)(6916009)(41300700001)(66556008)(66946007)(4326008)(82960400001)(83380400001)(26005)(316002)(6512007)(9686003)(6506007)(53546011)(33716001)(6486002)(54906003)(478600001)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4XvPAuYxtzv5N1aaLen6s8snriIC5L/I2PAi+zVpv3p+7E7fUq1I7soUr028?=
- =?us-ascii?Q?yUFcu42Byb6ZUM8qY8moI+NxsyMzrKIRjpPbPFuazUZWPYDpYbrdxJbXYS8p?=
- =?us-ascii?Q?KoRDhTKvoai8+9H9VptVq2iTh4oJxVgp4xRcaX8gGLR6cduDsz7DMxHGDL2c?=
- =?us-ascii?Q?tVBn/+Wfbr/O6q2SIYZgIpAiWNdyf4+G26UGTaknV0+QGv1avxymEZLvlyQh?=
- =?us-ascii?Q?20G8rg7UPE2EMmVyN6viSj5Qwe3DBwDlukOTdlryczysseThLST3KXvccb8x?=
- =?us-ascii?Q?5vpyLpUCBzUHQI0Q4HI65F1PiDPHFfOd3TRZuON4RsDInFvNBpcO2IzIrj6P?=
- =?us-ascii?Q?7r4p9VIvVm6nH1EkQKOS33DYQyACvSqP4WjH6u0JyKis29axM1W7PtSBhsH8?=
- =?us-ascii?Q?cwnofWp+7UaqsqedsRTGIXkOj62abUagG5r+pkxWHLSvm8kYg+ye/Mg7OB9Y?=
- =?us-ascii?Q?y+4/poLHFpV032oOUsEHCNse9GGfZrFgBqaqJyLoO/2RHx5HS8Wnv2X5SJ6s?=
- =?us-ascii?Q?jnbMQ5MfhX9iROA5G8TwfFWTAn6sA2caS7gDTFr9y7UBIq/nVMI75qHdvIdR?=
- =?us-ascii?Q?lJ1eV7ZjXnZ9B4x8GSGlQm9j1RlS46QEXcqgujmJNncDDpHAED43uI5sMAU4?=
- =?us-ascii?Q?led77/jle6oJwf3hyut8RyxNdr8BUmKcxbIsNmuqHO6rjhdgLETcbmXUvyWE?=
- =?us-ascii?Q?04bQtf6xBaiSd9B17AaZH3228t5pv0vI8WjdsYGviFU/EKVa9eapJE454lHY?=
- =?us-ascii?Q?ZsFVoMWcJCjC+5vgDfVIJqczpvTu3Nr8HQq0PIdZ9zh3j1J5B0wT+tvlwflp?=
- =?us-ascii?Q?zoDVCLev3tqlH43N2daXNm8g3/MnhvSCOaZ1113Vex3kHvcHGtGDEA7LWf/b?=
- =?us-ascii?Q?trWLL3XGPPPOaSJNBoPYpkcKrF2wSx/dj5RKZd+NuWgCBFVup8+RNTi/Cajm?=
- =?us-ascii?Q?fJU8HPVlRtxGcoYEKajVIVwPIVwH18KkmUsLU+vsSxYx+875EBbLGhJP+GQP?=
- =?us-ascii?Q?v+mgFCBZYHxalZ1MKUXe4Dm0gELxR5xz/ll3rhRMPWGCqJPtNClNCHmq9MaV?=
- =?us-ascii?Q?TYd/9CE7BrWIfKMNyOTKJb1LegwJXRVbCZPw2HRZkp11bK37Riw6ZDiR43Cf?=
- =?us-ascii?Q?Hre+XtOiY2gCUrwHjjcbET6CZjN/7zfiXH17ntNgKVlo1YQZm9asoZO4j/jr?=
- =?us-ascii?Q?T967dU8rRqHjEQkQXUpzgOOyJHiEh1hMDDNmTPN8Rp2u43v58BmHAdJHOGFU?=
- =?us-ascii?Q?BRsZe/HIwL3tCYkhhWz0odBIPnRgmjP7pczpLc20H1cpFtBIeOztCSix8jsg?=
- =?us-ascii?Q?0vlAXvRivV8GTjeJzCyVIXj0+8labtNxKw0UQfPxTayYimEwLoslvaMqscOD?=
- =?us-ascii?Q?3pDKcxXXzdalDb1IJUS6cbKpJ3XLj8YJ+c8ijZMS3vTQEunIQfSWT+3f1Lpt?=
- =?us-ascii?Q?LeeV7zlHbTkTHx1LvOXEQQCT20ewQDr/FQNtB0kST6Qjz9YGb9XB4m3dVdQ0?=
- =?us-ascii?Q?lYw1tcH67+adcCxoUgyL6+xrQJgUIgXRaoxSGHaqFmVEuOvocxNKoK1mOcg8?=
- =?us-ascii?Q?r+YLCUN6oV1VXk/86fyrzDp8fLa00DdfJ8HIPBuy?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ef2d7bd-d9e6-4eec-88aa-08db39b09283
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1418.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 10:44:34.0889
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RdENQCrHpkAtK8etC5dC8hmuj3sBrDC1dUYefx6BPTCmKxxYCpBkuE74TJjwj8n+NMbLCwCkfasE/E7YyPSZVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5505
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver
+Starting with Zen4, core PMU on AMD platforms such as Genoa and
+Ryzen-7000 will support PerfMonV2, and it is also compatible with
+legacy PERFCTR_CORE behavior and MSR addresses.
 
-Thanks for the review.
-On Tue, Apr 04, 2023 at 10:53:48AM +0200, Oliver Neukum wrote:
-> 
-> 
-> On 25.03.23 16:47, Ye Xiang wrote:
-> > Add sysfs attributes Documentation entries for LJCA device
-> 
-> Hi,
-> 
-> do we really want each driver to have its own attribute for that?
-> It seems to me that that should be unified.
-Three ABI entries are added in this patch: ljca_version, ljca_trace_level,
-and ljca_enable_dfu. The first two items are specified for LJCA device and
-I think they can be kept in sysfs-bus-usb-devices-ljca.
+If you don't have access to the hardware specification, the commits
+d6d0c7f681fd..7685665c390d for host perf can also bring a quick
+overview. Its main change is the addition of three MSR's equivalent
+to Intel V2, namely global_ctrl, global_status, global_status_clear.
 
-But for ljca_enable_dfu, I didn't see a unified DFU entry in sys-bus-usb.
-I am not sure whether other USB devices have similar DFU mode or not.
+It is worth noting that this feature is very attractive for reducing the
+overhead of PMU virtualization, since multiple MSR accesses to multiple
+counters will be replaced by a single access to the global register,
+plus more accuracy gain when multiple guest counters are used.
 
-Any suggestions?
+All related testcases are passed on a Genoa box.
+Please feel free to run more tests, add more or share comments.
 
-Thanks
-Ye Xiang
-> 
-> > +
-> > +What:		/sys/bus/usb/.../ljca_enable_dfu
-> > +Date:		July 2023
-> > +KernelVersion:	6.4
-> > +Contact:	Ye Xiang<xiang.ye@intel.com>
-> > +Description:
-> > +		Writing 1 to this file to force the LJCA device into DFU
-> > +		mode so the firmware can be updated. After firmware
-> > +		updating has been done, the device will back to normal
-> > +		working mode.
+Patch 0001-0007 could be applied earlier, which may help reduce
+the burden on industrious reviewers.
+
+Previous:
+https://lore.kernel.org/kvm/20230214050757.9623-1-likexu@tencent.com/
+
+V4 -> V5 Changelog:
+- Avoid pronouns in the changelogs and comments; (Sean)
+- Drop the assumption that KVM can blindly set v2 without changes; (Sean)
+- Grab host CPUID and clear here (instead of setting); (Sean)
+- Clarification of behaviours from spec-defined and HW observations; (Sean)
+- Drop the use of the intermediate "entry"; (Sean)
+- Use BUILD_BUG_ON() to avoid potential null-pointer deref bug; (Sean)
+- Add a patch to cap nr_arch_gp_counters in the common flow; (Sean)
+- Add sanitize check for pmu->nr_arch_gp_counters; (Sean)
+- Rewrite changelogs which doesn't depend on the shortlog; (Sean)
+- State what the patch actually does, not "should do"; (Sean)
+- Drop the useless multiple line comment; (Sean)
+- Apply a better short log; (Sean)
+- Drop the performance blurb; (Sean)
+- Drop the "The", i.e. just "AMD PerfMonV2 defines ..."; (Sean)
+- s/hanlders/handlers; (Sean)
+- s/intel/Intel; (Sean)
+- Drop useless message on pmc_is_globally_enabled(); (Sean)
+- Tweak "return 1" to follow the patterns for other MSR helpers; (Sean)
+- Add assumptions about reusing global_ovf_ctrl_mask; (Sean)
+
+Like Xu (10):
+  KVM: x86/pmu: Expose reprogram_counters() in pmu.h
+  KVM: x86/pmu: Return #GP if user sets the GLOBAL_STATUS reserved bits
+  KVM: x86/pmu: Make part of the Intel v2 PMU MSRs handling x86 generic
+  KVM: x86: Explicitly zero cpuid "0xa" leaf when PMU is disabled
+  KVM: x86/pmu: Disable vPMU if the minimum num of counters isn't met
+  KVM: x86/pmu: Forget PERFCTR_CORE if the min num of counters isn't met
+  KVM: x86/pmu: Constrain the num of guest counters with kvm_pmu_cap
+  KVM: x86/cpuid: Add a KVM-only leaf to redirect AMD PerfMonV2 flag
+  KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+  KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
+
+ arch/x86/include/asm/kvm-x86-pmu-ops.h |  1 -
+ arch/x86/kvm/cpuid.c                   | 30 +++++++++-
+ arch/x86/kvm/pmu.c                     | 83 +++++++++++++++++++++++---
+ arch/x86/kvm/pmu.h                     | 32 +++++++++-
+ arch/x86/kvm/reverse_cpuid.h           |  7 +++
+ arch/x86/kvm/svm/pmu.c                 | 67 +++++++++++++++------
+ arch/x86/kvm/svm/svm.c                 | 19 +++++-
+ arch/x86/kvm/vmx/pmu_intel.c           | 32 ++--------
+ arch/x86/kvm/x86.c                     | 10 ++++
+ 9 files changed, 221 insertions(+), 60 deletions(-)
+
+
+base-commit: dfdeda67ea2dac57d2d7506d65cfe5a0878ad285
+-- 
+2.40.0
+
