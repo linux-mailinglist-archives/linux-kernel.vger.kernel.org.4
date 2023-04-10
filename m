@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E986DCE3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531C06DCE42
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjDJXmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S229806AbjDJXqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDJXmA (ORCPT
+        with ESMTP id S229591AbjDJXqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:42:00 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00E01BC7;
-        Mon, 10 Apr 2023 16:41:58 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id z9so6304319ybs.9;
-        Mon, 10 Apr 2023 16:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681170118; x=1683762118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2wHFed80X0tDB7uZIMKZwq8AtXe8sVS2+RdD7BlqWJ0=;
-        b=NCUGnMiSZ6pkOvrhy1awB8Mp0kC037Dn24U2kKhyGY5arhtIoF9JOwTtLLjDJ29ghK
-         HYRyjAGHdHWiXtmvajuzgBLBiqilfiW793sO/A6iZ/X180NQHkynsurfdnKu05S3eDHm
-         vr8oPf7qw2lSgtsiIyisxUEKfwMJTtOafdBFp8TpFUTqmjJvlPPnaGEaqSu9ntn+GgLk
-         nsHbVPZbnZRciTdWSU5W3dObfxn5xnThdw3HGLL0iL0BynQ23ZltxCTxyOVRGcXLq5Nj
-         aqIaU/8jC9dAl5X/0f99buX8CfzRYIFT9qUEIgYmUADWs4e8BILhiDprhpdZiCogWxyw
-         BvFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681170118; x=1683762118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2wHFed80X0tDB7uZIMKZwq8AtXe8sVS2+RdD7BlqWJ0=;
-        b=79nF2l4ufsgDeuPOgJ5H+pCPIzPP5XEI8oOq9xPFqk3cwEfE8Uoz5rraMiLPWIShfp
-         xzxs8pgLtPO6LPmSuNbWSw4PMq2OSW9AE9z65/C8z5zo18fhctyryR8jynJD1vP6sZfq
-         yIbQYuH0AzQrRiz7KU+0isQWtv3E07bXKDKMULF/4ppWd6LLWB5BNL1vTMX2dFcZsHpV
-         r6hua0PxRQUh9uk0T2kTKRF8uAugLYGsWKu8+kpgh8YLGgWVhqzhkGhjsymS5MKkeCNr
-         DeJ+ts96iSEKQqZDbxd2PlXHW6J/K10X4WjDXYNdsFZX24josOpVsRtZSkvBFlIyXEyq
-         fiLg==
-X-Gm-Message-State: AAQBX9cZ/xMK6hxM36uLf7S1Ef1UMYxWUOwIS8tPfUIt7ACshJQEEgGu
-        fKUgdM1ouvhO2LXzW8ReuqRHAv3/Zj8zISOTOEQ=
-X-Google-Smtp-Source: AKy350ZMKc++209kJg1zVkgj3yQq/NKejP9VbGC6SebYPA8wazTUNWYAIGuf1hZCg27F8xbh7+svzQIL1y+oht0gyoI=
-X-Received: by 2002:a25:e0d5:0:b0:b31:34ab:5ca0 with SMTP id
- x204-20020a25e0d5000000b00b3134ab5ca0mr4048180ybg.11.1681170117817; Mon, 10
- Apr 2023 16:41:57 -0700 (PDT)
+        Mon, 10 Apr 2023 19:46:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521A3127;
+        Mon, 10 Apr 2023 16:46:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE9C62025;
+        Mon, 10 Apr 2023 23:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B11CC4339C;
+        Mon, 10 Apr 2023 23:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681170375;
+        bh=ba5WN/ob26DX2j1mfRdkuBNwsPAtlnnuxEuuEqLz1C8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H9YruaKzVwG77HOg7V50SBlKkzs0L51pVIn+o0XlRzgSEeQjCTLCBHL51cp/Pp47o
+         4meAL5FtIiOMAXUiAhwr+S0s1SbsahrRtnTBu0BmUMHxF+N2b4fups362WRhGzpom3
+         UqjN5KrpLNBc47sK33HYzc7saKKl18CJdgLvfQOuHVpqwC4I60cWc81/oNF4HD1b7b
+         4795Id9pICDUj6QqoRtwa6hwmGN4VRK/lFbWPi6LHgL4Qt6unw+SHd9lAgcfslVrQg
+         4vbGwzl5SfkOJ8/VyMtwnRhN9VY5ed8DnLNxZEwcGBS3IAH8MkvkEU+XtE8ktRrJIz
+         8IsEikzPeRBBw==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1845f865452so2611157fac.12;
+        Mon, 10 Apr 2023 16:46:15 -0700 (PDT)
+X-Gm-Message-State: AAQBX9clFPArgb4f60u1I5nxGHXoGERmXwI2wPagk15rlFvih0QZb5aF
+        WHaGUQ5ds8R5lmG2x7QbBuTceKCFBK3QpCxPI/Y=
+X-Google-Smtp-Source: AKy350ZILWCd+oIsHOLpDJRwibeS8dcr/Le5Iys4XOH5R1JLJZkWZsJVo3kbTpNawnM7wvQ91VsMZSb/BF4gabBP9RQ=
+X-Received: by 2002:a05:6870:e989:b0:17e:d308:7790 with SMTP id
+ r9-20020a056870e98900b0017ed3087790mr5598150oao.11.1681170374514; Mon, 10 Apr
+ 2023 16:46:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
- <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
-In-Reply-To: <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 11 Apr 2023 01:41:46 +0200
-Message-ID: <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-To:     Hans Petter Selasky <hps@selasky.org>
-Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
-        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230410011316.26564-1-rdunlap@infradead.org>
+In-Reply-To: <20230410011316.26564-1-rdunlap@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 11 Apr 2023 08:45:38 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
+Message-ID: <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
+Subject: Re: [PATCH v2] sparc: allow sparc32 alias for archhelp
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 8:59=E2=80=AFPM Hans Petter Selasky <hps@selasky.or=
+On Mon, Apr 10, 2023 at 10:13=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
 g> wrote:
 >
-> Adding a dependency to build the Rust compiler even to build one or two
-> V4L2 device drivers, would mean a lot to my small hselasky/webcamd
-> project. It already has to fetch a copy of the Linux kernel, and now has
-> to bootstrap Rust from stage0 to stageN. I personally say no. It's like
+> Currently, entering
+> $ make ARCH=3Dsparc32 help
+> prints the archhelp text for sparc64.
+>
+> Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
+> to be a recognized alias for 32-bit sparc, also support that
+> string in sparc's archhelp by allowing either ARCH=3Dsparc or
+> ARCH=3Dsparc32 for sparc32 archhelp.
+>
+> Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> v2: rebase/resend; add Masahiro to Cc: list
+>
+>  arch/sparc/Makefile |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
+> --- a/arch/sparc/Makefile
+> +++ b/arch/sparc/Makefile
+> @@ -83,7 +83,7 @@ vdso_install:
+>  KBUILD_IMAGE :=3D $(boot)/zImage
+>
+>  # Don't use tabs in echo arguments.
+> -ifeq ($(ARCH),sparc)
+> +ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
+>  define archhelp
+>    echo  '* image        - kernel image ($(boot)/image)'
 
-Do you mean you need to compile `rustc`? Could you please explain why?
-Could you use your distribution's, or fetch the standalone installers
-or cache your own toolchain?
 
-> XCode unfortunately. I download 100's of GBytes of upgrades to XCode,
-> and barely upload one millionth worth of code back to Apple. It's not
-> good. Software developers shouldn't have to download more stuff than
-> they upload?
+BTW, this is strange.
 
-The Rust standalone installers are 2+ orders of magnitude lighter.
 
-> The definition of "bugs" may vary of course. I was thinking more like
-> stack exploits, missing validation of arrays and so on.
+The asterisk means it is built by 'all'.
 
-The kernel definitely needs to avoid those. What do you mean?
 
-> I must admit I'm not a Rust guy and don't see the advantages of Rust
-> like you do.
+But, I only see the following in this Makefile.
 
-The advantages are fairly clear. The question has always been whether
-the cost is worth those benefits.
 
-> Why not move Linux-V4L2 drivers to user-space? In my opinion Rust is
-> much more easy to get going there than at the kernel level.
+# Default target
+all: zImage
 
-That sounds like an orthogonal discussion.
 
-In any case, please note that you would need to install the same Rust
-toolchain to compile them in userspace. So, if you are concerned about
-the size of the toolchain (as you mention above), it would not really
-make a difference.
 
-> Rust is slow based on my observations building Firefox from sources. The
-> Rust compiler spends a significant amount of time per source file.
 
-It is slower than compiling C, but it also provides more features, so
-it seems fair for what we are getting in exchange.
 
-Cheers,
-Miguel
+Seeing arch/sparc/boot/Makefile,
+it is true $(boot)/image is generated
+as a side-effect of zImage, but it it true for
+both 32-bit and 64-bit.
+
+I think it is even better to rewrite archhelp
+to unify the 32/64 bits.
+
+
+
+
+
+>    echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
