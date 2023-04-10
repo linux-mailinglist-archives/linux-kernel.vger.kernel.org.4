@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23926DCD4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341DE6DCD5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjDJWNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S229702AbjDJWQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjDJWNe (ORCPT
+        with ESMTP id S229662AbjDJWQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:13:34 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1649C10E2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:13:32 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id q5so8968778ybk.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681164811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=emJXX1tWaFzEtlDfswfF2P0R3+dXu3v3TR+PG0ckaR4=;
-        b=irEsiTCQL1z/ZrlkuvbYltSjPuSv0cEn9s/tlAidxlxHKhdtR4MI3gJMHThyvFiMzZ
-         10J23MWpxEiOaeFUhoXhBBTFGWdlHjJnHCoEhTsCzvsFo9jQY4VtNQjXTCgJLZJHsiEa
-         Mc/J9E5ww8HLWCPZRlfpgHg/Xx62Bu2pf95vsQ/L71ia60anP+xdO3SpHoD1tPDp8xoy
-         Vz4nxNFLGMeaQkaasO4wgQS1qtJcb5bm+fs5/fzMAvArvD6EGPA4vA2LU9p0AfsJbPC0
-         QlLg7NOkcXfDPq7LZFHMLhcN4PE9gz72uTrOiM+hKd4RL1JHEXonVmmR7y6g5Pf4i3MT
-         1geA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681164811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=emJXX1tWaFzEtlDfswfF2P0R3+dXu3v3TR+PG0ckaR4=;
-        b=KzoigvrtM1LzTVkDBEZt2pl7VMffdio0g5GpAVjNn8+cC7cpTwym2UmKVH2v6+rcw5
-         RQJA1Pok02CP3zfYCNlv46ZRDiDhoGuhLEmsYo+KipNcAL6sPfVv9H7gFnAiT3m3RjYo
-         26NOKEVXiObnZgswvZdm1xX6pi7CGegEm+VYoh+1Q7IVvFVbTqwiNkDHY8mO4JLBZHeW
-         Iqb2g0Ec1bBVW6WTG0DGQ3shStLmBN5Rd47L6DKM9Cy/2R7/uq3Mt+VQeg0d7wVZ5L1p
-         69Tw/YVsNhBYnrTrGkjDI/FbaNTsYHvL7m4m8ebjdiQoAufHDuNRMNyxrYw93YGLpBmO
-         SeSA==
-X-Gm-Message-State: AAQBX9e555SheewAGmSqFLG4Mfm0znRMqf6cuFn6x+E8WHtCNSmfk+Z9
-        rbllFCUTNTK82/LUmOVQlj3JdqgI83kjfxC6HUuYBo9VZy7KIqGf
-X-Google-Smtp-Source: AKy350adMvcP5fh7YH7iAuPRCjpj2UN11sndlgPZfxBGcCytrueCQltV4rvwNVQ3w6r9LjMg4xdfJQOwja237vL9p2Q=
-X-Received: by 2002:a25:cac5:0:b0:b8e:d126:c64 with SMTP id
- a188-20020a25cac5000000b00b8ed1260c64mr187298ybg.4.1681164811332; Mon, 10 Apr
- 2023 15:13:31 -0700 (PDT)
+        Mon, 10 Apr 2023 18:16:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5D1131;
+        Mon, 10 Apr 2023 15:16:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A8561BBB;
+        Mon, 10 Apr 2023 22:16:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23394C433D2;
+        Mon, 10 Apr 2023 22:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681164981;
+        bh=5+Vu0u8xhRv+uGKlrUrXGJWww7elBjf7lpZ/udtRXIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W+zZZdzmUhDI2HaplyaSNTFoYCux9ZRWCLyThuYsbf21iwcyNfQpjshv6K+FYC+Wo
+         M+Hns6Vi7+6VmjXz0F8skEmwAnyXDA8HfM1ppuRIGz32fWXr6YyK2kAHCxyXR15THB
+         dlj+I6VX+0RCOvnQyT2kbDil27uNlorqkM6yn1FC8ORU/Hz3MlWat28yYIxdhQyQ/+
+         wPkMLzRlOTTMDuTlXY47K0zZWseqbAF8jGSgeCJIXk+4gp+ggMo4ecbv0CTePQT8i4
+         A1wHqCvGFAZ92aTAFWUxYEDlXEDQcTyExABTxc2NTekTG7PpUIGyakkmZfLi55ZN2i
+         JsXj2ayQjTCZw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9BB7F40009; Mon, 10 Apr 2023 19:16:18 -0300 (-03)
+Date:   Mon, 10 Apr 2023 19:16:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Write json and csv test output to test files
+Message-ID: <ZDSKsqkZkV/2AB5p@kernel.org>
+References: <20230408054456.3001367-1-irogers@google.com>
 MIME-Version: 1.0
-References: <cover.1680708357.git.william.gray@linaro.org>
-In-Reply-To: <cover.1680708357.git.william.gray@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 11 Apr 2023 00:13:20 +0200
-Message-ID: <CACRpkdZA7BUv0EeGjjEQ=Xk=WiDUSeTm4pgpxknN9qzNgc+19w@mail.gmail.com>
-Subject: Re: [PATCH v6 0/3] Migrate the PCIe-IDIO-24 and WS16C48 GPIO drivers
- to the regmap API
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, techsupport@winsystems.com,
-        pdemetrotion@winsystems.com, quarium@gmail.com,
-        jhentges@accesio.com, jay.dolan@accesio.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230408054456.3001367-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 5:45=E2=80=AFPM William Breathitt Gray
-<william.gray@linaro.org> wrote:
+Em Fri, Apr 07, 2023 at 10:44:53PM -0700, Ian Rogers escreveu:
+> Avoid problems where debug/warning messages would break output
+> formatting.
+> 
+> v2. move the XXX with mktemp to the end of the template as required.
 
-> Changes in v6:
+Thanks, applied.
 
-Excellent and persevere work,
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+- Arnaldo
 
-Yours,
-Linus Walleij
+ 
+> Ian Rogers (3):
+>   perf test: Write CSV output to a file
+>   perf stat: Don't write "started on" for json output
+>   perf test: Write Json output to a file
+> 
+>  tools/perf/builtin-stat.c                     |  6 +-
+>  .../tests/shell/lib/perf_json_output_lint.py  |  3 +-
+>  tools/perf/tests/shell/stat+csv_output.sh     | 58 ++++++++++++++-----
+>  tools/perf/tests/shell/stat+json_output.sh    | 48 +++++++++++----
+>  4 files changed, 84 insertions(+), 31 deletions(-)
+> 
+> -- 
+> 2.40.0.577.gac1e443424-goog
+> 
+
+-- 
+
+- Arnaldo
