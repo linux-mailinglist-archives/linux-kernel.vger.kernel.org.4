@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EE26DC850
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A32B6DC852
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDJPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 11:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S229880AbjDJPVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjDJPSd (ORCPT
+        with ESMTP id S229663AbjDJPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:18:33 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAB126B9;
-        Mon, 10 Apr 2023 08:18:32 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id h24so5055795plr.1;
-        Mon, 10 Apr 2023 08:18:32 -0700 (PDT)
+        Mon, 10 Apr 2023 11:21:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED5846B9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:21:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kt17so1052156ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681139911; x=1683731911;
+        d=linaro.org; s=google; t=1681140070;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZNcPr+y8/9NjCaWwABJXLJwupkaQ1Z2WNyPOrf8WwE=;
-        b=jgaQXxIHyIWuIAEj9p4DjxTrEnsP0IoU5gMNUYk7ZDSEFhjZlVBWz18Yb4Aj4JSsRC
-         4tHoJEWhqC7fbgUGNhXWEr1tfF6ru6kN77WmMzl+/3h+2ONsFoLDLq8gK5a+e0Zu+nLP
-         kB4MKBzR7bixSSHSUqD8D0139p6F9ueVpwqSFx+FYcRB56YGIJorVznmRE5kojSRKecZ
-         GDzyUbOEKl+Q9gQwpV3yJ/OFq48V6HCbKRJV639xV2G9jyLPwbj92nKuIkVs0IHdBuOJ
-         qqUGB2/EfqA3amxl4DoeroVN8mTeRrvsxnMg0+rHOsHJEIAWXv3mjxkNWNFTIxDu37Ov
-         I+qg==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZRw2wqvE/1MC1yZ0G5iCqLIwh8QF13oSGU/qO0zu+o=;
+        b=NYo/3/coo0c/yMIO7bncY2O4PQowzUY4HreJOHBoBdj/x/RT9LPYs4ujUtFPQI+WqW
+         Bxc9fR08xu5vm9VS6WFaCprSpdIAtUR6LsjR9LnFAETjS+VrCEtoYq3PzHzsqy/M4Uls
+         d6+XvtbngL3LscT0riA721aHMiTkyQjxPYRDQfqlV8BTrWJH6AzeZ2LeRg9rsVNtoZmJ
+         hVp9RTmhyPI8hSl0Qp0w8iv9r2bbaeu1jgXTcqpn2kb/x9clBGSQLRfPu7BZxokZZGwq
+         Z9zuTz6iZZvKScRfWUaqJOebbbRn/wyv2jQ7p1YharDKr3joVIx9E9uAp1SRaR0ByNXp
+         INxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681139911; x=1683731911;
+        d=1e100.net; s=20210112; t=1681140070;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mZNcPr+y8/9NjCaWwABJXLJwupkaQ1Z2WNyPOrf8WwE=;
-        b=NJu0oraSgU89bwHOXSDhRJRclzZ1QbbnbSJ6nG1Hl+d6rsiYn71OV6P8NaoeKOIo0K
-         DZt6CXjsyUWcjxFywARgVfwvy/nxrfqK3d/fdxs73hgMV96wXnZBJ6f8ugvVWpvrwvBJ
-         mRtw1q+dgPgzERn3zg4BbZ59WqYC9IOTbSjpZLY4glIsFmC1pfpWxOnS8aSfSOo7+bTs
-         V7zrnoDarMBAcQzJbG42DvzqLYas8dkn4hNorbFdcsL8+pUzUeqDBevAOt5LDVoC+pmu
-         TKavV4od8OYVN/cDPeZyQ40sIolMKoTZAWx5gBzN/5wzX5NhKBp3G+GOs32fy9Gvmg2r
-         QS8Q==
-X-Gm-Message-State: AAQBX9e2Po+n78hDAxynfA/r/lympA836j9NHtGCgB/yxWY93uY5loJg
-        D2xP5XH9tSAW6Jj7Auo3DTOlW8YA1/4=
-X-Google-Smtp-Source: AKy350bJpZHoiKVjNW7hcYRnpF2BcmPV5YYQszQbXeTdqc9G5ortDpbma31ImOOU93t7c/+ZxREU5g==
-X-Received: by 2002:a17:902:f90b:b0:1a5:329d:b975 with SMTP id kw11-20020a170902f90b00b001a5329db975mr5414040plb.66.1681139911590;
-        Mon, 10 Apr 2023 08:18:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l6-20020a63f306000000b0050f7f783ff0sm7104508pgh.76.2023.04.10.08.18.30
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZRw2wqvE/1MC1yZ0G5iCqLIwh8QF13oSGU/qO0zu+o=;
+        b=nPts5Pc+5lblf7eul3zybyuWJbbz/2HI1Eu2hocezhMMHJn/WZyoOD+QyyzyW89hur
+         G6J3vyKado9OMyFUwwZTj/HJqTHff1qDb4AbYrANS3y12YC6ywiS6D/GNy2l0x0IB405
+         MwVY1KEFdx4zKQ6tbGfJtXXNB7jsdVkYddJtkJI4j6ST7AS6a/jR5miQbjxzJ7JLC8At
+         RQUzWPD/EPptyhlRvvqHpBFun8bPPp7Pwd5S9s6FyRXfcpFeRnbyK0A2l1ZM0lsIZGue
+         ctwAwh17GiV9wDU42NxmusEYHedJt4xEFvrQ8DcgzWFl6QwV/sc6wQkmqwURRo4Bk4RC
+         wX5Q==
+X-Gm-Message-State: AAQBX9f6tLVvK1OLPtAzliIquCvKqVNi+lkAAdsLQt0hcnkg/8nrK0Ig
+        UeDRd7d+fC48Q3fQvPMYXMn9ig==
+X-Google-Smtp-Source: AKy350brrjadn1puHhcMr9fNNUWP0/tw4thCV3WBC6mO5mKGKNcG/rCgLhMkPEKFkStbM15G1M4YBw==
+X-Received: by 2002:a17:907:c60f:b0:94a:6fe4:c309 with SMTP id ud15-20020a170907c60f00b0094a6fe4c309mr3938620ejc.16.1681140069909;
+        Mon, 10 Apr 2023 08:21:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:eacd:ffa4:1df7:3870? ([2a02:810d:15c0:828:eacd:ffa4:1df7:3870])
+        by smtp.gmail.com with ESMTPSA id h22-20020a1709063b5600b0094cafa4fb8bsm344729ejf.124.2023.04.10.08.21.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 08:18:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4cbe67b2-51a9-e5cf-640f-9db77f8ada55@roeck-us.net>
-Date:   Mon, 10 Apr 2023 08:18:29 -0700
+        Mon, 10 Apr 2023 08:21:09 -0700 (PDT)
+Message-ID: <44a7ee80-e770-4918-9caa-f606713fe584@linaro.org>
+Date:   Mon, 10 Apr 2023 17:21:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Mark status as orphaned
+Subject: Re: [PATCH v1 1/2] ARM: dts: aspeed: greatlakes: Add gpio names
 Content-Language: en-US
-To:     William Breathitt Gray <william.gray@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Fred Eckert <Frede@cmslaser.com>
-References: <20230410150536.3168-1-william.gray@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230410150536.3168-1-william.gray@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
+        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230329083235.24123-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230329083235.24123-2-Delphine_CC_Chiu@Wiwynn.com>
+ <b66f708c-5369-c1c9-5506-c609a245bf4c@linaro.org>
+ <PS2PR04MB3592E90B033CA23F47CD02F2B7959@PS2PR04MB3592.apcprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PS2PR04MB3592E90B033CA23F47CD02F2B7959@PS2PR04MB3592.apcprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,36 +85,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/23 08:05, William Breathitt Gray wrote:
-> The current maintainer no longer has access to the device for testing,
-> the original user of this driver indicates that they have moved on to
-> another device, and the manufacturer WINSYSTEMS does not appear
-> interested in taking over support for this code.
+On 10/04/2023 09:11, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> Thank you for reviewing.
 > 
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org> > ---
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90abe83c02f3..8ef060ef48d8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22514,7 +22514,7 @@ F:	drivers/media/rc/winbond-cir.c
->   WINSYSTEMS EBC-C384 WATCHDOG DRIVER
->   M:	William Breathitt Gray <william.gray@linaro.org>
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Wednesday, March 29, 2023 4:37 PM
+>> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
+>> patrick@stwcx.xyz; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+>> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andrew
+>> Jeffery <andrew@aj.id.au>
+>> Cc: devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH v1 1/2] ARM: dts: aspeed: greatlakes: Add gpio names
+>>
+>>   Security Reminder: Please be aware that this email is sent by an external
+>> sender.
+>>
+>> On 29/03/2023 10:32, Delphine CC Chiu wrote:
+>>> From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+>>>
+>>> Add GPIO names for SOC lines.
+>>>
+>>> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+>>> ---
+>>>  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 49
+>> +++++++++++++++++++
+>>>  1 file changed, 49 insertions(+)
+>>>
+>>> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+>>> b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+>>> index 8c05bd56ce1e..59819115c39d 100644
+>>> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+>>> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+>>> @@ -238,4 +238,53 @@
+>>>  &gpio0 {
+>>>       pinctrl-names = "default";
+>>>       pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
+>>> +     status = "okay";
+>>
+>> Was it disabled before?
+>>
+> Yes, 
 
-You should also remove the M: line because, after all, there
-won't be a maintainer anymore.
+Really? Can you provide any proof for this?
 
-Thanks,
-Guenter
+> we have to enable gpio status for meeting aspeed-g6 device tree setting, and set net names for pulling gpio pin from application layer.
 
->   L:	linux-watchdog@vger.kernel.org
-> -S:	Maintained
-> +S:	Orphan
->   F:	drivers/watchdog/ebc-c384_wdt.c
->   
->   WINSYSTEMS WS16C48 GPIO DRIVER
-> 
-> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+What is "enable gpio status"? What does it mean to "meet aspeeg-g6
+devicetree setting"?
+What names have anything to do with my question?
+
+Sorry, I cannot parse it at all.
+
+>>> +     gpio-line-names =
+>>> +     /*A0-A7*/ "","","","","","","","",
+>>> +     /*B0-B7*/ "power-bmc-nic","presence-ocp-debug",
+>>> +               "power-bmc-slot1","power-bmc-slot2",
+>>> +               "power-bmc-slot3","power-bmc-slot4","","",
+>>> +     /*C0-C7*/ "presence-ocp-nic","","","reset-cause-nic-primary",
+>>> +               "reset-cause-nic-secondary","","","",
+>>> +     /*D0-D7*/ "","","","","","","","",
+>>> +     /*E0-E7*/ "","","","","","","","",
+>>> +     /*F0-F7*/ "slot1-bmc-reset-button","slot2-bmc-reset-button",
+>>> +               "slot3-bmc-reset-button","slot4-bmc-reset-button",
+>>> +               "","","","presence-emmc",
+>>> +     /*G0-G7*/ "","","","","","","","",
+>>> +     /*H0-H7*/ "","","","",
+>>> +               "presence-mb-slot1","presence-mb-slot2",
+>>> +               "presence-mb-slot3","presence-mb-slot4",
+>>> +     /*I0-I7*/ "","","","","","","bb-bmc-button","",
+>>> +     /*J0-J7*/ "","","","","","","","",
+>>> +     /*K0-K7*/ "","","","","","","","",
+>>> +     /*L0-L7*/ "","","","","","","","",
+>>> +     /*M0-M7*/
+>> "","power-nic-bmc-enable","","usb-bmc-enable","","reset-cause-usb-hub","","",
+>>> +     /*N0-N7*/ "","","","","bmc-ready","","","",
+>>> +     /*O0-O7*/
+>> "","","","","","","fan0-bmc-cpld-enable","fan1-bmc-cpld-enable",
+>>> +     /*P0-P7*/ "fan2-bmc-cpld-enable","fan3-bmc-cpld-enable",
+>>> +               "reset-cause-pcie-slot1","reset-cause-pcie-slot2",
+>>> +               "reset-cause-pcie-slot3","reset-cause-pcie-slot4","","",
+>>> +     /*Q0-Q7*/ "","","","","","","","",
+>>> +     /*R0-R7*/ "","","","","","","","",
+>>> +     /*S0-S7*/ "","","power-p5v-usb","presence-bmc-tpm","","","","",
+>>> +     /*T0-T7*/ "","","","","","","","",
+>>> +     /*U0-U7*/ "","","","","","","","GND",
+>>> +     /*V0-V7*/ "bmc-slot1-ac-button","bmc-slot2-ac-button",
+>>> +               "bmc-slot3-ac-button","bmc-slot4-ac-button",
+>>> +               "","","","",
+>>> +     /*W0-W7*/ "","","","","","","","",
+>>> +     /*X0-X7*/ "","","","","","","","",
+>>> +     /*Y0-Y7*/ "","","","reset-cause-emmc","","","","",
+>>> +     /*Z0-Z7*/ "","","","","","","",""; };
+>>> +
+>>> +&gpio1 {
+>>> +     status = "okay";
+>>
+>> Same question...
+> Yes, the answer is same as above.
+
+So the same incorrect?
+
+
+Best regards,
+Krzysztof
 
