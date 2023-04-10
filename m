@@ -2,270 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2DE6DC79E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179A96DC7A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjDJODz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S229744AbjDJOFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjDJODl (ORCPT
+        with ESMTP id S229808AbjDJOF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:03:41 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07537ED8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:03:24 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54c061acbc9so240365687b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681135404; x=1683727404;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NdQnl5qfmdrfczumTIya8UGLjCsmRaV4klr0sIRkZJ8=;
-        b=t9npnTZmCuPRW3blplvBRy3/VNzfr0USEDMn0K64RR1jrvFkNGz0D+FLGHQATOcN7g
-         I4F8OqYVbbOCGHOYsCTgsj+2fwYES1+EotqS5r+cy+oPYi/yIq+KAjHXQzN7GbSQ9bJz
-         mlc0A4kH39fFDXae7W9YAHG3ybsJ7VXpcEVId6lkfXKuDtBHt8uOxzVmfs2yNhDq5Loe
-         Ua0fBMNW1+Kq7QD7mzw1MH/LV7lSqk+iBUnHjxnFdQzuWBvk3RoxgIpYg971g46FRiFy
-         Law7ljG8Rx7iWpkuSQEH9iYGUk7MgH7PTH/4OW5gh9PatkHDkXo8ktWFIxhJ3FQ0o+Uv
-         wyng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681135404; x=1683727404;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NdQnl5qfmdrfczumTIya8UGLjCsmRaV4klr0sIRkZJ8=;
-        b=I282gm7yeDR0UknMwWBwnZuM+kgzP225o5xmC/UXeqi/ljdh1aP4dnQ/kABw0erB7R
-         6XjjPdaKCYW5Xnjqol1xIP9tYrAfbjrumy5SHtrRAwKWXcRz4soXsLaok/TPfeJJE/wy
-         scFlItPpXmCx0c4pdj3Uq2gDoUj8pm4PE1Q0Dh7oBIEl9qO6nNyn7ZPjSpS6NHYghxXP
-         aTJrBHNj7NkGmOn1XlER1FTwgFS1mhGMBLO4yAwUCr8XdR9t7ae1fNk/VcE7zsA2YX4I
-         FzfI4d8n239row1a9/oyYotG5RZCZn8jgx5llKYnVE5JSN0UTpSNR52K6mFgNCyO4oFi
-         gRAQ==
-X-Gm-Message-State: AAQBX9ceA0dA7+xDvJ8LYP9/Dss9wc5K69MINZnSU7RNqGXVjj8aji1L
-        Hsh0rup/wmx9SBTQVCEJLHTbdQ==
-X-Google-Smtp-Source: AKy350ZXQzu0NNBRVe7E82/H/DPmANFnzQxVyeaXAWfN/6op4Gl0CvtK3w2LO97Pmw+EjFBXiP3mjQ==
-X-Received: by 2002:a81:5b89:0:b0:543:1dc1:828b with SMTP id p131-20020a815b89000000b005431dc1828bmr8091878ywb.33.1681135401568;
-        Mon, 10 Apr 2023 07:03:21 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id cm24-20020a05690c0c9800b00545a08184c8sm2821000ywb.88.2023.04.10.07.03.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 07:03:21 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v3 3/3] counter: 104-quad-8: Utilize helper functions to handle PR, FLAG and PSC
-Date:   Mon, 10 Apr 2023 10:03:13 -0400
-Message-Id: <669c8f782f11fe27c4568e4fc3ba459c4f954874.1681134558.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1681134558.git.william.gray@linaro.org>
-References: <cover.1681134558.git.william.gray@linaro.org>
+        Mon, 10 Apr 2023 10:05:29 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23541999
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:05:26 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33AE57Yv104760;
+        Mon, 10 Apr 2023 09:05:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681135507;
+        bh=XZIofqlOHF0nUaQCtUAqDHMyrRnDGPp7zEadbeCaack=;
+        h=Date:From:To:CC:Subject;
+        b=ClxEVZ/yBm8BZvzNfSaYqnqXBBeD2WKRz6oL+OnMMyi+4cDO+hDTv8t0HWGR/74M5
+         7j6ALoQLze9uWr5eGoLwoM6ICI4COtF9OHusqRO9AnurKvX7vFhFSX7Gb9gM7EPx0G
+         2PNCrDz35rkgNzlh0VAiF3Ct6YLQZXm0PkloGlSg=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33AE57cR078297
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Apr 2023 09:05:07 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 10
+ Apr 2023 09:05:06 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 10 Apr 2023 09:05:06 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33AE56Ha058556;
+        Mon, 10 Apr 2023 09:05:06 -0500
+Date:   Mon, 10 Apr 2023 09:05:06 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [GIT PULL 1/3] soc: ti: Updates for v6.4
+Message-ID: <20230410140506.ucvkwq7vz2h47vyj@stipulate>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="754s2zqlbolxrofk"
+Content-Disposition: inline
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Preset Register (PR), Flag Register (FLAG), and Filter Clock
-Prescaler (PSC) have common usage patterns. Wrap up such usage into
-dedicated functions to improve code clarity.
+--754s2zqlbolxrofk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
-Changes in v3: none
-Changes in v2:
- - Utilize ioread8_rep() and iowrite8_rep() to read and write counter
-   data
+Hi,
 
- drivers/counter/104-quad-8.c | 87 +++++++++++++++---------------------
- 1 file changed, 37 insertions(+), 50 deletions(-)
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-index 0188c9c4e4cb..c171d0a80ef9 100644
---- a/drivers/counter/104-quad-8.c
-+++ b/drivers/counter/104-quad-8.c
-@@ -232,52 +232,56 @@ static int quad8_count_read(struct counter_device *counter,
- 	struct quad8 *const priv = counter_priv(counter);
- 	struct channel_reg __iomem *const chan = priv->reg->channel + count->id;
- 	unsigned long irqflags;
--	int i;
- 
- 	*val = 0;
- 
- 	spin_lock_irqsave(&priv->lock, irqflags);
- 
- 	iowrite8(SELECT_RLD | RESET_BP | TRANSFER_CNTR_TO_OL, &chan->control);
--
--	for (i = 0; i < 3; i++)
--		*val |= (unsigned long)ioread8(&chan->data) << (8 * i);
-+	ioread8_rep(&chan->data, val, 3);
- 
- 	spin_unlock_irqrestore(&priv->lock, irqflags);
- 
- 	return 0;
- }
- 
-+static void quad8_preset_register_set(struct quad8 *const priv, const size_t id,
-+				      const unsigned long preset)
-+{
-+	struct channel_reg __iomem *const chan = priv->reg->channel + id;
-+
-+	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
-+	iowrite8_rep(&chan->data, &preset, 3);
-+}
-+
-+static void quad8_flag_register_reset(struct quad8 *const priv, const size_t id)
-+{
-+	struct channel_reg __iomem *const chan = priv->reg->channel + id;
-+
-+	iowrite8(SELECT_RLD | RESET_BT_CT_CPT_S_IDX, &chan->control);
-+	iowrite8(SELECT_RLD | RESET_E, &chan->control);
-+}
-+
- static int quad8_count_write(struct counter_device *counter,
- 			     struct counter_count *count, u64 val)
- {
- 	struct quad8 *const priv = counter_priv(counter);
- 	struct channel_reg __iomem *const chan = priv->reg->channel + count->id;
- 	unsigned long irqflags;
--	int i;
- 
- 	if (val > LS7267_CNTR_MAX)
- 		return -ERANGE;
- 
- 	spin_lock_irqsave(&priv->lock, irqflags);
- 
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
--
- 	/* Counter can only be set via Preset Register */
--	for (i = 0; i < 3; i++)
--		iowrite8(val >> (8 * i), &chan->data);
--
-+	quad8_preset_register_set(priv, count->id, val);
- 	iowrite8(SELECT_RLD | TRANSFER_PR_TO_CNTR, &chan->control);
- 
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
-+	quad8_flag_register_reset(priv, count->id);
- 
- 	/* Set Preset Register back to original value */
--	val = priv->preset[count->id];
--	for (i = 0; i < 3; i++)
--		iowrite8(val >> (8 * i), &chan->data);
--
--	iowrite8(SELECT_RLD | RESET_BT_CT_CPT_S_IDX, &chan->control);
--	iowrite8(SELECT_RLD | RESET_E, &chan->control);
-+	quad8_preset_register_set(priv, count->id, priv->preset[count->id]);
- 
- 	spin_unlock_irqrestore(&priv->lock, irqflags);
- 
-@@ -771,21 +775,6 @@ static int quad8_count_preset_read(struct counter_device *counter,
- 	return 0;
- }
- 
--static void quad8_preset_register_set(struct quad8 *const priv, const int id,
--				      const unsigned int preset)
--{
--	struct channel_reg __iomem *const chan = priv->reg->channel + id;
--	int i;
--
--	priv->preset[id] = preset;
--
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
--
--	/* Set Preset Register */
--	for (i = 0; i < 3; i++)
--		iowrite8(preset >> (8 * i), &chan->data);
--}
--
- static int quad8_count_preset_write(struct counter_device *counter,
- 				    struct counter_count *count, u64 preset)
- {
-@@ -797,6 +786,7 @@ static int quad8_count_preset_write(struct counter_device *counter,
- 
- 	spin_lock_irqsave(&priv->lock, irqflags);
- 
-+	priv->preset[count->id] = preset;
- 	quad8_preset_register_set(priv, count->id, preset);
- 
- 	spin_unlock_irqrestore(&priv->lock, irqflags);
-@@ -843,6 +833,7 @@ static int quad8_count_ceiling_write(struct counter_device *counter,
- 	switch (u8_get_bits(priv->cmr[count->id], COUNT_MODE)) {
- 	case RANGE_LIMIT:
- 	case MODULO_N:
-+		priv->preset[count->id] = ceiling;
- 		quad8_preset_register_set(priv, count->id, ceiling);
- 		spin_unlock_irqrestore(&priv->lock, irqflags);
- 		return 0;
-@@ -961,24 +952,28 @@ static int quad8_signal_fck_prescaler_read(struct counter_device *counter,
- 	return 0;
- }
- 
-+static void quad8_filter_clock_prescaler_set(struct quad8 *const priv, const size_t id,
-+					     const u8 prescaler)
-+{
-+	struct channel_reg __iomem *const chan = priv->reg->channel + id;
-+
-+	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
-+	iowrite8(prescaler, &chan->data);
-+	iowrite8(SELECT_RLD | TRANSFER_PR0_TO_PSC, &chan->control);
-+}
-+
- static int quad8_signal_fck_prescaler_write(struct counter_device *counter,
- 					    struct counter_signal *signal,
- 					    u8 prescaler)
- {
- 	struct quad8 *const priv = counter_priv(counter);
- 	const size_t channel_id = signal->id / 2;
--	struct channel_reg __iomem *const chan = priv->reg->channel + channel_id;
- 	unsigned long irqflags;
- 
- 	spin_lock_irqsave(&priv->lock, irqflags);
- 
- 	priv->fck_prescaler[channel_id] = prescaler;
--
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
--
--	/* Set filter clock factor */
--	iowrite8(prescaler, &chan->data);
--	iowrite8(SELECT_RLD | RESET_BP | TRANSFER_PR0_TO_PSC, &chan->control);
-+	quad8_filter_clock_prescaler_set(priv, channel_id, prescaler);
- 
- 	spin_unlock_irqrestore(&priv->lock, irqflags);
- 
-@@ -1178,18 +1173,10 @@ static irqreturn_t quad8_irq_handler(int irq, void *private)
- static void quad8_init_counter(struct quad8 *const priv, const size_t channel)
- {
- 	struct channel_reg __iomem *const chan = priv->reg->channel + channel;
--	unsigned long i;
- 
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
--	/* Reset filter clock factor */
--	iowrite8(0, &chan->data);
--	iowrite8(SELECT_RLD | RESET_BP | TRANSFER_PR0_TO_PSC, &chan->control);
--	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
--	/* Reset Preset Register */
--	for (i = 0; i < 3; i++)
--		iowrite8(0x00, &chan->data);
--	iowrite8(SELECT_RLD | RESET_BT_CT_CPT_S_IDX, &chan->control);
--	iowrite8(SELECT_RLD | RESET_E, &chan->control);
-+	quad8_filter_clock_prescaler_set(priv, channel, 0);
-+	quad8_preset_register_set(priv, channel, 0);
-+	quad8_flag_register_reset(priv, channel);
- 
- 	/* Binary encoding; Normal count; non-quadrature mode */
- 	priv->cmr[channel] = SELECT_CMR | BINARY | u8_encode_bits(NORMAL_COUNT, COUNT_MODE) |
--- 
-2.39.2
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
+-soc-for-v6.4
+
+for you to fetch changes up to a33bfafd99e0d1e33dfe910f751426f298a218b6:
+
+  soc: ti: Use devm_platform_ioremap_resource() (2023-03-28 06:23:42 -0500)
+
+----------------------------------------------------------------
+TI SoC driver updates for v6.4
+
+* Minor fixups for of_property, using devm_platform_ioremap
+* Fixups for refcount leaks in pm33xx
+* Fixups for k3-ringacc for dmaring_request
+* SoCinfo detection for J784S4 SoC.
+
+----------------------------------------------------------------
+Miaoqian Lin (1):
+      soc: ti: pm33xx: Fix refcount leak in am33xx_pm_probe
+
+Nicolas Frayer (1):
+      soc: ti: k3-ringacc: Add try_module_get() to k3_dmaring_request_dual_=
+ring()
+
+Rob Herring (2):
+      soc: ti: Use of_property_present() for testing DT property presence
+      soc: ti: Use of_property_read_bool() for boolean properties
+
+Siddharth Vadapalli (1):
+      soc: ti: k3-socinfo: Add entry for J784S4 SOC
+
+Yang Li (1):
+      soc: ti: Use devm_platform_ioremap_resource()
+
+ drivers/soc/ti/k3-ringacc.c      | 7 +++++++
+ drivers/soc/ti/k3-socinfo.c      | 1 +
+ drivers/soc/ti/knav_dma.c        | 4 ++--
+ drivers/soc/ti/knav_qmss_acc.c   | 2 +-
+ drivers/soc/ti/knav_qmss_queue.c | 4 ++--
+ drivers/soc/ti/omap_prm.c        | 2 +-
+ drivers/soc/ti/pm33xx.c          | 5 +++--
+ drivers/soc/ti/wkup_m3_ipc.c     | 6 ++----
+ 8 files changed, 19 insertions(+), 12 deletions(-)
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--754s2zqlbolxrofk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmQ0F4cACgkQ3bWEnRc2
+JJ25rBAAkJ6xgfmuuRlLGvelAiNQdMVbClDtTBQZuBSR7mbghEPYvf16gp4Uu6yx
+slufP5K3dX32s+RRfiKfswWReSC+4lf3trRhFZMyMt80yq/Sf5fp9Zo+1aczeRIT
+VqLI1M37gCzvwqwdQOlJRivMmlPibO6OP11WDg2TZJ677vegSx8rFWOI9faBsLpW
+R4PMDHhszJoEECJYPEyDAoLIeWdEgsT2pSs7yMNkEum9CpImU9Tms/KDmEmTSsm7
+VPETvaoMRJzwRRKCWs4mGnVjFRZN9J1nsyhgL2M1PN+jBuCGTyhRRAcITK6ukDgD
+WfE8ux30tubn4VL6obW5GtV+Jz00A2HyPDNcKmyVaxgVRweLSJb2lohKHeMromnH
+MOwCLAngQif5vuIHNwuIf5k0qYHQfB6UQ+GnspeaY2RWItilpEdbxAKK6CdXGBZn
+LlLuC2bnyIADvWoA61Ef2x99MaYtQ2q9/jolE3r9aBFLPais2yK44K0slVzEogEk
+pL7gKK/4UalzdefBIxkmoAq2dm8VgZTfoHOqzs1Ue5cM0TuLSGdVj9jlzXtqYuBA
+1XIuICy+w/lTEg/kngu7WEsByMmWXpHly/TIMRgy9Sg6eY+vbR8aLZuPRVqox5e3
+HCvZx1a8S7sfVqdTLPxUdbIf3DJg8dE0cjy26v/3lzLLwin0t20=
+=QJZU
+-----END PGP SIGNATURE-----
+
+--754s2zqlbolxrofk--
