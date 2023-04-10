@@ -2,365 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69346DC44D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106B46DC451
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjDJI3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S229612AbjDJIeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjDJI3U (ORCPT
+        with ESMTP id S229575AbjDJIeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:29:20 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3153590;
-        Mon, 10 Apr 2023 01:29:15 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0C68124E02F;
-        Mon, 10 Apr 2023 16:29:14 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
- 2023 16:29:14 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 10 Apr
- 2023 16:29:12 +0800
-Message-ID: <62fc36bc-7e43-0214-85d7-be66748a901b@starfivetech.com>
-Date:   Mon, 10 Apr 2023 16:29:10 +0800
+        Mon, 10 Apr 2023 04:34:08 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D7A3AA7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:34:05 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id y13so3992439vss.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681115645;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
+        b=LdEWgyWN5oc0YneShy1GFV80BlXsRdVOLVGntL5QZXzKMJw00sGV6ud9nsoaXXALAh
+         cTmQqVYMpMbj4O5enPJ+sdLzx04GlcbnFQ7A4Y8ZdjE/zMCVXR/wx3VNYPdOA3I1a9u6
+         gXJ+OS3XX7+U7bsGiyv18KMphV1RkqDfpLstm0he3r3C52LEX+D8AZ6vd+TZg2Q4XtY1
+         89+zZuDkuCCof2vKmYOkcWlaffVjkZhwZYf30NkAQYz8bStQKxi+HIhY/QgSww+k3w2q
+         4mrYA+nAeaNKkDeRQhzLbfhYioXJL3DOQXj1GVLFIe2fNUCwffmqk/lndEBUH2qxcdrX
+         Uakw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681115645;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
+        b=RrN7Kd0BKStvp9TzAXtSabuKfPACKKNPCnZIHQFTYKyxRPzZOIpDZ0MRdj12T8itds
+         trkwcXIbbK0JK+nT/gFKs7LU1uwH7rEgk3xFXw5tUjXeBL+Kx7AbxyBvS/vFSSU0wSqn
+         CiHUipzKQVgg93MOvMBuEmyEV4AbusL94XYMwM6/TTqcZWZ8kRhebrX26Dg1Ww31R4KO
+         JY6h2RxDkYSFlx7z/LDLfXslWuBUo72Uk3cakAzSJw7Q20JTYiOivDoKoPCekDntWYCb
+         9QAdxlwfsZzPwXH2UTRywXApeMch58ubCpt4rBHxTedWzIqYLbL3Z8yZDhIgxKFMsenB
+         WLzQ==
+X-Gm-Message-State: AAQBX9cMV6mQWMwMSbF9hiRXvL+m2NEH/mMtAXQV1YyZEkqPHfPwwJuN
+        +agGvioqW0U7CeCopLoYg0vqBwprxFfQlRYVjDCsWQ==
+X-Google-Smtp-Source: AKy350bncSFZcosjHjqQnOjeQEFT8SwcKqwSa3FsXW6R4FbtxDmAmfupWPWLtksuGhZxRt1waKe0plT2W9g0MedZecc=
+X-Received: by 2002:a67:c38a:0:b0:425:e623:360a with SMTP id
+ s10-20020a67c38a000000b00425e623360amr5739468vsj.1.1681115644735; Mon, 10 Apr
+ 2023 01:34:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive
- JH7110 SoC
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <Arun.Ramadoss@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Pedro Moreira <pmmoreir@synopsys.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230407110356.8449-1-samin.guo@starfivetech.com>
- <20230407110356.8449-6-samin.guo@starfivetech.com>
- <CAJM55Z9jCdPASsk+fw_j+9QH3+Kj28tpCA4PgW_nB_ce7qWL8w@mail.gmail.com>
- <b8764e20-f983-177c-63c5-36bb3b57ba9e@starfivetech.com>
- <CAJM55Z8jSPz70ri_sFnKMjZDoNvoA=K-o7VCeAMmXztzOKRxaA@mail.gmail.com>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <CAJM55Z8jSPz70ri_sFnKMjZDoNvoA=K-o7VCeAMmXztzOKRxaA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 10 Apr 2023 14:03:53 +0530
+Message-ID: <CA+G9fYs9jB7V2QFBKy3WbMkGKqWSrE7iUq_t2QqCDLetws-bjg@mail.gmail.com>
+Subject: next: MIPS: clang-16: tinyconfig: error: unknown target CPU 'r4600'
+To:     llvm@lists.linux.dev, linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.9 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+MIPS clang-16 tinyconfig build failed on Linux next-20230410.
 
-Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive JH7110 SoC
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-to: Guo Samin <samin.guo@starfivetech.com>
-data: 2023/4/9
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> On Sat, 8 Apr 2023 at 03:16, Guo Samin <samin.guo@starfivetech.com> wrote:
->>
->>  Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive JH7110 SoC
->> From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
->> to: Samin Guo <samin.guo@starfivetech.com>
->> data: 2023/4/8
->>
->>> On Fri, 7 Apr 2023 at 13:05, Samin Guo <samin.guo@starfivetech.com> wrote:
->>>>
->>>> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
->>>>
->>>> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->>>> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
->>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->>>> ---
->>>>  MAINTAINERS                                   |   1 +
->>>>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
->>>>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
->>>>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 123 ++++++++++++++++++
->>>>  4 files changed, 137 insertions(+)
->>>>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 6b6b67468b8f..46b366456cee 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -19910,6 +19910,7 @@ M:      Emil Renner Berthing <kernel@esmil.dk>
->>>>  M:     Samin Guo <samin.guo@starfivetech.com>
->>>>  S:     Maintained
->>>>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>>> +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>>>
->>>>  STARFIVE JH7100 CLOCK DRIVERS
->>>>  M:     Emil Renner Berthing <kernel@esmil.dk>
->>>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
->>>> index f77511fe4e87..5f5a997f21f3 100644
->>>> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
->>>> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
->>>> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
->>>>           for the stmmac device driver. This driver is used for
->>>>           arria5 and cyclone5 FPGA SoCs.
->>>>
->>>> +config DWMAC_STARFIVE
->>>> +       tristate "StarFive dwmac support"
->>>> +       depends on OF && (ARCH_STARFIVE || COMPILE_TEST)
->>>> +       select MFD_SYSCON
->>>> +       default m if ARCH_STARFIVE
->>>> +       help
->>>> +         Support for ethernet controllers on StarFive RISC-V SoCs
->>>> +
->>>> +         This selects the StarFive platform specific glue layer support for
->>>> +         the stmmac device driver. This driver is used for StarFive JH7110
->>>> +         ethernet controller.
->>>> +
->>>>  config DWMAC_STI
->>>>         tristate "STi GMAC support"
->>>>         default ARCH_STI
->>>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
->>>> index 057e4bab5c08..8738fdbb4b2d 100644
->>>> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
->>>> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
->>>> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     += dwmac-oxnas.o
->>>>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        += dwmac-qcom-ethqos.o
->>>>  obj-$(CONFIG_DWMAC_ROCKCHIP)   += dwmac-rk.o
->>>>  obj-$(CONFIG_DWMAC_SOCFPGA)    += dwmac-altr-socfpga.o
->>>> +obj-$(CONFIG_DWMAC_STARFIVE)   += dwmac-starfive.o
->>>>  obj-$(CONFIG_DWMAC_STI)                += dwmac-sti.o
->>>>  obj-$(CONFIG_DWMAC_STM32)      += dwmac-stm32.o
->>>>  obj-$(CONFIG_DWMAC_SUNXI)      += dwmac-sunxi.o
->>>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>>> new file mode 100644
->>>> index 000000000000..4963d4008485
->>>> --- /dev/null
->>>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>>> @@ -0,0 +1,123 @@
->>>> +// SPDX-License-Identifier: GPL-2.0+
->>>> +/*
->>>> + * StarFive DWMAC platform driver
->>>> + *
->>>> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
->>>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->>>> + *
->>>> + */
->>>> +
->>>> +#include <linux/mfd/syscon.h>
->>>> +#include <linux/of_device.h>
->>>> +#include <linux/regmap.h>
->>>> +
->>>> +#include "stmmac_platform.h"
->>>> +
->>>> +struct starfive_dwmac {
->>>> +       struct device *dev;
->>>> +       struct clk *clk_tx;
->>>> +};
->>>> +
->>>> +static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
->>>> +{
->>>> +       struct starfive_dwmac *dwmac = priv;
->>>> +       unsigned long rate;
->>>> +       int err;
->>>> +
->>>> +       rate = clk_get_rate(dwmac->clk_tx);
->>>
->>> Hi Samin,
->>>
->>> I'm not sure why you added this line in this revision. If it's just to
->>> not call clk_set_rate on the uninitialized rate, I'd much rather you
->>> just returned early and don't call clk_set_rate at all in case of
->>> errors.
->>>
->>>> +
->>>> +       switch (speed) {
->>>> +       case SPEED_1000:
->>>> +               rate = 125000000;
->>>> +               break;
->>>> +       case SPEED_100:
->>>> +               rate = 25000000;
->>>> +               break;
->>>> +       case SPEED_10:
->>>> +               rate = 2500000;
->>>> +               break;
->>>> +       default:
->>>> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
->>>> +               break;
->>>
->>> That is skip the clk_get_rate above and just change this break to a return.
->>>
->>
->> Hi Emil,
->>
->> We used the solution you mentioned before V3, but Arun Ramadoss doesn't think that's great.
->> (https://patchwork.kernel.org/project/linux-riscv/patch/20230106030001.1952-6-yanhong.wang@starfivetech.com)
->>
->>
->>> +static void starfive_eth_plat_fix_mac_speed(void *priv, unsigned int
->>> speed)
->>> +{
->>> +     struct starfive_dwmac *dwmac = priv;
->>> +     unsigned long rate;
->>> +     int err;
->>> +
->>> +     switch (speed) {
->>> +     case SPEED_1000:
->>> +             rate = 125000000;
->>> +             break;
->>> +     case SPEED_100:
->>> +             rate = 25000000;
->>> +             break;
->>> +     case SPEED_10:
->>> +             rate = 2500000;
->>> +             break;
->>> +     default:
->>> +             dev_err(dwmac->dev, "invalid speed %u\n", speed);
->>> +             return;
->>
->> Do we need to return value, since it is invalid speed. But the return
->> value of function is void.(Arun Ramadoss)
->>
->>
->> So in v9, after discussing with Jakub Kicinski, the clk_set_rate was used to initialize the rate.
->> (It is a reference to Intel's scheme:    dwmac-intel-plat.c: kmb_eth_fix_mac_speed)
->> (https://patchwork.kernel.org/project/linux-riscv/patch/20230328062009.25454-6-samin.guo@starfivetech.com)
->>
-> 
-> Yeah, I think this is a misunderstanding and Arun is considering if we
-> ought to return the error which we can't without changing generic
-> dwmac code, and Jakub is rightly concerned about using a local
-> variable uninitialized. I don't think anyone is suggesting that
-> getting the rate just to set it to the exact same value is better than
-> just leaving the clock alone.
-> 
-HI Emil,
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
+clang' LLVM=1 LLVM_IAS=1
 
-Yeah, return early saves time and code complexity, and seems like a good solution so Yanhong did the same before v3. (Jakub has suggested it before),
-I wonder if Arun or other maintainers accept this solution or if there are other solutions?
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+make[2]: *** [/builds/linux/scripts/Makefile.build:114:
+scripts/mod/devicetable-offsets.s] Error 1
+make[2]: *** [/builds/linux/scripts/Makefile.build:252:
+scripts/mod/empty.o] Error 1
 
-Best regards,
-Samin
 
->> Best regards,
->> Samin
->>>> +       }
->>>> +
->>>> +       err = clk_set_rate(dwmac->clk_tx, rate);
->>>> +       if (err)
->>>> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
->>>> +}
->>>> +
->>>> +static int starfive_dwmac_probe(struct platform_device *pdev)
->>>> +{
->>>> +       struct plat_stmmacenet_data *plat_dat;
->>  cons>> +       struct stmmac_resources stmmac_res;
->>>> +       struct starfive_dwmac *dwmac;
->>>> +       struct clk *clk_gtx;
->>>> +       int err;
->>>> +
->>>> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
->>>> +       if (err)
->>>> +               return dev_err_probe(&pdev->dev, err,
->>>> +                                    "failed to get resources\n");
->>>> +
->>>> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
->>>> +       if (IS_ERR(plat_dat))
->>>> +               return dev_err_probe(&pdev->dev, PTR_ERR(plat_dat),
->>>> +                                    "dt configuration failed\n");
->>>> +
->>>> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
->>>> +       if (!dwmac)
->>>> +               return -ENOMEM;
->>>> +
->>>> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
->>>> +       if (IS_ERR(dwmac->clk_tx))
->>>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
->>>> +                                    "error getting tx clock\n");
->>>> +
->>>> +       clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
->>>> +       if (IS_ERR(clk_gtx))
->>>> +               return dev_err_probe(&pdev->dev, PTR_ERR(clk_gtx),
->>>> +                                    "error getting gtx clock\n");
->>>> +
->>>> +       /* Generally, the rgmii_tx clock is provided by the internal clock,
->>>> +        * which needs to match the corresponding clock frequency according
->>>> +        * to different speeds. If the rgmii_tx clock is provided by the
->>>> +        * external rgmii_rxin, there is no need to configure the clock
->>>> +        * internally, because rgmii_rxin will be adaptively adjusted.
->>>> +        */
->>>> +       if (!device_property_read_bool(&pdev->dev, "starfive,tx-use-rgmii-clk"))
->>>> +               plat_dat->fix_mac_speed = starfive_dwmac_fix_mac_speed;
->>>> +
->>>> +       dwmac->dev = &pdev->dev;
->>>> +       plat_dat->bsp_priv = dwmac;
->>>> +       plat_dat->dma_cfg->dche = true;
->>>> +
->>>> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
->>>> +       if (err) {
->>>> +               stmmac_remove_config_dt(pdev, plat_dat);
->>>> +               return err;
->>>> +       }
->>>> +
->>>> +       return 0;
->>>> +}
->>>> +
->>>> +static const struct of_device_id starfive_dwmac_match[] = {
->>>> +       { .compatible = "starfive,jh7110-dwmac" },
->>>> +       { /* sentinel */ }
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
->>>> +
->>>> +static struct platform_driver starfive_dwmac_driver = {
->>>> +       .probe  = starfive_dwmac_probe,
->>>> +       .remove = stmmac_pltfr_remove,
->>>> +       .driver = {
->>>> +               .name = "starfive-dwmac",
->>>> +               .pm = &stmmac_pltfr_pm_ops,
->>>> +               .of_match_table = starfive_dwmac_match,
->>>> +       },
->>>> +};
->>>> +module_platform_driver(starfive_dwmac_driver);
->>>> +
->>>> +MODULE_LICENSE("GPL");
->>>> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
->>>> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
->>>> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
->>>> --
->>>> 2.17.1
->>>>
->>>>
->>>> _______________________________________________
->>>> linux-riscv mailing list
->>>> linux-riscv@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>
->> --
->> Best regards,
->> Samin
+Build history:
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/test/clang-16-tinyconfig/history/
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/tests/
 
--- 
-Best regards,
-Samin
+
+--
+Linaro LKFT
+https://lkft.linaro.org
