@@ -2,80 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47F96DC953
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE4C6DC955
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjDJQbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S229910AbjDJQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjDJQbo (ORCPT
+        with ESMTP id S230194AbjDJQcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:31:44 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D5419B2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:31:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q15so2117486ljp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:31:43 -0700 (PDT)
+        Mon, 10 Apr 2023 12:32:18 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3201710
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:32:17 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id n3-20020a170903110300b001a50ede5078so5422928plh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681144302;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHVVN6oTtru9Zp5JWJbbh+zOuZxw8Uvr9aoYu9AkWkM=;
-        b=Y3CDiubLut2AB6QPV32bn/FfuOMZWWix66aTa31ZRqltIrsJFxAgIlNRPOewA3MZBr
-         nJxKYWYlqk8hgLD+6TwUnJB1pxm0/CRalftqoW4fcn4UW/49Q3R5HX65hXxLlHddhDAT
-         6vUgKi5L+bn/tx1Mz/BQRITWMKXE8FkZvr2DPhVXenQTmb0UiwqosO3qnabdMeQvwogg
-         +ZU9MculDoXd1poXG2BqEvgleELf7EOLXg1UOuhY7mhM7nGE80JXW8om0mgGsFcOUoml
-         E8cBqkDEte6py5pFWlKxbmUKaBGZ37TvpBtEdYnH8jXYsBUhmeYWepBPDH8hyxCp/BFj
-         6lkw==
+        d=google.com; s=20210112; t=1681144337;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=itQxv8BbM1PWm+RuQQ5FyL8tOIW1b7TZUP7dqH3kNac=;
+        b=I2sqdKuXsSOipEE4wkgH+zftrLP+ZQEvlfLiYQheAInvKEPAZuSnR3aFGMtEkqbAFR
+         SyTQDDUy726SsM1SPNsqKBd5DzBF+916FXKHv5mv2odD7ZSoowegDCzdulFXqhi5bwKs
+         0RO4A4u5NtsettVc7ORpAWmDOX2qoSbQfU+opLhH6bzUY5O5aHDjyJwinC8E6LxUo64O
+         Xoe//XAX5WmJ3OIV4r6zkDrxkmW/WvGB5Y17zVrOwXrTEFNzp0JMRCwlE39ZCcFTfITD
+         k94FBlTq7vw96Erc4nfik2gQfamsjjgLQyOplvHuAxVx/7xO6C8cRWmO2tQP/Iv4yWGs
+         Itpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681144302;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sHVVN6oTtru9Zp5JWJbbh+zOuZxw8Uvr9aoYu9AkWkM=;
-        b=O1wVGLqof9oXcjgKQErh4ZYmXe4VGmzi8aY3eWYhGV8jmomu5Ps7sKEOUSEKFXnH/1
-         ormYn0AG6rOEDiLzbsLe74xx+agsYGu4fsvmq6pJ81YOsPpf9+jNAA1/A77SfeRgRPAD
-         QxUHsF0rlEjpesGgI50uQ4cl5/7515kLAtZGXHhEpQDDkBL0LD1SRVcyj2mhB0XZZ0J1
-         Gu8X6U749mDiCRpesGmj139jjCGik46k/eNZFjCkzt/Xw1lqqZ09RpNbm/hp25Uw7HA7
-         o9MEH9TjTfk3ufIztNyiZtWvRU4J7g8UFUjqw6c2qxqSCy1OTHAo1WG1bzXs5uYfhEDR
-         i08A==
-X-Gm-Message-State: AAQBX9cdk84HVwkteHLPVmC1hTzfjS4f4FJc3xJRdVmsFSLS/SDutn4A
-        lKRi1rd3p6q5ijZwsgl/Tr+OMGsJxd8CvMW5brVK6A==
-X-Google-Smtp-Source: AKy350ZD5k8n0iaqSVhHkXIKwrBzfIpr7iLG2LzwFj5BEaUDz6+sdM5XQD8GXsHOvli8+zrafOFWrNFG4ucfC7AshTk=
-X-Received: by 2002:a2e:780e:0:b0:2a7:7470:4ebc with SMTP id
- t14-20020a2e780e000000b002a774704ebcmr1368279ljc.2.1681144302005; Mon, 10 Apr
- 2023 09:31:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230326144701.3039598-1-nikunj@amd.com> <20230326144701.3039598-5-nikunj@amd.com>
-In-Reply-To: <20230326144701.3039598-5-nikunj@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 10 Apr 2023 10:31:30 -0600
-Message-ID: <CAMkAt6r4-8zwW8_JbTG6zK0DFG9PVX5Z50Xrq1C_fLBCdsrqdg@mail.gmail.com>
-Subject: Re: [PATCH v2 04/11] virt: sev-guest: Add simplified helper to assign vmpck
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@alien8.de,
-        thomas.lendacky@amd.com, dionnaglaze@google.com, seanjc@google.com,
-        pbonzini@redhat.com, michael.roth@amd.com, ketanch@iitk.ac.in
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1681144337;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=itQxv8BbM1PWm+RuQQ5FyL8tOIW1b7TZUP7dqH3kNac=;
+        b=vXyqRvlX1g03LXuZWwLAM+7BSaA/BXz2useQ/3IyuZufYgKzwdEttx4/g/DSZEpDQi
+         2f1k1OQPMWP1rN8mn8H6IyoE4dokOi53v7IsHlMKCptRTUH4zfVwN8SDO4LuBV/3dPHV
+         r7/Sx6HfVtHhUPMj1pxjzKGfrggwehmi9gqf2S7+tBG5vlbFX1ctTbQ6tk7TpQvaw7Kw
+         nWxb54NL+LIhT5EquHnri24F+agmLE/Qj0FjCK3WAl3DtJrf+vRSbnvtDupiPb28hxIj
+         B4BC2XG0y+qh0sQKckrzXj4/VgcyIvE3OB4IvqZNe+YRCl4XCKbEK0T8LII6Acy1bfMs
+         Mugw==
+X-Gm-Message-State: AAQBX9cqQPKM0Tph7k+kGns2y3cmcdGOLClYLGlfCm6iBk7XLkbqaQrW
+        i2Ffyrj/x0rFyhYcQBH5hpTANn/eORE=
+X-Google-Smtp-Source: AKy350bYR39SqtSRv+Q85bHi/2KjFrjWdeKh6KU41dxqae4MwZtBP8V6ChtQJu17TSE+4pp4qQkXCguhBrg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:641a:0:b0:51b:fa5:7bce with SMTP id
+ a26-20020a65641a000000b0051b0fa57bcemr444164pgv.1.1681144337139; Mon, 10 Apr
+ 2023 09:32:17 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 09:32:15 -0700
+In-Reply-To: <20230410031021.4145297-1-alexjlzheng@tencent.com>
+Mime-Version: 1.0
+References: <20230410031021.4145297-1-alexjlzheng@tencent.com>
+Message-ID: <ZDQ6D6BX/3mqhCbW@google.com>
+Subject: Re: [PATCH kvm RESEND] KVM: i8259: Fix poll command
+From:   Sean Christopherson <seanjc@google.com>
+To:     alexjlzheng@gmail.com
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinliang Zheng <alexjlzheng@tencent.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> -static u8 *get_vmpck(int id, struct snp_secrets_page_layout *layout, u32 **seqno)
-> +bool snp_assign_vmpck(struct snp_guest_dev *dev, int vmpck_id)
->  {
-> -       u8 *key = NULL;
-> +       if (WARN_ON(vmpck_id > 3))
-> +               return false;
+Please don't use RESEND as a ping, just respond to the original patch with a "Ping",
+or any question you might have.  I know Documentation/process/submitting-patches.rst
+says its ok to RESEND after a couple of weeks, but IMO that's overly aggressive
+and just creates noise, e.g. your original patch was in my todo list, I just hadn't
+gotten too it.  If you can't get a response after multiple pings, then by all means
+RESEND, but in the future, please try pinging first.
 
-Should vmpck_id be a uint to match the module parameter or should we
-check if vmpck_id < 0 ?
+For the patch context, there's no need to put "kvm" after patch, i.e. [PATCH], or
+in this case [PATCH RESEND].  The "KVM:" namespace in the shortlog provides
+sufficient context.
+
+Regarding the shortlog, if a v2 is needed, ignore the somewhat messy history of
+this file and use "KVM: x86:".
+
+On Mon, Apr 10, 2023, alexjlzheng@gmail.com wrote:
+> From: Jinliang Zheng <alexjlzheng@tencent.com>
+> 
+> According to the hardware manual, when the Poll command is issued, the
+> byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
+> and the highest priority binary code in Bits 2:0. The current pic
+> simulation code is not implemented strictly according to the above
+> expression.
+
+There is way too much going on in this patch for this to be a sufficient description.
+pic_intack() is not a direct replacement for the open coded logic in pic_poll_read(),
+modulo the setting of bit 7.  E.g. there's no explanation for the "addr1 >> 7"
+logic, pic_clear_isr() is conditionally called on auto_eoi, priority_add is now
+modified, pic_update_irq() is no longer called, and so on and so forth.
+
+Maybe the patch is correct and pic_poll_read() was completely broken, but if that's
+the case, the changelog needs to be _much_ more verbose in explaining everything.
+
+> Fix the implementation of poll mode in pic simulation by pic_intack,
+
+Add () when referencing functions by name, i.e. pic_intack().
+
+> and remove redundant pic_poll_read code.
+
+Removing pic_poll() needs to be done in a separate patch.  Removing the helper
+while simultaneously modifying its effective code makes the patch unnecessarily
+difficult to review.
+
+> Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
+> ---
+>  arch/x86/kvm/i8259.c | 29 ++++++-----------------------
+>  1 file changed, 6 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
+> index 4756bcb5724f..bc5b758e8f73 100644
+> --- a/arch/x86/kvm/i8259.c
+> +++ b/arch/x86/kvm/i8259.c
+> @@ -397,35 +397,18 @@ static void pic_ioport_write(void *opaque, u32 addr, u32 val)
+>  		}
+>  }
+>  
+> -static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
+> -{
+> -	int ret;
+> -
+> -	ret = pic_get_irq(s);
+> -	if (ret >= 0) {
+> -		if (addr1 >> 7) {
+> -			s->pics_state->pics[0].isr &= ~(1 << 2);
+> -			s->pics_state->pics[0].irr &= ~(1 << 2);
+> -		}
+> -		s->irr &= ~(1 << ret);
+> -		pic_clear_isr(s, ret);
+> -		if (addr1 >> 7 || ret != 2)
+> -			pic_update_irq(s->pics_state);
+> -	} else {
+> -		ret = 0x07;
+> -		pic_update_irq(s->pics_state);
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+>  static u32 pic_ioport_read(void *opaque, u32 addr)
+>  {
+>  	struct kvm_kpic_state *s = opaque;
+>  	int ret;
+>  
+>  	if (s->poll) {
+> -		ret = pic_poll_read(s, addr);
+> +		ret = pic_get_irq(s);
+> +		if (ret >= 0) {
+> +			pic_intack(s, ret);
+> +			ret |= 0x80;
+> +		} else
+
+All branches in an if-elif-else statment need curly braces if any branch needs
+statements (again, ignore the bad "prior art" in this file), i.e.
+
+		if (ret >= 0) {
+			...
+		} else {
+			ret = 0;
+		}
+
+> +			ret = 0;
+>  		s->poll = 0;
+>  	} else
+>  		if ((addr & 1) == 0)
+> -- 
+> 2.37.3
+> 
