@@ -2,168 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893516DC9D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1556DC9DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjDJRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
+        id S230244AbjDJRPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjDJROy (ORCPT
+        with ESMTP id S230216AbjDJRPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:14:54 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C21210D;
-        Mon, 10 Apr 2023 10:14:53 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AFuo4M020232;
-        Mon, 10 Apr 2023 17:14:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=xdgv48S2+WPNyzZk0JpYPKZH0H+r6IYvnFJk2oxQuGI=;
- b=Rwr/ACHYd1sG4PAW9B9ErfHDyFl5ZUgrHV3iJHY58NBYUGUZXPKzLumNTV3FunchmpUH
- SFpHPEWe6OrTxbcA8gmWjMhGmbO7rUpHRpzfJZQucaqVVBsrq+uwEwRttR5KS09rGe9x
- urt73+QvFCFnCNJq3s4Bp+q3VLt/LIvyMYWGOJDyM/RUxido1CB6I9k6Bs548z2bllmh
- HlU/ksKzCYSLisyF2BeziehCBAM/J1is+eaTWi++PRSK815/B0GIOlN/aIv45TVZA1iU
- RdSItfUdKqGDxPLOB7ibZ1Z26bRtiuB8lIpz7wJ2tZNelqj8n+sUlIAf6bWm/dJyansy zQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvm97gcay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 17:14:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AHEm8a001728
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 17:14:48 GMT
-Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Apr 2023 10:14:47 -0700
-From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v5 1/1] soc: qcom: mdt_loader: Enhance split binary detection
-Date:   Mon, 10 Apr 2023 10:14:32 -0700
-Message-ID: <20230410171432.19046-1-quic_gokukris@quicinc.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 10 Apr 2023 13:15:01 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DD02125
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:15:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id e11so7146099lfc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681146899;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=refaldnRWRXVIagG/kiigNl9L5Qr3WA3N3K9r8I7Qew=;
+        b=JOZZ6sGNZEcvep9VW/UfBqlheOsM2lwaD1CRX84UkeMSuPvGwUo8V9Sa/5gRKPjWxp
+         +P3zu1gcvh8LxeC1ZsHRAOj7Kq/NJc5G8LEaOWUEpFwVmsjnY4+3XeP2E4PJfkALkoye
+         N0ap6HA6TqC7ctfeVy+dKZcnCNwqhfMvYCBswCq9gHuv2yGu04khyp/yWPEavK0k5Ij8
+         aL0ZaqX5RW8Conj31bgyxq1MjipMv7Zh9ib8xO/URUeI1z0k5H/u6EiWVz/0ihf74isK
+         ylkifBpl9+HwIqT00YUr+yGfyfJY4JomJmgaEspJhmJSl0+c70ZwohHaL2EPBKP9vQkM
+         L8+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681146899;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=refaldnRWRXVIagG/kiigNl9L5Qr3WA3N3K9r8I7Qew=;
+        b=IttlTw3bpgDXnhapF/hl/DpSWO0VzssfLDfuTvOa0YA/h+AJT+WZlFWHZIS/lTDGV2
+         M8xSLIbZus7MGKYuPH42xIzLqsV04DPFE0j851+4PzAHzZnpb6bGrSgS0UUeZzwvhYyi
+         yu+0JBaGU76M1gyhtWM1UQQW0TNIJhvNdg6SbnoFBnsgAVwmkgs64NOBu+/41Ek7zxBf
+         rYslGXuPlryQzdsJc+7vOFpadGUc+tmelvYTuemrOs7z6aA3804GUHjRX9g5jGmUxDzE
+         rFwAYVv5SpuuDkJt7OrhdY5m3v+mE6qWQJiY6bC6Umd7zKT2DGuH8b7dvX/cTE0GRUNo
+         Rvtw==
+X-Gm-Message-State: AAQBX9f+3iy/YXwlhumd6U2GXlYrbi2/qYFPxB6lmYZpnJkhLm6IT5O+
+        /602w8IlwRnykQ7cP1pBp6cyl3LwAZr0AcB0MkwSV4W1+Pu1i+QtHx4OVg==
+X-Google-Smtp-Source: AKy350ZraTUPzAz8G44kGeoDG5OoCpaJYxXg90vQzclY8VJumWuembahNcNf8NVNb7ofQRSk66WmQ+uukwrq3pT214I=
+X-Received: by 2002:ac2:51c7:0:b0:4eb:c44:ed50 with SMTP id
+ u7-20020ac251c7000000b004eb0c44ed50mr3042507lfm.9.1681146898639; Mon, 10 Apr
+ 2023 10:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QgBz8lDrWg-Y0BFJkTogsBHeIynZrowI
-X-Proofpoint-ORIG-GUID: QgBz8lDrWg-Y0BFJkTogsBHeIynZrowI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- adultscore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304100148
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230326144701.3039598-1-nikunj@amd.com> <20230326144701.3039598-9-nikunj@amd.com>
+In-Reply-To: <20230326144701.3039598-9-nikunj@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 10 Apr 2023 11:14:47 -0600
+Message-ID: <CAMkAt6rqsg6=Sx6Fqnf7KNOUB9YPMU6TUriZYZXbXQTvcoKzNw@mail.gmail.com>
+Subject: Re: [PATCH v2 08/11] x86/sev: Add Secure TSC support for SNP guests
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@alien8.de,
+        thomas.lendacky@amd.com, dionnaglaze@google.com, seanjc@google.com,
+        pbonzini@redhat.com, michael.roth@amd.com, ketanch@iitk.ac.in
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It may be that the offset of the first program header lies inside the mdt's
-filesize, in this case the loader would incorrectly assume that the bins
-were not split. The loading would then continue on to fail for split bins.
-This change updates the logic used by the mdt loader to understand whether
-the firmware images are split or not. It figures this out by checking if
-each programs header's segment lies within the file or not.
+> +
+>  /* #VC handler runtime per-CPU data */
+>  struct sev_es_runtime_data {
+>         struct ghcb ghcb_page;
+> @@ -1107,7 +1111,7 @@ static void *alloc_shared_pages(size_t sz)
+>         return page_address(page);
+>  }
+>
+> -static int snp_setup_psp_messaging(struct sev_guest_platform_data *pdata)
+> +static int __init snp_setup_psp_messaging(struct sev_guest_platform_data *pdata)
+>  {
+>         u64 gpa;
+>         int ret;
+> @@ -1406,6 +1410,80 @@ bool snp_assign_vmpck(struct snp_guest_dev *dev, int vmpck_id)
+>  }
+>  EXPORT_SYMBOL_GPL(snp_assign_vmpck);
+>
+> +static int __init snp_get_tsc_info(void)
+> +{
+> +       u8 buf[SNP_TSC_INFO_REQ_SZ + AUTHTAG_LEN];
+> +       struct snp_tsc_info_resp tsc_resp = {0};
+> +       struct snp_tsc_info_req tsc_req;
+> +       struct snp_guest_req req;
+> +       struct snp_guest_dev dev;
+> +       int rc, resp_len;
+> +
+> +       /*
+> +        * The intermediate response buffer is used while decrypting the
+> +        * response payload. Make sure that it has enough space to cover the
+> +        * authtag.
+> +        */
+> +       resp_len = sizeof(tsc_resp) + AUTHTAG_LEN;
+> +       if (sizeof(buf) < resp_len)
+> +               return -EINVAL;
+> +
+> +       /* Zero the tsc_info_req */
+> +       memzero_explicit(&tsc_req, sizeof(tsc_req));
+> +       memzero_explicit(&req, sizeof(req));
 
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
----
-V5: Removes extra empty lines from V4.
+Whats the guidance on when we should use memzero_explicit() vs just
+something like: `snp_tsc_info_resp tsc_resp = {0};`?
 
-V4: Removes the unneceessary change in qcom_mdt_read_metadata(), the
-exisiting check holds good in case the hash segment is in the loaded image.
+> +
+> +       dev.pdata = platform_data;
+> +       if (!snp_assign_vmpck(&dev, 0))
+> +               return -EINVAL;
+> +
+> +       req.msg_version = MSG_HDR_VER;
+> +       req.msg_type = SNP_MSG_TSC_INFO_REQ;
+> +       req.req_buf = &tsc_req;
+> +       req.req_sz = sizeof(tsc_req);
+> +       req.resp_buf = buf;
+> +       req.resp_sz = resp_len;
+> +       req.fw_err = NULL;
 
-V3 is separated out from [1] and includes
-changes addressing comments from that patch set.
+Why do we not want the FW error code?
 
-[1] https://lore.kernel.org/all/20230306231202.12223-5-quic_molvera@quicinc.com/
----
- drivers/soc/qcom/mdt_loader.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 33dd8c315eb7..814646ce41e5 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -258,6 +258,26 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
- }
- EXPORT_SYMBOL_GPL(qcom_mdt_pas_init);
- 
-+static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char* fw_name)
-+{
-+	const struct elf32_phdr *phdrs;
-+	const struct elf32_hdr *ehdr;
-+	uint64_t seg_start, seg_end;
-+	int i;
-+
-+	ehdr = (struct elf32_hdr *)fw->data;
-+	phdrs = (struct elf32_phdr *)(ehdr + 1);
-+
-+	for (i = 0; i < ehdr->e_phnum; i++) {
-+		seg_start = phdrs[i].p_offset;
-+		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
-+		if (seg_start > fw->size || seg_end > fw->size)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 			   const char *fw_name, int pas_id, void *mem_region,
- 			   phys_addr_t mem_phys, size_t mem_size,
-@@ -270,6 +290,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 	phys_addr_t min_addr = PHYS_ADDR_MAX;
- 	ssize_t offset;
- 	bool relocate = false;
-+	bool is_split;
- 	void *ptr;
- 	int ret = 0;
- 	int i;
-@@ -277,6 +298,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 	if (!fw || !mem_region || !mem_phys || !mem_size)
- 		return -EINVAL;
- 
-+	is_split = qcom_mdt_bins_are_split(fw, fw_name);
- 	ehdr = (struct elf32_hdr *)fw->data;
- 	phdrs = (struct elf32_phdr *)(ehdr + 1);
- 
-@@ -330,8 +352,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 
- 		ptr = mem_region + offset;
- 
--		if (phdr->p_filesz && phdr->p_offset < fw->size &&
--		    phdr->p_offset + phdr->p_filesz <= fw->size) {
-+		if (phdr->p_filesz && !is_split) {
- 			/* Firmware is large enough to be non-split */
- 			if (phdr->p_offset + phdr->p_filesz > fw->size) {
- 				dev_err(dev, "file %s segment %d would be truncated\n",
--- 
-2.39.2
-
+> +       req.exit_code = SVM_VMGEXIT_GUEST_REQUEST;
+> +       rc = snp_send_guest_request(&dev, &req);
+> +       if (rc)
+> +               goto err_req;
+> +
+> +       memcpy(&tsc_resp, buf, sizeof(tsc_resp));
+> +       pr_debug("%s: Valid response status %x scale %llx offset %llx factor %llx\n",
+> +                __func__, tsc_resp.status, tsc_resp.tsc_scale, tsc_resp.tsc_offset,
+> +                tsc_resp.tsc_factor);
+> +
+> +       guest_tsc_scale = tsc_resp.tsc_scale;
+> +       guest_tsc_offset = tsc_resp.tsc_offset;
+> +
+> +err_req:
+> +       /* The response buffer contains the sensitive data, explicitly clear it. */
+> +       memzero_explicit(buf, sizeof(buf));
+> +       memzero_explicit(&tsc_resp, sizeof(tsc_resp));
+> +       memzero_explicit(&req, sizeof(req));
+> +
+> +       return rc;
+> +}
+> +
