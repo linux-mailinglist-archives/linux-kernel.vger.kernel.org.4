@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911E36DCA04
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88806DCA0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjDJRam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S230313AbjDJReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjDJRah (ORCPT
+        with ESMTP id S229731AbjDJReE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:30:37 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1055A2681;
-        Mon, 10 Apr 2023 10:30:36 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id l1so6956982qvv.4;
-        Mon, 10 Apr 2023 10:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681147835; x=1683739835;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mfMMmtPEDLwOl/JKAguDStI8/SqoqRX9kqOTCMn7AGw=;
-        b=d6LAhlAD/HEDF+Wi2ybYcJFdo5uqQjKD+ha83RTcAkYnwlYy8WSeJfOvlZFPAIf3UE
-         KPtg1YNJ7TlBD+GKSKjI4yLiOGlnGtWiyQmbQAcYk/mWXWWnNTQO05v7COcmFDGUzIi6
-         8vLm8er86fjdvyL923sUS2gsfaEByCa3lik6RiqHL04t4DeyitM0XlmFew1GOxmaGh/r
-         yV72FYZY+xa61IkQv2SE/2R1zvp7ktDe3tiVDuOqae9c/WLk2oA3V/fBi7iaosPFDkpT
-         LVacqWc9OW0hy6q8Dh/Us02lNHs2jbpuGDE326h2PEVWDZk+XknOL6JDCCy9RqlvObfr
-         ArkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681147835; x=1683739835;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mfMMmtPEDLwOl/JKAguDStI8/SqoqRX9kqOTCMn7AGw=;
-        b=C19ExgAg+B2v1ugWCrvC2V7Mz761OOoQoThLCg/O3T2eHP3OGs97yGtlLAp2CDFPH0
-         zbbae8zn4B8/MBf/qW5L1Y+Od4pEWFclPSeEtHuRWuVGuaL8aUBhI7Y+8Sz5oTLAQfly
-         Zrhw8UdNvT4jkfyQT6UtYHPAm1n88X9vkEJlDRyjSOkCppvShZhrCxf7JOTC2/QHE0GQ
-         0W+Ut5qaQo0KzhmDOUb1ZHkEd6d7mZTKY9999Z7KoHZsZFtZg7jEEuwra5Fz+/Jidhl9
-         LqYx5WaawQCgeg6PyhOHqvrbclf2QUB1/4HLzBxXUOV5r535C4uZ5YaXmIVh2jfNYH2U
-         JWKA==
-X-Gm-Message-State: AAQBX9cBW43t/ccEar+Ggd3Lp36trulm2FvViBanaJQNNFqXXy1u1WOo
-        lwiJqHNkBOMeZ4Wg5qM7l8VcqWXHY5M=
-X-Google-Smtp-Source: AKy350btNdvQi8RnKbkYq8pj3Vj+PYTvnVtml87+DRqgn0usWQrRdpJIUR64NxGg9qmQZKQy8iX0/Q==
-X-Received: by 2002:ad4:5de8:0:b0:5ed:68ba:ce6b with SMTP id jn8-20020ad45de8000000b005ed68bace6bmr7079818qvb.4.1681147835104;
-        Mon, 10 Apr 2023 10:30:35 -0700 (PDT)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id e15-20020a0cf74f000000b005ead964bfa2sm1257153qvo.127.2023.04.10.10.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 10:30:34 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 13:30:34 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>, Lu Wei <luwei32@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com, brouer@redhat.com,
-        keescook@chromium.org, jbenc@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-ID: <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
-References: <20230410022152.4049060-1-luwei32@huawei.com>
- <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: Add check for csum_start in
- skb_partial_csum_set()
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        Mon, 10 Apr 2023 13:34:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E6A1BF3;
+        Mon, 10 Apr 2023 10:34:03 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AFqbZn017675;
+        Mon, 10 Apr 2023 17:33:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=sb6jpc0KNTLDv897qIhEwyKHMSgx7o9THMFXo2oD9bU=;
+ b=dxGZsF62iaLppBkOy6SOUJELTdCvaPly5rVhisdckfB3Gc/dwgAJ8zGLulvP0Prbn6fM
+ l5O1rm9zkhlXMekbQpqwNDji8IdPGrumaHaCyEovpwwkJcttosz4uujfLvtTpEI9Gehr
+ moixAK/Sq5rY7ab9635XOZyzGa0F5Hhgig6NvGfjobGGKMH1wgWZdCSFfTikio/LQNXV
+ /yvMeTSw/ifdNyy52SXD35v73R+exi9farghvxMx+jAxwF7kFTAKSapMAnWQIjHBcZnr
+ EZM+FO/4stKpzUL36nYbEFYpkjOAiXIcpqHvEGh+60/kT/0BvKOWx3OJg9ykfUWOPSDG Dg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvmnagd0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 17:33:54 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AHXrs1030256
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 17:33:53 GMT
+Received: from [10.110.88.83] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 10 Apr
+ 2023 10:33:53 -0700
+Message-ID: <74551421-56df-73d3-3f4d-1708768e207a@quicinc.com>
+Date:   Mon, 10 Apr 2023 10:33:52 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: support parameter
+ passing in smc/hvc
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <sudeep.holla@arm.com>
+CC:     <cristian.marussi@arm.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230409181918.29270-1-quic_nkela@quicinc.com>
+ <20230409181918.29270-2-quic_nkela@quicinc.com>
+ <5d264f46-b9e8-62ec-9bce-9d666fd1eaa8@linaro.org>
+From:   Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <5d264f46-b9e8-62ec-9bce-9d666fd1eaa8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Yz9HcfcsfpGN7L2DzyzCAtch_uGvDWY1
+X-Proofpoint-GUID: Yz9HcfcsfpGN7L2DzyzCAtch_uGvDWY1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_12,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=984
+ impostorscore=0 adultscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100151
+X-Spam-Status: No, score=-4.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,73 +85,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Dumazet wrote:
-> On Mon, Apr 10, 2023 at 4:22=E2=80=AFAM Lu Wei <luwei32@huawei.com> wro=
-te:
-> >
-> > If an AF_PACKET socket is used to send packets through a L3 mode ipvl=
-an
-> > and a vnet header is set via setsockopt() with the option name of
-> > PACKET_VNET_HDR, the value of offset will be nagetive in function
-> > skb_checksum_help() and trigger the following warning:
-> >
-> > WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
-> > skb_checksum_help+0x2dc/0x390
-> > ......
-> > Call Trace:
-> >  <TASK>
-> >  ip_do_fragment+0x63d/0xd00
-> >  ip_fragment.constprop.0+0xd2/0x150
-> >  __ip_finish_output+0x154/0x1e0
-> >  ip_finish_output+0x36/0x1b0
-> >  ip_output+0x134/0x240
-> >  ip_local_out+0xba/0xe0
-> >  ipvlan_process_v4_outbound+0x26d/0x2b0
-> >  ipvlan_xmit_mode_l3+0x44b/0x480
-> >  ipvlan_queue_xmit+0xd6/0x1d0
-> >  ipvlan_start_xmit+0x32/0xa0
-> >  dev_hard_start_xmit+0xdf/0x3f0
-> >  packet_snd+0xa7d/0x1130
-> >  packet_sendmsg+0x7b/0xa0
-> >  sock_sendmsg+0x14f/0x160
-> >  __sys_sendto+0x209/0x2e0
-> >  __x64_sys_sendto+0x7d/0x90
-> >
-> > The root cause is:
-> > 1. skb->csum_start is set in packet_snd() according vnet_hdr:
-> >    skb->csum_start =3D skb_headroom(skb) + (u32)start;
-> >
-> >    'start' is the offset from skb->data, and mac header has been
-> >    set at this moment.
-> >
-> > 2. when this skb arrives ipvlan_process_outbound(), the mac header
-> >    is unset and skb_pull is called to expand the skb headroom.
-> >
-> > 3. In function skb_checksum_help(), the variable offset is calculated=
 
-> >    as:
-> >       offset =3D skb->csum_start - skb_headroom(skb);
-> >
-> >    since skb headroom is expanded in step2, offset is nagetive, and i=
-t
-> >    is converted to an unsigned integer when compared with skb_headlen=
+On 4/10/2023 10:20 AM, Krzysztof Kozlowski wrote:
+> On 09/04/2023 20:19, Nikunj Kela wrote:
+>> Currently, smc/hvc calls are made with smc-id only. The parameters are
+>> all set to zeros. This patch defines two optional device tree bindings,
+>> that can be used to pass parameters in smc/hvc calls.
+>>
+>> This is useful when multiple scmi instances are used with common smc-id.
+>>
+>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/firmware/arm,scmi.yaml   | 16 ++++++++++++++++
+>>   1 file changed, 16 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+>> index 5824c43e9893..08c331a79b80 100644
+>> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+>> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+>> @@ -115,6 +115,22 @@ properties:
+>>       description:
+>>         SMC id required when using smc or hvc transports
+>>   
+>> +  arm,smc32-params:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    description:
+>> +      An optional parameter list passed in smc32 or hvc32 calls
+>> +    default: 0
+>> +    minItems: 1
+>> +    maxItems: 6
+>> +
+>> +  arm,smc64-params:
+>> +    $ref: /schemas/types.yaml#/definitions/uint64-array
+>> +    description:
+>> +      An optional parameter list passed in smc64 or hvc64 calls
+>> +    default: 0
+>> +    minItems: 1
+>> +    maxItems: 6
+> These do not look like hardware properties and the fact that you need
+> two properties for the same also points that you tied it to specific SW
+> interface.
 
-> >    and trigger the warning.
-> =
+This is certainly not the H/W property but then smc-id is also not H/W 
+property either
 
-> Not sure why it is negative ? This seems like the real problem...
-> =
+but that gets passed via DTB. I could use the same property for both 
+however I wasn't sure
 
-> csum_start is relative to skb->head, regardless of pull operations.
-> =
+which datatype should be used, uint32-array/uint64-array. Moreover, I 
+thought if users are
 
-> whatever set csum_start to a too small value should be tracked and fixe=
-d.
+passing parameters, they better know which SMC convention they are using 
+hence used two
 
-Right. The only way I could see it go negative is if something does
-the equivalent of pskb_expand_head with positive nhead, and without
-calling skb_headers_offset_update.
+explicit properties.
 
-Perhaps the cause can be found by instrumenting all the above
-functions in the trace to report skb_headroom and csum_start.
-And also virtio_net_hdr_to_skb.
+> Why this should be board-specific? Actually better question - why this
+> should be fixed per board? Doesn't my software want to have different
+> parameters, depending on some other condition?
+
+Not sure I follow, I didn't say this is board specific. People can use 
+the parameters to pass
+
+whatever their S/W demands. SMC/HVC calls are made by passing parameters 
+which is what this patch is enabling.
+
+>
+> You also did not provide any DTS user for this, so difficult to judge
+> usefulness.
+
+The work is still on going and we will push the dts in few months, 
+however that shouldn't stop
+
+making changes in advance.
+
+> Best regards,
+> Krzysztof
+>
