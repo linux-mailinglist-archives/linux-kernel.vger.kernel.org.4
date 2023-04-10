@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870256DC7C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB016DC7D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjDJOXA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 10:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S229727AbjDJOa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjDJOW6 (ORCPT
+        with ESMTP id S229503AbjDJOay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:22:58 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DD03C1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:22:56 -0700 (PDT)
-Received: from loongson.cn (unknown [209.85.128.49])
-        by gateway (Coremail) with SMTP id _____8AxJPy+GzRk7iEZAA--.38772S3;
-        Mon, 10 Apr 2023 22:22:55 +0800 (CST)
-Received: from mail-wm1-f49.google.com (unknown [209.85.128.49])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxtry7GzRkVKccAA--.28094S3;
-        Mon, 10 Apr 2023 22:22:54 +0800 (CST)
-Received: by mail-wm1-f49.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso4381851wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:22:54 -0700 (PDT)
-X-Gm-Message-State: AAQBX9es+pR5TCCO3/Kevsirz2khNWiI/l6qxtMRjM8qC50me6+9/0tf
-        D8cQ7FXTi9xeV4LS2rhZvJh0k/mvH8T3rp/fIq6I4g==
-X-Google-Smtp-Source: AKy350at++pGQMV2onEnYp+vCGoDPiljaKXoVstrDYlsMwhZnhPuzQB23hvux4mWiW1fP+w9nLREELhRKQZ/Dh/lpZs=
-X-Received: by 2002:a1c:4c10:0:b0:3ed:7664:6d79 with SMTP id
- z16-20020a1c4c10000000b003ed76646d79mr1560595wmf.0.1681136570453; Mon, 10 Apr
- 2023 07:22:50 -0700 (PDT)
+        Mon, 10 Apr 2023 10:30:54 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6448D4C3C;
+        Mon, 10 Apr 2023 07:30:50 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VfoSju._1681137045;
+Received: from 30.221.131.183(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VfoSju._1681137045)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Apr 2023 22:30:46 +0800
+Message-ID: <9f7eeb63-52a0-f83a-2e03-cf97ee419573@linux.alibaba.com>
+Date:   Mon, 10 Apr 2023 22:30:45 +0800
 MIME-Version: 1.0
-References: <20230410115734.93365-1-wangrui@loongson.cn> <b80e083baa49f0443abee66eb888fac920f66e79.camel@xry111.site>
-In-Reply-To: <b80e083baa49f0443abee66eb888fac920f66e79.camel@xry111.site>
-From:   Rui Wang <wangrui@loongson.cn>
-Date:   Mon, 10 Apr 2023 22:22:39 +0800
-X-Gmail-Original-Message-ID: <CAHirt9ib2LPXMbxb+UCJB1MsBnUuWNLb5+uyqcR5Wiw2fsJi6w@mail.gmail.com>
-Message-ID: <CAHirt9ib2LPXMbxb+UCJB1MsBnUuWNLb5+uyqcR5Wiw2fsJi6w@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Improve memory ops
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-CM-TRANSID: AQAAf8Cxtry7GzRkVKccAA--.28094S3
-X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7JFy5Kw1rKrW5ZryrXFyftFb_yoW3uwbE93
-        WkK3yDuw4DJFZ7Gan8Kr47Ary3WFW5WF10kw1jgr4akryrXF1vvF1kWFy3Zryxta9YgF1D
-        GrWYqF18AasFvjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        27kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-        IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH net-next v4 0/9] net/smc: Introduce SMC-D-based OS
+ internal communication acceleration
+To:     Niklas Schnelle <schnelle@linux.ibm.com>, kgraul@linux.ibm.com,
+        wenjia@linux.ibm.com, jaka@linux.ibm.com, wintera@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1679887699-54797-1-git-send-email-guwen@linux.alibaba.com>
+ <6156aaad710bc7350cbae6cb821289c8a37f44bb.camel@linux.ibm.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <6156aaad710bc7350cbae6cb821289c8a37f44bb.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 8:54 PM Xi Ruoyao <xry111@xry111.site> wrote:
-> Regarding these functions: we have -ffreestanding which is preventing
-> the compiler from optimizing for e.g. "memcpy(a, b, 8);" into a simple
-> ld.d/st.d pair.  A explicit compiler built-in usage like
->
->   #define memcpy(a, b, c) __builtin_memcpy(a, b, c)
->
-> would allow the compiler to do such kind of optimization.   Will this
-> improve the performance?
+Hi Niklas,
 
-That's a good question. IIUC, the current compiler generates
-inefficient code for constant-length memcpy, which may sacrifice
-performance for compatibility, as not all hardware supports unaligned
-memory access. We need a runtime CPU feature dispatch mechanism
-similar to alternatives to improve the compiler. This is indeed a
-problem that needs to be addressed.
+On 2023/4/6 01:04, Niklas Schnelle wrote:
 
-Regards,
-Rui
+> 
+> Let me just spell out some details here to make sure we're all on the
+> same page.
+> 
+> You're assuming that GIDs are generated randomly at cryptographic
+> quality. In the code I can see that you use get_random_bytes() which as
+> its comment explains supplies the same quality randomness as
+> /dev/urandom so on modern kernels that should provide cryptographic
+> quality randomness and be fine. Might be something to keep in mind for
+> backports though.
+> 
+> The fixed CHID of 0xFFFF makes sure this system identity confusion can
+> only occur between SMC-D loopback (and possibly virtio-ism?) never with
+> ISM based SMC-D or SMC-R as these never use this CHID value. Correct?
 
+Yes, CHID of 0xFFFF used for SMC-D loopback ensures the GID collision
+won't involve ISM based SMC-D or SMC-R.
+
+> 
+> Now for the collision scenario above. As I understand it the
+> probability of the case where fallback does *not* occur is equivalent
+> to a 128 bit hash collision. Basically the random 64 bit GID_A
+> concatenated with the 64 bit DMB Token_A needs to just happen to match
+> the concatenation of the random 64 bit GID_B with DMB Token_B.
+
+Yes, almost like this.
+
+A very little correction: Token_A happens to match a DMB token in B's
+kernel (not necessary Token_B) and Token_B happens to match a DMB token
+in A's kernel (not necessary Token_A).
+
+  With
+> that interpretation we can consult Wikipedia[0] for a nice table of how
+> many random GID+DMB Token choices are needed for a certain collision
+> probability. For 128 bits at least 8.2×10^11 tries would be needed just
+> to reach a 10^-15 collision probability. Considering the collision does
+> not only need to exist between two systems but these also need to try
+> to communicate with each other and happen to use the colliding DMBs for
+> things to get into the broken fallback case I think from a theoretical
+> point of view this sounds like neglible risk to me.
+> 
+Thanks for the reference data.
+
+> That said I'm more worried about the fallback to TCP being broken due
+> to a code bug once the GIDs do match which is already extremely
+> unlikely and thus not naturally tested in the wild. Do we have a plan
+> how to keep testing that fallback scenario somehow. Maybe with a
+> selftest or something?
+> 
+
+IIUC, you are worried about the code implementation of fallback when GID
+collides but DMB token check works? If so, I think we can provide a way
+to set loopback device's GID manually, so that we can inject GID collision
+fault to test the code.
+
+> If we can solve the testing part then I'm personally in favor of this
+> approach of going with cryptograhically random GID and DMB token. It's
+> simple and doesn't depend on external factors and doesn't need a
+> protocol extension except for possibly reserving CHID 0xFFFF.
+> 
+> One more question though, what about the SEID why does that have to be
+> fixed and at least partially match what ISM devices use? I think I'm
+> missing some SMC protocol/design detail here. I'm guessing this would
+> require a protocol change?
+
+SEID related topic will be replied in the next e-mail.
+> 
+> Thanks,
+> Niklas
+> 
+> [0] https://en.wikipedia.org/wiki/Birthday_attack
+> 
+
+Thanks!
+Wen Gu
