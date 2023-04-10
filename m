@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DD06DC7ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5776DC7F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjDJOhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S229840AbjDJOiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjDJOha (ORCPT
+        with ESMTP id S229748AbjDJOiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:37:30 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919B855A1;
-        Mon, 10 Apr 2023 07:37:25 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1plsdn-0007c2-2F;
-        Mon, 10 Apr 2023 16:37:07 +0200
-Date:   Mon, 10 Apr 2023 15:37:04 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH v2 net-next 13/14] net: dsa: mt7530: fix port
- capabilities for MT7988
-Message-ID: <ZDQfEAY8UWI6tgrY@makrotopia.org>
-References: <20230407134626.47928-1-arinc.unal@arinc9.com>
- <20230407134626.47928-14-arinc.unal@arinc9.com>
+        Mon, 10 Apr 2023 10:38:12 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF4A2D70
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681137491;
+        bh=he6UU8yYdaTIql9YV8y79tAkMBS2BT8Bu40h6/N3/Zw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nKObKDzrur0ahiZcC/8m24MvI8iuzzJtZrcsd38bT/ivqJJ9neg4fX3WCmaGx4S1u
+         QQCCuZrDNUi6311xdYDpSeUGN7O8LogRURLzUu+E6s6Cw4miG6knYC6syLYzKNMSey
+         nth0/bKAobvVTNKyF35swi4G3/p9J+wSgaDS95QE=
+Received: from [IPv6:240e:358:1117:7c00:dc73:854d:832e:5] (unknown [IPv6:240e:358:1117:7c00:dc73:854d:832e:5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id D136A65A39;
+        Mon, 10 Apr 2023 10:38:06 -0400 (EDT)
+Message-ID: <f568fd917bb8789fcef4206e256ef045176605e2.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Improve memory ops
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Rui Wang <wangrui@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Date:   Mon, 10 Apr 2023 22:37:56 +0800
+In-Reply-To: <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
+References: <20230410115734.93365-1-wangrui@loongson.cn>
+         <c90c442fe029bfb9c4487284366800b8781954e1.camel@xry111.site>
+         <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230407134626.47928-14-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,41 +54,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:46:25PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> On the switch on the MT7988 SoC, there are only 4 PHYs. That's port 0 to 3.
-> Set the internal phy cases to '0 ... 3'.
-> 
-> There's no need to clear the config->supported_interfaces bitmap before
-> reporting the supported interfaces as all bits in the bitmap will already
-> be initialized to zero when the phylink_config structure is allocated.
-> There's no code that would change the bitmap beforehand. Remove it.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Mon, 2023-04-10 at 22:19 +0800, Rui Wang wrote:
+> On Mon, Apr 10, 2023 at 8:20=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wr=
+ote:
+> >=20
+> > On Mon, 2023-04-10 at 19:57 +0800, WANG rui wrote:
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* align up address */
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 andi=C2=A0=C2=A0=C2=A0 t1, a0, =
+7
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sub.d=C2=A0=C2=A0 a0, a0, t1
+> >=20
+> > bstrins.d a0, zero, 2, 0
+> >=20
+> > Likewise for other aligning operations if the temporary is not used.
+>=20
+> I think we're on the same page. I had previously tested this on the
+> user-space version[1], but it's not a performance-critical area.
 
-Acked-by: Daniel Golle <daniel@makrotopia.org>
+The point is "if you can reduce one instruction and one register usage
+with no harm, why not do it?" :)
 
-> ---
->  drivers/net/dsa/mt7530.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 6fbbdcb5987f..903e39b7b772 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2545,10 +2545,8 @@ static void mt7531_mac_port_get_caps(struct dsa_switch *ds, int port,
->  static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
->  				     struct phylink_config *config)
->  {
-> -	phy_interface_zero(config->supported_interfaces);
-> -
->  	switch (port) {
-> -	case 0 ... 4: /* Internal phy */
-> +	case 0 ... 3: /* Internal phy */
->  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
->  			  config->supported_interfaces);
->  		break;
-> -- 
-> 2.37.2
-> 
+AFAIK bstrins.d should be available on all 64-bit LoongArch CPUs.
+
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
