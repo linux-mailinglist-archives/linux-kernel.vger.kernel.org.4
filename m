@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2629B6DC224
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 02:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A123F6DC22C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 02:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjDJAQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 20:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S229632AbjDJAjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 20:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDJAQg (ORCPT
+        with ESMTP id S229621AbjDJAjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 20:16:36 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FF1270F;
-        Sun,  9 Apr 2023 17:16:35 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id w13so22910932oik.2;
-        Sun, 09 Apr 2023 17:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681085794;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4+fisEuyz2gfHLt3JYIWPhs8SsTmY/+pkrWOFqxJ7Vo=;
-        b=OHEa/HVSjeJeD1tyVDbghFF+22wjXiFb2KRwBTHx4d8Qf/q9H7k0lTqulaTHQxjZFA
-         kwMTysODgFI9g7wmI3DkS+0QGUA6eiwRAwHTfI9hT0hCDaON8ujXCcs9frjBln4T5KJ9
-         j6be/PejSUTxbMHOaX0mUhgoxxobzNHTbeL4UV6ST7+Fwi/FaUpcPnNbLCSMQ6+1ILpO
-         WUv12yi456tK175eIDmhqVAnFKoFOHt1+hu3jEY4hk4uy3KbPa5jtV1Fem5MQlQV/rlJ
-         nM7gNm6e3GROZ987lyhCJN8v6Dld42lwZtyliZDtvGJbbQoczniX2DzyRab4DncRu0Iz
-         eyXw==
+        Sun, 9 Apr 2023 20:39:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F305730E4
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 17:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681087123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JoipxyuFINXgUm44ia8nIP1Z7voF8xXNR8jbsieNzXY=;
+        b=OvucV4c3DKO5y4EszT1TCBvEORBR7FYyV622+BKvVqCSZg52dG/pMpXpnfJI3WxACLlCXz
+        XkVguzqZcNLPjl927Dtvf9Pp1lgSZHaza8PKR37gX2zwLrY15bT/1YlF7EL5GgOa/Tp8mi
+        K3LxfiCbvNX60ZCuDf/7EhuJSlfjzIY=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-155-e10mr_6WN6-GPnN5VAcsgg-1; Sun, 09 Apr 2023 20:38:41 -0400
+X-MC-Unique: e10mr_6WN6-GPnN5VAcsgg-1
+Received: by mail-pg1-f199.google.com with SMTP id v63-20020a638942000000b0050be9465db8so1441872pgd.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 17:38:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681085794;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20210112; t=1681087120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4+fisEuyz2gfHLt3JYIWPhs8SsTmY/+pkrWOFqxJ7Vo=;
-        b=vZrbCGQIcXH3tEJYwUwTtB9txb2IW8V8WrWwhwLgiDsg3TLUf/3cl/YvpnTyvU6Ws4
-         yMYJSbWWcrWWIi7w4CQV38r2SAaXMiVvQx3BKnW3xlq4cGJELCawB6iLiS3bR7suwHnc
-         zmTdWWO8tQ3Iv2NWGSYSGyLTYTRfhUNcjHspmOQ58F/I3A5MmqrOMWCbQd/q1N6ECo9L
-         8nZpGeYTvOWTr58la/tvRUKqTXfkIYVm5OPe+90YUkbz35SQDkfmmt1fQNE3aNK9/iAt
-         cekzPzC/swalSBJqphFVZRVvwuM+WH8OVyQ7qDaU4je3ln300rO3nB0+hq8sjNoSgPYX
-         heOg==
-X-Gm-Message-State: AAQBX9eDVV4ZqIgbFWWISz7dRoRRFrKvq3o4Ns1Da7T0AHg0/iuHTaTi
-        +LrvnS+d0ZxY2seQlBaub8D8cuFUp44=
-X-Google-Smtp-Source: AKy350bhj/m6K0FfZ8nZnci3FhzBXIPsVdyMYR3Z9YzByKigzTBswZhPYfy+EovZIqXZT2vITCDrPA==
-X-Received: by 2002:a05:6808:657:b0:387:4991:46de with SMTP id z23-20020a056808065700b00387499146demr3720533oih.47.1681085793959;
-        Sun, 09 Apr 2023 17:16:33 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id o2-20020a0568080bc200b0038413a012dasm3856409oik.4.2023.04.09.17.16.31
+        bh=JoipxyuFINXgUm44ia8nIP1Z7voF8xXNR8jbsieNzXY=;
+        b=33KYnxDXUK9cjuwT5RVGQOVAe1FlY1+XXBgKPZxNQVRmyGvoUt03OWGm3F4Iw4p7kP
+         LBVuXGU7agSdROXh4C/h9B6Xxk0hk7oYdsXDOpM0S8sraF2/h8S1e0Uop93+xfQOjQZu
+         A60F/echWd7PP08dJ7lGu6GwX1TJHUf+c+qzwnG3p+SBGNnHJfp61r0+vuwvJne+V++z
+         EXkcCoQILEMhIX+QuzFFU8VbqgFtXQuYZCFQHULJeuOIFj2Le7/4RKWmLuHcvSWbbQ0e
+         0k7ZDduZCpV8FpJENzo1sR271HYTnmjx+rXP6R+rjViNQYHWMoJQfEXLyKhrneunT1IE
+         bIvg==
+X-Gm-Message-State: AAQBX9fVLyeQlAqjsItX3My1JCcmHNvW+Fwlcn9AjWbXkG8UqCkrs9je
+        BG6BeUi+4bu87dtt9J6ZpTsZyB1KAQPTiqDKghkWpM5FNZ9xEuXIonaxFT09vDApsqExdFUxJcN
+        ye4wedpeh8kORly1qYvWKAKDS
+X-Received: by 2002:a17:903:2309:b0:1a0:4fb2:6623 with SMTP id d9-20020a170903230900b001a04fb26623mr13634380plh.40.1681087120698;
+        Sun, 09 Apr 2023 17:38:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bBhI9mfvIxmgS3HdFTr0TeJ85lYetpQhXwNJ7ayezRXC3PbhU01R+aemZYHD/yCMAoEoKv5w==
+X-Received: by 2002:a17:903:2309:b0:1a0:4fb2:6623 with SMTP id d9-20020a170903230900b001a04fb26623mr13634356plh.40.1681087120361;
+        Sun, 09 Apr 2023 17:38:40 -0700 (PDT)
+Received: from [10.72.12.179] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170902988400b0019cd1ee1523sm6420247plp.30.2023.04.09.17.38.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 17:16:33 -0700 (PDT)
-Message-ID: <6ef506d0-e7d5-e812-ad31-1716507dc9b9@gmail.com>
-Date:   Sun, 9 Apr 2023 21:16:29 -0300
+        Sun, 09 Apr 2023 17:38:39 -0700 (PDT)
+Message-ID: <5019ac6e-6871-9439-b24f-6bcb24bd89d8@redhat.com>
+Date:   Mon, 10 Apr 2023 08:38:31 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH] scripts: read cfgs from Makefile for rust-analyzer
+Subject: Re: [RFC PATCH v2 37/48] ceph: Use sendmsg(MSG_SPLICE_PAGES) rather
+ than sendpage()
 Content-Language: en-US
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230223025924.526200-1-yakoyoku@gmail.com>
-In-Reply-To: <20230223025924.526200-1-yakoyoku@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
+References: <c99f1f3d-25ac-6f5c-b5f1-26f7bfa513e8@redhat.com>
+ <7f7947d6-2a03-688b-dc5e-3887553f0106@redhat.com>
+ <20230329141354.516864-1-dhowells@redhat.com>
+ <20230329141354.516864-38-dhowells@redhat.com>
+ <709552.1680158901@warthog.procyon.org.uk>
+ <1814785.1680510766@warthog.procyon.org.uk>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <1814785.1680510766@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,70 +99,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/23 23:59, Martin Rodriguez Reboredo wrote:
-> Both `core` and `alloc` had their `cfgs` missing in `rust-project.json`,
-> to remedy this `generate_rust_analyzer.py` scans the Makefile from
-> inside the `rust` directory for them to be added to a dictionary that
-> each key corresponds to a crate and each value, to an array of `cfgs`.
-> 
-> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> ---
->  scripts/generate_rust_analyzer.py | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
-> index ecc7ea9a4dcf..8bfadd688ebc 100755
-> --- a/scripts/generate_rust_analyzer.py
-> +++ b/scripts/generate_rust_analyzer.py
-> @@ -9,6 +9,24 @@ import logging
->  import pathlib
->  import sys
->  
-> +def makefile_crate_cfgs(makefile):
-> +    # Get configurations from a Makefile.
-> +    cfgs = {}
-> +    with open(makefile) as fd:
-> +        for line in fd:
-> +            if line.endswith("-cfgs = \\\n"):
-> +                crate = line.replace("-cfgs = \\\n", "")
-> +                cfg = []
-> +                for l in map(lambda l: l.strip(), fd):
-> +                    if not l:
-> +                        cfgs[crate] = cfg
-> +                        break
-> +                    l = l.replace("--cfg ", "")
-> +                    l = l.replace(" \\", "")
-> +                    cfg.append(l)
-> +
-> +    return cfgs
-> +
->  def generate_crates(srctree, objtree, sysroot_src):
->      # Generate the configuration list.
->      cfg = []
-> @@ -24,6 +42,8 @@ def generate_crates(srctree, objtree, sysroot_src):
->      crates = []
->      crates_indexes = {}
->  
-> +    makefile_cfgs = makefile_crate_cfgs(srctree / "rust" / "Makefile")
-> +
->      def append_crate(display_name, root_module, deps, cfg=[], is_workspace_member=True, is_proc_macro=False):
->          crates_indexes[display_name] = len(crates)
->          crates.append({
-> @@ -44,6 +64,7 @@ def generate_crates(srctree, objtree, sysroot_src):
->          "core",
->          sysroot_src / "core" / "src" / "lib.rs",
->          [],
-> +        cfg=makefile_cfgs.get("core", []),
->          is_workspace_member=False,
->      )
->  
-> @@ -57,6 +78,7 @@ def generate_crates(srctree, objtree, sysroot_src):
->          "alloc",
->          srctree / "rust" / "alloc" / "lib.rs",
->          ["core", "compiler_builtins"],
-> +        cfg=makefile_cfgs.get("alloc", []),
->      )
->  
->      append_crate(
 
-Bump, I think this can fit into rust-fixes for 6.3.
+On 4/3/23 16:32, David Howells wrote:
+> Xiubo Li <xiubli@redhat.com> wrote:
+>
+>> On 3/30/23 14:48, David Howells wrote:
+>>> Xiubo Li <xiubli@redhat.com> wrote:
+>>>
+>>>> BTW, will this two patch depend on the others in this patch series ?
+>>> Yes.  You'll need patches that affect TCP at least so that TCP supports
+>>> MSG_SPLICE_PAGES, so 04-08 and perhaps 09.  It's also on top of the
+>>> patches that remove ITER_PIPE on my iov-extract branch, but I don't think
+>>> that should affect you.
+>> Why I asked this is because I only could see these two ceph relevant patches
+>> currently.
+> Depends on how you defined 'relevant', I guess.  Only two patches modify ceph
+> directly, but there's a dependency: to make those work, TCP needs altering
+> also.
+
+Okay. Will run the test today. I was reinstalling my laptop last week.
+
+Thanks
+
+- Xiubo
+
+> David
+>
+
