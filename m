@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95116DCB9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E44F6DCBA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjDJTdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 15:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S229808AbjDJTeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 15:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjDJTdE (ORCPT
+        with ESMTP id S229523AbjDJTeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 15:33:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DC019BF;
-        Mon, 10 Apr 2023 12:33:02 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        Mon, 10 Apr 2023 15:34:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F2C1BD1;
+        Mon, 10 Apr 2023 12:34:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E0301EC03F1;
-        Mon, 10 Apr 2023 21:33:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681155180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FnDf/U6gxW/umguQgi+P2/TnpgyRIdcUwUNgmUo8Of0=;
-        b=CcO+pjX3qcxJtMShVlvqKTN+KGTa0EQnRxfWP9hvBIuizx0FDkMXz5dEzmQyPhjJGjJyyo
-        Hv9EOhUdSkylRyPVX5K1qWo//OKYfG+pL9gCr2HSq3w0YjYJTuzLdVvoGBQ0LqbctpTlEr
-        6IeVI3nQgKLTJDrMUbKtyDeNd2SMLcw=
-Date:   Mon, 10 Apr 2023 21:32:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "Kang, Shan" <shan.kang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>
-Subject: Re: [PATCH v8 00/33] x86: enable FRED for x86-64
-Message-ID: <20230410193254.GAZDRkZjBURP9BydHB@fat_crate.local>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <f3b12e7a-3536-c0af-2c67-d94c56b6fcc5@intel.com>
- <SA1PR11MB6734C0AE97E8B5ACF70CA32AA8959@SA1PR11MB6734.namprd11.prod.outlook.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DA59617BC;
+        Mon, 10 Apr 2023 19:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DFEC433EF;
+        Mon, 10 Apr 2023 19:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681155240;
+        bh=D6YU7sRE8nbRBi9Uu64NQEqv/ZbXRVGET4eYI4J8/Ls=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=f5CtC+7ZyczqM7xhdpd8SRa/270zF7uhAGlvD4qxzSsIT+dl2FRiRkZmcWGzc1/jn
+         0Yssu8mTM9+T28IZLs3L9T6AyGQSEzH+Bv0ruGxkYYV1WOnuM4ZXDY5ditCpuEtCat
+         Y1H3kETkigppAQCeDs0nGYor7e//lFdzJNae7ukVp6KR1W3ECp08lc7bvJ/ByQRISP
+         +qmES7ZNi8pZL963vU3qHuFxW1zki+reIFHfQayoEhEe1oi1IwO8V/2mzw/zG+7KBB
+         qzfTqRFevZB3zLz1eEAkCBLaU/ULktoQ5l3iJ0JOfythFuN1X3DQxlOlzJuYkcQ0Uj
+         aUEtY4aF8YfQg==
+Message-ID: <5cc6625ccee772346660b775da341335.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SA1PR11MB6734C0AE97E8B5ACF70CA32AA8959@SA1PR11MB6734.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
+References: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/3] dt-bindings: clock: qcom,gcc-sm8250: add missing bi_tcxo_ao clock
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 10 Apr 2023 12:33:58 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 07:14:21PM +0000, Li, Xin3 wrote:
-> > Basically, if anyone else has been procrastinating on reviewing this set, now is
-> > probably the time to dig in.  (I'll include myself in that category, btw)
-> 
-> I really appreciate it!
+Quoting Krzysztof Kozlowski (2023-04-08 06:48:18)
+> Without actual explanation commit 76bd127e6ca5 ("arm64: dts: qcom:
+> sm8250: add bi_tcxo_ao to gcc clocks") added bi_tcxo_ao clock input to
+> the GCC clock controller, so update the bindings hoping this is really
+> needed.  This fixes warnings like:
+>=20
+>   sm8250-xiaomi-elish-csot.dtb: clock-controller@100000: clock-names: ['b=
+i_tcxo', 'bi_tcxo_ao', 'sleep_clk'] is too long
+>=20
+> Fixes: 76bd127e6ca5 ("arm64: dts: qcom: sm8250: add bi_tcxo_ao to gcc clo=
+cks")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-That doesn't mean that you should patch-bomb people once a week even
-without any review happening.
-
-Is FRED in any hardware incarnation to rush it?
-
-If no, be patient, address the review comments once you have them and do
-not spam once a week just because. As Dave said, this is wanted by all
-and it will get reviewed eventually. But it is not something that needs
-to go in now so you don't have to create unnecessary pressure.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
