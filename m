@@ -2,81 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166D86DCA32
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A756DCA3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjDJRtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S230385AbjDJRvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjDJRtT (ORCPT
+        with ESMTP id S230363AbjDJRvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:49:19 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7477CA1;
-        Mon, 10 Apr 2023 10:49:17 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 0EE71604F6;
-        Mon, 10 Apr 2023 19:49:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1681148955; bh=U3pOROzhqYD9ZwfVhRy9Mx+ap6JQKY0JT2AwmgsNr1k=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=lV8QPspVC8DkjFOn/+CTjNHHc7EshLx2Xa7Ap9MKBvdiaC+K9d90w73AfYSXzSdwO
-         G+8CwuyNexu+XACu9dsGsIkdcQYLQwBQwpmrUnFOCa81u3SqJ6Dk0gX4J0uFrYH320
-         uk1wpQ/2MtDkK2YPkmlfb5jfAgA6rUrH7YI4vC0p6RDU2clGfouhb51k4Uxa9kHW/L
-         j2pwYcMyj+UtE9TBpQilpiO/Zub+evl8pwXPvlx/9r16TSBoMfZlIbzmTuNbn2/kND
-         dS1YHhL4fyexkMRInafMRqTGCB8UlYNMni6mNEs09MhyqfJEhr1g8zEXz4WU1P5acJ
-         WbN0fVAM08ekA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CI-TJC3QQVxi; Mon, 10 Apr 2023 19:49:11 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [94.250.188.177])
-        by domac.alu.hr (Postfix) with ESMTPSA id 6BA58604ED;
-        Mon, 10 Apr 2023 19:49:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1681148951; bh=U3pOROzhqYD9ZwfVhRy9Mx+ap6JQKY0JT2AwmgsNr1k=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=GRrY7ZCIBmyI6/oBENVauha7oHHcH+cZ51o15yYqKw+xRo2SYSkH/vmifnEKN6b4Q
-         Xvcn8GD0e4a18wO5MY3pWPjA1s3BAq8oyC+jpzpmxvi3hfpYUh0ZkpBJIDpVfcCoS8
-         XGzRf5lGlMDZKRJdaZOchV4JGtMVwkQ0U1jHE4tCtWgHNie4HbIY+XW/jKH17ZUabC
-         aJ3HjHHkyv2BjF9Mocj/07l2+jcmZquZVOv8L7g421PelkD7/9gyuJV3NXCkfHyxHB
-         lZoajKOqPiTYaWBZw9dN9apUEvZSZD1WVzdo1KRDabojSpfi6+HX9DcmxGJ/1errl2
-         UoifOoLYtbwzg==
-Message-ID: <8dcec198-93ba-a78c-ab5b-ee7e516b80eb@alu.unizg.hr>
-Date:   Mon, 10 Apr 2023 19:49:11 +0200
+        Mon, 10 Apr 2023 13:51:17 -0400
+Received: from alln-iport-1.cisco.com (alln-iport-1.cisco.com [173.37.142.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6ACD171C;
+        Mon, 10 Apr 2023 10:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1021; q=dns/txt; s=iport;
+  t=1681149076; x=1682358676;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=GKwqSaUhbr0nEy4eCxDsIJiHe/gLNM5H25yq5F9aV10=;
+  b=UEGYbhc1vis8VO5+N6/+tTWKx5oMnLdoX55WZCO3Z92SQXDGpPVe/ref
+   64tdH4W5KRbEcl+owAtnhnwVq8qTk13h+lxRkKusbZFwnOAp/HY/fIEGQ
+   vhe3DNA1WukTu82qJZEVqIZSMwK1UHMtUKM7xjFH2gghP5QUm7+uQv5hh
+   s=;
+X-IPAS-Result: =?us-ascii?q?A0DoAQAcSzRkmIoNJK1aHAEBAQEBAQcBARIBAQQEAQFAg?=
+ =?us-ascii?q?U+BXFJzWztGiB4DhS6IM5IgihGCUQNWDwEBAQ0BAUQEAQGBUgGDMwKFPAIlO?=
+ =?us-ascii?q?BMBAgQBAQEBAwIDAQEBAQEBAwEBBQEBAQIBBwQUAQEBAQEBAQEeGQUOECeFa?=
+ =?us-ascii?q?A2GBAEBAQMSKAYBATcBDwIBCBgeEDIlAgQOJ4Jcgl0DAZ9lAYE/AoogeIE0g?=
+ =?us-ascii?q?QGCCAEBBgQEnyIJFoErkTonG4FJRIEVgTyBbj6CYgKBYIQUggwimiQKgTR0g?=
+ =?us-ascii?q?SAOgTyBBAIJAhFrgRAIaoF5QAINYwsOb4FJgyoEAhQtNwNEHUADCzs6PzUUH?=
+ =?us-ascii?q?wZYgRkkBQMLFSpHBAg4Bhw0EQIIDxIPBiZEDkI3MxMGXAEpCw4RA1CBRwQvg?=
+ =?us-ascii?q?VgKBgEmJJ89xwsKg32gbU0TqS+Xc6d2AgQCBAUCDgEBBoF6I4FbcBWDIlIZD?=
+ =?us-ascii?q?44gDA0Jg1CPeXU9AgcLAQEDCYtFAQE?=
+IronPort-PHdr: A9a23:nuawzxAKcpAjlMWQBqgbUyQVaBdPi9zP1kY95pkmjudIdaKut9TnM
+ VfE7PpgxFnOQc3A6v1ChuaX1sKoWWEJ7Zub9nxXdptKWkwJjMwMlFkmB8iIQUTwMP/taXk8G
+ 8JPHF9o9n22Kw5bAsH7MlbTuXa1qzUVH0aXCA==
+IronPort-Data: A9a23:UzrmnKA1YZZSHhVW/4bjw5YqxClBgxIJ4kV8jS/XYbTApGgh0jZSn
+ zQdW2/QaPzfYWuhKdFwborjphsPu5+Gy9IyOVdlrnsFo1CmBibm6XV1Cm+qYkt+++WaFBoPA
+ /02M4WGdoZtJpPljk/FGqD7qnVh3r2/SLP5CerVUgh8XgYMpB0J0XqPoMZkxN846TSFK1nV4
+ 4iq/5SHYAXNNwNcawr41YrS8HuDg9yq0N8olgRWTexGulbYi04UAPo3TU1mByKlKmX8NrfSq
+ 9frlNlVzEuAl/seIo/NfoLAT6E/auW60T5iJZZhc/PKbhBq/kTe20ugXRYWQR8/Zz6hx7idx
+ DjR3HC9YV9BA0HCpAgSewhqKh9RIZQYwZnWM1m8tcOR/3CaKWS5lp2CDGluVWEZ0u9zBWcL/
+ vsCJXVQKBuCnOmxhrm8T4GAhOx6c5KtZ91Z4yomlGqJZRolacirr6Hi6dZe3To0mclmFvfFb
+ M1fYj1qBPjFS0wQaglJVs9v9AuurnT/SQJXlVO3mbM++lfVzQlIwuXXCeOAL7RmQu0MzhrH+
+ Qoq5V/RBhAcKczayjef9H+orvHAkDm9W48IErC8sPlwjzW7ymENCRYbSUG2rNGnhUOkHdFSM
+ UoZ/mwpt6da3E+xXMjmTQG/rjiHuQwYXMVLEOx55B2lzqvS6hyeQG8eQVZpZMMvsMw7XxQk1
+ 1GOzoKvDjtq2JWPTnidtbuIhTC/Iy4YKSkFfyBsZQgf8cj4sp00gFTMScRnF7GujdzdHTD2y
+ iqN6i8kiN0uYdUj3qG/+xXMhCih48WPRQ8u7QKRVWWghu9kWGK7T52a0Gb08c8eFaCIXHiCu
+ HcGq/XCtv9bWPlhixexaOkKGbio4dOMPzvdnUNjEvEdG9KFpibLkWd4vWkWGat5DioXUWSzM
+ BKP5Wu98LcWbSX3PP4vC26kI55ypZUMA+gJQRw9gjBmTZFrcAaB8EmCjmbPgjixyyDAfUzDU
+ Kp3nO6lCXIcTK9g1jfzGqEW0KQgwWY1wma7qXHHI/aPj+H2iJ29EOht3L6yggYRtvLsTOL9q
+ Is3Cidy408DONASmwGOmWLpEXgELGIgGbf9oNFNe+iIL2JOQT9xUqePnOt7JdI9z8y5c9skG
+ FngBCe0L3Ki2hX6xfmiMRiPlZu2B88k9CJnVcDSFQfyghDPnrpDHI9GJ8doItHLBcRozOV/S
+ LEeat6cD/FUIgkrCBxDBaQRWLdKLUzx7SrXZnLNSGFmI/ZIGVeTkve6JVSHycX7Jnft3SfIi
+ +f+hlqzrFtqb1kKMfs6n9r2kwnh5SJAw7ssN6YKS/EKEHjRHEFRA3SZppcKzwskc30vGhPyO
+ 96qPCol
+IronPort-HdrOrdr: A9a23:quuTNaO6L0azVMBcT2D155DYdb4zR+YMi2TDiHoedfUFSKOlfp
+ 6V8MjzjSWE9Ar4WBkb6LS90DHpewKSyXcH2/hvAV7EZniphILIFvAv0WKG+Vzd8kLFh5ZgPM
+ tbAspD4ZjLfCVHZKXBkUiF+rQbsaK6GcmT7I+0pRoMPGJXguNbnn1E422gYypLrXx9dOME/e
+ 2nl6x6TlSbCBEqh+2Adwg4dtmGg+eOuIPtYBYACRJiwhKJlymU5LnzFAXd9gsCUhtUqI1SsV
+ Ttokjc3OGOovu7whjT2yv49JJNgubszdNFGYilltUVEDPxkQylDb4RGIFq/QpF4t1H2mxa1O
+ UkkC1QePibLEmhOF1dlCGdnjUIFgxeskMKh2Xo2UcL6vaJOg7SQ/Ax9b6xNCGpsHbJeLpHof
+ 92N6XzjesMMfqIplWP2/HYEx5tjUa6unwkjKoaiGFeS5IXbPtLoZUY5149KuZKIMvW0vFvLA
+ BVNrCV2N9GNVeBK3zJtGhmx9KhGnw1AxedW0AH/siYySJfknx1x1YRgJV3pAZMyLstD51fo+
+ jUOKVhk79DCscQcKJmHe8EBc+6EHbETx7AOH+bZV7nCKYEMXTQrIOf2sR+2Mi6PJgTiJcikp
+ XIV11V8WY0ZkL1EMWLmIZG9xjcKV/NKwgFCvsukKSRloeMMIYDaxfzOmzGu/HQ1skiPg==
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.98,333,1673913600"; 
+   d="scan'208";a="97866659"
+Received: from alln-core-5.cisco.com ([173.36.13.138])
+  by alln-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 10 Apr 2023 17:51:14 +0000
+Received: from mail.cisco.com (xfe-rtp-003.cisco.com [64.101.210.233])
+        by alln-core-5.cisco.com (8.15.2/8.15.2) with ESMTPS id 33AHpEil005711
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=OK);
+        Mon, 10 Apr 2023 17:51:14 GMT
+Received: from xfe-rcd-001.cisco.com (173.37.227.249) by xfe-rtp-003.cisco.com
+ (64.101.210.233) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 10 Apr
+ 2023 13:51:13 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (72.163.14.9) by
+ xfe-rcd-001.cisco.com (173.37.227.249) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25 via Frontend Transport; Mon, 10 Apr 2023 12:51:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gL0dm+itAL4G0D3ywwJkYTXeVW6GIa5FrtIh+u3ZF6DTIaBpr0qHeQgl39G6IH/U3oGsHBWR+0NIK/6G9dNuPR+hQEergimF/xD0YzA1JbEA8cam60Zb4qqbbuOQwvTLYLgq1JPDMcbLvh2WpivjD+duW7iITz1zQN3r95/nCF4iYLMxLehRiM6lmRlZiWvjrJTeiCgQA837fXhH9C0xwfcmaK0wxO9lUafjtm37/kAPOG87i0AR6cuKCMmWrJNmbNCLFPZd4BqjmB1eozjvTeFFQazd6nDh0ya5iONCxmieGF2bxLbzwXJHWsEV1sPc8Btb+OF3SyBGH1KKNk26Iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JbF34OEnmBbm7T+QFUrSta5oFt/ahzFYNpvlmD/b8cE=;
+ b=WcZrTQcsttsXvgusSvh5IAmg09cki2em6hjyzl7soz2MMyOWnNK0Zf0ZErR6Mnm+W2NYfsTxznq9KW0IhlqfLBuhGMnI25FqX4VZyh5YAneoJSA8/spDzuAQ7aE04tD5OY2xnf1UYbtBSHHnTzO+jwPya9NB1FSDmYwgIVZRmjVySw/0pJ7T8icXwHnT6AfJIOqBaX5eg4we30POpbC6ocE4rmr6ehoJ+BpkYfy1mTZQOQOd99N5KTyQnBpmYc0o6Y77oN3k+BNy8amnsg5x8/k84jNu92s/YiXOPo6THCT6nYEgp3y099wniDYFQKvbNlCcDgOpWmQ1A39DfCwm2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
+ dkim=pass header.d=cisco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JbF34OEnmBbm7T+QFUrSta5oFt/ahzFYNpvlmD/b8cE=;
+ b=ey2jxIC1miqwfFLHrrGjwV4M012agNMK+M9Cf8LKKTB9ZrOYTCwxCBUHAFXCBx+MybnSjRdQlz5xl78OeMSql2s351OO/egT66Ui8vWJ+wqhuDAunz7skeVMu4dcCldysP5NoAVSxAC7t++MHoZRCAzTK4UrpYxcjAakUjUnZXw=
+Received: from SJ0PR11MB5790.namprd11.prod.outlook.com (2603:10b6:a03:422::15)
+ by BL1PR11MB5319.namprd11.prod.outlook.com (2603:10b6:208:31b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
+ 2023 17:51:10 +0000
+Received: from SJ0PR11MB5790.namprd11.prod.outlook.com
+ ([fe80::66a3:de62:35f4:ad97]) by SJ0PR11MB5790.namprd11.prod.outlook.com
+ ([fe80::66a3:de62:35f4:ad97%6]) with mapi id 15.20.6277.036; Mon, 10 Apr 2023
+ 17:51:10 +0000
+From:   "Daniel Walker (danielwa)" <danielwa@cisco.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
+        "Marcin Wierzbicki -X (mawierzb - GLOBALLOGIC INC at Cisco)" 
+        <mawierzb@cisco.com>, Rob Herring <robh+dt@kernel.org>,
+        Daniel Walker <dwalker@fifo99.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
+ compatibles
+Thread-Topic: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
+ compatibles
+Thread-Index: AQHZaWqYW/PiGCKJbkGjA/VaWrFw568k1ygA
+Date:   Mon, 10 Apr 2023 17:51:10 +0000
+Message-ID: <20230410175054.GF1391488@zorba>
+References: <20230405223028.1268141-2-danielwa@cisco.com>
+ <6a9f041b-1c35-4691-8451-7119cd05ed17@linaro.org>
+ <20230407160413.GD1391488@zorba>
+ <6af9effe-89c0-7630-9a72-a5a6351e0a95@linaro.org>
+ <20230410170915.GE1391488@zorba>
+In-Reply-To: <20230410170915.GE1391488@zorba>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cisco.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB5790:EE_|BL1PR11MB5319:EE_
+x-ms-office365-filtering-correlation-id: 4215d4cd-273c-4c31-caf2-08db39ec2b4e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ccwj4rDTHpAMzZ4sNPSyFK66cRk2s2dz4ZFN+98OQcgUSqDJAYoSIoAsyOETcK23Jm8TbgF8maqEqTzQfIc2gBZ4aFrBhdjJ0G8EyANMOtN6EGI1rPqEGHF8/af1X+C1R7Wcz63uuxIwafzDlulhMDkOyIoVVIg6r/cjNAyeyeHtNFhUQ0VE6k4p+1ScIrbapB4b0pcB5uda7J/onkgKFkKypHFA9SnOds1zlxrrNA2yCsP9FQ92pVwPGg/XjTdgVXKezTsjR/YFfT9RVxCLx4BNeL6aLJGinagVlAH9OimPq6Feu+KcIO8ddFLEpZTnxWIgXri5hqqOHv9oQ5u72X/sFG4FLY4U7dfx8O2EXFlLqKgQVfz/kI8aOkHZL2IDP/g5tzODc/f4n0+tLs/J8seSnPKAniQNS/QgIssiuipUqI3r2Ir0Vb+CN6iYk2/9HkROgPrWP7A0t5RULHkStbnz4gz35VcTZhUctXguRMOt5kdL0UWIkarMFTLg+ERzeipkr9EEQQd+WEyEl0X+GCtNeLdoek52TCsIgBKgmkhjN5v2epWZCV+q7iyBsOdfYE2vZx43mdleJS/isXHpP9tUXS6GxYezz9wGjdCHGefphYUrPkKZOku6NHxp+Qh1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5790.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199021)(478600001)(71200400001)(316002)(54906003)(6512007)(6506007)(1076003)(53546011)(9686003)(26005)(186003)(6486002)(2906002)(4744005)(33716001)(4326008)(76116006)(66946007)(64756008)(8936002)(8676002)(66476007)(66556008)(6916009)(66446008)(41300700001)(5660300002)(38070700005)(38100700002)(122000001)(86362001)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uva0ve7rAz35GV2sK9j7Gk8C7qj6N7YFAJ3YiPonMcop590vV0UyPED9jSlf?=
+ =?us-ascii?Q?e2HVa7F15J6ADN88vb8wf0OPH/dz8LiWFKCnVrv9SuB9ZwDzbLDmd2J9B4LN?=
+ =?us-ascii?Q?Ug3aBWzCO1foxcnZG4UDDnMDLW/VVl+c8zlpHBobCDj/MNRC3x4dfznYhqOS?=
+ =?us-ascii?Q?S0bTKYgPByQcnoyD3UGfvmpsCRYV12K0ZfsL1M2QBZkWVfGUaeCpDOdgxQz4?=
+ =?us-ascii?Q?UjeWO0rE4WDRZS3aAWXDIDnBm2zhsJ7S/E1EeEpEa7TOTbmMJEJN2vNHvwES?=
+ =?us-ascii?Q?T4Oj0LOl3FULsUuwszoj+6PzpozjuPe/wCWb4oKBcY5WAhNTDui37hSEEf6Q?=
+ =?us-ascii?Q?BYYa0EXz6jiXRfIRUoBd1Hd5DdTPd29eUoAJ2EszRf544aokfskk7uM0SHcx?=
+ =?us-ascii?Q?8SOkII897WLGPKy2D/tgL/mvC0SsQPs/abINteRd907ppAKk7vB/q9dCIZu2?=
+ =?us-ascii?Q?Nrie97Qyk1zcisJcMUMh5dxYpPCk1tXhmCsV+M0qHFZ0RGZdwFtUX9wq8jhc?=
+ =?us-ascii?Q?Sl6IKsauyYFoXgs0dcG7Qvi141y4E9BMQMk5JvoWfX2JpcQMBzP3pjEK1OhP?=
+ =?us-ascii?Q?/AlLGhoERWwVYSQMx6s+8mjeHyDuZ+swMJQ6mZp2kdpkXQhrzjKS6NCLVvI+?=
+ =?us-ascii?Q?s5+zVUCuiMCTJ2Y41SiTtrux4ZUSQRxU7yTwA5n/hDyT8Em7hDRnfFDTgW4O?=
+ =?us-ascii?Q?LZyPK5yYDXv34SfUdWMnd+7ih0CNsJJmt5nPogc9PFWw/kDkbdCnDg49Be6r?=
+ =?us-ascii?Q?CgWGQotoap/mqDKsE+D8SDGb/SOL8jeIZrxDzEhqxiSkPwgifWH0K+9ALKSI?=
+ =?us-ascii?Q?yBfAA9tG6xL0xe/ASXXNeae/6TSAyFxm5t4rW1RhDmNHXmd6MMjk8XAsfZ3l?=
+ =?us-ascii?Q?9l2CraCjhSb876WIPsCkyVmK6sjbc/XS5hGg9JR0irTJ3GbHJbnZBF47SoZ7?=
+ =?us-ascii?Q?OWbS6XrRaAw7V+EAHgLwEYC+7zw1PdFOC5ToLs3N1fWuy+zCIs9COgA+vltN?=
+ =?us-ascii?Q?5+dOnGwK3cDYfXkl/xBKqKH4E9YHbKsNOeCmcqHq38ocWIadiMQhYyVOqDev?=
+ =?us-ascii?Q?z2AAPrnNgRTPD/OyJ5sxDywP/FiXJ6AaP4CGHT7CZkIeB8AXtgWG/Oq+NXJv?=
+ =?us-ascii?Q?JD/rBSt57Rq6lM70JBfL+ZR8ZBXKDZzDAXHnuClkYOuG8lhZfzkE/vuAODr4?=
+ =?us-ascii?Q?WmVDtT4EBXO/BcL4gqdN6F+cX/H+0DhWOoR5Nikxi6Lijyknpo+WfMgXzRRl?=
+ =?us-ascii?Q?n0OrjubPZoaeygjKLn+LWJzd4XL+B0Y1/KurLkw3FjGbtWVfmTSCVcdBx1mh?=
+ =?us-ascii?Q?7CKQykku0MZPbkFzft3KDo+XnkevCb32OY02qcBoGDIs/Jd3GotQjxrpOJlb?=
+ =?us-ascii?Q?AW/8Z0bBwJz/ShkqXt/LjEQ22IkE1UuNYOhw8Me/ddHUujlRmG8VdjkaQsvt?=
+ =?us-ascii?Q?Er8K37Gtz2hR27FS3+fA+Kx6N1wTfVah3UoVMHfvTNXa0BUiMNlyvK+/e0fR?=
+ =?us-ascii?Q?AM/7eoQiJfVURMojKROo0G/Vv9YZDTd+OMdsOEcNImWyA6Px7UJQB8L1sbPK?=
+ =?us-ascii?Q?qNk1yLv9YxBBrR4lbrTcAyFncosIgEB3q1rBRt2S?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <243E43182402A54F90F5C71F7C97145A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [BUG] [TESTING: HANG] kmemleak in rtnetlink_rcv() triggered by
- selftests/drivers/net/team in build cdc9718d5e59
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>
-References: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
- <ZDLyZX545Cw+aLhE@shredder>
- <67b3fa90-ad29-29f1-e6f3-fb674d255a1e@alu.unizg.hr>
- <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
-In-Reply-To: <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5790.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4215d4cd-273c-4c31-caf2-08db39ec2b4e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Apr 2023 17:51:10.4153
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zcErw6Qo+DuHKlLXDsx5Ov2NsQxLlOL12BwqzvLsqcftaQBbVaOkppYxidtV04rxIOM7ZidHsBmQqwSPKS6uuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5319
+X-OriginatorOrg: cisco.com
+X-Outbound-SMTP-Client: 64.101.210.233, xfe-rtp-003.cisco.com
+X-Outbound-Node: alln-core-5.cisco.com
+X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,351 +201,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10. 04. 2023. 19:34, Mirsad Goran Todorovac wrote:
-> On 09. 04. 2023. 20:47, Mirsad Goran Todorovac wrote:
->> On 09. 04. 2023. 19:14, Ido Schimmel wrote:
->>> On Sun, Apr 09, 2023 at 01:49:30PM +0200, Mirsad Goran Todorovac wrote:
->>>> Hi all,
->>>>
->>>> There appears to be a memleak triggered by the selftest drivers/net/team.
->>>
->>> Thanks for the report. Not sure it's related to team, see below.
->>
->> Not at all, I'm really encouraged that this leak is fixed so quickly and neatly.
->>
->> Now it isn't clear to me why I did not cut the possibility in half,
->> but I assumed that it was the drivers/net/team, and it wouldn't work
->> for me without the former.
->>
->> They say that the assumption is the mother of all blunders :-)
->>
->> I was lucky to choose the right entry function and the maintainers,
->> at least I hope so.
->>
->> (Additionally, I saw that bond_enslave() is Jay and Andy's support, so
->> I added them to Cc:, if that's not a problem.)
->>
->>>> # cat /sys/kernel/debug/kmemleak
->>>> unreferenced object 0xffff8c18def8ee00 (size 256):
->>>>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
->>>>   hex dump (first 32 bytes):
->>>>     00 20 09 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
->>>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>>>   backtrace:
->>>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
->>>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>>     [<ffffffffc176515e>] 0xffffffffc176515e
->>>
->>> Don't know what this is. Might be another issue.
->>
->> I really couldn't tell.
->>
->>>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>>> unreferenced object 0xffff8c18250d3700 (size 32):
->>>>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
->>>>   hex dump (first 32 bytes):
->>>>     a0 ee f8 de 18 8c ff ff a0 ee f8 de 18 8c ff ff  ................
->>>>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
->>>>   backtrace:
->>>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
->>>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>>     [<ffffffffc176515e>] 0xffffffffc176515e
->>>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>>> unreferenced object 0xffff8c1846e16800 (size 256):
->>>>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
->>>>   hex dump (first 32 bytes):
->>>>     00 20 f7 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
->>>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>>>   backtrace:
->>>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
->>>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
->>>
->>> This shows that the issue is related to the bond driver, not team.
->>
->> Now it seems obvious. But I am not that deep into the bond and team drivers
->> to tell without your help.
->>
->>>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>>> unreferenced object 0xffff8c184c5ff2a0 (size 32):
->>>
->>> This is 'struct vlan_vid_info'
->>>
->>>>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
->>>>   hex dump (first 32 bytes):
->>>>     a0 68 e1 46 18 8c ff ff a0 68 e1 46 18 8c ff ff  .h.F.....h.F....
->>>>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
->>>             ^ VLAN ID 0
->>
->> This is expert insight. Looks all Greek to me.
->>
->>>>   backtrace:
->>>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
->>>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
->>>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>>
->>> VLAN ID 0 is automatically added by the 8021q driver when a net device
->>> is opened. In this case it's a device being enslaved to a bond. I
->>> believe the issue was exposed by the new bond test that was added in
->>> commit 222c94ec0ad4 ("selftests: bonding: add tests for ether type
->>> changes") as part of v6.3-rc3.
->>>
->>> The VLAN is supposed to be removed by the 8021q driver when a net device
->>> is closed and the bond driver indeed calls dev_close() when a slave is
->>> removed. However, this function is a NOP when 'IFF_UP' is not set.
->>> Unfortunately, when a bond changes its type to Ethernet this flag is
->>> incorrectly cleared in bond_ether_setup(), causing this VLAN to linger.
->>> As far as I can tell, it's not a new issue.
->>>
->>> Temporary fix is [1]. Please test it although we might end up with a
->>> different fix (needs more thinking and it's already late here).
->>
->> This fix worked.
->>
->> In case you submit a formal temporary patch, please add
->>
->> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>
->> at your convenience.
->>
->> The issue doesn't seem exploitable without proper privileges, but it is a nice fix
->> nevertheless.
->>
->>> Reproduced using [2]. You can see in the before/after output how the
->>> flag is cleared/retained [3].
->>>
->>> [1]
->>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
->>> index 236e5219c811..50dc068dc259 100644
->>> --- a/drivers/net/bonding/bond_main.c
->>> +++ b/drivers/net/bonding/bond_main.c
->>> @@ -1777,14 +1777,15 @@ void bond_lower_state_changed(struct slave *slave)
->>>  
->>>  /* The bonding driver uses ether_setup() to convert a master bond device
->>>   * to ARPHRD_ETHER, that resets the target netdevice's flags so we always
->>> - * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE if it was set
->>> + * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE and IFF_UP
->>> + * if they were set
->>>   */
->>>  static void bond_ether_setup(struct net_device *bond_dev)
->>>  {
->>> -	unsigned int slave_flag = bond_dev->flags & IFF_SLAVE;
->>> +	unsigned int flags = bond_dev->flags & (IFF_SLAVE | IFF_UP);
->>>  
->>>  	ether_setup(bond_dev);
->>> -	bond_dev->flags |= IFF_MASTER | slave_flag;
->>> +	bond_dev->flags |= IFF_MASTER | flags;
->>>  	bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
->>>  }
->>>  
->>> [2]
->>> #!/bin/bash
->>>
->>> ip link add name t-nlmon type nlmon
->>> ip link add name t-dummy type dummy
->>> ip link add name t-bond type bond mode active-backup
->>>
->>> ip link set dev t-bond up
->>> ip link set dev t-nlmon master t-bond
->>> ip link set dev t-nlmon nomaster
->>> ip link show dev t-bond
->>> ip link set dev t-dummy master t-bond
->>> ip link show dev t-bond
->>>
->>> ip link del dev t-bond
->>> ip link del dev t-dummy
->>> ip link del dev t-nlmon
->>>
->>> [3]
->>> Before:
->>>
->>> 12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
->>>     link/netlink
->>> 12: t-bond: <BROADCAST,MULTICAST,MASTER,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
->>>     link/ether ce:b2:31:0a:53:83 brd ff:ff:ff:ff:ff:ff
->>>
->>> After:
->>>
->>> 12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
->>>     link/netlink
->>> 12: t-bond: <BROADCAST,MULTICAST,MASTER,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
->>>     link/ether 5a:18:e7:85:11:73 brd ff:ff:ff:ff:ff:ff
->>
->> Thank you once again for your patch and your quick response!
->>
->> Please consider Cc:-ing me for testing the official patch in the original environment.
->>
->> (Though it is a known HW, there might be BIOS update and fw issues.)
-> 
-> Hi, Ido,
-> 
-> I've ran "make kselftest" with vanilla torvalds tree 6.3-rc5 + your patch.
-> 
-> It failed two lines after "enslaved device client - ns-A IP" which passed OK.
-> 
-> Is this hang for 5 hours in selftests: net: fcnal-test.sh test, at the line
-> (please see to the end):
-> 
-> # ###########################################################################
-> # IPv4 address binds
-> # ###########################################################################
-> # 
-> # 
-> # #################################################################
-> # No VRF
-> # 
-> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
-> # 
-> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: Raw socket bind to local address - ns-A loopback IP                     [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A loopback IP   [ OK ]
-> # TEST: Raw socket bind to nonlocal address - nonlocal IP                       [ OK ]
-> # TEST: TCP socket bind to nonlocal address - nonlocal IP                       [ OK ]
-> # TEST: ICMP socket bind to nonlocal address - nonlocal IP                      [ OK ]
-> # TEST: ICMP socket bind to broadcast address - broadcast                       [ OK ]
-> # TEST: ICMP socket bind to multicast address - multicast                       [ OK ]
-> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-> # 
-> # #################################################################
-> # With VRF
-> # 
-> # SYSCTL: net.ipv4.ping_group_range=0 2147483647
-> # 
-> # TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: Raw socket bind to local address after VRF bind - ns-A IP               [ OK ]
-> # TEST: Raw socket bind to local address - VRF IP                               [ OK ]
-> # TEST: Raw socket bind to local address after device bind - VRF IP             [ OK ]
-> # TEST: Raw socket bind to local address after VRF bind - VRF IP                [ OK ]
-> # TEST: Raw socket bind to out of scope address after VRF bind - ns-A loopback IP  [ OK ]
-> # TEST: Raw socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-> # TEST: TCP socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-> # TEST: ICMP socket bind to nonlocal address after VRF bind - nonlocal IP       [ OK ]
-> # TEST: ICMP socket bind to broadcast address after VRF bind - broadcast        [ OK ]
-> # TEST: ICMP socket bind to multicast address after VRF bind - multicast        [ OK ]
-> # TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-> # TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-> # TEST: TCP socket bind to local address - VRF IP                               [ OK ]
-> # TEST: TCP socket bind to local address after device bind - VRF IP             [ OK ]
-> # TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IP     [ OK ]
-> # TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IP  [ OK ]
-> # 
-> # ###########################################################################
-> # Run time tests - ipv4
-> # ###########################################################################
-> # 
-> # TEST: Device delete with active traffic - ping in - ns-A IP                   [ OK ]
-> # TEST: Device delete with active traffic - ping in - VRF IP                    [ OK ]
-> # TEST: Device delete with active traffic - ping out - ns-B IP                  [ OK ]
-> # TEST: TCP active socket, global server - ns-A IP                              [ OK ]
-> # TEST: TCP active socket, global server - VRF IP                               [ OK ]
-> # TEST: TCP active socket, VRF server - ns-A IP                                 [ OK ]
-> # TEST: TCP active socket, VRF server - VRF IP                                  [ OK ]
-> # TEST: TCP active socket, enslaved device server - ns-A IP                     [ OK ]
-> # TEST: TCP active socket, VRF client - ns-A IP                                 [ OK ]
-> # TEST: TCP active socket, enslaved device client - ns-A IP                     [ OK ]
-> # TEST: TCP active socket, global server, VRF client, local - ns-A IP           [ OK ]
-> # TEST: TCP active socket, global server, VRF client, local - VRF IP            [ OK ]
-> # TEST: TCP active socket, VRF server and client, local - ns-A IP               [ OK ]
-> # TEST: TCP active socket, VRF server and client, local - VRF IP                [ OK ]
-> # TEST: TCP active socket, global server, enslaved device client, local - ns-A IP  [ OK ]
-> # TEST: TCP active socket, VRF server, enslaved device client, local - ns-A IP  [ OK ]
-> # TEST: TCP active socket, enslaved device server and client, local - ns-A IP   [ OK ]
-> # TEST: TCP passive socket, global server - ns-A IP                             [ OK ]
-> # TEST: TCP passive socket, global server - VRF IP                              [ OK ]
-> # TEST: TCP passive socket, VRF server - ns-A IP                                [ OK ]
-> # TEST: TCP passive socket, VRF server - VRF IP                                 [ OK ]
-> # TEST: TCP passive socket, enslaved device server - ns-A IP                    [ OK ]
-> # TEST: TCP passive socket, VRF client - ns-A IP                                [ OK ]
-> # TEST: TCP passive socket, enslaved device client - ns-A IP                    [ OK ]
-> # TEST: TCP passive socket, global server, VRF client, local - ns-A IP          [ OK ]
-> 
-> Hope this helps.
-> 
-> I also have a iwlwifi DEADLOCK and I don't know if these should be reported independently.
-> (I don't think it is related to the patch.)
-> 
-> The iwlwifi team probably has Easter Monday, so there is no rush whatsoever.
-> 
-> I may try to rebuild w/o the patch and re-run the tests, but now I need to do something
-> for my day job.
-> 
-> No need to thank, this is what kernel testers are for ;-)
+On Mon, Apr 10, 2023 at 05:09:15PM +0000, Daniel Walker (danielwa) wrote:
+> On Mon, Apr 10, 2023 at 05:28:03PM +0200, Krzysztof Kozlowski wrote:
+> > On 07/04/2023 18:04, Daniel Walker (danielwa) wrote:
+> > > On Thu, Apr 06, 2023 at 09:12:34AM +0200, Krzysztof Kozlowski wrote:
+> > >>> @@ -0,0 +1,27 @@
+> > >>> +# SPDX-License-Identifier: GPL-2.0-only
+> > >>
+> > >> Dual license.
+> > >>
+> > >=20
+> > > What are my choices here? I see this,
+> > >=20
+> > > # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >=20
+> > Yes, the one suggested by the checkpatch. Did you run it?
+> =20
+>  I don't recall if I did or not.
+>=20
+> > >=20
+> > > Which appears to be what your suggesting. I also see this,
+> > >=20
+> > > # SPDX-License-Identifier: GPL-2.0
+> > >=20
+> > > I'd rather use the later.
+> >=20
+> > Why? Bindings should be licensed under BSD, so what is the reason to
+> > make here exception?
+>=20
+> I'm sure I can re-license my submissions. I'd have to look into it.
 
-P.S.
-
-Please find the kernel log in the usual directory:
-
-→ https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/drivers_net/journalctl-last-5000l.log
-
-Have a nice day.
-
-And happy rest of the holidays, if you had any.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
-
+I'm _not_ sure.=
