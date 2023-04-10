@@ -2,169 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854B46DC8E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524D46DC8CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjDJP6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 11:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S230150AbjDJP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjDJP6t (ORCPT
+        with ESMTP id S230092AbjDJP5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:58:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF163AA1;
-        Mon, 10 Apr 2023 08:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681142294; x=1712678294;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Cpc+vWCiVUmsOySpGlMg+6/vKyP6bVmouafrvWfaSpU=;
-  b=kzOdlsJiBNzy+PcCnU3m4pdrnyaoIBRidtJm6jq5EZSa+cBF50QUFW3h
-   gqGNECwQMUPS+0SyE/IQTTIJKcJ0qphNNuxP2dr9qlF7vUP5LH3RAw4Da
-   RJzka/+ekx/LIYhqqQONsGEKNtRGbuvel0A4EOR52BSOB+n3SDjzSCMrV
-   RPN598xjxKi/cQ32vP4Emjs3EFWvcZDH01gYAwTnbYFwu3gFyvBasC5bO
-   ZzqNlJI64bnDpRzHkY36zYy2QxNPHyFHkjMKR7isqP/NjO1sl0UjZslDm
-   DKk6asNDFk8oEaxhzv75JjGpaR9K4q+oTm2Af8fZWBdUHh8pcPdAycgZT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="343391727"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="343391727"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 08:58:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="777601736"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="777601736"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Apr 2023 08:58:04 -0700
-From:   Song Yoong Siang <yoong.siang.song@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH net-next v2 2/4] net: stmmac: introduce wrapper for struct xdp_buff
-Date:   Mon, 10 Apr 2023 23:57:20 +0800
-Message-Id: <20230410155722.335908-3-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410155722.335908-1-yoong.siang.song@intel.com>
-References: <20230410155722.335908-1-yoong.siang.song@intel.com>
+        Mon, 10 Apr 2023 11:57:49 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677D4EC6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:57:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PVuR0BuOqVpR3KJm+Lg+D4rykBA3rnlhWjcnPQskwPUDhrZmFEeD3+QFqQqKAWTe8O3qs2Xm13dElPrnlqxSgZ5Ct9wSaFCkO7sBJebmIebyOFDx0IJkWJLQuYThlPHL/emAyWCwoNO9Ym/bNeB1UNSb4oYvPo6oeLwCZCAGkaU9KcgJWk3GJj1mZW/rvUnjpnO5+jB7pz/Tfzf4P/aCApugmcamlnKNM2OWS4Ss83vdTXZO+PIoXTPFCTL1GzWZKNuvWyby10DiqGfDB2Ga8ep412Q9o918Owk8n8NhtaNpEt5T1OBg35DlVdOotf0caGhJvBjIHxNx2SlvqWj7Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/aF/H+uiUkhuf5m7x27G909EICjt6oClo09RST+Zy+Q=;
+ b=nyw6bhIOiTjSES7AzcINBsgy0kZjBTpW0LcO46EzUaCPIQu1Tvqi7mk7+xgAw57qtMkCezgWYUVQUl4q6NJRp07jr31Hsk0Sx5fjAcp/wXPyrSEh/SBgegNOrkBvEn4lgSGWKt3mlKAgYLY2fdvuhEeXPqgNLEU9LNs0wOAzcXsobCXt8G5I8/pgiPzmAj3yViKACURUhw41+fiYy0T9JQiSRTJDA5N847NEySe+9mRIqL+cTWLJstp+80lJrVrPgoMewVrvRBfpjq9XmqDoh4MNSGW5e9dqAVYBqSA/L2NDHFBC9n9s1bPDXc21HgYDlQhPVWH9a55UOzb4WTTmWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linutronix.de smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/aF/H+uiUkhuf5m7x27G909EICjt6oClo09RST+Zy+Q=;
+ b=Q4kAoIwIR4akZL7RSsDztNIZ4aXL0uQEZ03Eq4+qj/akMqbNDzSxA0a1t9ENOw4yQyHmmI88VMKDlIIAokY/7wtaDAUxyVIWI3AfOLlMMuKdg06CfFB+UKliI2Umbzv67VBw+3Wy5tZAlJY3nG81IxgagfT4YZu0vXjsFnHtVkqYlkwqGGcH8Js2L3Z89W70R7SGdWxJ9LbEvcez2QbpH+eysYRUwn6h8psdJ6y/mYg1fQFfhmwZYqU+Wa9EiwPk3h/SxIctN73zeAq5QvHUwV0q34ZibbtW61tOmiioOwlbtkKncszMNdS995C4tXZmac0r6DEgPx8R3w+jgYOFNA==
+Received: from DS7PR06CA0017.namprd06.prod.outlook.com (2603:10b6:8:2a::24) by
+ CH2PR12MB5018.namprd12.prod.outlook.com (2603:10b6:610:6e::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.35; Mon, 10 Apr 2023 15:57:36 +0000
+Received: from DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2a:cafe::f9) by DS7PR06CA0017.outlook.office365.com
+ (2603:10b6:8:2a::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
+ Transport; Mon, 10 Apr 2023 15:57:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT015.mail.protection.outlook.com (10.13.172.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.25 via Frontend Transport; Mon, 10 Apr 2023 15:57:35 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Apr 2023
+ 08:57:25 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Apr
+ 2023 08:57:25 -0700
+Received: from SDONTHINENI-DESKTOP.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 10 Apr 2023 08:57:24 -0700
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+CC:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, Vikram Sethi <vsethi@nvidia.com>
+Subject: [PATCH v3 2/3] genirq: Encapsulate sparse bitmap handling
+Date:   Mon, 10 Apr 2023 10:57:20 -0500
+Message-ID: <20230410155721.3720991-3-sdonthineni@nvidia.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230410155721.3720991-1-sdonthineni@nvidia.com>
+References: <20230410155721.3720991-1-sdonthineni@nvidia.com>
 MIME-Version: 1.0
+X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT015:EE_|CH2PR12MB5018:EE_
+X-MS-Office365-Filtering-Correlation-Id: c50330b2-01cb-477b-f9a3-08db39dc4d9c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: njLwA6lQ2RbKIxyrMX3lVOEhhXy4KCcX5KSHAXGPpmC4Q+ctd/ywQv6JHnmR5r9AXh4pciiFKGMY0eNtW6ti6YuQJzU6DDpOzsbipLB1PK+qFbcdfLXXWtgsj/32O2S5P9YQcq56tYiedFYr0YHYlVseJJeqEGTjrMf7tqvqJ29g0yToy+WO8gylG6+AxXv5Mj6731Lc6bZpxXCA7lB8C7CsQhWbcvA2HVS00lZmBbYw/nC6/6T12yO+HhlRaRrxmWNuMtwchqFiS/znUxegkbJ2t8ul4o3aeJGC4tEap+aoKOTxAMCUNbgvzjAo4+xSMHjBaftXT8FdyL5X3Kyvujdl/04WHj4z5LYFhNCRGzkJMob0bQjejxJj6hyXJU7o93BhXz3VhabGJ2cKSstOWIR8IppH1Xx7fQ/OnQkeX4FuKgI2oaVCnjDvVhwoDktuWsUeS94EGq3fsaUCAjyQ6QDc1oilyFM2WZVgfewraJz7kqn8ovWSA6obGECi7PyZbv9A9ss1kcwx3R85qMMTw9qxpzMSLYKdXrcQRayE1jfjaFva4s0v8ErXiFl/dqilLGGuvH5nS7nfN6CHVZRGmg1SAlhVRyW7tGe910INWvPhHlCo9XSjRyQkD7YAjxb1kUuSuQIxc9bWKSSy8W2jw5O/sfWwOgs6U2Z6iiHM0+Ax4zr6WT5gJ4aIsvNUaTXlo+hTfmRK0mmMKvvIVtdZEMNk+Vff091HKeSLhhFIsfFdJdJAoPZsaLTBmbXAystu
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(70206006)(4326008)(478600001)(54906003)(7696005)(70586007)(8676002)(41300700001)(316002)(110136005)(86362001)(36756003)(83380400001)(426003)(2616005)(336012)(107886003)(1076003)(26005)(6666004)(8936002)(5660300002)(2906002)(82310400005)(40480700001)(36860700001)(82740400003)(356005)(7636003)(186003)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 15:57:35.9060
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c50330b2-01cb-477b-f9a3-08db39dc4d9c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5018
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce struct stmmac_xdp_buff as a preparation to support XDP Rx
-metadata via kfuncs.
+Move the open coded sparse bitmap handling into helper functions as
+a preparatory step for converting the sparse interrupt management
+to a maple tree.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+No functional change.
+
+Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac.h   |  4 ++++
- .../net/ethernet/stmicro/stmmac/stmmac_main.c  | 18 +++++++++---------
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ kernel/irq/internals.h |  4 ++--
+ kernel/irq/irqdesc.c   | 28 +++++++++++++++++++---------
+ 2 files changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-index 3d15e1e92e18..ac8ccf851708 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-@@ -92,6 +92,10 @@ struct stmmac_rx_buffer {
- 	dma_addr_t sec_addr;
- };
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 51fc8c497c22..f3f2090dd2de 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -12,9 +12,9 @@
+ #include <linux/sched/clock.h>
  
-+struct stmmac_xdp_buff {
-+	struct xdp_buff xdp;
-+};
+ #ifdef CONFIG_SPARSE_IRQ
+-# define IRQ_BITMAP_BITS	(NR_IRQS + 8196)
++# define MAX_SPARSE_IRQS	(NR_IRQS + 8196)
+ #else
+-# define IRQ_BITMAP_BITS	NR_IRQS
++# define MAX_SPARSE_IRQS	NR_IRQS
+ #endif
+ 
+ #define istate core_internal_state__do_not_mess_with_it
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index b401b89b226a..9a71fc6f2c5f 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -131,7 +131,18 @@ int nr_irqs = NR_IRQS;
+ EXPORT_SYMBOL_GPL(nr_irqs);
+ 
+ static DEFINE_MUTEX(sparse_irq_lock);
+-static DECLARE_BITMAP(allocated_irqs, IRQ_BITMAP_BITS);
++static DECLARE_BITMAP(allocated_irqs, MAX_SPARSE_IRQS);
 +
- struct stmmac_rx_queue {
- 	u32 rx_count_frames;
- 	u32 queue_index;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 2cc6237a9c28..f7bbdf04d20c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5189,9 +5189,9 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 	int status = 0, coe = priv->hw->rx_csum;
- 	unsigned int next_entry = rx_q->cur_rx;
- 	enum dma_data_direction dma_dir;
-+	struct stmmac_xdp_buff ctx = {};
- 	unsigned int desc_size;
- 	struct sk_buff *skb = NULL;
--	struct xdp_buff xdp;
- 	int xdp_status = 0;
- 	int buf_sz;
++static int irq_find_free_area(unsigned int from, unsigned int cnt)
++{
++	return bitmap_find_next_zero_area(allocated_irqs, MAX_SPARSE_IRQS,
++					  from, cnt, 0);
++}
++
++static unsigned int irq_find_next_irq(unsigned int offset)
++{
++	return find_next_bit(allocated_irqs, nr_irqs, offset);
++}
  
-@@ -5313,17 +5313,17 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 			dma_sync_single_for_cpu(priv->device, buf->addr,
- 						buf1_len, dma_dir);
+ #ifdef CONFIG_SPARSE_IRQ
  
--			xdp_init_buff(&xdp, buf_sz, &rx_q->xdp_rxq);
--			xdp_prepare_buff(&xdp, page_address(buf->page),
-+			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
-+			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
- 					 buf->page_offset, buf1_len, false);
+@@ -517,7 +528,7 @@ static int alloc_descs(unsigned int start, unsigned int cnt, int node,
  
--			pre_len = xdp.data_end - xdp.data_hard_start -
-+			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
- 				  buf->page_offset;
--			skb = stmmac_xdp_run_prog(priv, &xdp);
-+			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
- 			/* Due xdp_adjust_tail: DMA sync for_device
- 			 * cover max len CPU touch
- 			 */
--			sync_len = xdp.data_end - xdp.data_hard_start -
-+			sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
- 				   buf->page_offset;
- 			sync_len = max(sync_len, pre_len);
+ static int irq_expand_nr_irqs(unsigned int nr)
+ {
+-	if (nr > IRQ_BITMAP_BITS)
++	if (nr > MAX_SPARSE_IRQS)
+ 		return -ENOMEM;
+ 	nr_irqs = nr;
+ 	return 0;
+@@ -535,11 +546,11 @@ int __init early_irq_init(void)
+ 	printk(KERN_INFO "NR_IRQS: %d, nr_irqs: %d, preallocated irqs: %d\n",
+ 	       NR_IRQS, nr_irqs, initcnt);
  
-@@ -5333,7 +5333,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+-	if (WARN_ON(nr_irqs > IRQ_BITMAP_BITS))
+-		nr_irqs = IRQ_BITMAP_BITS;
++	if (WARN_ON(nr_irqs > MAX_SPARSE_IRQS))
++		nr_irqs = MAX_SPARSE_IRQS;
  
- 				if (xdp_res & STMMAC_XDP_CONSUMED) {
- 					page_pool_put_page(rx_q->page_pool,
--							   virt_to_head_page(xdp.data),
-+							   virt_to_head_page(ctx.xdp.data),
- 							   sync_len, true);
- 					buf->page = NULL;
- 					priv->dev->stats.rx_dropped++;
-@@ -5361,7 +5361,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+-	if (WARN_ON(initcnt > IRQ_BITMAP_BITS))
+-		initcnt = IRQ_BITMAP_BITS;
++	if (WARN_ON(initcnt > MAX_SPARSE_IRQS))
++		initcnt = MAX_SPARSE_IRQS;
  
- 		if (!skb) {
- 			/* XDP program may expand or reduce tail */
--			buf1_len = xdp.data_end - xdp.data;
-+			buf1_len = ctx.xdp.data_end - ctx.xdp.data;
+ 	if (initcnt > nr_irqs)
+ 		nr_irqs = initcnt;
+@@ -812,8 +823,7 @@ __irq_alloc_descs(int irq, unsigned int from, unsigned int cnt, int node,
  
- 			skb = napi_alloc_skb(&ch->rx_napi, buf1_len);
- 			if (!skb) {
-@@ -5371,7 +5371,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 			}
+ 	mutex_lock(&sparse_irq_lock);
  
- 			/* XDP program may adjust header */
--			skb_copy_to_linear_data(skb, xdp.data, buf1_len);
-+			skb_copy_to_linear_data(skb, ctx.xdp.data, buf1_len);
- 			skb_put(skb, buf1_len);
+-	start = bitmap_find_next_zero_area(allocated_irqs, IRQ_BITMAP_BITS,
+-					   from, cnt, 0);
++	start = irq_find_free_area(from, cnt);
+ 	ret = -EEXIST;
+ 	if (irq >=0 && start != irq)
+ 		goto unlock;
+@@ -838,7 +848,7 @@ EXPORT_SYMBOL_GPL(__irq_alloc_descs);
+  */
+ unsigned int irq_get_next_irq(unsigned int offset)
+ {
+-	return find_next_bit(allocated_irqs, nr_irqs, offset);
++	return irq_find_next_irq(offset);
+ }
  
- 			/* Data payload copied into SKB, page ready for recycle */
+ struct irq_desc *
 -- 
-2.34.1
+2.25.1
 
