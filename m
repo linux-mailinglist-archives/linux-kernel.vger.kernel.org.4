@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7A56DC912
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408AA6DC914
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjDJQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S229626AbjDJQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjDJQIr (ORCPT
+        with ESMTP id S229703AbjDJQJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:08:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB4E6C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681142883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tKyrBwfd2oDcUs2lWJFq6u064SVhVNeOSwEIW7vUOn0=;
-        b=Pyrq1cIkydbSwiAL9LsPDsEtHgf7yJEOHwpFd8kv52v5Sl+MEcxWyQiD6J0kXTZBi5MAQI
-        1cwNINemyMD6Pl5tvsjYEhBr6wNM83F+/cZ71EoZUTp7E/gWmIgP/r6QfBKG47elVQww5E
-        9IcRVBZ8nIQt+74btvdwkST1SPGuhuk=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-a5UfyMqANqqY1B2Gf3yZbA-1; Mon, 10 Apr 2023 12:08:02 -0400
-X-MC-Unique: a5UfyMqANqqY1B2Gf3yZbA-1
-Received: by mail-pg1-f198.google.com with SMTP id j62-20020a638041000000b0051827ed9c15so1989262pgd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:08:02 -0700 (PDT)
+        Mon, 10 Apr 2023 12:09:19 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134CEE74
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:18 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54bfc4e0330so138692427b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681142957;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hgpNSuwaIz5SOsDrctN1Z4DgOM8CO/tlKIwgfsZ4/ck=;
+        b=KbN+lzS+lcqidjAbQxa0GvXCAbmu1egDuByAETgeMWyb2/CMdMenHNWowg+xUpH1oB
+         QA7VrhCCALf4FouV8PrBU3pWbFqStiTfMYthOzYL8edyh46/hFQ4CCiXDnYrR9xhc2fA
+         GYKMHSIvehSvwJtxThZcxBmK2aQV3rdCDrKz678KucttKrgJyWSQ4agd+zrXFCLqRTKy
+         rI3fzOdO2l8cNcKq9ZyuFKMtUULQbVBORHrIhTcta+LWtGyflnxit5D25QTuU+XUzKEu
+         lZQUicrUwcjApxPLdUCbUbC+w+EWijpvTI42Y5mwbyYyb2JQFm3tqCQyHy5s5uZ2Pxad
+         Wlmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681142881; x=1683734881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKyrBwfd2oDcUs2lWJFq6u064SVhVNeOSwEIW7vUOn0=;
-        b=aciMMqy0HbB1w2O8vEgmGQZC2CBnCRlArJ4NISvI4uwW+JtRAhPW7XOTpQYkhcxiHd
-         1pCg+h0Gwu5Ca3HTA/Thf419alIgaOrYD6g5HzmdWZBj5gbEpMmN40Qwb8/2Tpa59PDC
-         FaLaZm8InEjNdjG1TJOP6wF1dJ10TYRKWy4K+sm+EJkkdE7mH/bw1tuHhqritGIGSN7v
-         x/GtPooFGTmY14fgezDNFDIy2/Z0M9i2Nk6Qr46o1R7nR1VEigFcbA0EwOtwsyhcXWAP
-         Bsw4Y1HvspfoWVKSlTKzekoMozw46VTMxnurMsEVbdNVg7o95Z0jB9SUT0zKTs/jkx9l
-         ddKA==
-X-Gm-Message-State: AAQBX9e1BcoPnLv/wb9gLRcSBnonsYZ5ebK6CS9HmATpqHQ/C1Ho9a4M
-        QdUNqriJwiFYNuGtFAMU+b5Li4lRtfQChzFDrwYZvxkrKu/Be99SrBKRbPsXYBgocMCjmhLL7SF
-        ooBJ+yjtA2myo46+nFSMdwgdn
-X-Received: by 2002:a05:6a20:7a86:b0:e4:2a2c:869b with SMTP id u6-20020a056a207a8600b000e42a2c869bmr12067471pzh.36.1681142881291;
-        Mon, 10 Apr 2023 09:08:01 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZXeZrFMveM/HuIZlNvxfD4NqlUe/w1jLGkwF5Qj6WkdSiJUAg3vzTfi5sKD3AiJ/e//XOcYg==
-X-Received: by 2002:a05:6a20:7a86:b0:e4:2a2c:869b with SMTP id u6-20020a056a207a8600b000e42a2c869bmr12067447pzh.36.1681142880863;
-        Mon, 10 Apr 2023 09:08:00 -0700 (PDT)
-Received: from zeus.elecom ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
-        by smtp.gmail.com with ESMTPSA id l14-20020a63da4e000000b005004919b31dsm3449040pgj.72.2023.04.10.09.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 09:08:00 -0700 (PDT)
-From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, david@fromorbit.com,
-        Ryosuke Yasuoka <ryasuoka@redhat.com>
-Subject: [PATCH v2] xfs: Use for_each_perag_from() to iterate all available AGs
-Date:   Tue, 11 Apr 2023 01:07:27 +0900
-Message-Id: <20230410160727.3748239-1-ryasuoka@redhat.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        d=1e100.net; s=20210112; t=1681142957;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hgpNSuwaIz5SOsDrctN1Z4DgOM8CO/tlKIwgfsZ4/ck=;
+        b=kgU6jcahTmF295fEbTMA//i8SgFmEoTI5KbCzUtu4/Lxxuh+1up72kRb3TevxHdNGV
+         6ig/SSDL6ylv9OEgezvehzkxpyFw+a2bE7CB3rpZQehM//UJnfJJlnwGNvTdTWDSSudV
+         aQJ0LLDiu4/VvTyUMA1L+EDXtpa/bmBQjFpNPhwNKUAYtYZXCuNIiADSjzpS5vMXRSLq
+         vOtAc2nZ7Mhi5HMe+zSX7fpf/mCBpGnT4Z/ouC2qKJoKzjK1lXl8focj0AE5+n0/JoLk
+         jetYPxqHKewuCt4wVZPL4DvUCk/Z06hTjsMmUk81/By9jDK2Maz8D+8V/c+zkRogYhN6
+         BC1w==
+X-Gm-Message-State: AAQBX9eR1NcpntI4lDZgFe6gUPq/2sephJQgWGq6d8KS7uxxiNLZ4Bzh
+        /GrxWrYtlt2kasSlJbgS34YWFS8sAiAC
+X-Google-Smtp-Source: AKy350aqBjJi0MjweR+Koinf0C4KZg04ZAy6t8zBhmoqTxsbnU8+cn0bFgYqbOxeoJJa9GhGP7nsB2ORSjwK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fc51:6a03:541d:a18d])
+ (user=irogers job=sendgmr) by 2002:a05:690c:31b:b0:54c:15ad:11e4 with SMTP id
+ bg27-20020a05690c031b00b0054c15ad11e4mr7321151ywb.0.1681142957303; Mon, 10
+ Apr 2023 09:09:17 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 09:09:05 -0700
+Message-Id: <20230410160905.3052640-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Subject: [PATCH v2] perf build: Warn for BPF skeletons if endian mismatches
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xfs_filestream_pick_ag() iterates all the available AGs when no
-unassociated AGs are available by using for_each_perag_wrap().
-To iterate all the available AGs, just use for_each_perag_from() instead.
+Done as a warning as I'm not fully confident of the test's robustness
+of comparing the macro definition of __BYTE_ORDER__.
 
+Signed-off-by: Ian Rogers <irogers@google.com>
 
-This patch cleans up a code where xfs_filestream_pick_ag() iterates 
-all the available AGs when no unassociated AGs are available.
-Current implementation is using a for_each_perag_wrap() macro which
-iterates all AGs from start_agno through wrap_agno, wraps to
-restart_agno, and then iterates again toward to (start_agno - 1).
-In this case, xfs_filestream_pick_ag() start to iterate from 0 and
-does't need to wrap. Although passing 0 as start_agno to
-for_each_perag_wrap() 
-is not problematic, we have already a for_each_perag() macro family
-which just iterates all AGs from 0 and doesn't wrap. Hense, I propose
-to use for_each_perag() family simply.
-
-
-Changes since v1 [1]:
-Use for_each_perag_from() instead of for_each_perag() to clarify
-where we are iterating from.
-
-[1]:
-https://lore.kernel.org/linux-xfs/CAHpthZrvhqh8O1HO7U_jVnaq9R9Ur=Yq2eWzjWfNx3ryDbnGPA@mail.gmail.com/T/#m5704d0409bec1ce5273be0d3860e8ad60e9886fd
-
-Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
+v2. Is a rebase following patch 1 being merged.
 ---
- fs/xfs/xfs_filestream.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/perf/Makefile.config | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/fs/xfs/xfs_filestream.c b/fs/xfs/xfs_filestream.c
-index 22c13933c8f8..29acd9f7d422 100644
---- a/fs/xfs/xfs_filestream.c
-+++ b/fs/xfs/xfs_filestream.c
-@@ -151,7 +151,8 @@ xfs_filestream_pick_ag(
- 		 * grab.
- 		 */
- 		if (!max_pag) {
--			for_each_perag_wrap(args->mp, 0, start_agno, args->pag)
-+			start_agno = 0;
-+			for_each_perag_from(args->mp, start_agno, args->pag)
- 				break;
- 			atomic_inc(&args->pag->pagf_fstrms);
- 			*longest = 0;
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 16bea51f0bcd..71442c54c25f 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -663,14 +663,17 @@ ifndef NO_BPF_SKEL
+   $(call feature_check,clang-bpf-co-re)
+   ifeq ($(feature-clang-bpf-co-re), 0)
+     dummy := $(error: ERROR: BPF skeletons unsupported. clang too old/not installed or build with NO_BPF_SKEL=1.)
+-  else
+-    ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
+-      dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
+-    else
+-      $(call detected,CONFIG_PERF_BPF_SKEL)
+-      CFLAGS += -DHAVE_BPF_SKEL
+-    endif
+   endif
++  ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
++    dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
++  endif
++  host_byte_order=$(echo ""|$(HOSTCC) -dM -E -|grep __BYTE_ORDER__)
++  target_byte_order=$(echo ""|$(CC) -dM -E -|grep __BYTE_ORDER__)
++  ifneq ($(host_byte_order), $(target_byte_order))
++    $(warning Possibly mismatched host and target endianness may break BPF skeletons)
++  endif
++  $(call detected,CONFIG_PERF_BPF_SKEL)
++  CFLAGS += -DHAVE_BPF_SKEL
+ endif
+ 
+ dwarf-post-unwind := 1
 -- 
-2.39.2
+2.40.0.577.gac1e443424-goog
 
