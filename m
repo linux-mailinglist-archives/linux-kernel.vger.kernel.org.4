@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B576DC242
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301856DC245
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjDJBNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S229667AbjDJBN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDJBNM (ORCPT
+        with ESMTP id S229661AbjDJBN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:13:12 -0400
+        Sun, 9 Apr 2023 21:13:27 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A0535A8
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:13:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1335A7;
+        Sun,  9 Apr 2023 18:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=/Er8ywl5bE4dJ7WJe8NshHVWK4m5x+uPSc3wvx5Wahs=; b=32HUnOsbmPEBVAWTjU/8ZNBGqK
-        Yrc2xscmsV8yVDbVPamGfskG2LHaj9J9d2/OsyijKXBABFHH6Gt9A4OIZTFlKkGC8ceDCR+DROI7C
-        SQdWAuxyksaUjYBbCwI1/bpK8MUcW9NNe9jYmaafnS6KmIf7gbPFTLCmWXW2/hRA1TXR460Ak73cS
-        qKWq5wE3IWjVPvOt6XsjD3RBSfULGmAFxsqDTJyy5S0Qg0KAIE3Id7TJ16iutYoIiUR0KFJIQHZZv
-        wd/xVu8tTJcPduQ1AZry2bqYPK1HdJ2+4y7UVyusO/IJ+4yJYjdVLSM/BToX1duW15BjM+clAFSsD
-        3+j+qMqQ==;
+        bh=cg1S3XoU3SPVIhEQjqsExfl3vAbSc03YUdI51frBIwo=; b=ihxSGen1Mdtj9zPUVP70jaRoFS
+        jMkwJJ0+UbW1zpkqIlDrT69e58N0usHXr1ZvlWsqdl6eWt1EMfTYMQoi4Lzg+ki0TwsQhuafFw5rV
+        E6LPC8k8x4r8p/UhokWeUrWFZ8mKnkg7kyH+pRsakwcyYw84cpecFtcrYeGoon/neG0UppLClZiat
+        9TgmC11sJRG0itlxR27r2vwQPrEGmrxUY0s44flobNfleMtRncFY1OlWacepG1SYX4ao9xst9+xot
+        2OprWMTPDaqaunoJcEV9Xkon1Pp0YIYzx8hZcIx+HqaO8HaaJ1Y0JInURGhNrIAEZ8AIHa4Os0W3f
+        5moEquOw==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1plg5j-00EPc1-0I;
-        Mon, 10 Apr 2023 01:13:07 +0000
+        id 1plg5t-00EPci-1A;
+        Mon, 10 Apr 2023 01:13:17 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Subject: [PATCH v3] firewire: init_ohci1394_dma: use correct function names in comments
-Date:   Sun,  9 Apr 2023 18:13:06 -0700
-Message-Id: <20230410011306.26268-1-rdunlap@infradead.org>
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v2] sparc: allow sparc32 alias for archhelp
+Date:   Sun,  9 Apr 2023 18:13:16 -0700
+Message-Id: <20230410011316.26564-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,42 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent kernel-doc complaints by using the correct function names in
-kernel-doc comments:
+Currently, entering
+$ make ARCH=sparc32 help
+prints the archhelp text for sparc64.
 
-drivers/firewire/init_ohci1394_dma.c:258: warning: expecting prototype for debug_init_ohci1394_dma(). Prototype was for init_ohci1394_dma_on_all_controllers() instead
-drivers/firewire/init_ohci1394_dma.c:289: warning: expecting prototype for setup_init_ohci1394_early(). Prototype was for setup_ohci1394_dma() instead
+Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
+to be a recognized alias for 32-bit sparc, also support that
+string in sparc's archhelp by allowing either ARCH=sparc or
+ARCH=sparc32 for sparc32 archhelp.
 
+Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc: linux1394-devel@lists.sourceforge.net
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
 ---
-v2: rebase/resend, add note to Andrew
-v3: add Takashi-san
+v2: rebase/resend; add Masahiro to Cc: list
 
- drivers/firewire/init_ohci1394_dma.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/sparc/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/drivers/firewire/init_ohci1394_dma.c b/drivers/firewire/init_ohci1394_dma.c
---- a/drivers/firewire/init_ohci1394_dma.c
-+++ b/drivers/firewire/init_ohci1394_dma.c
-@@ -251,7 +251,7 @@ static inline void __init init_ohci1394_
- }
+diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
+--- a/arch/sparc/Makefile
++++ b/arch/sparc/Makefile
+@@ -83,7 +83,7 @@ vdso_install:
+ KBUILD_IMAGE := $(boot)/zImage
  
- /**
-- * debug_init_ohci1394_dma - scan for OHCI1394 controllers and init DMA on them
-+ * init_ohci1394_dma_on_all_controllers - scan for OHCI1394 controllers and init DMA on them
-  * Scans the whole PCI space for OHCI1394 controllers and inits DMA on them
-  */
- void __init init_ohci1394_dma_on_all_controllers(void)
-@@ -283,7 +283,7 @@ void __init init_ohci1394_dma_on_all_con
- }
- 
- /**
-- * setup_init_ohci1394_early - enables early OHCI1394 DMA initialization
-+ * setup_ohci1394_dma - enables early OHCI1394 DMA initialization
-  */
- static int __init setup_ohci1394_dma(char *opt)
- {
+ # Don't use tabs in echo arguments.
+-ifeq ($(ARCH),sparc)
++ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
+ define archhelp
+   echo  '* image        - kernel image ($(boot)/image)'
+   echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
