@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7506DC4F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982826DC4F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjDJJRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S229637AbjDJJQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjDJJRa (ORCPT
+        with ESMTP id S229618AbjDJJQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:17:30 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582723C23
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:17:05 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-632384298b3so2033373b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:17:05 -0700 (PDT)
+        Mon, 10 Apr 2023 05:16:56 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560EB19AE
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:16:54 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id k20so3015693ual.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681118225; x=1683710225;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqjHZxrb5JBTsIZioYlzXXMMqB1GQY7z0T9aMHt7oLs=;
-        b=GEKMw4T1ntCXmJ9aBzvih0LsSJ8WculpHSz/XgPbV9zZSK4KYVqMx/MZn6g/hEKD7c
-         mKBs222LxFznsGXbEa4++UT/hceQwkbBG6HEGPP2OJOma1J34ibNvaHHo+jH8FzHHQ07
-         EfZSgI4PP0Ng26bOtclVRLF1h95oxCLUnBw1vC+nAztga+Bao0DFJI7qJgjOK61CFIIz
-         YL6akOB8e5uyw84vRXWICSKSjrHm8wTtM7nZb8pbq5/sWE7oT1g/m16zgyQeSKEXjYuc
-         53C/YVkS+2Dl2PIH2l02FnSRoSxm8GZEvj3owx998fsX7ct+/iUYmgFYKQtxD1z85XcX
-         nOuw==
+        d=linaro.org; s=google; t=1681118213;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0N2613pKQCAL9iN6z4rVK3cSRr5vURUZo3s2wt46N0=;
+        b=tA3Ep3a9rR3yyVebRfsMovHLrPAK9u2+vpAAk+hkocRWd2QSGN8327+jchQXINtRKQ
+         PQf9doLpbbJYCeEz9DkSLbrgF30UcULPcRmUFd2rh1C20Gg8/y8bI6U0+7dA4+3Io3eo
+         ZwI/UkqTzXwSc8oFVD0OFzlYfZsR5sxiEqEH+wsA8GByx/56ugja2fvdFpDcT30WPY99
+         im0JWODQSSJgMc5PKKdjandlE4fFQHCZHEaX0BIhuYryqXlw1w6p6u2PvMQoCAuUFsbE
+         yI6kOhMf817Eyw8lfNUQyVrdxDqDhsxe0s8IceUqJ7EqFAiq2EuuDVWo969434/Yt6bN
+         AJGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681118225; x=1683710225;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1681118213;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jqjHZxrb5JBTsIZioYlzXXMMqB1GQY7z0T9aMHt7oLs=;
-        b=nAcNVaxBI7TKAXNiqUluGRDa6SurKxmgVEjrmAb8z9+HXxnxiT9nBkaA3vLZ2uumPV
-         e03uCa65CC4BULp/VrR0jNfjmNiybl4kdb7pVernt1NBkvokH+UhXZrwk+ltZ9OQlMq+
-         oZor7pzWTN8YJHxuEPIg+rQXVlH7py7maLhYRyMPh8jX7wQPftbSpWLw4WAj9lvNn3k5
-         RbYf5HmxYKKht0C0dk2l7fBpPnos8D4QO7vJW8B3HD9fY+70zJq/Iqkon3nRsFSzxsHk
-         sgW/GBRXYclJ6olOsX3H3OJ5IPgUgpXRbXJ5Vj8Mq0RosXlxMkyJyTHTkC3AlQq+Q2wv
-         eofQ==
-X-Gm-Message-State: AAQBX9eHh1Rd0oC86SdXKgnSGMm9OiV7e+1WmDYTfVu+q1qnaDTDCMom
-        3dyDWdCPTNuHEGXaVw2TcPWDZg==
-X-Google-Smtp-Source: AKy350ahpPB/SV7Hpzi23MhQBt0LJvDWhyGroR6CshO6Y7lk3+eElgv9bNPICoTafETiYUBgNrm0sA==
-X-Received: by 2002:a62:3086:0:b0:627:f740:51f9 with SMTP id w128-20020a623086000000b00627f74051f9mr10875653pfw.3.1681118224798;
-        Mon, 10 Apr 2023 02:17:04 -0700 (PDT)
-Received: from GL4FX4PXWL.bytedance.net ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id d18-20020aa78152000000b005d61829db4fsm7314970pfn.168.2023.04.10.02.17.01
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 10 Apr 2023 02:17:04 -0700 (PDT)
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-To:     Liam.Howlett@oracle.com
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        David Binderman <dcb314@hotmail.com>
-Subject: [PATCH] maple_tree: Use correct variable type in sizeof
-Date:   Mon, 10 Apr 2023 17:14:31 +0800
-Message-Id: <20230410091431.74961-1-zhangpeng.00@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        bh=V0N2613pKQCAL9iN6z4rVK3cSRr5vURUZo3s2wt46N0=;
+        b=XpKhxR1D65BIMxPzxqzJRJ5UzsUkV1G/HLKwYFVB6eadVVMXVeGMsEzXx+pqKBGs5C
+         7fB0Xg0N7QYH8PcowbAudLHxcIPgwMefDpmAjb4vFGHR01UaD7fpfY8qlnN1h82f++6l
+         LyzyaMvwRGZqBSZKft9lhL8WMaRpfM/3jHvmqHUStzt/UR8X5Bj65Ffdg2CFI6Cw9K/Y
+         OBYmwkXE5hXmHncDjHUQOAGKPCDfHsukNonTnrxC0scAQaNgW3suDKF4pe7EsXt3oNQS
+         Cc/iy3FxR82KCfRexsCJQxli9TAca5oahztwPgxxBpu4i9Gdif5DJtHsIMDYZVXy5tch
+         njFQ==
+X-Gm-Message-State: AAQBX9dh1x1jajeEXnReQnZoFhujWzrvm1GAIzqDwHWznyoONg6OcXhw
+        L7VfOn6pcCezaLiAAL5BGO7rzctbT6QEvEgjT6k9Bg==
+X-Google-Smtp-Source: AKy350bKBcnWH4Hp69Mt7Cjb50/39FiDV0xEAscrOKWyxOWbHlaJoMMkrFK8FZZLH2HsFkOnC0rWcfFdqMA2zez+xjA=
+X-Received: by 2002:a1f:270e:0:b0:43b:e059:987f with SMTP id
+ n14-20020a1f270e000000b0043be059987fmr5467809vkn.0.1681118213114; Mon, 10 Apr
+ 2023 02:16:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
+ <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
+In-Reply-To: <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 10 Apr 2023 14:46:42 +0530
+Message-ID: <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
+Subject: Re: selftests: gpio: crash on arm64
+To:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -70,31 +77,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original code is:
-	memset(pivs + tmp, 0, sizeof(unsigned long *) * (max_p - tmp));
+On Thu, 9 Mar 2023 at 23:20, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Mar 09, 2023 at 09:33:29PM +0530, Naresh Kamboju wrote:
+> > Following kernel warnings and crash notices on arm64 Rpi4 device while
+> > running selftests: gpio on Linux mainline 6.3.0-rc1 kernel and Linux next.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ...
+>
+> > [   61.177432]  *** DEADLOCK ***
+> > [   61.177432]
+> > [   61.177434] 3 locks held by modprobe/510:
+> > [   61.177436] #0: ffff000040000698 (&n->list_lock){-.-.}-{2:2}, at:
+> > get_partial_node.part.0 (mm/slub.c:2271)
+> > [   61.177448] #1: ffff80000b227f18 (console_lock){+.+.}-{0:0}, at:
+> > vprintk_emit (kernel/printk/printk.c:1936 kernel/printk/printk.c:2315)
+> > [   61.177460] #2: ffff80000b228388 (console_srcu){....}-{0:0}, at:
+> > console_flush_all (include/linux/srcu.h:200 kernel/printk/printk.c:290
+> > kernel/printk/printk.c:2934)
+>
+> How is it related to the GPIO?
+> Can you bisect if it's a regression somewhere?
 
-The type of variable pointed to by pivs is unsigned long, but the type
-used in sizeof is a pointer type. Change it to unsigned long.
+The following crash on Linux mainline and next was noticed while running
+selftest gpio on arm64. And this is a kselftest-merge config build.
+Which means it has a large set of test configs enabled.
 
-Suggested-by: David Binderman <dcb314@hotmail.com>
-Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
----
- lib/maple_tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Anders performed bisection on this problem.
+The bisection have been poing to this commit log,
+  first bad commit: [24c94060fc9b4e0f19e6e018869db46db21d6bc7]
+    gpiolib: ensure that fwnode is properly set
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 88c44f6d6cee..b06fc5f19b31 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -3255,7 +3255,7 @@ static inline void mas_destroy_rebalance(struct ma_state *mas, unsigned char end
- 
- 		if (tmp < max_p)
- 			memset(pivs + tmp, 0,
--			       sizeof(unsigned long *) * (max_p - tmp));
-+			       sizeof(unsigned long) * (max_p - tmp));
- 
- 		if (tmp < mt_slots[mt])
- 			memset(slots + tmp, 0, sizeof(void *) * (max_s - tmp));
--- 
-2.20.1
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
+
+Crash log:
+# 2.  Module load error tests
+# 2.1 gpio overflow
+[   88.796755] =============================================================================
+[   88.806704] BUG kmalloc-512 (Not tainted): Poison overwritten
+[   88.812482] -----------------------------------------------------------------------------
+[   88.812482]
+[   88.822170] 0xe38-0xe47 @offset=28216. First byte 0x6a instead of 0x6b
+[   88.830994] Allocated in swnode_register+0x40/0x218 age=828 cpu=2 pid=565
+[   88.837830]  __kmem_cache_alloc_node+0x11c/0x320
+[   88.842480]  kmalloc_trace+0x54/0xa8
+[   88.846083]  swnode_register+0x40/0x218
+[   88.849947]  fwnode_create_software_node+0xcc/0x1a0
+[   88.854856]  0xffff8000018c71cc
+[   88.858029]  0xffff8000018c73b0
+[   88.861197]  do_one_initcall+0x80/0x320
+[   88.865062]  do_init_module+0x50/0x210
+[   88.868843]  load_module+0x201c/0x2260
+[   88.872622]  __do_sys_finit_module+0xb0/0x138
+[   88.877010]  __arm64_sys_finit_module+0x2c/0x48
+[   88.881572]  invoke_syscall+0x8c/0x120
+[   88.885352]  el0_svc_common.constprop.0+0x104/0x130
+[   88.890263]  do_el0_svc+0x44/0xb8
+[   88.893606]  el0_svc+0x48/0xb8
+[   88.896686]  el0t_64_sync_handler+0xbc/0x138
+[   88.900984] Freed in software_node_release+0xdc/0x108 age=34 cpu=1 pid=683
+[   88.907899]  __kmem_cache_free+0x2a4/0x2e0
+[   88.912024]  kfree+0xc0/0x1a0
+[   88.915015]  software_node_release+0xdc/0x108
+[   88.919402]  kobject_put+0xb0/0x220
+[   88.922919]  software_node_notify_remove+0x98/0xe8
+[   88.927741]  device_del+0x184/0x380
+[   88.931259]  platform_device_del.part.0+0x24/0xa8
+[   88.935995]  platform_device_unregister+0x30/0x50
+[   88.940730]  0xffff8000018a1dd4
+[   88.943898]  __arm64_sys_delete_module+0x184/0x328
+[   88.948722]  invoke_syscall+0x8c/0x120
+[   88.952502]  el0_svc_common.constprop.0+0x104/0x130
+[   88.957413]  do_el0_svc+0x44/0xb8
+[   88.960757]  el0_svc+0x48/0xb8
+[   88.963834]  el0t_64_sync_handler+0xbc/0x138
+[   88.968132]  el0t_64_sync+0x190/0x198
+[   88.971820] Slab 0xfffffc00209d0800 objects=21 used=7
+fp=0xffff000827423200
+flags=0xbfffc0000010200(slab|head|node=0|zone=2|lastcpupid=0xffff)
+[   88.984653] Object 0xe00 @offset=28160 fp=0xffff000827423200
+[   88.984653]
+[   88.992953] Redzone   <Trim>
+[   89.002470] Redzone   <Trim>
+[   89.011986] Redzone   <Trim>
+...
+[   89.278435] Redzone   <Trim>
+[   89.287951] Redzone   <Trim>
+[   89.297468] Object    <Trim>
+[   89.306984] Object    <Trim>
+[   89.316500] Object    <Trim>
+...
+[   89.592465] Object
+[   89.601981] Redzone
+[   89.610801] Padding
+[   89.620317] Padding
+
+
+Details test and crash log:
+  - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc6/testrun/16155019/suite/log-parser-test/test/check-kernel-exception/log
+  - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc6/testrun/16155019/suite/log-parser-test/tests/
+  - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc6/testrun/16155157/suite/log-parser-test/tests/
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+  git_describe: v6.3-rc6
+  kernel_version: 6.3.0-rc6
+  kernel-config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2OCXLSEmqxrg13KKFGzypngoE3K/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/832195018
+  artifact-location:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2OCXLSEmqxrg13KKFGzypngoE3K/
+  toolchain: gcc-11
+  email-notification: ''
+  build_name: gcc-11-lkftconfig-kselftest
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
