@@ -2,125 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404DA6DCDAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10376DCDAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDJWu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S229778AbjDJWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDJWu1 (ORCPT
+        with ESMTP id S229591AbjDJWwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:50:27 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF751BF1;
-        Mon, 10 Apr 2023 15:50:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ib9FxaDTFc/fWukhmfrJWOjy4oA5+39yhkyEHkQ5fZ+KsAEimIBVeT6+nldfhUz7r+wOQ4UiPurYY5Lv/w7bIuNgriAvJ6Fx2QzQg7Xgr1haDO0twAlqO6LeEAhvy7uneNZf4PSS3+8NwYExnPhGaNQrGsbKiSdA2u+iq6H0foLw6HW6bLcPThnNnRnIknNzf27kVbN6tD68GrAOH5kw0qjqmhe3kpCnIoDtxzUMu9O87qSpJuI0WLtd2hnBFUGGQtabrGjNGvETlTT+dV15/jxjKXHr7pLWdYWHlE7W/twVVKQI8vAj241g4iP5mq1T8Y3UiVwwgkbMIWprbqruog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3B4rjUf5998gTKbvClBzrvlQiVBsTqN5JAzGhGz0VeI=;
- b=jTcrtcle+3jTizVO8BIo0nFkRxM5lIhHTuvO+AnU0BFOzUxmCRQBCAJW0f0jHUSLEVp/dxgqvJE0vLRu014XSVKz2zDs5sK9c0URHnOv9IBkz1Md2Jx/7QbsVGYFiOrtkZSJP38Z8Xf3zViVbKLyYGExtWWKsUrK7xAVM7Cpe4HEfdT0x6eDZnFtxMoEja7sLeF9/9Jk9ID4W9SQ+POxG7/zK7SKE9Q8qqZF8z1BExIcLl2+RtePO1v/9kWA//0GVbSyK0ALdx5fuiq/UKSDnCjOYIJjHfipl+BRU/NPBmU2Pomk4CNWaT89QuX/VlayI9bNKKuwQ7ONTTxycN0vcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3B4rjUf5998gTKbvClBzrvlQiVBsTqN5JAzGhGz0VeI=;
- b=hB7SXjwgBzY4nwzNbbr9WqmkKWLvxIPelb9NqO0xI575zE75P8wlciu8McsL8b2/K+LehJC5XPZRgMA/a5iF4kAyuJ7yRb+dKbQB+M7sMbIADqLxFvDAiBr4dsCcHJKLljsZWwaEwyeMJW1Fevjp6dwRa6QU6/mLfs+YmFcyL8l85vyndaY0/iEVyy1+KFqTqMjMhnr1T7VvkagomuSYRUKZ1N66nQzi9yNLRVo7WXPbNKikeqb9xiwtGohjx6GKmaUr21lUMkpZwMLZItbr9UdzD/h9WLD0+NAkl00x/ed11FU0jKEBr8mhJRDugYcaawoC4OUvk3Y4TalRZsk0Uw==
-Received: from MW4PR03CA0071.namprd03.prod.outlook.com (2603:10b6:303:b6::16)
- by SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 22:50:24 +0000
-Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b6:cafe::b) by MW4PR03CA0071.outlook.office365.com
- (2603:10b6:303:b6::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
- Transport; Mon, 10 Apr 2023 22:50:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.28 via Frontend Transport; Mon, 10 Apr 2023 22:50:23 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Apr 2023
- 15:50:13 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Apr
- 2023 15:50:13 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Mon, 10 Apr 2023 15:50:11 -0700
-Date:   Mon, 10 Apr 2023 15:50:10 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>
-CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <farman@linux.ibm.com>
-Subject: Re: [PATCH v6 2/4] iommufd: Add iommufd_access_replace() API
-Message-ID: <ZDSSoiMj4fFFmR0j@Asurada-Nvidia>
-References: <cover.1679939952.git.nicolinc@nvidia.com>
- <955f7464fafc72984f3ec441671f37948f01d714.1679939952.git.nicolinc@nvidia.com>
+        Mon, 10 Apr 2023 18:52:10 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AAA1BF1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:52:09 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3287544f0a0so354745ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681167128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dCML3GJo02sARUkxvxRac8szR5Qx0GytecSMuFd6SAA=;
+        b=KSLa8ViMmYi89N65o0Yb2S2iJIqfk1oDmEi1G2YTQS/ZiNn88L2/qF38e4hVTyqJq3
+         FReKiq72zo5KiQ1SMH7f+TmoiNsCa6eGaonecUMzLu/tGB+rVALNEmv6Get4lUNBzLgi
+         F9wytHwU+xqnVhCldItDFsKsL15huyEPV6scg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681167128;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dCML3GJo02sARUkxvxRac8szR5Qx0GytecSMuFd6SAA=;
+        b=wWIlr5+87YAXCjcQbVCbzEdv0W8aPgbnUeLKfuYAHvB8VIqdx/7iFm3RwSN2Tuz9ye
+         sfV7KQP2hPiCB0K2iFXjv6RBRp+1Evj1abc6ewu+jwlCPhWK72Pmd6M2HuZDVgrX3xT+
+         KcvbdLPgcI+jrVROFL8LsAKIw2ksqqbmOD/uKFj2kPkSNDyHixrz7AsQaDH/8WxBOmX+
+         ltI/GhnoHaWKWYOnmE5N8bdnK1mGpOsx/czJvrLO+wlnXqu0a/r3nxeXMw4qHMKdOCf8
+         Yd0fur/Q6Xki31vUxAhirSdSpYqCXpbTj/fULN1+BNHZYrTcp7ZJPtDQ2L7EQJibCzjk
+         Zm5Q==
+X-Gm-Message-State: AAQBX9eJAPaaAqpIIeAl7bjOoo+4MzA/C9HRNySHshUPxszJkzHOrMR+
+        btikep9lgVhfgZr7dGZSYuQGZw==
+X-Google-Smtp-Source: AKy350ZkD+sGvf5Y8EIkzwr+3AVQrX7AGboJvNIy0Gf8aQFPeYv2t0ztn6JQ83CpFrYnM4YptngO4g==
+X-Received: by 2002:a05:6e02:1182:b0:326:1778:fae3 with SMTP id y2-20020a056e02118200b003261778fae3mr3569097ili.2.1681167128633;
+        Mon, 10 Apr 2023 15:52:08 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id e32-20020a026d60000000b003bf39936d1esm3517089jaf.131.2023.04.10.15.52.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 15:52:08 -0700 (PDT)
+Message-ID: <0197f2b8-96a3-22f6-aa14-960afdfd2e8d@linuxfoundation.org>
+Date:   Mon, 10 Apr 2023 16:52:07 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <955f7464fafc72984f3ec441671f37948f01d714.1679939952.git.nicolinc@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT065:EE_|SN7PR12MB8059:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d405f3e-1272-473d-5aab-08db3a15f862
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V6A39LKTH0TdAH56DYLTjwkdK/blzO7T5eb9N6M8TGZvS0Btjw74JbQE6A2yTpsCRzemHnQa/45lnZYdIZLsqdTaA2zyo13+XDMN/VYtdMmfhVW88kRnpVyPy5A2IbLH4YtH7+RaxpbbAWmy7cmr1askWIFrIAXUq+y5M7MoqJt7kwZywg1WsTsN02wS75I4iYMHOq8It27OPu5m9e2AgwNA4BJIAUNYC0Sie+7rcVqXibFQidSfYqET3QSltpCdRy6mvx7hMeMD7eUc0oth/KJ48elr04pqLbG5nIogTjJ6pYbMWbi/NKFFHpEGxNCyxC/FIk7nrJwxHMIDwghEujTgDeipJEsVvH5uy4FoU2j7MroiD6jfmWpW40D8oaL49iuDVrz+N9c68Moe+A7bzSaTAU2rh1FiPpJlMqP5SexXgl+5+BZ2M8rheGB3wcRy63sQnBRtnEUHBRGIjU5/hxeOuqQsh9Q8nVwcd6E1chZwINexye8qsqWKFRVhfFQbohCu7s45nBiisIA/rZwW3rX4MGI37PFiQ5MgJE+zYgDcrrQ1ObbaywqO/Ke1Lf4ZwELQcu2eQvXtpolvbIiBqZ/6psFBKkV3EXWvNntdXV88ZCcUF5YqoA0VedmlhkbTaELvK5JvCWeImpsmJlJjl53d/rPCZOHqpxnGkytCtn9nfrs1BhfbpatbOov6I+a6hOg+jN4Evih9ZMtHqJNG+3jnXuD/ucoEwZnOti27swhDNrOOzeY+2pxGdy4zjJi2
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(40470700004)(36840700001)(46966006)(478600001)(316002)(110136005)(54906003)(9686003)(26005)(186003)(2906002)(4744005)(33716001)(4326008)(70206006)(70586007)(41300700001)(7416002)(5660300002)(8676002)(82310400005)(8936002)(7636003)(356005)(82740400003)(47076005)(40460700003)(55016003)(40480700001)(336012)(36860700001)(426003)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 22:50:23.8039
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d405f3e-1272-473d-5aab-08db3a15f862
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8059
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric
+ values for idle-set operation.
+Content-Language: en-US
+To:     Korrapati Likhitha <likhitha@linux.ibm.com>, shuah@kernel.org,
+        trenn@suse.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com,
+        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230410121054.61622-1-likhitha@linux.ibm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230410121054.61622-1-likhitha@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:05:03AM -0700, Nicolin Chen wrote:
+On 4/10/23 06:10, Korrapati Likhitha wrote:
+> From: Likhitha Korrapati <likhitha@linux.ibm.com>
+> 
+> For both the d and e options in 'cpupower idle_set' command, an
+> atoi() conversion is done without checking if the input argument
+> is all numeric. So, an atoi conversion is done on any character
+> provided as input and the CPU idle_set operation continues with
+> that integer value, which may not be what is intended or entirely
+> correct.
+> 
+> The output of cpuidle-set before patch is as follows:
+> 
+> [root@xxx cpupower]# cpupower idle-set -e 1$
+> Idlestate 1 enabled on CPU 0
+> [snip]
+> Idlestate 1 enabled on CPU 47
+> 
+> [root@xxx cpupower]# cpupower idle-set -e 11
+> Idlestate 11 not available on CPU 0
+> [snip]
+> Idlestate 11 not available on CPU 47
+> 
+> [root@xxx cpupower]# cpupower idle-set -d 12
+> Idlestate 12 not available on CPU 0
+> [snip]
+> Idlestate 12 not available on CPU 47
+> 
+> [root@xxx cpupower]# cpupower idle-set -d qw
+> Idlestate 0 disabled on CPU 0
+> [snip]
+> Idlestate 0 disabled on CPU 47
+> 
+> This patch adds a check for both d and e options in cpuidle-set.c
+> to see that the idle_set value is all numeric before doing a
+> string-to-int conversion.
+> 
+> The output of cpuidle-set after the patch is as below:
+> 
+> [root@xxx cpupower]# ./cpupower idle-set -e 1$
+> Bad idle_set value: 1$. Integer expected
+> 
+> [root@xxx cpupower]# ./cpupower idle-set -e 11
+> Idlestate 11 not available on CPU 0
+> [snip]
+> Idlestate 11 not available on CPU 47
+> 
+> [root@xxx cpupower]# ./cpupower idle-set -d 12
+> Idlestate 12 not available on CPU 0
+> [snip]
+> Idlestate 12 not available on CPU 47
+> 
+> [root@xxx cpupower]# ./cpupower idle-set -d qw
+> Bad idle_set value: qw. Integer expected
+> 
+> Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
+> Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+> Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+> Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
+> ---
+> 
+> ** changes since v1 [1] **
+> 
+> - Addressed reviewed comments from v1.
+> - Slightly reworded the commit for clarity.
+> 
+> [1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
+> 
+>   tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
+>   tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
+>   tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
+>   3 files changed, 45 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+> index 46158928f9ad..1bfe16d27c2d 100644
+> --- a/tools/power/cpupower/utils/cpuidle-set.c
+> +++ b/tools/power/cpupower/utils/cpuidle-set.c
+> @@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
+>   				break;
+>   			}
+>   			param = ret;
+> -			idlestate = atoi(optarg);
+> +			if (is_stringnumeric(optarg))
+> +				idlestate = atoi(optarg);
+> +			else {
+> +				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
+> +				exit(EXIT_FAILURE);
+> +			}
 
->  tools/testing/selftests/iommu/iommfd*.c |  0
+Why can't we do this once instead of duplicating the code under
+'d' and 'e'
 
-> diff --git a/tools/testing/selftests/iommu/iommfd*.c b/tools/testing/selftests/iommu/iommfd*.c
-> new file mode 100644
-> index 000000000000..e69de29bb2d1
+Also have you tried using isdigit(idlestate) - works just fine
+for me.
 
-Accidentally included a noise here...
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 46158928f9ad..01b344efc1b1 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -95,6 +95,11 @@ int cmd_idle_set(int argc, char **argv)
+  		exit(EXIT_FAILURE);
+  	}
+  
++	if(!isdigit(idlestate)) {
++		printf("invalid idlestate specified\n");
++		exit(EXIT_FAILURE);
++	}
++
+  	get_cpustate();
+  
+  	/* Default is: set all CPUs */
 
-This series is on top of cdev, so I will send a v7 after the
-next version of cdev series (or next rc1), and drop this file.
-
-Thanks
-Nicolin
+thanks,
+-- Shuah
