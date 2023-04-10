@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31616DC243
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B576DC242
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjDJBNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S229659AbjDJBNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDJBNG (ORCPT
+        with ESMTP id S229546AbjDJBNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:13:06 -0400
+        Sun, 9 Apr 2023 21:13:12 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC1930FA
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:13:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A0535A8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=5ZqyIo2yPozy9BK+WevZ7XbxMmk32DVp4jnPgiud1w8=; b=CS2NUHbsxWHgEMwrtE3Ai397jJ
-        eXoVpzicm+RfmWnc3oR1P0YPKA4NK1qTUUhYXh1Bx8+hhT0ZArj5TeXoeMsj2Wxuka1omHAjGFdzx
-        j5Na+sxo7khLwW2anLjX1oh6PmqjFIaGugSYTdO/uO+/H+x8yCmlUVg6EXH9HC+lP1pYuhLif4TQW
-        kI/KfPyZUOfIy6svdLEK0YuOQolRPwaRZ+Upn9GMk+KJqTN0cCvL96zCQ3Z9h04uaIlILCIoWj/qE
-        B7QJ8lJLdyUZZOGRIWVDL5BaVBrA2AU0Rn/UQ2w6NjrPPYcnC5nqlVawWViqmcCOW+FqZya2e4xVg
-        mASJvUpA==;
+        bh=/Er8ywl5bE4dJ7WJe8NshHVWK4m5x+uPSc3wvx5Wahs=; b=32HUnOsbmPEBVAWTjU/8ZNBGqK
+        Yrc2xscmsV8yVDbVPamGfskG2LHaj9J9d2/OsyijKXBABFHH6Gt9A4OIZTFlKkGC8ceDCR+DROI7C
+        SQdWAuxyksaUjYBbCwI1/bpK8MUcW9NNe9jYmaafnS6KmIf7gbPFTLCmWXW2/hRA1TXR460Ak73cS
+        qKWq5wE3IWjVPvOt6XsjD3RBSfULGmAFxsqDTJyy5S0Qg0KAIE3Id7TJ16iutYoIiUR0KFJIQHZZv
+        wd/xVu8tTJcPduQ1AZry2bqYPK1HdJ2+4y7UVyusO/IJ+4yJYjdVLSM/BToX1duW15BjM+clAFSsD
+        3+j+qMqQ==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1plg5X-00EPbS-2C;
-        Mon, 10 Apr 2023 01:12:55 +0000
+        id 1plg5j-00EPc1-0I;
+        Mon, 10 Apr 2023 01:13:07 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Leo Li <leoyang.li@nxp.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kumar Gala <galak@kernel.crashing.org>
-Subject: [PATCH v2] soc/fsl/qe: fix usb.c build errors
-Date:   Sun,  9 Apr 2023 18:12:54 -0700
-Message-Id: <20230410011254.25675-1-rdunlap@infradead.org>
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Subject: [PATCH v3] firewire: init_ohci1394_dma: use correct function names in comments
+Date:   Sun,  9 Apr 2023 18:13:06 -0700
+Message-Id: <20230410011306.26268-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,49 +51,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix build errors in soc/fsl/qe/usb.c when QUICC_ENGINE is not set.
-This happens when PPC_EP88XC is set, which selects CPM1 & CPM.
-When CPM is set, USB_FSL_QE can be set without QUICC_ENGINE
-being set. When USB_FSL_QE is set, QE_USB deafults to y, which
-causes build errors when QUICC_ENGINE is not set. Making
-QE_USB depend on QUICC_ENGINE prevents QE_USB from defaulting to y.
+Prevent kernel-doc complaints by using the correct function names in
+kernel-doc comments:
 
-Fixes these build errors:
+drivers/firewire/init_ohci1394_dma.c:258: warning: expecting prototype for debug_init_ohci1394_dma(). Prototype was for init_ohci1394_dma_on_all_controllers() instead
+drivers/firewire/init_ohci1394_dma.c:289: warning: expecting prototype for setup_init_ohci1394_early(). Prototype was for setup_ohci1394_dma() instead
 
-drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
-usb.c:(.text+0x1e): undefined reference to `qe_immr'
-powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
-powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
-powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
-powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
-
-Fixes: 5e41486c408e ("powerpc/QE: add support for QE USB clocks routing")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202301101500.pillNv6R-lkp@intel.com/
-Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Leo Li <leoyang.li@nxp.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Qiang Zhao <qiang.zhao@nxp.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: Kumar Gala <galak@kernel.crashing.org>
+Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
+Cc: linux1394-devel@lists.sourceforge.net
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
-v2: drop Anton Vorontsov <avorontsov@ru.mvista.com>; rebase/resend
+v2: rebase/resend, add note to Andrew
+v3: add Takashi-san
 
- drivers/soc/fsl/qe/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/firewire/init_ohci1394_dma.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
---- a/drivers/soc/fsl/qe/Kconfig
-+++ b/drivers/soc/fsl/qe/Kconfig
-@@ -62,6 +62,7 @@ config QE_TDM
+diff -- a/drivers/firewire/init_ohci1394_dma.c b/drivers/firewire/init_ohci1394_dma.c
+--- a/drivers/firewire/init_ohci1394_dma.c
++++ b/drivers/firewire/init_ohci1394_dma.c
+@@ -251,7 +251,7 @@ static inline void __init init_ohci1394_
+ }
  
- config QE_USB
- 	bool
-+	depends on QUICC_ENGINE
- 	default y if USB_FSL_QE
- 	help
- 	  QE USB Controller support
+ /**
+- * debug_init_ohci1394_dma - scan for OHCI1394 controllers and init DMA on them
++ * init_ohci1394_dma_on_all_controllers - scan for OHCI1394 controllers and init DMA on them
+  * Scans the whole PCI space for OHCI1394 controllers and inits DMA on them
+  */
+ void __init init_ohci1394_dma_on_all_controllers(void)
+@@ -283,7 +283,7 @@ void __init init_ohci1394_dma_on_all_con
+ }
+ 
+ /**
+- * setup_init_ohci1394_early - enables early OHCI1394 DMA initialization
++ * setup_ohci1394_dma - enables early OHCI1394 DMA initialization
+  */
+ static int __init setup_ohci1394_dma(char *opt)
+ {
