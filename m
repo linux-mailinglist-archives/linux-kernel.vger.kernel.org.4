@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C866DC42F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81506DC433
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjDJIJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S229693AbjDJIMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDJIJe (ORCPT
+        with ESMTP id S229562AbjDJIMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:09:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B623840EA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:09:32 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id h193so1792105pgc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:09:32 -0700 (PDT)
+        Mon, 10 Apr 2023 04:12:19 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C44B40EA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:12:17 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id c3so4435924pjg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681114172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yI0LD2umo9G5Mj18v1Bg92+Ka77jnUXEaVGbSB697NY=;
-        b=DMVVll/s+XFS2HNxQsagfKXjeEOentDPixLCO9wIYWfko4qNzXYHlKKQTY958mGIBL
-         pjZVni2AX2NRyo29XZgkgm5MJq1jCw1a3P83+W02zDsflc7xKOPwCoA9+C8sVzETsrVW
-         eoHegWibPTPjlXXUYU2wocn9I3Np0aONHXJj9ZLoNzrwXN8R5rCMFeNHrMBXa0wBGcjL
-         HnPzSIeFm7R0q/adaH6SuhPs/f9NL9RBrXx6DhI5pm66bYIRX832fjsiB77quV0NKY2p
-         4MlJy6EvvTfgboJn6gmWjK5P/7DVbmUUBMpwOjWpGrD6dkJCL873NBIUU2CIOc7V63jP
-         iH0w==
+        d=bytedance.com; s=google; t=1681114336;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AnzM9U/2wJQYT1xeUJqeQOSExBa8HJ4Nk1EmXIm3SbI=;
+        b=Wo7VTjUIxqauPd+nQ8OdzJK305Pl6QZIALYA0NuD2pQyglFJZq+iQf/kdsm6YLgNTi
+         1ubTmat7kdIjDqY8OqyEI9jTmKeNEecNBahiq4cU1bYN1T2sTPOCd0USBF7bF0KryciJ
+         8aY1bI1aXJabvL2OujCs1njJnRHrczh1YqqgTfiY41z5jhpHBJj16RQN2Rsk7FlkrFq9
+         S7dcVyHEcOGuKmIHenJVS7ErRxh8Dp6C6xlKIIKk2Vc6Kl3jlYSKwLI3AVi9fmiOs5kt
+         ITwwSCZSohI3+b7DEIrq0Xa5dS+JWIikrDBZg/KB1BJn5BD6qYHENJvKFOVSfickOgx0
+         gLHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681114172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yI0LD2umo9G5Mj18v1Bg92+Ka77jnUXEaVGbSB697NY=;
-        b=5iZyhYgdyAGUT0OTg0OsML1cuGtd3j12wDib2zB10IOoHxtYK1xkeopAB4JGaArn0Y
-         g2QAdiE9X1QGxMxW1VwbjEuyABFf6oMfsJqN2mxQnui38qLF5kpsS74miXY/SZNJeycn
-         TRTqb3ICd6SQqUW522zB8LvXm7CqRGQZNyn6YdtJMh6RGBIVT53ytmwREnrf2LjAo/yt
-         7MQPodaikMvzPOHs1xjR64e4IJe0uOueZO0llWET/+pQw1pAQjJU8kpdpGWKsBMCJvsQ
-         BPS5oP1WiGGIwhk4D2lDHzDpaiJgnkh3UW9fWKWYkHKZKhWMxVPNwqqqUy38kcTEJA4E
-         IDzw==
-X-Gm-Message-State: AAQBX9dilo2I07t6bRts808o3tPehbTJ3FuRYCyE7Aeumy/Ll8DeZsoZ
-        aShHsgvNiJU/kmbkjXL0vtIFUXKRx0SGgFED+kpa5w==
-X-Google-Smtp-Source: AKy350biAiFjQ7sPWIe2hVDPFqFCKEFvmj9fAPFj4/4WpJmc6r4MBOqYxTFwa23PMKzpjMr1g0f6riqRACvunNypu3w=
-X-Received: by 2002:a63:d352:0:b0:518:4378:e548 with SMTP id
- u18-20020a63d352000000b005184378e548mr1348623pgi.8.1681114171989; Mon, 10 Apr
- 2023 01:09:31 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681114336;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AnzM9U/2wJQYT1xeUJqeQOSExBa8HJ4Nk1EmXIm3SbI=;
+        b=UNWOV0oqX6i0rEItFRLxo023JfaahgNXOTnCVPL8hTzFiAfpRq4wn+gOv+2M8npREY
+         m/AFCJVcykVfbJTMB3D8w+cHCdXuMbN36FufshQRYzgrYmHIzG9+3EIRrgBqTWSeS5dY
+         FuqHYn5G0hC9NCQEXBvW5UNGm66wfN8ga036+GBrrwZRDwVmWmmM6O+RInqOe1zS1ayS
+         TZGwhiOJ2rhrpzGTwIks+dSRO33KgP3vzt+2rC9/A6GU9I7gIWCKs2wJnAKp5V0lwwIP
+         8U0Blhdlqu0ymljsaSPTpn/HFPR3Dk8E99Etf7GJOELmhrBcni8vRDSTLgU7SzW65rzf
+         vfzA==
+X-Gm-Message-State: AAQBX9dU51bTi8r/z8Q4m7qZbQfK7MA+jgSlO40fTxDB+oqsEVpxGcQW
+        U9sxX1l5h2/83NSlS62GtjDyXQ==
+X-Google-Smtp-Source: AKy350bUord8cRFocB/vbhlK9SzXZDJ2j/QkcHG5lmGqHHghMRqOnOQcVFXpkHz7I2hXOeHd42c/YA==
+X-Received: by 2002:a05:6a20:be20:b0:e4:9ac9:844e with SMTP id ge32-20020a056a20be2000b000e49ac9844emr9920455pzb.61.1681114336608;
+        Mon, 10 Apr 2023 01:12:16 -0700 (PDT)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id m17-20020aa79011000000b0062d8e79ea22sm7234100pfo.40.2023.04.10.01.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 01:12:16 -0700 (PDT)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH 0/2] Fix two warnings about rq clock
+Date:   Mon, 10 Apr 2023 16:12:04 +0800
+Message-Id: <20230410081206.23441-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-References: <20230410073134.488762-1-badhri@google.com> <2023041028-irritate-starless-a42f@gregkh>
-In-Reply-To: <2023041028-irritate-starless-a42f@gregkh>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 10 Apr 2023 01:08:55 -0700
-Message-ID: <CAPTae5KZ0zkaCWrtPYzyX8oTyvDhBhc-hvxyHn9VHZ32UOqJ3g@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Add kernel config to wrap around
- tcpm logs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 12:45=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> On Mon, Apr 10, 2023 at 07:31:34AM +0000, Badhri Jagan Sridharan wrote:
-> > This change adds CONFIG_TCPM_LOG_WRAPAROUND which when set allows the
-> > logs to be wrapped around. Additionally, when set, does not clear
-> > the TCPM logs when dumped.
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >  drivers/usb/typec/tcpm/Kconfig | 6 ++++++
-> >  drivers/usb/typec/tcpm/tcpm.c  | 9 +++++++--
-> >  2 files changed, 13 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kc=
-onfig
-> > index e6b88ca4a4b9..4dd2b594dfc9 100644
-> > --- a/drivers/usb/typec/tcpm/Kconfig
-> > +++ b/drivers/usb/typec/tcpm/Kconfig
-> > @@ -18,6 +18,12 @@ config TYPEC_TCPCI
-> >       help
-> >         Type-C Port Controller driver for TCPCI-compliant controller.
-> >
-> > +config TCPM_LOG_WRAPAROUND
-> > +     bool "Enable TCPM log wraparound"
-> > +     help
-> > +       When set, wraps around TCPM logs and does not clear the logs wh=
-en dumped. TCPM logs by
-> > +       default gets cleared when dumped and does not wraparound when f=
-ull.
->
-> Kconfig help text needs to be wrapped at the properly width.
+These two patches fix two warnings about rq clock
 
-I assumed that the width is 100 characters, but it looks like it is
-80. Will fix it in the next version.
->
-> And you do not provide any hint here as to why this is not the default
-> option, or why someone would want this.
+Patch1 fixes the warning of using the old rq clock caused by
+missing update rq clock.
 
-"TCPM logs by default gets cleared when dumped and does not wraparound
-when full." was intended
-to convey why someone would want to set this. Perhaps it's not effective.
+Patch2 fixes the warning that the rq clock was updated multiple
+times while holding the rq lock.
 
-Does the below look better:
-"TCPM logs by default gets cleared when dumped and does not wraparound
-when full. This can be overridden by setting this config.
-When the config is set, TCPM wraps around logs and does not clear the
-logs when dumped."
+Hao Jia (2):
+  sched/core: Fixed missing rq clock update before calling
+    set_rq_offline()
+  sched/core: Avoid double calling update_rq_clock()
 
-Also, I could make this default if that's OK with Guenter.
+ kernel/sched/core.c     | 11 +++++++----
+ kernel/sched/fair.c     |  9 ++++++---
+ kernel/sched/topology.c | 10 ++++++----
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
->
-> So, why is this not just the default operation anyway?  Why would you
-> ever want the logs cleared?
+-- 
+2.37.0
 
-I remember Guenter mentioning that he was finding it useful to not
-wrap around the logs to fix problems
-during tcpm_register_port (init sequence). IMHO wrapping around the
-logs helps to triage interoperability
-issues uncovered during testing. So both approaches have their own advantag=
-es.
-
-Thanks for taking the time to review !
-- Badhri
-
->
-> thanks,
->
-> greg k-h
