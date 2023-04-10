@@ -2,224 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4171F6DC267
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29EE6DC271
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDJBpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S229758AbjDJBpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjDJBph (ORCPT
+        with ESMTP id S229724AbjDJBpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:45:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406632D6B;
-        Sun,  9 Apr 2023 18:45:36 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 339Nr3WI000924;
-        Mon, 10 Apr 2023 01:45:09 GMT
+        Sun, 9 Apr 2023 21:45:39 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D18D35AF;
+        Sun,  9 Apr 2023 18:45:38 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 339NpNbK011727;
+        Mon, 10 Apr 2023 01:45:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=YEeEucWqMdvl/w0fHu13v3UetqaV1bCa2Ep4Ai1Qeg4=;
- b=JIAYN+ZY4nJDVjYIwgLqswh9oZgKab5RtOxcNA6DoX31juoCw3t1I0m6QA2CmsJsgu4a
- 2ZuGWt+tyo6UOO1KB0rzc/UMiiVvFIFe/WodL1EQpYPgN9M1bWKdkaoQW4F9eJhcxGOq
- 1jbO9u6zQKqRzLnskGVq8dBfaamO8bEhXd/OpXT+nR3+nRtQYxAwQOLZqDBQ0PSjA0n9
- 7bfCJU/ufqw7oKlpfJjyluvbOoqmd5qbuQlRbLgCC3Rl63XZeQP95MbXJQnFGjbypYAj
- fpUCCfIhhSlh6mxmZZ1XdkzlOLbFBQEUd+KlGnricSFISMU2vgVsBtMwHBQFmIeTTXFl 4w== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj3rthmw-1
+ bh=c1DB9Q+Cek+iqDACVGLynf6pmu9TXXNVC26gWlakK7A=;
+ b=BPpaCqmTzfz95o3exg98nLBCS8D+HWZZ+LPy7xpa2EiVzbsrP+Q1KsesxQOX4f7ZQ7GS
+ nMz9XueaH2soXEYVWwE/zKfQfztPB9bV75PyYkPU4PXEQqvGqaEO5tNXQrqbdrzPLolK
+ 3kjDEceS/VTYjnuuUQ+/ZYqAvLjVHonxUI8ERbkvrppP+XzOpdjUPvNA/AKgIb9doFbv
+ 41/GwmH7Ujsx4/pJXxCjEgvKNFf+E7gu4lN0Tbhteu7oi9DZiBch+Vghpr3jLnY/7BS/
+ ayocruXsqJQzToLEX0K0uQtIKtbwVuLxfk6KiqG6Ffx28xg83X9WXe6SJheub3T1Y+4r 9A== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj4pjh4s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 10 Apr 2023 01:45:09 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 339NZUhw018863;
-        Mon, 10 Apr 2023 01:45:08 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jgrad5-1
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 339Nnoqd012442;
+        Mon, 10 Apr 2023 01:45:09 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pu0f9gaf7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 10 Apr 2023 01:45:08 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33A1j7N97275166
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33A1j79D15860436
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 10 Apr 2023 01:45:07 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8D7058069;
-        Mon, 10 Apr 2023 01:45:06 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E449B58056;
-        Mon, 10 Apr 2023 01:45:06 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 488D058059;
+        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32C8A5805B;
+        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
 Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 10 Apr 2023 01:45:06 +0000 (GMT)
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 10 Apr 2023 01:45:07 +0000 (GMT)
 Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
-        id A3F8A74514D; Sun,  9 Apr 2023 20:45:06 -0500 (CDT)
+        id A9ED674514E; Sun,  9 Apr 2023 20:45:06 -0500 (CDT)
 From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         eajames@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Subject: [PATCH v5 3/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
-Date:   Sun,  9 Apr 2023 20:44:43 -0500
-Message-Id: <20230410014445.458385-4-lakshmiy@us.ibm.com>
+Subject: [PATCH v5 4/5] docs: hwmon: Add documentaion for acbel-fsg032 PSU
+Date:   Sun,  9 Apr 2023 20:44:44 -0500
+Message-Id: <20230410014445.458385-5-lakshmiy@us.ibm.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230410014445.458385-1-lakshmiy@us.ibm.com>
 References: <20230410014445.458385-1-lakshmiy@us.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jcRVWVHG6gpS8_nslse2-7V77Zm7Ega8
-X-Proofpoint-GUID: jcRVWVHG6gpS8_nslse2-7V77Zm7Ega8
+X-Proofpoint-GUID: whLYNmDzmlR2kEeJT3dNa41QVzCyFDLE
+X-Proofpoint-ORIG-GUID: whLYNmDzmlR2kEeJT3dNa41QVzCyFDLE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-09_18,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0 bulkscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 adultscore=0 mlxlogscore=929 spamscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304100011
 X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the driver to support ACBEL FSG032 power supply.
+Add documentation changes for acbel-fsg032 psu
 
 Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 ---
- drivers/hwmon/pmbus/Kconfig        |  9 ++++
- drivers/hwmon/pmbus/Makefile       |  1 +
- drivers/hwmon/pmbus/acbel-fsg032.c | 85 ++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
+ Documentation/hwmon/acbel-fsg032.rst | 80 ++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst        |  1 +
+ 2 files changed, 81 insertions(+)
+ create mode 100644 Documentation/hwmon/acbel-fsg032.rst
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 59d9a7430499..270b6336b76d 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -27,6 +27,15 @@ config SENSORS_PMBUS
- 	  This driver can also be built as a module. If so, the module will
- 	  be called pmbus.
- 
-+config SENSORS_ACBEL_FSG032
-+	tristate "ACBEL FSG032 Power Supply"
-+	help
-+	  If you say yes here you get hardware monitoring support for the ACBEL
-+	  FSG032 Power Supply.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called acbel-fsg032.
-+
- config SENSORS_ADM1266
- 	tristate "Analog Devices ADM1266 Sequencer"
- 	select CRC8
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 3ae019916267..84ee960a6c2d 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -5,6 +5,7 @@
- 
- obj-$(CONFIG_PMBUS)		+= pmbus_core.o
- obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
-+obj-$(CONFIG_SENSORS_ACBEL_FSG032) += acbel-fsg032.o
- obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
- obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
- obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
-diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
+diff --git a/Documentation/hwmon/acbel-fsg032.rst b/Documentation/hwmon/acbel-fsg032.rst
 new file mode 100644
-index 000000000000..28a25f30e2cf
+index 000000000000..f1684b95e103
 --- /dev/null
-+++ b/drivers/hwmon/pmbus/acbel-fsg032.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright 2023 IBM Corp.
-+ */
++++ b/Documentation/hwmon/acbel-fsg032.rst
+@@ -0,0 +1,80 @@
++Kernel driver acbel-fsg032
++==========================
 +
-+#include <linux/device.h>
-+#include <linux/fs.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include <linux/hwmon-sysfs.h>
-+#include "pmbus.h"
++Supported chips:
 +
-+static const struct i2c_device_id acbel_fsg032_id[] = {
-+	{ "acbel_fsg032" },
-+	{}
-+};
++  * ACBEL FSG032-00xG power supply.
 +
-+static struct pmbus_driver_info acbel_fsg032_info = {
-+	.pages = 1,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-+		   PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
-+		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
-+		   PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_VOUT |
-+		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP |
-+		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_FAN12,
-+};
++Author: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
 +
-+static int acbel_fsg032_probe(struct i2c_client *client)
-+{
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-+	struct device *dev = &client->dev;
-+	int rc;
++Description
++-----------
 +
-+	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-+	if (rc < 0) {
-+		dev_err(dev, "Failed to read PMBUS_MFR_ID\n");
-+		return rc;
-+	}
-+	if (strncmp(buf, "ACBEL", 5)) {
-+		buf[rc] = '\0';
-+		dev_err(dev, "Manufacturer '%s' not supported\n", buf);
-+		return -ENODEV;
-+	}
++This driver supports ACBEL FSG032-00xG Power Supply. This driver
++is a client to the core PMBus driver.
 +
-+	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-+	if (rc < 0) {
-+		dev_err(dev, "Failed to read PMBUS_MFR_MODEL\n");
-+		return rc;
-+	}
++Usage Notes
++-----------
 +
-+	if (strncmp(buf, "FSG032", 6)) {
-+		buf[rc] = '\0';
-+		dev_err(dev, "Model '%s' not supported\n", buf);
-+		return -ENODEV;
-+	}
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
 +
-+	rc = pmbus_do_probe(client, &acbel_fsg032_info);
-+	if (rc)
-+		return rc;
++Sysfs entries
++-------------
 +
-+	return 0;
-+}
++The following attributes are supported:
 +
-+static const struct of_device_id acbel_fsg032_of_match[] = {
-+	{ .compatible = "acbel,fsg032" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, acbel_fsg032_of_match);
++======================= ======================================================
++curr1_crit              Critical maximum current.
++curr1_crit_alarm        Input current critical alarm.
++curr1_input             Measured output current.
++curr1_label             "iin"
++curr1_max               Maximum input current.
++curr1_max_alarm         Maximum input current high alarm.
++curr1_rated_max         Maximum rated input current.
++curr2_crit              Critical maximum current.
++curr2_crit_alarm        Output current critical alarm.
++curr2_input             Measured output current.
++curr2_label             "iout1"
++curr2_max               Maximum output current.
++curr2_max_alarm         Output current high alarm.
++curr2_rated_max         Maximum rated output current.
 +
-+static struct i2c_driver acbel_fsg032_driver = {
-+	.driver = {
-+		.name = "acbel-fsg032",
-+		.of_match_table = acbel_fsg032_of_match,
-+	},
-+	.probe_new = acbel_fsg032_probe,
-+	.id_table = acbel_fsg032_id,
-+};
 +
-+module_i2c_driver(acbel_fsg032_driver);
++fan1_alarm              Fan 1 warning.
++fan1_fault	        Fan 1 fault.
++fan1_input	        Fan 1 speed in RPM.
++fan1_target             Set fan speed reference.
 +
-+MODULE_AUTHOR("Lakshmi Yadlapati");
-+MODULE_DESCRIPTION("PMBus driver for AcBel Power System power supplies");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
++in1_alarm               Input voltage under-voltage alarm.
++in1_input               Measured input voltage.
++in1_label               "vin"
++in1_rated_max           Maximum rated input voltage.
++in1_rated_min           Minimum rated input voltage.
++in2_crit                Critical maximum output voltage.
++in2_crit_alarm          Output voltage critical high alarm.
++in2_input               Measured output voltage.
++in2_label               "vout1"
++in2_lcrit               Critical minimum output voltage.
++in2_lcrit_alarm         Output voltage critical low alarm.
++in2_rated_max           Maximum rated output voltage.
++in2_rated_min           Minimum rated output voltage.
++
++power1_alarm            Input fault or alarm.
++power1_input            Measured input power.
++power1_label            "pin"
++power1_max              Input power limit.
++power1_rated_max        Maximum rated input power.
++power2_crit             Critical output power limit.
++power2_crit_alarm       Output power crit alarm limit exceeded.
++power2_input            Measured output power.
++power2_label            "pout"
++power2_max              Output power limit.
++power2_max_alarm        Output power high alarm.
++power2_rated_max        Maximum rated output power.
++
++temp[1-3]_input         Measured temperature.
++temp[1-2]_max           Maximum temperature.
++temp[1-3]_rated_max     Temperature high alarm.
++======================= ======================================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f1fe75f596a5..dc4ebed13617 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -23,6 +23,7 @@ Hardware Monitoring Kernel Drivers
+    abituguru
+    abituguru3
+    acpi_power_meter
++   acbel-fsg032
+    ad7314
+    adc128d818
+    adm1021
 -- 
 2.37.2
 
