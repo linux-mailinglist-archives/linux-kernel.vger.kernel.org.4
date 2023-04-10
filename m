@@ -2,167 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273AB6DC6E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFA56DC6E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjDJMtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S229485AbjDJMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjDJMti (ORCPT
+        with ESMTP id S229618AbjDJMuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:49:38 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2049.outbound.protection.outlook.com [40.107.7.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8552738;
-        Mon, 10 Apr 2023 05:49:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i8pSSoo52lbWL2JDUznPwd5c+Fppe9zWuzU3U/uP4YFSJvpwiRyQe3h0dge9RtF0H2oN6lkHlPLlno17I9hRNqOL+sh/+BUmfb07rxDpXs2K92e2wPKcU7H+HSCwRhqph9QeofV4xCSO7kxSgTt34Ue5x4ueWjiEYdBVdTBrjXSEG61kM0nWX9egESQEOz2itejvXgEsfgsv60w7l55+j9nRZUxqYrFO/Ux3hlfUVeTU6zW74QZmEI0msku42thr58vtEfXX4aSj1mqCg0slVwf4tF5tM3NIhQT0akD8EeITjJs8P9R4l2LObXxIaGXsaJXbWaWf9T/DRCRgZ2ujhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5qoCUG7aIxDx9ZZ83tfYQ5fznWGb5QirS6EsyVHQgDM=;
- b=LI6PlDzBx92aRybU8Y1nzHwvHyYSzIIb5ewyLRWT0UgP6VyALh+RUqSXaq25XywwJRYNw9UpM89yAtV7+HhuwCUejqYy0ZiYHY6yP0hh6cY1ej1hbZq+nKXS3nmMSeuzTxYjdKcQOoMoRfcPlqFWy2GU18xx7xzyzmhYYljG/KR1Zhpeg8XU8OgS4trSkTr4tAGTqWgnNJCDyVJbKrFTvjXLoTf7uVij4WqOzIv+bHHLeIbpKytbY/rfu6mnh69wu52UMW5qOtMsU0ShqvqcOAW54+Jv0Wjdk0fCwjpm9FJbYxJHUuuJhqeusOJVRbC7DGvWS1UQPy2fbwoe6qJLmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5qoCUG7aIxDx9ZZ83tfYQ5fznWGb5QirS6EsyVHQgDM=;
- b=GMji5LiSDz78VVlmGNik4syuHehM2Sm7iAWh4GU4ex/EGL+ztte/ZBOfEIwqYY42XIoH+phe2/IakdKPIp+RCp294HBI2K3hDf8FzNp8QqRkLHsjqXUpljj+4NNX/pGm/Z/3zpXjGjHkY+FOjccQcI4FAk3B7xdm0PVTnaB0R1Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by AS8PR04MB8435.eurprd04.prod.outlook.com (2603:10a6:20b:346::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Mon, 10 Apr
- 2023 12:49:34 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733%7]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
- 12:49:33 +0000
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH net] net: phy: nxp-c45-tja11xx: fix the PTP interrupt enabling/disabling
-Date:   Mon, 10 Apr 2023 15:48:56 +0300
-Message-Id: <20230410124856.287753-1-radu-nicolae.pirea@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM3PR03CA0062.eurprd03.prod.outlook.com
- (2603:10a6:207:5::20) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Mon, 10 Apr 2023 08:50:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D945261
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681130956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gfI+8pNpKHzSRSbn60p2xLlTui4koSe7i9/TyNPKMTg=;
+        b=g1NFzA4Z0CWJ5MxbPPMIRNvRhZjC+JcLPK9bNf8dITcz3gCOP51Tq3oct1xueLLuYiQDeg
+        AqxuubiCnoiLSe43tHC9bCxE1rDlCBKkfsGouqKUCJs90Ab7d+f03tgH+gXTIsxH59uqpW
+        X1Z4jIxRmNtSiAUzNnc9S3kS/Hp/3X0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-570-jJ725RxJNFmF6k7MX5U79Q-1; Mon, 10 Apr 2023 08:49:14 -0400
+X-MC-Unique: jJ725RxJNFmF6k7MX5U79Q-1
+Received: by mail-wm1-f72.google.com with SMTP id u12-20020a05600c19cc00b003f07be0e96bso1802992wmq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 05:49:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681130953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gfI+8pNpKHzSRSbn60p2xLlTui4koSe7i9/TyNPKMTg=;
+        b=Z0EFkC6N+F4N7nXyjq1AlDk4dKImD1crQOJ13DXBxT5G4v7Jzlzgh9ecu7r7JbxS4a
+         2ca5uH6KUvA4noei+Uf+u51wsJM78TD6BvfO4RbWOmo4RLSwJH+4MFm43ff8dim7v7Mu
+         mHLkii/LybJvEF7RnHtJhlgcdaejubrM+DQLxjsK/N3yfPSGrGvll6oWtW4bV7Vc3q+q
+         FxMC+KJA9KDYjD5N5wV0X9jOUthBt1GnsquK8Pfpnqo4Pc9rEYM/z96HkmEPgn/lyBCS
+         wuk/n74WogsF2ga37tVr/L1T2dhlaI2rPqgTaLkQAqLSlbgF5C5PnnE584IifBKKOJqs
+         Ioeg==
+X-Gm-Message-State: AAQBX9dlogJUFMu09dBbceWKM6Z08+c9zlNLKECixxK4uBxLVqMUrg3/
+        66CKTdAky8nA4Kqcul9nwhtpmpV77lXVq1XQVfqTNwjuWJLAYPSQfQncF4man2IBqPDLStDT4zu
+        FmLIKEiJgbU77hhmgZXnGfGQrP/+5qQA1A33Nni608SJtLmzeL3Wsp1h7ijl8rtyWAcjnDm7m1L
+        IOmUwGCCo=
+X-Received: by 2002:a5d:5349:0:b0:2c7:1b4c:da75 with SMTP id t9-20020a5d5349000000b002c71b4cda75mr7297859wrv.69.1681130952906;
+        Mon, 10 Apr 2023 05:49:12 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zf/wmB9Myl3vBu+oEHUuKmq0XEAyi0iCtTxsDkx/dzU4MaidTOs+oWSxrEoWjjViR0eA5pqQ==
+X-Received: by 2002:a5d:5349:0:b0:2c7:1b4c:da75 with SMTP id t9-20020a5d5349000000b002c71b4cda75mr7297834wrv.69.1681130952548;
+        Mon, 10 Apr 2023 05:49:12 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m8-20020adfe0c8000000b002cff0e213ddsm11791320wri.14.2023.04.10.05.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 05:49:12 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Robert Elliott <elliott@hpe.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] ARM: exynos_defconfig: Enable zram as loadable modules
+Date:   Mon, 10 Apr 2023 14:49:07 +0200
+Message-Id: <20230410124907.3293869-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AS8PR04MB8435:EE_
-X-MS-Office365-Filtering-Correlation-Id: e41b0721-e529-43aa-2b30-08db39c208c5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AoS8oAcB67bT/gkXppYjfK0NQhEg954fxdezMgtqvg5md4R519LZvsIQB+bffXR2E05onRmeiGlLOLoA5n4lg4eDoehsKDmJ2Gl/p2qlB0WQUMHSTLWHDe9GtMWhuq5jKfHvfMWkV+DCSVM/tqeZllaSffZdovijZ3chDUEiQguwp9u74izh/9h+qYyIWoGdm9w+/0cYcN6BOWoXc79vS3++DaafS4orfaKW1P4LmtFsnVF53IvInC4TB/cNgAnCi0w9Iz5Jg2+q0vS3+weOBsNISx8puVVDjjM5mNLGVjIMpNSyEsdnzqF0n9qLpfC1EWB0upEWFru10fuR2o2MAazd8dKXkSiP+Ln//VX2w58PgM5mLR374kyjwM6XaS5FlA2eRKsfTWkwkk1VxB7fvkQsijV9P4JdwOyl+nVLOg9+H/9GT1oo7CnX8tTWmYlDXTbnjuBoId/ZJ23GFmAfTOiauL/JfMSh5c3H37GuVdprPtSBA0na+//GLIIX8ApoRa6uqbB1pp/rjpwgW4RHP4aR4kiHkOEwltYso0jXnfbu89dKlTrF1KGaplIpKoU5foCidEEkXIcogNIK9e0z3qnKrybIopuiUBgsXjieVJsHc6Yn6ufQJKnQ8Fo8vB5t
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(376002)(136003)(366004)(451199021)(52116002)(478600001)(86362001)(83380400001)(38350700002)(38100700002)(2616005)(6486002)(6666004)(2906002)(7416002)(316002)(186003)(6512007)(6506007)(1076003)(26005)(66476007)(8676002)(66556008)(8936002)(5660300002)(41300700001)(66946007)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sqrlGLr+HReyJ1PS4Ia8ClparUz0inc1AaPiPEnh9F6JGzOwV6G0+3yMBhD4?=
- =?us-ascii?Q?khDeMVDnZ/3WMwZZfIbO4uN5PphU1FcNRM9pYe1R3x5XjhRX9+eXHO8i/gXB?=
- =?us-ascii?Q?TjELTBdnOhmIe2WQRwrsCB0o/Gu/vHIQnZYpT46+PRlJE47/Zs2uoTOZ7nif?=
- =?us-ascii?Q?wgMI1Y7pCnGiL2NWezsdAk/hnPzKrtjBDgOKQC3HAfzzKx5XQMhPcsldbobU?=
- =?us-ascii?Q?oJpIriQGJrP6y6gD1iwk8cQ/qfqAhe/EgIHaL3576lnaCLKWfyFp8VQXS44X?=
- =?us-ascii?Q?e4mJQ5XAMd0QobrLUzOrSH2EokHy5T3ah2pHxVARjFr7AemZEivfVVivQAPq?=
- =?us-ascii?Q?DrlK25OrqFS7NJDbyvdcJQxu0blA01tyNTNvITUlA5BpN5KEyEjeeyyL/6uJ?=
- =?us-ascii?Q?I0KlUMkd2tTZhKN++f7hRT6ihDpmUcFNjgamOMO4pbXjNPpFZsoV4f2nOHeA?=
- =?us-ascii?Q?lGwp1ukB3NrKZL0x6Y43CjwBAm0qNSrNmKdHz0+LmCLYNPuVm79j9VkZdiVy?=
- =?us-ascii?Q?lFoWWrSEWdkrX4I+6T0j/+soewH3kRNFLoMVeKLSSjTpzLYrRlTEaHKXJgoz?=
- =?us-ascii?Q?5NYVcGcsv2aljG/q4ng65usJ1Jq+8/cpXqdY+1JkKvuxh2UJjFiRrJUeCHHN?=
- =?us-ascii?Q?e91QDNFBv9somolZ2QNMguhSq0hBkinll7Rghx8mrByJIBxzRNdvrmcCTRus?=
- =?us-ascii?Q?5Wsh/NL3/e16z0UHosK58vhu3lqOlbc2XbUr3Rw0M7Hpd1qFdqjzQbKhqye2?=
- =?us-ascii?Q?x+KVHc0xf49c5hFs+0U26ayMWWHS7OsRvXvEx061x/0OgWLjPdn+eQtjPGCm?=
- =?us-ascii?Q?i9epRMNWv/Oc2xfZ3XJwiXXtJUZENPJE4Fci6SxZlB6n94DlQiUBxx/4w73K?=
- =?us-ascii?Q?osmwc6ies2xC1X5z96LkSthZxPf4sN996FfqH8YLnmDfRBfKNPbyC2l1b6VD?=
- =?us-ascii?Q?z0wsjpCvbnOwmE0zBPFx3USd8Z4k8diZy6QaYIgGhqoVDAngrTtfSl+7wclA?=
- =?us-ascii?Q?WOwbzx5RAUD5KPKKq0QRytcrdv9cgQ4CnMzpr3xJYvholDGz+zSe4mHVGSXk?=
- =?us-ascii?Q?hIsdwpVH1jfmHTsDmp7TDCVFSTYzmNOGv/Y2oWudiizbwM8Fn80AyuVsfJXc?=
- =?us-ascii?Q?oilT8Q+BlfEP+Uf/YvY7XOsl+xXE+ZhHJJjAq7by3nSAuhBCI9jhAVbiuxAC?=
- =?us-ascii?Q?nvys/rVeEwQnC+k+0dbzoSXq2yI7d82YduQsE8honXUdt541TOUP+e6rsKOo?=
- =?us-ascii?Q?rJi5XZKwA5vKzROQxwPjV5OjGIbJUkSgY3moXaUAtVz+E7eIkba3ao/iMoUf?=
- =?us-ascii?Q?DE0nxlNWMgLaqwp6+Fm+e/SxukEc/2j/9VRVhqaL3LPAvi+/7kifKTrXOsMV?=
- =?us-ascii?Q?v83Dp8ELta51uFf2s5j9rs0+JI8pdZxdzIB8dB19H9im4m8b24RIsxvIVQDI?=
- =?us-ascii?Q?dlVmHjB2JA/bYVn528MPvWfWxzhQPYBQsLOdg/uMWgnai8Iod0Kwm+l0Y5TH?=
- =?us-ascii?Q?qGMj7zwQHJ0wAy3XzrGudhqwZn2eousA/6XAK399oUtu82xh8iijP2TULUAP?=
- =?us-ascii?Q?PxZRqYT5aRZjOqnY5RWwTkkGfNcE1fN5eid2dNZizznGMCGXSR+nw3eTMO9S?=
- =?us-ascii?Q?pA=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e41b0721-e529-43aa-2b30-08db39c208c5
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 12:49:33.8631
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2zzjb+CK2t1dyB8MoBbcECHEp3Cn3AQhBTEuwpmNST4GEKQ33P3249asHqrPaMgEjVl+c9q8iJwuMSEi6y9GRV5GahmaOTK0La9g4e/kJeI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8435
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-.config_intr() handles only the link event interrupt and should also
-disable/enable the PTP interrupt.
+Enable zram and dependencies as loadable modules. This allows to use the
+/dev/zramX virtual block devices as swap stored in system memory.
 
-Even if the PTP irqs bit is toggled unconditionally, it is safe. This
-interrupt acts as a global switch for all PTP irqs. By default, this bit
-is set.
+Options were taken from commit 5c824e8be64d ("ARM: omap2plus_defconfig:
+Enable zram as loadable modules") that does the same for OMAP2+ platforms.
 
-Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
- drivers/net/phy/nxp-c45-tja11xx.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-index 5813b07242ce..4d7f4cb05f89 100644
---- a/drivers/net/phy/nxp-c45-tja11xx.c
-+++ b/drivers/net/phy/nxp-c45-tja11xx.c
-@@ -63,6 +63,9 @@
- #define VEND1_PORT_ABILITIES		0x8046
- #define PTP_ABILITY			BIT(3)
- 
-+#define VEND1_PORT_FUNC_IRQ_EN		0x807A
-+#define PTP_IRQS			BIT(3)
-+
- #define VEND1_PORT_INFRA_CONTROL	0xAC00
- #define PORT_INFRA_CONTROL_EN		BIT(14)
- 
-@@ -890,12 +893,15 @@ static int nxp_c45_start_op(struct phy_device *phydev)
- 
- static int nxp_c45_config_intr(struct phy_device *phydev)
- {
--	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, PTP_IRQS, PTP_IRQS);
- 		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
- 					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
--	else
-+	} else {
-+		phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, PTP_IRQS, PTP_IRQS);
- 		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
- 					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-+	}
- }
- 
- static irqreturn_t nxp_c45_handle_interrupt(struct phy_device *phydev)
+ arch/arm/configs/exynos_defconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
+index b0f0baa3a6c4..2d5be864b4ca 100644
+--- a/arch/arm/configs/exynos_defconfig
++++ b/arch/arm/configs/exynos_defconfig
+@@ -37,6 +37,8 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_PARTITION_ADVANCED=y
+ CONFIG_CMA=y
++CONFIG_ZSMALLOC=m
++CONFIG_PGTABLE_MAPPING=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+@@ -84,6 +86,8 @@ CONFIG_NFC_SHDLC=y
+ CONFIG_NFC_S3FWRN5_I2C=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_ZRAM=m
++CONFIG_ZRAM_WRITEBACK=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_CRYPTOLOOP=y
+ CONFIG_BLK_DEV_RAM=y
+
+base-commit: e3adc46da349d4a4cda1c58d8186c5bce0b011fd
 -- 
-2.34.1
+2.40.0
 
