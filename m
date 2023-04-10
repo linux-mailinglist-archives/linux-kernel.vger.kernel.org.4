@@ -2,73 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92FA6DCCB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39426DCCC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjDJVVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S229806AbjDJVWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjDJVVQ (ORCPT
+        with ESMTP id S229591AbjDJVWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:21:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0F01BF7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:21:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F151A614D1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5FC03C4339B;
-        Mon, 10 Apr 2023 21:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681161675;
-        bh=s3PzlJPZmrchd9ttp90LKIJ9fi79LAf3Smf5a7Ie4no=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fiK7+g/rJWELGlqmPOzbL3Q5lO0vaouVQtUeYh6cXQPu3omP2TdC2QHMu3u6AcooX
-         9IL3/v/+sQT/X9HFJKi6Gn3pY374Bn1aIYZF+OrJhYtSOk1Av+oTk08fnX5E5VzZVS
-         FMcOl380n2KmPPucyspM/mKyJlJ1IK8BkkdSdylFU9Q6goeiEiHAHXQvP9Mir1AswC
-         XizIBbwJgw4c79ouKrllFVNfh2K1+Iw2U6L+p1VPCH/npXebwA0tjV2rX+18G5OCBB
-         JxOqyjK7RpjuLi6jBkxVNxCkX2ZNAAOHisE0Uh35noeF/THNq9W9WC1yZagkdja1Zj
-         J+0c1gZstuYrA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4320BF8321B;
-        Mon, 10 Apr 2023 21:21:15 +0000 (UTC)
-Subject: Re: [GIT PULL] 9p fixes for 6.3-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZDM/4C0PlbbzV/0R@7e9e31583646>
-References: <ZDM/4C0PlbbzV/0R@7e9e31583646>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZDM/4C0PlbbzV/0R@7e9e31583646>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git tags/9p-6.3-fixes-rc7
-X-PR-Tracked-Commit-Id: 347dca97f75d461ac2ac256b68e495dfc6f14d61
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c118b59e71d2a910ee300f8be40fa864a91bb6ca
-Message-Id: <168116167527.31176.17427545781211200295.pr-tracker-bot@kernel.org>
-Date:   Mon, 10 Apr 2023 21:21:15 +0000
-To:     Eric Van Hensbergen <ericvh@kernel.org>
-Cc:     torvalds@linux-foundation.org, v9fs@lists.linux.dev,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 10 Apr 2023 17:22:30 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C8671BF7;
+        Mon, 10 Apr 2023 14:22:28 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 029D62121ED9; Mon, 10 Apr 2023 14:22:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 029D62121ED9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681161748;
+        bh=xt/fJmUDps/x8ZiTtOAHQtR6GDYm/n5KlqBdwXz+DPQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f9sHGf+IeRjFMcQyEtxUhjJuMUB6nkvfJ9I7x4j6T2Qa2koeH8LT8W41X5kCgdFDQ
+         lmtJJaoaDtX2f7Nksb5/aLLwjtRIhWUdNPAfKKwL8Ev7N24aXZR6jtTOKlRnC94xN0
+         fC1Szq+H6slLOsQa1kIXqPOAnaeXcyeEJSG4vcpg=
+Date:   Mon, 10 Apr 2023 14:22:27 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 06/16] ipe: add LSM hooks on execution and kernel
+ read
+Message-ID: <20230410212227.GC18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-7-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRX4-=SSAkb0f2722dJ9JGudTyT-B=t8uoRqA8efwcoSg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRX4-=SSAkb0f2722dJ9JGudTyT-B=t8uoRqA8efwcoSg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 9 Apr 2023 22:44:48 +0000:
+On Thu, Mar 02, 2023 at 02:05:20PM -0500, Paul Moore wrote:
+> On Mon, Jan 30, 2023 at 5:59???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> >
+> > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> >
+> > IPE's initial goal is to control both execution and the loading of
+> > kernel modules based on the system's definition of trust. It
+> > accomplishes this by plugging into the security hooks for
+> > bprm_check_security, file_mprotect, mmap_file, kernel_load_data,
+> > and kernel_read_data.
+> >
+> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> 
+> ...
+> 
+> > ---
+> >  security/ipe/hooks.c | 169 +++++++++++++++++++++++++++++++++++++++++++
+> >  security/ipe/hooks.h |  13 ++++
+> >  security/ipe/ipe.c   |   6 ++
+> >  3 files changed, 188 insertions(+)
+> >
+> > diff --git a/security/ipe/hooks.c b/security/ipe/hooks.c
+> > index 335b773c7ae1..fd5109e29c76 100644
+> > --- a/security/ipe/hooks.c
+> > +++ b/security/ipe/hooks.c
+> > @@ -23,3 +23,172 @@ void ipe_sb_free_security(struct super_block *mnt_sb)
+> >  {
+> >         ipe_invalidate_pinned_sb(mnt_sb);
+> >  }
+> > +
+> > +/**
+> > + * ipe_bprm_check_security - ipe security hook function for bprm check.
+> > + * @bprm: Supplies a pointer to a linux_binprm structure to source the file
+> > + *       being evaluated.
+> > + *
+> > + * This LSM hook is called when a binary is loaded through the exec
+> > + * family of system calls.
+> > + * Return:
+> > + * *0  - OK
+> > + * *!0 - Error
+> > + */
+> > +int ipe_bprm_check_security(struct linux_binprm *bprm)
+> > +{
+> > +       struct ipe_eval_ctx ctx = { 0 };
+> > +
+> > +       build_eval_ctx(&ctx, bprm->file, ipe_op_exec);
+> > +       return ipe_evaluate_event(&ctx);
+> > +}
+> > +
+> > +/**
+> > + * ipe_mmap_file - ipe security hook function for mmap check.
+> > + * @f: File being mmap'd. Can be NULL in the case of anonymous memory.
+> > + * @reqprot: The requested protection on the mmap, passed from usermode.
+> > + * @prot: The effective protection on the mmap, resolved from reqprot and
+> > + *       system configuration.
+> > + * @flags: Unused.
+> > + *
+> > + * This hook is called when a file is loaded through the mmap
+> > + * family of system calls.
+> > + *
+> > + * Return:
+> > + * * 0 - OK
+> > + * * !0        - Error
+> > + */
+> > +int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
+> > +                 unsigned long flags)
+> > +{
+> > +       struct ipe_eval_ctx ctx = { 0 };
+> > +
+> > +       if (prot & PROT_EXEC || reqprot & PROT_EXEC) {
+> 
+> Is there a reason why you care about @reqprot?  It seems like IPE
+> would only be interested in the protection flags that the kernel is
+> actually using.
+> 
+> I notice that in the `ipe_file_mprotect()` hook you ignore @reqprot,
+> which I believe is the right thing to do.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git tags/9p-6.3-fixes-rc7
+Yes I double checked and found that's not necessary, I will remove that.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c118b59e71d2a910ee300f8be40fa864a91bb6ca
+-Fan
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> > +               build_eval_ctx(&ctx, f, ipe_op_exec);
+> > +               return ipe_evaluate_event(&ctx);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +/**
+> > + * ipe_file_mprotect - ipe security hook function for mprotect check.
+> > + * @vma: Existing virtual memory area created by mmap or similar.
+> > + * @reqprot: The requested protection on the mmap, passed from usermode.
+> > + * @prot: The effective protection on the mmap, resolved from reqprot and
+> > + *       system configuration.
+> > + *
+> > + * This LSM hook is called when a mmap'd region of memory is changing
+> > + * its protections via mprotect.
+> > + *
+> > + * Return:
+> > + * * 0 - OK
+> > + * * !0        - Error
+> > + */
+> > +int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> > +                     unsigned long prot)
+> > +{
+> > +       struct ipe_eval_ctx ctx = { 0 };
+> > +
+> > +       /* Already Executable */
+> > +       if (vma->vm_flags & VM_EXEC)
+> > +               return 0;
+> > +
+> > +       if (prot & PROT_EXEC) {
+> > +               build_eval_ctx(&ctx, vma->vm_file, ipe_op_exec);
+> > +               return ipe_evaluate_event(&ctx);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +/**
+> > + * ipe_kernel_read_file - ipe security hook function for kernel read.
+> > + * @file: Supplies a pointer to the file structure being read in from disk.
+> > + * @id: Supplies the enumeration identifying the purpose of the read.
+> > + * @contents: Unused.
+> > + *
+> > + * This LSM hook is called when a file is being read in from disk from
+> > + * the kernel.
+> > + *
+> > + * Return:
+> > + * 0 - OK
+> > + * !0 - Error
+> > + */
+> > +int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+> > +                        bool contents)
+> > +{
+> > +       enum ipe_op_type op;
+> > +       struct ipe_eval_ctx ctx;
+> > +
+> > +       switch (id) {
+> > +       case READING_FIRMWARE:
+> > +               op = ipe_op_firmware;
+> > +               break;
+> > +       case READING_MODULE:
+> > +               op = ipe_op_kernel_module;
+> > +               break;
+> > +       case READING_KEXEC_INITRAMFS:
+> > +               op = ipe_op_kexec_initramfs;
+> > +               break;
+> > +       case READING_KEXEC_IMAGE:
+> > +               op = ipe_op_kexec_image;
+> > +               break;
+> > +       case READING_POLICY:
+> > +               op = ipe_op_ima_policy;
+> > +               break;
+> > +       case READING_X509_CERTIFICATE:
+> > +               op = ipe_op_ima_x509;
+> > +               break;
+> > +       default:
+> > +               op = ipe_op_max;
+> > +               WARN(op == ipe_op_max, "no rule setup for enum %d", id);
+> > +       }
+> > +
+> > +       build_eval_ctx(&ctx, file, op);
+> > +       return ipe_evaluate_event(&ctx);
+> > +}
+> > +
+> > +/**
+> > + * ipe_kernel_load_data - ipe security hook function for kernel load data.
+> > + * @id: Supplies the enumeration identifying the purpose of the read.
+> > + * @contents: Unused.
+> > + *
+> > + * This LSM hook is called when a buffer is being read in from disk.
+> > + *
+> > + * Return:
+> > + * * 0 - OK
+> > + * * !0        - Error
+> > + */
+> > +int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents)
+> > +{
+> > +       enum ipe_op_type op;
+> > +       struct ipe_eval_ctx ctx = { 0 };
+> > +
+> > +       switch (id) {
+> > +       case LOADING_FIRMWARE:
+> > +               op = ipe_op_firmware;
+> > +               break;
+> > +       case LOADING_MODULE:
+> > +               op = ipe_op_kernel_module;
+> > +               break;
+> > +       case LOADING_KEXEC_INITRAMFS:
+> > +               op = ipe_op_kexec_initramfs;
+> > +               break;
+> > +       case LOADING_KEXEC_IMAGE:
+> > +               op = ipe_op_kexec_image;
+> > +               break;
+> > +       case LOADING_POLICY:
+> > +               op = ipe_op_ima_policy;
+> > +               break;
+> > +       case LOADING_X509_CERTIFICATE:
+> > +               op = ipe_op_ima_x509;
+> > +               break;
+> > +       default:
+> > +               op = ipe_op_max;
+> > +               WARN(op == ipe_op_max, "no rule setup for enum %d", id);
+> > +       }
+> > +
+> > +       build_eval_ctx(&ctx, NULL, op);
+> > +       return ipe_evaluate_event(&ctx);
+> > +}
+> > diff --git a/security/ipe/hooks.h b/security/ipe/hooks.h
+> > index 30fe455389bf..857cae69678c 100644
+> > --- a/security/ipe/hooks.h
+> > +++ b/security/ipe/hooks.h
+> > @@ -11,4 +11,17 @@
+> >
+> >  void ipe_sb_free_security(struct super_block *mnt_sb);
+> >
+> > +int ipe_bprm_check_security(struct linux_binprm *bprm);
+> > +
+> > +int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
+> > +                 unsigned long flags);
+> > +
+> > +int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> > +                     unsigned long prot);
+> > +
+> > +int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+> > +                        bool contents);
+> > +
+> > +int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents);
+> > +
+> >  #endif /* IPE_HOOKS_H */
+> > diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> > index bef923026b50..7af2f942decd 100644
+> > --- a/security/ipe/ipe.c
+> > +++ b/security/ipe/ipe.c
+> > @@ -4,6 +4,7 @@
+> >   */
+> >
+> >  #include "ipe.h"
+> > +#include "hooks.h"
+> >
+> >  bool ipe_enabled;
+> >
+> > @@ -12,6 +13,11 @@ static struct lsm_blob_sizes ipe_blobs __lsm_ro_after_init = {
+> >
+> >  static struct security_hook_list ipe_hooks[] __lsm_ro_after_init = {
+> >         LSM_HOOK_INIT(sb_free_security, ipe_sb_free_security),
+> > +       LSM_HOOK_INIT(bprm_check_security, ipe_bprm_check_security),
+> > +       LSM_HOOK_INIT(mmap_file, ipe_mmap_file),
+> > +       LSM_HOOK_INIT(file_mprotect, ipe_file_mprotect),
+> > +       LSM_HOOK_INIT(kernel_read_file, ipe_kernel_read_file),
+> > +       LSM_HOOK_INIT(kernel_load_data, ipe_kernel_load_data),
+> >  };
+> >
+> >  /**
+> > --
+> > 2.39.0
+> 
+> --
+> paul-moore.com
