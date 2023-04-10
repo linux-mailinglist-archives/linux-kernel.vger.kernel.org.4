@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4D66DC7C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9735A6DC7C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjDJOSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S229742AbjDJOUK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 10:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDJOSp (ORCPT
+        with ESMTP id S229603AbjDJOUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:18:45 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753E5213C;
-        Mon, 10 Apr 2023 07:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1681136324; x=1712672324;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=i+S/sDMXP9J94sRN9gjxGcSuFRzKplRBtZn53LQ1X8o=;
-  b=L5q0K+YmTkCVAcIVOtlFdmrdi6Gf+cgVragl0cP7eIihGjuVuf2mvaYp
-   Tv87h0EUPUlFZC+bFa+3T5kImYNcmUFbryLpux6M3929j28spHe7u1TIb
-   lBXFW/A/tffo7gnRJ0wEe1jFkfR+PKpIVZ5n3iOCtcuncdtJNMGrghAO6
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.98,333,1673913600"; 
-   d="scan'208";a="312348347"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 14:18:41 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id 0EA6060A8C;
-        Mon, 10 Apr 2023 14:18:39 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 10 Apr 2023 14:18:39 +0000
-Received: from b0f1d8753182.ant.amazon.com.com (10.106.82.21) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 10 Apr 2023 14:18:35 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <kvm@vger.kernel.org>
-CC:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        Takahiro Itazuri <zulinx86@gmail.com>,
-        Takahiro Itazuri <itazur@amazon.com>
-Subject: [PATCH] kvm: x86: Update KVM_GET_CPUID2 to return valid entry count
-Date:   Mon, 10 Apr 2023 15:18:20 +0100
-Message-ID: <20230410141820.57328-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 10 Apr 2023 10:20:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 046102689
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:20:04 -0700 (PDT)
+Received: from loongson.cn (unknown [209.85.128.41])
+        by gateway (Coremail) with SMTP id _____8Axkk4SGzRktCEZAA--.38625S3;
+        Mon, 10 Apr 2023 22:20:03 +0800 (CST)
+Received: from mail-wm1-f41.google.com (unknown [209.85.128.41])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxIL8OGzRkvaYcAA--.64977S3;
+        Mon, 10 Apr 2023 22:20:02 +0800 (CST)
+Received: by mail-wm1-f41.google.com with SMTP id gw13so2874357wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:20:01 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fdG3Ne5nfDIxB48t55RwF51lLWpYCOYQgZqZpSzsPXu/e+uNSx
+        BD0qcgYDmBy0aWymmBcF6gMpwclA3BRBWWIo04vn8A==
+X-Google-Smtp-Source: AKy350YZXNiBBM1EIRFVqDYPRhTbA1AdBFRq46FGsSzubrD07qtNxFiw40NpzFqHrk3GYLGwWeBqYK6eWi7ePA9PBls=
+X-Received: by 2002:a1c:7708:0:b0:3ed:d2fc:2fe7 with SMTP id
+ t8-20020a1c7708000000b003edd2fc2fe7mr2187905wmi.0.1681136398193; Mon, 10 Apr
+ 2023 07:19:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.82.21]
-X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230410115734.93365-1-wangrui@loongson.cn> <c90c442fe029bfb9c4487284366800b8781954e1.camel@xry111.site>
+In-Reply-To: <c90c442fe029bfb9c4487284366800b8781954e1.camel@xry111.site>
+From:   Rui Wang <wangrui@loongson.cn>
+Date:   Mon, 10 Apr 2023 22:19:47 +0800
+X-Gmail-Original-Message-ID: <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
+Message-ID: <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Improve memory ops
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-CM-TRANSID: AQAAf8AxIL8OGzRkvaYcAA--.64977S3
+X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
+        14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7V
+        AKI48JMxAqzxv262kKe7AKxVWUXVWUAwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
+        CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify the KVM_GET_CPUID2 API to return the number of valid entries in
-nent field of kvm_cpuid2, even when the API is successful.
+On Mon, Apr 10, 2023 at 8:20 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> On Mon, 2023-04-10 at 19:57 +0800, WANG rui wrote:
+> > +       /* align up address */
+> > +       andi    t1, a0, 7
+> > +       sub.d   a0, a0, t1
+>
+> bstrins.d a0, zero, 2, 0
+>
+> Likewise for other aligning operations if the temporary is not used.
 
-Previously, the KVM_GET_CPUID2 API only updated the nent field when an
-error was returned. If the API was called with an entry count larger
-than necessary (e.g., KVM_MAX_CPUID_ENTRIES), it would succeed, but the
-nent field would continue to show a value larger than the actual number
-of entries filled by the KVM_GET_CPUID2 API. With this change, users can
-rely on the updated nent field and there is no need to traverse
-unnecessary entries and check whether an entry is valid or not.
+I think we're on the same page. I had previously tested this on the
+user-space version[1], but it's not a performance-critical area.
 
-Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
----
- arch/x86/kvm/cpuid.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+[1] https://github.com/heiher/mem-bench/blob/0083d4e5a82e57939517413da3bcad81e01adbea/memset-int.S#L35-L37
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 599aebec2d52..31838dfddda6 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -523,10 +523,13 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
- 			      struct kvm_cpuid2 *cpuid,
- 			      struct kvm_cpuid_entry2 __user *entries)
- {
--	int r;
-+	int nent, r;
-+
-+	nent = cpuid->nent;
-+	cpuid->nent = vcpu->arch.cpuid_nent;
- 
- 	r = -E2BIG;
--	if (cpuid->nent < vcpu->arch.cpuid_nent)
-+	if (nent < vcpu->arch.cpuid_nent)
- 		goto out;
- 	r = -EFAULT;
- 	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
-@@ -535,7 +538,6 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
- 	return 0;
- 
- out:
--	cpuid->nent = vcpu->arch.cpuid_nent;
- 	return r;
- }
- 
--- 
-2.39.2
+Regards,
+Rui
 
