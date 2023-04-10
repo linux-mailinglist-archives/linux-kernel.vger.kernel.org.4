@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9846DCCDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C9E6DCCE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjDJViA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S229749AbjDJVkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjDJVh5 (ORCPT
+        with ESMTP id S229644AbjDJVkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:37:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBC51731;
-        Mon, 10 Apr 2023 14:37:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 10 Apr 2023 17:40:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417BA172D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681162788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=upgu2OeMvV+rfG2Ghh613QetkB7vJuE3skdR1FunYJU=;
+        b=eC7aD6Bid+9Qycoh4ghzpESL9YJgiJePGthnsjiiemwIqU5Ty3O8n4AB/JM1Cl1c7JwAFM
+        mvonciGdYwI2GF2UsV9ftUistI3LkEFZvsdOnTPvZOEdN3uLlMJ2QbUf8gpcKRhbLXL4tj
+        TGNB6hnVWDv0Fvi9fAjKkWx+AKKsbrU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-M6GgUEOPMeqb2cPwBvSNZA-1; Mon, 10 Apr 2023 17:39:43 -0400
+X-MC-Unique: M6GgUEOPMeqb2cPwBvSNZA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CAF561ED1;
-        Mon, 10 Apr 2023 21:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF2BC433EF;
-        Mon, 10 Apr 2023 21:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681162675;
-        bh=nInAUa6amMudrI8XEJL1TpR3ESFkYUHEKUku5oaWNKA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DzLbS6KrP/rrdDllYm/O2I3oH3pJyDW4jebSqhrbwp7E0WV32c4lv9i7QBsiRViCi
-         WthOOONKfQaRoVBC3phTcqYDc3FUb73jA7nzyQrw4O2X+s6nNF+GwnWKTNSMMtJ3GP
-         EVbqhJbc9V/QLQ10TnG9BA3l45Sv+aX1aI6Rmla2qFpAUog4pNjTCBynOFFr5VFTHd
-         XnPckJtmuDVoXtRDT+ulajPlSbtzUQzl7ODCO6pyKca9DF8sqCiBtGZFV79GfuHHa2
-         a/+Fr12VKF6WSp4Jn9IChB+LymOhcUJ9yG4L/ATm0fkC6B9LqxzDCNNmnhtvk8cmKt
-         y1IyR1e7nkxoQ==
-Date:   Mon, 10 Apr 2023 16:37:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Donald Hunter <donald.hunter@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
- with igb
-Message-ID: <20230410213754.GA4064490@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73FDF101A531;
+        Mon, 10 Apr 2023 21:39:42 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.16.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D6484407D445;
+        Mon, 10 Apr 2023 21:39:40 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Kirill Tkhai <tkhai@ya.ru>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Subject: [PATCH] mailmap: update jtoppins' entry to reference correct email
+Date:   Mon, 10 Apr 2023 17:39:35 -0400
+Message-Id: <d79bc6eaf65e68bd1c2a1e1510ab6291ce5926a6.1681162487.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD4GDZyVVoFmmBFY5hGQ9xbqRD=LzMfe7zVjDThiC589zT8uvQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
-> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
-> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > >
-> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
-> > > > because it apparently has an ACPI firmware node, and there's something
-> > > > we don't expect about its status?
-> > >
-> > > Yes they are built-in, to my knowledge.
-> > >
-> > > > Hopefully Rob will look at this.  If I were looking, I would be
-> > > > interested in acpidump to see what's in the DSDT.
-> > >
-> > > I can get an acpidump. Is there a preferred way to share the files, or just
-> > > an email attachment?
-> >
-> > I think by default acpidump produces ASCII that can be directly
-> > included in email.  http://vger.kernel.org/majordomo-info.html says
-> > 100K is the limit for vger mailing lists.  Or you could open a report
-> > at https://bugzilla.kernel.org and attach it there, maybe along with a
-> > complete dmesg log and "sudo lspci -vv" output.
-> 
-> Apologies for the delay, I was unable to access the machine while travelling.
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=217317
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ .mailmap | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
-with this in the kernel parameters:
+diff --git a/.mailmap b/.mailmap
+index e42486317d18..86d0760c15eb 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -232,6 +232,8 @@ Johan Hovold <johan@kernel.org> <johan@hovoldconsulting.com>
+ John Crispin <john@phrozen.org> <blogic@openwrt.org>
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+ John Stultz <johnstul@us.ibm.com>
++<jon.toppins+linux@gmail.com> <jtoppins@cumulusnetworks.com>
++<jon.toppins+linux@gmail.com> <jtoppins@redhat.com>
+ Jordan Crouse <jordan@cosmicpenguin.net> <jcrouse@codeaurora.org>
+ <josh@joshtriplett.org> <josh@freedesktop.org>
+ <josh@joshtriplett.org> <josh@kernel.org>
+-- 
+2.31.1
 
-  dyndbg="file drivers/acpi/* +p"
-
-and collect the entire dmesg log?
