@@ -2,56 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC06F6DC29F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B766DC2A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDJCUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 22:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S229570AbjDJCV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 22:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDJCUV (ORCPT
+        with ESMTP id S229482AbjDJCV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 22:20:21 -0400
+        Sun, 9 Apr 2023 22:21:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547DB1FC4;
-        Sun,  9 Apr 2023 19:20:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A853E1FC4
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 19:21:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C8A60F85;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41FCBC433D2;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B6A60DD0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A9FC433EF;
+        Mon, 10 Apr 2023 02:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681093219;
-        bh=BN2B0mTIIibvkjrxXG0dZV9T4ql1YRSxPcqNig5X/yw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CwhkRgyN9WOhKBknjL6ShqoCUge0mz8SruJLejdLb+5OtIZCe5IMlNx5gldrgRV9g
-         N1Qvqj346tZLQGz0OvWIZ0p9mZI+hxF6drj/E8ecMV9ANRm+31eJFMTXXKJorBn1Re
-         Esl8hvIR3MepU2cV35DmqWLshu1Cd2+BHq3i47GKcZwer0zCjqHgarP1FGETDiGWQz
-         7GeIPHGnW/NbfRlSrsf8My4Meuq5CltaR6LAknVCqP2S9XKpeNtSJ1U42IG1lmQoAY
-         cd9iG86vL2rKmlCkP14bhb7USMBABe51M4Pkjh0cePQFF8/UzDMlytqMOea1MrILyM
-         ogxcEdrc2yflA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B876E21EEE;
-        Mon, 10 Apr 2023 02:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1681093312;
+        bh=4T3lyXoA1FoV6P5GhQMMg5O/djdkaXone30k5xsKe0I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L0SmKFIOvAmAlaiZ9aKuw5CvWEbwZ52C609Zv78+Db0t3wcmTt04cSrEvcPvqhA7a
+         DDIOD+pIFtg6+vUGFSNwH8miY3ZRKv+iaBx0egZQqhgxhU9x/ZicBy7s1MA9lK8fmo
+         JI14+MNgTvtHQCO18hRY9dE3mCbaC9PU5z9mmssPiy4SZjoBBxcbWhoFWGJ2whSFd1
+         gLYBFu5DRcmSv0+lafLVV3wkMnIoe4yCWnH/7Xh1IBYwHIVKG2dbTdRC4dVocndID1
+         1eJZURI6+rNPIroziFLImK1jt5OoSi9PTCHzjTghlSGafeTMeW0iT0zws5Cr1QZRY/
+         nF3nUV32e/k5Q==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: remove unneeded set_page_private() in f2fs_delete_entry()
+Date:   Mon, 10 Apr 2023 10:21:45 +0800
+Message-Id: <20230410022145.1840993-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/8] net: netronome: constify pointers to hwmon_channel_info
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168109321910.29680.18338473238737964479.git-patchwork-notify@kernel.org>
-Date:   Mon, 10 Apr 2023 02:20:19 +0000
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, simon.horman@corigine.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        kabel@kernel.org, lxu@maxlinear.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -61,42 +51,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+As detach_page_private() should have reset page's private field.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/dir.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Fri,  7 Apr 2023 16:59:04 +0200 you wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> [...]
-
-Here is the summary with links:
-  - [1/8] net: netronome: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/87f1c15e8759
-  - [2/8] net: aquantia: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/bc1585f611b2
-  - [3/8] net: phy: aquantia: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/234d79a5f826
-  - [4/8] net: phy: bcm54140: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/211f70be2577
-  - [5/8] net: phy: marvell: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/ff0805e2bde0
-  - [6/8] net: phy: mxl: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/2ed84c0c6f75
-  - [7/8] net: phy: nxp-tja11xx: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/0e76f1dcf487
-  - [8/8] net: phy: sfp: constify pointers to hwmon_channel_info
-    https://git.kernel.org/netdev/net-next/c/490fde262f17
-
-You are awesome, thank you!
+diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
+index d6dd8327e82d..d5c7c8e55eb4 100644
+--- a/fs/f2fs/dir.c
++++ b/fs/f2fs/dir.c
+@@ -912,7 +912,6 @@ void f2fs_delete_entry(struct f2fs_dir_entry *dentry, struct page *page,
+ 		f2fs_remove_dirty_inode(dir);
+ 
+ 		detach_page_private(page);
+-		set_page_private(page, 0);
+ 	}
+ 	f2fs_put_page(page, 1);
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
