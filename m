@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8403D6DCD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82F86DCD94
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjDJWjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S229827AbjDJWkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjDJWjK (ORCPT
+        with ESMTP id S229746AbjDJWkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:39:10 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461401BCC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:09 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v6so5687901wrv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681166348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EEW0TzE/iHLHzvHGUl4AlDs0HbakMRi0xvPaOvsk9N0=;
-        b=dHR8/FV/VB9elKmpSAI11sosqQDYQcCFq6jASEZo+UpPU3+vILSJQuioDyDmtNvHXf
-         8u4dnSowc6o1mn6woXbnveHCEWdNhXZXUWsoATMtaEx8nI+XRbwu1okv/F6YHrmPxH+i
-         9Q0VBDJs4BVSPHPZExrlCyqKVzB+p8G8ml4/nrC3z3dqWMBi6TnQyLG9nqCP4u79xhvx
-         VL+GkBPP50Ez87OC3rF+87FPDQGNOOO7XcbIU+AqzEOYMGrz1GG4RxAz4FPXcYjH1Ep/
-         3nCjTZPWchY/VTI4SIERMzRrV41pHntk/4eY9P4YHTGRb67w5IjyWoy0b+TN81uaim+h
-         4g2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681166348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EEW0TzE/iHLHzvHGUl4AlDs0HbakMRi0xvPaOvsk9N0=;
-        b=oglLmU1yZqV7XbYKkotc2nskUE3mPq7Kak+fAUKO15vVqq/9sHH2zgCkKNwj9qOixE
-         GcoKheWyFN8zdeW/6yL1D+wIhiC2c9vaN5SANndeVXXGVbzLu7sc+mLYeMK4HNBHXFWy
-         IqqtCtQJm0T7MhxxMGvX/Cn0ZxUm8eOXmpvWn4wD8+NE9SUVeT2+HmfZy2xFJ1/VKEj/
-         nnefXiqPpHygFjdIp46JItezpGW/2Od9EeH/gpwjlBsMvFKaQJ+LTFZKYjQYCqV+uFTv
-         SxNDdvtNFrbq6R0L7tyAfMhwGQ0RW2Jow58mpx9Lll/lfrgzJYuqeJpv2Y0HAoJI3xk4
-         6ORg==
-X-Gm-Message-State: AAQBX9ei9uu1FM1BvEtSupkrFPNywxobu22W9kFDcn+cPcpDkWvCXWzB
-        IZe22th1RORWzSviBnVg9Lc=
-X-Google-Smtp-Source: AKy350b+wO4MJpD+u43vMScwz8azVmGnCXgzWl1VMIGqdNN/fQ1K6gERKuwr5WmiqLpz21Q+CGs6bw==
-X-Received: by 2002:adf:e785:0:b0:2ef:b21c:f6a0 with SMTP id n5-20020adfe785000000b002efb21cf6a0mr5474454wrm.53.1681166347771;
-        Mon, 10 Apr 2023 15:39:07 -0700 (PDT)
-Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with UTF8SMTPSA id p17-20020a056000019100b002f1dc56579esm3637350wrx.2.2023.04.10.15.39.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 15:39:07 -0700 (PDT)
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        James Schulman <james.schulman@cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>, patches@opensource.cirrus.com,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH 3/3] ASoC: ep93xx: i2s: Make it individually selectable
-Date:   Tue, 11 Apr 2023 00:39:02 +0200
-Message-Id: <20230410223902.2321834-4-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230410223902.2321834-1-alexander.sverdlin@gmail.com>
-References: <20230410223902.2321834-1-alexander.sverdlin@gmail.com>
+        Mon, 10 Apr 2023 18:40:05 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA22694;
+        Mon, 10 Apr 2023 15:39:42 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 1EF2D774;
+        Mon, 10 Apr 2023 22:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1EF2D774
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1681166379; bh=6eDX70pXfu8exeQjJyVzkDJBCFe2BFg+SPl9U895Ey0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UA6bLRNVpXgHbt3KdtqejYqSASP0hBTVmpARCX98AhvJd9CtyFGl5gijjE0UPOeld
+         /Yt+6WqEprCpl5bhMt8UHNeiSppyzusAiQ/Li/1W8PcRcTnO3s9Xab682o5iQArtdD
+         41/rSkEoWu8X6ktmIbkFTwdcC1N5jJrkJpzGcfywAPXbOzoH1D5jRVYX7ngHw4GCVA
+         H5fDcoslOD0FKHfZp9iKC5Q0q+FOBMp3uFrctTxAr2UAYqfTEFtYOKCufnsy8+ZuGu
+         9wY3ZkUlTLT6XGd2CL3SxZGi/PE2M8RpiqtooiHtVmLSMyU6NSsXY8nqH0f0RLc+tF
+         HvldD89qLSl7g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Takahiro Itazuri <itazur@amazon.com>, linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Takahiro Itazuri <zulinx86@gmail.com>,
+        Takahiro Itazuri <itazur@amazon.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v4] docs: kvm: x86: Fix broken field list
+In-Reply-To: <20230404101401.25012-1-itazur@amazon.com>
+References: <20230404101401.25012-1-itazur@amazon.com>
+Date:   Mon, 10 Apr 2023 16:39:38 -0600
+Message-ID: <873557e505.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is necessary to replace EDB93XX specific SoC audio driver with generic
-"simple-audio-card".
+Takahiro Itazuri <itazur@amazon.com> writes:
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
- sound/soc/cirrus/Kconfig | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> Add missing ":" to fix a broken field list.
+>
+> Fixes: ba7bb663f554 ("KVM: x86: Provide per VM capability for disabling PMU virtualization")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304041708.siWlxmyD-lkp@intel.com/
+> Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+> ---
+> v3 -> v4
+> * Add "Reported-by:" tag.
+> * Link to v3: https://lore.kernel.org/all/20230404090052.9872-1-itazur@amazon.com/
+>
+> v2 -> v3
+> * Add another missing ":"
+> * Link to v2: https://lore.kernel.org/all/20230331093116.99820-1-itazur@amazon.com/
+>
+> v1 -> v2
+> * Fix commit message to say "Do foo" instead of "This commit does foo".
+> * Add "Fixes:" tag.
+> * Link to v1: https://lore.kernel.org/all/20230330233956.78246-1-itazur@amazon.com/
+>
+>  Documentation/virt/kvm/api.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 62de0768d6aa..a5c803f39832 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8296,11 +8296,11 @@ ENOSYS for the others.
+>  8.35 KVM_CAP_PMU_CAPABILITY
+>  ---------------------------
+>  
+> -:Capability KVM_CAP_PMU_CAPABILITY
+> +:Capability: KVM_CAP_PMU_CAPABILITY
+>  :Architectures: x86
+>  :Type: vm
+>  :Parameters: arg[0] is bitmask of PMU virtualization capabilities.
+> -:Returns 0 on success, -EINVAL when arg[0] contains invalid bits
+> +:Returns: 0 on success, -EINVAL when arg[0] contains invalid bits
 
-diff --git a/sound/soc/cirrus/Kconfig b/sound/soc/cirrus/Kconfig
-index 34870c2d0cba..38a83c4dcc2d 100644
---- a/sound/soc/cirrus/Kconfig
-+++ b/sound/soc/cirrus/Kconfig
-@@ -8,7 +8,11 @@ config SND_EP93XX_SOC
- 	  the EP93xx I2S or AC97 interfaces.
- 
- config SND_EP93XX_SOC_I2S
--	tristate
-+	tristate "I2S controller support for the Cirrus Logic EP93xx series"
-+	depends on SND_EP93XX_SOC
-+	help
-+	  Say Y or M if you want to add support for codecs attached to
-+	  the EP93xx I2S interface.
- 
- if SND_EP93XX_SOC_I2S
- 
--- 
-2.40.0
+Applied, thanks.
 
+jon
