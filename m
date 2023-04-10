@@ -2,224 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25C76DC922
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630ED6DC92B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjDJQRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S230238AbjDJQSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjDJQRX (ORCPT
+        with ESMTP id S230236AbjDJQSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:17:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC495E74;
-        Mon, 10 Apr 2023 09:17:22 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AFxbs5027500;
-        Mon, 10 Apr 2023 16:17:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=rx+6r/17vOkvNWWUv4Nah3sAcrya9hfjXuhqzZbdT/I=;
- b=PuZip9sKIABDVsrs0C1TiARXXm1bOVDZl8IJoZez8mVRxwrb/ojV2Ub4dN/YrKMRxaBa
- d+/HmS8WSIOK+SFcvS4dosYpTIZlCGW3+7vkeMhi8nmuucoM+x/y8iuX9Ji2vKecsGmq
- mB5sluZFh5jK3IJ9/0a+ntLZhkAX0F9reNBTEZnD196UrVpZv6hpMib9P4OqWOtMPHuz
- f7Ky+LK64ScrsCEmMTnP6xWIS1NAEMcW82HqRBQHbcJt5SzPAzi7x/+u07H+Ib2C/QGr
- AKjsTQU+PuG8H8JeBoJqVJYUe/r1j9Ysb+S+UpWjiXJoOL9AwlNjk3k9VywFNO/zGIhz pg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvnjer135-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 16:17:19 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AGHIxl029813
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 16:17:18 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Apr 2023 09:17:18 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v3 3/3] mailbox: pcc: Use mbox_bind_client
-Date:   Mon, 10 Apr 2023 09:16:54 -0700
-Message-ID: <20230410161654.1660757-4-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230410161654.1660757-1-quic_eberman@quicinc.com>
-References: <20230410161654.1660757-1-quic_eberman@quicinc.com>
+        Mon, 10 Apr 2023 12:18:12 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7791737
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:17:46 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id kj14so3618850qvb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681143463;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rYoNI/GBnV/XFf9cldcCfKoCMP9onvoHik7LIhPrsRg=;
+        b=Un/CIKLUsHod8NZC3q1oBYRRT1tcolo3z+esv0yEylxdbqYWgU14GIHALm5q20kE68
+         njxx99gSV2I4M7alAyutYPd7r5dSFa4sKQJu/6PU/5gWpqj7PJa8Sgd9dxI3BIQrw4Wa
+         cCr3KCflB+L3OQcCamcqC2heJxQn16w3l4/Bc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681143463;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rYoNI/GBnV/XFf9cldcCfKoCMP9onvoHik7LIhPrsRg=;
+        b=diuVHa9PplBbmE7EfVNyCQ7ss5AbxQl/RpCOx8gJIsZ1qSsHzydhvO7SHO1kVdG4RD
+         QUvcE7g9bLOwScHwrEmjLmEiVhJWksZ0M4FIxOxn4O3c0gPb+hf0zOivITKUxILYNyCu
+         63h47eMpFshH4Vgb+agWzITWPO6SKALoSGxSu3Gt7VUB5ksYBAB8/PVYCSYWHrjqYxPk
+         i7BzqsyBoDLRYdxjQxfczSY+krwlkL9l3lWpUzoHgJ8aR9VWHxp689FKv4K20huACljQ
+         BLE+uPATtAID3ZFAn9l4wwhFikH1dM3Zx9mDU7EvK16e26q/6oI7v6ifFyNoa0FSnkQB
+         AcgA==
+X-Gm-Message-State: AAQBX9cXYZinnHxeMNjvDNOfs2Zb56z2oH8wn/CwGW/qpORaszVXhTQu
+        T8CvdOoAsgjEG/C5qCk5YfespRcynfitMfdhviy5sw==
+X-Google-Smtp-Source: AKy350Z5GL/btiKmt5L8DyVOk+tCBRyAfZBO+ALeHIia9N+doKnoeUtifo6ZagFIU6Q+TGQa9xg+G2Sx+2VQY6ILb4Y=
+X-Received: by 2002:a05:6214:bd2:b0:56e:9f09:ee58 with SMTP id
+ ff18-20020a0562140bd200b0056e9f09ee58mr2486153qvb.8.1681143463551; Mon, 10
+ Apr 2023 09:17:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C4ROi07CWOn_bjgIrmFjBxPnZUz7OHlW
-X-Proofpoint-GUID: C4ROi07CWOn_bjgIrmFjBxPnZUz7OHlW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=706 clxscore=1015 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100139
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320093259.845178-1-korneld@chromium.org> <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
+ <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
+In-Reply-To: <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
+From:   =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
+Date:   Mon, 10 Apr 2023 18:17:32 +0200
+Message-ID: <CAD=NsqxSDUu3wpfhUCDJgP2TaKb7dudB90snROQpPJPj3fdFgQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+To:     "Gong, Richard" <richard.gong@amd.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        gregkh@linuxfoundation.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use generic mbox_bind_client() to bind omap mailbox channel to a client.
+On Mon, Apr 10, 2023 at 5:29=E2=80=AFPM Gong, Richard <richard.gong@amd.com=
+> wrote:
+>
+> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
+> > On 3/20/23 04:32, Kornel Dul=C4=99ba wrote:
+> >
+> >> This fixes a similar problem to the one observed in:
+> >> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
+> >> probe").
+> >>
+> >> On some systems, during suspend/resume cycle firmware leaves
+> >> an interrupt enabled on a pin that is not used by the kernel.
+> >> This confuses the AMD pinctrl driver and causes spurious interrupts.
+> >>
+> >> The driver already has logic to detect if a pin is used by the kernel.
+> >> Leverage it to re-initialize interrupt fields of a pin only if it's no=
+t
+> >> used by us.
+> >>
+> >> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
+> >> ---
+> >>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++--------------=
+--
+> >>   1 file changed, 20 insertions(+), 16 deletions(-)
+> >>
+> >> diff --git a/drivers/pinctrl/pinctrl-amd.c
+> >> b/drivers/pinctrl/pinctrl-amd.c
+> >> index 9236a132c7ba..609821b756c2 100644
+> >> --- a/drivers/pinctrl/pinctrl-amd.c
+> >> +++ b/drivers/pinctrl/pinctrl-amd.c
+> >> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
+> >> =3D {
+> >>       .pin_config_group_set =3D amd_pinconf_group_set,
+> >>   };
+> >>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> >> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
+> >>   {
+> >> -    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> >> +    const struct pin_desc *pd;
+> >>       unsigned long flags;
+> >>       u32 pin_reg, mask;
+> >> -    int i;
+> >>         mask =3D BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+> >>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+> >>           BIT(WAKE_CNTRL_OFF_S4);
+> >>   -    for (i =3D 0; i < desc->npins; i++) {
+> >> -        int pin =3D desc->pins[i].number;
+> >> -        const struct pin_desc *pd =3D pin_desc_get(gpio_dev->pctrl, p=
+in);
+> >> -
+> >> -        if (!pd)
+> >> -            continue;
+> >> +    pd =3D pin_desc_get(gpio_dev->pctrl, pin);
+> >> +    if (!pd)
+> >> +        return;
+> >>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >> +    pin_reg =3D readl(gpio_dev->base + pin * 4);
+> >> +    pin_reg &=3D ~mask;
+> >> +    writel(pin_reg, gpio_dev->base + pin * 4);
+> >> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> >> +}
+> >>   -        pin_reg =3D readl(gpio_dev->base + i * 4);
+> >> -        pin_reg &=3D ~mask;
+> >> -        writel(pin_reg, gpio_dev->base + i * 4);
+> >> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> >> +{
+> >> +    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> >> +    int i;
+> >>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> >> -    }
+> >> +    for (i =3D 0; i < desc->npins; i++)
+> >> +        amd_gpio_irq_init_pin(gpio_dev, i);
+> >>   }
+> >>     #ifdef CONFIG_PM_SLEEP
+> >> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
+> >>       for (i =3D 0; i < desc->npins; i++) {
+> >>           int pin =3D desc->pins[i].number;
+> >>   -        if (!amd_gpio_should_save(gpio_dev, pin))
+> >> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
+> >> +            amd_gpio_irq_init_pin(gpio_dev, pin);
+> >>               continue;
+> >> +        }
+> >>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >>           gpio_dev->saved_regs[i] |=3D readl(gpio_dev->base + pin * 4)
+> >> & PIN_IRQ_PENDING;
+> >
+> > Hello Kornel,
+> >
+> > I've found that this commit which was included in 6.3-rc5 is causing a
+> > regression waking up from lid on a Lenovo Z13.
+> observed "unable to wake from power button" on AMD based Dell platform.
+> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
+> top of 6.3-rc6 does fix the issue.
 
-mbox_bind_client is identical to the replaced lines, except that it:
- - Does the operation under con_mutex which prevents possible races in
-   removal path
- - Sets TXDONE_BY_ACK if pcc uses TXDONE_BY_POLL and the client knows
-   when tx is done. TXDONE_BY_ACK is already set if there's no interrupt,
-   so this is not applicable.
- - Calls chan->mbox->ops->startup. This is usecase for requesting irq:
-   move the devm_request_irq into the startup callback and unregister it
-   in the shutdown path.
+Whoops, sorry for the breakage.
+Could you please share the output of "/sys/kernel/debug/gpio" before
+and after the first suspend/resume cycle.
+I've looked at the patch again and found a rather silly mistake.
+Please try the following.
+Note that I don't have access to hardware with this controller at the
+moment, so I've only compile tested it.
 
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- drivers/mailbox/pcc.c | 84 +++++++++++++++++++++++--------------------
- 1 file changed, 45 insertions(+), 39 deletions(-)
+diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+index 609821b756c2..7e7770152ca8 100644
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -899,7 +899,7 @@ static void amd_gpio_irq_init(struct amd_gpio *gpio_dev=
+)
+        int i;
 
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index 105d46c9801b..a44d4b3e5beb 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -282,8 +282,7 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- {
- 	struct pcc_chan_info *pchan;
- 	struct mbox_chan *chan;
--	struct device *dev;
--	unsigned long flags;
-+	int rc;
- 
- 	if (subspace_id < 0 || subspace_id >= pcc_chan_count)
- 		return ERR_PTR(-ENOENT);
-@@ -294,32 +293,10 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- 		pr_err("Channel not found for idx: %d\n", subspace_id);
- 		return ERR_PTR(-EBUSY);
- 	}
--	dev = chan->mbox->dev;
- 
--	spin_lock_irqsave(&chan->lock, flags);
--	chan->msg_free = 0;
--	chan->msg_count = 0;
--	chan->active_req = NULL;
--	chan->cl = cl;
--	init_completion(&chan->tx_complete);
--
--	if (chan->txdone_method == TXDONE_BY_POLL && cl->knows_txdone)
--		chan->txdone_method = TXDONE_BY_ACK;
--
--	spin_unlock_irqrestore(&chan->lock, flags);
--
--	if (pchan->plat_irq > 0) {
--		int rc;
--
--		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq, 0,
--				      MBOX_IRQ_NAME, chan);
--		if (unlikely(rc)) {
--			dev_err(dev, "failed to register PCC interrupt %d\n",
--				pchan->plat_irq);
--			pcc_mbox_free_channel(&pchan->chan);
--			return ERR_PTR(rc);
--		}
--	}
-+	rc = mbox_bind_client(chan, cl);
-+	if (rc)
-+		return ERR_PTR(rc);
- 
- 	return &pchan->chan;
+        for (i =3D 0; i < desc->npins; i++)
+-               amd_gpio_irq_init_pin(gpio_dev, i);
++               amd_gpio_irq_init_pin(gpio_dev, desc->pins[i].number);
  }
-@@ -333,23 +310,12 @@ EXPORT_SYMBOL_GPL(pcc_mbox_request_channel);
-  */
- void pcc_mbox_free_channel(struct pcc_mbox_chan *pchan)
- {
--	struct pcc_chan_info *pchan_info = to_pcc_chan_info(pchan);
- 	struct mbox_chan *chan = pchan->mchan;
--	unsigned long flags;
- 
- 	if (!chan || !chan->cl)
- 		return;
- 
--	if (pchan_info->plat_irq > 0)
--		devm_free_irq(chan->mbox->dev, pchan_info->plat_irq, chan);
--
--	spin_lock_irqsave(&chan->lock, flags);
--	chan->cl = NULL;
--	chan->active_req = NULL;
--	if (chan->txdone_method == TXDONE_BY_ACK)
--		chan->txdone_method = TXDONE_BY_POLL;
--
--	spin_unlock_irqrestore(&chan->lock, flags);
-+	mbox_free_channel(chan);
- }
- EXPORT_SYMBOL_GPL(pcc_mbox_free_channel);
- 
-@@ -377,8 +343,48 @@ static int pcc_send_data(struct mbox_chan *chan, void *data)
- 	return pcc_chan_reg_read_modify_write(&pchan->db);
- }
- 
-+/**
-+ * pcc_startup - Called from Mailbox Controller code. Used here
-+ *		to request the interrupt.
-+ * @chan: Pointer to Mailbox channel to startup.
-+ *
-+ * Return: Err if something failed else 0 for success.
-+ */
-+static int pcc_startup(struct mbox_chan *chan)
-+{
-+	struct pcc_chan_info *pchan = chan->con_priv;
-+	int rc;
-+
-+	if (pchan->plat_irq > 0) {
-+		rc = devm_request_irq(chan->mbox->dev, pchan->plat_irq, pcc_mbox_irq, 0,
-+				      MBOX_IRQ_NAME, chan);
-+		if (unlikely(rc)) {
-+			dev_err(chan->mbox->dev, "failed to register PCC interrupt %d\n",
-+				pchan->plat_irq);
-+			return rc;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * pcc_shutdown - Called from Mailbox Controller code. Used here
-+ *		to free the interrupt.
-+ * @chan: Pointer to Mailbox channel to shutdown.
-+ */
-+static void pcc_shutdown(struct mbox_chan *chan)
-+{
-+	struct pcc_chan_info *pchan = chan->con_priv;
-+
-+	if (pchan->plat_irq > 0)
-+		devm_free_irq(chan->mbox->dev, pchan->plat_irq, chan);
-+}
-+
- static const struct mbox_chan_ops pcc_chan_ops = {
- 	.send_data = pcc_send_data,
-+	.startup = pcc_startup,
-+	.shutdown = pcc_shutdown,
- };
- 
- /**
--- 
-2.39.2
 
+
+> >
+> > Reverting it on top of 6.3-rc6 resolves the problem.
+> >
+> > I've collected what I can into this bug report:
+> >
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D217315
+> >
+> > Linus Walleij,
+> >
+> > It looks like this was CC to stable.  If we can't get a quick solution
+> > we might want to pull this from stable.
+>
+> this commit landed into 6.1.23 as well
+>
+>          d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resum=
+e
+>
+> >
+> > Thanks,
+> >
+> >
+> Regards,
+>
+> Richard
+>
