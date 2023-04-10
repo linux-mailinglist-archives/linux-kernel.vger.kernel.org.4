@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024276DC7E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A116DC7EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjDJOes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        id S229746AbjDJOfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDJOer (ORCPT
+        with ESMTP id S229536AbjDJOfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:34:47 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4704ED2;
-        Mon, 10 Apr 2023 07:34:46 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1plsbF-0007aS-0m;
-        Mon, 10 Apr 2023 16:34:29 +0200
-Date:   Mon, 10 Apr 2023 15:34:26 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH v2 net-next 08/14] net: dsa: mt7530: remove pad_setup
- function pointer
-Message-ID: <ZDQecu1NkQDQk-cJ@makrotopia.org>
-References: <20230407134626.47928-1-arinc.unal@arinc9.com>
- <20230407134626.47928-9-arinc.unal@arinc9.com>
+        Mon, 10 Apr 2023 10:35:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D64524E;
+        Mon, 10 Apr 2023 07:35:20 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AEUM3F013007;
+        Mon, 10 Apr 2023 14:35:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UMgwG8hgDhYMcCE1N2y8m6s3Gz6llWV5GsBaLDYEGGI=;
+ b=i2KQebFTfm3MY4r5aAcmqpKbP69brZ3Cowt6x00Bv5N2pKHPrZz2HKWWMa4M4h6uWZNm
+ 7OWVI5fC6U/Kh5MwdcUGMSIOTf4qTfrAKFar+7HeQluRn49VniEQ0Rw6DRdNMmTXra0c
+ sar0xryuz4Zp1DvIILYcPCgPj4ILTBUZhbTsyI+92CtHAUcRp2oC7mIRggmmTtM8i/TQ
+ KfCGaNmZTO1FpXQ7PKsZ/RBiC1lY5pugH63+ySKiRbO70hdQPIQJrJ57wOpi/MmeOMZw
+ XdwjvfNGMZFCrGECq0BM6ozU8Vq+0Oh3F9FsID/cW6zSJ3QYV5nVqEF61QcRx6nyhBBf nA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvm97g0c1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:35:13 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AEZCwK028213
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 14:35:12 GMT
+Received: from [10.216.41.177] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 10 Apr
+ 2023 07:35:09 -0700
+Message-ID: <4b54b75c-f604-5323-942e-4701e31f47d6@quicinc.com>
+Date:   Mon, 10 Apr 2023 20:04:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230407134626.47928-9-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v6 0/5] Refactor to support multiple download mode
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hnLcWnoNpdjo3V97U9CGe9Zv9-dDVwVt
+X-Proofpoint-ORIG-GUID: hnLcWnoNpdjo3V97U9CGe9Zv9-dDVwVt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_09,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304100123
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,159 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:46:20PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> The pad_setup function pointer was introduced with 88bdef8be9f6 ("net: dsa:
-> mt7530: Extend device data ready for adding a new hardware"). It was being
-> used to set up the core clock and port 6 of the MT7530 switch, and pll of
-> the MT7531 switch.
-> 
-> All of these were moved to more appropriate locations, and it was never
-> used for the switch on the MT7988 SoC. Therefore, this function pointer
-> hasn't got a use anymore. Remove it.
-> 
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Bjorn and others,
 
-Acked-by: Daniel Golle <daniel@makrotopia.org>
+Any further comments on this series ?
 
-> ---
->  drivers/net/dsa/mt7530.c | 36 ++----------------------------------
->  drivers/net/dsa/mt7530.h |  3 ---
->  2 files changed, 2 insertions(+), 37 deletions(-)
+-- Mukesh
+
+On 3/29/2023 1:16 PM, Mukesh Ojha wrote:
+> Intention of this series to support multiple download mode and
+> only modify the required bits during setting tcsr register.
 > 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index c636a888d194..0a6d1c0872be 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -473,12 +473,6 @@ mt7530_setup_port6(struct dsa_switch *ds, phy_interface_t interface)
->  	return 0;
->  }
->  
-> -static int
-> -mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
-> -{
-> -	return 0;
-> -}
-> -
->  static bool mt7531_dual_sgmii_supported(struct mt7530_priv *priv)
->  {
->  	u32 val;
-> @@ -488,12 +482,6 @@ static bool mt7531_dual_sgmii_supported(struct mt7530_priv *priv)
->  	return (val & PAD_DUAL_SGMII_EN) != 0;
->  }
->  
-> -static int
-> -mt7531_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
-> -{
-> -	return 0;
-> -}
-> -
->  static void
->  mt7531_pll_setup(struct mt7530_priv *priv)
->  {
-> @@ -2576,14 +2564,6 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
->  	}
->  }
->  
-> -static int
-> -mt753x_pad_setup(struct dsa_switch *ds, const struct phylink_link_state *state)
-> -{
-> -	struct mt7530_priv *priv = ds->priv;
-> -
-> -	return priv->info->pad_setup(ds, state->interface);
-> -}
-> -
->  static int
->  mt7530_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		  phy_interface_t interface)
-> @@ -2754,8 +2734,6 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		if (priv->p6_interface == state->interface)
->  			break;
->  
-> -		mt753x_pad_setup(ds, state);
-> -
->  		if (mt753x_mac_config(ds, port, mode, state) < 0)
->  			goto unsupported;
->  
-> @@ -3053,11 +3031,6 @@ static int mt753x_set_mac_eee(struct dsa_switch *ds, int port,
->  	return 0;
->  }
->  
-> -static int mt7988_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
-> -{
-> -	return 0;
-> -}
-> -
->  static int mt7988_setup(struct dsa_switch *ds)
->  {
->  	struct mt7530_priv *priv = ds->priv;
-> @@ -3119,7 +3092,6 @@ const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7530_phy_write_c22,
->  		.phy_read_c45 = mt7530_phy_read_c45,
->  		.phy_write_c45 = mt7530_phy_write_c45,
-> -		.pad_setup = mt7530_pad_clk_setup,
->  		.mac_port_get_caps = mt7530_mac_port_get_caps,
->  		.mac_port_config = mt7530_mac_config,
->  	},
-> @@ -3131,7 +3103,6 @@ const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7530_phy_write_c22,
->  		.phy_read_c45 = mt7530_phy_read_c45,
->  		.phy_write_c45 = mt7530_phy_write_c45,
-> -		.pad_setup = mt7530_pad_clk_setup,
->  		.mac_port_get_caps = mt7530_mac_port_get_caps,
->  		.mac_port_config = mt7530_mac_config,
->  	},
-> @@ -3143,7 +3114,6 @@ const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7531_ind_c22_phy_write,
->  		.phy_read_c45 = mt7531_ind_c45_phy_read,
->  		.phy_write_c45 = mt7531_ind_c45_phy_write,
-> -		.pad_setup = mt7531_pad_setup,
->  		.cpu_port_config = mt7531_cpu_port_config,
->  		.mac_port_get_caps = mt7531_mac_port_get_caps,
->  		.mac_port_config = mt7531_mac_config,
-> @@ -3156,7 +3126,6 @@ const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7531_ind_c22_phy_write,
->  		.phy_read_c45 = mt7531_ind_c45_phy_read,
->  		.phy_write_c45 = mt7531_ind_c45_phy_write,
-> -		.pad_setup = mt7988_pad_setup,
->  		.cpu_port_config = mt7988_cpu_port_config,
->  		.mac_port_get_caps = mt7988_mac_port_get_caps,
->  		.mac_port_config = mt7988_mac_config,
-> @@ -3186,9 +3155,8 @@ mt7530_probe_common(struct mt7530_priv *priv)
->  	/* Sanity check if these required device operations are filled
->  	 * properly.
->  	 */
-> -	if (!priv->info->sw_setup || !priv->info->pad_setup ||
-> -	    !priv->info->phy_read_c22 || !priv->info->phy_write_c22 ||
-> -	    !priv->info->mac_port_get_caps ||
-> +	if (!priv->info->sw_setup || !priv->info->phy_read_c22 ||
-> +	    !priv->info->phy_write_c22 || !priv->info->mac_port_get_caps ||
->  	    !priv->info->mac_port_config)
->  		return -EINVAL;
->  
-> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-> index 01db5c9724fa..9e5b99b853ba 100644
-> --- a/drivers/net/dsa/mt7530.h
-> +++ b/drivers/net/dsa/mt7530.h
-> @@ -697,8 +697,6 @@ struct mt753x_pcs {
->   * @phy_write_c22:	Holding the way writing PHY port using C22
->   * @phy_read_c45:	Holding the way reading PHY port using C45
->   * @phy_write_c45:	Holding the way writing PHY port using C45
-> - * @pad_setup:		Holding the way setting up the bus pad for a certain
-> - *			MAC port
->   * @phy_mode_supported:	Check if the PHY type is being supported on a certain
->   *			port
->   * @mac_port_validate:	Holding the way to set addition validate type for a
-> @@ -719,7 +717,6 @@ struct mt753x_info {
->  			    int regnum);
->  	int (*phy_write_c45)(struct mt7530_priv *priv, int port, int devad,
->  			     int regnum, u16 val);
-> -	int (*pad_setup)(struct dsa_switch *ds, phy_interface_t interface);
->  	int (*cpu_port_config)(struct dsa_switch *ds, int port);
->  	void (*mac_port_get_caps)(struct dsa_switch *ds, int port,
->  				  struct phylink_config *config);
-> -- 
-> 2.37.2
+> Other download modes are minidump, full dump, both fulldump + minidump, nodump.
+> 
+> Latest minidump kernel driver patches has been sent here
+> https://lore.kernel.org/lkml/1679491817-2498-1-git-send-email-quic_mojha@quicinc.com/
+> 
+> Also, this series should be applied on
+> https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
+> 
+> Changes in v6:
+>    - Applied suggested API change(at v4) by [dmitry.baryshkov]
+> 
+> Changes in v5: https://lore.kernel.org/lkml/1680017869-22421-1-git-send-email-quic_mojha@quicinc.com/
+>    - Tried to fix the issue reported by kernel test robot
+>      https://lore.kernel.org/lkml/202303280535.acb66sQT-lkp@intel.com/
+> 
+>    - Applied some of the improvement suggested by [Bjorn.andersson]
+>   
+>      . Dropped 'both' instead support full,mini or mini,full for setting download
+>      mode to collect both minidump and full dump.
+>      
+>      . logging improvement.
+>      
+> 
+> Changes in v4: https://lore.kernel.org/lkml/1679935281-18445-1-git-send-email-quic_mojha@quicinc.com/
+>    - val should be shifted within the function [srinivas.kandagatla]
+>      i.e new = (old & ~mask) | (val << ffs(mask) - 1);
+>    - Added Acked-by [linus.walleij] on pinctrl change.
+> 
+> Changes in v3 : https://lore.kernel.org/lkml/1679070482-8391-1-git-send-email-quic_mojha@quicinc.com/
+>   - Removed [1] from the series and sent as a separate patch[2], although this series
+>     should be applied on top [2].
+>    [1] https://lore.kernel.org/lkml/1677664555-30191-2-git-send-email-quic_mojha@quicinc.com/
+>    [2] https://lore.kernel.org/lkml/1678979666-551-1-git-send-email-quic_mojha@quicinc.com/
+>   - Introduce new exported symbol on suggestion from [srinivas.kandagatla]
+>   - Use the symbol from drivers/pinctrl/qcom/pinctrl-msm.c.
+>   - Addressed comment given by [dmitry.baryshkov]
+>   - Converted non-standard Originally-by to Signed-off-by.
+> 
+> Changes in v2: https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+>   - Addressed comment made by [bjorn]
+>   - Added download mask.
+>   - Passed download mode as parameter
+>   - Accept human accepatable download mode string.
+>   - enable = !!dload_mode
+>   - Shifted module param callback to somewhere down in
+>     the file so that it no longer need to know the
+>     prototype of qcom_scm_set_download_mode()
+>   - updated commit text.
+> 
+> Mukesh Ojha (5):
+>    firmware: qcom_scm: provide a read-modify-write function
+>    pinctrl: qcom: Use qcom_scm_io_update_field()
+>    firmware: scm: Modify only the download bits in TCSR register
+>    firmware: qcom_scm: Refactor code to support multiple download mode
+>    firmware: qcom_scm: Add multiple download mode support
+> 
+>   drivers/firmware/Kconfig               | 11 -----
+>   drivers/firmware/qcom_scm.c            | 88 ++++++++++++++++++++++++++++++----
+>   drivers/pinctrl/qcom/pinctrl-msm.c     | 11 ++---
+>   include/linux/firmware/qcom/qcom_scm.h |  2 +
+>   4 files changed, 86 insertions(+), 26 deletions(-)
 > 
