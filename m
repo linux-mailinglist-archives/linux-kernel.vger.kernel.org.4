@@ -2,117 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0B26DC293
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2D66DC299
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDJCON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 22:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S229688AbjDJCRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 22:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDJCOM (ORCPT
+        with ESMTP id S229644AbjDJCRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 22:14:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71D92701
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 19:14:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 549B260D32
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918D1C433EF;
-        Mon, 10 Apr 2023 02:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681092850;
-        bh=pXSNSEY080dCZ45hxP1p6QKFX6fqVzj/5je/deUizYA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=n0DnDTV39nOj54ijI8xX14a/fVfk9sb29YAwpg1Njihu112/Z2WuHhSez2wB3VT5+
-         hDMhWrJ0w4tA2L4t7IM282Nh8c74N5OgCX2zCqgqrmIWR7qDHHK/m4FOfk1D8oCJKC
-         yLs5EfczK6jb6+70E8GlxQhvpLO8V3hdnSHeXDpKHxXJE7jsmUFOu3SpV4BTuVdHN2
-         SaLsZ/mG/9j9Gux99gVA4vf/XAfnj9XLdxddMh3/TWN/roBztJ17IdcJ2U+WJgnRjR
-         2qB6HZSUggm50IScvP1fzkgbLudZvtJZIRDH3tVqajaIZI4FY6l/+zfrrZqN+hRMZF
-         /i1a/H21BZKLQ==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: fix to avoid use-after-free for cached IPU bio
-Date:   Mon, 10 Apr 2023 10:14:02 +0800
-Message-Id: <20230410021402.1833220-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Sun, 9 Apr 2023 22:17:41 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F8D3C21;
+        Sun,  9 Apr 2023 19:17:39 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id bx15so2065827ljb.7;
+        Sun, 09 Apr 2023 19:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681093057;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wf+efalkSkI9mDMxtM/0oFO463/s9uRI1g/ofMKtVDo=;
+        b=WUDlFzBq4CMSyM65JP/KVwNhuWO/RvSl+oy866bY0BnNNEASFunHZ+hSDxCSEmW8lD
+         E9H63EEimuLNHW8A4CVtaK5W4nINAv27VKeF16TJMA6tT7HEXFgTFRCbdgBFqgS+Wt9T
+         g7kKyK22WkrzO8eC1O0jFEH407JspVuyghQUqbvQ0nVMGvAskJRH9lhCf25LWFFAPmxm
+         lgPF1US1pVdLAl/jNasKmk2pUs8zJKNphtS4QGGk0M+KdOrfspcLzL9H9pAMI93w8ex7
+         OeODgTFbnPy/q8PsUdTjNP43qzWhEhqE3Pa4Qd+INiYWeh6VnfCLIeMRMlIzeefGtEjE
+         zUIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681093057;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wf+efalkSkI9mDMxtM/0oFO463/s9uRI1g/ofMKtVDo=;
+        b=7DGvg7jXjcveCK6C89uJGDlvLsxoVoLgZpBh10w0xgzjak9LUrK2o+Qi9HYkl8pFrE
+         KtOsqCUzKcitYOD6RprWkwTDi5t9gas6dTtIelVkeXptPNSnpgeDbGhlXFenOgqkd96T
+         5PprbTz/X44qIuq9Cwd6Qqd5+Qm7W8zgHYiKmZLvqLpUDIwrMFJ3I3C97NRp+xssifFs
+         6LDzvV8eecehor5VVpUwHOmYnQ1Ad9H3jurBhsprZc4ULnj9ZsEgXK1OBWPD1xklrjz2
+         RmKGEOIgFHZOQ/84L2WAX5wBXy8DBJLisbmQVKzwUm4RHqiVU7gqUVfmxRoucWwkETbG
+         TFeQ==
+X-Gm-Message-State: AAQBX9cGSZDP1Uytf1z99EYgF9rvn72LwwquWUneGRqkS7w6ghE3H9PU
+        ngsnabrj0HMY02OkqzcE2lAk+AaEX9Ud0nz5K0I=
+X-Google-Smtp-Source: AKy350brDVaJMT570wYdSM/EYIYWXwU+EDYTuo8e2Qv81S4dgcFrmPHEYudKemWMtHHarOvKLnR2zIz09Kd9CS+j7gU=
+X-Received: by 2002:a2e:93c3:0:b0:29b:ebfa:765d with SMTP id
+ p3-20020a2e93c3000000b0029bebfa765dmr2450197ljh.1.1681093057526; Sun, 09 Apr
+ 2023 19:17:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230206054326.89323-1-k1rh4.lee@gmail.com> <Y+X+kZResf0a/aES@yilunxu-OptiPlex-7050>
+ <ZDMLSOoMt5Ims6xT@eldamar.lan>
+In-Reply-To: <ZDMLSOoMt5Ims6xT@eldamar.lan>
+From:   sangsup lee <k1rh4.lee@gmail.com>
+Date:   Mon, 10 Apr 2023 11:17:01 +0900
+Message-ID: <CAJkuJRh4r9bqjfTAdkFgAQ1Az+zt6HuG85d-fWVQXdgmQDW8dQ@mail.gmail.com>
+Subject: Re: [PATCH] fpga: dfl-afu-region: Add overflow checks for region size
+ and offset
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xfstest generic/019 reports a bug:
+Hi,
 
-kernel BUG at mm/filemap.c:1619!
-RIP: 0010:folio_end_writeback+0x8a/0x90
-Call Trace:
- end_page_writeback+0x1c/0x60
- f2fs_write_end_io+0x199/0x420
- bio_endio+0x104/0x180
- submit_bio_noacct+0xa5/0x510
- submit_bio+0x48/0x80
- f2fs_submit_write_bio+0x35/0x300
- f2fs_submit_merged_ipu_write+0x2a0/0x2b0
- f2fs_write_single_data_page+0x838/0x8b0
- f2fs_write_cache_pages+0x379/0xa30
- f2fs_write_data_pages+0x30c/0x340
- do_writepages+0xd8/0x1b0
- __writeback_single_inode+0x44/0x370
- writeback_sb_inodes+0x233/0x4d0
- __writeback_inodes_wb+0x56/0xf0
- wb_writeback+0x1dd/0x2d0
- wb_workfn+0x367/0x4a0
- process_one_work+0x21d/0x430
- worker_thread+0x4e/0x3c0
- kthread+0x103/0x130
- ret_from_fork+0x2c/0x50
+In my opinion the code has an insecure code pattern.
+The size may have integer overflow condition i think.
+But, I did  not do dynamic analysis but I did static audit fpga code(I
+don't have an fpga device).
+because of this.  I don't make sure about Yilun's comment.
+I think the code must have defensive coding rules.
 
-The root cause is: after cp_error is set, f2fs_submit_merged_ipu_write()
-in f2fs_write_single_data_page() tries to flush IPU bio in cache, however
-f2fs_submit_merged_ipu_write() missed to check validity of @bio parameter,
-result in submitting random cached bio which belong to other IO context,
-then it will cause use-after-free issue, fix it by adding additional
-validity check.
-
-Fixes: 0b20fcec8651 ("f2fs: cache global IPU bio")
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/f2fs/data.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 8064df5f829d..b59b5c7096f3 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -874,6 +874,8 @@ void f2fs_submit_merged_ipu_write(struct f2fs_sb_info *sbi,
- 	bool found = false;
- 	struct bio *target = bio ? *bio : NULL;
- 
-+	f2fs_bug_on(sbi, !target && !page);
-+
- 	for (temp = HOT; temp < NR_TEMP_TYPE && !found; temp++) {
- 		struct f2fs_bio_info *io = sbi->write_io[DATA] + temp;
- 		struct list_head *head = &io->bio_list;
-@@ -2902,7 +2904,8 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 
- 	if (unlikely(f2fs_cp_error(sbi))) {
- 		f2fs_submit_merged_write(sbi, DATA);
--		f2fs_submit_merged_ipu_write(sbi, bio, NULL);
-+		if (bio && *bio)
-+			f2fs_submit_merged_ipu_write(sbi, bio, NULL);
- 		submitted = NULL;
- 	}
- 
--- 
-2.25.1
-
+best regards.
