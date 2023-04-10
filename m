@@ -2,172 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822206DC702
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7F36DC700
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 15:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjDJNCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 09:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S229624AbjDJNCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 09:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjDJNCU (ORCPT
+        with ESMTP id S229645AbjDJNCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 09:02:20 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F008359FD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:02:15 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso7815556wmo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:02:15 -0700 (PDT)
+        Mon, 10 Apr 2023 09:02:10 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE61330C0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:02:09 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id q15-20020a17090a2dcf00b0023efab0e3bfso7271291pjm.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 06:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681131734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1681131729;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qMNuHyCwxEK3koi4pqvJhsXicfoNWbhWnmipyaVju4M=;
-        b=HvOuBNyOgjfr39JAQKFugdJgk+1juTO10dWCflAjcDyn4yZGvd1kNMmiyjY7+CGS54
-         jeE2r0TqRfOeqgfw+tqd9yvPEsiwVv0TXT6ujNobEJLF6WCYTykfyiDmzBio+oaRsWJU
-         4N3DWcpc0fjpjENmCGR9EbQh20OqIWmjwkK9VuKj5bwyaJbfJC/XzWKhoUqLhjWHXJnZ
-         T91p+lVTw0sAtpWhZqGO/etjxdfrv53IfTmC/rsjNUw4HPkkECCpGCCIm7TLSJFsCfLs
-         E3+FAnvadpQkdy61hcHq4TLylSoQNa1L3Gt4XFpsmU1CGezXg4XePiagbdh7U6wuUZ/y
-         sWJg==
+        bh=u5w185Me5M7zSn4d9QrTVpJhTLjbMKcakFOrEP4Qx0w=;
+        b=S8wYV9umEhgUZNjfILciRNDGBn7cJijaO7FXTAKY4FSEyNceJ5QHXyHR9jq/USG+Bd
+         pusNPwx61zaBzazu/5Mb9CLrs223026k2XjjFwXmJtLoOa8FoCpuwHL7GPwE6yHczywS
+         KbXdQ65vKRtY8rYYzp6E4UmP1t6pgFrQhGlXRb2EpxBycbBKYbEWfmA5m0iAEzCTIC1a
+         30QW/mYSGaV6KSqgtpoygzqzjHC8c6ug1kMBzieVtDGsfcXBEQXZNFy8lU+R153IqLJG
+         y2l2nbV0Q7rlFr8L3r6AgXkrrHXeuexg0rOz42hyuacA/1wOv1DJWTuZwuoTSYrJyQ7w
+         jr6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681131734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qMNuHyCwxEK3koi4pqvJhsXicfoNWbhWnmipyaVju4M=;
-        b=arZoW7RAt4AD6iz1lV46/mKhLVKEhpIgeLxxpyKAYSQDK6hntjlYvRwG96geA1cgWi
-         76nISsawhqWXPgJB/pZjBbBbgkW+SGrfnVYioo00K3C7JH3kY24vdxNdrhr1R6IZkr7f
-         1OFvnT52jgRBRKKQDuSXMG0ZeEC2B+5LtNYyEMha+XiDooerI8sXzpAgQ2cyZjmcEGvh
-         KT/ZMirRcb1F+b7+V5ZsjSRu5ceoieOkXbFpKKdOtSnk61IzmHOQI8ff0gmq6Cb1xBtj
-         M4UBiLlN+smB1HoXL1jI6Jy/uN0TXh26WhYs5iY86H7i0MdqBjDj8ObbB6j8CQl/Gb7e
-         4NIg==
-X-Gm-Message-State: AAQBX9frRr2QuzsMhP3KA2/jYoM4w0PTdhHfHPeDnwUReO7/7XzJcoRY
-        AcMLdSzcq6ykuqUv+bPQGEppTTW6GviFkcLRDM2I6w==
-X-Google-Smtp-Source: AKy350Y4nHCIweRVkZTWk9jjjvIwFqjS+ub19pC4j1YPV18prcWr/gTyBF1xUcEhBaPM7Z9AGCY8d3X+iNEn36z3uIE=
-X-Received: by 2002:a05:600c:3c9e:b0:3f0:7403:6e63 with SMTP id
- bg30-20020a05600c3c9e00b003f074036e63mr3314026wmb.2.1681131734216; Mon, 10
- Apr 2023 06:02:14 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681131729;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=u5w185Me5M7zSn4d9QrTVpJhTLjbMKcakFOrEP4Qx0w=;
+        b=s75DZ7NUMwl7gxAVeBh98XC5ZyJGXfVdygz4fLP/PodpYzS49o1gUwxYUjjVFw/LOt
+         IC2u7TbZUMIvUsKIacY4/muouR11GNCMtGOjgkvWwHbuPokxmbsXcBYIFp0NUcVk+ARa
+         O6XKvWCauILNN1fI4uP9/nUAoWnLllqywTDix+m2zwSEvtWK9jCNdURMQ6FgiY7cZCCh
+         W+rH/BIPTaATnDwcrBb5HpyyYxPM4JGfDB5Yy65E/4c3zqQdUMZxaECx1VCL+OFr0Cdh
+         frbnB2Ol8N9pOCOy5ba876p/9Qtcx0vjkDlfWIMk9gLKwTzlZvPMhHnFNNcD4XRDVbjp
+         SFbA==
+X-Gm-Message-State: AAQBX9eGWt9KTDJS8t9hSStJdgFWVwqgwuLeLr06gAEPowrhHCLyqaWi
+        TjxIx9dDedGX+giSTqkk3KM=
+X-Google-Smtp-Source: AKy350aLe9TwzIVhf7jL14WwgNiiUj5REUzvaSnIBPqjDytnJ8YZd0SiIsDGsQ3zlvToLv4fSu8dsg==
+X-Received: by 2002:a17:902:d503:b0:19c:a9b8:58eb with SMTP id b3-20020a170902d50300b0019ca9b858ebmr16999131plg.12.1681131728814;
+        Mon, 10 Apr 2023 06:02:08 -0700 (PDT)
+Received: from [10.200.10.217] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170902b70300b0019a8530c063sm7741083pls.102.2023.04.10.06.02.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 06:02:08 -0700 (PDT)
+Message-ID: <d4b49df5-0f17-15f1-a077-3a30beb64386@gmail.com>
+Date:   Mon, 10 Apr 2023 21:02:04 +0800
 MIME-Version: 1.0
-References: <20230410022152.4049060-1-luwei32@huawei.com>
-In-Reply-To: <20230410022152.4049060-1-luwei32@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 10 Apr 2023 15:02:01 +0200
-Message-ID: <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: Add check for csum_start in skb_partial_csum_set()
-To:     Lu Wei <luwei32@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com, brouer@redhat.com,
-        keescook@chromium.org, jbenc@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] maple_tree: Add a test case to check maple_alloc
+To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Peng Zhang <zhangpeng.00@bytedance.com>,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
+References: <20230407040718.99064-1-zhangpeng.00@bytedance.com>
+ <20230410124144.ouhhnmfoipkqtveu@revolver>
+From:   Peng Zhang <perlyzhang@gmail.com>
+In-Reply-To: <20230410124144.ouhhnmfoipkqtveu@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 4:22=E2=80=AFAM Lu Wei <luwei32@huawei.com> wrote:
->
-> If an AF_PACKET socket is used to send packets through a L3 mode ipvlan
-> and a vnet header is set via setsockopt() with the option name of
-> PACKET_VNET_HDR, the value of offset will be nagetive in function
-> skb_checksum_help() and trigger the following warning:
->
-> WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
-> skb_checksum_help+0x2dc/0x390
-> ......
-> Call Trace:
->  <TASK>
->  ip_do_fragment+0x63d/0xd00
->  ip_fragment.constprop.0+0xd2/0x150
->  __ip_finish_output+0x154/0x1e0
->  ip_finish_output+0x36/0x1b0
->  ip_output+0x134/0x240
->  ip_local_out+0xba/0xe0
->  ipvlan_process_v4_outbound+0x26d/0x2b0
->  ipvlan_xmit_mode_l3+0x44b/0x480
->  ipvlan_queue_xmit+0xd6/0x1d0
->  ipvlan_start_xmit+0x32/0xa0
->  dev_hard_start_xmit+0xdf/0x3f0
->  packet_snd+0xa7d/0x1130
->  packet_sendmsg+0x7b/0xa0
->  sock_sendmsg+0x14f/0x160
->  __sys_sendto+0x209/0x2e0
->  __x64_sys_sendto+0x7d/0x90
->
-> The root cause is:
-> 1. skb->csum_start is set in packet_snd() according vnet_hdr:
->    skb->csum_start =3D skb_headroom(skb) + (u32)start;
->
->    'start' is the offset from skb->data, and mac header has been
->    set at this moment.
->
-> 2. when this skb arrives ipvlan_process_outbound(), the mac header
->    is unset and skb_pull is called to expand the skb headroom.
->
-> 3. In function skb_checksum_help(), the variable offset is calculated
->    as:
->       offset =3D skb->csum_start - skb_headroom(skb);
->
->    since skb headroom is expanded in step2, offset is nagetive, and it
->    is converted to an unsigned integer when compared with skb_headlen
->    and trigger the warning.
 
-Not sure why it is negative ? This seems like the real problem...
-
-csum_start is relative to skb->head, regardless of pull operations.
-
-whatever set csum_start to a too small value should be tracked and fixed.
-
+在 2023/4/10 20:41, Liam R. Howlett 写道:
+> * Peng Zhang <zhangpeng.00@bytedance.com> [230407 00:09]:
+>> Add a test case to check whether the number of maple_alloc structures is
+>> actually equal to mas->alloc->total.
+> Thanks for the test case.  Can you please send the code to fix the issue
+> first in the future?  This way the verification code can be used to
+> bisect any issues.
+Ok, I will exchange the order of the two patches in the next version.
 >
-> In fact the data to be checksummed should not contain the mac header
-> since the mac header is stripped after a packet leaves L2 layer.
-> This patch fixes this by adding a check for csum_start to make it
-> start after the mac header.
->
-> Fixes: 52b5d6f5dcf0 ("net: make skb_partial_csum_set() more robust agains=
-t overflows")
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
-> ---
->  net/core/skbuff.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 1a31815104d6..5e24096076fa 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -5232,9 +5232,11 @@ bool skb_partial_csum_set(struct sk_buff *skb, u16=
- start, u16 off)
->         u32 csum_end =3D (u32)start + (u32)off + sizeof(__sum16);
->         u32 csum_start =3D skb_headroom(skb) + (u32)start;
->
-> -       if (unlikely(csum_start > U16_MAX || csum_end > skb_headlen(skb))=
-) {
-> -               net_warn_ratelimited("bad partial csum: csum=3D%u/%u head=
-room=3D%u headlen=3D%u\n",
-> -                                    start, off, skb_headroom(skb), skb_h=
-eadlen(skb));
-> +       if (unlikely(csum_start > U16_MAX || csum_end > skb_headlen(skb) =
-||
-> +                    csum_start < skb->network_header)) {
-> +               net_warn_ratelimited("bad partial csum: csum=3D%u/%u head=
-room=3D%u headlen=3D%u network_header=3D%u\n",
-> +                                    start, off, skb_headroom(skb),
-> +                                    skb_headlen(skb), skb->network_heade=
-r);
->
-
-I do not understand this patch. You are working around the real bug, right =
-?
-
-Otherwise we would not have a net_warn_ratelimited() ?
-
-csum_start should actually be at the transport header, so not
-considering network header
- length seems to call for another bug report when syzbot gets smarter ?
+>> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+>> ---
+>>   tools/testing/radix-tree/maple.c | 24 ++++++++++++++++++++++++
+>>   1 file changed, 24 insertions(+)
+>>
+>> diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
+>> index 958ee9bdb316..26389e0dcfff 100644
+>> --- a/tools/testing/radix-tree/maple.c
+>> +++ b/tools/testing/radix-tree/maple.c
+>> @@ -55,6 +55,28 @@ struct rcu_reader_struct {
+>>   	struct rcu_test_struct2 *test;
+>>   };
+>>   
+>> +static int get_alloc_node_count(struct ma_state *mas)
+>> +{
+>> +	int count = 1;
+>> +	struct maple_alloc *node = mas->alloc;
+>> +
+>> +	if (!node || ((unsigned long)node & 0x1))
+>> +		return 0;
+>> +	while (node->node_count) {
+>> +		count += node->node_count;
+>> +		node = node->slot[0];
+>> +	}
+>> +	return count;
+>> +}
+>> +
+>> +static void check_mas_alloc_node_count(struct ma_state *mas)
+>> +{
+>> +	mas_node_count_gfp(mas, MAPLE_ALLOC_SLOTS + 1, GFP_KERNEL);
+>> +	mas_node_count_gfp(mas, MAPLE_ALLOC_SLOTS + 3, GFP_KERNEL);
+>> +	MT_BUG_ON(mas->tree, get_alloc_node_count(mas) != mas->alloc->total);
+>> +	mas_destroy(mas);
+>> +}
+>> +
+>>   /*
+>>    * check_new_node() - Check the creation of new nodes and error path
+>>    * verification.
+>> @@ -69,6 +91,8 @@ static noinline void check_new_node(struct maple_tree *mt)
+>>   
+>>   	MA_STATE(mas, mt, 0, 0);
+>>   
+>> +	check_mas_alloc_node_count(&mas);
+>> +
+>>   	/* Try allocating 3 nodes */
+>>   	mtree_lock(mt);
+>>   	mt_set_non_kernel(0);
+>> -- 
+>> 2.20.1
+>>
