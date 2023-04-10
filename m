@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531C06DCE42
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5256DCE46
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjDJXqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S229794AbjDJXsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDJXqR (ORCPT
+        with ESMTP id S229536AbjDJXsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:46:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521A3127;
-        Mon, 10 Apr 2023 16:46:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE9C62025;
-        Mon, 10 Apr 2023 23:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B11CC4339C;
-        Mon, 10 Apr 2023 23:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681170375;
-        bh=ba5WN/ob26DX2j1mfRdkuBNwsPAtlnnuxEuuEqLz1C8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H9YruaKzVwG77HOg7V50SBlKkzs0L51pVIn+o0XlRzgSEeQjCTLCBHL51cp/Pp47o
-         4meAL5FtIiOMAXUiAhwr+S0s1SbsahrRtnTBu0BmUMHxF+N2b4fups362WRhGzpom3
-         UqjN5KrpLNBc47sK33HYzc7saKKl18CJdgLvfQOuHVpqwC4I60cWc81/oNF4HD1b7b
-         4795Id9pICDUj6QqoRtwa6hwmGN4VRK/lFbWPi6LHgL4Qt6unw+SHd9lAgcfslVrQg
-         4vbGwzl5SfkOJ8/VyMtwnRhN9VY5ed8DnLNxZEwcGBS3IAH8MkvkEU+XtE8ktRrJIz
-         8IsEikzPeRBBw==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1845f865452so2611157fac.12;
-        Mon, 10 Apr 2023 16:46:15 -0700 (PDT)
-X-Gm-Message-State: AAQBX9clFPArgb4f60u1I5nxGHXoGERmXwI2wPagk15rlFvih0QZb5aF
-        WHaGUQ5ds8R5lmG2x7QbBuTceKCFBK3QpCxPI/Y=
-X-Google-Smtp-Source: AKy350ZILWCd+oIsHOLpDJRwibeS8dcr/Le5Iys4XOH5R1JLJZkWZsJVo3kbTpNawnM7wvQ91VsMZSb/BF4gabBP9RQ=
-X-Received: by 2002:a05:6870:e989:b0:17e:d308:7790 with SMTP id
- r9-20020a056870e98900b0017ed3087790mr5598150oao.11.1681170374514; Mon, 10 Apr
- 2023 16:46:14 -0700 (PDT)
+        Mon, 10 Apr 2023 19:48:05 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD641715;
+        Mon, 10 Apr 2023 16:48:04 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id m2so3896055oiw.0;
+        Mon, 10 Apr 2023 16:48:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681170484; x=1683762484;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sgropNRrE05ElIoWGGtnBq0l7SFJzOMXHEv8LTacl3M=;
+        b=UyvG6QvB0me928bdw910Lz4RY0Kova7s44CPlo1QkqulayjNNakRp2xVMrP9/V5fXW
+         n/TquraFrdkw7+kr03pgGzewjJM0bKpqbiXaqker4rev0y2rs6P52LaCO91dvFnkyq2n
+         qxQwFEnbhn3lhsfF3NMv8m35vvwknLlSSshDoT80bFefIYBGUfTgWnoNvY2Gv4Njb59v
+         QeZ54afxYAMcFPqd8SazHGh8+Fo4754ilO4soxBqF2a5udIwfIcfbwJNRjienvJytvpJ
+         cyi8UFbff447Or/aG1mkQgnZi0MK2QhDcwDvjLb/OyWPMnXcS+Me9uNKJc/HGJvkKKyV
+         dG1w==
+X-Gm-Message-State: AAQBX9fL0NN5fsnmPrANMxaHsuHGkbWx+aKGlp/nt3mdpECdmhMs0j2O
+        +RZ3R4kezrn1Pb/fe2i5YQl+tCxRWg==
+X-Google-Smtp-Source: AKy350Z554Bj2KhLs1nDATV8HxFu1IsscAIjPptfdkTW9sY8Nzu9lo2pgr4uslFKIciMuQAqqup6gw==
+X-Received: by 2002:aca:2116:0:b0:38b:de4:e3c5 with SMTP id 22-20020aca2116000000b0038b0de4e3c5mr5577453oiz.43.1681170483840;
+        Mon, 10 Apr 2023 16:48:03 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r142-20020acaa894000000b003871471f894sm4982640oie.27.2023.04.10.16.48.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 16:48:03 -0700 (PDT)
+Received: (nullmailer pid 1602128 invoked by uid 1000);
+        Mon, 10 Apr 2023 23:48:02 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230410011316.26564-1-rdunlap@infradead.org>
-In-Reply-To: <20230410011316.26564-1-rdunlap@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 11 Apr 2023 08:45:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
-Message-ID: <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
-Subject: Re: [PATCH v2] sparc: allow sparc32 alias for archhelp
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     dinh.nguyen@linux.intel.com
+Cc:     dinguyen@kernel.org, robh+dt@kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-hwmon@vger.kernel.org
+In-Reply-To: <20230410153314.27127-2-dinh.nguyen@linux.intel.com>
+References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
+ <20230410153314.27127-2-dinh.nguyen@linux.intel.com>
+Message-Id: <168117031287.1592502.13206866820553188194.robh@kernel.org>
+Subject: Re: [PATCH 2/5] dt-bindings: hwmon: intel: add hardware monitor
+ bindings for SoCFPGA
+Date:   Mon, 10 Apr 2023 18:48:02 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:13=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
->
-> Currently, entering
-> $ make ARCH=3Dsparc32 help
-> prints the archhelp text for sparc64.
->
-> Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
-> to be a recognized alias for 32-bit sparc, also support that
-> string in sparc's archhelp by allowing either ARCH=3Dsparc or
-> ARCH=3Dsparc32 for sparc32 archhelp.
->
-> Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
+
+On Mon, 10 Apr 2023 10:33:11 -0500, dinh.nguyen@linux.intel.com wrote:
+> From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+> 
+> Document the hardware monitoring bindings for SoCFPGA 64-bit platforms.
+> 
+> Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
 > ---
-> v2: rebase/resend; add Masahiro to Cc: list
->
->  arch/sparc/Makefile |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
-> --- a/arch/sparc/Makefile
-> +++ b/arch/sparc/Makefile
-> @@ -83,7 +83,7 @@ vdso_install:
->  KBUILD_IMAGE :=3D $(boot)/zImage
->
->  # Don't use tabs in echo arguments.
-> -ifeq ($(ARCH),sparc)
-> +ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
->  define archhelp
->    echo  '* image        - kernel image ($(boot)/image)'
+>  .../bindings/hwmon/intel,socfpga-hwmon.yaml   | 241 ++++++++++++++++++
+>  1 file changed, 241 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-BTW, this is strange.
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.example.dtb: temp_volt: 'reg' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
 
-The asterisk means it is built by 'all'.
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230410153314.27127-2-dinh.nguyen@linux.intel.com
 
-But, I only see the following in this Makefile.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-# Default target
-all: zImage
+pip3 install dtschema --upgrade
 
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-
-
-
-Seeing arch/sparc/boot/Makefile,
-it is true $(boot)/image is generated
-as a side-effect of zImage, but it it true for
-both 32-bit and 64-bit.
-
-I think it is even better to rewrite archhelp
-to unify the 32/64 bits.
-
-
-
-
-
->    echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
-
-
-
---=20
-Best Regards
-Masahiro Yamada
