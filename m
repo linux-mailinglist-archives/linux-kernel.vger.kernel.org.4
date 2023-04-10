@@ -2,197 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8696DC55E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A076DC564
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjDJJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S229800AbjDJJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjDJJxb (ORCPT
+        with ESMTP id S229694AbjDJJyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:53:31 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80822697;
-        Mon, 10 Apr 2023 02:53:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RvbnHT5AnaDGFv4UhA+Y2cK22w/xXMf6V4+NN8COSztqj65Cp1n9Bb4sWO4uQrVsqvNcZMR0gJvqSiI0YRU1dnx8j3sgO3br5Dwa+Nw17hp5cz5soZkYZ3R1HUTjyyrKtrN9MtEc8dE0aLNBQkNWTHdMbY6FANXyLEv8TL7uoIJqORM3aPhwPgMgx6EzBuXoFp6I0xVgyjFtatSNlhBy/BjdeopbkQbfk2I3wT/uKOtEaXO+hGNxITgy2EG4VOngB+gUTGis2CjcAFyKeBAk9IEFzIlCRo0W6N8JMJA3gNWfyq58R/PlbKgVcr67DWDyT7i1FRYMSLbgGIcZBBN5Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FPiD4y58o7FmxPLFDaXsIbFOai38OvwCh+r+77WEFxc=;
- b=KSb/gkyqdGxghKJCxdkEWMZlOzrsQj8X7B9owBZt19WOf1BhBtdfVVCh6CZVjLxF9JIbUVGxWHaVpP6O42loYiUENNRxFpP2jD4TdFwUC+kSMRMlAkLGgv+mPLb5eq+tdYrnc2jaOXgJ21gDT/8VOlNHfebYt4FFaw0NvN81HQrAJa+zsITZjptaBiusZHBTscU18vUVx1vJKcElN+bJa0OEW8SEiBjxTHzTxXAJJSgkWX/7lZ922eaWigm5dg1TGwMO1n4fS4GePd23+08URTkSZmIknAmdcJlpquaFutxlYrz8B1HPjeWdAO7pshozn+lw7n/WX26Z9MekjX4Eiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FPiD4y58o7FmxPLFDaXsIbFOai38OvwCh+r+77WEFxc=;
- b=YL/jyvCQvrHDwhsUIwRaC2lnwlty4TfGxx+kY9EOyI69lLmzEm32hhxiwGSgmq1o8U+Q6cvr2TX6jzrwmUJWnCGQFvRx6wS26GStp2iqqkZSyh+75Cg4TZvRW91CJwkIqu2PhBGkEGnjquP19T2hZp8sZTUYMnZwgLdKZWlXc3g=
-Received: from MW4PR04CA0314.namprd04.prod.outlook.com (2603:10b6:303:82::19)
- by PH7PR12MB6537.namprd12.prod.outlook.com (2603:10b6:510:1f2::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.30; Mon, 10 Apr
- 2023 09:53:27 +0000
-Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::d5) by MW4PR04CA0314.outlook.office365.com
- (2603:10b6:303:82::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35 via Frontend
- Transport; Mon, 10 Apr 2023 09:53:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.25 via Frontend Transport; Mon, 10 Apr 2023 09:53:27 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 10 Apr
- 2023 04:53:18 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <joel@joelfernandes.org>,
-        <gautham.shenoy@amd.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Wyes Karny <wyes.karny@amd.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH 1/2] cpufreq/schedutil: Add fast_switch callback check
-Date:   Mon, 10 Apr 2023 09:52:50 +0000
-Message-ID: <20230410095250.14908-1-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410095045.14872-1-wyes.karny@amd.com>
-References: <20230410095045.14872-1-wyes.karny@amd.com>
+        Mon, 10 Apr 2023 05:54:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D166F270D;
+        Mon, 10 Apr 2023 02:54:14 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33A9Pfrx008806;
+        Mon, 10 Apr 2023 09:53:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=yRB7cciyRzcz8nkDBjPpG/bkD/w2lbThPBq1TXUWcrM=;
+ b=KRKZY7jcsg8kuryqAG6dv0YzLuMtuudMBzsx2/2fz2y9E8N2ZxcRUEfI2ZMsMAKa4BIJ
+ smNE8QMsKCMu66cZSZydBnbpOuwSeYuvMegtlTcnA+m53FcV/BYpYNwY/xRhifzxzcEF
+ Kr2eSBLn0ieaoamTdIbMsbmoWMfCb9K3LP95tpQy7ZyDxvGg1vFtr0eI5OSi5jgQxJVD
+ m8lXO7UBV6qfO0ecssAzvVQtrtXj3YpP7q0OBVuE6EYcCsRJU5yyviA4IChC7bwHHQKd
+ Hw6YQS44ytURM2tehSynOmfMgSIMLNQfFtWBdQIxy96dDIzxR+BxwWoAouv7ndC1+X6z MQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pu0nejkyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 09:53:40 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33A9rdmM013200
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 09:53:39 GMT
+Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 02:53:36 -0700
+From:   Tim Jiang <quic_tjiang@quicinc.com>
+To:     <marcel@holtmann.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <tjiang@codeaurora.org>,
+        <bgodavar@codeaurora.org>, <c-hbandi@codeaurora.org>,
+        <hemantg@codeaurora.org>, <mka@chromium.org>,
+        Tim Jiang <quic_tjiang@quicinc.com>
+Subject: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+Date:   Mon, 10 Apr 2023 17:53:24 +0800
+Message-ID: <20230410095324.11292-1-quic_tjiang@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT066:EE_|PH7PR12MB6537:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c5b243e-a9ab-4785-d60c-08db39a96ea9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j7etvTiLCCJybty4Q4weL3n+IIKHbpTH/7xbQdKuyU3vkCxIk/D4eGxIQN8GdV6g19+XweaeosxIxFHwhjIKcf9OhDGTdNzKE7XsPWiU5zIRE1H5pWW3StacVnFqBAsrIGNCizL58U/o54J8BNA5owkxZFxg6+CvMbHc59cc1TSDEBT1tdZCX9UlpKuhi+2xbkVCjIA3qeuS91LVjoVlMToRO0yEyva5tqP3KLnrqw044H1nbaTmcIO+/Q5tJfinTgYWgS7/uqyn1wVXoUHux4/6LM41CQ/o6jpiQZoYQBrJDtqW/MXiOOUukMdtU69SJ9WO+aKFX3uP8xLA9O4A5E0WT5xksFqP7C54BZCd4dwVwwlDg2Q0PS3Euk5fmOEJgBexY2y//7N5Z5cmh3vI20qhbeGa8TAiPyaCgFehwVmEPPGCwsgTxFLErPjdnjbPQKxTGYM80TDTidngeD5LcVDEYws53hXof0UgDZwNVuSqtuG930k0CrJJGiTvEsGQYK0I+hJL+9B6jNOEuRLecXCCRHmSI4UFBdhU9xmWSgcgfX44B4RQvjLSvKOgWtjc4qVqy7nFeZ3pcOjFR38/LFyzPlqs2fWUffGyCZzjSOoc3zk+meIEb9uqqgkBzs5q2dbzqA//RcQ61tyf9CNqPwIS6nEk3Gedp0ehsDVGNxJugbCHip8AOxkzmyBrxZfDwavZ7W8x8ACQRFlNYLqd8C3XrcuMohQJzowBfX+3J1Y6LMKu3fUkot9WMh8bcsfQHqTL/oBLmzguawGXAC5A1g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(36840700001)(40470700004)(46966006)(16526019)(186003)(66899021)(7416002)(26005)(44832011)(1076003)(40480700001)(6666004)(40460700003)(426003)(110136005)(36756003)(8676002)(81166007)(7696005)(82310400005)(36860700001)(54906003)(478600001)(70206006)(316002)(4326008)(82740400003)(83380400001)(356005)(41300700001)(70586007)(47076005)(86362001)(2906002)(336012)(5660300002)(8936002)(2616005)(2101003)(36900700001)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:53:27.0375
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c5b243e-a9ab-4785-d60c-08db39a96ea9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6537
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: bPXDkPsAI5VuoVNk2BHWWjCBiOtm_g5I
+X-Proofpoint-ORIG-GUID: bPXDkPsAI5VuoVNk2BHWWjCBiOtm_g5I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 clxscore=1011
+ malwarescore=0 suspectscore=0 priorityscore=1501 adultscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100085
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The set value of `fast_switch_enabled` flag doesn't guarantee that
-fast_switch callback is set. For some drivers such as amd_pstate, the
-adjust_perf callback is used but it still sets `fast_switch_possible`
-flag. This is not wrong because this flag doesn't imply fast_switch
-callback is set, it implies whether the driver can guarantee that
-frequency can be changed on any CPU sharing the policy and that the
-change will affect all of the policy CPUs without the need to send any
-IPIs or issue callbacks from the notifier chain.  Therefore add an extra
-NULL check before calling fast_switch in sugov_update_single_freq
-function.
+WCN6855 will report memdump via ACL data or HCI event when
+it get crashed, so we collect memdump to debug firmware.
 
-Ideally `sugov_update_single_freq` function should not be called with
-amd_pstate. But in a corner case scenario, when aperf/mperf overflow
-occurs, kernel disables frequency invariance calculation which causes
-schedutil to fallback to sugov_update_single_freq which currently relies
-on the fast_switch callback.
-
-Normal flow:
-  sugov_update_single_perf
-    cpufreq_driver_adjust_perf
-      cpufreq_driver->adjust_perf
-
-Error case flow:
-  sugov_update_single_perf
-    sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
-      cpufreq_driver_fast_switch
-         cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
-
-Fix this NULL pointer dereference issue by doing a NULL check.
-
-Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: stable@vger.kernel.org
+Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
 ---
- drivers/cpufreq/cpufreq.c        | 11 +++++++++++
- include/linux/cpufreq.h          |  1 +
- kernel/sched/cpufreq_schedutil.c |  2 +-
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ drivers/bluetooth/btusb.c | 222 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 222 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 6d8fd3b8dcb5..364d31b55380 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2138,6 +2138,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- }
- EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 2303b0a66323..f045bbb0ee09 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -733,6 +733,16 @@ static const struct dmi_system_id btusb_needs_reset_resume_table[] = {
+ 	{}
+ };
  
-+/**
-+ * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
-+ *
-+ * Return 'true' if the ->fast_switch callback is present for the
-+ * current driver or 'false' otherwise.
-+ */
-+bool cpufreq_driver_has_fast_switch(void)
++struct qca_dump_info {
++	/* fields for dump collection */
++	u16 id_vendor;
++	u16 id_product;
++	u32 fw_version;
++	u32 controller_id;
++	u32 ram_dump_size;
++	u16 ram_dump_seqno;
++};
++
+ #define BTUSB_MAX_ISOC_FRAMES	10
+ 
+ #define BTUSB_INTR_RUNNING	0
+@@ -752,6 +762,7 @@ static const struct dmi_system_id btusb_needs_reset_resume_table[] = {
+ #define BTUSB_WAKEUP_AUTOSUSPEND	14
+ #define BTUSB_USE_ALT3_FOR_WBS	15
+ #define BTUSB_ALT6_CONTINUOUS_TX	16
++#define BTUSB_HW_SSR_ACTIVE	17
+ 
+ struct btusb_data {
+ 	struct hci_dev       *hdev;
+@@ -814,6 +825,8 @@ struct btusb_data {
+ 
+ 	int oob_wake_irq;   /* irq for out-of-band wake-on-bt */
+ 	unsigned cmd_timeout_cnt;
++
++	struct qca_dump_info qca_dump;
+ };
+ 
+ static void btusb_reset(struct hci_dev *hdev)
+@@ -904,6 +917,11 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+ 	struct gpio_desc *reset_gpio = data->reset_gpio;
+ 
++	if (test_bit(BTUSB_HW_SSR_ACTIVE, &data->flags)) {
++		bt_dev_info(hdev, "Ramdump in progress, defer cmd_timeout");
++		return;
++	}
++
+ 	if (++data->cmd_timeout_cnt < 5)
+ 		return;
+ 
+@@ -3294,6 +3312,202 @@ static int btusb_set_bdaddr_wcn6855(struct hci_dev *hdev,
+ 	return 0;
+ }
+ 
++#define QCA_MEMDUMP_ACL_HANDLE 0x2EDD
++#define QCA_MEMDUMP_SIZE_MAX  0x100000
++#define QCA_MEMDUMP_VSE_CLASS 0x01
++#define QCA_MEMDUMP_MSG_TYPE 0x08
++#define QCA_MEMDUMP_PKT_SIZE 248
++#define QCA_LAST_SEQUENCE_NUM 0xffff
++
++struct qca_dump_hdr {
++	u8 vse_class;
++	u8 msg_type;
++	__le16 seqno;
++	u8 reserved;
++	union {
++		u8 data[0];
++		struct {
++			__le32 ram_dump_size;
++			u8 data0[0];
++		} __packed;
++	};
++} __packed;
++
++
++static void btusb_dump_hdr_qca(struct hci_dev *hdev, struct sk_buff *skb)
 +{
-+	return !!cpufreq_driver->fast_switch;
++	char buf[128];
++	struct btusb_data *btdata = hci_get_drvdata(hdev);
++
++	snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
++			btdata->qca_dump.controller_id);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
++			btdata->qca_dump.fw_version);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Driver: %s\nVendor: qca\n",
++			btusb_driver.name);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "VID: 0x%x\nPID:0x%x\n",
++			btdata->qca_dump.id_vendor, btdata->qca_dump.id_product);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Lmp Subversion: 0x%x\n",
++			hdev->lmp_subver);
++	skb_put_data(skb, buf, strlen(buf));
 +}
 +
- /**
-  * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-  * @cpu: Target CPU.
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 65623233ab2f..8a9286fc718b 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -604,6 +604,7 @@ struct cpufreq_governor {
- /* Pass a target to the cpufreq driver */
- unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq);
-+bool cpufreq_driver_has_fast_switch(void);
- void cpufreq_driver_adjust_perf(unsigned int cpu,
- 				unsigned long min_perf,
- 				unsigned long target_perf,
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e3211455b203..a1c449525ac2 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -364,7 +364,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
- 	 * concurrently on two different CPUs for the same target and it is not
- 	 * necessary to acquire the lock in the fast switch case.
- 	 */
--	if (sg_policy->policy->fast_switch_enabled) {
-+	if (sg_policy->policy->fast_switch_enabled && cpufreq_driver_has_fast_switch()) {
- 		cpufreq_driver_fast_switch(sg_policy->policy, next_f);
- 	} else {
- 		raw_spin_lock(&sg_policy->update_lock);
++static void btusb_coredump_qca(struct hci_dev *hdev)
++{
++	static const u8 param[] = { 0x26 };
++	struct sk_buff *skb;
++
++	skb = __hci_cmd_sync(hdev, 0xfc0c, 1, param, HCI_CMD_TIMEOUT);
++	if (IS_ERR(skb))
++		bt_dev_err(hdev, "%s: triggle crash failed (%ld)", __func__, PTR_ERR(skb));
++	kfree_skb(skb);
++}
++
++/*
++ * ==0: not a dump pkt.
++ * < 0: fails to handle a dump pkt
++ * > 0: otherwise.
++ */
++static int handle_dump_pkt_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	int ret = 1;
++	u8 pkt_type;
++	u8 *sk_ptr;
++	unsigned int sk_len;
++	u16 seqno;
++	u32 dump_size;
++
++	struct hci_event_hdr *event_hdr;
++	struct hci_acl_hdr *acl_hdr;
++	struct qca_dump_hdr *dump_hdr;
++	struct btusb_data *btdata = hci_get_drvdata(hdev);
++	struct usb_device *udev = btdata->udev;
++
++	pkt_type = hci_skb_pkt_type(skb);
++	sk_ptr = skb->data;
++	sk_len = skb->len;
++
++	if (pkt_type == HCI_ACLDATA_PKT) {
++		acl_hdr = hci_acl_hdr(skb);
++		if (le16_to_cpu(acl_hdr->handle) != QCA_MEMDUMP_ACL_HANDLE)
++			return 0;
++		sk_ptr += HCI_ACL_HDR_SIZE;
++		sk_len -= HCI_ACL_HDR_SIZE;
++		event_hdr = (struct hci_event_hdr *)sk_ptr;
++	} else {
++		event_hdr = hci_event_hdr(skb);
++	}
++
++	if ((event_hdr->evt != HCI_VENDOR_PKT)
++		|| (event_hdr->plen != (sk_len - HCI_EVENT_HDR_SIZE)))
++		return 0;
++
++	sk_ptr += HCI_EVENT_HDR_SIZE;
++	sk_len -= HCI_EVENT_HDR_SIZE;
++
++	dump_hdr = (struct qca_dump_hdr *)sk_ptr;
++	if ((sk_len < offsetof(struct qca_dump_hdr, data))
++		|| (dump_hdr->vse_class != QCA_MEMDUMP_VSE_CLASS)
++	    || (dump_hdr->msg_type != QCA_MEMDUMP_MSG_TYPE))
++		return 0;
++
++	/*it is dump pkt now*/
++	seqno = le16_to_cpu(dump_hdr->seqno);
++	if (seqno == 0) {
++		set_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
++		dump_size = le32_to_cpu(dump_hdr->ram_dump_size);
++		if (!dump_size || (dump_size > QCA_MEMDUMP_SIZE_MAX)) {
++			ret = -EILSEQ;
++			bt_dev_err(hdev, "Invalid memdump size(%u)",
++				   dump_size);
++			goto out;
++		}
++
++		ret = hci_devcd_init(hdev, dump_size);
++		if (ret < 0) {
++			bt_dev_err(hdev, "memdump init error(%d)", ret);
++			goto out;
++		}
++
++		btdata->qca_dump.ram_dump_size = dump_size;
++		btdata->qca_dump.ram_dump_seqno = 0;
++		sk_ptr += offsetof(struct qca_dump_hdr, data0);
++		sk_len -= offsetof(struct qca_dump_hdr, data0);
++
++		usb_disable_autosuspend(udev);
++		bt_dev_info(hdev, "%s memdump size(%u)\n",
++			    (pkt_type == HCI_ACLDATA_PKT) ? "ACL" : "event",
++			    dump_size);
++	} else {
++		sk_ptr += offsetof(struct qca_dump_hdr, data);
++		sk_len -= offsetof(struct qca_dump_hdr, data);
++	}
++
++	if (!btdata->qca_dump.ram_dump_size) {
++		ret = -EINVAL;
++		bt_dev_err(hdev, "memdump is not active");
++		goto out;
++	}
++
++	if ((seqno > btdata->qca_dump.ram_dump_seqno + 1) && (seqno != QCA_LAST_SEQUENCE_NUM)) {
++		dump_size = QCA_MEMDUMP_PKT_SIZE * (seqno - btdata->qca_dump.ram_dump_seqno - 1);
++		hci_devcd_append_pattern(hdev, 0x0, dump_size);
++		bt_dev_err(hdev,
++			   "expected memdump seqno(%u) is not received(%u)\n",
++			   btdata->qca_dump.ram_dump_seqno, seqno);
++		btdata->qca_dump.ram_dump_seqno = seqno;
++		kfree_skb(skb);
++		return ret;
++	}
++
++	skb_pull(skb, skb->len - sk_len);
++	hci_devcd_append(hdev, skb);
++	btdata->qca_dump.ram_dump_seqno++;
++	if (seqno == QCA_LAST_SEQUENCE_NUM) {
++		bt_dev_info(hdev,
++				"memdump done: pkts(%u), total(%u)\n",
++				btdata->qca_dump.ram_dump_seqno, btdata->qca_dump.ram_dump_size);
++
++		hci_devcd_complete(hdev);
++		goto out;
++	}
++	return ret;
++
++out:
++	if (btdata->qca_dump.ram_dump_size)
++		usb_enable_autosuspend(udev);
++	btdata->qca_dump.ram_dump_size = 0;
++	btdata->qca_dump.ram_dump_seqno = 0;
++	clear_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
++
++	if (ret < 0)
++		kfree_skb(skb);
++	return ret;
++}
++
++static int btusb_recv_acl_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	if (handle_dump_pkt_qca(hdev, skb))
++		return 0;
++	return hci_recv_frame(hdev, skb);
++}
++
++static int btusb_recv_evt_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	if (handle_dump_pkt_qca(hdev, skb))
++		return 0;
++	return hci_recv_frame(hdev, skb);
++}
++
++
+ #define QCA_DFU_PACKET_LEN	4096
+ 
+ #define QCA_GET_TARGET_VERSION	0x09
+@@ -3628,6 +3842,9 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+ 	if (err < 0)
+ 		return err;
+ 
++	btdata->qca_dump.fw_version = le32_to_cpu(ver.patch_version);
++	btdata->qca_dump.controller_id = le32_to_cpu(ver.rom_version);
++
+ 	if (!(status & QCA_SYSCFG_UPDATED)) {
+ 		err = btusb_setup_qca_load_nvm(hdev, &ver, info);
+ 		if (err < 0)
+@@ -4117,6 +4334,11 @@ static int btusb_probe(struct usb_interface *intf,
+ 	}
+ 
+ 	if (id->driver_info & BTUSB_QCA_WCN6855) {
++		data->qca_dump.id_vendor = id->idVendor;
++		data->qca_dump.id_product = id->idProduct;
++		data->recv_event = btusb_recv_evt_qca;
++		data->recv_acl = btusb_recv_acl_qca;
++		hci_devcd_register(hdev, btusb_coredump_qca, btusb_dump_hdr_qca, NULL);
+ 		data->setup_on_usb = btusb_setup_qca;
+ 		hdev->shutdown = btusb_shutdown_qca;
+ 		hdev->set_bdaddr = btusb_set_bdaddr_wcn6855;
 -- 
-2.34.1
+2.17.1
 
