@@ -2,172 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9916DCA49
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60756DCA4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjDJR7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S230333AbjDJSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDJR7t (ORCPT
+        with ESMTP id S229591AbjDJSAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:59:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1809C173F;
-        Mon, 10 Apr 2023 10:59:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FFB61B4C;
-        Mon, 10 Apr 2023 17:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03EECC433D2;
-        Mon, 10 Apr 2023 17:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681149587;
-        bh=Ku1zx3A7RxvGkqCRghJdFHiTNADgifG+1p6GZNJN9TE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IXqfhbyuJAJlTn4a+5upyTSWnNs4gVHnkDHtHysREJj8xrAA/m8DEAb44KmYM5Bwf
-         kQZ35Azvj7of7dVUpbDIvXi7G+mx4095hyDIonQNJ0Otg3ONLuNynUNz97wdZHiqIk
-         JhA0Z1852+Cuz7SFHyEfPltFm9CifAdF/nyyjv1dG9qaT+udmoVp2GAtXaA+5pZnpG
-         1TsVslVxOcKHNHarsZk8CXgP2P6FJSX/zeI/YLZ1sYhCJCYXL4XkbdH+Ztk1fLKdhB
-         YxtG3RWT+CL8i2BxFvluKuC8oJR4DP5ByVpjtIekuJnAS8cJaq5Tubkcih/gXdh1BC
-         Zc5Xrw1jmQDKQ==
-Date:   Mon, 10 Apr 2023 10:59:46 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Ryosuke Yasuoka <ryasuoka@redhat.com>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, david@fromorbit.com
-Subject: Re: [PATCH v2] xfs: Use for_each_perag_from() to iterate all
- available AGs
-Message-ID: <20230410175946.GD360889@frogsfrogsfrogs>
-References: <20230410160727.3748239-1-ryasuoka@redhat.com>
- <20230410163029.GC360889@frogsfrogsfrogs>
+        Mon, 10 Apr 2023 14:00:31 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB9A173B;
+        Mon, 10 Apr 2023 11:00:30 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id j8so3586690pjy.4;
+        Mon, 10 Apr 2023 11:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681149630; x=1683741630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IV33xBJ34yY7yL7GA0OE+66nFcSLRJs2V5SHArKgYcw=;
+        b=aoRYjh4Ii+DhcP9USwhs2qrv1CjEdbxNmI9u/NaVcRTGTbojD/jNjhc3O7ZdbbD/Q9
+         P9x8DzRviQ1xw3ijKKBqhcnUXE11kAK1YlfgMmhzOkT6zltq8XfSmwnbjU4KY714GIYw
+         GqBhPyxBnEBUNCvdEa1QnsV9uTsHt1GktXG+iYC+Pod2AQBCMAtBCPBmy+ax9lLTN1Nu
+         hlXdFKeCR+bmSeUOUgaMBv1cuCmKM/87mgQRhBSahpkVv9+hTkUDsyWTqaIez4hLFGPV
+         kMlhTxeFi96MDkY4YGvGGHc3EmRPKuZIJC+cApusatF7M2C3Bv4tv+7ZoG+5+mPXMBGD
+         VkkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681149630; x=1683741630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IV33xBJ34yY7yL7GA0OE+66nFcSLRJs2V5SHArKgYcw=;
+        b=Jtwk5GKvhlaINjEvMfP8yXVB9lRM7X1MuYJLwAFsqGGPO8Yprgw0v6XJdgZCrEAucQ
+         WKDt+YclA4egnhB7jEkbryNhDB1en5QAyzq8q5c6mGvRw3/PMuMSktMrbwO54ys0bBvm
+         NKta6xL8nRRPnyEm/swyc9YJVJSUqMlSLVsWGrdnp/sk3bg2kpnzxeNLtWRtUbkAQPef
+         +cl8Q9dpJxUIvKnjG5+MXtLpJhfC12Dk0sG5YYt082gccaZw6B0Q8G+HVmAJBgWJv3z5
+         CNUEnvX9CIWK1TyvCORygEHlnMbrC9NW8k3Xn30mlTq+0+jd/Po++WSjz8vYeVFq55E2
+         wVXQ==
+X-Gm-Message-State: AAQBX9d/CpC2OydveEAdLn3rtcmzwsYqu36TWsHaYDJ+81EMu1iEE0/i
+        8upKEaZdbVDA2YXWTxNL0A9u/Ht27Sg=
+X-Google-Smtp-Source: AKy350b3uYuhvmpWVUIpVtZI0gqCwySA0fm3SARAAz//DMwRmDHNYP6qdC/3hmAvZUJjxd5kWB1rBQ==
+X-Received: by 2002:a05:6a20:4da1:b0:cd:74aa:df55 with SMTP id gj33-20020a056a204da100b000cd74aadf55mr11989045pzb.25.1681149629777;
+        Mon, 10 Apr 2023 11:00:29 -0700 (PDT)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id k24-20020aa78218000000b005921c46cbadsm8342466pfi.99.2023.04.10.11.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 11:00:29 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 11:00:28 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: Re: [PATCH 2/8] sched/topology: introduce sched_numa_find_next_cpu()
+Message-ID: <ZDROvNNIPdahL3AP@yury-laptop>
+References: <20230325185514.425745-1-yury.norov@gmail.com>
+ <20230325185514.425745-3-yury.norov@gmail.com>
+ <ZCFvvHZXT/dqjOOb@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230410163029.GC360889@frogsfrogsfrogs>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCFvvHZXT/dqjOOb@smile.fi.intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 09:30:29AM -0700, Darrick J. Wong wrote:
-> On Tue, Apr 11, 2023 at 01:07:27AM +0900, Ryosuke Yasuoka wrote:
-> > xfs_filestream_pick_ag() iterates all the available AGs when no
-> > unassociated AGs are available by using for_each_perag_wrap().
-> > To iterate all the available AGs, just use for_each_perag_from() instead.
+On Mon, Mar 27, 2023 at 01:28:12PM +0300, Andy Shevchenko wrote:
+> On Sat, Mar 25, 2023 at 11:55:08AM -0700, Yury Norov wrote:
+> > The function searches for the next CPU in a given cpumask according to
+> > NUMA topology, so that it traverses cpus per-hop.
 > > 
-> > 
-> > This patch cleans up a code where xfs_filestream_pick_ag() iterates 
-> > all the available AGs when no unassociated AGs are available.
-> > Current implementation is using a for_each_perag_wrap() macro which
-> > iterates all AGs from start_agno through wrap_agno, wraps to
-> > restart_agno, and then iterates again toward to (start_agno - 1).
-> > In this case, xfs_filestream_pick_ag() start to iterate from 0 and
-> > does't need to wrap. Although passing 0 as start_agno to
-> > for_each_perag_wrap() 
-> > is not problematic, we have already a for_each_perag() macro family
-> > which just iterates all AGs from 0 and doesn't wrap. Hense, I propose
-> > to use for_each_perag() family simply.
-> > 
-> > 
-> > Changes since v1 [1]:
-> > Use for_each_perag_from() instead of for_each_perag() to clarify
-> > where we are iterating from.
-> > 
-> > [1]:
-> > https://lore.kernel.org/linux-xfs/CAHpthZrvhqh8O1HO7U_jVnaq9R9Ur=Yq2eWzjWfNx3ryDbnGPA@mail.gmail.com/T/#m5704d0409bec1ce5273be0d3860e8ad60e9886fd
-> > 
-> > Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
-> > ---
-> >  fs/xfs/xfs_filestream.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/xfs/xfs_filestream.c b/fs/xfs/xfs_filestream.c
-> > index 22c13933c8f8..29acd9f7d422 100644
-> > --- a/fs/xfs/xfs_filestream.c
-> > +++ b/fs/xfs/xfs_filestream.c
-> > @@ -151,7 +151,8 @@ xfs_filestream_pick_ag(
+> > If the CPU is the last cpu in a given hop, sched_numa_find_next_cpu()
+> > switches to the next hop, and picks the first CPU from there, excluding
+> > those already traversed.
+> 
+> ...
+> 
+> > +/*
+> 
+> Hmm... Is it deliberately not a kernel doc?
 
-Oh, also -- I ran the whole codebase through smatch this morning.
-Could you please set @err to zero in its declaration above?  If the
-first for_each_perag_wrap never manages to get any perag structures
-(currently impossible with the codebase) then err will be undefined and
-probably nonzero.
+Yes, I'd prefer to encourage people to use for_each() approach instead
+of calling it directly.
 
-  CHECK  fs/xfs/xfs_filestream.c
-fs/xfs/xfs_filestream.c:120
-xfs_filestream_pick_ag() error: uninitialized symbol 'err'.
-
---D
-
-> >  		 * grab.
-> >  		 */
-> >  		if (!max_pag) {
-> > -			for_each_perag_wrap(args->mp, 0, start_agno, args->pag)
-> > +			start_agno = 0;
-> > +			for_each_perag_from(args->mp, start_agno, args->pag)
+If there will be a good reason to make it a more self-consistent thing,
+we'll have to add a wrapper, just like sched_numa_find_nth_cpu() is
+wrapped with cpumask_local_spread(). Particularly, use RCU lock/unlock
+and properly handle NUMA_NO_NODE.
+ 
+> > + * sched_numa_find_next_cpu() - given the NUMA topology, find the next cpu
+> > + * cpumask: cpumask to find a cpu from
+> > + * cpu: current cpu
+> > + * node: local node
+> > + * hop: (in/out) indicates distance order of current CPU to a local node
+> > + *
+> > + * The function searches for next cpu at a given NUMA distance, indicated
+> > + * by hop, and if nothing found, tries to find CPUs at a greater distance,
+> > + * starting from the beginning.
+> > + *
+> > + * returns: cpu, or >= nr_cpu_ids when nothing found.
+> > + */
 > 
-> IDGI.  for_each_perag initializes the loop variable and calls
-> for_each_perag_from, so this is open-coding an existing macro.
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 > 
-> If people are confused by the reuse of the function call parameter
-> variable for the second loop, then either declare a new variable and let
-> the compiler notice that we never use start_agno ever again and reuse
-> a cpu register:
-> 
-> 	if (!max_pag) {
-> 		xfs_agnumber_t	agno;
-> 
-> 		for_each_perag(args->mp, agno, args->pag)
-> 			break;
-> 		...
-> 	}
-> 
-> Or reuse it explicitly and leave a comment:
-> 
-> 	if (!max_pag) {
-> 		/*
-> 		 * Use any AG that we can grab.  start_agno is no longer
-> 		 * pertinent here so we can reuse the variable.
-> 		 */
-> 		for_each_perag(args->mp, start_agno, args->pag)
-> 			break;
-> 		...
-> 	}
-> 
-> As a third alternative, I suppose you could encapsulate all of that into
-> a dorky helper since I bet this isn't the first or the last time we're
-> going to need something like this:
-> 
-> static inline struct xfs_perag *
-> xfs_perag_get_first_avail(
-> 	struct xfs_mount	*mp)
-> {
-> 	struct xfs_perag	*pag;
-> 	xfs_agnumber_t		agno;
-> 
-> 	for_each_perag(mp, agno, pag)
-> 		return pag;
-> 
-> 	ASSERT(0);
-> 	return NULL;
-> }
-> 
-> 	if (!max_pag) {
-> 		args->pag = xfs_perag_get_first_avail(mp);
-> 		...
-> 	}
-> 
-> --D
-> 
-> >  				break;
-> >  			atomic_inc(&args->pag->pagf_fstrms);
-> >  			*longest = 0;
-> > -- 
-> > 2.39.2
-> > 
