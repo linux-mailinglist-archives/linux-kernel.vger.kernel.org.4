@@ -2,165 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15226DCA23
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45C56DCA29
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjDJRoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S230201AbjDJRpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjDJRoO (ORCPT
+        with ESMTP id S229503AbjDJRps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:44:14 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7FD2685
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:44:13 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id px4so2939716pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681148653;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yWQNPjxOiH9ikIbp275JanF40njNYNR09cvqLl6jQAE=;
-        b=sFZiOJlR/azM1KLSZuC4d6gGG/o4LsLQldk2wiRC/oJSCDKReSANURRkcHhJRjUGuo
-         H/c5rEyrx9HHs8+u8Sy78D7L+5xreTcsA+Q9HJPJq05QMQvaRgmJ2p1nyab1jzHhnSoy
-         FZEyJM6XhjLXOHrSqVZgf7OIq6LK/HImYa4g3MxPlfoY1aZIU+APRSPTjoLnVtI88OrT
-         8NMRwNrfqXkZ1gMWcijAL94AnZBBMmg6mJrifl7ZRougbsRc7l4b5zS9AEwNpw4diQgI
-         Ui9aClbn6XG4G1ut+BTlF3CXakefy3trXxSqQZ2tITeG6l/FDCAFGWAkV8PTpDMD/Sit
-         WDsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681148653;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yWQNPjxOiH9ikIbp275JanF40njNYNR09cvqLl6jQAE=;
-        b=RVLgEhHShiBiutA65Yd/Z925BC7cHqtX224WlFuRUwfbrBQLNqTy/EGZ1ekz7ghn3X
-         XOeVrqs0nZiQMFH3DijfZ7WijEPjqgSThvwBip3uok9ceruvRR6NRiWqc3lfusQw8eAx
-         wD7taCuyF16MkikHOCZLE+eFudEs5JF2kY4l37ebO+25Lu589ut45oipguN7WlzwVwO/
-         yg1uUqEqMmgLqApVCjDAGmM+xTo0UPdsOG3643TwC9T5LDkQLAodxqvJc/NVFq+Wh3Os
-         AmxyCMmAe4/7yUBjyL3qwgeM+yfd7xXdU05zNHi1UycvR5PR5mq3doUg1hRPAbIsE1Js
-         sohA==
-X-Gm-Message-State: AAQBX9fyDfruijzGNKIXc2AvQgpJJWdv6h1eBOEzFeq5Q8nQPPYZUFek
-        GjkCkb6cG9F5fY1aRPNXAavuOHJ+rYyTBtDZl6g=
-X-Google-Smtp-Source: AKy350a0UqbFHqt+Sl9q/bhoxYb7h3/xxccDs8RVv+EDn0SI5G+SHERF4W6kDbcDz5ySUIJzae8ALQ==
-X-Received: by 2002:a17:90a:bb89:b0:246:5780:ccf8 with SMTP id v9-20020a17090abb8900b002465780ccf8mr10743326pjr.4.1681148653018;
-        Mon, 10 Apr 2023 10:44:13 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:cecd:b1ee:70ec:874])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090ae50f00b0023377b98c7csm7753977pjy.38.2023.04.10.10.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 10:44:12 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 11:44:10 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, Bjorn Andersson <andersson@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: Improve exception handling in
- imx_dsp_rproc_mbox_alloc()
-Message-ID: <20230410174410.GB4129213@p14s>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <8f785de5-ebe2-edd9-2155-f440acacc643@web.de>
- <d0e18bb1-afc4-8b6f-bb1c-b74b3bad908e@web.de>
+        Mon, 10 Apr 2023 13:45:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8DC171C;
+        Mon, 10 Apr 2023 10:45:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B965B610A3;
+        Mon, 10 Apr 2023 17:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC0DC433D2;
+        Mon, 10 Apr 2023 17:45:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681148746;
+        bh=Q72b34YBtc7OXzlvOQZ3dPKBZ4tw4gB1Uk02Sk+ZOxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G/G2jOWOmBcqah9uKdDP7U0f+PCmS5RTT9H0cTBuVaFjX7PfIKGfmy0XkQI5BInZr
+         3NvcwNYSGElLLQg2L8tvKzVJc5HlMdL3NnvKlgvO3t8XPttosac3Bm377sBBC0ZvJZ
+         o6delpRrwT7W7L7Elhd/NpV5+o7b5X3vvtrURuIkbD2E4PeDDi1trJVBc07rH1Ai/e
+         FEll0jV9xkFBUMAEcPV7hGvGqNgs2xtVHWApf8KfDBuIKlrpm4EIAuaEEqc93yW+gD
+         o2L37UUddeCbp7Cggouqwfgu8oOFCxolY/CPffCF6xVwWzOEd9A6088yKp04+LhoG2
+         ZGl3RFt3wH9yg==
+Date:   Mon, 10 Apr 2023 10:45:45 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Guoqing Cai <u202112087@hust.edu.cn>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        HUST OS Kernel Contribution 
+        <hust-os-kernel-patches@googlegroups.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs: jbd2: fix an incorrect warn log
+Message-ID: <20230410174545.GA360877@frogsfrogsfrogs>
+References: <20230410172039.1752440-1-u202112087@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d0e18bb1-afc4-8b6f-bb1c-b74b3bad908e@web.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230410172039.1752440-1-u202112087@hust.edu.cn>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 10:12:50PM +0200, Markus Elfring wrote:
-> Date: Thu, 6 Apr 2023 22:00:24 +0200
+On Tue, Apr 11, 2023 at 01:20:38AM +0800, Guoqing Cai wrote:
+> In jbd2_journal_load(), when journal_reset fails, it prints an incorrect
+> warn log.
 > 
-> The label “err_out” was used to jump to another pointer check
-> despite of the detail in the implementation of the function
-> “imx_dsp_rproc_mbox_alloc” that it was determined already
-> that the corresponding variable contained an error pointer
-> because of a failed call of the function “mbox_request_channel_byname”.
+> Fix this by changing the goto statement to return statement.
 > 
-> Thus perform the following adjustments:
-> 
-> 1. Return directly after a call of the function
->    “mbox_request_channel_byname” failed for the input parameter “tx”.
-> 
-> 2. Use more appropriate labels instead.
-> 
-> 3. Reorder jump targets at the end.
-> 
-> 4. Omit a function call and three extra checks.
-> 
-> 
-> This issue was detected by using the Coccinelle software.
-> 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> Signed-off-by: Guoqing Cai <u202112087@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 > ---
->  drivers/remoteproc/imx_dsp_rproc.c | 18 +++++++-----------
->  1 file changed, 7 insertions(+), 11 deletions(-)
->
-
-Applied
-
-Thanks,
-Mathieu
-
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 21759d9e5b7b..a8ad15ef1da0 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -530,7 +530,7 @@ static int imx_dsp_rproc_mbox_alloc(struct imx_dsp_rproc *priv)
->  		ret = PTR_ERR(priv->tx_ch);
->  		dev_dbg(cl->dev, "failed to request tx mailbox channel: %d\n",
->  			ret);
-> -		goto err_out;
-> +		return ret;
->  	}
+>  fs/jbd2/journal.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 > 
->  	/* Channel for receiving message */
-> @@ -539,7 +539,7 @@ static int imx_dsp_rproc_mbox_alloc(struct imx_dsp_rproc *priv)
->  		ret = PTR_ERR(priv->rx_ch);
->  		dev_dbg(cl->dev, "failed to request rx mailbox channel: %d\n",
->  			ret);
-> -		goto err_out;
-> +		goto free_channel_tx;
->  	}
-> 
->  	cl = &priv->cl_rxdb;
-> @@ -555,19 +555,15 @@ static int imx_dsp_rproc_mbox_alloc(struct imx_dsp_rproc *priv)
->  		ret = PTR_ERR(priv->rxdb_ch);
->  		dev_dbg(cl->dev, "failed to request mbox chan rxdb, ret %d\n",
->  			ret);
-> -		goto err_out;
-> +		goto free_channel_rx;
->  	}
-> 
+> diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
+> index e80c781731f8..555f09ca1d99 100644
+> --- a/fs/jbd2/journal.c
+> +++ b/fs/jbd2/journal.c
+> @@ -2082,8 +2082,10 @@ int jbd2_journal_load(journal_t *journal)
+>  
+>  	/* Let the recovery code check whether it needs to recover any
+>  	 * data from the journal. */
+> -	if (jbd2_journal_recover(journal))
+> -		goto recovery_error;
+> +	if (jbd2_journal_recover(journal)) {
+> +		printk(KERN_WARNING "JBD2: recovery failed\n");
+> +		return -EIO;
+> +	}
+>  
+>  	if (journal->j_failed_commit) {
+>  		printk(KERN_ERR "JBD2: journal transaction %u on %s "
+> @@ -2101,14 +2103,10 @@ int jbd2_journal_load(journal_t *journal)
+>  	 * reinitialise the dynamic contents of the superblock in memory
+>  	 * and reset them on disk. */
+>  	if (journal_reset(journal))
+> -		goto recovery_error;
+> +		return -EIO;
+
+Why wouldn't you warn about the journal reset failing here?
+
+--D
+
+>  
+>  	journal->j_flags |= JBD2_LOADED;
 >  	return 0;
-> 
-> -err_out:
-> -	if (!IS_ERR(priv->tx_ch))
-> -		mbox_free_channel(priv->tx_ch);
-> -	if (!IS_ERR(priv->rx_ch))
-> -		mbox_free_channel(priv->rx_ch);
-> -	if (!IS_ERR(priv->rxdb_ch))
-> -		mbox_free_channel(priv->rxdb_ch);
 > -
-> +free_channel_rx:
-> +	mbox_free_channel(priv->rx_ch);
-> +free_channel_tx:
-> +	mbox_free_channel(priv->tx_ch);
->  	return ret;
+> -recovery_error:
+> -	printk(KERN_WARNING "JBD2: recovery failed\n");
+> -	return -EIO;
 >  }
-> 
-> --
+>  
+>  /**
+> -- 
 > 2.40.0
 > 
