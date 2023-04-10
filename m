@@ -2,291 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB266DCDF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD44E6DCE1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjDJXVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S230054AbjDJXa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjDJXVx (ORCPT
+        with ESMTP id S229838AbjDJXau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:21:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701DB2100
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:21:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 10 Apr 2023 19:30:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3E26BB;
+        Mon, 10 Apr 2023 16:30:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1D461FEF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BA4C433EF;
-        Mon, 10 Apr 2023 23:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681168908;
-        bh=oxQX+UqO5Av7KgllwTbzTq9L9gnk5w5BnaS1yJ01Ttg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s8hzaNyI11A/P74F81vBntD+/1EJ2p9wEVprEZtDrRtJezqibBY4JDiXSCxPcru7s
-         1bLHngUL34NRz364m9zNl7eYgLSz2CUx0dkFW9PLhs9VGOjW6KAIbZXWhPyalQEw7v
-         hyh3A4gxfy2EEnWhH7YNeoFPCpJ7KSYHrz861YGBmkJlg39dbjPUuKhAvcVVfOMBU9
-         One5u6dMiDFE5Z5pAIukSEfLt0f+AgLo4y0OMiHgdAZfPPWamm63NsW3xnTVuynGyf
-         /P2O90mh8moyIZWiHe+0hFAqk5lf++EkytkDGhttW1grHd/efh7NQdHwX309sm8K1G
-         VJpWHuRUQKelg==
-Date:   Mon, 10 Apr 2023 16:21:46 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
- foreground garbage collection
-Message-ID: <ZDSaCsLSYLyzUxBQ@google.com>
-References: <20230324071028.336982-1-chao@kernel.org>
- <ZCyZGgf4RSEjyHTF@google.com>
- <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
- <ZC2aA+i5+HpdJ6M2@google.com>
- <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwQFV2GPbz4xGK;
+        Tue, 11 Apr 2023 09:30:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1681169438;
+        bh=eQ323mptkFKVmTqHoJ4N9twQjxrIVz7CEBRJFQnHJQY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ew0fo6VRWyKYAefRtXRU9R/72EXNo1WwR8QX1mRgOyUWf9YxQG8QJvxTEdyg3COif
+         1el9qdXr42Fjy5CH3alGR/Oi2fQZTFhhdleymPo4qNPMMs821rwpKrPbBrKNv5mzwt
+         gRDMNGvgBpMPPmXhAJ11Vt7SJDdfl9RCK0la8B/YxXlvKsocokBbx9LNnY7QsW1183
+         2Lw/Mc0skO/SctMRV0kURphagCLNZXKBqryCd/+Ta0Qjhpvfqbw5c7ITxvaiTwJ6i6
+         1lEBY/2EMrqCkxQlM5sx8HuBmvlVDUY4dvm1GDqR8EKfUXOqWauu5Z7zQkRau2Jxvd
+         Hm8LSBi4c6vxQ==
+Date:   Tue, 11 Apr 2023 09:24:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mediatek tree
+Message-ID: <20230411092412.5a9e20e5@canb.auug.org.au>
+In-Reply-To: <20230403175220.5b946b60@canb.auug.org.au>
+References: <20230403175220.5b946b60@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Ys2kOWQkUtiSP_m96f97eCM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10, Chao Yu wrote:
-> On 2023/4/5 23:55, Jaegeuk Kim wrote:
-> > On 04/05, Chao Yu wrote:
-> > > On 2023/4/5 5:39, Jaegeuk Kim wrote:
-> > > > Can we do like this?
-> > > > 
-> > > >   From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
-> > > > From: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > Date: Tue, 4 Apr 2023 14:36:00 -0700
-> > > > Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
-> > > > 
-> > > > We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
-> > > > sctions in time.
-> > > > 
-> > > > Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
-> > > > Signed-off-by: Chao Yu <chao@kernel.org>
-> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > ---
-> > > >    fs/f2fs/gc.c | 24 +++++++++++-------------
-> > > >    1 file changed, 11 insertions(+), 13 deletions(-)
-> > > > 
-> > > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > > > index 56c53dbe05c9..f1d0dd9c5a6c 100644
-> > > > --- a/fs/f2fs/gc.c
-> > > > +++ b/fs/f2fs/gc.c
-> > > > @@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
-> > > >    	};
-> > > >    	unsigned int skipped_round = 0, round = 0;
-> > > >    	unsigned int upper_secs;
-> > > > +	bool stop_gc = false;
-> > > >    	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
-> > > >    				gc_control->nr_free_secs,
-> > > > @@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
-> > > >    				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
-> > > >    		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
-> > > >    			goto go_gc_more;
-> > > > -		goto stop;
-> > > > -	}
-> > > > -
-> > > > -	/* FG_GC stops GC by skip_count */
-> > > > -	if (gc_type == FG_GC) {
-> > > > +		stop_gc = true;
-> > > 
-> > > I guess below condition is for emergency recycle of prefree segments during
-> > > foreground GC, in order to avoid exhausting free sections due to to many
-> > > metadata allocation during CP.
-> > > 
-> > > 	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
-> > > 				prefree_segments(sbi)) {
-> > > 
-> > > But for common case, free_sections() is close to reserved_segments(), and
-> > > upper_secs + NR_GC_CHECKPOINT_SECS value may be far smaller than free_sections(),
-> > > so checkpoint may not be trggered as expected, IIUC.
-> > > 
-> > > So it's fine to just trigger CP in the end of foreground garbage collection?
-> > 
-> > My major concern is to avoid unnecessary checkpointing given multiple FG_GC
-> > requests were pending in parallel. And, I don't want to add so many combination
-> > which gives so many corner cases, and feel f2fs_gc() needs to call checkpoint
-> > automatically in the worst case scenario only.
-> 
-> Alright.
-> 
-> > 
-> > By the way, do we just need to call checkpoint here including FG_GC as well?
-> 
-> I didn't get it, do you mean?
-> 
-> - f2fs_balance_fs()
->  - f2fs_gc() creates prefree segments but not call checkpoint to reclaim
-> 
-> - f2fs_balance_fs()
->  - f2fs_gc()
->   - detect prefree segments created by last f2fs_balance_fs, then call
-> f2fs_write_checkpoint to reclaim
-> 
-> Or could you please provide a draft patch? :-P
+--Sig_/Ys2kOWQkUtiSP_m96f97eCM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Testing this.
+Hi all,
 
-From ec5f37bbe33110257c04e0ec97a80b0111465b52 Mon Sep 17 00:00:00 2001
-From: Jaegeuk Kim <jaegeuk@kernel.org>
-Date: Mon, 10 Apr 2023 14:48:50 -0700
-Subject: [PATCH] f2fs: refactor f2fs_gc to call checkpoint in urgent condition
+On Mon, 3 Apr 2023 17:52:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the mediatek tree, today's linux-next build (arm64
+> defconfig) failed like this:
+>=20
+> Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
+> FATAL ERROR: Unable to parse input tree
+>=20
+> Maybe caused by commit
+>=20
+>   a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multime=
+dia clocks")
+>=20
+> but I don't know how.
+>=20
+> I have reverted that commit (and the following 2) for today.
 
-The major change is to call checkpoint, if there's not enough space while having
-some prefree segments in FG_GC case.
+Ping?
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/gc.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index c748cdfb0501..0a823d2e8b9d 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1829,7 +1829,10 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 		goto stop;
- 	}
- 
--	if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
-+	/* Let's run FG_GC, if we don't have enough space. */
-+	if (has_not_enough_free_secs(sbi, 0, 0)) {
-+		gc_type = FG_GC;
-+
- 		/*
- 		 * For example, if there are many prefree_segments below given
- 		 * threshold, we can make them free by checkpoint. Then, we
-@@ -1840,8 +1843,6 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 			if (ret)
- 				goto stop;
- 		}
--		if (has_not_enough_free_secs(sbi, 0, 0))
--			gc_type = FG_GC;
- 	}
- 
- 	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
-@@ -1868,19 +1869,14 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
- 		sec_freed++;
- 
--	if (gc_type == FG_GC)
-+	if (gc_type == FG_GC) {
- 		sbi->cur_victim_sec = NULL_SEGNO;
- 
--	if (gc_control->init_gc_type == FG_GC ||
--	    !has_not_enough_free_secs(sbi,
--				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
--		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
--			goto go_gc_more;
--		goto stop;
--	}
--
--	/* FG_GC stops GC by skip_count */
--	if (gc_type == FG_GC) {
-+		if (!has_not_enough_free_secs(sbi, sec_freed, 0)) {
-+			if (sec_freed < gc_control->nr_free_secs)
-+				goto go_gc_more;
-+			goto stop;
-+		}
- 		if (sbi->skipped_gc_rwsem)
- 			skipped_round++;
- 		round++;
-@@ -1889,6 +1885,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 			ret = f2fs_write_checkpoint(sbi, &cpc);
- 			goto stop;
- 		}
-+	} else if (!has_not_enough_free_secs(sbi, 0, 0)) {
-+		goto stop;
- 	}
- 
- 	__get_secs_required(sbi, NULL, &upper_secs, NULL);
--- 
-2.40.0.577.gac1e443424-goog
+--Sig_/Ys2kOWQkUtiSP_m96f97eCM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> Thanks,
-> 
-> > 
-> > 1832
-> > 1833         if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
-> > 1834                 /*
-> > 1835                  * For example, if there are many prefree_segments below given
-> > 1836                  * threshold, we can make them free by checkpoint. Then, we
-> > 1837                  * secure free segments which doesn't need fggc any more.
-> > 1838                  */
-> > 1839                 if (prefree_segments(sbi)) {
-> > 1840                         ret = f2fs_write_checkpoint(sbi, &cpc);
-> > 1841                         if (ret)
-> > 1842                                 goto stop;
-> > 1843                 }
-> > 1844                 if (has_not_enough_free_secs(sbi, 0, 0))
-> > 1845                         gc_type = FG_GC;
-> > 1846         }
-> > 
-> > > 
-> > > One other concern is for those path as below:
-> > > - disable_checkpoint
-> > > - ioc_gc
-> > > - ioc_gc_range
-> > > - ioc_resize
-> > > ...
-> > 
-> > I think the upper caller should decide to call checkpoint, if they want to
-> > reclaim the prefree likewise f2fs_disable_checkpoint.
-> > 
-> > > 
-> > > We've passed gc_type as FG_GC, but the demand here is to migrate block in time,
-> > > rather than dirtying blocks, and callers don't expect checkpoint in f2fs_gc(),
-> > > instead the callers will do the checkpoit as it needs.
-> > > 
-> > > That means it's better to decouple FG_GC and write_checkpoint behavior, so I
-> > > added another parameter .reclaim_space to just let f2fs_balance_fs() to trigger
-> > > checkpoit in the end of f2fs_gc().
-> > 
-> > > 
-> > > Thanks,
-> > > 
-> > > > +	} else if (gc_type == FG_GC) {
-> > > > +		/* FG_GC stops GC by skip_count */
-> > > >    		if (sbi->skipped_gc_rwsem)
-> > > >    			skipped_round++;
-> > > >    		round++;
-> > > >    		if (skipped_round > MAX_SKIP_GC_COUNT &&
-> > > > -				skipped_round * 2 >= round) {
-> > > > -			ret = f2fs_write_checkpoint(sbi, &cpc);
-> > > > -			goto stop;
-> > > > -		}
-> > > > +				skipped_round * 2 >= round)
-> > > > +			stop_gc = true;
-> > > >    	}
-> > > >    	__get_secs_required(sbi, NULL, &upper_secs, NULL);
-> > > > @@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
-> > > >    				prefree_segments(sbi)) {
-> > > >    		ret = f2fs_write_checkpoint(sbi, &cpc);
-> > > >    		if (ret)
-> > > > -			goto stop;
-> > > > +			stop_gc = true;
-> > > >    	}
-> > > >    go_gc_more:
-> > > > -	segno = NULL_SEGNO;
-> > > > -	goto gc_more;
-> > > > -
-> > > > +	if (!stop_gc) {
-> > > > +		segno = NULL_SEGNO;
-> > > > +		goto gc_more;
-> > > > +	}
-> > > >    stop:
-> > > >    	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
-> > > >    	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ0mpwACgkQAVBC80lX
+0GyZtAf/RNDD4gSTNwW778o05h6XJn7z8xHdHW1LB9H1kemjMBCsM8N0BhYr9B5K
+Yvwg6pnLmOuvLPQsXWXh7p7C2lwIt9SUnsY9Go+wv5aWoU4y3hf+5BKtPxQCV1od
+UntAzzTpAieoKUf+vzr1R3QF14fdgPDrwXMKCveKzaX4nSAM1MPcvodp0UjoK5RG
+/2V2ckT6BooFvj6XlV8XhTEil/c8kScPCv5wyaIykbYrLdl+Sb0wK6hAGyPeiFj8
+YpUR06u0pnihY5GCHPDgg45yZbT9N0QE40XE7VMLbKuzZ0vtmiMkUPpxZSAPTxaW
+aFuyEMcv6PPtYTIxrCOz6x4u3VAqdQ==
+=UHQ8
+-----END PGP SIGNATURE-----
+
+--Sig_/Ys2kOWQkUtiSP_m96f97eCM--
