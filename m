@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824786DC3FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ACB6DC401
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjDJHpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 03:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S229822AbjDJHva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 03:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDJHps (ORCPT
+        with ESMTP id S229503AbjDJHv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 03:45:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D183C20;
-        Mon, 10 Apr 2023 00:45:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8025C61187;
-        Mon, 10 Apr 2023 07:45:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ECC2C433EF;
-        Mon, 10 Apr 2023 07:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681112746;
-        bh=t/KY9hnRvPrQKkPlCnL180pm6J2CY1USbVAOaF/2POQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v6OPvVGFJnoAqWMK0YdevoA5VrZN6V7CGXYMj+TXOwhgLqd8Ei0KasbIxwOIIjyCF
-         SyQ4HbELHJyz06RQbJWEO3Z2P2vOmAC6Gegg/OWlOgq55icI0umbUXfERaU9BTe2Bt
-         VKnCPp6g/V7xLjqquZFufYICDeE9iU0S656QP7vQ=
-Date:   Mon, 10 Apr 2023 09:45:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Add kernel config to wrap around
- tcpm logs
-Message-ID: <2023041028-irritate-starless-a42f@gregkh>
-References: <20230410073134.488762-1-badhri@google.com>
+        Mon, 10 Apr 2023 03:51:28 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A63C0A;
+        Mon, 10 Apr 2023 00:51:25 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1plmIR-00EEnN-4P; Mon, 10 Apr 2023 15:50:40 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 10 Apr 2023 15:50:39 +0800
+Date:   Mon, 10 Apr 2023 15:50:39 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 4/4] crypto: starfive - Add hash and HMAC support
+Message-ID: <ZDO/z++4/TE6AiIz@gondor.apana.org.au>
+References: <20230410073752.39506-1-jiajie.ho@starfivetech.com>
+ <20230410073752.39506-5-jiajie.ho@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230410073134.488762-1-badhri@google.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230410073752.39506-5-jiajie.ho@starfivetech.com>
+X-Spam-Status: No, score=4.3 required=5.0 tests=HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 07:31:34AM +0000, Badhri Jagan Sridharan wrote:
-> This change adds CONFIG_TCPM_LOG_WRAPAROUND which when set allows the
-> logs to be wrapped around. Additionally, when set, does not clear
-> the TCPM logs when dumped.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/Kconfig | 6 ++++++
->  drivers/usb/typec/tcpm/tcpm.c  | 9 +++++++--
->  2 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index e6b88ca4a4b9..4dd2b594dfc9 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -18,6 +18,12 @@ config TYPEC_TCPCI
->  	help
->  	  Type-C Port Controller driver for TCPCI-compliant controller.
->  
-> +config TCPM_LOG_WRAPAROUND
-> +	bool "Enable TCPM log wraparound"
-> +	help
-> +	  When set, wraps around TCPM logs and does not clear the logs when dumped. TCPM logs by
-> +	  default gets cleared when dumped and does not wraparound when full.
+On Mon, Apr 10, 2023 at 03:37:52PM +0800, Jia Jie Ho wrote:
+>
+> +static void starfive_hash_start(void *param)
+> +{
+> +	struct starfive_cryp_ctx *ctx = param;
+> +	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
+> +	struct starfive_cryp_dev *cryp = ctx->cryp;
+> +	union starfive_alg_cr alg_cr;
+> +	union starfive_hash_csr csr;
+> +
+> +	dma_unmap_sg(cryp->dev, rctx->in_sg, rctx->in_sg_len, DMA_TO_DEVICE);
+> +
+> +	alg_cr.v = 0;
+> +	alg_cr.clear = 1;
+> +
+> +	writel(alg_cr.v, cryp->base + STARFIVE_ALG_CR_OFFSET);
+> +
+> +	csr.v = readl(cryp->base + STARFIVE_HASH_SHACSR);
+> +	csr.firstb = 0;
+> +	csr.final = 1;
+> +
+> +	reinit_completion(&cryp->hash_done);
+> +	writel(~STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
+> +	writel(csr.v, cryp->base + STARFIVE_HASH_SHACSR);
+> +}
 
-Kconfig help text needs to be wrapped at the properly width.
+Why are you still using a completion? The callback function should
+invoke the crypto_engine finalize_request call directly.
 
-And you do not provide any hint here as to why this is not the default
-option, or why someone would want this.
+> +static int starfive_hash_xmit(struct starfive_cryp_ctx *ctx)
+> +{
+> +	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
+> +	struct starfive_cryp_dev *cryp = ctx->cryp;
+> +	int ret;
+> +
+> +	rctx->csr.hash.v = 0;
+> +	rctx->csr.hash.reset = 1;
+> +	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
+> +
+> +	if (starfive_hash_wait_busy(ctx))
+> +		return dev_err_probe(cryp->dev, -ETIMEDOUT, "Error resetting engine.\n");
+> +
+> +	rctx->csr.hash.v = 0;
+> +	rctx->csr.hash.mode = ctx->hash_mode & STARFIVE_HASH_MODE_MASK;
+> +	rctx->csr.hash.ie = 1;
+> +
+> +	if (ctx->hash_mode & STARFIVE_HASH_HMAC_FLAGS) {
+> +		ret = starfive_hash_hmac_key(ctx);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		rctx->csr.hash.start = 1;
+> +		rctx->csr.hash.firstb = 1;
+> +		writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
+> +	}
+> +
+> +	ret = starfive_hash_xmit_dma(ctx);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!wait_for_completion_timeout(&cryp->hash_done, msecs_to_jiffies(10000)))
+> +		return dev_err_probe(cryp->dev, -ETIMEDOUT, "Timeout waiting for hash done\n");
 
-So, why is this not just the default operation anyway?  Why would you
-ever want the logs cleared?
+There is no point in waiting for completion.  Just return 0 and
+you're done.
 
-thanks,
-
-greg k-h
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
