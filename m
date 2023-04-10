@@ -2,171 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB6C6DC38D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9099C6DC396
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjDJGdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 02:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S229695AbjDJGfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 02:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDJGdu (ORCPT
+        with ESMTP id S229679AbjDJGfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 02:33:50 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2070.outbound.protection.outlook.com [40.107.96.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C8540E0;
-        Sun,  9 Apr 2023 23:33:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FGKbZ3zcObUHKKDGb9Xw5baj40CrB9/3gS/gH70dzyl3QNmCA7Ff8qfuTXDqdBfGH+8Ok6GYL4RPy5uLBficISV/61icgTnP8TkBtANmgePlOhp3KJQmrgog4M0HP6OLI/oWCCn13sajv2aqieBS9BOqJZeFRxMixRXjlA5pkJNvHYCWh5hC0+Y0Ssd7Up2+TQyOhrBispW5sIqUAVxnOlDkKT0Cw3FEpwIbqt/kOS1BT8TfyUgyZKayhHZBM94yTWHl3ywklCZqQjr9X+uZVeMIygTQNDLwKadSzuSRhdMlFpWpNPVGhEoS4zq41cSB5Pyknc6W8WbvJGLdb/4L/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=to62dQV35H0chhqVGmVPXiRxbvSli/Hnh+xMgdny3tI=;
- b=UVpRqcEoA9uBMreQirH64irIhmX1QNGCGhUx/qBWBeuXQL1XfrvL3OJ+R5Gh+KS5/Hq+oqa41k3ZwK/qTu1J+pzhRjq4qVS1Rr9FKL4sVG11TeKUBeVE1aGADEcpCuU/hl0IROFG7E3GJ6d8JBj2Cusgki5P9SyimQhxFj6Tcu7+eObK/ZFrwVmAbzfD57EcOdiL3mlfVJuxC2WjIVsJxkeNqK5tDPLr6e/8/YO7iY9u687IbmKpD99Fx6H+a/AzDMsblZergiGufXAz/9K/UH1PIPDPLBbN88Sg2LMrNuZAbr3kVbHZqg6bGhJRkUtB2k+Ca+G1lDyx242lxG0/+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=to62dQV35H0chhqVGmVPXiRxbvSli/Hnh+xMgdny3tI=;
- b=QQxL1zisCpyNrLsE4GI4cU6Vrc8V+L+Cwo6pZs8Xx4HRYN0cN8v1W84pI3Mi5WBYGkPrOHSSO/KZhVzlLneyXceX7MmXy5Syeu1us+GvqreycY7493CK+LCR8atcuvNJ2XM6MUHZAcHB77jvV6rMFFtqWKEGXcQME8TL16PyPUo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com (2603:10b6:208:394::20)
- by CH2PR12MB4086.namprd12.prod.outlook.com (2603:10b6:610:7c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Mon, 10 Apr
- 2023 06:33:45 +0000
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::6fc1:fb89:be1e:b12e]) by BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::6fc1:fb89:be1e:b12e%6]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
- 06:33:45 +0000
-Message-ID: <ba8c6139-66c3-a04b-143d-546f9cbccb70@amd.com>
-Date:   Mon, 10 Apr 2023 12:03:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v4 00/14] sfc: add vDPA support for EF100 devices
-Content-Language: en-US
-To:     Jason Wang <jasowang@redhat.com>, Leon Romanovsky <leon@kernel.org>
-Cc:     Gautam Dawar <gautam.dawar@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-net-drivers@amd.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-References: <20230407081021.30952-1-gautam.dawar@amd.com>
- <20230409091325.GF14869@unreal>
- <CACGkMEur1xkFPxaiVVhnZqHzUdyyqw6a0vw=GHpYKJM7U3cj7Q@mail.gmail.com>
-From:   Gautam Dawar <gdawar@amd.com>
-In-Reply-To: <CACGkMEur1xkFPxaiVVhnZqHzUdyyqw6a0vw=GHpYKJM7U3cj7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0229.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::11) To BL1PR12MB5825.namprd12.prod.outlook.com
- (2603:10b6:208:394::20)
+        Mon, 10 Apr 2023 02:35:31 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9664234
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 23:35:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 90-20020a17090a0fe300b0023b4bcf0727so3653704pjz.0
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 23:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681108520;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pE8Xixo+TICdPiGFAuNSIk6ig9wvTIQUamx/6iLwBic=;
+        b=UiR9ijr24uUbwDKEPpWzHwgXtJ6jitLNom9Elkf8tTrw+wbGgDliQ1/yMnx9xUnm7S
+         MgigofOUl4uR78975dlHVogMpuifE6pz49gq6POOMatwaVGmSXu3KK5WbeRQ5Kc450yg
+         0s+H3hsJ5RN59961UO+p2BpbOozuzhOYuKjo8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681108520;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pE8Xixo+TICdPiGFAuNSIk6ig9wvTIQUamx/6iLwBic=;
+        b=VQ3FKKfn18wlTRkenXUHV8WoJOpefkN/y7LceU/ebD7D1l9efkAo9se2/m9ABSuWRF
+         yZXwJBzMu7muyGRGu26/qZ9Wa/irLR1BRw6ncHKOzB8TZJFHGuBbMDi2Qf8caZNWCZDP
+         9xITx7MwsBnZIAy27Z1z0NJxvozmlVJBM8Nl45cyOLA4UUY4Y+IsoJui5M96OiaJAjzM
+         9Op5vEx9W0XMOkLDkTgulkcnZBSDjjA55VfETbjDLhCaaMlVAD9VWoL5DpOmXv8Y5LcR
+         axBd2nQGW5jM7FU/grc7mIqmYic6hmH3EoLZpcOqFkcsg68Mh/prr8t8xjpkCyn18ptp
+         XFEQ==
+X-Gm-Message-State: AAQBX9ecraqbjpLgxLuGpq1NU0a1zX4jnXBrg660gKE2nkP8slhvS9He
+        lqUxV21tv1k2LXhr5kRc1W9c4Q==
+X-Google-Smtp-Source: AKy350afPKTwGxGfJaH+LV5BlpGrnHlb8vpkh8oaPc8WryPb6mHCeW8eCOi6aaeFJmOoU5FukP1lcw==
+X-Received: by 2002:a17:903:1112:b0:1a3:d4c7:365b with SMTP id n18-20020a170903111200b001a3d4c7365bmr14426768plh.3.1681108519958;
+        Sun, 09 Apr 2023 23:35:19 -0700 (PDT)
+Received: from mstaudt.tok.corp.google.com ([2401:fa00:8f:203:cf15:93f:d468:3104])
+        by smtp.gmail.com with ESMTPSA id jg14-20020a17090326ce00b001a1fe42a141sm6963372plb.115.2023.04.09.23.35.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Apr 2023 23:35:19 -0700 (PDT)
+From:   Max Staudt <mstaudt@chromium.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Max Staudt <mstaudt@chromium.org>
+Subject: [PATCH v1] media: vivid: Add webcam parameter for (un)limited bandwidth
+Date:   Mon, 10 Apr 2023 15:33:56 +0900
+Message-Id: <20230410063356.3894767-1-mstaudt@chromium.org>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5825:EE_|CH2PR12MB4086:EE_
-X-MS-Office365-Filtering-Correlation-Id: ddca1f9f-8dcb-4b2d-15af-08db398d88ae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OQdEIOOZ3tOwtV3ztwP8am5eYwuay20ljDJ/5AXiar7ibFClSR8f3N/cwVGCvquMQuwAyGATFVwGGRFARMGzaZeCI/MMLECUxebmXVPzE++OE5n2h7qUnKV4sSyR5ct4OJG3dscKRDvAnxOwAUrHUrmBIEiJ9hheciypoO41pv8hysYK8ogiIUQW0DnCPIJPEfEEMEkaUtDj/2s7mlIEnFAC6ZVT1Qua3A4u89UWuPuNkQK+xjn8w+rIVNgJmsulMPccNuc7z7OhlyP25W04JKfLKsafCPKd6DpIdn7yJ//QuEKHXC9+fhfksjIGAYkStOTIq/Xo2fTsbt0ZdoiwMVvjnIjK1fOkcOxf+jlAwSswFDwbXCUNqI2FT7EkNgY6uBIrM5hHfxyhCyurqiF8Fhv9jWZScamzg/B0WNQM/clvaNF6u5hrXnqQSkmXQAplKFhXy21BqQN1jXa8moBcDypuAUgoF0r83e/AUYcFTdiOyWq76/8x7NGhznpFqlLqwUraPNTTZZnaBEkzSkBRChwtpapGbihVBlhCYHi6P9vlqJKdIHeAaR90LOCOgViJ7GHCSa/3zqhbOIVEzWFLBjgC2NrpLfYZWQ1r2FUOnpmvy+RuwQIh/2WwmEKUvhOiGTPwm0vJx6Wal/frTQuq7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5825.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199021)(478600001)(316002)(54906003)(110136005)(6512007)(53546011)(6506007)(26005)(186003)(6666004)(6486002)(2906002)(5660300002)(4326008)(66946007)(41300700001)(8936002)(8676002)(7416002)(66476007)(66556008)(38100700002)(31696002)(36756003)(83380400001)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WjZkS2JFb0lZd1hmWUpxeXMrQUVoS3YycGlPSzlmdW42Um54R25odFJrcGNy?=
- =?utf-8?B?ek4yZ3E5MnY5TldIVmIwSFN3WWg0SlI1bmdDSzVPQjRacXRFUFFrVXBySGp6?=
- =?utf-8?B?eTVoZWVsODMwblVqQUtZQlRSbDh5aHNUSWV6S3c5TmtFRTVRSWZQMjhWM1Fo?=
- =?utf-8?B?aEgxTUpVOTVZS1hySkczejh6em1VbGRmM1hUVmZwakdqU2s4SkV3V2VmcGdL?=
- =?utf-8?B?eERVQnNmaVRkUHUyS2NxcHYwMnNGdGJyTTJpS1JLVHNhZzVtY0ZrQkRGYVZa?=
- =?utf-8?B?T3VJSXhoUGp2dzNZUGRMYStrUEVSVlZmZEJFbDdERFJsbmpMTlpPRzVDTk9W?=
- =?utf-8?B?Zkk2U3g2ZGNjTXNaaUo4eG9hc2REYXhFdFgvMG1HMitKbCtBZC82Q2MwSVZ4?=
- =?utf-8?B?K21VcTFNRHZtSHJYRnVieUV6eGJrd0Q4U05QdloxT3pTZjFrTFkrVk5mc3Fs?=
- =?utf-8?B?NlZrOVFUaVdvUHplaXVuWU1UTkJHR1VqWk9ESWF4cnRDRituWU1aRzhJM2tG?=
- =?utf-8?B?WmdxVGRuMkd0Vm5Edmg1YlhOSlZLSlRtSG44dDNWYVIvWDg3R09XZDlhT2tC?=
- =?utf-8?B?SytkS1ozTWxRUGZkdkZKZXRhLyt2Wk1zQWwyVlg2dnFDNk5RUXdLTDFsTzNG?=
- =?utf-8?B?dGtjTnJEMVJCZEQ4d1lxZytNRUViNGlsazdxcHc1YnFyblhQYzl4Q2RNSWpO?=
- =?utf-8?B?cHUzbkphSnZGaDJ5eldGK2RSYkxmaUtCTFNlRjE5dE5ad3BvQ2NkWGdXQWp4?=
- =?utf-8?B?RjRRRFBBNHEwa3k2aWdXbDNSSUErdlVEbXYwM1FscVBaeVhvZ09YVytxSVNR?=
- =?utf-8?B?b0F3d2ZkTmN1QWk4VXhzNitkK1FqU2lpcHcyc0kzbW9hTzNCbmxnbG1abGxQ?=
- =?utf-8?B?OHpDSEhMNnRhS2dyNUtaSE1zVDg0TWoweHVCMUNyV1BQb3AzRVI3RGE2T2VL?=
- =?utf-8?B?ZE9iU0ZkZUtYZStKTlF6RjFsZDJDdDVYTGVvYUcwVVB0NDZTWWltYjFQc1E3?=
- =?utf-8?B?RDFReFJBNHFCVXVLTXY5TEtSSlRwWTN5SUpTOEk0eW5ESlZNZHR1OVlEWHAz?=
- =?utf-8?B?UXNnMWNCV2Nmc0RCaW1EZE05MHBMSXhHeWRBSjRCbFRYMDdRNENhWEpFaTBt?=
- =?utf-8?B?cW43Q2x1TDZld0piM3pyd3ZUdkpBMGR6UzViU24rcCtORGh0Qyt2L09CL1R1?=
- =?utf-8?B?cWZleTZNOGFTOXRvZHBDaEF4eklzWDZYWEdBVlU2YTJGTmZPODdCM0dqMDlw?=
- =?utf-8?B?UDNPRGFkRmxrUk1qQVNiRWZYeGlvN0V5NGRqeThveU5Za3IxeXJOSjFMVTZN?=
- =?utf-8?B?SlZvc3RNZXlyb2JLcFl1R1VpQ3BZcGZRd3hCajBQbkZwMDBicHhyQWovL2Jh?=
- =?utf-8?B?UWMzSG9CTTZlRE1DV284SlVYQ2UxQjh3NHlSSDBSQm01V3YrQ3RiUEw5Qlhw?=
- =?utf-8?B?VFlKbGV6SG5sYkZYb2FjQkU0YXc5a29WZ291dkx4aSs0WHduelZmMGJrYW1S?=
- =?utf-8?B?ZXBJTnR5MXpnWWU2QnNnZlRUcncxRWZubm5jZ3Z6OFFXZFVObXlUdWM3TTRs?=
- =?utf-8?B?YlBic2w4eHlVT2VUNVJ1cWtPbVJWeVdVWVJWa0FxQVpMUmJacW0wbFJLTkY2?=
- =?utf-8?B?K01WODJxL3hiU0FJVVRZY1pUV0VGek1mMWRlUGNRV0ZTbmxXajZLQ3pvMkdt?=
- =?utf-8?B?WXlXQ0crb3gwMkZvbDBaL09DQVkwNVZGdHhML3ZtSDdRU3ExZXY2L3JDSW1q?=
- =?utf-8?B?QXhyU1MwSmRFRnkrRTRPYlpUUnhOVzEydStFSEJNYlZwQnFWWVlGRkd0ZHpX?=
- =?utf-8?B?ZERYeFpqcDh1TnZ2bHFuWTc0WW4yU05kdU51U3hPL0h1RUEwNlJzMVd0WUZq?=
- =?utf-8?B?aTVERWNmbUNTSWkvVjB4WDVmY3M3Z01NUGNOL3dUS0tGbGNZM1NLSVhScUo3?=
- =?utf-8?B?RHlHazdsOUVtaGRZb0pJL3F5ZytGZmplaUhTRjk1N1dhUVpWQlVyY2p6ODI2?=
- =?utf-8?B?Yi9HOXM0aGsvbE9BNUF0S0xWV1MvRUFrZjVDYzczbmZNOEN5eWEzREFSTlUy?=
- =?utf-8?B?MjNUcllGditRdnRPTFZoR2piSjRvZ2lyYjV6MkkxdEJpbXJOVGJEdmJzM0Ux?=
- =?utf-8?Q?qclwAYJccm13BaWw1pvQtvCEv?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddca1f9f-8dcb-4b2d-15af-08db398d88ae
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5825.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 06:33:45.3065
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VRn4EoGzk5eZyNYpisOD5T3VnJqObJwXZSpdsybE2FKm84vw9q2D/yyCg0KhE1Yb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4086
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This adds an option for higher frame rates from a simulated webcam.
 
-On 4/10/23 07:09, Jason Wang wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->
->
-> On Sun, Apr 9, 2023 at 5:13 PM Leon Romanovsky <leon@kernel.org> wrote:
->> On Fri, Apr 07, 2023 at 01:40:01PM +0530, Gautam Dawar wrote:
->>> Hi All,
->>>
->>> This series adds the vdpa support for EF100 devices.
->>> For now, only a network class of vdpa device is supported and
->>> they can be created only on a VF. Each EF100 VF can have one
->>> of the three function personalities (EF100, vDPA & None) at
->>> any time with EF100 being the default. A VF's function personality
->>> is changed to vDPA while creating the vdpa device using vdpa tool.
->> Jakub,
->>
->> I wonder if it is not different approach to something that other drivers
->> already do with devlink enable knobs (DEVLINK_PARAM_GENERIC_ID_ENABLE_*)
->> and auxiliary bus.
-> I think the auxiliary bus fits here, and I've proposed to use that in
-> V2 of this series.
+Currently, vivid emulates (amongst other things) a webcam with somewhat
+limited bandwidth - higher resolutions deliver fewer frames per second:
 
-Yeah, right and you mentioned that are fine with it if this is done 
-sometime in future to which Martin responded saying the auxbus approach 
-will be considered when re-designing sfc driver for the upcoming 
-projects on the roadmap.
+$ yavta --enum-formats -c /dev/video0
+Device /dev/video0 opened.
+Device `vivid' on `platform:vivid-000' (driver 'vivid') supports video, capture, without mplanes.
+- Available formats:
+	Format 0: YUYV (56595559)
+	Type: Video capture (1)
+	Name: YUYV 4:2:2
+	Frame size: 320x180 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 640x360 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40)
+	Frame size: 640x480 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25)
+	Frame size: 1280x720 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25)
+	Frame size: 1920x1080 (1/1, 1/2, 1/4, 1/5)
+	Frame size: 3840x2160 (1/1, 1/2)
 
-Gautam
+In some test cases, it is useful to allow for higher frame rates, as
+configurations such as 720p@30 FPS have become commonplace now.
 
->
-> Thanks
->
->> Thanks
->>
+With `webcam_bandwidth_limit=0` we get more options:
+
+$ yavta --enum-formats -c /dev/video0
+Device /dev/video0 opened.
+Device `vivid' on `platform:vivid-000' (driver 'vivid') supports video, capture, without mplanes.
+- Available formats:
+	Format 0: YUYV (56595559)
+	Type: Video capture (1)
+	Name: YUYV 4:2:2
+	Frame size: 320x180 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 640x360 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 640x480 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 1280x720 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 1920x1080 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+	Frame size: 3840x2160 (1/1, 1/2, 1/4, 1/5, 1/10, 2/25, 1/15, 1/25, 1/30, 1/40, 1/50, 1/60)
+
+Passes v4l2-compliance 1.25.0-5039 from v4l-utils git ccc08732823f
+
+Signed-off-by: Max Staudt <mstaudt@chromium.org>
+---
+ Documentation/admin-guide/media/vivid.rst     | 25 +++++++++++++++++++
+ drivers/media/test-drivers/vivid/vivid-core.c |  8 ++++++
+ drivers/media/test-drivers/vivid/vivid-core.h |  1 +
+ .../media/test-drivers/vivid/vivid-vid-cap.c  | 18 ++++++++++---
+ 4 files changed, 48 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/admin-guide/media/vivid.rst b/Documentation/admin-guide/media/vivid.rst
+index 58ac25b2c385..e65067550efc 100644
+--- a/Documentation/admin-guide/media/vivid.rst
++++ b/Documentation/admin-guide/media/vivid.rst
+@@ -110,6 +110,28 @@ all configurable using the following module options:
+ 
+ 		num_inputs=8 input_types=0xffa9
+ 
++- webcam_bandwidth_limit:
++
++	whether a simulated webcam offers fewer frames per second for higher
++	resolutions. This only affects webcam inputs as selected in input_types
++	and is ignored for all other inputs. It affects all webcam inputs of
++	a vivid instance.
++
++		- 0: All predefined frame intervals available for all
++		     predefined resolutions
++		- 1: Simulate limited bandwidth by removing two FPS rates
++		     for each step up in resolution
++
++	The default is for all webcams to cap their FPS at high resolutions.
++	This maintains the behaviour known from earlier versions of vivid.
++
++	To enable all frame rates across all resolutions on webcam inputs, load
++	vivid with this option set to 0:
++
++	.. code-block:: none
++
++		webcam_bandwidth_limit=0
++
+ - num_outputs:
+ 
+ 	the number of outputs, one for each instance. By default 2 outputs
+@@ -336,6 +358,9 @@ supports frames per second settings of 10, 15, 25, 30, 50 and 60 fps. Which ones
+ are available depends on the chosen framesize: the larger the framesize, the
+ lower the maximum frames per second.
+ 
++The FPS limit for higher resolutions can be disabled by passing the
++`webcam_bandwidth_limit=0` parameter.
++
+ The initially selected colorspace when you switch to the webcam input will be
+ sRGB.
+ 
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
+index f28440e6c9f8..720ffe470709 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.c
++++ b/drivers/media/test-drivers/vivid/vivid-core.c
+@@ -143,6 +143,11 @@ MODULE_PARM_DESC(input_types, " input types, default is 0xe4. Two bits per input
+ 			      "\t\t    bits 0-1 == input 0, bits 31-30 == input 15.\n"
+ 			      "\t\t    Type 0 == webcam, 1 == TV, 2 == S-Video, 3 == HDMI");
+ 
++/* Default: limited webcam bandwidth */
++static bool webcam_bandwidth_limit[VIVID_MAX_DEVS] = { [0 ... (VIVID_MAX_DEVS - 1)] = true };
++module_param_array(webcam_bandwidth_limit, bool, NULL, 0444);
++MODULE_PARM_DESC(webcam_bandwidth_limit, " for webcam inputs, cap FPS at higher frame sizes (default: true).");
++
+ /* Default: 2 outputs */
+ static unsigned num_outputs[VIVID_MAX_DEVS] = { [0 ... (VIVID_MAX_DEVS - 1)] = 2 };
+ module_param_array(num_outputs, uint, NULL, 0444);
+@@ -940,6 +945,9 @@ static int vivid_detect_feature_set(struct vivid_dev *dev, int inst,
+ 	v4l2_info(&dev->v4l2_dev, "using %splanar format API\n",
+ 			dev->multiplanar ? "multi" : "single ");
+ 
++	/* Are "webcam" type inputs of this instance rate limited? */
++	dev->webcam_bandwidth_limit = webcam_bandwidth_limit[inst];
++
+ 	/* how many inputs do we have and of what type? */
+ 	dev->num_inputs = num_inputs[inst];
+ 	if (node_type & 0x20007) {
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
+index 473f3598db5a..aa38988384e4 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.h
++++ b/drivers/media/test-drivers/vivid/vivid-core.h
+@@ -186,6 +186,7 @@ struct vivid_dev {
+ 	unsigned int			num_hdmi_outputs;
+ 	u8				output_type[MAX_OUTPUTS];
+ 	u8				output_name_counter[MAX_OUTPUTS];
++	bool				webcam_bandwidth_limit;
+ 	bool				has_audio_inputs;
+ 	bool				has_audio_outputs;
+ 	bool				has_vid_cap;
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index c0999581c599..347c51f36386 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -79,6 +79,14 @@ static const struct v4l2_fract webcam_intervals[VIVID_WEBCAM_IVALS] = {
+ 	{  1, 60 },
+ };
+ 
++static inline unsigned webcam_ival_count(const struct vivid_dev *dev,
++					 unsigned frmsize_idx)
++{
++	return dev->webcam_bandwidth_limit ?
++		2 * (VIVID_WEBCAM_SIZES - frmsize_idx) :
++		2 * (VIVID_WEBCAM_SIZES);
++}
++
+ static int vid_cap_queue_setup(struct vb2_queue *vq,
+ 		       unsigned *nbuffers, unsigned *nplanes,
+ 		       unsigned sizes[], struct device *alloc_devs[])
+@@ -773,14 +781,16 @@ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
+ 			compose->height /= factor;
+ 		}
+ 	} else if (vivid_is_webcam(dev)) {
++		unsigned ival_sz = webcam_ival_count(dev, dev->webcam_size_idx);
++
+ 		/* Guaranteed to be a match */
+ 		for (i = 0; i < ARRAY_SIZE(webcam_sizes); i++)
+ 			if (webcam_sizes[i].width == mp->width &&
+ 					webcam_sizes[i].height == mp->height)
+ 				break;
+ 		dev->webcam_size_idx = i;
+-		if (dev->webcam_ival_idx >= 2 * (VIVID_WEBCAM_SIZES - i))
+-			dev->webcam_ival_idx = 2 * (VIVID_WEBCAM_SIZES - i) - 1;
++		if (dev->webcam_ival_idx >= ival_sz)
++			dev->webcam_ival_idx = ival_sz - 1;
+ 		vivid_update_format_cap(dev, false);
+ 	} else {
+ 		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
+@@ -1908,7 +1918,7 @@ int vidioc_enum_frameintervals(struct file *file, void *priv,
+ 			break;
+ 	if (i == ARRAY_SIZE(webcam_sizes))
+ 		return -EINVAL;
+-	if (fival->index >= 2 * (VIVID_WEBCAM_SIZES - i))
++	if (fival->index >= webcam_ival_count(dev, i))
+ 		return -EINVAL;
+ 	fival->type = V4L2_FRMIVAL_TYPE_DISCRETE;
+ 	fival->discrete = webcam_intervals[fival->index];
+@@ -1935,7 +1945,7 @@ int vivid_vid_cap_s_parm(struct file *file, void *priv,
+ 			  struct v4l2_streamparm *parm)
+ {
+ 	struct vivid_dev *dev = video_drvdata(file);
+-	unsigned ival_sz = 2 * (VIVID_WEBCAM_SIZES - dev->webcam_size_idx);
++	unsigned ival_sz = webcam_ival_count(dev, dev->webcam_size_idx);
+ 	struct v4l2_fract tpf;
+ 	unsigned i;
+ 
+-- 
+2.40.0.577.gac1e443424-goog
+
