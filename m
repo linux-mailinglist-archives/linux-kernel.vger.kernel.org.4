@@ -2,139 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903F26DC7BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4D66DC7C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjDJOQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S229718AbjDJOSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDJOQi (ORCPT
+        with ESMTP id S229603AbjDJOSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:16:38 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883A8199E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1681136192; bh=JFxIGato1Hvx8g9xV9cO3IPTvj8x3ok57KNjAO1cBMU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=flfjmvOgDlm6XfvrXM/Rc73uluo1Ja5YN2jPl5HPGCSA7LhEe832Hz/sa+6H0+dA/
-         wy/FyYdvpMcMK9gct0oClYwhbqiX8HY7qFhXPtfjvRpoPkhhxZVZ7GItMX3k3/pBf6
-         sXaI8KuNqyxRZpehkw9iGpsMjZp4V+uTgm6q6tNU=
-Received: from [100.100.33.167] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0BD26600AE;
-        Mon, 10 Apr 2023 22:16:32 +0800 (CST)
-Message-ID: <01dcb3b6-efdb-af17-93a5-f6288b3f816d@xen0n.name>
-Date:   Mon, 10 Apr 2023 22:16:31 +0800
+        Mon, 10 Apr 2023 10:18:45 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753E5213C;
+        Mon, 10 Apr 2023 07:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1681136324; x=1712672324;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=i+S/sDMXP9J94sRN9gjxGcSuFRzKplRBtZn53LQ1X8o=;
+  b=L5q0K+YmTkCVAcIVOtlFdmrdi6Gf+cgVragl0cP7eIihGjuVuf2mvaYp
+   Tv87h0EUPUlFZC+bFa+3T5kImYNcmUFbryLpux6M3929j28spHe7u1TIb
+   lBXFW/A/tffo7gnRJ0wEe1jFkfR+PKpIVZ5n3iOCtcuncdtJNMGrghAO6
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.98,333,1673913600"; 
+   d="scan'208";a="312348347"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 14:18:41 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id 0EA6060A8C;
+        Mon, 10 Apr 2023 14:18:39 +0000 (UTC)
+Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Mon, 10 Apr 2023 14:18:39 +0000
+Received: from b0f1d8753182.ant.amazon.com.com (10.106.82.21) by
+ EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 10 Apr 2023 14:18:35 +0000
+From:   Takahiro Itazuri <itazur@amazon.com>
+To:     <kvm@vger.kernel.org>
+CC:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        Takahiro Itazuri <zulinx86@gmail.com>,
+        Takahiro Itazuri <itazur@amazon.com>
+Subject: [PATCH] kvm: x86: Update KVM_GET_CPUID2 to return valid entry count
+Date:   Mon, 10 Apr 2023 15:18:20 +0100
+Message-ID: <20230410141820.57328-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [RFC PATCH 2/3] LoongArch: Add larch_insn_gen_break() to generate
- break insn
-Content-Language: en-US
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <1680833701-1727-1-git-send-email-yangtiezhu@loongson.cn>
- <1680833701-1727-3-git-send-email-yangtiezhu@loongson.cn>
- <0d309725-3b91-6902-de67-08bda48ccf57@loongson.cn>
- <ab4f20ff-6aeb-f343-c4dc-24c46919176c@xen0n.name>
- <9433a12a-b24b-4438-fdc8-0213522c71ba@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <9433a12a-b24b-4438-fdc8-0213522c71ba@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.106.82.21]
+X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
+ EX19D002ANA003.ant.amazon.com (10.37.240.141)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/7 20:02, Tiezhu Yang wrote:
-> 
-> 
-> On 04/07/2023 05:51 PM, WANG Xuerui wrote:
->> On 2023/4/7 10:30, Youling Tang wrote:
->>> /* snip */
->>>
->>>> diff --git a/arch/loongarch/kernel/kprobes.c
->>>> b/arch/loongarch/kernel/kprobes.c
->>>> index 08c78d2..a5c3712 100644
->>>> --- a/arch/loongarch/kernel/kprobes.c
->>>> +++ b/arch/loongarch/kernel/kprobes.c
->>>> @@ -4,19 +4,8 @@
->>>>  #include <linux/preempt.h>
->>>>  #include <asm/break.h>
->>>>
->>>> -static const union loongarch_instruction breakpoint_insn = {
->>>> -    .reg0i15_format = {
->>>> -        .opcode = break_op,
->>>> -        .immediate = BRK_KPROBE_BP,
->>>> -    }
->>>> -};
->>>> -
->>>> -static const union loongarch_instruction singlestep_insn = {
->>>> -    .reg0i15_format = {
->>>> -        .opcode = break_op,
->>>> -        .immediate = BRK_KPROBE_SSTEPBP,
->>>> -    }
->>>> -};
->>>> +#define breakpoint_insn larch_insn_gen_break(BRK_KPROBE_BP)
->>>> +#define singlestep_insn larch_insn_gen_break(BRK_KPROBE_SSTEPBP)
->>>
->>> IMO, Defined as KPROBE_BP_INSN, KPROBE_SSTEPBP_INSN may be better.
->>
->> Are you suggesting to hardcode the instruction words for those two BREAK
->> flavors?
-> 
-> I think what Youling said is:
-> 
-> #define KPROBE_BP_INSN         larch_insn_gen_break(BRK_KPROBE_BP)
-> #define KPROBE_SSTEPBP_INSN    larch_insn_gen_break(BRK_KPROBE_SSTEPBP)
-> 
->> I don't think it's better because even more structured info is
->> lost, and the compiler would generate the same code (if not, it's the
->> compiler that's to be fixed).
->>
->> Actually, I don't know why this commit was necessary in the first place.
->> For the very least, it consisted of two logical changes (pass around
->> instruction words instead of unions; and change the BREAK insns to make
->> them words) that should get split;
-> 
-> Yes, thanks for your suggestion, I will split it into two patches
-> in the next version.
-> 
->> but again, the generated code should
->> be identical anyway, so it seems a lot of churn for no benefit and
->> reduced readability.
->>
-> 
-> Define and use larch_insn_gen_break() is to avoid hardcoding the
-> uprobe break instruction in patch #3.
-> 
-> We do not like the following definitions:
-> 
-> #define UPROBE_SWBP_INSN    0x002a000c
-> #define UPROBE_XOLBP_INSN    0x002a000d
-> 
-> Using larch_insn_gen_break() seems better:
-> 
-> #define UPROBE_SWBP_INSN    larch_insn_gen_break(BRK_UPROBE_BP)
-> #define UPROBE_XOLBP_INSN    larch_insn_gen_break(BRK_UPROBE_XOLBP)
+Modify the KVM_GET_CPUID2 API to return the number of valid entries in
+nent field of kvm_cpuid2, even when the API is successful.
 
-Sorry, I meant *not* ditching the union-typed parameters. IMO they 
-should behave the same codegen-wise (i.e. unchanged performance), and 
-have the benefit of being clearly typed unlike plain u32's.
+Previously, the KVM_GET_CPUID2 API only updated the nent field when an
+error was returned. If the API was called with an entry count larger
+than necessary (e.g., KVM_MAX_CPUID_ENTRIES), it would succeed, but the
+nent field would continue to show a value larger than the actual number
+of entries filled by the KVM_GET_CPUID2 API. With this change, users can
+rely on the updated nent field and there is no need to traverse
+unnecessary entries and check whether an entry is valid or not.
 
+Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+---
+ arch/x86/kvm/cpuid.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 599aebec2d52..31838dfddda6 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -523,10 +523,13 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
+ 			      struct kvm_cpuid2 *cpuid,
+ 			      struct kvm_cpuid_entry2 __user *entries)
+ {
+-	int r;
++	int nent, r;
++
++	nent = cpuid->nent;
++	cpuid->nent = vcpu->arch.cpuid_nent;
+ 
+ 	r = -E2BIG;
+-	if (cpuid->nent < vcpu->arch.cpuid_nent)
++	if (nent < vcpu->arch.cpuid_nent)
+ 		goto out;
+ 	r = -EFAULT;
+ 	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
+@@ -535,7 +538,6 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
+ 	return 0;
+ 
+ out:
+-	cpuid->nent = vcpu->arch.cpuid_nent;
+ 	return r;
+ }
+ 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.39.2
 
