@@ -2,177 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64FD6DCA8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519A86DCA91
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjDJSL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S230463AbjDJSO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjDJSLz (ORCPT
+        with ESMTP id S230450AbjDJSOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:11:55 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2133.outbound.protection.outlook.com [40.107.244.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0184CF;
-        Mon, 10 Apr 2023 11:11:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MPfPJHnMqCpH5Mt7YMKtzbG4XTlhzeIBnV/hNpnNy2dzA3HTkAmYe9Y/IKhwTnxK6LXh6gyG+1N8b0Se2yNF8+bOKUOSbaDwti3wqYJFy9ilp0IsliYTV7cTIUmIsbU3SuJyh2gPlvX26NeCbOZWAX9Dn7HKqqKRAioBdaTK+OVdI/DrlldobLQ8gg6j4HRLrZP3dX1cB8ClIQhqZ31nL+kciEQon18QoOz5Aftq1ogUPKdkWe7cjdZ2z5Wjjn8Xknxj2Ni559fzMn+m5XwaijSHw6D8nUoTokXeOqya/YluuLwhlEXrp02/HZlB7tn0XM5B0aFhebYVTOQ7hli0Vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jtf2oEJwma+VI/kKwviJh8GilpjhJ6r2XtBRw/xhcaw=;
- b=hwzu2sdGnUaISlhrq/IMZGAZ7HiizXP7cWoPQ1LSOnsQ+Q44m83t7hLIWu3Y84EpKOsnY+Ye5mD4muBmzBfI6q4z/TTGwQSOp/LQEszZMnrjSL3ZXgk4qj4Aa6V5eqmW8M+Xg77vdWcqfqFUFI5P4Si8vWmdYkPgehhQaNxJxitzgvUU3dwNT+X2YXHVsRxsuN0TQFTLV8pJk8TpFILMe0GSQ/Imb1kUiWQ6ZiVfjteTX7Bik/90RF9gd7183Zx9yLZdrN3ElB3HtTo8DuqHPMSVjX5l9RKq/u10ZKpuxIQBRj3BfnUFh9X1UhKzwXtkTNKtWkKL453ucedCgh+0cQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 10 Apr 2023 14:14:23 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DEB1BF8;
+        Mon, 10 Apr 2023 11:14:21 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id cj22so6408911qtb.3;
+        Mon, 10 Apr 2023 11:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jtf2oEJwma+VI/kKwviJh8GilpjhJ6r2XtBRw/xhcaw=;
- b=F9noO4f6+Bt0vZVJ57E5bb7PTDqLxjmv27KGLDQ8iatu7qdle+74KwvBeyS97N4n8dQwDxSQhNaboVwoSm4+p5bwSAwK85lXEtT2YJdgRevlBlPKif9MK3R6SeITB2wPW4pcVE3mk+dJXtBkdeHKgGZsArNBWksJ/eP/+/R17Gg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL3PR13MB5226.namprd13.prod.outlook.com (2603:10b6:208:345::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 18:11:53 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::89d1:63f2:2ed4:9169]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::89d1:63f2:2ed4:9169%5]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
- 18:11:53 +0000
-Date:   Mon, 10 Apr 2023 20:11:44 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     "Song, Yoong Siang" <yoong.siang.song@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>
-Subject: Re: [PATCH net-next 3/4] net: stmmac: add Rx HWTS metadata to XDP
- receive pkt
-Message-ID: <ZDRRYCoKxEsNIJ75@corigine.com>
-References: <20230410100939.331833-1-yoong.siang.song@intel.com>
- <20230410100939.331833-4-yoong.siang.song@intel.com>
- <ZDQZeSe5OaFlNKso@corigine.com>
- <PH0PR11MB58304A6BD97AB6DEA58067D5D8959@PH0PR11MB5830.namprd11.prod.outlook.com>
+        d=gmail.com; s=20210112; t=1681150461; x=1683742461;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WgswBvjvPVN9EODWp24b5y7J/5TVQZ53Ui2VNPSM2t0=;
+        b=f0TzmAHcGI1a8pEJQrld2hDmHAvYpBa13m61ZjIPEQly/FYWTybSgywtTR/zqjepSt
+         UYoG3uynRj9B3jpwCdWLHzB4OZbvqKi3XdjwLpAUipDOgvLj0Gt7hfF5ynIHZaHkMrzN
+         3jEWEIEEMy8BQCl6/w+ckTn9vuGe6e2v18mPmHVbAFUIQ5Qq5c2A7YrH/c3mgYmmWmNT
+         mzoRXAgVBKJX4Beu2k61Ku8rBGmBBaid0bu9wSNhVLhGCyHdnZ5eIP9zqf4JK1+GP+ei
+         lv/fPEWlkAzTRuBIkQFxzpSRXvYTyDsfzWXlvRqLDG32RXWZgOVy5j6UV+6uijLDY9+e
+         hJqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681150461; x=1683742461;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WgswBvjvPVN9EODWp24b5y7J/5TVQZ53Ui2VNPSM2t0=;
+        b=p4xU9D+l+W8Kxb81Hm4JMm/Sdb+qbIRVSzX0qfwCi8GBBBFShT7Bl59yetAuu79xw6
+         T5ZljbmJ/nUhW0HDVGHarwbio2kIVisMbLIy0O4jiGxRa7tHKxtHyTSp5AeZ06abmqDZ
+         rKmW0zgPIbwa6agWHev7DnNqYmycYtJLnqrOl4GpF5qxJdZlBAiU7Uu/P0O+fPSvJuH8
+         NwVkTrXvt6Us01/iWHcS94ZA4YzVZHS8TqnmLlWmcGQR4toHwxAA5AF1NpuRG+0MGY4a
+         qMz2Sw2wNhS/MXHu5Me8A5KqpyoCrrmfj1V9mqOkunVIvZQGAtCi9xKHHEDYvYEFUbIW
+         s9Yg==
+X-Gm-Message-State: AAQBX9cuQx3KNeEqibrjdzvC8Jpiqqk22ztNKHGjaMjvxGPXmh1Mq+/E
+        3jAPCPV+2LBZtcSiv5Cp6o6Gce6Z2SY=
+X-Google-Smtp-Source: AKy350YZyyHC+BdnkNOp6zIPGk3yJVwnPCrViCa3+pGl4na8+pUJHxzlFnAM++4kCrPskpywtjm2Og==
+X-Received: by 2002:a05:622a:1911:b0:3e4:eb8f:8a7b with SMTP id w17-20020a05622a191100b003e4eb8f8a7bmr29881478qtc.29.1681150460718;
+        Mon, 10 Apr 2023 11:14:20 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id dm6-20020a05620a1d4600b00741a984943fsm3416726qkb.40.2023.04.10.11.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 11:14:19 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9B50327C0054;
+        Mon, 10 Apr 2023 14:14:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 10 Apr 2023 14:14:19 -0400
+X-ME-Sender: <xms:-1E0ZCdbnxHA8Taf3Blp99-BaNCIBjbhU8ChWOn4tVGWLsXpI60Uiw>
+    <xme:-1E0ZMP1qM78QT3RoByQiVnjCsOLX8sk5eDz6JfZ9SLZs7wKDPRDjHbPfUYyDqwSK
+    1-i7Aw6LtevxxID1w>
+X-ME-Received: <xmr:-1E0ZDgu4muTxn4OmczjoDlgJGkZkmP871NT4TevBW1qPjoUoD-XQ3E7SNGnMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekvddguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:-1E0ZP9pV5U7jlGq-Wd2Kr0NHcyiDI7uOwUz3T2aHotjLv8596THew>
+    <xmx:-1E0ZOv_yjSRor9QXk3wdu4ClCXAB6-F2D7edAPtQwEkBmgGs_ZhAg>
+    <xmx:-1E0ZGG15hMA-D8-rH4jDMN3DXUN8f683As9ccAa48ZJIEhZgcXIxQ>
+    <xmx:-1E0ZL92lzkEqAm9O2UA-sHKhZyAfN640J7uxFLXTgNrSBY4j5vtdg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Apr 2023 14:14:18 -0400 (EDT)
+Date:   Mon, 10 Apr 2023 11:13:02 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH v3 13/13] rust: sync: introduce `LockedBy`
+Message-ID: <ZDRRrnPZ0cAfEPTW@boqun-archlinux>
+References: <20230408075340.25237-1-wedsonaf@gmail.com>
+ <20230408075340.25237-13-wedsonaf@gmail.com>
+ <ZDRLaDEnrLhQmW+F@boqun-archlinux>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58304A6BD97AB6DEA58067D5D8959@PH0PR11MB5830.namprd11.prod.outlook.com>
-X-ClientProxiedBy: AM0PR02CA0157.eurprd02.prod.outlook.com
- (2603:10a6:20b:28d::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5226:EE_
-X-MS-Office365-Filtering-Correlation-Id: b43dbed3-c695-4020-e3a5-08db39ef0fad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IMB6Q/pjaZH7/BsJlIjqT6bzZ8DMBrq5cBNAC7jdQvPDcCSKYsGHhEYfhmd0785U+BvniNwmsTCl80AFLSM4+PSRi0Epgk5dI3p7Ykf7Y+njsBdnBnJvC/8T66QkAcKvsH9/odJiMH/cKUZLqLVD+0YdaPmACpe+JwwR37JR3emnEltIF0n5nyvL7/vj6I/4M2ZPVC+K6QQFSCu7hKzzsRquPZ9hzNYT3WUW/i10Gjeexi91fkpiM40b7lHdBQk1dcrR/XRPFyUKB2cGKDPWkBRfWM8Wo/n9enfA3BMo8v0GdheXuluaFZvjPu37uinn9qpyaZ9BVpWv5NdikW+soqp+egjjHEYgZn0UsxWRQ0rqXBD7HWAjHJH2Z2REQEG0zLZj2msoXRA/Y4TBI8bd+adDwZpkXQjP0vY8L+1ukdVpE3Ze7NT0OqDgUMb/14WmEVUsrbibsV/mNp6GipJtgw/ZESCN49SLKnZtFOLEOR0YWukk9l+6yQr7EfTCEf527Hii6GdOgbABp/RVaHgUxiMfh0zqNmireGD/GN3Kg0b+kcsc/78kc+nFj6UmEuwJlfH/egQhpUECy06zHTtv7hvN8/OjlEgrJ0jvpCLVQSY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(136003)(39840400004)(346002)(451199021)(478600001)(86362001)(83380400001)(36756003)(38100700002)(2616005)(6486002)(6666004)(2906002)(316002)(6512007)(186003)(54906003)(44832011)(6506007)(7416002)(66476007)(8936002)(8676002)(6916009)(41300700001)(66556008)(5660300002)(66946007)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E0FmmLFkq6ksuy/2VLyboI5W88xxD3Ms1zQzHtz8vPEkODFhA+21gzYg67x9?=
- =?us-ascii?Q?C2G6TKvocfCgE4It7jbRhRrmTWza5bb+jcj9MTew3IPvvEo9pnAtFeCMM9b2?=
- =?us-ascii?Q?uav6Kg8v9THKEDozaC8JQIfAPR/eGrFEbgae8fv18JwUoCr7aYHblIxp/5ds?=
- =?us-ascii?Q?nAh3T5YK87I57ORpvdPOL4IeWPuZPZFr7FI0DhkNfEVjN3ctYib/ef9nICBz?=
- =?us-ascii?Q?ymfu8wCrqyFEGWr7+Bv2UwqFQdogFyJwvIS9++STWKTMVXzn+eDfXcv3gR3T?=
- =?us-ascii?Q?fzGQK2WdeOq57S7lfvIIfB1tJloIJWCuFDsx59ryjUP/MvrGRax1PEUCSNi9?=
- =?us-ascii?Q?7PhURSR5tFe+ethuFtXw6iLLikiWI941WpDD1IkGM2ID56KrNYPcychVaTsz?=
- =?us-ascii?Q?8SndcNOzwro7m3SHC+OR3usu/fOuPn2rsh1rDFMGHaEBhVVLr6CAQSpZ7wBs?=
- =?us-ascii?Q?EHrOkizrVDzJJWGwMdJMu8fuzTvl8rpuuhzyDSv7cZrbUV3FvGhrFZqEyQKV?=
- =?us-ascii?Q?1eIrl+Z8qVOSUA2iLwybEnislAaYVb1r0OLDXC/WwyqfX5bc9y430MfhFsno?=
- =?us-ascii?Q?pCabxxImb/nvsIRy5amJYHYX/6b1lh+ZILXwNi58kLDtJRaFJQq8uNrLYpBU?=
- =?us-ascii?Q?/UVoLS6jn+qL8LSQpC6e0kU2Rg7OR94LPVcxJlH4cckq26QdJOviNAG8LZuG?=
- =?us-ascii?Q?uDLVI9FrqUSk9Syc+zjshvnaxVM7KUJHxPwQBCK3Ewc2uuf9OMTyLbufJ4JO?=
- =?us-ascii?Q?HyQDDlFuTAbPi8mEDjwP3ImQWDscqrSm5neU10Q2Bm2B+FwFr3k3tb3DSLcs?=
- =?us-ascii?Q?l37xuagFFNoKc5iFQUoR49OdjNR/1XxRmskLzSKPe/pMbH9TrnUZ1w+LMxOQ?=
- =?us-ascii?Q?McgSyUG1i9n3fsjlr2uKMz5gIEgjNpVcMRKXBlgHjk708W4ylmCdL7aggGaN?=
- =?us-ascii?Q?2+YQ6Qb6uj+KYazmI+0MQHoFigjeUOKKMd//FzQPuoaB/a4pSVK14nf+m9Nq?=
- =?us-ascii?Q?uGY+86N9eeHX+QiknsEjbOFsxR4bbG5GSmRoVMzero47mmW3FMkbK9AN1D/4?=
- =?us-ascii?Q?zRl2PqHA04jcn8nlNoflfgIdBynhnBRflVL0feY10ILGMxwMUl8r7FRz3IUJ?=
- =?us-ascii?Q?mTd1p2TD6QJQQ3MmcZf1+9NolVUK0P3jvAAcJ/dwKz/bunh84HYl5GBRV8cR?=
- =?us-ascii?Q?rlRopHYWUXn2SWDoJesnXg1EFCi9U9cCAoUFVYSXi5JXbcZ+icA/8eIoIz/q?=
- =?us-ascii?Q?UqbeHG2CJIiCc+R7pjHmM0WTWgNh96vkGy7m3MjgKtt2jPlETyyDtXOtl7Bf?=
- =?us-ascii?Q?1MVTpPxWU0rE6A7hRAf4jGOn35ynpztWR3xljj/cApJfDP4v0WjIYGoTW51B?=
- =?us-ascii?Q?PMld5jSgbCv7mGbVzusnaPtnGnQMxh9xxEW3GwEtaRDXJEnLzVBHfYEriBb/?=
- =?us-ascii?Q?UeKQrVouOxajqGBSXOLXg1DE0MQy5yUZOPC2eir6TwOKDGvw4hX+UUdH+Y3r?=
- =?us-ascii?Q?/INJFiRYjhYfLe1+0gTKAUdgZrUvFhTCZZj+fPQghZybsk7U1MYSTCKIG6VD?=
- =?us-ascii?Q?NZiUOgRlNCDBzME4S8QSXTZdZvOnq3/YkAuzZ0kMxkfY3DDsX1x2eygreTSk?=
- =?us-ascii?Q?0NKV05B/IXOqjp2ROMfrkzSf4AoKK1kmwK4ZBVkRetMdTeyxQFM/O6zJWOzc?=
- =?us-ascii?Q?yyl3/A=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b43dbed3-c695-4020-e3a5-08db39ef0fad
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 18:11:52.8897
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BAjDA69q4PVb0B5vyJqnJ+sKxTgA3Y2x8yttHeDqqMuzZxvX4PEBpmYscDqBjtz8msCr7I/Jz+hA46vPMWQ3CSHa8M4IxfJXNTY16NRXpA0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5226
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZDRLaDEnrLhQmW+F@boqun-archlinux>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 03:33:48PM +0000, Song, Yoong Siang wrote:
-> >On Mon, Apr 10, 2023 at 06:09:38PM +0800, Song Yoong Siang wrote:
-> >> Add receive hardware timestamp metadata support via kfunc to XDP
-> >> receive packets.
-> >>
-> >> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> >
-> >...
-> >
-> >> @@ -7071,6 +7073,22 @@ void stmmac_fpe_handshake(struct stmmac_priv
-> >*priv, bool enable)
-> >>  	}
-> >>  }
-> >>
-> >> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64
-> >> +*timestamp) {
-> >> +	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
-> >> +
-> >> +	if (ctx->rx_hwts) {
-> >> +		*timestamp = ctx->rx_hwts;
-> >> +		return 0;
-> >> +	}
-> >> +
-> >> +	return -ENODATA;
-> >> +}
-> >> +
-> >> +const struct xdp_metadata_ops stmmac_xdp_metadata_ops = {
-> >> +	.xmo_rx_timestamp		= stmmac_xdp_rx_timestamp,
-> >> +};
-> >
-> >sparse seems to think this should be static.
-> >
-> >drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:7082:31: warning: symbol
-> >'stmmac_xdp_metadata_ops' was not declared. Should it be static?
-> Yes, you are right. It should be static. I will add correct it in v2. Thank you.
+On Mon, Apr 10, 2023 at 10:46:16AM -0700, Boqun Feng wrote:
+> On Sat, Apr 08, 2023 at 04:53:40AM -0300, Wedson Almeida Filho wrote:
+> > From: Wedson Almeida Filho <walmeida@microsoft.com>
+> > 
+> > This allows us to have data protected by a lock despite not being
+> > wrapped by it. Access is granted by providing evidence that the lock is
+> > held by the caller.
+> > 
+> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> > ---
+> > v1 -> v2: Added build_assert to rule out zero-sized types
+> > v2 -> v3: Improve comments around panics and support for ZSTs
+> > 
+> >  rust/kernel/sync.rs           |   2 +
+> >  rust/kernel/sync/lock.rs      |   2 +-
+> >  rust/kernel/sync/locked_by.rs | 147 ++++++++++++++++++++++++++++++++++
+> >  3 files changed, 150 insertions(+), 1 deletion(-)
+> >  create mode 100644 rust/kernel/sync/locked_by.rs
+> > 
+> > diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> > index 431402180aa8..d219ee518eff 100644
+> > --- a/rust/kernel/sync.rs
+> > +++ b/rust/kernel/sync.rs
+> > @@ -10,10 +10,12 @@ use crate::types::Opaque;
+> >  mod arc;
+> >  mod condvar;
+> >  pub mod lock;
+> > +mod locked_by;
+> >  
+> >  pub use arc::{Arc, ArcBorrow, UniqueArc};
+> >  pub use condvar::CondVar;
+> >  pub use lock::{mutex::Mutex, spinlock::SpinLock};
+> > +pub use locked_by::LockedBy;
+> >  
+> >  /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
+> >  #[repr(transparent)]
+> > diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+> > index c365bc909dff..84d8d7d01aaa 100644
+> > --- a/rust/kernel/sync/lock.rs
+> > +++ b/rust/kernel/sync/lock.rs
+> > @@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
+> >      _pin: PhantomPinned,
+> >  
+> >      /// The data protected by the lock.
+> > -    data: UnsafeCell<T>,
+> > +    pub(crate) data: UnsafeCell<T>,
+> >  }
+> >  
+> >  // SAFETY: `Lock` can be transferred across thread boundaries iff the data it protects can.
+> > diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.rs
+> > new file mode 100644
+> > index 000000000000..ab0ecb013f54
+> > --- /dev/null
+> > +++ b/rust/kernel/sync/locked_by.rs
+> > @@ -0,0 +1,147 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +//! A wrapper for data protected by a lock that does not wrap it.
+> > +
+> > +use super::{lock::Backend, lock::Lock};
+> > +use core::{cell::UnsafeCell, ptr};
+> > +
+> > +/// Allows access to some data to be serialised by a lock that does not wrap it.
+> > +///
+> > +/// In most cases, data protected by a lock is wrapped by the appropriate lock type, e.g.,
+> > +/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for cases when this is not
+> > +/// possible. For example, if a container has a lock and some data in the contained elements needs
+> > +/// to be protected by the same lock.
+> > +///
+> > +/// [`LockedBy`] wraps the data in lieu of another locking primitive, and only allows access to it
+> > +/// when the caller shows evidence that the 'external' lock is locked. It panics if the evidence
+> > +/// refers to the wrong instance of the lock.
+> > +///
+> > +/// # Examples
+> > +///
+> > +/// The following is an example for illustrative purposes: `InnerDirectory::bytes_used` is an
+> > +/// aggregate of all `InnerFile::bytes_used` and must be kept consistent; so we wrap `InnerFile` in
+> > +/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This allows us to enforce at
+> > +/// compile-time that access to `InnerFile` is only granted when an `InnerDirectory` is also
+> > +/// locked; we enforce at run time that the right `InnerDirectory` is locked.
+> > +///
+> > +/// ```
+> > +/// use kernel::sync::{LockedBy, Mutex};
+> > +///
+> > +/// struct InnerFile {
+> > +///     bytes_used: u64,
+> > +/// }
+> > +///
+> > +/// struct File {
+> > +///     _ino: u32,
+> > +///     inner: LockedBy<InnerFile, InnerDirectory>,
+> > +/// }
+> > +///
+> > +/// struct InnerDirectory {
+> > +///     /// The sum of the bytes used by all files.
+> > +///     bytes_used: u64,
+> > +///     _files: Vec<File>,
+> > +/// }
+> > +///
+> > +/// struct Directory {
+> > +///     _ino: u32,
+> > +///     inner: Mutex<InnerDirectory>,
+> > +/// }
+> > +///
+> > +/// /// Prints `bytes_used` from both the directory and file.
+> > +/// fn print_bytes_used(dir: &Directory, file: &File) {
+> > +///     let guard = dir.inner.lock();
+> > +///     let inner_file = file.inner.access(&guard);
+> > +///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
+> > +/// }
+> > +///
+> > +/// /// Increments `bytes_used` for both the directory and file.
+> > +/// fn inc_bytes_used(dir: &Directory, file: &File) {
+> > +///     let mut guard = dir.inner.lock();
+> > +///     guard.bytes_used += 10;
+> > +///
+> > +///     let file_inner = file.inner.access_mut(&mut guard);
+> > +///     file_inner.bytes_used += 10;
+> > +/// }
+> > +///
+> > +/// /// Creates a new file.
+> > +/// fn new_file(ino: u32, dir: &Directory) -> File {
+> > +///     File {
+> > +///         _ino: ino,
+> > +///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }),
+> > +///     }
+> > +/// }
+> > +/// ```
+> > +pub struct LockedBy<T: ?Sized, U: ?Sized> {
+> > +    owner: *const U,
+> > +    data: UnsafeCell<T>,
+> > +}
+> > +
+> > +// SAFETY: `LockedBy` can be transferred across thread boundaries iff the data it protects can.
+> > +unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
+> > +
+> > +// SAFETY: `LockedBy` serialises the interior mutability it provides, so it is `Sync` as long as the
+> > +// data it protects is `Send`.
+> > +unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
+> > +
+> > +impl<T, U: ?Sized> LockedBy<T, U> {
+> > +    /// Constructs a new instance of [`LockedBy`].
+> > +    ///
+> > +    /// It stores a raw pointer to the owner that is never dereferenced. It is only used to ensure
+> > +    /// that the right owner is being used to access the protected data. If the owner is freed, the
+> > +    /// data becomes inaccessible; if another instance of the owner is allocated *on the same
+> > +    /// memory location*, the data becomes accessible again: none of this affects memory safety
+> > +    /// because in any case at most one thread (or CPU) can access the protected data at a time.
+> > +    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
+> > +        Self {
+> > +            owner: owner.data.get(),
+> 
+> Given we use the address of the `data` as a key to verify holding a
+> lock, I think we should use `Pin<_>` in the function signature, i.e.
+> 
+> 	pub fn new(owner: Pin<&Lock<U, impl Backend>, data: T) -> Self {
+> 	    Self {
+> 	        owner: owner.get_ref().data.get()
+> 		data: UnsafeCell::new(data),
+> 	    }
+> 	}
+> 
+> Thoughts?
+> 
 
-Thanks
+Nevermind for now, since `Lock` is a pin-inited type, we can revisit
+this later.
+
+Regards,
+Boqun
+
+> Regards,
+> Boqun
+> 
+> > +            data: UnsafeCell::new(data),
+> > +        }
+> > +    }
+> > +}
+> > +
+> > +impl<T: ?Sized, U> LockedBy<T, U> {
+> > +    /// Returns a reference to the protected data when the caller provides evidence (via a
+> > +    /// reference) that the owner is locked.
+> > +    ///
+> > +    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&U` that matches
+> > +    /// the data protected by the lock without actually holding it.
+> > +    ///
+> > +    /// # Panics
+> > +    ///
+> > +    /// Panics if `owner` is different from the data protected by the lock used in
+> > +    /// [`new`](LockedBy::new).
+> > +    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
+> > +        // Detect the usage of SZTs, which are supported, at compile time.
+> > +        crate::build_assert!(core::mem::size_of::<U>() > 0);
+> > +        if !ptr::eq(owner, self.owner) {
+> > +            panic!("mismatched owners");
+> > +        }
+> > +
+> > +        // SAFETY: `owner` is evidence that the owner is locked.
+> > +        unsafe { &*self.data.get() }
+> > +    }
+> > +
+> > +    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
+> > +    /// mutable owner) that the owner is locked mutably.
+> > +    ///
+> > +    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&mut U` that
+> > +    /// matches the data protected by the lock without actually holding it.
+> > +    ///
+> > +    /// Showing a mutable reference to the owner is sufficient because we know no other references
+> > +    /// can exist to it.
+> > +    ///
+> > +    /// # Panics
+> > +    ///
+> > +    /// Panics if `owner` is different from the data protected by the lock used in
+> > +    /// [`new`](LockedBy::new).
+> > +    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
+> > +        // Detect the usage of SZTs, which are supported, at compile time.
+> > +        crate::build_assert!(core::mem::size_of::<U>() > 0);
+> > +        if !ptr::eq(owner, self.owner) {
+> > +            panic!("mismatched owners");
+> > +        }
+> > +
+> > +        // SAFETY: `owner` is evidence that there is only one reference to the owner.
+> > +        unsafe { &mut *self.data.get() }
+> > +    }
+> > +}
+> > -- 
+> > 2.34.1
+> > 
