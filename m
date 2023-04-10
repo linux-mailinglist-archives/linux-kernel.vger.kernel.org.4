@@ -2,135 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60756DCA4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED626DCA5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjDJSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S230409AbjDJSG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDJSAb (ORCPT
+        with ESMTP id S230033AbjDJSGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:00:31 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB9A173B;
-        Mon, 10 Apr 2023 11:00:30 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id j8so3586690pjy.4;
-        Mon, 10 Apr 2023 11:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681149630; x=1683741630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IV33xBJ34yY7yL7GA0OE+66nFcSLRJs2V5SHArKgYcw=;
-        b=aoRYjh4Ii+DhcP9USwhs2qrv1CjEdbxNmI9u/NaVcRTGTbojD/jNjhc3O7ZdbbD/Q9
-         P9x8DzRviQ1xw3ijKKBqhcnUXE11kAK1YlfgMmhzOkT6zltq8XfSmwnbjU4KY714GIYw
-         GqBhPyxBnEBUNCvdEa1QnsV9uTsHt1GktXG+iYC+Pod2AQBCMAtBCPBmy+ax9lLTN1Nu
-         hlXdFKeCR+bmSeUOUgaMBv1cuCmKM/87mgQRhBSahpkVv9+hTkUDsyWTqaIez4hLFGPV
-         kMlhTxeFi96MDkY4YGvGGHc3EmRPKuZIJC+cApusatF7M2C3Bv4tv+7ZoG+5+mPXMBGD
-         VkkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681149630; x=1683741630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IV33xBJ34yY7yL7GA0OE+66nFcSLRJs2V5SHArKgYcw=;
-        b=Jtwk5GKvhlaINjEvMfP8yXVB9lRM7X1MuYJLwAFsqGGPO8Yprgw0v6XJdgZCrEAucQ
-         WKDt+YclA4egnhB7jEkbryNhDB1en5QAyzq8q5c6mGvRw3/PMuMSktMrbwO54ys0bBvm
-         NKta6xL8nRRPnyEm/swyc9YJVJSUqMlSLVsWGrdnp/sk3bg2kpnzxeNLtWRtUbkAQPef
-         +cl8Q9dpJxUIvKnjG5+MXtLpJhfC12Dk0sG5YYt082gccaZw6B0Q8G+HVmAJBgWJv3z5
-         CNUEnvX9CIWK1TyvCORygEHlnMbrC9NW8k3Xn30mlTq+0+jd/Po++WSjz8vYeVFq55E2
-         wVXQ==
-X-Gm-Message-State: AAQBX9d/CpC2OydveEAdLn3rtcmzwsYqu36TWsHaYDJ+81EMu1iEE0/i
-        8upKEaZdbVDA2YXWTxNL0A9u/Ht27Sg=
-X-Google-Smtp-Source: AKy350b3uYuhvmpWVUIpVtZI0gqCwySA0fm3SARAAz//DMwRmDHNYP6qdC/3hmAvZUJjxd5kWB1rBQ==
-X-Received: by 2002:a05:6a20:4da1:b0:cd:74aa:df55 with SMTP id gj33-20020a056a204da100b000cd74aadf55mr11989045pzb.25.1681149629777;
-        Mon, 10 Apr 2023 11:00:29 -0700 (PDT)
-Received: from localhost ([216.228.127.130])
-        by smtp.gmail.com with ESMTPSA id k24-20020aa78218000000b005921c46cbadsm8342466pfi.99.2023.04.10.11.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 11:00:29 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 11:00:28 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH 2/8] sched/topology: introduce sched_numa_find_next_cpu()
-Message-ID: <ZDROvNNIPdahL3AP@yury-laptop>
-References: <20230325185514.425745-1-yury.norov@gmail.com>
- <20230325185514.425745-3-yury.norov@gmail.com>
- <ZCFvvHZXT/dqjOOb@smile.fi.intel.com>
+        Mon, 10 Apr 2023 14:06:25 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10DB1BD6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:06:11 -0700 (PDT)
+Received: from liber-MS-7D42.. ([10.12.190.56])
+        (user=gangecen@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33AI4Qur017616-33AI4Qus017616
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 11 Apr 2023 02:04:31 +0800
+From:   Gencen Gan <gangecen@hust.edu.cn>
+To:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gan Gecen <gangecen@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/pl111: fix drm and dev leak when irq request failed.
+Date:   Tue, 11 Apr 2023 02:03:07 +0800
+Message-Id: <20230410180307.3563501-1-gangecen@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCFvvHZXT/dqjOOb@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: gangecen@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 01:28:12PM +0300, Andy Shevchenko wrote:
-> On Sat, Mar 25, 2023 at 11:55:08AM -0700, Yury Norov wrote:
-> > The function searches for the next CPU in a given cpumask according to
-> > NUMA topology, so that it traverses cpus per-hop.
-> > 
-> > If the CPU is the last cpu in a given hop, sched_numa_find_next_cpu()
-> > switches to the next hop, and picks the first CPU from there, excluding
-> > those already traversed.
-> 
-> ...
-> 
-> > +/*
-> 
-> Hmm... Is it deliberately not a kernel doc?
+From: Gan Gecen <gangecen@hust.edu.cn>
 
-Yes, I'd prefer to encourage people to use for_each() approach instead
-of calling it directly.
+Smatch reports:
+	pl111_amba_probe() warn: missing unwind goto?
 
-If there will be a good reason to make it a more self-consistent thing,
-we'll have to add a wrapper, just like sched_numa_find_nth_cpu() is
-wrapped with cpumask_local_spread(). Particularly, use RCU lock/unlock
-and properly handle NUMA_NO_NODE.
+Code segment for dev_put is:
+	dev_put:
+		drm_dev_put(drm);
+		of_reserved_mem_device_release(dev);
+
+When err happened, jumping to dev_put will release
+drm and dev resources allocated or initialized 
+before. But after devm_request_irq() failed, it
+returns directly without releasing drm and dev, 
+which may cause memory leak.
+
+Fixes: 3f9d6bccff6c ("drm/pl111: fix drm and dev leak when irq request failed")
+Signed-off-by: Gan Gecen <gangecen@hust.edu.cn>
+---
+ drivers/gpu/drm/pl111/pl111_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/pl111/pl111_drv.c b/drivers/gpu/drm/pl111/pl111_drv.c
+index 00deba0b7271..52945f7e0aef 100644
+--- a/drivers/gpu/drm/pl111/pl111_drv.c
++++ b/drivers/gpu/drm/pl111/pl111_drv.c
+@@ -297,7 +297,7 @@ static int pl111_amba_probe(struct amba_device *amba_dev,
+ 			       variant->name, priv);
+ 	if (ret != 0) {
+ 		dev_err(dev, "%s failed irq %d\n", __func__, ret);
+-		return ret;
++		goto dev_put;
+ 	}
  
-> > + * sched_numa_find_next_cpu() - given the NUMA topology, find the next cpu
-> > + * cpumask: cpumask to find a cpu from
-> > + * cpu: current cpu
-> > + * node: local node
-> > + * hop: (in/out) indicates distance order of current CPU to a local node
-> > + *
-> > + * The function searches for next cpu at a given NUMA distance, indicated
-> > + * by hop, and if nothing found, tries to find CPUs at a greater distance,
-> > + * starting from the beginning.
-> > + *
-> > + * returns: cpu, or >= nr_cpu_ids when nothing found.
-> > + */
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
+ 	ret = pl111_modeset_init(drm);
+-- 
+2.34.1
