@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A164A6DC793
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3A86DC796
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDJOCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 10:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229759AbjDJODe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 10:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjDJOCJ (ORCPT
+        with ESMTP id S229618AbjDJODb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:02:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D1EBB83;
-        Mon, 10 Apr 2023 07:01:46 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ADkT0d027735;
-        Mon, 10 Apr 2023 14:00:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=rggXVKONdQBOjVXzOFO07RfA4ZP1lr1ajKhxQI6MQNw=;
- b=jk9jFpimHmOq593vS4wxBWiF8uxQ8a2l08UazAyhPWRp7lN+gIQpXvCqzzzF9hY2heVJ
- g8LzbFEAjBXuWWhhxObbM6qKWAsnaGhik6tnl+ucmPb+UzeoBV78msHtrtq3XMxjAdex
- I6GPfIw13CGHBKtGV23lNPN5NajeSicL/f/CyauDQ5tLdRAsaO9dZM8aWmNk+PAuIfkf
- 9g9PZXBQTbraMAO2AAMtIm9XPov0j29a40aQ/yEYzNVsBPDc/jURitl0fyDuHh8cWcQs
- rSWbDN8BqBQ0H4vAGi3xy2i9yrP9hIhSb4CtH7wbfTZ79AEanIhTQxrSr1/Knqf7YzK2 9g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptwmyua6u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 14:00:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33AE0p98013080
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 14:00:51 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Apr 2023 07:00:42 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <geert+renesas@glider.be>, <rafal@milecki.pl>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-Subject: [PATCH V12 4/4] arm64: defconfig: Enable IPQ9574 SoC base configs
-Date:   Mon, 10 Apr 2023 19:29:48 +0530
-Message-ID: <20230410135948.11970-5-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230410135948.11970-1-quic_devipriy@quicinc.com>
-References: <20230410135948.11970-1-quic_devipriy@quicinc.com>
+        Mon, 10 Apr 2023 10:03:31 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7025527B;
+        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id px4so2172682pjb.3;
+        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681135384; x=1683727384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qY72AomAbMje6jRkZ+K0dBVO8y8e5SQs2AgwhNQHgaI=;
+        b=oEWIIxAFZGUXoIe7xm1Ww8Nz5Z1O+m6YP4HtPpJ8p7hF+bFb+WyuYjq7x04iikFM+V
+         rHVxzwXXMnvyiYcVtj5wcGfCt4t4q87NA1P1H95JgxzGknyyU/CEkZpl31YynsD+Jsrz
+         gumTPlz6ysQsp2NrISfE2b94qiWJga0fqfYEIii2PDW/4rLJyrHlDvXpeFWhbL/zT0U6
+         3BLmHxrSQwc14m5nuP+gak300fknTJrwK3qrf5wgFiUNEI1OF/qNEgjLUlIx+FspC1N3
+         knJ1AP9JfKHwmN7tg4SvgsKxGmFR2wSHr3Fv5TxK+a4J4zs3QkdFX5fwwamB0n/e+xX6
+         BpTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681135384; x=1683727384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qY72AomAbMje6jRkZ+K0dBVO8y8e5SQs2AgwhNQHgaI=;
+        b=qo5RnXUCgIx6Vl1orv5RofG0Da0iCx53XddGsGgsgKoR+pqay7ruJlpZvQGams58Yh
+         0s4GZcD4E3TQ5cVIo9sPU2pl0Q7vxk08JPucC6Hyd8sB4zBOAPx/L+OvJH8GRhpX3KC0
+         ONBvctjQEquqp8/n8C+HVybnzGlLIjyaOEC5ojsJPgyToIaKobo1fTBEGJ2iUO/Z6W6j
+         mMkM0jKbaPEH4T1lcXmEkAqeS0IfbosPstF6YMVvMzocRcPls6/Ib0Vg3jW9DpYfCjIN
+         4ZzyplnaI16Ym/8OuOLrtDYQqY/SZOJY4OZWQICz8/iwyg6jPsRUl2ybz18JimtKAFkQ
+         sukQ==
+X-Gm-Message-State: AAQBX9c4yDqWfZJ32LMXVCTkVZM68ioAnu76XNOZ9hM4XqYku2Q8DlKT
+        lcMaLyp4qIdM31rLNUXwUIQnUqO7rtE=
+X-Google-Smtp-Source: AKy350ZhmibEj2DixzKyVcxxNP46/k57WPd2OqJaXKP90aKYHVrwKh1KvVPgM74ZIbICsziOKIE9Sw==
+X-Received: by 2002:a17:902:f544:b0:1a1:d70f:7114 with SMTP id h4-20020a170902f54400b001a1d70f7114mr13250142plf.14.1681135384043;
+        Mon, 10 Apr 2023 07:03:04 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p12-20020a1709028a8c00b001a63deeb5e2sm2108819plo.92.2023.04.10.07.03.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 07:03:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2facc7cd-81fa-b8b7-6974-217392906578@roeck-us.net>
+Date:   Mon, 10 Apr 2023 07:03:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9YsBZkNMz93mJh7GMiS-gna71SHYBTN0
-X-Proofpoint-GUID: 9YsBZkNMz93mJh7GMiS-gna71SHYBTN0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_09,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=752 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100118
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] vdpa: solidrun: constify pointers to hwmon_channel_info
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alvaro Karsz <alvaro.karsz@solid-run.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+References: <20230407150130.79917-1-krzysztof.kozlowski@linaro.org>
+ <0395eff6-694e-1a2f-de78-8cb9d7b129a7@roeck-us.net>
+ <20230410055634-mutt-send-email-mst@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230410055634-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enables clk & pinctrl related configs for Qualcomm IPQ9574 SoC
+On 4/10/23 02:56, Michael S. Tsirkin wrote:
+> On Fri, Apr 07, 2023 at 04:08:30PM -0700, Guenter Roeck wrote:
+>> On 4/7/23 08:01, Krzysztof Kozlowski wrote:
+>>> Statically allocated array of pointed to hwmon_channel_info can be made
+>>> const for safety.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> ---
+>>>
+>>> This depends on hwmon core patch:
+>>> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>>>
+>>> Therefore I propose this should also go via hwmon tree.
+>>
+>> I am not going to apply patches for 10+ subsystems through the hwmon tree.
+>> This can only result in chaos. The dependent patch is available at
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
+> 
+> Doesn't it cause build errors or warnings there?
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- Changes in V12:
-	- No change
+Are you saying that "hwmon: constify pointers to hwmon_channel_info" applied on its own
+on top of v6.3-rc5 (as done in above branch) causes build errors or warnings ?
+I have not seen any such reports, and I don't immediately see why that would be
+the case. Please elaborate.
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Guenter
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 1e7021ead7f5..b6342b40c600 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -555,6 +555,7 @@ CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ5332=y
- CONFIG_PINCTRL_IPQ6018=y
-+CONFIG_PINCTRL_IPQ9574=y
- CONFIG_PINCTRL_MSM8916=y
- CONFIG_PINCTRL_MSM8953=y
- CONFIG_PINCTRL_MSM8976=y
-@@ -1153,6 +1154,7 @@ CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_GCC_5332=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
-+CONFIG_IPQ_GCC_9574=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8994=m
--- 
-2.17.1
+>> or wait until after the next commit window to apply this patch.
+>>
+>> Thanks,
+>> Guenter
+>>
+>>>
+>>> Cc: Jean Delvare <jdelvare@suse.com>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>> Cc: linux-hwmon@vger.kernel.org
+>>> ---
+>>>    drivers/vdpa/solidrun/snet_hwmon.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/vdpa/solidrun/snet_hwmon.c b/drivers/vdpa/solidrun/snet_hwmon.c
+>>> index e695e36ff753..65304354b34a 100644
+>>> --- a/drivers/vdpa/solidrun/snet_hwmon.c
+>>> +++ b/drivers/vdpa/solidrun/snet_hwmon.c
+>>> @@ -159,7 +159,7 @@ static const struct hwmon_ops snet_hwmon_ops = {
+>>>    	.read_string = snet_hwmon_read_string
+>>>    };
+>>> -static const struct hwmon_channel_info *snet_hwmon_info[] = {
+>>> +static const struct hwmon_channel_info * const snet_hwmon_info[] = {
+>>>    	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_LABEL,
+>>>    			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LABEL),
+>>>    	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT | HWMON_P_LABEL),
+> 
 
