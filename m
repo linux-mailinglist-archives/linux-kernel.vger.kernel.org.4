@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445E06DCA65
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9686DCA67
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjDJSHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S230412AbjDJSHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjDJSHO (ORCPT
+        with ESMTP id S229973AbjDJSHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:07:14 -0400
+        Mon, 10 Apr 2023 14:07:15 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D64E26AF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:06:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E74826B3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681149977;
+        s=mimecast20190719; t=1681149980;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IT3jC7AVGFDWN5+2QSJmXDWRAxru1buk6lN5s+Jf7j4=;
-        b=AqfVlM1IPup8NrL64qR0ipTsPHwCceJpYEtTbZP6qM+IIBwGBxQpc5MscdvMK1xnrAT0AD
-        ANY3dkZpOV/mC17YL6gWfkzgp0qtfXACwP9rxgDaq8n1rE5L6T4VGBfEGIGITK4yAGcU85
-        YcbIJFp0HCfJ+QtL9HiOcaDr/TD9UBU=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ISj7vJEBaH0Ok4XCxrHU0Yfhlf+Ohg61blivylaRcYI=;
+        b=Rj3GPH9XvHmKpLVNWGvhc/QMdmjw0yPW7QwSniYkrrl+0tHE9SrAiD4IRdgJZiENjjz2t5
+        lQJIUHC1q19tDqkuylS8hVU3L0mtLXh/599sUFutLRuC2TXtoSucjBEtYhOODTt9O/cidv
+        dF4A7j/lU6QeeH49zLXOzZjvlQgHfCI=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-52-Cs151I7pNJeGsXXn-R-o-A-1; Mon, 10 Apr 2023 14:06:13 -0400
-X-MC-Unique: Cs151I7pNJeGsXXn-R-o-A-1
+ us-mta-372-hcSii8A9PcyeTamlHWGCyw-1; Mon, 10 Apr 2023 14:06:17 -0400
+X-MC-Unique: hcSii8A9PcyeTamlHWGCyw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC8BA800B23;
-        Mon, 10 Apr 2023 18:06:12 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 845F4858F09;
+        Mon, 10 Apr 2023 18:06:16 +0000 (UTC)
 Received: from green.redhat.com (unknown [10.2.16.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 02A04492C13;
-        Mon, 10 Apr 2023 18:06:11 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B2858492C13;
+        Mon, 10 Apr 2023 18:06:15 +0000 (UTC)
 From:   Eric Blake <eblake@redhat.com>
 To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
         nbd@other.debian.org
 Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
         christoph.boehmwalder@linbit.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/4] nbd: s/handle/cookie/
-Date:   Mon, 10 Apr 2023 13:06:07 -0500
-Message-Id: <20230410180611.1051618-1-eblake@redhat.com>
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH v3 1/4] uapi nbd: improve doc links to userspace spec
+Date:   Mon, 10 Apr 2023 13:06:08 -0500
+Message-Id: <20230410180611.1051618-2-eblake@redhat.com>
+In-Reply-To: <20230410180611.1051618-1-eblake@redhat.com>
+References: <20230410180611.1051618-1-eblake@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -60,26 +64,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2 was here: https://lkml.org/lkml/2023/3/17/1107
-since then:
-- squash patch 2/5 and 3/5 into 3/4 [Ming]
-- add Josef's R-b
-- tweak commit messages to match commits in userspace NBD (code itself
-  is unchanged, modulo the patch squash)
+The uapi <linux/nbd.h> header intentionally documents only the NBD
+server features that the kernel module will utilize as a client.  But
+while it already had one mention of skipped bits due to userspace
+extensions, it did not actually direct the reader to the canonical
+source to learn about those extensions.
 
-Eric Blake (4):
-  uapi nbd: improve doc links to userspace spec
-  uapi nbd: add cookie alias to handle
-  block nbd: use req.cookie instead of req.handle
-  docs nbd: userspace NBD now favors github over sourceforge
+While touching comments, fix an outdated reference that listed only
+READ and WRITE as commands.
 
- Documentation/admin-guide/blockdev/nbd.rst |  2 +-
- drivers/block/nbd.c                        |  6 +++---
- include/uapi/linux/nbd.h                   | 25 +++++++++++++++++-----
- 3 files changed, 24 insertions(+), 9 deletions(-)
+Signed-off-by: Eric Blake <eblake@redhat.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
 
+---
+v2: Split change to sourceforge link to separate patch
+v3: Add R-b
+---
+ include/uapi/linux/nbd.h | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+diff --git a/include/uapi/linux/nbd.h b/include/uapi/linux/nbd.h
+index 20d6cc91435d..8797387caaf7 100644
+--- a/include/uapi/linux/nbd.h
++++ b/include/uapi/linux/nbd.h
+@@ -11,6 +11,8 @@
+  *            Cleanup PARANOIA usage & code.
+  * 2004/02/19 Paul Clements
+  *            Removed PARANOIA, plus various cleanup and comments
++ * 2023 Copyright Red Hat
++ *            Link to userspace extensions.
+  */
+
+ #ifndef _UAPILINUX_NBD_H
+@@ -30,12 +32,18 @@
+ #define NBD_SET_TIMEOUT _IO( 0xab, 9 )
+ #define NBD_SET_FLAGS   _IO( 0xab, 10)
+
++/*
++ * See also https://github.com/NetworkBlockDevice/nbd/blob/master/doc/proto.md
++ * for additional userspace extensions not yet utilized in the kernel module.
++ */
++
+ enum {
+ 	NBD_CMD_READ = 0,
+ 	NBD_CMD_WRITE = 1,
+ 	NBD_CMD_DISC = 2,
+ 	NBD_CMD_FLUSH = 3,
+ 	NBD_CMD_TRIM = 4
++	/* userspace defines additional extension commands */
+ };
+
+ /* values for flags field, these are server interaction specific. */
+@@ -64,14 +72,15 @@ enum {
+ #define NBD_REQUEST_MAGIC 0x25609513
+ #define NBD_REPLY_MAGIC 0x67446698
+ /* Do *not* use magics: 0x12560953 0x96744668. */
++/* magic 0x668e33ef for structured reply not supported by kernel yet */
+
+ /*
+  * This is the packet used for communication between client and
+  * server. All data are in network byte order.
+  */
+ struct nbd_request {
+-	__be32 magic;
+-	__be32 type;	/* == READ || == WRITE 	*/
++	__be32 magic;	/* NBD_REQUEST_MAGIC	*/
++	__be32 type;	/* See NBD_CMD_*	*/
+ 	char handle[8];
+ 	__be64 from;
+ 	__be32 len;
+@@ -82,7 +91,7 @@ struct nbd_request {
+  * it has completed an I/O request (or an error occurs).
+  */
+ struct nbd_reply {
+-	__be32 magic;
++	__be32 magic;		/* NBD_REPLY_MAGIC	*/
+ 	__be32 error;		/* 0 = ok, else error	*/
+ 	char handle[8];		/* handle you got from request	*/
+ };
 -- 
 2.39.2
 
