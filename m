@@ -2,102 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16B16DC4C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486006DC4CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjDJJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S229687AbjDJJDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjDJJCH (ORCPT
+        with ESMTP id S229630AbjDJJDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:02:07 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2018.outbound.protection.outlook.com [40.92.19.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3D92D62
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:02:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nwo16Fz7HMV7I6s1Q3EybFhj7bISxKPJI2rY3trYEhQxMhkJrc525DkZj4LWsJBWzxVeOH/I1bH0wXixrq/jcQNienFJcO43illP6ce3CsdXLQdy6LF0qq5gVe2JJsY14n71eB+mkJMxG46xkAejTnW/rboVoLnLNxOYFUdVL5AThQg/Aa3qO+oHGpmsYF7n5dVLgnZEY6GVKrI1qJcRvbG9pzpXdk611W0943bErixaeL4mXFa3BZlQcTaZm2aH7MnhFuuJd9z+wPPhJ6uMXsnH2XjZpwEU0noXbOuvuDhtjPjQd1plF2qdA0/2eIkOv3wQWfg3lRmTMj1F73Ijsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TRbUrKpTEjIuMH1C+Oeim/P/WdMGuZBs4i3UveQOTV0=;
- b=k27RhcSIrmD+lv/TWXELQcWMXmNoWa4z6IAQqwO+l+nyItF+Snr3ncIG/tscFYY6dHq4F/+waqDBeowTjSXrweot08wikCbvmsqbH9HOm7ReYiDQ6+t2EuuHgmHPH+VV3/NY92aMCXr6JK/CNh+9Oibge1M/w8e23Y4hp74tak5e42MUPrtn/p/ekGUW8d6sp+C/WerRPesBGK98pHJn3IDMh8/aW6JRsO83Nd0mxWL7GO0IUoEtrCr59GPJZAHm9hqT35cd0U6YdY/rkqjU5Ltc/45sKu1alwP68MFFT/WSfzIfH8bBMFSXn5b8iaOL70o1TJ0jzjWb2dejceriBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TRbUrKpTEjIuMH1C+Oeim/P/WdMGuZBs4i3UveQOTV0=;
- b=gmQmM10McAtQAmUVPoNvQYa0LiJHNpm3ak6nSqraaJHnax2asr2ATk4xocYGfO/hUzDrNFpy3bholg5OtggYIWiMOL4u8XcPJ+TLeqnmYfH81MKzOFXRJv2y4NoWGIn36+4JNCxpGPkkRtpPlpzvh7i5fI+a/7miD/gUpSuKu+SBekWrWtfKnJDJiuP5M2/tSZPJI3IKftMI8szrOs5utPk8qeZk9bqpWZ/gRgWaomdcb2NEJYuOriLz9a5Sk//tTxWJrhJbXmeMvJ1YAOFxysZcaADJChmAE8g+DC1PSyeyyVFcRlYwWK9ygd+ItEgbb1QCj10PqullV9UGEU29zA==
-Received: from DM6PR22MB1836.namprd22.prod.outlook.com (2603:10b6:5:25e::21)
- by SJ0PR22MB4380.namprd22.prod.outlook.com (2603:10b6:a03:51a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 09:02:03 +0000
-Received: from DM6PR22MB1836.namprd22.prod.outlook.com
- ([fe80::4b7e:925f:eeca:488c]) by DM6PR22MB1836.namprd22.prod.outlook.com
- ([fe80::4b7e:925f:eeca:488c%4]) with mapi id 15.20.6277.035; Mon, 10 Apr 2023
- 09:02:03 +0000
-From:   zhaoxinchao <ChrisXinchao@outlook.com>
-To:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     zhaoxinchao <chrisxinchao@outlook.com>
-Subject: [PATCH] mm: Fixed incorrect comment for _kmem_cache_create function
-Date:   Mon, 10 Apr 2023 17:01:42 +0800
-Message-ID: <DM6PR22MB1836D8C5348D28989105DADBC5959@DM6PR22MB1836.namprd22.prod.outlook.com>
-X-Mailer: git-send-email 2.39.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [FHMU8DzyWEwkc/BXqB510O+Ys6ytbDoB]
-X-ClientProxiedBy: SJ0PR03CA0051.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::26) To DM6PR22MB1836.namprd22.prod.outlook.com
- (2603:10b6:5:25e::21)
-X-Microsoft-Original-Message-ID: <20230410090142.12442-1-ChrisXinchao@outlook.com>
+        Mon, 10 Apr 2023 05:03:10 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A12D30CB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:03:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfkBM0n_1681117383;
+Received: from 30.97.49.25(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfkBM0n_1681117383)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Apr 2023 17:03:04 +0800
+Message-ID: <90d29dc6-39b3-439c-904b-7a2207610d64@linux.alibaba.com>
+Date:   Mon, 10 Apr 2023 17:03:03 +0800
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR22MB1836:EE_|SJ0PR22MB4380:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76e91249-5401-44ed-a322-08db39a24096
-X-MS-Exchange-SLBlob-MailProps: 02NmSoc12DdnXLGGOuD9rmefhPe+K3xZxO7oA4JCSFWlG+a4c5RJ8YOGX/hEW6T8lBQyg9wVTqgZ//ArmQlyEcdxXPPD56m2NMk8fl4qniUF3EK3dMepxn6tPNnuorArDZGy8Yp+SIV7ZSBv06Hj5N+CLvBUAwd01ceRh7iCFz86OiJxCCqFUBBBkFTfgGfGjKx78fPi6yV4oTRUq3Ei15CIBYINdcQQzYR8mLX9SY72eHVGEYM/mpv+H0mqjyl0LSeNOnFudI0R9JFlNPwzeHseQ+Uc/en7atJpteyvY4XTkkWr47iP5mwoc28w198iCY491f1PEmGUaNhmgfNq/bQtYQTCKu67p8yjNvSzLe+kPBl/gQCFH6q2aLlcKaleAw6RmYXvD/TAq5fhojPA8KkU0i/+/ShzcvnhMht7aqNGLMaYCioXQ3lJIba59st59MGOaC3K1OYlL9xA4lI8boo9VF6INHukd7eXmaISnDdS8iBbbMwUnN7pnaXUc5bFOL5/uClDop+KmSYTefb9bgE+E3qrhepwnk1bE6njUr3mFDf92t9J63baCF7ub/+DRWTBFAnhYlt1Ts3WmRShZ4vC3n9Xza/oFMdwRC8jpT+UFzcyIPXws72WF/HKdcorIVABWcN/gcTF4z3QjwjbPIDV49abe77vZeKiY0o4oBK1Dw0GGX7wxtDIcR0+Vbtxm5F0SvYCo3y5STV0ZJeV3Nn//f2GqGuj8PhmEp7vdCtmsiixgyh2TaVLSCKRu9Fi
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6xqO2V4lydQJ/7qk0EheBKpZeCd1F3oRfPYha07wbygfgftUHtiwD9kKYRJ7daIxZt/3v9WXeXpD9V8JCOUYm7Gj92PDs1WV1GfwHBq++TZOAPM64ys6BMTZCn8aR0Mr1W866RdsgrV3poXzo37XAmm9zzyRFusHdFgHsZS5ZPxJ9MsNbHZOOlmjnKIhL2ri69X9eAGP0+eanWvItgRnPqs9xr3VY6cO9qmznFEHoqeA02LCTpSS1pV4qjm8/x6tL6Q1TT4PqfXK8+Njs6k99roOdKz2qhaFzy8AecKEwBoEfxd+1JFpKwFiBI6XHFAiMp7cGCeyr8fsaMcMFy5oZBHCVuPeFP4u5zj0gjlqeJ3aR0qGFsmJH+BPwwFeKNSUcbce5tivMc9VjR5wzB9xu+QSAR/stq4uV8yDKaeE4IzFMOZJ7P5VMzcwGTeQG4a7ys6Ts0lVjki8Jdb8OyDgCyvp2ZVG6WehgGGavllR5v7pjAivlVn+/aMkRT/GUNA7N5HtrOTEJzyZWdR88qlvSQyeAd3nOEfVLLSQkkgdBcztZHDD753fAjuSGQEnBJLYda9R1NkIoM27QYi6Riv/Igsq+mUi9hEFNiaM6mMBvJ5DZh1yFtWjlzbnXY615MpX
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OEpapxng7RPh2elB3fN7vlBzOfcRbPpG22jSlZNhuiUV5NsnLzkV3WhPlxIz?=
- =?us-ascii?Q?ZguYwvKWfwAwMU1yY6zHVys5GJQQsIGzZ8mkbdt9wXfVtHefcCD7uEtZlzy1?=
- =?us-ascii?Q?ho6mJJXbUl7YSzs17/ybqS5YwM3eEsS7Vk7dBpuAMZID2UmJ4eJ6T/DTD6vT?=
- =?us-ascii?Q?BBViI2aR6fni0soFuc4pAnQ/g1lTKJxafktdRrbPsfY4xkqFveucbUnsbJRN?=
- =?us-ascii?Q?qyHwk6RTr3/89uBa03p70ntB2VbP8WrXFJOivjHEOSWlAPwzINbHzrThrEjf?=
- =?us-ascii?Q?/tUmappJjBx8inOdKE0SIhTzwbW+QzZ30NOaVH1fKhtskRXRvrodbzWJ7k2s?=
- =?us-ascii?Q?46h8o7zInwtc5BuAbuKXl08sK/LCXwV35U8+SI7t0cJ50kie2U42P4msqaMT?=
- =?us-ascii?Q?dBwN+zD88j0eN1KS1jxsRHlpzo8fwqk3/d63cfy6YT1cXjxx5vyD0KFLYcad?=
- =?us-ascii?Q?QeT9L6eEH9YM+ydJ/VZX/yFndjkLMFofSHXJL2ilK0IwyVSkVNTtd0Z/3H0s?=
- =?us-ascii?Q?e5/uPomYitup06ZFiK4LZNt1hNU9oUsMMn7DR+BJ9/WdJ4yg8zG8pVCJ7GL2?=
- =?us-ascii?Q?4wG0TKdm7JdiBOoPBqxr5bUCrlnF+QDo3b+QFsS7Jel1xAFzvkG73fG8TRL9?=
- =?us-ascii?Q?QxZzQwO/9cZrvt8Zhir5lOzEhB7Mz63mcYmKVa+dgdpPfNUzBQDn0MZpuyp7?=
- =?us-ascii?Q?RAOQi1O1yo5N7oQEAeMBYW50qEPHBVYFzGtCcFtsqJhG0VQqm3MPbfbEBDfm?=
- =?us-ascii?Q?8VlWoTDYj/uM8WIB0tX/+rkppWZ2rEA8IdHjBoh2yQ31ZuytNZemUNXjQG1X?=
- =?us-ascii?Q?K36XC853GvIH7uP7S21qb0VtKvtbPOiWYWjNac8np4Qg84iaq784VJ2iwL8Y?=
- =?us-ascii?Q?t0NaCJRuYtF38OEToPEeW+tDvWrGljOPUIfOVr93OqZghR42FKtcVvkXg+cS?=
- =?us-ascii?Q?jwb+PiX9XC6IrJ4Vi+Y2fZD2Mq5VaVXNAmoj2ZmiQQ30A8KBNxuJOw06YZXY?=
- =?us-ascii?Q?Rn+0uAPpWckni1EiivAzKlw9OqHAaRfH91DlQz3Tw1lP1E8WGRBvBB1UzQZw?=
- =?us-ascii?Q?Ft8Sg+hEp0B/0mYOLulKnRnDGAMivBuzL2lgGnBYm92xtgzSxJkrtnR/4VVb?=
- =?us-ascii?Q?Xdk5CXTxc6P/Z+2Erdu9DyDErcUs5f0LGJORvV2vLjiCKAji3WMiWWdNPm/K?=
- =?us-ascii?Q?1OdfeThZkQhMvQyF4NF42GTPgmuu+4Bo1IKUB1iKZMQVe3X8vRx/u4yWySs?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76e91249-5401-44ed-a322-08db39a24096
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR22MB1836.namprd22.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:02:03.6844
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR22MB4380
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [syzbot] WARNING in rmqueue
+To:     syzbot <syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com>,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, xiang@kernel.org
+References: <000000000000ec75b005ee97fbaa@google.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <000000000000ec75b005ee97fbaa@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,30 +43,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhaoxinchao <chrisxinchao@outlook.com>
 
-Actually __kmem_cache_create() returns a status :
-0 is success
-others are failed.
 
-Signed-off-by: zhaoxinchao <chrisxinchao@outlook.com>
----
- mm/slab.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/11/29 16:43, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b7b275e60bcd Linux 6.1-rc7
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=16a70187880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=aafb3f37cfeb6534c4ac
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dde8a1880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15685e8d880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/d643567f551d/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
 
-diff --git a/mm/slab.c b/mm/slab.c
-index ca4822f6b..65985f767 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1901,7 +1901,7 @@ static bool set_on_slab_cache(struct kmem_cache *cachep,
-  * @cachep: cache management descriptor
-  * @flags: SLAB flags
-  *
-- * Returns a ptr to the cache on success, NULL on failure.
-+ * Returns zero on success, others on failure.
-  * Cannot be called within a int, but can be interrupted.
-  * The @ctor is run when new pages are allocated by the cache.
-  *
--- 
-2.39.2
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.3-rc6
 
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 __count_numa_events include/linux/vmstat.h:249 [inline]
+> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 zone_statistics mm/page_alloc.c:3692 [inline]
+> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue_buddy mm/page_alloc.c:3728 [inline]
+> WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3853
+> Modules linked in:
+> CPU: 0 PID: 48 Comm: kworker/u5:0 Not tainted 6.1.0-rc7-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> Workqueue: erofs_unzipd z_erofs_decompressqueue_work
+> RIP: 0010:rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3837
+> Code: 48 8b 02 65 48 ff 40 20 49 83 f6 05 42 80 3c 2b 00 74 08 4c 89 e7 e8 a4 44 0b 00 49 8b 04 24 65 4a ff 44 f0 10 e9 2a fe ff ff <0f> 0b e9 29 e3 ff ff 48 89 df be 08 00 00 00 e8 31 46 0b 00 f0 41
+> RSP: 0018:ffffc90000b97260 EFLAGS: 00010202
+> RAX: f301f204f1f1f1f1 RBX: ffff88813fffae00 RCX: 000000000000adc2
+> RDX: 1ffff92000172e70 RSI: 1ffff92000172e70 RDI: ffff88813fffae00
+> RBP: ffffc90000b97420 R08: 0000000000000901 R09: 0000000000000009
+> R10: ffffed1027fff5b3 R11: 1ffff11027fff5b2 R12: ffff88813fffc310
+> R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88813fffa700
+> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f7bec722f10 CR3: 000000004a430000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   <TASK>
+>   get_page_from_freelist+0x4b6/0x7c0 mm/page_alloc.c:4288
+>   __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+>   vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
+>   __vmalloc_area_node mm/vmalloc.c:3043 [inline]
+>   __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3213
+>   kvmalloc_node+0x13e/0x180 mm/util.c:606
+>   kvmalloc include/linux/slab.h:706 [inline]
+>   kvmalloc_array include/linux/slab.h:724 [inline]
+>   kvcalloc include/linux/slab.h:729 [inline]
+>   z_erofs_decompress_pcluster fs/erofs/zdata.c:1049 [inline]
+>   z_erofs_decompress_queue+0x693/0x2c30 fs/erofs/zdata.c:1155
+>   z_erofs_decompressqueue_work+0x95/0xe0 fs/erofs/zdata.c:1167
+>   process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+>   worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+>   kthread+0x266/0x300 kernel/kthread.c:376
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>   </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
