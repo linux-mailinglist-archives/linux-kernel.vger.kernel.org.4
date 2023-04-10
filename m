@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39C16DC247
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859076DC24C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjDJBNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S229683AbjDJB0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjDJBNt (ORCPT
+        with ESMTP id S229672AbjDJB0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:13:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1643A9A;
-        Sun,  9 Apr 2023 18:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=VdW0QiWZs5tGfWPYA1DUgJb23J28q3ZPvcBOi0zT0BE=; b=daWXvKb1EIcxg0HC4CwHgCtg37
-        uOSPNeR3CtfZXI4UL1UQEKRw53ztrrwSN16KQDm0/4UjmKQBs/K4fdMJS1HKBP8Y2lFCOxRQuzvy+
-        X/QkANaB6jdpL1QM2u5V4JiTpYp1CIgii1o//f8tyFp/CHbaSd7E8IL75M0NWjF/wt+vxJviwGu+z
-        iZqE/xoSuYH0mj4H0lD4fmN4yAnheEX/ke1abhcxu8W4roCX4+2RCCDCUDnQYUWYfWqdULe/K6RvQ
-        JbetAX6DydD8As2XFOgUHaCRA9XZNIA9GMa0CZsceZI5KaSgue60KcV8q/9bGl1IQCz+DO4rLq033
-        1oudGLig==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1plg61-00EPd9-31;
-        Mon, 10 Apr 2023 01:13:26 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-um@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v3] UML: pata_cs5536: fix build for X86_32 UML with TRACEPOINTS
-Date:   Sun,  9 Apr 2023 18:13:25 -0700
-Message-Id: <20230410011325.26850-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.0
+        Sun, 9 Apr 2023 21:26:12 -0400
+Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14ABE35A8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:26:10 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.98,332,1673884800"; 
+   d="scan'208";a="2457880"
+Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
+  by emcscan.emc.com.tw with ESMTP; 10 Apr 2023 09:26:06 +0800
+Received: from 192.168.10.23
+        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(80155:0:AUTH_RELAY)
+        (envelope-from <jingle.wu@emc.com.tw>); Mon, 10 Apr 2023 09:26:08 +0800 (CST)
+Received: from 192.168.33.11
+        by webmail.emc.com.tw with Mail2000 ESMTP Server V7.00(2470:0:AUTH_RELAY)
+        (envelope-from <jingle.wu@emc.com.tw>); Mon, 10 Apr 2023 09:26:06 +0800 (CST)
+From:   "Jingle.Wu" <jingle.wu@emc.com.tw>
+To:     "'Dmitry Torokhov'" <dmitry.torokhov@gmail.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <phoenix@emc.com.tw>, <josh.chen@emc.com.tw>,
+        <dave.wang@emc.com.tw>
+References: <20230320011456.986321-1-jingle.wu@emc.com.tw> <ZDBKwo4UMUm+TSnj@penguin>
+In-Reply-To: <ZDBKwo4UMUm+TSnj@penguin>
+Subject: RE: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
+Date:   Mon, 10 Apr 2023 09:26:04 +0800
+Message-ID: <000001d96b4b$6b30cda0$419268e0$@emc.com.tw>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQJF62IY79PwBMHzbH32rexKKwKtngJcjz5NrjfYmYA=
+Content-Language: zh-tw
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMDYwMTFcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy1hODdmNzhhYi1kNzNlLTExZWQtYTg1Zi1mMDc5NTk2OWU3NWVcYW1lLXRlc3RcYTg3Zjc4YWMtZDczZS0xMWVkLWE4NWYtZjA3OTU5NjllNzVlYm9keS50eHQiIHN6PSIzNDkxIiB0PSIxMzMyNTU2MzU2NDM3OTEwMjUiIGg9Ik9CVTBrYmlxazBIaEpCcWRjYVA0U00rS0VnUT0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: true
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,40 +52,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current build of pata_cs5536 for i386 UML fails with:
+HI Dmitry:
 
-ERROR: modpost: "__tracepoint_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
-ERROR: modpost: "do_trace_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
-ERROR: modpost: "__tracepoint_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
-ERROR: modpost: "do_trace_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
+> +static void elan_close(struct input_dev *input_dev) {
+> +	if ((input_dev->users) && (!input_dev->inhibited))
+> +		elan_inhibit(input_dev);
 
-Add the arch/x86/lib/msr.o binary to resolve these undefined symbols.
+This check is for "only inhibit request", and elan_open() its check is for
+"only uninhibit request".
+Because input_dev-> open() close() will be executed 2-3 times when initial.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: linux-ide@vger.kernel.org
-Cc: linux-um@lists.infradead.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
----
-v2: change from not building on UML to fixing the build on UML
-v3: add Rev-by: Damien Le Moal
+Thanks
+Jingle
 
- arch/x86/um/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----Original Message-----
+From: Dmitry Torokhov [mailto:dmitry.torokhov@gmail.com] 
+Sent: Saturday, April 8, 2023 12:57 AM
+To: jingle.wu <jingle.wu@emc.com.tw>
+Cc: linux-kernel@vger.kernel.org; linux-input@vger.kernel.org;
+phoenix@emc.com.tw; josh.chen@emc.com.tw; dave.wang@emc.com.tw
+Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit
+functions.
 
-diff -- a/arch/x86/um/Makefile b/arch/x86/um/Makefile
---- a/arch/x86/um/Makefile
-+++ b/arch/x86/um/Makefile
-@@ -21,7 +21,7 @@ obj-y += checksum_32.o syscalls_32.o
- obj-$(CONFIG_ELF_CORE) += elfcore.o
- 
- subarch-y = ../lib/string_32.o ../lib/atomic64_32.o ../lib/atomic64_cx8_32.o
--subarch-y += ../lib/cmpxchg8b_emu.o ../lib/atomic64_386_32.o
-+subarch-y += ../lib/cmpxchg8b_emu.o ../lib/atomic64_386_32.o ../lib/msr.o
- subarch-y += ../kernel/sys_ia32.o
- 
- else
+Hi Jingle,
+
+On Mon, Mar 20, 2023 at 09:14:56AM +0800, jingle.wu wrote:
+> Add inhibit/uninhibit functions.
+> 
+> Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
+> ---
+>  drivers/input/mouse/elan_i2c_core.c | 86 
+> +++++++++++++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+> 
+> diff --git a/drivers/input/mouse/elan_i2c_core.c 
+> b/drivers/input/mouse/elan_i2c_core.c
+> index 5f0d75a45c80..b7100945c9cc 100644
+> --- a/drivers/input/mouse/elan_i2c_core.c
+> +++ b/drivers/input/mouse/elan_i2c_core.c
+> @@ -329,6 +329,89 @@ static int elan_initialize(struct elan_tp_data *data,
+bool skip_reset)
+>  	return error;
+>  }
+>  
+> +static int elan_reactivate(struct elan_tp_data *data) {
+> +	struct device *dev = &data->client->dev;
+> +	int ret;
+
+Please call this variable and other similar ones "error".
+
+> +
+> +	ret = elan_set_power(data, true);
+> +	if (ret)
+> +		dev_err(dev, "failed to restore power: %d\n", ret);
+> +
+> +	ret = data->ops->sleep_control(data->client, false);
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"failed to wake device up: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+
+return 0;
+
+> +}
+> +
+> +static void elan_inhibit(struct input_dev *input_dev) {
+> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
+> +	struct i2c_client *client = data->client;
+> +	int ret;
+> +
+> +	if (data->in_fw_update)
+> +		return;
+
+Simply and silently ignoring inhibit request is not great. Can we wait for
+firmware update to complete?
+
+> +
+> +	dev_dbg(&client->dev, "inhibiting\n");
+> +	/*
+> +	 * We are taking the mutex to make sure sysfs operations are
+> +	 * complete before we attempt to bring the device into low[er]
+> +	 * power mode.
+> +	 */
+> +	ret = mutex_lock_interruptible(&data->sysfs_mutex);
+> +	if (ret)
+> +		return;
+> +
+> +	disable_irq(client->irq);
+> +
+> +	ret = elan_set_power(data, false);
+> +	if (ret)
+> +		enable_irq(client->irq);
+> +
+> +	mutex_unlock(&data->sysfs_mutex);
+> +
+> +}
+> +
+> +static void elan_close(struct input_dev *input_dev) {
+> +	if ((input_dev->users) && (!input_dev->inhibited))
+> +		elan_inhibit(input_dev);
+
+I am not sure why you need these checks. Input core will only call
+input_dev->close() when device is powered up st (i.e. it is not inhibited
+and there are users of it) and when either:
+
+- there is inhibit request or
+- the last user is letting go of the device
+
+Similarly elan_open() will be called when first user opens device if device
+is not inhibited, or when request to uninhibit comes for inhibited device
+that has users.
+
+But you need to make sure you start in a low power state.
+
+Thanks.
+
+--
+Dmitry
+
