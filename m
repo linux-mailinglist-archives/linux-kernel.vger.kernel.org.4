@@ -2,160 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80EB6DC90B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7A56DC912
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjDJQF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S229961AbjDJQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjDJQFZ (ORCPT
+        with ESMTP id S229771AbjDJQIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:05:25 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C580A7;
-        Mon, 10 Apr 2023 09:05:24 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id f26so7419448ejb.1;
-        Mon, 10 Apr 2023 09:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681142723; x=1683734723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GVjLfNtBrKxtCcfxvBYkIZ+9NrsFrjbA5yaTUpDWRqk=;
-        b=dNNEZ+J9y8fxGs583ZvtpMBFduZpF+gGXd85xKDJxb+cu8M0rETW02Opeu9Elvr0Q6
-         oH8W82+ioklpFCgZs8zhTOwIi8DiC101XQOtSlVAIt3j2fW9V5udYVwGsimO3tTEIqff
-         50vnLioJYOO59Y0ZqEis07iQ9m6tnQqy6NTB8GJoDCz0R0CoL/FB06F0yLaOq44Um1gl
-         DcBt78mm4lxvA5AHylFXAPtzuOkwpzJptNC/br1JM5iJmQ2uqUpWSLmI8o4VGHoi4b36
-         O8CSEQtYsE3tfZKW9LclU/OBjQzjzJhJ2sdx0UE8Oiq5bQ7yYou0jl+vaNBxCAtMSji7
-         Gzow==
+        Mon, 10 Apr 2023 12:08:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB4E6C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681142883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tKyrBwfd2oDcUs2lWJFq6u064SVhVNeOSwEIW7vUOn0=;
+        b=Pyrq1cIkydbSwiAL9LsPDsEtHgf7yJEOHwpFd8kv52v5Sl+MEcxWyQiD6J0kXTZBi5MAQI
+        1cwNINemyMD6Pl5tvsjYEhBr6wNM83F+/cZ71EoZUTp7E/gWmIgP/r6QfBKG47elVQww5E
+        9IcRVBZ8nIQt+74btvdwkST1SPGuhuk=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-20-a5UfyMqANqqY1B2Gf3yZbA-1; Mon, 10 Apr 2023 12:08:02 -0400
+X-MC-Unique: a5UfyMqANqqY1B2Gf3yZbA-1
+Received: by mail-pg1-f198.google.com with SMTP id j62-20020a638041000000b0051827ed9c15so1989262pgd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:08:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681142723; x=1683734723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GVjLfNtBrKxtCcfxvBYkIZ+9NrsFrjbA5yaTUpDWRqk=;
-        b=h2rut+nnJdlSGft/uZpFuPMFQ1NNzgAObGYhrhkzTL/LtIN2XRQCjEW5ZdP/ozRBM0
-         VqWri53ve9VhEmis0TmalBvV+OHN8s2vCxT49wwGqoYFbUKYgIKeHpMdbSAa0nn9te15
-         HatBC8XtTmVdRAP2zNLqW0VOt+xHOVHx5KLQYeRp+45vIeY2S7OMRSnPV+u2PjAYE1+b
-         xuXEVHWS6Uq4zDnuKfvBtAKO/RT0XXaWV9hPaNo/7kvidSarJOCYOks0iAGy/Z2vWqwH
-         2EjJNue7pRH0bw9ZJ6UiSQ2n2/3KKjRq3Am7lILttj/rwxLQlyzeidJAYDVMxtyKIgdr
-         VRTA==
-X-Gm-Message-State: AAQBX9fNqYbmwfB2mLlyI6RlKwzIZ6q99qLZ9yqF7uwCe5nBIufo+JAM
-        2q18hoJ21h6CIWVDGFhBebY=
-X-Google-Smtp-Source: AKy350ZvJSA1nnzosjr5bhvvnr+1442VxjKvMzCAiyfLNjv0iIKyccNtq0yNenUUNRmcYEQFfkjimg==
-X-Received: by 2002:a17:907:78ce:b0:94a:7d5c:2fab with SMTP id kv14-20020a17090778ce00b0094a7d5c2fabmr4064919ejc.72.1681142722963;
-        Mon, 10 Apr 2023 09:05:22 -0700 (PDT)
-Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
-        by smtp.gmail.com with ESMTPSA id rn5-20020a170906d92500b0094d69608f5fsm281387ejb.97.2023.04.10.09.05.21
+        d=1e100.net; s=20210112; t=1681142881; x=1683734881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tKyrBwfd2oDcUs2lWJFq6u064SVhVNeOSwEIW7vUOn0=;
+        b=aciMMqy0HbB1w2O8vEgmGQZC2CBnCRlArJ4NISvI4uwW+JtRAhPW7XOTpQYkhcxiHd
+         1pCg+h0Gwu5Ca3HTA/Thf419alIgaOrYD6g5HzmdWZBj5gbEpMmN40Qwb8/2Tpa59PDC
+         FaLaZm8InEjNdjG1TJOP6wF1dJ10TYRKWy4K+sm+EJkkdE7mH/bw1tuHhqritGIGSN7v
+         x/GtPooFGTmY14fgezDNFDIy2/Z0M9i2Nk6Qr46o1R7nR1VEigFcbA0EwOtwsyhcXWAP
+         Bsw4Y1HvspfoWVKSlTKzekoMozw46VTMxnurMsEVbdNVg7o95Z0jB9SUT0zKTs/jkx9l
+         ddKA==
+X-Gm-Message-State: AAQBX9e1BcoPnLv/wb9gLRcSBnonsYZ5ebK6CS9HmATpqHQ/C1Ho9a4M
+        QdUNqriJwiFYNuGtFAMU+b5Li4lRtfQChzFDrwYZvxkrKu/Be99SrBKRbPsXYBgocMCjmhLL7SF
+        ooBJ+yjtA2myo46+nFSMdwgdn
+X-Received: by 2002:a05:6a20:7a86:b0:e4:2a2c:869b with SMTP id u6-20020a056a207a8600b000e42a2c869bmr12067471pzh.36.1681142881291;
+        Mon, 10 Apr 2023 09:08:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZXeZrFMveM/HuIZlNvxfD4NqlUe/w1jLGkwF5Qj6WkdSiJUAg3vzTfi5sKD3AiJ/e//XOcYg==
+X-Received: by 2002:a05:6a20:7a86:b0:e4:2a2c:869b with SMTP id u6-20020a056a207a8600b000e42a2c869bmr12067447pzh.36.1681142880863;
+        Mon, 10 Apr 2023 09:08:00 -0700 (PDT)
+Received: from zeus.elecom ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
+        by smtp.gmail.com with ESMTPSA id l14-20020a63da4e000000b005004919b31dsm3449040pgj.72.2023.04.10.09.07.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 09:05:22 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 10 Apr 2023 17:05:20 +0100
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     ast@kernel.org, rongtao@cestc.cn,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Nick Terrell <terrelln@fb.com>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: trace_helpers.c: Fix segfault
-Message-ID: <ZDQzwP3K8WOImluJ@krava>
-References: <tencent_0D62BF818D106C96C26594CAC76BF3281306@qq.com>
+        Mon, 10 Apr 2023 09:08:00 -0700 (PDT)
+From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, david@fromorbit.com,
+        Ryosuke Yasuoka <ryasuoka@redhat.com>
+Subject: [PATCH v2] xfs: Use for_each_perag_from() to iterate all available AGs
+Date:   Tue, 11 Apr 2023 01:07:27 +0900
+Message-Id: <20230410160727.3748239-1-ryasuoka@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_0D62BF818D106C96C26594CAC76BF3281306@qq.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 09, 2023 at 04:15:25PM +0800, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> When the number of symbols is greater than MAX_SYMS (300000), the access
-> array struct ksym syms[MAX_SYMS] goes out of bounds, which will result in
-> a segfault.
-> 
-> Resolve this issue by judging the maximum number and exiting the loop, and
-> increasing the default size appropriately. (6.2.9 = 329839 below)
-> 
->     $ cat /proc/kallsyms | wc -l
->     329839
-> 
->     GDB debugging:
->     $ cd linux/samples/bpf
->     $ sudo gdb ./sampleip
->     ...
->     (gdb) r
->     ...
->     Program received signal SIGSEGV, Segmentation fault.
->     0x00007ffff7e2debf in malloc () from /lib64/libc.so.6
->     Missing separate debuginfos, use: dnf debuginfo-install
->     elfutils-libelf-0.189-1.fc37.x86_64 glibc-2.36-9.fc37.x86_64
->     libzstd-1.5.4-1.fc37.x86_64 zlib-1.2.12-5.fc37.x86_64
->     (gdb) bt
->     #0  0x00007ffff7e2debf in malloc () from /lib64/libc.so.6
->     #1  0x00007ffff7e33f8e in strdup () from /lib64/libc.so.6
->     #2  0x0000000000403fb0 in load_kallsyms_refresh() from trace_helpers.c
->     #3  0x00000000004038b2 in main ()
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+xfs_filestream_pick_ag() iterates all the available AGs when no
+unassociated AGs are available by using for_each_perag_wrap().
+To iterate all the available AGs, just use for_each_perag_from() instead.
 
-I had to apply by hand, there was some fuzz:
 
-  patching file tools/testing/selftests/bpf/trace_helpers.c
-  Hunk #1 succeeded at 18 with fuzz 2 (offset 4 lines).
-  Hunk #2 succeeded at 48 (offset 4 lines).
+This patch cleans up a code where xfs_filestream_pick_ag() iterates 
+all the available AGs when no unassociated AGs are available.
+Current implementation is using a for_each_perag_wrap() macro which
+iterates all AGs from start_agno through wrap_agno, wraps to
+restart_agno, and then iterates again toward to (start_agno - 1).
+In this case, xfs_filestream_pick_ag() start to iterate from 0 and
+does't need to wrap. Although passing 0 as start_agno to
+for_each_perag_wrap() 
+is not problematic, we have already a for_each_perag() macro family
+which just iterates all AGs from 0 and doesn't wrap. Hense, I propose
+to use for_each_perag() family simply.
 
-but other than that looks good
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Changes since v1 [1]:
+Use for_each_perag_from() instead of for_each_perag() to clarify
+where we are iterating from.
 
-jirka
+[1]:
+https://lore.kernel.org/linux-xfs/CAHpthZrvhqh8O1HO7U_jVnaq9R9Ur=Yq2eWzjWfNx3ryDbnGPA@mail.gmail.com/T/#m5704d0409bec1ce5273be0d3860e8ad60e9886fd
 
-> ---
->  tools/testing/selftests/bpf/trace_helpers.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-> index 09a16a77bae4..a9d589c560d2 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-> @@ -14,7 +14,7 @@
->  
->  #define DEBUGFS "/sys/kernel/debug/tracing/"
->  
-> -#define MAX_SYMS 300000
-> +#define MAX_SYMS 400000
->  static struct ksym syms[MAX_SYMS];
->  static int sym_cnt;
->  
-> @@ -44,7 +44,8 @@ int load_kallsyms_refresh(void)
->  			continue;
->  		syms[i].addr = (long) addr;
->  		syms[i].name = strdup(func);
-> -		i++;
-> +		if (++i >= MAX_SYMS)
-> +			break;
->  	}
->  	fclose(f);
->  	sym_cnt = i;
-> -- 
-> 2.39.2
-> 
+Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
+---
+ fs/xfs/xfs_filestream.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/xfs/xfs_filestream.c b/fs/xfs/xfs_filestream.c
+index 22c13933c8f8..29acd9f7d422 100644
+--- a/fs/xfs/xfs_filestream.c
++++ b/fs/xfs/xfs_filestream.c
+@@ -151,7 +151,8 @@ xfs_filestream_pick_ag(
+ 		 * grab.
+ 		 */
+ 		if (!max_pag) {
+-			for_each_perag_wrap(args->mp, 0, start_agno, args->pag)
++			start_agno = 0;
++			for_each_perag_from(args->mp, start_agno, args->pag)
+ 				break;
+ 			atomic_inc(&args->pag->pagf_fstrms);
+ 			*longest = 0;
+-- 
+2.39.2
+
