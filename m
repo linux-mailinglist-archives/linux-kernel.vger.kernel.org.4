@@ -2,191 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10376DCDAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE016DCDB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDJWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S229827AbjDJWx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDJWwK (ORCPT
+        with ESMTP id S229877AbjDJWxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:52:10 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AAA1BF1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:52:09 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3287544f0a0so354745ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681167128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dCML3GJo02sARUkxvxRac8szR5Qx0GytecSMuFd6SAA=;
-        b=KSLa8ViMmYi89N65o0Yb2S2iJIqfk1oDmEi1G2YTQS/ZiNn88L2/qF38e4hVTyqJq3
-         FReKiq72zo5KiQ1SMH7f+TmoiNsCa6eGaonecUMzLu/tGB+rVALNEmv6Get4lUNBzLgi
-         F9wytHwU+xqnVhCldItDFsKsL15huyEPV6scg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681167128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dCML3GJo02sARUkxvxRac8szR5Qx0GytecSMuFd6SAA=;
-        b=wWIlr5+87YAXCjcQbVCbzEdv0W8aPgbnUeLKfuYAHvB8VIqdx/7iFm3RwSN2Tuz9ye
-         sfV7KQP2hPiCB0K2iFXjv6RBRp+1Evj1abc6ewu+jwlCPhWK72Pmd6M2HuZDVgrX3xT+
-         KcvbdLPgcI+jrVROFL8LsAKIw2ksqqbmOD/uKFj2kPkSNDyHixrz7AsQaDH/8WxBOmX+
-         ltI/GhnoHaWKWYOnmE5N8bdnK1mGpOsx/czJvrLO+wlnXqu0a/r3nxeXMw4qHMKdOCf8
-         Yd0fur/Q6Xki31vUxAhirSdSpYqCXpbTj/fULN1+BNHZYrTcp7ZJPtDQ2L7EQJibCzjk
-         Zm5Q==
-X-Gm-Message-State: AAQBX9eJAPaaAqpIIeAl7bjOoo+4MzA/C9HRNySHshUPxszJkzHOrMR+
-        btikep9lgVhfgZr7dGZSYuQGZw==
-X-Google-Smtp-Source: AKy350ZkD+sGvf5Y8EIkzwr+3AVQrX7AGboJvNIy0Gf8aQFPeYv2t0ztn6JQ83CpFrYnM4YptngO4g==
-X-Received: by 2002:a05:6e02:1182:b0:326:1778:fae3 with SMTP id y2-20020a056e02118200b003261778fae3mr3569097ili.2.1681167128633;
-        Mon, 10 Apr 2023 15:52:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e32-20020a026d60000000b003bf39936d1esm3517089jaf.131.2023.04.10.15.52.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 15:52:08 -0700 (PDT)
-Message-ID: <0197f2b8-96a3-22f6-aa14-960afdfd2e8d@linuxfoundation.org>
-Date:   Mon, 10 Apr 2023 16:52:07 -0600
+        Mon, 10 Apr 2023 18:53:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5861FED;
+        Mon, 10 Apr 2023 15:53:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCDA961F27;
+        Mon, 10 Apr 2023 22:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3013DC433EF;
+        Mon, 10 Apr 2023 22:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681167224;
+        bh=PBq6Pho8K6a+RvufYUks/PO6mSqnNledF7opKlNbT/U=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Gfo+N7R09DMPn0NoZNP8fZjGZ9jzR/hYhy/qendafaMlbLU4UzE9tIsFpidGp2Jxd
+         3e1T1oTJYNkt4ZWvBKFNA8RHBK8PHtb+S7YoP+BxoFXHsZLWB/Seel0GwMEoDJ7S3E
+         fJctC1ib0kPRDW7xEgutKslxEjraWQw1OspbOt5bxUIY83gF6864llfXcgCVnbJLFj
+         OXARTmDtBnPn+73n/W5JkgC4jY0x9p9dR0hrIxipKK3MFt69WeiL8yETxEwBJVDSCw
+         mQXNqOG+t+iYwvTJ9LxsM9/HSoFMtAaHDom5jlQJIAe7q8s22m1quegL2mkivU3P+e
+         E/ZUI2LhJtTIA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C2C931540478; Mon, 10 Apr 2023 15:53:43 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 15:53:43 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>, x86@kernel.org,
+        Wangyang Guo <wangyang.guo@intel.com>,
+        Arjan van De Ven <arjan@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Subject: Re: [patch V3 0/4] net, refcount: Address dst_entry reference count
+ scalability issues
+Message-ID: <bf0816ba-4143-46fe-88b1-46010bc14117@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230323102649.764958589@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric
- values for idle-set operation.
-Content-Language: en-US
-To:     Korrapati Likhitha <likhitha@linux.ibm.com>, shuah@kernel.org,
-        trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com,
-        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230410121054.61622-1-likhitha@linux.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230410121054.61622-1-likhitha@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323102649.764958589@linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/23 06:10, Korrapati Likhitha wrote:
-> From: Likhitha Korrapati <likhitha@linux.ibm.com>
+On Thu, Mar 23, 2023 at 09:55:27PM +0100, Thomas Gleixner wrote:
+> Hi!
 > 
-> For both the d and e options in 'cpupower idle_set' command, an
-> atoi() conversion is done without checking if the input argument
-> is all numeric. So, an atoi conversion is done on any character
-> provided as input and the CPU idle_set operation continues with
-> that integer value, which may not be what is intended or entirely
-> correct.
+> This is version 3 of this series. Version 2 can be found here:
 > 
-> The output of cpuidle-set before patch is as follows:
+>      https://lore.kernel.org/lkml/20230307125358.772287565@linutronix.de
 > 
-> [root@xxx cpupower]# cpupower idle-set -e 1$
-> Idlestate 1 enabled on CPU 0
-> [snip]
-> Idlestate 1 enabled on CPU 47
+> Wangyang and Arjan reported a bottleneck in the networking code related to
+> struct dst_entry::__refcnt. Performance tanks massively when concurrency on
+> a dst_entry increases.
 > 
-> [root@xxx cpupower]# cpupower idle-set -e 11
-> Idlestate 11 not available on CPU 0
-> [snip]
-> Idlestate 11 not available on CPU 47
+> This happens when there are a large amount of connections to or from the
+> same IP address. The memtier benchmark when run on the same host as
+> memcached amplifies this massively. But even over real network connections
+> this issue can be observed at an obviously smaller scale (due to the
+> network bandwith limitations in my setup, i.e. 1Gb). How to reproduce:
 > 
-> [root@xxx cpupower]# cpupower idle-set -d 12
-> Idlestate 12 not available on CPU 0
-> [snip]
-> Idlestate 12 not available on CPU 47
+>   Run memcached with -t $N and memtier_benchmark with -t $M and --ratio=1:100
+>   on the same machine. localhost connections amplify the problem.
 > 
-> [root@xxx cpupower]# cpupower idle-set -d qw
-> Idlestate 0 disabled on CPU 0
-> [snip]
-> Idlestate 0 disabled on CPU 47
+>   Start with the defaults for $N and $M and increase them. Depending on
+>   your machine this will tank at some point. But even in reasonably small
+>   $N, $M scenarios the refcount operations and the resulting false sharing
+>   fallout becomes visible in perf top. At some point it becomes the
+>   dominating issue.
 > 
-> This patch adds a check for both d and e options in cpuidle-set.c
-> to see that the idle_set value is all numeric before doing a
-> string-to-int conversion.
+> There are two factors which make this reference count a scalability issue:
 > 
-> The output of cpuidle-set after the patch is as below:
+>    1) False sharing
 > 
-> [root@xxx cpupower]# ./cpupower idle-set -e 1$
-> Bad idle_set value: 1$. Integer expected
+>       dst_entry:__refcnt is located at offset 64 of dst_entry, which puts
+>       it into a seperate cacheline vs. the read mostly members located at
+>       the beginning of the struct.
 > 
-> [root@xxx cpupower]# ./cpupower idle-set -e 11
-> Idlestate 11 not available on CPU 0
-> [snip]
-> Idlestate 11 not available on CPU 47
+>       That prevents false sharing vs. the struct members in the first 64
+>       bytes of the structure, but there is also
 > 
-> [root@xxx cpupower]# ./cpupower idle-set -d 12
-> Idlestate 12 not available on CPU 0
-> [snip]
-> Idlestate 12 not available on CPU 47
+>       	    dst_entry::lwtstate
 > 
-> [root@xxx cpupower]# ./cpupower idle-set -d qw
-> Bad idle_set value: qw. Integer expected
+>       which is located after the reference count and in the same cache
+>       line. This member is read after a reference count has been acquired.
 > 
-> Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
-> Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
-> Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
-> Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
-> ---
+>       The other problem is struct rtable, which embeds a struct dst_entry
+>       at offset 0. struct dst_entry has a size of 112 bytes, which means
+>       that the struct members of rtable which follow the dst member share
+>       the same cache line as dst_entry::__refcnt. Especially
 > 
-> ** changes since v1 [1] **
+>       	  rtable::rt_genid
 > 
-> - Addressed reviewed comments from v1.
-> - Slightly reworded the commit for clarity.
+>       is also read by the contexts which have a reference count acquired
+>       already.
 > 
-> [1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
+>       When dst_entry:__refcnt is incremented or decremented via an atomic
+>       operation these read accesses stall and contribute to the performance
+>       problem.
 > 
->   tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
->   tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
->   tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
->   3 files changed, 45 insertions(+), 5 deletions(-)
+>    2) atomic_inc_not_zero()
 > 
-> diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-> index 46158928f9ad..1bfe16d27c2d 100644
-> --- a/tools/power/cpupower/utils/cpuidle-set.c
-> +++ b/tools/power/cpupower/utils/cpuidle-set.c
-> @@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
->   				break;
->   			}
->   			param = ret;
-> -			idlestate = atoi(optarg);
-> +			if (is_stringnumeric(optarg))
-> +				idlestate = atoi(optarg);
-> +			else {
-> +				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
-> +				exit(EXIT_FAILURE);
-> +			}
+>       A reference on dst_entry:__refcnt is acquired via
+>       atomic_inc_not_zero() and released via atomic_dec_return().
+> 
+>       atomic_inc_not_zero() is implemted via a atomic_try_cmpxchg() loop,
+>       which exposes O(N^2) behaviour under contention with N concurrent
+>       operations. Contention scalability is degrading with even a small
+>       amount of contenders and gets worse from there.
+> 
+>       Lightweight instrumentation exposed an average of 8!! retry loops per
+>       atomic_inc_not_zero() invocation in a inc()/dec() loop running
+>       concurrently on 112 CPUs.
 
-Why can't we do this once instead of duplicating the code under
-'d' and 'e'
+Huh.  8 is pretty bad, 8! far worse, but 8!!?  3.4e168186???
 
-Also have you tried using isdigit(idlestate) - works just fine
-for me.
+(Sorry, couldn't resist...)
 
-diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-index 46158928f9ad..01b344efc1b1 100644
---- a/tools/power/cpupower/utils/cpuidle-set.c
-+++ b/tools/power/cpupower/utils/cpuidle-set.c
-@@ -95,6 +95,11 @@ int cmd_idle_set(int argc, char **argv)
-  		exit(EXIT_FAILURE);
-  	}
-  
-+	if(!isdigit(idlestate)) {
-+		printf("invalid idlestate specified\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-  	get_cpustate();
-  
-  	/* Default is: set all CPUs */
+>       There is nothing which can be done to make atomic_inc_not_zero() more
+>       scalable.
+> 
+> The following series addresses these issues:
+> 
+>     1) Reorder and pad struct dst_entry to prevent the false sharing.
+> 
+>     2) Implement and use a reference count implementation which avoids the
+>        atomic_inc_not_zero() problem.
+> 
+>        It is slightly less performant in the case of the final 0 -> -1
+>        transition, but the deconstruction of these objects is a low
+>        frequency event. get()/put() pairs are in the hotpath and that's
+>        what this implementation optimizes for.
+> 
+>        The algorithm of this reference count is only suitable for RCU
+>        managed objects. Therefore it cannot replace the refcount_t
+>        algorithm, which is also based on atomic_inc_not_zero(), due to a
+>        subtle race condition related to the 0 -> -1 transition and the final
+>        verdict to mark the reference count dead. See details in patch 2/3.
+> 
+>        It might be just my lack of imagination which declares this to be
+>        impossible and I'd be happy to be proven wrong.
 
-thanks,
--- Shuah
+It is possible to make something like rcuref_get that does only a
+READ_ONCE(), WRITE_ONCE() to storage local to the task, smp_mb(),
+READ_ONCE() and compare in the common case.  There would be something
+like rcuref_put() that did an smp_store_release() to the same storage
+local to the task.
+
+Of course, there is always a catch, and here there are several:
+
+1.	Instead of just returning a pointer to a struct dst_entry,
+	sk_dst_get() would need to hand back both that pointer along
+	with a pointer to the aforementioned storage local to the task.
+
+2.	A generally useful implementation would require the counterpart
+	to rcuref_get() to sometimes allocate memory.  Failure to allocate
+	memory would imply failure to gain a reference.
+
+3.	The structure would not need to be RCU-freed, but it still
+	would need to be freed specially.  (All of the non-NULL
+	locations in all the storage local to the tasks needs to be
+	checked, but batching optimizations work well here.)
+
+4.	The smp_mb() compares well to the atomic_add_negative_relaxed(),
+	but getting rid of that smp_mb() either adds more RCU-like delays
+	on the free path on the one hand, or requires IPIs on the free
+	path on the other.
+
+5.	The aforementioned storage local to the task could instead be
+	local to the CPU, but at the expense of some put-side cache
+	misses and possible false sharing in the case where rcuref_get()
+	runs on one CPU and rcuref_put() runs on another.  Of course,
+	the current rcuref_put() gets that already due to the use of
+	atomic_add_negative_release() on shared memory, so perhaps not
+	a big deal.
+
+Not sure it is worth it, but you did ask!
+
+If this does turn out to be an attractive option, please let me know.
+
+							Thanx, Paul
+
+>        As a bonus the new rcuref implementation provides underflow/overflow
+>        detection and mitigation while being performance wise on par with
+>        open coded atomic_inc_not_zero() / atomic_dec_return() pairs even in
+>        the non-contended case.
+> 
+> The combination of these two changes results in performance gains in micro
+> benchmarks and also localhost and networked memtier benchmarks talking to
+> memcached. It's hard to quantify the benchmark results as they depend
+> heavily on the micro-architecture and the number of concurrent operations.
+> 
+> The overall gain of both changes for localhost memtier ranges from 1.2X to
+> 3.2X and from +2% to %5% range for networked operations on a 1Gb connection.
+> 
+> A micro benchmark which enforces maximized concurrency shows a gain between
+> 1.2X and 4.7X!!!
+> 
+> Obviously this is focussed on a particular problem and therefore needs to
+> be discussed in detail. It also requires wider testing outside of the cases
+> which this is focussed on.
+> 
+> Though the false sharing issue is obvious and should be addressed
+> independent of the more focussed reference count changes.
+> 
+> The series is also available from git:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rcuref
+> 
+> Changes vs. V2:
+> 
+>   - Rename __refcnt to __rcuref (Linus)
+> 
+>   - Fix comments and changelogs (Mark, Qiuxu)
+> 
+>   - Fixup kernel doc of generated atomic_add_negative() variants
+> 
+> I want to say thanks to Wangyang who analyzed the issue and provided the
+> initial fix for the false sharing problem. Further thanks go to Arjan
+> Peter, Marc, Will and Borislav for valuable input and providing test
+> results on machines which I do not have access to, and to Linus and
+> Eric, Qiuxu and Mark for helpful feedback.
+> 
+> Thanks,
+> 
+> 	tglx
+> 
