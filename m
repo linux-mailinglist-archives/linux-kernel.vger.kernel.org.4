@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B7C6DC8F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C776DC904
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjDJQCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S230181AbjDJQCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjDJQCG (ORCPT
+        with ESMTP id S229669AbjDJQCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:02:06 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33DA10A;
-        Mon, 10 Apr 2023 09:02:04 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3261b76b17aso1799115ab.0;
-        Mon, 10 Apr 2023 09:02:04 -0700 (PDT)
+        Mon, 10 Apr 2023 12:02:08 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C31E63;
+        Mon, 10 Apr 2023 09:02:06 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7606d6a2aa5so2412239f.1;
+        Mon, 10 Apr 2023 09:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681142524; x=1683734524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YHlyCEEJEtWKucnlrijjk2nbetLGWAzpZkLzz8yXRw=;
-        b=epKmCkNmCehnwWv9Nsk6zchNP/0m9/SDPd+cB+OWBGa4RFIBDl/4tDdujtL95fqtwa
-         V5JIa/CvRZWJt3H8BR+biDkLamnz/YCtH6lJvXJ2vo+NMe3U1rz4xT96r/o9u7uqS4+s
-         7g/TxBsnpeAcYcUmAA1/udv7CcK6/5gfFzUJIetKFtskSpgYeqaFxpkmcnSjA9e/ECQ8
-         hdy1a1s5dSicQuK1QhuovuPd35Et77RbaMNbci1QQZaOJ+T1W+Ip+keAujkGcVQmR4Qo
-         Awhtax41zsH5lHGGnRCa8ZdbEVD4j4qkdwp0HnZWDtQXNBYAFoOhqyybHQhJcNU6TeMx
-         8NNg==
+        d=gmail.com; s=20210112; t=1681142525; x=1683734525;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ml18rVYykM8RSPcNS38Utyfp7oGrBURSiK5dX/uCCMg=;
+        b=Xb7DyguBz/havimHm+lI28ZuxYeIjMZcSFeL8Y5Tzq9jtTT2kGY5wHzMgomybXdwgw
+         SGm8NxbqdmCz2JHdqkS66oSrPtgGsonTFCLNtx7eYUi3HQ1EktK1JhIITc9MEy04/t1N
+         zSYsa1V1lX7fqgOrwYpMKlb3gs5yjvudfbDVmaTQ+IWBiHJnC1zrVIs20hUSWMaxaSJH
+         N5v3TofZESwUNbDahV9Qndj+xuqpnHwI/7VUX8X8IytBtNSavPN5IPrOVEjUsJCs7hnd
+         WyVUxVRqyxbqdegI8n/u5ceifFhcvFBiuLZk8QkpXt8ikLMVXDkqbqTBi/vXZI+O0KaS
+         DWbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681142524; x=1683734524;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8YHlyCEEJEtWKucnlrijjk2nbetLGWAzpZkLzz8yXRw=;
-        b=7ZgAWvXQNHES/+SXgAN/1VsfUlOWirRwqSuHLlUeYEhJ9ufGr97ZmekTaVdwpK76m2
-         sndJ+yXflw3AHdTzydVnqy37dr/Llbn+qFvol2Jten2pfdoLKg3rplA7Q9NYP3Fuw9a6
-         2cOBg/rsMS+QZn85GoM3PG8rsuc+/rGWP73rmr/JrMVa8iL+3IfoVGTOo5rNslJ53wqc
-         SD+fHg5qYJ1CgjTLxyN9KV8H5aX+BlOmt041NLGYeBnI02HbZPL4nBNSrRBnTSFMMVx5
-         Q/6Fyo0ut/BjJSowPpzUWftcCzre7xyurrtXuLDTia4WcPKoYOr0OatxMC55/SWfV0yW
-         iSPQ==
-X-Gm-Message-State: AAQBX9fqJ23ebtVQV520lCd4rNc4wCrGKbsQUUSHTxHeUflASWWTf18C
-        bbMfHsgvwdAPtYVcztzwo8M=
-X-Google-Smtp-Source: AKy350Z0P68Xv90CfVLoFoIwWeV7OhYacXeW6/NQvz9Dr5K/wT1cuW0VHU+NxVtWuYgexcEmTu51IQ==
-X-Received: by 2002:a6b:8d84:0:b0:740:7d21:d96f with SMTP id p126-20020a6b8d84000000b007407d21d96fmr3473314iod.1.1681142524259;
-        Mon, 10 Apr 2023 09:02:04 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681142525; x=1683734525;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ml18rVYykM8RSPcNS38Utyfp7oGrBURSiK5dX/uCCMg=;
+        b=3WZVN1YQvrmpMDsWScnYoKdynwryM+sWm+51Hl6g3KyMcdeHlImKecJ5jLzoYfMf8k
+         x07s2comb00NZNEO0Db9XZk7Li6HI6J3wlGDmzEXnUbh6P60JwuVyVVy8V6s6U/58yPA
+         c7ZsCmaU8YTMqgMFC3S80kRWnfgD2QEwkVl5ObvU9xxV6OctZqezjuYKc8KXFguAUb4l
+         r8KsEjkRz4Nk5UiIi0OcITvOS3qY2tO15nNx+BNu9U/KMz5f1h752wqex/4Drz5mJlXJ
+         Wrtfpt+2U98USPAW8iuN+ZdZkoR5vN7t0IhQjVBusaIexbd+2zlpy0vExU9UbptEo16U
+         rHIQ==
+X-Gm-Message-State: AAQBX9ePaRH1S2j6KgvdMWeRbgz0doeNLkiSm/mOiOwHM+0YKR4F1XFo
+        IHe9DnzxQwYdcp5v5X3RiWw=
+X-Google-Smtp-Source: AKy350Z//jb9iMw3Y2hMFp4YCE1amp7CtwmW4ptJyAQl/zovn0w+U9N1IIl/vHh9DLqiYe+YyAevaw==
+X-Received: by 2002:a05:6602:89d:b0:760:9027:3501 with SMTP id f29-20020a056602089d00b0076090273501mr182225ioz.0.1681142525680;
+        Mon, 10 Apr 2023 09:02:05 -0700 (PDT)
 Received: from JOEL-DESKTOP.. ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
-        by smtp.gmail.com with ESMTPSA id c7-20020a5d9a87000000b00746041ecbf9sm3184435iom.39.2023.04.10.09.02.02
+        by smtp.gmail.com with ESMTPSA id c7-20020a5d9a87000000b00746041ecbf9sm3184435iom.39.2023.04.10.09.02.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 09:02:03 -0700 (PDT)
+        Mon, 10 Apr 2023 09:02:05 -0700 (PDT)
 From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
 To:     Caleb Connolly <caleb@connolly.tech>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -71,10 +72,12 @@ Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Subject: [PATCH v2 0/5] Add support for Focaltech FTS Touchscreen
-Date:   Mon, 10 Apr 2023 11:01:55 -0500
-Message-Id: <20230410160200.57261-1-joelselvaraj.oss@gmail.com>
+Subject: [PATCH v2 1/5] dt-bindings: input: touchscreen: add bindings for focaltech,fts5452
+Date:   Mon, 10 Apr 2023 11:01:56 -0500
+Message-Id: <20230410160200.57261-2-joelselvaraj.oss@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230410160200.57261-1-joelselvaraj.oss@gmail.com>
+References: <20230410160200.57261-1-joelselvaraj.oss@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -87,92 +90,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v2:
---------------
-1. dt-bindings changes (Suggested by Krzysztof Kozlowski)
-	- changed file name from focaltech,fts.yaml to focaltech,fts5452.yaml
-	- removed focaltech,max-touch-number property, handled in driver now
-	- removed touchscreen-* properties and used unevaluatedProperties: false
-	instead of additionalProperties: false
-	- fixed the example dts node name to be generic
-	
-2. FTS Touchscreen driver changes (Suggested by Markuss Broks and Jeff LaBundy)
-	- removed repeated license terms since SPDX tag is used
-	- includes are now sorted
-	- added the missing input_mt_sync_frame when reporting touch
-	- focaltech,max-touch-number is no longer read from dts and instead
-	specified in the driver as compatible data.
-	- removed redundant __set_bits
-	- input_mt_init_slots is now called after the axes are defined
-	- irq handler now returns IRQ_NONE when there is an i2c error
-	- other minor fixes and refactoring as suggested
-	- renamed driver filename from focaltech_fts.c to focaltech_fts5452.c
-	(Suggested by Krzysztof Kozlowski)
-	
-3. dts changes (Suggested by Krzysztof Kozlowski)
-	- use generic touchscreen nodes
-	- removed focaltech,max-touch-number property
-	- irq type was specified wrongly for Poco F1 in v1. Changed the irq
-	type to IRQ_TYPE_EDGE_FALLING as that is correct.
+Add devicetree bindings for the Focaltech FTS touchscreen drivers.
 
-Some Clarifications:
---------------------
-1. Jeff LaBundy suggested I could read chip id with the following:
-	__be16 val;
-	regmap_raw_read(data->regmap, FTS_REG_CHIP_ID_H, &val, sizeof(val));
-But this is not possible because FTS_REG_CHIP_ID_H and FTS_REG_CHIP_ID_L
-are not continous register, therefore reading it together as 16-bit values
-will not work. So I went with what Markuss Broks suggested:
-	regmap_read(data->regmap, FTS_REG_CHIP_ID_L, &id);
-        regmap_read(data->regmap, FTS_REG_CHIP_ID_H, &val);
-        id |= val << 8;
-
-2. As Markuss Broks suggested, I tried to cast the buffer to struct, but 
-unfortunately was not able to successfully do it. The buffer layout is 
-weirdly split into 4 bits and 12 bits at someplaces which makes it hard 
-to cast into a struct. For example, we can note
-	type = buf[base + 3] >> 6
-	x = ((buf[base + 3] & 0x0F) << 8) + (buf[base + 4] & 0xFF);
-Here at buffer index 3, the first two bits (>>6) are used for denoting
-event type. The next two bits are not used. But the last 4 bits (&0x0F)
-of buffer[3] are added with buffer index 4 to get the x position. 
-I don't know how to handle these when casting to a struct. I tried
-experimenting with bitfields in struct, but to no avail. So I am sticking
-with my initial implementation for now.
-
-Kindly let me know if any further improvements are needed. Thanks.
-
-The Focaltech FTS driver supports several variants of focaltech
-touchscreens found in ~2018 era smartphones including variants found on
-the PocoPhone F1 and the SHIFT6mq which are already present in mainline.
-This driver is loosely based on the original driver from Focaltech and
-the patches submitted by Caleb Connolly previously[1] but has been
-simplified and largely reworked.
-
-[1] https://patchwork.kernel.org/project/linux-input/patch/20220123173650.290349-3-caleb@connolly.tech/
-
-Joel Selvaraj (5):
-  dt-bindings: input: touchscreen: add bindings for focaltech,fts5452
-  Input: add driver for Focaltech FTS touchscreen
-  arm64: dts: qcom: sdm845-xiaomi-beryllium-common: add touchscreen
-    related nodes
-  arm64: dts: qcom: sdm845-xiaomi-beryllium-ebbg: introduce support for
-    fts touchscreen
-  arm64: dts: qcom: sdm845-shift-axolotl: update focaltech touchscreen
-    properties
-
- .../input/touchscreen/focaltech,fts5452.yaml  |  71 +++
- MAINTAINERS                                   |   8 +
- .../boot/dts/qcom/sdm845-shift-axolotl.dts    |  15 +-
- .../qcom/sdm845-xiaomi-beryllium-common.dtsi  |  39 ++
- .../dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts |  26 ++
- drivers/input/touchscreen/Kconfig             |  12 +
- drivers/input/touchscreen/Makefile            |   1 +
- drivers/input/touchscreen/focaltech_fts5452.c | 432 ++++++++++++++++++
- 8 files changed, 596 insertions(+), 8 deletions(-)
+Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
+Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+---
+ .../input/touchscreen/focaltech,fts5452.yaml  | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
- create mode 100644 drivers/input/touchscreen/focaltech_fts5452.c
 
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml b/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+new file mode 100644
+index 000000000000..f42868293439
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/touchscreen/focaltech,fts5452.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Focaltech FTS I2C Touchscreen Controller
++
++maintainers:
++  - Joel Selvaraj <joelselvaraj.oss@gmail.com>
++  - Caleb Connolly <caleb@connolly.tech>
++
++allOf:
++  - $ref: touchscreen.yaml#
++
++properties:
++  compatible:
++    enum:
++      - focaltech,fts5452
++      - focaltech,fts8719
++
++  reg:
++    const: 0x38
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  avdd-supply:
++    description: regulator supplying analog power (2.6V to 3.3V).
++
++  vddio-supply:
++    description: regulator supplying IO power (1.8V).
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - touchscreen-size-x
++  - touchscreen-size-y
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      touchscreen@38 {
++        compatible = "focaltech,fts5452";
++        reg = <0x38>;
++
++        interrupt-parent = <&tlmm>;
++        interrupts = <125 IRQ_TYPE_EDGE_FALLING>;
++        reset-gpios = <&tlmm 99 GPIO_ACTIVE_LOW>;
++
++        avdd-supply = <&vreg_l28a_3p0>;
++        vddio-supply = <&vreg_l14a_1p88>;
++
++        pinctrl-names = "default", "suspend";
++        pinctrl-0 = <&ts_int_active &ts_reset_active>;
++        pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
++
++        touchscreen-size-x = <1080>;
++        touchscreen-size-y = <2160>;
++      };
++    };
 -- 
 2.40.0
 
