@@ -2,54 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57A56DCA5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B676DCA59
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjDJSFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S230371AbjDJSF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjDJSF0 (ORCPT
+        with ESMTP id S230343AbjDJSFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:05:26 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514801BC1;
+        Mon, 10 Apr 2023 14:05:25 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515041BCE;
         Mon, 10 Apr 2023 11:05:23 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 18:04:51 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1681149919; x=1681409119;
-        bh=U23Pxj6RmRXluaupeIIMF2+OgyhNmuLdOBsJ8ac8t5U=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=jqTai2OjeGJSWBhhS2vtfoWFT8IrFEzaTAx2Es/P9khzhP5bfX1SZGcqSSDlrgi1P
-         uBgaWpDxOAwW8OMqF7J6n+9PcR5ZOpH7AFCYN1UyF3joWFzYFL7kZB13R0c27WVMtL
-         X8e9g/qczUxDoK7eS/HL7fdDpscy2RQBUHsERv3aXl7a36pHp6L0zWng7x2KdkOs3m
-         qNMlAcI1OkPCGk2aER5BJirri/djpfU3HrZGrrC+1ZHmQPh8C5QUhEqjBjgwFcv7C5
-         4/18mM8O3mc6P9Sndp1UGvrDNORCQ0t3IizJAx7uJumUFDNbLaXzXUVIHRKuyeSV/h
-         3Pj41pZx7ookQ==
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        rust-for-linux@vger.kernel.org
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
+Received: by mail-pl1-x62d.google.com with SMTP id 20so7138863plk.10;
+        Mon, 10 Apr 2023 11:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681149922; x=1683741922;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BDFq1y3F8viINpXVlwTLfAnP5qiEXoQlHVJuS9HDArY=;
+        b=bKQXub+9dep0EKbz2N4iq0b5oiw3VF4S4XQdeCJJItf03sJjABhRb20GZJrHcxgX/x
+         9P2PVe4QRgKWoGwuD6DIeMfvsLE2U0rgoQwckX9Ceow/wZh33M80Qwf9IULoRmn6lY4G
+         B1tmZjBcLSA0NJ/qq/ZHB6Vz48eSOcLCQrGPRwm4/Z5KlpMW2P3YsjENuF8Zwjm75BaF
+         ItEeOJRi/8Ivjn2Pt2ofDmstgJ2/CoMPSgnzEF4mHEfITQQno4bB8fzZULbOoiB1odDZ
+         6JhhNR+C9q779EVFKosXg2PxSL+DRY0SiamDjcHx+3mOoi23FaY/mmF/KhcpTxeBa0SF
+         l3Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681149922; x=1683741922;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BDFq1y3F8viINpXVlwTLfAnP5qiEXoQlHVJuS9HDArY=;
+        b=MLR3JWWAovSdUQ7ajmz++bWHYc5mjtvgmspLxH7PZuyNsVIqPWBBdEzSKK2YOIG4rp
+         ueVLWH5G64ky3zC8YMw+9cqjTAaA+5+bWlamMj4g86+KrUxVoif5a5j/FJjQOxVP6Pat
+         B2mASfsMHCA2z+iSyCiEheC+qbLi8MnIJKqc4cb7O76WnFgjGcedYMITe5Zqg0ngB8p9
+         iHIF9JI6alJzjjCh35jyFurZ0WSBtjU2BXlgDDtYs5lJ+JDtMWTMFITClDdz1W6lJPM2
+         SjeWDnkO7P237xIWiTTwqAISMNQEESHCWMjRBRVoNL/zrMihinrhsAYMmINEOedoH1Z+
+         C0Nw==
+X-Gm-Message-State: AAQBX9fxlboEzu/lIDLtnVTffWAloAY8XUfKCI4wNJWzfHyP7RYJ9NkS
+        VgbPY4W73oEtt9t9RpKHfNM=
+X-Google-Smtp-Source: AKy350aO+8hq94hLZtaMkIoAG2sn/MnGR4aUyS9JLnfMt75ct/F0HJeKLfNBnZf339atMk2kndBKUA==
+X-Received: by 2002:a17:903:185:b0:19c:f476:4793 with SMTP id z5-20020a170903018500b0019cf4764793mr14622227plg.51.1681149922535;
+        Mon, 10 Apr 2023 11:05:22 -0700 (PDT)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id q1-20020a170902b10100b001a505f04a06sm7382192plr.190.2023.04.10.11.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 11:05:22 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 11:05:20 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 10/13] rust: introduce `current`
-Message-ID: <08df022b-c0e9-bac6-a57f-296217dc81ed@protonmail.com>
-In-Reply-To: <20230408075340.25237-10-wedsonaf@gmail.com>
-References: <20230408075340.25237-1-wedsonaf@gmail.com> <20230408075340.25237-10-wedsonaf@gmail.com>
-Feedback-ID: 40624463:user:proton
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: Re: [PATCH 3/8] sched/topology: add for_each_numa_cpu() macro
+Message-ID: <ZDRP4KHfa9ptGe3X@yury-laptop>
+References: <20230325185514.425745-1-yury.norov@gmail.com>
+ <20230325185514.425745-4-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325185514.425745-4-yury.norov@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,190 +93,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.04.23 09:53, Wedson Almeida Filho wrote:
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
->
-> This allows Rust code to get a reference to the current task without
-> having to increment the refcount, but still guaranteeing memory safety.
->
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+On Sat, Mar 25, 2023 at 11:55:09AM -0700, Yury Norov wrote:
+> for_each_cpu() is widely used in the kernel, and it's beneficial to
+> create a NUMA-aware version of the macro.
+> 
+> Recently added for_each_numa_hop_mask() works, but switching existing
+> codebase to it is not an easy process.
+> 
+> New for_each_numa_cpu() is designed to be similar to the for_each_cpu().
+> It allows to convert existing code to NUMA-aware as simple as adding a
+> hop iterator variable and passing it inside new macro. for_each_numa_cpu()
+> takes care of the rest.
+> 
+> At the moment, we have 2 users of NUMA-aware enumerators. One is
+> Melanox's in-tree driver, and another is Intel's in-review driver:
+> 
+> https://lore.kernel.org/lkml/20230216145455.661709-1-pawel.chmielewski@intel.com/
+> 
+> Both real-life examples follow the same pattern:
+> 
+> 	for_each_numa_hop_mask(cpus, prev, node) {
+>  		for_each_cpu_andnot(cpu, cpus, prev) {
+>  			if (cnt++ == max_num)
+>  				goto out;
+>  			do_something(cpu);
+>  		}
+> 		prev = cpus;
+>  	}
+> 
+> With the new macro, it would look like this:
+> 
+> 	for_each_numa_cpu(cpu, hop, node, cpu_possible_mask) {
+> 		if (cnt++ == max_num)
+> 			break;
+> 		do_something(cpu);
+>  	}
+> 
+> Straight conversion of existing for_each_cpu() codebase to NUMA-aware
+> version with for_each_numa_hop_mask() is difficult because it doesn't
+> take a user-provided cpu mask, and eventually ends up with open-coded
+> double loop. With for_each_numa_cpu() it shouldn't be a brainteaser.
+> Consider the NUMA-ignorant example:
+> 
+> 	cpumask_t cpus = get_mask();
+> 	int cnt = 0, cpu;
+> 
+> 	for_each_cpu(cpu, cpus) {
+> 		if (cnt++ == max_num)
+> 			break;
+> 		do_something(cpu);
+>  	}
+> 
+> Converting it to NUMA-aware version would be as simple as:
+> 
+> 	cpumask_t cpus = get_mask();
+> 	int node = get_node();
+> 	int cnt = 0, hop, cpu;
+> 
+> 	for_each_numa_cpu(cpu, hop, node, cpus) {
+> 		if (cnt++ == max_num)
+> 			break;
+> 		do_something(cpu);
+>  	}
+> 
+> The latter looks more verbose and avoids from open-coding that annoying
+> double loop. Another advantage is that it works with a 'hop' parameter with
+> the clear meaning of NUMA distance, and doesn't make people not familiar
+> to enumerator internals bothering with current and previous masks machinery.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
-> v1 -> v2: Make `current` a macro to prevent it from escaping the caller
-> v2 -> v3:
-> - Mention `current` macro in `Task::current`
-> - Hide implementation of `TaskRef` inside `Task::current`
->
->   rust/helpers.c         |  6 +++
->   rust/kernel/prelude.rs |  2 +
->   rust/kernel/task.rs    | 88 +++++++++++++++++++++++++++++++++++++++++-
->   3 files changed, 95 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 58a194042c86..96441744030e 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r=
-)
->   }
->   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
->
-> +struct task_struct *rust_helper_get_current(void)
-> +{
-> +=09return current;
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_get_current);
-> +
->   void rust_helper_get_task_struct(struct task_struct *t)
->   {
->   =09get_task_struct(t);
-> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> index fcdc511d2ce8..c28587d68ebc 100644
-> --- a/rust/kernel/prelude.rs
-> +++ b/rust/kernel/prelude.rs
-> @@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
->   pub use super::{str::CStr, ThisModule};
->
->   pub use super::init::{InPlaceInit, Init, PinInit};
-> +
-> +pub use super::current;
-> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-> index d70cad131956..5269a562cb1b 100644
-> --- a/rust/kernel/task.rs
-> +++ b/rust/kernel/task.rs
-> @@ -5,7 +5,17 @@
->   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched=
-.h).
->
->   use crate::{bindings, types::Opaque};
-> -use core::ptr;
-> +use core::{marker::PhantomData, ops::Deref, ptr};
-> +
-> +/// Returns the currently running task.
-> +#[macro_export]
-> +macro_rules! current {
-> +    () =3D> {
-> +        // SAFETY: Deref + addr-of below create a temporary `TaskRef` th=
-at cannot outlive the
-> +        // caller.
-> +        unsafe { &*$crate::task::Task::current() }
-> +    };
-> +}
->
->   /// Wraps the kernel's `struct task_struct`.
->   ///
-> @@ -15,6 +25,42 @@ use core::ptr;
->   ///
->   /// Instances of this type are always ref-counted, that is, a call to `=
-get_task_struct` ensures
->   /// that the allocation remains valid at least until the matching call =
-to `put_task_struct`.
-> +///
-> +/// # Examples
-> +///
-> +/// The following is an example of getting the PID of the current thread=
- with zero additional cost
-> +/// when compared to the C version:
-> +///
-> +/// ```
-> +/// let pid =3D current!().pid();
-> +/// ```
-> +///
-> +/// Getting the PID of the current process, also zero additional cost:
-> +///
-> +/// ```
-> +/// let pid =3D current!().group_leader().pid();
-> +/// ```
-> +///
-> +/// Getting the current task and storing it in some struct. The referenc=
-e count is automatically
-> +/// incremented when creating `State` and decremented when it is dropped=
-:
-> +///
-> +/// ```
-> +/// use kernel::{task::Task, types::ARef};
-> +///
-> +/// struct State {
-> +///     creator: ARef<Task>,
-> +///     index: u32,
-> +/// }
-> +///
-> +/// impl State {
-> +///     fn new() -> Self {
-> +///         Self {
-> +///             creator: current!().into(),
-> +///             index: 0,
-> +///         }
-> +///     }
-> +/// }
-> +/// ```
->   #[repr(transparent)]
->   pub struct Task(pub(crate) Opaque<bindings::task_struct>);
->
-> @@ -27,6 +73,46 @@ unsafe impl Sync for Task {}
->   type Pid =3D bindings::pid_t;
->
->   impl Task {
-> +    /// Returns a task reference for the currently executing task/thread=
-.
-> +    ///
-> +    /// The recommended way to get the current task/thread is to use the
-> +    /// [`current`](crate::current) macro because it is safe.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Callers must ensure that the returned object doesn't outlive the=
- current task/thread.
-> +    pub unsafe fn current() -> impl Deref<Target =3D Task> {
-> +        pub struct TaskRef<'a> {
-> +            task: &'a Task,
-> +            _not_send: PhantomData<*mut ()>,
-> +        }
-> +
-> +        impl Deref for TaskRef<'_> {
-> +            type Target =3D Task;
-> +
-> +            fn deref(&self) -> &Self::Target {
-> +                self.task
-> +            }
-> +        }
-> +
-> +        impl From<TaskRef<'_>> for crate::types::ARef<Task> {
-> +            fn from(t: TaskRef<'_>) -> Self {
-> +                t.deref().into()
-> +            }
-> +        }
+>  include/linux/topology.h | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/include/linux/topology.h b/include/linux/topology.h
+> index 4a63154fa036..62a9dd8edd77 100644
+> --- a/include/linux/topology.h
+> +++ b/include/linux/topology.h
+> @@ -286,4 +286,24 @@ sched_numa_hop_mask(unsigned int node, unsigned int hops)
+>  	     !IS_ERR_OR_NULL(mask);					       \
+>  	     __hops++)
+>  
+> +/**
+> + * for_each_numa_cpu - iterate over cpus in increasing order taking into account
+> + *		       NUMA distances from a given node.
+> + * @cpu: the (optionally unsigned) integer iterator
+> + * @hop: the iterator variable, must be initialized to a desired minimal hop.
+> + * @node: the NUMA node to start the search from.
+> + *
+> + * Requires rcu_lock to be held.
 
-I think we can remove this `From` impl, since the type is never exposed
-to the outside (there still is the `From<&T> for ARef<T>` impl, so users
-can still do `current!().into()` to get an `ARef<Task>`).
+The comments below are incorrect (copy-paste error). I'll remove them in v2.
 
---
-Cheers,
-Benno
-
+> + *
+> + * Because it's implemented as double-loop, using 'break' inside the body of
+> + * iterator may lead to undefined behaviour. Use 'goto' instead.
+> + *
+> + * Yields intersection of @mask and cpu_online_mask if @node == NUMA_NO_NODE.
+> + */
+> +#define for_each_numa_cpu(cpu, hop, node, mask)					\
+> +	for ((cpu) = 0, (hop) = 0;						\
+> +		(cpu) = sched_numa_find_next_cpu((mask), (cpu), (node), &(hop)),\
+> +		(cpu) < nr_cpu_ids;						\
+> +		(cpu)++)
 > +
-> +        // SAFETY: Just an FFI call with no additional safety requiremen=
-ts.
-> +        let ptr =3D unsafe { bindings::get_current() };
-> +
-> +        TaskRef {
-> +            // SAFETY: If the current thread is still running, the curre=
-nt task is valid. Given
-> +            // that `TaskRef` is not `Send`, we know it cannot be transf=
-erred to another thread
-> +            // (where it could potentially outlive the caller).
-> +            task: unsafe { &*ptr.cast() },
-> +            _not_send: PhantomData,
-> +        }
-> +    }
-> +
->       /// Returns the group leader of the given task.
->       pub fn group_leader(&self) -> &Task {
->           // SAFETY: By the type invariant, we know that `self.0` is a va=
-lid task. Valid tasks always
-> --
+>  #endif /* _LINUX_TOPOLOGY_H */
+> -- 
 > 2.34.1
->
-
