@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87776DCDEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A296DCDF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjDJXUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S229764AbjDJXVe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 19:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDJXUK (ORCPT
+        with ESMTP id S229727AbjDJXVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:20:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A86E4D;
-        Mon, 10 Apr 2023 16:20:09 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ANCdmc032106;
-        Mon, 10 Apr 2023 23:20:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bI/wZP7ubTjCdHoQXeZS5R4X8U4Eh+xW5LDQQWeAzvw=;
- b=AB6JC7lT307nwfRAxfmYuUEfDHcytjG0e2enSXsuARDS91zFRpMzjQtzHnoKegP5+n9e
- nOvgIIeHO46V6NnZ3VOqN2vRc4Vez5Ea+XEgZtIHZUtuByBHnirKujunr/FwYkkPPZ7m
- GQznEANjyRoNDmY2XkD1LmNL4GXyWQT837AGWHtq8Mv31oTj9URVgkmJEop86U3ivD+s
- +5k5Mq7MP16t2wE85aMXUNu5h6pUyHRJ3hjeNFl5+tBqz5q+HxUkVM/vOgmHAh+rNOYF
- RyleuwjQsfzMufUBd0H/jLlI518d8uElJBU4XmSBjYYdsQhA1tuUzpXQz7I9DgLCkdkb Wg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvmnagwpp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 23:20:07 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ANK6it029474
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 23:20:06 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 10 Apr 2023 16:20:06 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v3 3/3] usb: dwc3: gadget: Execute gadget stop after halting the controller
-Date:   Mon, 10 Apr 2023 16:19:54 -0700
-Message-ID: <20230410231954.437-4-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230410231954.437-1-quic_wcheng@quicinc.com>
-References: <20230410231954.437-1-quic_wcheng@quicinc.com>
+        Mon, 10 Apr 2023 19:21:32 -0400
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D912118;
+        Mon, 10 Apr 2023 16:21:09 -0700 (PDT)
+Received: by mail-ua1-f49.google.com with SMTP id ba16so4410966uab.4;
+        Mon, 10 Apr 2023 16:21:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681168869; x=1683760869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P4Lc7kTtUKpJq2HePJoO52rNn2Ss3QVKDL6cqFdOw4s=;
+        b=MxBSz9HWyK5hgCi29CGRVBEoPh7dV+/rI4YzgRrAfh7IvMTfh24wF3BDxWQt1/I+PQ
+         mEM4FUxIP1XofKXqMNYwdvNVDDx6Mx7Khitqtk+bsZ3CT8LE+Jv7It9dhFmMMiWHjxWg
+         rsqaiYyHSILt/Gtbs0GxEjbYkxkDFqYsOZWQlu9T3UHJvElqu5I2tw0huiMgt6GU9bFi
+         yhqKJ16yQFr2aYlk4bIIZKafjFOIoJrOaeI7Fj6nxJgFT92c9CfbXSHADBIWFjlTd1yg
+         fUjZ40aOLE1TdfVgYaeXGeTyHzYeGzcQFBznaCQ0FHBzS7gpRfIZuUWII6oLyVc+3BtM
+         K54Q==
+X-Gm-Message-State: AAQBX9fS6ELsN+T5YMoVOuwzox9DFFb//5Kp7hm9HFtCee8cKPFJlkqY
+        Jb9JslmeQi2jlMYk2Mrr0jH/lBBogCwMh2RYE3rBLSll
+X-Google-Smtp-Source: AKy350bxdML3cCqmsj+BIwmFI4dCKsDMnnNSN+bSZSMYEI67lOCP3r3LuK20kJRCM5CIrokpVf0bPnMUN+/nkUAVkYk=
+X-Received: by 2002:a05:6122:1691:b0:43b:ead4:669e with SMTP id
+ 17-20020a056122169100b0043bead4669emr3979285vkl.16.1681168868654; Mon, 10 Apr
+ 2023 16:21:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: g2aW2SwlmXZO6rK8tP5AbcAGQz405Dx6
-X-Proofpoint-GUID: g2aW2SwlmXZO6rK8tP5AbcAGQz405Dx6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_16,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=627
- impostorscore=0 adultscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100205
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230410205659.3131608-1-irogers@google.com>
+In-Reply-To: <20230410205659.3131608-1-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 10 Apr 2023 16:20:57 -0700
+Message-ID: <CAM9d7cjuqcwcy+CwAPj8wK4hO2Pzr6xor76+jW-Do443Gr2ENQ@mail.gmail.com>
+Subject: Re: [PATCH v1] perf evsel: Avoid segv if delete is called on NULL
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not call gadget stop until the poll for controller halt is
-completed.  DEVTEN is cleared as part of gadget stop, so the intention to
-allow ep0 events to continue while waiting for controller halt is not
-happening.
+Hi Ian,
 
-Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+On Mon, Apr 10, 2023 at 1:57 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Seen in "perf stat --bpf-counters --for-each-cgroup test" running in a
+> container:
+>
+> libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
+> libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
+> libbpf: failed to load object 'bperf_cgroup_bpf'
+> libbpf: failed to load BPF skeleton 'bperf_cgroup_bpf': -1
+> Failed to load cgroup skeleton
+>
+>     #0 0x55f28a650981 in list_empty tools/include/linux/list.h:189
+>     #1 0x55f28a6593b4 in evsel__exit util/evsel.c:1518
+>     #2 0x55f28a6596af in evsel__delete util/evsel.c:1544
+>     #3 0x55f28a89d166 in bperf_cgrp__destroy util/bpf_counter_cgroup.c:283
+>     #4 0x55f28a899e9a in bpf_counter__destroy util/bpf_counter.c:816
+>     #5 0x55f28a659455 in evsel__exit util/evsel.c:1520
+>     #6 0x55f28a6596af in evsel__delete util/evsel.c:1544
+>     #7 0x55f28a640d4d in evlist__purge util/evlist.c:148
+>     #8 0x55f28a640ea6 in evlist__delete util/evlist.c:169
+>     #9 0x55f28a4efbf2 in cmd_stat tools/perf/builtin-stat.c:2598
+>     #10 0x55f28a6050c2 in run_builtin tools/perf/perf.c:330
+>     #11 0x55f28a605633 in handle_internal_command tools/perf/perf.c:384
+>     #12 0x55f28a6059fb in run_argv tools/perf/perf.c:428
+>     #13 0x55f28a6061d3 in main tools/perf/perf.c:562
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 91768f1bdbaf..9715de8e99bc 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2566,7 +2566,6 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	 * bit.
- 	 */
- 	dwc3_stop_active_transfers(dwc);
--	__dwc3_gadget_stop(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	/*
-@@ -2596,7 +2595,19 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	 * remaining event generated by the controller while polling for
- 	 * DSTS.DEVCTLHLT.
- 	 */
--	return dwc3_gadget_run_stop(dwc, false, false);
-+	ret = dwc3_gadget_run_stop(dwc, false, false);
-+
-+	/*
-+	 * Stop the gadget after controller is halted, so that if needed, the
-+	 * events to update EP0 state can still occur while the run/stop
-+	 * routine polls for the halted state.  DEVTEN is cleared as part of
-+	 * gadget stop.
-+	 */
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	__dwc3_gadget_stop(dwc);
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+
-+	return ret;
- }
- 
- static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+In addition to this, I think bperf code should clear the evsel->bpf_skel
+at the end of the bpf_counter__destroy() to avoid confusion with the
+bpf_filter as they share the fields in a union.
+
+Thanks,
+Namhyung
+
+
+> ---
+>  tools/perf/util/evsel.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index dc3faf005c3b..fe3ce765a4f3 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -1541,6 +1541,9 @@ void evsel__exit(struct evsel *evsel)
+>
+>  void evsel__delete(struct evsel *evsel)
+>  {
+> +       if (!evsel)
+> +               return;
+> +
+>         evsel__exit(evsel);
+>         free(evsel);
+>  }
+> --
+> 2.40.0.577.gac1e443424-goog
+>
