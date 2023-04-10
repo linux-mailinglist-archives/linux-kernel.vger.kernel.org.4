@@ -2,179 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979E26DC510
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62806DC515
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjDJJYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S229898AbjDJJ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjDJJYa (ORCPT
+        with ESMTP id S229574AbjDJJ0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:24:30 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3779A4C3C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:24:26 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p8so4251410plk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1681118665;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bf5bveb+ux4A6UqkD/1l5g+psrLw8BnlaeaDh2PpD9g=;
-        b=XWmBIi7gc16NVFGgnHOQOJSQ+Yvhu3RtDTX+FnMBMfo7p0o/V9vknY67SFTGmwOTEL
-         gMHKvguortA40zG42HOvhcHI0zCdfX+ErKzqx06+NPmOJzy4cbc7hUE+zG51OhhT6s1g
-         OXOK+80SUGN1J52TdCEXNTYo5wMdcirrw7eNv+cfNLqou5aPk/0mdks33Cj4oK/yJWur
-         f37xX5H2gIagX7OHTpu42RmKRwKMCPiXC9Pi3DD+z8kwCBRJCqKsWnzNgmrV6T8zub+0
-         k+dBUYcaCSxwUuWGJ5AN2MJuKHT40B4PN1eqIQLlmoVvA5Mx/AqxC/NUCS7+MmAvKGNb
-         oqwQ==
+        Mon, 10 Apr 2023 05:26:25 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39675E54
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:26:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id y74-20020a6bc84d000000b00758ac1b67f8so3375881iof.17
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:26:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681118665;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bf5bveb+ux4A6UqkD/1l5g+psrLw8BnlaeaDh2PpD9g=;
-        b=NGQ70EAS6m4hSXzFuGw4MNNnUx8+jIm4nCNexJNvPUI4hxEOfZtfZTlJTLYig/ihp9
-         prZS6r3DKLLbTbbbFTy5dyxZyirwqDIhXBr4hdxTktEASoAo+39qpJMupcUlmo6FCMYf
-         O9fuWXFTXU8VldVcNL1kl7pjYJlZFVhrTdwUyao8aT0chuIEREOmTLzdkKNhcJGLsdmb
-         Qd+jDUtJ2wy9hMIMViq4kbm30kiXPWnG9qEzKWkMn4tg8K4ORAARPBz2JuTok+7SK9Cu
-         M2Sn5nelYC7AGomcQ/StCPvoD3As6i0i9Vc47hZuHqNRX5MDQuP+XtrPre/zRBE2eruG
-         DBag==
-X-Gm-Message-State: AAQBX9cf5WCusYY3YNBT1qicGYBF8oASAVe7IXo3NSvHBEq/q50YcNqo
-        EejgJBOuuJ4Pi8t0MFl5yC0jDQ==
-X-Google-Smtp-Source: AKy350YfQaZVFEQLwC/r29BiDxuJxEj2g8fTOfEoogL7h4DUBMApctGUgORL7Ak29eFjlUtBLd6KNQ==
-X-Received: by 2002:a17:90a:e7c2:b0:240:1014:a1b3 with SMTP id kb2-20020a17090ae7c200b002401014a1b3mr12349661pjb.35.1681118665654;
-        Mon, 10 Apr 2023 02:24:25 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id k91-20020a17090a4ce400b00246b1b4a3ffsm1179217pjh.0.2023.04.10.02.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 02:24:25 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH] tools/virtio: fix build caused by virtio_ring changes
-Date:   Mon, 10 Apr 2023 18:24:19 +0900
-Message-Id: <20230410092419.302932-1-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20210112; t=1681118783; x=1683710783;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wc2sUwlFpKZrrDVUHkKjAK8MSfapluqU8r9yqcMm9YE=;
+        b=ZkZHvFyZ579ese+6NN0tjtaVbHwZ0EftuMmcSV6UteZi0n6Nq1nDt0hw/TyzqafoPf
+         38XoI+c+M0Jl20beWbMKwQA4n+Vm/mTZmCYwHR7VJ7UiPG8nVdZVuUNbpK3yN1KL7Etb
+         cZ3fQ9Dnro62mb88NLQeOQ7UT54OiuY27l2eo8fh/Y2+jFxAhBBWrjUQScR37oD1dXE2
+         GCDEYe4jdL3SZuGEOb1838YfuTfWrO19rv0rOJeNt94TKKH4eTgkOhLkI6J03uvhA7Sr
+         dHXlskVDHChEwV3j5y/8/4CzcOgAsnjZ5FACvAy6Hc87YgAxDRli1Q980IGjKd1iFYBw
+         aUgg==
+X-Gm-Message-State: AAQBX9dItTnNNeI18MmAaaS9vSRoRRfnn7eMVSrpfGUdC4TEQo3VX7Vi
+        RXRTeNGvPyZoyIukXSSOnrgIqisz40YETUQqOnohjHdoRub3
+X-Google-Smtp-Source: AKy350Yuion+XBa4D0xRy1+ObWUdzEIinu0vbNGMiPEVTe1OLQgW0zQvLwdl21uU0vfUVhEmhuHMhRg1iBFw9rWvXbu+rIA81XP7
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6287:0:b0:3a7:e46f:2a32 with SMTP id
+ d129-20020a026287000000b003a7e46f2a32mr3783038jac.6.1681118783588; Mon, 10
+ Apr 2023 02:26:23 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 02:26:23 -0700
+In-Reply-To: <90d29dc6-39b3-439c-904b-7a2207610d64@linux.alibaba.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ebd27d05f8f7f713@google.com>
+Subject: Re: [syzbot] [erofs?] WARNING in rmqueue
+From:   syzbot <syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com>
+To:     hsiangkao@linux.alibaba.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the build dependency for virtio_test. virtio_ring requires
-container_of_const() and struce device.
+Hello,
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- tools/include/linux/container_of.h | 36 ++++++++++++++++++++++++++++++
- tools/virtio/linux/compiler.h      |  3 +++
- tools/virtio/linux/kernel.h        |  5 +----
- tools/virtio/linux/module.h        |  1 +
- 4 files changed, 41 insertions(+), 4 deletions(-)
- create mode 100644 tools/include/linux/container_of.h
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+BUG: unable to handle kernel paging request in z_erofs_decompress_queue
 
-diff --git a/tools/include/linux/container_of.h b/tools/include/linux/container_of.h
-new file mode 100644
-index 000000000000..06e293b7cfda
---- /dev/null
-+++ b/tools/include/linux/container_of.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_CONTAINER_OF_H
-+#define _LINUX_CONTAINER_OF_H
-+
-+#include <linux/build_bug.h>
-+#include <linux/stddef.h>
-+
-+/**
-+ * container_of - cast a member of a structure out to the containing structure
-+ * @ptr:	the pointer to the member.
-+ * @type:	the type of the container struct this is embedded in.
-+ * @member:	the name of the member within the struct.
-+ *
-+ * WARNING: any const qualifier of @ptr is lost.
-+ */
-+#define container_of(ptr, type, member) ({				\
-+	void *__mptr = (void *)(ptr);					\
-+	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
-+		      __same_type(*(ptr), void),			\
-+		      "pointer type mismatch in container_of()");	\
-+	((type *)(__mptr - offsetof(type, member))); })
-+
-+/**
-+ * container_of_const - cast a member of a structure out to the containing
-+ *			structure and preserve the const-ness of the pointer
-+ * @ptr:		the pointer to the member
-+ * @type:		the type of the container struct this is embedded in.
-+ * @member:		the name of the member within the struct.
-+ */
-+#define container_of_const(ptr, type, member)				\
-+	_Generic(ptr,							\
-+		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
-+		default: ((type *)container_of(ptr, type, member))	\
-+	)
-+
-+#endif	/* _LINUX_CONTAINER_OF_H */
-diff --git a/tools/virtio/linux/compiler.h b/tools/virtio/linux/compiler.h
-index 2c51bccb97bb..ac27b3ea6e67 100644
---- a/tools/virtio/linux/compiler.h
-+++ b/tools/virtio/linux/compiler.h
-@@ -8,4 +8,7 @@
- #define READ_ONCE(var) (*((volatile typeof(var) *)(&(var))))
- 
- #define __aligned(x) __attribute((__aligned__(x)))
-+
-+#define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-+
- #endif
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 8b877167933d..3cd20cb92649 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
- 
- #include <linux/compiler.h>
-+#include <linux/container_of.h>
- #include <linux/log2.h>
- #include <linux/types.h>
- #include <linux/overflow.h>
-@@ -107,10 +108,6 @@ static inline void free_page(unsigned long addr)
- 	free((void *)addr);
- }
- 
--#define container_of(ptr, type, member) ({			\
--	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
--	(type *)( (char *)__mptr - offsetof(type,member) );})
--
- # ifndef likely
- #  define likely(x)	(__builtin_expect(!!(x), 1))
- # endif
-diff --git a/tools/virtio/linux/module.h b/tools/virtio/linux/module.h
-index 9dfa96fea2b2..e2e791dbd104 100644
---- a/tools/virtio/linux/module.h
-+++ b/tools/virtio/linux/module.h
-@@ -5,3 +5,4 @@
- 	static __attribute__((unused)) const char *__MODULE_LICENSE_name = \
- 		__MODULE_LICENSE_value
- 
-+struct device;
--- 
-2.25.1
+BUG: unable to handle page fault for address: fffff52101a3fff9
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 23ffed067 P4D 23ffed067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4398 Comm: kworker/u5:1 Not tainted 6.3.0-rc6-syzkaller-g09a9639e56c0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: erofs_worker z_erofs_decompressqueue_work
+RIP: 0010:z_erofs_decompress_queue+0xb7e/0x2b40
+Code: 0a 48 8b 7c 24 68 e8 51 fe 00 fe 89 db 48 c1 e3 03 48 03 9c 24 20 03 00 00 49 89 de 49 c1 ee 03 48 b8 00 00 00 00 00 fc ff df <41> 80 3c 06 00 74 08 48 89 df e8 23 fe 00 fe 48 83 3b 00 0f 84 a1
+RSP: 0018:ffffc90006a5f7c0 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: ffffc9080d1fffc8 RCX: 1ffff92000d4bf5c
+RDX: ffff88802b800000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc90006a5fbb0 R08: ffffffff83ddecfa R09: fffff52001a40000
+R10: 0000000000000000 R11: dffffc0000000001 R12: 00000000ffff8f00
+R13: ffff888073fad0b8 R14: 1ffff92101a3fff9 R15: ffffea0001b54b40
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff52101a3fff9 CR3: 000000002b4b9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ z_erofs_decompressqueue_work+0x99/0xe0
+ process_one_work+0x8f6/0x1170
+ worker_thread+0xa63/0x1210
+ kthread+0x270/0x300
+ ret_from_fork+0x1f/0x30
+ </TASK>
+Modules linked in:
+CR2: fffff52101a3fff9
+---[ end trace 0000000000000000 ]---
+RIP: 0010:z_erofs_decompress_queue+0xb7e/0x2b40
+Code: 0a 48 8b 7c 24 68 e8 51 fe 00 fe 89 db 48 c1 e3 03 48 03 9c 24 20 03 00 00 49 89 de 49 c1 ee 03 48 b8 00 00 00 00 00 fc ff df <41> 80 3c 06 00 74 08 48 89 df e8 23 fe 00 fe 48 83 3b 00 0f 84 a1
+RSP: 0018:ffffc90006a5f7c0 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: ffffc9080d1fffc8 RCX: 1ffff92000d4bf5c
+RDX: ffff88802b800000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc90006a5fbb0 R08: ffffffff83ddecfa R09: fffff52001a40000
+R10: 0000000000000000 R11: dffffc0000000001 R12: 00000000ffff8f00
+R13: ffff888073fad0b8 R14: 1ffff92101a3fff9 R15: ffffea0001b54b40
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff52101a3fff9 CR3: 000000002b4b9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	48 8b 7c 24 68       	mov    0x68(%rsp),%rdi
+   5:	e8 51 fe 00 fe       	callq  0xfe00fe5b
+   a:	89 db                	mov    %ebx,%ebx
+   c:	48 c1 e3 03          	shl    $0x3,%rbx
+  10:	48 03 9c 24 20 03 00 	add    0x320(%rsp),%rbx
+  17:	00
+  18:	49 89 de             	mov    %rbx,%r14
+  1b:	49 c1 ee 03          	shr    $0x3,%r14
+  1f:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  26:	fc ff df
+* 29:	41 80 3c 06 00       	cmpb   $0x0,(%r14,%rax,1) <-- trapping instruction
+  2e:	74 08                	je     0x38
+  30:	48 89 df             	mov    %rbx,%rdi
+  33:	e8 23 fe 00 fe       	callq  0xfe00fe5b
+  38:	48 83 3b 00          	cmpq   $0x0,(%rbx)
+  3c:	0f                   	.byte 0xf
+  3d:	84                   	.byte 0x84
+  3e:	a1                   	.byte 0xa1
 
+
+Tested on:
+
+commit:         09a9639e Linux 6.3-rc6
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.3-rc6
+console output: https://syzkaller.appspot.com/x/log.txt?x=1125d353c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=174dd96f08254844
+dashboard link: https://syzkaller.appspot.com/bug?extid=aafb3f37cfeb6534c4ac
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
