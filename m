@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6BF6DC27F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DD56DC278
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjDJCBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 22:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S229513AbjDJB57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjDJCBr (ORCPT
+        with ESMTP id S229455AbjDJB56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 22:01:47 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED6E3590
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 19:01:44 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by SHSQR01.spreadtrum.com with ESMTP id 33A1xiga063929;
-        Mon, 10 Apr 2023 09:59:44 +0800 (+08)
-        (envelope-from Xiaosong.Ma@unisoc.com)
-Received: from bj10638pcu1.spreadtrum.com (10.0.74.32) by
- BJMBX02.spreadtrum.com (10.0.64.8) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 10 Apr 2023 09:59:41 +0800
-From:   "xiaosong.ma" <Xiaosong.Ma@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        <yuming.han@unisoc.com>, <ke.wang@unisoc.com>
-Subject: [PATCH V2] fs: perform the check when page without mapping but page->mapping contains junk or random bitscribble
-Date:   Mon, 10 Apr 2023 09:45:02 +0800
-Message-ID: <1681091102-31907-1-git-send-email-Xiaosong.Ma@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Sun, 9 Apr 2023 21:57:58 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5C9358D;
+        Sun,  9 Apr 2023 18:57:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PvsYm20NLz4f4Nt5;
+        Mon, 10 Apr 2023 09:57:48 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHcyEbbTNkJq3_GQ--.14009S3;
+        Mon, 10 Apr 2023 09:57:49 +0800 (CST)
+Subject: Re: [PATCH v2 0/3] blk-cgroup: some cleanup
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Chengming Zhou <zhouchengming@bytedance.com>, axboe@kernel.dk,
+        tj@kernel.org
+Cc:     paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-block@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230406145050.49914-1-zhouchengming@bytedance.com>
+ <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <d23a6891-96f0-2ee0-70c7-869123d85362@huaweicloud.com>
+Date:   Mon, 10 Apr 2023 09:57:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.32]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL: SHSQR01.spreadtrum.com 33A1xiga063929
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDHcyEbbTNkJq3_GQ--.14009S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4fCr4xAr1kXw43AF1DJrb_yoW8ur4rpa
+        15KFZxCr48Gryqqa1rZanrWF18Ga9IkasrAr93Kr43Zas8uw48JF1kJF9FvryUGFWkZFyx
+        WFyDGFZ5XF4jq37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU1zuWJUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.9 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perform the check in dump_mapping() to print warning info and avoid crash with invalid non-NULL page->mapping.
-For example, a panic with following backtraces show dump_page will show wrong info and panic when the bad page
-is non-NULL mapping and page->mapping is 0x80000000000.
+Hi, Bart
 
-    crash_arm64> bt
-    PID: 232    TASK: ffffff80e8c2c340  CPU: 0   COMMAND: "Binder:232_2"
-     #0 [ffffffc013e5b080] sysdump_panic_event$b2bce43a479f4f7762201bfee02d7889 at ffffffc0108d7c2c
-     #1 [ffffffc013e5b0c0] atomic_notifier_call_chain at ffffffc010300228
-     #2 [ffffffc013e5b2c0] panic at ffffffc0102c926c
-     #3 [ffffffc013e5b370] die at ffffffc010267670
-     #4 [ffffffc013e5b3a0] die_kernel_fault at ffffffc0102808a4
-     #5 [ffffffc013e5b3d0] __do_kernel_fault at ffffffc010280820
-     #6 [ffffffc013e5b410] do_bad_area at ffffffc01028059c
-     #7 [ffffffc013e5b440] do_translation_fault$4df5decbea5d08a63349aa36f07426b2 at ffffffc0111149c8
-     #8 [ffffffc013e5b470] do_mem_abort at ffffffc0100a4488
-     #9 [ffffffc013e5b5e0] el1_ia at ffffffc0100a6c00
-     #10 [ffffffc013e5b5f0] __dump_page at ffffffc0104beecc
-     #11 [ffffffc013e5b630] bad_page at ffffffc0104e6ffc
-     #12 [ffffffc013e5b820] rmqueue_bulk at ffffffc0104e9128
-     #13 [ffffffc013e5b950] rmqueue at ffffffc0104e7c3c
-     #14 [ffffffc013e5b9c0] get_page_from_freelist at ffffffc0104e3e3c
-     #15 [ffffffc013e5ba50] __alloc_pages_nodemask at ffffffc0104e3a7c
-     #16 [ffffffc013e5bac0] pagecache_get_page at ffffffc01047d0e4
-     #17 [ffffffc013e5bb20] grab_cache_page_write_begin at ffffffc010480e3c
-     #18 [ffffffc013e5bb50] block_write_begin at ffffffc010586204
-     #19 [ffffffc013e5bb90] blkdev_write_begin$75b353f60767e771433fc3b19ba260ab at ffffffc01058cc48
-     #20 [ffffffc013e5bc00] generic_perform_write at ffffffc010480f1c
-     #21 [ffffffc013e5bc60] __generic_file_write_iter at ffffffc01048115c
-     #22 [ffffffc013e5bcf0] blkdev_write_iter at ffffffc01058c0a8
-     #23 [ffffffc013e5bda0] __vfs_write at ffffffc01052d808
-     #24 [ffffffc013e5bdd0] vfs_write at ffffffc01052da5c
-     #25 [ffffffc013e5be30] __arm64_sys_pwrite64 at ffffffc01052e09c
-     #26 [ffffffc013e5be60] el0_svc_common at ffffffc010272224
-     #27 [ffffffc013e5bea0] el0_svc_handler at ffffffc010272148
-     #28 [ffffffc013e5bff0] el0_svc at ffffffc0100a7ec4
+在 2023/04/08 2:41, Bart Van Assche 写道:
+> On 4/6/23 07:50, Chengming Zhou wrote:
+>> These are some cleanup patches of blk-cgroup. Thanks for review.
+> 
+> With these patches applied, my kernel test VM crashes during boot. The 
+> following crash disappears if I revert these patches:
+> 
+> BUG: KASAN: null-ptr-deref in bio_associate_blkg_from_css+0x83/0x240
+> Read of size 8 at addr 0000000000000518 by task blkid/5885
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 
+> 1.16.0-debian-1.16.0-5 04/01/2014
+> Call Trace:
+>   dump_stack_lvl+0x4a/0x80
+>   print_report+0x21e/0x260
+>   kasan_report+0xc2/0xf0
+>   __asan_load8+0x69/0x90
+>   bio_associate_blkg_from_css+0x83/0x240
+>   bfq_bio_bfqg+0xce/0x120 [bfq]
+>   bfq_bic_update_cgroup+0x2f/0x3c0 [bfq]
+>   bfq_init_rq+0x1e8/0xb10 [bfq]
+>   bfq_insert_request.isra.0+0xa3/0x420 [bfq]
+>   bfq_insert_requests+0xca/0xf0 [bfq]
+>   blk_mq_dispatch_rq_list+0x4c0/0xb00
 
-Signed-off-by: xiaosong.ma <Xiaosong.Ma@unisoc.com>
----
- fs/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I found this call trace quite weird, I can't figure out how
+bfq_insert_requests can be called from blk_mq_dispatch_rq_list,
+can you show the add2line result?
 
-diff --git a/fs/inode.c b/fs/inode.c
-index f453eb5..c9021e5 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -564,7 +564,8 @@ void dump_mapping(const struct address_space *mapping)
- 	 * If mapping is an invalid pointer, we don't want to crash
- 	 * accessing it, so probe everything depending on it carefully.
- 	 */
--	if (get_kernel_nofault(host, &mapping->host) ||
-+	if (get_kernel_nofault(mapping, &mapping) ||
-+	    get_kernel_nofault(host, &mapping->host) ||
- 	    get_kernel_nofault(a_ops, &mapping->a_ops)) {
- 		pr_warn("invalid mapping:%px\n", mapping);
- 		return;
--- 
-1.9.1
+Thanks,
+Kuai
+>   __blk_mq_sched_dispatch_requests+0x15e/0x200
+>   blk_mq_sched_dispatch_requests+0x8b/0xc0
+>   __blk_mq_run_hw_queue+0x3ff/0x500
+>   __blk_mq_delay_run_hw_queue+0x23a/0x300
+>   blk_mq_run_hw_queue+0x14e/0x350
+>   blk_mq_sched_insert_request+0x181/0x1f0
+>   blk_execute_rq+0xf4/0x300
+>   scsi_execute_cmd+0x23e/0x350
+>   sr_do_ioctl+0x173/0x3d0 [sr_mod]
+>   sr_packet+0x60/0x90 [sr_mod]
+>   cdrom_get_track_info.constprop.0+0x125/0x170 [cdrom]
+>   cdrom_get_last_written+0x1d4/0x2d0 [cdrom]
+>   mmc_ioctl_cdrom_last_written+0x85/0x120 [cdrom]
+>   mmc_ioctl+0x10b/0x1d0 [cdrom]
+>   cdrom_ioctl+0xa66/0x1270 [cdrom]
+>   sr_block_ioctl+0xee/0x130 [sr_mod]
+>   blkdev_ioctl+0x1bb/0x3f0
+>   __x64_sys_ioctl+0xc7/0xe0
+>   do_syscall_64+0x34/0x80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> Bart.
+> 
+> .
+> 
 
