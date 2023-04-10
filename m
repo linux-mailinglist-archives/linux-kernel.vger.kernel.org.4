@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3606DC9C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0B76DC9C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjDJRJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S229978AbjDJRK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDJRJd (ORCPT
+        with ESMTP id S229711AbjDJRK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:09:33 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AE5213E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:09:31 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id ie17-20020a17090b401100b00246d4b282eeso262907pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:09:31 -0700 (PDT)
+        Mon, 10 Apr 2023 13:10:56 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78532682
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:10:24 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id nh20-20020a17090b365400b0024496d637e1so10450489pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:10:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681146571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/qMzLcyJA7tAXp1tU9NgIQftvKNUnbdSk4uhIyzQdXg=;
-        b=aRyRJJOQxWN4G2mHZw3wX92LiwUgwbLbNJpMU6pXr6+HWBy2vFq2b2/I2j9g6RpyPz
-         cGlLHgzluMcUMXg+5mK97nn8upV18SgSSz+09CXLpjXelc+BxSVaSL3F9fR8XaJ91YgD
-         Ml2z7pxPh7zxL4FWiq7uqN/6prv+CvLnhihto+RYTwQe1+w/RynGF7Uf9SI9daB3CYjj
-         Sxdm/zBtoA34EggZZVNyOnMQo0UgVjCgYrHtrepEhJHaAK2lJNis2LUGbMuQ734yUOBl
-         0UqOGjDSY8uxY7w4RxpRdngcwa3ZQuDrYGjE30OjZZnMBMSfdTTQUqMkW+OCnvrWH59u
-         b41w==
+        d=linaro.org; s=google; t=1681146620;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YCbIblIYxd1RoPaHWqrob6eFeH3aWHVNQ4+Mn4FxgT4=;
+        b=iY1dyo8B1KuXKb4CR8siFrdPdE7V04bbmicUP06JHAb/LUwfIRE3cbLW7n+FzGe4bF
+         uPJq3bVljTp3bZXjaJ4s2blU0xX9M8UyNSzkk3aL/Pvbm9use+vtQ1KXBQy6OO1SP8Gv
+         a1HIjG+fKWrG0IeDy67u2F2p9FaN0IbXSoMQdycs5qFj71bqa8ONaOEIZF6EHM2JUFH7
+         oCkIAeg9vajdK9wwHS1rMaUqtiMxKlKxTTu8tgfcW0NA2mezDng0vKso0RxSiTAoRSSU
+         /izDE8Ru0yqPcq6Us1Fj9d2kvquv8BtLdP2v1cc05lIhGArHl/yz9oS28KzIhp0waxTA
+         5U1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681146571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qMzLcyJA7tAXp1tU9NgIQftvKNUnbdSk4uhIyzQdXg=;
-        b=YBFDAzPZi56Ge5ZZQ6iRbJt/Wn6Ni/7qDsAVk7tCx2e9EuLYWSNUYeUxWr9aElAvra
-         u21JewxG+L4OMehOhO850lqoqPENXrC1ja16PsHhfwV/l8Wn0dkmcBHWZNP/YbnDEXwe
-         2kK1bdRgPUCcEW+Npm7ejvVyUuwhQf+gmmRs2a/xIefgfAA/mIV8t/a6GMKgHfpyFUio
-         r/5oOqJ/AwuLrYss5I9yBalJ2KVBnaNT5qwQHw/dPj4IjnS27dA0m9jsEZ8soiaDAMYS
-         68sTlrQIstKSRcen6Gztm7B3s4aZC3o6rr/bVerFvdpHFRmi9dPsMQXGRZygz3jBjRQX
-         H7cg==
-X-Gm-Message-State: AAQBX9fEvrQTypM5YKsRYNAysVvjWW7tNx4LBldGJFukKB/az53CdIKZ
-        KQ+mu753h/q+2/LBsbH6RaXLFA==
-X-Google-Smtp-Source: AKy350bBNfrIDV8cxyDWxKg9zw5e5Ci36xNMs12c4lXqHzdILQOt602MGpS9B0xwJ84nnLbLIM3LMA==
-X-Received: by 2002:a17:90b:1d8e:b0:246:681c:71fd with SMTP id pf14-20020a17090b1d8e00b00246681c71fdmr12582430pjb.6.1681146570979;
-        Mon, 10 Apr 2023 10:09:30 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:cecd:b1ee:70ec:874])
-        by smtp.gmail.com with ESMTPSA id d22-20020a631d56000000b00513468106d8sm7142726pgm.1.2023.04.10.10.09.29
+        d=1e100.net; s=20210112; t=1681146620;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YCbIblIYxd1RoPaHWqrob6eFeH3aWHVNQ4+Mn4FxgT4=;
+        b=ljOKj5bWRC29ie/OAGSF19+G2/SNSzYpPD77k/CQ3GO0TgK+cAWBmeT5y+VnCB/IHB
+         zT75V0jJKIJf4hHuzdP4PuPZdpPkc8pCR4BA44LMFPkqDtwbsQZX4r5gIrFqopfxKlxv
+         79U4FOfRcNTViDKE3D43cuFzeielBvkqDNF5pmIfGf/vyyDFDac2VDTLiV5377bxdNLS
+         RC5BMtxvdqT7NloYDz6rzDjqe60e+iqF0zn4S8sWH44bv0T/Ld08TMUNILiJy1D8Guic
+         9rSFZkCu+FDBEkU4McrenqkjI0XxSAwGwRxU3isQqAdmvukXS8TjvSDm8QgPQBsdXgbP
+         wOag==
+X-Gm-Message-State: AAQBX9dJAvmx4OcILKsrWPKvHsLlaEP/WqrURjEe+xacYi1kZHHiW54Z
+        Zdz8AyAnUhgsxF8ss31lMOBNNg==
+X-Google-Smtp-Source: AKy350Ya/nSe91SuTZPm7XeJEaQOdImxghVZMquW7RmXi1HY3dcEHJ4qAUO55wSypXR1QRf0ZgFS+g==
+X-Received: by 2002:a05:6a20:4c28:b0:cb:91ee:dca0 with SMTP id fm40-20020a056a204c2800b000cb91eedca0mr11004890pzb.41.1681146619915;
+        Mon, 10 Apr 2023 10:10:19 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:6a11:8ba1:beba:def7:a4ae])
+        by smtp.gmail.com with ESMTPSA id q11-20020a63cc4b000000b0050bc4ca9024sm7187818pgi.65.2023.04.10.10.10.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 10:09:30 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 11:09:27 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v7 1/4] soc: ti: pruss: Add pruss_get()/put() API
-Message-ID: <20230410170927.GA4129213@p14s>
-References: <20230404115336.599430-1-danishanwar@ti.com>
- <20230404115336.599430-2-danishanwar@ti.com>
+        Mon, 10 Apr 2023 10:10:19 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org, kishon@kernel.org,
+        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Subject: [PATCH v8 0/2] Enable USB SS qmp phy for Qualcomm SM6115 SoC
+Date:   Mon, 10 Apr 2023 22:40:08 +0530
+Message-Id: <20230410171010.2561393-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404115336.599430-2-danishanwar@ti.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -79,224 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 05:23:33PM +0530, MD Danish Anwar wrote:
-> From: Tero Kristo <t-kristo@ti.com>
-> 
-> Add two new get and put API, pruss_get() and pruss_put() to the
-> PRUSS platform driver to allow client drivers to request a handle
-> to a PRUSS device. This handle will be used by client drivers to
-> request various operations of the PRUSS platform driver through
-> additional API that will be added in the following patches.
-> 
-> The pruss_get() function returns the pruss handle corresponding
-> to a PRUSS device referenced by a PRU remoteproc instance. The
-> pruss_put() is the complimentary function to pruss_get().
-> 
-> Co-developed-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/remoteproc/pru_rproc.c                |  2 +-
->  drivers/soc/ti/pruss.c                        | 64 ++++++++++++++++++-
->  .../{pruss_driver.h => pruss_internal.h}      |  7 +-
->  include/linux/remoteproc/pruss.h              | 19 ++++++
->  4 files changed, 87 insertions(+), 5 deletions(-)
->  rename include/linux/{pruss_driver.h => pruss_internal.h} (90%)
->
+Changes since v7:
+-----------------
+- v7 can be seen here: https://lore.kernel.org/linux-arm-msm/20230409200934.2329297-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Dmitry and added "pipe clk".
 
-Throughout this patchset an API to access resources required by the PRUSS
-is added to pruss.c but all the function declarations are added to
-remoteproc/pruss.h.  Is this something you were asked to do or is this how the
-original implementation was?
+Changes since v6:
+-----------------
+- v6 can be seen here: https://lore.kernel.org/linux-arm-msm/20230407061122.2036838-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Bjorn and Dmitry and dropped old bindings in this
+  version.
 
-Other than pruss_get() nothing in there is related to the remoteproc
-subsystem, the bulk of the work is all about PRUSS.
+Changes since v5:
+-----------------
+- v5 can be seen here: https://lore.kernel.org/linux-arm-msm/20230405191633.1864671-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Dmitry and made [PATCH 1/2] compatible with his 
+  'split away legacy USB+DP code' series:
+  <https://patchwork.kernel.org/project/linux-phy/cover/20230324215550.1966809-1-dmitry.baryshkov@linaro.org>
 
-In my opinion all the function declaration should go in pruss_driver.h, which
-should stay as it is and not made internal.  The code looks good now but it
-needs to be added where it belongs.
+Changes since v4:
+-----------------
+- v4 can be seen here: https://lore.kernel.org/linux-arm-msm/20230401154725.1059563-1-bhupesh.sharma@linaro.org/ 
+- Collected Krzysztof's Ack for [PATCH 1/2].
+- Added more descriptive commit logs as per Dmitry's comments on v4.
 
-Thanks,
-Mathieu
+Changes since v3:
+-----------------
+- v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20221215094532.589291-4-bhupesh.sharma@linaro.org/
+- Fixed v4 as per the downstream driver code: https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/bengal-usb.dtsi#296
 
-> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> index b76db7fa693d..4ddd5854d56e 100644
-> --- a/drivers/remoteproc/pru_rproc.c
-> +++ b/drivers/remoteproc/pru_rproc.c
-> @@ -19,7 +19,7 @@
->  #include <linux/of_device.h>
->  #include <linux/of_irq.h>
->  #include <linux/remoteproc/pruss.h>
-> -#include <linux/pruss_driver.h>
-> +#include <linux/pruss_internal.h>
->  #include <linux/remoteproc.h>
->  
->  #include "remoteproc_internal.h"
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index 6882c86b3ce5..28b77d715903 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -6,6 +6,7 @@
->   * Author(s):
->   *	Suman Anna <s-anna@ti.com>
->   *	Andrew F. Davis <afd@ti.com>
-> + *	Tero Kristo <t-kristo@ti.com>
->   */
->  
->  #include <linux/clk-provider.h>
-> @@ -16,8 +17,9 @@
->  #include <linux/of_address.h>
->  #include <linux/of_device.h>
->  #include <linux/pm_runtime.h>
-> -#include <linux/pruss_driver.h>
-> +#include <linux/pruss_internal.h>
->  #include <linux/regmap.h>
-> +#include <linux/remoteproc.h>
->  #include <linux/slab.h>
->  
->  /**
-> @@ -30,6 +32,66 @@ struct pruss_private_data {
->  	bool has_core_mux_clock;
->  };
->  
-> +/**
-> + * pruss_get() - get the pruss for a given PRU remoteproc
-> + * @rproc: remoteproc handle of a PRU instance
-> + *
-> + * Finds the parent pruss device for a PRU given the @rproc handle of the
-> + * PRU remote processor. This function increments the pruss device's refcount,
-> + * so always use pruss_put() to decrement it back once pruss isn't needed
-> + * anymore.
-> + *
-> + * This API doesn't check if @rproc is valid or not. It is expected the caller
-> + * will have done a pru_rproc_get() on @rproc, before calling this API to make
-> + * sure that @rproc is valid.
-> + *
-> + * Return: pruss handle on success, and an ERR_PTR on failure using one
-> + * of the following error values
-> + *    -EINVAL if invalid parameter
-> + *    -ENODEV if PRU device or PRUSS device is not found
-> + */
-> +struct pruss *pruss_get(struct rproc *rproc)
-> +{
-> +	struct pruss *pruss;
-> +	struct device *dev;
-> +	struct platform_device *ppdev;
-> +
-> +	if (IS_ERR_OR_NULL(rproc))
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	dev = &rproc->dev;
-> +
-> +	/* make sure it is PRU rproc */
-> +	if (!dev->parent || !is_pru_rproc(dev->parent))
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	ppdev = to_platform_device(dev->parent->parent);
-> +	pruss = platform_get_drvdata(ppdev);
-> +	if (!pruss)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	get_device(pruss->dev);
-> +
-> +	return pruss;
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_get);
-> +
-> +/**
-> + * pruss_put() - decrement pruss device's usecount
-> + * @pruss: pruss handle
-> + *
-> + * Complimentary function for pruss_get(). Needs to be called
-> + * after the PRUSS is used, and only if the pruss_get() succeeds.
-> + */
-> +void pruss_put(struct pruss *pruss)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return;
-> +
-> +	put_device(pruss->dev);
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_put);
-> +
->  static void pruss_of_free_clk_provider(void *data)
->  {
->  	struct device_node *clk_mux_np = data;
-> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_internal.h
-> similarity index 90%
-> rename from include/linux/pruss_driver.h
-> rename to include/linux/pruss_internal.h
-> index ecfded30ed05..8f91cb164054 100644
-> --- a/include/linux/pruss_driver.h
-> +++ b/include/linux/pruss_internal.h
-> @@ -6,9 +6,10 @@
->   *	Suman Anna <s-anna@ti.com>
->   */
->  
-> -#ifndef _PRUSS_DRIVER_H_
-> -#define _PRUSS_DRIVER_H_
-> +#ifndef _PRUSS_INTERNAL_H_
-> +#define _PRUSS_INTERNAL_H_
->  
-> +#include <linux/remoteproc/pruss.h>
->  #include <linux/types.h>
->  
->  /*
-> @@ -51,4 +52,4 @@ struct pruss {
->  	struct clk *iep_clk_mux;
->  };
->  
-> -#endif	/* _PRUSS_DRIVER_H_ */
-> +#endif	/* _PRUSS_INTERNAL_H_ */
-> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-> index 039b50d58df2..93a98cac7829 100644
-> --- a/include/linux/remoteproc/pruss.h
-> +++ b/include/linux/remoteproc/pruss.h
-> @@ -4,12 +4,14 @@
->   *
->   * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
->   *	Suman Anna <s-anna@ti.com>
-> + *	Tero Kristo <t-kristo@ti.com>
->   */
->  
->  #ifndef __LINUX_PRUSS_H
->  #define __LINUX_PRUSS_H
->  
->  #include <linux/device.h>
-> +#include <linux/err.h>
->  #include <linux/types.h>
->  
->  #define PRU_RPROC_DRVNAME "pru-rproc"
-> @@ -44,6 +46,23 @@ enum pru_ctable_idx {
->  
->  struct device_node;
->  struct rproc;
-> +struct pruss;
-> +
-> +#if IS_ENABLED(CONFIG_TI_PRUSS)
-> +
-> +struct pruss *pruss_get(struct rproc *rproc);
-> +void pruss_put(struct pruss *pruss);
-> +
-> +#else
-> +
-> +static inline struct pruss *pruss_get(struct rproc *rproc)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +static inline void pruss_put(struct pruss *pruss) { }
-> +
-> +#endif /* CONFIG_TI_PRUSS */
->  
->  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->  
-> -- 
-> 2.25.1
-> 
+This patchset adds the support for USB SS qmp phy for Qualcomm SM6115
+SoC. For the previous versions of this patch there were conversations
+on irc as to whether this was a 'qcom,usb-ssphy-qmp-usb3-or-dp' or a
+'qcom,usb-ssphy-qmp-dp-combo' as per downstream code and hardware
+documentation.
+
+But after a careful look at downstream dtsi (see [1]) it appears that
+this indeed is a 'qcom,usb-ssphy-qmp-usb3-or-dp' phy and not a
+'dp-combo' phy.
+
+[1]. https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/bengal-usb.dtsi#296
+
+Bhupesh Sharma (2):
+  dt-bindings: phy: qcom,qmp-usb: Drop legacy bindings and move to newer
+    one (SM6115 & QCM2290)
+  arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+
+ .../phy/qcom,msm8996-qmp-usb3-phy.yaml        | 27 ------------
+ .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   | 44 ++++++++++++++++---
+ .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 29 +++++++++++-
+ .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    |  3 ++
+ 5 files changed, 72 insertions(+), 34 deletions(-)
+
+-- 
+2.38.1
+
