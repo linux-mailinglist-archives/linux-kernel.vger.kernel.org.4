@@ -2,138 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCC96DCCE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CBB6DCCEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjDJVoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S229605AbjDJVuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDJVov (ORCPT
+        with ESMTP id S229720AbjDJVuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:44:51 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708F8173E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:44:50 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id h198so12574278ybg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:44:50 -0700 (PDT)
+        Mon, 10 Apr 2023 17:50:10 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23CD198C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:50:08 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-514141c6692so329841a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 14:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681163089; x=1683755089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2fqJKygNcTwYXqE/W6HnsQWcXW83jUHOxTtEqQQFCCQ=;
-        b=c8gGW9KEuUs7rOxRy31qPsb5UswCPfrRfqTb0L97WfXCBmTDp1kP7o+kOv1iiUZNxa
-         Lc7XrALeZ43cdvsL5ChYw5E/BViCfJHj8cjUk8BE7YDRTUWxDMcsG0D0W7VYXtSQefgp
-         fbV5QjibYa0q+unpvL5PUVWs5aGUlCfuih1I8/0uqSWe42iN3cO9WgV68A2tDis0uF67
-         J4dWNfpWzVf5r+xmiIMt+6kgDAeHk+TSdkHiA5C4OjKepRdlTcaQrQErR/Ao/ae/Y7Yo
-         K/5VYanNEQOKwqVaYLvETpgywJl6QxAlUozFRcx6V4ypX4MQabwP9YpEWDJvnRmBHT5W
-         QKqA==
+        d=google.com; s=20210112; t=1681163408;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mj8dSCbGPlf0CRd5FNuA/sfSA8tqFa0rbdFYnaL0J0Y=;
+        b=ooZshyiJM9UMbazIhJLtbwAA6XYym8j66UHXKxeDstWut5Z0om8gM2U8Wxsv7usA1j
+         /RDW4i+lw+54YqovzPCcrlvFD5NCURhqkzQMR563bk2Ly9QOz5ySTdTxMQVj88bnxUju
+         3Dzdpb7KWHHAHE0BhKFgGARlvJvvIfMjuqA0VuoHQfC43Hpnrz2IAWW2RnTKFagUXePJ
+         U6P9qyO957ebbuy6n78f7arEMU33C09rdIUe0Q76GW9f9hUnEQf3z+RLkXpYSiJoeHU4
+         mqgH7xOTHOZ4UyZtodRVU/csERu6lokPoNn9lXbhrWIiqNfE65Zi6wLRrRG6OSM00cRs
+         S0TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681163089; x=1683755089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2fqJKygNcTwYXqE/W6HnsQWcXW83jUHOxTtEqQQFCCQ=;
-        b=zirOf7dFFhXjbBENXt6PxNeVq/64ebzYEvf+bv9S3EO2XffAn2T8DLIp9uwoWaAsA+
-         glfRvBIhNPsCctpA9ZG+LtDGk3ycwPkQAQPfCVTjctzhreioxYYo644OhptIPik2R42s
-         PyFTyBHFQDENasdM0IUvsHnOVFqv+ELy6j+qbjy8unkDqMnavKszEjwVdAsiEmpb+IgG
-         IRTIfVqtSqTcmwu6GbQBIZfQ14Rb0suq9HEX0AkgCHpHz19Nc4QR2aO7hZnuY05F0mdq
-         OuArqsIfLSSKls3XDtYd3abUZlbmcv/T5kPFrpwbN8ZVcsQdNCSCtVdLDqafB5IhWza0
-         6Qfg==
-X-Gm-Message-State: AAQBX9epVAKMgVUcvr0hJ+VlkDzY3GPmitSADZhIOC5bhqOPg6pnvVRt
-        uDk3mta1br1tswBHMBRQrIUGbE9J8XcPd/cUNH2U
-X-Google-Smtp-Source: AKy350bw7pWEBerXtD57WYRkTF0n63gFcuFSKH0/ueLBXUsY3z6l7NJlgmPBBAhKqYb2e6cxx21TLQycOA6L5f9O+wE=
-X-Received: by 2002:a25:d70d:0:b0:b68:7a4a:5258 with SMTP id
- o13-20020a25d70d000000b00b687a4a5258mr7739153ybg.3.1681163089576; Mon, 10 Apr
- 2023 14:44:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZC8Dbux56HbJjpTy@char.us.oracle.com> <CAHC9VhQ2rLpjczvb4993fQiMau7ZXLe8aTLtMZO_iF42w=1frg@mail.gmail.com>
- <ZC8eZ/RTX//0urV/@char.us.oracle.com> <CAHC9VhR06pa2mDwW26XFqiry11Ubz2_3YKj+ayftu0JdYx9m9w@mail.gmail.com>
- <93ef5db7-fb4d-bf3f-9456-3fb6e7d5ca29@oracle.com> <CAHC9VhRKzv4+fbSK8+fV7v+N5Eaevtag7YvSW1YwJrxs5gAyHQ@mail.gmail.com>
- <fa0a4afb-14ce-a387-ec0e-2098c5bec8c3@oracle.com>
-In-Reply-To: <fa0a4afb-14ce-a387-ec0e-2098c5bec8c3@oracle.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 10 Apr 2023 17:44:38 -0400
-Message-ID: <CAHC9VhT4r4HwrfZMVbG8DWbfvVRGH_AMGpdVUS_YLmUR7L3uvw@mail.gmail.com>
-Subject: Re: Semantics of blktrace with lockdown (integrity) enabled kernel.
-To:     Junxiao Bi <junxiao.bi@oracle.com>
-Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        serge@hallyn.com, nathanl@linux.ibm.com, joe.jin@oracle.com,
-        Eric <eric.snowberg@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>, axboe@kernel.dk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1681163408;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mj8dSCbGPlf0CRd5FNuA/sfSA8tqFa0rbdFYnaL0J0Y=;
+        b=gS4sIraQPi0rZrk5NFgxFj8+yuhtlsrAwMfwXpL33/OsJ6ZY93WesWnVtQTwzTfvRX
+         KJh7VWXxYJz98qM2K7zKnBSS0ohF+vuTpBFjvPp9ajyneZKbq4cYLkp0Q+q88uYk8/vp
+         2GfbGi7Y9va62uCgf6frkva3aCNnQyGk6Vm1Vd/axXqlGJKdgUIHTRbSR/+xY7sG5AMw
+         0gFP2jnEkNP7vQCv+5wr+7Rsm7OwDLWAinIHe74/Eot2gOfQTM+p50rXk3wV2hMNu4di
+         aC89PrtHB4peJhL9kDUcz1wNTy6y+rZbju4YsE2JA95lZD0tTcM5I6Qk7d2QB9m/BvK/
+         Gbiw==
+X-Gm-Message-State: AAQBX9cCu5nMLOyZva1G+bP/MnPvfPh2WE5VzQ1CdA0a23fp8epPzRaJ
+        L0uB1ae55gAg5IlmhrovMTucruMGy0U=
+X-Google-Smtp-Source: AKy350YbhvrLBgazf2oCDb5y29XRCncB+f0XTQue/QJfvSxLioZvcRsgREAZwOBt6wfR46kpVcAihEU1g4Q=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:b87:b0:626:23a1:7b8a with SMTP id
+ g7-20020a056a000b8700b0062623a17b8amr295013pfj.3.1681163408325; Mon, 10 Apr
+ 2023 14:50:08 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 14:50:06 -0700
+In-Reply-To: <20230410081438.1750-34-xin3.li@intel.com>
+Mime-Version: 1.0
+References: <20230410081438.1750-1-xin3.li@intel.com> <20230410081438.1750-34-xin3.li@intel.com>
+Message-ID: <ZDSEjhGV9D90J6Bx@google.com>
+Subject: Re: [PATCH v8 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to
+ generate FRED stack frames
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com, jiangshanlai@gmail.com,
+        shan.kang@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 5:28=E2=80=AFPM Junxiao Bi <junxiao.bi@oracle.com> =
-wrote:
-> On 4/10/23 1:22 PM, Paul Moore wrote:
-> > On Mon, Apr 10, 2023 at 3:20=E2=80=AFPM Junxiao Bi <junxiao.bi@oracle.c=
-om> wrote:
-> >> On 4/6/23 2:43 PM, Paul Moore wrote:
-> >>> On Thu, Apr 6, 2023 at 3:33=E2=80=AFPM Konrad Rzeszutek Wilk
-> >>> <konrad.wilk@oracle.com> wrote:
-> >>>> On Thu, Apr 06, 2023 at 02:39:57PM -0400, Paul Moore wrote:
-> >>> ...
-> >>>
-> >>>>> Before we go any further, can you please verify that your issue is
-> >>>>> reproducible on a supported, upstream tree (preferably Linus')?
-> >>>> Yes. Very much so.
-> >>> Okay, in that case I suspect the issue is due to the somewhat limited
-> >>> granularity in the lockdown LSM.  While there are a number of
-> >>> different lockdown "levels", the reality is that the admin has to
-> >>> choose from either NONE, INTEGRITY, or CONFIDENTIALITY.  Without
-> >>> digging to deep into the code path that you would be hitting, we can
-> >>> see that TRACEFS is blocked by the CONFIDENTIALITY (and therefore
-> >>> INTEGRITY too) setting and DEBUGFS is blocked by the INTEGRITY
-> >>> setting.  With DEBUGFS blocked by INTEGRITY, the only lockdown option
-> >>> that would allow DEBUGFS is NONE.
-> >>>
-> >>> Without knowing too much about blktrace beyond the manpage, it looks
-> >>> like it has the ability to trace/snoop on the block device operations
-> >>> so I don't think this is something we would want to allow in a
-> >>> "locked" system.
-> >> blktrace depends on tracepoint in block layer to trace io events of
-> >> block devices,
-> >>
-> >> through the test with mainline, those tracepoints were not blocked by
-> >> lockdown.
-> >>
-> >> If snoop block devices operations is a security concern in lock down, =
-these
-> >>
-> >> tracepoints should be disabled?
-> > Possibly, however, as I said earlier I'm not very familiar with
-> > blktrace and the associated tracepoints.  If it is possible to snoop
-> > on kernel/user data using blktrace then it probably should be
-> > protected by a lockdown control point.
-> >
-> > Is this something you could verify and potentially submit a patch to re=
-solve?
->
-> blktrace can not snoop kernel/user data. The information it got from
-> kernel is kind of "io metadata", basically include which process from
-> which cpu, at what time, triggered what kind of IO events(issue, queue,
-> complete etc.), to which disk, from which sector offset and how long.
-> blktrace has no way to know what's inside that io. I am kind of think
-> this is safe for lockdown mode.
+"KVM: VMX:" for the shortlog please.
 
-Well, you could always submit a patch* and we would review it like any
-other; that's usually a much better approach.
+On Mon, Apr 10, 2023, Xin Li wrote:
+> -.macro VMX_DO_EVENT_IRQOFF call_insn call_target
+> +.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=0 nmi=0
+>  	/*
+>  	 * Unconditionally create a stack frame, getting the correct RSP on the
+>  	 * stack (for x86-64) would take two instructions anyways, and RBP can
+> @@ -41,16 +43,55 @@
+>  	mov %_ASM_SP, %_ASM_BP
+>  
+>  #ifdef CONFIG_X86_64
+> +#ifdef CONFIG_X86_FRED
+> +	/*
+> +	 * It's not necessary to change current stack level for handling IRQ/NMI
+> +	 * because the state of the kernel stack is well defined in this place
+> +	 * in the code, and it is known not to be deep in a bunch of nested I/O
+> +	 * layer handlers that eat up the stack.
+> +	 *
+> +	 * Before starting to push a FRED stack frame, FRED reserves a redzone
+> +	 * (for CALL emulation) and aligns RSP to a 64-byte boundary.
+> +	 */
+> +	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
+> +	and $FRED_STACK_FRAME_RSP_MASK, %rsp
+> +
+> +	/*
+> +	 * A FRED stack frame has extra 16 bytes of information pushed at the
+> +	 * regular stack top comparing to an IDT stack frame.
+> +	 */
+> +	push $0		/* Reserved by FRED, must be 0 */
+> +	push $0		/* FRED event data, 0 for NMI and external interrupts */
+> +#else
+>  	/*
+>  	 * Align RSP to a 16-byte boundary (to emulate CPU behavior) before
+>  	 * creating the synthetic interrupt stack frame for the IRQ/NMI.
+>  	 */
+>  	and  $-16, %rsp
+> -	push $__KERNEL_DS
+> +#endif
+> +
+> +	.if \fred
+> +	.if \nmi
+> +	mov $(2 << 32 | 2 << 48), %rax		/* NMI event type and vector */
+> +	.else
+> +	mov %rdi, %rax
+> +	shl $32, %rax				/* External interrupt vector */
+> +	.endif
+> +	add $__KERNEL_DS, %rax
+> +	bts $57, %rax				/* Set 64-bit mode */
+> +	.else
+> +	mov $__KERNEL_DS, %rax
+> +	.endif
+> +	push %rax
 
-* Yes, there was a patch submitted, but it was against a distro kernel
-that diverged significantly from the upstream kernel in the relevant
-areas.
+This is painfully difficult to read, and the trampolines only add to that pain.
+Using macros instead of magic numbers would alleviate a small amount of pain, but
+but the #ifdefs and .if \fred/\nmi are the real culprits.
 
---=20
-paul-moore.com
+>  static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
+> @@ -6916,14 +6916,20 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+>  {
+>  	u32 intr_info = vmx_get_intr_info(vcpu);
+>  	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
+> -	gate_desc *desc = (gate_desc *)host_idt_base + vector;
+> +	unsigned long entry_or_vector;
+> +
+> +#ifdef CONFIG_X86_64
+> +	entry_or_vector = vector;
+> +#else
+> +	entry_or_vector = gate_offset((gate_desc *)host_idt_base + vector);
+> +#endif
+
+And then this is equally gross.  Rather than funnel FRED+legacy into a single
+function only to split them back out, just route FRED into its own asm subroutine.
+The common bits are basically the creation/destruction of the stack frame and the
+CALL itself, i.e. the truly interesting bits are what's different.
+
+Pretty much all of the #ifdeffery goes away, the helpers just need #ifdefs to
+play nice with CONFIG_X86_FRED=n.  E.g. something like the below as a starting
+point (it most definitely doesn't compile, and most definitely isn't 100% correct).
+
+---
+ arch/x86/kvm/vmx/vmenter.S | 72 ++++++++++++++++++++++++++++++++++++++
+ arch/x86/kvm/vmx/vmx.c     | 19 ++++++++--
+ 2 files changed, 88 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 631fd7da2bc3..a6929c78e038 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -2,12 +2,14 @@
+ #include <linux/linkage.h>
+ #include <asm/asm.h>
+ #include <asm/bitsperlong.h>
++#include <asm/fred.h>
+ #include <asm/kvm_vcpu_regs.h>
+ #include <asm/nospec-branch.h>
+ #include <asm/percpu.h>
+ #include <asm/segment.h>
+ #include "kvm-asm-offsets.h"
+ #include "run_flags.h"
++#include "../../entry/calling.h"
+ 
+ #define WORD_SIZE (BITS_PER_LONG / 8)
+ 
+@@ -31,6 +33,62 @@
+ #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
+ #endif
+ 
++#ifdef CONFIG_X86_FRED
++.macro VMX_DO_FRED_EVENT_IRQOFF call_target cs_val
++	/*
++	 * Unconditionally create a stack frame, getting the correct RSP on the
++	 * stack (for x86-64) would take two instructions anyways, and RBP can
++	 * be used to restore RSP to make objtool happy (see below).
++	 */
++	push %_ASM_BP
++	mov %_ASM_SP, %_ASM_BP
++
++	/*
++	 * Don't check the FRED stack level, the call stack leading to this
++	 * helper is effectively constant and shallow (relatively speaking).
++	 *
++	 * Emulate the FRED-defined redzone and stack alignment (128 bytes and
++	 * 64 bytes respectively).
++	 */
++	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
++	and $FRED_STACK_FRAME_RSP_MASK, %rsp
++
++	/*
++	* A FRED stack frame has extra 16 bytes of information pushed at the
++	* regular stack top compared to an IDT stack frame.
++	*/
++	push $0         /* Reserved by FRED, must be 0 */
++	push $0         /* FRED event data, 0 for NMI and external interrupts */
++	shl $32, %rax
++	orq $__KERNEL_DS | $FRED_64_BIT_MODE, %ax
++	push %rax	/* Vector (from the "caller") and DS */
++
++	push %rbp
++	pushf
++	push \cs_val
++
++	push $0 /* FRED error code, 0 for NMI and external interrupts */
++	PUSH_REGS
++
++	/* Load @pt_regs */
++	movq    %rsp, %_ASM_ARG1
++
++	call \call_target
++
++	POP_REGS
++
++	/*
++	 * "Restore" RSP from RBP, even though IRET has already unwound RSP to
++	 * the correct value.  objtool doesn't know the callee will IRET and,
++	 * without the explicit restore, thinks the stack is getting walloped.
++	 * Using an unwind hint is problematic due to x86-64's dynamic alignment.
++	 */
++	mov %_ASM_BP, %_ASM_SP
++	pop %_ASM_BP
++	RET
++.endm
++#endif
++
+ .macro VMX_DO_EVENT_IRQOFF call_insn call_target
+ 	/*
+ 	 * Unconditionally create a stack frame, getting the correct RSP on the
+@@ -299,6 +357,14 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ 
+ SYM_FUNC_END(__vmx_vcpu_run)
+ 
++#ifdef CONFIG_X86_FRED
++SYM_FUNC_START(vmx_do_fred_nmi_irqoff)
++	push $FRED_NMI_ERROR_CODE
++	mov $NMI_VECTOR | $FRED_NMI_SOMETHING, %eax
++	VMX_DO_FRED_EVENT_IRQOFF call fred_entrypoint_kernel $FRED_NMI_CS_VAL
++SYM_FUNC_END(vmx_do_nmi_irqoff)
++#endif
++
+ SYM_FUNC_START(vmx_do_nmi_irqoff)
+ 	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
+ SYM_FUNC_END(vmx_do_nmi_irqoff)
+@@ -357,6 +423,12 @@ SYM_FUNC_START(vmread_error_trampoline)
+ SYM_FUNC_END(vmread_error_trampoline)
+ #endif
+ 
++#ifdef CONFIG_X86_FRED
++SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
++	mov %_ASM_ARG1, %rax
++	VMX_DO_FRED_EVENT_IRQOFF call external_interrupt
++#endif
++
+ SYM_FUNC_START(vmx_do_interrupt_irqoff)
+ 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
+ SYM_FUNC_END(vmx_do_interrupt_irqoff)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 11080a649f60..42f50b0cc125 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6891,6 +6891,14 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+ 	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
+ }
+ 
++#ifdef CONFIG_X86_FRED
++void vmx_do_fred_interrupt_irqoff(unsigned int vector);
++void vmx_do_fred_nmi_irqoff(unsigned int vector);
++#else
++#define vmx_do_fred_interrupt_irqoff(x) BUG();
++#define vmx_do_fred_nmi_irqoff(x) BUG();
++#endif
++
+ void vmx_do_interrupt_irqoff(unsigned long entry);
+ void vmx_do_nmi_irqoff(void);
+ 
+@@ -6933,14 +6941,16 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+ {
+ 	u32 intr_info = vmx_get_intr_info(vcpu);
+ 	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
+-	gate_desc *desc = (gate_desc *)host_idt_base + vector;
+ 
+ 	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
+ 	    "unexpected VM-Exit interrupt info: 0x%x", intr_info))
+ 		return;
+ 
+ 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
+-	vmx_do_interrupt_irqoff(gate_offset(desc));
++	if (cpu_feature_enabled(X86_FEATURE_FRED))
++		vmx_do_fred_interrupt_irqoff(vector);
++	else
++		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
+ 	kvm_after_interrupt(vcpu);
+ 
+ 	vcpu->arch.at_instruction_boundary = true;
+@@ -7226,7 +7236,10 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 	if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
+ 	    is_nmi(vmx_get_intr_info(vcpu))) {
+ 		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
+-		vmx_do_nmi_irqoff();
++		if (cpu_feature_enabled(X86_FEATURE_FRED))
++			vmx_do_fred_nmi_irqoff();
++		else
++			vmx_do_nmi_irqoff();
+ 		kvm_after_interrupt(vcpu);
+ 	}
+ 
+
+base-commit: 33d1a64081c98e390e064db18738428d6fb96f95
+-- 
+
