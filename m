@@ -2,177 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E076DC4C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16B16DC4C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjDJJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S229808AbjDJJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjDJJA7 (ORCPT
+        with ESMTP id S229801AbjDJJCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:00:59 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FFC10CB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:00:45 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id v9so8908367pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681117245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Yf6i3dwVyGNHunqVy4wvMe4Mu5dQWI3DJrKMN6n03A=;
-        b=go0HNhF8sbV56879EF0jnigLtZjM/PEkln1DJD/l30BBdvyr5OggfhblddHaccOzea
-         mN76tKnyPFHmnPCnAGFrtLUvsjXhvsGfoikqyVdDxSHCUXnJ8usNxsx0BE3uPIPkGkrD
-         /vwOYI0p2uw7uiv3iE+LVOHnoggggfjCrFLCVbMI/aPSnAOeOX7k/IHyoV19DkHobRTP
-         F1kyBIS/irVKTGzzaVTWuGrvpjpNKbau1ncL4K7Pps9U0iJLmrk99dT1uC0A7IxTQztz
-         6LLqe1KKHE4pLbI+33jFuD3L3bIFqLHBv/6c+jrHCDGI09ITIsg4UXYJIGE1YgfXwm7S
-         LUoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681117245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Yf6i3dwVyGNHunqVy4wvMe4Mu5dQWI3DJrKMN6n03A=;
-        b=TGOhG+XJueLhiu1MSrkN81S9vjK7y/FX07748HMCVIT4FHIs9gzZYcbDWsI6TP0ag3
-         7c1GmlVnAL0ggD3YLSs3wGFI4wszcVwmZ7dqdOoXJit+L45ItwxYwI0LIGM04/R+dhif
-         nVwxY6EjcKRy9OY5H2fYzAa7kWrxyWMV9XkCgz6JApvvg6aMP7a1LwHdAfTMQOPIP8b7
-         yIDtAQ0qKca9FQkI8raiIOndrxRPrBbndsONA6FyP9AHNKHal2rKolDmCiA1UhNWIsWZ
-         SNgpvB5S3NW5JkD8som42IsRnpceqCulmYp+slIBS7CoTP6Mofl56DUK2/L9HHlw8M6y
-         5qnA==
-X-Gm-Message-State: AAQBX9cnC0Ssqku6OQO05lsaFy6As4aCyVk+7+qdTFna4ybvAOcfsdzQ
-        sCBlf7oDyQEomQOP0mhmFnmU2Gmu8ceUPOphjUrOEHBO3Zu/2runDwBnTg==
-X-Google-Smtp-Source: AKy350ZIxNWI1S019pZJHU9u88eFp+zQty20lRWIS6vsojbalefkFbcIwumPNIIx1viGM/igzOsfLF8VzL46JfYZaOk=
-X-Received: by 2002:a17:90a:4290:b0:246:6a3a:6aec with SMTP id
- p16-20020a17090a429000b002466a3a6aecmr2059886pjg.4.1681117245070; Mon, 10 Apr
- 2023 02:00:45 -0700 (PDT)
+        Mon, 10 Apr 2023 05:02:07 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2018.outbound.protection.outlook.com [40.92.19.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3D92D62
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:02:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nwo16Fz7HMV7I6s1Q3EybFhj7bISxKPJI2rY3trYEhQxMhkJrc525DkZj4LWsJBWzxVeOH/I1bH0wXixrq/jcQNienFJcO43illP6ce3CsdXLQdy6LF0qq5gVe2JJsY14n71eB+mkJMxG46xkAejTnW/rboVoLnLNxOYFUdVL5AThQg/Aa3qO+oHGpmsYF7n5dVLgnZEY6GVKrI1qJcRvbG9pzpXdk611W0943bErixaeL4mXFa3BZlQcTaZm2aH7MnhFuuJd9z+wPPhJ6uMXsnH2XjZpwEU0noXbOuvuDhtjPjQd1plF2qdA0/2eIkOv3wQWfg3lRmTMj1F73Ijsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TRbUrKpTEjIuMH1C+Oeim/P/WdMGuZBs4i3UveQOTV0=;
+ b=k27RhcSIrmD+lv/TWXELQcWMXmNoWa4z6IAQqwO+l+nyItF+Snr3ncIG/tscFYY6dHq4F/+waqDBeowTjSXrweot08wikCbvmsqbH9HOm7ReYiDQ6+t2EuuHgmHPH+VV3/NY92aMCXr6JK/CNh+9Oibge1M/w8e23Y4hp74tak5e42MUPrtn/p/ekGUW8d6sp+C/WerRPesBGK98pHJn3IDMh8/aW6JRsO83Nd0mxWL7GO0IUoEtrCr59GPJZAHm9hqT35cd0U6YdY/rkqjU5Ltc/45sKu1alwP68MFFT/WSfzIfH8bBMFSXn5b8iaOL70o1TJ0jzjWb2dejceriBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TRbUrKpTEjIuMH1C+Oeim/P/WdMGuZBs4i3UveQOTV0=;
+ b=gmQmM10McAtQAmUVPoNvQYa0LiJHNpm3ak6nSqraaJHnax2asr2ATk4xocYGfO/hUzDrNFpy3bholg5OtggYIWiMOL4u8XcPJ+TLeqnmYfH81MKzOFXRJv2y4NoWGIn36+4JNCxpGPkkRtpPlpzvh7i5fI+a/7miD/gUpSuKu+SBekWrWtfKnJDJiuP5M2/tSZPJI3IKftMI8szrOs5utPk8qeZk9bqpWZ/gRgWaomdcb2NEJYuOriLz9a5Sk//tTxWJrhJbXmeMvJ1YAOFxysZcaADJChmAE8g+DC1PSyeyyVFcRlYwWK9ygd+ItEgbb1QCj10PqullV9UGEU29zA==
+Received: from DM6PR22MB1836.namprd22.prod.outlook.com (2603:10b6:5:25e::21)
+ by SJ0PR22MB4380.namprd22.prod.outlook.com (2603:10b6:a03:51a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
+ 2023 09:02:03 +0000
+Received: from DM6PR22MB1836.namprd22.prod.outlook.com
+ ([fe80::4b7e:925f:eeca:488c]) by DM6PR22MB1836.namprd22.prod.outlook.com
+ ([fe80::4b7e:925f:eeca:488c%4]) with mapi id 15.20.6277.035; Mon, 10 Apr 2023
+ 09:02:03 +0000
+From:   zhaoxinchao <ChrisXinchao@outlook.com>
+To:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     zhaoxinchao <chrisxinchao@outlook.com>
+Subject: [PATCH] mm: Fixed incorrect comment for _kmem_cache_create function
+Date:   Mon, 10 Apr 2023 17:01:42 +0800
+Message-ID: <DM6PR22MB1836D8C5348D28989105DADBC5959@DM6PR22MB1836.namprd22.prod.outlook.com>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [FHMU8DzyWEwkc/BXqB510O+Ys6ytbDoB]
+X-ClientProxiedBy: SJ0PR03CA0051.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::26) To DM6PR22MB1836.namprd22.prod.outlook.com
+ (2603:10b6:5:25e::21)
+X-Microsoft-Original-Message-ID: <20230410090142.12442-1-ChrisXinchao@outlook.com>
 MIME-Version: 1.0
-References: <20230410073134.488762-1-badhri@google.com> <2023041028-irritate-starless-a42f@gregkh>
- <CAPTae5KZ0zkaCWrtPYzyX8oTyvDhBhc-hvxyHn9VHZ32UOqJ3g@mail.gmail.com> <2023041004-antarctic-hardiness-524e@gregkh>
-In-Reply-To: <2023041004-antarctic-hardiness-524e@gregkh>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 10 Apr 2023 02:00:08 -0700
-Message-ID: <CAPTae5JFC8WUzjrMeiyw7tYfWpsZUQThrrvG_etx7Fb2KP6y6A@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Add kernel config to wrap around
- tcpm logs
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR22MB1836:EE_|SJ0PR22MB4380:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76e91249-5401-44ed-a322-08db39a24096
+X-MS-Exchange-SLBlob-MailProps: 02NmSoc12DdnXLGGOuD9rmefhPe+K3xZxO7oA4JCSFWlG+a4c5RJ8YOGX/hEW6T8lBQyg9wVTqgZ//ArmQlyEcdxXPPD56m2NMk8fl4qniUF3EK3dMepxn6tPNnuorArDZGy8Yp+SIV7ZSBv06Hj5N+CLvBUAwd01ceRh7iCFz86OiJxCCqFUBBBkFTfgGfGjKx78fPi6yV4oTRUq3Ei15CIBYINdcQQzYR8mLX9SY72eHVGEYM/mpv+H0mqjyl0LSeNOnFudI0R9JFlNPwzeHseQ+Uc/en7atJpteyvY4XTkkWr47iP5mwoc28w198iCY491f1PEmGUaNhmgfNq/bQtYQTCKu67p8yjNvSzLe+kPBl/gQCFH6q2aLlcKaleAw6RmYXvD/TAq5fhojPA8KkU0i/+/ShzcvnhMht7aqNGLMaYCioXQ3lJIba59st59MGOaC3K1OYlL9xA4lI8boo9VF6INHukd7eXmaISnDdS8iBbbMwUnN7pnaXUc5bFOL5/uClDop+KmSYTefb9bgE+E3qrhepwnk1bE6njUr3mFDf92t9J63baCF7ub/+DRWTBFAnhYlt1Ts3WmRShZ4vC3n9Xza/oFMdwRC8jpT+UFzcyIPXws72WF/HKdcorIVABWcN/gcTF4z3QjwjbPIDV49abe77vZeKiY0o4oBK1Dw0GGX7wxtDIcR0+Vbtxm5F0SvYCo3y5STV0ZJeV3Nn//f2GqGuj8PhmEp7vdCtmsiixgyh2TaVLSCKRu9Fi
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6xqO2V4lydQJ/7qk0EheBKpZeCd1F3oRfPYha07wbygfgftUHtiwD9kKYRJ7daIxZt/3v9WXeXpD9V8JCOUYm7Gj92PDs1WV1GfwHBq++TZOAPM64ys6BMTZCn8aR0Mr1W866RdsgrV3poXzo37XAmm9zzyRFusHdFgHsZS5ZPxJ9MsNbHZOOlmjnKIhL2ri69X9eAGP0+eanWvItgRnPqs9xr3VY6cO9qmznFEHoqeA02LCTpSS1pV4qjm8/x6tL6Q1TT4PqfXK8+Njs6k99roOdKz2qhaFzy8AecKEwBoEfxd+1JFpKwFiBI6XHFAiMp7cGCeyr8fsaMcMFy5oZBHCVuPeFP4u5zj0gjlqeJ3aR0qGFsmJH+BPwwFeKNSUcbce5tivMc9VjR5wzB9xu+QSAR/stq4uV8yDKaeE4IzFMOZJ7P5VMzcwGTeQG4a7ys6Ts0lVjki8Jdb8OyDgCyvp2ZVG6WehgGGavllR5v7pjAivlVn+/aMkRT/GUNA7N5HtrOTEJzyZWdR88qlvSQyeAd3nOEfVLLSQkkgdBcztZHDD753fAjuSGQEnBJLYda9R1NkIoM27QYi6Riv/Igsq+mUi9hEFNiaM6mMBvJ5DZh1yFtWjlzbnXY615MpX
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OEpapxng7RPh2elB3fN7vlBzOfcRbPpG22jSlZNhuiUV5NsnLzkV3WhPlxIz?=
+ =?us-ascii?Q?ZguYwvKWfwAwMU1yY6zHVys5GJQQsIGzZ8mkbdt9wXfVtHefcCD7uEtZlzy1?=
+ =?us-ascii?Q?ho6mJJXbUl7YSzs17/ybqS5YwM3eEsS7Vk7dBpuAMZID2UmJ4eJ6T/DTD6vT?=
+ =?us-ascii?Q?BBViI2aR6fni0soFuc4pAnQ/g1lTKJxafktdRrbPsfY4xkqFveucbUnsbJRN?=
+ =?us-ascii?Q?qyHwk6RTr3/89uBa03p70ntB2VbP8WrXFJOivjHEOSWlAPwzINbHzrThrEjf?=
+ =?us-ascii?Q?/tUmappJjBx8inOdKE0SIhTzwbW+QzZ30NOaVH1fKhtskRXRvrodbzWJ7k2s?=
+ =?us-ascii?Q?46h8o7zInwtc5BuAbuKXl08sK/LCXwV35U8+SI7t0cJ50kie2U42P4msqaMT?=
+ =?us-ascii?Q?dBwN+zD88j0eN1KS1jxsRHlpzo8fwqk3/d63cfy6YT1cXjxx5vyD0KFLYcad?=
+ =?us-ascii?Q?QeT9L6eEH9YM+ydJ/VZX/yFndjkLMFofSHXJL2ilK0IwyVSkVNTtd0Z/3H0s?=
+ =?us-ascii?Q?e5/uPomYitup06ZFiK4LZNt1hNU9oUsMMn7DR+BJ9/WdJ4yg8zG8pVCJ7GL2?=
+ =?us-ascii?Q?4wG0TKdm7JdiBOoPBqxr5bUCrlnF+QDo3b+QFsS7Jel1xAFzvkG73fG8TRL9?=
+ =?us-ascii?Q?QxZzQwO/9cZrvt8Zhir5lOzEhB7Mz63mcYmKVa+dgdpPfNUzBQDn0MZpuyp7?=
+ =?us-ascii?Q?RAOQi1O1yo5N7oQEAeMBYW50qEPHBVYFzGtCcFtsqJhG0VQqm3MPbfbEBDfm?=
+ =?us-ascii?Q?8VlWoTDYj/uM8WIB0tX/+rkppWZ2rEA8IdHjBoh2yQ31ZuytNZemUNXjQG1X?=
+ =?us-ascii?Q?K36XC853GvIH7uP7S21qb0VtKvtbPOiWYWjNac8np4Qg84iaq784VJ2iwL8Y?=
+ =?us-ascii?Q?t0NaCJRuYtF38OEToPEeW+tDvWrGljOPUIfOVr93OqZghR42FKtcVvkXg+cS?=
+ =?us-ascii?Q?jwb+PiX9XC6IrJ4Vi+Y2fZD2Mq5VaVXNAmoj2ZmiQQ30A8KBNxuJOw06YZXY?=
+ =?us-ascii?Q?Rn+0uAPpWckni1EiivAzKlw9OqHAaRfH91DlQz3Tw1lP1E8WGRBvBB1UzQZw?=
+ =?us-ascii?Q?Ft8Sg+hEp0B/0mYOLulKnRnDGAMivBuzL2lgGnBYm92xtgzSxJkrtnR/4VVb?=
+ =?us-ascii?Q?Xdk5CXTxc6P/Z+2Erdu9DyDErcUs5f0LGJORvV2vLjiCKAji3WMiWWdNPm/K?=
+ =?us-ascii?Q?1OdfeThZkQhMvQyF4NF42GTPgmuu+4Bo1IKUB1iKZMQVe3X8vRx/u4yWySs?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76e91249-5401-44ed-a322-08db39a24096
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR22MB1836.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:02:03.6844
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR22MB4380
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 1:27=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Mon, Apr 10, 2023 at 01:08:55AM -0700, Badhri Jagan Sridharan wrote:
-> > On Mon, Apr 10, 2023 at 12:45=E2=80=AFAM Greg KH <gregkh@linuxfoundatio=
-n.org> wrote:
-> > >
-> > > On Mon, Apr 10, 2023 at 07:31:34AM +0000, Badhri Jagan Sridharan wrot=
-e:
-> > > > This change adds CONFIG_TCPM_LOG_WRAPAROUND which when set allows t=
-he
-> > > > logs to be wrapped around. Additionally, when set, does not clear
-> > > > the TCPM logs when dumped.
-> > > >
-> > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > > ---
-> > > >  drivers/usb/typec/tcpm/Kconfig | 6 ++++++
-> > > >  drivers/usb/typec/tcpm/tcpm.c  | 9 +++++++--
-> > > >  2 files changed, 13 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcp=
-m/Kconfig
-> > > > index e6b88ca4a4b9..4dd2b594dfc9 100644
-> > > > --- a/drivers/usb/typec/tcpm/Kconfig
-> > > > +++ b/drivers/usb/typec/tcpm/Kconfig
-> > > > @@ -18,6 +18,12 @@ config TYPEC_TCPCI
-> > > >       help
-> > > >         Type-C Port Controller driver for TCPCI-compliant controlle=
-r.
-> > > >
-> > > > +config TCPM_LOG_WRAPAROUND
-> > > > +     bool "Enable TCPM log wraparound"
-> > > > +     help
-> > > > +       When set, wraps around TCPM logs and does not clear the log=
-s when dumped. TCPM logs by
-> > > > +       default gets cleared when dumped and does not wraparound wh=
-en full.
-> > >
-> > > Kconfig help text needs to be wrapped at the properly width.
-> >
-> > I assumed that the width is 100 characters, but it looks like it is
-> > 80. Will fix it in the next version.
-> > >
-> > > And you do not provide any hint here as to why this is not the defaul=
-t
-> > > option, or why someone would want this.
-> >
-> > "TCPM logs by default gets cleared when dumped and does not wraparound
-> > when full." was intended
-> > to convey why someone would want to set this. Perhaps it's not effectiv=
-e.
-> >
-> > Does the below look better:
-> > "TCPM logs by default gets cleared when dumped and does not wraparound
-> > when full. This can be overridden by setting this config.
-> > When the config is set, TCPM wraps around logs and does not clear the
-> > logs when dumped."
-> >
-> > Also, I could make this default if that's OK with Guenter.
-> >
-> > >
-> > > So, why is this not just the default operation anyway?  Why would you
-> > > ever want the logs cleared?
-> >
-> > I remember Guenter mentioning that he was finding it useful to not
-> > wrap around the logs to fix problems
-> > during tcpm_register_port (init sequence). IMHO wrapping around the
-> > logs helps to triage interoperability
-> > issues uncovered during testing. So both approaches have their own adva=
-ntages.
->
-> But as this is a build-time option, what would cause someone to choose
-> one over the other, and then when the system is running, they can't
-> change them?
+From: zhaoxinchao <chrisxinchao@outlook.com>
 
-During initial phases of bringup, it makes sense to not wrap around
-the logs, but, once bringup is done its most effective to wraparound
-so that interop issues reported by the end users can be triaged where
-TCPM logs are very effective.
-Also, without wrapping around, the logbuffer logs are completely stale
-after the user goes through a few USB connect and disconnect cycles
-till the system is rebooted.
-If we don't want to pursue the Kconfig option, we should atleast make
-TCPM default to wrapping the logs around when full so we could
-maximise the use of the logbuffer contents.
+Actually __kmem_cache_create() returns a status :
+0 is success
+others are failed.
 
->
-> That does not seem good at all.
->
-> Why not just use tracing instead of this odd custom log buffer?  That's
-> a better solution overall, right?
+Signed-off-by: zhaoxinchao <chrisxinchao@outlook.com>
+---
+ mm/slab.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tracing is not enabled by default in most systems. End users don't
-want to retry and reproduce the failure to collect traces even if they
-could reproduce it consistently.
-So tracing was not proving handy here.
+diff --git a/mm/slab.c b/mm/slab.c
+index ca4822f6b..65985f767 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1901,7 +1901,7 @@ static bool set_on_slab_cache(struct kmem_cache *cachep,
+  * @cachep: cache management descriptor
+  * @flags: SLAB flags
+  *
+- * Returns a ptr to the cache on success, NULL on failure.
++ * Returns zero on success, others on failure.
+  * Cannot be called within a int, but can be interrupted.
+  * The @ctor is run when new pages are allocated by the cache.
+  *
+-- 
+2.39.2
 
-Thanks,
-Badhri
-
->
-> thanks,
->
-> greg k-h
