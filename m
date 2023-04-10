@@ -2,80 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9229A6DC81F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E416DC825
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjDJPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 11:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S229964AbjDJPC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjDJPBR (ORCPT
+        with ESMTP id S229766AbjDJPC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:01:17 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3BF4ED3;
-        Mon, 10 Apr 2023 08:01:16 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso3254958pjt.4;
-        Mon, 10 Apr 2023 08:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681138876; x=1683730876;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/gheyaCTp4V2rB10c4zOvu9Oo7rvG6c7rSlnCnrhsM=;
-        b=AoIgJLUa3lJgR4pR1dCSqC/X1z+doWpyDjIOIrQWFfYK32IKPjTfyv54o+LqUx36tE
-         zEhARCNCOb9nMheGkGhASK+lbJf/FA5fv6q1sxbccydJjZ/1SSjQgKihpEbmZ/UTKbsL
-         1rK1uSvNQRKq+LElzETzZZ4wxaRGDaB65f35Imm6F9ijjfsPolgUPyOe57R9uRy4Z/zu
-         lVjHGQ2kXd7EuSwn83PmzmsXUt4a+JEZYxLye5hIi64HtyOhVfnLynDfNDx8DGpC9gs5
-         4v9r/t6EUe6NSWZtrOuVTgQV7KIItRNmjYWKbwbCFYXVAa3+RtmzORT90cwpFji5c0Wz
-         Am4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681138876; x=1683730876;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D/gheyaCTp4V2rB10c4zOvu9Oo7rvG6c7rSlnCnrhsM=;
-        b=60SZAnkfukdWZ6Ee9S4+YD6DLoNgzRfCo/GLFmqDdpZrYzjF4RP2D9+Z3zQV+YmO3T
-         YGKLttWLqS1nLvBDkG27C4kNuBmUQ0t0FadHCUE7Vgt4ooadqPVplb9jZtpLfiEPy4Py
-         tmwMldfWdOBJLzVhyqnLj4SGX5eyIxIuKfOr0aoOmAXhs6x2m3TYBkOY1Bqz/bWBJi/G
-         cQUQCeW1z9EXDAUpM/chirghTB74QZt+ZhBbqJnaudxodEAyf9go/xbTJY1DBUTwI/LM
-         748PB9bHwsOZU1d/KEImBhIYFnP8Ll4tfnoqXzMUrxa5TuK3npoSI99/Jd2/ok0ZLiED
-         Pfww==
-X-Gm-Message-State: AAQBX9d7jUbnCmqH6pPwlyQ2nThTDp2TAWcRIsucJx/lW2DBqCX3l1BF
-        vhFIk7gEdIgoaDnAKPon3wI=
-X-Google-Smtp-Source: AKy350Y9XKZgt5cHBZpkiyzzMdjkE3jeC/Na9/l9cPQdfSolpcWiFr8jW0VR/iJ0T9OdgIyVWQ64Ug==
-X-Received: by 2002:a17:902:bf41:b0:1a1:a800:96a7 with SMTP id u1-20020a170902bf4100b001a1a80096a7mr12955497pls.8.1681138875948;
-        Mon, 10 Apr 2023 08:01:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001a52974700dsm4386082pld.174.2023.04.10.08.01.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 08:01:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fd4497b6-32a4-3135-fc62-fafb9fb76d26@roeck-us.net>
-Date:   Mon, 10 Apr 2023 08:01:14 -0700
+        Mon, 10 Apr 2023 11:02:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B15F4ED3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681138904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jvoKw5fddC6ImxYUVWRQGjUNBYWemWpfZTmvE3MZouI=;
+        b=J3fmotMVTaKvLfCm1xlsbvIHdJPthCs8ZbvDWF7G6Us768W6qSc8KC0vqXvraRlzbRlaUH
+        ztR2he+Fwf0sEx1oFDUIYPxTqDsTxQulg7pkL08PjX4B7x6T4N05ulvAK/loivRVb8gLax
+        2K9LTtYZLbGn+i+ICdGierb+/hZ8Gcs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-195-6Lhfy9nhOkqSBmrUFiGbxQ-1; Mon, 10 Apr 2023 11:01:41 -0400
+X-MC-Unique: 6Lhfy9nhOkqSBmrUFiGbxQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3379E1C0513F;
+        Mon, 10 Apr 2023 15:01:41 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-107.pek2.redhat.com [10.72.12.107])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D646314171B7;
+        Mon, 10 Apr 2023 15:01:37 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     lulu@redhat.com, jasowang@redhat.com, mst@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: [PATCH] vhost_vdpa: fix unmap process in no-batch mode
+Date:   Mon, 10 Apr 2023 23:01:30 +0800
+Message-Id: <20230410150130.837691-1-lulu@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Remove support
-Content-Language: en-US
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Fred Eckert <Frede@cmslaser.com>
-References: <20230410143101.182563-1-william.gray@linaro.org>
- <7b0fbd06-73d0-7fa9-3f03-e788f1df4631@roeck-us.net> <ZDQifl7EB33dh/eu@fedora>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZDQifl7EB33dh/eu@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,43 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/23 07:51, William Breathitt Gray wrote:
-> On Mon, Apr 10, 2023 at 07:43:37AM -0700, Guenter Roeck wrote:
->> On 4/10/23 07:31, William Breathitt Gray wrote:
->>> The current maintainer no longer has access to the device for testing,
->>> the original user of this driver indicates that they have moved on to
->>> another device, and the manufacturer WINSYSTEMS does not appear
->>> interested in taking over support for this code.
->>>
->>> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->>
->> A bit harsh, maybe. Just mark it as orphan for the time being.
->>
->> I see there are other Winsystems drivers. What are you going to do
->> with those ?
->>
->> Guenter
-> 
-> Oops, I didn't mean for that commit message to sound so harsh but merely
-> log some brief reasons for the support removal for posterity. However, I
-> adjust this to orphan status rather than dropping; what is the process
-> to mark a driver as orphaned?
-> 
+While using the no-batch mode, the process will not begin with
+VHOST_IOTLB_BATCH_BEGIN, so we need to add the
+VHOST_IOTLB_INVALIDATE to get vhost_vdpa_as, the process is the
+same as VHOST_IOTLB_UPDATE
 
-I didn't refer to the description when saying "harsh" (the description was fine),
-I meant to say that removing the driver would be a bit harsh. There might still
-be some (unknown) users, after all.
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vhost/vdpa.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Just submit a patch removing yourself as driver maintainer and mark its
-status as "Orphan", with the same explanation.
-
-Thanks,
-Guenter
-
-> As for the other Winsystems drivers, I'm still able to test those so I
-> can continue maintainance of those -- although I'm always open if
-> WINSYSTEMS would like to join as a supporter, or a user co-maintainer
-> comes along. ;-)
-> 
-> William Breathitt Gray
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 7be9d9d8f01c..32636a02a0ab 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -1074,6 +1074,7 @@ static int vhost_vdpa_process_iotlb_msg(struct vhost_dev *dev, u32 asid,
+ 		goto unlock;
+ 
+ 	if (msg->type == VHOST_IOTLB_UPDATE ||
++	    msg->type == VHOST_IOTLB_INVALIDATE ||
+ 	    msg->type == VHOST_IOTLB_BATCH_BEGIN) {
+ 		as = vhost_vdpa_find_alloc_as(v, asid);
+ 		if (!as) {
+-- 
+2.34.3
 
