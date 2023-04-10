@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8858C6DC3AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DEA6DC3B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjDJGt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 02:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S229740AbjDJGw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 02:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjDJGt1 (ORCPT
+        with ESMTP id S229725AbjDJGwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 02:49:27 -0400
+        Mon, 10 Apr 2023 02:52:55 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBF63A8C;
-        Sun,  9 Apr 2023 23:49:25 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33A6LvMp025518;
-        Mon, 10 Apr 2023 06:49:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=d33h0MeCKuVcMedfvoFaIM87gL5+nRQ4ofP6VMY89Hg=;
- b=MQLdE/H0f8FG/TvgAIKr7HQWhLBw1BC1mafMhtsD3pF3gGbQL7sjrBnL0aORYSWKKOCz
- IhOas0Kj1fq7bhwJdQ/aPdBJbqSLdCea8ycyJLNKY9xCDZLdKOyA1BR+LSOR0MSVwAS1
- 8VpCadKzRg37EIw0wR/IpwTpPY1bx8z3JQoBfBTSrmg6jRzL+rvtikyJKr+e4sIXcQZ2
- HNjyx+j5PAA+xx/zSfQFZNpmjTQZ1sZsQFHylsZs2wqddOz3lCFL61O6VaA8HbVnQTCs
- ELXH4TuLhpdbGjlz4HiACOotoZRgdVi9RJc10R7Z8ratm1BGQpUzK30WxcxaizVbgd2P ww== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptwmythnv-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBBB359C;
+        Sun,  9 Apr 2023 23:52:54 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33A5p4ep032584;
+        Mon, 10 Apr 2023 06:52:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=AdTqV1LnkiqTJqJ3WLEqQ1447PfvQcPkkAZmyMzUECM=;
+ b=TZJTWHqhDWONIW/RrFP19pMLIS3bYl1uoeHo8sog5OP1ePfd7rXTtTetpeb80sqBKoEK
+ kWj4F7W1wpgKKbNX+TC9QpDbXKgwE6gsjUbvT1OqDI3ttXGTB3p6stMFQyeUKZIB8DQE
+ ylPy3Gn5aOzuO0jPKWIuTYT82z49e62AV/7ZqfAZB4KLYRlvQIlrX4a27mZGu7lInTfa
+ 1Wkq6kDl+Fu5yNHcmYCi3hsPdUIf+u6L5aaZvKZiYBLQ7eY0B5dnm4r4gU71BKwvV/Zg
+ YFJ9pMblYLHkwP/j+obfI9W4LZPu2NiYytdX0Bz4mb/VaR4Nnw1+ycsywQIao3/YGNyr pg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pu0c32ceu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 06:49:13 +0000
+        Mon, 10 Apr 2023 06:52:43 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33A6nCCK032301
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33A6qIgx014557
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 06:49:12 GMT
-Received: from [10.50.45.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 9 Apr 2023
- 23:49:08 -0700
-Message-ID: <8cf793df-b676-bbb4-0601-5647d58bb2b3@quicinc.com>
-Date:   Mon, 10 Apr 2023 12:18:56 +0530
+        Mon, 10 Apr 2023 06:52:18 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 9 Apr 2023 23:52:15 -0700
+Date:   Mon, 10 Apr 2023 12:22:11 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Chen Yu <yu.c.chen@intel.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yifan Li <yifan2.li@intel.com>
+Subject: Re: [PATCH] PM: hibernate: Do not get block device exclusively in
+ test_resume mode
+Message-ID: <20230410065211.GA3638819@hu-pkondeti-hyd.qualcomm.com>
+References: <20230401165540.322665-1-yu.c.chen@intel.com>
+ <CAJZ5v0j704JoCPTrDO1jTHwP1+8NVdLk7hym5036uFcfo7YHXQ@mail.gmail.com>
+ <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+ <CAJZ5v0j5PWsF6zCCVMRW59WevYLvWiBk82U4MpxqWdFnAcrqrQ@mail.gmail.com>
+ <ZDLL0SI87x9a/qvB@chenyu5-mobl1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
- <5eeeb46e9b3f61656a37cb77c2ad6a04e383c16d.1680874520.git.quic_schowdhu@quicinc.com>
- <20230407154132.dpguz24f6rukyujq@ripper>
-Content-Language: en-US
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <20230407154132.dpguz24f6rukyujq@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDLL0SI87x9a/qvB@chenyu5-mobl1>
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8VWpsdI3C7kq6P_VaPy1RTpBPvT4ytJf
-X-Proofpoint-GUID: 8VWpsdI3C7kq6P_VaPy1RTpBPvT4ytJf
+X-Proofpoint-GUID: rNXBgaVzK-LtG0Dzx_oMXSqrFDAnFZqm
+X-Proofpoint-ORIG-GUID: rNXBgaVzK-LtG0Dzx_oMXSqrFDAnFZqm
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_03,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
+ definitions=2023-04-10_04,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 spamscore=0 malwarescore=0 adultscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100056
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+ engine=8.12.0-2303200000 definitions=main-2304100058
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,267 +84,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/7/2023 9:11 PM, Bjorn Andersson wrote:
-> On Fri, Apr 07, 2023 at 07:34:36PM +0530, Souradeep Chowdhury wrote:
->> All of Qualcomm's proprietary Android boot-loaders capture boot time
->> stats, like the time when the bootloader started execution and at what
->> point the bootloader handed over control to the kernel etc. in the IMEM
->> region. This information is captured in a specific format by this driver
->> by mapping a structure to the IMEM memory region and then accessing the
->> members of the structure to print the information. This information is
->> useful in verifying if the existing boot KPIs have regressed or not.
->> A sample log in SM8450(waipio) device is as follows:-
->>
->> KPI: Pre ABL Time = 3s
->> KPI: ABL Time = 14s
+On Sun, Apr 09, 2023 at 10:29:37PM +0800, Chen Yu wrote:
+> On 2023-04-06 at 12:02:01 +0200, Rafael J. Wysocki wrote:
+> > On Thu, Apr 6, 2023 at 4:49 AM Chen Yu <yu.c.chen@intel.com> wrote:
+> > >
+> > > Hi Rafael,
+> > > On 2023-04-05 at 20:37:32 +0200, Rafael J. Wysocki wrote:
+> > > > On Sat, Apr 1, 2023 at 10:59 AM Chen Yu <yu.c.chen@intel.com> wrote:
+> > > > >
+> > > > > The system refused to do a test_resume because it found that the
+> > > > > swap device has already been taken by someone else. Specificly,
+> > > > > the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
+> > > > > do this check.
+> > > > >
+> > > > > Steps to reproduce:
+> > > > >  dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
+> > > > >        awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+> > > > >  mkswap /swapfile
+> > > > >  swapon /swapfile
+> > > > >  swap-offset /swapfile
+> > > > >  echo 34816 > /sys/power/resume_offset
+> > > > >  echo test_resume > /sys/power/disk
+> > > > >  echo disk > /sys/power/state
+> > > > >
+> > > > >  PM: Using 3 thread(s) for compression
+> > > > >  PM: Compressing and saving image data (293150 pages)...
+> > > > >  PM: Image saving progress:   0%
+> > > > >  PM: Image saving progress:  10%
+> > > > >  ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+> > > > >  ata1.00: configured for UDMA/100
+> > > > >  ata2: SATA link down (SStatus 0 SControl 300)
+> > > > >  ata5: SATA link down (SStatus 0 SControl 300)
+> > > > >  ata6: SATA link down (SStatus 0 SControl 300)
+> > > > >  ata3: SATA link down (SStatus 0 SControl 300)
+> > > > >  ata4: SATA link down (SStatus 0 SControl 300)
+> > > > >  PM: Image saving progress:  20%
+> > > > >  PM: Image saving progress:  30%
+> > > > >  PM: Image saving progress:  40%
+> > > > >  PM: Image saving progress:  50%
+> > > > >  pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
+> > > > >  PM: Image saving progress:  60%
+> > > > >  PM: Image saving progress:  70%
+> > > > >  PM: Image saving progress:  80%
+> > > > >  PM: Image saving progress:  90%
+> > > > >  PM: Image saving done
+> > > > >  PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
+> > > > >  PM: S|
+> > > > >  PM: hibernation: Basic memory bitmaps freed
+> > > > >  PM: Image not found (code -16)
+> > > > >
+> > > > > This is because when using the swapfile as the hibernation storage,
+> > > > > the block device where the swapfile is located has already been mounted
+> > > > > by the OS distribution(usually been mounted as the rootfs). This is not
+> > > > > an issue for normal hibernation, because software_resume()->swsusp_check()
+> > > > > happens before the block device(rootfs) mount. But it is a problem for the
+> > > > > test_resume mode. Because when test_resume happens, the block device has
+> > > > > been mounted already.
+> > > > >
+> > > > > Thus remove the FMODE_EXCL for test_resume mode. This would not be a
+> > > > > problem because in test_resume stage, the processes have already been
+> > > > > frozen, and the race condition described in
+> > > > > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > > > is unlikely to happen.
+> > > > >
+> > > > > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > > > Reported-by: Yifan Li <yifan2.li@intel.com>
+> > > > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > > > ---
+> > > > >  kernel/power/hibernate.c | 18 +++++++++++-------
+> > > > >  kernel/power/power.h     |  2 +-
+> > > > >  kernel/power/swap.c      | 10 +++++++---
+> > > > >  3 files changed, 19 insertions(+), 11 deletions(-)
+> > > > >
+> > > > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > > > > index 793c55a2becb..f50456e72f0a 100644
+> > > > > --- a/kernel/power/hibernate.c
+> > > > > +++ b/kernel/power/hibernate.c
+> > > > > @@ -683,22 +683,26 @@ static void power_down(void)
+> > > > >                 cpu_relax();
+> > > > >  }
+> > > > >
+> > > > > -static int load_image_and_restore(void)
+> > > > > +static int load_image_and_restore(bool safe)
+> > > >
+> > > > It is not very clear why the argument is called "safe".
+> > > >
+> > > > Either this needs to be explained in a comment, or I would just call
+> > > > it "exclusive" and rework the checks accordingly.
+> > > >
+> > > OK, I can change it to "exclusive". Pavan proposed to add a global
+> > > variable snapshot_testing to indicate that the system is in test_resume mode,
+> > > and we can check this flag to decide whether to open the block device
+> > > exclusively or not. Then we don't have to add parameter for load_image_and_restore()
+> > > nor swsusp_check(). Could you please give advice whether this is applicable?
+> > 
+> > Well, in that case, why don't you simply check pm_test_level?
+> >
+> After rethink about this further, it seems that the global variable snapshot_testing
+> can not present the race condition described in 39fbef4b0f77 in a corner case, if
+> we do like this:
 > 
-> Why are these in whole seconds?
+>      1. echo test_resume > /sys/power/disk
+>      2. mkfs.ext4 -O mmp  /dev/sda -b 1024
+>      3. mount /dev/sda /home/test
+>      4. echo "/dev/sda" > /sys/power/resume
+>  
+> We will still see the kernel crash, because in step4, the software_resume()
+> will open swap device non-exclusively because step1 has enabled snapshot_testing.
+> 
+> That is to say, to avoid the race condition, we should let software_resume() open
+> the swap device exclusively no matter what the hibernation mode is.
+> 
+> Maybe fall back to add "exclusive" flag for load_image_and_restore()
+> and swsusp_check() is simpler.
+> 
+> Pavan, what do you think?
+> 
+Right, If we directly use (hibernation_mode == HIBERNATION_TEST_RESUME)
+condition, it would be a problem. I was saying, snapshot_test which
+is a local variable in hibernate() needs to be made global so that
+block device open / close can use flags approriately. Onething I did not
+like was passing flags to swsusp_close(). Thats the reason for me
+to cache the flags while opening the block device and using it in
+the swsusp_close().
 
-This is to give a granular view of time.
-
-> 
->> KPI: Kernel MPM timestamp = 890206
-> 
-> And why is this presented in cycles?
-
-This timestamp is used as an intermediate value for calculating one of 
-the KPIs. Can be changed to seconds as well for consistency.
-
-> 
->>
->> The Module Power Manager(MPM) sleep counter starts ticking at the PBL
->> stage and the timestamp generated by the sleep counter is logged by
->> the Qualcomm proprietary bootloader(ABL) at two points-> First when it
->> starts execution which is logged here as "Pre ABL Time" and the second
->> when it is about to load the kernel logged as "ABL Time". Both are
->> logged in the unit of seconds.
-> 
-> We have a policy to not taint the kernel log with "useless" information,
-> for kernel developers this seems to add no value and for end users
-> there's no benefit to this.
-> 
->> The current kernel timestamp is
->> printed by the boot_stats driver as well.
->>
-> 
-> Why?
-
-Same as stated above.
-
-
-> 
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   drivers/soc/qcom/Kconfig      |  7 ++++
->>   drivers/soc/qcom/Makefile     |  1 +
->>   drivers/soc/qcom/boot_stats.c | 95 +++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 103 insertions(+)
->>   create mode 100644 drivers/soc/qcom/boot_stats.c
->>
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->> index d11bda2..2cfdbb7 100644
->> --- a/drivers/soc/qcom/Kconfig
->> +++ b/drivers/soc/qcom/Kconfig
->> @@ -79,6 +79,13 @@ config QCOM_DCC
->>   	  driver provides interface to configure DCC block and read back
->>   	  captured data from DCC's internal SRAM.
->>   
->> +config QCOM_BOOTSTAT
->> +	tristate "Qualcomm Technologies, Boot Stat driver"
->> +	depends on ARCH_QCOM || COMPILE_TEST
->> +	help
->> +	  This option enables driver for boot stats. Boot stat driver prints
->> +	  the kernel bootloader information by accessing the imem region.
->> +
->>   config QCOM_KRYO_L2_ACCESSORS
->>   	bool
->>   	depends on ARCH_QCOM && ARM64 || COMPILE_TEST
->> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
->> index 3b92c6c..8a9d995 100644
->> --- a/drivers/soc/qcom/Makefile
->> +++ b/drivers/soc/qcom/Makefile
->> @@ -5,6 +5,7 @@ obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
->>   obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
->>   obj-$(CONFIG_QCOM_CPR)		+= cpr.o
->>   obj-$(CONFIG_QCOM_DCC) += dcc.o
->> +obj-$(CONFIG_QCOM_BOOTSTAT) += boot_stats_new.o
-> 
-> Most other entries here are sorted alphabetically.
-
-Ack
-
-> 
->>   obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
->>   obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
->>   obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
->> diff --git a/drivers/soc/qcom/boot_stats.c b/drivers/soc/qcom/boot_stats.c
->> new file mode 100644
->> index 0000000..080e820
->> --- /dev/null
->> +++ b/drivers/soc/qcom/boot_stats.c
->> @@ -0,0 +1,95 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2013-2019, 2021 The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/err.h>
->> +#include <linux/io.h>
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/of_address.h>
->> +#include <linux/platform_device.h>
->> +
->> +#define MPM_COUNTER_FREQ 32768
->> +
->> +/**
->> + *  struct boot_stats - timestamp information related to boot stats
->> + *  @bootloader_start:  Time for the starting point of the abl bootloader
->> + *  @bootloader_end:    Time when the kernel starts loading from abl bootloader
->> + */
->> +struct boot_stats {
->> +	u32 bootloader_start;
->> +	u32 bootloader_end;
-> 
-> bootloader != abl
-
-Ack. Will change these names based on abl.
-
-> 
->> +} __packed;
->> +
->> +struct boot_stats __iomem *boot_stats;
->> +void __iomem *mpm_counter_base;
-> 
-> Why are these non-static global variables?
-
-This was removed as per the comment on version 1 of the patch. Will 
-reinstate it.
-
-> 
->> +
->> +static void print_boot_stats(void)
->> +{
->> +	u32 pre_abl_time = readl_relaxed(&boot_stats->bootloader_start) / MPM_COUNTER_FREQ;
->> +	u32 abl_time = readl_relaxed(&boot_stats->bootloader_end) / MPM_COUNTER_FREQ;
->> +
->> +	pr_info("KPI: Pre ABL Time = %us\n", pre_abl_time);
->> +	pr_info("KPI: ABL Time = %us\n", abl_time);
->> +	pr_info("KPI: Kernel MPM timestamp = %u\n", readl_relaxed(mpm_counter_base));
-> 
-> This number is completely dependent on link order and other things in
-> happening in the kernel, so what trust do you give in this number going
-> up or down?
-> 
-> As above, why is this presented in ticks?
-
-This is the sleep counter for module power manager unit which starts 
-ticking from PBL stage, it will keep on ticking till the system shuts 
-down. As mentioned above this timestamp value is used at an intermediate
-point for calculating one of the KPIs, we can change it to seconds for 
-consistency.
-
-> 
->> +}
->> +
->> +static int boot_stats_probe(struct platform_device *pdev)
->> +{
->> +	struct device_node *np_mpm2;
->> +	struct device *boot_stat = &pdev->dev;
->> +
->> +	boot_stats = of_iomap(boot_stat->of_node->child, 0);
-> 
-> You can't just do ->child here, what if boot stats isn't the first item
-> in the list?
-
-Ack
-
-> 
->> +	if (!boot_stats)
->> +		return dev_err_probe(&pdev->dev, -ENOMEM,
->> +					"failed to map imem region\n");
->> +
->> +	np_mpm2 = of_find_compatible_node(NULL, NULL,
->> +					  "qcom,mpm2-sleep-counter");
->> +	if (!np_mpm2) {
->> +		return dev_err_probe(&pdev->dev, -EINVAL,
->> +				     "failed to get the counter node\n");
->> +	}
->> +
->> +	if (of_get_address(np_mpm2, 0, NULL, NULL)) {
->> +		mpm_counter_base = of_iomap(np_mpm2, 0);
-> 
-> Isn't this region going to be also accessed by some sleep stats driver?
-
-Currently there is no sleep stat driver present for this upstream.
-
-> 
->> +		if (!mpm_counter_base) {
->> +			return dev_err_probe(&pdev->dev, -ENOMEM,
->> +					     "failed to map the counter\n");
->> +		}
->> +	}
->> +	print_boot_stats();
-> 
-> You're done with your platform_device, and your two ioremap regions
-> here. But you're holding on to those 10kb of memory for the rest of the
-> systems runtime.
-
-Ack
-
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static int boot_stats_remove(struct platform_device *pdev)
->> +{
->> +	iounmap(boot_stats);
->> +	iounmap(mpm_counter_base);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id boot_stats_dt_match[] = {
->> +	{ .compatible = "qcom,sm8450-imem" },
-> 
-> You're binding to the root imem node, rather than your boot stats child
-> node.
-
-Ack
-
-> 
-> How about just exposing the boot stats imem region to userspace, through
-> debugfs or similar and then you can have a userspace tool that digs out
-> and reports this information when profiling is relevant?
-
-Ack. This can be exposed to user as a part of debugfs interface.
-
-> 
-> Regards,
-> Bjorn
-> 
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(of, boot_stats_dt_match);
->> +
->> +static struct platform_driver boot_stat_driver = {
->> +	.probe  = boot_stats_probe,
->> +	.remove = boot_stats_remove,
->> +	.driver = {
->> +		.name = "qcom-boot-stats",
->> +		.of_match_table = boot_stats_dt_match,
->> +	},
->> +};
->> +module_platform_driver(boot_stat_driver);
->> +
->> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. Boot Stat driver");
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.7.4
->>
+Thanks,
+Pavan
