@@ -2,310 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107476DC4EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EF46DC4EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDJJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S229746AbjDJJOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjDJJNJ (ORCPT
+        with ESMTP id S229574AbjDJJOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:13:09 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73124681
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:13:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ETiwiIYlPesfz6C+whyBycZ9XvqhBF/S2r91kXILFMVNzEt6H2+0JplBztOHyPSXkK7IDZig9/9tMmlh/MJI94R25Flv9/E+Toix7gbRmRaogSLda25deHMfnk6IQgF1QX+nchlmx1kKUYohhuixVqwMU4sg1DnnNsI3fbTemlq+0EiBGpKcO9OFpZ2ChCJFhtMArd3fM8KpJCxbKcdn23fgSo18fAFwHwk39MRSdGwVgDLwpwXPb5XX9tK+9+wTbvLgxVQ2011fcxAouLgocYEowdLjxeU31iazYFukd4JaCNESXQGM7HK6ppjw71jEe8ZaHjpQGhNHwe8ni2kLtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V75irzTUXp33w85GzwxLvQo26Glzwo/Wku7UN++bNCY=;
- b=Ih1JtYp66wuccjYUkFnC4vfSWKOxQsRYhadsB3k5NiI3MEIXZZblb+FHghLYXxKXIze3OkLDgwUNlKKg7kOptRDlbYtl1vi72EWr2pHXXDHFyf7dVe6ZBnoQFhJczBIZUHMZjK/WEcQvi+twkH+UovkH8E7ljN0ifsl20afo5lGg2g3PAOz3wLFd5SjN2FMSsv6ruDPgNFNSnQtQYElx+e5qb0/MU2Sv3UttTN1XEB+ov6nD4hjJUaEwLeOKqPL6BUbnkxuhJDZhA3S7Drgw8Cr/rPpTn2Mv+Valv9m1PQ00a5Cp/O0gZOslDEEftGpjuZCE3HDesF37TzbkzxcPBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V75irzTUXp33w85GzwxLvQo26Glzwo/Wku7UN++bNCY=;
- b=RN/jm8ZEEAw2bmL3iiM+WGj9P28aT7LHnBrOqqLSrCxTrsLiI8rn4vlQFsjgz9Uwr79R4s8/2mEM+DMZ2tubxMdwbT29tNJ9pyh5X4eaJesYEN3ZxtJOMnUJTIihCNnOUg5GMWPgRg9mwb1UyE8HOeSTjULGC7EK9mN3lj01SxI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8752.eurprd04.prod.outlook.com (2603:10a6:102:20e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Mon, 10 Apr
- 2023 09:12:57 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%5]) with mapi id 15.20.6277.036; Mon, 10 Apr 2023
- 09:12:56 +0000
-Message-ID: <426d8797-d4e5-624e-0d08-0b9dea5ea62a@oss.nxp.com>
-Date:   Mon, 10 Apr 2023 17:12:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2] soc: imx: imx8m-blk-ctrl/gpcv2: fix i.MX8MP VPU_H1
- sequence
-To:     Lucas Stach <l.stach@pengutronix.de>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>
-References: <20230403084228.3212581-1-peng.fan@oss.nxp.com>
- <30937b92bece48c008c1fe2b29498641df1dfd0c.camel@pengutronix.de>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <30937b92bece48c008c1fe2b29498641df1dfd0c.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR06CA0228.apcprd06.prod.outlook.com
- (2603:1096:4:68::36) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 10 Apr 2023 05:14:44 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8C619AE;
+        Mon, 10 Apr 2023 02:14:41 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso3806757pjp.5;
+        Mon, 10 Apr 2023 02:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681118080;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=80Mgnei7BeppmYWkATLFPz3AY8r0GUe8yhxZdDcYCoc=;
+        b=AHKws6ygmx7L1U9epf0FVJANubq4tQYTu0zBy+avxauJ9PhTbvF2L7z3CBsG8QwBZB
+         Laz2/N+gS9oorKDQoFS7dv21HfrI/N8Yc2Kflg4+5pS9MvpE/orRK8z4X25AXMQBcWCt
+         FAzu2j1MWL/8SGPmtdIvy+OKyOmYaam1tjkZBFp2lMYFpAs4x8kfq0kWgj44Q2n2OJQr
+         LzweqDQ8AMahAdFdFm+hDILiFTQ8LdwC+IVyoIvinoAsT6ejEFIjUHasC4CK/NPR+Y+e
+         uo/odjP1jDzVepAVTLXwRM26uuH2fRXEVGfzyskJyMSHW77Epx8bjm+cM7ZwnSN/+wRn
+         jU9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681118080;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=80Mgnei7BeppmYWkATLFPz3AY8r0GUe8yhxZdDcYCoc=;
+        b=wmdIIOVS5NLQ4tG/OJq+xuf8uqqpHTQDAUQg0WWuPoWTGFZ3QdZ+uDBa9BCYcrAZFa
+         +z0Pd3x9jyVK5Ho/pBXDR4yMB2SZqM5fPlTxgdbDxxRU5toeSrjCCVW7hbrfIfqSwvmS
+         SofQyOQZZTzpw8hd4C3DIZNU5umXk7tlTXY4wdxwd0FeitZEuAPGdt0Un7T1q48B01cq
+         tDcW3EaPI5XA7yrq1RowSZbkXY2RgafwEoCHbQtHoY0SqGgxtcsTQB/TfQyZ6p9FCZBP
+         d994rROaQlmwZ9S8TGmAUnzRrBuq/uNTyh3RcjJGxNrbakmIm+2dkPBAE8Q6eSh1KWH1
+         rZ5A==
+X-Gm-Message-State: AAQBX9dxZbKUdNpRSkFAKdMYEjqyiT7ukvoTmLjPPl6MjBwpGYe6CrG1
+        WJyHQjlXy12vIHbc46xXvUWNKkkfBOVGuEiVyqE=
+X-Google-Smtp-Source: AKy350Y69aygSicJh9IdeXcO/MrMayQfMGeGlmTB7AcuTk7p2b3vM1ItzXforpSKw9nJ/wRC0Dsruw==
+X-Received: by 2002:a17:90b:4d8b:b0:23d:2d68:1d6a with SMTP id oj11-20020a17090b4d8b00b0023d2d681d6amr13788490pjb.37.1681118080397;
+        Mon, 10 Apr 2023 02:14:40 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.213.201])
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090a838100b002372106a5c2sm8794785pjn.37.2023.04.10.02.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 02:14:40 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        William Zhang <william.zhang@broadcom.com>,
+        Jenny Zhang <jenny.zhang@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwrng: histb - Move driver to drivers/char/hw_random/histb-rng.c
+Date:   Mon, 10 Apr 2023 17:13:54 +0800
+Message-Id: <20230410091408.56638-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8752:EE_
-X-MS-Office365-Filtering-Correlation-Id: db5fb1dc-27db-4fdc-cf35-08db39a3c5ce
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8t37fYyUJ0NRXHms+nkQ8XE1adZHcGot3gpEAui7ZuuYXi2e+ApF/l54sFq914lH2z89Di4rmAFFSPkUom6DrIuHNuFaS71YExwIXGQVA/uFayYuj2AmCCkIe196RD7d94beGWs+EZ9hFALfd94iBAlbiK+TRSSNPndM5xsWaMbacPauRI00b99upSg3U8BJWrV9Uxv/O2AxdLW5nsXs5v4pnYriODvjl0G+GX9JgUA/YQIqW1qWj4nCOfx4UITZC/83+xlmgn9de7+NFai65U+fGpune7HWRxPperm1fD3UyNeXrkvytUFVAfAamd1eR5f+0anEMyYWnpcYra9/ZyPty/KUJJz+7JjBD+nE/NkSSuZgQgcp9XgAzrAJ+GJPoUp2/i41L7HpROfTPlGXdJBsdrQ+byz1Nt2V6CF5VSsZEgyxo245ZUCaGpDVC/lGjDwH63wJUQy+BsSMjvNpI/3bvct5GaQqXBbtRUKP7RrP0z1lFVX4MqRqXzFmZc/960d5nbU0UZUmgioKMYN0dsS3BRb319tx3LUm0BPg0aRl/fXIvVh1YhykME0lOpBeX1DQH1904mqXok1Am9vDrqxs0py5+PxJdfBKiCCkIpVCmA0eeey+4je9ZewawGSYO9MIb7ZpaNvjaz5ecNCG+8zL8ueR89ttklznePJaDZQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199021)(478600001)(316002)(54906003)(6512007)(6506007)(5660300002)(26005)(53546011)(186003)(6486002)(6666004)(2906002)(44832011)(66476007)(66946007)(41300700001)(8676002)(4326008)(8936002)(66556008)(38100700002)(31696002)(83380400001)(2616005)(86362001)(31686004)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHZLZi9CS2doMlg5SEJuVmdWaWdZeGl4b0JlTVg3KzhlRWR0UWl5MngwSjJq?=
- =?utf-8?B?NlJHeDc1dnp3SDJId0pROUpjVHJrN0lPOUd0SEJOS2JaU25TZitualEyQVdS?=
- =?utf-8?B?REJmN0JYV2hqcEdKdk81R25TTzV6L1FJUDQzTzdhVTV4c0V3c2JydHJZTjFz?=
- =?utf-8?B?aGI0NXBvajc3VlczTEhJR2hHSVdhMm53YUltUGNCVEJNcm8yT2hLdnJHTU1y?=
- =?utf-8?B?UFFzaitoMFNBdEpjKytVbTFGTDYwYkJuL21UZUFoeTlFMnZmVXJONytRd1hN?=
- =?utf-8?B?VjJIVTVvelFQTG4rQzVXNFhZc1lML0Qzc0VOSHlLMjFia3F4dllyMHJZdWFE?=
- =?utf-8?B?L1RYbHhlTXNQVWNhS0JTc3p5UG5jTklHVktHWitrcXJXN0NsSGw4dkx2YkZL?=
- =?utf-8?B?aEVoSjNJMENmcE95VVY1S0FNYzgwWlRmSEhmVlJBMXJ1bmZlQ3U1VUptdTEz?=
- =?utf-8?B?R2JpR3lyNE0rQWV5cjdMb3hRMnhlUzVjMlVOYXhPWnF1QkV6dHVTWFJXL2hk?=
- =?utf-8?B?TWRPUTNJY0VBakRSTGpkVzJERGxwMjFPbTdyZDlrdXlDNlh3K05PQ3kweEVE?=
- =?utf-8?B?dE10Sm9zK1ZTRHdHcWhBSzR2Z3hRSEhCVXNZMitySVg1bWJYaFJRL1NvQm1t?=
- =?utf-8?B?Y2lreUdBeDVuU0FackNFQndBZWNtbUxuREZxdUtaTnFxS0hoU2lNUGovLytD?=
- =?utf-8?B?MnZjR042ai81WE5mSjgyd04zc2k5MnRIMUFvL0d6Mk5lNWJKdlpSdFpCRURn?=
- =?utf-8?B?c21mZnVxTnhsQ0FBQTRnL2JaMXJtVm5uZ3F4ZzFhYkE1SkxKVFVxUUl5NC9t?=
- =?utf-8?B?NjM4ZjhFMkszK3EzSm94TnFzd20wbUU4SGp6WlowamErYjQwaTVTR2NtMHlY?=
- =?utf-8?B?UUNYM1prd3hPUnp1RTRKdkVZVFpka05HbytqY1lTQUZnRm9PVCt3NkdJNjM2?=
- =?utf-8?B?MWZRcEk1NkpGdWV1M3VLaFlBMld5SHpJYjFMMU5SS1RPN3BnUDZablFITE9s?=
- =?utf-8?B?SHpsdUNrS2h5Y0VQZ0VGcWMxSk5qeUh5WFNya0ZseWRaVmxUempjbXdKSjkz?=
- =?utf-8?B?QmUzZ1F1b3dLRTJ5MEFrMmx4UGs2bEVaZW1SMUdzT0o2R0wreDdNQ1VSWDdi?=
- =?utf-8?B?OHAvKzVYQTZjZjludmRNR3VqYVdqUlNqUGJWWGZ0UjRhTDdEcHB2SitJYzlJ?=
- =?utf-8?B?MVIrK2NZQ0R5bkxBeHh5ajE0Z3dMNnN3M2IyVWxnSHgrQzY0Q0NDdjNEclNE?=
- =?utf-8?B?OThYc0haSU5DNFBhV2I1cUdsajhWMk52aGo2aHg4bjVTQXZXdUdKb0NTOWFr?=
- =?utf-8?B?dy93TnZ2V2IwL2hYZWoyUWc1MlIzM3dMQk12c3hrMldxTkxtSFZ3Z0lUQ1Ba?=
- =?utf-8?B?eGliZ2pIYk5PMmNrWURwZFZiS2NTNGlHcFkvOUJCb1hHaWdMV2h1Q2dEb1dQ?=
- =?utf-8?B?bG5HMlo0TzRKY0Q4TWlYcDlDbDBDTUo5Uk1vV0hwaXUwbC90aWFyMGlFYjZG?=
- =?utf-8?B?bjFmT0kxc29BeThOWkJNMEVTWUdycmxpQ2ZyR2laTE9JRllZaWhIdGJKQ2xt?=
- =?utf-8?B?TW56ZWlJeWdEMnZNWXJvS3lWRm4vVzBjZkJrYUNEU1J4dDlCcHhJV25mRVIy?=
- =?utf-8?B?L1EvN1kzVUpDTDhmbEoyRHBzcW5ESW9OVEd1bXdXQUFTWThtcUlNb0ExSVJH?=
- =?utf-8?B?bHNKWVovRVh5ZURRV2J6bmNVRFR0NkExVUNLSEEvRW5telRUNWRVRHhxWEN5?=
- =?utf-8?B?Vml2QTlLVzlvTjRNN0JwOXNNcHRvRXFPTTZrYmdEeUxoYTNPN2ZsZTVUTHQx?=
- =?utf-8?B?L3U3RjlWVHhsb0xUSTVobVN1QWlXVEllR0ZXWmdZZDd5SFUzNHZSdStNZkJY?=
- =?utf-8?B?VWZ5TWE4WkZOZWVKeWxFbHZmQWVseHlsS094ZVhCY0pvd204STNRdUFQa3pZ?=
- =?utf-8?B?eGtOU1ZZUHVTUmY2YWtCU3k0VElER0F3ck1hdzNSbEFmRks4aGpyUmFvdy9D?=
- =?utf-8?B?Q1B1aG0wMndnWnhuVUh5c3RYMk4zSlZwdUFJaFZlN2J5eWVUbk4zR1dqMU9V?=
- =?utf-8?B?cGtEWTVwckZ1K2duclJyczZ5c00wNWd3NTA3TUh4b1dnVndTemhBVFhwNGlR?=
- =?utf-8?Q?NBns/16cng50AjBkdIb2/kdpB?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db5fb1dc-27db-4fdc-cf35-08db39a3c5ce
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 09:12:56.7649
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1755aH4YfMB7bGymeKdXRE/H6iApC4T63E4TNfsb+pMGf1odzzMJvNNpwY5EwtxOZ24dVu/X9SveXbpQwD8eDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8752
-X-Spam-Status: No, score=-3.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Move to drivers/char/hw_random since histb-(t)rng does not provide
+cryptography pseudo rng.
 
-Hi Lucas,
-On 4/3/2023 5:04 PM, Lucas Stach wrote:
-> Am Montag, dem 03.04.2023 um 16:42 +0800 schrieb Peng Fan (OSS):
->> From: Peng Fan <peng.fan@nxp.com>
->>
->> Per errata:
->> ERR050531: VPU_NOC power down handshake may hang during VC8000E/VPUMIX
->> power up/down cycling.
->> Description: VC8000E reset de-assertion edge and AXI clock may have a
->> timing issue.
->> Workaround: Set bit2 (vc8000e_clk_en) of BLK_CLK_EN_CSR to 0 to gate off
->> both AXI clock and VC8000E clock sent to VC8000E and AXI clock sent to
->> VPU_NOC m_v_2 interface during VC8000E power up(VC8000E reset is
->> de-asserted by HW)
->>
->> Need clear BIT2 of BLK_CLK_EN_CSR before power up VPU_H1, so
->> add a notifier with BIT2 cleared when GENPD_NOTIFY_PRE_ON and BIT2 set
->> when GENPD_NOTIFY_ON to match NXP downstream Arm Trusted Firmware
->> implementation.
->>
->> NOTE: The NXP downstream ATF has VPU_H1 CLK SET before do ADB400 HDSK,
->> so follow that procdure to avoid any suprise.
->>
-> This patch seems to be quite complex for what it is trying to achieve.
->  From what I can tell, we can implement the correct sequence just by
-> fixing the blk-ctrl driver.
-> 
-> First of all the i.MX8MP VPU support needs to stop using the
-> imx8mm_vpu_power_notifier. This is wrong, as it ungates the VPU clocks
-> to provide the ADB clock, which is necessary on i.MX8MM, but on i.MX8MP
-> there is a separate gate (bit 3) for the NoC. When this is correctly
-> implemented the VC8000E clock should already be gated off.
+histb-rng is pretty like hisi-rng, but after investigation, we confirm
+there is no RNG_PHY_SEED register on histb-rng so a separate driver is
+needed.
 
-I added a notifier for vc8000e, not the whole vpumix blk ctrl.
+Still we rename relevant function names to match those in hisi-rng.
 
-> 
-> Then we just need to move the clock enable after the GPC domain has
-> been powered up in imx8m_blk_ctrl_power_up(), which shouldn't hurt for
-> the other domains, to achieve the necessary sequence.
+Link: https://lore.kernel.org/r/20230401164448.1393336-1-mmyangfl@gmail.com
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ drivers/char/hw_random/Kconfig                | 12 +++
+ drivers/char/hw_random/Makefile               |  1 +
+ .../trng-stb.c => char/hw_random/histb-rng.c} | 78 +++++++++----------
+ drivers/crypto/hisilicon/Kconfig              |  7 --
+ drivers/crypto/hisilicon/Makefile             |  2 +-
+ drivers/crypto/hisilicon/trng/Makefile        |  3 -
+ 6 files changed, 51 insertions(+), 52 deletions(-)
+ rename drivers/{crypto/hisilicon/trng/trng-stb.c => char/hw_random/histb-rng.c} (55%)
 
-Let me check more.
+diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
+index 4fdf07ae3c54..1a241f37abed 100644
+--- a/drivers/char/hw_random/Kconfig
++++ b/drivers/char/hw_random/Kconfig
+@@ -335,6 +335,18 @@ config HW_RANDOM_HISI
+ 
+ 	  If unsure, say Y.
+ 
++config HW_RANDOM_HISTB
++	tristate "Hisilicon STB Random Number Generator support"
++	depends on ARCH_HISI || COMPILE_TEST
++	depends on HW_RANDOM
++	default ARCH_HISI
++	help
++	  This driver provides kernel-side support for the Random Number
++	  Generator hardware found on Hisilicon Hi37xx SoC.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called histb-rng.
++
+ config HW_RANDOM_ST
+ 	tristate "ST Microelectronics HW Random Number Generator support"
+ 	depends on HW_RANDOM && ARCH_STI
+diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
+index 09bde4a0f971..32549a1186dc 100644
+--- a/drivers/char/hw_random/Makefile
++++ b/drivers/char/hw_random/Makefile
+@@ -29,6 +29,7 @@ obj-$(CONFIG_HW_RANDOM_NOMADIK) += nomadik-rng.o
+ obj-$(CONFIG_HW_RANDOM_PSERIES) += pseries-rng.o
+ obj-$(CONFIG_HW_RANDOM_POWERNV) += powernv-rng.o
+ obj-$(CONFIG_HW_RANDOM_HISI)	+= hisi-rng.o
++obj-$(CONFIG_HW_RANDOM_HISTB) += histb-rng.o
+ obj-$(CONFIG_HW_RANDOM_BCM2835) += bcm2835-rng.o
+ obj-$(CONFIG_HW_RANDOM_IPROC_RNG200) += iproc-rng200.o
+ obj-$(CONFIG_HW_RANDOM_ST) += st-rng.o
+diff --git a/drivers/crypto/hisilicon/trng/trng-stb.c b/drivers/char/hw_random/histb-rng.c
+similarity index 55%
+rename from drivers/crypto/hisilicon/trng/trng-stb.c
+rename to drivers/char/hw_random/histb-rng.c
+index 29200a7d3d81..250a2896d767 100644
+--- a/drivers/crypto/hisilicon/trng/trng-stb.c
++++ b/drivers/char/hw_random/histb-rng.c
+@@ -1,11 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+ /*
+- * Device driver for True RNG in HiSTB SoCs
+- *
+  * Copyright (c) 2023 David Yang
+  */
+ 
+-#include <crypto/internal/rng.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/hw_random.h>
+@@ -13,19 +10,18 @@
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/of_device.h>
+ 
+-#define HISTB_TRNG_CTRL		0x0
++#define RNG_CTRL		0x0
+ #define  RNG_SOURCE			GENMASK(1, 0)
+ #define  DROP_ENABLE			BIT(5)
+ #define  POST_PROCESS_ENABLE		BIT(7)
+ #define  POST_PROCESS_DEPTH		GENMASK(15, 8)
+-#define HISTB_TRNG_NUMBER	0x4
+-#define HISTB_TRNG_STAT		0x8
++#define RNG_NUMBER	0x4
++#define RNG_STAT		0x8
+ #define  DATA_COUNT			GENMASK(2, 0)	/* max 4 */
+ 
+-struct histb_trng_priv {
++struct histb_rng_priv {
+ 	struct hwrng rng;
+ 	void __iomem *base;
+ };
+@@ -35,19 +31,19 @@ struct histb_trng_priv {
+  * depth = 1 -> ~1ms
+  * depth = 255 -> ~16ms
+  */
+-static int histb_trng_wait(void __iomem *base)
++static int histb_rng_wait(void __iomem *base)
+ {
+ 	u32 val;
+ 
+-	return readl_relaxed_poll_timeout(base + HISTB_TRNG_STAT, val,
++	return readl_relaxed_poll_timeout(base + RNG_STAT, val,
+ 					  val & DATA_COUNT, 1000, 30 * 1000);
+ }
+ 
+-static void histb_trng_init(void __iomem *base, unsigned int depth)
++static void histb_rng_init(void __iomem *base, unsigned int depth)
+ {
+ 	u32 val;
+ 
+-	val = readl_relaxed(base + HISTB_TRNG_CTRL);
++	val = readl_relaxed(base + RNG_CTRL);
+ 
+ 	val &= ~RNG_SOURCE;
+ 	val |= 2;
+@@ -58,72 +54,72 @@ static void histb_trng_init(void __iomem *base, unsigned int depth)
+ 	val |= POST_PROCESS_ENABLE;
+ 	val |= DROP_ENABLE;
+ 
+-	writel_relaxed(val, base + HISTB_TRNG_CTRL);
++	writel_relaxed(val, base + RNG_CTRL);
+ }
+ 
+-static int histb_trng_read(struct hwrng *rng, void *data, size_t max, bool wait)
++static int histb_rng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ {
+-	struct histb_trng_priv *priv = container_of(rng, typeof(*priv), rng);
++	struct histb_rng_priv *priv = container_of(rng, typeof(*priv), rng);
+ 	void __iomem *base = priv->base;
+ 
+ 	for (int i = 0; i < max; i += sizeof(u32)) {
+-		if (!(readl_relaxed(base + HISTB_TRNG_STAT) & DATA_COUNT)) {
++		if (!(readl_relaxed(base + RNG_STAT) & DATA_COUNT)) {
+ 			if (!wait)
+ 				return i;
+-			if (histb_trng_wait(base)) {
++			if (histb_rng_wait(base)) {
+ 				pr_err("failed to generate random number, generated %d\n",
+ 				       i);
+ 				return i ? i : -ETIMEDOUT;
+ 			}
+ 		}
+-		*(u32 *) (data + i) = readl_relaxed(base + HISTB_TRNG_NUMBER);
++		*(u32 *) (data + i) = readl_relaxed(base + RNG_NUMBER);
+ 	}
+ 
+ 	return max;
+ }
+ 
+-static unsigned int histb_trng_get_depth(void __iomem *base)
++static unsigned int histb_rng_get_depth(void __iomem *base)
+ {
+-	return (readl_relaxed(base + HISTB_TRNG_CTRL) & POST_PROCESS_DEPTH) >> 8;
++	return (readl_relaxed(base + RNG_CTRL) & POST_PROCESS_DEPTH) >> 8;
+ }
+ 
+ static ssize_t
+ depth_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+-	struct histb_trng_priv *priv = dev_get_drvdata(dev);
++	struct histb_rng_priv *priv = dev_get_drvdata(dev);
+ 	void __iomem *base = priv->base;
+ 
+-	return sprintf(buf, "%d\n", histb_trng_get_depth(base));
++	return sprintf(buf, "%d\n", histb_rng_get_depth(base));
+ }
+ 
+ static ssize_t
+ depth_store(struct device *dev, struct device_attribute *attr,
+ 	    const char *buf, size_t count)
+ {
+-	struct histb_trng_priv *priv = dev_get_drvdata(dev);
++	struct histb_rng_priv *priv = dev_get_drvdata(dev);
+ 	void __iomem *base = priv->base;
+ 	unsigned int depth;
+ 
+ 	if (kstrtouint(buf, 0, &depth))
+ 		return -ERANGE;
+ 
+-	histb_trng_init(base, depth);
++	histb_rng_init(base, depth);
+ 	return count;
+ }
+ 
+ static DEVICE_ATTR_RW(depth);
+ 
+-static struct attribute *histb_trng_attrs[] = {
++static struct attribute *histb_rng_attrs[] = {
+ 	&dev_attr_depth.attr,
+ 	NULL,
+ };
+ 
+-ATTRIBUTE_GROUPS(histb_trng);
++ATTRIBUTE_GROUPS(histb_rng);
+ 
+-static int histb_trng_probe(struct platform_device *pdev)
++static int histb_rng_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct histb_trng_priv *priv;
++	struct histb_rng_priv *priv;
+ 	void __iomem *base;
+ 	int ret;
+ 
+@@ -133,17 +129,17 @@ static int histb_trng_probe(struct platform_device *pdev)
+ 
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+-		return -ENOMEM;
++		return PTR_ERR(base);
+ 
+-	histb_trng_init(base, 144);
+-	if (histb_trng_wait(base)) {
++	histb_rng_init(base, 144);
++	if (histb_rng_wait(base)) {
+ 		dev_err(dev, "cannot bring up device\n");
+ 		return -ENODEV;
+ 	}
+ 
+ 	priv->base = base;
+ 	priv->rng.name = pdev->name;
+-	priv->rng.read = histb_trng_read;
++	priv->rng.read = histb_rng_read;
+ 	ret = devm_hwrng_register(dev, &priv->rng);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register hwrng: %d\n", ret);
+@@ -155,22 +151,22 @@ static int histb_trng_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static const struct of_device_id histb_trng_of_match[] = {
+-	{ .compatible = "hisilicon,histb-trng", },
++static const struct of_device_id histb_rng_of_match[] = {
++	{ .compatible = "hisilicon,histb-rng", },
+ 	{ }
+ };
+ 
+-static struct platform_driver histb_trng_driver = {
+-	.probe = histb_trng_probe,
++static struct platform_driver histb_rng_driver = {
++	.probe = histb_rng_probe,
+ 	.driver = {
+-		.name = "histb-trng",
+-		.of_match_table = histb_trng_of_match,
+-		.dev_groups = histb_trng_groups,
++		.name = "histb-rng",
++		.of_match_table = histb_rng_of_match,
++		.dev_groups = histb_rng_groups,
+ 	},
+ };
+ 
+-module_platform_driver(histb_trng_driver);
++module_platform_driver(histb_rng_driver);
+ 
+-MODULE_DESCRIPTION("HiSTB True RNG");
++MODULE_DESCRIPTION("Hisilicon STB random number generator driver");
+ MODULE_LICENSE("Dual MIT/GPL");
+ MODULE_AUTHOR("David Yang <mmyangfl@gmail.com>");
+diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
+index e8690c223584..4137a8bf131f 100644
+--- a/drivers/crypto/hisilicon/Kconfig
++++ b/drivers/crypto/hisilicon/Kconfig
+@@ -82,10 +82,3 @@ config CRYPTO_DEV_HISI_TRNG
+ 	select CRYPTO_RNG
+ 	help
+ 	  Support for HiSilicon TRNG Driver.
+-
+-config CRYPTO_DEV_HISTB_TRNG
+-	tristate "Support for HiSTB TRNG Driver"
+-	depends on ARCH_HISI || COMPILE_TEST
+-	select HW_RANDOM
+-	help
+-	  Support for HiSTB TRNG Driver.
+diff --git a/drivers/crypto/hisilicon/Makefile b/drivers/crypto/hisilicon/Makefile
+index fc51e0edec69..8595a5a5d228 100644
+--- a/drivers/crypto/hisilicon/Makefile
++++ b/drivers/crypto/hisilicon/Makefile
+@@ -5,4 +5,4 @@ obj-$(CONFIG_CRYPTO_DEV_HISI_SEC2) += sec2/
+ obj-$(CONFIG_CRYPTO_DEV_HISI_QM) += hisi_qm.o
+ hisi_qm-objs = qm.o sgl.o debugfs.o
+ obj-$(CONFIG_CRYPTO_DEV_HISI_ZIP) += zip/
+-obj-y += trng/
++obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += trng/
+diff --git a/drivers/crypto/hisilicon/trng/Makefile b/drivers/crypto/hisilicon/trng/Makefile
+index cf20b057c66b..d909079f351c 100644
+--- a/drivers/crypto/hisilicon/trng/Makefile
++++ b/drivers/crypto/hisilicon/trng/Makefile
+@@ -1,5 +1,2 @@
+ obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += hisi-trng-v2.o
+ hisi-trng-v2-objs = trng.o
+-
+-obj-$(CONFIG_CRYPTO_DEV_HISTB_TRNG) += histb-trng.o
+-histb-trng-objs += trng-stb.o
+-- 
+2.39.2
 
-> 
-> Btw: it's quite confusing that the commit talks about both VC8K and H1.
-> The VPU core on the i.MX8MP is called VC8K, so we should really stick
-> to that when talking about patches specific to the 8MP.
-
-sure, I will update to use VC8K.
-
-Thanks,
-Peng.
-
-> 
-> Regards,
-> Lucas
-> 
->> Reviewed-by: Jacky Bai <ping.bai@nxp.com>
->> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->> ---
->>
->> V2:
->>   Add the missing gpcv2 changes
->>
->>   drivers/soc/imx/gpcv2.c          |  3 +++
->>   drivers/soc/imx/imx8m-blk-ctrl.c | 28 ++++++++++++++++++++++++++++
->>   include/soc/imx/gpcv2.h          |  8 ++++++++
->>   3 files changed, 39 insertions(+)
->>   create mode 100644 include/soc/imx/gpcv2.h
->>
->> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
->> index 4b3300b090a8..81e3c09e004b 100644
->> --- a/drivers/soc/imx/gpcv2.c
->> +++ b/drivers/soc/imx/gpcv2.c
->> @@ -17,6 +17,7 @@
->>   #include <linux/regulator/consumer.h>
->>   #include <linux/reset.h>
->>   #include <linux/sizes.h>
->> +#include <soc/imx/gpcv2.h>
->>   #include <dt-bindings/power/imx7-power.h>
->>   #include <dt-bindings/power/imx8mq-power.h>
->>   #include <dt-bindings/power/imx8mm-power.h>
->> @@ -376,6 +377,8 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
->>   
->>   	reset_control_deassert(domain->reset);
->>   
->> +	raw_notifier_call_chain(&genpd->power_notifiers, IMX_GPCV2_NOTIFY_ON_ADB400, NULL);
->> +
->>   	/* request the ADB400 to power up */
->>   	if (domain->bits.hskreq) {
->>   		regmap_update_bits(domain->regmap, domain->regs->hsk,
->> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
->> index afbca0d48c14..d88e338a54b1 100644
->> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
->> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/pm_runtime.h>
->>   #include <linux/regmap.h>
->>   #include <linux/clk.h>
->> +#include <soc/imx/gpcv2.h>
->>   
->>   #include <dt-bindings/power/imx8mm-power.h>
->>   #include <dt-bindings/power/imx8mn-power.h>
->> @@ -53,6 +54,7 @@ struct imx8m_blk_ctrl_domain_data {
->>   	 * register.
->>   	 */
->>   	u32 mipi_phy_rst_mask;
->> +	notifier_fn_t power_notifier_fn;
->>   };
->>   
->>   #define DOMAIN_MAX_CLKS 4
->> @@ -66,6 +68,7 @@ struct imx8m_blk_ctrl_domain {
->>   	struct device *power_dev;
->>   	struct imx8m_blk_ctrl *bc;
->>   	int num_paths;
->> +	struct notifier_block power_nb;
->>   };
->>   
->>   struct imx8m_blk_ctrl_data {
->> @@ -265,6 +268,15 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->>   			goto cleanup_pds;
->>   		}
->>   
->> +		if (data->power_notifier_fn) {
->> +			domain->power_nb.notifier_call = data->power_notifier_fn;
->> +			ret = dev_pm_genpd_add_notifier(domain->power_dev, &domain->power_nb);
->> +			if (ret) {
->> +				dev_err_probe(dev, ret, "failed to add power notifier\n");
->> +				goto cleanup_pds;
->> +			}
->> +		}
->> +
->>   		domain->genpd.name = data->name;
->>   		domain->genpd.power_on = imx8m_blk_ctrl_power_on;
->>   		domain->genpd.power_off = imx8m_blk_ctrl_power_off;
->> @@ -479,6 +491,21 @@ static const struct imx8m_blk_ctrl_data imx8mm_vpu_blk_ctl_dev_data = {
->>   	.num_domains = ARRAY_SIZE(imx8mm_vpu_blk_ctl_domain_data),
->>   };
->>   
->> +static int imx8mp_vpu_h1_power_notifier(struct notifier_block *nb,
->> +					unsigned long action, void *data)
->> +{
->> +	struct imx8m_blk_ctrl_domain *domain = container_of(nb, struct imx8m_blk_ctrl_domain,
->> +							    power_nb);
->> +	struct imx8m_blk_ctrl *bc = domain->bc;
->> +
->> +	if (action == GENPD_NOTIFY_PRE_ON)
->> +		regmap_clear_bits(bc->regmap, BLK_CLK_EN, BIT(2));
->> +	else if (action == IMX_GPCV2_NOTIFY_ON_ADB400)
->> +		regmap_set_bits(bc->regmap, BLK_CLK_EN, BIT(2));
->> +
->> +	return NOTIFY_OK;
->> +}
->> +
->>   static const struct imx8m_blk_ctrl_domain_data imx8mp_vpu_blk_ctl_domain_data[] = {
->>   	[IMX8MP_VPUBLK_PD_G1] = {
->>   		.name = "vpublk-g1",
->> @@ -509,6 +536,7 @@ static const struct imx8m_blk_ctrl_domain_data imx8mp_vpu_blk_ctl_domain_data[]
->>   		.clk_mask = BIT(2),
->>   		.path_names = (const char *[]){"vc8000e"},
->>   		.num_paths = 1,
->> +		.power_notifier_fn = imx8mp_vpu_h1_power_notifier,
->>   	},
->>   };
->>   
->> diff --git a/include/soc/imx/gpcv2.h b/include/soc/imx/gpcv2.h
->> new file mode 100644
->> index 000000000000..db09720bf638
->> --- /dev/null
->> +++ b/include/soc/imx/gpcv2.h
->> @@ -0,0 +1,8 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->> +#ifndef __SOC_IMX_GPCV2_H
->> +#define __SOC_IMX_GPCV2_H
->> +
->> +/* Avoid conflict with GENPD_NOTIFY_XX */
->> +#define IMX_GPCV2_NOTIFY_ON_ADB400	0x80000000
->> +
->> +#endif /* __SOC_IMX_GPC_H */
-> 
