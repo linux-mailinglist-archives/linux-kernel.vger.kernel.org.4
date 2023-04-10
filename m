@@ -2,203 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C036DC9FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1856DCA00
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjDJR12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S230305AbjDJR2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjDJR10 (ORCPT
+        with ESMTP id S229804AbjDJR2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:27:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6F22114
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:27:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67A6761DFB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2249C433AF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681147644;
-        bh=Nxyw5zvIvf2NKnO4JOdVNchaMz+8oiVXvZhhwRDHj9k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Lf38t2+JTfK8QGByRYzQs5kmYz4wjUE4yAxptBtEmmom98uMwWm4hO7bAdvml8m2K
-         bPLZU9dr2kF24FbfiJNOEghc3yB/VJxQxIa7c2WezR9rxZjnRKufuAUS4lVNCL5Pqh
-         RTlAo5cflvA9NT77qsYpuMdRv8jsZbaof/OoFtQtaFLg766MGWkZuyU3J4UhHSAJiY
-         xhiyT5p5qkcDxgYlnnBHZMzHydxTgKHbCbOrV+oNYVJM0a4ZX6/LC9eqGEpwlilvOZ
-         WULafu+90t2+xpcLSTkB+anNeyelSC/AbyA+vCyAq1nXWqrpyA7lL3aDkaxgq5Bloj
-         /4guKsCNIRDew==
-Received: by mail-ej1-f52.google.com with SMTP id kt17so1870125ejb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:27:24 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dfSFpCoZ7/YANxCexfB7G9pnnZW5tRoYuKt4+P5c10tul09INt
-        cwp7rvMpQmS6BolJ26+jySXLFO2zwK/eC/uZiZMV0Q==
-X-Google-Smtp-Source: AKy350YXLeIcOBPTgzinX4kAkaHfEK04D3VhIlVixKS5qQj/f8lgUmQV3CEoVMiYtH/ujRuLTWnubX1ZcPlMgh14rdE=
-X-Received: by 2002:a17:907:742:b0:930:310:abc9 with SMTP id
- xc2-20020a170907074200b009300310abc9mr4166533ejb.9.1681147642884; Mon, 10 Apr
- 2023 10:27:22 -0700 (PDT)
+        Mon, 10 Apr 2023 13:28:01 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36765E63
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:27:59 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id gb34so14239522ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681147678;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d9mHuc/0jkxbtCProBti3bz+sK5Di7+vyx8qV3tJ7YI=;
+        b=R9adl5n07bSFGSJT0gB0RCP7MH8bgWX/Bbx4Wj5w3/wwG4PhmjGDgZjlxrD0t10/M2
+         lfD+MMiH56z6PMJ7NoS82YTxQeNNzmp9BE8EV7RTsnA3+wbj5FRKE+4rLG0CAX1+vWGq
+         6giF61LUf/qH0rIvdyic7EZifsb2wgLlK9jtcYNZ9H78UoIejZsiUawChqZO/tnBr0Fs
+         7io8Mk+Vuta/8n8R3jTgruJoygMEaEa5vMPrDOLulmDJdU10YEzDbstJ1F4fo5MlQ8/w
+         cSc+A2ZJc34P6+8h2kuW0jbgNhf82BTEZ4Wb0hIEdSlNGaEZk2FsspzHHCnLJamSHEI4
+         x7cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681147678;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9mHuc/0jkxbtCProBti3bz+sK5Di7+vyx8qV3tJ7YI=;
+        b=yAkUdEyZBnvgCQNiUgNUJ5oA1H0K8k8k/WkkWKsPI8BFsnrRuSkIBRIEmPPQTKW/W6
+         259CB+3mFvrpuviIQ8M1vXjUAIGXABFxxiiXMx+mF+ZhijBbPzgMcqr4Gsx5EX+II0fN
+         8M/LCJ2IE3i4Q16ww/xjGtRPcRORTRREXWWBOmjLYS8cXuOFHAGxT37CUvLWuP6YoTVg
+         owK1KwqDUoNnxdJTaryPrqlSA1mbUpkQQzZI5qd6z9C23TAtitbE8kA++AnT/fjWFKqo
+         FrwSgFSF+HbMBYi60bLRptUZtPSsB0v4A40CmtWlvAwHRMacyYxeovPlZYJwccXzTgNA
+         W30Q==
+X-Gm-Message-State: AAQBX9f75xWhmjAATYaymCYxARkw0g9gIl+eX3VKo8uA9YQ24bHaipzl
+        YiKyQDZRwgREL0PUNFRm15VWNQ==
+X-Google-Smtp-Source: AKy350YfN+2UEzC0NlN4x6X62S+nRiFw26ejYnSb99QGBYY/lmtcP5njB3CNLnqALOGz4qy5AbaRHw==
+X-Received: by 2002:a17:906:80cc:b0:939:a610:fc32 with SMTP id a12-20020a17090680cc00b00939a610fc32mr7335057ejx.53.1681147677725;
+        Mon, 10 Apr 2023 10:27:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:1a6c:6968:e633:48df? ([2a02:810d:15c0:828:1a6c:6968:e633:48df])
+        by smtp.gmail.com with ESMTPSA id gl2-20020a170906e0c200b00930aa50372csm5268807ejb.43.2023.04.10.10.27.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 10:27:57 -0700 (PDT)
+Message-ID: <ffe813e4-e3ad-3dff-b8e5-42b0f82faed3@linaro.org>
+Date:   Mon, 10 Apr 2023 19:27:56 +0200
 MIME-Version: 1.0
-References: <20230308073201.3102738-1-avagin@google.com> <20230308073201.3102738-3-avagin@google.com>
- <ZDDddj50KZInqa84@chenyu5-mobl1> <CANaxB-y0eDExPB0v=LRPyoz1e-3tJ2VuuCmYJ3qkAERpnbz+aQ@mail.gmail.com>
-In-Reply-To: <CANaxB-y0eDExPB0v=LRPyoz1e-3tJ2VuuCmYJ3qkAERpnbz+aQ@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 10 Apr 2023 10:27:10 -0700
-X-Gmail-Original-Message-ID: <CALCETrVBVTDxUdKtPuaD35KVfUWihxNbTY2Ks65oGbzf8Yfm=w@mail.gmail.com>
-Message-ID: <CALCETrVBVTDxUdKtPuaD35KVfUWihxNbTY2Ks65oGbzf8Yfm=w@mail.gmail.com>
-Subject: Re: [PATCH 2/6] sched: add WF_CURRENT_CPU and externise ttwu
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     Chen Yu <yu.c.chen@intel.com>, Andrei Vagin <avagin@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 1/4] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP15060 variant
+Content-Language: en-US
+To:     Shengyu Qu <wiagn233@outlook.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230407141813.89-1-wiagn233@outlook.com>
+ <TY3P286MB26117891DFB2DD615A7C54EF98969@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TY3P286MB26117891DFB2DD615A7C54EF98969@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 9, 2023 at 9:56=E2=80=AFPM Andrei Vagin <avagin@gmail.com> wrot=
-e:
->
-> On Fri, Apr 7, 2023 at 8:20=E2=80=AFPM Chen Yu <yu.c.chen@intel.com> wrot=
-e:
-> >
-> > On 2023-03-07 at 23:31:57 -0800, Andrei Vagin wrote:
-> > > From: Peter Oskolkov <posk@google.com>
-> > >
-> > > Add WF_CURRENT_CPU wake flag that advices the scheduler to
-> > > move the wakee to the current CPU. This is useful for fast on-CPU
-> > > context switching use cases.
-> > >
-> > > In addition, make ttwu external rather than static so that
-> > > the flag could be passed to it from outside of sched/core.c.
-> > >
-> > > Signed-off-by: Peter Oskolkov <posk@google.com>
-> > > Signed-off-by: Andrei Vagin <avagin@google.com>
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -7569,6 +7569,10 @@ select_task_rq_fair(struct task_struct *p, int=
- prev_cpu, int wake_flags)
-> > >       if (wake_flags & WF_TTWU) {
-> > >               record_wakee(p);
-> > >
-> > > +             if ((wake_flags & WF_CURRENT_CPU) &&
-> > > +                 cpumask_test_cpu(cpu, p->cpus_ptr))
-> > > +                     return cpu;
-> > > +
-> > I tried to reuse WF_CURRENT_CPU to mitigate the cross-cpu wakeup, howev=
-er there
-> > are regressions when running some workloads, and these workloads want t=
-o be
-> > spreaded on idle CPUs whenever possible.
-> > The reason for the regression is that, above change chooses current CPU=
- no matter
-> > what the load/utilization of this CPU is. So task are stacked on 1 CPU =
-and hurts
-> > throughput/latency. And I believe this issue would be more severe on sy=
-stem with
-> > smaller number of CPU within 1 LLC(when compared to Intel platforms), s=
-uch as AMD,
-> > Arm64.
->
-> WF_CURRENT_CPU works only in certain conditions. Maybe you saw my
-> attempt to change how WF_SYNC works:
->
-> https://www.spinics.net/lists/kernel/msg4567650.html
->
-> Then we've found that this idea doesn't work well, and it is a reason
-> why we have the separate WF_CURRENT_CPU flag.
->
-> >
-> > I know WF_CURRENT_CPU benefits seccomp, and can we make this change mor=
-e genefic
-> > to benefit other workloads, by making the condition to trigger WF_CURRE=
-NT_CPU stricter?
-> > Say, only current CPU has 1 runnable task, and treat current CPU as the=
- last resort by
-> > checking if the wakee's previous CPU is not idle. In this way, we can e=
-nable WF_CURRENT_CPU flag
-> > dynamically when some condition is met(a short task for example).
->
-> We discussed all of these here and here:
->
-> https://www.spinics.net/lists/kernel/msg4657545.html
->
-> https://lore.kernel.org/lkml/CANaxB-yWkKzhhPMGXCQbtjntJbqZ40FL2qtM2hk7LLW=
-E-ZpbAg@mail.gmail.com/
->
-> I like your idea about short-duration tasks, but I think it is a
-> separate task and it has to be done in a separate patch set. Here, I
-> solve the problem of optimizing synchronous switches when one task wakes
-> up another one and falls asleep immediately after that. Waking up the
-> target task on the current CPU looks reasonable for a few reasons in
-> this case. First, waking up a task on the current CPU is cheaper than on
-> another one and it is much cheaper than waking on an idle cpu.  Second,
-> when tasks want to do synchronous switches, they often exchange some
-> data, so memory caches can play on us.
+On 07/04/2023 16:18, Shengyu Qu wrote:
+> The X-Powers AXP15060 is a PMIC seen on Starfive Visionfive 2 board. Add
+> relative compatible item and CPUSLDO support for it.
+> 
+> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 3 ++-
 
-I've contemplated this on occasion for quite a few years, and I think
-that part of our issue is that the userspace ABI part doesn't exist
-widely.  In particular, most of the common ways that user tasks talk
-to each other don't have a single system call that can do the
-send-a-message-and-start-waiting part all at once.  For example, if
-task A is running and it wants to wake task B and then sleep:
+I received cover letter disattached from rest of patchset and everything
+duplicate. Please check your process of sending patches.
 
-UNIX sockets (or other sockets): A calls send() or write() or
-sendmsg() then recv() or read() or recvmsg() or epoll_wait() or poll()
-or select().
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> index b7a8747d5fa0..e150a8bf040a 100644
+> --- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> @@ -92,6 +92,7 @@ properties:
+>            - x-powers,axp806
+>            - x-powers,axp809
+>            - x-powers,axp813
+> +          - x-powers,axp15060
 
-Pipes: Same as sockets except no send/recv.
-
-Shared memory: no wakeup or sleep mechanism at all. UMONITOR doesn't count =
-:)
-
-I think io_uring can kind of do a write-and-wait operation, but I
-doubt it's wired up for this purpose.
-
-
-seccomp seems like it should be able to do this straightforwardly on
-the transition from the seccomp-sandboxed task to the monitor, but the
-reverse direction is tricky.
+So you have chosen order by absolute number, not alphabetically. That's
+fine, but keep it for the future entries as well. :)
 
 
 
-Anyway, short of a massive API project, I don't see a totally
-brilliant solution.  But maybe we could take a baby step toward a
-general solution by deferring all the hard work of a wakeup a bit so
-that, as we grow syscalls and other mechanisms that do wake-and-wait,
-we can optimize them automatically.  For example, we could perhaps add
-a pending wakeup to task_struct, kind of like:
+>        - items:
+>            - const: x-powers,axp228
+>            - const: x-powers,axp221
+> @@ -260,7 +261,7 @@ properties:
+>            Defines the work frequency of DC-DC in kHz.
+>  
+>      patternProperties:
+> -      "^(([a-f])?ldo[0-9]|dcdc[0-7a-e]|ldo(_|-)io(0|1)|(dc1)?sw|rtc(_|-)ldo|drivevbus|dc5ldo)$":
+> +      "^(([a-f])?ldo[0-9]|dcdc[0-7a-e]|ldo(_|-)io(0|1)|cpusldo|(dc1)?sw|rtc(_|-)ldo|drivevbus|dc5ldo)$":
 
-struct task_struct *task_to_wake;
+It seems fixed strings are at the end of entire pattern, so "cpusldo"
+should be before "drivevbus".
 
-and then, the next time we sleep or return to usermode, we handle the
-wakeup.  And if we're going to sleep, we can do it as an optimized
-synchronous wakeup.  And if we try to wake a task while task_to_wake
-is set, we just wake everything normally.
 
-(There are refcounting issues here, and maybe this wants to be percpu,
-not per task.)
 
-I think it would be really nifty if Linux could somewhat reliably do
-this style of synchronous con
+Best regards,
+Krzysztof
 
-PeterZ, is this at all sensible or am I nuts?
-
---Andy
