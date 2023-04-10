@@ -2,307 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29286DC4A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEC16DC4A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjDJIvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S229755AbjDJIuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDJIvq (ORCPT
+        with ESMTP id S230401AbjDJIuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:51:46 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAF340D9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:51:22 -0700 (PDT)
-Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
-        by SHSQR01.spreadtrum.com with ESMTP id 33A8oOjo049296
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:50:24 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 33A8krjN036709;
-        Mon, 10 Apr 2023 16:46:53 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 10 Apr 2023 16:46:50 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [RFC PATCHv2] mm: introduce defer free for cma
-Date:   Mon, 10 Apr 2023 16:46:35 +0800
-Message-ID: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Mon, 10 Apr 2023 04:50:23 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75BD559F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:49:55 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-62e102cadc7so669227b3a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681116584; x=1683708584;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=umDFBP5ADUurtK4IUTyxudUc2wuZVQg0JpEeV/qBi+I=;
+        b=SHQYCqhum56VvZP3Q/lMEy7r75JNq87Dzq4OLQ4tUD0syNI3nflS2QTSo6BfR6D3qa
+         syizqdVpso38tqGHxu9FncfyEmjxT/aV4jn04j50v66DBIGWfwzcA1mg24CNHo7Zoyzr
+         ujw19hEwTDkBcRsFgO1aVjq8yfZpkoldX2NWQ8Hi6u5cLRGKryGzp8Fxs61BAuRNWNYJ
+         TrfPChTLAaG7EcS1ybB4/HIrEChUtqDRvC4/H91+38cPBwCUT6VKrn3hArRuIk14yBgM
+         hlhJex9LsPkbtYza2IvnFXcdiCzqAtK5UsxHaygaa/YAA4Sypx1x58TC3KtY407aBnem
+         B7/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681116584; x=1683708584;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=umDFBP5ADUurtK4IUTyxudUc2wuZVQg0JpEeV/qBi+I=;
+        b=bw9Cg33LfORkdq2xbfRoZHUseg2nHcTJ77wROcy9/uvSSRR762scRlFamBd2iOQ9UQ
+         k8e4wBvQtY/9/vqwFGKUffeadKpqUP2EN5gh/BAM4TLlIhrQDXPteTh27XsDF2ayT62D
+         s5xVp9ipSw28R5567chNnlHOZYJf36tZg7e4frvL8EHtOW0Gun0hqyTqta5X2TLFtWXW
+         EQU7eW6J6UaaIT4/oo/QZyx/3tp7mDe0aPs4zly0fJX3tnPSLe1guvZGDmFwJKPo1pEw
+         vfffgfGHj7N9LU1dDQhjwnuAWGVNq/D1URkwMoQ1H10hAqVC40kU0PszQ+4dVhzrr17w
+         WS3g==
+X-Gm-Message-State: AAQBX9fQNuXDI4kN0b3dhEy3FkINBGscvt47WtgD1Hk2f3IOAbF2lOkN
+        PrjP9NwJo70IPxVR/6QRH8Y=
+X-Google-Smtp-Source: AKy350YMFk+1vteUW1ylnR25fm6rXSHKvO6WhmdfPrVOV4BEibHm3vp9XTVvNtE0zuta0qNcsu+aWw==
+X-Received: by 2002:a62:1850:0:b0:62d:8376:3712 with SMTP id 77-20020a621850000000b0062d83763712mr6383716pfy.28.1681116584239;
+        Mon, 10 Apr 2023 01:49:44 -0700 (PDT)
+Received: from Zephyrus-G14 ([103.251.210.208])
+        by smtp.gmail.com with ESMTPSA id l19-20020a62be13000000b006249928aba2sm7318598pff.59.2023.04.10.01.49.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 01:49:43 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 14:19:39 +0530
+From:   Yogesh Hegde <yogi.kernel@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Subject: [PATCH] staging: rtl8192e: Remove functions _rtl92e_wx_get_sens and
+ _rtl92e_wx_set_sens
+Message-ID: <ZDPNo9HI1vrdyD64@Zephyrus-G14>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 33A8krjN036709
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Both of these functions depend on the function rf_set_sens, which is declared
+but never defined. Hence calling this function will cause an oops.
+Because there is no definition of the function priv->rf_set_sens will always be NULL.
 
-Continues page blocks are expensive for the system. Introducing defer free
-mechanism to buffer some which make the allocation easier. The shrinker will
-ensure the page block can be reclaimed when there is memory pressure.
+As a result _rtl92e_wx_set_sens and _rtl92e_wx_get_sens will always return -1.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
-v2: fix build warning and regist shrinker
----
----
- mm/cma.c | 151 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- mm/cma.h |  11 +++++
- 2 files changed, 160 insertions(+), 2 deletions(-)
+Hence,
+* Removed function definition rf_set_sens
+* Removed usage of variable priv->rf_set_sens
+* Removed functions _rtl92e_wx_get_sens and _rtl92e_wx_set_sens
+* Cleaned up the variables sens and max_sens used in these functions
 
-diff --git a/mm/cma.c b/mm/cma.c
-index 4a978e0..6d2fd24 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -39,6 +39,10 @@
- unsigned cma_area_count;
- static DEFINE_MUTEX(cma_mutex);
+This bug was pointed out by Philipp Hortmann[1].
+
+[1]: https://lore.kernel.org/linux-staging/004210bd-0ed1-58d5-0315-47499c850444@gmail.com/
+
+Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  3 --
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c   | 45 --------------------
+ 2 files changed, 48 deletions(-)
+
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 2b2d8af4cf6e..a949a3833cca 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -234,7 +234,6 @@ struct r8192_priv {
+ 	struct rt_stats stats;
+ 	struct iw_statistics			wstats;
  
-+static unsigned long cma_defer_free_count(struct shrinker *shrinker,
-+					struct shrink_control *sc);
-+static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
-+					struct shrink_control *sc);
- phys_addr_t cma_get_base(const struct cma *cma)
- {
- 	return PFN_PHYS(cma->base_pfn);
-@@ -153,6 +157,20 @@ static int __init cma_init_reserved_areas(void)
- }
- core_initcall(cma_init_reserved_areas);
+-	short (*rf_set_sens)(struct net_device *dev, short sens);
+ 	u8 (*rf_set_chan)(struct net_device *dev, u8 ch);
  
-+static unsigned long cma_free_get(struct cma *cma)
-+{
-+	unsigned long used;
-+	unsigned long val;
-+
-+	spin_lock_irq(&cma->lock);
-+	/* pages counter is smaller than sizeof(int) */
-+	used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
-+	val = cma->count - ((u64)used << cma->order_per_bit);
-+	spin_unlock_irq(&cma->lock);
-+
-+	return val;
-+}
-+
- void __init cma_reserve_pages_on_error(struct cma *cma)
- {
- 	cma->reserve_pages_on_error = true;
-@@ -212,6 +230,13 @@ int __init cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
- 	cma_area_count++;
- 	totalcma_pages += (size / PAGE_SIZE);
+ 	struct rx_desc *rx_ring[MAX_RX_QUEUE];
+@@ -274,8 +273,6 @@ struct r8192_priv {
+ 	short	promisc;
  
-+	cma->batch = cma->count >> 1;
-+	cma->shrinker.count_objects = cma_defer_free_count;
-+	cma->shrinker.scan_objects = cma_defer_free_scan;
-+	cma->shrinker.seeks = DEFAULT_SEEKS;
-+	cma->shrinker.batch = 0;
-+
-+	register_shrinker(&cma->shrinker, "cma-shrinker");
+ 	short	chan;
+-	short	sens;
+-	short	max_sens;
+ 	bool ps_force;
+ 
+ 	u32 irq_mask[2];
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+index cb28288a618b..0bb657fda06c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+@@ -311,10 +311,6 @@ static int _rtl92e_wx_get_range(struct net_device *dev,
+ 	/* ~130 Mb/s real (802.11n) */
+ 	range->throughput = 130 * 1000 * 1000;
+ 
+-	if (priv->rf_set_sens != NULL)
+-		/* signal level threshold range */
+-		range->sensitivity = priv->max_sens;
+-
+ 	range->max_qual.qual = 100;
+ 	range->max_qual.level = 0;
+ 	range->max_qual.noise = 0;
+@@ -807,45 +803,6 @@ static int _rtl92e_wx_get_retry(struct net_device *dev,
  	return 0;
  }
  
-@@ -411,6 +436,46 @@ static void cma_debug_show_areas(struct cma *cma)
- static inline void cma_debug_show_areas(struct cma *cma) { }
- #endif
- 
-+static int cma_defer_area_fetch(struct cma *cma, unsigned long pfn,
-+		unsigned long count)
-+{
-+	struct cma_defer_free_area *area;
-+	unsigned long new_pfn;
-+	int ret = -1;
-+
-+	if (!atomic64_read(&cma->defer_count))
-+		return ret;
-+	if (count <= atomic64_read(&cma->defer_count)) {
-+		spin_lock_irq(&cma->lock);
-+		list_for_each_entry(area, &cma->defer_free, list) {
-+			/*area found for given pfn and count*/
-+			if (pfn >= area->pfn && count <= area->count) {
-+				list_del(&area->list);
-+				/*set bits for allocated pfn*/
-+				bitmap_set(cma->bitmap, pfn - cma->base_pfn, count);
-+				kfree(area);
-+				atomic64_sub(count, &cma->defer_count);
-+				/*release the rest pfn to cma*/
-+				if (!list_empty(&cma->defer_free) && (pfn == area->pfn)) {
-+					new_pfn = pfn + count;
-+					cma_release(cma, pfn_to_page(new_pfn), area->count - count);
-+				}
-+				ret = 0;
-+				spin_unlock_irq(&cma->lock);
-+				return ret;
-+			}
-+		}
-+	}
-+	/*no area found, release all to buddy*/
-+	list_for_each_entry(area, &cma->defer_free, list) {
-+		list_del(&area->list);
-+		free_contig_range(area->pfn, area->count);
-+		cma_clear_bitmap(cma, area->pfn, area->count);
-+		kfree(area);
-+	}
-+	spin_unlock_irq(&cma->lock);
-+	return ret;
-+}
- /**
-  * cma_alloc() - allocate pages from contiguous area
-  * @cma:   Contiguous memory region for which the allocation is performed.
-@@ -469,9 +534,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		spin_unlock_irq(&cma->lock);
- 
- 		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
-+
- 		mutex_lock(&cma_mutex);
--		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
--				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
-+		/*search defer area first*/
-+		ret = cma_defer_area_fetch(cma, pfn, count) ? alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
-+				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0)) : 0;
- 		mutex_unlock(&cma_mutex);
- 		if (ret == 0) {
- 			page = pfn_to_page(pfn);
-@@ -556,6 +623,8 @@ bool cma_release(struct cma *cma, const struct page *pages,
- 		 unsigned long count)
- {
- 	unsigned long pfn;
-+	unsigned long flags;
-+	struct cma_defer_free_area *defer_area;
- 
- 	if (!cma_pages_valid(cma, pages, count))
- 		return false;
-@@ -566,6 +635,19 @@ bool cma_release(struct cma *cma, const struct page *pages,
- 
- 	VM_BUG_ON(pfn + count > cma->base_pfn + cma->count);
- 
-+	if (atomic64_read(&cma->defer_count) < cma->batch) {
-+		defer_area = kmalloc(sizeof(struct cma_defer_free_area), GFP_KERNEL);
-+		if (defer_area) {
-+			defer_area->pfn = pfn;
-+			defer_area->count = count;
-+			spin_lock_irqsave(&cma->lock, flags);
-+			list_add(&defer_area->list, &cma->defer_free);
-+			atomic64_add(count, &cma->defer_count);
-+			spin_unlock_irqrestore(&cma->lock, flags);
-+			cma_clear_bitmap(cma, pfn, count);
-+			return true;
-+		}
-+	}
- 	free_contig_range(pfn, count);
- 	cma_clear_bitmap(cma, pfn, count);
- 	trace_cma_release(cma->name, pfn, pages, count);
-@@ -586,3 +668,68 @@ int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
- 
- 	return 0;
- }
-+
-+static unsigned long cma_defer_free_count(struct shrinker *shrinker,
-+					struct shrink_control *sc)
-+{
-+	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-+	unsigned long val;
-+
-+	val = atomic64_read(&cma->defer_count);
-+	return val;
-+}
-+
-+static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
-+					struct shrink_control *sc)
-+{
-+	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-+	unsigned long to_scan;
-+	struct cma_defer_free_area *area;
-+	unsigned long new_pfn;
-+	unsigned long defer_count;
-+
-+	if (sc->nr_to_scan < cma->batch)
-+		return 0;
-+
-+	to_scan = cma->batch - sc->nr_to_scan;
-+	defer_count = atomic64_read(&cma->defer_count);
-+	spin_lock_irq(&cma->lock);
-+
-+	/*large to_scan, free all node*/
-+	if (to_scan >= defer_count) {
-+		list_for_each_entry(area, &cma->defer_free, list) {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+		}
-+		atomic64_set(&cma->defer_count, 0);
-+		return defer_count;
-+	}
-+	/*iterate all defer_area*/
-+	list_for_each_entry(area, &cma->defer_free, list) {
-+		if (to_scan <= area->count) {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+			atomic64_sub(to_scan, &cma->defer_count);
-+			/*release the rest pfn to cma*/
-+			if (!list_empty(&cma->defer_free)) {
-+				new_pfn = area->pfn + to_scan;
-+				cma_release(cma, pfn_to_page(new_pfn), area->count - to_scan);
-+			}
-+			break;
-+		}
-+		else {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+			to_scan = to_scan - atomic64_read(&cma->defer_count);
-+			continue;
-+		}
-+	}
-+	spin_unlock_irq(&cma->lock);
-+	return 0;
-+}
-diff --git a/mm/cma.h b/mm/cma.h
-index 88a0595..e1e3e2f 100644
---- a/mm/cma.h
-+++ b/mm/cma.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/debugfs.h>
- #include <linux/kobject.h>
-+#include <linux/shrinker.h>
- 
- struct cma_kobject {
- 	struct kobject kobj;
-@@ -31,6 +32,16 @@ struct cma {
- 	struct cma_kobject *cma_kobj;
- #endif
- 	bool reserve_pages_on_error;
-+	struct list_head defer_free;
-+	atomic64_t defer_count;
-+	unsigned long batch;
-+	struct shrinker shrinker;
-+};
-+
-+struct cma_defer_free_area {
-+	unsigned long pfn;
-+	unsigned long count;
-+	struct list_head list;
- };
- 
- extern struct cma cma_areas[MAX_CMA_AREAS];
+-static int _rtl92e_wx_get_sens(struct net_device *dev,
+-			       struct iw_request_info *info,
+-			       union iwreq_data *wrqu, char *extra)
+-{
+-	struct r8192_priv *priv = rtllib_priv(dev);
+-
+-	if (priv->rf_set_sens == NULL)
+-		return -1; /* we have not this support for this radio */
+-	wrqu->sens.value = priv->sens;
+-	return 0;
+-}
+-
+-static int _rtl92e_wx_set_sens(struct net_device *dev,
+-			       struct iw_request_info *info,
+-			       union iwreq_data *wrqu, char *extra)
+-{
+-	struct r8192_priv *priv = rtllib_priv(dev);
+-
+-	short err = 0;
+-
+-	if (priv->hw_radio_off)
+-		return 0;
+-
+-	mutex_lock(&priv->wx_mutex);
+-	if (priv->rf_set_sens == NULL) {
+-		err = -1; /* we have not this support for this radio */
+-		goto exit;
+-	}
+-	if (priv->rf_set_sens(dev, wrqu->sens.value) == 0)
+-		priv->sens = wrqu->sens.value;
+-	else
+-		err = -EINVAL;
+-
+-exit:
+-	mutex_unlock(&priv->wx_mutex);
+-
+-	return err;
+-}
+-
+ static int _rtl92e_wx_set_encode_ext(struct net_device *dev,
+ 				     struct iw_request_info *info,
+ 				     union iwreq_data *wrqu, char *extra)
+@@ -1066,8 +1023,6 @@ static iw_handler r8192_wx_handlers[] = {
+ 	[IW_IOCTL(SIOCGIWFREQ)] = _rtl92e_wx_get_freq,
+ 	[IW_IOCTL(SIOCSIWMODE)] = _rtl92e_wx_set_mode,
+ 	[IW_IOCTL(SIOCGIWMODE)] = _rtl92e_wx_get_mode,
+-	[IW_IOCTL(SIOCSIWSENS)] = _rtl92e_wx_set_sens,
+-	[IW_IOCTL(SIOCGIWSENS)] = _rtl92e_wx_get_sens,
+ 	[IW_IOCTL(SIOCGIWRANGE)] = _rtl92e_wx_get_range,
+ 	[IW_IOCTL(SIOCSIWAP)] = _rtl92e_wx_set_wap,
+ 	[IW_IOCTL(SIOCGIWAP)] = _rtl92e_wx_get_wap,
 -- 
-1.9.1
+2.34.1
 
