@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31206DCE3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E986DCE3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjDJXk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S230089AbjDJXmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDJXkY (ORCPT
+        with ESMTP id S229717AbjDJXmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:40:24 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6BE1BF5;
-        Mon, 10 Apr 2023 16:40:20 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id h12so3319886lfj.8;
-        Mon, 10 Apr 2023 16:40:20 -0700 (PDT)
+        Mon, 10 Apr 2023 19:42:00 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00E01BC7;
+        Mon, 10 Apr 2023 16:41:58 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id z9so6304319ybs.9;
+        Mon, 10 Apr 2023 16:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681170019; x=1683762019;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fur996rCaWYVGAHkL9B8t6UIa+8lHC0yv4M9nEOrYXo=;
-        b=oCzfxBcreBt29EaLl+71B9b/Q9qgIZXp6nVXJ/ZVkuB6CVfBsRJFo1lAUD3/GAxFV6
-         SVaBq0XwHUQ/TrhgfQF9QOmyhqqd3zQfSd8jl80BrU+bY5s0EnJc9ix5dwLvlaD/tVPf
-         LlFnUsb2/Nmzgv+1PPlABYMwmnZDgH40woWrYLJFXHGmsy9+O5IPZwiwrLfcLIAT3BXS
-         f/VArm7ldvG9/3oB5MrWFo70/hcUl9fJjkMmbD+Ph0W+rED701KZ70PrujsFfwa1BBEb
-         G4pLZhhbAkHpTuhYZCurpub93G9rBQH7Pu7FqbOMgmPVJW9n6yyTfMzEqn6e8EowxiW6
-         yiEA==
+        d=gmail.com; s=20210112; t=1681170118; x=1683762118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2wHFed80X0tDB7uZIMKZwq8AtXe8sVS2+RdD7BlqWJ0=;
+        b=NCUGnMiSZ6pkOvrhy1awB8Mp0kC037Dn24U2kKhyGY5arhtIoF9JOwTtLLjDJ29ghK
+         HYRyjAGHdHWiXtmvajuzgBLBiqilfiW793sO/A6iZ/X180NQHkynsurfdnKu05S3eDHm
+         vr8oPf7qw2lSgtsiIyisxUEKfwMJTtOafdBFp8TpFUTqmjJvlPPnaGEaqSu9ntn+GgLk
+         nsHbVPZbnZRciTdWSU5W3dObfxn5xnThdw3HGLL0iL0BynQ23ZltxCTxyOVRGcXLq5Nj
+         aqIaU/8jC9dAl5X/0f99buX8CfzRYIFT9qUEIgYmUADWs4e8BILhiDprhpdZiCogWxyw
+         BvFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681170019; x=1683762019;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fur996rCaWYVGAHkL9B8t6UIa+8lHC0yv4M9nEOrYXo=;
-        b=Dh0Cgxsanp57vXlETGGj7L9Y5btRrOsymNHXWkAkjTZQWr1XRPOrPCEhVBa5jiC35I
-         0P0mdAg0cr3LvEy0wpxCwPxHzf+0F0HJ1wMzOyEdFm5TGukBPMBq38mULHZmyLGtaeeW
-         gJCOPguDcvydqUds5I6JKgCJsuTHnTzNxn38+autvBpdw/0kaFr0emvfgBtLeYb3oBfw
-         AYPLvfBEsZYyP1x09ndb9Vb0/SR6wkr8muHg5b7m7YpPGyMEJ25QWmp+ByBgaUnK+YnT
-         FkqDVd9EtLwCS3PwclPSpXhezoVh8qF6ImT7gunhahXkux/bbBEZNWTwfUmndnrsLlF+
-         +0VA==
-X-Gm-Message-State: AAQBX9ctrslQQanDEqvA/YB4HMNP6Ws7AEHhfSWpjJLEmDypCPw08U3O
-        RZLrpfXYgUNkow5FZZz1B9tTsSuFGOg=
-X-Google-Smtp-Source: AKy350Y8vHryK+xbHopzRc1cNjMjYH5S/Wo750TJjWInhOO3WY08PTqXauE7zSAidBeOMTmC84bjeA==
-X-Received: by 2002:ac2:5292:0:b0:4eb:29b0:1ca4 with SMTP id q18-20020ac25292000000b004eb29b01ca4mr3506937lfm.8.1681170018902;
-        Mon, 10 Apr 2023 16:40:18 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id v18-20020ac25612000000b004e9b4a8f738sm2284738lfd.152.2023.04.10.16.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 16:40:18 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 02:40:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        sunying@nj.iscas.ac.cn
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greybus-dev@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: Multiple undefined configuration options are dependent in
- Kconfig under the v6.3-rc4 drivers directory
-Message-ID: <20230410232725.zwbccyryboxj3bh5@mobilestation>
-References: <bc6c86d.11bb9.1872c5aa2cb.Coremail.sunying@nj.iscas.ac.cn>
- <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
+        d=1e100.net; s=20210112; t=1681170118; x=1683762118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2wHFed80X0tDB7uZIMKZwq8AtXe8sVS2+RdD7BlqWJ0=;
+        b=79nF2l4ufsgDeuPOgJ5H+pCPIzPP5XEI8oOq9xPFqk3cwEfE8Uoz5rraMiLPWIShfp
+         xzxs8pgLtPO6LPmSuNbWSw4PMq2OSW9AE9z65/C8z5zo18fhctyryR8jynJD1vP6sZfq
+         yIbQYuH0AzQrRiz7KU+0isQWtv3E07bXKDKMULF/4ppWd6LLWB5BNL1vTMX2dFcZsHpV
+         r6hua0PxRQUh9uk0T2kTKRF8uAugLYGsWKu8+kpgh8YLGgWVhqzhkGhjsymS5MKkeCNr
+         DeJ+ts96iSEKQqZDbxd2PlXHW6J/K10X4WjDXYNdsFZX24josOpVsRtZSkvBFlIyXEyq
+         fiLg==
+X-Gm-Message-State: AAQBX9cZ/xMK6hxM36uLf7S1Ef1UMYxWUOwIS8tPfUIt7ACshJQEEgGu
+        fKUgdM1ouvhO2LXzW8ReuqRHAv3/Zj8zISOTOEQ=
+X-Google-Smtp-Source: AKy350ZMKc++209kJg1zVkgj3yQq/NKejP9VbGC6SebYPA8wazTUNWYAIGuf1hZCg27F8xbh7+svzQIL1y+oht0gyoI=
+X-Received: by 2002:a25:e0d5:0:b0:b31:34ab:5ca0 with SMTP id
+ x204-20020a25e0d5000000b00b3134ab5ca0mr4048180ybg.11.1681170117817; Mon, 10
+ Apr 2023 16:41:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18c3fbb4-59db-d508-ddd6-080cc8944b39@opensource.wdc.com>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
+ <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
+In-Reply-To: <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 01:41:46 +0200
+Message-ID: <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -79,39 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 07:34:58AM +0900, Damien Le Moal wrote:
-> On 3/29/23 16:52, 孙滢 wrote:
-> > It has been discovered that the following configuration options are undefined in the current latest version, v6.3-rc4, yet they are being relied upon by other configuration options in multiple Kconfig files:
-> > 
-> > MIPS_BAIKAL_T1 is undefined, used as a 'depends on' condition in multiple files such as drivers/ata/Kconfig, drivers/hwmon/Kconfig, drivers/bus/Kconfig, and drivers/memory/Kconfig.
-> > MFD_MAX597X is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
-> > MFD_SM5703 is undefined, used as a 'depends on' condition in Kconfig file drivers/regulator/Kconfig.
-> > ARCH_THUNDERBAY is undefined, used as a 'depends on' condition in Kconfig files drivers/pinctrl/Kconfig and drivers/phy/intel/Kconfig.
-> > ARCH_BCM4908 is undefined, used as a 'depends on' condition in Kconfig file drivers/leds/blink/Kconfig.
-> > MFD_TN48M_CPLD is undefined, used as a 'depends on' condition in Kconfig files drivers/gpio/Kconfig and drivers/reset/Kconfig. 
-> > USB_HSIC_USB3613 is undefined, used as a 'depends on' condition in drivers/staging/greybus/Kconfig and drivers/staging/greybus/arche-platform.c.
+On Mon, Apr 10, 2023 at 8:59=E2=80=AFPM Hans Petter Selasky <hps@selasky.or=
+g> wrote:
+>
+> Adding a dependency to build the Rust compiler even to build one or two
+> V4L2 device drivers, would mean a lot to my small hselasky/webcamd
+> project. It already has to fetch a copy of the Linux kernel, and now has
+> to bootstrap Rust from stage0 to stageN. I personally say no. It's like
 
-Please, don't drop the MIPS_BAIKAL_T1 config. It will be defined and
-thus utilized after I submit the SoC CSP support to the MIPS arch.
+Do you mean you need to compile `rustc`? Could you please explain why?
+Could you use your distribution's, or fetch the standalone installers
+or cache your own toolchain?
 
--Serge(y)
+> XCode unfortunately. I download 100's of GBytes of upgrades to XCode,
+> and barely upload one millionth worth of code back to Apple. It's not
+> good. Software developers shouldn't have to download more stuff than
+> they upload?
 
-> > 
-> > If these 7 configuration options are deprecated, it is recommended to remove the dependencies on them in the Kconfig files. 
-> > If they are still useful, it is recommended to define them.
-> 
-> + linux-arm & linux-mips
-> 
-> What about you send patches to fix this ?
-> 
-> > 
-> > 
-> > Best regards,
-> > Ying Sun
-> > Pengpeng Hou
-> > Yanjie Ren
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
-> 
+The Rust standalone installers are 2+ orders of magnitude lighter.
+
+> The definition of "bugs" may vary of course. I was thinking more like
+> stack exploits, missing validation of arrays and so on.
+
+The kernel definitely needs to avoid those. What do you mean?
+
+> I must admit I'm not a Rust guy and don't see the advantages of Rust
+> like you do.
+
+The advantages are fairly clear. The question has always been whether
+the cost is worth those benefits.
+
+> Why not move Linux-V4L2 drivers to user-space? In my opinion Rust is
+> much more easy to get going there than at the kernel level.
+
+That sounds like an orthogonal discussion.
+
+In any case, please note that you would need to install the same Rust
+toolchain to compile them in userspace. So, if you are concerned about
+the size of the toolchain (as you mention above), it would not really
+make a difference.
+
+> Rust is slow based on my observations building Firefox from sources. The
+> Rust compiler spends a significant amount of time per source file.
+
+It is slower than compiling C, but it also provides more features, so
+it seems fair for what we are getting in exchange.
+
+Cheers,
+Miguel
