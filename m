@@ -2,94 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA10C6DCB58
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806216DCB5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjDJTKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 15:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S229730AbjDJTKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 15:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDJTKR (ORCPT
+        with ESMTP id S229523AbjDJTKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 15:10:17 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33311718;
-        Mon, 10 Apr 2023 12:10:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CHpzpo6tAu04d3UzoGOU3S4Gi1ljCykq2WXUrjmLLndbMPqLhSw5IfIZm/5LFWVESl8lLJ4I0UXPj2Vj4COXDFg5tGNqI2x9RrHMO2sCZB0h8qniep8MvdZMOdA0NfIp2NHqCSg6NIerXt9VWc9mIerZp/14EU9SnWqgSi5GAskdDzq7vWlpFFBI1qmsoR3QCMhX60Jjvzf+r5Ri1LIs2WH78/U+b+ZjNfuWhd22PnavKw0rRKtppQ1aQoCfQTZ2rcaNePb8PdNjsQzUQzHhE6PIMjLWGKi4L1pRNxE553zGC6RCF1NnS2jSLwPqbVUgaUcfqrEDxYiYWQnZm30G8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7MMsd9A1dbk/TDkm86T+7yWZhP6qJ5ZFOGYNFqqWoz0=;
- b=WjnVEjh8bCjpd11epZm6fGEz2NWXj0RGN646sY6F12gQx6Q+4nt/hunw3Qv94e5WlqBxPL6tOeuZpfUoJmXkMFse90fOSdVoDb3X/E86fw6c6QYCnCNDmeBCNtuoKBFwhc3vyFpUCYtO3PwOKYUrB6gTILizpPVqTOamiELJ+ty3A3VrN/mhV4c9T1Vf5EhR/zKNbMauWsof0dt6ZzrqBbQQoKFJC4mVjYSeNlajZLgAXMt78J1oeDoVSya1fGCT6mgVcioAGRSrR4e2HOY0p1wxlitU6YmqBQMMofO3kwlpoMlWUrzYamdRojW1LfdMvsCBj1lauI9i7mLTYDhBSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7MMsd9A1dbk/TDkm86T+7yWZhP6qJ5ZFOGYNFqqWoz0=;
- b=LXm3EMMaCiIwP8u+7H4n59M4/xCclJCV1TszOKoFD4XrwW76Y6UyTx+zV8iJpsrtxCKjhZKcGVHgLIHgLY5D+sqZWL17Q6qTVPUSTPCkBofrE0O8HzYduY9nUp/jwM7wo/JTLG6YUV0Oa2JeI25I5lLSaB6yOf7ljKi4DO1u05s=
-Received: from BN9PR03CA0495.namprd03.prod.outlook.com (2603:10b6:408:130::20)
- by DM4PR12MB5087.namprd12.prod.outlook.com (2603:10b6:5:38a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Mon, 10 Apr
- 2023 19:10:12 +0000
-Received: from BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:130:cafe::fd) by BN9PR03CA0495.outlook.office365.com
- (2603:10b6:408:130::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
- Transport; Mon, 10 Apr 2023 19:10:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT060.mail.protection.outlook.com (10.13.177.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.28 via Frontend Transport; Mon, 10 Apr 2023 19:10:11 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 10 Apr
- 2023 14:10:10 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH] EDAC/amd64: Remove module version string
-Date:   Mon, 10 Apr 2023 14:09:59 -0500
-Message-ID: <20230410190959.3367528-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 10 Apr 2023 15:10:42 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAAC21BC0;
+        Mon, 10 Apr 2023 12:10:35 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 36F172174E2A; Mon, 10 Apr 2023 12:10:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 36F172174E2A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681153835;
+        bh=LitfwmASCD6XtrcgTnTIIPBcVPikllBf+qN/GfqwP8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GOMIdjecPKY/CPgp3Hfb8d0/as17ALZ4feRwVik4YxfTblNlTUL+lnjqlAW6134lu
+         Urxyg0gve4p23SRx8ZvktUXNuHLxvME7Zv/VBDQ6XcS/44WG4NlPINI2DOUkJV08qN
+         /oxfY2MKMlvmrozaEbOwKupq23Mu/E/s+h90LTgo=
+Date:   Mon, 10 Apr 2023 12:10:35 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
+Message-ID: <20230410191035.GB18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT060:EE_|DM4PR12MB5087:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55910ace-de74-4691-8472-08db39f73575
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FHmMeSKpEfFtTnKQluI6Y/azpYnSEwy1T/HDTyHdHEWQWQ7G7h40NunGyFtRzz7wu1ymoVxt+yvGXE8YUb/OASs6smxeQCyudjOAwQkaS+Ec1MUBE88SDNzsb/BH7flJ8k3zTbdm9LksG7OZFUtrFWmX3XJYbJhG4a/vnkXFCnX2eDITqgOPH0dv+xt/bXRzl4G4q1lINKkpzIiDk6x3a93S7tQ9aoRVCrtvj/lBbO/6AmAJqIRSkXvYBQ8+tmx0LmSFPGGWo9JwIsSAlfoJLMnz0Ie3K9sJbQ4Da7PhsvPq4EJMdE1FTn6XXgJejqMlmjnp35zm1wlRlNTtNlmhTeTKZubjWGvEEVR7ZeCeGPRJzpgafhMuHnK8nzhT08YyjblZ2UcJxItjXGVn1YrNwndw9aP5Vnoajh4uggBTyRavhZpfvUDpXtlAZ5Bi615bxxf9xaRBGDydjKsNbLLOBeeQ1arm2WGhfYuhLBBTGyMJ7DW10rkia/hkOCUoAq5V7e9J2iqquwj1u2qL9uoPqkK2q8wqzSjsal2drGvF/2UTPmXe1Q1l33anPc8fY2PhaVJZ8l5M+ZgH1lRY/n6b/4Lp0tu4DA+SpQZSoELf3ptZPzZawnd0eHXPYPAld+lHEvt/MHWJxzsq4BN+zcuhmANWPuIXK/E2WATC3Rqn42waENgZaGLSHldMKFHbvJJhYDktT9l+juqrwufjH4v4lK5Z3P77k+CiduANJMPzV0A=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(451199021)(40470700004)(46966006)(36840700001)(70586007)(70206006)(4326008)(26005)(86362001)(1076003)(316002)(110136005)(186003)(40460700003)(16526019)(36756003)(6666004)(7696005)(54906003)(82310400005)(40480700001)(478600001)(36860700001)(8676002)(8936002)(2616005)(5660300002)(356005)(41300700001)(81166007)(47076005)(2906002)(83380400001)(44832011)(426003)(336012)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 19:10:11.9187
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55910ace-de74-4691-8472-08db39f73575
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5087
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,56 +58,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMD64 EDAC module version information is not exposed through ABI
-like MODULE_VERSION(). Instead it is printed during module init.
+On Thu, Mar 02, 2023 at 02:04:42PM -0500, Paul Moore wrote:
+> On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> >
+> > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> >
+> > As is typical with LSMs, IPE uses securityfs as its interface with
+> > userspace. for a complete list of the interfaces and the respective
+> > inputs/outputs, please see the documentation under
+> > admin-guide/LSM/ipe.rst
+> >
+> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> 
+> ...
+> 
+> > ---
+> >  security/ipe/Makefile    |   2 +
+> >  security/ipe/fs.c        | 101 +++++++++
+> >  security/ipe/fs.h        |  17 ++
+> >  security/ipe/ipe.c       |   3 +
+> >  security/ipe/ipe.h       |   2 +
+> >  security/ipe/policy.c    | 135 ++++++++++++
+> >  security/ipe/policy.h    |   7 +
+> >  security/ipe/policy_fs.c | 459 +++++++++++++++++++++++++++++++++++++++
+> >  8 files changed, 726 insertions(+)
+> >  create mode 100644 security/ipe/fs.c
+> >  create mode 100644 security/ipe/fs.h
+> >  create mode 100644 security/ipe/policy_fs.c
+> 
+> ...
+> 
+> > diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> > index 772d876b1087..a5e9c6e5691b 100644
+> > --- a/security/ipe/policy.c
+> > +++ b/security/ipe/policy.c
+> > @@ -4,12 +4,39 @@
+> >   */
+> >
+> >  #include "ipe.h"
+> > +#include "eval.h"
+> > +#include "fs.h"
+> >  #include "policy.h"
+> >  #include "policy_parser.h"
+> >  #include "digest.h"
+> >
+> >  #include <linux/verification.h>
+> >
+> > +/* lock for synchronizing writers across ipe policy */
+> > +DEFINE_SPINLOCK(ipe_policy_lock);
+> > +
+> > +/**
+> > + * ver_to_u64 - Convert an internal ipe_policy_version to a u64.
+> > + * @p: Policy to extract the version from.
+> > + *
+> > + * Bits (LSB is index 0):
+> > + *     [48,32] -> Major
+> > + *     [32,16] -> Minor
+> > + *     [16, 0] -> Revision
+> > + *
+> > + * Return: u64 version of the embedded version structure.
+> > + */
+> > +static inline u64 ver_to_u64(const struct ipe_policy *const p)
+> > +{
+> > +       u64 r = 0;
+> 
+> No need to set @r to 0 since you set it to the version immediately below.
+> 
 
-Version numbers may be confusing in cases where module updates are
-partly backported resulting in a difference between upstream and
-backported module versions.
+Yes this is redundant, I will remove it.
 
-Remove the AMD64 EDAC module version information to avoid user
-confusion.
+> > +       r = (((u64)p->parsed->version.major) << 32)
+> > +         | (((u64)p->parsed->version.minor) << 16)
+> > +         | ((u64)(p->parsed->version.rev));
+> > +
+> > +       return r;
+> > +}
+> > +
+> >  /**
+> >   * ipe_free_policy - Deallocate a given IPE policy.
+> >   * @p: Supplies the policy to free.
+> > @@ -21,6 +48,7 @@ void ipe_free_policy(struct ipe_policy *p)
+> >         if (IS_ERR_OR_NULL(p))
+> >                 return;
+> >
+> > +       ipe_del_policyfs_node(p);
+> >         free_parsed_policy(p->parsed);
+> >         if (!p->pkcs7)
+> >                 kfree(p->text);
+> > @@ -39,6 +67,70 @@ static int set_pkcs7_data(void *ctx, const void *data, size_t len,
+> >         return 0;
+> >  }
+> >
+> > +/**
+> > + * ipe_update_policy - parse a new policy and replace @old with it.
+> > + * @addr: Supplies a pointer to the i_private for saving policy.
+> > + * @text: Supplies a pointer to the plain text policy.
+> > + * @textlen: Supplies the length of @text.
+> > + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message.
+> > + * @pkcs7len: Supplies the length of @pkcs7len.
+> > + *
+> > + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
+> > + * ipe_new_policy.
+> > + *
+> > + * Return:
+> > + * * !IS_ERR   - OK
+> > + * * -ENOENT   - Policy doesn't exist
+> > + * * -EINVAL   - New policy is invalid
+> > + */
+> > +struct ipe_policy *ipe_update_policy(struct ipe_policy __rcu **addr,
+> > +                                    const char *text, size_t textlen,
+> > +                                    const char *pkcs7, size_t pkcs7len)
+> > +{
+> > +       int rc = 0;
+> > +       struct ipe_policy *old, *new;
+> > +
+> > +       old = ipe_get_policy_rcu(*addr);
+> > +       if (!old) {
+> > +               rc = -ENOENT;
+> > +               goto err;
+> > +       }
+> > +
+> > +       new = ipe_new_policy(text, textlen, pkcs7, pkcs7len);
+> > +       if (IS_ERR(new)) {
+> > +               rc = PTR_ERR(new);
+> > +               goto err;
+> > +       }
+> > +
+> > +       if (strcmp(new->parsed->name, old->parsed->name)) {
+> > +               rc = -EINVAL;
+> > +               goto err;
+> > +       }
+> > +
+> > +       if (ver_to_u64(old) > ver_to_u64(new)) {
+> > +               rc = -EINVAL;
+> > +               goto err;
+> > +       }
+> > +
+> > +       if (ipe_is_policy_active(old)) {
+> 
+> I don't understand the is-active check, you want to make @new the new
+> active policy regardless, right?  Could this is-active check ever be
+> false?
+> 
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- drivers/edac/amd64_edac.c | 4 +---
- drivers/edac/amd64_edac.h | 1 -
- 2 files changed, 1 insertion(+), 4 deletions(-)
+Actually this is needed. Policy updates can be applied to any deployed
+policy, which may be saved in two places: the securityfs file node
+and the ipe_active_policy pointer. To update a policy, this function first
+checks if the policy saved in the securityfs file node is currently active.
+If so, it updates the ipe_active_policy pointer to point to the new policy,
+and finally updates the policy pointer in the securityfs to the new policy.
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 5c4292e65b96..37b1a6127d0b 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4074,8 +4074,6 @@ static int __init amd64_edac_init(void)
- 	amd64_err("%s on 32-bit is unsupported. USE AT YOUR OWN RISK!\n", EDAC_MOD_STR);
- #endif
- 
--	printk(KERN_INFO "AMD64 EDAC driver v%s\n", EDAC_AMD64_VERSION);
--
- 	return 0;
- 
- err_pci:
-@@ -4121,7 +4119,7 @@ module_exit(amd64_edac_exit);
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("SoftwareBitMaker: Doug Thompson, Dave Peterson, Thayne Harbaugh; AMD");
--MODULE_DESCRIPTION("MC support for AMD64 memory controllers - " EDAC_AMD64_VERSION);
-+MODULE_DESCRIPTION("MC support for AMD64 memory controllers");
- 
- module_param(edac_op_state, int, 0444);
- MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index e84fe0d4120a..0bde0db76f7a 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -85,7 +85,6 @@
-  *         sections 3.5.4 and 3.5.5 for more information.
-  */
- 
--#define EDAC_AMD64_VERSION		"3.5.0"
- #define EDAC_MOD_STR			"amd64_edac"
- 
- /* Extended Model from CPUID, for CPU Revision numbers */
--- 
-2.34.1
+-Fan
 
+> > +               spin_lock(&ipe_policy_lock);
+> > +               rcu_assign_pointer(ipe_active_policy, new);
+> > +               spin_unlock(&ipe_policy_lock);
+> > +               synchronize_rcu();
+> > +       }
+> > +
+> > +       rcu_assign_pointer(*addr, new);
+> > +
+> > +       swap(new->policyfs, old->policyfs);
+> > +       ipe_free_policy(old);
+> > +
+> > +       goto out;
+> > +err:
+> > +       ipe_free_policy(new);
+> > +out:
+> > +       return (rc < 0) ? ERR_PTR(rc) : new;
+> > +}
+> > +
+> >  /**
+> >   * ipe_new_policy - Allocate and parse an ipe_policy structure.
+> >   *
+> > @@ -117,3 +209,46 @@ struct ipe_policy *ipe_get_policy_rcu(struct ipe_policy __rcu *p)
+> >
+> >         return rv;
+> >  }
+> > +
+> > +/**
+> > + * ipe_set_active_pol - Make @p the active policy.
+> > + * @p: Supplies a pointer to the policy to make active.
+> > + */
+> > +int ipe_set_active_pol(const struct ipe_policy *p)
+> > +{
+> > +       int rc = 0;
+> > +       struct ipe_policy *ap = NULL;
+> > +
+> > +       ap = ipe_get_policy_rcu(ipe_active_policy);
+> > +       if (ap && ver_to_u64(ap) > ver_to_u64(p)) {
+> > +               rc = -EINVAL;
+> > +               goto out;
+> > +       }
+> > +
+> > +       spin_lock(&ipe_policy_lock);
+> > +       rcu_assign_pointer(ipe_active_policy, p);
+> > +       spin_unlock(&ipe_policy_lock);
+> > +       synchronize_rcu();
+> > +
+> > +out:
+> > +       return rc;
+> > +}
+> > +
+> > +/**
+> > + * ipe_is_policy_active - Determine wehther @p is the active policy.
+> > + * @p: Supplies a pointer to the policy to check.
+> > + *
+> > + * Return:
+> > + * * true      - @p is the active policy
+> > + * * false     - @p is not the active policy
+> > + */
+> > +bool ipe_is_policy_active(const struct ipe_policy *p)
+> > +{
+> > +       bool rv;
+> > +
+> > +       rcu_read_lock();
+> > +       rv = rcu_access_pointer(ipe_active_policy) == p;
+> > +       rcu_read_unlock();
+> > +
+> > +       return rv;
+> > +}
+> 
+> --
+> paul-moore.com
