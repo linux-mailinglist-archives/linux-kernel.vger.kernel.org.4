@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7566DC556
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB996DC559
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 11:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjDJJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 05:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S229603AbjDJJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 05:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDJJrw (ORCPT
+        with ESMTP id S229863AbjDJJt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 05:47:52 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD8155BF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:47:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vfl5d6x_1681120056;
-Received: from 30.97.49.25(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vfl5d6x_1681120056)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Apr 2023 17:47:38 +0800
-Message-ID: <1142fe0c-4464-8735-1d49-9b21c0774303@linux.alibaba.com>
-Date:   Mon, 10 Apr 2023 17:47:36 +0800
+        Mon, 10 Apr 2023 05:49:56 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E7E1726
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:49:55 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54c17fa9ae8so189349337b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681120194; x=1683712194;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zWIONkUKCX2JMCosfarTeLGkNWabBO6R8R+bGsxbMRQ=;
+        b=RpUyosrOhhL0wZpx0h55J1Kik864LAMd7bldb+7jzAs0QxLpSaP+na0qnhocaSrYoh
+         H2XkdBwYkVuay7o2ydjB9mv2VhEvi1G80G+RCw7UY7uDl56fHZudaI3xNtxGx1QZLHff
+         JM7ywUbW+svS5R5illHglMeeQyTQG7xPEBAJv2IbF46ebhVFFcSIGkWH9W8wfPRdoG+Q
+         bATKzdi4RK6kES2fycfsN+q5XfYJSJaXtzU3NKAlKqdFi3+zOFkdkSpwtiskIdAekcFO
+         JEJ53JSEqjlmXZjzboI3YErYoR2Yn4OMctIJownq9BlgU+pJIG4Ib7doDHYUNRVH3Eox
+         2Wzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681120194; x=1683712194;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zWIONkUKCX2JMCosfarTeLGkNWabBO6R8R+bGsxbMRQ=;
+        b=xCPBOa6wVc8E+AIjnSZw1cCaase1wdX3RD0Jtp/zBVP3faLwIO6IzFvOg37Xx8Uw3q
+         OioarxjfN+rGunY1WRdrTxgrr2ma+hSlO7lCchjvaLkXTjmN5Q+uvxTk6+FRMNJH+iT8
+         NufPzfvzBqLlekpCGsvcapED2CZekYVM66dLRZ0WrNGSw8OvaSvLZyv8pokp/H8SUNSa
+         cNbbbGbJIYM3shWcLN6kGvo8ouHky3ZWT/IQhX7YNrV9ZGPfNYDD8oBEN4So3kLfAzoc
+         TuPmqXTzcr7RNepCrzWUG+odCNiCzmcM1ZTRbn7GH7C0go2PiT//zO/gvXtOC4Lsb6+d
+         kqsg==
+X-Gm-Message-State: AAQBX9cINKvnpxHdySvt+4sco93517xfG/Yr9KQxJ5rekddLN8YPUsjm
+        gpspBoi8tKuxg+IzqfUTm22+KyHc95C7gaqxRL8=
+X-Google-Smtp-Source: AKy350addpWjKvmKKBtX77oSHTNYJAOdWDs3i/GVMNGa8jPwwWxm16ndUxRIy2roUEhHgAp1PnNRmsgJdwN4L6eizpU=
+X-Received: by 2002:a81:b654:0:b0:54c:88d:4052 with SMTP id
+ h20-20020a81b654000000b0054c088d4052mr3697018ywk.1.1681120194172; Mon, 10 Apr
+ 2023 02:49:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [syzbot] [erofs?] BUG: spinlock bad magic in
- erofs_pcpubuf_growsize
-To:     syzbot <syzbot+d6a0e4b80bd39f54c2f6@syzkaller.appspotmail.com>,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-References: <000000000000de8f6a05f8f834e5@google.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <000000000000de8f6a05f8f834e5@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:4ec3:b0:49a:2de4:d8ab with HTTP; Mon, 10 Apr 2023
+ 02:49:53 -0700 (PDT)
+Reply-To: wormer.amos@aol.com
+From:   Wormer Amos <jyotsnafarhadmurad123@gmail.com>
+Date:   Mon, 10 Apr 2023 09:49:53 +0000
+Message-ID: <CAJzJiXWYn=eZHUKBx9=NNMLw2gz58vp3_M+0ju8rKqbpW51d_w@mail.gmail.com>
+Subject: I WANT TO KNOW YOU BETTER
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kindly want to know if you're ready for investment project in your country. i
+need serious investment partnership with good background, kindly reply
+me to discuss details immediately. i will appreciate you to contact me
+on this email address Thanks and awaiting your quick response,
 
-
-On 2023/4/10 17:43, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+d6a0e4b80bd39f54c2f6@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         09a9639e Linux 6.3-rc6
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.3-rc6
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12cc39abc80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c47e989e3f0f1947
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d6a0e4b80bd39f54c2f6
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Note: no patches were applied.
-> Note: testing is done by a robot and is best-effort only.
-
-#syz invalid
+Your friend
+Wormer,
