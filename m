@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2583C6DCD62
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274A56DCD66
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 00:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjDJWUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 18:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S229922AbjDJWU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 18:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjDJWUc (ORCPT
+        with ESMTP id S229790AbjDJWU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 18:20:32 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9AD1FF9;
-        Mon, 10 Apr 2023 15:20:26 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5D0106D9;
-        Mon, 10 Apr 2023 22:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5D0106D9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1681165225; bh=LuRsNKjkb+NUZ3zVG1+d02enL9jGANZrCsc3PC/NrcE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XOS2PtEljfm6dC30KimThDbyw7j5myZMX3SoUI1FMm6JJhixDSoyn0NeqF6iAJGGi
-         soUAHycvvET5UeCASQPzvJRN+wQ7sIjjEu6ZqAkbOih6FRUzomySnldlYTl8DSSKxE
-         RgZEMK29k6KEv8vbZBgIwsGKwcIe6dtL3ZM8oeBccphZPa1Wi2Ir/iyKJZCpUCvo34
-         mIJTv8TrXSnUJZoKMTZ6w+Wn35OMfQEolWYKOwVieUBowN6cozfCdIXiHTY80o2wtI
-         CA+ibDtKQGg1/PnYn9EAhWR1m2Zq4D+eitDUtSr9IRTibYsVvbdez4eW+W1zIn9UQO
-         M5Y2a/aYm9jVw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org
-Subject: Re: [PATCH] dma-api-howto: typo fix
-In-Reply-To: <af1505348a67981f63ccff4e3c3d45b686cda43f.1680864874.git.mst@redhat.com>
-References: <af1505348a67981f63ccff4e3c3d45b686cda43f.1680864874.git.mst@redhat.com>
-Date:   Mon, 10 Apr 2023 16:20:23 -0600
-Message-ID: <87bkjve5w8.fsf@meer.lwn.net>
+        Mon, 10 Apr 2023 18:20:56 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6773110E2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:20:54 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id h198so12655021ybg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 15:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681165253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GY3XURVYWCIcemLAr8O9Wiej+aFCql/3yCAZTzhHcSs=;
+        b=VNcMwyYOH9xebcPuWV3dFdUJ5t+c0vlfeyFbDGAu53qPX29fh9SVStP0ZvJlPO9b0N
+         HGUPWUOezP7UdaQQly+jeaBFl4E8qA23Xz7uxqiFVJjVk06p7HvPKC4HpaDgA8hjHlBi
+         xJBgoAeN9xkOU2PpC0BwJVbfKvDVoS4lkBYBu7KCqS9MyWvrgGRFOUMaHfjuNdMcBmlB
+         t5whbFRg6wPG6/IAA0+edaA3s7DXYbZij5R1ZQaaXIj+Tt3Udi0gJGEY7J1uyw+DDF44
+         bqlj3OBWyJdp9QC/BJ6N+JzIVYy9nIQ6qdWDa2V8vJT4WNdbz4w5/eAIynxyAnLll+gS
+         mBUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681165253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GY3XURVYWCIcemLAr8O9Wiej+aFCql/3yCAZTzhHcSs=;
+        b=jeaTYaewjU2lUAD/BQ8mPxzTx8uz4NMh/QCVqXpl/VZWwXaE0ZCydL7iXAfbbcbRaR
+         DKcdpseP9Tp9Xxzg4UpZP6sjH0Z+p7JafTxiVja8pkO/1ZnlK603sgzgxrcdXUQOC6AO
+         RgGyNjcIpqjG7CVNjYrd4ZjnfRN73p41UoXxvBNailjKVhyCy6XqHuDddSqrI24GD5Ri
+         UazRg7O9k176q7Nlz9L5GqS2D0Vi4P1PRhDongbkRV56uqOebdVMUUWZb948N70E1Qxj
+         kfjJWC5tMDAJDmUh8v67Y2JCCN3m/tkcChG2rU3CRAGNmdmvoUYcDQX9z6SbaXth9U7e
+         ZCPw==
+X-Gm-Message-State: AAQBX9cucVZoxDwntVNQe0ZYsIOYp3Pr+et69WftqlSylNBWmf+6/07E
+        vWrScZHk2FPbWtnAv+8uCyO3lQWnimQyKnucykEo/asdp5+7p6Os
+X-Google-Smtp-Source: AKy350bXiLysNcV+Q+/hru2MCd67dq41AQdoznEw88BUw2uC8Wa1FCc0rGVz3dTyK37BVHXOUEC94ofML1oMScjzdTk=
+X-Received: by 2002:a25:d994:0:b0:b8e:fbcb:d6ef with SMTP id
+ q142-20020a25d994000000b00b8efbcbd6efmr2648692ybg.4.1681165253591; Mon, 10
+ Apr 2023 15:20:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com>
+In-Reply-To: <20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 11 Apr 2023 00:20:42 +0200
+Message-ID: <CACRpkdbXvMsa=suwEZ64b1Jn9Tp2mD8CqhmwLhSHdtdAOBzN-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Cleanup Mediatek pinctrl device tree binding
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,27 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Michael S. Tsirkin" <mst@redhat.com> writes:
+On Tue, Apr 4, 2023 at 6:30=E2=80=AFPM Alexandre Mergnat <amergnat@baylibre=
+.com> wrote:
 
-> Stumbled upon a typo while reading the doc, here's a fix.
+> Deprecate properties which shall not exist, leaked upstream from downstre=
+am
+> kernels, there's no reason to use them. Here the deprecated properties an=
+d
+> the generic properties which will replace them:
 >
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->  Documentation/core-api/dma-api-howto.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> - mediatek,drive-strength-adv =3D> drive-strength-microamp
+> - mediatek,pull-up-adv        =3D> bias-pull-up
+> - mediatek,pull-down-adv      =3D> bias-pull-down
 >
-> diff --git a/Documentation/core-api/dma-api-howto.rst b/Documentation/core-api/dma-api-howto.rst
-> index 828846804e25..72f6cdb6be1c 100644
-> --- a/Documentation/core-api/dma-api-howto.rst
-> +++ b/Documentation/core-api/dma-api-howto.rst
-> @@ -185,7 +185,7 @@ device struct of your device is embedded in the bus-specific device struct of
->  your device.  For example, &pdev->dev is a pointer to the device struct of a
->  PCI device (pdev is a pointer to the PCI device struct of your device).
->  
-> -These calls usually return zero to indicated your device can perform DMA
-> +These calls usually return zero to indicate your device can perform DMA
->  properly on the machine given the address mask you provided, but they might
+> Another commit has been added in v3 to make it easier to merge. [2]
+>
+> Thanks AngeloGioacchino Del Regno to reported it. [1]
+>
+> [1]: https://lore.kernel.org/all/6e08d78f-ef4c-b228-f7d2-d63767ea87b8@col=
+labora.com/
+> [2]: https://lore.kernel.org/all/20230203-evk-board-support-v4-2-5cffe66a=
+38c0@baylibre.com/
+> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl=
+.git/log/?h=3Ddevel
+>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Applied, thanks.
+Patches applied!
 
-jon
+Thanks for you excellent attention to detail!
+
+Yours,
+Linus Walleij
