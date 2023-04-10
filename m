@@ -2,367 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3EE6DC2CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D200D6DC2CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjDJCqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 22:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S229641AbjDJCvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 22:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjDJCqB (ORCPT
+        with ESMTP id S229512AbjDJCvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 22:46:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E6F30F3;
-        Sun,  9 Apr 2023 19:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681094760; x=1712630760;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=j5TkN7QNcizkbwVOeT6r1ZlngJRFEu87dJsrqVLE2Y8=;
-  b=atKYup2YJJya7RAiP5fkYn3D+i7uAvlR5vdb7INJ7nKoPzpENAdzRSNW
-   nmnIDq2i6ZxgplI5EuTx2NcMQEY9YIwqiPXbMQ6UboF4dCboX0TyQW/Lq
-   w+qtGeFtCk3PgC//qUiuHXP30na6kDkqZDEGghPL/5edN9uijEwo3Wf2s
-   BmEgijruYFPkFJeVKLsGli1BYuoa1QU9nvWTEzLkyLYLKzQ3TwrTsflXo
-   j4Zzj43x7EHf2ztIDoW0jQdJ+pJ+3BP1EHvkd1aWu/fOmv3MUv6L75D5j
-   NOD3McKRCPM6gfiUYnM6yjfG7UkpDt7mbvmlztiN0rLl1E/SDI+aaQnTO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="408412176"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="408412176"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 19:45:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="831787085"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="831787085"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2023 19:45:55 -0700
-Message-ID: <54591e4f-682b-cd4e-ee6b-9c9395d9c526@linux.intel.com>
-Date:   Mon, 10 Apr 2023 10:46:02 +0800
+        Sun, 9 Apr 2023 22:51:31 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D608E30F3
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 19:51:04 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p8so3662561plk.9
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 19:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681095064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJOefRQrozTqAzaaP0k/ueE5wQvUaa1yyg3cUW9q0RM=;
+        b=JOtB5P+MButyoMf9OTRe1POvR1FUCeEkPzDMZv8Bf65mSDeY3ESN4yjsOLA9st3qAm
+         gYuvCr+rS8xZMdOSRNr+GQiBa95YINrW/NhmzXZEaYVvfvgUypoGq2TxvcpODn7tXZm1
+         88riwOcwh8sXn9EAAiAyjSqpkMvYmbzM8vHEcIb4T9o3IuYX5BYw5DICpMXbolHP6rGi
+         78Ux6vpGXbjJ7OHnMmCz7XwApLtcLuHnJ1RVGVWtH7Yw1rD49Pm8v4cn74JVV49M9Zde
+         K0QxZfdvJ5ZB6P21qLX9CaZ5CVljB8y33KUQrPL8DMN+OrDzqAXM5j/RrvwNYvB8BamF
+         Jcxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681095064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rJOefRQrozTqAzaaP0k/ueE5wQvUaa1yyg3cUW9q0RM=;
+        b=IeHiqLaMxiTLwsYIUtuKoD0/t+EVjtLbyhaQAuB7Gd3JaV8FOPsx+12dxcBuhAOFyD
+         UMK8JLhNmElON5B7NUnOt5wN5BGEK4PId5mFE4aaBEWaNc9vEVFzYjcTLBQ+SZ2BH80t
+         32V0zv1y34gNf+vLY5IdRkwafUWl+PfJKrQitq2F16ytUlPjGHddnUzcRyy4EUzu6BHj
+         vEdI2hUfbQQz2JsggozSm4rNwSmdc3Bbu1cN8EgiEBkQImgdzk8gWDGxPLOCPk2oC8Lf
+         FkrbLwg8JGHdZTFWaAlP44vTZKoiXvlXjkvk78bIv64mk9fd6EZdAwtQB+E02tVZmcZk
+         YXBg==
+X-Gm-Message-State: AAQBX9fji22Da95yFQ61DZRsUfJiQZGSBmohXtnXCTLgGw9EUdZeEGWG
+        FFdycnO0m/QjNS1K4w8EnwUu9g==
+X-Google-Smtp-Source: AKy350Yf2yL+hcn31obOfvgDB7o8eZAIg8yZihoYaCUkEzKXDRgpjBnJf850MT7CeXE2kvA0SURqjw==
+X-Received: by 2002:a17:902:e88c:b0:19f:35df:5d60 with SMTP id w12-20020a170902e88c00b0019f35df5d60mr12188126plg.22.1681095064232;
+        Sun, 09 Apr 2023 19:51:04 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b00199193e5ea1sm6544674plb.61.2023.04.09.19.51.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Apr 2023 19:51:03 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Waiman Long <longman@redhat.com>, Michal Hocko <mhocko@suse.com>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, rientjes@google.com,
+        Zefan Li <lizefan.x@bytedance.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] mm: oom: introduce cpuset oom
+Date:   Mon, 10 Apr 2023 10:50:55 +0800
+Message-Id: <20230410025056.22103-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v4 5/7] iommu/vt-d: Make device pasid attachment explicit
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
- <20230407180554.2784285-6-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230407180554.2784285-6-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/23 2:05 AM, Jacob Pan wrote:
-> @@ -2429,10 +2475,11 @@ static int __init si_domain_init(int hw)
->   	return 0;
->   }
->   
-> -static int dmar_domain_attach_device(struct dmar_domain *domain,
-> -				     struct device *dev)
-> +static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
-> +				     struct device *dev, ioasid_t pasid)
->   {
->   	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> +	struct device_pasid_info *dev_pasid;
->   	struct intel_iommu *iommu;
->   	unsigned long flags;
->   	u8 bus, devfn;
-> @@ -2442,43 +2489,57 @@ static int dmar_domain_attach_device(struct dmar_domain *domain,
->   	if (!iommu)
->   		return -ENODEV;
->   
-> +	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
-> +	if (!dev_pasid)
-> +		return -ENOMEM;
-> +
->   	ret = domain_attach_iommu(domain, iommu);
->   	if (ret)
-> -		return ret;
-> +		goto exit_free;
-> +
->   	info->domain = domain;
-> +	dev_pasid->pasid = pasid;
-> +	dev_pasid->dev = dev;
->   	spin_lock_irqsave(&domain->lock, flags);
-> -	list_add(&info->link, &domain->devices);
-> +	if (!info->dev_attached)
-> +		list_add(&info->link, &domain->devices);
-> +
-> +	list_add(&dev_pasid->link_domain, &domain->dev_pasids);
->   	spin_unlock_irqrestore(&domain->lock, flags);
->   
->   	/* PASID table is mandatory for a PCI device in scalable mode. */
->   	if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
->   		/* Setup the PASID entry for requests without PASID: */
->   		if (hw_pass_through && domain_type_is_si(domain))
-> -			ret = intel_pasid_setup_pass_through(iommu, domain,
-> -					dev, PASID_RID2PASID);
-> +			ret = intel_pasid_setup_pass_through(iommu, domain, dev, pasid);
->   		else if (domain->use_first_level)
-> -			ret = domain_setup_first_level(iommu, domain, dev,
-> -					PASID_RID2PASID);
-> +			ret = domain_setup_first_level(iommu, domain, dev, pasid);
->   		else
-> -			ret = intel_pasid_setup_second_level(iommu, domain,
-> -					dev, PASID_RID2PASID);
-> +			ret = intel_pasid_setup_second_level(iommu, domain, dev, pasid);
->   		if (ret) {
-> -			dev_err(dev, "Setup RID2PASID failed\n");
-> +			dev_err(dev, "Setup PASID %d failed\n", pasid);
->   			device_block_translation(dev);
-> -			return ret;
-> +			goto exit_free;
->   		}
->   	}
-> +	/* device context already activated,  we are done */
-> +	if (info->dev_attached)
-> +		goto exit;
->   
->   	ret = domain_context_mapping(domain, dev);
->   	if (ret) {
->   		dev_err(dev, "Domain context map failed\n");
->   		device_block_translation(dev);
-> -		return ret;
-> +		goto exit_free;
->   	}
->   
->   	iommu_enable_pci_caps(info);
-> -
-> +	info->dev_attached = 1;
-> +exit:
->   	return 0;
-> +exit_free:
-> +	kfree(dev_pasid);
-> +	return ret;
->   }
->   
->   static bool device_has_rmrr(struct device *dev)
-> @@ -4029,8 +4090,7 @@ static void device_block_translation(struct device *dev)
->   	iommu_disable_pci_caps(info);
->   	if (!dev_is_real_dma_subdevice(dev)) {
->   		if (sm_supported(iommu))
-> -			intel_pasid_tear_down_entry(iommu, dev,
-> -						    PASID_RID2PASID, false);
-> +			intel_iommu_detach_device_pasid(&info->domain->domain, dev, PASID_RID2PASID);
->   		else
->   			domain_context_clear(info);
->   	}
-> @@ -4040,6 +4100,7 @@ static void device_block_translation(struct device *dev)
->   
->   	spin_lock_irqsave(&info->domain->lock, flags);
->   	list_del(&info->link);
-> +	info->dev_attached = 0;
->   	spin_unlock_irqrestore(&info->domain->lock, flags);
->   
->   	domain_detach_iommu(info->domain, iommu);
-> @@ -4186,7 +4247,7 @@ static int intel_iommu_attach_device(struct iommu_domain *domain,
->   	if (ret)
->   		return ret;
->   
-> -	return dmar_domain_attach_device(to_dmar_domain(domain), dev);
-> +	return dmar_domain_attach_device_pasid(to_dmar_domain(domain), dev, PASID_RID2PASID);
->   }
+Cpusets constrain the CPU and Memory placement of tasks.
+`CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
+has never been utilized.
 
-For VT-d driver, attach_dev and attach_dev_pasid have different
-meanings. Merging them into one helper may lead to confusion. What do
-you think of the following code? The dmar_domain_attach_device_pasid()
-helper could be reused for attach_dev_pasid path.
+When a process in cpuset which constrain memory placement triggers
+oom, it may kill a completely irrelevant process on other numa nodes,
+which will not release any memory for this cpuset.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 7c2f4bd33582..09ae62bc3724 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2434,6 +2434,40 @@ static int __init si_domain_init(int hw)
-  	return 0;
-  }
+We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
+selecting victim from all cpusets with the same mems_allowed as the
+current cpuset.
 
+Example:
+
+Create two processes named mem_on_node0 and mem_on_node1 constrained
+by cpusets respectively. These two processes alloc memory on their
+own node. Now node0 has run out of memory, OOM will be invokled by
+mem_on_node0.
+
+Before this patch:
+
+Since `CONSTRAINT_CPUSET` do nothing, the victim will be selected from
+the entire system. Therefore, the OOM is highly likely to kill
+mem_on_node1, which will not free any memory for mem_on_node0. This
+is a useless kill.
+
+```
+[ 2786.519080] mem_on_node0 invoked oom-killer
+[ 2786.885738] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+[ 2787.181724] [  13432]     0 13432   787016   786745  6344704        0             0 mem_on_node1
+[ 2787.189115] [  13457]     0 13457   787002   785504  6340608        0             0 mem_on_node0
+[ 2787.216534] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
+[ 2787.229991] Out of memory: Killed process 13432 (mem_on_node1)
+```
+
+After this patch:
+
+The victim will be selected only in all cpusets that have the same
+mems_allowed as the cpuset that invoked oom. This will prevent
+useless kill and protect innocent victims.
+
+```
+[  395.922444] mem_on_node0 invoked oom-killer
+[  396.239777] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+[  396.246128] [   2614]     0  2614  1311294  1144192  9224192        0             0 mem_on_node0
+[  396.252655] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
+[  396.264068] Out of memory: Killed process 2614 (mem_on_node0)
+```
+
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Cc: <cgroups@vger.kernel.org>
+Cc: <linux-mm@kvack.org>
+Cc: <rientjes@google.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+Changes in v3:
+- Provide more details about the use case, testing, implementation.
+- Document the userspace visible change in Documentation.
+- Rename cpuset_cgroup_scan_tasks() to cpuset_scan_tasks() and add
+  a doctext comment about its purpose and how it should be used.
+- Take cpuset_rwsem to ensure that cpusets are stable.
+
+Changes in v2:
+- https://lore.kernel.org/all/20230404115509.14299-1-ligang.bdlg@bytedance.com/
+- Select victim from all cpusets with the same mems_allowed as the current cpuset.
+  (David Rientjes <rientjes@google.com>)
+
+v1:
+- https://lore.kernel.org/all/20220921064710.89663-1-ligang.bdlg@bytedance.com/
+- Introduce cpuset oom.
+---
+ .../admin-guide/cgroup-v1/cpusets.rst         | 14 +++++-
+ include/linux/cpuset.h                        |  6 +++
+ kernel/cgroup/cpuset.c                        | 44 +++++++++++++++++++
+ mm/oom_kill.c                                 |  4 ++
+ 4 files changed, 66 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v1/cpusets.rst b/Documentation/admin-guide/cgroup-v1/cpusets.rst
+index 5d844ed4df69..d686cd47e91d 100644
+--- a/Documentation/admin-guide/cgroup-v1/cpusets.rst
++++ b/Documentation/admin-guide/cgroup-v1/cpusets.rst
+@@ -25,7 +25,8 @@ Written by Simon.Derr@bull.net
+      1.6 What is memory spread ?
+      1.7 What is sched_load_balance ?
+      1.8 What is sched_relax_domain_level ?
+-     1.9 How do I use cpusets ?
++     1.9 What is cpuset oom ?
++     1.10 How do I use cpusets ?
+    2. Usage Examples and Syntax
+      2.1 Basic Usage
+      2.2 Adding/removing cpus
+@@ -607,8 +608,17 @@ If your situation is:
+  - The latency is required even it sacrifices cache hit rate etc.
+    then increasing 'sched_relax_domain_level' would benefit you.
+ 
++1.9 What is cpuset oom ?
++--------------------------
++If there is no available memory to allocate on the nodes specified by
++cpuset.mems, then an OOM (Out-Of-Memory) will be invoked.
 +
-+static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
-+					   struct intel_iommu *iommu,
-+					   struct device *dev, ioasid_t pasid)
++Since the victim selection is a heuristic algorithm, we cannot select
++the "perfect" victim. Therefore, currently, the victim will be selected
++from all the cpusets that have the same mems_allowed as the cpuset
++which invoked OOM.
+ 
+-1.9 How do I use cpusets ?
++1.10 How do I use cpusets ?
+ --------------------------
+ 
+ In order to minimize the impact of cpusets on critical kernel
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index 980b76a1237e..75465bf58f74 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -171,6 +171,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+ 	task_unlock(current);
+ }
+ 
++int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
++
+ #else /* !CONFIG_CPUSETS */
+ 
+ static inline bool cpusets_enabled(void) { return false; }
+@@ -287,6 +289,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+ 	return false;
+ }
+ 
++static inline int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
 +{
-+	struct device_pasid_info *dev_pasid;
-+	unsigned long flags;
-+	int ret;
-+
-+	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
-+	if (!dev_pasid)
-+		return -ENOMEM;
-+
-+	if (hw_pass_through && domain_type_is_si(domain))
-+		ret = intel_pasid_setup_pass_through(iommu, domain, dev, pasid);
-+	else if (domain->use_first_level)
-+		ret = domain_setup_first_level(iommu, domain, dev, pasid);
-+	else
-+		ret = intel_pasid_setup_second_level(iommu, domain, dev, pasid);
-+
-+	if (ret) {
-+		kfree(dev_pasid);
-+		return ret;
-+	}
-+
-+	dev_pasid->pasid = pasid;
-+	dev_pasid->dev = dev;
-+	spin_lock_irqsave(&domain->lock, flags);
-+	list_add(&dev_pasid->link_domain, &domain->dev_pasids);
-+	spin_unlock_irqrestore(&domain->lock, flags);
-+
 +	return 0;
 +}
+ #endif /* !CONFIG_CPUSETS */
+ 
+ #endif /* _LINUX_CPUSET_H */
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index bc4dcfd7bee5..4c51225568aa 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -4013,6 +4013,50 @@ void cpuset_print_current_mems_allowed(void)
+ 	rcu_read_unlock();
+ }
+ 
++/**
++ * cpuset_scan_tasks - specify the oom scan range
++ * @fn: callback function to select oom victim
++ * @arg: argument for callback function, usually a pointer to struct oom_control
++ *
++ * Description: This function is used to specify the oom scan range. Return 0 if
++ * no task is selected, otherwise return 1. The selected task will be stored in
++ * arg->chosen. Thins function can only be called in select_bad_process()
++ * while oc->onstraint == CONSTRAINT_CPUSET.
++ *
++ * The selection algorithm is heuristic, therefore requires constant iteration
++ * based on user feedback. Currently, we just iterate through all cpusets with
++ * the same mems_allowed as the current cpuset.
++ */
++int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
++{
++	int ret = 0;
++	struct css_task_iter it;
++	struct task_struct *task;
++	struct cpuset *cs;
++	struct cgroup_subsys_state *pos_css;
 +
-  static int dmar_domain_attach_device(struct dmar_domain *domain,
-  				     struct device *dev)
-  {
-@@ -2458,15 +2492,8 @@ static int dmar_domain_attach_device(struct 
-dmar_domain *domain,
-  	/* PASID table is mandatory for a PCI device in scalable mode. */
-  	if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
-  		/* Setup the PASID entry for requests without PASID: */
--		if (hw_pass_through && domain_type_is_si(domain))
--			ret = intel_pasid_setup_pass_through(iommu, domain,
--					dev, PASID_RID2PASID);
--		else if (domain->use_first_level)
--			ret = domain_setup_first_level(iommu, domain, dev,
--					PASID_RID2PASID);
--		else
--			ret = intel_pasid_setup_second_level(iommu, domain,
--					dev, PASID_RID2PASID);
-+		ret = dmar_domain_attach_device_pasid(domain, iommu, dev,
-+						      PASID_RID2PASID);
-  		if (ret) {
-  			dev_err(dev, "Setup RID2PASID failed\n");
-  			device_block_translation(dev);
-
->   
->   static int intel_iommu_map(struct iommu_domain *domain,
-> @@ -4675,26 +4736,52 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
->   		__mapping_notify_one(info->iommu, dmar_domain, pfn, pages);
->   }
->   
-> -static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
-> +static void intel_iommu_detach_device_pasid(struct iommu_domain *domain,
-> +					    struct device *dev, ioasid_t pasid)
->   {
-> -	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-> -	struct iommu_domain *domain;
-> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-> +	struct device_pasid_info *i, *dev_pasid = NULL;
-> +	struct intel_iommu *iommu = info->iommu;
-> +	unsigned long flags;
->   
-> -	/* Domain type specific cleanup: */
-> -	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
-> -	if (domain) {
-> -		switch (domain->type) {
-> -		case IOMMU_DOMAIN_SVA:
-> -			intel_svm_remove_dev_pasid(dev, pasid);
-> -			break;
-> -		default:
-> -			/* should never reach here */
-> -			WARN_ON(1);
-> +	spin_lock_irqsave(&dmar_domain->lock, flags);
-> +	list_for_each_entry(i, &dmar_domain->dev_pasids, link_domain) {
-> +		if (i->dev == dev && i->pasid == pasid) {
-> +			list_del(&i->link_domain);
-> +			dev_pasid = i;
->   			break;
->   		}
->   	}
-> +	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-> +	if (WARN_ON(!dev_pasid))
-> +		return;
-> +
-> +	/* PASID entry already cleared during SVA unbind */
-> +	if (domain->type != IOMMU_DOMAIN_SVA)
-> +		intel_pasid_tear_down_entry(iommu, dev, pasid, false);
-> +
-> +	kfree(dev_pasid);
-> +}
-> +
-> +static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
-> +{
-> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
-> +	struct dmar_domain *dmar_domain;
-> +	struct iommu_domain *domain;
-> +
-> +	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
-> +	dmar_domain = to_dmar_domain(domain);
-> +
-> +	/*
-> +	 * SVA Domain type specific cleanup: Not ideal but not until we have
-> +	 * IOPF capable domain specific ops, we need this special case.
-> +	 */
-> +	if (domain->type == IOMMU_DOMAIN_SVA)
-> +		return intel_svm_remove_dev_pasid(dev, pasid);
->   
-> -	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
-> +	intel_iommu_detach_device_pasid(domain, dev, pasid);
-> +	domain_detach_iommu(dmar_domain, info->iommu);
->   }
-
-The remove_dev_pasid path need to change only after attach_dev_pasid op
-is added, right? If so, we should move such change into the next patch.
-
->   
->   const struct iommu_ops intel_iommu_ops = {
-> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-> index 65b15be72878..b6c26f25d1ba 100644
-> --- a/drivers/iommu/intel/iommu.h
-> +++ b/drivers/iommu/intel/iommu.h
-> @@ -595,6 +595,7 @@ struct dmar_domain {
->   
->   	spinlock_t lock;		/* Protect device tracking lists */
->   	struct list_head devices;	/* all devices' list */
-> +	struct list_head dev_pasids;	/* all attached pasids */
->   
->   	struct dma_pte	*pgd;		/* virtual address */
->   	int		gaw;		/* max guest address width */
-> @@ -708,6 +709,7 @@ struct device_domain_info {
->   	u8 ats_supported:1;
->   	u8 ats_enabled:1;
->   	u8 dtlb_extra_inval:1;	/* Quirk for devices need extra flush */
-> +	u8 dev_attached:1;	/* Device context activated */
->   	u8 ats_qdep;
->   	struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
->   	struct intel_iommu *iommu; /* IOMMU used by this device */
-> @@ -715,6 +717,12 @@ struct device_domain_info {
->   	struct pasid_table *pasid_table; /* pasid table */
->   };
->   
-> +struct device_pasid_info {
-> +	struct list_head link_domain;	/* link to domain siblings */
-> +	struct device *dev;		/* physical device derived from */
-> +	ioasid_t pasid;			/* PASID on physical device */
-> +};
-> +
->   static inline void __iommu_flush_cache(
->   	struct intel_iommu *iommu, void *addr, int size)
->   {
-
-Best regards,
-baolu
++	/*
++	 * Situation gets complex with overlapping nodemasks in different cpusets.
++	 * TODO: Maybe we should calculate the "distance" between different mems_allowed.
++	 *
++	 * But for now, let's make it simple. Just iterate through all cpusets
++	 * with the same mems_allowed as the current cpuset.
++	 */
++	cpuset_read_lock();
++	rcu_read_lock();
++	cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
++		if (nodes_equal(cs->mems_allowed, task_cs(current)->mems_allowed)) {
++			css_task_iter_start(&(cs->css), CSS_TASK_ITER_PROCS, &it);
++			while (!ret && (task = css_task_iter_next(&it)))
++				ret = fn(task, arg);
++			css_task_iter_end(&it);
++		}
++	}
++	rcu_read_unlock();
++	cpuset_read_unlock();
++	return ret;
++}
++
+ /*
+  * Collection of memory_pressure is suppressed unless
+  * this flag is enabled by writing "1" to the special
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 044e1eed720e..228257788d9e 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -367,6 +367,8 @@ static void select_bad_process(struct oom_control *oc)
+ 
+ 	if (is_memcg_oom(oc))
+ 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
++	else if (oc->constraint == CONSTRAINT_CPUSET)
++		cpuset_scan_tasks(oom_evaluate_task, oc);
+ 	else {
+ 		struct task_struct *p;
+ 
+@@ -427,6 +429,8 @@ static void dump_tasks(struct oom_control *oc)
+ 
+ 	if (is_memcg_oom(oc))
+ 		mem_cgroup_scan_tasks(oc->memcg, dump_task, oc);
++	else if (oc->constraint == CONSTRAINT_CPUSET)
++		cpuset_scan_tasks(dump_task, oc);
+ 	else {
+ 		struct task_struct *p;
+ 
+-- 
+2.20.1
