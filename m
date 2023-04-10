@@ -2,154 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B916DCA02
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911E36DCA04
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDJRac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S230322AbjDJRam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjDJRaa (ORCPT
+        with ESMTP id S230315AbjDJRah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:30:30 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52E71BF3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:30:29 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id d83-20020a25e656000000b00b8befc985b5so14207775ybh.22
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:30:29 -0700 (PDT)
+        Mon, 10 Apr 2023 13:30:37 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1055A2681;
+        Mon, 10 Apr 2023 10:30:36 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id l1so6956982qvv.4;
+        Mon, 10 Apr 2023 10:30:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681147829;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=swVfre5E7m12aH0Nili/mE00RBn/7V3Gu0cV4TQa/FI=;
-        b=Bkm3kfKfijVWKSJdjja05oxaylJKNgze8NUBaNrlZrjyYxB2BhIx2QCbiYpMYHgunp
-         q9wpnImTxUPFCn+Obtm/P8HljpWVGrqboHSWsPwrb78ysw63WfhtsV/9PirFUGzp54Sw
-         71dE4ZUWfRATRyE2naB8qPLZSxDshvQofaiqaWQoHsxnj4PjkDgjwtH0m8YM6VeR+Xhj
-         PHuOWNB1u2d0sT44T9ps2SWjEU8wvY+WSlVHKjMimgd4beNNjExpHf02HfIP0KmaQjAB
-         U1FEWFYPDu639l7qQNHrgb71v2k17lDH6gdA+akXxIpRK/3TErLnfvYHrUdeeM4CBsKK
-         n0JQ==
+        d=gmail.com; s=20210112; t=1681147835; x=1683739835;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mfMMmtPEDLwOl/JKAguDStI8/SqoqRX9kqOTCMn7AGw=;
+        b=d6LAhlAD/HEDF+Wi2ybYcJFdo5uqQjKD+ha83RTcAkYnwlYy8WSeJfOvlZFPAIf3UE
+         KPtg1YNJ7TlBD+GKSKjI4yLiOGlnGtWiyQmbQAcYk/mWXWWnNTQO05v7COcmFDGUzIi6
+         8vLm8er86fjdvyL923sUS2gsfaEByCa3lik6RiqHL04t4DeyitM0XlmFew1GOxmaGh/r
+         yV72FYZY+xa61IkQv2SE/2R1zvp7ktDe3tiVDuOqae9c/WLk2oA3V/fBi7iaosPFDkpT
+         LVacqWc9OW0hy6q8Dh/Us02lNHs2jbpuGDE326h2PEVWDZk+XknOL6JDCCy9RqlvObfr
+         ArkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681147829;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=swVfre5E7m12aH0Nili/mE00RBn/7V3Gu0cV4TQa/FI=;
-        b=uL/Jf9wN99Y9ybiBkLPIk2I7fc2OnpREkqx1MtAIwqEGEJigkcT09Sh15RCYBdKfi3
-         rnNvFpocGw7ASz7aBFn2Hb9wv9md2DLDyw3sPnKiVpDPrtVL65j2Cnl2OgqGinPcsZ6G
-         DUSYc+xUyeUI0OgcxCamPTYVqia2rO1dFL5mvF277x/QFx1AAmBuKAXivJVZC8HbGngl
-         t/Qe6XlJNgUMJRjo1vuVdZUBinUfdeoIwf8yNc79oJCNwdOG2p4uNvqqj3ympKJZb0XR
-         mJHdZGGj7LSA0AUTRBUJP2oeaTcme8NcvYh9dautBOUifKcbhpLnDRqPZQ2ZiRHFGUf2
-         /8pA==
-X-Gm-Message-State: AAQBX9dCqQzFnkE/pl6FiyWvqG9BmSHMJSR2AsO6lqNM2Rbw61mLDaqJ
-        RKhV/oTvyr9XrjUDUc+4GTJ4xc0u3bU=
-X-Google-Smtp-Source: AKy350ZVyCIs5di6w8hxNKACB2pecEoa4FTRa10a0IuTcTLYi3jcffJrMoieyodIccC2/MdJ2P/JXn3MYIc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ad1b:0:b0:54c:637a:a154 with SMTP id
- l27-20020a81ad1b000000b0054c637aa154mr6574846ywh.8.1681147829075; Mon, 10 Apr
- 2023 10:30:29 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 10:30:27 -0700
-In-Reply-To: <ZCYj9yfbf+65OThn@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230313111022.13793-1-yan.y.zhao@intel.com> <ZB4uoe9WBzhG9ddU@google.com>
- <ZCOaHWE6aS0vjvya@yzhao56-desk.sh.intel.com> <75ae80f7-b86e-3380-b3da-0e2201df4b7f@redhat.com>
- <ZCVcvuddkEFKW/0p@yzhao56-desk.sh.intel.com> <ZCXRgw5+5A7aluNc@google.com> <ZCYj9yfbf+65OThn@yzhao56-desk.sh.intel.com>
-Message-ID: <ZDRHsyM00sJ1j4qX@google.com>
-Subject: Re: [PATCH v3] KVM: VMX: fix lockdep warning on posted intr wakeup
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1681147835; x=1683739835;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mfMMmtPEDLwOl/JKAguDStI8/SqoqRX9kqOTCMn7AGw=;
+        b=C19ExgAg+B2v1ugWCrvC2V7Mz761OOoQoThLCg/O3T2eHP3OGs97yGtlLAp2CDFPH0
+         zbbae8zn4B8/MBf/qW5L1Y+Od4pEWFclPSeEtHuRWuVGuaL8aUBhI7Y+8Sz5oTLAQfly
+         Zrhw8UdNvT4jkfyQT6UtYHPAm1n88X9vkEJlDRyjSOkCppvShZhrCxf7JOTC2/QHE0GQ
+         0W+Ut5qaQo0KzhmDOUb1ZHkEd6d7mZTKY9999Z7KoHZsZFtZg7jEEuwra5Fz+/Jidhl9
+         LqYx5WaawQCgeg6PyhOHqvrbclf2QUB1/4HLzBxXUOV5r535C4uZ5YaXmIVh2jfNYH2U
+         JWKA==
+X-Gm-Message-State: AAQBX9cBW43t/ccEar+Ggd3Lp36trulm2FvViBanaJQNNFqXXy1u1WOo
+        lwiJqHNkBOMeZ4Wg5qM7l8VcqWXHY5M=
+X-Google-Smtp-Source: AKy350btNdvQi8RnKbkYq8pj3Vj+PYTvnVtml87+DRqgn0usWQrRdpJIUR64NxGg9qmQZKQy8iX0/Q==
+X-Received: by 2002:ad4:5de8:0:b0:5ed:68ba:ce6b with SMTP id jn8-20020ad45de8000000b005ed68bace6bmr7079818qvb.4.1681147835104;
+        Mon, 10 Apr 2023 10:30:35 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id e15-20020a0cf74f000000b005ead964bfa2sm1257153qvo.127.2023.04.10.10.30.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 10:30:34 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 13:30:34 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>, Lu Wei <luwei32@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com, brouer@redhat.com,
+        keescook@chromium.org, jbenc@redhat.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
+References: <20230410022152.4049060-1-luwei32@huawei.com>
+ <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: Add check for csum_start in
+ skb_partial_csum_set()
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023, Yan Zhao wrote:
-> On Thu, Mar 30, 2023 at 11:14:27AM -0700, Sean Christopherson wrote:
-> > On Thu, Mar 30, 2023, Yan Zhao wrote:
-> > > While with v3 of this patch (sched_in path holds both out_lock and in_lock),
-> > > lockdep is still able to warn about this issue.
-> > 
-> > Couldn't we just add a manual assertion?  That'd also be a good location for a
-> > comment to document all of this, and to clarify that current->pi_lock is a
-> > completely different lock that has nothing to do with posted interrupts.
-> > 
-> > It's not foolproof, but any patches that substantially touch this code need a
-> > ton of scrutiny as the scheduling interactions are gnarly, i.e. IMO a deadlock
-> > bug sneaking in is highly unlikely.
-> > 
-> > diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> > index 94c38bea60e7..19325a10e42f 100644
-> > --- a/arch/x86/kvm/vmx/posted_intr.c
-> > +++ b/arch/x86/kvm/vmx/posted_intr.c
-> > @@ -90,6 +90,7 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
-> >          */
-> >         if (pi_desc->nv == POSTED_INTR_WAKEUP_VECTOR) {
-> >                 raw_spin_lock(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu));
-> > +               lockdep_assert_not_held(&current->pi_lock);
-> >                 list_del(&vmx->pi_wakeup_list);
-> >                 raw_spin_unlock(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu));
-> >         }
-> Hmm...No. It's not about "current->pi_lock" cannot be held, it's about
-> the lock ordering.
-> In sched_out thread, the lock ordering is
-> "current->pi_lock" --> "rq->__lock" --> "per_cpu(wakeup_vcpus_on_cpu_lock, cpu)",
-> then in sched_in thread, if the lock ordering is
-> "per_cpu(wakeup_vcpus_on_cpu_lock, cpu)" --> "current->pi_lock",
-> circular locking dependency will happen.
-> while if the lock ordering in sched_in thread is
-> "current->pi_lock" --> "per_cpu(wakeup_vcpus_on_cpu_lock, cpu)",
-> it's fine!
+Eric Dumazet wrote:
+> On Mon, Apr 10, 2023 at 4:22=E2=80=AFAM Lu Wei <luwei32@huawei.com> wro=
+te:
+> >
+> > If an AF_PACKET socket is used to send packets through a L3 mode ipvl=
+an
+> > and a vnet header is set via setsockopt() with the option name of
+> > PACKET_VNET_HDR, the value of offset will be nagetive in function
+> > skb_checksum_help() and trigger the following warning:
+> >
+> > WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
+> > skb_checksum_help+0x2dc/0x390
+> > ......
+> > Call Trace:
+> >  <TASK>
+> >  ip_do_fragment+0x63d/0xd00
+> >  ip_fragment.constprop.0+0xd2/0x150
+> >  __ip_finish_output+0x154/0x1e0
+> >  ip_finish_output+0x36/0x1b0
+> >  ip_output+0x134/0x240
+> >  ip_local_out+0xba/0xe0
+> >  ipvlan_process_v4_outbound+0x26d/0x2b0
+> >  ipvlan_xmit_mode_l3+0x44b/0x480
+> >  ipvlan_queue_xmit+0xd6/0x1d0
+> >  ipvlan_start_xmit+0x32/0xa0
+> >  dev_hard_start_xmit+0xdf/0x3f0
+> >  packet_snd+0xa7d/0x1130
+> >  packet_sendmsg+0x7b/0xa0
+> >  sock_sendmsg+0x14f/0x160
+> >  __sys_sendto+0x209/0x2e0
+> >  __x64_sys_sendto+0x7d/0x90
+> >
+> > The root cause is:
+> > 1. skb->csum_start is set in packet_snd() according vnet_hdr:
+> >    skb->csum_start =3D skb_headroom(skb) + (u32)start;
+> >
+> >    'start' is the offset from skb->data, and mac header has been
+> >    set at this moment.
+> >
+> > 2. when this skb arrives ipvlan_process_outbound(), the mac header
+> >    is unset and skb_pull is called to expand the skb headroom.
+> >
+> > 3. In function skb_checksum_help(), the variable offset is calculated=
 
-Right, but IIUC, neither ordering happens today.  In other words, the lockdep
-assertion isn't defining a hard rule, rather it's enforcing an assumption that KVM
-relies on to avoid a potential deadlock.
+> >    as:
+> >       offset =3D skb->csum_start - skb_headroom(skb);
+> >
+> >    since skb headroom is expanded in step2, offset is nagetive, and i=
+t
+> >    is converted to an unsigned integer when compared with skb_headlen=
 
-> If sched_out thread and sched_in thread actually should hold the same
-> subclass of lock, we can't fool the lockdep just to let it shut up.
-> And, we may not be able to list or document out all potential locks that cannot
-> be held inside the "per_cpu(wakeup_vcpus_on_cpu_lock, cpu)", right?
+> >    and trigger the warning.
+> =
 
-Eh, IMO this is a non-issue.  It's a raw_spin_lock() in an IRQs disabled section
-that wraps a single line of benign code.  If it's really concerning, we could add
-a scary comment like this.
+> Not sure why it is negative ? This seems like the real problem...
+> =
 
-diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-index 94c38bea60e7..a7ec0371aeca 100644
---- a/arch/x86/kvm/vmx/posted_intr.c
-+++ b/arch/x86/kvm/vmx/posted_intr.c
-@@ -87,6 +87,12 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
-         * If the vCPU was waiting for wakeup, remove the vCPU from the wakeup
-         * list of the _previous_ pCPU, which will not be the same as the
-         * current pCPU if the task was migrated.
-+        *
-+        * Stating the obvious, do not under any circumstance let this path
-+        * acquire a different lock while holding the per-CPU lock.  To avoid
-+        * false postives in lockdep, KVM uses different lockdep subclasses for
-+        * vmx_vcpu_pi_put() vs vmx_vcpu_pi_load(), i.e. lockdep may not be
-+        * to detect circular dependencies and other issues.
-         */
-        if (pi_desc->nv == POSTED_INTR_WAKEUP_VECTOR) {
-                raw_spin_lock(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu));
- 
-> BTW, could you tell me why you think v3 complicates KVM's functionality?
-> It just splits a single lock into two sub locks, and let irq path only
+> csum_start is relative to skb->head, regardless of pull operations.
+> =
 
-Heh, "just".  
+> whatever set csum_start to a too small value should be tracked and fixe=
+d.
 
-> takes in_lock, sched_out path only takes out_lock, while sched_in path takes
-> both in_lock and out_lock.
-> IMHO, it does not make any functional change to KVM code.
-> Maybe it's because the commit message is not well written and gave people a wrong
-> impression that the logic changes a lot?
+Right. The only way I could see it go negative is if something does
+the equivalent of pskb_expand_head with positive nhead, and without
+calling skb_headers_offset_update.
 
-No, this is not a problem that can be solved by any changelog.  My very strong
-objection to having two separate locks is that when reading the code, it's not
-remotely obvious why two locks are needed, or that the code is correct.  Adding
-copious amounts of documentation/comments can help, but it'll never fully solve
-the problem that having two locks simply isn't intuitive/straightforward.
+Perhaps the cause can be found by instrumenting all the above
+functions in the trace to report skb_headroom and csum_start.
+And also virtio_net_hdr_to_skb.
