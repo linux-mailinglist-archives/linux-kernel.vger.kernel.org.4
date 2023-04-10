@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318FF6DCC60
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62AA6DCC4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDJUyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S229828AbjDJUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDJUxq (ORCPT
+        with ESMTP id S229485AbjDJUxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 16:53:46 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0128DE6F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id g5so8916390wrb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681160023; x=1683752023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
-        b=mSw0zD5otsKK5tmRq1nzEby61f1faooSdycceSRUQVSbqwQtQ3QNrRcjZiruaVhTX1
-         01z0EFsycSofwCc38R6wZMtBEmoO7U5lrSgky/sBpvvget+6owZTp3TaT9grVrgYEJxe
-         3IFHUkU/yH0MnYIux9ZZElCzeEEF7gId0w05Qshto+uJElSmGN/miERwnchMIKeSSDwb
-         2jADe8x34PHeZfU50+CCeeCYv5rTqPxvMnpPmPgrgFsO8MFdU9hSujx45zKX+kMvCVrE
-         dcJO2yuj8TD54nLGr8CpsZU02rvzY812iXt2q1vbZ4uCsX8NNW9mJ0zqF7mtQnfBiooT
-         jKyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681160023; x=1683752023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bkQUnOWLA+V2iTlaapxkS0DuXVJow8vrvqyKzHmwuBE=;
-        b=HW7W5ZREAbd8B9U/OJ4auLwe1kKfvh+xOMU3jk100mbo01HHNHVNM2ekQQfu6KrLBc
-         KiIjl7wznfjuAvGgY5ZWw6AQ/rBSnkztUqWvJtiVD1ND8rH35iQEZwADtCU0qaukYi8J
-         zrZnlcc9k683y1sI23lG7FHL/OPw/2EmrYlicBLIkQ7jrMpm0D5xzL9xr///giBjz3+l
-         tZ1KVLka7O2s7AsyHd+tkLwUrb3AKaNMn54yjeoajwyE9zxGvMvFs+FktngjuVukK25a
-         h/x1ppl4a8schioFRvqMdm8NZYoGC9GV9uX48Qs0iyYUyhGMuVlBqbxDPpe46ommtdpJ
-         Z0zg==
-X-Gm-Message-State: AAQBX9frshONTzKMPM2a5RJQnhEbrXSzUJZnkG86MTZGLpi7AX5hsweq
-        +LDRdXiVjBBIQZ4COS55H3uEPw==
-X-Google-Smtp-Source: AKy350bg2a4lxEjB/SUZECrf0UoKpqThrQonwo7vjEvFnpkEwzrg+Jh/9wFjd/+2RSeBjkpV2n70Tg==
-X-Received: by 2002:adf:e885:0:b0:2e4:506c:6483 with SMTP id d5-20020adfe885000000b002e4506c6483mr343276wrm.48.1681160023519;
-        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 7/7] thermal/drivers/intel_menlow: Make additionnal sysfs information optional
-Date:   Mon, 10 Apr 2023 22:53:05 +0200
-Message-Id: <20230410205305.1649678-8-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
+        Mon, 10 Apr 2023 16:53:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2D4AB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:32 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681160010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R4JQWssSZwpQKK+gUirN9oNcVHbnzbE+PBErzg92h2M=;
+        b=DsmfJLSDX9OtUzzTWCfTrRHh+MsLRg+vq/olJ/IGvkeDyllNBjs3n4B6usagSoNFN9xmPC
+        6A3b1ronjJ+xfsiVUpWJMB+dNtjlcnBOEmgQeM63YXuN9w8r3cw3SWcwFbycEGZ9FWptiB
+        vpWWKXTImh+Z99aAt/E+7Veb9SuRiXVpcYGEOrJca/Udqt1lNDbf3JDLpHS2edd6dcFuOW
+        SyebLdfZCqkZUi27/lyG5bHHwihJat9/VS1dP8xAE8VaO4qMx5dxC7AxSsQPiwPUtt4tmj
+        zB3riat/ZP+7GdbzMX+OldTTq0iiuXXupZ3aAmXRfUhxP8j8yWcjwFD8w+A4xA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681160010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R4JQWssSZwpQKK+gUirN9oNcVHbnzbE+PBErzg92h2M=;
+        b=hEzrXCQ4TUe2yCP6o4OX6MespJKQQ0CY1WRuSZDS2tcHf0RiOXmJgDtiJaW6f1OngO/oTA
+        /eU56R48Dk9hjJCw==
+To:     Ye Bin <yebin@huaweicloud.com>, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk
+Cc:     linux-kernel@vger.kernel.org, dchinner@redhat.com,
+        yebin10@huawei.com, yebin@huaweicloud.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: [PATCH v2 2/2] lib/percpu_counter: fix dying cpu compare race
+In-Reply-To: <20230406015629.1804722-3-yebin@huaweicloud.com>
+References: <20230406015629.1804722-1-yebin@huaweicloud.com>
+ <20230406015629.1804722-3-yebin@huaweicloud.com>
+Date:   Mon, 10 Apr 2023 22:53:30 +0200
+Message-ID: <877cuj1mt1.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +60,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Menlon thermal driver creates specific files in the thermal zone
-sysfs class. It is specific to Menlon and these entries look debug
-code. It is probable these are not needed.
+On Thu, Apr 06 2023 at 09:56, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>
+> In commit 8b57b11cca88 ("pcpcntrs: fix dying cpu summation race") a race
+> condition between a cpu dying and percpu_counter_sum() iterating online CPUs
+> was identified.
+> Acctually, there's the same race condition between a cpu dying and
+> __percpu_counter_compare(). Here, use 'num_online_cpus()' for quick judgment.
+> But 'num_online_cpus()' will be decreased before call 'percpu_counter_cpu_dead()',
+> then maybe return incorrect result.
+> To solve above issue, also need to add dying CPUs count when do quick judgment
+> in __percpu_counter_compare().
 
-Let's make the code optional and disable it by default.
+This is all bogus including the above commit.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/intel/intel_menlow.c | 3 +++
- 1 file changed, 3 insertions(+)
+All CPU masks including cpu_online_mask and cpu_dying_mask are only
+valid when the context is:
 
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index d720add918ff..d46dacea1b4d 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -374,6 +374,9 @@ static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
- 	struct intel_menlow_attribute *attr;
- 	int result;
- 
-+	if (!IS_ENABLED(CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY))
-+		return 0;
-+	
- 	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
- 	if (!attr)
- 		return -ENOMEM;
--- 
-2.34.1
+  - A CPU hotplug callback
 
+  - Any other code which holds cpu_hotplug_lock read or write locked.
+
+cpu_online_mask is special in that regard. It is also protected against
+modification in any preemption disabled region, but that's a pure
+implementation detail.
+
+cpu_dying_mask is a random number generator w/o cpu_hotplug_lock being
+held. And even with that lock held any cpumask operation on it is silly.
+The mask is a core detail:
+
+  commit e40f74c535b8 "cpumask: Introduce DYING mask"
+    
+    Introduce a cpumask that indicates (for each CPU) what direction the
+    CPU hotplug is currently going. Notably, it tracks rollbacks. Eg. when
+    an up fails and we do a roll-back down, it will accurately reflect the
+    direction.
+
+It does not tell anything to a user which is not aware of the actual
+hotplug state machine state.
+
+
+The real reason for this percpu counter issue is how percpu counter
+hotplug callbacks are implemented: They are asymmetric and at the
+completely wrong place.
+
+The above 8b57b11cca88 ("pcpcntrs: fix dying cpu summation race") was
+done via XFS and without the courtesy of CC'ing the people who care
+about the CPU hotplug core. The lenghty analysis of this commit is all
+shiny, but fundamentally wrong. See above.
+
+I'm way too tired to come up with a proper fix for this mess, but I'm
+going to stare at it tomorrow morning with brain awake.
+
+Thanks,
+
+        tglx
