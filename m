@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A196DCA0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756946DCA12
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjDJReg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S230133AbjDJRfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjDJRed (ORCPT
+        with ESMTP id S229703AbjDJRfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:34:33 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F52212B;
-        Mon, 10 Apr 2023 10:34:22 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 703EF604ED;
-        Mon, 10 Apr 2023 19:34:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1681148059; bh=q2v0ptTDj156LcDeCyn8w8H/tdTIqyuL5BCBqmUEdRE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=jL7QL8k2CjiI30QCPlaoOhfhzPbxiSecthfToL392FhtLcXG1kMOngbacK9Pc0nW4
-         o0N4Ez+Y4eSEp6JEWA4vqDRMmYuT4M6rfWujRHs3224PcQ2u8WNnmQpjeShZ3yM0L2
-         3GhItSlvMvJinfgVVEBLW1fV25TgScaKri+1A5A6CKvbXg6MVfU841KDmEchfwiEz2
-         Utb3sHgzui5jr2Pk7lTUEMbCRUJL/Wpe5Qf338OMRerQeRIjEATzhaW7/Kj6yvdoxK
-         5QuoI6Qocx0ye/4YPzUUloF9coAQiZYkEx/tXLJ6vcNp6bb6gC8jum4+/jw2k19UGR
-         mb3hGJ30+br0A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8GmTCmkQFnk8; Mon, 10 Apr 2023 19:34:16 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [94.250.188.177])
-        by domac.alu.hr (Postfix) with ESMTPSA id 973FB604F6;
-        Mon, 10 Apr 2023 19:34:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1681148056; bh=q2v0ptTDj156LcDeCyn8w8H/tdTIqyuL5BCBqmUEdRE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=D1YA9sSRWvqUWYlwm2S7BrPv9g+d2clCtXJE/z5vKdFErVKKa670qyBQvwQrGtxoL
-         28TpH3YiG3ObeEE3vkJn8VMQuyP0K1NhRnfqKNT6GuVp93osXxkpRqlIPFX26Z0OvC
-         Z5Ff4Qa+dWCLy8TOxDnKAkNYV+wqvTkcYD1w+rhKABv/OtzHSz+EIIjVJwYqA8G0cP
-         AvnQfJfyg3HjlPM5JLWHKGCsFbdEoqlbbfNBME1sBEV9WW2Eehb8cQ8NNW27qkwD+9
-         qI3kqYutJ+V1JqV3J8zUR3WofiJ8gM/VBCVS+irhBDQEr9ClLqRNcc/ACnzxN49N5q
-         4cBgLNSXgxDaw==
-Message-ID: <7650b2eb-0aee-a2b0-2e64-c9bc63210f67@alu.unizg.hr>
-Date:   Mon, 10 Apr 2023 19:34:09 +0200
+        Mon, 10 Apr 2023 13:35:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F372123;
+        Mon, 10 Apr 2023 10:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681148121; x=1712684121;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vhVw5OFDRc/HhALHYAky466L4C5uYZxbntzeNjO/Zj0=;
+  b=aiWdKKyzVEPL/Ftocwg1fQPIzrPw5g7uqFVNON274nU2E8P10O1xoqFv
+   xMLEu6iMtD26QMzConWYApa3aYxqg8Ub72zsukEkEyyg0IrhsDZWvm1Qq
+   hBLhWyG6kcvOyScI+x3EOY/LI2GQNoKSYj/wNl0LXcf2LxJb5kQQ3bfZH
+   6KmB5LVtb/Y0TCF41zTJs7dZpU/e8y0uVIIl3FUH0zg1VT4neHv6uXVaz
+   QLUrPt8cy9rZJ6a9VM24ueniKXb+WFil2inKbWPJRpEglV5eQNfbOHH37
+   IBLgMRbm0JF5qd4xBAUZzAm56kNNL9z2roTgrI+S2qR7JVZ63s9qyuUE9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="406242460"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="406242460"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 10:35:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="799573853"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="799573853"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Apr 2023 10:35:05 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bp@alien8.de,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Rui Salvaterra <rsalvaterra@gmail.com>, stable@kernel.org
+Subject: [PATCH] thermal: intel: Fix unchecked MSR issue
+Date:   Mon, 10 Apr 2023 10:35:01 -0700
+Message-Id: <20230410173501.3743570-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [BUG] [FIXED: TESTED] kmemleak in rtnetlink_rcv() triggered by
- selftests/drivers/net/team in build cdc9718d5e59
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>
-References: <78a8a03b-6070-3e6b-5042-f848dab16fb8@alu.unizg.hr>
- <ZDLyZX545Cw+aLhE@shredder>
- <67b3fa90-ad29-29f1-e6f3-fb674d255a1e@alu.unizg.hr>
-Content-Language: en-US, hr
-In-Reply-To: <67b3fa90-ad29-29f1-e6f3-fb674d255a1e@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,340 +60,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09. 04. 2023. 20:47, Mirsad Goran Todorovac wrote:
-> On 09. 04. 2023. 19:14, Ido Schimmel wrote:
->> On Sun, Apr 09, 2023 at 01:49:30PM +0200, Mirsad Goran Todorovac wrote:
->>> Hi all,
->>>
->>> There appears to be a memleak triggered by the selftest drivers/net/team.
->>
->> Thanks for the report. Not sure it's related to team, see below.
-> 
-> Not at all, I'm really encouraged that this leak is fixed so quickly and neatly.
-> 
-> Now it isn't clear to me why I did not cut the possibility in half,
-> but I assumed that it was the drivers/net/team, and it wouldn't work
-> for me without the former.
-> 
-> They say that the assumption is the mother of all blunders :-)
-> 
-> I was lucky to choose the right entry function and the maintainers,
-> at least I hope so.
-> 
-> (Additionally, I saw that bond_enslave() is Jay and Andy's support, so
-> I added them to Cc:, if that's not a problem.)
-> 
->>> # cat /sys/kernel/debug/kmemleak
->>> unreferenced object 0xffff8c18def8ee00 (size 256):
->>>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
->>>   hex dump (first 32 bytes):
->>>     00 20 09 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
->>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>>   backtrace:
->>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
->>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>     [<ffffffffc176515e>] 0xffffffffc176515e
->>
->> Don't know what this is. Might be another issue.
-> 
-> I really couldn't tell.
-> 
->>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>> unreferenced object 0xffff8c18250d3700 (size 32):
->>>   comm "ip", pid 5727, jiffies 4294961159 (age 954.244s)
->>>   hex dump (first 32 bytes):
->>>     a0 ee f8 de 18 8c ff ff a0 ee f8 de 18 8c ff ff  ................
->>>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
->>>   backtrace:
->>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
->>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>     [<ffffffffc176515e>] 0xffffffffc176515e
->>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>> unreferenced object 0xffff8c1846e16800 (size 256):
->>>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
->>>   hex dump (first 32 bytes):
->>>     00 20 f7 de 18 8c ff ff 00 00 00 00 00 00 00 00  . ..............
->>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>>   backtrace:
->>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>     [<ffffffffb6dbc00b>] vlan_vid_add+0x11b/0x290
->>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
->>
->> This shows that the issue is related to the bond driver, not team.
-> 
-> Now it seems obvious. But I am not that deep into the bond and team drivers
-> to tell without your help.
-> 
->>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>> unreferenced object 0xffff8c184c5ff2a0 (size 32):
->>
->> This is 'struct vlan_vid_info'
->>
->>>   comm "ip", pid 7837, jiffies 4295135225 (age 258.160s)
->>>   hex dump (first 32 bytes):
->>>     a0 68 e1 46 18 8c ff ff a0 68 e1 46 18 8c ff ff  .h.F.....h.F....
->>>     81 00 00 00 01 00 00 00 cc cc cc cc cc cc cc cc  ................
->>             ^ VLAN ID 0
-> 
-> This is expert insight. Looks all Greek to me.
-> 
->>>   backtrace:
->>>     [<ffffffffb60fb25c>] slab_post_alloc_hook+0x8c/0x3e0
->>>     [<ffffffffb6102b39>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>>     [<ffffffffb607684e>] kmalloc_trace+0x2e/0xc0
->>>     [<ffffffffb6dbc064>] vlan_vid_add+0x174/0x290
->>>     [<ffffffffb6dbcffc>] vlan_device_event+0x19c/0x880
->>>     [<ffffffffb5dde4d7>] raw_notifier_call_chain+0x47/0x70
->>>     [<ffffffffb6ab6940>] call_netdevice_notifiers_info+0x50/0xa0
->>>     [<ffffffffb6ac7574>] dev_open+0x94/0xa0
->>>     [<ffffffffc177115e>] bond_enslave+0x34e/0x1840 [bonding]
->>>     [<ffffffffb6ada6b0>] do_set_master+0x90/0xb0
->>>     [<ffffffffb6adc5f4>] do_setlink+0x514/0x11f0
->>>     [<ffffffffb6ae4507>] __rtnl_newlink+0x4e7/0xa10
->>>     [<ffffffffb6ae4a8c>] rtnl_newlink+0x4c/0x70
->>>     [<ffffffffb6adf334>] rtnetlink_rcv_msg+0x184/0x5d0
->>>     [<ffffffffb6b6ad1e>] netlink_rcv_skb+0x5e/0x110
->>>     [<ffffffffb6ada0e9>] rtnetlink_rcv+0x19/0x20
->>
->> VLAN ID 0 is automatically added by the 8021q driver when a net device
->> is opened. In this case it's a device being enslaved to a bond. I
->> believe the issue was exposed by the new bond test that was added in
->> commit 222c94ec0ad4 ("selftests: bonding: add tests for ether type
->> changes") as part of v6.3-rc3.
->>
->> The VLAN is supposed to be removed by the 8021q driver when a net device
->> is closed and the bond driver indeed calls dev_close() when a slave is
->> removed. However, this function is a NOP when 'IFF_UP' is not set.
->> Unfortunately, when a bond changes its type to Ethernet this flag is
->> incorrectly cleared in bond_ether_setup(), causing this VLAN to linger.
->> As far as I can tell, it's not a new issue.
->>
->> Temporary fix is [1]. Please test it although we might end up with a
->> different fix (needs more thinking and it's already late here).
-> 
-> This fix worked.
-> 
-> In case you submit a formal temporary patch, please add
-> 
-> Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> 
-> at your convenience.
-> 
-> The issue doesn't seem exploitable without proper privileges, but it is a nice fix
-> nevertheless.
-> 
->> Reproduced using [2]. You can see in the before/after output how the
->> flag is cleared/retained [3].
->>
->> [1]
->> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
->> index 236e5219c811..50dc068dc259 100644
->> --- a/drivers/net/bonding/bond_main.c
->> +++ b/drivers/net/bonding/bond_main.c
->> @@ -1777,14 +1777,15 @@ void bond_lower_state_changed(struct slave *slave)
->>  
->>  /* The bonding driver uses ether_setup() to convert a master bond device
->>   * to ARPHRD_ETHER, that resets the target netdevice's flags so we always
->> - * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE if it was set
->> + * have to restore the IFF_MASTER flag, and only restore IFF_SLAVE and IFF_UP
->> + * if they were set
->>   */
->>  static void bond_ether_setup(struct net_device *bond_dev)
->>  {
->> -	unsigned int slave_flag = bond_dev->flags & IFF_SLAVE;
->> +	unsigned int flags = bond_dev->flags & (IFF_SLAVE | IFF_UP);
->>  
->>  	ether_setup(bond_dev);
->> -	bond_dev->flags |= IFF_MASTER | slave_flag;
->> +	bond_dev->flags |= IFF_MASTER | flags;
->>  	bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
->>  }
->>  
->> [2]
->> #!/bin/bash
->>
->> ip link add name t-nlmon type nlmon
->> ip link add name t-dummy type dummy
->> ip link add name t-bond type bond mode active-backup
->>
->> ip link set dev t-bond up
->> ip link set dev t-nlmon master t-bond
->> ip link set dev t-nlmon nomaster
->> ip link show dev t-bond
->> ip link set dev t-dummy master t-bond
->> ip link show dev t-bond
->>
->> ip link del dev t-bond
->> ip link del dev t-dummy
->> ip link del dev t-nlmon
->>
->> [3]
->> Before:
->>
->> 12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
->>     link/netlink
->> 12: t-bond: <BROADCAST,MULTICAST,MASTER,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
->>     link/ether ce:b2:31:0a:53:83 brd ff:ff:ff:ff:ff:ff
->>
->> After:
->>
->> 12: t-bond: <NO-CARRIER,BROADCAST,MULTICAST,MASTER,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
->>     link/netlink
->> 12: t-bond: <BROADCAST,MULTICAST,MASTER,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
->>     link/ether 5a:18:e7:85:11:73 brd ff:ff:ff:ff:ff:ff
-> 
-> Thank you once again for your patch and your quick response!
-> 
-> Please consider Cc:-ing me for testing the official patch in the original environment.
-> 
-> (Though it is a known HW, there might be BIOS update and fw issues.)
+Some older processors don't allow BIT(13) and BIT(15) in the current
+mask set by "THERM_STATUS_CLEAR_CORE_MASK". This results in:
 
-Hi, Ido,
+unchecked MSR access error: WRMSR to 0x19c (tried to
+write 0x000000000000aaa8) at rIP: 0xffffffff816f66a6
+(throttle_active_work+0xa6/0x1d0)
 
-I've ran "make kselftest" with vanilla torvalds tree 6.3-rc5 + your patch.
+To avoid unchecked MSR issues, check cpuid for each feature and then
+form core mask. Do the same for package mask set by
+"THERM_STATUS_CLEAR_PKG_MASK".
 
-It failed two lines after "enslaved device client - ns-A IP" which passed OK.
+Introduce functions thermal_intr_core_clear_mask() and
+thermal_intr_pkg_clear_mask() to set core and package mask respectively.
+These functions are called during initialization.
 
-Is this hang for 5 hours in selftests: net: fcnal-test.sh test, at the line
-(please see to the end):
+Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
+Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Link: https://lore.kernel.org/lkml/cdf43fb423368ee3994124a9e8c9b4f8d00712c6.camel@linux.intel.com/T/
+Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@kernel.org # 6.2+
+---
+ drivers/thermal/intel/therm_throt.c | 73 ++++++++++++++++++++++++++---
+ 1 file changed, 66 insertions(+), 7 deletions(-)
 
-# ###########################################################################
-# IPv4 address binds
-# ###########################################################################
-# 
-# 
-# #################################################################
-# No VRF
-# 
-# SYSCTL: net.ipv4.ping_group_range=0 2147483647
-# 
-# TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-# TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-# TEST: Raw socket bind to local address - ns-A loopback IP                     [ OK ]
-# TEST: Raw socket bind to local address after device bind - ns-A loopback IP   [ OK ]
-# TEST: Raw socket bind to nonlocal address - nonlocal IP                       [ OK ]
-# TEST: TCP socket bind to nonlocal address - nonlocal IP                       [ OK ]
-# TEST: ICMP socket bind to nonlocal address - nonlocal IP                      [ OK ]
-# TEST: ICMP socket bind to broadcast address - broadcast                       [ OK ]
-# TEST: ICMP socket bind to multicast address - multicast                       [ OK ]
-# TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-# TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-# 
-# #################################################################
-# With VRF
-# 
-# SYSCTL: net.ipv4.ping_group_range=0 2147483647
-# 
-# TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
-# TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
-# TEST: Raw socket bind to local address after VRF bind - ns-A IP               [ OK ]
-# TEST: Raw socket bind to local address - VRF IP                               [ OK ]
-# TEST: Raw socket bind to local address after device bind - VRF IP             [ OK ]
-# TEST: Raw socket bind to local address after VRF bind - VRF IP                [ OK ]
-# TEST: Raw socket bind to out of scope address after VRF bind - ns-A loopback IP  [ OK ]
-# TEST: Raw socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-# TEST: TCP socket bind to nonlocal address after VRF bind - nonlocal IP        [ OK ]
-# TEST: ICMP socket bind to nonlocal address after VRF bind - nonlocal IP       [ OK ]
-# TEST: ICMP socket bind to broadcast address after VRF bind - broadcast        [ OK ]
-# TEST: ICMP socket bind to multicast address after VRF bind - multicast        [ OK ]
-# TEST: TCP socket bind to local address - ns-A IP                              [ OK ]
-# TEST: TCP socket bind to local address after device bind - ns-A IP            [ OK ]
-# TEST: TCP socket bind to local address - VRF IP                               [ OK ]
-# TEST: TCP socket bind to local address after device bind - VRF IP             [ OK ]
-# TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IP     [ OK ]
-# TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IP  [ OK ]
-# 
-# ###########################################################################
-# Run time tests - ipv4
-# ###########################################################################
-# 
-# TEST: Device delete with active traffic - ping in - ns-A IP                   [ OK ]
-# TEST: Device delete with active traffic - ping in - VRF IP                    [ OK ]
-# TEST: Device delete with active traffic - ping out - ns-B IP                  [ OK ]
-# TEST: TCP active socket, global server - ns-A IP                              [ OK ]
-# TEST: TCP active socket, global server - VRF IP                               [ OK ]
-# TEST: TCP active socket, VRF server - ns-A IP                                 [ OK ]
-# TEST: TCP active socket, VRF server - VRF IP                                  [ OK ]
-# TEST: TCP active socket, enslaved device server - ns-A IP                     [ OK ]
-# TEST: TCP active socket, VRF client - ns-A IP                                 [ OK ]
-# TEST: TCP active socket, enslaved device client - ns-A IP                     [ OK ]
-# TEST: TCP active socket, global server, VRF client, local - ns-A IP           [ OK ]
-# TEST: TCP active socket, global server, VRF client, local - VRF IP            [ OK ]
-# TEST: TCP active socket, VRF server and client, local - ns-A IP               [ OK ]
-# TEST: TCP active socket, VRF server and client, local - VRF IP                [ OK ]
-# TEST: TCP active socket, global server, enslaved device client, local - ns-A IP  [ OK ]
-# TEST: TCP active socket, VRF server, enslaved device client, local - ns-A IP  [ OK ]
-# TEST: TCP active socket, enslaved device server and client, local - ns-A IP   [ OK ]
-# TEST: TCP passive socket, global server - ns-A IP                             [ OK ]
-# TEST: TCP passive socket, global server - VRF IP                              [ OK ]
-# TEST: TCP passive socket, VRF server - ns-A IP                                [ OK ]
-# TEST: TCP passive socket, VRF server - VRF IP                                 [ OK ]
-# TEST: TCP passive socket, enslaved device server - ns-A IP                    [ OK ]
-# TEST: TCP passive socket, VRF client - ns-A IP                                [ OK ]
-# TEST: TCP passive socket, enslaved device client - ns-A IP                    [ OK ]
-# TEST: TCP passive socket, global server, VRF client, local - ns-A IP          [ OK ]
-
-Hope this helps.
-
-I also have a iwlwifi DEADLOCK and I don't know if these should be reported independently.
-(I don't think it is related to the patch.)
-
-The iwlwifi team probably has Easter Monday, so there is no rush whatsoever.
-
-I may try to rebuild w/o the patch and re-run the tests, but now I need to do something
-for my day job.
-
-No need to thank, this is what kernel testers are for ;-)
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+index 2e22bb82b738..d5047676f3d2 100644
+--- a/drivers/thermal/intel/therm_throt.c
++++ b/drivers/thermal/intel/therm_throt.c
+@@ -193,8 +193,67 @@ static const struct attribute_group thermal_attr_group = {
+ #define THERM_THROT_POLL_INTERVAL	HZ
+ #define THERM_STATUS_PROCHOT_LOG	BIT(1)
  
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
+-#define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+-#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
++static u64 def_therm_core_clear_mask;
++static u64 def_therm_pkg_clear_mask;
++
++static void thermal_intr_core_clear_mask(void)
++{
++	if (def_therm_core_clear_mask)
++		return;
++
++	/*
++	 * Reference: Intel SDM  Volume 4
++	 * "Table 2-2. IA-32 Architectural MSRs", MSR 0x19C
++	 * IA32_THERM_STATUS.
++	 */
++
++	/*
++	 * Bit 1, 3, 5: CPUID.01H:EDX[22] = 1. This driver will not
++	 * enable interrupts, when 0 as it checks for X86_FEATURE_ACPI.
++	 */
++	def_therm_core_clear_mask = (BIT(1) | BIT(3) | BIT(5));
++
++	/*
++	 * Bit 7 and 9: Thermal Threshold #1 and #2 log
++	 * If CPUID.01H:ECX[8] = 1
++	 */
++	if (boot_cpu_has(X86_FEATURE_TM2))
++		def_therm_core_clear_mask |= (BIT(7) | BIT(9));
++
++	/* Bit 11: Power Limitation log (R/WC0) If CPUID.06H:EAX[4] = 1 */
++	if (boot_cpu_has(X86_FEATURE_PLN))
++		def_therm_core_clear_mask |= BIT(11);
++
++	/*
++	 * Bit 13: Current Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
++	 * Bit 15: Cross Domain Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
++	 */
++	if (boot_cpu_has(X86_FEATURE_HWP))
++		def_therm_core_clear_mask |= (BIT(13) | BIT(15));
++}
++
++static void thermal_intr_pkg_clear_mask(void)
++{
++	if (def_therm_pkg_clear_mask)
++		return;
++
++	/*
++	 * Reference: Intel SDM  Volume 4
++	 * "Table 2-2. IA-32 Architectural MSRs", MSR 0x1B1
++	 * IA32_PACKAGE_THERM_STATUS.
++	 */
++
++	/* All bits except BIT 26 depends on CPUID.06H: EAX[6] = 1 */
++	if (boot_cpu_has(X86_FEATURE_PTS))
++		def_therm_pkg_clear_mask = (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11));
++
++	/*
++	 * Intel SDM Volume 2A: Thermal and Power Management Leaf
++	 * Bit 26: CPUID.06H: EAX[19] = 1
++	 */
++	if (boot_cpu_has(X86_FEATURE_HFI))
++		def_therm_pkg_clear_mask |= BIT(26);
++}
+ 
+ /*
+  * Clear the bits in package thermal status register for bit = 1
+@@ -207,13 +266,10 @@ void thermal_clear_package_intr_status(int level, u64 bit_mask)
+ 
+ 	if (level == CORE_LEVEL) {
+ 		msr  = MSR_IA32_THERM_STATUS;
+-		msr_val = THERM_STATUS_CLEAR_CORE_MASK;
++		msr_val = def_therm_core_clear_mask;
+ 	} else {
+ 		msr  = MSR_IA32_PACKAGE_THERM_STATUS;
+-		msr_val = THERM_STATUS_CLEAR_PKG_MASK;
+-		if (boot_cpu_has(X86_FEATURE_HFI))
+-			msr_val |= BIT(26);
+-
++		msr_val = def_therm_pkg_clear_mask;
+ 	}
+ 
+ 	msr_val &= ~bit_mask;
+@@ -708,6 +764,9 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
+ 	h = THERMAL_APIC_VECTOR | APIC_DM_FIXED | APIC_LVT_MASKED;
+ 	apic_write(APIC_LVTTHMR, h);
+ 
++	thermal_intr_core_clear_mask();
++	thermal_intr_pkg_clear_mask();
++
+ 	rdmsr(MSR_IA32_THERM_INTERRUPT, l, h);
+ 	if (cpu_has(c, X86_FEATURE_PLN) && !int_pln_enable)
+ 		wrmsr(MSR_IA32_THERM_INTERRUPT,
+-- 
+2.39.1
 
