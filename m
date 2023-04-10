@@ -2,117 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408AA6DC914
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73816DC915
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDJQJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S229965AbjDJQJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDJQJT (ORCPT
+        with ESMTP id S229703AbjDJQJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:09:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134CEE74
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:18 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54bfc4e0330so138692427b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681142957;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hgpNSuwaIz5SOsDrctN1Z4DgOM8CO/tlKIwgfsZ4/ck=;
-        b=KbN+lzS+lcqidjAbQxa0GvXCAbmu1egDuByAETgeMWyb2/CMdMenHNWowg+xUpH1oB
-         QA7VrhCCALf4FouV8PrBU3pWbFqStiTfMYthOzYL8edyh46/hFQ4CCiXDnYrR9xhc2fA
-         GYKMHSIvehSvwJtxThZcxBmK2aQV3rdCDrKz678KucttKrgJyWSQ4agd+zrXFCLqRTKy
-         rI3fzOdO2l8cNcKq9ZyuFKMtUULQbVBORHrIhTcta+LWtGyflnxit5D25QTuU+XUzKEu
-         lZQUicrUwcjApxPLdUCbUbC+w+EWijpvTI42Y5mwbyYyb2JQFm3tqCQyHy5s5uZ2Pxad
-         Wlmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681142957;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hgpNSuwaIz5SOsDrctN1Z4DgOM8CO/tlKIwgfsZ4/ck=;
-        b=kgU6jcahTmF295fEbTMA//i8SgFmEoTI5KbCzUtu4/Lxxuh+1up72kRb3TevxHdNGV
-         6ig/SSDL6ylv9OEgezvehzkxpyFw+a2bE7CB3rpZQehM//UJnfJJlnwGNvTdTWDSSudV
-         aQJ0LLDiu4/VvTyUMA1L+EDXtpa/bmBQjFpNPhwNKUAYtYZXCuNIiADSjzpS5vMXRSLq
-         vOtAc2nZ7Mhi5HMe+zSX7fpf/mCBpGnT4Z/ouC2qKJoKzjK1lXl8focj0AE5+n0/JoLk
-         jetYPxqHKewuCt4wVZPL4DvUCk/Z06hTjsMmUk81/By9jDK2Maz8D+8V/c+zkRogYhN6
-         BC1w==
-X-Gm-Message-State: AAQBX9eR1NcpntI4lDZgFe6gUPq/2sephJQgWGq6d8KS7uxxiNLZ4Bzh
-        /GrxWrYtlt2kasSlJbgS34YWFS8sAiAC
-X-Google-Smtp-Source: AKy350aqBjJi0MjweR+Koinf0C4KZg04ZAy6t8zBhmoqTxsbnU8+cn0bFgYqbOxeoJJa9GhGP7nsB2ORSjwK
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fc51:6a03:541d:a18d])
- (user=irogers job=sendgmr) by 2002:a05:690c:31b:b0:54c:15ad:11e4 with SMTP id
- bg27-20020a05690c031b00b0054c15ad11e4mr7321151ywb.0.1681142957303; Mon, 10
- Apr 2023 09:09:17 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:09:05 -0700
-Message-Id: <20230410160905.3052640-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v2] perf build: Warn for BPF skeletons if endian mismatches
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 10 Apr 2023 12:09:35 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 64D84171D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:09:32 -0700 (PDT)
+Received: (qmail 139685 invoked by uid 1000); 10 Apr 2023 12:09:31 -0400
+Date:   Mon, 10 Apr 2023 12:09:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com>,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in sisusb_send_bulk_msg/usb_submit_urb
+Message-ID: <1d74e8db-682e-4d9a-af69-3ec56835021e@rowland.harvard.edu>
+References: <00000000000096e4f905f81b2702@google.com>
+ <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b799fc68-8840-43e7-85f5-27e1e6457a44@rowland.harvard.edu>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Done as a warning as I'm not fully confident of the test's robustness
-of comparing the macro definition of __BYTE_ORDER__.
+The patch has been revised.  Make sure it still works right.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Alan Stern
 
-v2. Is a rebase following patch 1 being merged.
----
- tools/perf/Makefile.config | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.2
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 16bea51f0bcd..71442c54c25f 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -663,14 +663,17 @@ ifndef NO_BPF_SKEL
-   $(call feature_check,clang-bpf-co-re)
-   ifeq ($(feature-clang-bpf-co-re), 0)
-     dummy := $(error: ERROR: BPF skeletons unsupported. clang too old/not installed or build with NO_BPF_SKEL=1.)
--  else
--    ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
--      dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
--    else
--      $(call detected,CONFIG_PERF_BPF_SKEL)
--      CFLAGS += -DHAVE_BPF_SKEL
--    endif
-   endif
-+  ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
-+    dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
-+  endif
-+  host_byte_order=$(echo ""|$(HOSTCC) -dM -E -|grep __BYTE_ORDER__)
-+  target_byte_order=$(echo ""|$(CC) -dM -E -|grep __BYTE_ORDER__)
-+  ifneq ($(host_byte_order), $(target_byte_order))
-+    $(warning Possibly mismatched host and target endianness may break BPF skeletons)
-+  endif
-+  $(call detected,CONFIG_PERF_BPF_SKEL)
-+  CFLAGS += -DHAVE_BPF_SKEL
- endif
+Index: usb-devel/drivers/usb/core/usb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/usb.c
++++ usb-devel/drivers/usb/core/usb.c
+@@ -207,6 +207,82 @@ int usb_find_common_endpoints_reverse(st
+ EXPORT_SYMBOL_GPL(usb_find_common_endpoints_reverse);
  
- dwarf-post-unwind := 1
--- 
-2.40.0.577.gac1e443424-goog
+ /**
++ * usb_find_endpoint() - Given an endpoint address, search for the endpoint's
++ * usb_host_endpoint structure in an interface's current altsetting.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addr: the endpoint address (number and direction) to find
++ *
++ * Search the altsetting's list of endpoints for one with the specified address.
++ *
++ * Return: Pointer to the usb_host_endpoint if found, %NULL otherwise.
++ */
++static const struct usb_host_endpoint *usb_find_endpoint(
++		const struct usb_interface *intf, unsigned int ep_addr)
++{
++	int n;
++	const struct usb_host_endpoint *ep;
++
++	n = intf->cur_altsetting->desc.bNumEndpoints;
++	ep = intf->cur_altsetting->endpoint;
++	for (; n > 0; (--n, ++ep)) {
++		if (ep->desc.bEndpointAddress == ep_addr)
++			return ep;
++	}
++	return NULL;
++}
++
++/**
++ * usb_check_bulk_endpoints - Check whether an interface's current altsetting
++ * contains a set of bulk endpoints with the given addresses.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
++ * direction) to look for
++ *
++ * Search for endpoints with the specified addresses and check their types.
++ *
++ * Return: %true if all the endpoints are found and are bulk, %false otherwise.
++ */
++bool usb_check_bulk_endpoints(
++		const struct usb_interface *intf, const u8 *ep_addrs)
++{
++	const struct usb_host_endpoint *ep;
++
++	for (; *ep_addrs; ++ep_addrs) {
++		ep = usb_find_endpoint(intf, *ep_addrs);
++		if (!ep || !usb_endpoint_xfer_bulk(&ep->desc))
++			return false;
++	}
++	return true;
++}
++EXPORT_SYMBOL_GPL(usb_check_bulk_endpoints);
++
++/**
++ * usb_check_int_endpoints - Check whether an interface's current altsetting
++ * contains a set of interrupt endpoints with the given addresses.
++ * @intf: the interface whose current altsetting should be searched
++ * @ep_addrs: 0-terminated array of the endpoint addresses (number and
++ * direction) to look for
++ *
++ * Search for endpoints with the specified addresses and check their types.
++ *
++ * Return: %true if all the endpoints are found and are interrupt,
++ * %false otherwise.
++ */
++bool usb_check_int_endpoints(
++		const struct usb_interface *intf, const u8 *ep_addrs)
++{
++	const struct usb_host_endpoint *ep;
++
++	for (; *ep_addrs; ++ep_addrs) {
++		ep = usb_find_endpoint(intf, *ep_addrs);
++		if (!ep || !usb_endpoint_xfer_int(&ep->desc))
++			return false;
++	}
++	return true;
++}
++EXPORT_SYMBOL_GPL(usb_check_int_endpoints);
++
++/**
+  * usb_find_alt_setting() - Given a configuration, find the alternate setting
+  * for the given interface.
+  * @config: the configuration to search (not necessarily the current config).
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -292,6 +292,11 @@ void usb_put_intf(struct usb_interface *
+ #define USB_MAXINTERFACES	32
+ #define USB_MAXIADS		(USB_MAXINTERFACES/2)
+ 
++bool usb_check_bulk_endpoints(
++		const struct usb_interface *intf, const u8 *ep_addrs);
++bool usb_check_int_endpoints(
++		const struct usb_interface *intf, const u8 *ep_addrs);
++
+ /*
+  * USB Resume Timer: Every Host controller driver should drive the resume
+  * signalling on the bus for the amount of time defined by this macro.
 
+Index: usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/sisusbvga/sisusbvga.c
++++ usb-devel/drivers/usb/misc/sisusbvga/sisusbvga.c
+@@ -2778,6 +2778,20 @@ static int sisusb_probe(struct usb_inter
+ 	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct sisusb_usb_data *sisusb;
+ 	int retval = 0, i;
++	static const u8 ep_addresses[] = {
++		SISUSB_EP_GFX_IN | USB_DIR_IN,
++		SISUSB_EP_GFX_OUT | USB_DIR_OUT,
++		SISUSB_EP_GFX_BULK_OUT | USB_DIR_OUT,
++		SISUSB_EP_GFX_LBULK_OUT | USB_DIR_OUT,
++		SISUSB_EP_BRIDGE_IN | USB_DIR_IN,
++		SISUSB_EP_BRIDGE_OUT | USB_DIR_OUT,
++		0};
++
++	/* Are the expected endpoints present? */
++	if (!usb_check_bulk_endpoints(intf, ep_addresses)) {
++		dev_err(&intf->dev, "Invalid USB2VGA device\n");
++		return -EINVAL;
++	}
+ 
+ 	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
+ 			dev->devnum);
