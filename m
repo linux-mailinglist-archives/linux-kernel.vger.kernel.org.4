@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002B86DCA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445E06DCA65
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjDJSGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S230267AbjDJSHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjDJSGJ (ORCPT
+        with ESMTP id S229916AbjDJSHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:06:09 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8286826A0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:05:48 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id jg21so13964382ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681149946;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G9PVist2arUI3kdkR3ttleRdx9YrvXAmoxGbLGAPcGI=;
-        b=SUFfmwVSDzggfij1RLzndNQHnBBBk4BxVxk1C2Z8/U3w9EJQNx8TkcxhlS8AEzdke+
-         6W6s4H6cwpbibiRC60ftHooMGFC0UuRwROh/6GcefEm6Zep22zc5a3hB/aMBuOlcPMd7
-         TvloWPSjvlFjLQbJYZB3tnC9LToSHp23VeMLjvWdB+aBd/OyCny7vvcED7julRJed1tI
-         sIs6EzMNo80vodjdMfDhhpCvIt5hWl9lnoVgtCVkScLZj9EvwVw3YSsdEhzzl+iumW5Z
-         07jxIPJvs1FzpfPIK1aEjUaZbTvHG+F6jHfh/Up/X+/wHltgWbYpDS+Hy2nwpVrPYe4H
-         8DeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681149946;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G9PVist2arUI3kdkR3ttleRdx9YrvXAmoxGbLGAPcGI=;
-        b=TGZj5XtzO9AIo4EE/ZQ6Lk7Nl5Be0zsxzxMXcYgVRtDsBB3fRKvLEqiURFhHh2tAxx
-         GJ9SSg9DA7uy7rtpJenqoErkqaoXt+/aEbH5GiF6sIbCu4kFdm/u3gckwHrf7YA0cRlD
-         G1JZhLjCdQlTVXKLJur+MHTpcR9r6838VuvD2XtU1vQxUhcNY8b/RCdW6aOzupOmv9Ew
-         vdfh4F67I33vy38V3GxS2uyhL824QQvHGg07qjvFiYYD3nnGMhH6hL28EyoyiQliRFA9
-         U1iVrEoP3R2nYuwmfczui/I6qaOr90GkocXXbLyA1V8lSFQY2O2tuG7/R7axQBFR9gZz
-         I89g==
-X-Gm-Message-State: AAQBX9eJ/IwsvTSkwDAF/+MxFvv7UayrOQXEpTR9VG5bGMNaqIRJYZmH
-        x8oam3h0eg6gyxehjNAi+KAQag==
-X-Google-Smtp-Source: AKy350Z4KybuktGNUlFrXFdPBinlDWA5XpwNX08ySiR1+g5FcSX17vllngbCaMnGKhuuppAfORKkSw==
-X-Received: by 2002:a17:906:8595:b0:94a:7c88:263a with SMTP id v21-20020a170906859500b0094a7c88263amr3889107ejx.9.1681149946492;
-        Mon, 10 Apr 2023 11:05:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:1a6c:6968:e633:48df? ([2a02:810d:15c0:828:1a6c:6968:e633:48df])
-        by smtp.gmail.com with ESMTPSA id gq10-20020a170906e24a00b0094a962da55dsm1028943ejb.195.2023.04.10.11.05.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 11:05:46 -0700 (PDT)
-Message-ID: <8132817a-db81-9a3f-7cfc-176c5df023ae@linaro.org>
-Date:   Mon, 10 Apr 2023 20:05:44 +0200
+        Mon, 10 Apr 2023 14:07:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D64E26AF
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681149977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IT3jC7AVGFDWN5+2QSJmXDWRAxru1buk6lN5s+Jf7j4=;
+        b=AqfVlM1IPup8NrL64qR0ipTsPHwCceJpYEtTbZP6qM+IIBwGBxQpc5MscdvMK1xnrAT0AD
+        ANY3dkZpOV/mC17YL6gWfkzgp0qtfXACwP9rxgDaq8n1rE5L6T4VGBfEGIGITK4yAGcU85
+        YcbIJFp0HCfJ+QtL9HiOcaDr/TD9UBU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-52-Cs151I7pNJeGsXXn-R-o-A-1; Mon, 10 Apr 2023 14:06:13 -0400
+X-MC-Unique: Cs151I7pNJeGsXXn-R-o-A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC8BA800B23;
+        Mon, 10 Apr 2023 18:06:12 +0000 (UTC)
+Received: from green.redhat.com (unknown [10.2.16.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02A04492C13;
+        Mon, 10 Apr 2023 18:06:11 +0000 (UTC)
+From:   Eric Blake <eblake@redhat.com>
+To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org
+Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] nbd: s/handle/cookie/
+Date:   Mon, 10 Apr 2023 13:06:07 -0500
+Message-Id: <20230410180611.1051618-1-eblake@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: exynos_defconfig: Enable zram as loadable modules
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Elliott <elliott@hpe.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20230410124907.3293869-1-javierm@redhat.com>
- <fe1e74a2-e933-7cd9-f740-86d871076191@linaro.org>
- <87sfd7sk04.fsf@minerva.mail-host-address-is-not-set>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <87sfd7sk04.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/2023 19:51, Javier Martinez Canillas wrote:
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
-> 
->> On 10/04/2023 14:49, Javier Martinez Canillas wrote:
->>> Enable zram and dependencies as loadable modules. This allows to use the
->>> /dev/zramX virtual block devices as swap stored in system memory.
->>>
->>> Options were taken from commit 5c824e8be64d ("ARM: omap2plus_defconfig:
->>> Enable zram as loadable modules") that does the same for OMAP2+ platforms.
->>
->> Neither this commit msg nor above omap commit explain why do we want it.
->> I know what zram is, I know its purpose, but the commit should answer
->> why we want it in defconfig.
->>
->> To me it is not a matching defconfig at all:
->> 1. Not a feature related to Exynos hardware,
->> 2. Not needed for basic boot (systemd) or debug.
->>
-> 
-> It's needed for basic boot on distros that use swap on zram (i.e: Fedora).
+v2 was here: https://lkml.org/lkml/2023/3/17/1107
+since then:
+- squash patch 2/5 and 3/5 into 3/4 [Ming]
+- add Josef's R-b
+- tweak commit messages to match commits in userspace NBD (code itself
+  is unchanged, modulo the patch squash)
 
-ZSWAP could be for this as well, but none of them should be used to be
-able to boot Fedora. If Fedora requires them, it's something broken
-there. I can setup SWAP on my eMMC as well, so why would I need ZRAM?
+Eric Blake (4):
+  uapi nbd: improve doc links to userspace spec
+  uapi nbd: add cookie alias to handle
+  block nbd: use req.cookie instead of req.handle
+  docs nbd: userspace NBD now favors github over sourceforge
 
-Best regards,
-Krzysztof
+ Documentation/admin-guide/blockdev/nbd.rst |  2 +-
+ drivers/block/nbd.c                        |  6 +++---
+ include/uapi/linux/nbd.h                   | 25 +++++++++++++++++-----
+ 3 files changed, 24 insertions(+), 9 deletions(-)
+
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+-- 
+2.39.2
 
