@@ -2,337 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CE66DC49A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9446DC439
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjDJInf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S229577AbjDJIT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjDJInI (ORCPT
+        with ESMTP id S229475AbjDJITz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:43:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAB64C18;
-        Mon, 10 Apr 2023 01:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681116085; x=1712652085;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H2LkgNfdgZCxqjwQsMzz3P7aFl8VuyYKoqg0zmKZpZ0=;
-  b=JpuXekzSTlq2nI3bstm/g7N199dVqiWAhyTbgMyQzPODcB1Zrpadrm2x
-   lTQXpURSZS5Lau9xb6jJv1l6KaJARRNuPjnNTCDrxRSh0Bk+8koo7gwRt
-   ePqUEkFuUYj1yLAl8MKxD8RtAhBdZYtCewIHDsZNKtBhk6+VOExVSCva6
-   izIsVuRMBY9El6rzuZBOoBlANq3J9D57Qw3D+ZhRLLzWHVUqXjA4D+E0L
-   OOoJOhEtjbWyhx4dezwX87W39wzBMstu8zp+ew5LjUyGDoGAd2/8Edt9R
-   VAbzyglmV1Ouplb8PaQJqsgDHx4LoWHzjLOHQ+hZ5XWHa0IuKeaZn849t
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="342078228"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="342078228"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 01:41:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="799436372"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="799436372"
-Received: from unknown (HELO fred..) ([172.25.112.68])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Apr 2023 01:41:08 -0700
-From:   Xin Li <xin3.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com, jiangshanlai@gmail.com,
-        shan.kang@intel.com
-Subject: [PATCH v8 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to generate FRED stack frames
-Date:   Mon, 10 Apr 2023 01:14:38 -0700
-Message-Id: <20230410081438.1750-34-xin3.li@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410081438.1750-1-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
+        Mon, 10 Apr 2023 04:19:55 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3BA2105;
+        Mon, 10 Apr 2023 01:19:54 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e2so3772395wrc.10;
+        Mon, 10 Apr 2023 01:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681114793;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=byTwI4OqmTEe5I8sJVHbwYg2j3SFXMpSEW7IJRnCz9U=;
+        b=eaHh02fyIIw3zrfFXKxRGiQKduM0qyRkZDCslQF1vIhbDJOgy7Y02hlgGYw3wPvVHl
+         HPciC1YouYyWhSn6mKEZ0cqZqRy7XgTj7qmLtZAHjkLbSr2puMcF0LW79AJkcmsiu+MP
+         VYsmIvBZTV+fDyqHOQzq7p8QkR1o9FfI+F0rQ7+QijgPRNH4jVpNgqlKDg8gwv+u76y5
+         /+mGhquErLl+rRq8OxBSV1xihQ0FQH5iMB/x9u729EoXY893HIzkFxumCghA1rL3WdOT
+         btQMUwrWHqS2VJt3F3HA4nV93hPII95IyFX0AQBZubgz6viss15GzLiNkJIwjXv4iOcJ
+         FiRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681114793;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=byTwI4OqmTEe5I8sJVHbwYg2j3SFXMpSEW7IJRnCz9U=;
+        b=pzVwXOa4t4tc+h+5R09jXosV859kR8zYYzW0Mx6GqZtER7Sx1U7YTTzq5p1b7CgQjR
+         KbWlaOWJ1PsD0XP8v22dNByrc+qlTiwkbhQ586WXRRtCU1tGd9uXfL+weM7S6jLA2X25
+         WHlfRbT9CCL44fyrtC0obyg/FFtQyfUSHbtN63zGRGYNGTvIYb9mrqptC39Pu7L4CDIH
+         gK66g4PuqxMHg+UbCgomHZfAEI6BfTbC6G9r9bLGnvs6GEaUXFXaj+Bb9hLjFcXFuOmi
+         +cGDGmgmxFpMX/kquz5LffCDeB8pGviVDQLIpFC6m3Mo0mvqegsGsWZ5y7HUsCm3x+F0
+         np6g==
+X-Gm-Message-State: AAQBX9fQvJXOsixOUHQBmLBqT0KZNBFcPPn/gCNbNyldJmg6N/iuuRSd
+        jr4GO6Jq0LBMdKN/OA7v5+QY4mFlBDgmh735b5A=
+X-Google-Smtp-Source: AKy350aSUqytqn4pNHEcICog2NjhpBMZ1fu4WtbEp8H4HOS6gsvm3mHJin9YxjnxPC+xOwjNMZj37VcaZDq/K6YPwqU=
+X-Received: by 2002:a5d:6a4d:0:b0:2ca:4533:5d6a with SMTP id
+ t13-20020a5d6a4d000000b002ca45335d6amr1626338wrw.7.1681114792855; Mon, 10 Apr
+ 2023 01:19:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
+ <20230328150335.90238-2-Naresh.Solanki@9elements.com> <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
+ <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net> <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
+ <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net> <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
+ <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com> <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+In-Reply-To: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Mon, 10 Apr 2023 11:19:41 +0300
+Message-ID: <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        jerome Neanne <jneanne@baylibre.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comparing to an IDT stack frame, a FRED stack frame has extra 16 bytes of
-information pushed at the regular stack top and 8 bytes of error code _always_
-pushed at the regular stack bottom, VMX_DO_EVENT_IRQOFF can be refactored
-to generate FRED stack frames with event type and vector properly set. Thus,
-IRQ/NMI can be handled with the existing approach when FRED is enabled.
+to 6. huhtik. 2023 klo 16.43 Mark Brown (broonie@kernel.org) kirjoitti:
+>
+> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
+> > ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
+> > > On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
 
-As a FRED stack frame always contains an error code pushed by hardware, call
-a trampoline code first to have the return instruction address pushed on
-the regular stack. Then the trampoline code pushes an error code (0 for
-both IRQ and NMI) and jumps to fred_entrypoint_kernel() for NMI handling or
-calls external_interrupt() for IRQ handling.
+> > > It can also try to avoid
+> > > interacting with hardware if that might not work.
+>
+> > It'd be great to have documentation / specification for sending and/or
+> > handling the regulator events. I don't think we currently have such.
+> > As far as I understand, the notifications can be picked up by all
+> > consumers of a regulator. I am a bit worried about:
+> > a) Situations where notification handlers 'collide' by doing 'actions'
+> > which are unexpected by other handlers
+>
+> I'm not sure what you're expecting there?  A device working with itself
+> shouldn't disrupt any other users.
 
-The trampoline code for IRQ handling pushes general purpose registers to
-form a pt_regs structure and then use it to call external_interrupt(). As a
-result, IRQ handling no longer re-enter the noinstr code.
+I have no concrete idea, just a vague uneasy feeling knowing that
+devices tend to interact with each other. I guess it is more about the
+amount of uncertainty caused by my lack of knowledge regarding what
+could be done by these handlers. So, as I already said - if no one
+else is bothered by this then I definitely don't want to block the
+series. Still, if the error handling should be kept internal to PMBus
+- then we should probably either say that consumer drivers must not
+(forcibly) turn off the supply when receiving these notifications - or
+not send these notifications from PMBus and allow PMBus to decide
+error handling internally. (Again, I don't know if any in-tree
+consumer drivers do turn off the supply regulator in error handlers -
+but I don't think it is actually forbidden). Or am I just making  a
+problem that does not exist?
 
-Export fred_entrypoint_kernel() and external_interrupt() for above changes.
+> > b) Situations where different notification senders send similar
+> > severity-level notifications for faults expecting different types of
+> > handling.
+>
+> Like I say I'm not sure how much practical difference it makes to think
+> too hard about differentiating the errors.
 
-Tested-by: Shan Kang <shan.kang@intel.com>
-Signed-off-by: Xin Li <xin3.li@intel.com>
----
+I would do at least two classes.
 
-Changes since v7:
-* Always call external_interrupt() for IRQ handling on x86_64, thus avoid
-  re-entering the noinstr code.
-* Create a FRED stack frame when FRED is compiled-in but not enabled, which
-  uses some extra stack space but simplifies the code.
+1) critical class - it is Ok for the consumer to forcibly shut down
+the regulator, or maybe the whole system.
+2) warning class - it is not Ok to forcibly shut down the regulator.
 
-Changes since v6:
-* Export fred_entrypoint_kernel(), required when kvm-intel built as a module.
-* Reserve a REDZONE for CALL emulation and align RSP to a 64-byte boundary
-  before pushing a new FRED stack frame.
----
- arch/x86/entry/entry_64_fred.S        |  1 +
- arch/x86/include/asm/asm-prototypes.h |  1 +
- arch/x86/include/asm/fred.h           |  1 +
- arch/x86/include/asm/traps.h          |  2 +
- arch/x86/kernel/traps.c               |  5 ++
- arch/x86/kvm/vmx/vmenter.S            | 78 +++++++++++++++++++++++++--
- arch/x86/kvm/vmx/vmx.c                | 12 +++--
- 7 files changed, 93 insertions(+), 7 deletions(-)
+OTOH, after writing this down - if this was the division, then it
+could be clearer to implement the shutdown at critical errors in the
+regulator driver (or core) and just send a specific notification to
+consumers telling this was done.
 
-diff --git a/arch/x86/entry/entry_64_fred.S b/arch/x86/entry/entry_64_fred.S
-index efe2bcd11273..de74ab97ff00 100644
---- a/arch/x86/entry/entry_64_fred.S
-+++ b/arch/x86/entry/entry_64_fred.S
-@@ -59,3 +59,4 @@ SYM_CODE_START_NOALIGN(fred_entrypoint_kernel)
- 	FRED_EXIT
- 	ERETS
- SYM_CODE_END(fred_entrypoint_kernel)
-+EXPORT_SYMBOL(fred_entrypoint_kernel)
-diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
-index b1a98fa38828..076bf8dee702 100644
---- a/arch/x86/include/asm/asm-prototypes.h
-+++ b/arch/x86/include/asm/asm-prototypes.h
-@@ -12,6 +12,7 @@
- #include <asm/special_insns.h>
- #include <asm/preempt.h>
- #include <asm/asm.h>
-+#include <asm/fred.h>
- #include <asm/gsseg.h>
- 
- #ifndef CONFIG_X86_CMPXCHG64
-diff --git a/arch/x86/include/asm/fred.h b/arch/x86/include/asm/fred.h
-index f7caf3b2f3f7..d00b9cab6aa6 100644
---- a/arch/x86/include/asm/fred.h
-+++ b/arch/x86/include/asm/fred.h
-@@ -129,6 +129,7 @@ DECLARE_FRED_HANDLER(fred_exc_machine_check);
-  * The actual assembly entry and exit points
-  */
- extern __visible void fred_entrypoint_user(void);
-+extern __visible void fred_entrypoint_kernel(void);
- 
- /*
-  * Initialization
-diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-index 612b3d6fec53..017b95624325 100644
---- a/arch/x86/include/asm/traps.h
-+++ b/arch/x86/include/asm/traps.h
-@@ -58,4 +58,6 @@ typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
- 
- system_interrupt_handler get_system_interrupt_handler(unsigned int i);
- 
-+int external_interrupt(struct pt_regs *regs);
-+
- #endif /* _ASM_X86_TRAPS_H */
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 73471053ed02..0f1fcd53cb52 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -1573,6 +1573,11 @@ int external_interrupt(struct pt_regs *regs)
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_KVM_INTEL)
-+/* For KVM VMX to handle IRQs in IRQ induced VM exits. */
-+EXPORT_SYMBOL_GPL(external_interrupt);
-+#endif
-+
- #endif /* CONFIG_X86_64 */
- 
- void __init install_system_interrupt_handler(unsigned int n, const void *asm_addr, const void *addr)
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 631fd7da2bc3..f2e1f8e61be9 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -2,12 +2,14 @@
- #include <linux/linkage.h>
- #include <asm/asm.h>
- #include <asm/bitsperlong.h>
-+#include <asm/fred.h>
- #include <asm/kvm_vcpu_regs.h>
- #include <asm/nospec-branch.h>
- #include <asm/percpu.h>
- #include <asm/segment.h>
- #include "kvm-asm-offsets.h"
- #include "run_flags.h"
-+#include "../../entry/calling.h"
- 
- #define WORD_SIZE (BITS_PER_LONG / 8)
- 
-@@ -31,7 +33,7 @@
- #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
- #endif
- 
--.macro VMX_DO_EVENT_IRQOFF call_insn call_target
-+.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=0 nmi=0
- 	/*
- 	 * Unconditionally create a stack frame, getting the correct RSP on the
- 	 * stack (for x86-64) would take two instructions anyways, and RBP can
-@@ -41,16 +43,55 @@
- 	mov %_ASM_SP, %_ASM_BP
- 
- #ifdef CONFIG_X86_64
-+#ifdef CONFIG_X86_FRED
-+	/*
-+	 * It's not necessary to change current stack level for handling IRQ/NMI
-+	 * because the state of the kernel stack is well defined in this place
-+	 * in the code, and it is known not to be deep in a bunch of nested I/O
-+	 * layer handlers that eat up the stack.
-+	 *
-+	 * Before starting to push a FRED stack frame, FRED reserves a redzone
-+	 * (for CALL emulation) and aligns RSP to a 64-byte boundary.
-+	 */
-+	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
-+	and $FRED_STACK_FRAME_RSP_MASK, %rsp
-+
-+	/*
-+	 * A FRED stack frame has extra 16 bytes of information pushed at the
-+	 * regular stack top comparing to an IDT stack frame.
-+	 */
-+	push $0		/* Reserved by FRED, must be 0 */
-+	push $0		/* FRED event data, 0 for NMI and external interrupts */
-+#else
- 	/*
- 	 * Align RSP to a 16-byte boundary (to emulate CPU behavior) before
- 	 * creating the synthetic interrupt stack frame for the IRQ/NMI.
- 	 */
- 	and  $-16, %rsp
--	push $__KERNEL_DS
-+#endif
-+
-+	.if \fred
-+	.if \nmi
-+	mov $(2 << 32 | 2 << 48), %rax		/* NMI event type and vector */
-+	.else
-+	mov %rdi, %rax
-+	shl $32, %rax				/* External interrupt vector */
-+	.endif
-+	add $__KERNEL_DS, %rax
-+	bts $57, %rax				/* Set 64-bit mode */
-+	.else
-+	mov $__KERNEL_DS, %rax
-+	.endif
-+	push %rax
-+
- 	push %rbp
- #endif
- 	pushf
--	push $__KERNEL_CS
-+	mov $__KERNEL_CS, %_ASM_AX
-+	.if \fred && \nmi
-+	bts $28, %_ASM_AX			/* Set the NMI bit */
-+	.endif
-+	push %_ASM_AX
- 	\call_insn \call_target
- 
- 	/*
-@@ -299,8 +340,19 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 
- SYM_FUNC_END(__vmx_vcpu_run)
- 
-+SYM_CODE_START(vmx_do_nmi_trampoline)
-+#ifdef CONFIG_X86_FRED
-+	ALTERNATIVE "jmp .Lno_errorcode_push", "", X86_FEATURE_FRED
-+	push $0		/* FRED error code, 0 for NMI */
-+	jmp fred_entrypoint_kernel
-+#endif
-+
-+.Lno_errorcode_push:
-+	jmp asm_exc_nmi_kvm_vmx
-+SYM_CODE_END(vmx_do_nmi_trampoline)
-+
- SYM_FUNC_START(vmx_do_nmi_irqoff)
--	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
-+	VMX_DO_EVENT_IRQOFF call vmx_do_nmi_trampoline fred=1 nmi=1
- SYM_FUNC_END(vmx_do_nmi_irqoff)
- 
- 
-@@ -357,6 +409,24 @@ SYM_FUNC_START(vmread_error_trampoline)
- SYM_FUNC_END(vmread_error_trampoline)
- #endif
- 
-+#ifdef CONFIG_X86_64
-+SYM_CODE_START(vmx_do_interrupt_trampoline)
-+	push $0	/* FRED error code, 0 for NMI and external interrupts */
-+	PUSH_REGS
-+
-+	movq	%rsp, %rdi	/* %rdi -> pt_regs */
-+	call external_interrupt
-+
-+	POP_REGS
-+	addq $8,%rsp		/* Drop FRED error code */
-+	RET
-+SYM_CODE_END(vmx_do_interrupt_trampoline)
-+#endif
-+
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
-+#ifdef CONFIG_X86_64
-+	VMX_DO_EVENT_IRQOFF call vmx_do_interrupt_trampoline fred=1
-+#else
- 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
-+#endif
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..d85bcfd191b7 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6874,7 +6874,7 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
- 	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
- }
- 
--void vmx_do_interrupt_irqoff(unsigned long entry);
-+void vmx_do_interrupt_irqoff(unsigned long entry_or_vector);
- void vmx_do_nmi_irqoff(void);
- 
- static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-@@ -6916,14 +6916,20 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
- {
- 	u32 intr_info = vmx_get_intr_info(vcpu);
- 	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
--	gate_desc *desc = (gate_desc *)host_idt_base + vector;
-+	unsigned long entry_or_vector;
-+
-+#ifdef CONFIG_X86_64
-+	entry_or_vector = vector;
-+#else
-+	entry_or_vector = gate_offset((gate_desc *)host_idt_base + vector);
-+#endif
- 
- 	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
- 	    "unexpected VM-Exit interrupt info: 0x%x", intr_info))
- 		return;
- 
- 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
--	vmx_do_interrupt_irqoff(gate_offset(desc));
-+	vmx_do_interrupt_irqoff(entry_or_vector);
- 	kvm_after_interrupt(vcpu);
- 
- 	vcpu->arch.at_instruction_boundary = true;
+> > Or, is it so that no "generic handling" of these errors is to be
+> > expected? Eg, consumers who implement any handling must always be
+> > targeted to a very specific system? My thinking has been that the
+> > device sending the notification knows the severity of the problem and
+> > - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
+> > such severe problems that consumers can try disabling the regulator,
+> > whereas the _WARN level notifications may not warrant such action. But
+> > again, I don't think we have a specification for this - so this is
+> > just my thinking - which may be off.
+>
+> Do we actually have practical examples of systems sending warnings that
+> aren't followed in very short order by more severe errors, notified or
+> otherwise?
+
+No. I don't. I will send one more question about the real-world use of
+BD9576 'warning' level IRQs - but I am highly sceptical I will receive
+any real information.
+
+Thanks for the education and time Mark & Guenter. It's a bit hard for
+me to let go of the thought that we would benefit from the handling of
+different severity level errors - but maybe this was just my illusion
+after all.
+
+Yours,
+    -- Matti
+
 -- 
-2.34.1
 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));
