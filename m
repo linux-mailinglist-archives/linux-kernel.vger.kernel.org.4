@@ -2,266 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623756DC31E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 06:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0456DC32F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 06:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjDJEed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 00:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S229553AbjDJErf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 00:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjDJEeZ (ORCPT
+        with ESMTP id S229475AbjDJErc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 00:34:25 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51A43C32
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 21:34:23 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1a2b01f5ac0so4329595ad.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 21:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681101263; x=1683693263;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3sV0mvKgExLa61TD4oV6e6QKH6k26NRAsPw2q/sIptY=;
-        b=6N1Ll4lBsBO3F91bivVGG+AcRkH/V9v3SFDbYGF2cCEpBJhibNkpWfo8heKOpf7PeK
-         F4htyxI9Dzsm08ZBmm78EnbxOq6YeSU/xBzMATpQINRRofB/lY9rqR7w4EfOWgdxksSO
-         2h62cr6TAWRwinrIs6rXe3mwgbVQBKnHkdeKrGdtbqOdBj5Q8XzLEnRIADWQMhWD3Aw0
-         hgnJkZA3EPdkulfMJjrpFVtisYNK6fIvkXo4l/MAXgRGSB7t7VtsGojckzc4x6Ii5gjV
-         Y+IEUomUc80/qXbyC1qQvS29gLmaPgyBI9lZKl7nJwwhA9C8IKdtvysEBzrcQS3TU9OZ
-         e+Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681101263; x=1683693263;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3sV0mvKgExLa61TD4oV6e6QKH6k26NRAsPw2q/sIptY=;
-        b=HedksOqo7TK8nFUtSXyrzD6rEmqvVWC/sdQy85Ixk/nfjmPGYKQYUa63LsAGKW/Kn6
-         WZfXFuEdnYugiEGlz9R9WTL70xwq6IcTSNR2KtR7G1oMO5Xchwz0i7ir5pRQiFHsrKeS
-         hr5XyIH3seSFAS6QnWABjKdf0FtQ6yTxTiB5bARcDscN7Ugr+UYqLZyNjQ77qjq1jzyf
-         7tgcPHKp4qtWzGoaI7hjtOk+tUWO+kPPCSDz7wkODzzXyGQtBBu9n/C63G/kLc8MaHuW
-         bycLK96hUwlHChh7W7MR5Xi72Mow2I0CNpdEi3gEtfZTFASiTb2j1A+DDrxGeOPC9B7D
-         21Og==
-X-Gm-Message-State: AAQBX9dJFxxPRKILpCbAhyWsOSGB5VJoDh8SwcNbwrQEUyg+QJgjpWgi
-        T6/oAtP2NOqlvURPRjMcT4bOwg==
-X-Google-Smtp-Source: AKy350Zl7sZArfG8z0rXM1frr2iQuRxz40uDjDFFAuAI50yWPI44W7Qc7LrEGEUGP/9VaFa1Oc/fsw==
-X-Received: by 2002:a62:5e41:0:b0:626:2ae6:31f6 with SMTP id s62-20020a625e41000000b006262ae631f6mr10982689pfb.7.1681101263359;
-        Sun, 09 Apr 2023 21:34:23 -0700 (PDT)
-Received: from x1.. ([2601:1c2:1801:d250:45c0:94f2:eea7:6dc3])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa793b8000000b00634a96493f7sm2394411pff.128.2023.04.09.21.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Apr 2023 21:34:22 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        James Morse <james.morse@arm.com>,
-        =?UTF-8?q?Kornel=20Dul=C4=99ba?= <mindal@semihalf.com>,
-        Adrien Ricciardi <aricciardi@baylibre.com>
-Cc:     Drew Fustini <dfustini@baylibre.com>
-Subject: [RFC PATCH 2/2] RISC-V: Add support for sqoscfg CSR
-Date:   Sun,  9 Apr 2023 21:36:46 -0700
-Message-Id: <20230410043646.3138446-3-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230410043646.3138446-1-dfustini@baylibre.com>
-References: <20230410043646.3138446-1-dfustini@baylibre.com>
+        Mon, 10 Apr 2023 00:47:32 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC1E30C6;
+        Sun,  9 Apr 2023 21:47:30 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33A4lBoH101478;
+        Sun, 9 Apr 2023 23:47:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681102031;
+        bh=Ytx9fQ9Ub8uG529ZrD4BPGXjS5WsbtxTltwVymlI5EY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=di9uad7g8o6mc+SUeEMjwQE0pHDJHpuClOwJxovDPrJkU0RjNyL39zYmd+1QdurFL
+         fS7jwdU5OjbhyxeObxRDj5eVQ4ORkuQJ5Ww2Y8D40ygmfPnSKtWkO1I6jF1ykeoRKU
+         3PCJPNZLIdG6swmUz59g7BAks0ZhZSBsF9+bgZcQ=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33A4lBhe020480
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 9 Apr 2023 23:47:11 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 9
+ Apr 2023 23:47:10 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 9 Apr 2023 23:47:10 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33A4l5pl079918;
+        Sun, 9 Apr 2023 23:47:06 -0500
+Message-ID: <08c07263-f4d4-1264-dd67-b377c3b6a048@ti.com>
+Date:   Mon, 10 Apr 2023 10:17:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [EXTERNAL] Re: [PATCH v7 0/4] Introduce PRU platform consumer API
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230404115336.599430-1-danishanwar@ti.com>
+ <86ee5333-6d65-d28b-0dd5-40dfe485d48b@ti.com>
+ <CANLsYkyrvAcVa8VNkbsrxyAC-60fyGYoXVS=fqwLcsMverzNcg@mail.gmail.com>
+Content-Language: en-US
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <CANLsYkyrvAcVa8VNkbsrxyAC-60fyGYoXVS=fqwLcsMverzNcg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the sqoscfg CSR defined in the Ssqosid ISA extension
-(Supervisor-mode Quality of Service ID). The CSR contains two fields:
 
-  - Resource Control ID (RCID) used determine resource allocation
-  - Monitoring Counter ID (MCID) used to track resource usage
 
-Requests from a hart to shared resources like cache will be tagged with
-these IDs. This allows the usage of shared resources to be associated
-with the task currently running on the hart.
+On 06/04/23 18:45, Mathieu Poirier wrote:
+> On Thu, 6 Apr 2023 at 00:54, Md Danish Anwar <a0501179@ti.com> wrote:
+>>
+>> On 04/04/23 17:23, MD Danish Anwar wrote:
+>>> Hi All,
+>>> The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+>>> or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+>>> (Programmable Real-Time Units, or PRUs) for program execution.
+>>>
+>>> There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+>>> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+>>> already been merged and can be found under:
+>>> 1) drivers/soc/ti/pruss.c
+>>>    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+>>> 2) drivers/irqchip/irq-pruss-intc.c
+>>>    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+>>> 3) drivers/remoteproc/pru_rproc.c
+>>>    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>>>
+>>> The programmable nature of the PRUs provide flexibility to implement custom
+>>> peripheral interfaces, fast real-time responses, or specialized data handling.
+>>> Example of a PRU consumer drivers will be:
+>>>   - Software UART over PRUSS
+>>>   - PRU-ICSS Ethernet EMAC
+>>>
+>>> In order to make usage of common PRU resources and allow the consumer drivers
+>>> to configure the PRU hardware for specific usage the PRU API is introduced.
+>>>
+>>> This is the v7 of the old patch series [9].
+>>>
+>>
+>> Hi Mathieu, Can you please review this series. I have addressed comments made
+>> by you in v5. I have also addressed Simon's comment in v6 and removed redundant
+>> macros from pruss.h header file.
+>>
+> 
+> You are pushing me to review your code 19 hours after sending the last
+> revision?  Are you serious?
+> 
 
-A sqoscfg field is added to thread_struct and has the same format as the
-sqoscfg CSR. This allows the scheduler to set the hart's sqoscfg CSR to
-contain the RCID and MCID for the task that is being scheduled in. The
-sqoscfg CSR is only written to if the thread_struct.sqoscfg is different
-from the current value of the CSR.
+I am really sorry for this. Thursday was last working day last week (as Friday
+was holiday in India), so I thought I should ping you so that this series would
+be reviewed by Monday. From now on I would try to keep a gap a week (or
+whatever is appropriate) before pinging you for review.
 
-A per-cpu variable cpu_sqoscfg is used to mirror that state of the CSR.
-This is because access to L1D hot memory should be several times faster
-than a CSR read. Also, in the case of virtualization, accesses to this
-CSR are trapped in the hypervisor.
+I am really sorry for this again.
 
-Link: https://github.com/riscv-non-isa/riscv-cmqri/blob/main/riscv-cbqri.pdf
-Co-developed-by: Kornel Dulęba <mindal@semihalf.com>
-Signed-off-by: Kornel Dulęba <mindal@semihalf.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
-Note: the Ssqosid extension and CBQRI spec are still in a draft state.
-The CSR address of sqoscfg is not final.
+>>> Changes from v6 [9] to v7:
+>>> *) Addressed Simon's comment on patch 3 of this series and dropped unnecassary
+>>> macros from the patch.
+>>>
+>>> Changes from v5 [1] to v6:
+>>> *) Added Reviewed by tags of Roger and Tony to the patches.
+>>> *) Added Acked by tag of Mathieu to patch 2 of this series.
+>>> *) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+>>> *) Added comment to the pruss_get() function documentation mentioning it is
+>>> expected the caller will have done a pru_rproc_get() on @rproc.
+>>> *) Fixed compilation warning "warning: ‘pruss_cfg_update’ defined but not used"
+>>> in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revision
+>>> together. Squashed patch 5 instead of patch 4 with patch 3 because patch 5 uses
+>>> both read() and update() APIs where as patch 4 only uses update() API.
+>>> Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+>>> and used in patch 4 and 5. Now these APIs are introduced as well as used in
+>>> patch 3.
+>>>
+>>
+>>
+>> --
+>> Thanks and Regards,
+>> Danish.
 
-Changes from the original patch [1]:
-- Rebase from 6.0 to 6.3
-- Simplify per-cpu variable from struct to u32 with just sqoscfg
-- Move qoscfg to thread_struct in arch/riscv/include/asm/processor.h
-  This avoids changing task_struct in /include/linux/sched.h
-- Reword commit description
-- Reword Kconfig description
-
-[1] https://github.com/rivosinc/linux/commit/8454b793a62be21d39e5826ef5241dfa06198ba9
-
- arch/riscv/Kconfig                 | 19 ++++++++++++++
- arch/riscv/include/asm/csr.h       |  8 ++++++
- arch/riscv/include/asm/processor.h |  3 +++
- arch/riscv/include/asm/qos.h       | 40 ++++++++++++++++++++++++++++++
- arch/riscv/include/asm/switch_to.h |  2 ++
- 5 files changed, 72 insertions(+)
- create mode 100644 arch/riscv/include/asm/qos.h
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index cc02eb9eee1f..03f22b7fe34b 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -418,6 +418,25 @@ config RISCV_ISA_SVNAPOT
- 
- 	  If you don't know what to do here, say Y.
- 
-+config RISCV_ISA_SSQOSID
-+	bool "Ssqosid extension support"
-+	default y
-+	help
-+	  Adds support for the Ssqosid ISA extension (Supervisor-mode
-+	  Quality of Service ID).
-+
-+	  Ssqosid defines the sqoscfg CSR which allows the system to tag
-+	  the running process with RCID (Resource Control ID) and MCID
-+	  (Monitoring Counter ID). The RCID is used determine resource
-+	  allocation. The MCID is used to track resource usage in event
-+	  counters.
-+
-+	  For example, a cache controller may use the RCID to apply a
-+	  cache partitioning scheme and use the MCID to track how much
-+	  cache a process, or a group of processes, is using.
-+
-+	  If you don't know what to do here, say Y.
-+
- config RISCV_ISA_SVPBMT
- 	bool "SVPBMT extension support"
- 	depends on 64BIT && MMU
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 7c2b8cdb7b77..17d04a0cacd6 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -59,6 +59,13 @@
- #define SATP_ASID_MASK	_AC(0xFFFF, UL)
- #endif
- 
-+/* SQOSCFG fields */
-+#define SQOSCFG_RCID_MASK	_AC(0x00000FFF, UL)
-+#define SQOSCFG_MCID_MASK	SQOSCFG_RCID_MASK
-+#define SQOSCFG_MCID_SHIFT	16
-+#define SQOSCFG_MASK		((SQOSCFG_MCID_MASK << SQOSCFG_MCID_SHIFT) | \
-+				  SQOSCFG_RCID_MASK)
-+
- /* Exception cause high bit - is an interrupt if set */
- #define CAUSE_IRQ_FLAG		(_AC(1, UL) << (__riscv_xlen - 1))
- 
-@@ -245,6 +252,7 @@
- #define CSR_STVAL		0x143
- #define CSR_SIP			0x144
- #define CSR_SATP		0x180
-+#define CSR_SQOSCFG		0x181
- 
- #define CSR_STIMECMP		0x14D
- #define CSR_STIMECMPH		0x15D
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 94a0590c6971..724b2aa2732d 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -39,6 +39,9 @@ struct thread_struct {
- 	unsigned long s[12];	/* s[0]: frame pointer */
- 	struct __riscv_d_ext_state fstate;
- 	unsigned long bad_cause;
-+#ifdef CONFIG_RISCV_ISA_SSQOSID
-+	u32 sqoscfg;
-+#endif
- };
- 
- /* Whitelist the fstate from the task_struct for hardened usercopy */
-diff --git a/arch/riscv/include/asm/qos.h b/arch/riscv/include/asm/qos.h
-new file mode 100644
-index 000000000000..297e7fb64d80
---- /dev/null
-+++ b/arch/riscv/include/asm/qos.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RISCV_QOS_H
-+#define _ASM_RISCV_QOS_H
-+
-+#ifdef CONFIG_RISCV_ISA_SSQOSID
-+
-+#include <linux/sched.h>
-+#include <linux/jump_label.h>
-+
-+#include <asm/barrier.h>
-+#include <asm/csr.h>
-+#include <asm/hwcap.h>
-+
-+/* cached value of sqoscfg csr for each cpu */
-+static DEFINE_PER_CPU(u32, cpu_sqoscfg);
-+
-+static void __qos_sched_in(struct task_struct *task)
-+{
-+	u32 *cpu_sqoscfg_ptr = this_cpu_ptr(&cpu_sqoscfg);
-+	u32 thread_sqoscfg;
-+
-+	thread_sqoscfg = READ_ONCE(task->thread.sqoscfg);
-+
-+	if (thread_sqoscfg != *cpu_sqoscfg_ptr) {
-+		*cpu_sqoscfg_ptr = thread_sqoscfg;
-+		csr_write(CSR_SQOSCFG, thread_sqoscfg);
-+	}
-+}
-+
-+static inline void qos_sched_in(struct task_struct *task)
-+{
-+	if (riscv_has_extension_likely(RISCV_ISA_EXT_SSQOSID))
-+		__qos_sched_in(task);
-+}
-+#else
-+
-+static inline void qos_sched_in(struct task_struct *task) {}
-+
-+#endif /* CONFIG_RISCV_ISA_SSQOSID */
-+#endif /* _ASM_RISCV_QOS_H */
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 60f8ca01d36e..75d9bfd766af 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -12,6 +12,7 @@
- #include <asm/processor.h>
- #include <asm/ptrace.h>
- #include <asm/csr.h>
-+#include <asm/qos.h>
- 
- #ifdef CONFIG_FPU
- extern void __fstate_save(struct task_struct *save_to);
-@@ -79,6 +80,7 @@ do {							\
- 	if (has_fpu())					\
- 		__switch_to_aux(__prev, __next);	\
- 	((last) = __switch_to(__prev, __next));		\
-+	qos_sched_in(__next);				\
- } while (0)
- 
- #endif /* _ASM_RISCV_SWITCH_TO_H */
 -- 
-2.34.1
-
+Thanks and Regards,
+Danish.
