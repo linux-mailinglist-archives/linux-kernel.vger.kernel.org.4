@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9396DC9E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC66A6DC9E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 19:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjDJRRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 13:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S230288AbjDJRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 13:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjDJRRR (ORCPT
+        with ESMTP id S230226AbjDJRU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 13:17:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6192111;
-        Mon, 10 Apr 2023 10:17:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB0B86160D;
-        Mon, 10 Apr 2023 17:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D1BC433D2;
-        Mon, 10 Apr 2023 17:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681147035;
-        bh=XAbXp0EbRQZU1hXmWf09pKmM5RRXeqSnlu79jGDc+YI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AIV8YXyDQ4JVDBq/e3QArmrKEAnskczTds6tSmGj9kFCn6gW/WHpcR7NCW3Prg4oA
-         ugHxTDACEIzProTD+TACLVfL5BswAgUYLzs+AZvu+eUQTRvnEviniTOxqFQUMDCavN
-         Qmkgb9HvV48y1qHrNS3YPDx/JibaFwd5+et6w9Jv3Vm5sjSqws8nlayvF1+Dx4g1zL
-         HfIn7GNSK8vuC+SJPC9vWXkkYFZcQOKqSNy9SPegWbjyw9MiGujG8EwMdsNUq097d2
-         m7fWT8/pj+KS+1vKQRH3o5U+RFTz8PtWkcBezNCOxic6puAaG5QVsVO9eVebcYS5OO
-         nSQrh5+7kpW9w==
-Date:   Mon, 10 Apr 2023 10:17:12 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tom Rini <trini@konsulko.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-Message-ID: <20230410171712.GA177836@dev-arch.thelio-3990X>
-References: <20230409145358.2538266-1-masahiroy@kernel.org>
- <202304100319.Wfcfuyqz-lkp@intel.com>
+        Mon, 10 Apr 2023 13:20:29 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F8D2116
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:20:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id sg7so25437725ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 10:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681147226;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uiGkVZuP4SKipoXqig3t+i70oWcmpQUiQnrzBe9N9p8=;
+        b=XY9PmTQFGXLKphdbRxca8qtQziW/zeEMFu4EGtG/reD0qqja3WrlyFWkeoMPU5a2Bw
+         TqJSoG3DpY4mAdD1k9K/xerwkmuS+DN2fE/UZ7vq4iB0hr+D8Ix88jc4nTJfh+NGqHKw
+         geL4vh7/73w5K4RsJDWkjiMBncCxhx3AOHD7BjSzgfE2eB7ibfMgRBsE2K1OCD/MUL+y
+         5xgjU4Va1Shl9G0r9gbGU57yvf5LQKwZMBWbYjQSdrQxqSFEhR0t2cIKaeLGqFSAim7r
+         51KORrDgJfh5cxh881gvERllMEPan9rzpu3c2XzHJ5+8a3dFg5+DVC3HnDnqgjd/O9U6
+         O9tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681147226;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uiGkVZuP4SKipoXqig3t+i70oWcmpQUiQnrzBe9N9p8=;
+        b=XjcvF+5fiXLMMN93v9JDzqLqpd1wVH0ju/lkiQLdfeq7b3vhUApfnp2yCoHjuIPrUX
+         184ksIdWfPAU+rKHeZqDRqsuILcdqlmmnYam6w3CRbQOWzSMRpG2yXWiC9PFvBKCBezb
+         w8uNq6voE0fFV1dApdYHYg+sdvF2rFJ9UOlp9tYdYTdxxiPu8pbTY6xm/2keFTy/mcY9
+         VyYne20G+ziv2Ily6YNjP+hmNHnM98Rim6qP5CGYXWsMfvDDb2i6+QhQHKioCLAkwNJ3
+         55nkZmvgyZ/doixi9D8Pi27lQBe3t8nXbCAl3HG0wFHs/Hy0At9xBxzfqTeSH69/VGLc
+         ywcQ==
+X-Gm-Message-State: AAQBX9eDNJaUsSwN29jDWSbt0XZtpcvucz/Q5T/GmhzugiTEvsN6Tg1L
+        J0K5ysK6AkDFAsKA/gVNfrZlOQ==
+X-Google-Smtp-Source: AKy350ZSYPnunqjrFFEoIZOM1l/debS3IXgfIFfaJ7eZsVCrY2BwfQH1FGJj3rO11FgSMdyfagldCw==
+X-Received: by 2002:a17:906:3843:b0:93a:353d:e38b with SMTP id w3-20020a170906384300b0093a353de38bmr7223420ejc.37.1681147226436;
+        Mon, 10 Apr 2023 10:20:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:1a6c:6968:e633:48df? ([2a02:810d:15c0:828:1a6c:6968:e633:48df])
+        by smtp.gmail.com with ESMTPSA id e23-20020a170906375700b0094da6a90107sm302005ejc.73.2023.04.10.10.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 10:20:25 -0700 (PDT)
+Message-ID: <5d264f46-b9e8-62ec-9bce-9d666fd1eaa8@linaro.org>
+Date:   Mon, 10 Apr 2023 19:20:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304100319.Wfcfuyqz-lkp@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: support parameter
+ passing in smc/hvc
+Content-Language: en-US
+To:     Nikunj Kela <quic_nkela@quicinc.com>, sudeep.holla@arm.com
+Cc:     cristian.marussi@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230409181918.29270-1-quic_nkela@quicinc.com>
+ <20230409181918.29270-2-quic_nkela@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230409181918.29270-2-quic_nkela@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 04:09:37AM +0800, kernel test robot wrote:
-> Hi Masahiro,
+On 09/04/2023 20:19, Nikunj Kela wrote:
+> Currently, smc/hvc calls are made with smc-id only. The parameters are
+> all set to zeros. This patch defines two optional device tree bindings,
+> that can be used to pass parameters in smc/hvc calls.
 > 
-> kernel test robot noticed the following build warnings:
+> This is useful when multiple scmi instances are used with common smc-id.
 > 
-> [auto build test WARNING on masahiroy-kbuild/for-next]
-> [also build test WARNING on masahiroy-kbuild/fixes linus/master v6.3-rc6 next-20230406]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+>  .../devicetree/bindings/firmware/arm,scmi.yaml   | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbuild-add-CLANG_CFLAGS-to-KBUILD_CPPFLAGS/20230409-225441
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-> patch link:    https://lore.kernel.org/r/20230409145358.2538266-1-masahiroy%40kernel.org
-> patch subject: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
-> config: mips-ip22_defconfig (https://download.01.org/0day-ci/archive/20230410/202304100319.Wfcfuyqz-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/4a97e93c7f8c2aaf7bcca67a061264a1126d0e25
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Masahiro-Yamada/kbuild-add-CLANG_CFLAGS-to-KBUILD_CPPFLAGS/20230409-225441
->         git checkout 4a97e93c7f8c2aaf7bcca67a061264a1126d0e25
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304100319.Wfcfuyqz-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> clang: warning: argument unused during compilation: '-mno-check-zero-division' [-Wunused-command-line-argument]
->    clang: warning: argument unused during compilation: '-mabi=32' [-Wunused-command-line-argument]
-> >> clang: warning: argument unused during compilation: '-G 0' [-Wunused-command-line-argument]
-> >> clang: warning: argument unused during compilation: '-mno-abicalls' [-Wunused-command-line-argument]
->    error: unknown target CPU 'r5000'
->    note: valid target CPU values are: nocona, core2, penryn, bonnell, atom, silvermont, slm, goldmont, goldmont-plus, tremont, nehalem, corei7, westmere, sandybridge, corei7-avx, ivybridge, core-avx-i, haswell, core-avx2, broadwell, skylake, skylake-avx512, skx, cascadelake, cooperlake, cannonlake, icelake-client, rocketlake, icelake-server, tigerlake, sapphirerapids, alderlake, raptorlake, meteorlake, sierraforest, grandridge, graniterapids, emeraldrapids, knl, knm, k8, athlon64, athlon-fx, opteron, k8-sse3, athlon64-sse3, opteron-sse3, amdfam10, barcelona, btver1, btver2, bdver1, bdver2, bdver3, bdver4, znver1, znver2, znver3, znver4, x86-64, x86-64-v2, x86-64-v3, x86-64-v4
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> index 5824c43e9893..08c331a79b80 100644
+> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> @@ -115,6 +115,22 @@ properties:
+>      description:
+>        SMC id required when using smc or hvc transports
+>  
+> +  arm,smc32-params:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      An optional parameter list passed in smc32 or hvc32 calls
+> +    default: 0
+> +    minItems: 1
+> +    maxItems: 6
+> +
+> +  arm,smc64-params:
+> +    $ref: /schemas/types.yaml#/definitions/uint64-array
+> +    description:
+> +      An optional parameter list passed in smc64 or hvc64 calls
+> +    default: 0
+> +    minItems: 1
+> +    maxItems: 6
 
-While r5000 is not a valid MIPS CPU for LLVM (as you can see from the
-values below), the note here seems to imply that there is a place where
-KBUILD_{A,C}FLAGS is used without KBUILD_CPPFLAGS because we are
-dropping '--target'. V=1 does not make it obvious where that is
-happening though, as I see the error right after syncing the
-configuration (is it coming from Kconfig internally?). I can see the
-same issue with 32r2_defconfig, which uses an LLVM supported CPU value.
+These do not look like hardware properties and the fact that you need
+two properties for the same also points that you tied it to specific SW
+interface.
 
->    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
->    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
->    scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->    error: unknown target CPU 'r5000'
->    note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
->    make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
->    error: unknown target CPU 'r5000'
->    note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
->    make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
->    make[2]: Target 'scripts/mod/' not remade because of errors.
->    make[1]: *** [Makefile:1285: prepare0] Error 2
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:226: __sub-make] Error 2
->    make: Target 'prepare' not remade because of errors.
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Why this should be board-specific? Actually better question - why this
+should be fixed per board? Doesn't my software want to have different
+parameters, depending on some other condition?
+
+You also did not provide any DTS user for this, so difficult to judge
+usefulness.
+
+Best regards,
+Krzysztof
+
