@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3746DCC41
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7BB6DCC3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjDJUo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S229776AbjDJUoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjDJUoL (ORCPT
+        with ESMTP id S229718AbjDJUoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Apr 2023 16:44:11 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4037F10FC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:44:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67621BC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681159450; x=1712695450;
+  t=1681159449; x=1712695449;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=inpVng/Bcp3nfLuM1fQwcQiyrkOpWUtdNri8ppIn/8A=;
-  b=k7gJ/e5srCfvm1JNWBCFM5yQkULBx35Xl7kiyBFVE92YJZUgzRycoC8E
-   ZfAXR4qarFKANuEQmVpeYKIXXAi5IYW/7tNhcNdERyEWMko1WWVySo5QG
-   B44AFzU6pH98NtF3LMWckgkwy9lFIp68wHshEAnI054ab5ki39VUN1CN5
-   IKBfcoIC/EbfkTTfz0oKKRpvLtnnAIWuL3NJqTZbmOTp/8i075PnBfwQi
-   nguka0Jvaa7KEzyT3IpocRCgE3lcAH0Wfli1l5Ycal0e+wst2do1Lokdr
-   bVx/deH1Tpd4UGJF/ng8Uw4n9+76ObgptQsxKlfB05AhKvbLEPQg5Ga1g
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408588946"
+  bh=kcLJhD28Bc2+ALOajmNmlBWEQ7assJNKIKUzATapj3k=;
+  b=UdIE7jtYCVYUFfcXZTzZ7nEHJQ91kWuKc8pYSdYL9SxycWLS2MWpls03
+   DuT/oC62dGTwp4H8s+M6yQ/yZ3f3u2GhNW5yvL7HV/PJchrJK/keJ1j7W
+   6F3MNr2Eidd/mEmqyHAv5uGz53dxNPkBYPviyvgG9ko6INZtwN5shGaJg
+   Hd1GIqBRl/h0/0py7H300dNL6sYuSOMYdD0LtYPdTbN9zCQKkwDr80QtN
+   w+w5//OXYsbdFuxAR0wNfwSaJZkvgx0ERQHiyFLN4Z9HJ/tEe/ohTr2JK
+   0R4XmJQmC5/TLjxAGq1jfLy6s+4ezYxCizVNQkTMZQfj/2ywh4GGCJfc8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408588952"
 X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="408588946"
+   d="scan'208";a="408588952"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 13:44:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638569726"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638569729"
 X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="638569726"
+   d="scan'208";a="638569729"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga003.jf.intel.com with ESMTP; 10 Apr 2023 13:44:06 -0700
 From:   kan.liang@linux.intel.com
@@ -46,9 +46,9 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
         adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 5/6] perf tools: Add branch event knob
-Date:   Mon, 10 Apr 2023 13:43:51 -0700
-Message-Id: <20230410204352.1098067-5-kan.liang@linux.intel.com>
+Subject: [PATCH 6/6] perf tools: Support PERF_SAMPLE_BRANCH_EVENT_IDS
+Date:   Mon, 10 Apr 2023 13:43:52 -0700
+Message-Id: <20230410204352.1098067-6-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230410204352.1098067-1-kan.liang@linux.intel.com>
 References: <20230410204352.1098067-1-kan.liang@linux.intel.com>
@@ -66,167 +66,219 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-Add a new branch filter for the branch event option. If the legacy
-kernel doesn't support the branch sample type, switching off the branch
-event filter.
+Support new sample type PERF_SAMPLE_BRANCH_EVENT_IDS.
 
-The new branch event information should be dumped with other branch
-information via perf report -D.
+It's used with the branch event feature together. If the legacy kernel
+doesn't support either of them, switching off them together.
 
-Extend the struct branch_flags and evsel__bitfield_swap_branch_flags()
-to support the new field.
+The sampling event may not be the event logged by a branch. Apply the
+PERF_SAMPLE_BRANCH_EVENT_IDS for all events if the branch events logging
+feature is detected.
 
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/Documentation/perf-record.txt  |  1 +
- tools/perf/util/branch.h                  |  3 ++-
- tools/perf/util/evsel.c                   | 18 ++++++++++++++----
- tools/perf/util/evsel.h                   |  1 +
- tools/perf/util/parse-branch-options.c    |  1 +
- tools/perf/util/perf_event_attr_fprintf.c |  1 +
- tools/perf/util/session.c                 |  3 ++-
- 7 files changed, 22 insertions(+), 6 deletions(-)
+ tools/perf/util/branch.h                  |  5 +++++
+ tools/perf/util/evsel.c                   | 22 ++++++++++++++++++++--
+ tools/perf/util/perf_event_attr_fprintf.c |  2 +-
+ tools/perf/util/record.c                  | 13 +++++++++++++
+ tools/perf/util/sample.h                  |  1 +
+ tools/perf/util/session.c                 | 17 +++++++++++++++++
+ tools/perf/util/synthetic-events.c        | 12 ++++++++++++
+ 7 files changed, 69 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index ff815c2f67e8..d09443a01d91 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -402,6 +402,7 @@ following filters are defined:
- 		     4th-Gen Xeon+ server), the save branch type is unconditionally enabled
- 		     when the taken branch stack sampling is enabled.
- 	- priv: save privilege state during sampling in case binary is not available later
-+	- event: save occurrences of the event since the last branch entry.
- 
- +
- The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
 diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
-index e41bfffe2217..5feb79ccd698 100644
+index 5feb79ccd698..761b686e7730 100644
 --- a/tools/perf/util/branch.h
 +++ b/tools/perf/util/branch.h
-@@ -25,7 +25,8 @@ struct branch_flags {
- 			u64 spec:2;
- 			u64 new_type:4;
- 			u64 priv:3;
--			u64 reserved:31;
-+			u64 events:8;
-+			u64 reserved:23;
- 		};
- 	};
+@@ -51,6 +51,11 @@ struct branch_stack {
+ 	struct branch_entry	entries[];
  };
+ 
++struct branch_event_ids {
++	u64			nr;
++	u64			ids[];
++};
++
+ /*
+  * The hw_idx is only available when PERF_SAMPLE_BRANCH_HW_INDEX is applied.
+  * Otherwise, the output format of a sample with branch stack is
 diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 51e8ce6edddc..1888552f41f9 100644
+index 1888552f41f9..91bd989c8491 100644
 --- a/tools/perf/util/evsel.c
 +++ b/tools/perf/util/evsel.c
-@@ -1850,6 +1850,8 @@ static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
+@@ -1850,8 +1850,10 @@ static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
  
  static void evsel__disable_missing_features(struct evsel *evsel)
  {
-+	if (perf_missing_features.branch_event)
-+		evsel->core.attr.branch_sample_type &= ~PERF_SAMPLE_BRANCH_EVENT;
+-	if (perf_missing_features.branch_event)
++	if (perf_missing_features.branch_event) {
+ 		evsel->core.attr.branch_sample_type &= ~PERF_SAMPLE_BRANCH_EVENT;
++		evsel__reset_sample_bit(evsel, BRANCH_EVENT_IDS);
++	}
  	if (perf_missing_features.read_lost)
  		evsel->core.attr.read_format &= ~PERF_FORMAT_LOST;
  	if (perf_missing_features.weight_struct) {
-@@ -1903,7 +1905,12 @@ bool evsel__detect_missing_features(struct evsel *evsel)
- 	 * Must probe features in the order they were added to the
+@@ -1906,7 +1908,8 @@ bool evsel__detect_missing_features(struct evsel *evsel)
  	 * perf_event_attr interface.
  	 */
--	if (!perf_missing_features.read_lost &&
-+	if (!perf_missing_features.branch_event &&
-+	    (evsel->core.attr.branch_sample_type & PERF_SAMPLE_BRANCH_EVENT)) {
-+		perf_missing_features.branch_event = true;
-+		pr_debug2("switching off branch event support\n");
-+		return true;
-+	} else if (!perf_missing_features.read_lost &&
- 	    (evsel->core.attr.read_format & PERF_FORMAT_LOST)) {
- 		perf_missing_features.read_lost = true;
- 		pr_debug2("switching off PERF_FORMAT_LOST support\n");
-@@ -2320,7 +2327,8 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
- 	 * 		spec:2		//branch speculation info
- 	 * 		new_type:4	//additional branch type
- 	 * 		priv:3		//privilege level
--	 * 		reserved:31
-+	 *		events:8	//occurrences of events
-+	 *		reserved:23
- 	 * 	}
- 	 * }
- 	 *
-@@ -2339,7 +2347,8 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
- 		new_val |= bitfield_swap(value, 24, 2);
- 		new_val |= bitfield_swap(value, 26, 4);
- 		new_val |= bitfield_swap(value, 30, 3);
--		new_val |= bitfield_swap(value, 33, 31);
-+		new_val |= bitfield_swap(value, 33, 8);
-+		new_val |= bitfield_swap(value, 41, 23);
- 	} else {
- 		new_val = bitfield_swap(value, 63, 1);
- 		new_val |= bitfield_swap(value, 62, 1);
-@@ -2350,7 +2359,8 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
- 		new_val |= bitfield_swap(value, 38, 2);
- 		new_val |= bitfield_swap(value, 34, 4);
- 		new_val |= bitfield_swap(value, 31, 3);
--		new_val |= bitfield_swap(value, 0, 31);
-+		new_val |= bitfield_swap(value, 23, 8);
-+		new_val |= bitfield_swap(value, 0, 23);
+ 	if (!perf_missing_features.branch_event &&
+-	    (evsel->core.attr.branch_sample_type & PERF_SAMPLE_BRANCH_EVENT)) {
++	    ((evsel->core.attr.branch_sample_type & PERF_SAMPLE_BRANCH_EVENT) ||
++	     (evsel->core.attr.sample_type & PERF_SAMPLE_BRANCH_EVENT_IDS))) {
+ 		perf_missing_features.branch_event = true;
+ 		pr_debug2("switching off branch event support\n");
+ 		return true;
+@@ -2710,6 +2713,21 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+ 		array = (void *)array + sz;
  	}
  
- 	return new_val;
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 24cb807ef6ce..05a61d36ee10 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -187,6 +187,7 @@ struct perf_missing_features {
- 	bool code_page_size;
- 	bool weight_struct;
- 	bool read_lost;
-+	bool branch_event;
- };
- 
- extern struct perf_missing_features perf_missing_features;
-diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
-index fd67d204d720..c9fcefed5f9d 100644
---- a/tools/perf/util/parse-branch-options.c
-+++ b/tools/perf/util/parse-branch-options.c
-@@ -36,6 +36,7 @@ static const struct branch_mode branch_modes[] = {
- 	BRANCH_OPT("stack", PERF_SAMPLE_BRANCH_CALL_STACK),
- 	BRANCH_OPT("hw_index", PERF_SAMPLE_BRANCH_HW_INDEX),
- 	BRANCH_OPT("priv", PERF_SAMPLE_BRANCH_PRIV_SAVE),
-+	BRANCH_OPT("event", PERF_SAMPLE_BRANCH_EVENT),
- 	BRANCH_END
- };
++	if (type & PERF_SAMPLE_BRANCH_EVENT_IDS) {
++		const u64 max_branch_nr = UINT64_MAX / sizeof(u64);
++
++		OVERFLOW_CHECK_u64(array);
++		data->branch_event_ids = (struct branch_event_ids *)array++;
++
++		if (data->branch_event_ids->nr > max_branch_nr)
++			return -EFAULT;
++
++		sz = data->branch_event_ids->nr * sizeof(u64);
++
++		OVERFLOW_CHECK(array, sz, max_size);
++		array = (void *)array + sz;
++	}
++
+ 	return 0;
+ }
  
 diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-index 7e5e7b30510d..96f0aafc962d 100644
+index 96f0aafc962d..5eadcdaba12e 100644
 --- a/tools/perf/util/perf_event_attr_fprintf.c
 +++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -53,6 +53,7 @@ static void __p_branch_sample_type(char *buf, size_t size, u64 value)
- 		bit_name(COND), bit_name(CALL_STACK), bit_name(IND_JUMP),
- 		bit_name(CALL), bit_name(NO_FLAGS), bit_name(NO_CYCLES),
- 		bit_name(TYPE_SAVE), bit_name(HW_INDEX), bit_name(PRIV_SAVE),
-+		bit_name(EVENT),
+@@ -36,7 +36,7 @@ static void __p_sample_type(char *buf, size_t size, u64 value)
+ 		bit_name(IDENTIFIER), bit_name(REGS_INTR), bit_name(DATA_SRC),
+ 		bit_name(WEIGHT), bit_name(PHYS_ADDR), bit_name(AUX),
+ 		bit_name(CGROUP), bit_name(DATA_PAGE_SIZE), bit_name(CODE_PAGE_SIZE),
+-		bit_name(WEIGHT_STRUCT),
++		bit_name(WEIGHT_STRUCT), bit_name(BRANCH_EVENT_IDS),
  		{ .name = NULL, }
  	};
  #undef bit_name
+diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
+index 9eb5c6a08999..640ba5243209 100644
+--- a/tools/perf/util/record.c
++++ b/tools/perf/util/record.c
+@@ -98,6 +98,7 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
+ 	bool use_sample_identifier = false;
+ 	bool use_comm_exec;
+ 	bool sample_id = opts->sample_id;
++	bool has_branch_events = false;
+ 
+ 	if (perf_cpu_map__cpu(evlist->core.user_requested_cpus, 0).cpu < 0)
+ 		opts->no_inherit = true;
+@@ -108,6 +109,8 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
+ 		evsel__config(evsel, opts, callchain);
+ 		if (evsel->tracking && use_comm_exec)
+ 			evsel->core.attr.comm_exec = 1;
++		if (evsel->core.attr.branch_sample_type & PERF_SAMPLE_BRANCH_EVENT)
++			has_branch_events = true;
+ 	}
+ 
+ 	/* Configure leader sampling here now that the sample type is known */
+@@ -139,6 +142,16 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
+ 			evsel__set_sample_id(evsel, use_sample_identifier);
+ 	}
+ 
++	if (has_branch_events) {
++		/*
++		 * The sampling event may not be the event logged by a
++		 * branch. Apply the BRANCH_EVENT_IDS for all events if
++		 * the branch events logging feature is detected.
++		 */
++		evlist__for_each_entry(evlist, evsel)
++			evsel__set_sample_bit(evsel, BRANCH_EVENT_IDS);
++	}
++
+ 	evlist__set_id_pos(evlist);
+ }
+ 
+diff --git a/tools/perf/util/sample.h b/tools/perf/util/sample.h
+index 33b08e0ac746..b0979571c8af 100644
+--- a/tools/perf/util/sample.h
++++ b/tools/perf/util/sample.h
+@@ -101,6 +101,7 @@ struct perf_sample {
+ 	void *raw_data;
+ 	struct ip_callchain *callchain;
+ 	struct branch_stack *branch_stack;
++	struct branch_event_ids *branch_event_ids;
+ 	struct regs_dump  user_regs;
+ 	struct regs_dump  intr_regs;
+ 	struct stack_dump user_stack;
 diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index 749d5b5c135b..ce6d9349ec42 100644
+index ce6d9349ec42..cc53a4ddfe6d 100644
 --- a/tools/perf/util/session.c
 +++ b/tools/perf/util/session.c
-@@ -1180,13 +1180,14 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
- 		struct branch_entry *e = &entries[i];
+@@ -1203,6 +1203,20 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
+ 	}
+ }
  
- 		if (!callstack) {
--			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x %s %s\n",
-+			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x %x %s %s\n",
- 				i, e->from, e->to,
- 				(unsigned short)e->flags.cycles,
- 				e->flags.mispred ? "M" : " ",
- 				e->flags.predicted ? "P" : " ",
- 				e->flags.abort ? "A" : " ",
- 				e->flags.in_tx ? "T" : " ",
-+				e->flags.events,
- 				(unsigned)e->flags.reserved,
- 				get_branch_type(e),
- 				e->flags.spec ? branch_spec_desc(e->flags.spec) : "");
++static void branch_event_ids__printf(struct branch_event_ids *br_event)
++{
++	u64 i;
++
++	printf("%s: nr:%" PRIu64 "\n", "... branch event IDs", br_event->nr);
++
++	for (i = 0; i < br_event->nr; i++) {
++		if (br_event->ids[i] != -1ULL)
++			printf("..... %2"PRIu64": %016" PRIx64 "\n", i, br_event->ids[i]);
++		else
++			printf("..... %2"PRIu64": N/A\n", i);
++	}
++}
++
+ static void regs_dump__printf(u64 mask, u64 *regs, const char *arch)
+ {
+ 	unsigned rid, i = 0;
+@@ -1364,6 +1378,9 @@ static void dump_sample(struct evsel *evsel, union perf_event *event,
+ 	if (evsel__has_br_stack(evsel))
+ 		branch_stack__printf(sample, evsel__has_branch_callstack(evsel));
+ 
++	if (sample_type & PERF_SAMPLE_BRANCH_EVENT_IDS)
++		branch_event_ids__printf(sample->branch_event_ids);
++
+ 	if (sample_type & PERF_SAMPLE_REGS_USER)
+ 		regs_user__printf(sample, arch);
+ 
+diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+index 9ab9308ee80c..f4c47979e7c1 100644
+--- a/tools/perf/util/synthetic-events.c
++++ b/tools/perf/util/synthetic-events.c
+@@ -1543,6 +1543,11 @@ size_t perf_event__sample_event_size(const struct perf_sample *sample, u64 type,
+ 		result += sample->aux_sample.size;
+ 	}
+ 
++	if (type & PERF_SAMPLE_BRANCH_EVENT_IDS) {
++		result += sizeof(u64);
++		result += sample->branch_event_ids->nr * sizeof(u64);
++	}
++
+ 	return result;
+ }
+ 
+@@ -1757,6 +1762,13 @@ int perf_event__synthesize_sample(union perf_event *event, u64 type, u64 read_fo
+ 		array = (void *)array + sz;
+ 	}
+ 
++	if (type & PERF_SAMPLE_BRANCH_EVENT_IDS) {
++		sz = sizeof(u64);
++		sz += sample->branch_event_ids->nr * sizeof(u64);
++		memcpy(array, sample->branch_event_ids, sz);
++		array = (void *)array + sz;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 
