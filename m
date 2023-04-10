@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A5C6DC89D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5376DC8A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjDJPgs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 11:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S230046AbjDJPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDJPgq (ORCPT
+        with ESMTP id S229881AbjDJPkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:36:46 -0400
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1D14EC7;
-        Mon, 10 Apr 2023 08:36:45 -0700 (PDT)
-Received: by mail-ua1-f50.google.com with SMTP id z23so3627599uav.8;
-        Mon, 10 Apr 2023 08:36:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681141005; x=1683733005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9mZMaZ5yM1oqShI5ecZeTy++LWeRnqrDt5SHNiRc2dw=;
-        b=4h3B48wV9ux9k1pjzAZbdODKjzzLv00gUyGT5kI/tJX/aR+nJSE3rKFoDenYFbFd6U
-         PYtN2EB0qmwDHAgzhV4Mz96fmOeExCRsWD5r0JtB4c3jQT43V/rlpACzwViBQGIZBKpx
-         omqk4+P8bJeyG+5N+tm3+7V0LEoKsfpwlz+fZcOslHCprQc5eYaURBxyJTKKBI57t1e6
-         YbZmAxpgaLlS8NjYeOgHnEhueAQ5F2PtZihyTYn2Hk1+63tIDwUNDH18NXRnTLJpuq0q
-         SCdpZvFH2eCzz6ixe0X/nREkNyCMyDPhnwg6UETy9klDYVTqK3f+WBXQfQU0sqGAC0i6
-         L2GQ==
-X-Gm-Message-State: AAQBX9esjagkCvwrNdB06ZyaH+pADCHD27zyJY0YML+PYeVLyQDeQjaO
-        dR/qN24exjxNiO85BXtgDB7OKv+5oCLZipBRvQY=
-X-Google-Smtp-Source: AKy350bNKl0reJD3SO/DqgLdgKOPJmlAx2JD3JHd6SAqnqPLXa9KyNikKOvfnDIqNJEjZ9U/6Ef3je8q0/I4luvxHx4=
-X-Received: by 2002:a1f:1750:0:b0:43f:cacf:9f08 with SMTP id
- 77-20020a1f1750000000b0043fcacf9f08mr1385800vkx.12.1681141003430; Mon, 10 Apr
- 2023 08:36:43 -0700 (PDT)
+        Mon, 10 Apr 2023 11:40:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AE530EC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 08:39:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681141164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=txWd2dHY1jKmJaXlngkV7LKfXExjOljbbsG1zTM1SKw=;
+        b=OiWgfzZlP6rn58O7wINlZjI/cJAHNn1nOQNExcnMD1dhJNF8qbLYbgSDfgKNHS9bZcV5un
+        v+CytrFXCU6W0v3VXcUms5BkIGGb0gT3A0sP3/bn6+qa4uYQUyzBZE4cmfIc4nt87oDQ2Z
+        LwA572U2j8OGAQAsbyYDSMzd9NXudko=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-3YIPTR51Oy638WLZm_U0_Q-1; Mon, 10 Apr 2023 11:39:18 -0400
+X-MC-Unique: 3YIPTR51Oy638WLZm_U0_Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AF2385A5B1;
+        Mon, 10 Apr 2023 15:39:18 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E875240C83AC;
+        Mon, 10 Apr 2023 15:39:17 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        oliver.upton@linux.dev
+Subject: [GIT PULL] KVM changes for Linux 6.3-rc7
+Date:   Mon, 10 Apr 2023 11:39:17 -0400
+Message-Id: <20230410153917.1313858-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <CAM9d7cgK-P5KuDy7hkAR4j7oB4ydE6Mw3KexqgwPPhJF6MKtXQ@mail.gmail.com>
- <20230410132239.2062-1-laihangliang1@huawei.com>
-In-Reply-To: <20230410132239.2062-1-laihangliang1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 10 Apr 2023 08:36:31 -0700
-Message-ID: <CAM9d7cjy-XivELAgq49YF9RKxFZ3M+H3V6s6zVboenRT3oRFDA@mail.gmail.com>
-Subject: Re: [PATCH v3] perf top: expand the range of multithreaded phase
-To:     Hangliang Lai <laihangliang1@huawei.com>
-Cc:     acme@kernel.org, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, brauner@kernel.org,
-        hewenliang4@huawei.com, irogers@google.com, jolsa@kernel.org,
-        linfeilong@huawei.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, liuwenyu7@huawei.com,
-        mark.rutland@arm.com, mingo@redhat.com, yeyunfeng@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,71 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linus,
 
-On Mon, Apr 10, 2023 at 6:22 AM Hangliang Lai <laihangliang1@huawei.com> wrote:
->
-> In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
-> donw_read and down_write can work to handle concurrency problems. Then top
-> use perf_set_singlethreaded and switch to single threaded phase, assuming
-> that no thread concurrency will happen later.
-> However, a UAF problem could occur in perf top in single threaded phase,
-> The concurrent procedure is like this:
-> display_thread                              process_thread
-> --------------                              --------------
-> thread__comm_len
->   -> thread__comm_str
->     -> __thread__comm_str(thread)
->                                             thread__delete
->                                              -> comm__free
->                                               -> comm_str__put
->                                                -> zfree(&cs->str)
->     -> thread->comm_len = strlen(comm);
-> Since in single thread phase, perf_singlethreaded is true, down_read and
-> down_write can not work to avoid concurrency problems.
-> This patch put perf_set_singlethreaded to the function tail to expand the
-> multithreaded phase range, make display_thread and process_thread run
-> safe.
->
-> Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
-> Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
+The following changes since commit fb5015bc8b733323b58f015b88e4f316010ec856:
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+  docs: kvm: x86: Fix broken field list (2023-04-04 13:22:05 -0400)
 
-Thanks,
-Namhyung
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-> ---
-> v2 -> v3
->  - Sorry for my misunderstanding, patch v3 makes perf_set_multithreaded
->    unconditional after synthesis and set_singlethread in the end.
->
->  tools/perf/builtin-top.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> index d4b5b02bab73..ae96ddaf85c4 100644
-> --- a/tools/perf/builtin-top.c
-> +++ b/tools/perf/builtin-top.c
-> @@ -1273,8 +1273,7 @@ static int __cmd_top(struct perf_top *top)
->                                     top->evlist->core.threads, true, false,
->                                     top->nr_threads_synthesize);
->
-> -       if (top->nr_threads_synthesize > 1)
-> -               perf_set_singlethreaded();
-> +       perf_set_multithreaded();
->
->         if (perf_hpp_list.socket) {
->                 ret = perf_env__read_cpu_topology_map(&perf_env);
-> @@ -1352,6 +1351,7 @@ static int __cmd_top(struct perf_top *top)
->  out_join_thread:
->         cond_signal(&top->qe.cond);
->         pthread_join(thread_process, NULL);
-> +       perf_set_singlethreaded();
->         return ret;
->  }
->
-> --
-> 2.33.0
->
+for you to fetch changes up to 0bf9601f8ef0703523018e975d6c1f3fdfcff4b9:
+
+  Merge tag 'kvmarm-fixes-6.3-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2023-04-06 13:34:19 -0400)
+
+----------------------------------------------------------------
+Two ARM fixes:
+
+* Ensure the guest PMU context is restored before the first KVM_RUN,
+  fixing an issue where EL0 event counting is broken after vCPU
+  save/restore
+
+* Actually initialize ID_AA64PFR0_EL1.{CSV2,CSV3} based on the
+  sanitized, system-wide values for protected VMs
+
+----------------------------------------------------------------
+Fuad Tabba (1):
+      KVM: arm64: Advertise ID_AA64PFR0_EL1.CSV2/3 to protected VMs
+
+Paolo Bonzini (1):
+      Merge tag 'kvmarm-fixes-6.3-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+
+Reiji Watanabe (1):
+      KVM: arm64: PMU: Restore the guest's EL0 event counting after migration
+
+ arch/arm64/kvm/arm.c                           | 26 +++++++++++++++++++++++++-
+ arch/arm64/kvm/hyp/include/nvhe/fixed_config.h |  5 ++++-
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c             |  7 -------
+ arch/arm64/kvm/pmu-emul.c                      |  1 +
+ arch/arm64/kvm/sys_regs.c                      |  1 -
+ 5 files changed, 30 insertions(+), 10 deletions(-)
+
