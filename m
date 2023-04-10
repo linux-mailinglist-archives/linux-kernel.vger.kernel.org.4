@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7C16DCCDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9846DCCDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 23:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjDJVha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 17:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S229931AbjDJViA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 17:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjDJVh2 (ORCPT
+        with ESMTP id S229690AbjDJVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:37:28 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81264172D;
-        Mon, 10 Apr 2023 14:37:27 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ALR1io019456;
-        Mon, 10 Apr 2023 21:37:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OlBCd49eBjkXp2Pv93kyk/rSi7LwB0d4AsewpoDOdKk=;
- b=lu0Ux9peRflihjxDoIqNxwbhRqMKf0lb3m3IKGGIt7Xn0SD3k7iD9bQsuh42hMsWqaU/
- Gnj7zelHxFT6ywOmqp4utWQ6CctCx8ljBytEdhdwrkJHPHsi/EeldUgU0WvqRGII6dhe
- g3IqZdGVxxX97OXOsZ5PhcdliqF1BnHLAhn+yAtUbI+sfGEX7icKwUcx9UolbIkeImCr
- I0YEN/Xsq2zJtHp+Zw7Wy/DxTq8OsFWF7A/qmEmAU0SiysGqjLFORFjcoGE/qVr11Quz
- cltyri/v+T/Zq/TRsZ7n9MXy7SY0djCjh6J1gs+N7tOoqNTVbm0yIdtyGDI22G99PL84 MQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvj1ks612-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 21:37:24 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ALbNoS008983
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Apr 2023 21:37:23 GMT
-Received: from [10.110.58.223] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 10 Apr
- 2023 14:37:22 -0700
-Message-ID: <3efb8203-a6d3-86e0-9e25-f7a2f2a6b71f@quicinc.com>
-Date:   Mon, 10 Apr 2023 14:37:16 -0700
+        Mon, 10 Apr 2023 17:37:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBC51731;
+        Mon, 10 Apr 2023 14:37:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CAF561ED1;
+        Mon, 10 Apr 2023 21:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF2BC433EF;
+        Mon, 10 Apr 2023 21:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681162675;
+        bh=nInAUa6amMudrI8XEJL1TpR3ESFkYUHEKUku5oaWNKA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DzLbS6KrP/rrdDllYm/O2I3oH3pJyDW4jebSqhrbwp7E0WV32c4lv9i7QBsiRViCi
+         WthOOONKfQaRoVBC3phTcqYDc3FUb73jA7nzyQrw4O2X+s6nNF+GwnWKTNSMMtJ3GP
+         EVbqhJbc9V/QLQ10TnG9BA3l45Sv+aX1aI6Rmla2qFpAUog4pNjTCBynOFFr5VFTHd
+         XnPckJtmuDVoXtRDT+ulajPlSbtzUQzl7ODCO6pyKca9DF8sqCiBtGZFV79GfuHHa2
+         a/+Fr12VKF6WSp4Jn9IChB+LymOhcUJ9yG4L/ATm0fkC6B9LqxzDCNNmnhtvk8cmKt
+         y1IyR1e7nkxoQ==
+Date:   Mon, 10 Apr 2023 16:37:54 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Donald Hunter <donald.hunter@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
+ with igb
+Message-ID: <20230410213754.GA4064490@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/3] usb: dwc3: gadget: Refactor EP0 forced
- stall/restart into a separate API
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-References: <20230407224025.22315-1-quic_wcheng@quicinc.com>
- <20230407224025.22315-2-quic_wcheng@quicinc.com>
- <20230408014456.nc2dgoavurtonq3r@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230408014456.nc2dgoavurtonq3r@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: dpxW21GFK31tWGaYn6yEroNN_UsSfnVn
-X-Proofpoint-ORIG-GUID: dpxW21GFK31tWGaYn6yEroNN_UsSfnVn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-10_14,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=442 mlxscore=0
- suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0 phishscore=0
- malwarescore=0 spamscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304100187
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD4GDZyVVoFmmBFY5hGQ9xbqRD=LzMfe7zVjDThiC589zT8uvQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
-
-On 4/7/2023 6:45 PM, Thinh Nguyen wrote:
-> On Fri, Apr 07, 2023, Wesley Cheng wrote:
->> Several sequences utilize the same routine for forcing the control endpoint
->> back into the SETUP phase.  This is required, because those operations need
->> to ensure that EP0 is back in the default state.
->>
->> Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
+On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
+> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
+> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
+> > > > because it apparently has an ACPI firmware node, and there's something
+> > > > we don't expect about its status?
+> > >
+> > > Yes they are built-in, to my knowledge.
+> > >
+> > > > Hopefully Rob will look at this.  If I were looking, I would be
+> > > > interested in acpidump to see what's in the DSDT.
+> > >
+> > > I can get an acpidump. Is there a preferred way to share the files, or just
+> > > an email attachment?
+> >
+> > I think by default acpidump produces ASCII that can be directly
+> > included in email.  http://vger.kernel.org/majordomo-info.html says
+> > 100K is the limit for vger mailing lists.  Or you could open a report
+> > at https://bugzilla.kernel.org and attach it there, maybe along with a
+> > complete dmesg log and "sudo lspci -vv" output.
 > 
-> Refactor patch should have no functional change. Why is there fixes tag?
+> Apologies for the delay, I was unable to access the machine while travelling.
 > 
+> https://bugzilla.kernel.org/show_bug.cgi?id=217317
 
-Sorry my mistake, will remove and resubmit.
+Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
+with this in the kernel parameters:
 
-Thanks
-Wesley Cheng
+  dyndbg="file drivers/acpi/* +p"
+
+and collect the entire dmesg log?
