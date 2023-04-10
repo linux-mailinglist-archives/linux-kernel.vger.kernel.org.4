@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB6E6DCE1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1646DCE1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDJXao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S229901AbjDJXb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDJXal (ORCPT
+        with ESMTP id S229663AbjDJXb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:30:41 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE2D26AC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:30:38 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54c1e4b7e63so118682667b3.20
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:30:38 -0700 (PDT)
+        Mon, 10 Apr 2023 19:31:27 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340032100
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:31:24 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id n11-20020a170902d2cb00b001a64cdd8210so1008451plc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681169437;
+        d=google.com; s=20210112; t=1681169483;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEJjGhEklh175OeP8/Q76NV27eAb8+1mk5/dnEHppbY=;
-        b=FsuXazcrHJKZvu6g1nSDIuc3/gmgb4O7h/UZ3ppdemgARatJqjZUYAyQ7ArpDcQjGg
-         NNksngyx5safom93YGHnZ4pHfIdvagOTlwG4e6mPTdqA0m/I0/j5XO4g7RC/yDXqUUnE
-         0kjgYDaAtcYR2UnK8LAYL4ueJjpjL+vmDuetHHIkGmUvzU5np9agexCj8KgH5xtyRJeI
-         FyqIkXZtem2//4UMqGFNuqp0CNKcQ9ZL1bFMk4hx5pUdYkb8i+8Z88/cg75hfZAtHBlG
-         8wpSWZnhFB907WN/1gf7dSSmW89DpoYb4f1pI94YGNd9pvs3aIqLJHpBOUNElFegdCXf
-         Jb7Q==
+        bh=rr1CIFtVTdjqLI7dwqPzvS7cU0W17pkXfsKjFMd7v0k=;
+        b=n2uZem2EWeXRVBaq9BmZVKAbxgj92XeXqw0FPrD7wqb9ZhQV2Rqyb/c/gRBpbmDN5P
+         DfgvFer+5dE6yvaRTw7NdShhLqC27wDTIbsceGUDGFSBTCWuYm/G654Mq09LjV/EzIZT
+         XVjDQqUJ29kb5vufr+Bn/nurajsLo5RwEJ1AuA9l/Gqb4zfOEd61rJ1WINL69sYdVfHa
+         sEzhq7MFL/TNyxOwAN+L+kazRTThaxn3XyUXTZ1SkOHRUCyDVRiKAP2S0HNuJOdRN59q
+         3kGIazWVRFEZkNPE6PjCL2Dlp44mfvhkWIsiZNKpCMb4JOzRDgyxA3ayTL2kMK3fQ2Jo
+         EAbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681169437;
+        d=1e100.net; s=20210112; t=1681169483;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEJjGhEklh175OeP8/Q76NV27eAb8+1mk5/dnEHppbY=;
-        b=WOi2Q5MMYxdO4+i/OvoQEZGyaM6eGKXPfh6lrbNoiVWZviHghyXznekAoBOFI9NDXk
-         GM5ERp4+G4nmWMgxsyP44oX5X6jFJJofbwxfrFVIXcnwjIVzyP6kVdIAAQX+664gHdGi
-         LUVU6vH3LlX/abllMvIIbxMon1FfJ4sZREjl3kjgyu4C+dfk9OVOa06hZPQS7TNHOESl
-         cMhbMIRiLvxXf67pBvtSabq4XrsEAeWJvCsOygAe7coCyzyoRVtoNVECV0Ji/5BcBNeJ
-         /YjOAFI4WT9wbIwfsptAliTZ/7p9oxqebjCk34R7Phwh6q7vuJDV5cnaNtl0aiEEwvYD
-         UvOg==
-X-Gm-Message-State: AAQBX9d1LZhfluqjWJc389SUAqzXH+wF7vamK/aSTqMsFvKfbqJFt6O9
-        dW0FtfXu6ckpWR4hwhLJnx0q4v+sCS0=
-X-Google-Smtp-Source: AKy350aTFgm3kLlfiqX/31P/rtLap6T3RPMivnN0w+GwPDldj9gU7Bx0Rw1DYwrMVkwIJ/cdQaYc3ikaDJI=
+        bh=rr1CIFtVTdjqLI7dwqPzvS7cU0W17pkXfsKjFMd7v0k=;
+        b=pIvvPnMmKixPGhErkPDKqVo1zh2uNkgyArmt0Tig+dqrhwQySnQLi4P3JTELZsH272
+         ovQ7U0epukLEmQLfIBYqKJ/u9roUBmogORfTjswetLRBBsnzD9wLwj1iOg0xPwsxD5wf
+         Coe/d40o767cSAdZ0k8xpuhEaVfrwS8/VpfQDctBYsdszThmh0e87+YWvdEUs+/tXCQH
+         6L7tRrL3bKkB/sYZz12w4z4a+DuMS74iegyXnmA/pfgsnxGX6sG/+RGK9OIZiPQtLtGN
+         /aHErHp86o4lONaUJI1DT7vCv4geuB+k3YVBDJ3+4G+EM1oED/DEWuS7dWV1e2JTeLe6
+         /joQ==
+X-Gm-Message-State: AAQBX9esO8EzH8svJKd7dIyq4Fm0xoyFS5K2biahq7bpyfq/hUJOoqJY
+        cPMg+RznhSDoiCWeGAvfHrxBuV/lOiI=
+X-Google-Smtp-Source: AKy350bdb0W1qwW783P0cLVSX3bBBaS+dWUsv+q2/D31Nq7LesVUBlQvOVteNoKHAR40lbgtWYbznUs7JmU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c905:0:b0:b77:81f:42dc with SMTP id
- z5-20020a25c905000000b00b77081f42dcmr8185978ybf.1.1681169437488; Mon, 10 Apr
- 2023 16:30:37 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 16:30:33 -0700
-In-Reply-To: <20230405003133.419177-1-seanjc@google.com>
+ (user=seanjc job=sendgmr) by 2002:a17:903:445:b0:1a0:5402:b17b with SMTP id
+ iw5-20020a170903044500b001a05402b17bmr2823543plb.0.1681169483722; Mon, 10 Apr
+ 2023 16:31:23 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 16:31:05 -0700
+In-Reply-To: <20230405002359.418138-1-seanjc@google.com>
 Mime-Version: 1.0
-References: <20230405003133.419177-1-seanjc@google.com>
+References: <20230405002359.418138-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <168116506851.1036283.16135858065837035509.b4-ty@google.com>
-Subject: Re: [PATCH 0/2] KVM: x86: More cleanups for Hyper-V range flushing
+Message-ID: <168116572088.1038076.7789958735569045426.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: nVMX: Emulate NOPs in L2, and PAUSE if it's not intercepted
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>
+        Mathias Krause <minipli@grsecurity.net>
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,26 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Apr 2023 17:31:31 -0700, Sean Christopherson wrote:
-> More cleanups of the code related to Hyper-V's range-based TLB flushing.
-> David's series got most of the names, but there are a few more that can
-> be converted (patch 1).  On top of that, having Hyper-V fill its struct
-> provides a decent improvement to code generation, and IMO yields a better
-> API (patch 2).
+On Tue, 04 Apr 2023 17:23:59 -0700, Sean Christopherson wrote:
+> Extend VMX's nested intercept logic for emulated instructions to handle
+> "pause" interception, in quotes because KVM's emulator doesn't filter out
+> NOPs when checking for nested intercepts.  Failure to allow emulation of
+> NOPs results in KVM injecting a #UD into L2 on any NOP that collides with
+> the emulator's definition of PAUSE, i.e. on all single-byte NOPs.
 > 
-> Sean Christopherson (2):
->   KVM: x86: Rename Hyper-V remote TLB hooks to match established scheme
->   KVM: x86/mmu: Move filling of Hyper-V's TLB range struct into Hyper-V
->     code
+> For PAUSE itself, honor L1's PAUSE-exiting control, but ignore PLE to
+> avoid unnecessarily injecting a #UD into L2.  Per the SDM, the first
+> execution of PAUSE after VM-Entry is treated as the beginning of a new
+> loop, i.e. will never trigger a PLE VM-Exit, and so L1 can't expect any
+> given execution of PAUSE to deterministically exit.
 > 
 > [...]
 
-Applied to kvm-x86 mmu, thanks!
+Applied to kvm-x86 vmx.  I haven't gotten any reviews, but the FEP changes
+in KUT will cause the nVMX test to fail, so I want to get kvm-x86/next fixed
+sooner than later.  I'm not expecting anything else for "vmx", so unwinding
+should be easy if it turns out this is busted/flawed.
 
-[1/2] KVM: x86: Rename Hyper-V remote TLB hooks to match established scheme
-      https://github.com/kvm-x86/linux/commit/8a1300ff9518
-[2/2] KVM: x86/mmu: Move filling of Hyper-V's TLB range struct into Hyper-V code
-      https://github.com/kvm-x86/linux/commit/9ed3bf411226
+[1/1] KVM: nVMX: Emulate NOPs in L2, and PAUSE if it's not intercepted
+      https://github.com/kvm-x86/linux/commit/84f481315b10
 
 --
 https://github.com/kvm-x86/linux/tree/next
