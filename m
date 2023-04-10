@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386A16DC844
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EE26DC850
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 17:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDJPPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 11:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S229764AbjDJPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 11:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDJPPy (ORCPT
+        with ESMTP id S229782AbjDJPSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 11:15:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC30A18D;
-        Mon, 10 Apr 2023 08:15:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 616FA60FC6;
-        Mon, 10 Apr 2023 15:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E02C433EF;
-        Mon, 10 Apr 2023 15:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681139751;
-        bh=rNyHz04r9T4fInohogsQtdUfB2r/6rgq5gFr00Es8Gg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qO7nXdPyp5y2xV8+mWQoqOOWEa8g8aVm71wGEEw1QqKt5B65B4ZH/VpOuZWxYkuKK
-         VTNp4ae9/oPs5An1Vi/wIWmlEIV2poZoYKmeLqBi3R0lA24k3J/YkV5BEcVcmfzvws
-         o5rcbL4QH6dlULqTPlMiDm/aNWfP7H9xcqqlzSyhl7t9Z47Acqxmifk/tlThi/uiGk
-         mIe1Tl1u4Ih2xwhaCjLFOrCKXSEQd0p//8QYwJ63LhdCAh0Qxdk92uYORwiD0oi/0m
-         DIn5kNtVd66Dg66LV8DeDd5yJHJnJFLkX1Mrw3KVwMxeHrDB+igJU9iJQsZGkqm3q3
-         JKyicynB9ScCw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 205F740009; Mon, 10 Apr 2023 12:15:48 -0300 (-03)
-Date:   Mon, 10 Apr 2023 12:15:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, peterz@infradead.org,
-        mingo@kernel.org, eranian@google.com, kan.liang@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        leo.yan@linaro.org, kjain@linux.ibm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v3 0/9] perf/mem: AMD IBS and generic tools improvements
-Message-ID: <ZDQoJFcyxpF+4Qu+@kernel.org>
-References: <20230407112459.548-1-ravi.bangoria@amd.com>
- <CAM9d7cijvZBsaXTMm8d=sxUWy6s+umCCnWhunD3KVhKbpVp_-A@mail.gmail.com>
- <631876a2-5946-82d5-6f70-bf7734db3992@amd.com>
+        Mon, 10 Apr 2023 11:18:33 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAB126B9;
+        Mon, 10 Apr 2023 08:18:32 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id h24so5055795plr.1;
+        Mon, 10 Apr 2023 08:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681139911; x=1683731911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZNcPr+y8/9NjCaWwABJXLJwupkaQ1Z2WNyPOrf8WwE=;
+        b=jgaQXxIHyIWuIAEj9p4DjxTrEnsP0IoU5gMNUYk7ZDSEFhjZlVBWz18Yb4Aj4JSsRC
+         4tHoJEWhqC7fbgUGNhXWEr1tfF6ru6kN77WmMzl+/3h+2ONsFoLDLq8gK5a+e0Zu+nLP
+         kB4MKBzR7bixSSHSUqD8D0139p6F9ueVpwqSFx+FYcRB56YGIJorVznmRE5kojSRKecZ
+         GDzyUbOEKl+Q9gQwpV3yJ/OFq48V6HCbKRJV639xV2G9jyLPwbj92nKuIkVs0IHdBuOJ
+         qqUGB2/EfqA3amxl4DoeroVN8mTeRrvsxnMg0+rHOsHJEIAWXv3mjxkNWNFTIxDu37Ov
+         I+qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681139911; x=1683731911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mZNcPr+y8/9NjCaWwABJXLJwupkaQ1Z2WNyPOrf8WwE=;
+        b=NJu0oraSgU89bwHOXSDhRJRclzZ1QbbnbSJ6nG1Hl+d6rsiYn71OV6P8NaoeKOIo0K
+         DZt6CXjsyUWcjxFywARgVfwvy/nxrfqK3d/fdxs73hgMV96wXnZBJ6f8ugvVWpvrwvBJ
+         mRtw1q+dgPgzERn3zg4BbZ59WqYC9IOTbSjpZLY4glIsFmC1pfpWxOnS8aSfSOo7+bTs
+         V7zrnoDarMBAcQzJbG42DvzqLYas8dkn4hNorbFdcsL8+pUzUeqDBevAOt5LDVoC+pmu
+         TKavV4od8OYVN/cDPeZyQ40sIolMKoTZAWx5gBzN/5wzX5NhKBp3G+GOs32fy9Gvmg2r
+         QS8Q==
+X-Gm-Message-State: AAQBX9e2Po+n78hDAxynfA/r/lympA836j9NHtGCgB/yxWY93uY5loJg
+        D2xP5XH9tSAW6Jj7Auo3DTOlW8YA1/4=
+X-Google-Smtp-Source: AKy350bJpZHoiKVjNW7hcYRnpF2BcmPV5YYQszQbXeTdqc9G5ortDpbma31ImOOU93t7c/+ZxREU5g==
+X-Received: by 2002:a17:902:f90b:b0:1a5:329d:b975 with SMTP id kw11-20020a170902f90b00b001a5329db975mr5414040plb.66.1681139911590;
+        Mon, 10 Apr 2023 08:18:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l6-20020a63f306000000b0050f7f783ff0sm7104508pgh.76.2023.04.10.08.18.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 08:18:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4cbe67b2-51a9-e5cf-640f-9db77f8ada55@roeck-us.net>
+Date:   Mon, 10 Apr 2023 08:18:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <631876a2-5946-82d5-6f70-bf7734db3992@amd.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Mark status as orphaned
+Content-Language: en-US
+To:     William Breathitt Gray <william.gray@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
+        techsupport@winsystems.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fred Eckert <Frede@cmslaser.com>
+References: <20230410150536.3168-1-william.gray@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230410150536.3168-1-william.gray@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 10, 2023 at 07:53:57AM +0530, Ravi Bangoria escreveu:
-> On 08-Apr-23 3:14 AM, Namhyung Kim wrote:
-> > Hi Ravi,
-> > 
-> > On Fri, Apr 7, 2023 at 4:25 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
-> >>
-> >> Kernel IBS driver wasn't using new PERF_MEM_* APIs due to some of its
-> >> limitations. Mainly:
-> >>
-> >> 1. mem_lvl_num doesn't allow setting multiple sources whereas old API
-> >>    allows it. Setting multiple data sources is useful because IBS on
-> >>    pre-zen4 uarch doesn't provide fine granular DataSrc details (there
-> >>    is only one such DataSrc(2h) though).
-> >> 2. perf mem sorting logic (sort__lvl_cmp()) ignores mem_lvl_num. perf
-> >>    c2c (c2c_decode_stats()) does not use mem_lvl_num at all. perf mem
-> >>    prints mem_lvl and mem_lvl_num both if both are set, which is ugly.
-> >>
-> >> Set mem_lvl_num, mem_remote and mem_hops for data_src via IBS. Handle
-> >> first issue using mem_lvl_num = ANY_CACHE | HOPS_0. In addition to
-> >> setting new API fields, convert all individual field assignments to
-> >> compile time wrapper macros built using PERF_MEM_S(). Also convert
-> >> DataSrc conditional code to array lookups.
-> >>
-> >> Interpretation of perf_mem_data_src by perf_mem__lvl_scnprintf() was
-> >> non-intuitive. Make it sane.
-> > 
-> > Looks good, but I think you need to split kernel and user patches.
+On 4/10/23 08:05, William Breathitt Gray wrote:
+> The current maintainer no longer has access to the device for testing,
+> the original user of this driver indicates that they have moved on to
+> another device, and the manufacturer WINSYSTEMS does not appear
+> interested in taking over support for this code.
 > 
-> Patch #1 to #3 are kernel changes. Patch #4 to #9 are userspace changes.
-> Arnaldo, Peter, please let me know if you wants to split the series and
-> resend.
-
-I can always use b4's -P option :-) So no need to resubmit, I can pick
-the tools bits,
-
-- Arnaldo
- 
-> > 
-> >>
-> >> v2: https://lore.kernel.org/r/20230327130851.1565-1-ravi.bangoria%40amd.com
-> >> v2->v3:
-> >>   - IBS: Don't club RmtNode with DataSrc=7 (IO)
-> >>   - Make perf_mem__lvl_scnprintf() more sane
-> >>   - Introduce PERF_MEM_LVLNUM_UNC, set it along with PERF_MEM_LVL_UNC
-> >>     and interpreat it in tool.
-> >>   - Add PERF_MEM_LVLNUM_NA to default data_src value
-> >>   - Change some of the IBS bit description according to latest PPR
-> >>
-> >> Namhyung Kim (1):
-> >>   perf/x86/ibs: Set mem_lvl_num, mem_remote and mem_hops for data_src
-> >>
-> >> Ravi Bangoria (8):
-> >>   perf/mem: Introduce PERF_MEM_LVLNUM_UNC
-> >>   perf/mem: Add PERF_MEM_LVLNUM_NA to PERF_MEM_NA
-> >>   perf headers: Sync uapi/linux/perf_event.h
-> >>   perf mem: Add PERF_MEM_LVLNUM_NA to PERF_MEM_DATA_SRC_NONE
-> >>   perf mem: Add support for printing PERF_MEM_LVLNUM_UNC
-> >>   perf mem: Refactor perf_mem__lvl_scnprintf()
-> >>   perf mem: Increase HISTC_MEM_LVL column size to 39 chars
-> >>   perf script ibs: Change bit description according to latest PPR
-> > 
-> > Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org> > ---
+>   MAINTAINERS | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks!
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90abe83c02f3..8ef060ef48d8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22514,7 +22514,7 @@ F:	drivers/media/rc/winbond-cir.c
+>   WINSYSTEMS EBC-C384 WATCHDOG DRIVER
+>   M:	William Breathitt Gray <william.gray@linaro.org>
 
--- 
+You should also remove the M: line because, after all, there
+won't be a maintainer anymore.
 
-- Arnaldo
+Thanks,
+Guenter
+
+>   L:	linux-watchdog@vger.kernel.org
+> -S:	Maintained
+> +S:	Orphan
+>   F:	drivers/watchdog/ebc-c384_wdt.c
+>   
+>   WINSYSTEMS WS16C48 GPIO DRIVER
+> 
+> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+
