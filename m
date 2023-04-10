@@ -2,128 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018ED6DC2B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B8E6DC2B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 04:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjDJCZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 22:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S229705AbjDJCYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 22:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjDJCZK (ORCPT
+        with ESMTP id S229700AbjDJCYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 22:25:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3E54233
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 19:24:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F01061763
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 02:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E946C4339E;
-        Mon, 10 Apr 2023 02:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681093479;
-        bh=4A4DyiocA7iSLRN+kYgk0UYrwVmLr56Y98gdBv7T4VM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mx4UEWTYXnX+SvedTlqQ/oWMLdG8xAtkFUZybN8GfM1d6E3CC0YIYGMqUI+j39ZKS
-         mF2SzpSv5lRk3MjsIjYWwugztk/+WfRFTODZnmjTdFKHKMHJ0Ycwo23TdQ7VRhQKfs
-         zr1PsAaFDNV1pbEWgi78izJqiyWRAwN/l+KN10/ivrwpBEn1PCNpgOeRY4G71iuyBP
-         hotGOXlw5JgqiTCljar99yLckXboqKZQhgE1OLnqWURhtlkeByEoAPo0VWRmD0WNgI
-         qZxoMe/3bE3kMjWBP/9yjO8E06NECcZsNR/LEbn5N3Les7/EQkqSzlaWVX3bOncv5X
-         WEB77LaEHKxpw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH 2/2] f2fs: clean up with {attach,detach}_page_private()
-Date:   Mon, 10 Apr 2023 10:24:18 +0800
-Message-Id: <20230410022418.1843178-2-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230410022418.1843178-1-chao@kernel.org>
-References: <20230410022418.1843178-1-chao@kernel.org>
+        Sun, 9 Apr 2023 22:24:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80BC40D7;
+        Sun,  9 Apr 2023 19:24:28 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id j8so1344827pjy.4;
+        Sun, 09 Apr 2023 19:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681093468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A1UI2o30pT9Hi/87peHLOtQusZd6rghspWdn2S7xv4s=;
+        b=c94fsjL6JJVY9BPRGg+uSAZ0BULulqhni26xSiQaa/SCtElVEukB+kARgM3QkQfyXd
+         Eh5p3S3ag7ti+aUf/5HnD3S9lHPoU/NKOUYWutwfNKriPWV9mmwOxoPZTAwS5+H5zBfu
+         bRgoEnwzzYbNCQTwApbM5IeEnNUqkLYCxUseumNiPKAeSYgKorZTbNe0K4gNXlb89mwv
+         JgVrh8MvU0BmTXg6M2LdLhl156km5LNFNkfYT02bQ6+FCoTtGwkwS0NsvHZnqhRbt24P
+         /xC5/nLcecK2l9efdAGT9Tm0cyBd8uzMkfhu0+ZZee0fjF0V54qxe0ku2Yt3OBcw7Kt9
+         FF1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681093468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A1UI2o30pT9Hi/87peHLOtQusZd6rghspWdn2S7xv4s=;
+        b=gxOFayEYf1G5ZbShyK3rmtwFIWTIQ80siz3Zf2okRsZFJIEU9PlhGWOy97nn8WmHTz
+         g5sP5E+yASmVjQ2vfHRub66EEA3FBN1NGnOQb36I52SaEHMt2OguQjQkUj4ZZM7fqAyQ
+         /VY8oFoqXZBStKW+XajKwRTSjkvXjDXGAjCPfGdkKN/aI6g23DZ9Hg3r0ccnhic7h6yw
+         EUU10vxOk+BUt7s2WAMbq63TV+h2c1Cn6ZaYiqmCidX3pg2kUYWxjJ0nuK4Z7rrsP1P4
+         WrWPdnjpG+o2oP0hnctZJ3K4AzNPIqpL6sBsAhqV971VYYA8TzkUf/zR1aj4iBhwEZCb
+         leYQ==
+X-Gm-Message-State: AAQBX9fcezNYNrtvM3qdI2nJx0vVjE7Erf0EoQNfs/ah6ZZ7Lbg+xxHo
+        wbxzsbAWlS2oypCRCWAYXoc=
+X-Google-Smtp-Source: AKy350aDs4UZ/tV+VjOOGiqFLzeH/HVg7N4qx7sm0xNcxpT5geXq/9Lx/JfLN3YTjaybGFlcW7HJqQ==
+X-Received: by 2002:a05:6a20:b326:b0:d6:c9e2:17a1 with SMTP id ef38-20020a056a20b32600b000d6c9e217a1mr8343706pzb.62.1681093467624;
+        Sun, 09 Apr 2023 19:24:27 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:803c:4683:913e:ce04])
+        by smtp.gmail.com with ESMTPSA id j3-20020aa79283000000b005d22639b577sm6611680pfa.165.2023.04.09.19.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Apr 2023 19:24:27 -0700 (PDT)
+Date:   Sun, 9 Apr 2023 19:24:24 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Soumya Negi <soumya.negi97@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: Check sanity of pipe in pegasus_probe()
+Message-ID: <ZDNzWH69OCefPW+G@google.com>
+References: <20230404074145.11523-1-soumya.negi97@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404074145.11523-1-soumya.negi97@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No logic changes.
+On Tue, Apr 04, 2023 at 12:41:45AM -0700, Soumya Negi wrote:
+> Fix WARNING in pegasus_open/usb_submit_urb
+> Syzbot bug: https://syzkaller.appspot.com/bug?id=bbc107584dcf3262253ce93183e51f3612aaeb13
+> 
+> Warning raised because pegasus_driver submits transfer request for
+> bogus URB(pipe type does not match endpoint type). Add sanity check at
+> probe time for pipe value extracted from endpoint descriptor. Probe
+> will fail if sanity check fails.
+> 
+> Reported-and-tested-by: syzbot+04ee0cb4caccaed12d78@syzkaller.appspotmail.com
+> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
 
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/f2fs/f2fs.h | 32 ++++++++------------------------
- 1 file changed, 8 insertions(+), 24 deletions(-)
+Applied, thank you.
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index ec8387da7f74..c378aedcadea 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1416,11 +1416,8 @@ static inline bool page_private_##name(struct page *page) \
- #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
- static inline void set_page_private_##name(struct page *page) \
- { \
--	if (!PagePrivate(page)) { \
--		get_page(page); \
--		SetPagePrivate(page); \
--		set_page_private(page, 0); \
--	} \
-+	if (!PagePrivate(page)) \
-+		attach_page_private(page, (void *)page->private); \
- 	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
- 	set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
- }
-@@ -1429,13 +1426,8 @@ static inline void set_page_private_##name(struct page *page) \
- static inline void clear_page_private_##name(struct page *page) \
- { \
- 	clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
--	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
--		set_page_private(page, 0); \
--		if (PagePrivate(page)) { \
--			ClearPagePrivate(page); \
--			put_page(page); \
--		}\
--	} \
-+	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) \
-+		detach_page_private(page); \
- }
- 
- PAGE_PRIVATE_GET_FUNC(nonpointer, NOT_POINTER);
-@@ -1464,11 +1456,8 @@ static inline unsigned long get_page_private_data(struct page *page)
- 
- static inline void set_page_private_data(struct page *page, unsigned long data)
- {
--	if (!PagePrivate(page)) {
--		get_page(page);
--		SetPagePrivate(page);
--		set_page_private(page, 0);
--	}
-+	if (!PagePrivate(page))
-+		attach_page_private(page, 0);
- 	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page));
- 	page_private(page) |= data << PAGE_PRIVATE_MAX;
- }
-@@ -1476,13 +1465,8 @@ static inline void set_page_private_data(struct page *page, unsigned long data)
- static inline void clear_page_private_data(struct page *page)
- {
- 	page_private(page) &= GENMASK(PAGE_PRIVATE_MAX - 1, 0);
--	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) {
--		set_page_private(page, 0);
--		if (PagePrivate(page)) {
--			ClearPagePrivate(page);
--			put_page(page);
--		}
--	}
-+	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER))
-+		detach_page_private(page);
- }
- 
- /* For compression */
 -- 
-2.25.1
-
+Dmitry
