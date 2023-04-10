@@ -2,80 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BE56DC93D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD136DC94A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 18:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjDJQZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 12:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S230132AbjDJQ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 12:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjDJQZU (ORCPT
+        with ESMTP id S230304AbjDJQ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 12:25:20 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EFA171D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:25:17 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d83-20020a25e656000000b00b8befc985b5so14050185ybh.22
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681143917;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zJZt4cv250ETxOLYWhNXH5O28WLGu+lq/P9MQwXS1vc=;
-        b=Q38PWrtfrWbIykKvRvvBdbu2xEQ65qR53Fa294q6h9fTzpEgUOChCN6gZzA6J/2Jrr
-         oqqSni32vEWVPYCbg0h6jm4fUOjfjFak24TvaaKhhhzysF17g2T81sIMcNE/NB6iEZfy
-         +JAuyYt2ZIkrpatZUEADvUNtPERwhA5h4EJXJKEds3rQ3lUQshZ+PSpMj9wQN087+Ou9
-         FPqzzKvhqvM3NpQ0KRI+2RbokVotgwcuON+I3/gS46uHJ5RfnNczmlNKsnPDqRFen6K/
-         toC13G+9g8xUr2c5Iins+M2UhJTrM19tEpB1/wsJwf04OBfN3YoQtNyJepOI8VsojJVK
-         Mzyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681143917;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zJZt4cv250ETxOLYWhNXH5O28WLGu+lq/P9MQwXS1vc=;
-        b=QfD2hj9qaoMJFOHNfPJ1jy0fHHxtjLOUpu+hcIfq78A/5HJEaXXGvEixsCr55kX9uH
-         wuAWSsbuUc/OmWwLPDVZ3Bo1Xi/VYjneU0JBL+z2ghCCftZoHjdOGYsKAeEMzzuLXR9Q
-         ryni21TfLVK4dHQNGnT1FJ4BqmDvVu0f90+PGIoOm4sepXmu66Dw+nqLatX7SDCwK/rS
-         l+YOPzXP3N1rEqKWbmbBMpL3cz+wIdM2M2uCbq+nvQ9qHmg/CCNIf/JseOy8Agd/Kk5E
-         dA32UT9+HDMr+v0Xox2u5KVX1ihwASIXer3MZ4ycS78RPaXKBA3OmSCPoD8T2q0U5ySO
-         WZZA==
-X-Gm-Message-State: AAQBX9cZYK99xD5OY3Jc0NutAORpaLjne9tHUDr3L6MDnFEsDv6w404G
-        YHgvJaOj0NhW20WKsS2Pw74bhrg=
-X-Google-Smtp-Source: AKy350Yza28bnGsHoOQVOcw77cb7JSctAnu5UcsxyRZ6i3OPX41XxJItWn69Z01NRHFpS7EVaLNUCGM=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a25:cb52:0:b0:a02:a3a6:78fa with SMTP id
- b79-20020a25cb52000000b00a02a3a678famr5422814ybg.12.1681143917218; Mon, 10
- Apr 2023 09:25:17 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 09:25:15 -0700
-In-Reply-To: <20230410100939.331833-4-yoong.siang.song@intel.com>
-Mime-Version: 1.0
-References: <20230410100939.331833-1-yoong.siang.song@intel.com> <20230410100939.331833-4-yoong.siang.song@intel.com>
-Message-ID: <ZDQ4a9UIVysA6hgd@google.com>
-Subject: Re: [PATCH net-next 3/4] net: stmmac: add Rx HWTS metadata to XDP
- receive pkt
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Song Yoong Siang <yoong.siang.song@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Mon, 10 Apr 2023 12:27:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02BC1FFB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 09:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681143980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3K4izxTpeZeRb9RjlSqD5EHbDYTo8MP2lTjHdQRyzJo=;
+        b=fLLlypiAdOEgziS4D6QbKHWq9QVtwwtMs0lc8xokDafzBlKAuzs/tGPBvkgMsDeIaM8PDc
+        QPfR20p0nyvYQSXPgevZrgDl0midUD7Jn9r9EDImOUXdL8nUlIbTdHaToPp+z+J1hrHeWU
+        pic1Z0Bm75+iQyg0WT0pSmTW0p4ggx8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-gt_EIpKkNJeGxp2tSJwrfw-1; Mon, 10 Apr 2023 12:26:16 -0400
+X-MC-Unique: gt_EIpKkNJeGxp2tSJwrfw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0E1F3806627;
+        Mon, 10 Apr 2023 16:26:15 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 778E0492B00;
+        Mon, 10 Apr 2023 16:26:15 +0000 (UTC)
+Message-ID: <0978e4c6-0af5-be68-dc8d-3b55d00ec2cd@redhat.com>
+Date:   Mon, 10 Apr 2023 12:26:15 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3] mm: oom: introduce cpuset oom
+Content-Language: en-US
+To:     Gang Li <ligang.bdlg@bytedance.com>, Michal Hocko <mhocko@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org, rientjes@google.com,
+        Zefan Li <lizefan.x@bytedance.com>,
+        linux-kernel@vger.kernel.org
+References: <20230410025056.22103-1-ligang.bdlg@bytedance.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230410025056.22103-1-ligang.bdlg@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,111 +65,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10, Song Yoong Siang wrote:
-> Add receive hardware timestamp metadata support via kfunc to XDP receive
-> packets.
-> 
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+On 4/9/23 22:50, Gang Li wrote:
+> Cpusets constrain the CPU and Memory placement of tasks.
+> `CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
+> has never been utilized.
+>
+> When a process in cpuset which constrain memory placement triggers
+> oom, it may kill a completely irrelevant process on other numa nodes,
+> which will not release any memory for this cpuset.
+>
+> We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
+> selecting victim from all cpusets with the same mems_allowed as the
+> current cpuset.
+>
+> Example:
+>
+> Create two processes named mem_on_node0 and mem_on_node1 constrained
+> by cpusets respectively. These two processes alloc memory on their
+> own node. Now node0 has run out of memory, OOM will be invokled by
+> mem_on_node0.
+>
+> Before this patch:
+>
+> Since `CONSTRAINT_CPUSET` do nothing, the victim will be selected from
+> the entire system. Therefore, the OOM is highly likely to kill
+> mem_on_node1, which will not free any memory for mem_on_node0. This
+> is a useless kill.
+>
+> ```
+> [ 2786.519080] mem_on_node0 invoked oom-killer
+> [ 2786.885738] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+> [ 2787.181724] [  13432]     0 13432   787016   786745  6344704        0             0 mem_on_node1
+> [ 2787.189115] [  13457]     0 13457   787002   785504  6340608        0             0 mem_on_node0
+> [ 2787.216534] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
+> [ 2787.229991] Out of memory: Killed process 13432 (mem_on_node1)
+> ```
+>
+> After this patch:
+>
+> The victim will be selected only in all cpusets that have the same
+> mems_allowed as the cpuset that invoked oom. This will prevent
+> useless kill and protect innocent victims.
+>
+> ```
+> [  395.922444] mem_on_node0 invoked oom-killer
+> [  396.239777] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+> [  396.246128] [   2614]     0  2614  1311294  1144192  9224192        0             0 mem_on_node0
+> [  396.252655] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
+> [  396.264068] Out of memory: Killed process 2614 (mem_on_node0)
+> ```
+>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Cc: <cgroups@vger.kernel.org>
+> Cc: <linux-mm@kvack.org>
+> Cc: <rientjes@google.com>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+Thanks for the update.
 > ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  1 +
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 24 +++++++++++++++++--
->  2 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> index ac8ccf851708..760445275da8 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-> @@ -94,6 +94,7 @@ struct stmmac_rx_buffer {
->  
->  struct stmmac_xdp_buff {
->  	struct xdp_buff xdp;
-> +	ktime_t rx_hwts;
->  };
->  
->  struct stmmac_rx_queue {
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index f7bbdf04d20c..ca183fbfde85 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5307,6 +5307,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->  			}
->  		}
->  
-
-[..]
-
-> +		stmmac_get_rx_hwtstamp(priv, p, np, &ctx.rx_hwts);
-
-Do we want to pay this cost for every packet?
-
-The preferred alternative is to store enough state in the
-stmmac_xdp_buff so we can get to this data from stmmac_xdp_rx_timestamp.
-
-I haven't read this code, but tentatively:
-- move priv, p, np into stmmac_xdp_buff, assign them here instead of
-  calling stmmac_get_rx_hwtstamp
-- call stmmac_get_rx_hwtstamp from stmmac_xdp_rx_timestamp with the
-  stored priv, p, np
-
-That would ensure that we won't waste the cycles pulling out the rx
-timestamp for every packet if the higher levels / users don't care.
-
-Would something like this work?
-
+> Changes in v3:
+> - Provide more details about the use case, testing, implementation.
+> - Document the userspace visible change in Documentation.
+> - Rename cpuset_cgroup_scan_tasks() to cpuset_scan_tasks() and add
+>    a doctext comment about its purpose and how it should be used.
+> - Take cpuset_rwsem to ensure that cpusets are stable.
+>
+> Changes in v2:
+> - https://lore.kernel.org/all/20230404115509.14299-1-ligang.bdlg@bytedance.com/
+> - Select victim from all cpusets with the same mems_allowed as the current cpuset.
+>    (David Rientjes <rientjes@google.com>)
+>
+> v1:
+> - https://lore.kernel.org/all/20220921064710.89663-1-ligang.bdlg@bytedance.com/
+> - Introduce cpuset oom.
+> ---
+>   .../admin-guide/cgroup-v1/cpusets.rst         | 14 +++++-
+>   include/linux/cpuset.h                        |  6 +++
+>   kernel/cgroup/cpuset.c                        | 44 +++++++++++++++++++
+>   mm/oom_kill.c                                 |  4 ++
+>   4 files changed, 66 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/cgroup-v1/cpusets.rst b/Documentation/admin-guide/cgroup-v1/cpusets.rst
+> index 5d844ed4df69..d686cd47e91d 100644
+> --- a/Documentation/admin-guide/cgroup-v1/cpusets.rst
+> +++ b/Documentation/admin-guide/cgroup-v1/cpusets.rst
+> @@ -25,7 +25,8 @@ Written by Simon.Derr@bull.net
+>        1.6 What is memory spread ?
+>        1.7 What is sched_load_balance ?
+>        1.8 What is sched_relax_domain_level ?
+> -     1.9 How do I use cpusets ?
+> +     1.9 What is cpuset oom ?
+> +     1.10 How do I use cpusets ?
+>      2. Usage Examples and Syntax
+>        2.1 Basic Usage
+>        2.2 Adding/removing cpus
+> @@ -607,8 +608,17 @@ If your situation is:
+>    - The latency is required even it sacrifices cache hit rate etc.
+>      then increasing 'sched_relax_domain_level' would benefit you.
+>   
+> +1.9 What is cpuset oom ?
+> +--------------------------
+> +If there is no available memory to allocate on the nodes specified by
+> +cpuset.mems, then an OOM (Out-Of-Memory) will be invoked.
 > +
->  		if (!skb) {
->  			unsigned int pre_len, sync_len;
->  
-> @@ -5315,7 +5317,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->  
->  			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
->  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
-> -					 buf->page_offset, buf1_len, false);
-> +					 buf->page_offset, buf1_len, true);
->  
->  			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
->  				  buf->page_offset;
-> @@ -5411,7 +5413,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->  
->  		shhwtstamp = skb_hwtstamps(skb);
->  		memset(shhwtstamp, 0, sizeof(struct skb_shared_hwtstamps));
-> -		stmmac_get_rx_hwtstamp(priv, p, np, &shhwtstamp->hwtstamp);
-> +		shhwtstamp->hwtstamp = ctx.rx_hwts;
->  
->  		stmmac_rx_vlan(priv->dev, skb);
->  		skb->protocol = eth_type_trans(skb, priv->dev);
-> @@ -7071,6 +7073,22 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv, bool enable)
->  	}
->  }
->  
-> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
+> +Since the victim selection is a heuristic algorithm, we cannot select
+> +the "perfect" victim. Therefore, currently, the victim will be selected
+> +from all the cpusets that have the same mems_allowed as the cpuset
+> +which invoked OOM.
+Nit: That feature is not specific to cgroup v1, as it applies to v2 as 
+well. Maybe you can be more specific about that.
+>   
+> -1.9 How do I use cpusets ?
+> +1.10 How do I use cpusets ?
+>   --------------------------
+>   
+>   In order to minimize the impact of cpusets on critical kernel
+> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+> index 980b76a1237e..75465bf58f74 100644
+> --- a/include/linux/cpuset.h
+> +++ b/include/linux/cpuset.h
+> @@ -171,6 +171,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+>   	task_unlock(current);
+>   }
+>   
+> +int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
+> +
+>   #else /* !CONFIG_CPUSETS */
+>   
+>   static inline bool cpusets_enabled(void) { return false; }
+> @@ -287,6 +289,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+>   	return false;
+>   }
+>   
+> +static inline int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
 > +{
-> +	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
-> +
-> +	if (ctx->rx_hwts) {
-> +		*timestamp = ctx->rx_hwts;
-> +		return 0;
-> +	}
-> +
-> +	return -ENODATA;
+> +	return 0;
 > +}
-> +
-> +const struct xdp_metadata_ops stmmac_xdp_metadata_ops = {
-> +	.xmo_rx_timestamp		= stmmac_xdp_rx_timestamp,
-> +};
-> +
->  /**
->   * stmmac_dvr_probe
->   * @device: device pointer
-> @@ -7178,6 +7196,8 @@ int stmmac_dvr_probe(struct device *device,
->  
->  	ndev->netdev_ops = &stmmac_netdev_ops;
->  
-> +	ndev->xdp_metadata_ops = &stmmac_xdp_metadata_ops;
-> +
->  	ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
->  			    NETIF_F_RXCSUM;
->  	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-> -- 
-> 2.34.1
-> 
+>   #endif /* !CONFIG_CPUSETS */
+>   
+>   #endif /* _LINUX_CPUSET_H */
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index bc4dcfd7bee5..4c51225568aa 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -4013,6 +4013,50 @@ void cpuset_print_current_mems_allowed(void)
+>   	rcu_read_unlock();
+>   }
+>   
+> +/**
+> + * cpuset_scan_tasks - specify the oom scan range
+> + * @fn: callback function to select oom victim
+> + * @arg: argument for callback function, usually a pointer to struct oom_control
+> + *
+> + * Description: This function is used to specify the oom scan range. Return 0 if
+> + * no task is selected, otherwise return 1. The selected task will be stored in
+> + * arg->chosen. Thins function can only be called in select_bad_process()
+> + * while oc->onstraint == CONSTRAINT_CPUSET.
+
+Nit: That is not strictly correct as dump_tasks() will call this as well.
+
+Cheers,
+Longman
+
