@@ -2,244 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59BB6DCC0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459EA6DCC06
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjDJUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        id S229680AbjDJUMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDJUMe (ORCPT
+        with ESMTP id S229536AbjDJUMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 16:12:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48329E7E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681157507;
+        Mon, 10 Apr 2023 16:12:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5610DD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:12:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681157522;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=aF+LN6zHkq+MYwedY1yELa2Syfx18KiVV4p0VX9cRU8=;
-        b=HkzLvOpRQvmcvTVbvOSareO1sEMJJmWskesdKfd3NK/C5ZY/QE0O1/DxjRJ99hAJIOzyYd
-        jUncv0s06pvd1hJXv17dDRpc7MdETHOqLjZCHYostGLlrYJygCLRSsil0J9WqYD43OIlNt
-        2j7ZjkHlZP+z5QlhSciMC24dhu1Ucng=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-390-BfSm2WhuO1eDXneGLL2aFQ-1; Mon, 10 Apr 2023 16:11:46 -0400
-X-MC-Unique: BfSm2WhuO1eDXneGLL2aFQ-1
-Received: by mail-qk1-f198.google.com with SMTP id 127-20020a370685000000b00746a3ab9426so3305852qkg.20
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:11:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681157504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aF+LN6zHkq+MYwedY1yELa2Syfx18KiVV4p0VX9cRU8=;
-        b=6IvtJLkfbQwMeNppG0y2nP8JTOInywu6au5+NIbquLwbmK6RoMBXbw5O12PH3AXMyY
-         /42cwU98nX3zE7pp0WiH6fZR0E0kYd1rSJjEvaQIw3vB9s5l3qr8JzpJ4uJQHiOnzfQy
-         bNDsTfvxJX8lrYAphdtMQdPugozPwFGh2wqviphVaJXtQ9vTtOpOUFYW54QR+PgxsctY
-         aAyjhUW3+CGhcw/AcGA2gKeHIpWEpRVWuvciNFtBjnatZ4xWnnZ/ErSl4908tbif+ohQ
-         zGiBc64Xm76VekiMaglcyCMvmUg5bfvTaTS0EiUi+GXZAe5Rcrn/a0m/Z0iorh7N7DQx
-         mgkQ==
-X-Gm-Message-State: AAQBX9cIlmVrclyMZIZGvu6vBx2k40WNg5SOk9P0l+ScjgXB+JSJK0k+
-        3/mNlGuDOzvcWhhePH9jqXIeuK8p/iRaSRUd0SGINwwo5u+Z8850o5GvVUaO94rcDuoXUpa0gG7
-        JKdOnrk6yf10VQWhjzn15bbAa
-X-Received: by 2002:a05:622a:19a8:b0:3e3:913c:1ca8 with SMTP id u40-20020a05622a19a800b003e3913c1ca8mr530687qtc.22.1681157503812;
-        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZpTbP2PVw2o8uUHr2dWI9RknpdGBALbZPgkbhmGvuYy32zsn/DFIhdrrDx1ewOr2ydR64RMA==
-X-Received: by 2002:a05:622a:19a8:b0:3e3:913c:1ca8 with SMTP id u40-20020a05622a19a800b003e3913c1ca8mr530654qtc.22.1681157503536;
-        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
-Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
-        by smtp.gmail.com with ESMTPSA id n124-20020a374082000000b0074860fcfc00sm3447372qka.136.2023.04.10.13.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:11:43 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 16:11:45 -0400
-From:   Eric Chanudet <echanude@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2 5/7] arm64: dts: qcom: sa8775p: add the pcie smmu node
-Message-ID: <20230410201145.6e2qsl5gtwh7n3k7@echanude>
-References: <20230406200723.552644-1-brgl@bgdev.pl>
- <20230406200723.552644-6-brgl@bgdev.pl>
+        bh=vdW463lMrSIv6E0tgsiWW1gHVmKWpAD6pFZXhTowmDg=;
+        b=Qx6ain5zpkrw9c0mIzTsdZJ2CziF6CqWWukuvArgsC4szGXpIxgHH/QINUH69+TsLjxssH
+        ZtxAQFYwuObC448FwupWmc7cUrlmNSCsooOlcluSRtZZY6pYhdU1BzpiCRzn6PbD3KizpC
+        4L7T1dbr7DA9xUiX9gIYM06Sfvfta2AfHmq2q35mD6ZAtj2jcPQDNrmZzdvmzJ8GMApr5/
+        iGlCfU6kuA3lVF3/mkvgmYEof908j9ue1JEDCXtEoce6c8IjDMHZkEJXk6Xcu/CUbBu0+W
+        UGBgV1oE9MTEaT3pNQ3m6Qwa6IBMyht89rhKb2igK55qXqX/QkuQS/OYHXhnqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681157522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vdW463lMrSIv6E0tgsiWW1gHVmKWpAD6pFZXhTowmDg=;
+        b=qCqxFj5jAYh3BVZhm6uZMnl5peEQBRM5008KIMURBjiOGz05/O+U/0Y2t9lJJYalfATkJu
+        tJYspYOL2pZ2mQAA==
+To:     Ye Bin <yebin@huaweicloud.com>, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk
+Cc:     linux-kernel@vger.kernel.org, dchinner@redhat.com,
+        yebin10@huawei.com, yebin@huaweicloud.com
+Subject: Re: [PATCH v2 1/2] cpu/hotplug: introduce 'num_dying_cpus' to get
+ dying CPUs count
+In-Reply-To: <20230406015629.1804722-2-yebin@huaweicloud.com>
+References: <20230406015629.1804722-1-yebin@huaweicloud.com>
+ <20230406015629.1804722-2-yebin@huaweicloud.com>
+Date:   Mon, 10 Apr 2023 22:12:02 +0200
+Message-ID: <87bkjv1oq5.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406200723.552644-6-brgl@bgdev.pl>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 10:07:21PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add the PCIe SMMU node for sa8775p platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index 2343df7e0ea4..9ab630c7d81b 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
->  				     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-> +		pcie_smmu: iommu@15200000 {
-> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
-> +			reg = <0x0 0x15200000 0x0 0x800000>;
+On Thu, Apr 06 2023 at 09:56, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>
+> Introduce '__num_dying_cpus' variable to cache the number of dying CPUs
+> in the core and just return the cached variable.
 
-Testing on the board, applying on next-20230406:
-[    1.041869] arm-smmu 15200000.iommu: SMMU address space size (0x80000) differs from mapped region size (0x800000)!
+Why?
 
-In the downstream sources, the size is 0x80000[1].
+That atomic counter is racy too if read and acted upon w/o having CPUs
+read locked.
 
-On reboot, I also get a synchronous abort, but the second line, from the
-following output on the serial, could indicate the hypervisor is behind
-it:
+All it does is making the race window smaller vs. the cpumask_weight()
+based implementation. It's still racy and incorrect.
 
-[   26.906206] arm-smmu 15200000.iommu: disabling translation
-3      33.244434 Injecting instruction/data abort to VM 3, original ESR_EL2 = 0x93800047, fault VA = 0xffff80000a380000, fault IPA = 0x15200000, ELR_EL2 = 0xffffd064f70c9de8
-[   26.942083] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
-[   26.948506] Modules linked in: nvmem_qcom_spmi_sdam qcom_pon spi_geni_qcom nvmem_reboot_mode crct10dif_ce i2c_qcom_geni phy_qcom_qmp_ufs gpucc_sa8775p ufs_qcom socinfo fuse ipv6
-[   26.966702] CPU: 3 PID: 1 Comm: systemd-shutdow Not tainted 6.3.0-rc5-next-20230406-00019-g9d08a3c17f54-dirty #134
-[   26.977315] Hardware name: Qualcomm SA8775P Ride (DT)
-[   26.982505] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   26.989651] pc : arm_smmu_device_shutdown+0x88/0x1d8
-[   26.994773] lr : arm_smmu_device_shutdown+0x70/0x1d8
-[   26.999875] sp : ffff80000805bbf0
-[   27.003283] x29: ffff80000805bbf0 x28: ffff0e69400a0000 x27: 0000000000000000
-[   27.010608] x26: ffffd064f8130f38 x25: 0000000000000001 x24: ffffd064f8eac028
-[   27.017932] x23: ffff0e6940eeb490 x22: ffffd064f8f24f80 x21: ffff0e6940eeb410
-[   27.025254] x20: ffff0e6940808c80 x19: ffff0e6940eeb410 x18: 0000000000000006
-[   27.032579] x17: 0000000000000001 x16: 0000000000000014 x15: ffff80000805b5c0
-[   27.039903] x14: 0000000000000000 x13: ffffd064f8ac19a8 x12: 0000000000000606
-[   27.047226] x11: 0000000000000202 x10: ffffd064f8b199a8 x9 : ffffd064f8ac19a8
-[   27.054549] x8 : 00000000ffffefff x7 : ffffd064f8b199a8 x6 : 80000000fffff000
-[   27.061872] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
-[   27.069195] x2 : 0000000000000000 x1 : ffff80000a380000 x0 : 0000000000000001
-[   27.076520] Call trace:
-[   27.079041]  arm_smmu_device_shutdown+0x88/0x1d8
-[   27.083787]  platform_shutdown+0x24/0x34
-[   27.087825]  device_shutdown+0x150/0x258
-[   27.091859]  kernel_restart+0x40/0xc0
-[   27.095632]  __do_sys_reboot+0x1f0/0x274
-[   27.099664]  __arm64_sys_reboot+0x24/0x30
-[   27.103786]  invoke_syscall+0x48/0x114
-[   27.107644]  el0_svc_common+0x40/0xf4
-[   27.111410]  do_el0_svc+0x3c/0x9c
-[   27.114822]  el0_svc+0x2c/0x84
-[   27.117969]  el0t_64_sync_handler+0xf4/0x120
-[   27.122357]  el0t_64_sync+0x190/0x194
-[   27.126126] Code: f9400404 b50008e4 f9400681 52800020 (b9000020) 
-[   27.132385] ---[ end trace 0000000000000000 ]---
+So no, this is not going to happen.
 
-[1] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/blob/ES2/arch/arm64/boot/dts/qcom/lemans.dtsi#L3498
+Thanks,
 
-> +			#iommu-cells = <2>;
-> +			#global-interrupts = <2>;
-> +
-> +			interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
->  		intc: interrupt-controller@17a00000 {
->  			compatible = "arm,gic-v3";
->  			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
-> -- 
-> 2.37.2
-> 
+        tglx
 
--- 
-Eric Chanudet
 
