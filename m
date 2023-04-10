@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5256DCE46
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3876DCE48
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjDJXsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S230091AbjDJXss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDJXsF (ORCPT
+        with ESMTP id S229536AbjDJXsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:48:05 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD641715;
-        Mon, 10 Apr 2023 16:48:04 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id m2so3896055oiw.0;
-        Mon, 10 Apr 2023 16:48:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681170484; x=1683762484;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sgropNRrE05ElIoWGGtnBq0l7SFJzOMXHEv8LTacl3M=;
-        b=UyvG6QvB0me928bdw910Lz4RY0Kova7s44CPlo1QkqulayjNNakRp2xVMrP9/V5fXW
-         n/TquraFrdkw7+kr03pgGzewjJM0bKpqbiXaqker4rev0y2rs6P52LaCO91dvFnkyq2n
-         qxQwFEnbhn3lhsfF3NMv8m35vvwknLlSSshDoT80bFefIYBGUfTgWnoNvY2Gv4Njb59v
-         QeZ54afxYAMcFPqd8SazHGh8+Fo4754ilO4soxBqF2a5udIwfIcfbwJNRjienvJytvpJ
-         cyi8UFbff447Or/aG1mkQgnZi0MK2QhDcwDvjLb/OyWPMnXcS+Me9uNKJc/HGJvkKKyV
-         dG1w==
-X-Gm-Message-State: AAQBX9fL0NN5fsnmPrANMxaHsuHGkbWx+aKGlp/nt3mdpECdmhMs0j2O
-        +RZ3R4kezrn1Pb/fe2i5YQl+tCxRWg==
-X-Google-Smtp-Source: AKy350Z554Bj2KhLs1nDATV8HxFu1IsscAIjPptfdkTW9sY8Nzu9lo2pgr4uslFKIciMuQAqqup6gw==
-X-Received: by 2002:aca:2116:0:b0:38b:de4:e3c5 with SMTP id 22-20020aca2116000000b0038b0de4e3c5mr5577453oiz.43.1681170483840;
-        Mon, 10 Apr 2023 16:48:03 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r142-20020acaa894000000b003871471f894sm4982640oie.27.2023.04.10.16.48.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 16:48:03 -0700 (PDT)
-Received: (nullmailer pid 1602128 invoked by uid 1000);
-        Mon, 10 Apr 2023 23:48:02 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 10 Apr 2023 19:48:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F81715;
+        Mon, 10 Apr 2023 16:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681170524; x=1712706524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HLABFzxIaBKdwMWhvhRoqNf4XliHa9M847b79qETyi0=;
+  b=n3oaUx3W4B5p+hfxHTzGsD62dKB2EcYFNEOQUPEfdhID0YodKSAH4u4f
+   jLSMiEtM39stn4jFcM4H9f2zj1hEgP6x8XNCiv2c2NYFFSmJSj7tHw7SQ
+   BftouZNbh+mXJ+BVkC4z+3xeP3RlBY7WS1ikLDnNWlxG8hcss4UpQuHBU
+   FunXwNBaaav8TO3Fq8biY1EzDD8pNZSJfnptTSKkBPv9dW6co0Zc2sKSD
+   MnlDSHvmLjpuz4F1inlBXx/oWmmxAfF6r+gQSDKO65yPRj8f1ZIdELiNe
+   mfGiDWCgWtplhocoxw376KqENA5vhyvLj48+1jLy2UF5pyhXmNnFwteom
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="332160674"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="332160674"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 16:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="718761257"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="718761257"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.230.103])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 16:48:43 -0700
+Date:   Mon, 10 Apr 2023 16:48:41 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Angel Alberto Carretero <angelalbertoc.r@gmail.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: imx: fix macro style error
+Message-ID: <ZDSgWU5GXPFdJ99o@aschofie-mobl2>
+References: <20230409200135.1033677-1-angelalbertoc.r@gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     dinh.nguyen@linux.intel.com
-Cc:     dinguyen@kernel.org, robh+dt@kernel.org, linux@roeck-us.net,
-        jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org
-In-Reply-To: <20230410153314.27127-2-dinh.nguyen@linux.intel.com>
-References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
- <20230410153314.27127-2-dinh.nguyen@linux.intel.com>
-Message-Id: <168117031287.1592502.13206866820553188194.robh@kernel.org>
-Subject: Re: [PATCH 2/5] dt-bindings: hwmon: intel: add hardware monitor
- bindings for SoCFPGA
-Date:   Mon, 10 Apr 2023 18:48:02 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230409200135.1033677-1-angelalbertoc.r@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 10 Apr 2023 10:33:11 -0500, dinh.nguyen@linux.intel.com wrote:
-> From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+On Sun, Apr 09, 2023 at 10:01:36PM +0200, Angel Alberto Carretero wrote:
+> Wrap macro in parenthesis to fix checkpatch error.
 > 
-> Document the hardware monitoring bindings for SoCFPGA 64-bit platforms.
+> Tested it by compiling the driver successfully.
 > 
-> Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+> Signed-off-by: Angel Alberto Carretero <angelalbertoc.r@gmail.com>
 > ---
->  .../bindings/hwmon/intel,socfpga-hwmon.yaml   | 241 ++++++++++++++++++
->  1 file changed, 241 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
+
+Hi Angel,
+
+The code change looks fine. Here are a few patch style suggestions:
+
+- If you do 'git log --oneline imx-media-utils.c' you'll see that
+  changes in utils file only, seem to have utils in the patch subject
+  prefix. "media: imx: utils:"
+
+- Commit message is vague. How about being explicit so anyone persuing
+  those one-liners knows exactly what change was made.
+  "Enclose IMX_BUS_FMTS macro in parentheses"
+
+- The commit log 'why' is to conform to the kernel coding style, not
+  to fix a checkpatch error. It is good to say Issue found by
+  checkpatch, but that itself is not the 'why'.
+
+Alison
+
+>  drivers/staging/media/imx/imx-media-utils.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.example.dtb: temp_volt: 'reg' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230410153314.27127-2-dinh.nguyen@linux.intel.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+> index 411e907b68eb..eb44c09071de 100644
+> --- a/drivers/staging/media/imx/imx-media-utils.c
+> +++ b/drivers/staging/media/imx/imx-media-utils.c
+> @@ -7,7 +7,7 @@
+>  #include <linux/module.h>
+>  #include "imx-media.h"
+>  
+> -#define IMX_BUS_FMTS(fmt...) (const u32[]) {fmt, 0}
+> +#define IMX_BUS_FMTS(fmt...) ((const u32[]) {fmt, 0})
+>  
+>  /*
+>   * List of supported pixel formats for the subdevs.
+> -- 
+> 2.40.0
+> 
