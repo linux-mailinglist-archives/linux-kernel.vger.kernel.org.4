@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B916DCAE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302DB6DCB10
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 20:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjDJSpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 14:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S230033AbjDJSrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 14:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjDJSpv (ORCPT
+        with ESMTP id S229923AbjDJSrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:45:51 -0400
+        Mon, 10 Apr 2023 14:47:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5E10C7;
-        Mon, 10 Apr 2023 11:45:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816C9E77
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 11:47:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F1F7614B3;
-        Mon, 10 Apr 2023 18:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E21C433D2;
-        Mon, 10 Apr 2023 18:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681152349;
-        bh=0n4eaHIxt403lbgomlAGAL123JZ2zK8IK+30XDNzj8Y=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DF926122F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C509C433D2;
+        Mon, 10 Apr 2023 18:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681152433;
+        bh=aBlz48YZds82/29V67b+Ke52jVh21IHmdlaHPojy2Dc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T6r13krDEDJEGWRefoOLT3kEnwfW2FpoNaRNtSbXyPwyPDVpS8vkoJS2IssSSPuIm
-         ZHhVLn7Uj49zY/sThsvBPPJ02qxK7OEBBf42tjAMosD/yWsl6KFbsMie6IliwxlGpY
-         I/0+W+cIrt2AW1Y8RpFV6jlT7X1XRFaS/wy8bAZ8=
-Date:   Mon, 10 Apr 2023 20:45:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     John Moon <quic_johmoo@quicinc.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, libabigail@sourceware.org,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
-Message-ID: <2023041015-lunar-dandelion-1b4e@gregkh>
-References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
- <20230407203456.27141-2-quic_johmoo@quicinc.com>
- <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+        b=Z4wjBtCAzOKa0ez6iqWFoe5dQU5GMSeAX5jfjGQqwkjja/7yJLEcW1cKePmXmZ92G
+         pB/WHCQodK0KP8a+Q9HqjOU3TdbOcAjVBUhcx2jLRjEjZ+7RR+ts+9Cy9q8zDzKedo
+         wnVuVLbVElnyY9Eef84UTm1BzqzqCgxBqOOnhIAptNFuzrX6AhZQIrjo0ghnXHqGgO
+         6eP6hifqJzuDZTlnpSQhQJ0B9pbr7cjFRpk6SS9J2YNekuFW4d/IZDajopKzIjcFs/
+         iuAL4JmwBXIgJLl7H5yiVo4LhtKeaI3o/3cUfU/RwDEmKATMItv9koRy2mJQKJgdYg
+         bbWMEfdPipU3A==
+Date:   Mon, 10 Apr 2023 11:47:11 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] f2fs: clean up with {attach,detach}_page_private()
+Message-ID: <ZDRZrzROjW5z935R@google.com>
+References: <20230410022418.1843178-1-chao@kernel.org>
+ <20230410022418.1843178-2-chao@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+In-Reply-To: <20230410022418.1843178-2-chao@kernel.org>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -70,68 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 07:03:05PM +0900, Masahiro Yamada wrote:
-> On Sat, Apr 8, 2023 at 5:35 AM John Moon <quic_johmoo@quicinc.com> wrote:
-> >
-> > While the kernel community has been good at maintaining backwards
-> > compatibility with kernel UAPIs, it would be helpful to have a tool
-> > to check if a commit introduces changes that break backwards
-> > compatibility.
-> >
-> > To that end, introduce check-uapi.sh: a simple shell script that
-> > checks for changes to UAPI headers using libabigail.
-> >
-> > libabigail is "a framework which aims at helping developers and
-> > software distributors to spot some ABI-related issues like interface
-> > incompatibility in ELF shared libraries by performing a static
-> > analysis of the ELF binaries at hand."
-> >
-> > The script uses one of libabigail's tools, "abidiff", to compile the
-> > changed header before and after the commit to detect any changes.
-> >
-> > abidiff "compares the ABI of two shared libraries in ELF format. It
-> > emits a meaningful report describing the differences between the two
-> > ABIs."
-> >
-> > The script also includes the ability to check the compatibility of
-> > all UAPI headers across commits. This allows developers to inspect
-> > the stability of the UAPIs over time.
-> >
-> > Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+On 04/10, Chao Yu wrote:
+> No logic changes.
 > 
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+>  fs/f2fs/f2fs.h | 32 ++++++++------------------------
+>  1 file changed, 8 insertions(+), 24 deletions(-)
 > 
-> 
-> BTW, is there anybody (except the submitters) who loves this tool?
-> (or anybody who has ever evaluated this?)
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index ec8387da7f74..c378aedcadea 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -1416,11 +1416,8 @@ static inline bool page_private_##name(struct page *page) \
+>  #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
+>  static inline void set_page_private_##name(struct page *page) \
+>  { \
+> -	if (!PagePrivate(page)) { \
+> -		get_page(page); \
+> -		SetPagePrivate(page); \
+> -		set_page_private(page, 0); \
+> -	} \
+> +	if (!PagePrivate(page)) \
+> +		attach_page_private(page, (void *)page->private); \
 
-I evaluated the first one, and yes, I do want this, but I haven't tested
-it out yet, sorry.
+		attach_page_private(page, (void *)0);
 
-I get patches for header files all the time and hand-verifying that they
-don't break the abi is a pain at times
-
-> According to this tool, it looks like we broke a lot of UAPI
-> headers in the previous MW (between v6.2 and v6.3-rc1).
-
-That's not ok, and needs to be fixed, otherwise this is useless as no
-one can rely on it at all.
-
-> The script takes some time because it builds many objects
-> internally.
-> 
-> However, once this script starts running, you must not hit Ctrl-C.
-> If you do it, your repository will be sprinkled with a ton
-> of untracked files.
-
-That needs to be unwound and fixed.
-
-> CAVEAT
-> This tool runs 'git checkout' a couple of times internally.
-> If you interrupt it, your worktree might be messed up.
-
-ctrl-c can be properly caught and the git state needs to be restored for
-this to be able to be accepted.
-
-thanks,
-
-greg k-h
+>  	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
+>  	set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+>  }
+> @@ -1429,13 +1426,8 @@ static inline void set_page_private_##name(struct page *page) \
+>  static inline void clear_page_private_##name(struct page *page) \
+>  { \
+>  	clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+> -	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
+> -		set_page_private(page, 0); \
+> -		if (PagePrivate(page)) { \
+> -			ClearPagePrivate(page); \
+> -			put_page(page); \
+> -		}\
+> -	} \
+> +	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) \
+> +		detach_page_private(page); \
+>  }
+>  
+>  PAGE_PRIVATE_GET_FUNC(nonpointer, NOT_POINTER);
+> @@ -1464,11 +1456,8 @@ static inline unsigned long get_page_private_data(struct page *page)
+>  
+>  static inline void set_page_private_data(struct page *page, unsigned long data)
+>  {
+> -	if (!PagePrivate(page)) {
+> -		get_page(page);
+> -		SetPagePrivate(page);
+> -		set_page_private(page, 0);
+> -	}
+> +	if (!PagePrivate(page))
+> +		attach_page_private(page, 0);
+>  	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page));
+>  	page_private(page) |= data << PAGE_PRIVATE_MAX;
+>  }
+> @@ -1476,13 +1465,8 @@ static inline void set_page_private_data(struct page *page, unsigned long data)
+>  static inline void clear_page_private_data(struct page *page)
+>  {
+>  	page_private(page) &= GENMASK(PAGE_PRIVATE_MAX - 1, 0);
+> -	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) {
+> -		set_page_private(page, 0);
+> -		if (PagePrivate(page)) {
+> -			ClearPagePrivate(page);
+> -			put_page(page);
+> -		}
+> -	}
+> +	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER))
+> +		detach_page_private(page);
+>  }
+>  
+>  /* For compression */
+> -- 
+> 2.25.1
