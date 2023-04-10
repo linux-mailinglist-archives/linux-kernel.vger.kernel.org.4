@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E9D6DC25C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECFE6DC25F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjDJBhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S229575AbjDJBkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDJBhH (ORCPT
+        with ESMTP id S229557AbjDJBkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:37:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B727535A7;
-        Sun,  9 Apr 2023 18:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681090626; x=1712626626;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kM3MVlxT3U4OwC09SKYW+x+Zuer/Bey+4Mm+quIUoZI=;
-  b=kqWDNU8/DuEvhb70D8DI1h+ky1kKev5x6UrAM3bu5y52/W3SaPewZO3P
-   RXsbR1UvJ4khoIy5a7XmvaTPOwTJcHmF7WqLk2QihmIpLdIqJMnP4unKs
-   tlLKhuAalWO+RpC/6aoW/Ss77JvzGkh2f2xRsIE4CYk/ScVcPFY/Danyd
-   Mrmtrt0NYZbIYgV5tyr9D6u9BexKu4+dUw2uC16cifamjkJvzPw3UozsJ
-   WgNfDvzdV1Q6BMKsLY1i9P9EnjFTrN3Tpko26z7mR1UAaSrlen0T5O0cr
-   8bO0+5O2CasVXx32z3GrKeyt6Z93uvTPyQsyBAPgY1MGR4Eypl6xY+yER
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="429551537"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="429551537"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 18:37:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="688106998"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="688106998"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Apr 2023 18:37:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1plgSr-000UuD-17;
-        Mon, 10 Apr 2023 01:37:01 +0000
-Date:   Mon, 10 Apr 2023 09:36:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn
-Subject: Re: [PATCH v5 30/30] LoongArch: KVM: Supplement kvm document about
- loongarch-specific part
-Message-ID: <202304100944.xF4XkTAE-lkp@intel.com>
-References: <20230407020003.3651096-31-zhaotianrui@loongson.cn>
+        Sun, 9 Apr 2023 21:40:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74972727
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 18:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681090792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y7vvaahi7EtSEdZtxTNRZslDy7MErAqHXrjq5q/UMYw=;
+        b=OFleB525f6g2uw8/UHult48kirtaTH/M0e2gj4ZdUWZeJWu+w0s8QDndPox+3o4KK8FgHr
+        bHUCORx5vjolB1SKPIkRRgFt4C3sQFXSl81WrOTa4SWUaTR2ecZHNmD5Yxqe3HSbwnpHlj
+        8kebWGcpJDPKnnIJHafTP/udUmJ+Kzs=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-wRmUYh3oM06sLt0ipj0U0g-1; Sun, 09 Apr 2023 21:39:50 -0400
+X-MC-Unique: wRmUYh3oM06sLt0ipj0U0g-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1842ab38ebcso2653389fac.19
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Apr 2023 18:39:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681090790; x=1683682790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y7vvaahi7EtSEdZtxTNRZslDy7MErAqHXrjq5q/UMYw=;
+        b=Vyzbne36iaHFxSXQzYmja2gZvBF5D9oMYf3eBKMZsOrEqPS6kborlf9XnqSFRaDlWE
+         EWIwBBsrxlisyRYxOMF7jH997kbu+DQNfWlzsi5wlzr1c659AttPFQUTG4Wa8o4axwal
+         rTZ+ccFgJs7oLrk66ttbNm8NQYfkME6N+SPTWvilOs0Mb6hbB/ZMG070nNxVXMIZIoRX
+         NXF94l60Lj1qvyI/4rjh5OGKvbviztX7sFn1g6JyHX5FmYZH2FpqqWsX7iJSRo7vGYeJ
+         zreApsFj79gqxxDXOWAs1ovD7UO4Ut7n4SKpAo9yBtYWxYyq3+FqkkktweQNp+r24DRO
+         lBew==
+X-Gm-Message-State: AAQBX9euwTqOKNMNKeNNOKGf+NkXCnJxeG/XzYtf/3t3pNyBd4OtBU86
+        vVRiH3tTZEYilZVWMiy0vDK27NdXZh3Nh2vyTsXSmP+b5jAQOapOIH83HkKP74NmyyiGwh9dwcb
+        S53UmXeqI3kqDWbpT0BZlgZbPT90O34b7iceRdf3V
+X-Received: by 2002:a54:4115:0:b0:36e:f6f5:604c with SMTP id l21-20020a544115000000b0036ef6f5604cmr1609967oic.9.1681090790005;
+        Sun, 09 Apr 2023 18:39:50 -0700 (PDT)
+X-Google-Smtp-Source: AKy350afNrE3GBqcnN6kNnP5S+FQWaWxrFPoCbQFmfTlo/EgX44P29Xg43OeVii5W6AF4zXUT0rOOqPNCrxN/L7OSFk=
+X-Received: by 2002:a54:4115:0:b0:36e:f6f5:604c with SMTP id
+ l21-20020a544115000000b0036ef6f5604cmr1609954oic.9.1681090789821; Sun, 09 Apr
+ 2023 18:39:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407020003.3651096-31-zhaotianrui@loongson.cn>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230407081021.30952-1-gautam.dawar@amd.com> <20230409091325.GF14869@unreal>
+In-Reply-To: <20230409091325.GF14869@unreal>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 10 Apr 2023 09:39:38 +0800
+Message-ID: <CACGkMEur1xkFPxaiVVhnZqHzUdyyqw6a0vw=GHpYKJM7U3cj7Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 00/14] sfc: add vDPA support for EF100 devices
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Gautam Dawar <gautam.dawar@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-net-drivers@amd.com,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
+        koushik.dutta@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tianrui,
+On Sun, Apr 9, 2023 at 5:13=E2=80=AFPM Leon Romanovsky <leon@kernel.org> wr=
+ote:
+>
+> On Fri, Apr 07, 2023 at 01:40:01PM +0530, Gautam Dawar wrote:
+> > Hi All,
+> >
+> > This series adds the vdpa support for EF100 devices.
+> > For now, only a network class of vdpa device is supported and
+> > they can be created only on a VF. Each EF100 VF can have one
+> > of the three function personalities (EF100, vDPA & None) at
+> > any time with EF100 being the default. A VF's function personality
+> > is changed to vDPA while creating the vdpa device using vdpa tool.
+>
+> Jakub,
+>
+> I wonder if it is not different approach to something that other drivers
+> already do with devlink enable knobs (DEVLINK_PARAM_GENERIC_ID_ENABLE_*)
+> and auxiliary bus.
 
-kernel test robot noticed the following build warnings:
+I think the auxiliary bus fits here, and I've proposed to use that in
+V2 of this series.
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on linus/master v6.3-rc6 next-20230406]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230407-100816
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230407020003.3651096-31-zhaotianrui%40loongson.cn
-patch subject: [PATCH v5 30/30] LoongArch: KVM: Supplement kvm document about loongarch-specific part
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/a4ea2786cae9b2350b1aed613edcc003ce93cfc2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230407-100816
-        git checkout a4ea2786cae9b2350b1aed613edcc003ce93cfc2
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+>
+> Thanks
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304100944.xF4XkTAE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/virt/kvm/api.rst:423: WARNING: Literal block ends without a blank line; unexpected unindent.
-
-vim +423 Documentation/virt/kvm/api.rst
-
-   399	
-   400	  /* x86 */
-   401	  struct kvm_regs {
-   402		/* out (KVM_GET_REGS) / in (KVM_SET_REGS) */
-   403		__u64 rax, rbx, rcx, rdx;
-   404		__u64 rsi, rdi, rsp, rbp;
-   405		__u64 r8,  r9,  r10, r11;
-   406		__u64 r12, r13, r14, r15;
-   407		__u64 rip, rflags;
-   408	  };
-   409	
-   410	  /* mips */
-   411	  struct kvm_regs {
-   412		/* out (KVM_GET_REGS) / in (KVM_SET_REGS) */
-   413		__u64 gpr[32];
-   414		__u64 hi;
-   415		__u64 lo;
-   416		__u64 pc;
-   417	  };
-   418	
-   419	  /* loongarch */
-   420	  struct kvm_regs {
-   421	        unsigned long gpr[32];
-   422	        unsigned long pc;
- > 423	};
-   424	
-   425	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
