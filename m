@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9735A6DC7C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870256DC7C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 16:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjDJOUK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 10:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S229781AbjDJOXA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 10:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDJOUI (ORCPT
+        with ESMTP id S229592AbjDJOW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:20:08 -0400
+        Mon, 10 Apr 2023 10:22:58 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 046102689
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:20:04 -0700 (PDT)
-Received: from loongson.cn (unknown [209.85.128.41])
-        by gateway (Coremail) with SMTP id _____8Axkk4SGzRktCEZAA--.38625S3;
-        Mon, 10 Apr 2023 22:20:03 +0800 (CST)
-Received: from mail-wm1-f41.google.com (unknown [209.85.128.41])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxIL8OGzRkvaYcAA--.64977S3;
-        Mon, 10 Apr 2023 22:20:02 +0800 (CST)
-Received: by mail-wm1-f41.google.com with SMTP id gw13so2874357wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:20:01 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fdG3Ne5nfDIxB48t55RwF51lLWpYCOYQgZqZpSzsPXu/e+uNSx
-        BD0qcgYDmBy0aWymmBcF6gMpwclA3BRBWWIo04vn8A==
-X-Google-Smtp-Source: AKy350YZXNiBBM1EIRFVqDYPRhTbA1AdBFRq46FGsSzubrD07qtNxFiw40NpzFqHrk3GYLGwWeBqYK6eWi7ePA9PBls=
-X-Received: by 2002:a1c:7708:0:b0:3ed:d2fc:2fe7 with SMTP id
- t8-20020a1c7708000000b003edd2fc2fe7mr2187905wmi.0.1681136398193; Mon, 10 Apr
- 2023 07:19:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DD03C1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:22:56 -0700 (PDT)
+Received: from loongson.cn (unknown [209.85.128.49])
+        by gateway (Coremail) with SMTP id _____8AxJPy+GzRk7iEZAA--.38772S3;
+        Mon, 10 Apr 2023 22:22:55 +0800 (CST)
+Received: from mail-wm1-f49.google.com (unknown [209.85.128.49])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxtry7GzRkVKccAA--.28094S3;
+        Mon, 10 Apr 2023 22:22:54 +0800 (CST)
+Received: by mail-wm1-f49.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso4381851wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 07:22:54 -0700 (PDT)
+X-Gm-Message-State: AAQBX9es+pR5TCCO3/Kevsirz2khNWiI/l6qxtMRjM8qC50me6+9/0tf
+        D8cQ7FXTi9xeV4LS2rhZvJh0k/mvH8T3rp/fIq6I4g==
+X-Google-Smtp-Source: AKy350at++pGQMV2onEnYp+vCGoDPiljaKXoVstrDYlsMwhZnhPuzQB23hvux4mWiW1fP+w9nLREELhRKQZ/Dh/lpZs=
+X-Received: by 2002:a1c:4c10:0:b0:3ed:7664:6d79 with SMTP id
+ z16-20020a1c4c10000000b003ed76646d79mr1560595wmf.0.1681136570453; Mon, 10 Apr
+ 2023 07:22:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230410115734.93365-1-wangrui@loongson.cn> <c90c442fe029bfb9c4487284366800b8781954e1.camel@xry111.site>
-In-Reply-To: <c90c442fe029bfb9c4487284366800b8781954e1.camel@xry111.site>
+References: <20230410115734.93365-1-wangrui@loongson.cn> <b80e083baa49f0443abee66eb888fac920f66e79.camel@xry111.site>
+In-Reply-To: <b80e083baa49f0443abee66eb888fac920f66e79.camel@xry111.site>
 From:   Rui Wang <wangrui@loongson.cn>
-Date:   Mon, 10 Apr 2023 22:19:47 +0800
-X-Gmail-Original-Message-ID: <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
-Message-ID: <CAHirt9jXQcvSQPEFgW6B-qeakcRXGFfd1eYCw2g23Fmu4bbS8g@mail.gmail.com>
+Date:   Mon, 10 Apr 2023 22:22:39 +0800
+X-Gmail-Original-Message-ID: <CAHirt9ib2LPXMbxb+UCJB1MsBnUuWNLb5+uyqcR5Wiw2fsJi6w@mail.gmail.com>
+Message-ID: <CAHirt9ib2LPXMbxb+UCJB1MsBnUuWNLb5+uyqcR5Wiw2fsJi6w@mail.gmail.com>
 Subject: Re: [PATCH] LoongArch: Improve memory ops
 To:     Xi Ruoyao <xry111@xry111.site>
 Cc:     Huacai Chen <chenhuacai@kernel.org>,
@@ -43,23 +43,24 @@ Cc:     Huacai Chen <chenhuacai@kernel.org>,
         linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-CM-TRANSID: AQAAf8AxIL8OGzRkvaYcAA--.64977S3
+X-CM-TRANSID: AQAAf8Cxtry7GzRkVKccAA--.28094S3
 X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
-        14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7V
-        AKI48JMxAqzxv262kKe7AKxVWUXVWUAwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-        CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-Coremail-Antispam: 1Uk129KBjvdXoW7JFy5Kw1rKrW5ZryrXFyftFb_yoW3uwbE93
+        WkK3yDuw4DJFZ7Gan8Kr47Ary3WFW5WF10kw1jgr4akryrXF1vvF1kWFy3Zryxta9YgF1D
+        GrWYqF18AasFvjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        27kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I2
+        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
+        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvj
+        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+        IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
 X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,21 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 8:20 PM Xi Ruoyao <xry111@xry111.site> wrote:
+On Mon, Apr 10, 2023 at 8:54 PM Xi Ruoyao <xry111@xry111.site> wrote:
+> Regarding these functions: we have -ffreestanding which is preventing
+> the compiler from optimizing for e.g. "memcpy(a, b, 8);" into a simple
+> ld.d/st.d pair.  A explicit compiler built-in usage like
 >
-> On Mon, 2023-04-10 at 19:57 +0800, WANG rui wrote:
-> > +       /* align up address */
-> > +       andi    t1, a0, 7
-> > +       sub.d   a0, a0, t1
+>   #define memcpy(a, b, c) __builtin_memcpy(a, b, c)
 >
-> bstrins.d a0, zero, 2, 0
->
-> Likewise for other aligning operations if the temporary is not used.
+> would allow the compiler to do such kind of optimization.   Will this
+> improve the performance?
 
-I think we're on the same page. I had previously tested this on the
-user-space version[1], but it's not a performance-critical area.
-
-[1] https://github.com/heiher/mem-bench/blob/0083d4e5a82e57939517413da3bcad81e01adbea/memset-int.S#L35-L37
+That's a good question. IIUC, the current compiler generates
+inefficient code for constant-length memcpy, which may sacrifice
+performance for compatibility, as not all hardware supports unaligned
+memory access. We need a runtime CPU feature dispatch mechanism
+similar to alternatives to improve the compiler. This is indeed a
+problem that needs to be addressed.
 
 Regards,
 Rui
