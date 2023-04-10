@@ -2,152 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED53A6DC69F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484466DC6A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjDJMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S229902AbjDJML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDJMK0 (ORCPT
+        with ESMTP id S229862AbjDJML0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:10:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B919A7;
-        Mon, 10 Apr 2023 05:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 005D76126A;
-        Mon, 10 Apr 2023 12:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCBBEC433EF;
-        Mon, 10 Apr 2023 12:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681128620;
-        bh=uwr5cvR5R48BwQEXefLwCTCrzr7Wk3Z6VFdhoUUZ43A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JrKj/Q2gHZzXSfN1gZ3uOnI9y3a3TO/4SPXWpOGEMsyS1QQSly57wlpXj/s2w04dm
-         FYwBd4gK5LNSZytU5n63Xtm7ivwbtXj2yqYOweq4PLmrrduGzSWouGnX27GIB1h3Gn
-         4DhSTvXYmVKz7bvQ8FKuvRib2DPLguQhHKFRwq4Yw+bCiaEjN7VNbOzbcLjsHa1FZi
-         MSlVXSJoHogvnLkKNXphBw6Y/Lg7ZE2tTEQWRbHnC87p1m5hvpijlXy34wALz2In/8
-         +RHerF4umYcTOMmpu3smR+FXsYAlEPZXeXW7y3KCu6/LsTKxBYKZICZfHv+tlG6ADO
-         97pGqMYG2z90w==
-Date:   Mon, 10 Apr 2023 15:10:16 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     haris.iqbal@ionos.com, jinpu.wang@ionos.com, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, guoqing.jiang@linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-next 3/3] RDMA/rtrs: Avoid use-after-free in
- rtrs_clt_rdma_cm_handler
-Message-ID: <20230410121016.GO182481@unreal>
-References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
- <1681108984-2-4-git-send-email-lizhijian@fujitsu.com>
+        Mon, 10 Apr 2023 08:11:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE081B9;
+        Mon, 10 Apr 2023 05:11:25 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33AAWg4Q002478;
+        Mon, 10 Apr 2023 12:11:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=oCX33MHJdVwOcqkM9x30iXp+//dYE8FJsaDB4GyktJM=;
+ b=pB7yvr+47tys5sMNhweB7ggoJT62VjE5Xek1+x+hPfOvVcfzwehDbuF6AkiZONlq0YZR
+ N22RBcMh4RpkgeEaKITffC11tzYLjwwTp/1ny28KlTYsd7RiH1QqsGRV1uDrJy0VBQjs
+ jSzQpwRfowuHR1dN8ZORCZsxvHj0+HQAO4FVyvuerNqvqOqpDBvA3gAfqe+wAfkS9hok
+ OqnKe3f0y8CG2DPVAgDs7FXcKlfxS/QA3dc7DRsYsJXmwJpNYdZqCDj+RISQX8kWgVsD
+ aL+CiKDl2FBbdfynVHty9fC9UwFzUAgfoaJluHm0HEVYwIIL9+Ja4yZ7UGjm53g0DYhs rQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj2txjm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 12:11:19 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33A3v8aD003252;
+        Mon, 10 Apr 2023 12:11:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m191s7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 12:11:17 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33ACBEqZ24314374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Apr 2023 12:11:14 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAE6520043;
+        Mon, 10 Apr 2023 12:11:14 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1052F20040;
+        Mon, 10 Apr 2023 12:11:13 +0000 (GMT)
+Received: from li-a1f1b24c-1ef0-11b2-a85c-b2994f3f6269.in.ibm.com (unknown [9.109.248.124])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Apr 2023 12:11:12 +0000 (GMT)
+From:   Korrapati Likhitha <likhitha@linux.ibm.com>
+To:     shuah@kernel.org, trenn@suse.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com,
+        Likhitha Korrapati <likhitha@linux.ibm.com>,
+        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Subject: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation.
+Date:   Mon, 10 Apr 2023 17:40:54 +0530
+Message-Id: <20230410121054.61622-1-likhitha@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
+X-Proofpoint-ORIG-GUID: CZ-hDHT6yL7JfOG4XsZ-Hx98efbR4ymQ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681108984-2-4-git-send-email-lizhijian@fujitsu.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_08,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 spamscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100103
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 06:43:04AM +0000, Li Zhijian wrote:
-> Currently, con will be destroyed when wait_event_interruptible_timeout()
-> returns ERESTARTSYS. But the in-flight event handler
-> rtrs_clt_rdma_cm_handler() could be rescheduled/wakeup which
-> may cause a use-after-free.
-> 
->     WARNING: CPU: 0 PID: 14766 at drivers/infiniband/ulp/rtrs/rtrs-clt.c:1687 rtrs_clt_rdma_cm_handler+0x620/0x640 [rtrs_client]
->      Modules linked in: rnbd_client rtrs_client rtrs_core rdma_cm iw_cm ib_cm rdma_rxe ib_uverbs ib_core libiscsi scsi_transport_iscsi crc32_generic udp_tunnel dax_pmem nd_pmem nd_btt virtiofs crc32c_intel nvme fuse nvme_core nfit
-> libnvdimm dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod [last unloaded: ib_core]
->      CPU: 0 PID: 14766 Comm: kworker/u2:3 Kdump: loaded Tainted: G        W          6.2.0-rc6-roce-flush+ #56
->      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->      Workqueue: ib_addr process_one_req [ib_core]
->      RIP: 0010:rtrs_clt_rdma_cm_handler+0x620/0x640 [rtrs_client]
->      Code: 00 0f 85 5f fd ff ff 4c 8b 23 41 bd f4 ff ff ff e9 95 fb ff ff 0f 0b 4c 89 f7 41 bd ea ff ff ff e8 75 c8 92 ec e9 4b ff ff ff <0f> 0b 4c 89 f7 41 bd ea ff ff ff e8 60 c8 92 ec e9 36 ff ff ff e8
->      RSP: 0018:ffffa4ef41cdbc60 EFLAGS: 00010246
->      RAX: 0000000000000000 RBX: ffff9372c394e600 RCX: 0000000000000001
->      RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffffffffad634277
->      RBP: ffffa4ef41cdbd00 R08: 0000000000000000 R09: 0000000000000001
->      R10: 0000000000003ff3 R11: 0000000000000000 R12: ffff9372c3164800
->      R13: ffff9372c3164800 R14: ffff9372c394e640 R15: ffff9372c5219020
->      FS:  0000000000000000(0000) GS:ffff9372fbc00000(0000) knlGS:0000000000000000
->      CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->      CR2: 00007f35bb7d5de0 CR3: 0000000020c2a006 CR4: 00000000001706f0
->      DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->      DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->      Call Trace:
->       <TASK>
->       ? mark_held_locks+0x49/0x80
->       ? lock_is_held_type+0xd7/0x130
->       ? cma_cm_event_handler+0x49/0x200 [rdma_cm]
->       cma_cm_event_handler+0x49/0x200 [rdma_cm]
->       addr_handler+0xf1/0x1e0 [rdma_cm]
->       ? lock_acquire+0xca/0x2f0
->       ? lock_acquire+0xda/0x2f0
->       process_one_req+0x43/0x170 [ib_core]
->       process_one_work+0x274/0x590
->       worker_thread+0x4f/0x3d0
->       ? __pfx_worker_thread+0x10/0x10
->       kthread+0xe7/0x110
->       ? __pfx_kthread+0x10/0x10
->       ret_from_fork+0x2c/0x50
->       </TASK>
->      irq event stamp: 1432669
->      hardirqs last  enabled at (1432683): [<ffffffffac508eb2>] __up_console_sem+0x52/0x60
->      hardirqs last disabled at (1432698): [<ffffffffac508e97>] __up_console_sem+0x37/0x60
->      softirqs last  enabled at (1432518): [<ffffffffac48c985>] __irq_exit_rcu+0xc5/0x120
->      softirqs last disabled at (1432509): [<ffffffffac48c985>] __irq_exit_rcu+0xc5/0x120
->      ---[ end trace 0000000000000000 ]---
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> index 4c8f42e46e2f..760a7eb51297 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -2074,6 +2074,7 @@ static int create_cm(struct rtrs_clt_con *con)
->  		rtrs_err(s, "Failed to resolve address, err: %d\n", err);
->  		goto destroy_cm;
->  	}
-> +again:
->  	/*
->  	 * Combine connection status and session events. This is needed
->  	 * for waiting two possible cases: cm_err has something meaningful
-> @@ -2083,10 +2084,15 @@ static int create_cm(struct rtrs_clt_con *con)
->  			clt_path->state_wq,
->  			con->cm_err || clt_path->state != RTRS_CLT_CONNECTING,
->  			msecs_to_jiffies(RTRS_CONNECT_TIMEOUT_MS));
-> -	if (err == 0 || err == -ERESTARTSYS) {
-> -		if (err == 0)
-> -			err = -ETIMEDOUT;
-> -		/* Timedout or interrupted */
-> +	if (err == -ERESTARTSYS) {
-> +		/* interrupted,
-> +		 * try again to avoid the in-flight rtrs_clt_rdma_cm_handler()
-> +		 * getting a use-after-free
-> +		 */
-> +		goto again;
-> +	} else if (err == 0) {
-> +		err = -ETIMEDOUT;
-> +		/* Timedout */
+From: Likhitha Korrapati <likhitha@linux.ibm.com>
 
-Timedout -> Timeout
+For both the d and e options in 'cpupower idle_set' command, an
+atoi() conversion is done without checking if the input argument
+is all numeric. So, an atoi conversion is done on any character
+provided as input and the CPU idle_set operation continues with
+that integer value, which may not be what is intended or entirely
+correct.
 
->  		goto errr;
+The output of cpuidle-set before patch is as follows:
 
-errrr, sigh.
+[root@xxx cpupower]# cpupower idle-set -e 1$
+Idlestate 1 enabled on CPU 0
+[snip]
+Idlestate 1 enabled on CPU 47
 
->  	}
->  	if (con->cm_err < 0) {
-> -- 
-> 2.29.2
-> 
+[root@xxx cpupower]# cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d qw
+Idlestate 0 disabled on CPU 0
+[snip]
+Idlestate 0 disabled on CPU 47
+
+This patch adds a check for both d and e options in cpuidle-set.c
+to see that the idle_set value is all numeric before doing a
+string-to-int conversion.
+
+The output of cpuidle-set after the patch is as below:
+
+[root@xxx cpupower]# ./cpupower idle-set -e 1$
+Bad idle_set value: 1$. Integer expected
+
+[root@xxx cpupower]# ./cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d qw
+Bad idle_set value: qw. Integer expected
+
+Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
+Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
+---
+
+** changes since v1 [1] **
+
+- Addressed reviewed comments from v1.
+- Slightly reworded the commit for clarity.
+
+[1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
+
+ tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
+ tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
+ tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
+ 3 files changed, 45 insertions(+), 5 deletions(-)
+
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 46158928f9ad..1bfe16d27c2d 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			idlestate = atoi(optarg);
++			if (is_stringnumeric(optarg))
++				idlestate = atoi(optarg);
++			else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
++				exit(EXIT_FAILURE);
++			}
+ 			break;
+ 		case 'e':
+ 			if (param) {
+@@ -56,7 +61,12 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			idlestate = atoi(optarg);
++			if (is_stringnumeric(optarg))
++				idlestate = atoi(optarg);
++			else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
++				exit(EXIT_FAILURE);
++			}
+ 			break;
+ 		case 'D':
+ 			if (param) {
+@@ -65,9 +75,14 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			latency = strtoull(optarg, &endptr, 10);
+-			if (*endptr != '\0') {
+-				printf(_("Bad latency value: %s\n"), optarg);
++			if (is_stringnumeric(optarg)) {
++				latency = strtoull(optarg, &endptr, 10);
++				if (*endptr != '\0') {
++					printf(_("Bad latency value: %s\n"), optarg);
++					exit(EXIT_FAILURE);
++				}
++			} else {
++				printf(_("Bad idle_set value: %s. Integer expected\n"), optarg);
+ 				exit(EXIT_FAILURE);
+ 			}
+ 			break;
+diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+index 96e4bede078b..9977f0773986 100644
+--- a/tools/power/cpupower/utils/helpers/helpers.h
++++ b/tools/power/cpupower/utils/helpers/helpers.h
+@@ -208,3 +208,11 @@ void print_offline_cpus(void);
+ void print_speed(unsigned long speed, int no_rounding);
+ 
+ #endif /* __CPUPOWERUTILS_HELPERS__ */
++
++/*
++ * CPU idle-set
++ */
++int is_stringnumeric(char *arg);
++/*
++ * CPU idle-set
++ */
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index 9547b29254a7..8ec47c3c138e 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -4,6 +4,7 @@
+ #include <errno.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <ctype.h>
+ 
+ #include "helpers/helpers.h"
+ #include "helpers/sysfs.h"
+@@ -204,3 +205,19 @@ void print_speed(unsigned long speed, int no_rounding)
+ 		}
+ 	}
+ }
++
++/*
++ * is_stringnumeric
++ *
++ * To check if the given string has all numericals
++ */
++int is_stringnumeric(char *arg)
++{
++	size_t i = 0;
++
++	for (i = 0; arg[i] ; i++) {
++		if (!isdigit(arg[i]))
++			return 0;
++	}
++	return 1;
++}
+-- 
+2.31.1
+
