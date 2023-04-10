@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7F76DC300
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 05:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E906DC301
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 05:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDJDm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 23:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S229640AbjDJDnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 23:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDJDmy (ORCPT
+        with ESMTP id S229475AbjDJDno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 23:42:54 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E364269D;
-        Sun,  9 Apr 2023 20:42:49 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id y69so10357400ybe.2;
-        Sun, 09 Apr 2023 20:42:49 -0700 (PDT)
+        Sun, 9 Apr 2023 23:43:44 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C34E42;
+        Sun,  9 Apr 2023 20:43:43 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54c12009c30so187074897b3.9;
+        Sun, 09 Apr 2023 20:43:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681098168; x=1683690168;
+        d=gmail.com; s=20210112; t=1681098223; x=1683690223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vqy+7HgrqhTA3y3Mm7XBf4JyoweihTIc8x6wEhmraPM=;
-        b=GawGlHsoA2kIbqxJQVRZov4meNamppKioPXApj9jwaZlnW0T1h2th4QNPx79j3GiR/
-         F6v4c+2G+5ZB9mjWuIF8KJmB2pClE0SinH6j5NERHHNGptlEAefSQ6hhd4guBykVIjh3
-         HqQYr8Fot0T7HfYUOyxUpJ/zv8Hb0Cr4lB6e3WtQSIPi5ISU3Qx1GOizP/bVfQI7s95e
-         Q8Ffof529tBogs5QxsSKCwHKHnPiY3O+fHpdjkm/dFQn528bnsKmx+/nOrAfCgrCpv0u
-         EzJjf5TWf92RSBwAMvhikLLUtOCx5gg7i03Gwd9RCiOXcX1ZO8vsIe2jm2KuIEylEvlv
-         mt3g==
+        bh=aAEMO45BhOISY8Il2XgEX/kFiJjek2ES5jcqD/mIP3w=;
+        b=IkJgD55SKcRru/KkoeHpgzFDWM0eSVn9wpWr+7PUiIyxX6bNjY8KYouplV3P+8+1+d
+         Zr8u2+/CkL3eEwyzo4N/G48ZteVTuul3nFs+TnShDDmSctntBv0IrESBW7eHoJ+DWeiH
+         69mdSWFNV0b44z+4hCC0cPOvxgxh2M8RsyBiPlJETOBzEChoRQpaK+9H/CyjpMWBq2Lo
+         UxF+ViHClT90L2Qj+vZcrX7C9uY1/lJJ5AhSaLl3neP+WryQzvrfIYrSPfyvEIohSKuK
+         SzFVUgGKVHbrZcG9ZrcgZbKMlsFhoUpcM4mcsFA/tQ4ipB1A5h0ticvy+MqJwqp+Plvu
+         HuSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681098168; x=1683690168;
+        d=1e100.net; s=20210112; t=1681098223; x=1683690223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vqy+7HgrqhTA3y3Mm7XBf4JyoweihTIc8x6wEhmraPM=;
-        b=6wpcwxIfOY0cax/iCFX+KbFGZRxWtg8y5IsEq3jrHz5uwCh8lN6ycRNXBg7pCJ8Z4m
-         1r4Mh/EY9WnSKDIm4xHbyXN1WzoUyYL17MvtINgEpDke8Fr/iHM6so/43J+EugwxUSQi
-         DUWCmqDybt03rRqF+xvXCdu/afYPv9wBsOgGaaH0qKh7pr17cZB/uaK24MIUPWFYk2XI
-         hUFBaQX64tQ3UbeFC36QgDUA9mlVveIYDVE5yMwBg8g8ZoW0AHl1Gk53eyDDC6KrV4PX
-         OpuB//PzuYZYWY8YbEYMfc9OfQSU7L2P/V703OJraqsFLCP1oFftz+nUCLD23Dp/WOSx
-         BcNQ==
-X-Gm-Message-State: AAQBX9eWFFWEP3C14A2BDzGrnEKw0u8cJt27MQ8jDp3SKofi5nQnlk4K
-        V1qin+Yp1ViD8DtewVjm/NWYiCYJsEj/VOk3RJY=
-X-Google-Smtp-Source: AKy350Zg3LyywQHh550qv7aoJJHLaiYrdsf0Yzhcm0fkr1UkhpgZkbYWByN4y3ey5VlDLH0uEnvJF3KwvJHqgdhwgQY=
-X-Received: by 2002:a25:dad3:0:b0:b77:e465:cb16 with SMTP id
- n202-20020a25dad3000000b00b77e465cb16mr6281632ybf.11.1681098168252; Sun, 09
- Apr 2023 20:42:48 -0700 (PDT)
+        bh=aAEMO45BhOISY8Il2XgEX/kFiJjek2ES5jcqD/mIP3w=;
+        b=XcVune/9fscvwwF4QgR4JrgshN/IARy6RiONKdekD7rShPh5QcWNQkU+m3+W42R1tN
+         5pZRFGJsAgfupTZDsAcuQWLR2N33sCglFtQG62kRwrhnGHlwDhLpRknN09osHypDtKXg
+         kAAMPKkrZc80++ikFXNGb7ubaDZCGNdlWcliWxUENnygzxkUHpcn8fcPzbVGlBQ/ajSb
+         v9LEyQ/F6LgmNqKVoCDMcec30DNXo1oROnwKNhhLkCJNQyQP6kNdWRKxJ3tbfoCWZMVY
+         iB/UlMn0Yh6vbOoeAUty+3Uayh2bWf0AjpEuQ9lXQXnJi0ASgY0hYx5n8sVxD3RxOJo+
+         np9w==
+X-Gm-Message-State: AAQBX9ewuBMKSpgGYJYXaSqgQsfhOrru+8F0Gvi9tntAk41fcOWVHJPK
+        sfDmG1B8CGq+lgGKVrMfMeSjAf7kw4JQIDdbfdRIHuyXlNNZsA==
+X-Google-Smtp-Source: AKy350bCmqk3jof3BCKTVENyhnOqOjIW0PWUvsv789++M6zuwALUjNvHWRbkZqmzvwF6j9ZvESorNJpiTYRGY40119M=
+X-Received: by 2002:a81:ae17:0:b0:533:8f19:4576 with SMTP id
+ m23-20020a81ae17000000b005338f194576mr5218650ywh.0.1681098222747; Sun, 09 Apr
+ 2023 20:43:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
-In-Reply-To: <20230224-rust-vec-v1-0-733b5b5a57c5@asahilina.net>
+References: <20230224-rust-macros-v2-1-7396e8b7018d@asahilina.net>
+In-Reply-To: <20230224-rust-macros-v2-1-7396e8b7018d@asahilina.net>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 10 Apr 2023 05:42:37 +0200
-Message-ID: <CANiq72kVpFMqk82Tx23GmBsLy3mwrPLEfPod=BvXsE-s4MCMUQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] rust: alloc: vec: Add some missing fallible try_* methods
+Date:   Mon, 10 Apr 2023 05:43:32 +0200
+Message-ID: <CANiq72=j8iDJSTbLJ__r3XAk8tHC8cFFqRjj7YN3zO=8CYQWBg@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: macros: Allow specifying multiple module aliases
 To:     Asahi Lina <lina@asahilina.net>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Finn Behrens <me@kloenk.dev>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -74,32 +76,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:12=E2=80=AFAM Asahi Lina <lina@asahilina.net> wr=
-ote:
+On Thu, Mar 23, 2023 at 1:35=E2=80=AFPM Asahi Lina <lina@asahilina.net> wro=
+te:
 >
-> Hi everyone!
+> Modules can (and usually do) have multiple alias tags, in order to
+> specify multiple possible device matches for autoloading. Allow this by
+> changing the alias ModuleInfo field to an Option<Vec<String>>.
 >
-> This short series is part of the set of dependencies for the drm/asahi
-> Apple M1/M2 GPU driver.
+> Note: For normal device IDs this is autogenerated by modpost (which is
+> not properly integrated with Rust support yet), so it is useful to be
+> able to manually add device match aliases for now, and should still be
+> useful in the future for corner cases that modpost does not handle.
 >
-> This series imports part of a commit from Miguel in
-> rust-for-linux/linux, which adds missing fallible
-> mutation/allocation methods to `Vec`. These are generally useful to make
-> standard features available to the kernel environment, which does not
-> have infallible allocation.
->
-> The additions in turn depend on importing two submodules from the Rust
-> stdlib, which I have attributed using the same commit message template
-> used for the original import of this part of the codebase. These
-> versions come from Rust 1.66, but also build on Rust 1.62 (the current
-> version upstream). I added the SPDX identifiers in a separate commit to
-> clearly separate the original code from subsequent changes.
-
-I have used the 1.62.0 versions to keep things aligned.
-
-More importantly, I matched the new fallible methods to those in
-1.62.0, since the commit used to import them was quite old and there
-have been changes since then.
+> This pulls in the expect_group() helper from the rfl/rust branch
+> (with credit to authors).
 
 Applied to `rust-next`. Thanks!
 
