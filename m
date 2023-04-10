@@ -2,127 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A296DCDF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB266DCDF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDJXVe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 19:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S229697AbjDJXVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjDJXVc (ORCPT
+        with ESMTP id S229763AbjDJXVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:21:32 -0400
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D912118;
-        Mon, 10 Apr 2023 16:21:09 -0700 (PDT)
-Received: by mail-ua1-f49.google.com with SMTP id ba16so4410966uab.4;
-        Mon, 10 Apr 2023 16:21:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681168869; x=1683760869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P4Lc7kTtUKpJq2HePJoO52rNn2Ss3QVKDL6cqFdOw4s=;
-        b=MxBSz9HWyK5hgCi29CGRVBEoPh7dV+/rI4YzgRrAfh7IvMTfh24wF3BDxWQt1/I+PQ
-         mEM4FUxIP1XofKXqMNYwdvNVDDx6Mx7Khitqtk+bsZ3CT8LE+Jv7It9dhFmMMiWHjxWg
-         rsqaiYyHSILt/Gtbs0GxEjbYkxkDFqYsOZWQlu9T3UHJvElqu5I2tw0huiMgt6GU9bFi
-         yhqKJ16yQFr2aYlk4bIIZKafjFOIoJrOaeI7Fj6nxJgFT92c9CfbXSHADBIWFjlTd1yg
-         fUjZ40aOLE1TdfVgYaeXGeTyHzYeGzcQFBznaCQ0FHBzS7gpRfIZuUWII6oLyVc+3BtM
-         K54Q==
-X-Gm-Message-State: AAQBX9fS6ELsN+T5YMoVOuwzox9DFFb//5Kp7hm9HFtCee8cKPFJlkqY
-        Jb9JslmeQi2jlMYk2Mrr0jH/lBBogCwMh2RYE3rBLSll
-X-Google-Smtp-Source: AKy350bxdML3cCqmsj+BIwmFI4dCKsDMnnNSN+bSZSMYEI67lOCP3r3LuK20kJRCM5CIrokpVf0bPnMUN+/nkUAVkYk=
-X-Received: by 2002:a05:6122:1691:b0:43b:ead4:669e with SMTP id
- 17-20020a056122169100b0043bead4669emr3979285vkl.16.1681168868654; Mon, 10 Apr
- 2023 16:21:08 -0700 (PDT)
+        Mon, 10 Apr 2023 19:21:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701DB2100
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:21:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1D461FEF
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BA4C433EF;
+        Mon, 10 Apr 2023 23:21:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681168908;
+        bh=oxQX+UqO5Av7KgllwTbzTq9L9gnk5w5BnaS1yJ01Ttg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s8hzaNyI11A/P74F81vBntD+/1EJ2p9wEVprEZtDrRtJezqibBY4JDiXSCxPcru7s
+         1bLHngUL34NRz364m9zNl7eYgLSz2CUx0dkFW9PLhs9VGOjW6KAIbZXWhPyalQEw7v
+         hyh3A4gxfy2EEnWhH7YNeoFPCpJ7KSYHrz861YGBmkJlg39dbjPUuKhAvcVVfOMBU9
+         One5u6dMiDFE5Z5pAIukSEfLt0f+AgLo4y0OMiHgdAZfPPWamm63NsW3xnTVuynGyf
+         /P2O90mh8moyIZWiHe+0hFAqk5lf++EkytkDGhttW1grHd/efh7NQdHwX309sm8K1G
+         VJpWHuRUQKelg==
+Date:   Mon, 10 Apr 2023 16:21:46 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
+ foreground garbage collection
+Message-ID: <ZDSaCsLSYLyzUxBQ@google.com>
+References: <20230324071028.336982-1-chao@kernel.org>
+ <ZCyZGgf4RSEjyHTF@google.com>
+ <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
+ <ZC2aA+i5+HpdJ6M2@google.com>
+ <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
 MIME-Version: 1.0
-References: <20230410205659.3131608-1-irogers@google.com>
-In-Reply-To: <20230410205659.3131608-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 10 Apr 2023 16:20:57 -0700
-Message-ID: <CAM9d7cjuqcwcy+CwAPj8wK4hO2Pzr6xor76+jW-Do443Gr2ENQ@mail.gmail.com>
-Subject: Re: [PATCH v1] perf evsel: Avoid segv if delete is called on NULL
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4ae2b3a-0aff-8941-4081-9dc53334c590@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+On 04/10, Chao Yu wrote:
+> On 2023/4/5 23:55, Jaegeuk Kim wrote:
+> > On 04/05, Chao Yu wrote:
+> > > On 2023/4/5 5:39, Jaegeuk Kim wrote:
+> > > > Can we do like this?
+> > > > 
+> > > >   From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
+> > > > From: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > Date: Tue, 4 Apr 2023 14:36:00 -0700
+> > > > Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
+> > > > 
+> > > > We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
+> > > > sctions in time.
+> > > > 
+> > > > Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+> > > > Signed-off-by: Chao Yu <chao@kernel.org>
+> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > ---
+> > > >    fs/f2fs/gc.c | 24 +++++++++++-------------
+> > > >    1 file changed, 11 insertions(+), 13 deletions(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> > > > index 56c53dbe05c9..f1d0dd9c5a6c 100644
+> > > > --- a/fs/f2fs/gc.c
+> > > > +++ b/fs/f2fs/gc.c
+> > > > @@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> > > >    	};
+> > > >    	unsigned int skipped_round = 0, round = 0;
+> > > >    	unsigned int upper_secs;
+> > > > +	bool stop_gc = false;
+> > > >    	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+> > > >    				gc_control->nr_free_secs,
+> > > > @@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> > > >    				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+> > > >    		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+> > > >    			goto go_gc_more;
+> > > > -		goto stop;
+> > > > -	}
+> > > > -
+> > > > -	/* FG_GC stops GC by skip_count */
+> > > > -	if (gc_type == FG_GC) {
+> > > > +		stop_gc = true;
+> > > 
+> > > I guess below condition is for emergency recycle of prefree segments during
+> > > foreground GC, in order to avoid exhausting free sections due to to many
+> > > metadata allocation during CP.
+> > > 
+> > > 	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
+> > > 				prefree_segments(sbi)) {
+> > > 
+> > > But for common case, free_sections() is close to reserved_segments(), and
+> > > upper_secs + NR_GC_CHECKPOINT_SECS value may be far smaller than free_sections(),
+> > > so checkpoint may not be trggered as expected, IIUC.
+> > > 
+> > > So it's fine to just trigger CP in the end of foreground garbage collection?
+> > 
+> > My major concern is to avoid unnecessary checkpointing given multiple FG_GC
+> > requests were pending in parallel. And, I don't want to add so many combination
+> > which gives so many corner cases, and feel f2fs_gc() needs to call checkpoint
+> > automatically in the worst case scenario only.
+> 
+> Alright.
+> 
+> > 
+> > By the way, do we just need to call checkpoint here including FG_GC as well?
+> 
+> I didn't get it, do you mean?
+> 
+> - f2fs_balance_fs()
+>  - f2fs_gc() creates prefree segments but not call checkpoint to reclaim
+> 
+> - f2fs_balance_fs()
+>  - f2fs_gc()
+>   - detect prefree segments created by last f2fs_balance_fs, then call
+> f2fs_write_checkpoint to reclaim
+> 
+> Or could you please provide a draft patch? :-P
 
-On Mon, Apr 10, 2023 at 1:57 PM Ian Rogers <irogers@google.com> wrote:
->
-> Seen in "perf stat --bpf-counters --for-each-cgroup test" running in a
-> container:
->
-> libbpf: Failed to bump RLIMIT_MEMLOCK (err = -1), you might need to do it explicitly!
-> libbpf: Error in bpf_object__probe_loading():Operation not permitted(1). Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.
-> libbpf: failed to load object 'bperf_cgroup_bpf'
-> libbpf: failed to load BPF skeleton 'bperf_cgroup_bpf': -1
-> Failed to load cgroup skeleton
->
->     #0 0x55f28a650981 in list_empty tools/include/linux/list.h:189
->     #1 0x55f28a6593b4 in evsel__exit util/evsel.c:1518
->     #2 0x55f28a6596af in evsel__delete util/evsel.c:1544
->     #3 0x55f28a89d166 in bperf_cgrp__destroy util/bpf_counter_cgroup.c:283
->     #4 0x55f28a899e9a in bpf_counter__destroy util/bpf_counter.c:816
->     #5 0x55f28a659455 in evsel__exit util/evsel.c:1520
->     #6 0x55f28a6596af in evsel__delete util/evsel.c:1544
->     #7 0x55f28a640d4d in evlist__purge util/evlist.c:148
->     #8 0x55f28a640ea6 in evlist__delete util/evlist.c:169
->     #9 0x55f28a4efbf2 in cmd_stat tools/perf/builtin-stat.c:2598
->     #10 0x55f28a6050c2 in run_builtin tools/perf/perf.c:330
->     #11 0x55f28a605633 in handle_internal_command tools/perf/perf.c:384
->     #12 0x55f28a6059fb in run_argv tools/perf/perf.c:428
->     #13 0x55f28a6061d3 in main tools/perf/perf.c:562
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Testing this.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+From ec5f37bbe33110257c04e0ec97a80b0111465b52 Mon Sep 17 00:00:00 2001
+From: Jaegeuk Kim <jaegeuk@kernel.org>
+Date: Mon, 10 Apr 2023 14:48:50 -0700
+Subject: [PATCH] f2fs: refactor f2fs_gc to call checkpoint in urgent condition
 
-In addition to this, I think bperf code should clear the evsel->bpf_skel
-at the end of the bpf_counter__destroy() to avoid confusion with the
-bpf_filter as they share the fields in a union.
+The major change is to call checkpoint, if there's not enough space while having
+some prefree segments in FG_GC case.
 
-Thanks,
-Namhyung
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/gc.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index c748cdfb0501..0a823d2e8b9d 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1829,7 +1829,10 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		goto stop;
+ 	}
+ 
+-	if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
++	/* Let's run FG_GC, if we don't have enough space. */
++	if (has_not_enough_free_secs(sbi, 0, 0)) {
++		gc_type = FG_GC;
++
+ 		/*
+ 		 * For example, if there are many prefree_segments below given
+ 		 * threshold, we can make them free by checkpoint. Then, we
+@@ -1840,8 +1843,6 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 			if (ret)
+ 				goto stop;
+ 		}
+-		if (has_not_enough_free_secs(sbi, 0, 0))
+-			gc_type = FG_GC;
+ 	}
+ 
+ 	/* f2fs_balance_fs doesn't need to do BG_GC in critical path. */
+@@ -1868,19 +1869,14 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
+ 		sec_freed++;
+ 
+-	if (gc_type == FG_GC)
++	if (gc_type == FG_GC) {
+ 		sbi->cur_victim_sec = NULL_SEGNO;
+ 
+-	if (gc_control->init_gc_type == FG_GC ||
+-	    !has_not_enough_free_secs(sbi,
+-				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+-		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+-			goto go_gc_more;
+-		goto stop;
+-	}
+-
+-	/* FG_GC stops GC by skip_count */
+-	if (gc_type == FG_GC) {
++		if (!has_not_enough_free_secs(sbi, sec_freed, 0)) {
++			if (sec_freed < gc_control->nr_free_secs)
++				goto go_gc_more;
++			goto stop;
++		}
+ 		if (sbi->skipped_gc_rwsem)
+ 			skipped_round++;
+ 		round++;
+@@ -1889,6 +1885,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 			ret = f2fs_write_checkpoint(sbi, &cpc);
+ 			goto stop;
+ 		}
++	} else if (!has_not_enough_free_secs(sbi, 0, 0)) {
++		goto stop;
+ 	}
+ 
+ 	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+-- 
+2.40.0.577.gac1e443424-goog
 
 
-> ---
->  tools/perf/util/evsel.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index dc3faf005c3b..fe3ce765a4f3 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -1541,6 +1541,9 @@ void evsel__exit(struct evsel *evsel)
->
->  void evsel__delete(struct evsel *evsel)
->  {
-> +       if (!evsel)
-> +               return;
-> +
->         evsel__exit(evsel);
->         free(evsel);
->  }
-> --
-> 2.40.0.577.gac1e443424-goog
->
+> 
+> Thanks,
+> 
+> > 
+> > 1832
+> > 1833         if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
+> > 1834                 /*
+> > 1835                  * For example, if there are many prefree_segments below given
+> > 1836                  * threshold, we can make them free by checkpoint. Then, we
+> > 1837                  * secure free segments which doesn't need fggc any more.
+> > 1838                  */
+> > 1839                 if (prefree_segments(sbi)) {
+> > 1840                         ret = f2fs_write_checkpoint(sbi, &cpc);
+> > 1841                         if (ret)
+> > 1842                                 goto stop;
+> > 1843                 }
+> > 1844                 if (has_not_enough_free_secs(sbi, 0, 0))
+> > 1845                         gc_type = FG_GC;
+> > 1846         }
+> > 
+> > > 
+> > > One other concern is for those path as below:
+> > > - disable_checkpoint
+> > > - ioc_gc
+> > > - ioc_gc_range
+> > > - ioc_resize
+> > > ...
+> > 
+> > I think the upper caller should decide to call checkpoint, if they want to
+> > reclaim the prefree likewise f2fs_disable_checkpoint.
+> > 
+> > > 
+> > > We've passed gc_type as FG_GC, but the demand here is to migrate block in time,
+> > > rather than dirtying blocks, and callers don't expect checkpoint in f2fs_gc(),
+> > > instead the callers will do the checkpoit as it needs.
+> > > 
+> > > That means it's better to decouple FG_GC and write_checkpoint behavior, so I
+> > > added another parameter .reclaim_space to just let f2fs_balance_fs() to trigger
+> > > checkpoit in the end of f2fs_gc().
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > +	} else if (gc_type == FG_GC) {
+> > > > +		/* FG_GC stops GC by skip_count */
+> > > >    		if (sbi->skipped_gc_rwsem)
+> > > >    			skipped_round++;
+> > > >    		round++;
+> > > >    		if (skipped_round > MAX_SKIP_GC_COUNT &&
+> > > > -				skipped_round * 2 >= round) {
+> > > > -			ret = f2fs_write_checkpoint(sbi, &cpc);
+> > > > -			goto stop;
+> > > > -		}
+> > > > +				skipped_round * 2 >= round)
+> > > > +			stop_gc = true;
+> > > >    	}
+> > > >    	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+> > > > @@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> > > >    				prefree_segments(sbi)) {
+> > > >    		ret = f2fs_write_checkpoint(sbi, &cpc);
+> > > >    		if (ret)
+> > > > -			goto stop;
+> > > > +			stop_gc = true;
+> > > >    	}
+> > > >    go_gc_more:
+> > > > -	segno = NULL_SEGNO;
+> > > > -	goto gc_more;
+> > > > -
+> > > > +	if (!stop_gc) {
+> > > > +		segno = NULL_SEGNO;
+> > > > +		goto gc_more;
+> > > > +	}
+> > > >    stop:
+> > > >    	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+> > > >    	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
