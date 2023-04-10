@@ -2,109 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEAA6DC57C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098846DC57F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 12:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDJKDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 06:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S229579AbjDJKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 06:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDJKDL (ORCPT
+        with ESMTP id S229828AbjDJKDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 06:03:11 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47987270D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 03:03:09 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j1so8027931wrb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 03:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681120987;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9KjDWiVC9FREZXf9jIuLYMwQbdeYXF+2V10Ky+2iAZU=;
-        b=hgelFPbm9bgitDC+gC/mcIFymhRKCeY9ZCC197lZsCtrqCqOd5mK+qMpdMEgo4E7EG
-         gB1aLTvPTR5wR9ew0SieUMlfQiqqjRBGPS0ZPT01WWLzJ76RdMEM83O5wQadcuPvH11l
-         2fJN1rlPWI+CKzNX7rURHW5kxLUFDUTmyT6GyxeJ3YZ0zUDXv9roJT3qgsn6QX2Zwj9a
-         q7niKO7E+mfYRAyQZwLjfrQZ8s/Sm9/SavKtP4EDBSbI90RNLZblXwLlqLpFjrU/JeXz
-         dJU5CdVTwCdLOSz3aX79xIyZ81svvbnpopt1EYwqoCbghSj3loKWFq+W/v2N5H3j+9Va
-         kFaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681120987;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9KjDWiVC9FREZXf9jIuLYMwQbdeYXF+2V10Ky+2iAZU=;
-        b=Mj4c9XXef1rcEEy3f4TibluCOZe7Lzu3rnYSSxaT+VZ+BMGaPAVI5hDJ7mEpbklF+D
-         MOmijITURXQJZFk7tky7/PFG2TTIrMJ3J76uRyaxzfsJTnxKOIF7/Epptfi4YdT7iDl6
-         qpZIudhtKIpSXaliO5Qxs0voCcoDNDeOtYLXxoqAbGVaQ/u0eHbJjfjQAIO96zk8GB5I
-         6zbztGPc82McwvgQVpXBC3yRqxSIaJPKuKyJqZ0icYAmaLAJkMpix0j+9SULxXNVstjN
-         pgTbOQihbK+X3+qCi3xsxVuaoy2v5tpPjaecTaYHr7RPXpaKm0ECZiKjcj8PhR1RKKS8
-         oLuA==
-X-Gm-Message-State: AAQBX9dlM4t4u/vprBGElClbVXGVUxpBlz9bCWgzrf5M6fAV9sv2Uzzo
-        Y62KFYVY2TfR0X9AAbfeH9w=
-X-Google-Smtp-Source: AKy350Y0YJYb6ehTAcGd5lXyGAuRdT1S1aJEgut7eJEkpGRaYzt+YGtvxQh3cdbNJx4HhSrGd3h++Q==
-X-Received: by 2002:a05:6000:124c:b0:2f0:595:679b with SMTP id j12-20020a056000124c00b002f00595679bmr3233385wrx.66.1681120987541;
-        Mon, 10 Apr 2023 03:03:07 -0700 (PDT)
-Received: from lshz10676.. ([2a01:e0a:4cc:a210:2e0:4cff:fe4b:7422])
-        by smtp.gmail.com with ESMTPSA id r9-20020a5d6949000000b002e51195a3e2sm11428959wrw.79.2023.04.10.03.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 03:03:06 -0700 (PDT)
-From:   Antonio Borneo <borneo.antonio@gmail.com>
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Antonio Borneo <borneo.antonio@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] checkpatch: exclude gerrit's Change-Id line from commit description
-Date:   Mon, 10 Apr 2023 12:02:55 +0200
-Message-Id: <20230410100255.16755-1-borneo.antonio@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 10 Apr 2023 06:03:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9344D3580;
+        Mon, 10 Apr 2023 03:03:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E94C61198;
+        Mon, 10 Apr 2023 10:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE77C4339B;
+        Mon, 10 Apr 2023 10:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681121022;
+        bh=X6mFdrcKBloByjl+W+HqhTL0wxXMHJsugPyYCIhiCuQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BXKaFHIauq0W0rEqTd0dU4B313rWlL/ab5aUxj23oPqxYYDxfeD8UdorVlEHCgN52
+         kY+L6h0Of+F/fSfFeCPKA5o23nc0M0RScNtORjnXoU4hw2Q3pmujZzviQI1yhWdEdJ
+         UvYxTe9oZTIwQiQGFIeDiYl05ptRMeHeEo158Y/aHy62emMgLNxD/hd1cgB2dDKLCn
+         HtHLZM019uiDOliPMHCrzctOyC69cc+Z3yMqCUhpbgY1W83YkY/0vopNeoPVt7urqO
+         D4qW+N5iXcExVXt48enOYupVy8QYw7FRkIEM1rMl4ng2UIVANDqska3oAPKISMLp2h
+         6QiWs+HApLPag==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1842e8a8825so5317354fac.13;
+        Mon, 10 Apr 2023 03:03:42 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dk+LdZK4izVP217e8q+qo2HYfpxyLYLYRoGDu3ow2BDbGFtWA7
+        vqw14hqGW/0w5EAXESQyDYefIQweaSAcg8Ncotw=
+X-Google-Smtp-Source: AKy350ZSMPsXHOZRqPbQgGcdegDIS4ZvZkviKutYNlqfA6bckwfU2TPWc8FRAmTHiCTn7pfKyZgtA7inGf0zF4Q/NSs=
+X-Received: by 2002:a05:6870:5594:b0:17f:f1f4:b006 with SMTP id
+ n20-20020a056870559400b0017ff1f4b006mr4967756oao.11.1681121021823; Mon, 10
+ Apr 2023 03:03:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com> <20230407203456.27141-2-quic_johmoo@quicinc.com>
+In-Reply-To: <20230407203456.27141-2-quic_johmoo@quicinc.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 10 Apr 2023 19:03:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+Message-ID: <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checkpatch rejects patches that have empty commit description and
-logs them with:
-	WARNING:COMMIT_MESSAGE: Missing commit description - Add an appropriate one
-But if the patch has a gerrit's Change-Id line placed before the
-line Signed-off-by, then checkpatch considers the Change-Id line
-as a valid commit description text.
+On Sat, Apr 8, 2023 at 5:35=E2=80=AFAM John Moon <quic_johmoo@quicinc.com> =
+wrote:
+>
+> While the kernel community has been good at maintaining backwards
+> compatibility with kernel UAPIs, it would be helpful to have a tool
+> to check if a commit introduces changes that break backwards
+> compatibility.
+>
+> To that end, introduce check-uapi.sh: a simple shell script that
+> checks for changes to UAPI headers using libabigail.
+>
+> libabigail is "a framework which aims at helping developers and
+> software distributors to spot some ABI-related issues like interface
+> incompatibility in ELF shared libraries by performing a static
+> analysis of the ELF binaries at hand."
+>
+> The script uses one of libabigail's tools, "abidiff", to compile the
+> changed header before and after the commit to detect any changes.
+>
+> abidiff "compares the ABI of two shared libraries in ELF format. It
+> emits a meaningful report describing the differences between the two
+> ABIs."
+>
+> The script also includes the ability to check the compatibility of
+> all UAPI headers across commits. This allows developers to inspect
+> the stability of the UAPIs over time.
+>
+> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
 
-Use the Change-Id tag as a marker of the end of the commit message,
-thus not counting its line as part of the commit description.
 
-This patch is not relevant for the Linux kernel development process
-as gerrit is not involved and the Change-Id tag is rejected. But
-other projects, like OpenOCD, base the development on gerrit and
-reuse kernel's checkpatch with flag '--ignore GERRIT_CHANGE_ID'.
 
-Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
----
- scripts/checkpatch.pl | 1 +
- 1 file changed, 1 insertion(+)
+BTW, is there anybody (except the submitters) who loves this tool?
+(or anybody who has ever evaluated this?)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index bd44d12965c9..5b2212d5907b 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3224,6 +3224,7 @@ sub process {
- 
- # Check for Gerrit Change-Ids not in any patch context
- 		if ($realfile eq '' && !$has_patch_separator && $line =~ /^\s*change-id:/i) {
-+			$in_commit_log = 0;
- 			if (ERROR("GERRIT_CHANGE_ID",
- 			          "Remove Gerrit Change-Id's before submitting upstream\n" . $herecurr) &&
- 			    $fix) {
+I am the only person who pointed out something.
 
-base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
--- 
-2.40.0
 
+
+I put some more comments from users' point of view.
+
+
+
+
+
+[1] The number of lines of the error log.
+
+
+According to this tool, it looks like we broke a lot of UAPI
+headers in the previous MW (between v6.2 and v6.3-rc1).
+
+Not only in the previous MW, we always broke so many UAPI
+headers, this script says.
+
+
+The following command outputs 2380 lines.
+
+
+$ ./scripts/check-uapi.sh -q -b v6.3-rc1 -p v6.2 2>&1  | wc
+   2380    9438  104953
+
+
+I do not know how many are real breakages, and
+how many are false positives.
+
+Anyway, I will not check the 2380 lines of the error log.
+
+
+And, please note that the help message explains '-q' is the *quiet* mode.
+It is the opposite. This is super noisy.
+
+
+
+
+[2] Be careful!
+
+
+While testing the patch submissions of this,
+I messed up my repository multiple times.
+
+The script takes some time because it builds many objects
+internally.
+
+However, once this script starts running, you must not hit Ctrl-C.
+If you do it, your repository will be sprinkled with a ton
+of untracked files.
+
+Apply this patch, and run "./scripts/check-uapi.sh -p v6.0"
+and hit Ctrl-C.
+
+Repeat it a couple of times, and "git status" will show you
+something horrible.
+
+
+You will never know when git is checking out a commit
+because this script hides it by 'git checkout --quiet'.
+
+
+So, this tool should show a caveat at least.
+
+
+'git checkout' should not be hidden, or
+maybe a caveat message should be shown.
+
+
+CAVEAT
+This tool runs 'git checkout' a couple of times internally.
+If you interrupt it, your worktree might be messed up.
+
+
+
+
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
