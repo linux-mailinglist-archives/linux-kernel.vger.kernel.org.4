@@ -2,164 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9446DC439
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2311E6DC43A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 10:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjDJIT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 04:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S229624AbjDJIUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 04:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjDJITz (ORCPT
+        with ESMTP id S229611AbjDJIUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:19:55 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3BA2105;
-        Mon, 10 Apr 2023 01:19:54 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e2so3772395wrc.10;
-        Mon, 10 Apr 2023 01:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681114793;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=byTwI4OqmTEe5I8sJVHbwYg2j3SFXMpSEW7IJRnCz9U=;
-        b=eaHh02fyIIw3zrfFXKxRGiQKduM0qyRkZDCslQF1vIhbDJOgy7Y02hlgGYw3wPvVHl
-         HPciC1YouYyWhSn6mKEZ0cqZqRy7XgTj7qmLtZAHjkLbSr2puMcF0LW79AJkcmsiu+MP
-         VYsmIvBZTV+fDyqHOQzq7p8QkR1o9FfI+F0rQ7+QijgPRNH4jVpNgqlKDg8gwv+u76y5
-         /+mGhquErLl+rRq8OxBSV1xihQ0FQH5iMB/x9u729EoXY893HIzkFxumCghA1rL3WdOT
-         btQMUwrWHqS2VJt3F3HA4nV93hPII95IyFX0AQBZubgz6viss15GzLiNkJIwjXv4iOcJ
-         FiRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681114793;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=byTwI4OqmTEe5I8sJVHbwYg2j3SFXMpSEW7IJRnCz9U=;
-        b=pzVwXOa4t4tc+h+5R09jXosV859kR8zYYzW0Mx6GqZtER7Sx1U7YTTzq5p1b7CgQjR
-         KbWlaOWJ1PsD0XP8v22dNByrc+qlTiwkbhQ586WXRRtCU1tGd9uXfL+weM7S6jLA2X25
-         WHlfRbT9CCL44fyrtC0obyg/FFtQyfUSHbtN63zGRGYNGTvIYb9mrqptC39Pu7L4CDIH
-         gK66g4PuqxMHg+UbCgomHZfAEI6BfTbC6G9r9bLGnvs6GEaUXFXaj+Bb9hLjFcXFuOmi
-         +cGDGmgmxFpMX/kquz5LffCDeB8pGviVDQLIpFC6m3Mo0mvqegsGsWZ5y7HUsCm3x+F0
-         np6g==
-X-Gm-Message-State: AAQBX9fQvJXOsixOUHQBmLBqT0KZNBFcPPn/gCNbNyldJmg6N/iuuRSd
-        jr4GO6Jq0LBMdKN/OA7v5+QY4mFlBDgmh735b5A=
-X-Google-Smtp-Source: AKy350aSUqytqn4pNHEcICog2NjhpBMZ1fu4WtbEp8H4HOS6gsvm3mHJin9YxjnxPC+xOwjNMZj37VcaZDq/K6YPwqU=
-X-Received: by 2002:a5d:6a4d:0:b0:2ca:4533:5d6a with SMTP id
- t13-20020a5d6a4d000000b002ca45335d6amr1626338wrw.7.1681114792855; Mon, 10 Apr
- 2023 01:19:52 -0700 (PDT)
+        Mon, 10 Apr 2023 04:20:04 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74FB49EE
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 01:20:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vfjr5EG_1681114798;
+Received: from 30.221.148.128(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vfjr5EG_1681114798)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Apr 2023 16:19:59 +0800
+Message-ID: <666bd030-5201-9118-f56a-a5c18f0a27b1@linux.alibaba.com>
+Date:   Mon, 10 Apr 2023 16:19:57 +0800
 MIME-Version: 1.0
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com> <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
- <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net> <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net> <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com> <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-In-Reply-To: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Mon, 10 Apr 2023 11:19:41 +0300
-Message-ID: <CANhJrGMkwi1TVW_wGw=Boj1vRO_wGrd9=atOxKfbbdM4cwPGsw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/arm-cmn: Fix port detection for CMN-700
+To:     Robin Murphy <robin.murphy@arm.com>, will@kernel.org
+Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <68ff05869f6dae06a92c5d320e535d8a2f75a0cd.1680522619.git.robin.murphy@arm.com>
+ <d2e7837e-a7b0-6fa6-6eee-9ccf487b4f49@arm.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <d2e7837e-a7b0-6fa6-6eee-9ccf487b4f49@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to 6. huhtik. 2023 klo 16.43 Mark Brown (broonie@kernel.org) kirjoitti:
->
-> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
-> > ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
-> > > On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
 
-> > > It can also try to avoid
-> > > interacting with hardware if that might not work.
->
-> > It'd be great to have documentation / specification for sending and/or
-> > handling the regulator events. I don't think we currently have such.
-> > As far as I understand, the notifications can be picked up by all
-> > consumers of a regulator. I am a bit worried about:
-> > a) Situations where notification handlers 'collide' by doing 'actions'
-> > which are unexpected by other handlers
->
-> I'm not sure what you're expecting there?  A device working with itself
-> shouldn't disrupt any other users.
+在 2023/4/3 下午8:47, Robin Murphy 写道:
+> On 2023-04-03 12:50, Robin Murphy wrote:
+>> When the "extra device ports" configuration was first added, the
+>> additional mxp_device_port_connect_info registers were added around the
+>> existing mxp_mesh_port_connect_info registers. What I missed about
+>> CMN-700 is that it shuffled them around to remove this discontinuity.
+>> As such, tweak the definitions and factor out a helper for reading these
+>> registers so we can deal with this discrepancy easily, which does at
+>> least allow nicely tidying up the callsites. With this we can then also
+>> do the nice thing and skip accesses completely rather than relying on
+>> RES0 behaviour where we know the extra registers aren't defined.
+>>
+>> Fixes: 23760a014417 ("perf/arm-cmn: Add CMN-700 support")
+>> Reported-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>   drivers/perf/arm-cmn.c | 55 ++++++++++++++++++++++--------------------
+>>   1 file changed, 29 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+>> index c9689861be3f..367d41c5d983 100644
+>> --- a/drivers/perf/arm-cmn.c
+>> +++ b/drivers/perf/arm-cmn.c
+>> @@ -57,14 +57,12 @@
+>>   #define CMN_INFO_REQ_VC_NUM        GENMASK_ULL(1, 0)
+>>     /* XPs also have some local topology info which has uses too */
+>> -#define CMN_MXP__CONNECT_INFO_P0    0x0008
+>> -#define CMN_MXP__CONNECT_INFO_P1    0x0010
+>> -#define CMN_MXP__CONNECT_INFO_P2    0x0028
+>> -#define CMN_MXP__CONNECT_INFO_P3    0x0030
+>> -#define CMN_MXP__CONNECT_INFO_P4    0x0038
+>> -#define CMN_MXP__CONNECT_INFO_P5    0x0040
+>> +#define CMN_MXP__CONNECT_INFO(p)    (0x0008 + 8 * (p))
+>>   #define CMN__CONNECT_INFO_DEVICE_TYPE    GENMASK_ULL(4, 0)
+>>   +#define CMN_MAX_PORTS            6
+>> +#define CI700_CONNECT_INFO_P2_5_OFFSET    0x20
+> 
+> ...which of course should be 0x10 for the way the code below ended up, sigh. I'll wait for any further review before resending.
+> 
+> Cheers,
+> Robin.
+> 
+>> +
+>>   /* PMU registers occupy the 3rd 4KB page of each node's region */
+>>   #define CMN_PMU_OFFSET            0x2000
+>>   @@ -396,6 +394,25 @@ static struct arm_cmn_node *arm_cmn_node(const struct arm_cmn *cmn,
+>>       return NULL;
+>>   }
+>>   +static u32 arm_cmn_device_connect_info(const struct arm_cmn *cmn,
+>> +                       const struct arm_cmn_node *xp, int port)
+>> +{
+>> +    int offset = CMN_MXP__CONNECT_INFO(port);
+>> +
+>> +    if (port >= 2) {
+>> +        if (cmn->model & (CMN600 | CMN650))
+>> +            return 0;
+>> +        /*
+>> +         * CI-700 may have extra ports, but still has the
+>> +         * mesh_port_connect_info registers in the way.
+>> +         */
+>> +        if (cmn->model == CI700)
+>> +            offset += CI700_CONNECT_INFO_P2_5_OFFSET;
+>> +    }
+>> +
+>> +    return readl_relaxed(xp->pmu_base - CMN_PMU_OFFSET + offset);
+>> +}
+>> +
+>>   static struct dentry *arm_cmn_debugfs;
+>>     #ifdef CONFIG_DEBUG_FS
+>> @@ -469,7 +486,7 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
+>>       y = cmn->mesh_y;
+>>       while (y--) {
+>>           int xp_base = cmn->mesh_x * y;
+>> -        u8 port[6][CMN_MAX_DIMENSION];
+>> +        u8 port[CMN_MAX_PORTS][CMN_MAX_DIMENSION];
+>>             for (x = 0; x < cmn->mesh_x; x++)
+>>               seq_puts(s, "--------+");
+>> @@ -477,14 +494,9 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
+>>           seq_printf(s, "\n%d    |", y);
+>>           for (x = 0; x < cmn->mesh_x; x++) {
+>>               struct arm_cmn_node *xp = cmn->xps + xp_base + x;
+>> -            void __iomem *base = xp->pmu_base - CMN_PMU_OFFSET;
+>>   -            port[0][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P0);
+>> -            port[1][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P1);
+>> -            port[2][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P2);
+>> -            port[3][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P3);
+>> -            port[4][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P4);
+>> -            port[5][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P5);
+>> +            for (p = 0; p < CMN_MAX_PORTS; p++)
+>> +                port[p][x] = arm_cmn_device_connect_info(cmn, xp, p);
+>>               seq_printf(s, " XP #%-2d |", xp_base + x);
+>>           }
+>>   @@ -2083,18 +2095,9 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+>>            * from this, since in that case we will see at least one XP
+>>            * with port 2 connected, for the HN-D.
+>>            */
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P0))
+>> -            xp_ports |= BIT(0);
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P1))
+>> -            xp_ports |= BIT(1);
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P2))
+>> -            xp_ports |= BIT(2);
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P3))
+>> -            xp_ports |= BIT(3);
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P4))
+>> -            xp_ports |= BIT(4);
+>> -        if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P5))
+>> -            xp_ports |= BIT(5);
+>> +        for (int p = 0; p < CMN_MAX_PORTS; p++)
 
-I have no concrete idea, just a vague uneasy feeling knowing that
-devices tend to interact with each other. I guess it is more about the
-amount of uncertainty caused by my lack of knowledge regarding what
-could be done by these handlers. So, as I already said - if no one
-else is bothered by this then I definitely don't want to block the
-series. Still, if the error handling should be kept internal to PMBus
-- then we should probably either say that consumer drivers must not
-(forcibly) turn off the supply when receiving these notifications - or
-not send these notifications from PMBus and allow PMBus to decide
-error handling internally. (Again, I don't know if any in-tree
-consumer drivers do turn off the supply regulator in error handlers -
-but I don't think it is actually forbidden). Or am I just making  a
-problem that does not exist?
 
-> > b) Situations where different notification senders send similar
-> > severity-level notifications for faults expecting different types of
-> > handling.
->
-> Like I say I'm not sure how much practical difference it makes to think
-> too hard about differentiating the errors.
+Hi Robin,
 
-I would do at least two classes.
+I tested the patch on CMN700, it works fine as I expected.
+And maybe the variable 'p' should be defined to the front?
 
-1) critical class - it is Ok for the consumer to forcibly shut down
-the regulator, or maybe the whole system.
-2) warning class - it is not Ok to forcibly shut down the regulator.
+Thanks,
+Jing
 
-OTOH, after writing this down - if this was the division, then it
-could be clearer to implement the shutdown at critical errors in the
-regulator driver (or core) and just send a specific notification to
-consumers telling this was done.
 
-> > Or, is it so that no "generic handling" of these errors is to be
-> > expected? Eg, consumers who implement any handling must always be
-> > targeted to a very specific system? My thinking has been that the
-> > device sending the notification knows the severity of the problem and
-> > - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
-> > such severe problems that consumers can try disabling the regulator,
-> > whereas the _WARN level notifications may not warrant such action. But
-> > again, I don't think we have a specification for this - so this is
-> > just my thinking - which may be off.
->
-> Do we actually have practical examples of systems sending warnings that
-> aren't followed in very short order by more severe errors, notified or
-> otherwise?
-
-No. I don't. I will send one more question about the real-world use of
-BD9576 'warning' level IRQs - but I am highly sceptical I will receive
-any real information.
-
-Thanks for the education and time Mark & Guenter. It's a bit hard for
-me to let go of the thought that we would benefit from the handling of
-different severity level errors - but maybe this was just my illusion
-after all.
-
-Yours,
-    -- Matti
-
--- 
-
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
+>> +            if (arm_cmn_device_connect_info(cmn, xp, p))
+>> +                xp_ports |= BIT(p);
+>>             if (cmn->multi_dtm && (xp_ports & 0xc))
+>>               arm_cmn_init_dtm(dtm++, xp, 1);
