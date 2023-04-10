@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880016DCC5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3CF6DCC5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 22:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDJUx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 16:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S229897AbjDJUyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 16:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDJUxp (ORCPT
+        with ESMTP id S229644AbjDJUxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Apr 2023 16:53:45 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B312114
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id w21so5438189wra.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:42 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2F2118
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e22so5442694wra.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 13:53:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681160021; x=1683752021;
+        d=linaro.org; s=google; t=1681160022; x=1683752022;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
-        b=CNbSdHE8n1zV1HPzRdLK08lEvmMz/Kid8qJ/8adULTAra3QhdAdgSk4eHGV9zO7TmW
-         oWjrs4f3ETu6O+96aPhnZ6Q61+FIGxTq7P2q1LMH6BuLH1tGqL7J5m8hL2EJwYcfVPmB
-         6L3TFCl3sAP7+8wmSXHvX8cyCl6JXV+DnepvXSz7J7ts3uSUoAbB7roDO477PeGjZBrq
-         B6UhPUI7bSVGwpPMPNawVS5xr9xsTzHINTVbnfJfS+KYyCjmqQiqKMa7/B+XTVzindJW
-         i0Ly4fqWapIN5RdJQ67GyRLwIeA+K2atzBMK38N3Fu6RJZJUsMNs+X50dxpI0knuK8pN
-         hU1w==
+        bh=6mEz7s6yXlIw25RW3QnKrwFn+iq3xNtUieG1OCq5dPk=;
+        b=NlLccR0KaN5Ll/7MrXFcv0iaJaQMvc9Kqagpb1at2P4U852rFGmVf2y2OQE9s2mL5k
+         ytRuSnPFYurJpACKpwJOfhDci6BllshkGnz2eDgHc5RwR47dC3sbKK2WmUeKJ6EPqHHJ
+         6cHrV9pUVWno3115aq5NNQzMfO4QRmn6Ai03OZtl7HSJ79QuCJPU3zwkRgWA3Zvuqnby
+         o3te8dPJz9quPZ3ADWRglYk1/brpRGN272ndnRdq1x2zlK7AcUuZOk5cUXFdx1ykUBOy
+         IXI7+P+t+rBBJEmulk3yKZFoj+cOj743k7aEr7D1mOAThuQjfCxiWu3vgT2S4cmZL0Xf
+         fcEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681160021; x=1683752021;
+        d=1e100.net; s=20210112; t=1681160022; x=1683752022;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jPfklvntaSAZNSstWZb9c9xIuh7wy5gv7laC1WOc6HM=;
-        b=2YBPzWWz+CDxc751Mas52FM2ik8luHgXMLqDChLCHNoM0qIzhkZOI1O2IFkiZGQbLf
-         uBYJvC1oYje/YdC2lI7feoXJPtBHj1YX4AsECESXxCUo6fee0GdnCtSORMeTsJfYBtYw
-         PSH7ZGBoiKud0Uj1vBc3zKgDWrFPQprPRznfjUd7uWfLrlVPcbFppNWipO/GtjEOisTy
-         r79Uw+7dKQ/+veCcmh0QmeA9CjWc+1Igjr60w3C8yPsU9D4ura5iGX0WR+Xew01faarL
-         DzQeHIEQRCvHWMPzuoHhFjMqs9vxeM7sM1W3TvtwPxt/96j3ZoueFd3yNv9/eHLy9/S/
-         jvTQ==
-X-Gm-Message-State: AAQBX9eMGcqJfaiaPfrTqUGc1jWcE0HdAATVf4Ge+ovFtXsi5RjZj8ie
-        nNt2pN0dM80y7AUUropjGBOHHRVI6mftw3MZs4k=
-X-Google-Smtp-Source: AKy350aFfGmqz5nU83qM1fv+sU7tCyVxJ496+1K9KVy1xzlKLKyU5K5Dr7MTMmRg3cXmeAr5FguKsQ==
-X-Received: by 2002:adf:dec2:0:b0:2ca:175b:d850 with SMTP id i2-20020adfdec2000000b002ca175bd850mr5111363wrn.11.1681160021173;
+        bh=6mEz7s6yXlIw25RW3QnKrwFn+iq3xNtUieG1OCq5dPk=;
+        b=DhnZvHfy5rgYfXw3BdBIumNbcxC8XB/M4L++WaBVoBABirCWBCjDSMOsMZCTR+YLFL
+         dzCwrAHSg3ZGbk/Hnzjey+kUx/OgPSYZbYunI7bty/e4k2OlouQ0OObEaXs3bhXFksAi
+         6pOj+9IpNCfStCZOfJqBkgDeEJavnghlMkTlU7S4DczTYgufythlS54HUsph5kA8gSTs
+         jv9FwIi8fbwW9tsDWdZPxd788TGIPDvt5FC9gzPkeER6pYlKZie6cWUTe7qNVVraLbJ0
+         Buk7DqJU73Mf6YPt5laAIvdFd1EJWD397BzdNQ7X6InTkSLbFEMFs1dQPrsBNtkCvg9E
+         z0Qw==
+X-Gm-Message-State: AAQBX9fnSd7m22bQ1LSWLj1GKsBraK0DfvfSlR+aPmpeK5/YwBraIEbH
+        x4DUcWo/FkOhqXg7kIqej+8muA==
+X-Google-Smtp-Source: AKy350aNGX6fjxWMXUkHK1m5zFHBH9TADms1ks0RD+DYVYGB/clRzrNGq0INQ7lPmE1ZHchKlEnxNw==
+X-Received: by 2002:a5d:6588:0:b0:2d1:53f5:900c with SMTP id q8-20020a5d6588000000b002d153f5900cmr7843051wru.20.1681160021960;
         Mon, 10 Apr 2023 13:53:41 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.40
+        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm11966789wrs.16.2023.04.10.13.53.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:53:40 -0700 (PDT)
+        Mon, 10 Apr 2023 13:53:41 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 4/7] thermal/drivers/menlow: Use thermal_zone_device()
-Date:   Mon, 10 Apr 2023 22:53:02 +0200
-Message-Id: <20230410205305.1649678-5-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v2 5/7] thermal/core: Prepare sanitizing thermal class sysfs content
+Date:   Mon, 10 Apr 2023 22:53:03 +0200
+Message-Id: <20230410205305.1649678-6-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
 References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
@@ -72,49 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to get the device associated with the thermal zone, let's use
-the wrapper thermal_zone_device() instead of accessing directly the
-content of the thermal zone device structure.
+Some drivers are accessing the thermal zone device structure to create
+specific entries in /sys/class/thermal regardless the documentation.
+
+It is questionable as the specific information should be in the
+driver's sysfs directory, not the framework it is dealing with.
+
+It has been long time these specific attributes were added in the
+thermal sysfs directory and are limited to the ACPI thermal driver and
+the Menlon driver.
+
+It is probable those are not really needed, so in order to figure out
+if that is the case, let's create a default option disabling the
+attribute in order to prepare a definitive removal.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/intel/intel_menlow.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/thermal/Kconfig | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index 5a6ad0552311..d720add918ff 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -422,7 +422,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 4cd7ab707315..cca4e5cf6f30 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -33,6 +33,18 @@ config THERMAL_STATISTICS
  
- 	result = intel_menlow_add_one_attribute("aux0", 0644,
- 						aux0_show, aux0_store,
--						&thermal->device, handle);
-+						thermal_zone_device(thermal),
-+						handle);
- 	if (result)
- 		return AE_ERROR;
+ 	  If in doubt, say N.
  
-@@ -436,7 +437,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 
- 	result = intel_menlow_add_one_attribute("aux1", 0644,
- 						aux1_show, aux1_store,
--						&thermal->device, handle);
-+						thermal_zone_device(thermal),
-+						handle);
- 	if (result) {
- 		intel_menlow_unregister_sensor();
- 		return AE_ERROR;
-@@ -449,7 +451,8 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 
- 	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
- 						bios_enabled_show, NULL,
--						&thermal->device, handle);
-+						thermal_zone_device(thermal),
-+						handle);
- 	if (result) {
- 		intel_menlow_unregister_sensor();
- 		return AE_ERROR;
++config THERMAL_SYSFS_OBSOLETE_SINGULARITY
++	bool "Enable obsolete and undocumented sysfs extra information"
++	def_bool n
++	help
++	  Enable sysfs extra information added in the thermal zone and
++	  the driver specific sysfs directories. That could be a link
++	  to the associated thermal zone as well as a link pointing to
++	  the device from the thermal zone. By default those are
++	  disabled and are candidate for removal, if you need these
++	  information anyway, enable the option or upgrade the
++	  userspace program using them.
++
+ config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
+ 	int "Emergency poweroff delay in milli-seconds"
+ 	default 0
 -- 
 2.34.1
 
