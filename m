@@ -2,123 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B0D6DC256
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6168D6DC258
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 03:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjDJBcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Apr 2023 21:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S229696AbjDJBeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Apr 2023 21:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDJBb6 (ORCPT
+        with ESMTP id S229445AbjDJBeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Apr 2023 21:31:58 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6886272D;
-        Sun,  9 Apr 2023 18:31:56 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso3081449pjp.5;
-        Sun, 09 Apr 2023 18:31:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681090316; x=1683682316;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DLwvq29JwSIBBYrW4Isd+U0FFmgKDUr1oqbZPE8w1Ss=;
-        b=WKRMfFedjP5ddZMGsOzbCdVYKjCqlZnsKmxnnPw2qLtc+vvr3+JgWYufAIBCVWApfw
-         bjX3XnZGTJ4Nb6b7MDHDWZaB4N4fMwdQo6tmrLDmY9Bo8NndeHi3DaYEJvLaECZ9MKlG
-         a7NficR9AdtQqTvGXtuL+8Ijx6X7fEMeQj6zEmKcIRtCNQxbHBdIt0WpSSDtmKy+HZ6V
-         l05J+Tf12/fpv12A+Naoap18xZo72XuejjElz+TlRBiE0Xf7Jc+oPMqmjBUork2K8pqc
-         grHL1yyPrnFox2Y7K17wKKiJq/bYa2MBneQSXiZEvEZrRZUktZqta+jP/XAx8aml8v23
-         XFTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681090316; x=1683682316;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLwvq29JwSIBBYrW4Isd+U0FFmgKDUr1oqbZPE8w1Ss=;
-        b=BQadNTi6AdRjqfTxDm7ZCz7wIXqsy2mI3NGwvw8fqJvAsaGngMozbQGOSWCiD2w6yu
-         PTJ8QZ9br3DNoz5dCqLIQrFkvD0OwW3iU2qRPOIASdXzTglOhma6C5TdPFoGfK/6z8y1
-         CjZK+0LHhgnxN55DaPZyxQrseokFbcjur/588ngiqjV+hR/Jm/rSw3ZzOMufcFd7Fj2f
-         v42huXdMaMReU4sBc2vM+qWnxiOwXrWKBnAZTBp79y8SgPc0QRu2tNDf/DvPzNvgdtzv
-         T2lvyopNSMeEHQ7TkbOkutmwRSBwxK0pyRMEO/aK70fBdCB9Pqoyi8HAKI1+iKS20iQz
-         zMtQ==
-X-Gm-Message-State: AAQBX9emIB7ZZEY8SiIZt/txjH1Z8cKIrMJJjzSOAwIfj/ntjNQ8l0Rq
-        CaMDcaAWc33T689ik8wQ+Bk=
-X-Google-Smtp-Source: AKy350adz1kb7JahPlYOAO2PqxvyuQm+oHmSvdfrjXXQmldWN/GjLOAyT3H3pQ0Q7E1BxxafFzFnxg==
-X-Received: by 2002:a17:903:22c4:b0:1a2:70ed:6cd9 with SMTP id y4-20020a17090322c400b001a270ed6cd9mr13860468plg.22.1681090315981;
-        Sun, 09 Apr 2023 18:31:55 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id o4-20020a1709026b0400b001a216d44440sm6430968plk.200.2023.04.09.18.31.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Apr 2023 18:31:55 -0700 (PDT)
-Message-ID: <9c21f8ec-4f1d-9658-bf5b-682be16d9321@gmail.com>
-Date:   Mon, 10 Apr 2023 10:31:50 +0900
+        Sun, 9 Apr 2023 21:34:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781FF26B1;
+        Sun,  9 Apr 2023 18:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681090459; x=1712626459;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VPEA52FKxbDPXZFsBUBRgLqlLFiawR6T60laqFjEQvw=;
+  b=I4D/FO6JdItg8J/yfT1dYdZPWAatpbli6dxRQflfR20/WMnXcLRf9Yg4
+   cNZoOoWhcKHCTlqsh8iJBDCrJJiNxtdZglnExiB1KgIgF0jZpDhzLiG0D
+   c5RvKFAKXo4Ysq1D+e1bKl1YbGW7KiJwBEEYzhJajLErOh9ydBv7VcZ7g
+   jfze3WX6hRge00BCCoUYiLZXmzAb8lRn6t6VtYgFNTdxaJ9uXVqfLVXiy
+   6U5NXWuxXWH4JGjXcXyZUm65NGJXAxJZ9R8jGYLLOoaVvR6YsalYRPYJx
+   FyIP+H5kbFN3+bmYxOm4HCDWHUkZFl02LRtldTeUQlovyOdSG9fT84CLF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="342026849"
+X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
+   d="scan'208";a="342026849"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 18:34:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="831775182"
+X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
+   d="scan'208";a="831775182"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2023 18:34:14 -0700
+Message-ID: <ce7de769-ecc2-4f89-d031-7f1279384eb2@linux.intel.com>
+Date:   Mon, 10 Apr 2023 09:34:21 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] tools: memory-model: Rename litmus test to avoid
- confusion with similar-named test
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20230409044823.775760-1-joel@joelfernandes.org>
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH v4 3/7] iommu: Support allocation of global PASIDs outside
+ SVA
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
+ <20230407180554.2784285-4-jacob.jun.pan@linux.intel.com>
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20230409044823.775760-1-joel@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230407180554.2784285-4-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
-
-On Sun,  9 Apr 2023 04:48:22 +0000, Joel Fernandes (Google) wrote:
-> In order to differentiate the test
-> Z6.0+pooncelock+poonceLock+pombonce.litmus from another test that only
-> differs by a capital L, the following file has been renamed:
+On 4/8/23 2:05 AM, Jacob Pan wrote:
+> Devices that use Intel ENQCMD to submit work must use global PASIDs in
+> that the PASID are stored in a per CPU MSR. When such device need to
+> submit work for in-kernel DMA with PASID, it must allocate PASIDs from
+> the same global number space to avoid conflict.
 > 
-> renamed: litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus ->
-> litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
+> This patch moves global PASID allocation APIs from SVA to IOMMU APIs.
+> It is expected that device drivers will use the allocated PASIDs to attach
+> to appropriate IOMMU domains for use.
 > 
-> This change should help avoid confusion between the two tests.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 > ---
->  ...mbonce.litmus => Z6.0+pooncelock+pooncelockmb+pombonce.litmus} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename tools/memory-model/litmus-tests/{Z6.0+pooncelock+poonceLock+pombonce.litmus => Z6.0+pooncelock+pooncelockmb+pombonce.litmus} (100%)
+> v4: move dummy functions outside ifdef CONFIG_IOMMU_SVA (Baolu)
+> ---
+>   drivers/iommu/iommu-sva.c | 10 ++++------
+>   drivers/iommu/iommu.c     | 33 +++++++++++++++++++++++++++++++++
+>   include/linux/iommu.h     | 11 +++++++++++
+>   3 files changed, 48 insertions(+), 6 deletions(-)
 > 
-> diff --git a/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus b/tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
-> similarity index 100%
-> rename from tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus
-> rename to tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
+> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> index c434b95dc8eb..222544587582 100644
+> --- a/drivers/iommu/iommu-sva.c
+> +++ b/drivers/iommu/iommu-sva.c
+> @@ -9,15 +9,13 @@
+>   #include "iommu-sva.h"
+>   
+>   static DEFINE_MUTEX(iommu_sva_lock);
+> -static DEFINE_IDA(iommu_global_pasid_ida);
+>   
+>   /* Allocate a PASID for the mm within range (inclusive) */
+>   static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+>   {
+>   	int ret = 0;
+>   
+> -	if (!pasid_valid(min) || !pasid_valid(max) ||
+> -	    min == 0 || max < min)
+> +	if (!pasid_valid(min) || !pasid_valid(max) || max < min)
+>   		return -EINVAL;
+>   
+>   	mutex_lock(&iommu_sva_lock);
+> @@ -28,8 +26,8 @@ static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t ma
+>   		goto out;
+>   	}
+>   
+> -	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max, GFP_KERNEL);
+> -	if (ret < min)
+> +	ret = iommu_alloc_global_pasid(min, max);
+> +	if (!pasid_valid(ret))
+>   		goto out;
+>   	mm->pasid = ret;
+>   	ret = 0;
+> @@ -211,5 +209,5 @@ void mm_pasid_drop(struct mm_struct *mm)
+>   	if (likely(!pasid_valid(mm->pasid)))
+>   		return;
+>   
+> -	ida_free(&iommu_global_pasid_ida, mm->pasid);
+> +	iommu_free_global_pasid(mm->pasid);
+>   }
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 10db680acaed..2a132ff7e3de 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -38,6 +38,7 @@
+>   
+>   static struct kset *iommu_group_kset;
+>   static DEFINE_IDA(iommu_group_ida);
+> +static DEFINE_IDA(iommu_global_pasid_ida);
+>   
+>   static unsigned int iommu_def_domain_type __read_mostly;
+>   static bool iommu_dma_strict __read_mostly = IS_ENABLED(CONFIG_IOMMU_DEFAULT_DMA_STRICT);
+> @@ -3450,3 +3451,35 @@ struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
+>   
+>   	return domain;
+>   }
+> +
+> +/**
+> + * @brief
+> + *	Allocate a PASID from the global number space.
+> + *
+> + * @param min starting range, inclusive
+> + * @param max ending range, inclusive
+> + * @return The reserved PASID on success or IOMMU_PASID_INVALID on failure.
+> + */
+> +ioasid_t iommu_alloc_global_pasid(ioasid_t min, ioasid_t max)
+> +{
+> +	int ret;
+> +
+> +	if (!pasid_valid(min) || !pasid_valid(max) || max < min)
+> +		return IOMMU_PASID_INVALID;
+> +
+> +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return IOMMU_PASID_INVALID;
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid);
+> +
+> +void iommu_free_global_pasid(ioasid_t pasid)
+> +{
+> +	if (WARN_ON(!pasid_valid(pasid)))
+> +		return;
+> +
+> +	ida_free(&iommu_global_pasid_ida, pasid);
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_free_global_pasid);
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 54f535ff9868..c9720ddc81d2 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -723,6 +723,8 @@ void iommu_detach_device_pasid(struct iommu_domain *domain,
+>   struct iommu_domain *
+>   iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid,
+>   			       unsigned int type);
+> +ioasid_t iommu_alloc_global_pasid(ioasid_t min, ioasid_t max);
+> +void iommu_free_global_pasid(ioasid_t pasid);
+>   #else /* CONFIG_IOMMU_API */
+>   
+>   struct iommu_ops {};
+> @@ -1089,6 +1091,13 @@ iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid,
+>   {
+>   	return NULL;
+>   }
+> +
+> +static inline ioasid_t iommu_alloc_global_pasid(ioasid_t min, ioasid_t max)
+> +{
+> +	return IOMMU_PASID_INVALID;
+> +}
+> +
+> +static inline void iommu_free_global_pasid(ioasid_t pasid) {}
+>   #endif /* CONFIG_IOMMU_API */
+>   
+>   /**
+> @@ -1187,6 +1196,7 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>   					struct mm_struct *mm);
+>   void iommu_sva_unbind_device(struct iommu_sva *handle);
+>   u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+> +
 
-I must say simply changing the file name is only part of the job.
-You need to update comments/docs as well.
+Nit: irrelevant blank line
 
-There are 4 hits after this patch is applied:
+>   #else
+>   static inline struct iommu_sva *
+>   iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+> @@ -1202,6 +1212,7 @@ static inline u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+>   {
+>   	return IOMMU_PASID_INVALID;
+>   }
+> +
 
-$ find . -type f -exec grep -nH --null -F -e Z6.0+pooncelock+poonceLock \{\} +
-./tools/memory-model/Documentation/locking.txt187:	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
-./tools/memory-model/Documentation/recipes.txt162:	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
-./tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus1:C Z6.0+pooncelock+poonceLock+pombonce
-./tools/memory-model/litmus-tests/README152:Z6.0+pooncelock+poonceLock+pombonce.litmus
+Ditto
 
-        Thanks, Akira
+>   static inline void mm_pasid_init(struct mm_struct *mm) {}
+>   static inline void mm_pasid_drop(struct mm_struct *mm) {}
+>   #endif /* CONFIG_IOMMU_SVA */
+
+Other look good to me.
+
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
