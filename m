@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC0E6DC69C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED53A6DC69F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjDJMKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S229840AbjDJMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDJMKB (ORCPT
+        with ESMTP id S229535AbjDJMK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:10:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB6772B2;
-        Mon, 10 Apr 2023 05:09:38 -0700 (PDT)
+        Mon, 10 Apr 2023 08:10:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B919A7;
+        Mon, 10 Apr 2023 05:10:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C356126A;
-        Mon, 10 Apr 2023 12:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0EE0C433D2;
-        Mon, 10 Apr 2023 12:09:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 005D76126A;
+        Mon, 10 Apr 2023 12:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCBBEC433EF;
+        Mon, 10 Apr 2023 12:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681128554;
-        bh=WIlDoCw7J08iW5K2/pEMUnymPz10vogrfsy6xiu6IA8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BdswfQA6uvVQWhZs+GEM+p455ZmbzebNsTmo2FEdCtM6H0mtwiroAVknlGHrqANmh
-         Y3wqAeZv2jWOIi9MspMQYYhBwXIzx64D4zxiVJowP31S6obe7GsI7PtC/DuMqMdCxi
-         OKXh5gIhJFSbtidAQ6frqV59yD3c3Mwhn9uSrwjLuFjmMUxKCLnZNoL41bAfm/aHTT
-         g35Cyw6LTEPcdWy4OS/jTSlaJI2Rs1n7PexhDWzMvxWN9fw/3wXgCRTk6lrWnkAh9G
-         h7r5g9eBNFSsdQdj9L7Pnc4GvwR8t+6G6as6mLfJuL3nK1u33f2rYhut+xIM8juKch
-         l2BzjLWLtFFtg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2] kbuild: give up untracked files for source package builds
-Date:   Mon, 10 Apr 2023 21:09:07 +0900
-Message-Id: <20230410120907.410879-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        s=k20201202; t=1681128620;
+        bh=uwr5cvR5R48BwQEXefLwCTCrzr7Wk3Z6VFdhoUUZ43A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JrKj/Q2gHZzXSfN1gZ3uOnI9y3a3TO/4SPXWpOGEMsyS1QQSly57wlpXj/s2w04dm
+         FYwBd4gK5LNSZytU5n63Xtm7ivwbtXj2yqYOweq4PLmrrduGzSWouGnX27GIB1h3Gn
+         4DhSTvXYmVKz7bvQ8FKuvRib2DPLguQhHKFRwq4Yw+bCiaEjN7VNbOzbcLjsHa1FZi
+         MSlVXSJoHogvnLkKNXphBw6Y/Lg7ZE2tTEQWRbHnC87p1m5hvpijlXy34wALz2In/8
+         +RHerF4umYcTOMmpu3smR+FXsYAlEPZXeXW7y3KCu6/LsTKxBYKZICZfHv+tlG6ADO
+         97pGqMYG2z90w==
+Date:   Mon, 10 Apr 2023 15:10:16 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     haris.iqbal@ionos.com, jinpu.wang@ionos.com, jgg@ziepe.ca,
+        linux-rdma@vger.kernel.org, guoqing.jiang@linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next 3/3] RDMA/rtrs: Avoid use-after-free in
+ rtrs_clt_rdma_cm_handler
+Message-ID: <20230410121016.GO182481@unreal>
+References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1681108984-2-4-git-send-email-lizhijian@fujitsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681108984-2-4-git-send-email-lizhijian@fujitsu.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,305 +56,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the source tree is dirty and contains untracked files, package
-builds may fail. For example, when a broken symlink exists, a file
-path contains whitespaces, etc.
+On Mon, Apr 10, 2023 at 06:43:04AM +0000, Li Zhijian wrote:
+> Currently, con will be destroyed when wait_event_interruptible_timeout()
+> returns ERESTARTSYS. But the in-flight event handler
+> rtrs_clt_rdma_cm_handler() could be rescheduled/wakeup which
+> may cause a use-after-free.
+> 
+>     WARNING: CPU: 0 PID: 14766 at drivers/infiniband/ulp/rtrs/rtrs-clt.c:1687 rtrs_clt_rdma_cm_handler+0x620/0x640 [rtrs_client]
+>      Modules linked in: rnbd_client rtrs_client rtrs_core rdma_cm iw_cm ib_cm rdma_rxe ib_uverbs ib_core libiscsi scsi_transport_iscsi crc32_generic udp_tunnel dax_pmem nd_pmem nd_btt virtiofs crc32c_intel nvme fuse nvme_core nfit
+> libnvdimm dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod [last unloaded: ib_core]
+>      CPU: 0 PID: 14766 Comm: kworker/u2:3 Kdump: loaded Tainted: G        W          6.2.0-rc6-roce-flush+ #56
+>      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>      Workqueue: ib_addr process_one_req [ib_core]
+>      RIP: 0010:rtrs_clt_rdma_cm_handler+0x620/0x640 [rtrs_client]
+>      Code: 00 0f 85 5f fd ff ff 4c 8b 23 41 bd f4 ff ff ff e9 95 fb ff ff 0f 0b 4c 89 f7 41 bd ea ff ff ff e8 75 c8 92 ec e9 4b ff ff ff <0f> 0b 4c 89 f7 41 bd ea ff ff ff e8 60 c8 92 ec e9 36 ff ff ff e8
+>      RSP: 0018:ffffa4ef41cdbc60 EFLAGS: 00010246
+>      RAX: 0000000000000000 RBX: ffff9372c394e600 RCX: 0000000000000001
+>      RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffffffffad634277
+>      RBP: ffffa4ef41cdbd00 R08: 0000000000000000 R09: 0000000000000001
+>      R10: 0000000000003ff3 R11: 0000000000000000 R12: ffff9372c3164800
+>      R13: ffff9372c3164800 R14: ffff9372c394e640 R15: ffff9372c5219020
+>      FS:  0000000000000000(0000) GS:ffff9372fbc00000(0000) knlGS:0000000000000000
+>      CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>      CR2: 00007f35bb7d5de0 CR3: 0000000020c2a006 CR4: 00000000001706f0
+>      DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>      DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>      Call Trace:
+>       <TASK>
+>       ? mark_held_locks+0x49/0x80
+>       ? lock_is_held_type+0xd7/0x130
+>       ? cma_cm_event_handler+0x49/0x200 [rdma_cm]
+>       cma_cm_event_handler+0x49/0x200 [rdma_cm]
+>       addr_handler+0xf1/0x1e0 [rdma_cm]
+>       ? lock_acquire+0xca/0x2f0
+>       ? lock_acquire+0xda/0x2f0
+>       process_one_req+0x43/0x170 [ib_core]
+>       process_one_work+0x274/0x590
+>       worker_thread+0x4f/0x3d0
+>       ? __pfx_worker_thread+0x10/0x10
+>       kthread+0xe7/0x110
+>       ? __pfx_kthread+0x10/0x10
+>       ret_from_fork+0x2c/0x50
+>       </TASK>
+>      irq event stamp: 1432669
+>      hardirqs last  enabled at (1432683): [<ffffffffac508eb2>] __up_console_sem+0x52/0x60
+>      hardirqs last disabled at (1432698): [<ffffffffac508e97>] __up_console_sem+0x37/0x60
+>      softirqs last  enabled at (1432518): [<ffffffffac48c985>] __irq_exit_rcu+0xc5/0x120
+>      softirqs last disabled at (1432509): [<ffffffffac48c985>] __irq_exit_rcu+0xc5/0x120
+>      ---[ end trace 0000000000000000 ]---
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+>  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> index 4c8f42e46e2f..760a7eb51297 100644
+> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> @@ -2074,6 +2074,7 @@ static int create_cm(struct rtrs_clt_con *con)
+>  		rtrs_err(s, "Failed to resolve address, err: %d\n", err);
+>  		goto destroy_cm;
+>  	}
+> +again:
+>  	/*
+>  	 * Combine connection status and session events. This is needed
+>  	 * for waiting two possible cases: cm_err has something meaningful
+> @@ -2083,10 +2084,15 @@ static int create_cm(struct rtrs_clt_con *con)
+>  			clt_path->state_wq,
+>  			con->cm_err || clt_path->state != RTRS_CLT_CONNECTING,
+>  			msecs_to_jiffies(RTRS_CONNECT_TIMEOUT_MS));
+> -	if (err == 0 || err == -ERESTARTSYS) {
+> -		if (err == 0)
+> -			err = -ETIMEDOUT;
+> -		/* Timedout or interrupted */
+> +	if (err == -ERESTARTSYS) {
+> +		/* interrupted,
+> +		 * try again to avoid the in-flight rtrs_clt_rdma_cm_handler()
+> +		 * getting a use-after-free
+> +		 */
+> +		goto again;
+> +	} else if (err == 0) {
+> +		err = -ETIMEDOUT;
+> +		/* Timedout */
 
-Since commit 05e96e96a315 ("kbuild: use git-archive for source package
-creation"), the source tarball only contains committed files because
-it is created by 'git archive'. scripts/package/gen-diff-patch tries
-to address the diff from HEAD, but including untracked files by the
-hand-crafted script introduces more complexity. I wrote a patch [1] to
-make it work in most cases, but still wonder if this is what we should
-aim for.
+Timedout -> Timeout
 
-This patch just gives up untracked files. Going forward, it is your
-responsibility to do 'git add' for what you want in the source package.
-The script shows a warning just in case you forgot to do so. It should
-be checked only when building source packages.
+>  		goto errr;
 
-[1]: https://lore.kernel.org/all/CAK7LNAShbZ56gSh9PrbLnBDYKnjtTkHMoCXeGrhcxMvqXGq9=g@mail.gmail.com/2-0001-kbuild-make-package-builds-more-robust.patch
+errrr, sigh.
 
-Fixes: 05e96e96a315 ("kbuild: use git-archive for source package creation")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
----
-
-Changes in v2:
-  - Fix a bug that ${maintainer} expands to empty in gen_source()
-  - Add a patch header to diff.patch
-  - Remove unneeded 'shift'
-  - Quote variables to fix shellcheck warnings
-  - Rename 'config' to 'config.patch' for debian source package
-
- scripts/Makefile.package       |   3 +-
- scripts/package/gen-diff-patch |  62 +++++++++-----------
- scripts/package/mkdebian       | 103 +++++++++++++++++++--------------
- scripts/package/mkspec         |  11 +---
- 4 files changed, 90 insertions(+), 89 deletions(-)
-
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index 61f72eb8d9be..49aff12cb6ab 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -94,7 +94,7 @@ binrpm-pkg:
- 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
- 
- quiet_cmd_debianize = GEN     $@
--      cmd_debianize = $(srctree)/scripts/package/mkdebian
-+      cmd_debianize = $(srctree)/scripts/package/mkdebian $(mkdebian-opts)
- 
- debian: FORCE
- 	$(call cmd,debianize)
-@@ -103,6 +103,7 @@ PHONY += debian-orig
- debian-orig: private source = $(shell dpkg-parsechangelog -S Source)
- debian-orig: private version = $(shell dpkg-parsechangelog -S Version | sed 's/-[^-]*$$//')
- debian-orig: private orig-name = $(source)_$(version).orig.tar.gz
-+debian-orig: mkdebian-opts = --need-source
- debian-orig: linux.tar.gz debian
- 	$(Q)if [ "$(df  --output=target .. 2>/dev/null)" = "$(df --output=target $< 2>/dev/null)" ]; then \
- 		ln -f $< ../$(orig-name); \
-diff --git a/scripts/package/gen-diff-patch b/scripts/package/gen-diff-patch
-index f842ab50a780..12103644bef4 100755
---- a/scripts/package/gen-diff-patch
-+++ b/scripts/package/gen-diff-patch
-@@ -1,44 +1,36 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0-only
- 
--diff_patch="${1}"
--untracked_patch="${2}"
--srctree=$(dirname $0)/../..
-+diff_patch=$1
- 
--rm -f ${diff_patch} ${untracked_patch}
-+mkdir -p "$(dirname "${diff_patch}")"
- 
--if ! ${srctree}/scripts/check-git; then
--	exit
--fi
--
--mkdir -p "$(dirname ${diff_patch})" "$(dirname ${untracked_patch})"
-+git -C "${srctree:-.}" diff HEAD > "${diff_patch}"
- 
--git -C "${srctree}" diff HEAD > "${diff_patch}"
--
--if [ ! -s "${diff_patch}" ]; then
--	rm -f "${diff_patch}"
-+if [ ! -s "${diff_patch}" ] ||
-+   [ -z "$(git -C "${srctree:-.}" ls-files --other --exclude-standard | head -n1)" ]; then
- 	exit
- fi
- 
--git -C ${srctree} status --porcelain --untracked-files=all |
--while read stat path
--do
--	if [ "${stat}" = '??' ]; then
--
--		if ! diff -u /dev/null "${srctree}/${path}" > .tmp_diff &&
--			! head -n1 .tmp_diff | grep -q "Binary files"; then
--			{
--				echo "--- /dev/null"
--				echo "+++ linux/$path"
--				cat .tmp_diff | tail -n +3
--			} >> ${untracked_patch}
--		fi
--	fi
--done
--
--rm -f .tmp_diff
--
--if [ ! -s "${diff_patch}" ]; then
--	rm -f "${diff_patch}"
--	exit
--fi
-+# The source tarball, which is generated by 'git archive', contains everything
-+# you committed in the repository. If you have local diff ('git diff HEAD'),
-+# it will go into ${diff_patch}. If untracked files are remaining, the resulting
-+# source package may not be correct.
-+#
-+# Examples:
-+#  - You modified a source file to add #include <linux/new-header.h>
-+#    but forgot to add include/linux/new-header.h
-+#  - You modified a Makefile to add 'obj-$(CONFIG_FOO) += new-dirver.o'
-+#    but you forgot to add new-driver.c
-+#
-+# You need to commit them, or at least stage them by 'git add'.
-+#
-+# This script does not take care of untracked files because doing so would
-+# introduce additional complexity. Instead, print a warning message here if
-+# untracked files are found.
-+# If all untracked files are just garbage, you can ignore this warning.
-+echo >&2 "============================ WARNING ============================"
-+echo >&2 "Your working tree has diff from HEAD, and also untracked file(s)."
-+echo >&2 "Please make sure you did 'git add' for all new files you need in"
-+echo >&2 "the source package."
-+echo >&2 "================================================================="
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index e20a2b5be9eb..a4c2c2276223 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -84,7 +84,66 @@ set_debarch() {
- 	fi
- }
- 
-+# Create debian/source/ if it is a source package build
-+gen_source ()
-+{
-+	mkdir -p debian/source
-+
-+	echo "3.0 (quilt)" > debian/source/format
-+
-+	{
-+		echo "diff-ignore"
-+		echo "extend-diff-ignore = .*"
-+	} > debian/source/local-options
-+
-+	# Add .config as a patch
-+	mkdir -p debian/patches
-+	{
-+		echo "Subject: Add .config"
-+		echo "Author: ${maintainer}"
-+		echo
-+		echo "--- /dev/null"
-+		echo "+++ linux/.config"
-+		diff -u /dev/null "${KCONFIG_CONFIG}" | tail -n +3
-+	} > debian/patches/config.patch
-+	echo config.patch > debian/patches/series
-+
-+	"${srctree}/scripts/package/gen-diff-patch" debian/patches/diff.patch
-+	if [ -s debian/patches/diff.patch ]; then
-+		sed -i "
-+			1iSubject: Add local diff
-+			1iAuthor: ${maintainer}
-+			1i
-+		" debian/patches/diff.patch
-+
-+		echo diff.patch >> debian/patches/series
-+	else
-+		rm -f debian/patches/diff.patch
-+	fi
-+}
-+
- rm -rf debian
-+mkdir debian
-+
-+email=${DEBEMAIL-$EMAIL}
-+
-+# use email string directly if it contains <email>
-+if echo "${email}" | grep -q '<.*>'; then
-+	maintainer=${email}
-+else
-+	# or construct the maintainer string
-+	user=${KBUILD_BUILD_USER-$(id -nu)}
-+	name=${DEBFULLNAME-${user}}
-+	if [ -z "${email}" ]; then
-+		buildhost=${KBUILD_BUILD_HOST-$(hostname -f 2>/dev/null || hostname)}
-+		email="${user}@${buildhost}"
-+	fi
-+	maintainer="${name} <${email}>"
-+fi
-+
-+if [ "$1" = --need-source ]; then
-+	gen_source
-+fi
- 
- # Some variables and settings used throughout the script
- version=$KERNELRELEASE
-@@ -104,22 +163,6 @@ fi
- debarch=
- set_debarch
- 
--email=${DEBEMAIL-$EMAIL}
--
--# use email string directly if it contains <email>
--if echo $email | grep -q '<.*>'; then
--	maintainer=$email
--else
--	# or construct the maintainer string
--	user=${KBUILD_BUILD_USER-$(id -nu)}
--	name=${DEBFULLNAME-$user}
--	if [ -z "$email" ]; then
--		buildhost=${KBUILD_BUILD_HOST-$(hostname -f 2>/dev/null || hostname)}
--		email="$user@$buildhost"
--	fi
--	maintainer="$name <$email>"
--fi
--
- # Try to determine distribution
- if [ -n "$KDEB_CHANGELOG_DIST" ]; then
-         distribution=$KDEB_CHANGELOG_DIST
-@@ -132,34 +175,6 @@ else
-         echo >&2 "Install lsb-release or set \$KDEB_CHANGELOG_DIST explicitly"
- fi
- 
--mkdir -p debian/source/
--echo "3.0 (quilt)" > debian/source/format
--
--{
--	echo "diff-ignore"
--	echo "extend-diff-ignore = .*"
--} > debian/source/local-options
--
--# Add .config as a patch
--mkdir -p debian/patches
--{
--	echo "Subject: Add .config"
--	echo "Author: ${maintainer}"
--	echo
--	echo "--- /dev/null"
--	echo "+++ linux/.config"
--	diff -u /dev/null "${KCONFIG_CONFIG}" | tail -n +3
--} > debian/patches/config
--echo config > debian/patches/series
--
--$(dirname $0)/gen-diff-patch debian/patches/diff.patch debian/patches/untracked.patch
--if [ -f debian/patches/diff.patch ]; then
--	echo diff.patch >> debian/patches/series
--fi
--if [ -f debian/patches/untracked.patch ]; then
--	echo untracked.patch >> debian/patches/series
--fi
--
- echo $debarch > debian/arch
- extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
- extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
-diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-index b7d1dc28a5d6..fc8ad3fbc0a9 100755
---- a/scripts/package/mkspec
-+++ b/scripts/package/mkspec
-@@ -19,8 +19,7 @@ else
- 	mkdir -p rpmbuild/SOURCES
- 	cp linux.tar.gz rpmbuild/SOURCES
- 	cp "${KCONFIG_CONFIG}" rpmbuild/SOURCES/config
--	$(dirname $0)/gen-diff-patch rpmbuild/SOURCES/diff.patch rpmbuild/SOURCES/untracked.patch
--	touch rpmbuild/SOURCES/diff.patch rpmbuild/SOURCES/untracked.patch
-+	"${srctree}/scripts/package/gen-diff-patch" rpmbuild/SOURCES/diff.patch
- fi
- 
- if grep -q CONFIG_MODULES=y include/config/auto.conf; then
-@@ -56,7 +55,6 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
- $S	Source0: linux.tar.gz
- $S	Source1: config
- $S	Source2: diff.patch
--$S	Source3: untracked.patch
- 	Provides: $PROVIDES
- $S	BuildRequires: bc binutils bison dwarves
- $S	BuildRequires: (elfutils-libelf-devel or libelf-devel) flex
-@@ -94,12 +92,7 @@ $S$M
- $S	%prep
- $S	%setup -q -n linux
- $S	cp %{SOURCE1} .config
--$S	if [ -s %{SOURCE2} ]; then
--$S		patch -p1 < %{SOURCE2}
--$S	fi
--$S	if [ -s %{SOURCE3} ]; then
--$S		patch -p1 < %{SOURCE3}
--$S	fi
-+$S	patch -p1 < %{SOURCE2}
- $S
- $S	%build
- $S	$MAKE %{?_smp_mflags} KERNELRELEASE=$KERNELRELEASE KBUILD_BUILD_VERSION=%{release}
--- 
-2.37.2
-
+>  	}
+>  	if (con->cm_err < 0) {
+> -- 
+> 2.29.2
+> 
