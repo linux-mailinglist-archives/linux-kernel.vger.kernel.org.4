@@ -2,151 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BD06DC398
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2C96DC3A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 08:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjDJGjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 02:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S229709AbjDJGnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 02:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjDJGjX (ORCPT
+        with ESMTP id S229598AbjDJGnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 02:39:23 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB5B40E0
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Apr 2023 23:39:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfhGV3r_1681108758;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VfhGV3r_1681108758)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Apr 2023 14:39:18 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/7] erofs: handle long xattr name prefixes properly
-Date:   Mon, 10 Apr 2023 14:39:18 +0800
-Message-Id: <20230410063918.47215-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230407141710.113882-7-jefflexu@linux.alibaba.com>
-References: <20230407141710.113882-7-jefflexu@linux.alibaba.com>
+        Mon, 10 Apr 2023 02:43:31 -0400
+Received: from mail1.bemta32.messagelabs.com (mail1.bemta32.messagelabs.com [195.245.230.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB842D47;
+        Sun,  9 Apr 2023 23:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1681109008; i=@fujitsu.com;
+        bh=lz2fI0gpznOYEVET54zSAl1n0IRovlfLa0r/idjEk1w=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=d1pHysgimmoV7X2JKFbYJgttT37v7dBF8WSiO73AKPlDXgKiWCdRobdlDUtQEfRxf
+         VSHlNayFMFudbyl3eaWlzmH+DAOeT0RZeFoFv2UfDmJoNRgfTHeRCYID6M4HDcBEJM
+         sdREHTD/Mt4/S1MQUlmAd9ZvVmNKG3U7S67p7XwRkISycRutW7ebseyMC7AClLda0z
+         zy4ysVPlGOSVgRA9KMkzrB15MBbfDjHAnLE686/PKJV12SMfKxVh5+CIxSS5rePtUx
+         xs4B8IR3q9db5D9MwCyLV4ZN1ydGODP0BrOi+GG8s1LVDZnktaW+kUcUCl3OJeS6gv
+         dj40sry45YI3Q==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHIsWRWlGSWpSXmKPExsViZ8ORpMu/wTj
+  FoOsmq8WNaXIW205vYLeYOeMEo8XbTVNYLKb8WspscXnXHDaLZ4d6WRzYPU6/ucPksWlVJ5vH
+  woapzB6fN8l5bP18myWANYo1My8pvyKBNaOrMbhgPVvFvol7WBoY57J2MXJxCAlsZJTYP+EqE
+  4SzhEmiubmZDcLZzyix7VgfUIaTg01AQ+Jey01GEFtEoFTicNs+dhCbWSBJYt7tt8wgtrCAmc
+  S0pm1sIDaLgKrE0hc/WUFsXgFHiUN3t4DNkRBQkJjy8D0zRFxQ4uTMJywQcyQkDr54wQxRoyh
+  xpPMvC4RdIdE4/RBUr5rE1XObmCcw8s9C0j4LSfsCRqZVjGbFqUVlqUW6hmZ6SUWZ6RkluYmZ
+  OXqJVbqJeqmluuWpxSW6hnqJ5cV6qcXFesWVuck5KXp5qSWbGIHBnlLM/HIH44m+v3qHGCU5m
+  JREebu4jFOE+JLyUyozEosz4otKc1KLDzHKcHAoSfB+XwCUEyxKTU+tSMvMAUYeTFqCg0dJhP
+  fEMqA0b3FBYm5xZjpE6hSjopQ47691QAkBkERGaR5cGyzaLzHKSgnzMjIwMAjxFKQW5WaWoMq
+  /YhTnYFQS5p0EMp4nM68EbvoroMVMQIu5XAxAFpckIqSkGpiyPNO7uE/+2jFF1XGe9n/Z49Pr
+  Zm2ueMh1r4yvlV3+sZDoI/fIl/++v2+Nca5t298jkyh/6twku+Pp2TqX/phlvt5xdlXBm8k3K
+  wxflc26fzXvv7nNjfdvZ/geffWtQv991OQTpxXmz09NyaoOWLjppvbjGueoiIyvi10fMAlols
+  7dLCDoESpZu8nUv+fKLaND2Qd2+KvPX+i8PnPrhv3PF+7U9P/EebX30r4l/puU/Tf3cN1a8W7
+  qrb8ua/ln7xUUXPpRutSlPmLF8sY/aztCuJ0KX5y+ssqm+uO+Tby35hy7vdnfuDdx9gax6NkK
+  0RGf3h79+EhJcYtT7irDtYfM1q273RF15gp7Xl3B0fbrH5RYijMSDbWYi4oTAbC+cRdxAwAA
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-12.tower-587.messagelabs.com!1681109006!373208!1
+X-Originating-IP: [62.60.8.98]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.104.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 1604 invoked from network); 10 Apr 2023 06:43:27 -0000
+Received: from unknown (HELO n03ukasimr03.n03.fujitsu.local) (62.60.8.98)
+  by server-12.tower-587.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 10 Apr 2023 06:43:27 -0000
+Received: from n03ukasimr03.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTP id A320C1CD;
+        Mon, 10 Apr 2023 07:43:26 +0100 (BST)
+Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTPS id 97C791C8;
+        Mon, 10 Apr 2023 07:43:26 +0100 (BST)
+Received: from 31d618797ed9.localdomain (10.167.226.45) by
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Mon, 10 Apr 2023 07:43:23 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <haris.iqbal@ionos.com>, <jinpu.wang@ionos.com>, <jgg@ziepe.ca>,
+        <leon@kernel.org>, <linux-rdma@vger.kernel.org>
+CC:     <guoqing.jiang@linux.dev>, <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH for-next 0/3] rtrs bugfix and cleanups
+Date:   Mon, 10 Apr 2023 06:43:01 +0000
+Message-ID: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.226.45]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make .{list,get}xattr routines adapted to long xattr name prefixes.
-When the bit 7 of erofs_xattr_entry.e_name_index is set, it indicates
-that it refers to a long xattr name prefix.
+It's trying to fix 2 issues caused by the following script which
+connect/disconnect rnbd frequently.
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
-v2: remove "idx" temporary variable (Gao Xiang)
----
- fs/erofs/xattr.c | 57 +++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 49 insertions(+), 8 deletions(-)
+# cat rnbd-self.sh 
+#!/bin/bash
 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 684571e83a2c..4ad290b6acb7 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -301,11 +301,38 @@ struct getxattr_iter {
- 	struct qstr name;
- };
- 
-+static int erofs_xattr_long_entrymatch(struct getxattr_iter *it,
-+				       struct erofs_xattr_entry *entry)
-+{
-+	struct erofs_sb_info *sbi = EROFS_SB(it->it.sb);
-+	struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
-+		(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+
-+	if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
-+		return -ENOATTR;
-+
-+	if (it->index != pf->prefix->base_index)
-+		return -ENOATTR;
-+
-+	if (strncmp(it->name.name, pf->prefix->infix, pf->infix_len))
-+		return -ENOATTR;
-+
-+	it->name.name += pf->infix_len;
-+	it->name.len -= pf->infix_len;
-+	if (it->name.len != entry->e_name_len)
-+		return -ENOATTR;
-+	return 0;
-+}
-+
- static int xattr_entrymatch(struct xattr_iter *_it,
- 			    struct erofs_xattr_entry *entry)
- {
- 	struct getxattr_iter *it = container_of(_it, struct getxattr_iter, it);
- 
-+	/* should also match the infix for long name prefixes */
-+	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX)
-+		return erofs_xattr_long_entrymatch(it, entry);
-+
- 	return (it->index != entry->e_name_index ||
- 		it->name.len != entry->e_name_len) ? -ENOATTR : 0;
- }
-@@ -487,12 +514,24 @@ static int xattr_entrylist(struct xattr_iter *_it,
- {
- 	struct listxattr_iter *it =
- 		container_of(_it, struct listxattr_iter, it);
--	unsigned int prefix_len;
--	const char *prefix;
--
--	const struct xattr_handler *h =
--		erofs_xattr_handler(entry->e_name_index);
-+	unsigned int base_index = entry->e_name_index;
-+	unsigned int prefix_len, infix_len = 0;
-+	const char *prefix, *infix = NULL;
-+	const struct xattr_handler *h;
-+
-+	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
-+		struct erofs_sb_info *sbi = EROFS_SB(_it->sb);
-+		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
-+			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+
-+		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
-+			return 1;
-+		infix = pf->prefix->infix;
-+		infix_len = pf->infix_len;
-+		base_index = pf->prefix->base_index;
-+	}
- 
-+	h = erofs_xattr_handler(base_index);
- 	if (!h || (h->list && !h->list(it->dentry)))
- 		return 1;
- 
-@@ -500,16 +539,18 @@ static int xattr_entrylist(struct xattr_iter *_it,
- 	prefix_len = strlen(prefix);
- 
- 	if (!it->buffer) {
--		it->buffer_ofs += prefix_len + entry->e_name_len + 1;
-+		it->buffer_ofs += prefix_len + infix_len +
-+					entry->e_name_len + 1;
- 		return 1;
- 	}
- 
--	if (it->buffer_ofs + prefix_len
-+	if (it->buffer_ofs + prefix_len + infix_len +
- 		+ entry->e_name_len + 1 > it->buffer_size)
- 		return -ERANGE;
- 
- 	memcpy(it->buffer + it->buffer_ofs, prefix, prefix_len);
--	it->buffer_ofs += prefix_len;
-+	memcpy(it->buffer + it->buffer_ofs + prefix_len, infix, infix_len);
-+	it->buffer_ofs += prefix_len + infix_len;
- 	return 0;
- }
- 
+/root/rpma/tools/config_softroce.sh eth0
+modprobe rnbd_server
+modprobe rnbd_client
+
+while true;
+do
+        echo "sessname=xyz path=ip:<server-ip> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
+        for i in /sys/block/rnbd*/rnbd/unmap_device
+        do
+                echo "normal" > $i
+        done
+done
+
+Li Zhijian (3):
+  RDMA/rtrs: remove duplicate cq_num assignment
+  RDMA/rtrs: Fix rxe_dealloc_pd warning
+  RDMA/rtrs: Fix use-after-free in rtrs_clt_rdma_cm_handler
+
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 19 ++++++++++++++-----
+ drivers/infiniband/ulp/rtrs/rtrs-clt.h |  1 +
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
 -- 
-2.19.1.6.gb485710b
+2.29.2
 
