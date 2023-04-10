@@ -2,229 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC926DC3F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988636DC3CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 09:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjDJHlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 03:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S229714AbjDJH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 03:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDJHlX (ORCPT
+        with ESMTP id S229551AbjDJH3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 03:41:23 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA83ABD
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 00:41:20 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by baptiste.telenet-ops.be with bizsmtp
-        id ivhG2900D1C8whw01vhGll; Mon, 10 Apr 2023 09:41:16 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1plm8X-00GRl9-Pd
-        for linux-kernel@vger.kernel.org;
-        Mon, 10 Apr 2023 09:41:16 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pllvV-006aIv-NM
-        for linux-kernel@vger.kernel.org;
-        Mon, 10 Apr 2023 09:26:57 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.3-rc6
-Date:   Mon, 10 Apr 2023 09:26:57 +0200
-Message-Id: <20230410072657.1569497-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHk-=wi=_UHtmSy-3jB0ZJ7sAPULLy4a86HP3DpYX-C3eu+wpg@mail.gmail.com>
-References: <CAHk-=wi=_UHtmSy-3jB0ZJ7sAPULLy4a86HP3DpYX-C3eu+wpg@mail.gmail.com>
+        Mon, 10 Apr 2023 03:29:35 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0C02708;
+        Mon, 10 Apr 2023 00:29:34 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 339KkluL007503;
+        Mon, 10 Apr 2023 00:29:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=kIrSEg7gmt9+Rw0Zntt9m3XQrT1ZddfD7AXzvBnf2oI=;
+ b=WThHNcaXMoS305qI5MpwdgDuSZbaDrLqPd1FiI4dZz5+NTs0NK8hyo8kE3ViyAqwve/D
+ UHVjyeJn3Otop/LieNelkzOrSD4C+obVTL76sKEpTdICSBCuKG5o6fc000Ss3q64v+yJ
+ G67839bTBhCqdVTv4BhobIsoZfg1zY8LbaSwvz2ZLClpXr9GDNOvS+RruQ2p/GCzJm3r
+ ojuLtAGl4nDmsBec/qpjJtNyrKHz7rWnpnIiK0njlWpQ/rpQAqem8ErIUhH6Mg6yr4UW
+ 2mm4DiaxPgArAfDQab/KYKJ38kQ4ma8rW6d7Ar+15vFWGRSGJZDKj1s43nbJZp6HAJwA yg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3purfs3tuq-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 00:29:21 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 10 Apr
+ 2023 00:29:19 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 10 Apr 2023 00:29:19 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 0F8DF5C68E2;
+        Mon, 10 Apr 2023 00:29:11 -0700 (PDT)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>,
+        <willemdebruijn.kernel@gmail.com>, <andrew@lunn.ch>,
+        <sgoutham@marvell.com>, <lcherian@marvell.com>,
+        <gakula@marvell.com>, <jerinj@marvell.com>, <sbhatta@marvell.com>,
+        <hkelam@marvell.com>, <naveenm@marvell.com>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <maxtram95@gmail.com>, <corbet@lwn.net>
+Subject: fRom db62b365277f354bad482ac77be8308f8ac326b4 Mon Sep 17 00:00:00 2001
+Date:   Mon, 10 Apr 2023 12:59:04 +0530
+Message-ID: <20230410072910.5632-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: A_2p_6UjkMPVx5jrklZsS6u5cYjplW1Q
+X-Proofpoint-GUID: A_2p_6UjkMPVx5jrklZsS6u5cYjplW1Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_04,2023-04-06_03,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.3-rc6[1] compared to v6.2[2].
+octeontx2 silicon and CN10K transmit interface consists of five
+transmit levels starting from MDQ, TL4 to TL1. Once packets are
+submitted to MDQ, hardware picks all active MDQs using strict
+priority, and MDQs having the same priority level are chosen using
+round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
+Each level contains an array of queues to support scheduling and
+shaping.
 
-Summarized:
-  - build errors: +7/-6
-  - build warnings: +56/-68
+As HTB supports classful queuing mechanism by supporting rate and
+ceil and allow the user to control the absolute bandwidth to
+particular classes of traffic the same can be achieved by
+configuring shapers and schedulers on different transmit levels.
 
-JFYI, when comparing v6.3-rc6[1] to v6.3-rc5[3], the summaries are:
-  - build errors: +2/-0
-  - build warnings: +0/-0
+This series of patches adds support for HTB offload,
 
-Happy fixing! ;-)
+Patch1: Allow strict priority parameter in HTB offload mode.
 
-Thanks to the linux-next team for providing the build service.
+Patch2: Rename existing total tx queues for better readability
 
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/09a9639e56c01c7a00d6c0ca63f4c7c41abe075d/ (all 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e364e56293bb98cae1b55fd835f5991c4e96e7d/ (all 152 configs)
+Patch3: defines APIs such that the driver can dynamically initialize/
+        deinitialize the send queues.
 
+Patch4: Refactors transmit alloc/free calls as preparation for QOS
+        offload code.
 
-*** ERRORS ***
+Patch5: Adds actual HTB offload support.
 
-7 error regressions:
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid':  => 2157:41, 2157:48
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7086:1
-  + /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant:  => 299:2, 296:2, 300:2
-  + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6163:45
-  + /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]:  => 1902:23, 1909:13
-  + /opt/cross/kisskb/fe-x86-64-core-i7-2017.05/x86_64-buildroot-linux-gnu/sysroot/usr/include/bits/stdlib-float.h: error: SSE register return with SSE disabled:  => 27:1
-  + {standard input}: Error: unknown pseudo-op: `.':  => 1118
+Patch6: Add documentation about htb offload flow in driver
 
-6 error improvements:
-  - /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer: 94:19, 94:18 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: error: array subscript is above array bounds [-Werror=array-bounds]: 543:55 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 7082:1 => 
-  - /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: 'op' is used uninitialized [-Werror=uninitialized]: 564:27, 523:27 => 
-  - /kisskb/src/include/linux/sh_intc.h: error: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements [-Werror=sizeof-pointer-div]: 100:63 => 
-  - {standard input}: Error: unknown pseudo-op: `.cfi_def_c': 1718 => 
+Hariprasad Kelam (3):
+  octeontx2-pf: Rename tot_tx_queues to non_qos_queues
+  octeontx2-pf: Refactor schedular queue alloc/free calls
+  docs: octeontx2: Add Documentation for QOS
 
+Naveen Mamindlapalli (2):
+  sch_htb: Allow HTB priority parameter in offload mode
+  octeontx2-pf: Add support for HTB offload
 
-*** WARNINGS ***
+Subbaraya Sundeep (1):
+  octeontx2-pf: qos send queues management
+-----
+v1 -> v2 :
+          ensure other drivers won't affect by allowing 'prio'
+          a parameter in htb offload mode.
 
-56 warning regressions:
-  + /kisskb/src/fs/btrfs/extent_io.c: warning: 'last_extent_end' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 3542:19
-  + /kisskb/src/fs/btrfs/send.c: warning: 'right_gen' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 1902:23, 1909:13, 1909:27
-  + /kisskb/src/fs/btrfs/volumes.c: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 2524:9, 2524:2
-  + /kisskb/src/include/linux/list.h: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 74:12, 74:19
-  + modpost: WARNING: modpost: "__ndelay" [drivers/hwspinlock/omap_hwspinlock.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/aten.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/bpck.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/comm.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/dstr.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/epat.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/epia.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/fit2.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/fit3.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/friq.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/frpw.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/kbic.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/ktti.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/on20.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/on26.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_parport/pata_parport.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/cm4000_cs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/hwmon/pmbus/ucd9000.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/rzg2l_adc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ti-ads7924.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/common/saa7146/saa7146.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/imx296.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/imx415.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/tc358746.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/pci/saa7146/hexium_orion.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/pci/ttpci/budget-av.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/pci/ttpci/budget-core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/pci/ttpci/budget.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/renesas/vsp1/vsp1.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/rockchip/rkisp1/rockchip-isp1.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/s3c-camif/s3c-camif.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/memory/mtk-smi.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/mt7530.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/enetc/fsl-enetc-core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-meson-gxl.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath12k/ath12k.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath9k/ath9k_htc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/soc/amlogic/meson-ee-pwrc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/soc/amlogic/meson-gx-pwrc-vpu.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/soc/mediatek/mtk-mutex.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/staging/media/av7110/budget-patch.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/staging/media/av7110/dvb-ttpci.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/staging/media/av7110/sp8870.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ufs/host/ufs-sprd.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/renesas_usbf.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-rcar-hcd.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/phy/phy-mv-usb.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [sound/soc/apple/snd-soc-apple-mca.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-peb2466.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [sound/soc/mediatek/mt8188/snd-soc-mt8188-afe.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "empty_zero_page" [drivers/md/dm-flakey.ko] has no CRC!:  => N/A
+v2 -> v3 :
+          1. discard patch supporting devlink to configure TL1 round
+             robin priority
+          2. replace NL_SET_ERR_MSG with NL_SET_ERR_MSG_MOD
+          3. use max3 instead of using max couple of times and use a better
+             naming convention in send queue management code.
 
-68 warning improvements:
-  - .config: warning: override: reassigning to symbol UML_NET_MCAST: 12874, 12655, 12669, 12888 => 
-  - /kisskb/src/include/linux/sh_intc.h: warning: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements [-Wsizeof-pointer-div]: 100:63 => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/input/joystick/sidewinder.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/xilinx/xilinx_emac.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/virtio_net.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [fs/hfsplus/hfsplus.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashldi3" [net/mac80211/mac80211.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashrdi3" [drivers/nvme/target/nvmet.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashrdi3" [drivers/usb/gadget/function/usb_f_mass_storage.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashrdi3" [fs/xfs/xfs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__ashrdi3" [fs/zonefs/zonefs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-writecache.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-zoned.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/hpsa.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [fs/ext2/ext2.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [fs/ext4/ext4.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [fs/gfs2/gfs2.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [fs/ntfs3/ntfs3.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [fs/zonefs/zonefs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [net/mac80211/mac80211.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__lshrdi3" [net/sched/act_police.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_samsung_cf.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/aten.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/bpck.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/comm.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/dstr.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/epat.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/epia.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/fit2.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/fit3.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/friq.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/frpw.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/kbic.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/ktti.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/on20.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/on26.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pf.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pg.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pt.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/ucb1400_ts.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-cns3xxx.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/enetc/fsl-enetc-vf.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/enetc/fsl-enetc.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-v3020.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-omap-100k.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/budget-patch.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/dvb-ttpci.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/sp8870.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/common/saa7146.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget-av.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget-core.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/zr364xx/zr364xx.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/staging/r8188eu/r8188eu.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-plat-hcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/tmiofb.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/w100fb.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [sound/soc/samsung/snd-soc-s3c24xx-i2s.ko] has no CRC!: N/A => 
+v3 -> v4:
+	  1. fix sparse warnings.
+	  2. release mutex lock in error conditions.
 
-Gr{oetje,eeting}s,
+v4 -> v5:
+	  1. fix pahole reported issues
+          2. add documentation for htb offload flow.
 
-						Geert
+v5 -> v6:
+	  1. fix synchronization issues w.r.t hlist accessing
+             from ndo_select_queue with rcu lock.
+          2. initialize qos related resources in device init.
+
+v6 -> v7:
+	  1. fix erros reported by sparse and clang
+
+ .../ethernet/marvell/octeontx2.rst            |   39 +
+ .../ethernet/marvell/octeontx2/af/common.h    |    2 +-
+ .../marvell/octeontx2/af/rvu_debugfs.c        |    5 +
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |   45 +
+ .../ethernet/marvell/octeontx2/nic/Makefile   |    2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  120 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   56 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   31 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  114 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_reg.h |   13 +
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |    7 +-
+ .../marvell/octeontx2/nic/otx2_txrx.c         |   24 +-
+ .../marvell/octeontx2/nic/otx2_txrx.h         |    3 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |   14 +-
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  | 1471 +++++++++++++++++
+ .../net/ethernet/marvell/octeontx2/nic/qos.h  |   69 +
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  296 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |    7 +-
+ include/net/pkt_cls.h                         |    1 +
+ net/sched/sch_htb.c                           |    7 +-
+ 20 files changed, 2219 insertions(+), 107 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.h
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+2.17.1
