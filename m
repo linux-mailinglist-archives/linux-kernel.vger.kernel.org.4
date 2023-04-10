@@ -2,79 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E44F6DCBA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD306DCBA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 21:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjDJTeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 15:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S229690AbjDJTeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 15:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDJTeC (ORCPT
+        with ESMTP id S229830AbjDJTeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 15:34:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F2C1BD1;
-        Mon, 10 Apr 2023 12:34:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DA59617BC;
-        Mon, 10 Apr 2023 19:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DFEC433EF;
-        Mon, 10 Apr 2023 19:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681155240;
-        bh=D6YU7sRE8nbRBi9Uu64NQEqv/ZbXRVGET4eYI4J8/Ls=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=f5CtC+7ZyczqM7xhdpd8SRa/270zF7uhAGlvD4qxzSsIT+dl2FRiRkZmcWGzc1/jn
-         0Yssu8mTM9+T28IZLs3L9T6AyGQSEzH+Bv0ruGxkYYV1WOnuM4ZXDY5ditCpuEtCat
-         Y1H3kETkigppAQCeDs0nGYor7e//lFdzJNae7ukVp6KR1W3ECp08lc7bvJ/ByQRISP
-         +qmES7ZNi8pZL963vU3qHuFxW1zki+reIFHfQayoEhEe1oi1IwO8V/2mzw/zG+7KBB
-         qzfTqRFevZB3zLz1eEAkCBLaU/ULktoQ5l3iJ0JOfythFuN1X3DQxlOlzJuYkcQ0Uj
-         aUEtY4aF8YfQg==
-Message-ID: <5cc6625ccee772346660b775da341335.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Mon, 10 Apr 2023 15:34:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264A61BE4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 12:34:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681155252; x=1712691252;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1v+fkw5hKVXUIsw8os7nktMH4AZSQ0oQAFoWW69TZ4g=;
+  b=BQYzk7brDrJJDj4OCHVriY65qp8/RliklgMSRMWNnocW73oPoYcBvN/z
+   gA0rF+K9Q7AmRD8GPJF/VApyhreXHb+E+QfYmYPvpk8SXh6SfnVtNNTSB
+   E4+DWCjqrKphGzaxhfKeKayPzdAIwFx0UON0GU87OWxVvNqiwaF+63s5I
+   Xjl5Dp4X/gt96qiDL2lP5MZBO6jW8lYiIDPE+WH1bh+VB8kMK+C/n69M9
+   XZXUKZozzbJp14Fev0i4kKFVqvLcsCEJLyYMB4PVtDi2fk51xK4YVOlDy
+   4TJKDuQj8Eqit6V/fRRPVwgJatGXC98WTVC0vSpTpKzpCJOC9QOuHsMjL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="371281073"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="371281073"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 12:34:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="688364595"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="688364595"
+Received: from arsetion-mobl.amr.corp.intel.com (HELO [10.209.122.228]) ([10.209.122.228])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 12:34:11 -0700
+Message-ID: <d416428f-c846-b6b9-74da-f3571d92d38a@intel.com>
+Date:   Mon, 10 Apr 2023 12:34:10 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
-References: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] dt-bindings: clock: qcom,gcc-sm8250: add missing bi_tcxo_ao clock
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] x86: profiling: remove lock functions hack for
+ !FRAME_POINTER
+Content-Language: en-US
+To:     Chen Zhongjin <chenzhongjin@huawei.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Mon, 10 Apr 2023 12:33:58 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        akpm@linux-foudation.org, ben-linux@fluff.org, wuchi.zero@gmail.com
+References: <20230410022226.181812-1-chenzhongjin@huawei.com>
+ <20230410022226.181812-2-chenzhongjin@huawei.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230410022226.181812-2-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2023-04-08 06:48:18)
-> Without actual explanation commit 76bd127e6ca5 ("arm64: dts: qcom:
-> sm8250: add bi_tcxo_ao to gcc clocks") added bi_tcxo_ao clock input to
-> the GCC clock controller, so update the bindings hoping this is really
-> needed.  This fixes warnings like:
->=20
->   sm8250-xiaomi-elish-csot.dtb: clock-controller@100000: clock-names: ['b=
-i_tcxo', 'bi_tcxo_ao', 'sleep_clk'] is too long
->=20
-> Fixes: 76bd127e6ca5 ("arm64: dts: qcom: sm8250: add bi_tcxo_ao to gcc clo=
-cks")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+On 4/9/23 19:22, Chen Zhongjin wrote:
+> Syzbot has been reporting the problem of stack-out-of-bounds in
+> profile_pc for a long time:
+> https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
+> 
+> profile_pc tries to get pc if current regs is inside lock function. For
+> !CONFIG_FRAME_POINTER it used a hack way to get the pc from stack, which
+> is not work with ORC. It makes profile_pc read illeagal address, return
+> wrong result, and frequently triggers KASAN.
+> 
+> Since lock profiling can be handled with much better other tools, It's
+> reasonable to remove lock functions hack for !FRAME_POINTER kernel.
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+OK, so let me make sure I understand what's going on:
+
+1. This whole issue is limited to kernel/profile.c which is what drives
+   readprofile(8) and /proc/profile
+2. This is removing code that got added in 2006:
+	0cb91a229364 ("[PATCH] i386: Account spinlocks to the caller during
+profiling for !FP kernels")
+3. This was an OK hack back in the day, but it outright breaks today
+   in some situations.  KASAN also didn't exist in 2006.
+4. !CONFIG_FRAME_POINTER is probably even more rare today than it was in
+   2006
+5. Lock function caller information is available at _least_ from perf,
+   maybe other places too??  (What "much better other tools" are there?)
+
+Given all that, this patch suggests that we can remove the stack peeking
+hack.  The downside is that /proc/profile users will see their profiles
+pointing to the spinlock functions like they did in 2005.  The upside is
+that we won't get any more KASAN reports.
+
+If anyone complains, I assume we're just going to tell them to run 'perf
+--call-graph' and to go away (which also probably didn't exist in 2006).
+
+If I got all that right, the end result seems sane to me.  It would be
+_nice_ if you could make a more coherent changelog out of that and
+resend.  Also, considering that your two "profile" issues are quite
+independent, you can probably just resend the two patches separately.
