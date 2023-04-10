@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087606DCE20
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C949D6DCDFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjDJXbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S229485AbjDJXZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjDJXbg (ORCPT
+        with ESMTP id S229523AbjDJXZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:31:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33909270E;
-        Mon, 10 Apr 2023 16:31:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwQGV2Kmfz4xGq;
-        Tue, 11 Apr 2023 09:31:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681169490;
-        bh=RbVWEK+110cXCUfBhP97yyMLZqmw6pdjtluBHUH3vM0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yt+rjD7rgTWj00+HuR1wchs9+Pc5iw1aozLfQrVlf/SOW7z2PG2sgqUSZ3tdltTYe
-         PY09SLRFlJU74yixqX6yZUBCVZfZN2XpgQ4We06dTviRM/IOtsdE8agpwaU3dKJJjo
-         pXRNHga+bq+wTb/QjywEmZOYtA+8PphJLNZ2pd327BUOKCjElCNrT+4TxOGw7pfgcJ
-         CiOPfsniFZfMOMTza9/EYUF4RzyLHyIwS4r9tX+XteRzk6xMx19digzbygQ4j+UuYv
-         JDY/sy//3oo4HPrI970vOrTD8xXPbp4yU+JujEQrC6bNo+QlxnuEjx0Ve1o8pIZSig
-         cQtjVPIbpmrFA==
-Date:   Tue, 11 Apr 2023 09:25:22 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mediatek tree
-Message-ID: <20230411092522.6380fa88@canb.auug.org.au>
-In-Reply-To: <20230403181552.607a8b64@canb.auug.org.au>
-References: <20230403181552.607a8b64@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gIh2U5XJYbniFn0tQjO8cBg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        Mon, 10 Apr 2023 19:25:44 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21161BCA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:25:42 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c0b8ca2d1so135847017b3.17
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681169142;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDQcwM0Ljq47Kk+Cx8Zo9PwBtwHuWqUYBxNgZio/RfY=;
+        b=bkyyOP2BDUJ+Th0lHoGO7vJXGV+88YNyum6G/YIxmMfueZJtcBv9odQCjB+mTj5U6u
+         iuqMnEWS/RBWfoENX3U6XkNTInEgC5Zeujj2Y7olklOMNDLxmIvsOrXs3kYbI3SEVHk2
+         bQ9nZzL2dL+oYUBfs3cqncHkNY+uly0GeA8kIaxIisGXszxC5bzNUapXOTnvwgIXND9e
+         dZvDamirs/JT+T5ouQYIR79vZd4yRA4vqAFVoW/Ref+lT+oenzXYdJ1IVboJzX/DEp8h
+         oNmH3sxCZydRo6YIUzUvqqsF1XswzjT8qYth3Yz+sUCWNqOymLDjrRQNiYrYCgzjRZ6k
+         MYRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681169142;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDQcwM0Ljq47Kk+Cx8Zo9PwBtwHuWqUYBxNgZio/RfY=;
+        b=WpV/M3XlTrHEVj3OISmcgSvZeFH6rtHik9mmwntraHKhpAhAiMlXxr1QPXtJjb0Y83
+         5bglCS09RQ77Z7C6O83zjLGnLqo91oyTPLpnI2WwHEdDdO3HxOsnEWhZvlsdqtDa+IOP
+         A0KzvzuD1ez4g0HmQpDe7ODL/A69kG61tTdNgGc38HJ9FXBFpqsco0P0RfuxxP/uKo91
+         7QgyxylYtvk7u0PKtasRJ5enHT8iITBI6JrNWExww5IoWiuCY87TLqIPVHUR+J7dY3pY
+         3UyY08ZCvmpFB53u89Y7q4HMrPmwIm85z+x/CflqOU8jNJn9x8FlgsUXbRYGiGWxgaOx
+         w6fg==
+X-Gm-Message-State: AAQBX9chtjATKcjjHAdkVtVARg+FHuIAfdrKYp4V3wltxbGVSFDvJoY3
+        UtGl2mzXtr2P4Vj+nDFrQJGzIIJH0KU=
+X-Google-Smtp-Source: AKy350aIRErR0b3vVYuuWy3U6TpySuEN2x9ml7g4wtHK7DVqIf4n9ArmsN/Mf78+hLS6k78ixc6bd3s0LjM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:3157:0:b0:b8e:db4a:a366 with SMTP id
+ x84-20020a253157000000b00b8edb4aa366mr4567666ybx.11.1681169142239; Mon, 10
+ Apr 2023 16:25:42 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 16:25:40 -0700
+In-Reply-To: <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
+Mime-Version: 1.0
+References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
+ <ZAd2MRNLw1JAXmOf@google.com> <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
+Message-ID: <ZDSa9Bbqvh0btgQo@google.com>
+Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,79 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gIh2U5XJYbniFn0tQjO8cBg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Apr 05, 2023, Jeremi Piotrowski wrote:
+> On 3/7/2023 6:36 PM, Sean Christopherson wrote:
+> > Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
+> > hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
+> > doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
+> > happens to get lucky and not run afoul of the underlying bugs.  The revert appears
+> > to be reasonably straightforward (see bottom).
+> 
+> Hi Sean,
+> 
+> I'm back, and I don't have good news. The fix for the missing hyperv TLB flushes has
+> landed in Linus' tree and I now had the chance to test things outside Azure, in WSL on my
+> AMD laptop.
+> 
+> There is some seriously weird interaction going on between TDP MMU and Hyper-V, with
+> or without enlightened TLB. My laptop has 16 vCPUs, so the WSL VM also has 16 vCPUs.
+> I have hardcoded the kernel to disable enlightened TLB (so we know that is not interfering).
+> I'm running a Flatcar Linux VM inside the WSL VM using legacy BIOS, a single CPU
+> and 4GB of RAM.
+> 
+> If I run with `kvm.tdp_mmu=0`, I can boot and shutdown my VM consistently in 20 seconds.
+> 
+> If I run with TDP MMU, the VM boot stalls for seconds at a time in various spots
+> (loading grub, decompressing kernel, during kernel boot), the boot output feels like
+> it's happening in slow motion. The fastest I see it finish the same cycle is 2 minutes,
+> I have also seen it take 4 minutes, sometimes even not finish at all. Same everything,
+> the only difference is the value of `kvm.tdp_mmu`.
 
-Hi all,
+When a stall occurs, can you tell where the time is lost?  E.g. is the CPU stuck
+in L0, L1, or L2?  L2 being a single vCPU rules out quite a few scenarios, e.g.
+lock contention and whatnot.
 
-On Mon, 3 Apr 2023 18:15:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the mediatek tree, today's linux-next build (arm64
-> defconfig) failed like this:
->=20
-> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_=
-mmsys_update_bits':
-> drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_wr=
-ite_mask'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_=
-mmsys_probe':
-> drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_ge=
-t_client_reg'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_=
-mutex_enable_by_cmdq':
-> drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_wr=
-ite'
-> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_=
-mutex_probe':
-> drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_g=
-et_client_reg'
->=20
-> Caused by commit
->=20
->   b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MT=
-K_CMDQ)")
->=20
-> I have used the mediatek tree from next-20230331 for today.
->=20
-> There were also the following warnings:
->=20
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warn=
-ing (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name =
-should not have leading "0x"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warn=
-ing (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name s=
-hould not have leading "0x"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warn=
-ing (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit addre=
-ss format error, expected "10"
-> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warn=
-ing (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit addres=
-s format error, expected "12"
+If you can run perf in WSL, that might be the easiest way to suss out what's going
+on.
 
-Ping?
+> So I would like to revisit disabling tdp_mmu on hyperv altogether for the time being but it
+> should probably be with the following condition:
+> 
+>   tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && !hypervisor_is_type(X86_HYPER_MS_HYPERV)
+> 
+> Do you have an environment where you would be able to reproduce this? A Windows server perhaps
+> or an AMD laptop?
 
---=20
-Cheers,
-Stephen Rothwell
+Hrm, not easily, no.  Can you try two things?
 
---Sig_/gIh2U5XJYbniFn0tQjO8cBg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  1. Linus' tree on Intel hardware
+  2. kvm-x86/next[*] on Intel hardware
 
------BEGIN PGP SIGNATURE-----
+Don't bother with #2 if #1 (Linus' tree) does NOT suffer the same stalls as AMD.
+#2 is interesting iff Intel is also affected as kvm-x86/next has an optimization
+for CR0.WP toggling, which was the achilles heel of the TDP MMU.  If Intel isn't
+affected, then something other than CR0.WP is to blame.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ0muIACgkQAVBC80lX
-0Gzm0wf/YA+bOr/iNHbMRfFBpSeetmwzmY4i6HofVVuPe/he5FxChlxDSUYEkylv
-9pfIOW4NnOFyxS9LzNmRq0Iy/6gmuLBrQRdHyipKgPCromZA6Xkdw8YC1caRQzsU
-rhqIgj/md97jUAowcYADoEM45ax6z1QVd9x8mD0qv0s0O7g5CSrSoK4G3Ude2K0D
-mo0HblPFdu8n9CWNxXEYkafxeAuQVuxg+9ju4GKR/XK93NtK2lZkerBtmuz0S5Wq
-yMNNKzBHi4RzLs4lH6YaGLUjcMBdhGGYx5+OLtsZp2yd9ncbGyU1i1jjFHziboCk
-4rFu9umaQjouJDj2bCbEIoOr74I7Rg==
-=5q6k
------END PGP SIGNATURE-----
+I fully expect both experiments to show the same behavior as AMD, but if for some
+reason they don't, the results should help narrow the search.
 
---Sig_/gIh2U5XJYbniFn0tQjO8cBg--
+[*] https://github.com/kvm-x86/linux/tree/next
