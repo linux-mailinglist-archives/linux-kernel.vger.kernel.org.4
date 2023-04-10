@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E426DCE0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7120A6DCE0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 01:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjDJX1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 19:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S229985AbjDJX15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 19:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjDJX1g (ORCPT
+        with ESMTP id S230032AbjDJX1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 19:27:36 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388901FD7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:27:32 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id g74-20020a9d12d0000000b006a131458abfso1549882otg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 16:27:32 -0700 (PDT)
+        Mon, 10 Apr 2023 19:27:50 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF82710;
+        Mon, 10 Apr 2023 16:27:42 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id bf5so4325198oib.8;
+        Mon, 10 Apr 2023 16:27:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681169251; x=1683761251;
+        d=1e100.net; s=20210112; t=1681169262; x=1683761262;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hHSsnVLxNGJM3Ez93hi8dq4uDehdSbUPmnwM+uX5lMI=;
-        b=J8fEaJhwJxGf+T/XGUMV3iPv600mkm/Oep3x0jSDlRobJLBDBBrgRh/qZW6U2wYs+e
-         0Vsnl+5W3hfZKMfCxB4NtvnO9cmpFBxQd4Gk+ntlo31/yH3sh6bhxkdmAVp7A0pNDQTP
-         f2TO7RvvgtUt3SyHedQa8Ejlo9V9SxTeM7jcvBvs8GXHoFaWuBVmObXmdrOh5lqdGfiq
-         mweCu9hU8iDPYgj+fwiWpI6Fjbz5srnRxWboH7g6kvl3dMQC3ukLjAVnnOscyG02DSPF
-         34rU4IDTNtagTsL3TmlDmlvWuQ9OBqTCoysSucgTq/kj/hsEHdSx+ADnLKRRnBB6l3Za
-         DPpQ==
-X-Gm-Message-State: AAQBX9d8TQC643E+zyEWDBFrTYUqE02XllA4C7S4MzkDxFiC7aPw8RNT
-        MR2Kph8CMbc+L0wB4zPp3A==
-X-Google-Smtp-Source: AKy350Z1yILcQOoNNAMkNcstW3sSatfTIbbHAlTtJ4fh8jkmcLnqPgVjO+Ny9STtH0cSx3h7UopeAQ==
-X-Received: by 2002:a9d:7514:0:b0:6a2:fbe9:9db4 with SMTP id r20-20020a9d7514000000b006a2fbe99db4mr5352515otk.4.1681169251406;
-        Mon, 10 Apr 2023 16:27:31 -0700 (PDT)
+        bh=Mfji5NwyNXtXMo7uqw/b5LhlGHgLtluaYpZTYl5kDcg=;
+        b=1X5EktgpuTUZA3z9/cGIm5uaeMOsBwZoHcVr31VXaXlUaUQjXll9rOiCIXvs0BA9Kp
+         x3zknCRos+8rnR3IHjidGBMZ1H6JtHys9W4w+A3Lm3yR5pZlh0zW2JU+gyUKPBqR2E7G
+         Ma7XoGrW8Z0c+rX8w26BGvrqdyRTyd58U23KtFlfb2f2XeVJVmYIW20NzPaHN5un5xio
+         tCyabZ9cKl5yRsCkoOol07sx3pQ6NZDRKaCyXxI1F9el9uwWxTjPPOvM4nX19GPZ4DGc
+         mMXv1Ta8cfqPriW7SCCfN+W3FvRsiDv8ZwtnvdpEhjkMXDRipqkFnb393tC8i9ZtT3wY
+         0i3Q==
+X-Gm-Message-State: AAQBX9dtflDRV+ilNZUGSCpg7BfXJAcfkuPSrvwGZsa5m7FH2pduHJ4N
+        bw2qlSHKESjoeJEIkym1Pg==
+X-Google-Smtp-Source: AKy350YAbAr6APS9TvDqRY2lI0vAquRw5hKXo1B2+OpPci8Vc6rmORsRHoIs5Ce4Xt+6ABzM9Ze33g==
+X-Received: by 2002:a05:6808:4391:b0:384:dfc7:7d84 with SMTP id dz17-20020a056808439100b00384dfc77d84mr4983708oib.58.1681169262021;
+        Mon, 10 Apr 2023 16:27:42 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r20-20020a9d7cd4000000b0069fb87285fdsm4772777otn.59.2023.04.10.16.27.30
+        by smtp.gmail.com with ESMTPSA id s83-20020acac256000000b00383eaea5e88sm4769712oif.38.2023.04.10.16.27.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 16:27:31 -0700 (PDT)
-Received: (nullmailer pid 1562198 invoked by uid 1000);
-        Mon, 10 Apr 2023 23:27:30 -0000
+        Mon, 10 Apr 2023 16:27:41 -0700 (PDT)
+Received: (nullmailer pid 1562406 invoked by uid 1000);
+        Mon, 10 Apr 2023 23:27:40 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] bus: vexpress-config: Add explicit of_platform.h include
-Date:   Mon, 10 Apr 2023 18:27:26 -0500
-Message-Id: <20230410232727.1562115-1-robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: tegra-gmi: Replace of_platform.h with explicit includes
+Date:   Mon, 10 Apr 2023 18:27:35 -0500
+Message-Id: <20230410232735.1562296-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vexpress-config uses of_platform_* functions which are declared in
-of_platform.h. of_platform.h gets implicitly included by of_device.h,
-but that is going to be removed soon. Nothing else depends on
-of_device.h so it can be dropped.
+Tegra-gmi doesn't use anything from of_platform.h, but depends on
+of.h, of_device.h, and platform_device.h which are all implicitly
+included, but that is going to be removed soon.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/bus/vexpress-config.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/tegra-gmi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/vexpress-config.c b/drivers/bus/vexpress-config.c
-index a58ac0c8e282..472a570bd53a 100644
---- a/drivers/bus/vexpress-config.c
-+++ b/drivers/bus/vexpress-config.c
-@@ -10,7 +10,7 @@
+diff --git a/drivers/bus/tegra-gmi.c b/drivers/bus/tegra-gmi.c
+index 662266719682..e3506ef37051 100644
+--- a/drivers/bus/tegra-gmi.c
++++ b/drivers/bus/tegra-gmi.c
+@@ -9,7 +9,9 @@
+ #include <linux/delay.h>
+ #include <linux/io.h>
  #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
 -#include <linux/of_device.h>
++#include <linux/of.h>
 +#include <linux/of_platform.h>
- #include <linux/sched/signal.h>
- #include <linux/slab.h>
- #include <linux/vexpress.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ 
 -- 
 2.39.2
 
