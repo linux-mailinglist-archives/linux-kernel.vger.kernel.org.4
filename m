@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AF86DC6BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211E76DC6BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Apr 2023 14:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjDJMZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 08:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S229818AbjDJM0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 08:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDJMZr (ORCPT
+        with ESMTP id S229578AbjDJM0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:25:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3511B524C;
-        Mon, 10 Apr 2023 05:25:46 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B83666015EC;
-        Mon, 10 Apr 2023 13:25:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681129544;
-        bh=/RVh0dF7TlKpEKSukKX6XhJ5f7HG7CyPyfJnYGJ2eq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n8Ma5Eku/5McQqNsu8IwFYxw9KnoVuC23Rj6LAtvNIsToqBsfeh0EUFCd/RWqEnwQ
-         i4qJQCTKRp1n6d/poomD2CDLmPg1CyS5APgoZYLfXybo50KhK47D7fUdEotp1WwIxn
-         Qfl++XOIdVvDwXxTV6YTO6/TBGuYdkbYWYtpqTuD1KWIrByMgUz1i1bHhotfQR+jDX
-         ZlWYpAr8oi8u6eUSd5j6H/g+mVk82Ujm4ESzZjwnyLO8vHX5xB6/LWSf5hMcXG3CLl
-         tc0pcpRzfS1C1oGS7iXJpQK+p8n3vHZU1wILmBTNtcfkLgYB0H/k+C2ue2DXRq0tMZ
-         PY9Eus4cb4YFw==
-Message-ID: <b6c315f7-cc14-4506-6102-e52413848f81@collabora.com>
-Date:   Mon, 10 Apr 2023 15:25:40 +0300
+        Mon, 10 Apr 2023 08:26:06 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10785B99;
+        Mon, 10 Apr 2023 05:25:59 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 857C925E9;
+        Mon, 10 Apr 2023 14:25:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681129557;
+        bh=67lduPacpLMhq2ux8wEvh/kW0ZiVWSVK8q5xSlMbhFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XnkLoWVVNjS1PQpP3QBcSk4z1swpJB8JK3C2aU6BSsmi7Qfo/7HZzobRc9HwMDJ7S
+         DhYty61c5DwflKTO4eSM0mCRH4z2OuYfn9/lago/eXx/MxkBVm7vQ5//sGg9Fl3Pv/
+         eRn2HhOx4rosR2/u1KG19b4ybsgZlz1eaeGwMt7A=
+Date:   Mon, 10 Apr 2023 15:26:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] drm: shmobile: Switch to drm_crtc_init_with_planes()
+Message-ID: <20230410122607.GA11253@pendragon.ideasonboard.com>
+References: <cover.1680273039.git.geert+renesas@glider.be>
+ <df4099d79c985c73bdc890eb0e026494b7fa5c96.1680273039.git.geert+renesas@glider.be>
+ <20230405035952.GI9915@pendragon.ideasonboard.com>
+ <CAMuHMdUMEVYRr9oYBB=50WJtM4St1UfVkGMw09dchjgoUC2Q6A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 06/10] riscv: dts: allwinner: d1: Switch dma-names
- order for snps,dw-apb-uart nodes
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
- <20230321215624.78383-7-cristian.ciocaltea@collabora.com>
- <1945003.usQuhbGJ8B@jernej-laptop>
-Content-Language: en-US
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <1945003.usQuhbGJ8B@jernej-laptop>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <CAMuHMdUMEVYRr9oYBB=50WJtM4St1UfVkGMw09dchjgoUC2Q6A@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +53,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/23 15:36, Jernej Škrabec wrote:
-> Dne torek, 21. marec 2023 ob 22:56:20 CEST je Cristian Ciocaltea napisal(a):
->> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
->> dma-names properties") documented dma-names property to handle Allwinner
->> D1 dtbs_check warnings, but relies on the rx->tx ordering, which is the
->> reverse of what a bunch of different boards expect.
->>
->> The initial proposed solution was to allow a flexible dma-names order in
->> the binding, due to potential ABI breakage concerns after fixing the DTS
->> files. But luckily the Allwinner boards are not affected, since they are
->> using a shared DMA channel for rx and tx.
->>
->> Hence, the first step in fixing the inconsistency was to change
->> dma-names order in the binding to tx->rx.
->>
->> Do the same for the snps,dw-apb-uart nodes in the DTS file.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Hi Geert,
+
+On Mon, Apr 10, 2023 at 11:35:56AM +0200, Geert Uytterhoeven wrote:
+> On Wed, Apr 5, 2023 at 5:59 AM Laurent Pinchart wrote:
+> > On Fri, Mar 31, 2023 at 04:48:09PM +0200, Geert Uytterhoeven wrote:
+> > > The SH-Mobile DRM driver uses the legacy drm_crtc_init(), which
+> > > advertizes only the formats in safe_modeset_formats[] (XR24 and AR24) as
+> > > being supported.
+> > >
+> > > Switch to drm_crtc_init_with_planes(), and advertize all supported
+> > > (A)RGB modes, so we can use RGB565 as the default mode for the console.
+> > >
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > 
-> Applied patches 2-6, thanks!
+> > > --- a/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
+> > > +++ b/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
+> > > @@ -18,6 +18,7 @@
+> > >  #include <drm/drm_gem_dma_helper.h>
+> > >  #include <drm/drm_modeset_helper.h>
+> > >  #include <drm/drm_modeset_helper_vtables.h>
+> > > +#include <drm/drm_plane_helper.h>
+> > >  #include <drm/drm_probe_helper.h>
+> > >  #include <drm/drm_simple_kms_helper.h>
+> > >  #include <drm/drm_vblank.h>
+> > > @@ -478,16 +479,41 @@ static const struct drm_crtc_funcs crtc_funcs = {
+> > >       .disable_vblank = shmob_drm_disable_vblank,
+> > >  };
+> > >
+> > > +static const uint32_t modeset_formats[] = {
+> > > +     DRM_FORMAT_RGB565,
+> > > +     DRM_FORMAT_RGB888,
+> > > +     DRM_FORMAT_ARGB8888,
+> > > +     DRM_FORMAT_XRGB8888,
+> > > +};
+> > > +
+> > > +static const struct drm_plane_funcs primary_plane_funcs = {
+> > > +     DRM_PLANE_NON_ATOMIC_FUNCS,
+> > > +};
+> > > +
+> > >  int shmob_drm_crtc_create(struct shmob_drm_device *sdev)
+> > >  {
+> > >       struct drm_crtc *crtc = &sdev->crtc.crtc;
+> > > +     struct drm_plane *primary;
+> > >       int ret;
+> > >
+> > >       sdev->crtc.dpms = DRM_MODE_DPMS_OFF;
+> > >
+> > > -     ret = drm_crtc_init(sdev->ddev, crtc, &crtc_funcs);
+> > > -     if (ret < 0)
+> > > +     primary = __drm_universal_plane_alloc(sdev->ddev, sizeof(*primary), 0,
+> > > +                                           0, &primary_plane_funcs,
+> > > +                                           modeset_formats,
+> > > +                                           ARRAY_SIZE(modeset_formats),
+> > > +                                           NULL, DRM_PLANE_TYPE_PRIMARY,
+> > > +                                           NULL);
+> > > +     if (IS_ERR(primary))
+> > > +             return PTR_ERR(primary);
+> >
+> > This seems like a bit of a hack to me. Why don't you use the planes
+> 
+> I'm following what Thomas did in the nouveau driver....
+> 
+> > created by shmob_drm_plane_create() instead of allocating a new one ?
+> 
+> Is that possible? shmob_drm_plane_create() creates overlay planes,
+> while this is for the primary plane.
 
-Hi Jernej,
+You're right, for some reason I overlooked that. Sorry for the noise.
 
-Please note the patches have been already picked by Greg and were merged
-in next-20230331.
+It would be good to move handling of the primary plane to
+shmob_drm_plane.c, but that's for later, when moving the driver to the
+atomic API. For now,
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> > > +
+> > > +     ret = drm_crtc_init_with_planes(sdev->ddev, crtc, primary, NULL,
+> > > +                                     &crtc_funcs, NULL);
+> > > +     if (ret < 0) {
+> > > +             drm_plane_cleanup(primary);
+> > > +             kfree(primary);
+> > >               return ret;
+> > > +     }
+> > >
+> > >       drm_crtc_helper_add(crtc, &crtc_helper_funcs);
+
+-- 
 Regards,
-Cristian
+
+Laurent Pinchart
