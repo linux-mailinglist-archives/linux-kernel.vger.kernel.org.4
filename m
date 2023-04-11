@@ -2,84 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4B66DE158
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758D06DE162
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjDKQp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S230079AbjDKQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDKQpQ (ORCPT
+        with ESMTP id S229520AbjDKQqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:45:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7E72690;
-        Tue, 11 Apr 2023 09:45:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A0A76241E;
-        Tue, 11 Apr 2023 16:44:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA0FC4339B;
-        Tue, 11 Apr 2023 16:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681231463;
-        bh=yxWndtrxm7KXvbmNlpUHoxZkfyHgM4MFEDIMiMnEyYQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=txzqcMuxReIUiyqf8Je/ZUFIKuSqiFS3/ibvncUcfHSG/SyAQG8G1iR+4UMcRMIfb
-         fmen+XKqhKS/sMrg62ZqvqKxXAY/u1ykj2KXQP8NFt+6pK4tS1qSAxgvW48/lBrqQx
-         4/geo+l3FslxuyNDsCWxnGY8wVwQ38S2HIT4Ka9YMzPhN4el32qh6stnbXgUv4+CIR
-         p0aBU9kppxS1ti9UnbEY5iduQtfR3qcy1oRLapcBtrI2uzZRlvAoXWoYTH3BO9nXet
-         9RUd99jPjPOgtSMawOHoXSYgpQdaGMt/hfdPDfMN21VicoeHxkeGJbFZnlwYnOGhVS
-         dsoe6UmCJSSPQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 677061540478; Tue, 11 Apr 2023 09:44:23 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 09:44:23 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
-Message-ID: <6a323775-6274-4d0c-844a-da53146c2abe@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
- <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
- <ZC8OwUPAC4s413jP@1wt.eu>
- <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
- <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
- <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
- <20230411150320.GA23045@willie-the-truck>
- <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
+        Tue, 11 Apr 2023 12:46:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFFA59FA;
+        Tue, 11 Apr 2023 09:46:10 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFCKMc021594;
+        Tue, 11 Apr 2023 16:44:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0CKCWoC0k7KLWRFjtiYq6s4O/Ry3B7Oq7ug3SOT91RI=;
+ b=Hdtc46rjwn9ItMyK3znLdC9hJrUpik9xuAIewQ9vNgz/JORJXEt5KKc1mQvGHbXcyS3u
+ G195KpLwjQIltRsUdMIQiVhZMo/HjLA9agqqSwWnT1FSrLL4/UvVkvsr5J73DTKTLrqN
+ 9K0TjH9KwuiVDyFQKpT8y3GznCU5yLBtw4RP4fIja5vuGwxtAcxVjZJC8oShhSRCO58A
+ l+hFwVk2lBBnFbjGgaAkwguzoS758WgfYizGHa/iT5iuCiP1w7gja8ha0zdX+3F+HD+B
+ MX6ZQ6yHUopF6gRTfSMjSpoxaJEJUuhujwd1u23bvOpkFQgHJPmbqsqnNgTfUI6LI2uG KA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw0jpshe4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 16:44:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BGiu46025508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 16:44:56 GMT
+Received: from [10.110.115.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 09:44:55 -0700
+Message-ID: <c7dc7a53-8f4b-1b83-ae80-fc6ab5a03263@quicinc.com>
+Date:   Tue, 11 Apr 2023 09:44:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Delete a variable initialisation before a
+ null pointer check in two functions
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        <kernel-janitors@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Archit Taneja <architt@codeaurora.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <cocci@inria.fr>, LKML <linux-kernel@vger.kernel.org>
+References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
+ <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
+ <13566308-9a80-e4aa-f64e-978c02b1406d@web.de>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <13566308-9a80-e4aa-f64e-978c02b1406d@web.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: X2UpLHKqjQEgmDCCvWadAWe8k_ojcOsu
+X-Proofpoint-ORIG-GUID: X2UpLHKqjQEgmDCCvWadAWe8k_ojcOsu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_11,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304110152
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:13:11PM +0100, Mark Brown wrote:
-> On Tue, Apr 11, 2023 at 04:03:21PM +0100, Will Deacon wrote:
-> > On Tue, Apr 11, 2023 at 03:31:10PM +0100, Mark Brown wrote:
-> 
-> > > It seems like more of a kselftest change than anything else so probably
-> > > makes sense for it to go that way?  The example user isn't really even
-> > > needed.
-> 
-> > Fine by me, as long as it doesn't conflict with any other arm64 selftest
-> > changes you hope to land for 6.4.
-> 
-> That shouldn't be an issue.
 
-Shuah, looks to me like this one is yours in kselftest, then.  ;-)
 
-							Thanx, Paul
+On 4/11/2023 9:38 AM, Markus Elfring wrote:
+> Date: Tue, 11 Apr 2023 18:24:24 +0200
+> 
+> The address of a data structure member was determined before
+> a corresponding null pointer check in the implementation of
+> the functions “dpu_hw_pp_enable_te” and “dpu_hw_pp_get_vsync_info”.
+> 
+> Thus avoid the risk for undefined behaviour by removing extra
+> initialisations for the variable “c” (also because it was already
+> reassigned with the same value behind this pointer check).
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: 25fdd5933e4c0f5fe2ea5cd59994f8ac5fbe90ef ("drm/msm: Add SDM845 DPU support")
+
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+
+We usually have 12 chars of the hash. Other than that,
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> index 0fcad9760b6f..870ab3ebbc94 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> @@ -176,7 +176,7 @@ static int dpu_hw_pp_enable_te(struct dpu_hw_pingpong *pp, bool enable)
+>   static int dpu_hw_pp_connect_external_te(struct dpu_hw_pingpong *pp,
+>   		bool enable_external_te)
+>   {
+> -	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> +	struct dpu_hw_blk_reg_map *c;
+>   	u32 cfg;
+>   	int orig;
+> 
+> @@ -221,7 +221,7 @@ static int dpu_hw_pp_get_vsync_info(struct dpu_hw_pingpong *pp,
+> 
+>   static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
+>   {
+> -	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> +	struct dpu_hw_blk_reg_map *c;
+>   	u32 height, init;
+>   	u32 line = 0xFFFF;
+> 
+> --
+> 2.40.0
+> 
