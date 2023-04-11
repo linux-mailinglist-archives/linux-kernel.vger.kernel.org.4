@@ -2,46 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E4C6DE3C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B0A6DE3C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDKSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S229728AbjDKSVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjDKSU5 (ORCPT
+        with ESMTP id S229624AbjDKSVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:20:57 -0400
-Received: from out-2.mta0.migadu.com (out-2.mta0.migadu.com [91.218.175.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537F75B86
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:20:55 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 11:20:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681237251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BviVJo8d5Bs8LCKJmkTvRdhI0+Q4kdUJaObznFPhyXA=;
-        b=FVVVZNnLVbmJlqlkSx0T6/NtT+r4Af2Yw6u5egGY161n0pQCozGAYw5ITSHeKzduWrb6jh
-        ao5kHKcukv7gQfqlud1wJIN4nAJFqQbY0dTW+FTQHXKvcwnL99JC2O0geHkdxIbnMARGRD
-        8CPqFCIXgUBN0BWjdT5Dci+IVfq+7Mw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended
- buffer descriptor mode
-Message-ID: <ZDWk8vjvk7HO4I7o@P9FQF9L96D.corp.robot.car>
-References: <20230407172402.103168-1-roman.gushchin@linux.dev>
+        Tue, 11 Apr 2023 14:21:31 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF36E49E1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:21:26 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2efbab477a6so149051f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681237285; x=1683829285;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PkwB6wdOwbBLoG6Y0240YbS2lyf1pUe4TVGYxzb7N+4=;
+        b=GVT2ANAkS8lnAikzVcILMBYYhL0xMigcWLHHOlnO+0O0xq9h+l5JyaH32ntwZwUhdl
+         p478VjpaNBCglRLds0tjMMjkLi5VnlluKPqtKDv2DnD/PgdnzuejUigQbQRQlUlHaMEv
+         tdJsw8oHEHtHhx2/GL0xF8iiGTTVUngY4T9xM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681237285; x=1683829285;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PkwB6wdOwbBLoG6Y0240YbS2lyf1pUe4TVGYxzb7N+4=;
+        b=Z5dOREGEW/j5gkZC6oDkimvNVMiUu8YVj01xEv7hKZgYJck3oLJwIIKIUtjnMHhwIi
+         k8an19uklzQAYOofOVUyGmR3SzdQPIGSqxzcuvkAgbGs/QZEpopwfio/ATdzySEpiRxX
+         Ai7JF21V7S6bcvtvxqc/3pC24fGxRFsspC6jHlZWaZgq5LZmsOi2qA2A3uy3V2yIqspX
+         xk83Sb3iPVeLBhhdfa8OWdO418NJBk/ElNgo98ppyxdGfYV5a4OsYxyIHwuibZD7JX59
+         dIfddXe33oDaXFupH655NKhiTy2vagoe2/R/QsROVf72dlRwoJvLJiMYS2LiQYiBQcwY
+         J72Q==
+X-Gm-Message-State: AAQBX9dxtGDnFxXR6YY8ZwauDHjJPvckibnx07kJdbJknPx9Xyu64mb5
+        MGHIVgUpc7rVgk+6cwjeDyQlug==
+X-Google-Smtp-Source: AKy350YELrooW0gOiwUcdOVihkEery8ZVxwTyvoCX2lKo+cr82pGoMxLmBKsYXsQnzM/IoxkAtSDzA==
+X-Received: by 2002:a05:600c:1c90:b0:3e8:7ca3:8424 with SMTP id k16-20020a05600c1c9000b003e87ca38424mr72655wms.1.1681237285154;
+        Tue, 11 Apr 2023 11:21:25 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id c24-20020a7bc858000000b003ef5b011b30sm17844642wml.8.2023.04.11.11.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 11:21:24 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 20:21:22 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <ZDWlIuRHYPP1DeYi@phenom.ffwll.local>
+Mail-Followup-To: Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Dave Airlie <airlied@redhat.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local>
+ <2023041123-tractor-quake-c44d@gregkh>
+ <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+ <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
+ <2023041131-boxy-excavator-1183@gregkh>
+ <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+ <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
+ <ZDWLRxkFjsGZazXD@phenom.ffwll.local>
+ <19e3438f-8e85-9da4-cd9d-8fc19559abd7@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230407172402.103168-1-roman.gushchin@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <19e3438f-8e85-9da4-cd9d-8fc19559abd7@quicinc.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,149 +95,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping.
+On Tue, Apr 11, 2023 at 11:18:29AM -0600, Jeffrey Hugo wrote:
+> On 4/11/2023 10:31 AM, Daniel Vetter wrote:
+> > On Tue, Apr 11, 2023 at 09:29:27AM -0600, Jeffrey Hugo wrote:
+> > > On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
+> > > > On 4/11/2023 9:13 AM, Greg KH wrote:
+> > > > > On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
+> > > > > > On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+> > > > > > > On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+> > > > > > > > On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+> > > > > > > > > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+> > > > > > > > > > Hi all,
+> > > > > > > > > > 
+> > > > > > > > > > After merging the driver-core tree, today's linux-next build (x86_64
+> > > > > > > > > > allmodconfig) failed like this:
+> > > > > > > > > > 
+> > > > > > > > > > In file included from include/linux/linkage.h:7,
+> > > > > > > > > >                     from include/linux/kernel.h:17,
+> > > > > > > > > >                     from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+> > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function
+> > > > > > > > > > 'mhi_qaic_ctrl_init':
+> > > > > > > > > > include/linux/export.h:27:22: error: passing
+> > > > > > > > > > argument 1 of 'class_create' from incompatible
+> > > > > > > > > > pointer type
+> > > > > > > > > > [-Werror=incompatible-pointer-types]
+> > > > > > > > > >       27 | #define THIS_MODULE (&__this_module)
+> > > > > > > > > >          |                     ~^~~~~~~~~~~~~~~
+> > > > > > > > > >          |                      |
+> > > > > > > > > >          |                      struct module *
+> > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note:
+> > > > > > > > > > in expansion of macro 'THIS_MODULE'
+> > > > > > > > > >      544 |         mqc_dev_class =
+> > > > > > > > > > class_create(THIS_MODULE,
+> > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
+> > > > > > > > > >          |                                      ^~~~~~~~~~~
+> > > > > > > > > > In file included from include/linux/device.h:31,
+> > > > > > > > > >                     from include/linux/mhi.h:9,
+> > > > > > > > > >                     from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+> > > > > > > > > > include/linux/device/class.h:229:54: note:
+> > > > > > > > > > expected 'const char *' but argument is of type
+> > > > > > > > > > 'struct module *'
+> > > > > > > > > >      229 | struct class * __must_check
+> > > > > > > > > > class_create(const char *name);
+> > > > > > > > > >          |                                          ~~~~~~~~~~~~^~~~
+> > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25:
+> > > > > > > > > > error: too many arguments to function
+> > > > > > > > > > 'class_create'
+> > > > > > > > > >      544 |         mqc_dev_class =
+> > > > > > > > > > class_create(THIS_MODULE,
+> > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
+> > > > > > > > > >          |                         ^~~~~~~~~~~~
+> > > > > > > > > > include/linux/device/class.h:229:29: note: declared here
+> > > > > > > > > >      229 | struct class * __must_check
+> > > > > > > > > > class_create(const char *name);
+> > > > > > > > > >          |                             ^~~~~~~~~~~~
+> > > > > > > > > > 
+> > > > > > > > > > Caused by commit
+> > > > > > > > > > 
+> > > > > > > > > >      1aaba11da9aa ("driver core: class: remove
+> > > > > > > > > > module * from class_create()")
+> > > > > > > > > > 
+> > > > > > > > > > interacting with commit
+> > > > > > > > > > 
+> > > > > > > > > >      566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+> > > > > > > > > > 
+> > > > > > > > > > from the drm tree.
+> > > > > > > > > > 
+> > > > > > > > > > I have applied the following merge fix patch for today.
+> > > > > > > > > > 
+> > > > > > > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > > > > > > Date: Tue, 11 Apr 2023 14:16:57 +1000
+> > > > > > > > > > Subject: [PATCH] fixup for "driver core: class:
+> > > > > > > > > > remove module * from class_create()"
+> > > > > > > > > > 
+> > > > > > > > > > interacting with "accel/qaic: Add mhi_qaic_cntl"
+> > > > > > > > > > 
+> > > > > > > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > > > > > 
+> > > > > > > > > Thanks for the fixup. Since Dave is out I've made a
+> > > > > > > > > note about this in my
+> > > > > > > > > handover mail so it won't get lost in the drm-next
+> > > > > > > > > merge window pull. I
+> > > > > > > > > don't think we need any other coordination than
+> > > > > > > > > mention it in each pull to
+> > > > > > > > > Linus, topic tree seems overkill for this. Plus there's no way I can
+> > > > > > > > > untangle the drm tree anyway :-).
+> > > > > > > > 
+> > > > > > > > Want me to submit a patch for the drm tree that moves this to use
+> > > > > > > > class_register() instead, which will make the
+> > > > > > > > merge/build issue go away
+> > > > > > > > for you?  That's my long-term goal here anyway, so converting this new
+> > > > > > > > code to this api today would be something I have to do eventually :)
+> > > > > > > 
+> > > > > > > We kinda closed drm-next for feature work mostly already (just pulling
+> > > > > > > stuff in from subtrees), so won't really help for this merge window.
+> > > > > > > 
+> > > > > > > For everything else I think this is up to Oded, I had no
+> > > > > > > idea qaic needed
+> > > > > > > it's entire own dev class and I don't want to dig into this
+> > > > > > > for the risk I
+> > > > > > > might freak out :-)
+> > > > > > > 
+> > > > > > > Adding Oded.
+> > > > > > > 
+> > > > > > > Cheers, Daniel
+> > > > > > 
+> > > > > > Sorry for the mess.
+> > > > > > 
+> > > > > > I made a note to update to class_register() once my drm-misc access is
+> > > > > > sorted out.  Looks like we'll address the conflict in the merge
+> > > > > > window, and
+> > > > > > catch the update to the new API in the following release.
+> > > > > 
+> > > > > Wait, I think the large question is, "why does this need a separate
+> > > > > class"?  Why are you not using the accel char device and class?  That is
+> > > > > what everything under accel/ should be using, otherwise why put it in
+> > > > > there?
+> > > > > 
+> > > > > And what exactly are you using that class for?  Just device nodes?  If
+> > > > > so, how many?
+> > > > > 
+> > > > > thanks,
+> > > > > 
+> > > > > greg k-h
+> > > > 
+> > > > 
+> > > > Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed
+> > > > out at the time that AIC100/QAIC would need the same functionality.
+> > > > You/Jakub told myself/Mani/Loic that a combined implementation is not
+> > > > acceptable, and every area needs to implement their own version of
+> > > > MHI_UCI.
+> > > > 
+> > > > We took the WWAN subsystem and simplified it to meet our needs.
+> > > > 
+> > > > The functionality is QAIC specific, so wedging it into the Accel node
+> > > > seems to be a poor fit as it would subject Habana and iVPU to the same.
+> > > 
+> > > Also, I forgot to mention.  QAIC is sharing userspace components with WWAN,
+> > > so we really cannot diverge from what WWAN has done and define a new API
+> > > through the Accel node.
+> > 
+> > So there is an accel/drm_device in the qaic driver, but there's also this
+> > different class thing, which I don't get.
+> > 
+> > And yeah if that's an entirely orthogonal thing then I guess that should
+> > be in a different driver/subsystem, all supported with the aux bus to
+> > multiplex the underlying device.
+> > 
+> > I haven't found any explanation for what MHI is (or any of the other
+> > acrynoms), so I'm entirely lost.
+> 
+> MHI is documented at Documentation/mhi/
+> It is also referenced in the QAIC documentation - Documentation/accel/qaic/
+> 
+> It stands for "Modem Host Interface" (arguably a bad name now, but you can
+> guess where it came from).  It is a Qualcomm hardware block and associated
+> software protocol that provides logical channels over a hardware link.  Most
+> commonly used for PCIe.
+> 
+> Pretty much any modern Qualcomm PCIe device implements it.  4G modems, 5G
+> modems, Wifi adapters, AIC100, etc.  Instead of talking "PCIe", the host
+> talks "MHI" to the devices in most cases.
+> 
+> The core implementation for MHI exists in drivers/bus/mhi
+> 
+> MHI_UCI is the MHI Userspace Character Interface.  It looked like most buses
+> (eg USB) provide some direct device access to userspace.  MHI_UCI was
+> formulated along those same lines - provide direct userspace access to a
+> whitelist of channels.  Qualcomm provides some fairly extensive userspace
+> utilities, and various communities have developed open source alternatives
+> using this mechanism.
+> 
+> MHI_UCI was proposed to the community as the common driver (misc device) for
+> all of the MHI devices.  The Net folks came along, saw that it was used for
+> 4G/5G modems (Wireless Wide Area Network devices or WWAN) and decided that
+> they would not tolerate a common implementation.  They NACK'd MHI_UCI and
+> required that a WWAN specific subsystem be developed which would only
+> service WWAN devices.  The Net folks decreed that other subsystems which
+> needed the same functionality need to have their own copy of the
+> implementation.
+> 
+> QAIC devices expose Sahara (a boot time protocol) which has an existing
+> userspace that is also used with Modems, although it looks like WWAN doesn't
+> currently support those generations of products today.  QAIC devices also
+> support DIAG, which is currently supported in WWAN.  The intent was to add
+> the QAIC support for DIAG at a later time since it is not required for the
+> bare minimum viable driver.
+> 
+> So, QAIC devices support the same services, would use the same userspace,
+> but can't use a common implementation because Jakub(net) doesn't want to
+> share and convinced Greg to go along.  I'm not interested in pushing a cross
+> tree fight (arguably already did that with MHI_UCI).  If neither Greg nor
+> Net will accept a common implementation that accelerators can use (QAIC),
+> then the only place I can fit this is in the Accel area.
+> 
+> Using aux bus seems to make little difference if QAIC is the only consumer
+> of this.  I'm willing to refactor the implementation with some feedback and
+> guidence, but the uAPI seems set in stone due to the existing userspace and
+> WWAN (char devs with open/close/read/write/poll).
 
-Also cc'ing Dave.
+Ok, so MHI _is_ the bus. Thanks for the explainer, I should have searched
+a bit more in Documentation/
 
-Thanks!
+> What would make you less unhappy?
 
-On Fri, Apr 07, 2023 at 10:24:02AM -0700, Roman Gushchin wrote:
-> For quite some time we were chasing a bug which looked like a sudden
-> permanent failure of networking and mmc on some of our devices.
-> The bug was very sensitive to any software changes and even more to
-> any kernel debug options.
+The MHI generic userspace driver interface needs to be in drivers/bus/mhi,
+not in a random driver. I think we should revert 566fc96198b4
+("accel/qaic: Add mhi_qaic_cntl") and re-land that through Greg's tree (or
+wherever mhi patches go to). This of course assuming that the accel
+userspace on top of the accel/drm_device does work stand-alone, and it's
+just the tooling and other userspace that needs MHI_UCI. If we end with a
+non-functional stack due to that, then I guess the entire driver is a bit
+up for questions, because at least the accel runtime is supposed to just
+run on top of the accel devnode and nothing else. Otherwise container
+stuff gets really bad, among a lot of other things.
+
+Cheers, Daniel
+
+
+
 > 
-> Finally we got a setup where the problem was reproducible with
-> CONFIG_DMA_API_DEBUG=y and it revealed the issue with the rx dma:
+> > -Daniel
+> > 
+> > > 
+> > > > 
+> > > > We need (eventually) 128 device nodes.  We have systems with 32 QAIC
+> > > > devices, and each QAIC device uses 4 device nodes (32 * 4 = 128).  WWAN
+> > > > subsystem would be similar.  Looks like each 5G modem is 6 nodes per
+> > > > device, so if you had 22 5G modems on a system, you'd have 132 device
+> > > > nodes.  I'm not aware of any such system, but it could exist.
+> > > > 
+> > > > -Jeff
+> > > 
+> > 
 > 
-> [   16.992082] ------------[ cut here ]------------
-> [   16.996779] DMA-API: macb ff0b0000.ethernet: device driver tries to free DMA memory it has not allocated [device address=0x0000000875e3e244] [size=1536 bytes]
-> [   17.011049] WARNING: CPU: 0 PID: 85 at kernel/dma/debug.c:1011 check_unmap+0x6a0/0x900
-> [   17.018977] Modules linked in: xxxxx
-> [   17.038823] CPU: 0 PID: 85 Comm: irq/55-8000f000 Not tainted 5.4.0 #28
-> [   17.045345] Hardware name: xxxxx
-> [   17.049528] pstate: 60000005 (nZCv daif -PAN -UAO)
-> [   17.054322] pc : check_unmap+0x6a0/0x900
-> [   17.058243] lr : check_unmap+0x6a0/0x900
-> [   17.062163] sp : ffffffc010003c40
-> [   17.065470] x29: ffffffc010003c40 x28: 000000004000c03c
-> [   17.070783] x27: ffffffc010da7048 x26: ffffff8878e38800
-> [   17.076095] x25: ffffff8879d22810 x24: ffffffc010003cc8
-> [   17.081407] x23: 0000000000000000 x22: ffffffc010a08750
-> [   17.086719] x21: ffffff8878e3c7c0 x20: ffffffc010acb000
-> [   17.092032] x19: 0000000875e3e244 x18: 0000000000000010
-> [   17.097343] x17: 0000000000000000 x16: 0000000000000000
-> [   17.102647] x15: ffffff8879e4a988 x14: 0720072007200720
-> [   17.107959] x13: 0720072007200720 x12: 0720072007200720
-> [   17.113261] x11: 0720072007200720 x10: 0720072007200720
-> [   17.118565] x9 : 0720072007200720 x8 : 000000000000022d
-> [   17.123869] x7 : 0000000000000015 x6 : 0000000000000098
-> [   17.129173] x5 : 0000000000000000 x4 : 0000000000000000
-> [   17.134475] x3 : 00000000ffffffff x2 : ffffffc010a1d370
-> [   17.139778] x1 : b420c9d75d27bb00 x0 : 0000000000000000
-> [   17.145082] Call trace:
-> [   17.147524]  check_unmap+0x6a0/0x900
-> [   17.151091]  debug_dma_unmap_page+0x88/0x90
-> [   17.155266]  gem_rx+0x114/0x2f0
-> [   17.158396]  macb_poll+0x58/0x100
-> [   17.161705]  net_rx_action+0x118/0x400
-> [   17.165445]  __do_softirq+0x138/0x36c
-> [   17.169100]  irq_exit+0x98/0xc0
-> [   17.172234]  __handle_domain_irq+0x64/0xc0
-> [   17.176320]  gic_handle_irq+0x5c/0xc0
-> [   17.179974]  el1_irq+0xb8/0x140
-> [   17.183109]  xiic_process+0x5c/0xe30
-> [   17.186677]  irq_thread_fn+0x28/0x90
-> [   17.190244]  irq_thread+0x208/0x2a0
-> [   17.193724]  kthread+0x130/0x140
-> [   17.196945]  ret_from_fork+0x10/0x20
-> [   17.200510] ---[ end trace 7240980785f81d6f ]---
-> 
-> [  237.021490] ------------[ cut here ]------------
-> [  237.026129] DMA-API: exceeded 7 overlapping mappings of cacheline 0x0000000021d79e7b
-> [  237.033886] WARNING: CPU: 0 PID: 0 at kernel/dma/debug.c:499 add_dma_entry+0x214/0x240
-> [  237.041802] Modules linked in: xxxxx
-> [  237.061637] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         5.4.0 #28
-> [  237.068941] Hardware name: xxxxx
-> [  237.073116] pstate: 80000085 (Nzcv daIf -PAN -UAO)
-> [  237.077900] pc : add_dma_entry+0x214/0x240
-> [  237.081986] lr : add_dma_entry+0x214/0x240
-> [  237.086072] sp : ffffffc010003c30
-> [  237.089379] x29: ffffffc010003c30 x28: ffffff8878a0be00
-> [  237.094683] x27: 0000000000000180 x26: ffffff8878e387c0
-> [  237.099987] x25: 0000000000000002 x24: 0000000000000000
-> [  237.105290] x23: 000000000000003b x22: ffffffc010a0fa00
-> [  237.110594] x21: 0000000021d79e7b x20: ffffffc010abe600
-> [  237.115897] x19: 00000000ffffffef x18: 0000000000000010
-> [  237.121201] x17: 0000000000000000 x16: 0000000000000000
-> [  237.126504] x15: ffffffc010a0fdc8 x14: 0720072007200720
-> [  237.131807] x13: 0720072007200720 x12: 0720072007200720
-> [  237.137111] x11: 0720072007200720 x10: 0720072007200720
-> [  237.142415] x9 : 0720072007200720 x8 : 0000000000000259
-> [  237.147718] x7 : 0000000000000001 x6 : 0000000000000000
-> [  237.153022] x5 : ffffffc010003a20 x4 : 0000000000000001
-> [  237.158325] x3 : 0000000000000006 x2 : 0000000000000007
-> [  237.163628] x1 : 8ac721b3a7dc1c00 x0 : 0000000000000000
-> [  237.168932] Call trace:
-> [  237.171373]  add_dma_entry+0x214/0x240
-> [  237.175115]  debug_dma_map_page+0xf8/0x120
-> [  237.179203]  gem_rx_refill+0x190/0x280
-> [  237.182942]  gem_rx+0x224/0x2f0
-> [  237.186075]  macb_poll+0x58/0x100
-> [  237.189384]  net_rx_action+0x118/0x400
-> [  237.193125]  __do_softirq+0x138/0x36c
-> [  237.196780]  irq_exit+0x98/0xc0
-> [  237.199914]  __handle_domain_irq+0x64/0xc0
-> [  237.204000]  gic_handle_irq+0x5c/0xc0
-> [  237.207654]  el1_irq+0xb8/0x140
-> [  237.210789]  arch_cpu_idle+0x40/0x200
-> [  237.214444]  default_idle_call+0x18/0x30
-> [  237.218359]  do_idle+0x200/0x280
-> [  237.221578]  cpu_startup_entry+0x20/0x30
-> [  237.225493]  rest_init+0xe4/0xf0
-> [  237.228713]  arch_call_rest_init+0xc/0x14
-> [  237.232714]  start_kernel+0x47c/0x4a8
-> [  237.236367] ---[ end trace 7240980785f81d70 ]---
-> 
-> Lars was fast to find an explanation: according to the datasheet
-> bit 2 of the rx buffer descriptor entry has a different meaning in the
-> extended mode:
->   Address [2] of beginning of buffer, or
->   in extended buffer descriptor mode (DMA configuration register [28] = 1),
->   indicates a valid timestamp in the buffer descriptor entry.
-> 
-> The macb driver didn't mask this bit while getting an address and it
-> eventually caused a memory corruption and a dma failure.
-> 
-> The problem is resolved by extending the MACB_RX_WADDR_SIZE
-> in the extended mode.
-> 
-> Fixes: 7b4296148066 ("net: macb: Add support for PTP timestamps in DMA descriptors")
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> ---
->  drivers/net/ethernet/cadence/macb.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
-> index c1fc91c97cee..1b330f7cfc09 100644
-> --- a/drivers/net/ethernet/cadence/macb.h
-> +++ b/drivers/net/ethernet/cadence/macb.h
-> @@ -826,8 +826,13 @@ struct macb_dma_desc_ptp {
->  #define MACB_RX_USED_SIZE			1
->  #define MACB_RX_WRAP_OFFSET			1
->  #define MACB_RX_WRAP_SIZE			1
-> +#ifdef MACB_EXT_DESC
-> +#define MACB_RX_WADDR_OFFSET			3
-> +#define MACB_RX_WADDR_SIZE			29
-> +#else
->  #define MACB_RX_WADDR_OFFSET			2
->  #define MACB_RX_WADDR_SIZE			30
-> +#endif
->  
->  #define MACB_RX_FRMLEN_OFFSET			0
->  #define MACB_RX_FRMLEN_SIZE			12
-> -- 
-> 2.40.0
-> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
