@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295B06DCE82
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DEA6DCE83
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjDKAe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 20:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S229843AbjDKAes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 20:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDKAeY (ORCPT
+        with ESMTP id S229660AbjDKAeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 20:34:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BAD13A;
-        Mon, 10 Apr 2023 17:34:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FF6661F84;
-        Tue, 11 Apr 2023 00:34:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94350C4339C;
-        Tue, 11 Apr 2023 00:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681173261;
-        bh=efI7CcBrOnAi7UitzE3jJIbPMYCE2T5N7BlnBnKd4Qs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ig3r+FIah4z9ucZdnt3LsAPbEVK0kMw+FZrUb2atv7b6FDNxstSYikyC9cJ1vfts9
-         eQZFXDR8rVfKPok6rm+Xi0HXq64eB7B0QY1ZcrtuPHebmj8R00P6ezp0o9PqDz64kd
-         IVlQJAwPZ7x3PGajarn9EDvbsLzby4Ws4RgsCkmQJ2BmUT+4VeyAxJwidwwtmmq/im
-         8iI9UNg/dJcsvdZna0HHOsSZ1+G3JKjd1IH3rR/WhAVSEFVg1BbQmrbxJ5mpAsA5dJ
-         k/XMl7fFJ+Zc5Klhxpr1RdHBHoOUY7WgNIeFxhLRZU14crDDtm6sa5fpKTCed5TVZ4
-         C5qSZ57Y1T1tA==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1842e278605so7954683fac.6;
-        Mon, 10 Apr 2023 17:34:21 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ebU1TdagZA1LM01RVlE0Fd6Q91k/8aeGd2M+ZxyDn+dUGOFTO6
-        OwgysllvTGRuHX/WBtIRFwy7ufbS2TLzvrU4/uw=
-X-Google-Smtp-Source: AKy350bB56rSS3PUwMDKdzwJ7lVHGcelQUNcRVDzFaRycHVwThDweamlnw0msl9/7GJdu7dmUhERNxGbGv2CtSS7zEc=
-X-Received: by 2002:a05:6870:e989:b0:17e:d308:7790 with SMTP id
- r9-20020a056870e98900b0017ed3087790mr5641366oao.11.1681173260778; Mon, 10 Apr
- 2023 17:34:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230407101629.1298051-1-masahiroy@kernel.org> <20230407101629.1298051-3-masahiroy@kernel.org>
-In-Reply-To: <20230407101629.1298051-3-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 11 Apr 2023 09:33:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARDqKWtNqPQX=G1JkVJTMsf+OqacgktOMePhTuqr9jtwA@mail.gmail.com>
-Message-ID: <CAK7LNARDqKWtNqPQX=G1JkVJTMsf+OqacgktOMePhTuqr9jtwA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kbuild: do not create intermediate *.tar for tar packages
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
+        Mon, 10 Apr 2023 20:34:46 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D75A13A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:34:45 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 184-20020a2515c1000000b009419f64f6afso7257710ybv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681173284;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VV8PXIioY+lpB4ukX6X0D5BOfhtAOO5OAgem+yfBPzU=;
+        b=MmK3pxBNM65yrkcmg8H132ZjPXqBIfU8z53aiLZbcxVHdcwb5CxL8/4Ji3dTd45Ip+
+         LH4bIxVQsf56Vf+CzVcoUVCFcU/eEyCgoDSaYc+HqLLM7hM8dqa102ICTIcGv7qsMHi1
+         J/xwCIAjHtxOMJaInNbFK8BeHNh/qjqh7EY4zQ2YwOTKUbt29zBQmAN3AqYH6uuXGbEH
+         UiXkilwXN53YlQxZZVx2k9i8YWOSaYRcLTkImGjjcDnk3DzPFom7ZZKbhapeq4ayIQfp
+         n04N3l/3G+PsiwKyKl3fdGBEo5ieR6beOSTFl9D01wkPtnHUs3jQlqmZY/Nr/kfSC7YE
+         pabg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681173284;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VV8PXIioY+lpB4ukX6X0D5BOfhtAOO5OAgem+yfBPzU=;
+        b=AqG9JhEKWJwIGiNMWjRuNiM8+KnYLp2albgbrAfy12mR92bejmIYVX9pWfWN0iTnmf
+         fDKH6RQdBxuPK/hAje+cxwmxYEXiCRwhTkVNaA/p92ycHhNEXECE0U2yprmyCxYt6Sta
+         5jSMcCaryqOZzp6oIx2jGrsj0GCaMGNsoqk60adp5rsgaNx8KdrymI4joRqbMz1bWYPE
+         eCbbHTQRtNjSWolLurpk7j4aWkg443XQ+H7zCPX6QVFWELabhRUasDshW5mG5Y0UH/xw
+         nAEzmaC1xsO7NwDzaxQ9s+qEMBle9wkx7THgduEB9qh0vndO0hfBUQwxBVfT2fFr2QZ+
+         judg==
+X-Gm-Message-State: AAQBX9cqrpqw4RR3lH13onohjC7lDwPSnNucQIqNTg+pWV3QZgMJljdk
+        iUZsHUy8LG6L7mJR5YPXTR+bICCSHj+r
+X-Google-Smtp-Source: AKy350ZOwDyxZ5zmnvjOtmK+m8d2Zb+sInKjo5gza1IG8xreF6QccHiFCV8qDL7zjDXDQLZcFmYPSNKGp1ua
+X-Received: from ezekiel.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:108e])
+ (user=shraash job=sendgmr) by 2002:a81:b284:0:b0:544:94fe:4244 with SMTP id
+ q126-20020a81b284000000b0054494fe4244mr636814ywh.10.1681173284695; Mon, 10
+ Apr 2023 17:34:44 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 06:04:31 +0530
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230411003431.4048700-1-shraash@google.com>
+Subject: [PATCH] ASoC: mediatek: common: Fix refcount leak in parse_dai_link_info
+From:   Aashish Sharma <shraash@google.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Aashish Sharma <shraash@google.com>,
+        kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@inria.fr>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 7:16=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> Commit 05e96e96a315 ("kbuild: use git-archive for source package
-> creation") split the compression as a separate step to factor out
-> the common build rules.
->
-> With the previous commit, we got back to the situation where
-> compressed source tarballs are created by a single rule.
-> There is no reason to keep the separate compression rules.
->
-> Generate the comressed tar packages directly.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/Makefile.package | 27 +++++++++------------------
->  1 file changed, 9 insertions(+), 18 deletions(-)
->
-> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> index 7707975f729b..e0e18d7dfbd5 100644
-> --- a/scripts/Makefile.package
-> +++ b/scripts/Makefile.package
-> @@ -2,7 +2,6 @@
->  # Makefile for the different targets used to generate full packages of a=
- kernel
->
->  include $(srctree)/scripts/Kbuild.include
-> -include $(srctree)/scripts/Makefile.lib
+Add missing of_node_put()s before the returns to balance
+of_node_get()s and of_node_put()s, which may get unbalanced
+in case the for loop 'for_each_available_child_of_node' returns
+early.
 
-I noticed a bug.
+Fixes: 4302187d955f ("ASoC: mediatek: common: add soundcard driver common code")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@inria.fr>
+Link: https://lore.kernel.org/r/202304090504.2K8L6soj-lkp@intel.com/
+Signed-off-by: Aashish Sharma <shraash@google.com>
+---
+ sound/soc/mediatek/common/mtk-soundcard-driver.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-I will keep this include directive.
-Otherwise, perf-tar*-src-pkg targets would be broken.
-'cmd_copy' is still used.
+diff --git a/sound/soc/mediatek/common/mtk-soundcard-driver.c b/sound/soc/mediatek/common/mtk-soundcard-driver.c
+index 7c55c2cb1f21..738093451ccb 100644
+--- a/sound/soc/mediatek/common/mtk-soundcard-driver.c
++++ b/sound/soc/mediatek/common/mtk-soundcard-driver.c
+@@ -47,20 +47,26 @@ int parse_dai_link_info(struct snd_soc_card *card)
+ 	/* Loop over all the dai link sub nodes */
+ 	for_each_available_child_of_node(dev->of_node, sub_node) {
+ 		if (of_property_read_string(sub_node, "link-name",
+-					    &dai_link_name))
++					    &dai_link_name)) {
++			of_node_put(sub_node);
+ 			return -EINVAL;
++		}
+ 
+ 		for_each_card_prelinks(card, i, dai_link) {
+ 			if (!strcmp(dai_link_name, dai_link->name))
+ 				break;
+ 		}
+ 
+-		if (i >= card->num_links)
++		if (i >= card->num_links) {
++			of_node_put(sub_node);
+ 			return -EINVAL;
++		}
+ 
+ 		ret = set_card_codec_info(card, sub_node, dai_link);
+-		if (ret < 0)
++		if (ret < 0) {
++			of_node_put(sub_node);
+ 			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.40.0.577.gac1e443424-goog
 
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
