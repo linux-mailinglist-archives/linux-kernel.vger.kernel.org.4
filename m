@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317426DDA1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DE26DDA1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjDKLwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S230017AbjDKLxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjDKLwX (ORCPT
+        with ESMTP id S229721AbjDKLxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:52:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA06E0;
-        Tue, 11 Apr 2023 04:52:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0E5662292;
-        Tue, 11 Apr 2023 11:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F87C433EF;
-        Tue, 11 Apr 2023 11:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681213941;
-        bh=7RJUk4YSpd3pqSy0exl1oYWF66yQpy0/ne486dtH/XM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c1gOSy88hc71+QkoCHhohvTl/y7A+kQeo7BHoUCffJqiu75CRPLLtcZljbp7c1tkK
-         CtAtZ+H1vzm6I1idVCZdhZiSwX9Ku3emALK6adwDciQtTSRJk2/W3qIkGF+yB20PNc
-         Sx2RV87NVXxczyNoNCqgWzrVEdhPenghf+raL60PnomNznqiHYC4cwSEOr/RhazCYX
-         sMpF6bwTcZqy5NimR+veX23m7xDpm1q4MMZjzBfQ4/WawLoBQCcdf1G+m4fMsdYCRi
-         l5y96hmZLSNOwQXVRsVYPeSQ+1RSOouhWKqq7Z1GHe/CMaxKt/0RLMe/h/LRnWDArR
-         nSWwSz5zbxdiA==
-Date:   Tue, 11 Apr 2023 17:22:01 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mani@kernel.org, p.zabel@pengutronix.de,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V2 5/9] dt-bindings: PCI: qcom: Add IPQ9574
-Message-ID: <20230411115201.GM5333@thinkpad>
-References: <20230404164828.8031-1-quic_devipriy@quicinc.com>
- <20230404164828.8031-6-quic_devipriy@quicinc.com>
- <79ddaff0-00a9-36db-2bc0-4c844ffd9528@linaro.org>
- <999dfe1c-3b0d-1cc1-7407-e0917fc62d77@quicinc.com>
+        Tue, 11 Apr 2023 07:53:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C33E68
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lUBqCEIfOxRVsu3MN5Mz6wJEIZM5gTn52LRqs/6YO5M=; b=AhTtQzD3DdPrtkV9sK0x3VKmU/
+        8ea0YLvNDqWLrVIZmBURDUYUIBJz7Gj6Puc252kNsZhx8ML1a6zR9EQ+vKJn8VDU1XcaYnFimB9mC
+        lRZiIKDyAOSD68Zps+vOK1wEEVGJuIIvnYQGo9C2A2WvCKxA5hEciAQiLVeY7tgxDQhfxFxWDSpxb
+        8xlmRYh6BUsb4QkF+GpfEK9qhUO/KhkmcjZlagA7ZRQOy2/nm1mYzgRlC2NYaJMeTZbjxzFjTXy3Q
+        zg+AyLJDZHOiaLDymY9RzYlf7GB5CW1dK3CsnAbwvhLCYtnTFfvtzGfU6o4GRn2TvA4ETAG4WF3P+
+        raIa1Avw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmCZ2-005sBY-GV; Tue, 11 Apr 2023 11:53:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CECDA300102;
+        Tue, 11 Apr 2023 13:53:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B1F6720593938; Tue, 11 Apr 2023 13:53:30 +0200 (CEST)
+Date:   Tue, 11 Apr 2023 13:53:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
+        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
+        npiggin@gmail.com
+Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230411115330.GB580235@hirez.programming.kicks-ass.net>
+References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+ <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
+ <20230406095122.GF386572@hirez.programming.kicks-ass.net>
+ <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
+ <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
+ <20230411110344.GC576825@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <999dfe1c-3b0d-1cc1-7407-e0917fc62d77@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230411110344.GC576825@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:27:23PM +0530, Devi Priya wrote:
-> 
-> 
-> On 4/5/2023 12:28 PM, Krzysztof Kozlowski wrote:
-> > On 04/04/2023 18:48, Devi Priya wrote:
-> > > Add bindings for PCIe hosts on IPQ9574 platform and allow
-> > > msi-parent property
-> > 
-> > Missing full stop. Also in your other patches.
-> Okay
-> > 
-> > > 
-> > > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> > > ---
-> > >   Changes in V2:
-> > > 	- Updated the commit message and dropped the aggr_noc entries
-> > > 	  as it will be handled via interconnect driver
-> > > 
-> > >   .../devicetree/bindings/pci/qcom,pcie.yaml    | 48 +++++++++++++++++++
-> > >   1 file changed, 48 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > index fb32c43dd12d..8657ab65008c 100644
-> > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > @@ -26,6 +26,7 @@ properties:
-> > >             - qcom,pcie-ipq8064-v2
-> > >             - qcom,pcie-ipq8074
-> > >             - qcom,pcie-ipq8074-gen3
-> > > +          - qcom,pcie-ipq9574
-> > >             - qcom,pcie-msm8996
-> > >             - qcom,pcie-qcs404
-> > >             - qcom,pcie-sa8540p
-> > > @@ -105,6 +106,8 @@ properties:
-> > >       items:
-> > >         - const: pciephy
-> > > +  msi-parent: true
-> > 
-> 
-> Yes right, will rebase it on Mani's series.
-> But, as you have pointed out don't see the binding changes
-> in linux-next/master
-> Mani, could you please provide the tree details onto which the
-> binding change is merged?
-> 
+On Tue, Apr 11, 2023 at 01:03:45PM +0200, Peter Zijlstra wrote:
+> On Fri, Apr 07, 2023 at 09:14:36PM -0400, Mathieu Desnoyers wrote:
 
-Looks like the initial msi-map binding's patch [1] never got merged even though
-the dts patch went in.
 
-I'll squash the later fix to this, post v4 and CC you.
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
+> >  static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
+> >  {
+> > +	/*
+> > +	 * Provide a memory barrier between rq->curr store and load of
+> > +	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
+> > +	 *
+> > +	 * Should be adapted if context_switch() is modified.
+> > +	 */
+> > +	if (!next->mm) {                                // to kernel
+> > +		/*
+> > +		 * user -> kernel transition does not guarantee a barrier, but
+> > +		 * we can use the fact that it performs an atomic operation in
+> > +		 * mmgrab().
+> > +		 */
+> > +		if (prev->mm)                           // from user
+> > +			smp_mb__after_mmgrab();
+> > +		/*
+> > +		 * kernel -> kernel transition does not change rq->curr->mm
+> > +		 * state. It stays NULL.
+> > +		 */
+> > +	} else {                                        // to user
+> > +		/*
+> > +		 * kernel -> user transition does not provide a barrier
+> > +		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
+> > +		 * Provide it here.
+> > +		 */
+> > +		if (!prev->mm)                          // from kernel
+> > +			smp_mb();
+> > +		/*
+> > +		 * user -> user transition guarantees a memory barrier through
+> > +		 * switch_mm().
+> > +		 */
+> > +	}
 
-- Mani
+The possibly nicer way to write all this is:
 
-[1] https://lore.kernel.org/all/20230102105821.28243-3-manivannan.sadhasivam@linaro.org/
+	if (!prev->mm != !next->mm)
+		smp_mb();
 
-> > Isn't this conflicting with Mani's series:
-> > https://lore.kernel.org/all/20230108203340.GA229573-robh@kernel.org/
-> > https://lore.kernel.org/all/20230111123004.21048-1-manivannan.sadhasivam@linaro.org/#t
-> > 
-> > Although for some reason Mani's patch references non-existing commit and
-> > hunk...
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> Best Regards,
-> Devi Priya
+And then clean up the mm{grab,drop)_lazy_tlb() helpers. But we can
+always do that later if we indeed end up with all this ...
 
--- 
-மணிவண்ணன் சதாசிவம்
