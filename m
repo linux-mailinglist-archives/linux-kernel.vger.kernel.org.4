@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E116DD81D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4576DD821
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDKKnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S229621AbjDKKnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjDKKn1 (ORCPT
+        with ESMTP id S229532AbjDKKnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:43:27 -0400
+        Tue, 11 Apr 2023 06:43:45 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F69230F5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:43:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4CF3C1F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:43:32 -0700 (PDT)
 Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DA6D53F244
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:43:20 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CBCBF3F237
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681209800;
-        bh=a+6gxbvn4hYwO5enGV6t44vz4Ixp1BNaXg7ewl6XAKs=;
+        s=20210705; t=1681209810;
+        bh=pU+XkxxaqxIltFz6HAiJgXotXtTecmR/abIbMqTWsWw=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=etClHLvaMSvWEG3YGfzCx9n/Y5As7kOUXYqQM2/azBQTR2sPDf0jt2pJuvqiCHelQ
-         hRoc4N3yUnb68JEi1DoAAxhoimj2XPsAhbHmRnua0o2M1gme7nESODcznW1cAn760F
-         Dd2BOD4dSF5cz2m9kYSFdsL4/nBcobjv6Z/dQ/deg0JE8+ha6mvd2VTcL0VtOK4nMp
-         LrJl4LiR22bpq0Ix2FZrUX5oAq2JvUTpbDqG8Stxufl1twW7Y6GxsLOJ76WF5FVazP
-         dSRx1UUFo2WYmBLtHDMfOwpqG0wahniby6HuiuM4kp4kOl4cwO7YTI2u19Cj8F2RUS
-         kpKely6rQgpig==
-Received: by mail-ej1-f72.google.com with SMTP id vt6-20020a170907a60600b009217998c8e3so2397463ejc.14
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:43:20 -0700 (PDT)
+        b=Z06CA+JcDdJSFA9PnH61/Q3e0p+z11skMn3k+JedjsCMAnWO3NCgcJES26N4PNFfs
+         3S5I/ZLknwsf3zB991NJIy0DPB9P7ps9Qyfr/N5hpVr4WAdf+aRhvQFcus2d2rChn/
+         lk446tSYDUX6ooVqg9Nf0fW6Ec8X42j0wTauiriComSpNn4RRjoNZw0D5ISr2oED/9
+         fUQgYjYw+YE77RvMSw+SpBnfZ4224/8gyPDLdYI0sgusM3RQlhYPH2okArpyL1pLvu
+         P4GRnceeOPPH7X/JtXEZIN13S7xdLyFEsu1RDb8WowET8yEARhQLp+BTQ0tB4D0r7m
+         fdrp7mYQiI2zg==
+Received: by mail-ej1-f72.google.com with SMTP id b3-20020a170906038300b009489cf242c8so4397490eja.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:43:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681209800;
+        d=1e100.net; s=20210112; t=1681209810;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a+6gxbvn4hYwO5enGV6t44vz4Ixp1BNaXg7ewl6XAKs=;
-        b=j1ppURx/CkWcqawOMhOnhN+DHRfgTaDbdH0Ox7dhFGWqHyUMTRcKF93bUbZ5j6298w
-         UOVyVzt31Z4g04+Sc+oyUQw9R8sw8d7Iolf0bNL+5wq8GAg5xBOUezZImfAsEi38CTN8
-         I4r7AjgrghJ3/ZiEFy9idIqFKi5h8c0oMVf/+QhBRu0o0eOyBj9uNZAebyX6FQIlV+AW
-         IiOzk+881zaUhXK26caQeing5H8/fiHmrfmEsatpSVQbZElorK6Yy/qAXJeLPfqQ/eSO
-         cpvD3BJs/6IZLcP2XEN+2iuaLtL2XVD15yd3e5okE5DwwaZMiWbmqqMr4vq4bDY3xc1R
-         dWOA==
-X-Gm-Message-State: AAQBX9fjLsFbHDI3DbqIviRbmqa+dD0OtJhgNP35koRLYgCDnBJVX9AG
-        Qmec6doyxHw2dBEgt0D8n3sOB/tSjD6P7IJ5gbeKrOZl2wGZ9Ebyniupxa2zcNuFbNfoWqxPPby
-        /xsqHIWeaLOSbsSmj1U501ZuAfk9ud2IHd+Oq03B4oQ==
-X-Received: by 2002:a17:906:a859:b0:94c:784f:7569 with SMTP id dx25-20020a170906a85900b0094c784f7569mr4265431ejb.30.1681209800371;
-        Tue, 11 Apr 2023 03:43:20 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZqUXeqS9O98LMdWi8cTD/jnZQD62JAh31WY6ycJqD3j95xAzxzQ0fKW3ItweqMjoUkTG9epQ==
-X-Received: by 2002:a17:906:a859:b0:94c:784f:7569 with SMTP id dx25-20020a170906a85900b0094c784f7569mr4265406ejb.30.1681209799970;
-        Tue, 11 Apr 2023 03:43:19 -0700 (PDT)
+        bh=pU+XkxxaqxIltFz6HAiJgXotXtTecmR/abIbMqTWsWw=;
+        b=Rs5cX7BjPuM4w9WZt3o3gIfbDFAzaCqpmAkjX9jDSOkAmhvS2g/QovSfZcUUEwYuRC
+         Coe4siqVkDojdyO4W/Irt5soZdVlurXwTsX6ZZ8FJCbvdI3ymJNrRcYvkcIM8AVQJ13E
+         3u8q/WSNwjWBnwKdrTeGk367Afv9q6TuDQUxwxIn3iQTvkSRUTOSvgVLjtM2zCqDNz52
+         QEuPmjI1BF+6QYlkPHKvKXNzXkLsD6uNwff+mzOwTkv2lQPC6ncxTrtO+O7yBuaBN03l
+         5gzw3f85VaWMHGXbSWu2QpNvDL38SoqRCQvUjMMykYEVIedgBzcNgEA4iYfPLp+1gEDj
+         QReQ==
+X-Gm-Message-State: AAQBX9cUKhdp5t5VK7q+CkvVNaP5PJV+98FQHwq4o+qCHVz8Bs4N3T5P
+        hh9JrdefL55A00Ter9c6ckFvFVyMKyv7wXzLY4OcQcc2Gf9yTQ175ms48E0Guw4euMxvNeQAkRe
+        B/QLK9XY6NbCl6t6HTW3hios/wl4tyo7W02JvPlPSbw==
+X-Received: by 2002:a17:907:6a12:b0:94a:474a:4dd7 with SMTP id rf18-20020a1709076a1200b0094a474a4dd7mr7376313ejc.60.1681209810561;
+        Tue, 11 Apr 2023 03:43:30 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZNewLrXNZ6daAOHQgJi0nkKHwQAVXgrGhHW2GSMumryIkh965UAbKXhAPWjtH8AEfHFA4Kaw==
+X-Received: by 2002:a17:907:6a12:b0:94a:474a:4dd7 with SMTP id rf18-20020a1709076a1200b0094a474a4dd7mr7376308ejc.60.1681209810274;
+        Tue, 11 Apr 2023 03:43:30 -0700 (PDT)
 Received: from amikhalitsyn.. ([95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id ne7-20020a1709077b8700b00948c320fcfdsm5921805ejc.202.2023.04.11.03.43.18
+        by smtp.gmail.com with ESMTPSA id ne7-20020a1709077b8700b00948c320fcfdsm5921805ejc.202.2023.04.11.03.43.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 03:43:19 -0700 (PDT)
+        Tue, 11 Apr 2023 03:43:29 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     davem@davemloft.net
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -72,10 +72,10 @@ Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Christian Brauner <brauner@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Lennart Poettering <mzxreary@0pointer.de>,
-        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
-Subject: [PATCH net-next v3 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
-Date:   Tue, 11 Apr 2023 12:42:28 +0200
-Message-Id: <20230411104231.160837-2-aleksandr.mikhalitsyn@canonical.com>
+        linux-arch@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH net-next v3 2/4] net: socket: add sockopts blacklist for BPF cgroup hook
+Date:   Tue, 11 Apr 2023 12:42:29 +0200
+Message-Id: <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
@@ -90,15 +90,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
-but it contains pidfd instead of plain pid, which allows programmers not
-to care about PID reuse problem.
+During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
+that bpf cgroup hook can cause FD leaks when used with sockopts which
+install FDs into the process fdtable.
 
-Idea comes from UAPI kernel group:
-https://uapi-group.org/kernel-features/
-
-Big thanks to Christian Brauner and Lennart Poettering for productive
-discussions about this.
+After some offlist discussion it was proposed to add a blacklist of
+socket options those can cause troubles when BPF cgroup hook is enabled.
 
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Eric Dumazet <edumazet@google.com>
@@ -111,273 +108,93 @@ Cc: Kees Cook <keescook@chromium.org>
 Cc: Christian Brauner <brauner@kernel.org>
 Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
 Cc: Lennart Poettering <mzxreary@0pointer.de>
-Cc: Luca Boccassi <bluca@debian.org>
 Cc: linux-kernel@vger.kernel.org
 Cc: netdev@vger.kernel.org
 Cc: linux-arch@vger.kernel.org
-Tested-by: Luca Boccassi <bluca@debian.org>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Suggested-by: Christian Brauner <brauner@kernel.org>
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
-v2:
-	According to review comments from Kuniyuki Iwashima and Christian Brauner:
-	- use pidfd_create(..) retval as a result
-	- whitespace change
----
- arch/alpha/include/uapi/asm/socket.h    |  2 ++
- arch/mips/include/uapi/asm/socket.h     |  2 ++
- arch/parisc/include/uapi/asm/socket.h   |  2 ++
- arch/sparc/include/uapi/asm/socket.h    |  2 ++
- include/linux/net.h                     |  1 +
- include/linux/socket.h                  |  1 +
- include/net/scm.h                       | 14 ++++++++++++--
- include/uapi/asm-generic/socket.h       |  2 ++
- net/core/sock.c                         | 11 +++++++++++
- net/mptcp/sockopt.c                     |  1 +
- net/unix/af_unix.c                      | 18 +++++++++++++-----
- tools/include/uapi/asm-generic/socket.h |  2 ++
- 12 files changed, 51 insertions(+), 7 deletions(-)
+ net/socket.c | 38 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 739891b94136..ff310613ae64 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -137,6 +137,8 @@
+diff --git a/net/socket.c b/net/socket.c
+index 73e493da4589..9c1ef11de23f 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -108,6 +108,8 @@
+ #include <linux/ptp_clock_kernel.h>
+ #include <trace/events/sock.h>
  
- #define SO_RCVMARK		75
- 
-+#define SO_PASSPIDFD		76
++#include <linux/sctp.h>
 +
- #if !defined(__KERNEL__)
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ unsigned int sysctl_net_busy_read __read_mostly;
+ unsigned int sysctl_net_busy_poll __read_mostly;
+@@ -2227,6 +2229,36 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
+ 	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+ }
  
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index 18f3d95ecfec..762dcb80e4ec 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -148,6 +148,8 @@
- 
- #define SO_RCVMARK		75
- 
-+#define SO_PASSPIDFD		76
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index f486d3dfb6bb..df16a3e16d64 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -129,6 +129,8 @@
- 
- #define SO_RCVMARK		0x4049
- 
-+#define SO_PASSPIDFD		0x404A
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 2fda57a3ea86..6e2847804fea 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -130,6 +130,8 @@
- 
- #define SO_RCVMARK               0x0054
- 
-+#define SO_PASSPIDFD             0x0055
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/linux/net.h b/include/linux/net.h
-index b73ad8e3c212..c234dfbe7a30 100644
---- a/include/linux/net.h
-+++ b/include/linux/net.h
-@@ -43,6 +43,7 @@ struct net;
- #define SOCK_PASSSEC		4
- #define SOCK_SUPPORT_ZC		5
- #define SOCK_CUSTOM_SOCKOPT	6
-+#define SOCK_PASSPIDFD		7
- 
- #ifndef ARCH_HAS_SOCKET_TYPES
- /**
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index 13c3a237b9c9..6bf90f251910 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
- #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
- #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
- #define SCM_SECURITY	0x03		/* rw: security label		*/
-+#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
- 
- struct ucred {
- 	__u32	pid;
-diff --git a/include/net/scm.h b/include/net/scm.h
-index 585adc1346bd..0c717ae9c8db 100644
---- a/include/net/scm.h
-+++ b/include/net/scm.h
-@@ -124,8 +124,9 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
- 				struct scm_cookie *scm, int flags)
- {
- 	if (!msg->msg_control) {
--		if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
--		    scm_has_secdata(sock))
-+		if (test_bit(SOCK_PASSCRED, &sock->flags) ||
-+		    test_bit(SOCK_PASSPIDFD, &sock->flags) ||
-+		    scm->fp || scm_has_secdata(sock))
- 			msg->msg_flags |= MSG_CTRUNC;
- 		scm_destroy(scm);
- 		return;
-@@ -141,6 +142,15 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
- 		put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds), &ucreds);
- 	}
- 
-+	if (test_bit(SOCK_PASSPIDFD, &sock->flags)) {
-+		int pidfd;
-+
-+		WARN_ON_ONCE(!scm->pid);
-+		pidfd = pidfd_create(scm->pid, 0);
-+
-+		put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd);
++#ifdef CONFIG_CGROUP_BPF
++static bool sockopt_installs_fd(int level, int optname)
++{
++	/*
++	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
++	 * hook returns an error after success of the original handler
++	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
++	 * syscall and will be not aware that fd was successfully installed into fdtable.
++	 *
++	 * Let's prevent bpf cgroup hook from running on them.
++	 */
++	if (level == SOL_SCTP) {
++		switch (optname) {
++		case SCTP_SOCKOPT_PEELOFF:
++		case SCTP_SOCKOPT_PEELOFF_FLAGS:
++			return true;
++		default:
++			return false;
++		}
 +	}
 +
- 	scm_destroy_cred(scm);
- 
- 	scm_passec(sock, msg, scm);
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 638230899e98..b76169fdb80b 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -132,6 +132,8 @@
- 
- #define SO_RCVMARK		75
- 
-+#define SO_PASSPIDFD		76
++	return false;
++}
++#else /* CONFIG_CGROUP_BPF */
++static inline bool sockopt_installs_fd(int level, int optname)
++{
++	return false;
++}
++#endif /* CONFIG_CGROUP_BPF */
 +
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/sock.c b/net/core/sock.c
-index c25888795390..3f974246ba3e 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1246,6 +1246,13 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 			clear_bit(SOCK_PASSCRED, &sock->flags);
- 		break;
- 
-+	case SO_PASSPIDFD:
-+		if (valbool)
-+			set_bit(SOCK_PASSPIDFD, &sock->flags);
-+		else
-+			clear_bit(SOCK_PASSPIDFD, &sock->flags);
-+		break;
-+
- 	case SO_TIMESTAMP_OLD:
- 	case SO_TIMESTAMP_NEW:
- 	case SO_TIMESTAMPNS_OLD:
-@@ -1737,6 +1744,10 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
- 		v.val = !!test_bit(SOCK_PASSCRED, &sock->flags);
- 		break;
- 
-+	case SO_PASSPIDFD:
-+		v.val = !!test_bit(SOCK_PASSPIDFD, &sock->flags);
-+		break;
-+
- 	case SO_PEERCRED:
- 	{
- 		struct ucred peercred;
-diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
-index b655cebda0f3..67be0558862f 100644
---- a/net/mptcp/sockopt.c
-+++ b/net/mptcp/sockopt.c
-@@ -355,6 +355,7 @@ static int mptcp_setsockopt_sol_socket(struct mptcp_sock *msk, int optname,
- 	case SO_BROADCAST:
- 	case SO_BSDCOMPAT:
- 	case SO_PASSCRED:
-+	case SO_PASSPIDFD:
- 	case SO_PASSSEC:
- 	case SO_RXQ_OVFL:
- 	case SO_WIFI_STATUS:
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index fb31e8a4409e..6d5dff4dfe83 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -1361,7 +1361,8 @@ static int unix_dgram_connect(struct socket *sock, struct sockaddr *addr,
- 		if (err)
- 			goto out;
- 
--		if (test_bit(SOCK_PASSCRED, &sock->flags) &&
-+		if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
-+		     test_bit(SOCK_PASSPIDFD, &sock->flags)) &&
- 		    !unix_sk(sk)->addr) {
- 			err = unix_autobind(sk);
- 			if (err)
-@@ -1469,7 +1470,8 @@ static int unix_stream_connect(struct socket *sock, struct sockaddr *uaddr,
- 	if (err)
- 		goto out;
- 
--	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
-+	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
-+	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
- 		err = unix_autobind(sk);
- 		if (err)
- 			goto out;
-@@ -1670,6 +1672,8 @@ static void unix_sock_inherit_flags(const struct socket *old,
- {
- 	if (test_bit(SOCK_PASSCRED, &old->flags))
- 		set_bit(SOCK_PASSCRED, &new->flags);
-+	if (test_bit(SOCK_PASSPIDFD, &old->flags))
-+		set_bit(SOCK_PASSPIDFD, &new->flags);
- 	if (test_bit(SOCK_PASSSEC, &old->flags))
- 		set_bit(SOCK_PASSSEC, &new->flags);
- }
-@@ -1819,8 +1823,10 @@ static bool unix_passcred_enabled(const struct socket *sock,
- 				  const struct sock *other)
- {
- 	return test_bit(SOCK_PASSCRED, &sock->flags) ||
-+	       test_bit(SOCK_PASSPIDFD, &sock->flags) ||
- 	       !other->sk_socket ||
--	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags);
-+	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags) ||
-+	       test_bit(SOCK_PASSPIDFD, &other->sk_socket->flags);
- }
- 
  /*
-@@ -1922,7 +1928,8 @@ static int unix_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
- 			goto out;
- 	}
+  *	Set a socket option. Because we don't know the option lengths we have
+  *	to pass the user mode parameter for the protocols to sort out.
+@@ -2250,7 +2282,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+ 	if (err)
+ 		goto out_put;
  
--	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
-+	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
-+	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
- 		err = unix_autobind(sk);
- 		if (err)
- 			goto out;
-@@ -2824,7 +2831,8 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
- 			/* Never glue messages from different writers */
- 			if (!unix_skb_scm_eq(skb, &scm))
- 				break;
--		} else if (test_bit(SOCK_PASSCRED, &sock->flags)) {
-+		} else if (test_bit(SOCK_PASSCRED, &sock->flags) ||
-+			   test_bit(SOCK_PASSPIDFD, &sock->flags)) {
- 			/* Copy credentials */
- 			scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
- 			unix_set_secdata(&scm, skb);
-diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
-index 8756df13be50..fbbc4bf53ee3 100644
---- a/tools/include/uapi/asm-generic/socket.h
-+++ b/tools/include/uapi/asm-generic/socket.h
-@@ -121,6 +121,8 @@
+-	if (!in_compat_syscall())
++	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+ 		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
+ 						     user_optval, &optlen,
+ 						     &kernel_optval);
+@@ -2304,7 +2336,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+ 	if (err)
+ 		goto out_put;
  
- #define SO_RCVMARK		75
+-	if (!in_compat_syscall())
++	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+ 		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
  
-+#define SO_PASSPIDFD		76
-+
- #if !defined(__KERNEL__)
+ 	if (level == SOL_SOCKET)
+@@ -2315,7 +2347,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+ 		err = sock->ops->getsockopt(sock, level, optname, optval,
+ 					    optlen);
  
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+-	if (!in_compat_syscall())
++	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+ 		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
+ 						     optval, optlen, max_optlen,
+ 						     err);
 -- 
 2.34.1
 
