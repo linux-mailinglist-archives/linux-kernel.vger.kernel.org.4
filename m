@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03026DD4FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF496DD52C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjDKISl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S230287AbjDKIV6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 04:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDKISj (ORCPT
+        with ESMTP id S230212AbjDKIVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:18:39 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1EADE58;
-        Tue, 11 Apr 2023 01:18:37 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:42666.1367120225
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id DCF741002F3;
-        Tue, 11 Apr 2023 16:18:34 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id 586403049fb9408e95ab8dae31b91955 for emil.l.velikov@gmail.com;
-        Tue, 11 Apr 2023 16:18:36 CST
-X-Transaction-ID: 586403049fb9408e95ab8dae31b91955
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <8c115006-3c06-c063-1381-d82d744871b4@189.cn>
-Date:   Tue, 11 Apr 2023 16:18:34 +0800
+        Tue, 11 Apr 2023 04:21:31 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4311440D1;
+        Tue, 11 Apr 2023 01:20:23 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-54ee17a659bso145692187b3.4;
+        Tue, 11 Apr 2023 01:20:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681201215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KOXdqLxEHLBZ7hy/2mM/9REbA1X5ZreSZtF+7etv6Sw=;
+        b=0iG9RzYMgEOTW+MRirY8tCfK6rpiSQCy2il7J6ptrHPhkhDKMaPjU8WOVFqgz7F876
+         ZIjqDi1aE1NMRaoJIYNLs6RR6QHB5tEiFn5Vhghsnc/YV2Hz4M40NYOYnwAEzcY9m2l7
+         TeyF5gPttiiXGEQBT6iqJbpKg/YLNecva2rDNwjFR+MZosdS12kEDT3vRx0PG7MuGGBV
+         YuYZk4NDVMzLHOOx45+wXHgrkiDUFpWXOkRtfbRDsWxqY0KcpUGlq5P8i/fOBM+Ar+D9
+         3w8O11FFTHPWVesziw6aefuLniatjfakJd4g2VgZDRoJyV1coUS2RLpm7xURmZks9CxV
+         vKVQ==
+X-Gm-Message-State: AAQBX9fUKMTVVqyQPRbiq7UYaZ9xESruPkGLjlrdyrd2HX/oxHxpCpVN
+        NSlNsr8RxujpKP+jnzrxKlO33KFl6JjKyg==
+X-Google-Smtp-Source: AKy350Y7EQFkQbSZA8SAtnnSPk/NknwPKAitFGCqkgGdgtkwcxLQiQgb0Iv6Zv/nOSM40z0Y9lDDBw==
+X-Received: by 2002:a81:5b86:0:b0:541:9464:40f1 with SMTP id p128-20020a815b86000000b00541946440f1mr1359319ywb.18.1681201214845;
+        Tue, 11 Apr 2023 01:20:14 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id y76-20020a81a14f000000b005460e4170e4sm3337593ywg.129.2023.04.11.01.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 01:20:13 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id q5so10018292ybk.7;
+        Tue, 11 Apr 2023 01:20:13 -0700 (PDT)
+X-Received: by 2002:a25:d447:0:b0:b75:9519:dbcd with SMTP id
+ m68-20020a25d447000000b00b759519dbcdmr960089ybf.12.1681201212819; Tue, 11 Apr
+ 2023 01:20:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
- <20230403171304.2157326-3-suijingfeng@loongson.cn>
- <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230406143019.6709-1-tzimmermann@suse.de> <20230406143019.6709-9-tzimmermann@suse.de>
+In-Reply-To: <20230406143019.6709-9-tzimmermann@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Apr 2023 10:20:00 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVmZ2GRKqEnZgQKzJ1-Hy-Cz8yoUOhD0TMMqZriH82-tQ@mail.gmail.com>
+Message-ID: <CAMuHMdVmZ2GRKqEnZgQKzJ1-Hy-Cz8yoUOhD0TMMqZriH82-tQ@mail.gmail.com>
+Subject: Re: [PATCH v2 08/19] arch/m68k: Implement <asm/fb.h> with generic helpers
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org,
+        linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/4/4 22:10, Emil Velikov wrote:
->> +       val = lsdc_crtc_rreg32(ldev, LSDC_CRTC0_CFG_REG, index);
->> +       /* clear old dma step settings */
->> +       val &= ~CFG_DMA_STEP_MASK;
->> +
->> +       if (descp->chip == CHIP_LS7A2000) {
->> +               /*
->> +                * Using large dma step as much as possible,
->> +                * for improve hardware DMA efficiency.
->> +                */
->> +               if (width_in_bytes % 256 == 0)
->> +                       val |= LSDC_DMA_STEP_256_BYTES;
->> +               else if (width_in_bytes % 128 == 0)
->> +                       val |= LSDC_DMA_STEP_128_BYTES;
->> +               else if (width_in_bytes % 64 == 0)
->> +                       val |= LSDC_DMA_STEP_64_BYTES;
->> +               else  /* width_in_bytes % 32 == 0 */
->> +                       val |= LSDC_DMA_STEP_32_BYTES;
->> +       }
->> +
->> +       clk_func->update(pixpll, &priv_state->pparms);
->> +
-> Without knowing the hardware, the clk_func abstraction seems quite
-> arbitrary and unnecessary. It should be introduced when there is a
-> use-case for it.
+On Thu, Apr 6, 2023 at 4:30 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Replace the architecture's fb_is_primary_device() with the generic
+> one from <asm-generic/fb.h>. No functional changes.
 >
+> v2:
+>         * provide empty fb_pgprotect() on non-MMU systems
 >
-The clk_func is necessary,  clk_func->update() will eventually call 
-ls7a1000_pixpll_param_update()
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
 
-to generate pixel clock frequency required by the display device.  There 
-is a abstract because different
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-bridges chip/SoC variants has the different register to operate, either 
-because the register offset changed
+Gr{oetje,eeting}s,
 
-or the arrangement  of specific bits field changed.
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-For the point view of the hardware, the PLL hardware belong to the 
-bridge chip.
-
-There is a clock tree which wrangler all of the PLL hardware, sub-device 
-may partially share the hardware PLL.
-
-
-The abstraction is used to suppress hardware variants which may change over time.
-
-For ls7a1000, there is user manual document about the clock tree and PLL, see[1][2][3]
-
-
-[1] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN#description-of-clock-function
-[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN#section-pll-pix-0-configuration-register
-[3] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN#configuration-method-of-pll
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
