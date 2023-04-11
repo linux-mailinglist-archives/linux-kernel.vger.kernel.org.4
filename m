@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20EA6DE46A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF4E6DE470
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDKS5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S229572AbjDKTCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDKS5d (ORCPT
+        with ESMTP id S229478AbjDKTCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:57:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9C618C;
-        Tue, 11 Apr 2023 11:57:27 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pww551qfcz6J70L;
-        Wed, 12 Apr 2023 02:55:05 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 19:57:24 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <dan.j.williams@intel.com>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v5 5/5] docs: perf: Minimal introduction the the CXL PMU device and driver
-Date:   Tue, 11 Apr 2023 19:54:52 +0100
-Message-ID: <20230411185452.23387-6-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230411185452.23387-1-Jonathan.Cameron@huawei.com>
-References: <20230411185452.23387-1-Jonathan.Cameron@huawei.com>
+        Tue, 11 Apr 2023 15:02:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B533AA3;
+        Tue, 11 Apr 2023 12:02:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5CF8625F7;
+        Tue, 11 Apr 2023 19:02:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3D2C433A0;
+        Tue, 11 Apr 2023 19:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681239736;
+        bh=QNGFZG+0FP4MiP9ZLTe2C0i6kcwFZTtZnUc+WXNjaSk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YsWsRQhKUjx5BxlD7iVZrSSuZgX5yGMQvuP42NmdhMO92CGcuJfMDJ20qCtRsRJcD
+         F94KeXCJBpPKn+OGzbcVZ4hpThDDRFv62ka4idJ0uOxRrOX+YkGMKRGzYPrN9038Wl
+         vOq+fy3/4bw0Ntz7fQWs7qBVm9/C3pkleMErfKUnvWvexjNTwoXz/7dAU3VUkf8x96
+         VZqy2u/bQ3SJpYsXXz9g8aZp6MpCWqW3jMreA+jsaoWNtWmfGMOfyoM3xuqMHmQuT5
+         l1hBDVf0iL3o1GcqZRRITl1TXmWr2ZVCJzsRFIEO2uzWRWmZUKAJKkn4PF8n1HDNWB
+         kRU962nVpaZEw==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-54ee0b73e08so178749447b3.0;
+        Tue, 11 Apr 2023 12:02:16 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dcsZBghpXQPLjXqyA3hjzEMtHEUZlC3BiIHLLyx5w9RYgAJ7Ys
+        jOxC4uzo/CgXJJ3/pNDYwKGTv5TsoBvIETQhxw==
+X-Google-Smtp-Source: AKy350Ze5hfFXMFMJbWjbNiov/fFkM8IZsuKDtzpLuSJGb+QEwiRJ6fkdrKag9pzHkolT1dcPO8Kc5+KO6orbOrnTZM=
+X-Received: by 2002:a81:ae1d:0:b0:54f:84c0:93ff with SMTP id
+ m29-20020a81ae1d000000b0054f84c093ffmr717809ywh.5.1681239735149; Tue, 11 Apr
+ 2023 12:02:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230410213754.GA4064490@bhelgaas> <m27cuih96y.fsf@gmail.com>
+In-Reply-To: <m27cuih96y.fsf@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 11 Apr 2023 14:02:03 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
+Message-ID: <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
+Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
+ with igb
+To:     Donald Hunter <donald.hunter@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Very basic introduction to the device and the current driver support
-provided. I expect to expand on this in future versions of this patch
-set.
++Rafael, Andy
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+On Tue, Apr 11, 2023 at 7:53=E2=80=AFAM Donald Hunter <donald.hunter@gmail.=
+com> wrote:
+>
+> Bjorn Helgaas <helgaas@kernel.org> writes:
+>
+> > On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
+> >> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
+> >> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> w=
+rote:
+> >> > > >
+> >> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in =
+card)
+> >> > > > because it apparently has an ACPI firmware node, and there's som=
+ething
+> >> > > > we don't expect about its status?
+> >> > >
+> >> > > Yes they are built-in, to my knowledge.
+> >> > >
+> >> > > > Hopefully Rob will look at this.  If I were looking, I would be
+> >> > > > interested in acpidump to see what's in the DSDT.
+> >> > >
+> >> > > I can get an acpidump. Is there a preferred way to share the files=
+, or just
+> >> > > an email attachment?
+> >> >
+> >> > I think by default acpidump produces ASCII that can be directly
+> >> > included in email.  http://vger.kernel.org/majordomo-info.html says
+> >> > 100K is the limit for vger mailing lists.  Or you could open a repor=
+t
+> >> > at https://bugzilla.kernel.org and attach it there, maybe along with=
+ a
+> >> > complete dmesg log and "sudo lspci -vv" output.
+> >>
+> >> Apologies for the delay, I was unable to access the machine while trav=
+elling.
+> >>
+> >> https://bugzilla.kernel.org/show_bug.cgi?id=3D217317
+> >
+> > Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
+> > with this in the kernel parameters:
+> >
+> >   dyndbg=3D"file drivers/acpi/* +p"
+> >
+> > and collect the entire dmesg log?
+>
+> Added to the bugzilla report.
 
---
-v5:
-- Correct final statemnt about sampling support. (Kan)
-- Update CXL PMU MAINTAINERS entry to include this documentation
-- Update device naming to cxl_pmu_memX.Y etc
----
- Documentation/admin-guide/perf/cxl.rst   | 68 ++++++++++++++++++++++++
- Documentation/admin-guide/perf/index.rst |  1 +
- MAINTAINERS                              |  1 +
- 3 files changed, 70 insertions(+)
+Rafael, Andy, Any ideas why fwnode_device_is_available() would return
+false for a built-in PCI device with a ACPI device entry? The only
+thing I see in the log is it looks like the parent PCI bridge/bus
+doesn't have ACPI device entry (based on "[    0.913389] pci_bus
+0000:07: No ACPI support"). For DT, if the parent doesn't have a node,
+then the child can't. Not sure on ACPI.
 
-diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
-new file mode 100644
-index 000000000000..2a1c684603bb
---- /dev/null
-+++ b/Documentation/admin-guide/perf/cxl.rst
-@@ -0,0 +1,68 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+CXL Performance Monitoring Unit (CPMU)
-+======================================
-+
-+The CXL rev 3.0 specification provides a definition of CXL Performance
-+Monitoring Unit in section 13.2: Performance Monitoring.
-+
-+CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
-+any number of CPMU instances. CPMU capabilities are fully discoverable from
-+the devices. The specification provides event definitions for all CXL protocol
-+message types and a set of additional events for things commonly counted on
-+CXL devices (e.g. DRAM events).
-+
-+CPMU driver
-+===========
-+
-+The CPMU driver registers a perf PMU with the name pmu_mem<X>.<Y> on the CXL bus
-+representing the Yth CPMU for memX.
-+
-+    /sys/bus/cxl/device/pmu_mem<X>.<Y>
-+
-+The associated PMU is registered as
-+
-+   /sys/bus/event_sources/devices/cxl_pmu_mem<X>.<Y>
-+
-+In common with other CXL bus devices, the id has no specific meaning and the
-+relationship to specific CXL device should be established via the device parent
-+of the device on the CXL bus.
-+
-+PMU driver provides description of available events and filter options in sysfs.
-+
-+The "format" directory describes all formats of the config (event vendor id,
-+group id and mask) config1 (threshold, filter enables) and config2 (filter
-+parameters) fields of the perf_event_attr structure.  The "events" directory
-+describes all documented events show in perf list.
-+
-+The events shown in perf list are the most fine grained events with a single
-+bit of the event mask set. More general events may be enable by setting
-+multiple mask bits in config. For example, all Device to Host Read Requests
-+may be captured on a single counter by setting the bits for all of
-+
-+* d2h_req_rdcurr
-+* d2h_req_rdown
-+* d2h_req_rdshared
-+* d2h_req_rdany
-+* d2h_req_rdownnodata
-+
-+Example of usage::
-+
-+  $#perf list
-+  cxl_pmu_mem0.0/clock_ticks/                        [Kernel PMU event]
-+  cxl_pmu_mem0.0/d2h_req_rdshared/                   [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpcur/                     [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpdata/                    [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpinv/                     [Kernel PMU event]
-+  -----------------------------------------------------------
-+
-+  $# perf stat -e cxl_pmu_mem0.0/clock_ticks/ -e cxl_pmu_mem0.0/d2h_req_rdshared/
-+
-+Vendor specific events may also be available and if so can be used via
-+
-+  $# perf stat -e cxl_pmu_mem0.0/vid=VID,gid=GID,mask=MASK/
-+
-+The driver does not support sampling so "perf record" is unsupported.
-+It only supports system-wide counting so attaching to a task is
-+unsupported.
-diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-index 9de64a40adab..f60be04e4e33 100644
---- a/Documentation/admin-guide/perf/index.rst
-+++ b/Documentation/admin-guide/perf/index.rst
-@@ -21,3 +21,4 @@ Performance monitor support
-    alibaba_pmu
-    nvidia-pmu
-    meson-ddr-pmu
-+   cxl
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 51234eb7858e..29a108afa065 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5178,6 +5178,7 @@ COMPUTE EXPRESS LINK PMU (CPMU)
- M:	Jonathan Cameron <jonathan.cameron@huawei.com>
- L:	linux-cxl@vger.kernel.org
- S:	Maintained
-+F:	Documentation/admin-guide/perf/cxl.rst
- F:	drivers/perf/cxl_pmu.c
- 
- CONEXANT ACCESSRUNNER USB DRIVER
--- 
-2.37.2
-
+Rob
