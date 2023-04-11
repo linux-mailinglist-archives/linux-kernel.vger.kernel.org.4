@@ -2,69 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C16C6DE663
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EB36DE667
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjDKVVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S229925AbjDKVXB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 17:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDKVVI (ORCPT
+        with ESMTP id S229481AbjDKVW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:21:08 -0400
-Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [IPv6:2001:41d0:1004:224b::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08C5FD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:21:04 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 14:20:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681248062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ix+xTKLRyryO0kML26qRvChiIo9OGMDZjWZ1lxLLx9Q=;
-        b=fM9p+0inVptO2bEu5CpucNL5vQK7/2aItlM1bTjn8GGhPOx7fyzLhLE4ikio4htJhPuPQ4
-        imHlHsAqctsfFG6HAYN7j42YljHLsC3kDz+1LTWayjxntXD9nDCUEMvQSI5o6Kd+Jbyrwh
-        gHbZFLysyIHBZ5pATrD9ylRlhUFh8p8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
-Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended
- buffer descriptor mode
-Message-ID: <ZDXPLtmzG0+3uZAV@P9FQF9L96D.corp.robot.car>
-References: <20230407172402.103168-1-roman.gushchin@linux.dev>
- <ZDWk8vjvk7HO4I7o@P9FQF9L96D.corp.robot.car>
- <20230411-turbulent-caddie-de82cf1a0f8f@spud>
+        Tue, 11 Apr 2023 17:22:59 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3919DD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:22:57 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-198-g5syxxZ0PvepsyDefepPNQ-1; Tue, 11 Apr 2023 22:22:54 +0100
+X-MC-Unique: g5syxxZ0PvepsyDefepPNQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 11 Apr
+ 2023 22:22:52 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 11 Apr 2023 22:22:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Lu Baolu' <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+CC:     Vinod Koul <vkoul@kernel.org>, Tina Zhang <tina.zhang@intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
+Thread-Topic: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
+Thread-Index: AQHZbEHu9QGkmONo40W+xGFseOdGmq8mnrSg
+Date:   Tue, 11 Apr 2023 21:22:52 +0000
+Message-ID: <ec1536af68e6478a9b10a0d884cc988d@AcuMS.aculab.com>
+References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
+ <20230411064815.31456-12-baolu.lu@linux.intel.com>
+In-Reply-To: <20230411064815.31456-12-baolu.lu@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411-turbulent-caddie-de82cf1a0f8f@spud>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 07:30:00PM +0100, Conor Dooley wrote:
-> On Tue, Apr 11, 2023 at 11:20:34AM -0700, Roman Gushchin wrote:
-> > Friendly ping.
+From: Lu Baolu
+> Sent: 11 April 2023 07:48
 > 
-> Nicolas and Claudiu look after the macb stuff, it's a good idea to CC
-> the people that get_maintainer.pl says are supporters of the code!
-
-My fault, probably I was too happy to finally find it :)
-
+> From: Tina Zhang <tina.zhang@intel.com>
 > 
-> > Also cc'ing Dave.
-> 
-> +CC Nicolas & Claudiu ;)
+> The patch fixes the klocwork issues that operands in a bitwise operation
+> have different size at line 1692 of dmar.c, line 1898 and line 1907 of
+> iommu.c.
 
-Thank you, appreciate it!
+Why is this any kind of thing that needs fixing?
+
+	David
+
+> Reported-by: Yongwei Ma <yongwei.ma@intel.com>
+> Signed-off-by: Tina Zhang <tina.zhang@intel.com>
+> Link: https://lore.kernel.org/r/20230406065944.2773296-2-tina.zhang@intel.com
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  drivers/iommu/intel/dmar.c  | 2 +-
+>  drivers/iommu/intel/iommu.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+> index 23828d189c2a..f0f51c957ccb 100644
+> --- a/drivers/iommu/intel/dmar.c
+> +++ b/drivers/iommu/intel/dmar.c
+> @@ -1690,7 +1690,7 @@ static void __dmar_enable_qi(struct intel_iommu *iommu)
+>  	 * is present.
+>  	 */
+>  	if (ecap_smts(iommu->ecap))
+> -		val |= (1 << 11) | 1;
+> +		val |= BIT_ULL(11) | BIT_ULL(0);
+> 
+>  	raw_spin_lock_irqsave(&iommu->register_lock, flags);
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index f4e536fd5a28..acbf82fa90e7 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1870,7 +1870,7 @@ context_set_sm_rid2pasid(struct context_entry *context, unsigned long pasid)
+>   */
+>  static inline void context_set_sm_dte(struct context_entry *context)
+>  {
+> -	context->lo |= (1 << 2);
+> +	context->lo |= BIT_ULL(2);
+>  }
+> 
+>  /*
+> @@ -1879,7 +1879,7 @@ static inline void context_set_sm_dte(struct context_entry *context)
+>   */
+>  static inline void context_set_sm_pre(struct context_entry *context)
+>  {
+> -	context->lo |= (1 << 4);
+> +	context->lo |= BIT_ULL(4);
+>  }
+> 
+>  /* Convert value to context PASID directory size field coding. */
+> --
+> 2.34.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
