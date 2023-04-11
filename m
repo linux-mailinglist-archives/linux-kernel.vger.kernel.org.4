@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94C96DD40F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0876DD416
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjDKHXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S229932AbjDKH04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjDKHXd (ORCPT
+        with ESMTP id S229771AbjDKH0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:23:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AFC1728;
-        Tue, 11 Apr 2023 00:23:32 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B5oLMK019046;
-        Tue, 11 Apr 2023 07:23:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=jx6ec3n4+Q018kA05bpZ4S4XVg3SaIZoPHl0RO8efsY=;
- b=sy3/HVgtWc3RKyyBGjbNS48nYmcwrL4porSdU93DJ01UJpiC9K+chQhNejUA8+3QE2Nv
- WDfF+KxwVg6ES6YRDtaoUd5PddrB4hdFxPPtg5pZFtGi/7P4uiJNmvDtnBDxfJwEPFS3
- 6KCgvOZ3aT4QNKHpyym1cjN7HWOY45FAVq836Z9tWpT2JLCyoF2aDUCa45VeQWhKrNmc
- AIlnU9Nm9sg22iDtzVbjikIkIVbyO0MerDJZFQV2ngU8CvGSXJyEmR/sRpX0asc8B9iu
- to31TYtVWujOGyZ/M6OQu2s22dMqXbxV39lRGfhRcrZWBg3DluJ0zVeOnOyoiwfpd3NW dA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj2usk5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:23:02 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B6fElf024954;
-        Tue, 11 Apr 2023 07:23:02 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3puj2usk52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:23:02 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B47f9W020781;
-        Tue, 11 Apr 2023 07:23:00 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3pu0jgy4nf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:23:00 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33B7Mx1w13959918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 07:22:59 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2884758067;
-        Tue, 11 Apr 2023 07:22:59 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A0EE58052;
-        Tue, 11 Apr 2023 07:22:54 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.109.203])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Apr 2023 07:22:54 +0000 (GMT)
-Message-ID: <1496aa1d378c3d7dc1b112b0d81fa7459aaee143.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 4/4] evm: Support multiple LSMs providing an xattr
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 11 Apr 2023 03:22:52 -0400
-In-Reply-To: <20230331123221.3273328-5-roberto.sassu@huaweicloud.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
-         <20230331123221.3273328-5-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xnLuj3iiRxW414W3ggGW-iv_bI3t9Pr4
-X-Proofpoint-ORIG-GUID: EMwnd3qD--UhdWadvezBYKMYJDSWph4o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_03,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- phishscore=0 spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110065
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 03:26:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496128E;
+        Tue, 11 Apr 2023 00:26:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D73EB6113B;
+        Tue, 11 Apr 2023 07:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 039D7C433EF;
+        Tue, 11 Apr 2023 07:26:49 +0000 (UTC)
+Message-ID: <6ee01cf1-5a8b-081f-e218-8c7da39343bc@xs4all.nl>
+Date:   Tue, 11 Apr 2023 09:26:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1] media: vivid: Add webcam parameter for (un)limited
+ bandwidth
+Content-Language: en-US
+To:     Max Staudt <mstaudt@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20230410063356.3894767-1-mstaudt@chromium.org>
+ <20230410102350.382f7d02@sal.lan>
+ <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-31 at 14:32 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 11/04/2023 08:51, Max Staudt wrote:
+> Thank you Mauro for having a first look!
 > 
-> Currently, evm_inode_init_security() processes a single LSM xattr from the
-> array passed by security_inode_init_security(), and calculates the HMAC on
-> it and other inode metadata.
+> Questions below.
 > 
-> As the LSM infrastructure now can pass to EVM an array with multiple
-> xattrs, scan them until the terminator (xattr name NULL), and calculate the
-> HMAC on all of them.
 > 
-> Also, double check that the xattrs array terminator is the first non-filled
-> slot (obtained with lsm_get_xattr_slot()). Consumers of the xattrs array,
-> such as the initxattrs() callbacks, rely on the terminator.
+> On 4/10/23 18:23, Mauro Carvalho Chehab wrote:
+>> IMO, instead of a parameter that just enables/disables the bandwidth
+>> limit, the best would be to have a parameter specifying the bandwidth
+>> (with 0 meaning unlimited).
+>>
+>> If not used, vivid would initialize it to dev->webcam_bandwidth_limit,
+>> so a read operation will show the current limit.
+> Up until now, the bandwidth limit is a rather arbitrary reduction of two interval sizes per frame size.
 > 
-> Finally, change the name of the lsm_xattr parameter of evm_init_hmac() to
-> xattrs, to reflect the new type of information passed.
+> How would you prefer to define a limited bandwidth in this parameter? How would it affect the simulated camera, do you have a suggestion for a formula from bandwidth to frame/interval sizes offered?
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+>>> +/* Default: limited webcam bandwidth */
+>>> +static bool webcam_bandwidth_limit[VIVID_MAX_DEVS] = { [0 ... (VIVID_MAX_DEVS - 1)] = true };
+>>> +module_param_array(webcam_bandwidth_limit, bool, NULL, 0444);
+>>
+>> I would also use 0666, to allow changing this on runtime.
+> 
+> I guess that's possible, though it would add complexity.
+> 
+> Currently we can ask for two instances, each with a different setting:
+> 
+>   n_devs=2 webcam_bandwidth_limit=1,0
+> 
+> This creates /dev/video0 which is limited, and /dev/video4 which is unlimited.
+> 
+> Maybe this already sufficiently covers the case you are looking for, and we can keep the complexity low? A real webcam won't suddenly offer new frame rates either...
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+I think we either use this bandwidth option and calculate the max fps based on
+that (basically the bandwidth divided by (image_size + some blanking factor)),
+or we keep it simple and instead of going down two steps in fps we allow up to
+60 fps up to 720p, then 30 fps for 1080p and 15 fps for 4k.
 
+The fps values currently used are a bit outdated w.r.t. modern webcams, so
+upgrading it wouldn't hurt. And this is a lot simpler than doing bandwidth
+calculations.
+
+Regards,
+
+	Hans
