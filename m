@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2DE6DE339
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385266DE33F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjDKRyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S229746AbjDKRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDKRyl (ORCPT
+        with ESMTP id S229844AbjDKRzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:54:41 -0400
-Received: from sonic305-27.consmr.mail.ne1.yahoo.com (sonic305-27.consmr.mail.ne1.yahoo.com [66.163.185.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F855BC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681235674; bh=fGQ/Q7TktUdbrwtcs4d+zlOk6EJlzv1LPbuaeOzMpN0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=RZa3olJISDTIAcn27+5P2WNEtQLN24G+D4etMjfeXY0CVW+6EyIgH5CauYVYJsvziedUobL5W/LX0TQnBWKUhrNjlpbC/zln5jul0jUKlbvd6PV+ARPqr0yAZyUHbzNNcjghHUN0U7a4+gA16cJklFwC3YLFn8V6sI2gK9Yl5GJwB10cFrg2sUKOo2nZ929NXFNowJ5ClBGyAU2LYyHlYD6ZqOpBmTlT0C7bB/nam/IvqrFHb0BZIfFL8eMjrWbCqYTD+op9z6rQ2xbmItj0s2Qm2/vVoz8p9N2Wn8lbJ2QMQgGc0VnxbGjK1EImhreA3qWp1WRHVFImZrHvMvUZ8A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681235674; bh=VcM0X6briIK3L2IQ2g0juE33a63sDXI7Nt5D2tthqkw=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PIikRrFgXhJeWcbAiYI4oWSlE/gJKAHvUlUh9pHHx1RfbMAHBZlUS988bXfJEBzen71/Lc4Cw9GP4c1q159txHjllReUsVURqPlOUtyrvuec6FD9Hfkb8O5joqFhBHe5TnrrVElbhpRRy6Qb4b0n4hV+pvVhsqylQv8YuzvdYRJ9mKJhAqbORBIljQXNo9SmCfYdv00VeHXydvxkgqIlMLlExwi/0dirak/oKfSYvZ+RfO5LPN4jiAVkixfX8a6/ZL6lMGTvS/8sF7sqxlzKUt5WICXPVoaJ1cwKELtA61IgvRq1mpH7yX8RXteWLyebyraBHlSabDqpq0hOi/dJhg==
-X-YMail-OSG: ex4xgrIVM1mq_GFAgmdkgns_DXkZUMCYSJARXKpMe0nJZcLBAjwOapPg1Tk6Q6s
- c3GC8GsN977ZKnlJLEVpaZDIrRuthATLHdJUsBtU0eRIEeW8kQv0Iqn.4nTiKHCNv4bJ98_Ru.E5
- s_1q3TGYmyCb2NstdjI3TeddkBNYIErWV1eh27CETeryV2i25gGhYCIaH7Gjh0eB5q4PHlTUE7OL
- 6ZjHqKWpoRCTU091eRPbhkkWB8c5HmKeVtcyISf8tIviZ5cftHFpwEZFqldYqh9vRMrSqxXP8X3v
- Oikl2Ut2adVZH66Tn9v3B_DUD_LCuTd6J3HldYymMFCIexxQCjAn21XlgvJdxxQrieMj.iI8n71X
- hsc7svA9t1iUD9rpXFuGKgnv.9lCsTB4RkPs0TdSe.wbW0dcNhVBJ_qgplhFiarzdWK5_VqeKlIv
- yJ5mgF9POtwliMALpHVfiol_KuIVbzHFSqrOQuCt.6DRW5Wqmh6v3b67AcYMOXYk6DsaQ.G8OP8h
- PBLfUyxm8xtw2QB8WWAwS3V7pZzJPZxqZCkJYEP1g_061tRIPrDb7JrasSZSbI_6pI813UKH0IrC
- zkNzDLvcb9m4ogbwjtVs_9Lf8wVRpxUZ4mdplJheovcATXrV41tln3j2cW576inegQ8zK3VSlSh7
- LDlzE3oiaqesSoZGk_NSrda1eCBk.GkvdpLrPGhHxSgSdJ0fJXezf.bkqPV82yJld6hMULDenj9a
- uoevL1_ZMSIquUWcUztvc3HzDfLzUayBwmyIzD4YAHt8wain6hIss6DyHSmQ4YTa72KoFLiN0VZV
- IuiLkzwWgyvgFJQrtUo2wKGpE2BDj.B18CIi7gHSSVC4o2nS5lzAUTdYVYCmioZqsVpiMxSfHv9I
- C7YWagQRI33VNvYnPkQPT0KFj5Thg1RHDxeufEVz9f0AVazrEUXccbz8776guAbHAfqhI9ok_thf
- uw4FbL6QIT7ZwYziVka_K71DBpZjHAyZwLxBM9qiThF3nAKuEh3FAh5erl0DFyHumqm9ZhGJKQOl
- NRpki1e0WDd3z56m8Xdl2P.wwakxy52cAH8cxXVANXAub3GRZew75R8eu4hG_KxLUQk5lHf9qZX8
- QC6oECgWZ4_Q5sfLrM63wJs9dh8USVmP_TcuQfkzN38VwaDi1sfOrowYBwCr6INntMIWY54jsOMc
- 2siRhaQFN6fe1eKuzx50Wdp7_nB53Kyjv8jDfGIsXrayxtb.u07N9B4SjAtWrEkGA6C3Pw5bdJYi
- 8anqhGoOxlcO8MF31J5azLQ8jc3DIawpk3MWC.rB1CgGtY94UQPtROLwvMi0Sey65zLNIOXYkakq
- Ty4sKexVI48.JykFo9LJb6fntZfGNJzEKjZ9pL.wow2aPqU61SNypURvgNVa.eXZL_.2DXfmEuUs
- SsiuP.jfyu41s_aUhRaAFGSVUSBMtloXGU9y2plMlMa.33pwMsVDstR5eV7vcUfFnFvT.zaRiqb3
- qMCFvTTKkXxqNCOW8eBlD.t7CB9BX2LDmZNVHVkC2BHWbER_2dYpHOhJ93EQ28nsDCk6S1v3c11x
- 2PP5c.ZGVN7gGtcWzb2AKHLH0lGimm5cBawx9NLl6BccNf1HZFC55FG88PVuSepPyNpMNWa6iWVF
- 7LRmhtI8QadEQXyQsvBJjGVfIizM7WLVbRAEYqUjxzsCsdVX79Vbgxu3tkETufEY867KjL7qktTL
- fCuvaDVVg5WnYfSAXJ7vYy8FEKB6UmU8Eu20D8KMOt5DHp5GFuV4EKfnGKCkOFQ4uxfyIzFuMbvV
- bqbEKa2OQMlbp7GiKY8EXUTUddXttUeVZ2r9UIcicOgNOlGZUUJKTOqpWBwBUPh56aoS.NXmAgIp
- y6U760J9xfZkrSBVlaYjuAdHwVdioqt65dzRdblS63m6ggxHhflPyAyY7d_DBxkABroW8KAcMhyv
- 1wQRXQKXhq3egvNf08kRdfjXAom3SC9wXHf0lUegrkzmxVfBcv6xo9Y9qCOAdUv8Lrm1H.3TRY9z
- NgEOM0_jx.LtOtJQC6q4Y.SYJgt0CDSRfNCMCkZ0HrmzDYfliox3RCWPfYCYocpqyTwwFoA1_JEO
- ewX9PZMXYqP.5TnAR9ZxwcxYDNcqKq_sx2TJVtfRpElAKK209SJSKqLJ_Gj2dXwm5TlJeGhCCYAt
- F3o1tY05LRYUrRyQmUgzrMu58PaH52c9AJh3v9yKQa13_TvoV9vlLLbc3YyXiE78EQUtK3EgQhx6
- D7ABlvnOTKnRhvRnE1b8XXSmU15MaGow27I9nyEapm6bKSmBkrm4kdxe3zUw6ousf2Uqa6hJEMIT
- XqpkI01Dae_p7XeG0_hx1FVMLdg--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: bb284cfe-0ef5-4431-9d01-cc72aa119f74
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Tue, 11 Apr 2023 17:54:34 +0000
-Received: by hermes--production-ne1-7dbd98dd99-tcjjg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3f38cbf819fe34d180ae475167ff757d;
-          Tue, 11 Apr 2023 17:54:32 +0000 (UTC)
-Message-ID: <2dc6486f-ce9b-f171-14fe-48a90386e1b7@schaufler-ca.com>
-Date:   Tue, 11 Apr 2023 10:54:30 -0700
+        Tue, 11 Apr 2023 13:55:38 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EF0619F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:55:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 60-20020a17090a09c200b0023fcc8ce113so11704260pjo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681235723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z+wspxn3j8gJu++FUxqZxSsWrkX6WZYur+w31HVIo5E=;
+        b=jG8rRP3d4bbGoXxIrEK0OYEnK+b1IjcF+Cs+d6eaZYAX94ri9Pum9fa/+Jx/A8HxCF
+         8yweRQp7oBFt+OYlXPYoxiHC0myTQjUhpLTLBRSfX1kjxW4TzvPfm6R+Abvncimgydpi
+         8YVDIFQcJmYCOyu+hpFjn2i56NA8kajSGOLy100OrURts2D0nrWuQ35uox5L9Ui5Z8LC
+         ClxFJKHQiV1SGHSKHUPJiHIO5HCZCvF/5PfhWRU0WHFeW6tNfTdtpPOrbHRdoeOq26mU
+         Kfd758hRYmRMtOMzXvjfmG38HbHI2dWTnWiagWfNiLa73Ngxqqoln8Wg4TUWWzLNMs6Z
+         ptVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681235723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z+wspxn3j8gJu++FUxqZxSsWrkX6WZYur+w31HVIo5E=;
+        b=c+J+hjF8i7l8HejLsswD3gDnwyHXgwf5Y+22vBDYglfHfUvsNq+Rb4bN9XgR5OGhRz
+         XaPv7M8s5/qYI/qFGNy8JSh0/3xeynKcEAtNwg7yUA6zqeGT8hOXuxWKIwPGDvzxJnJT
+         Ogq1WOvArZK33kszLXzjOo7ujYxedOJUEsuV/rDVEtkNVpY2Ylck6GbV+LELj2hAGT24
+         W2IgyuwI3XsCqIpNZ6CFLrzS3CBiIW9MqlIMtsr1xK6ClPxCxyYO4RY4m4sIUuuQ/xes
+         KuD0T//kv+hee6Op9Ue6biJWVx3EcBAFuzRLqCJvnPMH4vMtCZMQOnZl8zgV7dGwfHHU
+         wzSQ==
+X-Gm-Message-State: AAQBX9emzUUkjfth8vyYAl6GYOQUE/NRrJGz+ypeCwmsl3eVQlJjMoP4
+        jBJ+h1d7B1jhCD6gFEsb7yuYpw==
+X-Google-Smtp-Source: AKy350ZjzcTensJICOA4UuuuSXUEOa1haZjIESZWRdZ7Rh5k0GVM8LtE8IMxyCZ59c/F/5oquUzaxQ==
+X-Received: by 2002:a17:902:e892:b0:199:4be8:be48 with SMTP id w18-20020a170902e89200b001994be8be48mr17406540plg.19.1681235722790;
+        Tue, 11 Apr 2023 10:55:22 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:f795:eecb:467b:d183])
+        by smtp.gmail.com with ESMTPSA id bg12-20020a1709028e8c00b001a50dcd10c8sm8601290plb.277.2023.04.11.10.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 10:55:22 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:55:19 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v7 3/4] soc: ti: pruss: Add pruss_cfg_read()/update(),
+ pruss_cfg_get_gpmux()/set_gpmux() APIs
+Message-ID: <20230411175519.GD38361@p14s>
+References: <20230404115336.599430-1-danishanwar@ti.com>
+ <20230404115336.599430-4-danishanwar@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
- provide xattrs for inode_init_security hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
- <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404115336.599430-4-danishanwar@ti.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,127 +80,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/2023 10:23 AM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Very very quick modification. Not tested.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Apr 04, 2023 at 05:23:35PM +0530, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+> the PRUSS platform driver to read and program respectively a register
+> within the PRUSS CFG sub-module represented by a syscon driver. These
+> APIs are internal to PRUSS driver.
+> 
+> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
+> to get and set the GP MUX mode for programming the PRUSS internal wrapper
+> mux functionality as needed by usecases.
+> 
+> Various useful registers and macros for certain register bit-fields and
+> their values have also been added.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
 > ---
->  security/smack/smack.h     |  2 +-
->  security/smack/smack_lsm.c | 42 ++++++++++++++++++++------------------
->  2 files changed, 23 insertions(+), 21 deletions(-)
->
-> diff --git a/security/smack/smack.h b/security/smack/smack.h
-> index e2239be7bd6..f00c8498c60 100644
-> --- a/security/smack/smack.h
-> +++ b/security/smack/smack.h
-> @@ -127,7 +127,7 @@ struct task_smack {
+>  drivers/soc/ti/pruss.c           | 45 ++++++++++++++++
+>  drivers/soc/ti/pruss.h           | 88 ++++++++++++++++++++++++++++++++
+>  include/linux/remoteproc/pruss.h | 32 ++++++++++++
+>  3 files changed, 165 insertions(+)
+>  create mode 100644 drivers/soc/ti/pruss.h
+> 
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 7aa0f7171af1..0e37fe142615 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/slab.h>
+> +#include "pruss.h"
 >  
->  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
->  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
-> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
-> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
-
-See below ...
-
->  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
+>  /**
+>   * struct pruss_private_data - PRUSS driver private data
+> @@ -168,6 +169,50 @@ int pruss_release_mem_region(struct pruss *pruss,
+>  }
+>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
 >  
->  /*
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 8392983334b..b43820bdbd0 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -54,12 +54,12 @@
->  
->  /*
->   * Smack uses multiple xattrs.
-> - * SMACK64 - for access control, SMACK64EXEC - label for the program,
-> - * SMACK64MMAP - controls library loading,
-> + * SMACK64 - for access control,
->   * SMACK64TRANSMUTE - label initialization,
-> - * Not saved on files - SMACK64IPIN and SMACK64IPOUT
-> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
-> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
->   */
-> -#define SMACK_INODE_INIT_XATTRS 4
-> +#define SMACK_INODE_INIT_XATTRS 2
->  
->  #ifdef SMACK_IPV6_PORT_LABELING
->  static DEFINE_MUTEX(smack_ipv6_lock);
-> @@ -957,11 +957,11 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  				     const struct qstr *qstr,
->  				     struct xattr *xattrs, int *xattr_count)
->  {
-> -	struct inode_smack *issp = smack_inode(inode);
->  	struct smack_known *skp = smk_of_current();
->  	struct smack_known *isp = smk_of_inode(inode);
->  	struct smack_known *dsp = smk_of_inode(dir);
->  	struct xattr *xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-> +	struct xattr *xattr2;
-
-I'm going to channel Paul and suggest this be xattr_transmute instead of xattr2.
-It also looks like it could move to be declared in the if clause.
-
->  	int may;
->  
->  	if (xattr) {
-> @@ -979,7 +979,17 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
->  		    smk_inode_transmutable(dir)) {
->  			isp = dsp;
-> -			issp->smk_flags |= SMK_INODE_CHANGED;
-
-I think you need to keep this. More below.
-
-> +			xattr2 = lsm_get_xattr_slot(xattrs, xattr_count);
-> +			if (xattr2) {
-> +				xattr2->value = kmemdup(TRANS_TRUE,
-> +							TRANS_TRUE_SIZE,
-> +							GFP_NOFS);
-> +				if (xattr2->value == NULL)
-> +					return -ENOMEM;
+> +/**
+> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
+> + * @pruss: pruss instance
+> + * @pru_id: PRU identifier (0-1)
+> + * @mux: pointer to store the current mux value into
+> + w
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
+> +{
+> +	int ret = 0;
+> +	u32 val;
 > +
-> +				xattr2->value_len = TRANS_TRUE_SIZE;
-> +				xattr2->name = XATTR_NAME_SMACKTRANSMUTE;
-> +			}
->  		}
+> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS || !mux)
+> +		return -EINVAL;
+> +
+> +	ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
+> +	if (!ret)
+> +		*mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
+> +			    PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_get_gpmux);
+> +
+> +/**
+> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
+> + * @pruss: pruss instance
+> + * @pru_id: PRU identifier (0-1)
+> + * @mux: new mux value for PRU
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+> +{
+> +	if (mux >= PRUSS_GP_MUX_SEL_MAX ||
+> +	    pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+> +		return -EINVAL;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+> +				PRUSS_GPCFG_PRU_MUX_SEL_MASK,
+> +				(u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
+> +
+
+These stay here.
+
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
+> new file mode 100644
+> index 000000000000..6c55987e0e55
+> --- /dev/null
+> +++ b/drivers/soc/ti/pruss.h
+> @@ -0,0 +1,88 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * PRU-ICSS Subsystem user interfaces
+> + *
+> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://www.ti.com
+> + *	MD Danish Anwar <danishanwar@ti.com>
+> + */
+> +
+> +#ifndef _SOC_TI_PRUSS_H_
+> +#define _SOC_TI_PRUSS_H_
+> +
+> +#include <linux/bits.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * PRU_ICSS_CFG registers
+> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
+> + */
+> +#define PRUSS_CFG_REVID         0x00
+> +#define PRUSS_CFG_SYSCFG        0x04
+> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
+> +#define PRUSS_CFG_CGR           0x10
+> +#define PRUSS_CFG_ISRP          0x14
+> +#define PRUSS_CFG_ISP           0x18
+> +#define PRUSS_CFG_IESP          0x1C
+> +#define PRUSS_CFG_IECP          0x20
+> +#define PRUSS_CFG_SCRP          0x24
+> +#define PRUSS_CFG_PMAO          0x28
+> +#define PRUSS_CFG_MII_RT        0x2C
+> +#define PRUSS_CFG_IEPCLK        0x30
+> +#define PRUSS_CFG_SPP           0x34
+> +#define PRUSS_CFG_PIN_MX        0x40
+> +
+> +/* PRUSS_GPCFG register bits */
+> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
+> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
+> +
+> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
+> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
+> +
+> +/* PRUSS_MII_RT register bits */
+> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
+> +
+> +/* PRUSS_SPP register bits */
+> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
+> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
+> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
+> +
+> +/**
+> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
+> + * @pruss: the pruss instance handle
+> + * @reg: register offset within the CFG sub-module
+> + * @val: pointer to return the value in
+> + *
+> + * Reads a given register within the PRUSS CFG sub-module and
+> + * returns it through the passed-in @val pointer
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
+> +{
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return -EINVAL;
+> +
+> +	return regmap_read(pruss->cfg_regmap, reg, val);
+> +}
+> +
+> +/**
+> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
+> + * @pruss: the pruss instance handle
+> + * @reg: register offset within the CFG sub-module
+> + * @mask: bit mask to use for programming the @val
+> + * @val: value to write
+> + *
+> + * Programs a given register within the PRUSS CFG sub-module
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+> +			    unsigned int mask, unsigned int val)
+> +{
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return -EINVAL;
+> +
+> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+> +}
+> +
+
+Everything in pruss.h is ok.
+
+> +#endif  /* _SOC_TI_PRUSS_H_ */
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index 33f930e0a0ce..5641153459a7 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -16,6 +16,24 @@
 >  
->  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> @@ -3512,20 +3522,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
->  			 * If there is a transmute attribute on the
->  			 * directory mark the inode.
->  			 */
-> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
-> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
-> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE,
-> -					TRANS_TRUE, TRANS_TRUE_SIZE,
-> -					0);
-> -			} else {
-> -				rc = __vfs_getxattr(dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
-> -					TRANS_TRUE_SIZE);
-> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> -						       TRANS_TRUE_SIZE) != 0)
-> -					rc = -EINVAL;
-> -			}
-> +			rc = __vfs_getxattr(dp, inode,
-> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
-> +					    TRANS_TRUE_SIZE);
-> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> +					       TRANS_TRUE_SIZE) != 0)
-> +				rc = -EINVAL;
+>  #define PRU_RPROC_DRVNAME "pru-rproc"
+>  
+> +/*
+> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
+> + * PRUSS_GPCFG0/1 registers
+> + *
+> + * NOTE: The below defines are the most common values, but there
+> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
+> + * values are interchanged. Also, this bit-field does not exist on
+> + * AM335x SoCs
+> + */
+> +enum pruss_gp_mux_sel {
+> +	PRUSS_GP_MUX_SEL_GP = 0,
+> +	PRUSS_GP_MUX_SEL_ENDAT,
+> +	PRUSS_GP_MUX_SEL_RESERVED,
+> +	PRUSS_GP_MUX_SEL_SD,
+> +	PRUSS_GP_MUX_SEL_MII2,
+> +	PRUSS_GP_MUX_SEL_MAX,
+> +};
+> +
+>  /**
+>   * enum pruss_pru_id - PRU core identifiers
+>   * @PRUSS_PRU0: PRU Core 0.
+> @@ -78,6 +96,8 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>  			     struct pruss_mem_region *region);
+>  int pruss_release_mem_region(struct pruss *pruss,
+>  			     struct pruss_mem_region *region);
+> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
+> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
+>  
+>  #else
+>  
+> @@ -101,6 +121,18 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
+>  	return -EOPNOTSUPP;
+>  }
+>  
+> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss,
+> +				      enum pruss_pru_id pru_id, u8 *mux)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
+> +				      enum pruss_pru_id pru_id, u8 mux)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
 
-Where is the SMACK64_TRANSMUTE attribute going to get set on the file?
-It's not going to get set in smack_init_inode_security(). The inode will
-know it's transmuting, but it won't get to disk without the __vfs_setxattr()
-here in smack_d_instantiate(). Now, it's been a long time since that code
-was written, so I could be wrong, but I'm pretty sure about that.
+All of this goes in pruss_driver.h
 
-I think that you should be fine with the changes in smack_init_inode_security(),
-and leaving smack_d_instantiate() untouched. 
-
->  			if (rc >= 0)
->  				transflag = SMK_INODE_TRANSMUTE;
->  		}
+>  #endif /* CONFIG_TI_PRUSS */
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+> -- 
+> 2.25.1
+> 
