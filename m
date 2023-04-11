@@ -2,302 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2896DD842
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EB26DD845
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjDKKsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S229767AbjDKKs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDKKsb (ORCPT
+        with ESMTP id S229772AbjDKKs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:48:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4373358A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:48:28 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v6so7048027wrv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681210107; x=1683802107;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SVDWJnAAwrepPupyFSVjoWUaB4nQWZPWtKMm3U8io/I=;
-        b=j3zDcU+iAPsrfADKIV+Gr7vETui9jC7A8eVxsZZFfekHSCqKr5qKn2cka4OmyI1MR8
-         bOjUAZp7lkvRFZYFUfUjp+T9sgjgpWNQCmynj/g05FUJjlT+YMGuni8BlbRvqW4loNJk
-         5BePMbkBj5b6sQSh7FNtvOPAvbKDwQ5KB2BAikOvZtfjltOEman03qRZRB94AmuSh4pP
-         OedN746i/TErka7/ygpzf0jURljow2rPwuMW4k0q/YFlWSf3vC++mDuckRaoySLkwe7K
-         ncoKhMwvPEo28Fmm0m71PeA0DgrKS0cgaeZ6n+s77D/iebA8x1CvTHYZJPVCSTipDZfe
-         qUng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681210107; x=1683802107;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVDWJnAAwrepPupyFSVjoWUaB4nQWZPWtKMm3U8io/I=;
-        b=ADkmKGD2ctwa+bSF3boysHNVOSSvtFhjWtmYWmDY4IZzDfZOF9Ad6xvEoI/5tXSEvA
-         d7w9H0EZi0r8dt/EauUYtwMLM8mH1S8ROZyNrCexel5mkcroxIytOmKozv5+RotGU/Wp
-         TWWImZ6muDbnBsycZpVaMaBPXtAr1vrruV+af9ucQgl6jY2+Fj0JgHArrfv4A+H88ghX
-         iD7p8ARDrA1vz0PvsiY6dNIoXPwZL+nZLMnTsg2mZryFOvXtcPayVkUQTrREajPAJ0xk
-         i6FRvMGaNBSO15WmDk5jXkZyDoNv7A+nswtYppGmW6KmwSIbHEXmlO1RW/pXpls74Tgb
-         lTOQ==
-X-Gm-Message-State: AAQBX9dUfFwTOhmzJ5aBzr2zj1i3zvm+44M0OhE6eu0oEUjjT3iuCbGv
-        Ck8MOmWNvDgWwZbuCE22/vJ1uw==
-X-Google-Smtp-Source: AKy350YDrTuMpbPE+jkPqv88NXCrKsMGooMWeJZ4PZE9iPbtrilSMNP5EAs7CfJQWp29ynGqvBXXcw==
-X-Received: by 2002:a5d:6a88:0:b0:2c5:4ca3:d56c with SMTP id s8-20020a5d6a88000000b002c54ca3d56cmr9487181wru.0.1681210106957;
-        Tue, 11 Apr 2023 03:48:26 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.googlemail.com with ESMTPSA id m14-20020a5d6a0e000000b002f01cb41b0bsm6564780wru.60.2023.04.11.03.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 03:48:26 -0700 (PDT)
-Message-ID: <c93d583d-e2b8-e8dd-cc94-cd77ecb2cab1@linaro.org>
-Date:   Tue, 11 Apr 2023 12:48:25 +0200
+        Tue, 11 Apr 2023 06:48:58 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A32430F5;
+        Tue, 11 Apr 2023 03:48:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0Vfs-ska_1681210127;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vfs-ska_1681210127)
+          by smtp.aliyun-inc.com;
+          Tue, 11 Apr 2023 18:48:51 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
+        naoya.horiguchi@nec.com
+Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, xueshuai@linux.alibaba.com,
+        justin.he@arm.com, akpm@linux-foundation.org, ardb@kernel.org,
+        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, bp@alien8.de,
+        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
+        linmiaohe@huawei.com, lvying6@huawei.com, rafael@kernel.org,
+        xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
+Subject: [PATCH v5 0/2] ACPI: APEI: handle synchronous exceptions with proper si_code
+Date:   Tue, 11 Apr 2023 18:48:40 +0800
+Message-Id: <20230411104842.37079-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
- <Y9J4WAFyXyV/nqlG@orome> <20230210131703.GF175687@linaro.org>
- <Y+ZQC85TM+O8p8gQ@orome> <365c469b-22f6-fb26-1872-5e9a5079af5d@linaro.org>
- <Y+Ze4tAM6Jpszq/3@orome>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y+Ze4tAM6Jpszq/3@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+changes since v4 by addressing comments from Xiaofei:
+- do a force kill only for abnormal sync errors
+- Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/
 
-Hi Thierry,
+changes since v3 by addressing comments from Xiaofei:
+- do a force kill for abnormal memofy failure error such as invalid PA,
+unexpected severity, OOM, etc
+- pcik up tested-by tag from Ma Wupeng
+- Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/
 
-did you have time to look at this ?
+changes since v2 by addressing comments from Naoya:
+- rename mce_task_work to sync_task_work
+- drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+- add steps to reproduce this problem in cover letter
+- Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/
 
-This driver is the only one using get_thermal_instance() and I would 
-like to remove this function along with the thermal_core.h inclusion in 
-this driver
+changes since v1:
+- synchronous events by notify type
+- Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
 
-Thanks
-   -- Daniel
+Currently, both synchronous and asynchronous error are queued and handled
+by a dedicated kthread in workqueue. And Memory failure for synchronous
+error is synced by a cancel_work_sync trick which ensures that the
+corrupted page is unmapped and poisoned. And after returning to user-space,
+the task starts at current instruction which triggering a page fault in
+which kernel will send SIGBUS to current process due to VM_FAULT_HWPOISON.
 
+However, the memory failure recovery for hwpoison-aware mechanisms does not
+work as expected. For example, hwpoison-aware user-space processes like
+QEMU register their customized SIGBUS handler and enable early kill mode by
+seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
+the process by sending a SIGBUS signal in memory failure with wrong
+si_code: BUS_MCEERR_AO si_code to the actual user-space process instead of
+BUS_MCEERR_AR.
 
-On 10/02/2023 16:12, Thierry Reding wrote:
-> On Fri, Feb 10, 2023 at 03:36:59PM +0100, Daniel Lezcano wrote:
->> On 10/02/2023 15:09, Thierry Reding wrote:
->>> On Fri, Feb 10, 2023 at 02:17:03PM +0100, Daniel Lezcano wrote:
->>>> Hi Thierry,
->>>>
->>>> On Thu, Jan 26, 2023 at 01:55:52PM +0100, Thierry Reding wrote:
->>>>> On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> does anyone know what is the purpose of the get_thermal_instance() usage in
->>>>>> this code:
->>>>>>
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
->>>>>>
->>>>>> The driver is using a function which is reserved for the thermal core. It
->>>>>> should not.
->>>>>>
->>>>>> Is the following change ok ?
->>>>>>
->>>>>> diff --git a/drivers/thermal/tegra/soctherm.c
->>>>>> b/drivers/thermal/tegra/soctherm.c
->>>>>> index 220873298d77..5f552402d987 100644
->>>>>> --- a/drivers/thermal/tegra/soctherm.c
->>>>>> +++ b/drivers/thermal/tegra/soctherm.c
->>>>>> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
->>>>>> thermal_zone_device *tz, int trip
->>>>>>    				continue;
->>>>>>
->>>>>>    			cdev = ts->throt_cfgs[i].cdev;
->>>>>> -			if (get_thermal_instance(tz, cdev, trip_id))
->>>>>> -				stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>>>> -			else
->>>>>> +			stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>>>> +			if (!stc)
->>>>>>    				continue;
->>>>>>
->>>>>>    			return throttrip_program(dev, sg, stc, temp);
->>>>>> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
->>>>>> *dev,
->>>>>>    			continue;
->>>>>>
->>>>>>    		cdev = ts->throt_cfgs[i].cdev;
->>>>>> -		if (get_thermal_instance(tz, cdev, trip))
->>>>>> -			stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>>>> -		else
->>>>>> +
->>>>>> +		stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>>>> +		if (!stc)
->>>>>>    			continue;
->>>>>>
->>>>>>    		ret = throttrip_program(dev, sg, stc, temperature);
->>>>>
->>>>> There's a small difference in behavior after applying this patch. Prior
->>>>> to this I get (on Tegra210):
->>>>>
->>>>> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
->>>>> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
->>>>> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
->>>>> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
->>>>> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
->>>>> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
->>>>> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
->>>>> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
->>>>> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
->>>>>
->>>>> and after these changes, it turns into:
->>>>>
->>>>> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
->>>>> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
->>>>> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
->>>>> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
->>>>> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
->>>>> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
->>>>> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
->>>>> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
->>>>> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
->>>>> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
->>>>> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
->>>>> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
->>>>> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
->>>>>
->>>>> The "programming throttle ..." messages are something I've added locally
->>>>> to trace what gets called. So it looks like for "pll" and "mem" thermal
->>>>> zones, we now program trip points whereas we previously didn't.
->>>>
->>>> The DT descriptioni (tegra210.dtsi) says one thing and the implementation says
->>>> something else.
->>>>
->>>> If we refer to the PLL description, there is one 'hot' trip point and
->>>> one 'critical' trip point. No polling delay at all, so we need the
->>>> interrupts.
->>>>
->>>> Logically, we should set the 'hot' trip point first, when the trip
->>>> point is crossed, we setup the next trip point, which is the critical.
->>>>
->>>> With these two trip points, the first one will send a notification to
->>>> the userspace and the second one will force a shutdown of the
->>>> system. For both, no cooling device is expected.
->>>
->>> I think the intention here is to use the soctherm's built-in throttling
->>> mechanism as a last resort measure to try and cool the system down. I
->>> suppose that could count as "passive" cooling, so specifying it as the
->>> cooling device for the "passive" trip point may be more appropriate.
->>>
->>> The throttling that happens here is quite severe, so we don't want it to
->>> happen too early. I would expect that our "passive" trip point shouldn't
->>> be a lot less than the "hot" temperature. I suspect that's the reason
->>> why the "hot" trip point was reused for this.
->>>
->>> I'm also beginning to think that we should just not expose the soctherm
->>> throttling as a cooling device and instead keep it internal to the
->>> soctherm driver entirely.
->>
->> Yes, and perhaps separate it from the sensor driver.
->>
->> There is a similar hardware limiter for the qcom platform [1]. The
->> description in the device tree is separated from the sensor and the binding
->> has temperatures to begin the mitigation [2].
-> 
-> The hardware throttling is controlled using registers that are part of
-> the SOCTHERM block, so we can't separate it from the sensor driver. I
-> don't think that's much of a problem, though. The code for this already
-> exists in the current soctherm driver, so it's just a matter of removing
-> the cooling device registration code.
-> 
->>
->> There is no trip point associated as those are related to the in-kernel
->> mitigation.
->>
->> If this mitigation is a heavy mitigation, above what the kernel is able to
->> do with a passive cooling device. It would make sense to just have
->> configured outside of the thermal zone.
->>
->> So the configuration would be something like:
->>
->> myperformance_limite {
->> 	@ = <0x...>
->> 	temperature_limit = 95000;
->> };
->>
->> thermal_zone {
->>
->> 	cpu : {
->> 		trips {
->> 			alert {
->> 			temperature = 90000;
->> 			hysteresis = 2000;
->> 			type = passive;
->> 			};
->>
->> 			hot {
->> 			temperature = 97000;
->> 			type = hot;
->> 			};
->>
->> 			critical {
->> 			temperature = 100000;
->> 			hysteresis = 2000;
->> 			type = critical;
->> 			};
->>
->> 			cooling-maps = <&cpu NO_LIMIT NO_LIMIT>;
->> 		};
->> 	}
->> };
->>
->> The behavior will be a passive mitigation, if it fails the hardware limiter
->> will take over, if that fails then hot sends a notification to the userspace
->> (giving the opportunity to hotplug a cpu or kill a task or suspend), if that
->> fails then shutdown.
-> 
-> Yeah, that's exactly what I had in mind.
-> 
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/qcom/lmh.c?h=thermal/bleeding-edge
->>
->> [2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=thermal/bleeding-edge#n3922
->>
->> [ ... ]
->>
->>> On the DT side, I think most of the cooling maps can be cleaned up. We
->>> can remove the entries for "critical" and "hot" trip points if the
->>> driver unconditionally programs the automated throttling.
->>
->> You may want to keep the critical trip points at least. Even if the hardware
->> limiter is certainly very effective, having the critical point is another
->> fail safe allowing to gracefully shutdown the system before a wild hardware
->> reset.
-> 
-> Yeah. What I meant was to remove only the cooling map entries for
-> critical and hot since they would be unused. We absolutely want to
-> keep the trip points themselves around to make sure the system will
-> forcefully shutdown as a last resort.
-> 
-> Thierry
+To address this problem:
+
+- PATCH 1 sets mf_flags as MF_ACTION_REQUIRED on synchronous events which
+  indicates error happened in current execution context
+- PATCH 2 separates synchronous error handling into task work so that the
+  current context in memory failure is exactly belongs to the task
+  consuming poison data.
+
+Then, kernel will send SIGBUS with proper si_code in kill_proc().
+
+Lv Ying and XiuQi also proposed to address similar problem and we discussed
+about new solution to add a new flag(acpi_hest_generic_data::flags bit 8) to
+distinguish synchronous event. [2][3] The UEFI community still has no response.
+After a deep dive into the SDEI TRM, the SDEI notification should be used for
+asynchronous error. As SDEI TRM[1] describes "the dispatcher can simulate an
+exception-like entry into the client, **with the client providing an additional
+asynchronous entry point similar to an interrupt entry point**". The client
+(kernel) lacks complete synchronous context, e.g. systeam register (ELR, ESR,
+etc). So notify type is enough to distinguish synchronous event.
+
+To reproduce this problem:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 5 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+and it is not fact.
+
+After this patch set:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 4 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+as we expected.
+
+[1] https://developer.arm.com/documentation/den0054/latest/
+[2] https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
+[3] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+
+Shuai Xue (2):
+  ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+    synchronous events
+  ACPI: APEI: handle synchronous exceptions in task work
+
+ drivers/acpi/apei/ghes.c | 120 +++++++++++++++++++++++++++------------
+ include/acpi/ghes.h      |   3 -
+ mm/memory-failure.c      |  13 -----
+ 3 files changed, 84 insertions(+), 52 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.20.1.12.g72788fdb
 
