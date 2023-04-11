@@ -2,174 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739226DD2DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFDE6DD2F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjDKGeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S230207AbjDKGfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjDKGeN (ORCPT
+        with ESMTP id S230194AbjDKGfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:34:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414259D;
-        Mon, 10 Apr 2023 23:34:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0877621DE;
-        Tue, 11 Apr 2023 06:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4ADFC433D2;
-        Tue, 11 Apr 2023 06:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681194851;
-        bh=x+oH/HMKu73BCpFd8IM0DhA30uUo8CLngL7hAosyFdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MlONgH5GrXXlf5h6VLeHlLslNecKJZXb24RI+5PjWyd8gctDAHUuci4CEziLuXGtq
-         ewaqggQL3HcYvIxtsGPMLFguVDX4T6QoYzWaySXUAFwW6oGUV4NpGCU5wDooAyoTpZ
-         V6UB4TZttKhqX7K1BUZ8K+mivIMIoQO9yaYvO4Rk=
-Date:   Tue, 11 Apr 2023 08:34:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Moon <quic_johmoo@quicinc.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        kernel-team@android.com, libabigail@sourceware.org,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
-Message-ID: <2023041136-donator-faceplate-5f91@gregkh>
-References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
- <20230407203456.27141-2-quic_johmoo@quicinc.com>
- <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
- <2023041015-lunar-dandelion-1b4e@gregkh>
- <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
+        Tue, 11 Apr 2023 02:35:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6168E19AC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681194892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Cf/qv357ca13kf6O82+vlb+EKz3duU5OpGh0AK2ziA=;
+        b=QdhdHnc0pO1kIZFfEuCKPYimgUvqcqTp9JQcYfSvO80n6IerdnLr7cRPolNhNqgIJ/6n5q
+        SdHOOdWwgmwEUzII9zOL/G9ankHRztu8zia/fA+zl3PSI+8kd96kuk8fNUE4ismid5WG32
+        AY0M8qP2fzae9mi/2RAHGhADoWvLPrY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-445-8ctfH3tnN--WHYej2_hTTw-1; Tue, 11 Apr 2023 02:34:51 -0400
+X-MC-Unique: 8ctfH3tnN--WHYej2_hTTw-1
+Received: by mail-wm1-f71.google.com with SMTP id q19-20020a05600c46d300b003ef69894934so1897570wmo.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:34:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681194889; x=1683786889;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Cf/qv357ca13kf6O82+vlb+EKz3duU5OpGh0AK2ziA=;
+        b=s8cNtYfBpym7pbf8rE5zKDb7vAJPSft9v+swoMppTq99koo+KCwcorJ8/0XPPKKZKz
+         XVf3jYvYseXHlXXZTDQ8z+fecevULEqHg4RsryWa4fdOsz0iSbb9N1bz1rP788Jdaw1j
+         2VHduM0UU/KK27b0uu+SE+70vpAXPK1HVwudCb1cFvbuDuIfs02CPuh2hzMN9dvta3Ia
+         uvAKY2d4hLBHzsRPr1yDDeKc2/iGqi+qYrn659ASTMWZBa1ygCcAzAlodW03gjC/2zlc
+         JH0AkDisVu0MQLEbhW1wf5fJABzwhlUhJAAfB866oHc1/VS2toeJgOmYFGX1H5WMglOs
+         eHog==
+X-Gm-Message-State: AAQBX9cfwuwn62r8E+dF6T+UdOvswh8/hfuM8ekF5Us7f8hAMLCwTrDz
+        cuzHv1SPIi0ACX2RPsYQaubBF50g8gl1GY+BASCXtRaCm29rDWebJTJzvFPxFJwbvg9SZdGx7D+
+        QTihG887bGzcPir/5/cNq1ly2
+X-Received: by 2002:a05:6000:110e:b0:2cf:ec6c:f253 with SMTP id z14-20020a056000110e00b002cfec6cf253mr1044837wrw.20.1681194889649;
+        Mon, 10 Apr 2023 23:34:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YOU2zbEMzqYmgaRaZzmHmzLjA4stKyKaRTsKOC2o5bn67u0LmxVDMjMH71xkJIITbGoHH9zw==
+X-Received: by 2002:a05:6000:110e:b0:2cf:ec6c:f253 with SMTP id z14-20020a056000110e00b002cfec6cf253mr1044825wrw.20.1681194889292;
+        Mon, 10 Apr 2023 23:34:49 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id b16-20020adfe310000000b002f27a6a49d0sm2519213wrj.10.2023.04.10.23.34.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 23:34:48 -0700 (PDT)
+Message-ID: <2560f4b4-8620-6160-eee5-4086630bb5cc@redhat.com>
+Date:   Tue, 11 Apr 2023 08:34:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [GIT PULL] KVM changes for Linux 6.3-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        "'oliver.upton@linux.dev'" <oliver.upton@linux.dev>
+References: <20230410153917.1313858-1-pbonzini@redhat.com>
+ <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 04:32:49PM -0700, John Moon wrote:
-> > > According to this tool, it looks like we broke a lot of UAPI
-> > > headers in the previous MW (between v6.2 and v6.3-rc1).
-> > 
-> > That's not ok, and needs to be fixed, otherwise this is useless as no
-> > one can rely on it at all.
-> > 
+On 4/10/23 23:05, Linus Torvalds wrote:
+> On Mon, Apr 10, 2023 at 8:39 AM Paolo Bonzini<pbonzini@redhat.com>  wrote:
+>>    https://git.kernel.org/pub/scm/virt/kvm/kvm.git  tags/for-linus
+>>
+>> for you to fetch changes up to 0bf9601f8ef0703523018e975d6c1f3fdfcff4b9:
+>>
+>>    Merge tag 'kvmarm-fixes-6.3-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2023-04-06 13:34:19 -0400)
+> Nope, not at all.
 > 
-> Right, there are several classes of false positives that we've documented
-> and when examining thousands of commits at time, it'll flag many things.
+> You seem to have tagged the wrong commit. Instead of pointing to that
+> "kvmarm fixes" thing, it points to something entirely different.
 > 
-> For some comparison, if you run checkpatch on the same changeset
-> (v6.2..v6.3-rc1), you get 995 errors and 7,313 warnings. Still, checkpatch
-> is helpful for spot-checks.
+> Please double-check what happened.
 
-checkpatch.pl does not matter, it is a "hint", and many patches
-explicitly ignore it (think about patches in the staging tree, you could
-fix up one checkpatch issue for a line, but ignore another one as you
-are not supposed to mix them up.)
+That's the current 6.4 head, so the most likely explanation is that I 
+incorrectly ran "git tag ... -F<absolute path> && git push kvm 
++tags/for-linus" again from the wrong window/worktree.  That must have 
+been while I was doing a final check of the pull request, between 
+preparing the message and sending it; probably something stupid like 
+pressing "Enter" instead of "Ctrl-c" after a command line search (for 
+example, I typically use Ctrl-r to do the final send without --dry-run).
 
-Also for some subsystems, checkpatch does not matter because their
-codebase is old and follows different rules.  And in some places,
-checkpatch is just wrong, because it's a perl script and can not really
-parse code.
+I've now pushed the correct tag (object hash 7088282073b8).
 
-So NEVER use that as a comparison to the user/kernel abi please.  It's a
-false comparison.
+Out of curiosity, do you have some kind of script that parses the "git 
+request-pull" messages and does these checks?  Or was it just the 
+mismatch between diffstat and tag message?
 
-> "./scripts/check-uapi.sh -b v6.3-rc1 -p v6.2" flags 36 out of the 911 files
-> checked. Of those 36, 19 fell into the currently documented false positive
-> categories:
-> 
-> Enum expansion: 17
-> Expanding into padded/reserved fields: 2
-> 
-> Beyond those, the tool appears to be flagging legitimate breakages.
-> 
-> Some fit into the definition of "intentional breakages" where support is
-> being dropped or something is being refactored:
-> 
->  File removals:
->    - include/uapi/drm/i810_drm.h
->    - include/uapi/drm/mga_drm.h
->    - include/uapi/drm/r128_drm.h
->    - include/uapi/drm/savage_drm.h
->    - include/uapi/drm/sis_drm.h
->    - include/uapi/drm/via_drm.h
->    - include/uapi/linux/meye.h
-> 
->  File moves:
->    - include/uapi/misc/habanalabs.h
-> 
->  Removal of struct:
->    - include/uapi/linux/uuid.h (5e6a51787fef)
->      - include/uapi/linux/mei.h (failed due to uuid.h)
->      - include/uapi/linux/ublk_cmd.h (failed due to uuid.h)
-> 
-> Others do not seem to be intentional:
-> 
->  Addition/use of flex arrays:
->    - include/uapi/linux/rseq.h (f7b01bb0b57f)
->    - include/uapi/scsi/scsi_bsg_mpi3mr.h (c6f2e6b6eaaf)
+Paolo
 
-That is not a breakage, that's a tool problem.
-
->  Type change:
->    - include/uapi/scsi/scsi_bsg_ufs.h (3f5145a615238)
-
-Again, not a real breakage, size is still the same.
-
->  Additions into existing struct:
->    - include/uapi/drm/amdgpu_drm.h (b299221faf9b)
->    - include/uapi/linux/perf_event.h (09519ec3b19e)
->    - include/uapi/linux/virtio_blk.h (95bfec41bd3d)
-
-Adding data to the end of a structure is a well-known way to extend the
-api, in SOME instances if it is used properly.
-
-So again, not a break.
-
-> Is there something I'm missing that makes these changes false positives? If
-> so, I'd be happy to add on to the documentation and work towards a way to
-> filter them out.
-> 
-> In the mean time, we will start a thread on the libabigail mailing list to
-> see if there's a way to add flags such as --ignore-enum-expansion,
-> --ignore-expansion-into-reserved-fields, etc. Enum expansion seems to be
-> making up the largest portion of false positives, so would be the best thing
-> to filter out.
-
-Increasing enums is in no way an abi break unless the size of the
-structure changes.
-
-Using reserved fields too is not a breakage.
-
-So yes, it looks like the tooling needs some work in order for us to be
-able to use this properly, digging through false positives like this is
-going to make it not used at all.
-
-thanks,
-
-greg k-h
