@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604F36DD78A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9856DD78B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjDKKJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S229617AbjDKKJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKKJi (ORCPT
+        with ESMTP id S229437AbjDKKJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 06:09:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B152683;
-        Tue, 11 Apr 2023 03:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE0330FA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:09:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60B3A623A3;
-        Tue, 11 Apr 2023 10:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A8C6C433D2;
-        Tue, 11 Apr 2023 10:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681207772;
-        bh=4+yoX4M6EFzK4evMqyoDWLXKtr6ZMcsAr2nKxy77RRA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bVtG3bBiJFmwy+QRf5IN70L8M62cQvKnEFB5DKIAsEmZprmKpJlhlwqPCEfTnwrBg
-         DZvCkZWz6J1amjhEWP2rMTxkVIiKQM4xB6emPC/tKuqXQEMJALZ4PIZuy0VExHDIkp
-         BMyaBTP14uFC6YV8ADQ5K5qz0szbJLCXbs1es2RFn0XnUMliGunnAHl2l5UP8ao4tu
-         moTLCwshJ30L18CJVWZKK6WreiT373obdKtKtIIQ493ahOi/t0OYIj57tH8S3p7iyP
-         RDkm9Of6j7d+JviVUGNtskh20vSRZ+B9djn7MxvFPqpXUmJ/eMzqdJLcjZ3eZko6Rs
-         cwg4pzKK60FUw==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     andersson@kernel.org, robh@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        konrad.dybcio@linaro.org, bhelgaas@google.com, kishon@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 00/13] Add PCIe RC support to Qcom SDX55 SoC
-Date:   Tue, 11 Apr 2023 12:09:24 +0200
-Message-Id: <168120775114.17750.6718927163638250633.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308082424.140224-1-manivannan.sadhasivam@linaro.org>
-References: <20230308082424.140224-1-manivannan.sadhasivam@linaro.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DE4ED219FE;
+        Tue, 11 Apr 2023 10:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681207772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EV8e+y7eNRKrFN0k8UGFpRSD2keQGbtk2Rp81PGmh1o=;
+        b=uPr2HSiN9KFEGP474YkBadjLab0gOtMS+1OSfO25IayTA0yjUfwB9F1Dx2ICgpPZVLMrFR
+        mULtYW+rQYwIyySAdhvmHkpkQWJ4m3bd//cFUspraXLk+5QHy9SWB1PgIocOfFyBtj0lC1
+        XJBDVyMTXGQjsZ/+yJkfKFJ7zFFQnSQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681207772;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EV8e+y7eNRKrFN0k8UGFpRSD2keQGbtk2Rp81PGmh1o=;
+        b=BHQ9Gw2QP0Q7LUnJEEGkp5RgzyqBtc5tCALhs7YVgVkKISbNPTlHSK/w0kwzHx3NBuU+Xc
+        XNsyb+MIEpZS0HAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF90E13638;
+        Tue, 11 Apr 2023 10:09:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6ruhMtwxNWTRQAAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 11 Apr 2023 10:09:32 +0000
+Date:   Tue, 11 Apr 2023 12:09:32 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Subject: Re: [PATCH] rvmet-fcloop: Remove remote port from list when unlinking
+Message-ID: <r5hxrqiiqfsj27f3jlb2avq6wulg3ksnuf5zg6xrgkdprgrpxy@ssusv6tvghqy>
+References: <20230411092209.12719-1-dwagner@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411092209.12719-1-dwagner@suse.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Mar 2023 13:54:11 +0530, Manivannan Sadhasivam wrote:
-> This series adds PCIe RC support to the Qcom SDX55 SoC. The PCIe controller
-> in SDX55 can act as both Root Complex and Endpoint but only one mode at a
-> time i.e., the mode cannot be switched during runtime.
+On Tue, Apr 11, 2023 at 11:22:09AM +0200, Daniel Wagner wrote:
+> The remote port is never removed from fcloop_nports list. During module
+> unloading it's possible to end up an busy loop in fcloop_exit, because
+> the remote port is found in the list and thus we will never progress.
 > 
-> This series has been tested on Thundercomm T55 board having QCA6390 WLAN
-> chipset connected to the PCIe controller. For powering up the WLAN chipset,
-> an out-of-tree patch has been used since we do not have a proper driver in
-> mainline to handle the power supplies.
+> The kernel log will be spammed with
 > 
-> [...]
+>   nvme_fcloop: fcloop_exit: Failed deleting remote port
+>   nvme_fcloop: fcloop_exit: Failed deleting target port
+> 
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
 
-Applied to controller/qcom, thanks!
-
-[01/13] dt-bindings: PCI: qcom: Update maintainers entry
-        https://git.kernel.org/pci/pci/c/2be28836b281
-[02/13] dt-bindings: PCI: qcom: Add iommu-map properties
-        https://git.kernel.org/pci/pci/c/3f5ec65040b1
-[03/13] dt-bindings: PCI: qcom: Add SDX55 SoC
-        https://git.kernel.org/pci/pci/c/e8ce1671127d
-[04/13] dt-bindings: PCI: qcom-ep: Fix the unit address used in example
-        https://git.kernel.org/pci/pci/c/f6e7fbbe5bca
-[13/13] PCI: qcom: Add support for SDX55 SoC
-        https://git.kernel.org/pci/pci/c/490789b12332
-
-Thanks,
-Lorenzo
+Found a bunch more problems which need to be addressed. I'll collect all
+changes and send them as series.
