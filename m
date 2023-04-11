@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3986DDB21
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3316DDB10
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjDKMqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S230130AbjDKMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDKMqX (ORCPT
+        with ESMTP id S229920AbjDKMl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:46:23 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317F22690;
-        Tue, 11 Apr 2023 05:46:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ud9so19812100ejc.7;
-        Tue, 11 Apr 2023 05:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681217179;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bWaTRf6C8YWdWPQrffxy6ZlIMtLUhDaV8mY6LY1gQgY=;
-        b=DypWss9CZJkO5B5b1OUOCh/xUD01zAu9Ehet/SEmAQmYF8yQDZDx43eN621l/XLpTl
-         R7jUoyef+zoEtkjD1V6JnXeSJ7fzimQfmOev6tk73qf4RdeAMB1fuyvFlsXtII3VDt1U
-         LOPHfVowMYHrpzlfAEAVI7tpo3RaXKQVQOkdIt3PjUFK0JuNBdr+pltbcqAFAmSOZa5Z
-         HTrLZ1x9019LbQpRzd/3C6UI2VrRHovGG+mcbaEtNY4z3Dgh1d0AbmWwXEW4wDUzdahd
-         aG2VmK83sPmVJvoVaeN7inirfGngkbl7GPnlRFoJ4jLOPoas/XUMApdUsgjbfgaXw/uK
-         g8Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681217179;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWaTRf6C8YWdWPQrffxy6ZlIMtLUhDaV8mY6LY1gQgY=;
-        b=ldCLkPqnxDf0ly1xFGxBo8TmijfdpmDHtrp5N0vSLwxXlvV4g/0wA28A8lOC08T4mF
-         HiOz047sEzlB0LzyFdHz/AI1oqCsJkcEE9YchUKI2XRp9VeU9RA/+ywWRMlngV3Vlwa/
-         Qmh7UEOy/TxnvIGj6QEk/j9wLjyelFt7/cbZ7NWhn1jLSz2oweLTjBsNJI/3vxuyo/uZ
-         sO5Aj574z0DC5N2v84rFHfv4o6ZxEPGevveBn0nVk5gxk8vZ20zp01aoWFAoY1XuCsTB
-         J5y0qHEpnP77x89BemJ04hK4hDVkQn8wyrjGfMjaTYKuCwj/Jb2u4D1TXgPgztujUceI
-         PIrQ==
-X-Gm-Message-State: AAQBX9cD54x1eTbknDbfUan/0GLqBOSPDUpzNvoSfK0+4LNWUydp3ioB
-        YNPDZVBBrag2o5jvm25J2AM=
-X-Google-Smtp-Source: AKy350arumFB0mJu7EyJDwqsMue34wX4DmWd+2t2TdPJaSNbLOAjr/rDXTk4LJjLzAXi1kfinbcSCA==
-X-Received: by 2002:a17:906:9455:b0:94a:5911:b475 with SMTP id z21-20020a170906945500b0094a5911b475mr7593307ejx.52.1681217179336;
-        Tue, 11 Apr 2023 05:46:19 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:ddc3])
-        by smtp.gmail.com with ESMTPSA id k23-20020a170906971700b0094a53055894sm3129519ejx.78.2023.04.11.05.46.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 05:46:19 -0700 (PDT)
-Message-ID: <09f51486-5c27-6fd8-d3c5-0edadef30f81@gmail.com>
-Date:   Tue, 11 Apr 2023 13:39:34 +0100
+        Tue, 11 Apr 2023 08:41:26 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97212F4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1681216884;
+        bh=feQnz7LEtrUjR3knhXb/iWIUFOvW72wj0TBYEI4P9CY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=feLLcyQFTIG82JbvKvpJwlDTtzZMEGbSD0Nf94jBrzsa5GMvY552zq2NucnScCBf7
+         5yK8Yd6nQEPjrqX5cjNGFRm6pRVFtoI1/eHT7eDJ3sBjb3fjzFj1RX3tpCsmHAgcrA
+         U7997JvirBE9+1S4yLUg9NBSfloDiswiMjjfrEY0MiSxE3Kw1gTo/SLwbM4tiF7QD6
+         CbqLe6J1RgtW4JyPbags8SeYlh4aTsMFNcjjZ+slGbou+VTvaICMFfJ1KE6Y76eAZC
+         mTjvzhCjBrt7KmA4vq5sRVyeZ+9QaIBbkwyKil4amkwGSB2wQyH646tHFFyQ7ontPe
+         Wz6KpOwhW3rOQ==
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Pwlnw67GlzvQy;
+        Tue, 11 Apr 2023 08:41:24 -0400 (EDT)
+Message-ID: <7b5bf266-1418-1fe2-5d26-f94d3f67d49f@efficios.com>
+Date:   Tue, 11 Apr 2023 08:41:25 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
+ mm_cid
 Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, Keith Busch <kbusch@kernel.org>
-Cc:     axboe@kernel.dk, davem@davemloft.net, dccp@vger.kernel.org,
-        dsahern@kernel.org, edumazet@google.com, io-uring@vger.kernel.org,
-        kuba@kernel.org, leit@fb.com, linux-kernel@vger.kernel.org,
-        marcelo.leitner@gmail.com, matthieu.baerts@tessares.net,
-        mptcp@lists.linux.dev, netdev@vger.kernel.org, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <20230406165705.3161734-1-leitao@debian.org>
- <ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com>
- <ZDVRGoDZo1tTbmZu@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZDVRGoDZo1tTbmZu@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
+References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+ <20230411085304.GB576825@hirez.programming.kicks-ass.net>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230411085304.GB576825@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 13:22, Breno Leitao wrote:
-> On Fri, Apr 07, 2023 at 12:51:44PM -0600, Keith Busch wrote:
->>> @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
->>>   int io_uring_cmd_prep_async(struct io_kiocb *req)
->>>   {
->>>   	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
->>> -	size_t cmd_size;
->>> +	size_t size = sizeof(struct io_uring_sqe);
->>>   
->>>   	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
->>>   	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
->>
->> One minor suggestion. The above is the only user of uring_cmd_pdu_size() now,
->> which is kind of a convoluted way to enfoce the offset of the 'cmd' field. It
->> may be more clear to replace these with:
+On 2023-04-11 04:53, Peter Zijlstra wrote:
+> On Wed, Apr 05, 2023 at 12:26:35PM -0400, Mathieu Desnoyers wrote:
+>> +void sched_mm_cid_migrate_from(struct task_struct *t)
+>> +{
 > 
-> I agree with you here. Basically it is a bug if the payload (pdu) size is
-> is different than 16 for single SQE or != 80 for extended SQE.
+>> +	/*
+>> +	 * If the source cpu cid is set, and matches the last cid of the
+>> +	 * migrated task, clear the source cpu cid to keep cid allocation
+>> +	 * compact to cover the case where this task is the last task using
+>> +	 * this mm on the source cpu. If there happens to be other tasks left
+>> +	 * on the source cpu using this mm, the next task using this mm will
+>> +	 * reallocate its cid on context switch.
+>> +	 *
+>> +	 * We cannot keep ownership of concurrency ID without runqueue
+>> +	 * lock held when it is not used by a current task, because it
+>> +	 * would lead to allocation of more concurrency ids than there
+>> +	 * are possible cpus in the system. The last_mm_cid is used as
+>> +	 * a hint to conditionally unset the dst cpu cid, keeping
+>> +	 * allocated concurrency ids compact.
+>> +	 */
+>> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
+>> +		return;
+>> +
 > 
-> So, basically it is checking for two things:
->     * the cmd offset is 48
->     * the io_uring_sqe struct is 64
+> FWIW, I'm thinking that if we write this using try_cmpxchg() it'll be a
+> little nicer:
 > 
-> Since this is a uapi, I am not confidence that they will change at all.
-> I can replace the code with your suggestion.
+> 	lazy_cid = mm_cid_set_lazy_put(src_cid);
+> 	if (!try_cmpxchg(src_pcpu_cid, &src_cid, lazy_cid))
+> 		return;
 > 
->> 	BUILD_BUG_ON(offsetof(struct io_uring_sqe, cmd) == 48);
-> 
-> It should be "offset(struct io_uring_sqe, cmd) != 48)", right?
 
-Which is already checked, see io_uring_init()
+Yes, done.
+
+>> +	/*
+>> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+>> +	 * rq->curr->mm matches the scheduler barrier in context_switch()
+>> +	 * between store to rq->curr and load of prev and next task's
+>> +	 * per-mm/cpu cid.
+>> +	 *
+>> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+>> +	 * rq->curr->mm_cid_active matches the barrier in
+>> +	 * sched_mm_cid_exit_signals(), sched_mm_cid_before_execve(), and
+>> +	 * sched_mm_cid_after_execve() between store to t->mm_cid_active and
+>> +	 * load of per-mm/cpu cid.
+>> +	 */
+>> +
+>> +	/*
+>> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
+>> +	 * flag, this task will be responsible for transitioning from lazy-put
+>> +	 * flag set to MM_CID_UNSET.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	src_task = rcu_dereference(src_rq->curr);
+>> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+>> +		rcu_read_unlock();
+>> +		/*
+>> +		 * We observed an active task for this mm, clearing the destination
+>> +		 * cpu mm_cid is not relevant for compactness.
+>> +		 */
+>> +		t->last_mm_cid = -1;
+>> +		return;
+>> +	}
+>> +	rcu_read_unlock();
+>> +
+>> +	/*
+>> +	 * The src_cid is unused, so it can be unset.
+>> +	 */
+>> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
+>> +		return;
+> 
+> 	if (!try_cmpxchg(src_pcpu_cid, &lazy_cid, MM_CID_UNSET))
+> 		return;
+
+done,
+
+Thanks!
+
+Mathieu
+
+> 
+>> +	__mm_cid_put(mm, src_cid);
+>> +}
 
 -- 
-Pavel Begunkov
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
