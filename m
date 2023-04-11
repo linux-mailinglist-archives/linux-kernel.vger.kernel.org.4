@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A726DDC06
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C306DDC08
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjDKNZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S229575AbjDKNZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjDKNZS (ORCPT
+        with ESMTP id S229733AbjDKNZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:25:18 -0400
+        Tue, 11 Apr 2023 09:25:21 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E501558E;
-        Tue, 11 Apr 2023 06:25:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F56A55A4;
+        Tue, 11 Apr 2023 06:25:18 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C126D75;
-        Tue, 11 Apr 2023 06:26:00 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.20.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA9283F6C4;
-        Tue, 11 Apr 2023 06:25:13 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 14:25:11 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Message-ID: <ZDVft9kysWMfTiZW@FVFF77S0Q05N>
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
- <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 265DAFEC;
+        Tue, 11 Apr 2023 06:26:02 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6F203F6C4;
+        Tue, 11 Apr 2023 06:25:16 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 14:25:14 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [RFC v1 0/2] Introducing generic SCMI pinctrl driver
+ implementation
+Message-ID: <20230411132514.hdyyxug77t5gyzkj@bogus>
+References: <cover.1680793130.git.oleksii_moisieiev@epam.com>
+ <CACRpkdaY1KjkJ_it0okrixrbCbe5Yy8PZiFAYacr_C03adP_hQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdaY1KjkJ_it0okrixrbCbe5Yy8PZiFAYacr_C03adP_hQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
@@ -49,136 +49,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 10:40:07PM -0500, Madhavan T. Venkataraman wrote:
-> Hi Mark,
+On Tue, Apr 11, 2023 at 02:27:53PM +0200, Linus Walleij wrote:
+> Hi Oleksii,
 > 
-> Sorry for the long delay in responding. Was caught up in many things.
-> My responses inline..
+> thanks for your patches!
 > 
-> On 3/23/23 12:17, Mark Rutland wrote:
-> > Hi Madhavan,
-> > 
-> > At a high-level, I think this still falls afoul of our desire to not reverse
-> > engineer control flow from the binary, and so I do not think this is the right
-> > approach. I've expanded a bit on that below.
-> > 
-> > I do think it would be nice to have *some* of the objtool changes, as I do
-> > think we will want to use objtool for some things in future (e.g. some
-> > build-time binary patching such as table sorting).
+> On Fri, Apr 7, 2023 at 12:18 PM Oleksii Moisieiev
+> <Oleksii_Moisieiev@epam.com> wrote:
 > 
-> OK. I have been under the impression that the arm64 folks are basically OK with
-> Objtool's approach of reverse engineering from the binary. I did not see
-> any specific objections to previously submitted patches based on this approach
-> including mine.
-
-This has admittedly changed over time, but the preference to avoid
-reverse-engineering control flow has been around for a while. For example,
-during LPC 2021's "objtool on arm64" session:
-
-  https://lpc.events/event/11/contributions/971/
-
-... where Will and I expressed strong desires to get the compiler to help,
-whether that's compiler-generated metadata, (agreed upon) restrictions on code
-generation, or something else.
-
-[...]
-
-> > There's a more fundamental issue here in that objtool has to reverse-engineer
-> > control flow, and so even if the kernel code and compiled code generation is
-> > *perfect*, it's possible that objtool won't recognise the structure of the
-> > generated code, and won't be able to reverse-engineer the correct control flow.
-> > 
-> > We've seen issues where objtool didn't understand jump tables, so support for
-> > that got disabled on x86. A key objection from the arm64 side is that we don't
-> > want to disable compile code generation strategies like this. Further, as
-> > compiles evolve, their code generation strategies will change, and it's likely
-> > there will be other cases that crop up. This is inherently fragile.
-> > 
-> > The key objections from the arm64 side is that we don't want to
-> > reverse-engineer details from the binary, as this is complex, fragile, and
-> > unstable. This is why we've previously suggested that we should work with
-> > compiler folk to get what we need.
-> > 
+> > This RFC patch series is intended to introduce the potential generic driver for
+> > pin controls over SCMI protocol, provided in the latest beta version of DEN0056 [0].
+> >
+> > On ARM-based systems, a separate Cortex-M based System Control Processor (SCP)
+> > provides control on pins, as well as with power, clocks, reset controllers. In this case,
+> > kernel should use one of the possible transports, described in [0] to access SCP and
+> > control clocks/power-domains etc. This driver is using SMC transport to communicate with SCP via
+> > SCMI protocol and access to the Pin Control Subsystem.
+> >
+> > The provided driver consists of 2 parts:
+> >  - firmware/arm_scmi/pinctrl.c - the SCMI pinctrl protocol inmplementation
+> >    responsible for the communication with SCP firmware.
+> >
+> >  - drivers/pinctrl/pinctrl-scmi.c - pinctrl driver, which is using pinctrl
+> >   protocol implementation to access all necessary data.
 > 
-> So, what exactly do you have in mind? What help can the compiler folk provide?
-
-There are several possibilities, e.g.
-
-* Generate some simple metadata that tells us for each PC whether to start an
-  unwind from the LR or FP. My understanding was that SFrame *might* be
-  sufficient for this.
-
-  We might need some custom metadata for assembly (e.g. exception entry,
-  trampolines), but it'd be ok for that to be different.
-
-* Agree upon some restricted patterns for code generation (e.g. fixed
-  prologues/epilogues), so that we can identify whether to use LR or FP based
-  on the PC and a symbol lookup.
-
-> By your own argument, we cannot rely on the compiler as compiler implementations,
-> optimization strategies, etc can change in ways that are incompatible with any
-> livepatch implementation.
-
-That's not quite my argument.
-
-My argument is that if we assume some set of properties that compiler folk
-never agreed to (and were never made aware of), then compiler folk are well
-within their rights to change the compiler such that it doesn't provide those
-properties, and it's very likely that such expectation will be broken. We've
-seen that happen before (e.g. with jump tables).
-
-Consequently I think we should be working with compiler folk to agree upon some
-solution, where compiler folk will actually try to maintain the properties we
-depend upon (and e.g. they could have tests for). That sort of co-design has
-worked well so far (e.g. with things like kCFI).
-
-Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
-
-> Also, there can always be bugs in the compiler implementations.
-
-I don't disagree with that.
-
-> Can you please elaborate? Are we looking for a way for the compiler folks to
-> provide us with something that we can use to implement reliable stack trace?
-
-I tried to do so a bit above.
-
-I'm looking for some agreement between kernel folk and compiler folk on a
-reliable mechanism. That might be something that already exists, or something
-new. It might be metadata or some restrictions on code generation.
-
-> > I'll note that at the last Linux Plumbers Conference, there was a discussion
-> > about what is now called SFrame, which *might* give us sufficient information,
-> > but I have not had the time to dig into that as I have been chasing other
-> > problems and trying to get other infrastructure in place.
+> TBH this looks so good that I am happy to merge it once you send a non-RFC
+> version.
 > 
-> I will try to locate the link. If you can provide me a link, that would be greatly
-> appreciated. I will study their SFrame proposal.
-
-From looking around, that session was:
-
-  https://lpc.events/event/16/contributions/1177/
-
-At the time it was called CTF Frame, but got renamed to SFrame.
-
-I'm not sure where to find the most recent documentation. As I mentioned above
-I have not had the time to look in detail.
-
-> >> 		FWIW, I have also compared the CFI I am generating with DWARF
-> >> 		information that the compiler generates. The CFIs match a
-> >> 		100% for Clang. In the case of gcc, the comparison fails
-> >> 		in 1.7% of the cases. I have analyzed those cases and found
-> >> 		the DWARF information generated by gcc is incorrect. The
-> >> 		ORC generated by my Objtool is correct.
-> > 
-> > Have you reported this to the GCC folk, and can you give any examples?
-> > I'm sure they would be interested in fixing this, regardless of whether we end
-> > up using it.
+> My main concern would have been the protocol itself, but that was very
+> carefully tailored to match what the pin control subsystem needs and
+> I am quite happy with it the way it came out: using strings for groups and
+> functions.
 > 
-> I will try to get the data again and put something together and send it to the
-> gcc folks.
+> The scmi code in patch 1 adds an extra layer of abstraction and a vtable
+> that would not have been necessary if all of the code was confined in
+> one file in drivers/pinctrl but it is not up to me how the SCMI people
+> want to abstract their stuff and there seems to be precedents to do things
+> this way.
+>
 
-Thanks for doing so; that's much appreciated!
+I haven't looked at the code to comment on the details, but in general the
+SCMI abstraction was created and used in other kernel subsystems for couple
+of reasons:
 
-Thanks, 
-Mark.
+1. Leave all the protocol specific details like the version and other in
+   the abstraction so that the driver remains simple and doesn't have to deal
+   with those details.
+
+2. Similar to the version and other details(generic or vendor specific), since
+   there is a firmware involved, there might be need for quirks and again
+   dealing with those in these SCMI layer is better as we will not have any
+   specific compatible say just for pinctrl or dvfs ..etc.
+
+3. Other reason was to allow testing of features that are in the spec and
+   firmware but not used by any framework. But I think the way we introduced
+   raw scmi interface nullifies it as it allows to bypass any framework and do
+   raw SCMI transfers now. But originally the abstraction considered that
+   possibility as well.
+
+> I heard that someone wanted to also implement GPIO over SCMI, but
+> it is not part of this driver so I guess that will be a future addition.
+> It's a good starting point to add GPIO later.
+>
+
+Yes, Xilinx people want GPIO for moving away from their custom but similar to
+SCMI like interface. There are yet to start exploring details.
+
+--
+Regards,
+Sudeep
