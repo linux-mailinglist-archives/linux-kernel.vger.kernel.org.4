@@ -2,212 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108B86DD3FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D658D6DD3F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjDKHXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S229836AbjDKHWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjDKHXG (ORCPT
+        with ESMTP id S229624AbjDKHWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:23:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD69170B;
-        Tue, 11 Apr 2023 00:22:59 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B67ChT018270;
-        Tue, 11 Apr 2023 07:22:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=WPz6VWAuso0TUls6NwifSXDqXiXIq7ClHmv1ryg+u74=;
- b=m0fkeBVN34WmGzfqZ/cUYRqe5b9/YpiHfsmkTwU2prDzuF0Fj+CTJWmkgyy/mgGlOZWr
- mJitR9rlTOObaD/X0YdYvbI0bOUp/o3lryNd3zssJPqJD9LHecDyPR2ucLelRwJosso+
- ZPsDEfTs6ALdM0303yXuKVgguZ6+sZDbiKJxiAEKJ98aoJlRgCzXBjS8y1qKhCUg1eWC
- pKaLXENWcykEYCJCu+p74gGgX2GWfiirnOjDrOBQ5wgTdWaICkt1A5kqERf6CuVpQOzM
- D+b/TmA+Quer1dwFR6vnwxX4dofTjt5hH6v4BknhQXABvx9DapDHRQvEp+T5iRIxwFTj SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3puhut8muk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:22:14 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B7IcKa004461;
-        Tue, 11 Apr 2023 07:22:13 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3puhut8mu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:22:13 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4qSG2002007;
-        Tue, 11 Apr 2023 07:22:12 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pu0ktjx2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 07:22:12 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33B7MAAc12845678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 07:22:11 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA1EA58061;
-        Tue, 11 Apr 2023 07:22:10 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A5B3958056;
-        Tue, 11 Apr 2023 07:22:06 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.109.203])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Apr 2023 07:22:06 +0000 (GMT)
-Message-ID: <e65b6ea91d66b78c382acdec14003d3665fcfd3e.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 11 Apr 2023 03:22:05 -0400
-In-Reply-To: <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
-         <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: E8yNCj9MPzgxgSZEgocdya7SYFNPX_wi
-X-Proofpoint-ORIG-GUID: DqGj2APG48jSuJ7iodhUc6fHZ86fEZix
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 11 Apr 2023 03:22:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D63E4;
+        Tue, 11 Apr 2023 00:22:41 -0700 (PDT)
+X-UUID: a20a5e12d83911eda9a90f0bb45854f4-20230411
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=FNm0toZRqKebfuDZnoPN3XEdhirFfZDW4AZxy2KNFvU=;
+        b=hwU5TjXjT4rTg4Qu79FgqnrZa7NQo2N8bD2YX6/7swH/1kgdF2Cvvuq/naB4HC9iDo2oS+5dOaApE80ABNNWDRxc56qoAbvbnlfqJfq/2H8bZz8CuMriw2RGjsu0vACXHYcB6p4OkZahmaVTMjLhxAlpNzzS/13BHXKlN1OcaKA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:635729ad-993b-4862-823e-e3f956f05f58,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:7c0d90ea-db6f-41fe-8b83-13fe7ed1ef52,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: a20a5e12d83911eda9a90f0bb45854f4-20230411
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1039116335; Tue, 11 Apr 2023 15:22:36 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 11 Apr 2023 15:22:34 +0800
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 15:22:34 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YXfOmEgN4xMLZfXCb9Jfqtc5n0C+XFqscNSlAitoTwTAlN7bZnjjkVni6zKa86bwhibGZywGCjm7cz5rCoaRw5veEDIiftrkprOlxlIwFbblWalyRrNPNCvC40lBbocmZoqNaN8IDLTuuOQ4UlhEaJKc78zPCkrH9ZesNcIBE6TOy1+4JBG+Du3ARfJQqsM0JWZRdUGKoMRFc//qaLO1Hs7BM6YilS0dgKXqnWsk27/6sQiUsQvLAc4oHKMDg/3CsORDal+aPJqHJXR7H0FmCBX6MzqSOf+fEj1WWr5IfzWX2vWA0rYUoz6LxT553zuBEVMMftby2mdbyp9j3l59yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FNm0toZRqKebfuDZnoPN3XEdhirFfZDW4AZxy2KNFvU=;
+ b=fwxJNm77Ntl0xupwuLrJOXfChPd1eLBEvfauwolI9ic4smPTBJwUOItxPkfAa0HtqmfgXkqTrJQvbOOtVYU3U5115quYh1zOGl1LJLjTHGSWsck78tx82xMc1GQb7fRUBsjPs59WSZ8YCTY+sCYfQHieR+vaI6UDdibeHisPjjmAzo08NVAC/Em5Ian8xJg9oBfaExz2nx1lxsrnUr3VTZG0OfhupQpgnPfkLHjTCcw8LrS3DtONeZC7vdwxd3yjLriU12BYDx4R1YjJfL3Ou1UsD0G+CjlttgtQqmBJle5UXoxfu91vycc/fvRnXAlDmCOkMQYgiIo1MjG42D9JlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FNm0toZRqKebfuDZnoPN3XEdhirFfZDW4AZxy2KNFvU=;
+ b=MsmJzMILBfycPcYvlB58sIaI6wMNpZJIBRWwY5cWG2IRagmXpzUvQ/azhleNeM/SQO8uk/HoF8zp8xM2SFlduMGYkcdHkedJs1+lXoNYl56G4zL22dLzdaUjZvFWHSbAC8kRbBhtwrHhnsfw7tL4CSUoF4ICTni+Drm0vfCfxyM=
+Received: from SL2PR03MB4153.apcprd03.prod.outlook.com (2603:1096:100:4e::10)
+ by SI2PR03MB5673.apcprd03.prod.outlook.com (2603:1096:4:150::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 07:22:32 +0000
+Received: from SL2PR03MB4153.apcprd03.prod.outlook.com
+ ([fe80::30b:621:6d75:8337]) by SL2PR03MB4153.apcprd03.prod.outlook.com
+ ([fe80::30b:621:6d75:8337%5]) with mapi id 15.20.6277.036; Tue, 11 Apr 2023
+ 07:22:31 +0000
+From:   =?utf-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>
+To:     "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        =?utf-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?utf-8?B?TWFvZ3VhbmcgTWVuZyAo5a2f5q+b5bm/KQ==?= 
+        <Maoguang.Meng@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: Re: [PATCH v2, 2/2] media: mediatek: vcodec: make sure pointer isn't
+ NULL before used
+Thread-Topic: [PATCH v2, 2/2] media: mediatek: vcodec: make sure pointer isn't
+ NULL before used
+Thread-Index: AQHZbDooLqMORqeoNUWcdaTH79b1C68ltEsA
+Date:   Tue, 11 Apr 2023 07:22:31 +0000
+Message-ID: <55bc07edcca27b5be96642aede3d71fe076af668.camel@mediatek.com>
+References: <20230411055413.539-1-irui.wang@mediatek.com>
+         <20230411055413.539-3-irui.wang@mediatek.com>
+In-Reply-To: <20230411055413.539-3-irui.wang@mediatek.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SL2PR03MB4153:EE_|SI2PR03MB5673:EE_
+x-ms-office365-filtering-correlation-id: eef8d831-605f-4f8b-7985-08db3a5d8398
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xeh7O+vQGJopHffrKJij/v9NvE7z5yP2JDXuD78/r/S+tvaBeNSDB0NjLOKwT9uYCXsNVTRbXkbaYNtmyUqQxFAU5X1W2JUJ01+FGWTvxj21KZ5k7tXe4wKU9fzIi9n62QR9cXboutfMHtW6GOmj2Q1lcUK21TsIpdBQKb9HiEekpFSMnSODVMo/epLLj6jFJ2cZ5Fpf424CY3hf4AN86+HZoUa6fXVl5p6oHUUCL/s5aimaieEqt7Me29Od0wz68dgI1rbeRi5j9U+w25NvJxERHP4s+jb6Wryxy+V1ONu72oX3u8PCgmsCkP7pJkMT4QM235s2agat79L0egVmgsnUWoXjnaDCThzpmQweDP7CZPA8aX/tKiR+KbPHneVA3N6A/TWEjEzHgmYuWWSC/q6Q2YTV1TOVjObhlJ464T2yO0DEHUzLn59s/3KbDR9plAmVY/4wJ7Vl252rPHEVonKeNChZ/XNGk9GJctk52bWcrTgNUHvMJ2sVh/JLfDdw7EsWxjvKZR34T8hO3oOjKw+NtTJP0sIigATQTR4mngNd+ymqgvxLDABw6Go3vE68X+3n/ovP/T8ApxbHVcE1jPoWx1Ateugld2PiXkV873bb/xK0vRueGflkwni+f/aRRRXc2hNssxmaCkArpSvBfqxKFRXilHu6QjKx87j6YQdH82R3wWyKHOk1sEZoHgmg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR03MB4153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(451199021)(85182001)(36756003)(86362001)(41300700001)(316002)(76116006)(110136005)(91956017)(478600001)(6486002)(4326008)(66446008)(54906003)(66946007)(64756008)(8676002)(66476007)(66556008)(71200400001)(5660300002)(2906002)(8936002)(186003)(38100700002)(38070700005)(122000001)(107886003)(6512007)(6506007)(26005)(2616005)(83380400001)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a0hWaW9DZGwyOTBuU0tLZ1UrYkdxVXY0RWFRK3BKMFhNYVJRQUcwU3VlR05h?=
+ =?utf-8?B?dUp6V0QrR09hMXYwQlE2ZFcwbXZ0UGpDaTFwcGxrTjdOVlZ3b3ZvOU5OelM0?=
+ =?utf-8?B?SUFWQ0JDb0RBV2gvOVh5WXVTT2ZVR1F4TlJNNC9IOWZNRnR2QStKdXl3YVJV?=
+ =?utf-8?B?K2NQWDIvSnZHS1h1R3h3T3IvazVna3NJdnh1ZHoxZEltMGlxdTRFSitSL3pi?=
+ =?utf-8?B?V3NRc2l0bGh5YWs4MmFQT3RreFg4RzdyQ1FRYTNsa1hJUTNDV01wY3FDSlNP?=
+ =?utf-8?B?UlVySWFSZ1lmNzNhaEd0ZUFxZGt6VnZwSWtRWFlKUFBhTk0xVFV3RHhGK1Zp?=
+ =?utf-8?B?aVJ0WmFzeHBHUVJRUDlmWGtXVC8zMUNzaHkzZ21hVkE5QXBkLzFDWC9rVTl4?=
+ =?utf-8?B?eEEvSTVWY2hqQk1ZSmFxYWU5V2lPMWN6aVdYbFI2ZFA0cWdGSGpiY2p2ZEts?=
+ =?utf-8?B?TmJVVUlQVnE1TG00SHI1byszK2JWYXJoeGF2VDgrbVhKZUE2MmJDdGtsbWJl?=
+ =?utf-8?B?TW1oelFjV3RPczFmUWFYaDlqM3NBSkhEYXR1MWZvTzRQc3JkMDhzUXJwNXp5?=
+ =?utf-8?B?NVZnYzhaVmRobnpQMWZ5cUZkZnkxK2NPbGZXSXBob2Rsc3RTNnd0NVN2YnY2?=
+ =?utf-8?B?bWhpQit4WXhBYVpHU1duNTRrODhUZVUyQmpmWkViZjdYMng0dEhOWHlaUVRU?=
+ =?utf-8?B?c3RMNUtCdnVNTlV1Y3dmMmpxRElFK3FqTWw2VWx2R0tBQzZVd0ZPQjIvWElO?=
+ =?utf-8?B?RWZJSUg0d0NDZVdLVFBmN0svc0ZxMFhpSjJTZ3l1NEQvRUFvVWN0Z2JsZklN?=
+ =?utf-8?B?c2d0c2EzL2xwVWhjbWZHTFMxdlZYeHVrbTFoNFF1V2I1cGlFSmlTd3NSemJr?=
+ =?utf-8?B?V3hsQnJoZDFSS1RoNkdNbExDekdvYWZKSFIwMitxVU1nT1R4TWFCQ3BFNStJ?=
+ =?utf-8?B?MU1rSXYrZFBCd1ZObWNYelJxNGNkWUdSaW9EUE9wcjdmNXNFV1VuMWNEQkMy?=
+ =?utf-8?B?SFFzMGJoMTk5ZWUzdmFPK0M0bGxiWE0vellsWVY3MUJvUzZ3TmErai9KSUhK?=
+ =?utf-8?B?VE9XdzAyejZUUSsrb1h1bzN5K21CckdkMnNMNEgyNk01MHM0b2E0ZVRCWk56?=
+ =?utf-8?B?amlkZFN2OXk2cWkvZThDSVBERUc0QS9ibGtEU050RElrbXRHaGZSQXV6M3BJ?=
+ =?utf-8?B?MWRrQmZveGE2T3lQVVVVOWhNY3V4cXN3ZGFQd1NSTm9hWE5HUFlLV3FHN3Q4?=
+ =?utf-8?B?b1hqakRFanZEYnpEeEtnSk9hSm9kKzZaaE5LdEtWYkRWamJZQ3AzVHZHZE1u?=
+ =?utf-8?B?VHBCUUxoUEZtNDNlY2cxRXRVd1Rqb0Z6WUMrQkhzRGU3VEhEQWpscE96cXkv?=
+ =?utf-8?B?ME1SS21GSFI4VWcrVVBsbElyb1g2V283bGZlQkxjVlRmUDY0dXVmd0pXbnQx?=
+ =?utf-8?B?K1Jrb1htdUVWUG91Yy9GWG14L0hDajJCOUhRbWtYM0Y3cmhnUDZyQm1FVU85?=
+ =?utf-8?B?dDd1N0FjRVlnSHNGeHhkbzZESVF6QnFXTnhWUzJHUXVkc3Z3L052a0h4R0RW?=
+ =?utf-8?B?Wjc0WHpCcDRJR2dTSklFVldSTzFlR1h0alRoZTVxdHArL2tzaUFXUEdVRjRs?=
+ =?utf-8?B?ZUwyMisvdjhMbDJ2NzNJRUFRYUhCamRDd1dpMzduWmI4aFIrNzd0K05Yb3Jj?=
+ =?utf-8?B?TTFpWTBlM2w5dGMzcldNUWJ2N1hrSnVvcnVFN3IyN1FjUFVkZXM0czhrdUtO?=
+ =?utf-8?B?R2hXVGxIVkpRMGYrelBqRVA4QWVRenZ0NGtIcjZKYm9jb2x5YTB1RVVZWnpI?=
+ =?utf-8?B?TC9PTU9wTlhrYVF5YjZ0SWJraElta1RiMVBPU1ZPdk5ML3pHZWRMd2tsSjdG?=
+ =?utf-8?B?dTZHWnA4QVdZUjVkdW8wY2VhR2draE1YcjBKMUxpc015WmZEaVF0aFZaSHpj?=
+ =?utf-8?B?RlgzSmRCeE14QllMYWw2azlpNnU2U1RtRWg0UlUyZ3VVV0J4TzVyaVc4a016?=
+ =?utf-8?B?WWhpV3FIclJEeUtRWjFzQWUyNjlFQ1JVSmJXNHFuVm1maE1EdE10ZjNaRmNp?=
+ =?utf-8?B?Rzg1RnJ4SXJkZ3V6VW1VWlMzaWtzVStvWFVTVCt4dkdzNzloYWhoOVhrcjBo?=
+ =?utf-8?B?cDFwQjd3eVlrVk9VWVlTSnhDM1pxWnk4TmpKbFRmdTlrZitGQjRyQm14dlB1?=
+ =?utf-8?B?OFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FC56158BC1B47440B673113A447DF690@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_03,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- malwarescore=0 phishscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110065
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR03MB4153.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eef8d831-605f-4f8b-7985-08db3a5d8398
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 07:22:31.7062
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3NcJQ7f+xKKe3LS/XHIy9qtic7rALY5ovMgIFMNwLVM4mQRjzmISTJXm34o6hdnVv2hJTInmQRp4Yy2OYiDPjtafk7eCFx85JAWU58znMwk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5673
+X-MTK:  N
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
-
-Sorry for the delay in responding...
-
-The patch description reads as though support for per LSM multiple
-xattrs is being added in this patch, though lsm_get_xattr_slot() only
-ever is incremented once for each LSM.  To simplify review, it would be
-nice to mention that lsm_get_xattr_slot() would be called multiple
-times per LSM xattr.
-
-On Fri, 2023-03-31 at 14:32 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Currently, security_inode_init_security() supports only one LSM providing
-> an xattr and EVM calculating the HMAC on that xattr, plus other inode
-> metadata.
-> 
-> Allow all LSMs to provide one or multiple xattrs, by extending the security
-> blob reservation mechanism. Introduce the new lbs_xattr_count field of the
-> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
-> needs, and the LSM infrastructure knows how many xattr slots it should
-> allocate.
-> 
-> Dynamically allocate the new_xattrs array to be populated by LSMs with the
-> inode_init_security hook, and pass it to the latter instead of the
-> name/value/len triple. Unify the !initxattrs and initxattrs case, simply
-> don't allocate the new_xattrs array in the former.
-> 
-> Also, pass to the hook the number of xattrs filled by each LSM, so that
-> there are no gaps when the next LSM fills the array. Gaps might occur
-> because an LSM can legitimately request xattrs to the LSM infrastructure,
-> but not fill the reserved slots, if it was not initialized.
-
-The number of security xattrs permitted per LSM was discussed in the
-second paragraph.  The first line of this paragraph needs to be updated
-to reflect the current number of security xattrs used, though that is
-more related to the new lsm_get_xattr_slot().  Or perhaps the entire
-paragraph is unnecessary, a remnant from
-security_check_compact_filled_xattrs(), and should be removed.  
-
-> 
-> Update the documentation of security_inode_init_security() to reflect the
-> changes, and fix the description of the xattr name, as it is not allocated
-> anymore.
-> 
-> Finally, adapt both SELinux and Smack to use the new definition of the
-> inode_init_security hook, and to fill the reserved slots in the xattr
-> array. Introduce the lsm_get_xattr_slot() helper to retrieve an available
-> slot to fill, and to increment the number of filled slots.
-> 
-> Move the xattr->name assignment after the xattr->value one, so that it is
-> done only in case of successful memory allocation. For Smack, also reserve
-> space for the other defined xattrs although they are not set yet in
-> smack_inode_init_security().
-
-This Smack comment should be moved to the previous paragraph and even
-expanded explaining that lsm_get_xattr_slot() will be called for each
-additional security xattr.
-
-> 
-> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM crash)
-> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
-
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index c2be66c669a..9eb9b686493 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -28,6 +28,7 @@
->  #include <linux/security.h>
->  #include <linux/init.h>
->  #include <linux/rculist.h>
-> +#include <linux/xattr.h>
->  
->  union security_list_options {
->  	#define LSM_HOOK(RET, DEFAULT, NAME, ...) RET (*NAME)(__VA_ARGS__);
-> @@ -63,8 +64,27 @@ struct lsm_blob_sizes {
->  	int	lbs_ipc;
->  	int	lbs_msg_msg;
->  	int	lbs_task;
-> +	int	lbs_xattr_count; /* number of xattr slots in new_xattrs array */
->  };
->  
-> +/**
-> + * lsm_get_xattr_slot - Return the next available slot and increment the index
-> + * @xattrs: array storing LSM-provided xattrs
-> + * @xattr_count: number of already stored xattrs (updated)
-> + *
-> + * Retrieve the first available slot in the @xattrs array to fill with an xattr,
-> + * and increment @xattr_count.
-> + *
-> + * Return: The slot to fill in @xattrs if non-NULL, NULL otherwise.
-> + */
-> +static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
-> +					       int *xattr_count)
-> +{
-> +	if (unlikely(!xattrs))
-> +		return NULL;
-> +	return xattrs + (*xattr_count)++;
-
-At some point, since lsm_get_xattr_slot() could be called multiple
-times from the same LSM, shouldn't there be some sort of bounds
-checking?
-
--- 
-thanks,
-
-Mimi
-
+SGkgSXJ1aSwNCg0KT24gVHVlLCAyMDIzLTA0LTExIGF0IDEzOjU0ICswODAwLCBJcnVpIFdhbmcg
+d3JvdGU6DQo+IENFUlQtQyBFeHByZXNzaW9uIGNoZWNrOg0KPiBEZXJlZmVyZW5jaW5nIGJ1Ziwg
+d2hpY2ggaXMga25vd24gdG8gYmUgTlVMTCwgY2hlY2sgYnVmIGlzIG5vdCBOVUxMDQo+IGJlZm9y
+ZSB1c2VkLg0KPiANCldoZXRoZXIgJ2RlcmVmZXJlbmNpbmcgYnVmJyBpcyBvbmUga2luZCBvZiBD
+RVJULUMgRXhwcmVzc2lvbiBjaGVjaz8NCllvdSBjYW4gcmUtd3JpdGUgY29tbWl0IG1lc3NhZ2Ug
+YW5kIHN1YmplY3QuDQoNCkNFUlQtQyBFeHByZXNzaW9uIGNoZWNrIChEZXJlZmVyZW5jaW5nIGJ1
+Zik6DQpNYWtpbmcgc3VyZSB0aGUgcG9pbnRlciBpcyBub3QgTlVMTCBiZWZvcmUgdG8gYmUgdXNl
+ZC4NCg0KQmVzdCBSZWdhcmRzLA0KWXVuZmVpIERvbmcNCj4gU2lnbmVkLW9mZi1ieTogSXJ1aSBX
+YW5nIDxpcnVpLndhbmdAbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvbWVkaWEvcGxh
+dGZvcm0vbWVkaWF0ZWsvdmNvZGVjL210a192Y29kZWNfZW5jLmMgfCAyICstDQo+ICAxIGZpbGUg
+Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVjX2VuYy5j
+DQo+IGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tZWRpYXRlay92Y29kZWMvbXRrX3Zjb2RlY19l
+bmMuYw0KPiBpbmRleCBkNjU4MDBhM2I4OWQuLmRiNjVlNzdiZDM3MyAxMDA2NDQNCj4gLS0tIGEv
+ZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tZWRpYXRlay92Y29kZWMvbXRrX3Zjb2RlY19lbmMuYw0K
+PiArKysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVj
+X2VuYy5jDQo+IEBAIC05NDMsNyArOTQzLDcgQEAgc3RhdGljIGludCB2YjJvcHNfdmVuY19zdGFy
+dF9zdHJlYW1pbmcoc3RydWN0DQo+IHZiMl9xdWV1ZSAqcSwgdW5zaWduZWQgaW50IGNvdW50KQ0K
+PiAgCQkgKiBGSVhNRTogVGhpcyBjaGVjayBpcyBub3QgbmVlZGVkIGFzIG9ubHkgYWN0aXZlDQo+
+IGJ1ZmZlcnMNCj4gIAkJICogY2FuIGJlIG1hcmtlZCBhcyBkb25lLg0KPiAgCQkgKi8NCj4gLQkJ
+aWYgKGJ1Zi0+c3RhdGUgPT0gVkIyX0JVRl9TVEFURV9BQ1RJVkUpIHsNCj4gKwkJaWYgKGJ1ZiAm
+JiBidWYtPnN0YXRlID09IFZCMl9CVUZfU1RBVEVfQUNUSVZFKSB7DQo+ICAJCQltdGtfdjRsMl9k
+ZWJ1ZygwLCAiWyVkXSBpZD0lZCwgdHlwZT0lZCwgJWQgLT4NCj4gVkIyX0JVRl9TVEFURV9RVUVV
+RUQiLA0KPiAgCQkJCQljdHgtPmlkLCBpLCBxLT50eXBlLA0KPiAgCQkJCQkoaW50KWJ1Zi0+c3Rh
+dGUpOw0K
