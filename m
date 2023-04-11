@@ -2,229 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE6E6DDB50
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AFA6DDB53
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjDKM4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        id S229836AbjDKM5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjDKM4N (ORCPT
+        with ESMTP id S229862AbjDKM5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:56:13 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56BC40C8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:56:10 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id e11so10220887lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681217769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p59U/MidztXKvUHX3x4iKgmMCkXfcEm0tuGKGeli3EQ=;
-        b=cucQ3h4DO0/QUJTeJK2Z6K1Y3AmBhtS9dIxDq9CZh2AOpGfoRVsKwU35FBq616tuED
-         Z6Q1cB1nEL0g+1qHs6Zdhn4YNWSm2HXqpjjxmbmDshXZ8T2Jvan1Q2b3cA0kR0hmPkko
-         asEGupj1WPZ43KapY4CTBn0ypdDXnlbRR1jOlakm+yFaR1mwq7MHf4qDSfuERBm/bMSI
-         OaI5gps5unremrp0xfuMx2HO0EsSxZ3a+SZewcQ7Pel99vKUQAXvxrYWNfLiVN3PFtFX
-         TXz6JJy1vUJNHeBQbDG1gSHkCs0Pmo8rBwBfMO4D7VwliY9YTXfblA4vNCoCbw2NkgSB
-         VQ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681217769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p59U/MidztXKvUHX3x4iKgmMCkXfcEm0tuGKGeli3EQ=;
-        b=LlLLmJK1AZN7IhbmF2WwJTOLraqOwwC3z4DbbQf8xxxRDSew3vid8bWrzlBVD7E3k5
-         eiiDOZsCGY7TCGrG7E4VgRlQC1ifwHvJwwDECejm4WjPqBxI/pMSnFOMWt2AUk0Q4yvc
-         gWfH8kWwrHBxwiLJ6+2uvcOaBtg4XWCXXkfRvAyLJJeuYKa5pI9AaXEzL6/PqY3/3w0j
-         bwdemiaAJGoj6oM/EWG6oenQNYg564QQUKsxHSUOA2ryCOHE87Hn1IDDIGvCZYkj2mjD
-         lVKFqYJ3ZO3Isna8MPqvTOkqSqawTqTU3tQcTV5BeoHIQqKu3rpnSKLFKUC0pAC8PjhO
-         81Yg==
-X-Gm-Message-State: AAQBX9cWgh1idmgoWFIKAmK/59EK7ceG/AogKK3RjOh7kaLLmXNfR7VK
-        YC8lMGny6cTfS6w3WYpriWSMcQ==
-X-Google-Smtp-Source: AKy350a/nlAv6EQaVMDDtX7UwvD9JRmUg+BukSidmParaor5epxiPNDYQWuKjpm8YL65cdtci6mT9Q==
-X-Received: by 2002:a19:700b:0:b0:4e9:cb57:8fdc with SMTP id h11-20020a19700b000000b004e9cb578fdcmr4049342lfc.46.1681217768995;
-        Tue, 11 Apr 2023 05:56:08 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id r7-20020ac25a47000000b004e846175329sm2522743lfn.202.2023.04.11.05.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 05:56:08 -0700 (PDT)
-Message-ID: <9130c1cb-4081-b21c-7c1b-2e0c9879e66a@linaro.org>
-Date:   Tue, 11 Apr 2023 14:56:07 +0200
+        Tue, 11 Apr 2023 08:57:44 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D588E3596;
+        Tue, 11 Apr 2023 05:57:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QOg0g+UCIKeaMDjGLz1NjF+DtIrh/v6zcltUKLqaigruQtjpNx3fCj2kRbzG6uvxPCC/DD/LM8Us5k/twI1KySMBeBlY24l9tLfdxAr7jBWeLVZAbCeD14ZSty6x/S3yeVTybLs8K773UE2werxjEdDCAzZXfQTypw0mAPRwodySnC5fdmi1UdZahPeYxtY2BtaLisn2sxA+Uvo3MJ6GBfspRndDM92+7Mam1LdvLQS0+ThGG9GYIwfpUvAkpFnZrl2McqxfxWatoronoKmPlYXv2WbIs4rcUCgQsq2oFnxEpXfQ6blnxhjgKGyyGhw5Kc5BYqSEalv+9+ynLiyZlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6akHvPytSWW+T1d0qLMeSDSVBA8yqoukOe7DUFGoOzs=;
+ b=R3VijdX0HhZvTrudobEigwH+SeIydZwoUjTxrzS+zyIYHJDTo0alv9uQyrU5j0H9RIwX1A9zKC3I+VTTGcwh4fa029OaSZLEI5iUJ9up/Kc4LwsYBcwHB8L+4F0YaXOjzFxuvFqGRn7YzaEmuwgN1A+e/oFZDJEEvTv39W1X76tTeoJ8tVVDkYxp5aqaaZSgNrOygg+cFLpGL2XFZQ+YlXGG5zWfKX9LqUXIGjPILM0OeoMJYxRznwjUwFITVqGpzLnslZYbGz5DR6WuB2sfOse0BETEQGaXV6s4TVCu1ZxB3i9qzTnH0PAucU7f+dYRyruT79JGDySFRFaIKC1mVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6akHvPytSWW+T1d0qLMeSDSVBA8yqoukOe7DUFGoOzs=;
+ b=rJmZzFycVdR/dwGo2U16wu2hf91/DlKy1IKmv4D+VnHIdo4fsY6HalC8bT928GUR7Ng7URKjwQsD4yzs4PlA1PdW7ThzhAAFB1zApt2VcCnXFJEPpYkyfzF+zjK6WsAFLwHrGFaPV27z7cW5ny7/AkRhYZ/aKz/4hB7sARdxUU8=
+Received: from MW4PR03CA0080.namprd03.prod.outlook.com (2603:10b6:303:b6::25)
+ by CH3PR12MB8329.namprd12.prod.outlook.com (2603:10b6:610:12e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 12:57:39 +0000
+Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b6:cafe::4c) by MW4PR03CA0080.outlook.office365.com
+ (2603:10b6:303:b6::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.39 via Frontend
+ Transport; Tue, 11 Apr 2023 12:57:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.28 via Frontend Transport; Tue, 11 Apr 2023 12:57:39 +0000
+Received: from aiemdeew.1.ozlabs.ru (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 11 Apr
+ 2023 07:57:33 -0500
+From:   Alexey Kardashevskiy <aik@amd.com>
+To:     <kvm@vger.kernel.org>
+CC:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Pankaj Gupta" <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        "Santosh Shukla" <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>
+Subject: [PATCH kernel v5 0/6] KVM: SEV: Enable AMD SEV-ES DebugSwap
+Date:   Tue, 11 Apr 2023 22:57:12 +1000
+Message-ID: <20230411125718.2297768-1-aik@amd.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: Add base qrb4210-rb2 board dts
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
-References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
- <20230411072840.2751813-3-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230411072840.2751813-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT035:EE_|CH3PR12MB8329:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72847b36-fcfb-4f98-f263-08db3a8c54d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /v1pQIrbYePh9p0Wm4J1RCGw2CVC1kyTT3WcaV/H+E3lzfxaM1+7zfPNmFLC3kf5J9R/0/97iMlq5Iqd1g7hBqV7T/4hW7Q8VRhmD5H6Hi3RZ8AC2JE7anfq3NhWi6iGxzRft8q8bPGRbBVTdoGqC1Sh2i7OUiveT9QWauyPqvnJ/zVDnNjUonaSS9kqlbmiQ0JXUYCBnxwwxer64phvdIg92pRNXb3twyCb0lr+nSJRREf7zdib6FSod3MgVhXfO7hGt2dcz6wESxmk/a80AeaJ37HGc5fDiJvG6XOIh81VmmDUw8u7A5qzZ1l6qTdqtj4o+U99V1UxH+oCabJHalKOPxbslicc+tsW2lQ5iwTNtNtvNe+t7nU501//xIVvuuHxx1oCfmsK5NT6wZdF6l4Ho6N+bjWQyvlhurKxq95/tYDmlPI4Tv2fABPNcCEmMo1J65zDvoXbXyqA47UZYXWHOswJ+UxaBq9PvVKXr5CwSmAm5qojwwUCSu6rPCh7qYIK2NQ7rWApIJhQaJBFef3xZ8mIL6JvKYdMM7d3B05q9pZ2HHEqUVEfBQWyIReKMbWlo6JWE+gXLweWcTi6cgTob3TBVsWmhHwLIOC7rboojPbLbBYDxq0D5baQNeoJ6ByO2ouR0wjuPfnlu5LWp19K4A+rG3FxFfgVVkxtdIfXNXhJUMa8oYNxLrXfRclOxckt4JIfFARvaLwy5dJTMh63syfH7WE0RRi+KW2W54k=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(36840700001)(46966006)(40470700004)(6666004)(478600001)(40460700003)(40480700001)(47076005)(83380400001)(36756003)(82740400003)(81166007)(356005)(2616005)(36860700001)(426003)(16526019)(2906002)(966005)(336012)(316002)(1076003)(54906003)(26005)(186003)(41300700001)(8676002)(4326008)(82310400005)(8936002)(6916009)(5660300002)(70586007)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 12:57:39.4372
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72847b36-fcfb-4f98-f263-08db3a8c54d1
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8329
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is to use another AMD SEV-ES hardware assisted register swap,
+more detail in 5/6. In the process it's been suggested to fix other
+things, here is the attempt, with the great help of amders.
+
+The previous conversation is here:
+https://lore.kernel.org/r/20230203051459.1354589-1-aik@amd.com
+
+This is based on sha1
+f91f9332d782 Ingo Molnar "Merge branch into tip/master: 'x86/tdx'".
+
+Please comment. Thanks.
 
 
-On 11.04.2023 09:28, Bhupesh Sharma wrote:
-> Add DTS for Qualcomm qrb4210-rb2 board which uses SM4250 SoC.
-> 
-> This adds debug uart, emmc, uSD and tlmm support along with
-> regulators found on this board.
-> 
-> Also defines the 'xo_board' and 'sleep_clk' frequencies for
-> this board.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile        |   1 +
->  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 223 +++++++++++++++++++++++
->  2 files changed, 224 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index e0e2def48470..d42c59572ace 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -74,6 +74,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qrb2210-rb1.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= qrb4210-rb2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5-vision-mezzanine.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qru1000-idp.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> new file mode 100644
-> index 000000000000..c9c6e3787462
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> @@ -0,0 +1,223 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sm4250.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. QRB4210 RB2";
-> +	compatible = "qcom,qrb4210-rb2", "qcom,qrb4210", "qcom,sm4250";
-> +
-> +	aliases {
-> +		serial0 = &uart4;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-min-microvolt = <3700000>;
-> +		regulator-max-microvolt = <3700000>;
-> +
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +};
-> +
-> +&qupv3_id_0 {
-> +	status = "okay";
-> +};
-> +
-> +&rpm_requests {
-> +	regulators {
-> +		compatible = "qcom,rpm-pm6125-regulators";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +		vdd-s4-supply = <&vph_pwr>;
-> +		vdd-s5-supply = <&vph_pwr>;
-> +		vdd-s6-supply = <&vph_pwr>;
-> +		vdd-s7-supply = <&vph_pwr>;
-> +		vdd-s8-supply = <&vph_pwr>;
-> +		vdd-s9-supply = <&vph_pwr>;
-> +		vdd-s10-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l7-l17-l18-supply = <&vreg_s6a_1p352>;
-> +		vdd-l2-l3-l4-supply = <&vreg_s6a_1p352>;
-> +		vdd-l5-l15-l19-l20-l21-l22-supply = <&vph_pwr>;
-> +		vdd-l6-l8-supply = <&vreg_s5a_0p848>;
-> +		vdd-l9-l11-supply = <&vreg_s7a_2p04>;
-> +		vdd-l10-l13-l14-supply = <&vreg_s7a_2p04>;
-> +		vdd-l12-l16-supply = <&vreg_s7a_2p04>;
-> +		vdd-l23-l24-supply = <&vph_pwr>;
-> +
-> +		vreg_s5a_0p848: s5 {
-I think going with pmicname_regulatorname (e.g. pm6125_s5) here
-and adding:
 
-regulator-name = "vreg_s5a_0p848"
+Alexey Kardashevskiy (6):
+  KVM: SEV: move set_dr_intercepts/clr_dr_intercepts from the header
+  KVM: SEV: Move SEV's GP_VECTOR intercept setup to SEV
+  KVM: SEV-ES: explicitly disable debug
+  KVM: SVM/SEV/SEV-ES: Rework intercepts
+  KVM: SEV: Enable data breakpoints in SEV-ES
+  x86/sev: Do not handle #VC for DR7 read/write
 
-would make this more maintainable.
+ arch/x86/include/asm/cpufeatures.h |  1 +
+ arch/x86/include/asm/svm.h         |  1 +
+ arch/x86/kvm/svm/svm.h             | 42 ---------------
+ arch/x86/boot/compressed/sev.c     |  2 +-
+ arch/x86/kernel/sev.c              |  6 +++
+ arch/x86/kvm/svm/sev.c             | 54 +++++++++++++++++++-
+ arch/x86/kvm/svm/svm.c             | 48 +++++++++++++++--
+ 7 files changed, 105 insertions(+), 49 deletions(-)
 
-[...]
+-- 
+2.39.1
 
-> +&sdhc_1 {
-> +	vmmc-supply = <&vreg_l24a_2p96>;
-> +	vqmmc-supply = <&vreg_l11a_1p8>;
-> +	no-sdio;
-> +	non-removable;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&sdhc_2 {
-> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
-This comment is still pretty much spam.
-
-> +	vmmc-supply = <&vreg_l22a_2p96>;
-> +	vqmmc-supply = <&vreg_l5a_2p96>;
-> +	no-sdio;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&sleep_clk {
-> +	clock-frequency = <32000>;
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
-> +			       <49 1>, <52 1>, <54 1>,
-> +			       <56 3>, <61 2>, <64 1>,
-> +			       <68 1>, <72 8>, <96 1>;
-> +};
-> +
-> +&uart4 {
-> +	status = "okay";
-> +};
-This is not the correct SE for the production board. People
-booting this will get a tz bite.
-
-LGTM otherwise.
-
-Konrad
-> +
-> +&xo_board {
-> +	clock-frequency = <19200000>;
-> +};
