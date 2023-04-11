@@ -2,163 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44446DD989
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69A46DD994
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjDKLjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S229598AbjDKLkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjDKLj3 (ORCPT
+        with ESMTP id S229690AbjDKLko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:39:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A343A90;
-        Tue, 11 Apr 2023 04:39:27 -0700 (PDT)
+        Tue, 11 Apr 2023 07:40:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354435B1;
+        Tue, 11 Apr 2023 04:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681213168; x=1712749168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r0qqKJ4nkKA5foVlIR6UdPxdVJCmJH48u1jn3damEbI=;
-  b=uZYuTWCIEWnEC0sOGBQ8RZ+N0eFdgVENhtdxUWxpsmPWXmahzx0MAJWL
-   qLXyQTGU0+mvw42N8MzE9/W1Z2qgcAxriiyXGeyoSicDLoTBszKgKHjw/
-   JVo6R1ZuHSxVxENp599IhuLKmOTEK7E4slh0JSpA/pZWWcoKG2l7FkMOe
-   Qa+gemf4x/f9eZPGk8nYlrymSKFM6ILHKMgdE8p+ozAf71n7QLn9/Dgws
-   1Wz8oX9UfLj9XMcyyjRfanPo7m8UAUbQ1c/FStW5jOpUX8WLBPgpybjx8
-   BN5myXbvd5OTfmyDHh8jvfuQjwjKcjYr8OzTy0OYzZJLlGpvuzlvJA5UI
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681213241; x=1712749241;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Q1KmnT6CP3gcYAB98ih7TpWtjuH/X4ISON3W+ihbGac=;
+  b=NN5LEVK/xcK9IfYFRFoPG20GfiMA6lGBXYYQ0rBPbLLa5Pj3+n63OB5E
+   RPf4wsez2ggP4XXIu9yhbN/FWukRVIXK4FSAkqxuXbvySyGj26pj7Zofh
+   BtyNa7vdlTQYePK3VxWJNO0eKoF5RSyGViLIOCeMiZMAy+1VBEC2rX0Be
+   etY+Df0imumuwbKIMdSvpEdA/Er8x+xlsrhZUw+Jy3G5U4MwHnSnoZU1+
+   kyWkZfT2yk9zjb6rnp+cK9jqLR+m11t/MmV6Oo51bnUTd7Q70uQv0US4l
+   bf+rzqa8J3sdAiJIcrp8AiYmLFhas8TaiCcENzzCSq+ypUXMv5fJmtP/0
    A==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="scan'208";a="205927076"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 04:39:28 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 04:39:25 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 04:39:25 -0700
-Date:   Tue, 11 Apr 2023 13:39:24 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Simon Horman <horms@kernel.org>
-CC:     Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <lvs-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-        <coreteam@netfilter.org>
-Subject: Re: [PATCH nf-next v2 1/4] ipvs: Update width of source for
- ip_vs_sync_conn_options
-Message-ID: <20230411113924.6vhibpekifbyjksg@soft-dev3-1>
-References: <20230409-ipvs-cleanup-v2-0-204cd17da708@kernel.org>
- <20230409-ipvs-cleanup-v2-1-204cd17da708@kernel.org>
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="408732615"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="408732615"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:40:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638785598"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="638785598"
+Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:40:38 -0700
+Date:   Tue, 11 Apr 2023 14:40:33 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] mfd: intel-m10-bmc: Move core symbols to own
+ namespace
+In-Reply-To: <ZC+3msi6ovoF55tr@yilunxu-OptiPlex-7050>
+Message-ID: <a67058bc-8265-add0-3b89-8ee310e871b6@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-2-ilpo.jarvinen@linux.intel.com> <ZC+3msi6ovoF55tr@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230409-ipvs-cleanup-v2-1-204cd17da708@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1253313675-1681213247=:2109"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/11/2023 09:10, Simon Horman wrote:
-> 
-> In ip_vs_sync_conn_v0() copy is made to struct ip_vs_sync_conn_options.
-> That structure looks like this:
-> 
-> struct ip_vs_sync_conn_options {
->         struct ip_vs_seq        in_seq;
->         struct ip_vs_seq        out_seq;
-> };
-> 
-> The source of the copy is the in_seq field of struct ip_vs_conn.  Whose
-> type is struct ip_vs_seq. Thus we can see that the source - is not as
-> wide as the amount of data copied, which is the width of struct
-> ip_vs_sync_conn_option.
-> 
-> The copy is safe because the next field in is another struct ip_vs_seq.
-> Make use of struct_group() to annotate this.
-> 
-> Flagged by gcc-13 as:
-> 
->  In file included from ./include/linux/string.h:254,
->                   from ./include/linux/bitmap.h:11,
->                   from ./include/linux/cpumask.h:12,
->                   from ./arch/x86/include/asm/paravirt.h:17,
->                   from ./arch/x86/include/asm/cpuid.h:62,
->                   from ./arch/x86/include/asm/processor.h:19,
->                   from ./arch/x86/include/asm/timex.h:5,
->                   from ./include/linux/timex.h:67,
->                   from ./include/linux/time32.h:13,
->                   from ./include/linux/time.h:60,
->                   from ./include/linux/stat.h:19,
->                   from ./include/linux/module.h:13,
->                   from net/netfilter/ipvs/ip_vs_sync.c:38:
->  In function 'fortify_memcpy_chk',
->      inlined from 'ip_vs_sync_conn_v0' at net/netfilter/ipvs/ip_vs_sync.c:606:3:
->  ./include/linux/fortify-string.h:529:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
->    529 |                         __read_overflow2_field(q_size_field, size);
->        |
-> 
-> Compile tested only.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+--8323329-1253313675-1681213247=:2109
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
+On Fri, 7 Apr 2023, Xu Yilun wrote:
+
+> On 2023-04-05 at 11:01:49 +0300, Ilpo Järvinen wrote:
+> > Create INTEL_M10_BMC_CORE namespace for symbols exported by
+> > intel-m10-bmc-core.
 > 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
-> v2
-> * Correct spelling of 'conn' in subject
-> ---
->  include/net/ip_vs.h             | 6 ++++--
->  net/netfilter/ipvs/ip_vs_sync.c | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+> Is it necessary for handshake register, or just an independent
+> improvement?
+
+It's independent improvement.
+
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/mfd/intel-m10-bmc-core.c | 2 +-
+> >  drivers/mfd/intel-m10-bmc-pmci.c | 1 +
+> >  drivers/mfd/intel-m10-bmc-spi.c  | 1 +
+> >  3 files changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+> > index dac9cf7bcb4a..b94412813887 100644
+> > --- a/drivers/mfd/intel-m10-bmc-core.c
+> > +++ b/drivers/mfd/intel-m10-bmc-core.c
+> > @@ -98,7 +98,7 @@ const struct attribute_group *m10bmc_dev_groups[] = {
+> >  	&m10bmc_group,
+> >  	NULL,
+> >  };
+> > -EXPORT_SYMBOL_GPL(m10bmc_dev_groups);
+> > +EXPORT_SYMBOL_NS_GPL(m10bmc_dev_groups, INTEL_M10_BMC_CORE);
+> >  
+> >  int m10bmc_dev_init(struct intel_m10bmc *m10bmc, const struct intel_m10bmc_platform_info *info)
 > 
-> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> index 6d71a5ff52df..e20f1f92066d 100644
-> --- a/include/net/ip_vs.h
-> +++ b/include/net/ip_vs.h
-> @@ -630,8 +630,10 @@ struct ip_vs_conn {
->          */
->         struct ip_vs_app        *app;           /* bound ip_vs_app object */
->         void                    *app_data;      /* Application private data */
-> -       struct ip_vs_seq        in_seq;         /* incoming seq. struct */
-> -       struct ip_vs_seq        out_seq;        /* outgoing seq. struct */
-> +       struct_group(sync_conn_opt,
-> +               struct ip_vs_seq  in_seq;       /* incoming seq. struct */
-> +               struct ip_vs_seq  out_seq;      /* outgoing seq. struct */
-> +       );
-> 
->         const struct ip_vs_pe   *pe;
->         char                    *pe_data;
-> diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-> index 4963fec815da..d4fe7bb4f853 100644
-> --- a/net/netfilter/ipvs/ip_vs_sync.c
-> +++ b/net/netfilter/ipvs/ip_vs_sync.c
-> @@ -603,7 +603,7 @@ static void ip_vs_sync_conn_v0(struct netns_ipvs *ipvs, struct ip_vs_conn *cp,
->         if (cp->flags & IP_VS_CONN_F_SEQ_MASK) {
->                 struct ip_vs_sync_conn_options *opt =
->                         (struct ip_vs_sync_conn_options *)&s[1];
-> -               memcpy(opt, &cp->in_seq, sizeof(*opt));
-> +               memcpy(opt, &cp->sync_conn_opt, sizeof(*opt));
->         }
-> 
->         m->nr_conns++;
-> 
-> --
-> 2.30.2
-> 
+> Why this function is not included in namespace?
+
+It was not left out on purpose, I'll add it there.
 
 -- 
-/Horatiu
+ i.
+
+--8323329-1253313675-1681213247=:2109--
