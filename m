@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361806DD94D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661BE6DD955
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjDKLY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S229957AbjDKLZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDKLY0 (ORCPT
+        with ESMTP id S229844AbjDKLZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:24:26 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13E935A6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:24:25 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6321d67eed0so786401b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681212265;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qJRC2fmKYy3q5cvXM6tPwtBqOIrqlg10FuCvexioZB4=;
-        b=DzROGqTtBLAYNxgvMbhQVQlTSSOVeA5xvc8Zvg2yLMcU5+BLnlHPkS3wNNsMj4KY/q
-         fNnyVtMwzIjISmoD72T+YGghCwea+tqlgTh0Hu9H1TTctx2CUYhEySNVIXu3F7fCMaSi
-         91a3S/0AL9UBoMCYEECzcQf3VUpUjSMGY2s1/IETTJCq93DBmsxlkuG+vIJqp1zz4w90
-         iX1iEHcnknQVdvRpJ2sNtE3GNvoKlbwrzcZhw24UNmME/Q/RJypiqZKEiWyCU1z2SAXk
-         V2j5iJiKPlIujn7rm2/MOqSNeQgMVDb2wVsKkFESSsrlmQ3We7RGZo7a7Yp9Yzyi1qL9
-         2cog==
+        Tue, 11 Apr 2023 07:25:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7A43C23
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681212285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MtPLyLYKhvmRWrlscYidgNx3zT5WdNKDqiq0WkceOio=;
+        b=Pi4ziJYI158DMkwiZhpMAw30Gbm5unUT2y6fiWNL5/Dmfc0U1JN/4hgROiEL3gfP67kOqY
+        U9JyOnVR1kj/2snotr7O1n76xm69Q+rk9X/0mclZK7kUVuIC6n8Xo5rovTXYbBluzUujti
+        zzj6H1m46dHg0NPHMMv0LC1N7u9ZkTQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-CJik2Tb9Nxuj2xbOX7Tp5Q-1; Tue, 11 Apr 2023 07:24:43 -0400
+X-MC-Unique: CJik2Tb9Nxuj2xbOX7Tp5Q-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f083f439daso2979735e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:24:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681212265;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJRC2fmKYy3q5cvXM6tPwtBqOIrqlg10FuCvexioZB4=;
-        b=nJpnVrq+vmvt9J3+6JzHiP+7liiSdG0vKj75lN1WQe6qhwyhDezrQAhGlhMoeG/iPx
-         D/RNiYNhw2HQrD9WsHQ+xfJ7p4GxrHcL1CnfMJtsF7VOBFYUoiexbyeh1sw6x194rfwW
-         0Kz59MW4j0QFdk3+58D+0DhySUYt4gfBHWxatctLjHB/kvFhaigMDkDgwm47UQAp/yNp
-         W0XC9laZJXVre6/321dsPWvKoOjHHY5TD4e7YZInM8S+ETle5RqU6ICcILiDw/QKUvQO
-         PUrLhTdYIB0MU0HNrnSk3qTE2TjBXaqm+x4vC7pyOIsjPH+yyn/dXiWwd3aqz5eJIly0
-         TyCA==
-X-Gm-Message-State: AAQBX9fOlbnCz1bj88E8WB1/5UndMv74tOW7AAeTjGhMdP9qsYgtSwmt
-        yMre2yTivdbsOso4ubpjyKpD
-X-Google-Smtp-Source: AKy350Yd7ft8YsZDgS3sHNGhUX5XeKcYlCDmwld+oYfaymvFOGA2nRgZxrh7GTEgPLk/gL1cqQIrhA==
-X-Received: by 2002:a62:844c:0:b0:634:c780:5bb8 with SMTP id k73-20020a62844c000000b00634c7805bb8mr12304326pfd.17.1681212265281;
-        Tue, 11 Apr 2023 04:24:25 -0700 (PDT)
-Received: from thinkpad ([117.216.120.128])
-        by smtp.gmail.com with ESMTPSA id s13-20020a056a0008cd00b0062e48fe0ccfsm9578399pfu.45.2023.04.11.04.24.20
+        d=1e100.net; s=20210112; t=1681212275; x=1683804275;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MtPLyLYKhvmRWrlscYidgNx3zT5WdNKDqiq0WkceOio=;
+        b=6niA4ie5MBXNMJkDegbntHD4EnmjjoFS2QE3MqVc8ZPbWY+n6NWAfEZFT/t5LSFu7f
+         to4UUWX70Ienf/66T94HkXWmzl3oDw8I9UleMcvgc4tMp9guplYnTuAB3KTTjLAI8jJz
+         lIQQo+hg9Sb2g/O8XgzewrrNN2UAEm3ZLVKihRBL46lpV2Hr3LCkMThzMFrWJIc/h+oW
+         h7+nzGzokwUciF6g4wysHjpIleK04FQr0AdDU4UYvHprJCLxaAgYj9946jHYIiyZ3gTB
+         SeDETcBTraWkjHiUfL0c0R9+aPubOy4F55ZgeGHoFmNw1ZnLedXRz0JZ61aqFM4L4s0T
+         yuXw==
+X-Gm-Message-State: AAQBX9ffIjC91MLdzX7u+eOG/bwri4SRDtkRtq20AYvcMCndMRETzrhG
+        jcaXGAC6l1dGSVi3l4ZCzQwVSOtifKU0p+ddG8SziHIExgdnHmzNsHHV/YzUnpRzGwr5NFwXXYH
+        IOqw/HoOXCCrpWMmSJzJoFlZO
+X-Received: by 2002:a05:600c:3ca3:b0:3eb:2e2a:be95 with SMTP id bg35-20020a05600c3ca300b003eb2e2abe95mr7821408wmb.2.1681212275510;
+        Tue, 11 Apr 2023 04:24:35 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZaJdY9wSGZcde9+lbsNZ2ANdpKdY7cuJ2dIOasA09jgWsCgaLNmGkfulMRAgdLTl46i2QGMA==
+X-Received: by 2002:a05:600c:3ca3:b0:3eb:2e2a:be95 with SMTP id bg35-20020a05600c3ca300b003eb2e2abe95mr7821393wmb.2.1681212275209;
+        Tue, 11 Apr 2023 04:24:35 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-239-96.dyn.eolo.it. [146.241.239.96])
+        by smtp.gmail.com with ESMTPSA id s21-20020a05600c45d500b003f082388117sm10705154wmo.32.2023.04.11.04.24.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 04:24:24 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:54:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 09/10] MAINTAINERS: Add myself as the DW PCIe
- core reviewer
-Message-ID: <20230411112416.GK5333@thinkpad>
-References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
- <20230411033928.30397-10-Sergey.Semin@baikalelectronics.ru>
+        Tue, 11 Apr 2023 04:24:34 -0700 (PDT)
+Message-ID: <87eef8a06064dc895f183ba2a1cd649c213f3e37.camel@redhat.com>
+Subject: Re: [PATCH net-next v2] qlcnic: check pci_reset_function result
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Denis Plotnikov <den-plotnikov@yandex-team.ru>,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, anirban.chakraborty@qlogic.com,
+        sony.chacko@qlogic.com, GR-Linux-NIC-Dev@marvell.com,
+        helgaas@kernel.org, simon.horman@corigine.com, manishc@marvell.com,
+        shshaikh@marvell.com
+Date:   Tue, 11 Apr 2023 13:24:33 +0200
+In-Reply-To: <20230407071849.309516-1-den-plotnikov@yandex-team.ru>
+References: <20230407071849.309516-1-den-plotnikov@yandex-team.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411033928.30397-10-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:39:27AM +0300, Serge Semin wrote:
-> No actions have been spotted from the driver maintainers for almost two
-> years now. It significantly delays the review process of the relatively
-> often incoming updates. Since that IP-core has been used in several our
-> SoCs adding myself to the list of reviewers will help in the evolving the
-> driver faster and in catching any potential problem as early as possible.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Fri, 2023-04-07 at 10:18 +0300, Denis Plotnikov wrote:
+> Static code analyzer complains to unchecked return value.
+> The result of pci_reset_function() is unchecked.
+> Despite, the issue is on the FLR supported code path and in that
+> case reset can be done with pcie_flr(), the patch uses less invasive
+> approach by adding the result check of pci_reset_function().
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>=20
+> Fixes: 7e2cf4feba05 ("qlcnic: change driver hardware interface mechanism"=
+)
+> Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
 
-If the Maintainers were not responding for these long years, then it implies
-that they are not maintaining at all. So I'm inclined to remove their entries
-too but I'll defer that decision to Lorenzo.
+Any special reason to target the net-next tree? This looks like a -net
+candidate to me?
 
-For this patch,
+Thanks!
 
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Paolo
 
-- Mani
-
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 489fd4b4c7ae..51adcafa0f0c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16061,6 +16061,7 @@ F:	drivers/pci/controller/dwc/pci-exynos.c
->  PCI DRIVER FOR SYNOPSYS DESIGNWARE
->  M:	Jingoo Han <jingoohan1@gmail.com>
->  M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-> +R:	Serge Semin <fancer.lancer@gmail.com>
->  L:	linux-pci@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/pci/snps,dw-pcie*.yaml
-> -- 
-> 2.40.0
-> 
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
