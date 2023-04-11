@@ -2,141 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5CD6DE240
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8AA6DE244
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjDKRQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S229974AbjDKRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjDKRQn (ORCPT
+        with ESMTP id S229437AbjDKRRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:16:43 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7973D5598;
-        Tue, 11 Apr 2023 10:16:20 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id o1so11366825lfc.2;
-        Tue, 11 Apr 2023 10:16:20 -0700 (PDT)
+        Tue, 11 Apr 2023 13:17:00 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5A749F6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:16:56 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54c0c9de33aso155128907b3.15
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681233379; x=1683825379;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zRtwsRyVIGqbkmiCnDqCsYdQjOk1l7EH31DIMvx2aYo=;
-        b=QN4AgX1vG6TwvXQ6XOCqMVOZuOC4Ru5G1vKdR5L6LPPsHkM3tGW+XPrXX09zkc6j2S
-         +xPSm2znuJ8gvEhplWMtooiJusbJB8ZpA6EYHagHeNKic56w9GWMbEhPoRNVAHGOEGnL
-         k0iQXP0rBybo/qdK0qWNDK44bEFMFG4Bwf9NSpCLrM92JxDag+WDEqXV2JjxKhYa64zW
-         fhqxfu4SZFj5CbRY6YGcuuDEDHr+71ucCWLzWEyFdLgRKxLvl3Ez8ttMic61YQcBuV0e
-         EEmuH7oVQ2ZZgRaldisW9NB8vZIy42tZruIrYNdtKnGXjo1u31WFxV5gKncgZP8Ne9Bs
-         sA4g==
+        d=google.com; s=20221208; t=1681233415;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rxRq7IEOowHT+3lZvfsRXImSkulOEzG82uwdGkSU48I=;
+        b=IEIUnJfKT1h1+cZkb1XP2ptSpAyBOIu5i+dE3DGuWDt4Wv8yGnnU6YsR4hw1P1Rww2
+         5ARveRIB2sgXqKBkILJTbhnpymk/kafUHOkEROBI+uXPey9mGCmlPwSEQZZzzdflUKXL
+         qWLOa0nUgBP0+VhNkEFnyRph0Q/k/o1Jo5tBdLpE9SpAqwSXRep/VgfkVPFZDM+e2NYh
+         KNS5IKch27NzqpwghvRINaeYID+O5LeOSWkhheVEnxGM4Kzh+ETf7VNKR98bm9QhH+TT
+         FYcTVYOeMEg/MkmV6tuhOsoWa2WwpXHEBpYTF8Wl0pMzo3Tzvea7i3GdD15BUEIgHVaF
+         VMhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681233379; x=1683825379;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1681233415;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zRtwsRyVIGqbkmiCnDqCsYdQjOk1l7EH31DIMvx2aYo=;
-        b=jYnD2W4pgmih8T4R+8T7+Mrf3+2fXkwQ+zOKFAwTjleOWHAyttmdW0sBrHJ+Y9twJA
-         UjZKtZBFSKQ4SOlWZEMEo8wvFw6ruVdGeR3MwoYRft4VAUuR3Vd+r/oAKr1A+YHWDnIx
-         22qE6f6WxQgAzzOfghSen6rWuH7QzqSq45QsPL4O6NOHjUIedAbuWmy9MEwCWfikBLth
-         iqdRp6yRPY8KAdD1WYmpxNpQdl4uRFz6OkJ3ssFOz+m8scbacu+7X5aenSaTvaul/MYR
-         TxUWFKenN30Nh+hAX28UiAhrykHw/mZYemShAwklBIUhtM+P8spSuzVjkJPO8e5U7MAA
-         DHEA==
-X-Gm-Message-State: AAQBX9eiTWPMTtLcRkwrwlSPqvzrKGPfrukf2g0KYavfDcfcsHBFwkzA
-        For1+fcDdndlIGyA9bY0pIA=
-X-Google-Smtp-Source: AKy350aU2RyTu7csMgtptLshnV8XaxjcWlEXI5Nbb6vLFCW/PoKY/nJF++O4isukO/xLPd/Ba3Xn1g==
-X-Received: by 2002:a05:6512:244:b0:4e9:c327:dd81 with SMTP id b4-20020a056512024400b004e9c327dd81mr3582478lfo.63.1681233378577;
-        Tue, 11 Apr 2023 10:16:18 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id x4-20020a19f604000000b004ebae99cc1dsm2614134lfe.159.2023.04.11.10.16.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 10:16:17 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 20:16:15 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        bh=rxRq7IEOowHT+3lZvfsRXImSkulOEzG82uwdGkSU48I=;
+        b=P/JWMujh/USkJhMxW+wABcO7EGFa2JW2iePjOqsV+7LOs4UeOQ6+roUtDEfdzEKXr/
+         9lx9PzKhf+lcxhyu+63KQjlXsebsvec2jgWwno1nkiKiDzSi9ESEGXaZawjqlryn2CNI
+         4CY2WJS9PNgjxQtzKfhZDdDTdIPVFEI7uIcYATfMyWJyXbqdGYjsbUTEwr5KXFLGoIhn
+         d113V5ZK0O/VFJ1OqlO8oVKw3unJQ+wV3RlV/WU1jc1rJuwQTGmJsafpZNNQng7PfbzN
+         gLmRh2BS7iHzmHg69+h2nlyMFUzVTNNtFTm1bHBkC3utLa8/Exu+vCs9pOOM4Gp3q1h2
+         oRVw==
+X-Gm-Message-State: AAQBX9eabKNG5VnvNzp1Y3jasT0zkPpUYQQN14+Pd5+8yc0uto2hOuqV
+        hq6owjUgm3Jo3wj0Kl46/26Q0yt7XCk=
+X-Google-Smtp-Source: AKy350aOFuqLb4Xj6nP4d09SKpKOHeyL6TU4ugtbhHOugVmN4JDIGyDDtdUShlrt2xoUXZNRXoQWTEoTZwA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d4d1:0:b0:b80:2bf9:2f78 with SMTP id
+ m200-20020a25d4d1000000b00b802bf92f78mr10090547ybf.11.1681233415496; Tue, 11
+ Apr 2023 10:16:55 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 11 Apr 2023 10:16:49 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230411171651.1067966-1-seanjc@google.com>
+Subject: [PATCH v3 0/2] Documentation/process: Add a maintainer handbook for
+ KVM x86
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 09/10] MAINTAINERS: Add myself as the DW PCIe
- core reviewer
-Message-ID: <20230411171615.gezxhjcndpkrts2b@mobilestation>
-References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
- <20230411033928.30397-10-Sergey.Semin@baikalelectronics.ru>
- <20230411112416.GK5333@thinkpad>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411112416.GK5333@thinkpad>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:54:16PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Apr 11, 2023 at 06:39:27AM +0300, Serge Semin wrote:
-> > No actions have been spotted from the driver maintainers for almost two
-> > years now. It significantly delays the review process of the relatively
-> > often incoming updates. Since that IP-core has been used in several our
-> > SoCs adding myself to the list of reviewers will help in the evolving the
-> > driver faster and in catching any potential problem as early as possible.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> If the Maintainers were not responding for these long years, then it implies
-> that they are not maintaining at all. So I'm inclined to remove their entries
-> too but I'll defer that decision to Lorenzo.
+Dcumentation for contributing to KVM x86, round 3!
 
-To be completely honest @Jingoo responded to a few patches with minor
-comments lately meanwhile @Gustavo has been completely silent for
-about two years now.
+v3:
+ - Add language to clarify that "reverse fir tree" is also known as
+   "reverse Christmas tree or reverse XMAS tree". [Robert, Mingwei]
+ - Change guidance for patches/series that touch code outside of x86/kvm
+   to recommend/prescribe using a common base, e.g. release candidate,
+   not kvm-x86/next. [Bagas, Oliver]
 
-> 
-> For this patch,
-> 
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+v2:
+ - Fix a KVM_GET_SUPPORTED_CPUID typo. [Yuan]
+ - Give Cthulhu the respect it deserves. [Like]
+ - Explicitly state that selftests vs. KVM patches need to maintain
+   bisection (when possible). [Like]
+ - Change the recommended base from topic branches to "next" (and plan on
+   providing stable, persistent git objects via tags). [David W]
+ - Add a blurb to provide guidance for series that touch non-x86 arch
+   code. [Yu]
+ - Clarify when (not) to reference/quote specs (APM and SDM). [Maciej]
+ - Add preferences for shortlog length. [Maciej]
+ - Exempt things like comment fixes from testing requirements. [Maciej]
+ - Add a foreword to try and make the doc less scary to newcomers. [Maciej]
+ - Add a rule for testing Documentation/ changes.
+ - Clarify that fixes for the current cycle may be carried in the KVM x86
+   tree, but are usually taken directly by Paolo. [Robert]
+ - Tweak the "Changelog" section to call out that using imperative mood
+   and avoiding pronouns is the most important rule.
 
-Thanks.
+v1: https://lore.kernel.org/all/20230217225449.811957-1-seanjc@google.com
 
--Serge(y)
+Sean Christopherson (2):
+  Documentation/process: Add a label for the tip tree handbook's coding
+    style
+  Documentation/process: Add a maintainer handbook for KVM x86
 
-> 
-> - Mani
-> 
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 489fd4b4c7ae..51adcafa0f0c 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -16061,6 +16061,7 @@ F:	drivers/pci/controller/dwc/pci-exynos.c
-> >  PCI DRIVER FOR SYNOPSYS DESIGNWARE
-> >  M:	Jingoo Han <jingoohan1@gmail.com>
-> >  M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-> > +R:	Serge Semin <fancer.lancer@gmail.com>
-> >  L:	linux-pci@vger.kernel.org
-> >  S:	Maintained
-> >  F:	Documentation/devicetree/bindings/pci/snps,dw-pcie*.yaml
-> > -- 
-> > 2.40.0
-> > 
-> > 
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+ .../process/maintainer-handbooks.rst          |   1 +
+ Documentation/process/maintainer-kvm-x86.rst  | 390 ++++++++++++++++++
+ Documentation/process/maintainer-tip.rst      |   2 +
+ MAINTAINERS                                   |   1 +
+ 4 files changed, 394 insertions(+)
+ create mode 100644 Documentation/process/maintainer-kvm-x86.rst
+
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+-- 
+2.40.0.577.gac1e443424-goog
+
