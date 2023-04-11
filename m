@@ -2,72 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CD86DCFAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F426DCFB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjDKCZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 22:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S229605AbjDKC3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 22:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDKCZj (ORCPT
+        with ESMTP id S229827AbjDKC27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 22:25:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C892690;
-        Mon, 10 Apr 2023 19:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yhPVj9bkaKyOeFej+CfgkaNLlr/1Qr/o0GaaGMTZo/c=; b=mzNoeW+wr9QIHGNDW3WjRgQk2j
-        29wt2EIFds8PQQD106I5Tns9glgc5NmbUGc5PQx8BTm3uOTseisyE1lkjoMB2igmYEAzKQZROd/A9
-        6Xc+ocbXKbyT9pTCExrPwstOxHw550lolQ1uUUF3x8s7TdsFo/7azyKssLvW2KNYPwtl7cOBq44ZE
-        DbCR80Pu5eDpYmhgXUtJbZXPXsSVMSVCfZTPNHIrJDhw5JuT0HS7rqIncz6Zd4nbogYkiGnNKi18s
-        QwyEGJDcZ3aamkl3KXybuJKRHmtbkonb037tSgQwyD4QH6b3YzVOpL6tnDYfCo12YW4/bqv3z/K7G
-        xyTWtC+w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pm3h2-005AMa-7J; Tue, 11 Apr 2023 02:25:12 +0000
-Date:   Tue, 11 Apr 2023 03:25:12 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        maple-tree@lists.infradead.org,
-        Suren Baghdasaryan <surenb@google.com>, stable@vger.kernel.org,
-        syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com
-Subject: Re: [PATCH 8/8] mm: enable maple tree RCU mode by default.
-Message-ID: <ZDTFCOg7/I1WIviR@casper.infradead.org>
-References: <20230327185532.2354250-9-Liam.Howlett@oracle.com>
- <202304110907.a7339b10-oliver.sang@intel.com>
+        Mon, 10 Apr 2023 22:28:59 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9981982;
+        Mon, 10 Apr 2023 19:28:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwVC85ZDvz4xDh;
+        Tue, 11 Apr 2023 12:28:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1681180133;
+        bh=6e/jGpYDTAVw88CVqimS+a5Lt1DPmUftbnGWNhtg8oo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qp7qUKOZN3NpYLS8Vhe3ldz3K7BJodvVUfG/G0LiHStWw/lT+Opw/mkhahnskU3ls
+         MBr0BfaRXB/DqAEMXBbQh+w0RdchJPWPPO1PuJFYg3doNiizWm3YTIuMw8ZLkV4t2M
+         cWm70kPsbXn94qgsSCWlXh9pMhImJIvjpDYzdueoy+hNrkUfSg3/yJZYC/hCUCzlTO
+         NoMhSJ6dg5MbyKO3fGr9Xzm54gaOPoaGMlhnOF2BHxdPyBVusVqyZ5TXdx6u81oPXR
+         LIkRD0lwv6quiHxcM1tAVsOAhU8PMdDepdPVw+l6LYVFCKp1MQMtIOjXNEgGUUvliD
+         TOF89gPwGEPGA==
+Date:   Tue, 11 Apr 2023 12:28:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the devicetree tree
+Message-ID: <20230411122851.57f3dac6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304110907.a7339b10-oliver.sang@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/BprD_/xTEOv=gen9_bAa.hx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 09:25:16AM +0800, kernel test robot wrote:
-> kernel test robot noticed a -8.5% regression of stress-ng.mmapaddr.ops_per_sec on:
+--Sig_/BprD_/xTEOv=gen9_bAa.hx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Assuming this is the test in question:
+Hi all,
 
-https://github.com/ColinIanKing/stress-ng/blob/master/stress-mmapaddr.c
+After merging the devicetree tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-then yes, this is expected.  The test calls mmap() and munmap() a lot,
-and we've made those slower in order to fix a bug.
+drivers/cpufreq/acpi-cpufreq.c:1024:15: error: variable 'acpi_cpufreq_platd=
+rv' has initializer but incomplete type
+ 1024 | static struct platform_driver acpi_cpufreq_platdrv =3D {
+      |               ^~~~~~~~~~~~~~~
+drivers/cpufreq/acpi-cpufreq.c:1025:10: error: 'struct platform_driver' has=
+ no member named 'driver'
+ 1025 |         .driver =3D {
+      |          ^~~~~~
+drivers/cpufreq/acpi-cpufreq.c:1025:19: error: extra brace group at end of =
+initializer
+ 1025 |         .driver =3D {
+      |                   ^
+drivers/cpufreq/acpi-cpufreq.c:1025:19: note: (near initialization for 'acp=
+i_cpufreq_platdrv')
+drivers/cpufreq/acpi-cpufreq.c:1025:19: error: excess elements in struct in=
+itializer [-Werror]
+drivers/cpufreq/acpi-cpufreq.c:1025:19: note: (near initialization for 'acp=
+i_cpufreq_platdrv')
+drivers/cpufreq/acpi-cpufreq.c:1028:10: error: 'struct platform_driver' has=
+ no member named 'remove'
+ 1028 |         .remove         =3D acpi_cpufreq_remove,
+      |          ^~~~~~
+drivers/cpufreq/acpi-cpufreq.c:1028:27: error: excess elements in struct in=
+itializer [-Werror]
+ 1028 |         .remove         =3D acpi_cpufreq_remove,
+      |                           ^~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/acpi-cpufreq.c:1028:27: note: (near initialization for 'acp=
+i_cpufreq_platdrv')
+drivers/cpufreq/acpi-cpufreq.c: In function 'acpi_cpufreq_init':
+drivers/cpufreq/acpi-cpufreq.c:1033:16: error: implicit declaration of func=
+tion 'platform_driver_probe' [-Werror=3Dimplicit-function-declaration]
+ 1033 |         return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cp=
+ufreq_probe);
+      |                ^~~~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/acpi-cpufreq.c: In function 'acpi_cpufreq_exit':
+drivers/cpufreq/acpi-cpufreq.c:1038:9: error: implicit declaration of funct=
+ion 'platform_driver_unregister'; did you mean 'driver_unregister'? [-Werro=
+r=3Dimplicit-function-declaration]
+ 1038 |         platform_driver_unregister(&acpi_cpufreq_platdrv);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         driver_unregister
+drivers/cpufreq/acpi-cpufreq.c: At top level:
+drivers/cpufreq/acpi-cpufreq.c:1024:31: error: storage size of 'acpi_cpufre=
+q_platdrv' isn't known
+ 1024 | static struct platform_driver acpi_cpufreq_platdrv =3D {
+      |                               ^~~~~~~~~~~~~~~~~~~~
 
-While it does take pagefaults (which is a better test than some
-microbenchmarks), it only takes one pagefault per call to mmap() and
-munmap(), which is not representative of real workloads.
+I am not sure which of the include file update commits were the direct
+cause but they interacted with commit
 
-Thanks for running the test.
+  691a63712347 ("ACPI: cpufreq: Use platform devices to load ACPI PPC and P=
+CC drivers")
+
+from the pm tree.
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 11 Apr 2023 12:15:29 +1000
+Subject: [PATCH] devicetree: fix up for include rationalisation
+
+interacting with "ACPI: cpufreq: Use platform devices to load ACPI PPC and =
+PCC drivers"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 1 +
+ drivers/cpufreq/pcc-cpufreq.c  | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index e1a5384cf21c..29904395e95f 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -20,6 +20,7 @@
+ #include <linux/dmi.h>
+ #include <linux/slab.h>
+ #include <linux/string_helpers.h>
++#include <linux/platform_device.h>
+=20
+ #include <linux/acpi.h>
+ #include <linux/io.h>
+diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
+index 0c362932ca60..b4318a1a9335 100644
+--- a/drivers/cpufreq/pcc-cpufreq.c
++++ b/drivers/cpufreq/pcc-cpufreq.c
+@@ -36,6 +36,7 @@
+ #include <linux/io.h>
+ #include <linux/spinlock.h>
+ #include <linux/uaccess.h>
++#include <linux/platform_device.h>
+=20
+ #include <acpi/processor.h>
+=20
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BprD_/xTEOv=gen9_bAa.hx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ0xeQACgkQAVBC80lX
+0GwkBQgAl8bZzR2qrb78D0W9Mvb7FH6hEyViM4Wnm2y8a8AO5ihwTaOMFNO3vZZp
+1UR/uNKhky3v2DvqT0CLfReEOHtf+U6WbipYkp+5ofmI7HaPMRx5e+zUSfJzhSya
+5YTRHtLF8JmIWlFuQ6bKNrVvjZw/KFDmRYZNlNmruM+gqfq+MqVxnxjfoNqy5UaF
+WeVALYuk55RIcMZSRqSaQQGcavXEfF+sorC5xqoPvvmJLj3k/YPEHWhTvN3sdCsw
+7ZaYZDjozKoKh2eli3YGNaN1O2qPwpokMJrpB82K6zjEBeqlp41ya8FvVShclDh0
+yh23DL57VEWWv+z8oAuWe7Rqg3tCxg==
+=JMvZ
+-----END PGP SIGNATURE-----
+
+--Sig_/BprD_/xTEOv=gen9_bAa.hx--
