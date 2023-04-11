@@ -2,159 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3602B6DD8DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F4C6DD8DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjDKLGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S230056AbjDKLGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjDKLGC (ORCPT
+        with ESMTP id S230052AbjDKLGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:06:02 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F352420A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:45 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id d7so20954544lfj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:45 -0700 (PDT)
+        Tue, 11 Apr 2023 07:06:16 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E626546A3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:54 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24663864a71so356586a91.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681211142;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FGoMp9jrWiv4D2uEfNBy/ctjAgVhDYetWYxNpQhTgtc=;
-        b=UOdX+ACwVtbooY89XuZbEZ3qt3sRs7J4fWm1o7kypXtJRlxYb/FDOlOcjsudRNiZKf
-         nGtJRceLtl479oNoARGt1Z+zZZneoPKI2l8ZyhzcF+O+i0N47LjgUM5RohObK5/f323O
-         QL5sE4zN9yzCsKmcLh5QTa9JJOy5pO5983gzJt7pgUW/H0UPrRt5ahNrXOxzqeIV/PO8
-         w9PQt8DfFxT+0EHfGHUo2fpb7YG7hj3cr7d4aWHFtTMwqoKtgQXImg+EQGrOX9Z4dAtC
-         LE7S8Uy42bwbPmBojAul/epzN/hb2qQvdpFr3RmgzmJBw3H32at8nMzbTbGtQXXvdyQH
-         N7Ow==
+        d=linaro.org; s=google; t=1681211153;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3Henn4DTyZ5csO3RcwwNDZOMw3VH+OflLLeQ1lsdR/Y=;
+        b=Fv7ALfGPeofF6viDgC+eYRkrcB2kl2eVyjeLUk2Jul6IgsRYqtnz62FLA9xOn06ppc
+         NnE94DKoSjf/eOuqAWTL68wRHQDPeqzZzlPyXgIH5RAOdAV3jwDokQAuBsyX6sIhBf0A
+         haIEdQQeFbrlo3C9HhYQhQTM9RGSydK3dR52p77s29WeNxG8kz34+U0B/4GVUO8pzYlo
+         BZIClb6Dus2umAMBe7KQm1c6Opyim8o4prfbVtQS04gTcfmG22UlzBv+plXMr12nOCHY
+         ZNrU7MZyOp9X7TNeHnYr9jfVvZ1fYFC0GMRJXKQ8rRGt2tUKGzS1sfutyZQCPJNVEuDY
+         F4tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681211142;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1681211153;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGoMp9jrWiv4D2uEfNBy/ctjAgVhDYetWYxNpQhTgtc=;
-        b=BrVui6H4F1a99/yIcxN9lxjijylim005WK4qVvvnW2+Dgfh0NEHQKeg2b20QMYHJ5S
-         yy9tC4Leh02ey49anctsAB9sCc4rZOEIN1bYyVhmfZAHREK0puaJgWz7ZHSfaKr52BJd
-         J+jKBTvASPL37MR0Wc3wiSrYXu+OUa9mHI7NhcaIFRnc+Yk/P8XGsYXm2owzK8uI/2vY
-         AE0AvFm7MEzOnWc4mWtSDfYOdw5sLSHEavufV4/fGcuzLZfW6FvRN6OOq6lYx/qu9Ixd
-         hYceBAXs1OZgaFLyncGC2R0F6u80hN/yy5WFRBGu8V3mA3Sd+21fZloWVafwRu6PtCKn
-         dWtQ==
-X-Gm-Message-State: AAQBX9eaCyLLXglywVV7Bbc0Ys7yqYQPWb4pttfQNORGsOhUi2Vun4i3
-        njektPRNi0YHeJRiEye4yhznIw==
-X-Google-Smtp-Source: AKy350YxbEmoseDIOSy/3xVBbfG0YW1u/HFCga6nwgAPiCkAieyr9cUaiJwAZ5+LJVX8cc0juldb0Q==
-X-Received: by 2002:ac2:562b:0:b0:4da:e925:c95b with SMTP id b11-20020ac2562b000000b004dae925c95bmr4718273lff.62.1681211142120;
-        Tue, 11 Apr 2023 04:05:42 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac250d1000000b004d545f1e0ccsm2510931lfm.187.2023.04.11.04.05.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 04:05:41 -0700 (PDT)
-Message-ID: <b42f7c48-84b1-1e50-bcad-1bf5edf1a168@linaro.org>
-Date:   Tue, 11 Apr 2023 13:05:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/3] ARM: dts: qcom: apq8026: remove superfluous
- "input-enable"
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        bh=3Henn4DTyZ5csO3RcwwNDZOMw3VH+OflLLeQ1lsdR/Y=;
+        b=fQYbH27iGEGM2enMF+sqWNDUqr/B6mTOb3eLiRcwVTXxvY2wa02fljXWV43VWI5rat
+         qEtrPIle2XwDXW12kX+g5pqm17J1EBUY9+C/p0wCLaLqF0NtGLIDhEckfO+8z7L94kOs
+         aC0B9Xm7DQ2H/NMGlPmwOAKK349u9kahbas/SjvohXb3fW2bYgsZnd8doqcD7TW4ZJxo
+         NnvAZBM7pjDHDAn9Wr1EHP6VZPmYTmURIXxXrg0djWEETHpYieYWwpUn1X2SS2PgI62S
+         DqB1I95zjN/94iOVjrZAsUKKvApi0w4gbUUjJ+t7rO8WJ7uir3BSZ3BcQEPKw861mG4p
+         9ydA==
+X-Gm-Message-State: AAQBX9cZl49MlIALJ5cVFp1D1JI+bJBHYUrlHSgOHxNrw1tdK3Gqz5wN
+        wuXUQmFf9+kAQTHPHjUPpoOh
+X-Google-Smtp-Source: AKy350ZaDwG/ecpJNgVpobQmPOIs1jBN4tLQI3KG+sNWursEWwg0eY0WIL1Il4to3tRF2DCV8H2HrA==
+X-Received: by 2002:a62:1d8c:0:b0:626:29ed:941f with SMTP id d134-20020a621d8c000000b0062629ed941fmr13651820pfd.5.1681211153473;
+        Tue, 11 Apr 2023 04:05:53 -0700 (PDT)
+Received: from thinkpad ([117.216.120.128])
+        by smtp.gmail.com with ESMTPSA id b8-20020aa78708000000b005d72e54a7e1sm4309437pfo.215.2023.04.11.04.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 04:05:53 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:35:45 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230410181005.25853-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230410181005.25853-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH RESEND v3 03/10] PCI: bt1: Enable async probe type
+Message-ID: <20230411110545.GE5333@thinkpad>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411033928.30397-4-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230411033928.30397-4-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10.04.2023 20:10, Krzysztof Kozlowski wrote:
-> Pin configuration property "input-enable" was used with the intention to
-> disable the output, but this is done by default by Linux drivers.  Since
-> patch ("dt-bindings: pinctrl: qcom: tlmm should use output-disable, not
-> input-enable") the property is not accepted anymore.
+On Tue, Apr 11, 2023 at 06:39:21AM +0300, Serge Semin wrote:
+> It's safe to enable the asyncronous probe type since the PCIe peripheral
+> devices probing order isn't essential for booting the system. Moreover
+> enabling that feature saves 0.5 seconds of bootup time if no any device
+> attached to the PCIe root port. It's a significant performance gain seeing
+> the total bootup time takes about 3 seconds.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
+
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts    | 2 --
->  arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts | 1 -
->  arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts        | 3 ---
->  3 files changed, 6 deletions(-)
+>  drivers/pci/controller/dwc/pcie-bt1.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts b/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
-> index 7a80e1c9f126..aa0e0e8d2a97 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dts
-> @@ -268,7 +268,6 @@ bluetooth_default_state: bluetooth-default-state {
->  		function = "gpio";
->  		drive-strength = <8>;
->  		bias-disable;
-> -		input-enable;
->  	};
->  
->  	wlan_hostwake_default_state: wlan-hostwake-default-state {
-> @@ -276,7 +275,6 @@ wlan_hostwake_default_state: wlan-hostwake-default-state {
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
-> -		input-enable;
->  	};
->  
->  	wlan_regulator_default_state: wlan-regulator-default-state {
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> index d64096028ab1..5593a3a60d6c 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> @@ -352,7 +352,6 @@ wlan_hostwake_default_state: wlan-hostwake-default-state {
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
-> -		input-enable;
->  	};
->  
->  	wlan_regulator_default_state: wlan-regulator-default-state {
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-> index b82381229adf..b887e5361ec3 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-> @@ -307,7 +307,6 @@ bluetooth_default_state: bluetooth-default-state {
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
-> -		input-enable;
->  	};
->  
->  	touch_pins: touch-state {
-> @@ -317,7 +316,6 @@ irq-pins {
->  
->  			drive-strength = <8>;
->  			bias-pull-down;
-> -			input-enable;
->  		};
->  
->  		reset-pins {
-> @@ -335,7 +333,6 @@ wlan_hostwake_default_state: wlan-hostwake-default-state {
->  		function = "gpio";
->  		drive-strength = <2>;
->  		bias-disable;
-> -		input-enable;
->  	};
->  
->  	wlan_regulator_default_state: wlan-regulator-default-state {
+> diff --git a/drivers/pci/controller/dwc/pcie-bt1.c b/drivers/pci/controller/dwc/pcie-bt1.c
+> index 95a723a6fd46..e36a20bf82cf 100644
+> --- a/drivers/pci/controller/dwc/pcie-bt1.c
+> +++ b/drivers/pci/controller/dwc/pcie-bt1.c
+> @@ -638,6 +638,7 @@ static struct platform_driver bt1_pcie_driver = {
+>  	.driver = {
+>  		.name	= "bt1-pcie",
+>  		.of_match_table = bt1_pcie_of_match,
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>  	},
+>  };
+>  module_platform_driver(bt1_pcie_driver);
+> -- 
+> 2.40.0
+> 
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
