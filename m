@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2C16DD97E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270E56DD982
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjDKLgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229616AbjDKLhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDKLf7 (ORCPT
+        with ESMTP id S229459AbjDKLhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:35:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 887CDE60;
-        Tue, 11 Apr 2023 04:35:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96259D75;
-        Tue, 11 Apr 2023 04:36:42 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.20.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DAD93F6C4;
-        Tue, 11 Apr 2023 04:35:53 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 12:35:50 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>, linux-alpha@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
-Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Message-ID: <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+        Tue, 11 Apr 2023 07:37:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76EE60
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681213039; x=1712749039;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YPjrD+3mwHrcCrwE2Oq3I8nxe+q0Lx8hFRs76xaTrps=;
+  b=fIvK/AqAF7yiML8/TKNfr4mZWeWyDWdZdfXdtHvkzodY1ciegWht6zwy
+   I0pXSW9/yrZV/RHsxLFRaZhwLUAwDqrOxOhU59Xv2FwqpBA6LBwhWfMT/
+   MiX+wYqvNOoZZ8ueopHUhugaGV4GOaiYLWNJAHJEQq0ajz3VbPtv0N75k
+   vUtbCuJOMTLjOQPz009JO3U5hSfSXJIZ6xjUthU4VWM3tFw9ttVim65ST
+   0D5U5Zi3FGZLT9ANw0lrbjeBzw32q8WQXfPRPdtPPecZ3gbNev3P39WFk
+   FzNBbfhZn5N8t27i9GCg0NWwGSG6OPK/7APzHBi8OPrca/sECkkaFSHV6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="345379778"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="345379778"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:37:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="812535079"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="812535079"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2023 04:37:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pmCJH-00FF7B-20;
+        Tue, 11 Apr 2023 14:37:15 +0300
+Date:   Tue, 11 Apr 2023 14:37:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH v2 2/5] extcon: Get rid of not really used name field in
+ struct extcon_dev
+Message-ID: <ZDVGay+hWCfPEVdu@smile.fi.intel.com>
+References: <20230405152745.24959-1-andriy.shevchenko@linux.intel.com>
+ <20230405152745.24959-3-andriy.shevchenko@linux.intel.com>
+ <4632ce69-2a94-0c33-9a76-b97596436e24@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <4632ce69-2a94-0c33-9a76-b97596436e24@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 09:37:04AM -0700, Dave Hansen wrote:
-> On 4/5/23 07:17, Uros Bizjak wrote:
-> > Add generic and target specific support for local{,64}_try_cmpxchg
-> > and wire up support for all targets that use local_t infrastructure.
+On Fri, Apr 07, 2023 at 04:26:35AM +0900, Chanwoo Choi wrote:
+> On 23. 4. 6. 00:27, Andy Shevchenko wrote:
+
+...
+
+> > -	const char *name;
 > 
-> I feel like I'm missing some context.
-> 
-> What are the actual end user visible effects of this series?  Is there a
-> measurable decrease in perf overhead?  Why go to all this trouble for
-> perf?  Who else will use local_try_cmpxchg()?
+> No I don't want to remove the name even if the edev->name is equal
+> with the parent's name. I might reduce the readability and understaning
+> of the code user and I think that it is not good to use 'dev.parent' directly
+> at multiple point.
 
-Overall, the theory is that it can generate slightly better code (e.g. by
-reusing the flags on x86). In practice, that might be in the noise, but as
-demonstrated in prior postings the code generation is no worse than before.
+Obviously I think otherwise. But you are the extcon maintainer, so I assume
+that I have got NAK for these patches.
 
-From my perspective, the more important part is that this aligns local_t with
-the other atomic*_t APIs, which all have ${atomictype}_try_cmpxchg(), and for
-consistency/legibility/maintainability it's nice to be able to use the same
-code patterns, e.g.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-	${inttype} new, old = ${atomictype}_read(ptr);
-	do {
-		...
-		new = do_something_with(old);
-	} while (${atomictype}_try_cmpxvhg(ptr, &oldval, newval);
 
-> I'm all for improving things, and perf is an important user.  But, if
-> the goal here is improving performance, it would be nice to see at least
-> a stab at quantifying the performance delta.
-
-IIUC, Steve's original request for local_try_cmpxchg() was a combination of a
-theoretical performance benefit and a more general preference to use
-try_cmpxchg() for consistency / better structure of the source code:
-
-  https://lore.kernel.org/lkml/20230301131831.6c8d4ff5@gandalf.local.home/
-
-I agree it'd be nice to have performance figures, but I think those would only
-need to demonstrate a lack of a regression rather than a performance
-improvement, and I think it's fairly clear from eyeballing the generated
-instructions that a regression isn't likely.
-
-Thanks,
-Mark.
