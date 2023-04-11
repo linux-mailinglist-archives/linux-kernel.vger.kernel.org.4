@@ -2,152 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9926DDF08
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6728D6DDF0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDKPJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S230295AbjDKPKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjDKPJf (ORCPT
+        with ESMTP id S230264AbjDKPK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:09:35 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CEA46AF;
-        Tue, 11 Apr 2023 08:09:21 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d7so21926069lfj.3;
-        Tue, 11 Apr 2023 08:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681225760; x=1683817760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4l9gGbBhem91l3LZk10wDjtDcy4j4z6z5yoCU+ggJhM=;
-        b=LtEeRGDLhkts6D15O4owrM358WkFth20ZX3y7nmuWmmMbtVF/6JhM6zlHRnCkxoCfq
-         6ASPPu/i6BTjVOMH7Lwm13ybxrQrrLXEitlBw3md4zWLnMmPk2dBk+nSinvd+f3uOrZR
-         AtF5rHRzqVdEqyJwSIzhb4iQ76ZYrk2wNGxKcnwfOACyjtS4qAowPXwKDodSFWiC51L3
-         9Qa1OjGWP/7jXejyUeb1OLCih6ks29Sf5X4cDipvjvrffjKCIeC5lsaYo3HNjrU+yss2
-         Zojjsj59Ui1CUq5EGwzXfg0ql+mkcXZ7wLL0bp4badtv0bYxhj5EGCnSm54SNZDw9bL1
-         NJdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681225760; x=1683817760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4l9gGbBhem91l3LZk10wDjtDcy4j4z6z5yoCU+ggJhM=;
-        b=gm4MWS7WDUE6n8zMekqeP4XlyuR+RWfrws2FGRDbgTxGONAvQ1ssggRsp4YYUMH2L8
-         Q2HbA/T5ZZbUPkFN9ChhLYCFhjHlGuSTjuttGuyiua37Y9NQ+9Tzl7lSEP6Db2iLG9YL
-         ChPYnHDHOMI6a82k8uPBhbk0AT0IsLXChsBmsB3dyOB/F4GEIwwCMovYjsrvHR8Zs/Fi
-         qjmwsY1ZpBEy0LVKTCSOtPu5Hy+glPdzIvOvlfsDsgko1I2QE0KZhoSbm7YIPHQ0Ts12
-         Op0pQEMNtiyg6sKa23GJC5NASLgXHEdJmqs8ltQfmgwr9oQhaBnJi1BRlSiIXPx47fIV
-         BHOQ==
-X-Gm-Message-State: AAQBX9d/aAr9yx1Bwq/ISD4X9VZSBIDX2e3c4XX4I5jcwjRQ3hbl34Ze
-        Hzf2uZNrbj9aJBZxjH3utvI=
-X-Google-Smtp-Source: AKy350Z+mA4olk2EsE2nZlZIDBu2hIZ6NIsF+wElv86rLgas95v9BTFiV+K4mt3WuBfzmvhjV/W+gw==
-X-Received: by 2002:a05:6512:1582:b0:4dc:75c3:9a90 with SMTP id bp2-20020a056512158200b004dc75c39a90mr4201933lfb.11.1681225760014;
-        Tue, 11 Apr 2023 08:09:20 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id g13-20020ac2538d000000b004eb41d26d49sm2588350lfh.28.2023.04.11.08.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 08:09:19 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 18:09:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Joy Chakraborty <joychakr@google.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-Message-ID: <20230411150916.24vagjzbhshaujse@mobilestation>
-References: <20230330063450.2289058-1-joychakr@google.com>
- <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com>
- <20230411141115.vrfd6sud66u6xeog@mobilestation>
- <ZDVyyoN71cB7dvWW@smile.fi.intel.com>
+        Tue, 11 Apr 2023 11:10:26 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2079.outbound.protection.outlook.com [40.107.105.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3B5FB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=leNIrRxjY8AsxVsKr1qlD3qC8pXD5zDwgwY/xiy22Ig=;
+ b=qdxZZCtnfKeiY3cercJZf4f6baqUqypUOAOCF91k7UWCTp0hMvBCfkuKHX9Ltq/9w24WaabAtacStjNKdABDyUxck94I4FjjTVpR/MncDr4wPeirtuqaD0fwGMcQeJonyHy9wtgwzLoLTJJT29S6p7bpcFh0HtP2RoWDq7SoEaMcn+bDHA/Z+6aN3NSQM0AGfV0tv+R1RpQg4dsZmouGPZHEjj60Bn6i4M2MN5mxaTVK/ui5hT5OngS5K+NmXaj98+vo2korQHmPuhlSUTuBBtmZ/JpH/BiICzSbYj/aRXXTvQdMziMSgqNCnlPnzRgvHhf6cbXaoT/dgPTtvpgWOw==
+Received: from ZR0P278CA0007.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:16::17)
+ by AS8PR03MB8004.eurprd03.prod.outlook.com (2603:10a6:20b:42b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 15:10:06 +0000
+Received: from VI1EUR05FT037.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:910:16:cafe::20) by ZR0P278CA0007.outlook.office365.com
+ (2603:10a6:910:16::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.40 via Frontend
+ Transport; Tue, 11 Apr 2023 15:10:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.80)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.80 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.80; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.80) by
+ VI1EUR05FT037.mail.protection.outlook.com (10.233.243.185) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.28 via Frontend Transport; Tue, 11 Apr 2023 15:10:05 +0000
+Received: from outmta (unknown [192.168.82.135])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 66F562008026E;
+        Tue, 11 Apr 2023 15:10:05 +0000 (UTC)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (unknown [104.47.17.171])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id B81B12008006F;
+        Tue, 11 Apr 2023 15:10:56 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AwVoS54jmAoEPi1Cxp24Qec5yhDpnoaHzTgPzlRQhxALH1RkYAeQRXEGC0tsxvBYf5IrTn7UrpUqaMcF+lpkVqbuSN5Qhi+5apWfiDQb1CL4GmKKgckGjqpukf2fVMTdZMwRwOP8RGICDOVV+Crdv3fXsYprpz2Oy2sfcsE/85ogQ/0YrT/08WaduR/wNpTiDF255SMmhM9KjYqZvkfPgFlzEwoEK/cz9FhCXDv7jIZ2GCw+ERTnyq5DXLTs61hLi+ILDiq7dQBelTo14bEoG8dCeiW7MR0T56wu/zzF+mHaviqBWDWtnS/FtNaXcQuX8tNcFY6lAFDmksriV0tCDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=leNIrRxjY8AsxVsKr1qlD3qC8pXD5zDwgwY/xiy22Ig=;
+ b=CK4UL6/FRfk5FODYCqgaAkIh5X/q4BxqHXdMVn5jGLcOTYK1JeLM5GNed1ykOHB2c7fb8FaOZe5p16+oeAhnocJXzTYQGf8x8539Av3gGJqy12kss67MtFI1YUHKQ3hCua+xwFmK9GqyitbYp4QsxyxkDNUB+Mz03V5YkgkuHhib9JRReiIA8mUL8DsGMtXXbpOZmtplNYjg+643bWzoZqaqvjopJ1yk1Ki0oUuILYJwMO1ARU1ZiUvcRFPv3hlilfVLdfau3OnBDr3WS5H7r5aZku36pOEHmcveI2WUG3R8tOp6XTbZlayuc/NEeVY1GC/UyR/wy/qkxDJ7Q6KlIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=leNIrRxjY8AsxVsKr1qlD3qC8pXD5zDwgwY/xiy22Ig=;
+ b=qdxZZCtnfKeiY3cercJZf4f6baqUqypUOAOCF91k7UWCTp0hMvBCfkuKHX9Ltq/9w24WaabAtacStjNKdABDyUxck94I4FjjTVpR/MncDr4wPeirtuqaD0fwGMcQeJonyHy9wtgwzLoLTJJT29S6p7bpcFh0HtP2RoWDq7SoEaMcn+bDHA/Z+6aN3NSQM0AGfV0tv+R1RpQg4dsZmouGPZHEjj60Bn6i4M2MN5mxaTVK/ui5hT5OngS5K+NmXaj98+vo2korQHmPuhlSUTuBBtmZ/JpH/BiICzSbYj/aRXXTvQdMziMSgqNCnlPnzRgvHhf6cbXaoT/dgPTtvpgWOw==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by AS8PR03MB6871.eurprd03.prod.outlook.com (2603:10a6:20b:29e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 15:09:54 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5%2]) with mapi id 15.20.6277.035; Tue, 11 Apr 2023
+ 15:09:54 +0000
+Message-ID: <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
+Date:   Tue, 11 Apr 2023 11:09:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
+Content-Language: en-US
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     Crystal Wood <oss@buserror.net>, Li Yang <leoyang.li@nxp.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Madalin Bucur <madalin.bucur@nxp.com>
+References: <20230404145557.2356894-1-sean.anderson@seco.com>
+ <20230404145557.2356894-2-sean.anderson@seco.com>
+ <48dacc58c7c04ba8a005d8edd56744c8455f007e.camel@buserror.net>
+ <d4737c45-2bbf-d364-9768-20baa46f6af4@seco.com>
+In-Reply-To: <d4737c45-2bbf-d364-9768-20baa46f6af4@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR10CA0016.namprd10.prod.outlook.com
+ (2603:10b6:208:120::29) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDVyyoN71cB7dvWW@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AS8PR03MB6871:EE_|VI1EUR05FT037:EE_|AS8PR03MB8004:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51e4f0af-2b71-4287-6f58-08db3a9ed516
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: Tb0jPIiwDRV+osQVFmAe3gKUHQlKvTPrIQ5mSJdKW7cfNMps22C4VS148UAJrobrjNk+DsBK4+6qgf0PxMB3ytwoQtF4SwiPbCW+QVHKvz0Ej2j5pLVxKfIvhnX5sdKl2+7ovr5AZPmmVNWjY2GF41SDaL9u0Bl5oVybp+BD04+8/owozcjJ5dVOyT/15cyUI3jHniJpCzo1ofZ0qmKa7/n7Gy5M4R9iAkqbdc2N36Z0J4OBgq2yKy9QLgRzy6py0p0rRwwJ/M7PIBJZYwMiLvCW6VioguEv59KmBXS0x3nlBtO5B+PSrt+URhq3fiN+w25H9sEg7xdnTIh5XdR7Ee7qkUFkva2Xi2theJVbgkSnvB0/dczSZHfYtNkW/Ia4rcoUb0wGlM6DETwTirEByig/bL+qYpKoPGbxML1P+rqoTeDgDJONCvd+tJTayctGcznbJ/j5fLxH8/QMNLLLbthK1wx9YaPuZDk0JPCZ22rxoskfs+HEd1Y2NIRYgOR90nleMZro3M3Y165qXWdVc8nIan0OdfXLAy1Pjo2kUZze7L6LuoTqAcnVPaoGL8PR7YVL38uxh6III1/s2pv3Z8o3PiRWDPeLWG/M9mtLssvFwrVetdmI8xcolaLikvRr7A26ZdfoNVFrKL8RoN3a6KyNSclEk9AB0E2VFuGfMC4gQJDAVG/EI4UMTxDHbj0n
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(39850400004)(396003)(366004)(451199021)(8936002)(52116002)(83380400001)(6666004)(66476007)(66556008)(86362001)(66946007)(110136005)(36756003)(478600001)(54906003)(186003)(316002)(8676002)(4326008)(6506007)(6512007)(53546011)(41300700001)(26005)(2616005)(31696002)(6486002)(31686004)(38350700002)(7416002)(2906002)(44832011)(38100700002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6871
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT037.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 3b52a49f-6cd7-49b4-67c8-08db3a9ece40
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XhgQNpSmuiD85jmfBsxm/9NvLgdQAhGDHTfMHwfHvOeghsuj74yw834u7DR3Xe9g6eR0RpKawqnP7zzv2IZ4fUa4MyqVs+awrGzMotj1Bzhxgrhk5dww0srUHVcNGw750YpBaBgrbZaA0m1Vg5t/1KIfkXK9nBIura+WSscqL16yaBbLk3tFgXS0nBoJ6JapX8SFA2AVfA/15Iw4qkf4DiHgoZ2ca7CWvyb3WUuc5LT2kFhO4cT/8Kz2Tnr2PeRHta+3dszPvf/tpRjxXJw+PxTdvQu137aQLWK0MB+fMkH9PoeteKEMmTwQruONHPRrvL4ruMQ+DYtCXqFER/0L92UKVYVAZnfQMkygb0dV9xfw0o+ePI54gMrSgbQ+CetXJ6RtULH+rzX2Hg3Nkc1trMf8A5MTARfr9ZDQot1o+gH996yba5BGqJUa8/ll9jcqekB8peY6EZnvmeXTtXc4WN1vO3i9xEtmhjyEGZHDenkfUTEILNH+SEtcfHdFqBEMI1dsurcj68WHAJLV3ZnQdu4SPlLF0o7CxOVeifiasBO8kC9SEjsV+9di+3We3Pqoj93b61n+d219r/801e2PYGCuCa9zrPY6u5y0MHJg0BvzNkPDRS2NQIt7bmk2kh3mjz/eAG2nF1txV6/vLWTI+k8wpb+aNrY0Ou5GyEDTvCqHofcgwk8OQU9xKirRi3Mofnn3U7zyr+MIEQEmWdheypMB3VZMYUeye3oyOfJl/Srwpf+sJzRpPZMrS8xR6c2muBHQc8gvZrMFWy46dfXgEg==
+X-Forefront-Antispam-Report: CIP:20.160.56.80;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(39850400004)(396003)(451199021)(46966006)(40470700004)(36840700001)(8936002)(40460700003)(336012)(47076005)(83380400001)(6666004)(70206006)(86362001)(70586007)(110136005)(36756003)(478600001)(54906003)(186003)(316002)(8676002)(82310400005)(4326008)(6506007)(6512007)(53546011)(41300700001)(26005)(2616005)(40480700001)(31696002)(6486002)(31686004)(7416002)(36860700001)(2906002)(82740400003)(44832011)(34070700002)(7636003)(356005)(7596003)(5660300002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 15:10:05.6537
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51e4f0af-2b71-4287-6f58-08db3a9ed516
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.80];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT037.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB8004
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 05:46:34PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote:
-> > On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote:
-> > > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
-> 
-> ...
-> 
-> > > > -	if (n_bytes == 1)
-> > > > +	switch (n_bytes) {
-> > > > +	case 1:
-> > > >  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > > -	else if (n_bytes == 2)
-> > > > +	case 2:
-> > > >  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > > -
-> > > > -	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > 
-> > > > +	case 3:
-> > > 
-> > > I'm not sure about this.
-> > 
-> > This actually makes sense seeing the function argument can have values
-> > 1, 2, _3_ and 4:
-> > dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-> > transfer->bits_per_word = __F__(master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32));
-> > ...
-> > dw_spi_dma_convert_width(dws->n_bytes)
-> > 
-> > The spi_transfer.bits_per_word field value depends on the
-> > SPI peripheral device communication protocol requirements which may
-> > imply the 3-bytes word xfers (even though it's indeed unluckily).
-> > 
-> > This semantic will also match to what we currently have in the
-> > IRQ-based SPI-transfer implementation (see dw_writer() and
-> > dw_reader()).
-> 
+Hi Crystal,
 
-> Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for that. Why we don't
-> use it?
-
-We could but there are two more-or-less firm reasons not to do
-that:
-1. There aren't that much DMA-engines with the
-DMA_SLAVE_BUSWIDTH_3_BYTES capability meanwhile the DW APB SSI just
-ignores the upper bits if CTRLR0.DFS is less than the value actual
-written to the DR registers. Note DW DMAC engine isn't one of such
-controllers. So if we get to meet a peripheral SPI-device with 3-bytes
-word protocol transfers and the DMA-engine doesn't support it the
-DMA-based transfers may fail (depending on the DMA-engine driver
-implementation).
-2. The DW APB SSIs (3.x and 4.x) can be synthesized with the APB Data
-Bus Width of 8, 16 and 32. So no matter whether DMA-engine supports
-the 3-bytes bus width the system bus most likely will either convert
-the transfers to the proper sized bus-transactions or fail.
-
-So taking all of the above into account not using the
-DMA_SLAVE_BUSWIDTH_3_BYTES macro here seems better than using it with
-a risk to fail some of the platform setups especially seeing the DW
-APB SSI ignores the upper bits anyway.
-
--Serge(y)
-
+On 4/4/23 12:04, Sean Anderson wrote:
+> On 4/4/23 11:33, Crystal Wood wrote:
+>> On Tue, 2023-04-04 at 10:55 -0400, Sean Anderson wrote:
+>> 
+>>> @@ -1456,11 +1456,11 @@ static void tqm_congestion_task(struct work_struct
+>>> *work)
+>>>         union qm_mc_result *mcr;
+>>>         struct qman_cgr *cgr;
+>>>  
+>>> -       spin_lock_irq(&p->cgr_lock);
+>>> +       raw_spin_lock_irq(&p->cgr_lock);
+>>>         qm_mc_start(&p->p);
+>>>         qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
+>>>         if (!qm_mc_result_timeout(&p->p, &mcr)) {
+>>> -               spin_unlock_irq(&p->cgr_lock);
+>>> +               raw_spin_unlock_irq(&p->cgr_lock);
+>> 
+>> qm_mc_result_timeout() spins with a timeout of 10 ms which is very
+>> inappropriate for a raw lock.  What is the actual expected upper bound?
 > 
-> > > > +	case 4:
-> > > > +		return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > > +	default:
-> > > > +		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > +	}
+> Hm, maybe we can move this qm_mc stuff outside cgr_lock? In most other
+> places they're called without cgr_lock, which implies that its usage
+> here is meant to synchronize against some other function.
+
+Do you have any suggestions here? I think this should really be handled
+in a follow-up patch. If you think this code is waiting too long in a raw
+spinlock, the existing code can wait just as long with IRQs disabled.
+This patch doesn't change existing system responsiveness.
+
+--Sean
+
+>>>                 dev_crit(p->config->dev, "QUERYCONGESTION timeout\n");
+>>>                 qman_p_irqsource_add(p, QM_PIRQ_CSCI);
+>>>                 return;
+>>> @@ -1476,7 +1476,7 @@ static void qm_congestion_task(struct work_struct
+>>> *work)
+>>>         list_for_each_entry(cgr, &p->cgr_cbs, node)
+>>>                 if (cgr->cb && qman_cgrs_get(&c, cgr->cgrid))
+>>>                         cgr->cb(p, cgr, qman_cgrs_get(&rr, cgr->cgrid));
+>>> -       spin_unlock_irq(&p->cgr_lock);
+>>> +       raw_spin_unlock_irq(&p->cgr_lock);
+>>>         qman_p_irqsource_add(p, QM_PIRQ_CSCI);
+>>>  }
+>> 
+>> The callback loop is also a bit concerning...
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> The callbacks (in .../dpaa/dpaa_eth.c and .../caam/qi.c) look OK. The
+> only thing which might take a bit is dpaa_eth_refill_bpools, which
+> allocates memory (from the atomic pool).
 > 
-> 
+> --Sean
