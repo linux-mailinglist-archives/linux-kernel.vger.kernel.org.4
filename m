@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513AA6DD84A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2F86DD84E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDKKuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S229884AbjDKKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjDKKtr (ORCPT
+        with ESMTP id S229503AbjDKKvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:49:47 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D4340E2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:49:41 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p8so7490141plk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681210180; x=1683802180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IBq+Uus/FZgXLcP8xGrtvuI6hfCEGIicJ5yksbFAHOs=;
-        b=VP8SPdz6m7bZCqjSwbu2CWMhRIG43BNbcqdzzY7lI+mm1XgQkzJoznsPKHwRhbsMGR
-         KYzhqjfPAwtY8v6VwvJh72H3PD+8p6AzBCbYDZflR9rIzXLnpIOjS0e5auJMYOSvfpne
-         Jg0SO4gptkizxsgzz1qgvjQ5IxSvBh1QFBLpZ+ztV8uZiQlV8weiOAgIHibrfLgz0Yfe
-         yy0dUANC2umHn13hoAARAuhapAXPhTexD/2+22p9hmxDqPnNQx2UkYfILLDOxPVlYiV1
-         dpcgX82R8z+0y/xrGeeziqknvIHW6oSVk7QV6hBa+g89OeE5e91f2I/FbPGJG2beo4AI
-         o+vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681210180; x=1683802180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IBq+Uus/FZgXLcP8xGrtvuI6hfCEGIicJ5yksbFAHOs=;
-        b=mTVPttNpH+OTYWuaPy0cfMYvJ11UjY827Bmr67gh/bB7zWO5tRRNEivxKqT3NUQJc/
-         Zvx0TYeu3zQ3mutTXGQko+rd74Vd1G+gAFpgscdIDBeFSFMQvcZXaqs8AAE/4QzRxWvm
-         LpdcvMun4008JUU0llstq0GUVC9eKFcN5G2px3O0KulfoYHezQaHZo+l1IRwopjWjdGe
-         FY/S5qmxG9VC+BfyovAC2cppOA+isEmwpi77obev/AiLkX3xpWpjEjbePfQZKdXYQ9G5
-         iIjryE8AWx8nKItX+x35TX4BbqePGw6glRi0QIFQzy2AuAEWwKlkY4ikjOHN3Rab0keI
-         oQHg==
-X-Gm-Message-State: AAQBX9egrcqQ61B/uLZfj2ohxDe9R96UvLR4wEPv41E70TqElveeBnkO
-        IxF3kdE/hckPgXdafCpT1DUBNRyLC0u15l6Gs/U=
-X-Google-Smtp-Source: AKy350bBaHnbfX5Z4+nwRR0UpaT9fDAZeLkAIJE04Q3LMr4Qeoz1k+1ZhYYkSfXpJw7gduNPvA9r6OY5zluuA05qVUQ=
-X-Received: by 2002:a17:90a:d3c8:b0:240:d397:e66f with SMTP id
- d8-20020a17090ad3c800b00240d397e66fmr3918615pjw.6.1681210180619; Tue, 11 Apr
- 2023 03:49:40 -0700 (PDT)
+        Tue, 11 Apr 2023 06:51:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BE2D57;
+        Tue, 11 Apr 2023 03:51:16 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B91e07015923;
+        Tue, 11 Apr 2023 10:51:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=1vDpu+wru2g4wIURf7mPGl6X74I9e7k9f4mx8Rddcg8=;
+ b=EbGxvC+Y4jtoVHFKidG3C+ohNs9dj2TfNYWPPeFxRMzEuRq5BpBG/0pb+NcFGre4Ni5/
+ pu3PlsmKsvZuwGxJBMwo409oV/CU1YmkKwSyOuTwlhLgo2JKRA1gu2MNCjgNNGFQjyy7
+ c42fCfRdCyO1R+PttWYRO1LySEvEkZa8pCZZJSS2/IweORfEPL7Hdh88ryLSs+1ekqLr
+ FiYOCSg+42HGFLwROveaATLjvtksro1HU6iBxXx6WhOfbvGyWF67ZDqzyIraKWkCzjHU
+ yW/fQ1BF3CouGb5KehHO6YIn9ZU5LyhAEhfViRZ92Yz9YAsLwyztb9yRDKyQZYRjlT42 kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pw25xxm9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:51:10 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33BAB0OR024860;
+        Tue, 11 Apr 2023 10:51:10 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pw25xxm8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:51:09 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B1IViA017748;
+        Tue, 11 Apr 2023 10:51:07 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pu0hdhncc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:51:07 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33BAp38C8258122
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Apr 2023 10:51:03 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1F4420043;
+        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4273D20040;
+        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Alexander Schmidt <alexs@linux.ibm.com>,
+        Leon Romanovsky <leonro@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] net/mlx5: stop waiting for PCI link if reset is required
+Date:   Tue, 11 Apr 2023 12:51:02 +0200
+Message-Id: <20230411105103.2835394-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zvaAoXJmYZ0EcDA_tjiNVGo7fLB4cdSy
+X-Proofpoint-ORIG-GUID: 4Ld37dH-Ms6gvarzQdFtx5vARxAfiCBs
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <50439958420f91cc97ad929437334bfb19ca4d90.1681208396.git.geert+renesas@glider.be>
- <fd7c23298f2c62db85abc9114d12059ef5e5f330.1681208396.git.geert+renesas@glider.be>
-In-Reply-To: <fd7c23298f2c62db85abc9114d12059ef5e5f330.1681208396.git.geert+renesas@glider.be>
-From:   Marc Dionne <marc.c.dionne@gmail.com>
-Date:   Tue, 11 Apr 2023 07:49:29 -0300
-Message-ID: <CAB9dFds_C9hfwW+YBMbF8sakUwVXm4etVPSAXgXQpKMeTA9+yA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm: Spelling s/randevouz/rendez-vouz/
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan@rox.of.borg, Xinhui <Xinhui.Pan@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_06,2023-04-11_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 clxscore=1011
+ mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110094
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 7:44=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Fix a misspelling of "rendez-vouz".
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  include/drm/task_barrier.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/drm/task_barrier.h b/include/drm/task_barrier.h
-> index 217c1cf21c1ab7d5..59ead429acb2afb0 100644
-> --- a/include/drm/task_barrier.h
-> +++ b/include/drm/task_barrier.h
-> @@ -24,7 +24,7 @@
->  #include <linux/atomic.h>
->
->  /*
-> - * Reusable 2 PHASE task barrier (randevouz point) implementation for N =
-tasks.
-> + * Reusable 2 PHASE task barrier (rendez-vouz point) implementation for =
-N tasks.
->   * Based on the Little book of semaphores - https://greenteapress.com/wp=
-/semaphores/
->   */
->
-> --
-> 2.34.1
+After an error on the PCI link, the driver does not need to wait
+for the link to become functional again as a reset is required. Stop
+the wait loop in this case to accelerate the recovery flow.
 
-Sorry for the drive by comment, but shouldn't this be "rendez-vous"
-(with an 's' rather than a 'z')?
+Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
+Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Link: https://lore.kernel.org/r/20230403075657.168294-1-schnelle@linux.ibm.com
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-Marc
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+index f9438d4e43ca..81ca44e0705a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+@@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+ 	while (sensor_pci_not_working(dev)) {
+ 		if (time_after(jiffies, end))
+ 			return -ETIMEDOUT;
++		if (pci_channel_offline(dev->pdev))
++			return -EIO;
+ 		msleep(100);
+ 	}
+ 	return 0;
+@@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+ 
+ static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
+ {
++	int rc;
++
+ 	mlx5_core_warn(dev, "handling bad device here\n");
+ 	mlx5_handle_bad_state(dev);
+-	if (mlx5_health_wait_pci_up(dev)) {
+-		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
++	rc = mlx5_health_wait_pci_up(dev);
++	if (rc) {
++		if (rc == -ETIMEDOUT)
++			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
++		else
++			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offline\n");
+ 		return -EIO;
+ 	}
+ 	mlx5_core_err(dev, "starting health recovery flow\n");
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+-- 
+2.37.2
+
