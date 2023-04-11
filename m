@@ -2,203 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A4A6DD6B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B68D6DD6BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjDKJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S229863AbjDKJcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjDKJaA (ORCPT
+        with ESMTP id S229841AbjDKJcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:30:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2F3C04
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j17so9023150ejs.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681205397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
-        b=FhUN32+q9jPdgf97VAaqXvf8IScUuRysz38fQkweVq+QLxWO/S2VPxcB+Qra0cqTXQ
-         DtKxdwM0c4aDN8Vjr37sLs5OIJ750plHhvw4RIlibWv36S8feJJ6E0gw7j3/K8m2SdBR
-         lXRWVDa8fKPoNrLAfpuAgYZO4Kv1GqlYQ3orj3DhgB/2xC0Vl+Ip0J44oJYPsRguLxu8
-         o1zGRE8Q6fBpRs44zqc9poxIovdoonRREuuNqA9OC8Yu37zQBxA6eV9rpf2Dvke8Yh1x
-         Pa6Mx+lhdT46XqV9rT8hZtXXed0gSq3C4Pp2U2lqKXWSGu2AtU4k91ilBtZ+CVa8PMp4
-         cK4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681205397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
-        b=TIMrRjr2l60ohMxZwmxUdJfqPCnRYQh1Wg3yvJC1D1BG1/DdnPRBIDdvSJTj5jFfBv
-         QezdOg6kvi/Li5i1enMRH71YdJgU8LbV6Wc4zyEtGZf0xT9a2UgDWIzwxsKDkDRX1cit
-         Qu+JqIH+4Dczbqu2RrMPEAzxdyT256w9AOk/mxT9L0nF2rRyIEwj0kqOZP0bB47CjhCw
-         QpncqLUCIp/eKPR0kNpmG2/9DA8lTh9d7IAWlqsAmSKseLSvFqwtnIip1OBvPmWC0UAW
-         rVY1UhRrE14pV+8Tl0AERVWByitzwiyuRQFuZUDrgth/RrNlZqoWBpDKz9vO7JR5LyhT
-         rd8Q==
-X-Gm-Message-State: AAQBX9cEMrgZZDzPMr5s6SExigEJEMnyI1NhJjB02ohcQGA7+cX/61BH
-        +7jH5r9UdeROT0SAU8UtdZTz8HoDoH6/mZE1P/U5Ww==
-X-Google-Smtp-Source: AKy350YciC056geHubwxcdJsmaoBPi16cp8aurI4qOglRyDHG/cvxK/Ql9YEmFxW0jx+zwWEqAPGI0ZBL6z80oGpEw0=
-X-Received: by 2002:a17:906:11d8:b0:94e:fdd:9319 with SMTP id
- o24-20020a17090611d800b0094e0fdd9319mr1132630eja.15.1681205396442; Tue, 11
- Apr 2023 02:29:56 -0700 (PDT)
+        Tue, 11 Apr 2023 05:32:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0183DE44;
+        Tue, 11 Apr 2023 02:31:58 -0700 (PDT)
+X-UUID: b067f868d84b11eda9a90f0bb45854f4-20230411
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TUhFV/OivPCm2+hbj7TWhmkeiC431eZC9aTNqEGVSwE=;
+        b=KLYOVVJj/2e8Unc12MkSs9MiKPI8jWQPvcbJhQibXRTn1K3Wnfrh+HDFgyj3IxXRdmA+ArEkDhXscXR7SsjwLSZlq/b3ol8K6tUz9PeuCJLuW88Xf1fKRi8+qUxWPQnS7m5Rrs1UBwxmUF3E8Ua+UcLDhQDdaGZ3FOjZVdB+f/I=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:d84e3266-280f-49bc-b338-03c1cc37fda7,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:0760ae83-cd9c-45f5-8134-710979e3df0e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: b067f868d84b11eda9a90f0bb45854f4-20230411
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1087849141; Tue, 11 Apr 2023 17:31:51 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 11 Apr 2023 17:31:49 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 17:31:48 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>
+Subject: [PATCH v7 00/14] Adjust the dma-ranges for MTK IOMMU
+Date:   Tue, 11 Apr 2023 17:31:30 +0800
+Message-ID: <20230411093144.2690-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
- <8a837998-604f-a871-729e-aa274a621481@collabora.com> <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
- <c5b9201d-141c-10ae-0475-4b230d36508b@collabora.com> <CABb0KFH3mj5qt22qDLHRKjh-wB7Jrn6Pz8h-QARaf9oR65U0Qg@mail.gmail.com>
- <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
-In-Reply-To: <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 11 Apr 2023 11:29:44 +0200
-Message-ID: <CABb0KFE6Y=a5DQKjy3vKeP9YURwri3JHNKTCnN7PzOPOxr9SKQ@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Apr 2023 at 13:11, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 4/7/23 3:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Fri, 7 Apr 2023 at 12:04, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >> On 4/7/23 12:34=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
-> >>>>> <usama.anjum@collabora.com> wrote:
-> > [...]
-> >>>>>>>> +       /*
-> >>>>>>>> +        * Allocate smaller buffer to get output from inside the=
- page walk
-> >>>>>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE si=
-ze chunks. As
-> >>>>>>>> +        * we want to return output to user in compact form wher=
-e no two
-> >>>>>>>> +        * consecutive regions should be continuous and have the=
- same flags.
-> >>>>>>>> +        * So store the latest element in p.cur between differen=
-t walks and
-> >>>>>>>> +        * store the p.cur at the end of the walk to the user bu=
-ffer.
-> >>>>>>>> +        */
-> >>>>>>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_re=
-gion),
-> >>>>>>>> +                             GFP_KERNEL);
-> >>>>>>>> +       if (!p.vec)
-> >>>>>>>> +               return -ENOMEM;
-> >>>>>>>> +
-> >>>>>>>> +       walk_start =3D walk_end =3D start;
-> >>>>>>>> +       while (walk_end < end && !ret) {
-> >>>>>>>
-> >>>>>>> The loop will stop if a previous iteration returned ENOSPC (and t=
-he
-> >>>>>>> error will be lost) - is it intended?
-> >>>>>> It is intentional. -ENOSPC means that the user buffer is full even=
- though
-> >>>>>> there was more memory to walk over. We don't treat this error. So =
-when
-> >>>>>> buffer gets full, we stop walking over further as user buffer has =
-gotten
-> >>>>>> full and return as success.
-> >>>>>
-> >>>>> Thanks. What's the difference between -ENOSPC and
-> >>>>> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (co=
-de
-> >>>>> flow).
-> >>>> -ENOSPC --> user buffer has been filled completely
-> >>>> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer m=
-ay
-> >>>>                             still have more space
-> >>>
-> >>> What is the difference in code behaviour when those two cases are
-> >>> compared? (I'd expect none.)
-> >> There is difference:
-> >> We add data to user buffer. If it succeeds with return code 0, we enga=
-ge
-> >> the WP. If it succeeds with PM_SCAN_FOUND_MAX_PAGES, we still engage t=
-he
-> >> WP. But if we get -ENOSPC, we don't perform engage as the data wasn't =
-added
-> >> to the user buffer.
-> >
-> > Thanks! I see it now. I see a few more corner cases here:
-> > 1. If we did engage WP but fail to copy the vector we return -EFAULT
-> > but the WP is already engaged. I'm not sure this is something worth
-> > guarding against, but documenting that would be helpful I think.
-> Sure.
->
-> > 2. If uffd_wp_range() fails, but we have already processed pages
-> > earlier, we should treat the error like ENOSPC and back out the failed
-> > range (the earier changes would be lost otherwise).
-> Backing out is easier to do for hugepages. But for normal pages, we'll ha=
-ve
-> to write some code to find where the current data was added (in cur or in
-> vec) and back out from that. I'll have to write some more code to avoid t=
-he
-> side-effects as well.
+After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+controllers"), the dma-ranges is not allowed for dts leaf node.
+but we still would like to separate the different masters into
+different iova regions. Thus we adjust the internal flow, separate
+the 16GB iova range by the master HW larbid/portid and add the
+dma-ranges property in the parent "soc" node. This also could avoid
+the users forget/abuse the iova regions.
 
-If I read the code correctly, the last page should always be in `cur`
-and on failure only a single page is needed to be backed out. Did I
-miss something?
+The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
+a fatal issue, it could also work well at 0-4GB iova. thus I don't
+add "Fixes:" tag.
 
-> But aren't we going over-engineering here? Error occurred and we are tryi=
-ng
-> to keep the previously generated correct data and returning successfully
-> still to the user? I don't think we should do this. An error is error. We
-> should return the error simply even if the memory flags would get lost. W=
-e
-> don't know what caused the error in uffd_wp_range(). Under normal
-> situation, we there shouldn't have had error.
+In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+be in its special patchset. and the previous mt8173/mt8183...support
+0-4GB only, no need this function.
 
-In this case it means that on (intermittent) allocation error we get
-inconsistent or non-deterministic results. I wouldn't want to be the
-one debugging this later - I'd prefer either the syscall be
-"exception-safe" (give consistent and predictable output) or kill the
-process.
+Change note:
+v7: Remove the change about mediatek,vcodec-subdev-decoder.yaml since
+    this was merged at:
+    https://lore.kernel.org/all/98c48690-631d-1086-9b7c-004c61cc8dbb@xs4all.nl/
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+v6: https://lore.kernel.org/linux-mediatek/20230403091337.26745-1-yong.wu@mediatek.com/
+   Add three patches for set dma-mask for iommu master devices.
+
+v5: Nothing change. Just rebase on v6.3-rc1.
+
+v4: https://lore.kernel.org/linux-mediatek/20230215062544.8677-1-yong.wu@mediatek.com/
+    Improve the comment in the code from AngeloGioacchino.
+
+v3: https://lore.kernel.org/linux-mediatek/20230214031114.926-1-yong.wu@mediatek.com/
+   Add a new patch only for comment more in the code.
+
+v2: https://lore.kernel.org/linux-mediatek/20230208053643.28249-1-yong.wu@mediatek.com/
+   a) Base on next-20230206 since mt8195 jpeg node is applied which affect
+      this patch.
+   b) Reword the commit message [1/10][2/10] to explain effect.
+
+v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
+   Base on v6.2-rc3.
+
+Yong Wu (14):
+  dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+  dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+  iommu/mediatek: Improve comment for the current region/bank
+  iommu/mediatek: Get regionid from larb/port id
+  iommu/mediatek: mt8192: Add iova_region_larb_msk
+  iommu/mediatek: mt8195: Add iova_region_larb_msk
+  iommu/mediatek: mt8186: Add iova_region_larb_msk
+  iommu/mediatek: Add a gap for the iova regions
+  iommu/mediatek: Set dma_mask for the master devices
+  media: mtk-jpegdec: Remove the setting for dma_mask
+  media: mediatek: vcodec: Remove the setting for dma_mask
+  arm64: dts: mt8195: Remove the unnecessary dma-ranges
+  arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+  arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+
+ .../media/mediatek,mt8195-jpegdec.yaml        |   7 -
+ .../media/mediatek,mt8195-jpegenc.yaml        |   7 -
+ .../media/mediatek,vcodec-decoder.yaml        |   5 -
+ .../media/mediatek,vcodec-encoder.yaml        |   5 -
+ .../bindings/media/mediatek-jpeg-encoder.yaml |   5 -
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   4 +-
+ drivers/iommu/mtk_iommu.c                     | 145 ++++++++++++++----
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   3 -
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   8 -
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   3 -
+ 11 files changed, 117 insertions(+), 76 deletions(-)
+
+-- 
+2.18.0
+
+
