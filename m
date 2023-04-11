@@ -2,131 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D116DDEA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827EF6DDEA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjDKO5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S229762AbjDKO6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDKO5C (ORCPT
+        with ESMTP id S229583AbjDKO62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:57:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648CB199B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1681224987; i=efault@gmx.de;
-        bh=TgyZ5i2M/3KDc8da5n7BAQ9SrzkLC1GBtWlDUE6ES/g=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=M1P1BEnL4uwEBvWkXoMsfXEGho1r0lPTBh/RXf1YeM37x5/a619DYznkUC3xyRp3V
-         ztAhWNYuzRG9Mdkvbww2GzPAV5rGNvikXU4JwRk8S4nVrqqHzGQXtqTv67BAFfeRE2
-         mmMwirQeDA0WSmUSPnVmNV7t0WVRUZ9uX9BfBBDx0K7uDWWzLOMtKpNtdrTOf9L0WX
-         +DJqQRrB8ir2+TmDaPd/XfLjuL7c/wn5I0e4Lp4x/xpiYnbvaV/j4aWYIdAA8KINpb
-         8meyLqICR4RSm2Ro6DynGnuRq0R/J++pqbOJAACXhsxRfS7j+VCv/hwjPsgyYTJC6G
-         LIYqGzqA8WNMg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([185.191.218.64]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtfJd-1qeUhJ3kHH-00vAD1; Tue, 11
- Apr 2023 16:56:26 +0200
-Message-ID: <584da7e2052a11f432afaf623e567610ce17c78b.camel@gmx.de>
-Subject: Re: [PATCH 00/17] sched: EEVDF using latency-nice
-From:   Mike Galbraith <efault@gmx.de>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mgorman@suse.de, bristot@redhat.com,
-        corbet@lwn.net, kprateek.nayak@amd.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Date:   Tue, 11 Apr 2023 16:56:24 +0200
-In-Reply-To: <20230411133333.1790-1-hdanton@sina.com>
-References: <20230328092622.062917921@infradead.org>
-         <20230410082307.1327-1-hdanton@sina.com>
-         <20230411133333.1790-1-hdanton@sina.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 11 Apr 2023 10:58:28 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BFF35B1;
+        Tue, 11 Apr 2023 07:58:27 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id be27so8901672ljb.12;
+        Tue, 11 Apr 2023 07:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681225105; x=1683817105;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MCfDxZPGEWehZVR1WIoWj8Z0e30/w9tLpnBsc4IqhRA=;
+        b=pJzrABJ89JGct5JmE5L749eDy9kIbsZJLp12XqvnTRRhaGJhbbAcG3PtJ9iK1heRiS
+         VDKiJ9zEa2/wPn07IRy3BYE8y5sfuslYjzKguAVJeVcYbb7EWmPXHOEyA8EozWq56Puv
+         +W+3aJ3ETGruOLKhukn2LrcQfVEmXwA4XALTqq164aXVFYcVpgFoFTo68KTmV258zLFJ
+         UIvxfJkM2DZv58WWRNwtPwbZ/J0FGg41AGu+pl/QA+MKDxBI5NU7BxbqbZ/IhQqigmYV
+         CJL6fQ47PKYqdTKSF/aafa5oO+rtd/l/Dl1D4oI9YH6mayy8uWe1zRlBTwxQjozLibW9
+         Vhbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681225105; x=1683817105;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MCfDxZPGEWehZVR1WIoWj8Z0e30/w9tLpnBsc4IqhRA=;
+        b=bRzdQofQ+2ZqweNI9TSzd6wp3pXKPIncnL2+9va4EuXar3V6OkKzQ+0OGdiMbko6Il
+         aOq89besPa+/rq2nWc9LnbDTX2nxxPfzXwadsu0nZkH+576+UW6ehD3g2im8elRYnHx0
+         IqL9PwK7b/TlwRFhzmg0OZMnKDWUfRBTxf4w9ELGL+acOIzjma3YN6dy9mU9RSmz336L
+         pyMTKs/wf2H02e622kHppBYGZAp2bnMdFOpV65Y/iUpIk8vN3Z2BN67tNRDELLBgUd17
+         bF1gFZCQYIDhZ9tu2MAobkvjXsiKHYY5Rw990+G5gAEQhZX6HsF5oqLAlQNzVG81Th5S
+         Jvmw==
+X-Gm-Message-State: AAQBX9ePZQ4JRwUCrJ51+RhJX73LgwSPC9CYdRcvRGFitouJxqJyeFbo
+        IN6wY285Dz7CT69h+xt6jyo=
+X-Google-Smtp-Source: AKy350aOPQrkzz49edIQ/RI0dLtkCn77jTKHarrOCX+RVNhY2Qz7tvbs234I3mb4dHXXnQjB3nWNpw==
+X-Received: by 2002:a2e:b179:0:b0:2a7:96bd:9eb3 with SMTP id a25-20020a2eb179000000b002a796bd9eb3mr97233ljm.3.1681225105349;
+        Tue, 11 Apr 2023 07:58:25 -0700 (PDT)
+Received: from pc636 (host-90-235-5-238.mobileonline.telia.com. [90.235.5.238])
+        by smtp.gmail.com with ESMTPSA id u25-20020a2e8559000000b002a774fb7923sm1302810ljj.45.2023.04.11.07.58.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 07:58:25 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 11 Apr 2023 16:58:22 +0200
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] rcu/kvfree: Prevents cache growing when the
+ backoff_page_cache_fill is set
+Message-ID: <ZDV1jhENgED4ctxO@pc636>
+References: <20230408142517.800549-1-qiang1.zhang@intel.com>
+ <b96953b0-0ac5-477a-a2f0-c211dc17d5dc@paulmck-laptop>
+ <PH0PR11MB588072A12543FD617C833AF9DA9A9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <ZDVt5eUAlp4VmbFy@pc636>
+ <PH0PR11MB5880C4B181B6237402B1FBA7DA9A9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LZ4LcL2xRWvnRFA4Rg8812btaqUC/LgLwUeUiZGpvZWv9QZmzBx
- w8Qn+DNLgm1iGjdcvVjmo0tR5uhfRaFK39gxeg9Dr9ftgokR8ItPlxyL8p+hSMywuj23zaI
- xbxeGQt9IzOmhRjQ5Qu6mViUlpYflKZY13a/g1J6mWVPpqVsu/EAWKfmwvs/R69lhhObehl
- 6ylr53eioCD4QFaVrRv6A==
-UI-OutboundReport: notjunk:1;M01:P0:ozvJc9Xwgc0=;yXLb0mfuEsFNRb2/+mU5kJrKgfA
- kdCqD8sUCTswrtyrBBuzO6yBsvQgHvT3qOE1wYQe1jWDE7s8UuVbHaorF376zWwRuBt7Ve7SR
- acAs1xIIrdZ7DVaEDCwQKeSpW/UenoTe4F4RgzUewiRNhClhsV/f88kw8tid+fL7Yc3xDKF1p
- BEsBHeqPCK4IgKRtXA5wE35vFeu59vYUCEzg2mUr1BBi16olL7peTS64IPi/6VCyu4To6rYcu
- 7YGJTYxtikO13fDYSE8QmIf3+kTclwqAdIo6uKi6/xstqy0vhlO4YcTGSYUXtWhH8lizRtt9V
- Jr9+W271IXzct1YHJSLk+rs9GZE7oMKR5hWQHRvMAW2a7gsiG9+jVa5J1JG+0MXRfRtx8dsbO
- GD7+bFfVdqXrpp/ALikaxYc6JX+GrbuuCqqu8xApL21Om2ekxHe93pgIO9d9ZireIFxXBPCLz
- fh4Qc8/t2vdrk0JLRhU7i/Ce1lFlPKoe+hzs0HuOyTjG6xaKIIIQYa4SdPT/PHCjybS2GvpZn
- qexKyV0E2KpMYTsAbmL+tC9z1Qq0cVmk1vX9aES9jrSnM82ZbzdK6lR185rCkkxjoOfh8RZg5
- 2s6tjkss9zsETm+KmhCyZ5B8BHASVoxij5epEDWbMZZI9xzt02f8ShQ6aJ7Fr17wUQBVS9Ny0
- x+fZFAx/IgUeSlIb/e4Cd5w6aaiiK2/Vhh9y6CNqL10+XdOSzp1ux9lRQwXLUsZYubtoEzDuo
- Hl/sDzdeFqYsfI4c9waFwaNRYPgN4WSyhLqNkhzFecBVkvPhQjSJehpM8dCBqllZQtSGAux2T
- b1l8ldT+omc2aGkCFVOblb4d+CmBAZ2V/5l7iuVD9Pkj4HpYPZZ7S/EditBQnBGBTfqVYSoAs
- fA0RUCvCZonqdRv8b+O6RO4L50ArdIzuV+NEaUNoXOopAr5w+NHCMD8rrl37H0KAaf+DOM5rs
- 8qwu9iPg5Ad2RxIpNJwPfR/Yr80=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR11MB5880C4B181B6237402B1FBA7DA9A9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-11 at 21:33 +0800, Hillf Danton wrote:
-> On Tue, 11 Apr 2023 12:15:41 +0200 Mike Galbraith <efault@gmx.de>
+On Tue, Apr 11, 2023 at 02:42:27PM +0000, Zhang, Qiang1 wrote:
+> > > Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
+> > > executed before kfree_rcu_monitor() to drain page cache, if the bnode
+> > > structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
+> > > page cache again in kfree_rcu_monitor(), this commit add a check
+> > > for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
+> > > if the krcp structure's->backoff_page_cache_fill is set, prevent page
+> > > cache growing and disable allocated page in fill_page_cache_func().
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > >
+> > >Much improved!  But still some questions below...
+> > >
+> > >							Thanx, Paul
+> > >
+> > > ---
+> > >  kernel/rcu/tree.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index cc34d13be181..9d9d3772cc45 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -2908,6 +2908,8 @@ static inline bool
+> > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
+> > >  	struct kvfree_rcu_bulk_data *bnode)
+> > >  {
+> > > +	if (atomic_read(&krcp->backoff_page_cache_fill))
+> > > +		return false;
+> > >
+> > >This will mean that under low-memory conditions, we will keep zero
+> > >pages in ->bkvcache.  All attempts to put something there will fail.
+> > >
+> > >This is probably not an issue for structures containing an rcu_head
+> > >that are passed to kfree_rcu(p, field), but doesn't this mean that
+> > >kfree_rcu_mightsleep() unconditionally invokes synchronize_rcu()?
+> > >This could seriously slow up freeing under low-memory conditions,
+> > >which might exacerbate the low-memory conditions.
+> > 
+> > Thanks for mentioning this, I didn't think of this before😊.
+> > 
+> > >
+> > >Is this really what we want?  Zero cached rather than just fewer cached?
+> > >
+> > >
+> > >
+> > >  	// Check the limit.
+> > >  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
+> > >  		return false;
+> > > @@ -3221,7 +3223,7 @@ static void fill_page_cache_func(struct work_struct *work)
+> > >  	int i;
+> > >  
+> > >  	nr_pages = atomic_read(&krcp->backoff_page_cache_fill) ?
+> > > -		1 : rcu_min_cached_objs;
+> > > +		0 : rcu_min_cached_objs;
+> > >  
+> > >  	for (i = 0; i < nr_pages; i++) {
+> > >
+> > >I am still confused as to why we start "i" at zero rather than at
+> > >->nr_bkv_objs.  What am I missing here?
+> > 
+> > 
+> > No, you are right, I missed this place. 
+> > 
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -2908,6 +2908,8 @@ static inline bool
+> >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
+> >         struct kvfree_rcu_bulk_data *bnode)
+> >  {
+> > +       if (atomic_read(&krcp->backoff_page_cache_fill))
+> > +               return false;
 > >
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -950,6 +950,9 @@ static struct sched_entity *pick_eevdf(s
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (curr && (!curr->on=
-_rq || !entity_eligible(cfs_rq, curr)))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0curr =3D3D NULL;
-> >
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (sched_feat(GENTLE_EEVDF=
-) && curr)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return curr;
-> > +
->
-> This is rather aggressive, given latency-10 curr and latency-0 candidate
-> at tick hit for instance.
+> >This is broken, unfortunately. If a low memory condition we fill
+> >fill a cache with at least one page anyway because of we do not want
+> >to hit a slow path.
+> 
+> Thanks remind, please ignore my v4 patch,   how about the following?
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 41daae3239b5..e2e8412e687f 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3238,6 +3238,9 @@ static void fill_page_cache_func(struct work_struct *work)
+>                         free_page((unsigned long) bnode);
+>                         break;
+>                 }
+> +
+> +               if (atomic_read(&krcp->backoff_page_cache_fill))
+> +                       break;
+>         }
+It does not fix an "issue" you are reporting. kvfree_rcu_bulk() function
+can still fill it back. IMHO, the solution here is to disable cache if
+a low memory condition and enable back later on.
 
-The numbers seem to indicate that the ~400k ctx switches eliminated
-were meaningless to the load being measures.  I recorded everything for
-5 minutes, and the recording wide max actually went down.. but one-off
-hits happen regularly in noisy GUI regardless of scheduler, are
-difficult to assign meaning to.
+The cache size is controlled by the rcu_min_cached_objs variable. We can
+set it to 1 and restore it back to original value to make the cache operating
+as before.
 
-Now I'm not saying there is no cost, if you change anything that's
-converted to instructions, there is a price tag somewhere, whether you
-notice immediately or not.  Nor am I saying that patchlet is golden.  I
-am saying that some of the ctx switch delta look very much like useless
-overhead that can and should be made to go away.  From my POV, patchlet
-actually looks like kinda viable, but to Peter and regression reporter,
-it and associated data are presented as a datapoint.
-
->  And along your direction a mild change is
-> postpone the preempt wakeup to the next tick.
->
-> +++ b/kernel/sched/fair.c
-> @@ -7932,8 +7932,6 @@ static void check_preempt_wakeup(struct
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cfs_rq =3D cfs_rq_of(se)=
-;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0update_curr(cfs_rq);
-> -
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * XXX pick_eevdf(cfs_rq=
-) !=3D se ?
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-
-Mmmm, stopping time is a bad idea methinks.
-
-	-Mike
+--
+Uladzislau Rezki
