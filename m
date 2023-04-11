@@ -2,169 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DE76DDC46
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2186DDC4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjDKNhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S230059AbjDKNhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjDKNhK (ORCPT
+        with ESMTP id S229894AbjDKNhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:37:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31013A91
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681220184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xK1NCjqBm+Noko8JAoUQYHl2QqweOko54B+7fb/aUQk=;
-        b=Qpxux3t/jAPWs4Z4I5FiIbMArm5L0WPre2d47TWcyiXHkFnejqb5LqvnKltjcbhs0uwdMD
-        rkC6z7U/OvaiBaJtPLoCx+wmwKCjk2G6wmSXhMosESarQ7LtqFLh9W1099VBSlV9CaLGeR
-        3TbgpsAG2qfqvpBZxwakK9GGt9NqOxs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-DwDKLdOJOFO6fjaq4KMiHg-1; Tue, 11 Apr 2023 09:36:21 -0400
-X-MC-Unique: DwDKLdOJOFO6fjaq4KMiHg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78B611C0878A;
-        Tue, 11 Apr 2023 13:36:20 +0000 (UTC)
-Received: from llong.com (unknown [10.22.33.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 09FBA47CD0;
-        Tue, 11 Apr 2023 13:36:20 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 5/5] cgroup/cpuset: Optimize out unneeded cpuset_can_fork/cpuset_cancel_fork calls
-Date:   Tue, 11 Apr 2023 09:36:01 -0400
-Message-Id: <20230411133601.2969636-6-longman@redhat.com>
-In-Reply-To: <20230411133601.2969636-1-longman@redhat.com>
-References: <20230411133601.2969636-1-longman@redhat.com>
+        Tue, 11 Apr 2023 09:37:51 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694135B5;
+        Tue, 11 Apr 2023 06:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681220254; x=1712756254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lPs4hL2dArfIqO5UhCss13DB9x7JVqdkB3GyJ1laCgQ=;
+  b=ZhWTpUXnZSELPRAxq6P2gAn+/EXBjbEwI+nUeQKXrP5vRHX3pLj4ZaXg
+   ASSv/FQUCuk1FHAqVBGwJe4gCTm1/NOVAFiC78Ta04oBeFNSvPtxZDTSP
+   kTfozzEsa1BEAMnxkvO/N6Rmpu1UdajLW6iSxcSuheTIvFtysC5RhbP/r
+   NrpWtXeU24lbWNAnLP4sW1+TGbuP2Q07yzENgtZ/Q/U4MmnVqFmVMluuD
+   awwGAFk3JM3HcSR9bHtNGlCm6uGZuqnXbyWBdQlk9FkJzxG4QQNprCfcK
+   OEyjVV4ZT59iXcjV3yPtUAATh8NdRFqQYCIaQLupKpMg6zEziR1DoaPsw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="371465716"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="371465716"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:37:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="862862819"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="862862819"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 11 Apr 2023 06:37:32 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pmEBf-00FHXC-0e;
+        Tue, 11 Apr 2023 16:37:31 +0300
+Date:   Tue, 11 Apr 2023 16:37:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        LKML <linux-kernel@vger.kernel.org>, linux-gpio@vger.kernel.org
+Subject: Re: selftests/gpio: gpio-sim.sh: BUG: test FAILED due to recent
+ change in sh source
+Message-ID: <ZDVimnlgMYmeOj5L@smile.fi.intel.com>
+References: <fe030b8e-0573-93de-88ae-38ee48d6c89f@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe030b8e-0573-93de-88ae-38ee48d6c89f@alu.unizg.hr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The newly introduced cpuset_can_fork() and cpuset_cancel_fork() calls
-are only needed when the CLONE_INTO_CGROUP flag is set which is not
-likely. Adding an extra cpuset_can_fork() call does introduce a bit
-of performance overhead in the fork/clone fastpath. To reduce this
-performance overhead, introduce a new clone_into_cgroup_can_fork flag
-into the cgroup_subsys structure. This flag, when set, will call the
-can_fork and cancel_fork methods only if the CLONE_INTO_CGROUP flag
-is set.
+On Mon, Feb 27, 2023 at 06:51:09PM +0100, Mirsad Todorovac wrote:
+> Hi,
+> 
+> The gpio-sim.sh test appears to FAIL in a wrong way due to missing initialisation
+> of shell variables:
+> 
+> $ sudo gpio-sim.sh
+> .
+> .
+> .
+> 4. Simulated GPIO chips are functional
+> 4.1. Values can be read from sysfs
+> 4.2. Bias settings work correctly
+> cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
+> ./gpio-sim.sh: line 393: test: =: unary operator expected
+> bias setting does not work
+> GPIO gpio-sim test FAIL
+> $
+> 
+> This patch fixed the issue:
+> 
+> diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
+> index 9f539d454ee4..fa2ce2b9dd5f 100755
+> --- a/tools/testing/selftests/gpio/gpio-sim.sh
+> +++ b/tools/testing/selftests/gpio/gpio-sim.sh
+> @@ -389,6 +389,9 @@ create_chip chip
+>  create_bank chip bank
+>  set_num_lines chip bank 8
+>  enable_chip chip
+> +DEVNAME=`configfs_dev_name chip`
+> +CHIPNAME=`configfs_chip_name chip bank`
+> +SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
+>  $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
+>  test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
+>  remove_chip chip
+> 
+> ... after which the test passed:
+> 
+> 4. Simulated GPIO chips are functional
+> 4.1. Values can be read from sysfs
+> 4.2. Bias settings work correctly
+> GPIO gpio-sim test PASS
+> 
+> Which I believe proves that the bug was in the script and not in the gpio-sim driver.
 
-The cpuset code is now modified to set this flag. The same cpuset
-checking code in cpuset_can_fork() and cpuset_cancel_fork() will have
-to stay as the cgroups can be different, but the cpusets may still be
-the same. So the same check must be present in both cpuset_fork() and
-cpuset_can_fork() to make sure that attach_in_progress is correctly set.
+I agree with the analysis. Bart, seems to me that it might be the case, but
+I want to amend the fix a bit.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/cgroup-defs.h |  6 ++++++
- kernel/cgroup/cgroup.c      | 23 ++++++++++++++++++-----
- kernel/cgroup/cpuset.c      |  1 +
- 3 files changed, 25 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 8a0d5466c7be..0087a47d80a2 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -701,6 +701,12 @@ struct cgroup_subsys {
- 	 */
- 	bool threaded:1;
- 
-+	/*
-+	 * If %true, the controller will call can_fork and cancel_fork
-+	 * methods only if CLONE_INTO_CGROUP flag is set.
-+	 */
-+	bool clone_into_cgroup_can_fork:1;
-+
- 	/* the following two fields are initialized automatically during boot */
- 	int id;
- 	const char *name;
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 83ea13f2ccb1..23701e959ef5 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6517,6 +6517,10 @@ int cgroup_can_fork(struct task_struct *child, struct kernel_clone_args *kargs)
- 		return ret;
- 
- 	do_each_subsys_mask(ss, i, have_canfork_callback) {
-+		if (ss->clone_into_cgroup_can_fork &&
-+		   !(kargs->flags & CLONE_INTO_CGROUP))
-+			continue;
-+
- 		ret = ss->can_fork(child, kargs->cset);
- 		if (ret)
- 			goto out_revert;
-@@ -6528,8 +6532,12 @@ int cgroup_can_fork(struct task_struct *child, struct kernel_clone_args *kargs)
- 	for_each_subsys(ss, j) {
- 		if (j >= i)
- 			break;
--		if (ss->cancel_fork)
--			ss->cancel_fork(child, kargs->cset);
-+		if (!ss->cancel_fork ||
-+		   (ss->clone_into_cgroup_can_fork &&
-+		   !(kargs->flags & CLONE_INTO_CGROUP)))
-+			continue;
-+
-+		ss->cancel_fork(child, kargs->cset);
- 	}
- 
- 	cgroup_css_set_put_fork(kargs);
-@@ -6552,9 +6560,14 @@ void cgroup_cancel_fork(struct task_struct *child,
- 	struct cgroup_subsys *ss;
- 	int i;
- 
--	for_each_subsys(ss, i)
--		if (ss->cancel_fork)
--			ss->cancel_fork(child, kargs->cset);
-+	for_each_subsys(ss, i) {
-+		if (!ss->cancel_fork ||
-+		   (ss->clone_into_cgroup_can_fork &&
-+		   !(kargs->flags & CLONE_INTO_CGROUP)))
-+			continue;
-+
-+		ss->cancel_fork(child, kargs->cset);
-+	}
- 
- 	cgroup_css_set_put_fork(kargs);
- }
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index e4ca2dd2b764..937ef4d60cd4 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3391,6 +3391,7 @@ struct cgroup_subsys cpuset_cgrp_subsys = {
- 	.dfl_cftypes	= dfl_files,
- 	.early_init	= true,
- 	.threaded	= true,
-+	.clone_into_cgroup_can_fork = true,
- };
- 
- /**
 -- 
-2.31.1
+With Best Regards,
+Andy Shevchenko
+
 
