@@ -2,179 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC186DDD26
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB16D6DDD2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjDKOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S230037AbjDKODo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjDKOBg (ORCPT
+        with ESMTP id S229838AbjDKODl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:01:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B0B4EDA;
-        Tue, 11 Apr 2023 07:01:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47B646270A;
-        Tue, 11 Apr 2023 14:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA439C433EF;
-        Tue, 11 Apr 2023 14:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681221686;
-        bh=bh4S6Aaz0/IhrcgisyiKrZkqvR1FMBsHKNOalcM5KTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J96mmwfc22cFnqRer3iiimgMcd8ZJxl5kqeMIvCGmj7UZWOYW4QUV7XI/0NtwLjc2
-         TVdJj1huHkX4PJEVh7G/bZ0Rw9s6fvFHp1XqqACPyvRZkFcf2eEraW6V6Pg3hGFb58
-         EX4g6AMPpeRAUCJKhNQk7vIfOX8p6L7ztuzzRxUvQKeuZp12BUAXx4H/8ABaiHEJs8
-         LaVPyB0Jpl6n1icMA+f/7xlGzi/vnMNqYamEzZfK1qe+hG1kW3jYb9TInQsg5+b3Ih
-         MLK55Hf6ChOe49xqzdQE+EvhcgfmcpS9cbQ4B5bAXLKmoV8fwZReLOaqGtCaNAuXse
-         BDXMmpS3qqdoA==
-Date:   Tue, 11 Apr 2023 16:01:16 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com>,
-        syzbot <syzbot+aacb82fca60873422114@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] [fs?] possible deadlock in quotactl_fd
-Message-ID: <20230411-skandal-global-379ddaf6e66a@brauner>
-References: <000000000000f1a9d205f909f327@google.com>
- <000000000000ee3a3005f909f30a@google.com>
- <20230411-sendung-apokalypse-05af1adb8889@brauner>
- <20230411105542.6dee4qf2tgt5scwx@quack3>
- <20230411-stich-tonart-8da033e58554@brauner>
+        Tue, 11 Apr 2023 10:03:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328BB3581;
+        Tue, 11 Apr 2023 07:03:39 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PwnXd2gj3znbll;
+        Tue, 11 Apr 2023 22:00:01 +0800 (CST)
+Received: from [10.174.178.171] (10.174.178.171) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 11 Apr 2023 22:03:34 +0800
+Subject: Re: [PATCH net] net: Add check for csum_start in
+ skb_partial_csum_set()
+To:     Eric Dumazet <edumazet@google.com>
+CC:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <asml.silence@gmail.com>, <imagedong@tencent.com>,
+        <brouer@redhat.com>, <keescook@chromium.org>, <jbenc@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230410022152.4049060-1-luwei32@huawei.com>
+ <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
+ <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
+ <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
+ <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
+From:   "luwei (O)" <luwei32@huawei.com>
+Message-ID: <c90abe8c-ffa0-f986-11eb-bde65c84d18b@huawei.com>
+Date:   Tue, 11 Apr 2023 22:03:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230411-stich-tonart-8da033e58554@brauner>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.171]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 03:40:25PM +0200, Christian Brauner wrote:
-> On Tue, Apr 11, 2023 at 12:55:42PM +0200, Jan Kara wrote:
-> > On Tue 11-04-23 12:11:52, Christian Brauner wrote:
-> > > On Mon, Apr 10, 2023 at 11:53:46PM -0700, syzbot wrote:
-> > > > Hello,
-> > > > 
-> > > > syzbot found the following issue on:
-> > > > 
-> > > > HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=11798e4bc80000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > 
-> > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > > 
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
-> > > > 
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com
-> > > > 
-> > > > ======================================================
-> > > > WARNING: possible circular locking dependency detected
-> > > > 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0 Not tainted
-> > > > ------------------------------------------------------
-> > > > syz-executor.3/11858 is trying to acquire lock:
-> > > > ffff88802a3bc0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
-> > > > 
-> > > > but task is already holding lock:
-> > > > ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
-> > > > 
-> > > > which lock already depends on the new lock.
-> > > > 
-> > > > 
-> > > > the existing dependency chain (in reverse order) is:
-> > > > 
-> > > > -> #1 (sb_writers#4){.+.+}-{0:0}:
-> > > >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> > > >        __sb_start_write include/linux/fs.h:1477 [inline]
-> > > >        sb_start_write include/linux/fs.h:1552 [inline]
-> > > >        write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
-> > > >        ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
-> > > >        __ext4_remount fs/ext4/super.c:6543 [inline]
-> > > >        ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
-> > > >        reconfigure_super+0x40c/0xa30 fs/super.c:956
-> > > >        vfs_fsconfig_locked fs/fsopen.c:254 [inline]
-> > > >        __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
-> > > >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > > >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> > > >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > > 
-> > > > -> #0 (&type->s_umount_key#31){++++}-{3:3}:
-> > > >        check_prev_add kernel/locking/lockdep.c:3098 [inline]
-> > > >        check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-> > > >        validate_chain kernel/locking/lockdep.c:3832 [inline]
-> > > >        __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-> > > >        lock_acquire kernel/locking/lockdep.c:5669 [inline]
-> > > >        lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
-> > > >        down_write+0x92/0x200 kernel/locking/rwsem.c:1573
-> > > >        __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
-> > > >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > > >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> > > >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > > 
-> > > > other info that might help us debug this:
-> > > > 
-> > > >  Possible unsafe locking scenario:
-> > > > 
-> > > >        CPU0                    CPU1
-> > > >        ----                    ----
-> > > >   lock(sb_writers#4);
-> > > >                                lock(&type->s_umount_key#31);
-> > > >                                lock(sb_writers#4);
-> > > >   lock(&type->s_umount_key#31);
-> > > > 
-> > > >  *** DEADLOCK ***
-> > > 
-> > > Hmkay, I understand how this happens, I think:
-> > > 
-> > > fsconfig(FSCONFIG_CMD_RECONFIGURE)                      quotactl_fd(Q_QUOTAON/Q_QUOTAOFF/Q_XQUOTAON/Q_XQUOTAOFF)
-> > > 							-> mnt_want_write(f.file->f_path.mnt);
-> > > -> down_write(&sb->s_umount);                              -> __sb_start_write(sb, SB_FREEZE_WRITE) 
-> > > -> reconfigure_super(fc);
-> > >    -> ext4_multi_mount_protect()
-> > >       -> __sb_start_write(sb, SB_FREEZE_WRITE)         -> down_write(&sb->s_umount);
-> > > -> up_write(&sb->s_umount);
-> > 
-> > Thanks for having a look!
-> > 
-> > > I have to step away from the computer now for a bit but naively it seem
-> > > that the locking order for quotactl_fd() should be the other way around.
-> > > 
-> > > But while I'm here, why does quotactl_fd() take mnt_want_write() but
-> > > quotactl() doesn't? It seems that if one needs to take it both need to
-> > > take it.
-> > 
-> > Couple of notes here:
-> > 
-> > 1) quotactl() handles the filesystem freezing by grabbing the s_umount
-> > semaphore, checking the superblock freeze state (it cannot change while
-> > s_umount is held) and proceeding if fs is not frozen. This logic is hidden
-> > in quotactl_block().
-> > 
-> > 2) The proper lock ordering is indeed freeze-protection -> s_umount because
-> > that is implicitely dictated by how filesystem freezing works. If you grab
-> 
-> Yep.
 
-One final thought about this. quotactl() and quotactl_fd() could do the
-same thing though, right? quotactl() could just be made to use the same
-locking scheme as quotactl_fd(). Not saying it has to, but the code
-would probably be easier to understand/maintain if both would use the same.
+在 2023/4/11 4:13 PM, Eric Dumazet 写道:
+> On Tue, Apr 11, 2023 at 4:33 AM luwei (O) <luwei32@huawei.com> wrote:
+>>
+>> 在 2023/4/11 1:30 AM, Willem de Bruijn 写道:
+>>
+>> Eric Dumazet wrote:
+>>
+>> On Mon, Apr 10, 2023 at 4:22 AM Lu Wei <luwei32@huawei.com> wrote:
+>>
+>> If an AF_PACKET socket is used to send packets through a L3 mode ipvlan
+>> and a vnet header is set via setsockopt() with the option name of
+>> PACKET_VNET_HDR, the value of offset will be nagetive in function
+>> skb_checksum_help() and trigger the following warning:
+>>
+>> WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
+>> skb_checksum_help+0x2dc/0x390
+>> ......
+>> Call Trace:
+>>   <TASK>
+>>   ip_do_fragment+0x63d/0xd00
+>>   ip_fragment.constprop.0+0xd2/0x150
+>>   __ip_finish_output+0x154/0x1e0
+>>   ip_finish_output+0x36/0x1b0
+>>   ip_output+0x134/0x240
+>>   ip_local_out+0xba/0xe0
+>>   ipvlan_process_v4_outbound+0x26d/0x2b0
+>>   ipvlan_xmit_mode_l3+0x44b/0x480
+>>   ipvlan_queue_xmit+0xd6/0x1d0
+>>   ipvlan_start_xmit+0x32/0xa0
+>>   dev_hard_start_xmit+0xdf/0x3f0
+>>   packet_snd+0xa7d/0x1130
+>>   packet_sendmsg+0x7b/0xa0
+>>   sock_sendmsg+0x14f/0x160
+>>   __sys_sendto+0x209/0x2e0
+>>   __x64_sys_sendto+0x7d/0x90
+>>
+>> The root cause is:
+>> 1. skb->csum_start is set in packet_snd() according vnet_hdr:
+>>     skb->csum_start = skb_headroom(skb) + (u32)start;
+>>
+>>     'start' is the offset from skb->data, and mac header has been
+>>     set at this moment.
+>>
+>> 2. when this skb arrives ipvlan_process_outbound(), the mac header
+>>     is unset and skb_pull is called to expand the skb headroom.
+>>
+>> 3. In function skb_checksum_help(), the variable offset is calculated
+>>     as:
+>>        offset = skb->csum_start - skb_headroom(skb);
+>>
+>>     since skb headroom is expanded in step2, offset is nagetive, and it
+>>     is converted to an unsigned integer when compared with skb_headlen
+>>     and trigger the warning.
+>>
+>> Not sure why it is negative ? This seems like the real problem...
+>>
+>> csum_start is relative to skb->head, regardless of pull operations.
+>>
+>> whatever set csum_start to a too small value should be tracked and fixed.
+>>
+>> Right. The only way I could see it go negative is if something does
+>> the equivalent of pskb_expand_head with positive nhead, and without
+>> calling skb_headers_offset_update.
+>>
+>> Perhaps the cause can be found by instrumenting all the above
+>> functions in the trace to report skb_headroom and csum_start.
+>> And also virtio_net_hdr_to_skb.
+>> .
+>>
+>> Hi, Eric  and Willem,  sorry for not describing this issue clearly enough. Here is the detailed data path:
+>>
+>> 1.  Users call sendmsg() to send message with a AF_PACKET domain and SOCK_RAW type socket. Since vnet_hdr
+>>
+>> is set,  csum_start is calculated as:
+>>
+>>                        skb->csum_start = skb_headroom(skb) + (u32)start;     // see the following code.
+>>
+>> the varible "start" it passed from user data, in my case it is 5 and skb_headroom is 2, so skb->csum_start is 7.
+>>
+> I think you are rephrasing, but you did not address my feedback.
+>
+> Namely, "csum_start < skb->network_header" does not look sensical to me.
+>
+> csum_start should be related to the transport header, not network header.
 
-Christian
+     csum_start is calculated in pakcet_snd() as:
+
+                skb->csum_start = skb_headroom(skb) + (u32)start;
+
+    the varible "start" it passed from user data via vnet_hdr as follows:
+
+     packet_snd()
+     ...	
+	if (po->has_vnet_hdr) {
+		err = packet_snd_vnet_parse(msg, &len, &vnet_hdr);   // get vnet_hdr which includes start
+		if (err)
+		    goto out_unlock;
+		has_vnet_hdr = true;
+	}
+     ...
+
+   csum_start should be at the transport header but users may pass an incorrect value.
+
+>
+> If you fix a bug, please fix it completely, instead of leaving room
+> for future syzbot reports.
+>
+> Also, your reference to ipvlan pulling a mac header is irrelevant to
+> this bug, and adds confusion.
+>
+> That is  because csum_start is relative to skb->head, not skb->data.
+> So ipvlan business does not change csum_start or skb->head.
+> .
+
+-- 
+Best Regards,
+Lu Wei
+
