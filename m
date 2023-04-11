@@ -2,128 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C480F6DD2CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D0A6DD2D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjDKGah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S230238AbjDKGbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjDKGaf (ORCPT
+        with ESMTP id S229873AbjDKGbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:30:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685001FEA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681194586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oSR/BoPrTP4dM6eEMbqNicTKlgGAh6IQScE+JTRaUCI=;
-        b=Hra8B2eCWiJ6BdeclaIvYpWFdv1Yuk6cRegWMdaj6GhlrolKkaEfbYcFT10240nA2mnu6k
-        5xaXtIZ5NpGUs/QxUDJ4tWuCxS/sef6kbGllsxWD1obVoyRpB4+K/bW68s9w8zpa0YWyZb
-        T/57KP+tOdmd7EZKPkiohNP2TcN5+9E=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-328-V1ixWlo2Pfi3FArAWyFxtg-1; Tue, 11 Apr 2023 02:29:42 -0400
-X-MC-Unique: V1ixWlo2Pfi3FArAWyFxtg-1
-Received: by mail-wr1-f70.google.com with SMTP id c28-20020adfa31c000000b002d5737d3835so923431wrb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:29:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681194582;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oSR/BoPrTP4dM6eEMbqNicTKlgGAh6IQScE+JTRaUCI=;
-        b=hy8oY6yO1SxwduWUsjKhR1eQg7Tcnab01i4FqG+QWsV7z3SzUbWWy7laoHs4Av5IyE
-         RyTSkQhZP5EuM8dj81yF18/lmWeuU0o7ILHoJXwJo/OeyHY4ef3g0Uexk4up1a3trImz
-         Y+So66kRd1ybYOze9QA9UPgaXfhG42/FC7BB4Ah4b0fXOkOz7fwb8RqcbXdIPnmwYSTB
-         lTJA6c02P8MB4uI36PBFwvHFpDNAsxjyAr8FnaXiQPtZrA3kLGdvDpeV+zXYwtegKm6Z
-         7658/5LnaZYIbmQKPapaJq47+euan/zjtdUJMUIsWNpj/qOh5XYg+4ZFVXO0s2r639xe
-         foBQ==
-X-Gm-Message-State: AAQBX9enmL7nCuYZBCHct7MjvvddqoAgDTKSnldIUMNLQ/W6TDI1oG2f
-        Wr+pd2/EN3i9ZMK+uK3Ssrn8mNiBKnR/iAFotji+L6oSkYdPfhYvJA1BctUg0I31nAP8UXS8cn4
-        +5Ti7Uzv21zSjfhzV2YVg8Mis
-X-Received: by 2002:a05:600c:3786:b0:3eb:3104:efec with SMTP id o6-20020a05600c378600b003eb3104efecmr6103020wmr.16.1681194581882;
-        Mon, 10 Apr 2023 23:29:41 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZMnDmXJKwVPTFLe5E+xPCjkP07zR84RGkXb1tNKi76IBa8wNnsmfGG09/OTcO4lFwDkKN4+Q==
-X-Received: by 2002:a05:600c:3786:b0:3eb:3104:efec with SMTP id o6-20020a05600c378600b003eb3104efecmr6103012wmr.16.1681194581491;
-        Mon, 10 Apr 2023 23:29:41 -0700 (PDT)
-Received: from redhat.com ([2.52.10.80])
-        by smtp.gmail.com with ESMTPSA id m30-20020a05600c3b1e00b003ef5deb4188sm19722538wms.17.2023.04.10.23.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 23:29:40 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 02:29:37 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Angus Chen <angus.chen@jaguarmicro.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
-Message-ID: <20230411022329-mutt-send-email-mst@kernel.org>
-References: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
+        Tue, 11 Apr 2023 02:31:49 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F021F1BCA;
+        Mon, 10 Apr 2023 23:31:46 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxYczR_jRkkgMaAA--.40259S3;
+        Tue, 11 Apr 2023 14:31:45 +0800 (CST)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHL7R_jRkwg4eAA--.32207S2;
+        Tue, 11 Apr 2023 14:31:45 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: [PATCH] Mips: Fix _CONST64_(x) as unsigned
+Date:   Tue, 11 Apr 2023 14:31:44 +0800
+Message-Id: <20230411063144.3119-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxHL7R_jRkwg4eAA--.32207S2
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrtF4ktr4UAr4fGw45Kry3urg_yoWxtrg_C3
+        s2ya1kurW8Jr17Z39xZwn5JFy8W34kJFyDuFn8Gr9Iy3s0kw45Gay8GFy8tr43CFsa9r4r
+        ZFZ8tr1ayFnrKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5
+        R7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAI
+        cxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c
+        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
+        JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYx
+        BIdaVFxhVjvjDU0xZFpf9x07j8yCJUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 09:38:32AM +0800, Angus Chen wrote:
-> We read the status of device after reset,
-> It is not guaranteed that the device be reseted successfully.
+Addresses should all be of unsigned type to avoid unnecessary conversions.
 
-Sorry not guaranteed by what? I am guessing you have a legacy device
-that does not reset fully on write, and you need to wait?
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
+ arch/mips/include/asm/addrspace.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> We can use a while loop to make sure that,like the modern device did.
-> The spec is not request it ,but it work.
-> 
-> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-
-Generally I don't much like touching legacy, no telling what
-that will do. Case in point, is your device a pure
-legacy device or a transitional device?
-
-> ---
->  drivers/virtio/virtio_pci_legacy.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> index 2257f1b3d8ae..f2d241563e4f 100644
-> --- a/drivers/virtio/virtio_pci_legacy.c
-> +++ b/drivers/virtio/virtio_pci_legacy.c
-> @@ -14,6 +14,7 @@
->   *  Michael S. Tsirkin <mst@redhat.com>
->   */
->  
-> +#include <linux/delay.h>
->  #include "linux/virtio_pci_legacy.h"
->  #include "virtio_pci_common.h"
->  
-> @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
->  	vp_legacy_set_status(&vp_dev->ldev, 0);
->  	/* Flush out the status write, and flush in device writes,
->  	 * including MSi-X interrupts, if any. */
-> -	vp_legacy_get_status(&vp_dev->ldev);
-> +	while (vp_legacy_get_status(&vp_dev->ldev))
-> +		msleep(1);
-
-The problem with this is that it will break surprise
-removal even worse than it's already broken.
-
-
->  	/* Flush pending VQ/configuration callbacks. */
->  	vp_synchronize_vectors(vdev);
->  }
-> -- 
-> 2.25.1
+diff --git a/arch/mips/include/asm/addrspace.h b/arch/mips/include/asm/addrspace.h
+index 59a48c60a065..75d36115a25e 100644
+--- a/arch/mips/include/asm/addrspace.h
++++ b/arch/mips/include/asm/addrspace.h
+@@ -25,9 +25,9 @@
+ #define _ATYPE32_	int
+ #define _ATYPE64_	__s64
+ #ifdef CONFIG_64BIT
+-#define _CONST64_(x)	x ## L
++#define _CONST64_(x)	x ## UL
+ #else
+-#define _CONST64_(x)	x ## LL
++#define _CONST64_(x)	x ## ULL
+ #endif
+ #endif
+ 
+-- 
+2.20.1
 
