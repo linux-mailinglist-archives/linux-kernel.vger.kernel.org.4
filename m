@@ -2,171 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BF76DE0B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B1C6DE0BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjDKQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S231339AbjDKQNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjDKQLl (ORCPT
+        with ESMTP id S231267AbjDKQMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:11:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3646185
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681229409;
+        Tue, 11 Apr 2023 12:12:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8174965AE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:10:30 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 18:10:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681229427;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=NUYtJHWQHrlxATmFk6Zj0PzfCOzptdZvrIQb9VoBGYI=;
-        b=bABz1z/d9pZvttcqom4c05u/gGL8U1A4P6egq1KYl7xjIvhf1zOvwfWRX/lNfHMGDfRaEe
-        deqjq4EEtzeKJlN83KVVjJ8CAyNGFJu915eeujiTNohb2qAHKdFlRJ3yc1SqeFmGmzBOJh
-        YnVJqYO+IUKxfzT6WQRY0lItB5sVK0w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-v6vTLpRuNC-A8BVR-fqWyA-1; Tue, 11 Apr 2023 12:10:05 -0400
-X-MC-Unique: v6vTLpRuNC-A8BVR-fqWyA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EF7F101A551;
-        Tue, 11 Apr 2023 16:10:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B5F52166B31;
-        Tue, 11 Apr 2023 16:10:01 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        bh=ccJ9V/z+ZvQmu8XlUH812Aah5FhB9IY70ps95GksDiU=;
+        b=KJYLkGDYSwzeFnvaijbFeIwmVteo9ZntZePENCwkIh7JDdJ1R+Zv04SS6TH9bUMTSmTeGI
+        i/Ud+QaKYE/wcq31uDHCEh7/5Cwea9RoJIB+vbZ51/nEAUKsHU7YcqJAwNz4elZEz7Iylp
+        pF65jwCW/5XFuQUcoB2eoxWNre8ql9cjjrRCKvw3/HK1XsnL7IBWWUe8QnC2WYQtFFQBCx
+        hWh6n8VeIKpJ0ThvE2vatu1S3xVFaWbBVCliRW2ZcMF+44J38CEt8cIZuvkXbHGef9KhgN
+        QM4oiLRMl62L3q/HmBxthx8L+ZGhbILH498p44TfF8XdXuEFB3RIYcnckMGHJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681229427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ccJ9V/z+ZvQmu8XlUH812Aah5FhB9IY70ps95GksDiU=;
+        b=gOJZI63whU8cynzAb9c1LtnePkZc/50HtyXH6rwXAZ3HI7reY2SWAlytaKdzjnEEwXP9YH
+        Aewv2SrxQJLdyMDQ==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH net-next v6 18/18] af_unix: Support MSG_SPLICE_PAGES
-Date:   Tue, 11 Apr 2023 17:09:02 +0100
-Message-Id: <20230411160902.4134381-19-dhowells@redhat.com>
-In-Reply-To: <20230411160902.4134381-1-dhowells@redhat.com>
-References: <20230411160902.4134381-1-dhowells@redhat.com>
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v5 02/18] timer: Add comment to get_next_timer_interrupt()
+ description
+In-Reply-To: <ZDUqGCU3O7pIzn0O@lothringen>
+Message-ID: <4972b725-d6af-8f93-e534-52ee57dbc9f9@linutronix.de>
+References: <20230301141744.16063-1-anna-maria@linutronix.de> <20230301141744.16063-3-anna-maria@linutronix.de> <ZDUqGCU3O7pIzn0O@lothringen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make AF_UNIX sendmsg() support MSG_SPLICE_PAGES, splicing in pages from the
-source iterator if possible and copying the data in otherwise.
+On Tue, 11 Apr 2023, Frederic Weisbecker wrote:
 
-This allows ->sendpage() to be replaced by something that can handle
-multiple multipage folios in a single transaction.
+> On Wed, Mar 01, 2023 at 03:17:28PM +0100, Anna-Maria Behnsen wrote:
+> > get_next_timer_interrupt() does more than simply getting the next timer
+> > interrupt. The timer bases are forwarded and also marked as idle whenever
+> > possible.
+> > 
+> > To get not confused, add a comment to function description.
+> > 
+> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > ---
+> > v5: New patch, which adds only a comment to get_next_timer_interrupt()
+> > instead of changing the function name
+> > ---
+> >  kernel/time/timer.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> > index 63a8ce7177dd..ffb94bc3852f 100644
+> > --- a/kernel/time/timer.c
+> > +++ b/kernel/time/timer.c
+> > @@ -1915,6 +1915,10 @@ static u64 cmp_next_hrtimer_event(u64 basem, u64 expires)
+> >   * @basej:	base time jiffies
+> >   * @basem:	base time clock monotonic
+> >   *
+> > + * If required, base->clk is forwarded and base is also marked as
+> > + * idle. Idle handling of timer bases is allowed only to be done by CPU
+> > + * itself.
+> 
+> Idle marking you mean? Because idle handling can be done remotely after
+> this patchset.
+> 
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
----
+Jupp, will change idle handling to "idle marking".
 
-Notes:
-    ver #6)
-     - Use common helper.
+Thanks,
 
- net/unix/af_unix.c | 49 +++++++++++++++++++++++++++++++---------------
- 1 file changed, 33 insertions(+), 16 deletions(-)
-
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index ea45dcc80232..e1f962180e55 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -2200,19 +2200,25 @@ static int unix_stream_sendmsg(struct socket *sock, struct msghdr *msg,
- 	while (sent < len) {
- 		size = len - sent;
- 
--		/* Keep two messages in the pipe so it schedules better */
--		size = min_t(int, size, (sk->sk_sndbuf >> 1) - 64);
-+		if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES)) {
-+			skb = sock_alloc_send_pskb(sk, 0, 0,
-+						   msg->msg_flags & MSG_DONTWAIT,
-+						   &err, 0);
-+		} else {
-+			/* Keep two messages in the pipe so it schedules better */
-+			size = min_t(int, size, (sk->sk_sndbuf >> 1) - 64);
- 
--		/* allow fallback to order-0 allocations */
--		size = min_t(int, size, SKB_MAX_HEAD(0) + UNIX_SKB_FRAGS_SZ);
-+			/* allow fallback to order-0 allocations */
-+			size = min_t(int, size, SKB_MAX_HEAD(0) + UNIX_SKB_FRAGS_SZ);
- 
--		data_len = max_t(int, 0, size - SKB_MAX_HEAD(0));
-+			data_len = max_t(int, 0, size - SKB_MAX_HEAD(0));
- 
--		data_len = min_t(size_t, size, PAGE_ALIGN(data_len));
-+			data_len = min_t(size_t, size, PAGE_ALIGN(data_len));
- 
--		skb = sock_alloc_send_pskb(sk, size - data_len, data_len,
--					   msg->msg_flags & MSG_DONTWAIT, &err,
--					   get_order(UNIX_SKB_FRAGS_SZ));
-+			skb = sock_alloc_send_pskb(sk, size - data_len, data_len,
-+						   msg->msg_flags & MSG_DONTWAIT, &err,
-+						   get_order(UNIX_SKB_FRAGS_SZ));
-+		}
- 		if (!skb)
- 			goto out_err;
- 
-@@ -2224,13 +2230,24 @@ static int unix_stream_sendmsg(struct socket *sock, struct msghdr *msg,
- 		}
- 		fds_sent = true;
- 
--		skb_put(skb, size - data_len);
--		skb->data_len = data_len;
--		skb->len = size;
--		err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
--		if (err) {
--			kfree_skb(skb);
--			goto out_err;
-+		if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES)) {
-+			err = skb_splice_from_iter(skb, &msg->msg_iter, size,
-+						   sk->sk_allocation);
-+			if (err < 0) {
-+				kfree_skb(skb);
-+				goto out_err;
-+			}
-+			size = err;
-+			refcount_add(size, &sk->sk_wmem_alloc);
-+		} else {
-+			skb_put(skb, size - data_len);
-+			skb->data_len = data_len;
-+			skb->len = size;
-+			err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
-+			if (err) {
-+				kfree_skb(skb);
-+				goto out_err;
-+			}
- 		}
- 
- 		unix_state_lock(other);
+	Anna-Maria
 
