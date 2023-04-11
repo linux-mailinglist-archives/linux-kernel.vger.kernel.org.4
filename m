@@ -2,145 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A3F6DE1A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07C46DE193
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjDKQ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S229683AbjDKQyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDKQ7R (ORCPT
+        with ESMTP id S229992AbjDKQyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:59:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBB2198
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:59:15 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mbj3Y-1qN0BB0WCc-00dCN0; Tue, 11 Apr 2023 18:53:39 +0200
-Message-ID: <437e9983-55e9-3f9d-a94b-c746922973da@i2se.com>
-Date:   Tue, 11 Apr 2023 18:53:38 +0200
+        Tue, 11 Apr 2023 12:54:07 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB04C6A49;
+        Tue, 11 Apr 2023 09:53:47 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id e11so11201196lfc.10;
+        Tue, 11 Apr 2023 09:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681232025; x=1683824025;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xd7blxMbuV2pJWL/mke8wN3aR4SPVzbVIhErjMmhThE=;
+        b=Mse7hpUAFYh1mmLVeFVNGGgUKWENpRQi15LBiUwAIWPQG/ddIcXgnC5JhbuhewmddO
+         aPSs5jhlaUxthfiR84vIiwUHnVOnYwTFWjPyNhKLUCPVlcg8vTTnd1uhDEM3fmGiqzpV
+         lsmt6uBDOGP07BGLosVAM3CtnHs/tBLoR2plDTE71YBNRVcoFKaOZIf5QHxaDqxGGtRx
+         aVPvp+2VDFObEiJwXd0Lt69+PuVt2Uiv3MfwgZLCec23pQV79GSmRGPiiFFzzwS2jEbG
+         mwmkZegb7/0I8hQnuWBloJAJY99+CA/nT9dKGslbeRbs0f8IJfxESV7zbYY4BwDnuvbw
+         regA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681232025; x=1683824025;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xd7blxMbuV2pJWL/mke8wN3aR4SPVzbVIhErjMmhThE=;
+        b=SoRWwCP+OdUKr2s70CTEFcG2AHSy9zy6834ySfz5qKMsPO+d+OHOwRM5pBkR2P5Ox+
+         P7TpzWcAB4LZXW5KjFXh7t1mzEYRjDuBc4QwNmPN5VePMuhYdNCykqsMp1kCKanjrgzD
+         dhqAj45iO0bCrDuhAdCB/FO/4lwvoF1S/Cpia/eoVWC/VKHitkump9OhkU3XR7wZP5Ct
+         VtWgv407feGK5GbI6QEqLxT3ipcNFDJPdiUXyto0AM3Al/8yYudJqp3csA0iGHxlP/PK
+         EbMj5mIKOv+BAR09uBZNHhr1yfzjFd7dDMgXE8ZyekOK2DAVylLcileLrKmlcM/8J9LG
+         k6gQ==
+X-Gm-Message-State: AAQBX9cuqz8nrJIrj7gkhZVmfYNz/z/8p2/s8dWNCWsZo8B19iKuX1q5
+        R403M2qS7aRe4QzaCs+GGM4=
+X-Google-Smtp-Source: AKy350YtNCbal4G8hPVRskf40l3SXY0m0d+91irTDLCPDrG5Ej12/tmJNLWQi3N3eS244GQUHt8IkQ==
+X-Received: by 2002:a05:6512:110a:b0:4db:971:82cd with SMTP id l10-20020a056512110a00b004db097182cdmr3304550lfg.17.1681232025439;
+        Tue, 11 Apr 2023 09:53:45 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id b30-20020a056512025e00b004ec55ac6cd1sm2437299lfo.136.2023.04.11.09.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 09:53:44 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 19:53:42 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v9 0/4] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20230411165342.u6k6vamyejuqqb5z@mobilestation>
+References: <20230324021420.73401-1-cai.huoqing@linux.dev>
+ <20230324074455.bosmaxwkbo7mlyvj@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] nvmem: rmem: Make reserved region name unique
-To:     "Ivan T. Ivanov" <iivanov@suse.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230411135035.106725-1-iivanov@suse.de>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230411135035.106725-1-iivanov@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:JIR5IuZI1s/TSCpfSJQ4lEZdMEaQmJu2Qhz2QVuj5pY6/GPn3Ia
- Gz/cLDle5eT+m5Z81tTREriesMfRh5jrf2ph7VFbi4jLPd73uU+dqXpjxcZEv5MJfoKb7Gl
- 5HW55mGKCL9O9HKYzryemnxNz8SUg1ZtejNk8JKxnZzi1989oxXM/iDrxyLpF0yKhWL8fGi
- D3334dTHxICakhqWAC2uw==
-UI-OutboundReport: notjunk:1;M01:P0:HwjU1YyIMtU=;F72XKl5pHUoBy4qI6dq2WfqcC94
- 1usEX2OgZjMwwWOAGYkLxsKzud4tcAvZhQfStUHZoiSBCQdSBm9UT4eRgGMqfy43+qB7FvFvq
- jDxm4PGHnbxa9C6S43/EstehyKAiegBhvRcJQ8U10lAaAsYPSxiecCAo8USNmjpMNtfD4Pbh9
- OZNA0rHMcSYqEs9YjWDKra9vZo9dPGOj9HPRPbPDWvL3vIm6SmeI7q1eh0GGGd3IMAjZHFTq5
- Wv1WCiowP2y+objE8DM6kI6srzrbOcxBVouc6nIqgIVRCQrGOlj78Hwkqo8OVSV3KmjOcgeAk
- KMm2Prd24xaEgIUVRBdzpv9LYy7sSamjkGWQanlTVUJ5SPn8OKt4HQKvJ5CuZgnOc3XMHN9fI
- HiNebzJafW+TzSsgk9FXn0domcIZSvU3dWfQr2yAG7UOmngrHfL2p9PSwea7se59+lAVpmCK6
- wAnTrCaedudJ/Y/TMaERWFEz8owXgNglzJcZESC24a5q+e5IH2A/OMz0myqhSOfoeMW/R0sXf
- 8JueZafFcR7Rd6VG2t9XZBdawKk6MZZ4Mr8DOQ1ZS0zYTv5O5+jlm8PNgHa3Zm+5RSJOJrAgt
- TPwzvITV4q2TT6ATTn66D8qzGOyrrlfEQ/vtEwIUKZq6wEtMmDJ4a49Y3C8bZZMIQNgM3Q7lM
- muavMTwITq7XdtOVBTJgqi0f7jtx57wtcdVNVbmheQ==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324074455.bosmaxwkbo7mlyvj@mobilestation>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ivan,
-
-Am 11.04.23 um 15:50 schrieb Ivan T. Ivanov:
-> They could be multiple reserved memory regions,
-> so let's make their names unique.
+On Fri, Mar 24, 2023 at 10:44:58AM +0300, Serge Semin wrote:
+> Hi Vinod
 > 
-> This fixes following kernel error:
+> On Fri, Mar 24, 2023 at 10:14:14AM +0800, Cai Huoqing wrote:
+> > Add support for HDMA NATIVE, as long the IP design has set
+> > the compatible register map parameter-HDMA_NATIVE,
+> > which allows compatibility for native HDMA register configuration.
+> > 
+> > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> > And the native HDMA registers are different from eDMA,
+> > so this patch add support for HDMA NATIVE mode.
+> > 
+> > HDMA write and read channels operate independently to maximize
+> > the performance of the HDMA read and write data transfer over
+> > the link When you configure the HDMA with multiple read channels,
+> > then it uses a round robin (RR) arbitration scheme to select
+> > the next read channel to be serviced.The same applies when
+> > youhave multiple write channels.
+> > 
+> > The native HDMA driver also supports a maximum of 16 independent
+> > channels (8 write + 8 read), which can run simultaneously.
+> > Both SAR (Source Address Register) and DAR (Destination Address Register)
+> > are aligned to byte.
+> > 
+> > Cai Huoqing (1):
+> >   dmaengine: dw-edma: Add support for native HDMA
+> > 
+> > Cai huoqing (3):
+> >   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+> >     dw_edma_plat_ops
+> >   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+> >     abstract controller operation
+> >   dmaengine: dw-edma: Add HDMA DebugFS support
+> > 
+> > Tested-by: Serge Semin <fancer.lancer@gmail.com>
 > 
-> [    9.831285] sysfs: cannot create duplicate filename '/bus/nvmem/devices/rmem0'
+> I finished the patchset review and testing. Could you have a look at
+> the series. If you are ok with what it does please merge in.
 
-could you please provide more background information:
+@Vinod, merge window will supposedly be in the next week. Could you
+give your resolution about this series?
 
-- are two instances of rmem trying to create this file?
-- which exact platform is affect (Raspberry Pi 4), because the Hardware 
-name from the trace is useless?
-- could you provide some reliable scenario/config to reproduce this issue?
+-Serge(y)
 
-> [    9.831304] CPU: 3 PID: 467 Comm: (udev-worker) Not tainted 6.2.9-1-default #1 openSUSE Tumbleweed a4aeb3a90c0f23041a8a7944b12739b07585f009
-> [    9.831326] Hardware name: raspberrypi rpi/rpi, BIOS 2023.01 01/01/2023
-> [    9.831335] Call trace:
-> [    9.831343]  dump_backtrace+0xe4/0x140
-> [    9.831366]  show_stack+0x20/0x30
-> [    9.831379]  dump_stack_lvl+0x64/0x80
-> [    9.831398]  dump_stack+0x18/0x34
-> [    9.831410]  sysfs_warn_dup+0x6c/0x90
-> [    9.831424]  sysfs_do_create_link_sd+0xf8/0x100
-> [    9.831437]  sysfs_create_link+0x28/0x50
-> [    9.831449]  bus_add_device+0x70/0x190
-> [    9.831468]  device_add+0x3e8/0x84c
-> [    9.831481]  nvmem_register+0x85c/0x9f0
-> [    9.831500]  devm_nvmem_register+0x24/0x70
-> [    9.831517]  rmem_probe+0xa0/0xf4 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
-> [    9.831555]  platform_probe+0x70/0xd0
-> [    9.831566]  really_probe+0xc8/0x3e4
-> [    9.831582]  __driver_probe_device+0x84/0x190
-> [    9.831598]  driver_probe_device+0x44/0x11c
-> [    9.831613]  __driver_attach+0xf8/0x200
-> [    9.831629]  bus_for_each_dev+0x78/0xd0
-> [    9.831643]  driver_attach+0x2c/0x40
-> [    9.831657]  bus_add_driver+0x188/0x250
-> [    9.831672]  driver_register+0x80/0x13c
-> [    9.831688]  __platform_driver_register+0x30/0x40
-> [    9.831699]  rmem_driver_init+0x28/0x1000 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
-> [    9.831727]  do_one_initcall+0x48/0x2bc
-> [    9.831740]  do_init_module+0x50/0x1f0
-> [    9.831753]  load_module+0x1e54/0x2250
-> [    9.831763]  __do_sys_init_module+0x2ac/0x2f0
-> [    9.831774]  __arm64_sys_init_module+0x24/0x30
-> [    9.831785]  invoke_syscall+0x78/0x100
-> [    9.831803]  el0_svc_common.constprop.0+0x15c/0x180
-> [    9.831820]  do_el0_svc+0x40/0xb0
-> [    9.831836]  el0_svc+0x34/0x134
-> [    9.831850]  el0t_64_sync_handler+0x114/0x120
-> [    9.831865]  el0t_64_sync+0x1a4/0x1a8
-> [    9.831956] rmem: probe of 3ef62ce0.nvram failed with error -17
 > 
-> Some background information about the issue could be found here:
-> https://bugzilla.suse.com/show_bug.cgi?id=1206846
+> -Serge(y)
 > 
-> Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
-> ---
->   drivers/nvmem/rmem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvmem/rmem.c b/drivers/nvmem/rmem.c
-> index 80cb187f1481..77c70a47d519 100644
-> --- a/drivers/nvmem/rmem.c
-> +++ b/drivers/nvmem/rmem.c
-> @@ -70,7 +70,7 @@ static int rmem_probe(struct platform_device *pdev)
->   
->   	config.dev = dev;
->   	config.priv = priv;
-> -	config.name = "rmem";
-> +	config.name = dev_name(dev);
-
-AFAIR changing userspace isn't great because application could rely on 
-the filename prefix.
-
-What is the result after applying this patch:
-
-ls bus/nvmem/devices/rmem*
-
->   	config.size = mem->size;
->   	config.reg_read = rmem_read;
->   
+> > 
+> > v8->v9:
+> >   [3/4]
+> >   1.Drop an empty line.
+> >   [4/4]
+> >   2.Update commit log.
+> >   3.Remove unused macro
+> > 
+> > v8 link:
+> >   https://lore.kernel.org/lkml/20230323034944.78357-1-cai.huoqing@linux.dev/
+> > 
+> >  drivers/dma/dw-edma/Makefile                 |   8 +-
+> >  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
+> >  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
+> >  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+> >  drivers/dma/dw-edma/dw-edma-v0-core.c        |  85 +++++-
+> >  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+> >  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 296 +++++++++++++++++++
+> >  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+> >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 170 +++++++++++
+> >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+> >  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
+> >  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+> >  include/linux/dma/edma.h                     |   7 +-
+> >  13 files changed, 807 insertions(+), 91 deletions(-)
+> >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+> >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+> >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > 
+> > -- 
+> > 2.34.1
+> > 
