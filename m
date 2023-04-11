@@ -2,195 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E797F6DE588
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51836DE587
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjDKUN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S229794AbjDKULf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDKUNZ (ORCPT
+        with ESMTP id S229656AbjDKULe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:13:25 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7ACC3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:13:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tg4kqcPMvoklDFSZGr9/Q0WeMvTfPwqKRcb3Zv6icWrnX4ueJ8IJMra6HVlB1Hd5Kq/+hGV3k60urc9pUubziwPxAcZzYY+HUwDYkXzakBO83kPHFN5N1CM/G2WFtgIcqTUe/e9pY18AM438sUYrrt6CnuuuXPpzKbTWxU2V4+SEMZGqelY6jWr1poTqPuW+UDbzTsuAIuBsotNEiD7s/mSamteqVpiDj0AeU0C9p54MXR6MCJvOZWzXS/CzpLL5/R9A1HDluLVrTZ9ONBoKxVMl5K/ucEggTMtNetma4HlWd4nXfTXxrQgWIXNCE8GIXZ10n4Xdx6Mx1HGmOmxTmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wtHQNznrsuJWnMTXs/PTwzxUbUi2vuntq2HXIG5tzQo=;
- b=KP6jk6jDR0AtQS/4gG3BKRGUuRQlp0zFF/yQXtIcqUNvFbXwzemfcrndrmDDmidL2IgocMR3J4DtPtSulxMBkrAR2wSq0pmnYR3ziRGOBtTy4JzHEuhYy0cVYrWDbp9k+i7+bkZzjGvz8sHruZveu/3tEPSQsg+KCmJjRRB4+DxQPKwTvB1XNGovA4OwOWOWCF1TG5/dqtoqT4mx5nXHBtnmLGL7Z04dlofm04NnqITq7hdCrUzaVHV9QqPd0T9uoqU3S/AoVwyXHSCJixYBk+hQj62KPdODnYBEvYsb8RCrf3D33sH9v+8pXYtjzIR/DQtUZPkfzJNvdp1WhuIhwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wtHQNznrsuJWnMTXs/PTwzxUbUi2vuntq2HXIG5tzQo=;
- b=wQEhazQPB7nvzwu0FgyjGwF0s+kDC7RYJed9e8Ac1x64YJ6ZhpVZBqSBBNvVaorCMvpExIlEoYp4ED8lKZUsiqyoCF9Q9H/gktcupOgClhxwTx/QjULXbmQ5hlSMAssrbp/L1GBmoh7SkDQsLzWPEbac/MVw5w8Th8bzjANTcHs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- IA1PR12MB6305.namprd12.prod.outlook.com (2603:10b6:208:3e7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Tue, 11 Apr
- 2023 20:06:34 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
- 20:06:33 +0000
-Message-ID: <21c789de-e381-cccd-9093-741dcd7a2dc5@amd.com>
-Date:   Tue, 11 Apr 2023 16:06:30 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-CA
-To:     Danilo Krummrich <dakr@redhat.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        airlied@gmail.com, daniel@ffwll.ch, l.stach@pengutronix.de,
-        "Prosyak, Vitaly" <Vitaly.Prosyak@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230331000622.4156-1-dakr@redhat.com>
- <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
- <ecef210b-dc7d-e385-f9b2-927d55a6777e@amd.com>
- <32c28b47-2a3b-db1d-e927-ae44d52cae0b@redhat.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [PATCH] drm/scheduler: set entity to NULL in
- drm_sched_entity_pop_job()
-In-Reply-To: <32c28b47-2a3b-db1d-e927-ae44d52cae0b@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0228.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:eb::17) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Tue, 11 Apr 2023 16:11:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9C059FC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681243763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K45z4IfIS5W9aFNj1M79VvTcq0if3B4l0IQI1OCADJQ=;
+        b=FYiqk2sCBHF+5wc11gnS3r41tuDToEsB/cssDW8uY2UFHWuUjruZGhISkqdTA0UBpmR2w8
+        uB+omiB3aCiUSI8MtKcPKaN006rMU1hYb7QgJ44HAdEIBpjwTZyvDB7aLCc/34BZGRppmf
+        aZ45mA2ZBcvGqIiTkzne7pGQTvOccno=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-59-wUQybkdjORSiUQ-BQK6f9g-1; Tue, 11 Apr 2023 16:09:22 -0400
+X-MC-Unique: wUQybkdjORSiUQ-BQK6f9g-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5ef4122d2dbso150526d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:09:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681243762; x=1683835762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K45z4IfIS5W9aFNj1M79VvTcq0if3B4l0IQI1OCADJQ=;
+        b=I7D6iwRZUsx2g8E7DQ295Dd5KFVmDFtkxONVBJ1egiLDGZNNRmioFdpt7qLyqYW0Ow
+         8jkbtdItUvsYt4Yq9Is4CG3ahYcXjpKwrps3Ea5WB2goF4/JYI+Hudmta7jLI1uMnFMw
+         NTW8Ec7qDF0Bl8KPcfeVFXh4bMrdtglLUE2JCYnB/BSWyKJ2NU0Psn6pfpBbwLHEKoxy
+         m8ZiQ70qKVy+UrcJg2sSLwQcki6lI9lUrwLS7qAbdr2p+8uoJvTGEjlIKxmN9g44FUGy
+         QsV1bYIDZieXnr4OyTkhb1psRcI4rK3/gUSRFCcd9C3cR4sSPSsT2IKd03BJ+TNJZD70
+         Viog==
+X-Gm-Message-State: AAQBX9f9jNEcfTicnXuAHTI8g5kA7BrPw6PPIT1Zm7s7DPk9epr0Bh5H
+        33XBLHKNyGM6FdqnSW/dfv+ipM9/YzELWWQB1XExgkbC/0C64xALDdLZZjvon1IJ5qN2Cm1uPmC
+        56dtmYeMnXWFbn27kRikYgAN0
+X-Received: by 2002:a05:6214:5294:b0:5ad:cd4b:3765 with SMTP id kj20-20020a056214529400b005adcd4b3765mr666407qvb.1.1681243761902;
+        Tue, 11 Apr 2023 13:09:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZCVgYw2bwsduB2+jIpza6191NF737UXdgYyngMJ9F5Jv++vn9ogCCGzim2cMadewXaMln8xA==
+X-Received: by 2002:a05:6214:5294:b0:5ad:cd4b:3765 with SMTP id kj20-20020a056214529400b005adcd4b3765mr666375qvb.1.1681243761561;
+        Tue, 11 Apr 2023 13:09:21 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id me3-20020a0562145d0300b005dd8b9345aesm4365069qvb.70.2023.04.11.13.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 13:09:21 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:09:19 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 21/29] selftests/mm: Add framework for uffd-unit-test
+Message-ID: <ZDW+byWzRP2WEbd3@x1n>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160818.3107545-1-peterx@redhat.com>
+ <ZDU//1RXYUMIRMk3@linux.ibm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|IA1PR12MB6305:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6cb6f583-604f-432b-7221-08db3ac83f48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: seXpWW/bWyhf7r2/2hZ7Iyt+idGqkkSuyBwtq0lgLUh72y1cEaakxQ4CETg5pNM3BXibAuZ+S/NGqaEnxtmg4dRt2EfoLPTMMdwAw7AoLv9J+FILBlZKpnda/I1yuLjhuYt2tDDSX3evYPebFQXMwFIiWTFNLCFzv579+Z2kxzlnztC1JT4rhkJeACd/gVRGg84YY1ei1g5SNFRgP78yMXz4VyRuxWpUVAPPLJ2ndszOwVoGwDXtUqsonnzuj0mOkI/vgJU3/jG65a+XfJSfe/H82AfnS1RJ/RFe/WjEsBYKMMYNMbRZu5RBY6X9ynkwbvRaS3gp6e9WVmswGyWN76Wd+w2RSw/LnOGvyh2JFABBHJZn8qzpyPajcB1Otql+86DI7MChXMWLdlZYsVKTbWtaZKJIgPVPh4GjmxEpCU9dJr/IPynS8HNYZXdpIB5dc+SZrvjreIowMYiIobERRmcJHA+XPYlQf2EUPahlTtP2Kpl6QcUtaWkZfnBWq7A2nZuKthnheQO2KbwLdPrNd9blhv48CSnYFASqDkFn0IKcZ1zZlcavxtfZgjHEyBX8GFxO2a7VzIslW9n8+lngrxn0v2GgicpEdDpAYB72ru1ebQ2IrhaIU8lLeUZksd9xrqQdtKip3fV6AO0h1xXUrA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199021)(316002)(31686004)(110136005)(6636002)(38100700002)(66556008)(66476007)(8676002)(66946007)(4326008)(31696002)(86362001)(478600001)(66574015)(2616005)(186003)(83380400001)(36756003)(41300700001)(53546011)(2906002)(6506007)(6512007)(26005)(44832011)(8936002)(5660300002)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTdDeXRLWG1ZQUxKNytkdnhyQ2R5NjlxbmVKdHpXUzBWMHI5YTZOdGs1S1ZL?=
- =?utf-8?B?bDJIL2U4WnYrQkZlNklrblJGOVFDbzJaTFc3U1NCVUlHc3lHZktGcmxlT2RT?=
- =?utf-8?B?TEhqdjNJNElFY3ZGd0RieFU0SGt1bVZINit6SmlaOXBtVFMzV3Aybk9PRnpS?=
- =?utf-8?B?NVVVQzgxNnUvUitteXBDYksza2dXRFpmblhzWFdBZWFtRGw4ZUJDbEUrVi9u?=
- =?utf-8?B?MDc2b3MrZCtMbEo3eGovN2FxOVU4VHM5eFlYSUl2d1lyNkdXYnBVdWgvbElS?=
- =?utf-8?B?bmJFeVVUVlVEZ3l2allkMktwQW40eHAyb2l6aXNVaUVndEVFTzEzTndXanQ3?=
- =?utf-8?B?WXh1QmR3VGo1aEU1QWxmZktkKy9KV2RZUzZIeTV4QnRiZHhMUjEvbGRPR0RN?=
- =?utf-8?B?aE1BT3RBQW1ZdTdWb3IwYXBYWkh6dTRUbWpoRVYwbUVURDVLS3hYZnZLTzlh?=
- =?utf-8?B?ZmZEZm9qSWV1Rjc5NzViREZCeGVkZWpRMmk3OXBnbjZVd3pzYkhieVdqSUdN?=
- =?utf-8?B?WnRGVFZVSTBwVVBhaGx0bzNSYmFJSi9SM21nSVVYVVNMa0lZSE5iS210SkFI?=
- =?utf-8?B?TkFJZ3R1TTRtR00wU3cxdm94V3V5M1FvREM4Uk1GRWc1a0xRa2EzR1FFSjJv?=
- =?utf-8?B?VmpCVWFmTDUvYUFBbCtITmZ4TWxNK01VK0hranNmR1B5QkNndWs2UHc0dlcr?=
- =?utf-8?B?dXppMlVpRHV2SHhGN2NvWVhsVlZJZDZwSmZrNUZWanhZRWRwUUdTdFdYZmxS?=
- =?utf-8?B?cFcxQm5lWTU4RWFUSFZaM0FBbmZoMkxUc0o0QU45cnVNMmcwLzdGZlErbzlQ?=
- =?utf-8?B?M2JpbWlIQTRwL2VWQ2lvMkt0MEFLK1RNUWY1R0UrTzJ4QmpRQ0w3Tk5XUHA3?=
- =?utf-8?B?bE5JZjdPemxnbTN5MWJ2ZTVQQjFYUmlLNDJaN24zM0ZhQXZ0VzFwVytLMUhw?=
- =?utf-8?B?S0FzUE1hOUZmUWF1K3Q1QXZXWFBtc3pmd09CMk5FdnVXS2lJZXoyRllsMXo4?=
- =?utf-8?B?a09JNmtUaWFVdmtDcWQwVHRWMzB5d3pLQTdzUjBVYmtKVldOa3BBL3FFQ0li?=
- =?utf-8?B?VWpPVVhhVWduWVBUckY0aG5uQkNwbTk4ZlYxcUJSSjhDakZLRE92dGRTcDFH?=
- =?utf-8?B?Tk5rNXFmUVhPdi92VGJncXkveC9oMUFkSjRvUmxNQmcxQm1XMVpRY3h2Vmp0?=
- =?utf-8?B?WElVaE1qQ2NpV2Z5S3o5MW1waEZQQllXYjRQbnNYUnMzSCtaUDVrRWdKdDJS?=
- =?utf-8?B?L2MrVEVoeHhycUxmN1VYVWdwTE1UZllCSEVISjN0aU5SZGMzTFM0M1BzZXVV?=
- =?utf-8?B?Z1ZEUmZtWWdhUGROUThFMW50YjRtS3hvcUV5b3NkSTNCdkNoOWJkQU1QYlFJ?=
- =?utf-8?B?QzdzR2dJc1ErSlRNNXY4L3lCQVdWeWhOdzNwbk9lYkg4V0F6SUI2VVVqRG1E?=
- =?utf-8?B?di9mL0tpWnFXbVB2VHdoVTlXQXpYeEllQWlQUEpPeWh1QlM2YUoxcHhvaHlD?=
- =?utf-8?B?cCtqZE50UXk4OFgrNTg1cFJ6K1p2cllzQ0lBblR5bWNFUGg4UHFUOGlEU0Jx?=
- =?utf-8?B?aTFxOFhialExRW1kWFo5WFFvTUhSbzBFZTYwWWZQeXdmdWhENFpsQzFpSHhu?=
- =?utf-8?B?bjc0TU1TSDVSTFFSd3RTYzRYbmJETDlQV2FBQWxLWThLV1k5OTl2ME9yMnNY?=
- =?utf-8?B?MXV1RzUzU2hDZUFKQTA2RW1pU0xYcjNOSmt6SjVCcTlKSUVkOVZpeFgrRlNp?=
- =?utf-8?B?L3dsMTE1dWsxcUVXU1FoV0UxaXYwdk8vQ1F2Q0NReVVxTnhaalJFbEFWTWhL?=
- =?utf-8?B?aW8rc29sQWI3T1pmQnhrczdwZndEc0I4TWRrQjJOT2tIV0I3SUNLR2wySEZK?=
- =?utf-8?B?RDZHM0pEY1VzdjJjSis4eGp4aVpNRTYxUGtGeTQ2WlNuTlE1UUdwZzNuQTZz?=
- =?utf-8?B?NWl0TEozQnlmZ1dpUGdGaVpqZy9UNzIyUWVjNVhMdHpOK3R0WmZ5aHh4ajkv?=
- =?utf-8?B?OGVjbDJTVWNVQ0g1cXp5NDdEWStuMmJMdStWNkp6bVJrV2NqVnJWdUtlTmNR?=
- =?utf-8?B?R2NHSUsxL2pvSjV0YjJXTEVVb2thVmRwbHRlSnFRUXAzczFlajFMMC8wdDJu?=
- =?utf-8?Q?tv9+ksukbjlOgU3C82cfUJUFk?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6cb6f583-604f-432b-7221-08db3ac83f48
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 20:06:33.5004
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /vb+MWhGFkJDv3SAbdXnv+UOM60ejVOlH+TmYAGuanD4vJi3SdIu5/9Dq1p2gLcK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6305
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZDU//1RXYUMIRMk3@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-11 14:13, Danilo Krummrich wrote:
-> On 4/5/23 19:39, Luben Tuikov wrote:
->> On 2023-03-31 01:59, Christian König wrote:
->>> Am 31.03.23 um 02:06 schrieb Danilo Krummrich:
->>>> It already happend a few times that patches slipped through which
->>>> implemented access to an entity through a job that was already removed
->>>> from the entities queue. Since jobs and entities might have different
->>>> lifecycles, this can potentially cause UAF bugs.
->>>>
->>>> In order to make it obvious that a jobs entity pointer shouldn't be
->>>> accessed after drm_sched_entity_pop_job() was called successfully, set
->>>> the jobs entity pointer to NULL once the job is removed from the entity
->>>> queue.
->>>>
->>>> Moreover, debugging a potential NULL pointer dereference is way easier
->>>> than potentially corrupted memory through a UAF.
->>>>
->>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
->>>
->>> In general "YES PLEASE!", but I fear that this will break amdgpus reset
->>> sequence.
->>>
->>> On the other hand when amdgpu still relies on that pointer it's clearly
->>> a bug (which I pointed out tons of times before).
->>>
->>> Luben any opinion on that? Could you drive cleaning that up as well?
->>
->> I didn't find any references to scheduling entity after the job
->> is submitted to the hardware. (I commented the same in the other
->> thread, we just need to decide which way to go.)
+On Tue, Apr 11, 2023 at 02:09:51PM +0300, Mike Rapoport wrote:
+> > @@ -119,7 +220,31 @@ int main(int argc, char *argv[])
+> >  		printf("Userfaultfd not supported or unprivileged, skip all tests\n");
+> >  		exit(KSFT_SKIP);
+> >  	}
+> > +
+> > +	for (i = 0; i < n_tests; i++) {
+> > +		test = &uffd_tests[i];
+> > +		for (j = 0; j < n_mems; j++) {
+> > +			mem_type = &mem_types[j];
+> > +			if (!(test->mem_targets & mem_type->mem_flag))
+> > +				continue;
+> > +			snprintf(test_name, sizeof(test_name),
+> > +				 "%s on %s", test->name, mem_type->name);
+> > +
+> > +			uffd_test_start(test_name);
+> > +			if (!uffd_feature_supported(test)) {
+> > +				uffd_test_skip("feature missing");
+> > +				continue;
+> > +			}
+> > +			if (uffd_setup_environment(test, mem_type)) {
+> > +				uffd_test_skip("memory allocation failed");
 > 
-> AFAICS from the other mail thread it seems to be consensus to not 
-> ref-count entities and handle job statistics differently.
-> 
-> Should we go ahead and take this patch then? Maybe it also makes sense 
-> to send a V2 additionally adding a comment to the drm_sched_job 
-> structure mentioning that .entity must not be used after the job was 
-> taken from the entities queue.
+> Maybe uffd_test_skip("environment setup failed")?
 
-Yes, please send a v2, but instead of mentioning (or in addition to)
-that the job was taken from the "entities queue", mention that
-once the job is pushed to the hardware, i.e. the pending queue,
-from then on, the "entity" should not be referenced anymore. IOW, we
-want to mention that it is going from X to Y, as opposed to just
-that it's taken from X, because the latter begs the question "Where
-is it going to then?".
+Sure.
 
-For the record, I think that using kref would give us the most
-stability, even if we skipped "entity" and let the scheduler, or
-even the controller keep a kref on submitted commands down to
-the GPU. On reset, we block command submission to the GPU from
-the outermost boundary, and then start peeling the layers from
-the innermost boundary.
+Side note: the line will be changed after "selftests/mm: Allow uffd test to
+skip properly with no privilege" to contain an errmsg pointer instead, so
+it won't affect the last result after series applied.
 
-Using kref also forces us to think objectively and set explicit
-(clear) dependencies from the outset--i.e. who gets freed and when
-and under what circumstances.
+Thanks,
 
-And using kref might even expose the wrong dependencies, thus
-prompting a redesign and thus a fix.
 -- 
-Regards,
-Luben
+Peter Xu
 
