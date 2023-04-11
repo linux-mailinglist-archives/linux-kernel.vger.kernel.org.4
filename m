@@ -2,174 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA16DDE97
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3516DDE99
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjDKOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S230170AbjDKOzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjDKOyx (ORCPT
+        with ESMTP id S230185AbjDKOy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:54:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840D82683;
-        Tue, 11 Apr 2023 07:54:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D99E62811;
-        Tue, 11 Apr 2023 14:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697C0C433D2;
-        Tue, 11 Apr 2023 14:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681224887;
-        bh=CGAs5krnbEkxPgaPAZs8JvQBrcDCyRJbtDmkf6pgqFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DXugew4HthDAgFBFPE2Y+YeHKjqPLkIIGT0qU6/HO3aO4Mlj6uYdN9LcO8i/ixePo
-         b17IMExYNJJyPkedoCq7nAeOFjJXKgbVuyMBBE5hL0QBBoXV4qsMq2Xk7XVbtUq82/
-         d16gGqvrGJYhXonPCK+e8YHiVR1INUlReTP5qrB6vFS2imX16R84fAdb0PE1ovk+F2
-         yNEbfo2qlZPy4GCMEcjXhMl3u089fP98Z85p7WasnlVS+Lch/IrirJhZNFcOzRtEZK
-         JkggJUZbUQvse4WIrd0ZI8yu0iwo0c8w8H0q0HU9u+29p5bR8wWT8FUAqQUNteoRhJ
-         qi1OQcDHA2fIA==
-Date:   Tue, 11 Apr 2023 07:54:46 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3][RESEND] xfs: mark the inode for high-res
- timestamp update in getattr
-Message-ID: <20230411145446.GG360895@frogsfrogsfrogs>
-References: <20230411143702.64495-1-jlayton@kernel.org>
- <20230411143702.64495-4-jlayton@kernel.org>
+        Tue, 11 Apr 2023 10:54:56 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB72E4C0E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:54:51 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-7606d7cc9bdso2756339f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681224891;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n1/uakkZjv9cQF6P7up1HAscrfLZ1PckVlhhE3kXYRA=;
+        b=i2M7Gt5eHTm8Zs3MHrk2JXdsmGkyZeCGjw4sJo9A0tJ26iSzx4aGtypYqkuS6DYNUz
+         lv1RUSJkcY1cOnuVLJs4ky1/FBfMdyPk/UbAr++vHYTxtv9pREyb/taP47PWOFzlSuMd
+         u2X+Rt6tRRnnS6EJ6xBsDnWIVJG5kzFKGBG5C34Rf8brfoKsgQR70flgDtlaTr4hkMtK
+         40GCjDp8pq2KkGHK2ikm830ZQw/BPjREs1RKfJNSmVi1XbgCbldOvyTDewUFzkQmuKs/
+         AERVqGet/CWXA1fCNIa0kcXhEBm1pVqsYVUPejuHM9u2J0G9iMPDz/RN2vBo+F8bg4R/
+         zszg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681224891;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1/uakkZjv9cQF6P7up1HAscrfLZ1PckVlhhE3kXYRA=;
+        b=VQ4aBoJ3Xa/yNHMzG89js1216DULXzTPHE8niu2N6RsyeaXT5EFT+2fQv1durpkQ7L
+         0IsNMvKbv9frLpAKF7qK9cwuI9Kb/agY8m3BOHwccM6kutW6LiyTHova4F9a9fo84pIO
+         x9B9vQNF0kkJPj/9XiO/fNCWbhr5tW2NmAOy8c7LKH5iu00zL7oyLlMWCrczhPfZQIE1
+         RBmCpXRFWThlGhy0oaEruqi9rttLPizaaJ9AgNZaG4G74GAJNAYsSBkVAPTc23hq1YAS
+         P8579gB6mxD2nY7Z6x6y5zsbYGjJvA0gvVl9a+KFwozu8VmXYc1aRDw3MYjbbMZqcEFc
+         nPSg==
+X-Gm-Message-State: AAQBX9dWSQdIpKbRswewLcl6zqLbneSOPE3vn+H8RYrCYkw80LTzJBOf
+        QA5uSpSI9OvQfsgtJtNcuaXCDA==
+X-Google-Smtp-Source: AKy350ZNd1GN2qGTn8k0KmKiar/rBVtqQ95KVwEH4VZ0jhuU+wlCTFTF5pf6yJ2PAMLuldmKwNN0IA==
+X-Received: by 2002:a6b:8d84:0:b0:740:7d21:d96f with SMTP id p126-20020a6b8d84000000b007407d21d96fmr4946123iod.1.1681224890937;
+        Tue, 11 Apr 2023 07:54:50 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id y32-20020a029523000000b0040bd91e4803sm980367jah.155.2023.04.11.07.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 07:54:50 -0700 (PDT)
+Message-ID: <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
+Date:   Tue, 11 Apr 2023 08:54:49 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411143702.64495-4-jlayton@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Breno Leitao <leitao@debian.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
+        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+ <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+ <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:37:02AM -0400, Jeff Layton wrote:
-> When the mtime or ctime is being queried via getattr, ensure that we
-> mark the inode for a high-res timestamp update on the next pass. Also,
-> switch to current_cmtime for other c/mtime updates.
+On 4/11/23 8:51?AM, Willem de Bruijn wrote:
+> Jens Axboe wrote:
+>> On 4/11/23 8:36?AM, David Ahern wrote:
+>>> On 4/11/23 6:00 AM, Breno Leitao wrote:
+>>>> I am not sure if avoiding io_uring details in network code is possible.
+>>>>
+>>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+>>>> in the TCP case) could be somewhere else, such as in the io_uring/
+>>>> directory, but, I think it might be cleaner if these implementations are
+>>>> closer to function assignment (in the network subsystem).
+>>>>
+>>>> And this function (tcp_uring_cmd() for instance) is the one that I am
+>>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+>>>> -> SIOCINQ.
+>>>>
+>>>> Please let me know if you have any other idea in mind.
+>>>
+>>> I am not convinced that this io_uring_cmd is needed. This is one
+>>> in-kernel subsystem calling into another, and there are APIs for that.
+>>> All of this set is ioctl based and as Willem noted a little refactoring
+>>> separates the get_user/put_user out so that in-kernel can call can be
+>>> made with existing ops.
+>>
+>> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
+>> obviously, and we already have ->uring_cmd() for this purpose.
 > 
-> With this change, we're better off having the NFS server just ignore
-> the i_version field and have it use the ctime instead, so clear the
-> STATX_CHANGE_COOKIE flag in the result mask in ->getattr.
+> Does this suggestion not work?
+
+Not sure I follow, what suggestion?
+
+>>> I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
+>>> sock_do_ioctl.
+>  
+>> I do think the right thing to do is have a common helper that returns
+>> whatever value you want (or sets it), and split the ioctl parts into a
+>> wrapper around that that simply copies in/out as needed. Then
+>> ->uring_cmd() could call that, or you could some exported function that
+>> does supports that.
+>>
+>> This works for the basic cases, though I do suspect we'll want to go
+>> down the ->uring_cmd() at some point for more advanced cases or cases
+>> that cannot sanely be done in an ioctl fashion.
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
->  fs/xfs/xfs_acl.c                |  2 +-
->  fs/xfs/xfs_inode.c              |  2 +-
->  fs/xfs/xfs_iops.c               | 15 ++++++++++++---
->  4 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/xfs/libxfs/xfs_trans_inode.c b/fs/xfs/libxfs/xfs_trans_inode.c
-> index 8b5547073379..9ad7c229c617 100644
-> --- a/fs/xfs/libxfs/xfs_trans_inode.c
-> +++ b/fs/xfs/libxfs/xfs_trans_inode.c
-> @@ -63,7 +63,7 @@ xfs_trans_ichgtime(
->  	ASSERT(tp);
->  	ASSERT(xfs_isilocked(ip, XFS_ILOCK_EXCL));
->  
-> -	tv = current_time(inode);
-> +	tv = current_cmtime(inode);
->  
->  	if (flags & XFS_ICHGTIME_MOD)
->  		inode->i_mtime = tv;
-> diff --git a/fs/xfs/xfs_acl.c b/fs/xfs/xfs_acl.c
-> index 791db7d9c849..461adc58cf8c 100644
-> --- a/fs/xfs/xfs_acl.c
-> +++ b/fs/xfs/xfs_acl.c
-> @@ -233,7 +233,7 @@ xfs_acl_set_mode(
->  	xfs_ilock(ip, XFS_ILOCK_EXCL);
->  	xfs_trans_ijoin(tp, ip, XFS_ILOCK_EXCL);
->  	inode->i_mode = mode;
-> -	inode->i_ctime = current_time(inode);
-> +	inode->i_ctime = current_cmtime(inode);
+> Right now the two examples are ioctls that return an integer. Do you 
+> already have other calls in mind? That would help estimate whether
+> ->uring_cmd() indeed will be needed and we might as well do it now.
 
-Hmm, now we're adding a spinlock to all these updates.
-Does lockdep have anything exciting to say about this?
+Right, it's a proof of concept. But we'd want to support anything that
+setsockopt/getsockopt would do. This is necessary so that direct
+descriptors (eg ones that describe a struct file that isn't in the
+process file table or have a regular fd) can be used for anything that a
+regular file can. Beyond that, perhaps various things necessary for
+efficient zero copy rx.
 
-(I don't think it will, just wondering aloud...)
+I do think we can make the ->uring_cmd() hookup a bit more palatable in
+terms of API. It really should be just a sub-opcode and then arguments
+to support that. The grunt of the work is really refactoring the ioctl
+and set/getsockopt bits so that they can be called in-kernel rather than
+assuming copy in/out is needed. Once that is done, the actual uring_cmd
+hookup should be simple and trivial.
 
->  	xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
->  
->  	if (xfs_has_wsync(mp))
-> diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-> index 5808abab786c..80f9d731e261 100644
-> --- a/fs/xfs/xfs_inode.c
-> +++ b/fs/xfs/xfs_inode.c
-> @@ -843,7 +843,7 @@ xfs_init_new_inode(
->  	ip->i_df.if_nextents = 0;
->  	ASSERT(ip->i_nblocks == 0);
->  
-> -	tv = current_time(inode);
-> +	tv = current_cmtime(inode);
->  	inode->i_mtime = tv;
->  	inode->i_atime = tv;
->  	inode->i_ctime = tv;
-> diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-> index 24718adb3c16..a0b07f90e16c 100644
-> --- a/fs/xfs/xfs_iops.c
-> +++ b/fs/xfs/xfs_iops.c
-> @@ -565,6 +565,15 @@ xfs_vn_getattr(
->  	if (xfs_is_shutdown(mp))
->  		return -EIO;
->  
-> +	/*
-> +	 * XFS uses the i_version infrastructure to track any change to
-> +	 * the inode, including atime updates. This means that the i_version
-> +	 * returned by getattr doesn't conform to what the callers expect.
-> +	 * Clear it here so that nfsd will fake up a change cookie from the
-> +	 * ctime instead.
-> +	 */
-> +	stat->result_mask &= ~STATX_CHANGE_COOKIE;
-> +
->  	stat->size = XFS_ISIZE(ip);
->  	stat->dev = inode->i_sb->s_dev;
->  	stat->mode = inode->i_mode;
-> @@ -573,8 +582,8 @@ xfs_vn_getattr(
->  	stat->gid = vfsgid_into_kgid(vfsgid);
->  	stat->ino = ip->i_ino;
->  	stat->atime = inode->i_atime;
-> -	stat->mtime = inode->i_mtime;
-> -	stat->ctime = inode->i_ctime;
-> +	if (request_mask & (STATX_CTIME|STATX_MTIME))
-> +		fill_cmtime_and_mark(inode, stat);
+-- 
+Jens Axboe
 
-Should we be setting STATX_[CM]TIME in the result_mask, just in case the
-caller asked for ctime and not mtime?
-
---D
-
->  	stat->blocks = XFS_FSB_TO_BB(mp, ip->i_nblocks + ip->i_delayed_blks);
->  
->  	if (xfs_has_v3inodes(mp)) {
-> @@ -917,7 +926,7 @@ xfs_setattr_size(
->  	if (newsize != oldsize &&
->  	    !(iattr->ia_valid & (ATTR_CTIME | ATTR_MTIME))) {
->  		iattr->ia_ctime = iattr->ia_mtime =
-> -			current_time(inode);
-> +			current_cmtime(inode);
->  		iattr->ia_valid |= ATTR_CTIME | ATTR_MTIME;
->  	}
->  
-> -- 
-> 2.39.2
-> 
