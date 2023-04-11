@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172BE6DE622
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E5B6DE625
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjDKVFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S229630AbjDKVG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDKVFl (ORCPT
+        with ESMTP id S229525AbjDKVG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:05:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED2B30C4;
-        Tue, 11 Apr 2023 14:05:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 11 Apr 2023 17:06:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821194482;
+        Tue, 11 Apr 2023 14:06:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6E8EB21A0A;
-        Tue, 11 Apr 2023 21:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681247139;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7zctrdNUNIuPRnnH6YSgGlzlhIgOGJy0WVsWJrjpI1c=;
-        b=Bq83Bse4pGHW5O27Qu0LfHWgyaDyZL6tUnd/WlQ/ncGfZVCH24uuqzDPAnJD2lACRNTdOX
-        vBSvpuRp1SZgpl076h2+oZZThD17wMNMnm0oCWSRPWbTFmPe4XHEIYLEoj68Lj2oaOzCO9
-        l9PcJs6jSbfv28/kDtOkRq6SAl+5niA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681247139;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7zctrdNUNIuPRnnH6YSgGlzlhIgOGJy0WVsWJrjpI1c=;
-        b=/E60z5FOroRILhpYUhoJQHgQUsxcwyfqqpYb0VVFuwMnFfsRh2Ay/+iiBByGj3Tmj+bx7u
-        /Vzgg3p5FE+tTLBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2EFEF13519;
-        Tue, 11 Apr 2023 21:05:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DOxpCqPLNWRxHgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Tue, 11 Apr 2023 21:05:39 +0000
-Date:   Tue, 11 Apr 2023 23:05:37 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Kevin Brodsky <kevin.brodsky@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-Subject: Re: [PATCH RESEND] uapi/linux/const.h: Prefer ISO-friendly __typeof__
-Message-ID: <20230411210537.GA1800481@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20230411092747.3759032-1-kevin.brodsky@arm.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13FBC625C3;
+        Tue, 11 Apr 2023 21:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3585AC433D2;
+        Tue, 11 Apr 2023 21:06:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681247215;
+        bh=P5kk+3HVor0otYo94Y9G9N4eNK+mWyQxWEUIOko/rMY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PbIKZGOCX/7fiRt1GpDSR+rtak3ggv7H77B2RxD/Hc77w1JmFPLR1dnH1REUEzfSQ
+         DN0CCuxfM4QR88K9qVp3NoXzkSupq9iGFP3Fu6K3DNBxGB9ACEN4n6orD+FJ26IuEG
+         oi2rdpOCAVYKY0n7TT4Yq9lTLW4F9anemxOGpe4/2cKSJXNV5gMPUs96t2v3y7Ebnb
+         V/64xUxcPEfnuwKOZMo0ntcSqZlQAJWcLXAdHRE7TYxqNZ48q0f1j95flV/dmAE0B0
+         0HuDa55MzfNfqHNSM9NCfu5ml/xYvLPFi1S3thPEfiy5O2VdqkLL5evp3Ma1938+S6
+         9i+u/0/r8KceQ==
+Date:   Tue, 11 Apr 2023 22:06:50 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 5/7] soc: starfive: Use call back to parse device tree
+ resources
+Message-ID: <20230411-stimuli-reapprove-4659d50e5d2e@spud>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-6-changhuang.liang@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bDUiOgF7hkvaIlrf"
 Content-Disposition: inline
-In-Reply-To: <20230411092747.3759032-1-kevin.brodsky@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230411064743.273388-6-changhuang.liang@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
 
-> typeof is (still) a GNU extension, which means that it cannot be
-> used when building ISO C (e.g. -std=c99). It should therefore be
-> avoided in uapi headers in favour of the ISO-friendly __typeof__.
+--bDUiOgF7hkvaIlrf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-IMHO UAPI are built with -std=c90 -Wall -Werror=implicit-function-declaration
-(see usr/include/Makefile).
-But one or the other, you're right both require __typeof__.
+On Mon, Apr 10, 2023 at 11:47:41PM -0700, Changhuang Liang wrote:
+> Different compatible parse device tree resources work in different ways.
 
-"If you are writing a header file that must work when included in ISO C
-programs, write __typeof__ instead of typeof."
-https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Typeof.html
+Right now there is only one compatible, so this commit message needs to
+be expanded on to provide more information on your motivation.
 
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-Tested-by: Petr Vorel <pvorel@suse.cz>
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 
-Kind regards,
-Petr
+>  static int jh71xx_pmu_init_domain(struct jh71xx_pmu *pmu, int index)
+>  {
+>  	struct jh71xx_pmu_dev *pmd;
+> @@ -296,23 +325,20 @@ static int jh71xx_pmu_probe(struct platform_device =
+*pdev)
+>  	if (!pmu)
+>  		return -ENOMEM;
+> =20
+> -	pmu->base =3D device_node_to_regmap(np);
+> -	if (IS_ERR(pmu->base))
+> -		return PTR_ERR(pmu->base);
+> -
+> -	pmu->irq =3D platform_get_irq(pdev, 0);
+> -	if (pmu->irq < 0)
+> -		return pmu->irq;
+> -
+> -	ret =3D devm_request_irq(dev, pmu->irq, jh71xx_pmu_interrupt,
+> -			       0, pdev->name, pmu);
+> -	if (ret)
+> -		dev_err(dev, "failed to request irq\n");
+> +	spin_lock_init(&pmu->lock);
+> =20
+>  	match_data =3D of_device_get_match_data(dev);
+>  	if (!match_data)
+>  		return -EINVAL;
+> =20
+> +	if (match_data->pmu_parse_dt) {
 
-> Unfortunately this issue could not be detected by
-> CONFIG_UAPI_HEADER_TEST=y as the __ALIGN_KERNEL() macro is not
-> expanded in any uapi header.
+How can this be false?
 
-> Reported-by: Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-> Tested-by: Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
->  include/uapi/linux/const.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
+Conor.
 
-> diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
-> index af2a44c08683..a429381e7ca5 100644
-> --- a/include/uapi/linux/const.h
-> +++ b/include/uapi/linux/const.h
-> @@ -28,7 +28,7 @@
->  #define _BITUL(x)	(_UL(1) << (x))
->  #define _BITULL(x)	(_ULL(1) << (x))
+--bDUiOgF7hkvaIlrf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> -#define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (typeof(x))(a) - 1)
-> +#define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
->  #define __ALIGN_KERNEL_MASK(x, mask)	(((x) + (mask)) & ~(mask))
+-----BEGIN PGP SIGNATURE-----
 
->  #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDXL6gAKCRB4tDGHoIJi
+0hKsAQDfXKLTbzKOVFnOKyo4Q8rhO79dEC4uKOIjSEkTkNr0sAEAmTPcrqwT9S1J
+id3pUSxlo+QqgTZJtIAEFaPBifiRGg8=
+=MAxW
+-----END PGP SIGNATURE-----
+
+--bDUiOgF7hkvaIlrf--
