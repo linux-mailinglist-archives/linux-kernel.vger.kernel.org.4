@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E4E6DDA35
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747946DDA36
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjDKMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S229703AbjDKMDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDKMCb (ORCPT
+        with ESMTP id S229504AbjDKMDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:02:31 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626AF2D48;
-        Tue, 11 Apr 2023 05:02:29 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54c12009c30so260600497b3.9;
-        Tue, 11 Apr 2023 05:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681214548; x=1683806548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ed7arILbQ+stDRGb56PqaQ+j9TQJHYphyg1/PYzOzmk=;
-        b=Rwzq71gbowUoM1rvXcOluWBU+VCGjiqx7m3L1o5hn8j/rSPX63A5ROU62NLYNp8f3t
-         ZMn4wS9oGTB+Aq+cHjzNqbpzdGhHfimD9LFSr7wP79I5AzQzrUvHz+fm6SRkZwFdrO4Y
-         29w2UtSlrUWIk8HTzjWVqvOsGsqFl8V4PNsZ06tMAEHyd0p+ZywHif+XCKkiRvmcvHTb
-         LGM269EiBhnrGjCnPefeix7Aeqy99y0isbvsLzff/tXL8rBrfemZCjLc2LO4URwa9ygz
-         ZJimYqA1ZtgSvruHRkaRARcX856JhE/E9BilkCC9pDdjMzT4PzeQX9jrsAXihK1OljAt
-         l3+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681214548; x=1683806548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ed7arILbQ+stDRGb56PqaQ+j9TQJHYphyg1/PYzOzmk=;
-        b=xUvaXyH3bNVFsvvnHgGW77ZzXi0k5JED7kIEtlmOURh68LumBx6Liv1nhddlYEyOEq
-         wn6ExwtVUiY42f0ixHpJnZA1xo93+VASQoLMgXJfplM9mf3LJP2n6jgKSfd1QjXePzFi
-         +DqW5M2riCNAEkIl5RcddXeG08I0Yc6sSCfUFePdhi8+YRsC0D1WjailZvyCqJg7yrDA
-         ss5HPbPPkjXGUHB6LCTWzSTwoEyq1mtp9Mbse4+GJl/ykL0M1BNUF81WJVbT4szhF1o1
-         Z9lkEuYB2tCNG27j0khqUQlGdKLY0H3hU94KJUI+bbGjTD6s7Yqw0XHw8l90gtLC7Gbc
-         8GGQ==
-X-Gm-Message-State: AAQBX9d5mPqo3ByXsgU9XRcticY+VClmOlHYOYNR7ABsfx8weJs9gaI/
-        zILKt6FxHhUloZXuA7qod2Z6Z8vkGAgkokPOQbDVR6FaTQc=
-X-Google-Smtp-Source: AKy350bTta5wlLDVlBVYshj5v4fpgjnfKMPomn04Qb5vKkFkokQQY8rUGHNvQAkn5ODnufUsqE9RZ2CCKKgwhLJfb0g=
-X-Received: by 2002:a81:a887:0:b0:546:63a:6e23 with SMTP id
- f129-20020a81a887000000b00546063a6e23mr1594858ywh.0.1681214548487; Tue, 11
- Apr 2023 05:02:28 -0700 (PDT)
+        Tue, 11 Apr 2023 08:03:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DE54486
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681214556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zsl3EqzQpOYH+JVTc+1nS7wHRqvd0DNL4VH3/d/TtBM=;
+        b=Ef7XC6KOKaDpuRTJR6SDUoIvNqv6nrJuHCza5uX3j0OVNwtEfT8HyjFatWR3Qw9AxP+Ly+
+        AkK4Ebqxf7VtMlF9nQL8HpfylFNq7ZF4kcIvhHNDllar+uW8M1l8MCgOWnq4pWld5JpwYJ
+        a0WVG+05CLfNztgoiysWnpOH27+dtfQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-350-qR3hLjzbPhO16mLcvtBGuQ-1; Tue, 11 Apr 2023 08:02:35 -0400
+X-MC-Unique: qR3hLjzbPhO16mLcvtBGuQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E710B101A54F;
+        Tue, 11 Apr 2023 12:02:34 +0000 (UTC)
+Received: from [10.43.2.89] (unknown [10.43.2.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D9BC6492C13;
+        Tue, 11 Apr 2023 12:02:33 +0000 (UTC)
+Message-ID: <9541a779-bca8-4843-23ff-aff47709c5af@redhat.com>
+Date:   Tue, 11 Apr 2023 14:02:33 +0200
 MIME-Version: 1.0
-References: <20230406215615.122099-1-daniel.almeida@collabora.com> <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
-In-Reply-To: <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 11 Apr 2023 14:02:17 +0200
-Message-ID: <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
-        ojeda@kernel.org, mchehab@kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next] bnxt_en: Allow to set switchdev mode without
+ existing VFs
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     mschmidt@redhat.com, Michael Chan <michael.chan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230406130455.1155362-1-ivecera@redhat.com>
+ <258624e7ffa7bfc3960e727c451cdabe4e7f3efe.camel@redhat.com>
+Content-Language: en-US
+From:   Ivan Vecera <ivecera@redhat.com>
+In-Reply-To: <258624e7ffa7bfc3960e727c451cdabe4e7f3efe.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 9:51=E2=80=AFAM Hans Verkuil <hverkuil@xs4all.nl> w=
-rote:
->
-> One of my main concerns here is time: as subsystem maintainers we can bar=
-ely
-> keep up with all the incoming patches. Introducing support for a new lang=
-uage
-> would add only more pressure. Even though these are mainly bindings (as I
-> understand it), this would still require that every change to a C kAPI is
-> duplicated in rust, requiring someone to do that work, and have maintaine=
-rs
-> with enough rust knowledge to verify it.
+On 11. 04. 23 12:22, Paolo Abeni wrote:
+> On Thu, 2023-04-06 at 15:04 +0200, Ivan Vecera wrote:
+>> Remove an inability of bnxt_en driver to set eswitch to switchdev
+>> mode without existing VFs by:
+>>
+>> 1. Allow to set switchdev mode in bnxt_dl_eswitch_mode_set() so
+>>     representors are created only when num_vfs > 0 otherwise just
+>>     set bp->eswitch_mode
+>> 2. Do not automatically change bp->eswitch_mode during
+>>     bnxt_vf_reps_create() and bnxt_vf_reps_destroy() calls so
+>>     the eswitch mode is managed only by an user by devlink.
+>>     Just set temporarily bp->eswitch_mode to legacy to avoid
+>>     re-opening of representors during destroy.
+>> 3. Create representors in bnxt_sriov_enable() if current eswitch
+>>     mode is switchdev one
+>>
+>> Tested by this sequence:
+>> 1. Set PF interface up
+>> 2. Set PF's eswitch mode to switchdev
+>> 3. Created N VFs
+>> 4. Checked that N representors were created
+>> 5. Set eswitch mode to legacy
+>> 6. Checked that representors were deleted
+>> 7. Set eswitch mode back to switchdev
+>> 8. Checked that representros were re-created
+> 
+> Could you please update the commit message and re-post?
+> 
+> Thanks!
 
-Indeed, that is one of the main costs.
+of course..
 
-One potential solution is to have somebody step up as the maintainer
-of the Rust side (e.g. the author of the abstractions).
+I.
 
-Of course, that will not make the work go to zero, since there still
-needs to be some degree of communication even if the new maintainer
-does all the Rust side work, but it may make it feasible, especially
-if the abstracted parts of the C API do not change too frequently.
-
-It is also an opportunity for existing maintainers to see how the Rust
-side would work meanwhile the work gets done, and potentially a chance
-to get a new maintainer involved with the whole subsystem in the
-future.
-
-Some subsystems may want to give that maintainer a different
-`MAINTAINERS` entry, e.g. as a child subsystem that sends PRs to the
-main one and may be marked as "experimental". This is also a way to
-see how the new abstractions work or not, giving maintainers more time
-to decide whether to commit to a Rust side or not.
-
-I don't mean to say it would be doable for the media subsystem, but
-please consider it.
-
-Cheers,
-Miguel
