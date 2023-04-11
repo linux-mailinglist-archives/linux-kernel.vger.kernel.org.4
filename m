@@ -2,87 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9DA6DD7B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACB46DD7B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDKKQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S229586AbjDKKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjDKKQv (ORCPT
+        with ESMTP id S229530AbjDKKSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:16:51 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5E2BB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:16:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-202-bowHtzPvNE6BHyZ3kkHlFw-1; Tue, 11 Apr 2023 11:16:43 +0100
-X-MC-Unique: bowHtzPvNE6BHyZ3kkHlFw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 11 Apr
- 2023 11:16:42 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 11 Apr 2023 11:16:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peng Zhang' <zhangpeng.00@bytedance.com>,
-        Gang Li <ligang.bdlg@bytedance.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        David Binderman <dcb314@hotmail.com>
-Subject: RE: [PATCH] maple_tree: Use correct variable type in sizeof
-Thread-Topic: [PATCH] maple_tree: Use correct variable type in sizeof
-Thread-Index: AQHZa5SNBUM02W5oJk2/4C7Y9C/9d68l5c/A
-Date:   Tue, 11 Apr 2023 10:16:41 +0000
-Message-ID: <4211c1ee2b854711b9ff03ddd8e82905@AcuMS.aculab.com>
-References: <20230410091431.74961-1-zhangpeng.00@bytedance.com>
- <8b5af22d-1612-a2a0-02da-728f1fd57bf1@bytedance.com>
- <b1ea2c08-8e88-e04f-417b-4cf0daa417b1@bytedance.com>
-In-Reply-To: <b1ea2c08-8e88-e04f-417b-4cf0daa417b1@bytedance.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 11 Apr 2023 06:18:05 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2B71BD1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:18:03 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id e13so7059781plc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1681208283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCwSNc+RZNs4kaUNl6Q6MFm7xs7aEHy8Tuqz3FTq1lk=;
+        b=kiJqAn9CYVGlR7ndEQ0HOiaOjGyDmrHw3F9l0BxFGxvfzfQg+jDcigcGPT9qq1VyRn
+         JfBzGI3Ea7QNqgpuaVMrNO0xdO/Uq0hjft+zSfLCb9lQmuFv07G4mfEI9iH0MLiEkMPA
+         SBo1E4oSGib2LgC04Fk+HtZjbkcpKOD28qnP5nqO/JfmEGY02doVzEZhbH2dARd8RdoQ
+         gPAIMY4cagZn232gJZgAUQsgdL5yeJvkJyWfUcDNZpl70iBnlVh7bLwyqmGKH3W4M2mv
+         i/Vy/iFoQSc68BTxo9YEdJbTUJU5PYZ8gfi525Agz9VDM8iN/CBP7aoRcfOEJ20sVW46
+         KGMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681208283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xCwSNc+RZNs4kaUNl6Q6MFm7xs7aEHy8Tuqz3FTq1lk=;
+        b=yblC2Kyc4lZfCczsaJGO/VgXDUjP6QcMo/qjqfEpNgLss2CPpx/eJ4TZZSEpMoIy4P
+         boK9CbcqKFsdZPvBjD3MpcgIKzKg49x3+6Y8Ji5BbokNBtw7WUhdXJz6IAQGqqrYlgst
+         Q6vimXxSdVtsg57jiELf9DCPL19eqLMj13JqcPx3dk9XcQhc82y0jrHz3KyJ9bJCtRiP
+         rgXP30npJwiYAqodZejcWGFVHyzLnXl61FnARLlqcdSawGJo1zLx8itFzd/BJ6GCMN18
+         LjimPubV8erexCFuS8nDAbdYerOAGooYXrxmyEfLmQNrqEKosbpHKExzYpQO0h60Rf37
+         37vg==
+X-Gm-Message-State: AAQBX9e5ZRKzmlX26CwVzuX3OuM6XHU2AZGFNyGkRWLUoVzeMynUxgLS
+        bk9OgQDc/FeYUMkWVF6F4FqfAA==
+X-Google-Smtp-Source: AKy350bEGyfbtMXxQVd7FJ3cHLSPGYjkr7y7Bba7p3tW1TTHqROY1wKKT7s7ZjZ5WNl9v+y2v7cnlg==
+X-Received: by 2002:a17:903:288e:b0:19e:8075:5545 with SMTP id ku14-20020a170903288e00b0019e80755545mr15421707plb.54.1681208283110;
+        Tue, 11 Apr 2023 03:18:03 -0700 (PDT)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id iz4-20020a170902ef8400b00195f0fb0c18sm7629794plb.31.2023.04.11.03.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 03:18:02 -0700 (PDT)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>
+Subject: [PATCH v2 1/2] dmaengine: dw-edma: Fix to change for continuous transfer
+Date:   Tue, 11 Apr 2023 19:17:57 +0900
+Message-Id: <20230411101758.438472-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUGVuZyBaaGFuZw0KPiBTZW50OiAxMCBBcHJpbCAyMDIzIDExOjA5DQo+IA0KPiDlnKgg
-MjAyMy80LzEwIDE3OjQ2LCBHYW5nIExpIOWGmemBkzoNCj4gPiBPbiAyMDIzLzQvMTAgMTc6MTQs
-IFBlbmcgWmhhbmcgd3JvdGU6DQo+ID4+IFRoZSBvcmlnaW5hbCBjb2RlIGlzOg0KPiA+PiDCoMKg
-wqDCoG1lbXNldChwaXZzICsgdG1wLCAwLCBzaXplb2YodW5zaWduZWQgbG9uZyAqKSAqIChtYXhf
-cCAtIHRtcCkpOw0KPiA+Pg0KPiA+PiBUaGUgdHlwZSBvZiB2YXJpYWJsZSBwb2ludGVkIHRvIGJ5
-IHBpdnMgaXMgdW5zaWduZWQgbG9uZywgYnV0IHRoZSB0eXBlDQo+ID4+IHVzZWQgaW4gc2l6ZW9m
-IGlzIGEgcG9pbnRlciB0eXBlLiBDaGFuZ2UgaXQgdG8gdW5zaWduZWQgbG9uZy4NCj4gPj4NCj4g
-Pg0KPiA+IE1heWJlIGFkZCBhIGZpeCB0YWc/DQo+ID4NCj4gPiBGaXhlczogNTRhNjExYjYwNTkw
-ICgiTWFwbGUgVHJlZTogYWRkIG5ldyBkYXRhIHN0cnVjdHVyZSIpDQo+IA0KPiBNYXliZSBzaXpl
-b2Yodm9pZCAqKSBpcyBlcXVhbCB0byBzaXplb2YodW5zaWduZWQgbG9uZykNCj4gaW4gbW9zdCBh
-cmNoaXRlY3R1cmVzLCBzbyBJIGRvbid0IGtub3cgaWYgaXQgY291bnRzIGFzIGEgZml4Lg0KDQpN
-aWdodCBiZSB3b3J0aCBhZGRpbmc7ICJGb3J0dW5hdGVseSB0aGUgc2l6ZXMgYXJlIHRoZSBzYW1l
-LiINCg0KPiA+PiDCoCDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHRtcCA8IG1heF9wKQ0KPiA+PiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBtZW1zZXQocGl2cyArIHRtcCwgMCwNCj4gPj4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzaXplb2YodW5zaWduZWQgbG9uZyAq
-KSAqIChtYXhfcCAtIHRtcCkpOw0KPiA+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHNpemVvZih1bnNpZ25lZCBsb25nKSAqIChtYXhfcCAtIHRtcCkpOw0KCXNpemVvZiAo
-KnBpdnMpDQoNCj4gPj4gwqAgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICh0bXAgPCBtdF9zbG90c1tt
-dF0pDQo+ID4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG1lbXNldChzbG90cyArIHRtcCwg
-MCwgc2l6ZW9mKHZvaWQgKikgKiAobWF4X3MgLSB0bXApKTsNCglhbmQgc2l6ZW9mICgqc2xvdHMp
-DQoNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBS
-b2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9u
-IE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+The dw-edma driver stops after processing a DMA request even if a request
+remains in the issued queue, which is not the expected behavior. The DMA
+engine API requires continuous processing.
+
+Add a trigger to start after one processing finished if there are requests
+remain.
+
+Fixes: e63d79d1ffcd ("dmaengine: Add Synopsys eDMA IP core driver")
+Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+---
+Changes
+
+v2:
+- Refactor code
+- Rebase to next-20230411
+
+v1: https://lore.kernel.org/dmaengine/20221223022608.550697-1-mie@igel.co.jp/
+- Initial patch
+
+ drivers/dma/dw-edma/dw-edma-core.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+index 1906a836f0aa..26a395d02f5d 100644
+--- a/drivers/dma/dw-edma/dw-edma-core.c
++++ b/drivers/dma/dw-edma/dw-edma-core.c
+@@ -181,7 +181,7 @@ static void vchan_free_desc(struct virt_dma_desc *vdesc)
+ 	dw_edma_free_desc(vd2dw_edma_desc(vdesc));
+ }
+ 
+-static void dw_edma_start_transfer(struct dw_edma_chan *chan)
++static int dw_edma_start_transfer(struct dw_edma_chan *chan)
+ {
+ 	struct dw_edma_chunk *child;
+ 	struct dw_edma_desc *desc;
+@@ -189,16 +189,16 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
+ 
+ 	vd = vchan_next_desc(&chan->vc);
+ 	if (!vd)
+-		return;
++		return 0;
+ 
+ 	desc = vd2dw_edma_desc(vd);
+ 	if (!desc)
+-		return;
++		return 0;
+ 
+ 	child = list_first_entry_or_null(&desc->chunk->list,
+ 					 struct dw_edma_chunk, list);
+ 	if (!child)
+-		return;
++		return 0;
+ 
+ 	dw_edma_v0_core_start(child, !desc->xfer_sz);
+ 	desc->xfer_sz += child->ll_region.sz;
+@@ -206,6 +206,8 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
+ 	list_del(&child->list);
+ 	kfree(child);
+ 	desc->chunks_alloc--;
++
++	return 1;
+ }
+ 
+ static void dw_edma_device_caps(struct dma_chan *dchan,
+@@ -602,14 +604,14 @@ static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
+ 		switch (chan->request) {
+ 		case EDMA_REQ_NONE:
+ 			desc = vd2dw_edma_desc(vd);
+-			if (desc->chunks_alloc) {
+-				chan->status = EDMA_ST_BUSY;
+-				dw_edma_start_transfer(chan);
+-			} else {
++			if (!desc->chunks_alloc) {
+ 				list_del(&vd->node);
+ 				vchan_cookie_complete(vd);
+-				chan->status = EDMA_ST_IDLE;
+ 			}
++
++			/* Continue transferring if there are remaining chunks or issued requests.
++			 */
++			chan->status = dw_edma_start_transfer(chan) ? EDMA_ST_BUSY : EDMA_ST_IDLE;
+ 			break;
+ 
+ 		case EDMA_REQ_STOP:
+-- 
+2.25.1
 
