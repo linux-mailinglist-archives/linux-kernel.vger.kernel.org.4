@@ -2,201 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6546DD7E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC556DD7F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjDKK1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S229817AbjDKK2T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 06:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDKK1d (ORCPT
+        with ESMTP id S229787AbjDKK2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:27:33 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1F5A9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1681208853; x=1712744853;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=m78Ue2Zlv9mK7naDfv5XY8v/tKpVCjZ0KJMXQQBfKg8=;
-  b=gW+pMnmtwkibGnrZZSavIy3iKnxfZROdIg/uX7Z/JoRzzV3lrtSm0+VC
-   AZPMl1n75veYK3uaevJUofOrVJUGtZDi8UnpmhoVKhKM0S+ixuwNgoZrP
-   e5Bs5hWpgLw2r/XoCGrr2YgWMHV54rFUZd7fsbM0mIbYyx/6Fq94+TtmB
-   c=;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673913600"; 
-   d="scan'208";a="316995418"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:27:30 +0000
-Received: from EX19D002EUC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com (Postfix) with ESMTPS id 5821CC17FD;
-        Tue, 11 Apr 2023 10:27:28 +0000 (UTC)
-Received: from EX19D014EUC004.ant.amazon.com (10.252.51.182) by
- EX19D002EUC002.ant.amazon.com (10.252.51.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 11 Apr 2023 10:27:27 +0000
-Received: from EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41]) by
- EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41%3]) with mapi id
- 15.02.1118.026; Tue, 11 Apr 2023 10:27:27 +0000
-From:   "Gowans, James" <jgowans@amazon.com>
-To:     "maz@kernel.org" <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Raslan, KarimAllah" <karahmed@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "zouyipeng@huawei.com" <zouyipeng@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sironi, Filippo" <sironi@amazon.de>,
-        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-Thread-Topic: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-Thread-Index: AQHZbGA2fAhBEGmfNECNZZR1ac0pWg==
-Date:   Tue, 11 Apr 2023 10:27:26 +0000
-Message-ID: <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
-         <87h6tp5lkt.wl-maz@kernel.org>
-In-Reply-To: <87h6tp5lkt.wl-maz@kernel.org>
-Accept-Language: en-ZA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.146.13.108]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8AD4585CA7B68D4486DCDA27BC245C11@amazon.com>
-Content-Transfer-Encoding: base64
+        Tue, 11 Apr 2023 06:28:16 -0400
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C313E49;
+        Tue, 11 Apr 2023 03:28:14 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id i15-20020a9d610f000000b006a11f365d13so2901392otj.0;
+        Tue, 11 Apr 2023 03:28:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681208893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9k4ZTujQ4vL3rn+nuolFAvnH5smJoZ+VnOtxKctHstQ=;
+        b=y+0bH845JCNTfFSKJ0B1MNOHn231uHjFfzkjSJyaq98rD8+jejuBRzoyTS8HhnoNsO
+         8jQ0bd7bTqaZURCPChYQYxcPRSs7oyztbrQDGH3EQAa+rc3jkxU/hdBWk908Q1jRcEBD
+         MRxiWJpu5gvekAKHSXCg2vGClTRugX04MBZZy4Kje2/PBxfpSq/pGiuATVcYKzGxG4p1
+         3urjx9jdH9H2ImVyeelhhnhTvDRI3YejMMpWCWeMZ4s+LCNLUVhFVzA17grZmnFhAGlG
+         jbl9XUx5k4pxksCLilIFkF5uzXvqEjaBwX59XSJJnun9IBrkMSZr6cWBRu5bR8R1NM7Q
+         FRmA==
+X-Gm-Message-State: AAQBX9fL7mSESR+2nvw+f/aGHSDFxg7E8T6wyWC0Q+6AyiOEoINmtg4c
+        9qmfuOeOiXyBbgolJirbePzAEaVVepxtJt9a
+X-Google-Smtp-Source: AKy350an1xN/hishtaGm9b8dpgu3i42ccxwem6GQPxV40Cnc+i419snNpiA8gUUu82rkDrPlDBj9fg==
+X-Received: by 2002:a9d:7ac4:0:b0:69f:b541:3f6e with SMTP id m4-20020a9d7ac4000000b0069fb5413f6emr6422271otn.19.1681208893360;
+        Tue, 11 Apr 2023 03:28:13 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id d16-20020a9d5e10000000b006a305c68617sm5237126oti.53.2023.04.11.03.28.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 03:28:12 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id cp25-20020a056830661900b00693ce5a2f3eso3621124otb.8;
+        Tue, 11 Apr 2023 03:28:12 -0700 (PDT)
+X-Received: by 2002:a25:d74c:0:b0:b46:c5aa:86ef with SMTP id
+ o73-20020a25d74c000000b00b46c5aa86efmr5126210ybg.12.1681208871324; Tue, 11
+ Apr 2023 03:27:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech> <20221018-clk-range-checks-fixes-v3-28-9a1358472d52@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-28-9a1358472d52@cerno.tech>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Apr 2023 12:27:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
+Message-ID: <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 28/65] clk: renesas: r9a06g032: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWFyYywgdGhhbmtzIGZvciB0YWtpbmcgdGhlIHRpbWUgdG8gcHV0IHRob3VnaHQgaW50byB0
-aGlzIQ0KDQpPbiBTdW4sIDIwMjMtMDQtMDkgYXQgMTI6NDEgKzAxMDAsIE1hcmMgWnluZ2llciB3
-cm90ZToNCj4gPiBHZW5lcmFsbHkgaXQgc2hvdWxkIG5vdCBiZSBwb3NzaWJsZSBmb3IgdGhlIG5l
-eHQgaW50ZXJydXB0IHRvIGFycml2ZQ0KPiA+IHdoaWxlIHRoZSBwcmV2aW91cyBoYW5kbGVyIGlz
-IHN0aWxsIHJ1bm5pbmc6IHRoZSBuZXh0IGludGVycnVwdCBzaG91bGQNCj4gPiBvbmx5IGFycml2
-ZSBhZnRlciB0aGUgRU9JIG1lc3NhZ2UgaGFzIGJlZW4gc2VudCBhbmQgdGhlIHByZXZpb3VzIGhh
-bmRsZXINCj4gPiBoYXMgcmV0dXJuZWQuDQo+IA0KPiBUaGVyZSBpc24ndCBuZWNlc3NhcmlseSBh
-biBFT0kgbWVzc2FnZS4gT24gYmFyZSBtZXRhbCwgRU9JIG9mIGEgTFBJDQo+IGFtb3VudHMgdG8g
-c3dlZXQgbm90aGluZyAoc2VlIHRoZSBwc2V1ZG9jb2RlIHRvIGNvbnZpbmNlIHlvdXJzZWxmKSwN
-Cj4gYmVjYXVzZSB0aGUgcGh5c2ljYWwgTFBJIGRvZXNuJ3QgaGF2ZSBhbiBhY3RpdmUgc3RhdGUu
-DQoNCk9rYXksIEkgc2F3IHRoZSBnaWNfZW9pX2lycSgpIGZ1bmN0aW9uIGFuZCB0aG91Z2h0IHRo
-ZXJlIG1pZ2h0IGJlIHNvbWV0aGluZw0KZ29pbmcgb24gdGhlcmUuIEkgZ3Vlc3MgaXQncyBub3Qg
-cmVsZXZhbnQgdG8gdGhpcyBpc3N1ZS4NCg0KPiA+IA0KPiA+IFRoZSBpc3N1ZSBpcw0KPiA+IHRo
-YXQgdGhlIGdsb2JhbCBJVFMgaXMgcmVzcG9uc2libGUgZm9yIGFmZmluaXR5IGJ1dCBkb2VzIG5v
-dCBrbm93DQo+ID4gd2hldGhlciBpbnRlcnJ1cHRzIGFyZSBwZW5kaW5nL3J1bm5pbmcsIG9ubHkg
-dGhlIENQVS1sb2NhbCByZWRpc3RyaWJ1dG9yDQo+ID4gaGFuZGxlcyB0aGUgRU9JLiBIZW5jZSB3
-aGVuIHRoZSBhZmZpbml0eSBpcyBjaGFuZ2VkIGluIHRoZSBJVFMsIHRoZSBuZXcNCj4gPiBDUFUn
-cyByZWRpc3RyaWJ1dG9yIGRvZXMgbm90IGtub3cgdGhhdCB0aGUgb3JpZ2luYWwgQ1BVIGlzIHN0
-aWxsIHJ1bm5pbmcNCj4gPiB0aGUgaGFuZGxlci4NCj4gDQo+IFlvdSBzZWVtIHRvIGJlIG1pc3Vu
-ZGVyc3RhbmRpbmcgdGhlIGFyY2hpdGVjdHVyZS4NCj4gDQo+IFRoZSBsb2NhbCByZWRpc3RyaWJ1
-dG9yIGRvZXNuJ3Qga25vdyBhbnl0aGluZyBlaXRoZXIuIEEgcmVkaXN0cmlidXRvcg0KPiBkb2Vz
-bid0IGNvbnRhaW4gYW55IHN0YXRlIGFib3V0IHdoYXQgaXMgY3VycmVudGx5IHNlcnZpY2VkLiBB
-dCBiZXN0LA0KPiBpdCBrbm93cyBvZiB0aGUgcGVuZGluZyBzdGF0ZSBvZiBpbnRlcnJ1cHRzLCBh
-bmQgdGhhdCBhYm91dCBpdC4gVGhpcw0KPiBpcyBldmVuIG1vcmUgdHJ1ZSBpbiBhIFZNLiBPbmx5
-IHRoZSBDUFUga25vd3MgYWJvdXQgdGhpcywgYW5kIHRoZXJlIGlzDQo+IG5vIEVPSSB0aGF0IGV2
-ZXIgZ2V0cyBwcm9wYWdhdGVkIHRvIHRoZSByZWRpc3RyaWJ1dG9yLg0KDQpSaWdodC4gVGhpcyBt
-aXN1bmRlcnN0YW5kaW5nIGJhc2ljYWxseSBzdGVtcyBmcm9tIG15IGNvbmZ1c2lvbiBhYm92ZSB3
-aGVyZSBJDQp0aG91Z2h0IHRoYXQgdGhlIEVPSSB3b3VsZCBtb3ZlIGl0IGJhY2sgaW50byAicGVu
-ZGluZy4iIFRoYXQgb2J2aW91c2x5IG1ha2VzIG5vDQpzZW5zZSBiZWNhdXNlIGlmIGFub3RoZXIg
-SVJRIGFycml2ZXMgd2hpbGUgdGhlIGhhbmRsZXIgaXMgYWxyZWFkeSBydW5uaW5nLCB0aGVuDQph
-bm90aGVyIGhhbmRsZXIgcnVuIG11c3QgYmUgcXVldWVkLCBoZW5jZSBpdCBtdXN0IGJlIHNvbWV0
-aGluZyByZWFsbHkgZWFybHkgaW4NCnRoZSBmbG93IHdoaWNoIEFDS3MgdGhlIElSUSBzbyB0aGF0
-IGl0IGdldHMgbW92ZWQgYmFjayB0byAiaW5hY3RpdmUuIg0KDQo+ID4gMS4gRG8gd2UgbmVlZCB0
-byBtYXNrIHRoZSBJUlEgYW5kIHRoZW4gdW5tYXNrIGl0IGxhdGVyPyBJIGRvbid0IHRoaW5rIHNv
-DQo+ID4gYnV0IGl0J3Mgbm90IGVudGlyZWx5IGNsZWFyIHdoeSBoYW5kbGVfZWRnZV9pcnEgZG9l
-cyB0aGlzIGFueXdheTsgaXQncw0KPiA+IGFuIGVkZ2UgSVJRIHNvIG5vdCBzdXJlIHdoeSBpdCBu
-ZWVkcyB0byBiZSBtYXNrZWQuDQo+IA0KPiBQbGVhc2UgbWVhc3VyZSB0aGF0IGNvc3QgYW5kIHdl
-ZXAsIHNwZWNpYWxseSBpbiB0aGUgY29udGV4dCBvZg0KPiBtdWx0aXBsZSBjb25jdXJyZW50IGlu
-dGVycnVwdHMgc2VydmljZWQgYnkgYSBzaW5nbGUgSVRTIChjb3N0IG9mDQo+IGxvY2tpbmcgdGhl
-IGNvbW1hbmQgcXVldWUsIG9mIHdhaXRpbmcgZm9yIGEgZnVsbCByb3VuZCB0cmlwIHRvIHRoZSBJ
-VFMNCj4gZm9yIGEgY291cGxlIG9mIGNvbW1hbmRzLi4uKS4NCg0KRm9ydHVuYXRlbHkgdGhpcyBt
-YXNrL3VubWFza2luZyB3b3VsZCBvbmx5IGhhcHBlbiBpbiB0aGUgcmFyZShpc2gpIGNhc2VkIG9m
-IHRoZQ0KcmFjZSBjb25kaXRpb24gZGVzY3JpYmVkIGhlcmUgYmVpbmcgaGl0LiBFeGFjdGx5IHRo
-ZSBzYW1lIGFzDQp3aXRoIGhhbmRsZV9lZGdlX2lycSgpLCB0aGUgbWFza2luZyBhbmQgbGF0ZXIg
-dW5tYXNraW5nIHdvdWxkIG9ubHkgYmUgZG9uZQ0Kd2hlbiBpcnFfbWF5X3J1bigpID09IGZhbHNl
-IGR1ZSB0byB0aGUgcmFjZSBiZWluZyBoaXQuIENvbnNpZGVyaW5nIHRoYXQgdGhpcyBpcw0KYSBy
-YXJlIG9jY3VycmVuY2UsIEkgdGhpbmsgd2UgY291bGQgc3RvbWFjaCB0aGUgb2NjYXNpb25hbCBv
-dmVyaGVhZD8gSSB3YXMgbW9yZQ0KYXNraW5nIGlmIGl0J3MgYWN0dWFsbHkgKm5lY2Vzc2FyeSog
-dG8gZG8gdGhpcyBtYXNraW5nL3VubWFza2luZy4gSSdtIG5vdCBzdXJlDQppdCdzIG5lY2Vzc2Fy
-eSBhbnl3YXksIGhlbmNlIGl0IHdhc24ndCBpbXBsZW1lbnRlZCBpbiBteSBwYXRjaC4NCg0KPiA+
-IGluZGV4IDQ5ZTdiYzg3MWZlYy4uNGU1ZmMyYjdlOGE5IDEwMDY0NA0KPiA+IC0tLSBhL2tlcm5l
-bC9pcnEvY2hpcC5jDQo+ID4gKysrIGIva2VybmVsL2lycS9jaGlwLmMNCj4gPiBAQCAtNjkyLDgg
-KzY5MiwxMCBAQCB2b2lkIGhhbmRsZV9mYXN0ZW9pX2lycShzdHJ1Y3QgaXJxX2Rlc2MgKmRlc2Mp
-DQo+ID4gDQo+ID4gICAgICAgcmF3X3NwaW5fbG9jaygmZGVzYy0+bG9jayk7DQo+ID4gDQo+ID4g
-LSAgICAgaWYgKCFpcnFfbWF5X3J1bihkZXNjKSkNCj4gPiArICAgICBpZiAoIWlycV9tYXlfcnVu
-KGRlc2MpKSB7DQo+ID4gKyAgICAgICAgICAgICBkZXNjLT5pc3RhdGUgfD0gSVJRU19QRU5ESU5H
-Ow0KPiA+ICAgICAgICAgICAgICAgZ290byBvdXQ7DQo+ID4gKyAgICAgfQ0KPiANCj4gV2hhdCBp
-cyBjdXJyZW50bHkgdW5jbGVhciB0byBtZSBpcyBob3cgd2UgZ2V0IHRoZXJlIG9uIGFub3RoZXIg
-Q1BVIGlmDQo+IHdlJ3JlIHN0aWxsIGhhbmRsaW5nIHRoZSBpbnRlcnJ1cHQsIHdoaWNoIGhhcHBl
-bnMgaW4gdGhlIGNyaXRpY2FsDQo+IHNlY3Rpb24gZGVsaW5lYXRlZCBieSBkZXNjLT5sb2NrLiBT
-byB0aGVyZSBpcyBzb21lIGFkZGl0aW9uYWwgc3RhdGUNCj4gY2hhbmdlIGhlcmUgd2hpY2ggeW91
-IGRvbid0IHNlZW0gdG8gYmUgZGVzY3JpYmluZy4NCg0KVGhlIGxvY2sgaXMgYWN0dWFsbHkgcmVs
-ZWFzZWQgYW5kIGxhdGVyIHJlLWFjcXVpcmVkIGluIHRoZSBoYW5kbGVfaXJxX2V2ZW50KCkNCmZ1
-bmN0aW9uIHdoaWNoIGlzIGNhbGxlZCBiZWxvdy4gT25seSB0aGlzIGZsYWcgd3JhbmdsaW5nIGNv
-ZGUgaXMgZG9uZSB3aXRoIHRoZQ0KaXJxX2Rlc2MgbG9jayBoZWxkOyBhbGwgb2YgdGhlIGxvZ2lj
-IGluIHRoZSBsYXRlciBJUlEtc3BlY2lmaWMgaGFuZGxlciBjb2RlIGlzDQphY3R1YWxseSBydW4g
-dW5sb2NrZWQuIFRoaXMgaXMgd2h5IHRoZXJlIGlzIGEgd2luZG93IGZvciB0aGUgaXJxX2Rlc2Mg
-dG8gZ2V0DQppbnRvIHRoZSBpcnFfbWF5X3J1bigpIGZ1bmN0aW9uIGNvbmN1cnJlbnRseSB3aXRo
-IHRoZSBoYW5kbGVyIGJlaW5nIHJ1biBvbiBhDQpkaWZmZXJlbmNlIENQVS4NCj4gDQo+ID4gICAg
-ICAgZGVzYy0+aXN0YXRlICY9IH4oSVJRU19SRVBMQVkgfCBJUlFTX1dBSVRJTkcpOw0KPiA+IA0K
-PiA+IEBAIC03MTEsNyArNzEzLDEwIEBAIHZvaWQgaGFuZGxlX2Zhc3Rlb2lfaXJxKHN0cnVjdCBp
-cnFfZGVzYyAqZGVzYykNCj4gPiAgICAgICBpZiAoZGVzYy0+aXN0YXRlICYgSVJRU19PTkVTSE9U
-KQ0KPiA+ICAgICAgICAgICAgICAgbWFza19pcnEoZGVzYyk7DQo+ID4gDQo+ID4gLSAgICAgaGFu
-ZGxlX2lycV9ldmVudChkZXNjKTsNCj4gPiArICAgICBkbyB7DQo+ID4gKyAgICAgICAgICAgICBo
-YW5kbGVfaXJxX2V2ZW50KGRlc2MpOw0KPiA+ICsgICAgIH0gd2hpbGUgKHVubGlrZWx5KChkZXNj
-LT5pc3RhdGUgJiBJUlFTX1BFTkRJTkcpICYmDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICFp
-cnFkX2lycV9kaXNhYmxlZCgmZGVzYy0+aXJxX2RhdGEpKSk7DQo+ID4gDQo+ID4gICAgICAgY29u
-ZF91bm1hc2tfZW9pX2lycShkZXNjLCBjaGlwKTsNCj4gPiANCj4gDQo+IFdoeSBkbyB3ZSBuZWVk
-IHRvIGluZmxpY3QgYW55IG9mIHRoaXMgb24gYWxsIG90aGVyIHVzZXJzIG9mIHRoaXMgZmxvdz8N
-Cj4gVGhlIGxhY2sgb2YgYWN0aXZlIHN0YXRlIG9uIExQSXMgaXMgdGhlIGlzc3VlLCBhcyBpdCBh
-bGxvd3MgYSBuZXcNCj4gaW50ZXJydXB0IHRvIGJlIHByZXNlbnRlZCB0byBhbm90aGVyIENQVSBh
-cyBzb29uIGFzIHRoZSBwcmV2aW91cyBvbmUNCj4gaGFzIGJlZW4gQUNLJ2VkLg0KDQpEbyB5b3Ug
-bWVhbiBhbiBhY3RpdmUgc3RhdGUgaW4gaGFyZHdhcmU/IEV2ZW4gaWYgd2UgaGFkIGFuIGFjdGl2
-ZSBzdGF0ZSwgdGhhdA0Kc3RhdGUgd291bGQgYmUgQ1BVLWxvY2FsLCByaWdodD8gVGhlIGlzc3Vl
-IGhlcmUgaXMgdGhhdCB3aGVuIHRoZSBDUFUgYWZmaW5pdHkNCmNoYW5nZXMgd2hpbGUgdGhlIGhh
-bmRsZXIgaXMgcnVubmluZywgdGhlIG5ldyBDUFUgd2lsbCBlYXJseSBvdXQgYmVjYXVzZSB0aGUN
-CmZsYWdzIGluIGlycV9kZXNjIGluZGljYXRlIGl0J3MgYWxyZWFkeSBydW5uaW5nIGVsc2V3aGVy
-ZS4gQSBDUFUtbG9jYWwgaGFyZHdhcmUNCmFjdGl2ZSBzdGF0ZSB3b3VsZCBub3QgaGVscCBoZXJl
-OyBvbmx5IGlmIHRoZSBhY3RpdmUvcGVuZGluZyBzdGF0ZXMgd2VyZSBnbG9iYWwsDQp0aGVuIGl0
-IG1heSBoZWxwLg0KDQpBcyBmb3IgaW5mbGljdGluZyB0aGlzIG9uIG90aGVyIHVzZXJzLCB0aGlz
-IGlzIHByZXR0eSBsaWdodCBpbiBnZW5lcmFsLiBJdCdzDQpiYXNpY2FsbHkganVzdCBsb29raW5n
-IGF0IHRoYXQgZmxhZyBhZ2FpbjsgaW4gZ2VuZXJhbCBpdCB3aWxsIGJlIHVuc2V0IGFuZCB3ZSds
-bA0KZXhpdCB0aGUgbG9vcCBhZnRlciBvbmUgaW52b2tlLg0KDQo+IA0KPiBUaGlzIGFsc28gaGFz
-IHRoZSBlZmZlY3Qgb2Yga2VlcGluZyB0aGUgaGFuZGxpbmcgb2YgdGhlIGludGVycnVwdCBvbg0K
-PiB0aGUgb3JpZ2luYWwgQ1BVLCBuZWdhdGluZyB0aGUgZWZmZWN0cyBvZiB0aGUgY2hhbmdlIG9m
-IGFmZmluaXR5Lg0KDQpZZXMuIFRoaXMgYm90aGVyZWQgbWUgdG9vIGluaXRpYWxseSwgYnV0IG9u
-IHJlZmxlY3Rpb24gSSdtIG5vdCBzdXJlIGl0J3MNCmFjdHVhbGx5IGEgcHJvYmxlbS4gT25lIHBv
-c3NpYmxlIGlzc3VlIHRoYXQgY2FtZSB0byBtaW5kIHdhcyBhcm91bmQgQ1BVDQpvZmZsaW5pbmcs
-IGJ1dCBpbiB0aGUgZXZlbnQgdGhhdCBhIENQVSBiZWluZyBvZmZsaW5lZCB3YXMgcnVubmluZyBp
-bnRlcnJ1cHQNCmhhbmRsZXJzIGl0IHdvdWxkbid0IGJlIGFibGUgdG8gY29tcGxldGUgdGhlIG9m
-ZmxpbmUgYW55d2F5IHVudGlsIHRoZSBoYW5kbGVycw0Kd2VyZSBmaW5pc2hlZCwgc28gSSBkb24n
-dCB0aGluayB0aGlzIGlzIGFuIGlzc3VlLiBEbyB5b3Ugc2VlIGFueSBwcmFjdGljYWwgaXNzdWUN
-CndpdGggcnVubmluZyB0aGUgaGFuZGxlciBvbmNlIG1vcmUgb24gdGhlIG9yaWdpbmFsIENQVSBp
-bW1lZGlhdGVseSBhZnRlciB0aGUNCmFmZmluaXR5IGhhcyBiZWVuIGNoYW5nZWQ/DQoNCj4gSXQg
-ZmVlbHMgdGhhdCB3ZSBzaG91bGQgaW5zdGVhZCByZXNlbmQgdGhlIGludGVycnVwdCwgZWl0aGVy
-IGJ5IG1ha2luZw0KPiBpdCBwZW5kaW5nIGFnYWluIGJ5IGdlbmVyYXRpbmcgYW4gSU5UIGNvbW1h
-bmQgdG8gdGhlIElUUywgb3IgYnkgdXNpbmcNCj4gdGhlIFNXIHJlc2VuZCBtZWNoYW5pc20gKHdo
-aWNoIHRoZSBsYWNrIG9mIGRlYWN0aXZhdGlvbiByZXF1aXJlbWVudA0KPiBtYWtlcyBwb3NzaWJs
-ZSkuDQoNCkknbSBvcGVuIHRvIG90aGVyIHN1Z2dlc3Rpb25zIGhlcmUsIGp1c3Qgbm90IHN1cmUg
-aG93IHRoaXMgcmUtc2VuZGluZyB3b3VsZCB3b3JrDQppbiBwcmFjdGljZS4gRG8geW91IG1lYW4g
-dGhhdCB3aGVuIHRoZSBvcmlnaW5hbCBDUFUgb2JzZXJ2ZXMgdGhhdCB0aGUgcGVuZGluZw0KZmxh
-ZyBpcyBzZXQsIGluc3RlYWQgb2YgcnVubmluZyB0aGUgaGFuZGxlciBhZ2FpbiBsb2NhbGx5IHRo
-ZSBvcmlnaW5hbCBDUFUgd291bGQNCmluc3RydWN0IHRoZSBJVFMgdG8gbWFyayB0aGUgaW50ZXJy
-dXB0IGFzIHBlbmRpbmcgYWdhaW4sIGhlbmNlIHJlLXRyaWdnZXJpbmcgaXQNCm9uIHRoZSBuZXcg
-Q1BVPyBUaGF0IGNvdWxkIHdvcmssIGJ1dCBtYXkgYmUgdHJpY2t5IHRvIHNob2UtaG9ybiBpbnRv
-IHRoZSBnZW5lcmljDQpjb2RlLCB1bmxlc3Mgd2UgdXNlIHRoZSBFT0kgY2FsbGJhY2sgZm9yIHRo
-aXM/DQoNCkZ1bmRhbWVudGFsbHkgSSBkb24ndCB0aGluayB0aGF0IHRoZSBzb2x1dGlvbiBoZXJl
-IHNob3VsZCBiZSBHSUMgc3BlY2lmaWMuIFdlDQpoaXQgdGhpcyBpc3N1ZSBvbiB0aGUgR0lDLCBi
-dXQgcG90ZW50aWFsbHkgYW55IGlycSBjaGlwIGNvdWxkIGNhdXNlIHRoaXMgbG9zdA0KaW50ZXJy
-dXB0IGlzc3VlIHRvIG1hbmlmZXN0PyBUaGF0J3Mgb25lIG9mIHRoZSByZWFzb25zIEkgcHJlZmVy
-cmVkIGEgdHdlYWsgdG8NCnRoZSBnZW5lcmljIGNvZGUgdG8gZml4IHRoaXMgZm9yIGV2ZXJ5b25l
-Lg0KDQpKRw0KDQpbMF0gaHR0cHM6Ly9kZXZlbG9wZXIuYXJtLmNvbS9kb2N1bWVudGF0aW9uLzEw
-MjkyMy8wMTAwL1JlZGlzdHJpYnV0b3JzL0luaXRpYWwtY29uZmlndXJhdGlvbi1vZi1hLVJlZGlz
-dHJpYnV0b3I/bGFuZz1lbg0K
+CC Gareth, Hervé, Miquel, Ralph
+
+On Tue, Apr 4, 2023 at 2:44 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> The Renesas r9a06g032 bitselect clock implements a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
+>
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+>
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+>
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+>
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+>
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+But I do not have the hardware.
+
+> --- a/drivers/clk/renesas/r9a06g032-clocks.c
+> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
+> @@ -1121,6 +1121,7 @@ static int r9a06g032_clk_mux_set_parent(struct clk_hw *hw, u8 index)
+>  }
+>
+>  static const struct clk_ops clk_bitselect_ops = {
+> +       .determine_rate = __clk_mux_determine_rate,
+>         .get_parent = r9a06g032_clk_mux_get_parent,
+>         .set_parent = r9a06g032_clk_mux_set_parent,
+>  };
+> @@ -1145,7 +1146,7 @@ r9a06g032_register_bitsel(struct r9a06g032_priv *clocks,
+>
+>         init.name = desc->name;
+>         init.ops = &clk_bitselect_ops;
+> -       init.flags = CLK_SET_RATE_PARENT;
+> +       init.flags = CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT;
+>         init.parent_names = names;
+>         init.num_parents = 2;
+>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
