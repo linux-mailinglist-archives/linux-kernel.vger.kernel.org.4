@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8854B6DD675
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E936DD679
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjDKJUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S229744AbjDKJUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDKJUB (ORCPT
+        with ESMTP id S229452AbjDKJUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:20:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDFE1BD5;
-        Tue, 11 Apr 2023 02:19:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8BE601FDE9;
-        Tue, 11 Apr 2023 09:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681204798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9x2PP7g3qikWCl7Lm0S7Kg1LeW9kRdgJ7wxd8BEP+WA=;
-        b=ZkSyf6HWrFO7u2blhYjirwDKgUAzYkmGNXlK6Z3USIR2DZM5irMiI46wHDR1rKtcU7QX6y
-        CRW0glLXNXzEQ0+1iKvYTnI70Wiz7zNRxK9MzLDZjU7EqV2zwz11MHvAyTV8o+R6b3+7Gh
-        1kO/W3zR5kcAmbeSCXjre/Q3QAkqtU0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681204798;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9x2PP7g3qikWCl7Lm0S7Kg1LeW9kRdgJ7wxd8BEP+WA=;
-        b=4sSOGhLuEEzXG3CXu1wcYUV2XNdnB9SOHDdWBEo2nkpVHTj3ViuGiL0MUTHl2yF9M9Kw9S
-        j1C6lKqSmpWazwDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D1EE13519;
-        Tue, 11 Apr 2023 09:19:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id amB/Hj4mNWTbJAAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 11 Apr 2023 09:19:58 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 03F76A0732; Tue, 11 Apr 2023 11:19:57 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 11:19:57 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v2 2/2] ext4: use __GFP_NOFAIL if allocating
- extents_status cannot fail
-Message-ID: <20230411091957.wuwa7wii7pj35ua7@quack3>
-References: <20230406132834.1669710-1-libaokun1@huawei.com>
- <20230406132834.1669710-3-libaokun1@huawei.com>
+        Tue, 11 Apr 2023 05:20:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218D1FC1;
+        Tue, 11 Apr 2023 02:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681204850; x=1712740850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rG97cuIKZfWarCKMEtGQ4BtW1PVd9E6YqLa6yI8Cg34=;
+  b=NgxTDwpYjhLLjxGj5B202GgPn6ZEvv0eQl0gIxS6PaNvP7ABGFlQ8TXh
+   NnlVgUWgb+N446r3LGi7M2bYbzu+biiRt5ANQvB0mtmiIpkko9l2a4Z5P
+   mezMhzRAdlZQ27LWObAFZ0zL2Q3sLynXyGtGnvGp0QyNXgBvwusOICG1l
+   mamOE3nIdUUvQxe8txx4cOI84ctfIyDUlF8+VYCr1UBWZw4/1IEtx/Pc1
+   Bc+EbZJBpnW6Nqd0CzzKx53QwEKtcYw5+XSnBYOh3feEOol4x/wapGrdy
+   dpkeXZgrMPiok/LUF02vE1Rbg+hzWptS14cui26xpUiMf/78jobQ5OfSK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
+   d="asc'?scan'208";a="146441855"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 02:20:49 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 11 Apr 2023 02:20:49 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 11 Apr 2023 02:20:46 -0700
+Date:   Tue, 11 Apr 2023 10:20:31 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Mason Huo <mason.huo@starfivetech.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v1 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
+ allowlist
+Message-ID: <20230411-rewire-outlook-a5fb631fb635@wendy>
+References: <20230411083257.16155-1-mason.huo@starfivetech.com>
+ <20230411083257.16155-3-mason.huo@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/DkWhqOrZbaY7lnw"
 Content-Disposition: inline
-In-Reply-To: <20230406132834.1669710-3-libaokun1@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230411083257.16155-3-mason.huo@starfivetech.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 06-04-23 21:28:34, Baokun Li wrote:
-> If extent status tree update fails, we have inconsistency between what is
-> stored in the extent status tree and what is stored on disk. And that can
-> cause even data corruption issues in some cases.
-> 
-> In the extent status tree, we have extents which we can just drop without
-> issues and extents we must not drop - this depends on the extent's status
-> - currently ext4_es_is_delayed() extents must stay, others may be dropped.
-> 
-> For extents that cannot be dropped we use __GFP_NOFAIL to allocate memory.
-> A helper function is also added to help determine if the current extent can
-> be dropped, although only ext4_es_is_delayed() extents cannot be dropped
-> currently. In addition, with the above logic, the undo operation in
-> __es_remove_extent that may cause inconsistency if the split extent fails
-> is unnecessary, so we remove it as well.
-> 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+--/DkWhqOrZbaY7lnw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Apr 11, 2023 at 04:32:56PM +0800, Mason Huo wrote:
+> Add the compatible strings for supporting the generic
+> cpufreq driver on the StarFive JH7110 SoC.
+>=20
+> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
 > ---
-> V1->V2:
-> 	Add the patch 2 as suggested by Jan Kara.
-> 
->  fs/ext4/extents_status.c | 36 +++++++++++++++++++++++++++++-------
->  1 file changed, 29 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 7bc221038c6c..8eed17f35b11 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -448,12 +448,29 @@ static void ext4_es_list_del(struct inode *inode)
->  	spin_unlock(&sbi->s_es_lock);
->  }
->  
-> +/*
-> + * Helper function to help determine if memory allocation for this
-> + * extent_status is allowed to fail.
-> + */
-> +static inline bool ext4_es_alloc_should_nofail(struct extent_status *es)
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufr=
+eq-dt-platdev.c
+> index e85703651098..a1ac955aa7e2 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -92,6 +92,7 @@ static const struct of_device_id allowlist[] __initcons=
+t =3D {
+> =20
+>  	{ .compatible =3D "xlnx,zynq-7000", },
+>  	{ .compatible =3D "xlnx,zynqmp", },
+> +	{ .compatible =3D "starfive,jh7110", },
 
-I'd call this function ext4_es_must_keep() and also use it in
-es_do_reclaim_extents() instead of ext4_es_is_delayed(). Do this as a
-preparatory patch please.
+This struct looks to be in alphabetical order with a blank line between
+vendors.
 
-> @@ -792,9 +809,16 @@ static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
->  	}
->  
->  	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
-> -				  newes->es_pblk);
-> -	if (!es)
-> -		return -ENOMEM;
-> +				  newes->es_pblk, 0);
+--/DkWhqOrZbaY7lnw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I would just call this like:
+-----BEGIN PGP SIGNATURE-----
 
-	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
-				newes->es_pblk, ext4_es_must_keep(newes));
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDUmXwAKCRB4tDGHoIJi
+0q1CAP4hP0FaG1N8fWLK8YeBOG1dPrmqZ2GiASDCJ033kKDRsgEA+uyakkXQHuIE
+C3ejb+nnlELB4J8+dRseORPc4E0dQQM=
+=v6J5
+-----END PGP SIGNATURE-----
 
-to save the ifs below.
-
-> +	if (!es) {
-> +		/* Use GFP_NOFAIL if the allocation cannot fail. */
-> +		if (ext4_es_alloc_should_nofail(newes))
-> +			es = ext4_es_alloc_extent(inode, newes->es_lblk,
-> +					newes->es_len, newes->es_pblk, 1);
-> +		else
-> +			return -ENOMEM;
-> +	}
-> +
->  	rb_link_node(&es->rb_node, parent, p);
->  	rb_insert_color(&es->rb_node, &tree->root);
->  
-> @@ -1349,8 +1373,6 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  						    ext4_es_status(&orig_es));
->  			err = __es_insert_extent(inode, &newes);
->  			if (err) {
-> -				es->es_lblk = orig_es.es_lblk;
-> -				es->es_len = orig_es.es_len;
->  				if ((err == -ENOMEM) &&
->  				    __es_shrink(EXT4_SB(inode->i_sb),
->  							128, EXT4_I(inode)))
-
-Also now __es_remove_extent() cannot fail (it will always remove what it
-should, maybe more) so please just make it void function (as a separate
-cleanup patch afterwards). Thanks!
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+--/DkWhqOrZbaY7lnw--
