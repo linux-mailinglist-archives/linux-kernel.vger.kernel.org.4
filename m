@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C528C6DD8CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB0B6DD8D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjDKLEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S230031AbjDKLFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjDKLEp (ORCPT
+        with ESMTP id S229895AbjDKLFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:04:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC604491
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PEEIRFcCY8V94MFUrFLu3tv9SHVUfUNorm0Jdg+YNsM=; b=GAs7AfVokscfCgCy6zW0yVJe/a
-        1ubg6uTrcsewDRyG4lvPuQFDiZ28OZHvZwBeMBoF49NE6NEfxEzUF1dxgwTpc6ex4IyylyTJ+ebtR
-        7F+YiVfkHev7q77RsmCHripVOp1LNiG2KsDwjOcWANnFsOY8qcm7dOX0s7Re0QHlsx2e7ioVRSeuG
-        LWjahAC8aYZMRplyWOTd4YscNI1XwSmKdhCEItQM02MhQluVQdy/VgxQZ2pSpXeA9CCoRC1gc0Str
-        qvP9yXkEF+WnyLElGL7ktWcT413b4hh5eQJTmSjCcA0+KecZZ7zvRZrUkQgqXnWrS6M72XiXISr2/
-        w4e6kSJA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmBms-00DKS0-20;
-        Tue, 11 Apr 2023 11:03:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2B82A300274;
-        Tue, 11 Apr 2023 13:03:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EE57420593938; Tue, 11 Apr 2023 13:03:44 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 13:03:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
-        npiggin@gmail.com
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230411110344.GC576825@hirez.programming.kicks-ass.net>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
- <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
+        Tue, 11 Apr 2023 07:05:19 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F9944A5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:04:52 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso7546084pjp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681211070;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nFXSqQEvm7WLdQYFLs/odUV6nM3s17jTlqmzGXgnsF8=;
+        b=Mv6PhdV9pezPBL2JvF7UN8LNkuRUTjH/rvz6xm1Zq7XP3k/jPnyD1uP3jdkYy8YOCi
+         oLP9t3Cl2IhSsaqGNr7lfjmBV5hmSsdn5LLjAAWamK3vfCQM35/KMEC2lbFFgBCM8Vm8
+         7XMMG7KgllQUyUNfUE+TMSjg4IFwsOAmDylKiaoFQ02wBisqtupXkRK0x5zpYhCh0wWK
+         d6UuLzn+x3Yu9wBAeINXV/zUUj6YWFZdg920y949OpmKAPFk3HdRqv/pniIX+UDFUqyZ
+         fsOUEBRscUW5M7BHVPjVssyjRqrch53BjK4OUdy0d0UyVj7byvLPxFnKePzTKgkrfoJo
+         ffdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681211070;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nFXSqQEvm7WLdQYFLs/odUV6nM3s17jTlqmzGXgnsF8=;
+        b=Ps5e4GvvRfD3MEKsTbiR6zyIBYOXqOTWeeodCNW5oF0tI2NktHTYrPcWSzN/YGsMVb
+         JYaMMwW9DAgIdO85+qdNBqLxiieAzbqX3DPsBGo3xHxwpth31LWlcI8w5OpKf9nCkoDe
+         UaP5/NZiNPMwiiA5TMKJCVa7CylQgDO0d7leWfeMqGeiuT9hfOEWNzNPg8wSEe2qaCEq
+         hW/0EuCf/gkJTqCbBU4WwrJe5A1Q08KZjmjBQjwNXU2+9sWvaLewDbRVcg9ItXRx2JSm
+         /2rR1dZVfPfP9rCaDLn7PHW/bclMsJEaQ8kT2oCTPbDxbe0sko/LS1dH40yVgvZeKSil
+         uE5g==
+X-Gm-Message-State: AAQBX9fvGeOk7DvDVKdTF0OyguZL2Byo6hQZqGSwQomM6EWhtJP5nIi6
+        1ZXcqzKnhzJzLFLe2lskx+aN
+X-Google-Smtp-Source: AKy350b8YyM+gWZG9+maoSfUuO7Xh5vZ26HQrArMHUvOh+sEsQOeZFwbyYyjKo1HI2/YQAWqY85NTQ==
+X-Received: by 2002:a05:6a20:6d09:b0:da:5084:2764 with SMTP id fv9-20020a056a206d0900b000da50842764mr12933079pzb.24.1681211069983;
+        Tue, 11 Apr 2023 04:04:29 -0700 (PDT)
+Received: from thinkpad ([117.216.120.128])
+        by smtp.gmail.com with ESMTPSA id k24-20020aa78218000000b005921c46cbadsm9794338pfi.99.2023.04.11.04.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 04:04:29 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:34:19 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 01/10] PCI: dwc: Fix erroneous version type
+ test helper
+Message-ID: <20230411110419.GC5333@thinkpad>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411033928.30397-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230411033928.30397-2-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,113 +87,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 09:14:36PM -0400, Mathieu Desnoyers wrote:
+On Tue, Apr 11, 2023 at 06:39:19AM +0300, Serge Semin wrote:
+> Due to an unfortunate mistake the macro function actually checks the
+> IP-core version instead of the IP-core version type which isn't what
+> originally implied. Fix it by introducing a new helper
+> __dw_pcie_ver_type_cmp() with the same semantic as the __dw_pcie_ver_cmp()
+> counterpart except it refers to the dw_pcie.type field in order to perform
+> the passed comparison operation.
+> 
+> Fixes: 0b0a780d52ad ("PCI: dwc: Add macros to compare Synopsys IP core versions")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> index 2a243616f222..f20fc0600fcc 100644
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -37,6 +37,11 @@ static inline void mmgrab(struct mm_struct *mm)
->  	atomic_inc(&mm->mm_count);
->  }
-> +static inline void smp_mb__after_mmgrab(void)
-> +{
-> +	smp_mb__after_atomic();
-> +}
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.h | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 79713ce075cc..adad0ea61799 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -37,17 +37,20 @@
+>  #define __dw_pcie_ver_cmp(_pci, _ver, _op) \
+>  	((_pci)->version _op DW_PCIE_VER_ ## _ver)
+>  
+> +#define __dw_pcie_ver_type_cmp(_pci, _type, _op) \
+> +	((_pci)->type _op DW_PCIE_VER_TYPE_ ## _type)
 > +
->  extern void __mmdrop(struct mm_struct *mm);
->  static inline void mmdrop(struct mm_struct *mm)
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 9e0fa4193499..8d410c0dcb39 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5117,7 +5117,6 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
->  	sched_info_switch(rq, prev, next);
->  	perf_event_task_sched_out(prev, next);
->  	rseq_preempt(prev);
-> -	switch_mm_cid(prev, next);
->  	fire_sched_out_preempt_notifiers(prev, next);
->  	kmap_local_sched_out();
->  	prepare_task(next);
-> @@ -5273,6 +5272,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
->  	 *
->  	 * kernel ->   user   switch + mmdrop() active
->  	 *   user ->   user   switch
-> +	 *
-> +	 * switch_mm_cid() needs to be updated if the barriers provided
-> +	 * by context_switch() are modified.
->  	 */
->  	if (!next->mm) {                                // to kernel
->  		enter_lazy_tlb(prev->active_mm, next);
-> @@ -5302,6 +5304,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
->  		}
->  	}
-> +	/* switch_mm_cid() requires the memory barriers above. */
-> +	switch_mm_cid(prev, next);
-> +
->  	rq->clock_update_flags &= ~(RQCF_ACT_SKIP|RQCF_REQ_SKIP);
->  	prepare_lock_switch(rq, next, rf);
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
->  static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
->  {
-> +	/*
-> +	 * Provide a memory barrier between rq->curr store and load of
-> +	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
-> +	 *
-> +	 * Should be adapted if context_switch() is modified.
-> +	 */
-> +	if (!next->mm) {                                // to kernel
-> +		/*
-> +		 * user -> kernel transition does not guarantee a barrier, but
-> +		 * we can use the fact that it performs an atomic operation in
-> +		 * mmgrab().
-> +		 */
-> +		if (prev->mm)                           // from user
-> +			smp_mb__after_mmgrab();
-> +		/*
-> +		 * kernel -> kernel transition does not change rq->curr->mm
-> +		 * state. It stays NULL.
-> +		 */
-> +	} else {                                        // to user
-> +		/*
-> +		 * kernel -> user transition does not provide a barrier
-> +		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
-> +		 * Provide it here.
-> +		 */
-> +		if (!prev->mm)                          // from kernel
-> +			smp_mb();
-> +		/*
-> +		 * user -> user transition guarantees a memory barrier through
-> +		 * switch_mm().
-> +		 */
-> +	}
->  	if (prev->mm_cid_active) {
->  		mm_cid_put_lazy(prev);
->  		prev->mm_cid = -1;
+>  #define dw_pcie_ver_is(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, ==)
+>  
+>  #define dw_pcie_ver_is_ge(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, >=)
+>  
+>  #define dw_pcie_ver_type_is(_pci, _ver, _type) \
+>  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
+> -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, ==))
+> +	 __dw_pcie_ver_type_cmp(_pci, _type, ==))
+>  
+>  #define dw_pcie_ver_type_is_ge(_pci, _ver, _type) \
+>  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
+> -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, >=))
+> +	 __dw_pcie_ver_type_cmp(_pci, _type, >=))
+>  
+>  /* DWC PCIe controller capabilities */
+>  #define DW_PCIE_CAP_REQ_RES		0
+> -- 
+> 2.40.0
+> 
 > 
 
-This is going to be pain wrt.:
-
-  https://lkml.kernel.org/r/20230203071837.1136453-3-npiggin@gmail.com
-
-which is already in -next. Also, I recon Nick isn't going to too happy
--- although I recond smp_mb() is better than an atomic op on Power. But
-still.
-
-Urgh...
-
-For Nick; the TL;DR is we need an smp_mb() after setting rq->curr and
-before calling switch_mm_cid() *IFF* rq->curr->mm changes. Normally this
-is provided by switch_mm() itself per actually changing the address
-space, except for the whole active_mm/lazy swizzle nonsense, which gives
-a few holes still.
-
-The very much longer explanation is upthread here:
-
-  https://lkml.kernel.org/r/fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com
-
- 
+-- 
+மணிவண்ணன் சதாசிவம்
