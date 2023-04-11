@@ -2,219 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35CA6DDAB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BBE6DDABB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjDKM0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S229945AbjDKM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjDKM0d (ORCPT
+        with ESMTP id S229873AbjDKM1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:26:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B2211707;
-        Tue, 11 Apr 2023 05:26:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 419EFD75;
-        Tue, 11 Apr 2023 05:27:15 -0700 (PDT)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1ECC3F6C4;
-        Tue, 11 Apr 2023 05:26:29 -0700 (PDT)
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH] net: Finish up ->msg_control{,_user} split
-Date:   Tue, 11 Apr 2023 13:26:25 +0100
-Message-Id: <20230411122625.3902339-1-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 11 Apr 2023 08:27:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01E240F8;
+        Tue, 11 Apr 2023 05:26:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C34F6241E;
+        Tue, 11 Apr 2023 12:26:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326C8C433EF;
+        Tue, 11 Apr 2023 12:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681216015;
+        bh=h+Bk8l0bcNtue5rAI32PLmr4ljUzbsE0ynITbU7dios=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GAzuf5XsnUV+nDmFC6q2/SA+oFGfynM8smMf6cxYLJonkRmH3zEhu4IbISadU4eyl
+         TECvrUcVGaLPoQlP+8H7PPVyb7raAMss43lwg88UvmrUcGr7EfIxphw7c3BMKhSpVZ
+         4VN4Pfo69Xa1Uvi6UCWiYpalebe+z4ctULdo2kBxnJ5M0loofu7fkQ8nYlwmup7OaK
+         w/0gsaXYVOK+ATCt7aSciJ4y1ls5vAJVzFzHZVUAHRuVcdhC2lZSNPZUCvRMb498hu
+         NJezOYPxtCo/tiNnF44NFqDwMXnDNoHGdDfetK8BHJImKoqL2I9PeXrpmIRzZ8HJMQ
+         gaYfhPvditGGg==
+Date:   Tue, 11 Apr 2023 15:26:51 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
+Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
+        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
+Message-ID: <20230411122651.GV182481@unreal>
+References: <1681108984-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1681108984-2-3-git-send-email-lizhijian@fujitsu.com>
+ <20230410120809.GN182481@unreal>
+ <0d9c57db-bca3-adb4-71fd-7362e4842917@linux.dev>
+ <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 1f466e1f15cf ("net: cleanly handle kernel vs user buffers for
-->msg_control") introduced the msg_control_user and
-msg_control_is_user fields in struct msghdr to ensure user pointers
-are represented as such. It also took care of converting most users
-of struct msghdr::msg_control where user pointers are involved. It
-did however miss a number of cases, and some code using msg_control
-inappropriately has also appeared in the meantime.
+On Tue, Apr 11, 2023 at 02:43:46AM +0000, Zhijian Li (Fujitsu) wrote:
+> 
+> 
+> On 10/04/2023 21:10, Guoqing Jiang wrote:
+> > 
+> > 
+> > On 4/10/23 20:08, Leon Romanovsky wrote:
+> >> On Mon, Apr 10, 2023 at 06:43:03AM +0000, Li Zhijian wrote:
+> >>> The warning occurs when destroying PD whose reference count is not zero.
+> >>>
+> >>> Precodition: clt_path->s.con_num is 2.
+> >>> So 2 cm connection will be created as below:
+> >>> CPU0                                              CPU1
+> >>> init_conns {                              |
+> >>>    create_cm() // a. con[0] created        |
+> >>>                                            |  a'. rtrs_clt_rdma_cm_handler() {
+> >>>                                            |    rtrs_rdma_addr_resolved()
+> >>>                                            |      create_con_cq_qp(con); << con[0]
+> >>>                                            |  }
+> >>>                                            | in this moment, refcnt of PD was increased to 2+
+> >>>                                            |
+> >>>    create_cm() // b. cid = 1, failed       |
+> >>>      destroy_con_cq_qp()                   |
+> >>>        rtrs_ib_dev_put()                   |
+> >>>          dev_free()                        |
+> >>>            ib_dealloc_pd(dev->ib_pd) << PD |
+> >>>             is destroyed, but refcnt is    |
+> >>>             still greater than 0           |
+> >>> }
+> >>>
+> >>> Simply, Here we can avoid this warning by introducing conn own flag to
+> >>> track if its cleanup should drop the PD.
+> >>>
+> >>> -----------------------------------------------
+> >>>   rnbd_client L597: Mapping device /dev/nvme0n1 on session client, (access_mode: rw, nr_poll_queues: 0)
+> >>>   ------------[ cut here ]------------
+> >>>   WARNING: CPU: 0 PID: 26407 at drivers/infiniband/sw/rxe/rxe_pool.c:256 __rxe_cleanup+0x13a/0x170 [rdma_rxe]
+> >>>   Modules linked in: rpcrdma rdma_ucm ib_iser rnbd_client libiscsi rtrs_client scsi_transport_iscsi rtrs_core rdma_cm iw_cm ib_cm crc32_generic rdma_rxe udp_tunnel ib_uverbs ib_core kmem device_dax nd_pmem dax_pmem nd_
+> >>> vme crc32c_intel fuse nvme_core nfit libnvdimm dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod
+> >>>   CPU: 0 PID: 26407 Comm: rnbd-client.sh Kdump: loaded Not tainted 6.2.0-rc6-roce-flush+ #53
+> >>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> >>>   RIP: 0010:__rxe_cleanup+0x13a/0x170 [rdma_rxe]
+> >>>   Code: 45 84 e4 0f 84 5a ff ff ff 48 89 ef e8 5f 18 71 f9 84 c0 75 90 be c8 00 00 00 48 89 ef e8 be 89 1f fa 85 c0 0f 85 7b ff ff ff <0f> 0b 41 bc ea ff ff ff e9 71 ff ff ff e8 84 7f 1f fa e9 d0 fe ff
+> >>>   RSP: 0018:ffffb09880b6f5f0 EFLAGS: 00010246
+> >>>   RAX: 0000000000000000 RBX: ffff99401f15d6a8 RCX: 0000000000000000
+> >>>   RDX: 0000000000000001 RSI: ffffffffbac8234b RDI: 00000000ffffffff
+> >>>   RBP: ffff99401f15d6d0 R08: 0000000000000001 R09: 0000000000000001
+> >>>   R10: 0000000000002d82 R11: 0000000000000000 R12: 0000000000000001
+> >>>   R13: ffff994101eff208 R14: ffffb09880b6f6a0 R15: 00000000fffffe00
+> >>>   FS:  00007fe113904740(0000) GS:ffff99413bc00000(0000) knlGS:0000000000000000
+> >>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>>   CR2: 00007ff6cde656c8 CR3: 000000001f108004 CR4: 00000000001706f0
+> >>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >>>   Call Trace:
+> >>>    <TASK>
+> >>>    rxe_dealloc_pd+0x16/0x20 [rdma_rxe]
+> >>>    ib_dealloc_pd_user+0x4b/0x80 [ib_core]
+> >>>    rtrs_ib_dev_put+0x79/0xd0 [rtrs_core]
+> >>>    destroy_con_cq_qp+0x8a/0xa0 [rtrs_client]
+> >>>    init_path+0x1e7/0x9a0 [rtrs_client]
+> >>>    ? __pfx_autoremove_wake_function+0x10/0x10
+> >>>    ? lock_is_held_type+0xd7/0x130
+> >>>    ? rcu_read_lock_sched_held+0x43/0x80
+> >>>    ? pcpu_alloc+0x3dd/0x7d0
+> >>>    ? rtrs_clt_init_stats+0x18/0x40 [rtrs_client]
+> >>>    rtrs_clt_open+0x24f/0x5a0 [rtrs_client]
+> >>>    ? __pfx_rnbd_clt_link_ev+0x10/0x10 [rnbd_client]
+> >>>    rnbd_clt_map_device+0x6a5/0xe10 [rnbd_client]
+> >>>
+> >>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> >>> ---
+> >>>   drivers/infiniband/ulp/rtrs/rtrs-clt.c | 4 ++++
+> >>>   drivers/infiniband/ulp/rtrs/rtrs-clt.h | 1 +
+> >>>   2 files changed, 5 insertions(+)
+> >>>
+> >>> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> >>> index c2065fc33a56..4c8f42e46e2f 100644
+> >>> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> >>> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> >>> @@ -1664,6 +1664,7 @@ static int create_con_cq_qp(struct rtrs_clt_con *con)
+> >>>               return -ENOMEM;
+> >>>           }
+> >>>           clt_path->s.dev_ref = 1;
+> >>> +        con->has_dev = true;
+> >>>           query_fast_reg_mode(clt_path);
+> >>>           wr_limit = clt_path->s.dev->ib_dev->attrs.max_qp_wr;
+> >>>           /*
+> >>> @@ -1690,6 +1691,7 @@ static int create_con_cq_qp(struct rtrs_clt_con *con)
+> >>>           wr_limit = clt_path->s.dev->ib_dev->attrs.max_qp_wr;
+> >>>           /* Shared between connections */
+> >>>           clt_path->s.dev_ref++;
+> >> Without looking in the code, I would expect dev_ref from the line above
+> >> to perform PD protection.
+> > 
+> > Agreed.
+> 
+> Sorry, i didn't get your point. Do you mean something like this:
+> 
+> +		con->has_dev = true;
+>   		clt_path->s.dev_ref++;
 
-This patch is attempting to complete the split. Most issues are about
-msg_control being used when in fact a user pointer is stored in the
-union; msg_control_user is now used instead. An exception is made
-for null checks, as it should be safe to use msg_control
-unconditionally for that purpose.
+No, my point was that clt_path->s.dev_ref > 0 means that has_dev is
+equal to true, and dev_ref is supposed to protect from early PD
+destruction.
 
-Additionally, a special situation in
-cmsghdr_from_user_compat_to_kern() is addressed. There the input
-struct msghdr holds a user pointer (msg_control_user), but a kernel
-pointer is stored in msg_control when returning. msg_control_is_user
-is now updated accordingly.
+Thanks
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
-Note: this issue was discovered during the porting of Linux on
-Morello [1].
-
-[1] https://git.morello-project.org/morello/kernel/linux
-
- net/compat.c             | 13 +++++++------
- net/core/scm.c           |  9 ++++++---
- net/ipv4/tcp.c           |  4 ++--
- net/ipv6/ipv6_sockglue.c |  1 +
- 4 files changed, 16 insertions(+), 11 deletions(-)
-
-diff --git a/net/compat.c b/net/compat.c
-index 161b7bea1f62..6564720f32b7 100644
---- a/net/compat.c
-+++ b/net/compat.c
-@@ -113,7 +113,7 @@ int get_compat_msghdr(struct msghdr *kmsg,
- 
- #define CMSG_COMPAT_FIRSTHDR(msg)			\
- 	(((msg)->msg_controllen) >= sizeof(struct compat_cmsghdr) ?	\
--	 (struct compat_cmsghdr __user *)((msg)->msg_control) :		\
-+	 (struct compat_cmsghdr __user *)((msg)->msg_control_user) :	\
- 	 (struct compat_cmsghdr __user *)NULL)
- 
- #define CMSG_COMPAT_OK(ucmlen, ucmsg, mhdr) \
-@@ -126,7 +126,7 @@ static inline struct compat_cmsghdr __user *cmsg_compat_nxthdr(struct msghdr *ms
- 		struct compat_cmsghdr __user *cmsg, int cmsg_len)
- {
- 	char __user *ptr = (char __user *)cmsg + CMSG_COMPAT_ALIGN(cmsg_len);
--	if ((unsigned long)(ptr + 1 - (char __user *)msg->msg_control) >
-+	if ((unsigned long)(ptr + 1 - (char __user *)msg->msg_control_user) >
- 			msg->msg_controllen)
- 		return NULL;
- 	return (struct compat_cmsghdr __user *)ptr;
-@@ -211,6 +211,7 @@ int cmsghdr_from_user_compat_to_kern(struct msghdr *kmsg, struct sock *sk,
- 		goto Einval;
- 
- 	/* Ok, looks like we made it.  Hook it up and return success. */
-+	kmsg->msg_control_is_user = false;
- 	kmsg->msg_control = kcmsg_base;
- 	kmsg->msg_controllen = kcmlen;
- 	return 0;
-@@ -225,7 +226,7 @@ int cmsghdr_from_user_compat_to_kern(struct msghdr *kmsg, struct sock *sk,
- 
- int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *data)
- {
--	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control;
-+	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control_user;
- 	struct compat_cmsghdr cmhdr;
- 	struct old_timeval32 ctv;
- 	struct old_timespec32 cts[3];
-@@ -274,7 +275,7 @@ int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *dat
- 	cmlen = CMSG_COMPAT_SPACE(len);
- 	if (kmsg->msg_controllen < cmlen)
- 		cmlen = kmsg->msg_controllen;
--	kmsg->msg_control += cmlen;
-+	kmsg->msg_control_user += cmlen;
- 	kmsg->msg_controllen -= cmlen;
- 	return 0;
- }
-@@ -289,7 +290,7 @@ static int scm_max_fds_compat(struct msghdr *msg)
- void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
- {
- 	struct compat_cmsghdr __user *cm =
--		(struct compat_cmsghdr __user *)msg->msg_control;
-+		(struct compat_cmsghdr __user *)msg->msg_control_user;
- 	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
- 	int fdmax = min_t(int, scm_max_fds_compat(msg), scm->fp->count);
- 	int __user *cmsg_data = CMSG_COMPAT_DATA(cm);
-@@ -313,7 +314,7 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
- 			cmlen = CMSG_COMPAT_SPACE(i * sizeof(int));
- 			if (msg->msg_controllen < cmlen)
- 				cmlen = msg->msg_controllen;
--			msg->msg_control += cmlen;
-+			msg->msg_control_user += cmlen;
- 			msg->msg_controllen -= cmlen;
- 		}
- 	}
-diff --git a/net/core/scm.c b/net/core/scm.c
-index acb7d776fa6e..3cd7dd377e53 100644
---- a/net/core/scm.c
-+++ b/net/core/scm.c
-@@ -250,7 +250,10 @@ int put_cmsg(struct msghdr * msg, int level, int type, int len, void *data)
- 	}
- 
- 	cmlen = min(CMSG_SPACE(len), msg->msg_controllen);
--	msg->msg_control += cmlen;
-+	if (msg->msg_control_is_user)
-+		msg->msg_control_user += cmlen;
-+	else
-+		msg->msg_control += cmlen;
- 	msg->msg_controllen -= cmlen;
- 	return 0;
- 
-@@ -299,7 +302,7 @@ static int scm_max_fds(struct msghdr *msg)
- void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
- {
- 	struct cmsghdr __user *cm =
--		(__force struct cmsghdr __user *)msg->msg_control;
-+		(__force struct cmsghdr __user *)msg->msg_control_user;
- 	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
- 	int fdmax = min_t(int, scm_max_fds(msg), scm->fp->count);
- 	int __user *cmsg_data = CMSG_USER_DATA(cm);
-@@ -332,7 +335,7 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
- 			cmlen = CMSG_SPACE(i * sizeof(int));
- 			if (msg->msg_controllen < cmlen)
- 				cmlen = msg->msg_controllen;
--			msg->msg_control += cmlen;
-+			msg->msg_control_user += cmlen;
- 			msg->msg_controllen -= cmlen;
- 		}
- 	}
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 288693981b00..6fa7a3fa9abd 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2164,7 +2164,7 @@ static void tcp_zc_finalize_rx_tstamp(struct sock *sk,
- 	struct msghdr cmsg_dummy;
- 
- 	msg_control_addr = (unsigned long)zc->msg_control;
--	cmsg_dummy.msg_control = (void *)msg_control_addr;
-+	cmsg_dummy.msg_control_user = (void __user *)msg_control_addr;
- 	cmsg_dummy.msg_controllen =
- 		(__kernel_size_t)zc->msg_controllen;
- 	cmsg_dummy.msg_flags = in_compat_syscall()
-@@ -2175,7 +2175,7 @@ static void tcp_zc_finalize_rx_tstamp(struct sock *sk,
- 	    zc->msg_controllen == cmsg_dummy.msg_controllen) {
- 		tcp_recv_timestamp(&cmsg_dummy, sk, tss);
- 		zc->msg_control = (__u64)
--			((uintptr_t)cmsg_dummy.msg_control);
-+			((uintptr_t)cmsg_dummy.msg_control_user);
- 		zc->msg_controllen =
- 			(__u64)cmsg_dummy.msg_controllen;
- 		zc->msg_flags = (__u32)cmsg_dummy.msg_flags;
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 2917dd8d198c..ae818ff46224 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -716,6 +716,7 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 			goto done;
- 
- 		msg.msg_controllen = optlen;
-+		msg.msg_control_is_user = false;
- 		msg.msg_control = (void *)(opt+1);
- 		ipc6.opt = opt;
- 
--- 
-2.38.1
-
+> 
+> 
+> 
+> Thanks
+> Zhijian
+> 
+> > 
+> > Thanks,
+> > Guoqing
