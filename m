@@ -2,195 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F98D6DE3D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C506DE3D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjDKS0U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 14:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S229783AbjDKS0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjDKS0P (ORCPT
+        with ESMTP id S229598AbjDKS0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:26:15 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40FA59DA;
-        Tue, 11 Apr 2023 11:26:13 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id sh8so22639311ejc.10;
-        Tue, 11 Apr 2023 11:26:13 -0700 (PDT)
+        Tue, 11 Apr 2023 14:26:08 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527FC49E1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:26:06 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-2f4130b898cso34154f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681237565;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6V2fpjYPL3sTmtLv/4ao+yq+fKEhSjDDl7REJsXZ3TQ=;
+        b=d/zOnJVcqw74lXkfDZZyDOVgxROdHfNZVnimMK9k8hdpWl8ptHninUwzQqSnylc6dk
+         AU95xm0qZ6TRmNZQU99Z6CrtzJgV9caG2BvHZ6TRGN1s+zeYiCvssaQ4OA7xsnluWqZn
+         73hAIpcEjxwsKFiU3uqOeohoLEUmcBu3NCKFc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237572;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gilSqaLH75Kwn14U7AXuNMAb4A5ZtykHNo56iDEJFIA=;
-        b=EFAvvZz413DuUrhdtwBKgtr0ZAHs262Pcgoq2DYWAhBUgeTAw28COZQqcNjA+7mcIW
-         V/ne1FrLTsHHkUSbnlOmiUBaeug6fJu41AqvQUfujpbrnrDRcAqrtKA42sVgk2nPVAW+
-         JmdEhxv3v7CfflIib246fQSjvRC/ad+WD9xaLPyK7sDn6o2UavD3+xi0Un2Qt51f559A
-         reACMtj/krELGR2Ldhjdfy6Jh2qhvig087XEI1OE9y0MKWRgTtO9ifd34AxVGaxk7cwY
-         B+T1Wx6riFzKmyeY4vL1w5Yy+yZI4ORWiJ0n1ZM+G8E/MTnwy4DDbC/V6hUUHsC3b9kR
-         Fncg==
-X-Gm-Message-State: AAQBX9dMq9MD0SmmCTuixh/EIbSQGEZfSh/Ri7qSKvhISysZIw/hiEeJ
-        1gWHzqf5XqKQGB9TzeQ50P/SDGy/qZJCwqHQ67A=
-X-Google-Smtp-Source: AKy350YPEGwlG7daNVXhqJ7zE2BNiigplLpGV1d3lMesj/7tDeyYfGr4+pA14AYOz8D1FWVo67pP1KES3pCacHC8Uhw=
-X-Received: by 2002:a17:907:6287:b0:93e:c1ab:ae67 with SMTP id
- nd7-20020a170907628700b0093ec1abae67mr6094508ejc.2.1681237572089; Tue, 11 Apr
- 2023 11:26:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681237565;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6V2fpjYPL3sTmtLv/4ao+yq+fKEhSjDDl7REJsXZ3TQ=;
+        b=cAMnQUkEarTn2JBmROEwvYP2vA5puMl1ujn23cwfEpmzPevfEM/adkl4n0toFcCJf5
+         gw6CUlCNErwL6FiPnMqW77DFMoH3UtdUTF8FoDhHHxDRO2XSX6Da2jabicJKxu/U2Mn+
+         UQ3y+pIYknkHX9KS58LaPljmNHkrz65ykdtlKGttF32u/fYZbYyGvxrMhnxY2f8UKRFx
+         oJQOlYz3CKOIUe7kYMccq23n9+dj9s+504dZ/cTO8b64yuO2cTMLPS/Wihb49ieI4qbc
+         yEND1d4WWaLKoF8lpa5cBBoOtayY+Af69CDjS05p4bQYn7xpEVfbWNVchNJYwuzpK+OO
+         htFQ==
+X-Gm-Message-State: AAQBX9ct6sIPYfqMKbChZrEqTGPB7B7pfKnN5vYak327cvbVAByOH0q/
+        wFcUUW3HvpG1BVyvjkkV6exeLA==
+X-Google-Smtp-Source: AKy350ZLN7z7OO5hsuZ3LMeZ1jZvhbwhr3vlegYw8TcKWLO3U/rRdkG0GmcZU7l+bRPFupzU7WNqNg==
+X-Received: by 2002:a5d:644c:0:b0:2ef:9699:f906 with SMTP id d12-20020a5d644c000000b002ef9699f906mr39023wrw.7.1681237564706;
+        Tue, 11 Apr 2023 11:26:04 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b002ef2e148d59sm14493882wrs.16.2023.04.11.11.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 11:26:04 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 20:26:02 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>
+Subject: Re: [Freedreno] [PATCH v2 0/2] drm: fdinfo memory stats
+Message-ID: <ZDWmOsFL38ox+F5g@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>
+References: <20230410210608.1873968-1-robdclark@gmail.com>
+ <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+ <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local>
+ <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+ <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-7-daniel.lezcano@linaro.org>
-In-Reply-To: <20230410205305.1649678-7-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:26:01 +0200
-Message-ID: <CAJZ5v0hqqPQ0xQqt3KgyQ5b-xTRjPicgkKgyo=+p7jgB9BuZaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] thermal/drivers/acpi: Make cross dev link optional
- by configuration
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The ACPI thermal driver creates a link in the thermal zone device
-> sysfs directory pointing to the device sysfs directory. At the same
-> time, it creates a back pointer link from the device to the thermal
-> zone device sysfs directory.
->
-> From a generic perspective, having a device pointer in the sysfs
-> thermal zone directory may make sense. But the opposite is not true as
-> the same driver can be related to multiple thermal zones.
->
-> The usage of these information is very specific to ACPI and it is
-> questionable if they are really needed.
->
-> Let's make the code optional and disable it by default.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/acpi/thermal.c | 62 ++++++++++++++++++++++++++++--------------
->  1 file changed, 42 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index 5763db4528b8..70f1d28810f2 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -787,9 +787,44 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
->         .critical = acpi_thermal_zone_device_critical,
->  };
->
-> +#ifdef CONFIG_THERMAL_SYSFS_OBSOLETE_SINGULARITY
+On Tue, Apr 11, 2023 at 08:35:48PM +0300, Dmitry Baryshkov wrote:
+> On Tue, 11 Apr 2023 at 20:13, Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > On Tue, Apr 11, 2023 at 9:53 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > >
+> > > On Tue, Apr 11, 2023 at 09:47:32AM -0700, Rob Clark wrote:
+> > > > On Mon, Apr 10, 2023 at 2:06 PM Rob Clark <robdclark@gmail.com> wrote:
+> > > > >
+> > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > >
+> > > > > Similar motivation to other similar recent attempt[1].  But with an
+> > > > > attempt to have some shared code for this.  As well as documentation.
+> > > > >
+> > > > > It is probably a bit UMA-centric, I guess devices with VRAM might want
+> > > > > some placement stats as well.  But this seems like a reasonable start.
+> > > > >
+> > > > > Basic gputop support: https://patchwork.freedesktop.org/series/116236/
+> > > > > And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+> > > >
+> > > > On a related topic, I'm wondering if it would make sense to report
+> > > > some more global things (temp, freq, etc) via fdinfo?  Some of this,
+> > > > tools like nvtop could get by trawling sysfs or other driver specific
+> > > > ways.  But maybe it makes sense to have these sort of things reported
+> > > > in a standardized way (even though they aren't really per-drm_file)
+> > >
+> > > I think that's a bit much layering violation, we'd essentially have to
+> > > reinvent the hwmon sysfs uapi in fdinfo. Not really a business I want to
+> > > be in :-)
+> >
+> > I guess this is true for temp (where there are thermal zones with
+> > potentially multiple temp sensors.. but I'm still digging my way thru
+> > the thermal_cooling_device stuff)
+> 
+> It is slightly ugly. All thermal zones and cooling devices are virtual
+> devices (so, even no connection to the particular tsens device). One
+> can either enumerate them by checking
+> /sys/class/thermal/thermal_zoneN/type or enumerate them through
+> /sys/class/hwmon. For cooling devices again the only enumeration is
+> through /sys/class/thermal/cooling_deviceN/type.
+> 
+> Probably it should be possible to push cooling devices and thermal
+> zones under corresponding providers. However I do not know if there is
+> a good way to correlate cooling device (ideally a part of GPU) to the
+> thermal_zone (which in our case is provided by tsens / temp_alarm
+> rather than GPU itself).
 
-It is OK to move the code to the separate functions below, but it is
-not OK to make it depend on the Kconfig option above.
+There's not even sysfs links to connect the pieces in both ways?
 
-The extra sysfs things were added in different drivers for different
-reasons.  Making them all depend on one Kconfig option is just wrong.
+> > But what about freq?  I think, esp for cases where some "fw thing" is
+> > controlling the freq we end up needing to use gpu counters to measure
+> > the freq.
+> 
+> For the freq it is slightly easier: /sys/class/devfreq/*, devices are
+> registered under proper parent (IOW, GPU). So one can read
+> /sys/class/devfreq/3d00000.gpu/cur_freq or
+> /sys/bus/platform/devices/3d00000.gpu/devfreq/3d00000.gpu/cur_freq.
+> 
+> However because of the components usage, there is no link from
+> /sys/class/drm/card0
+> (/sys/devices/platform/soc@0/ae00000.display-subsystem/ae01000.display-controller/drm/card0)
+> to /sys/devices/platform/soc@0/3d00000.gpu, the GPU unit.
 
-> +static int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
-> +{
-> +       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-> +       int ret;
-> +
-> +       ret = sysfs_create_link(&tz->device->dev.kobj,
-> +                               &tzdev->kobj, "thermal_zone");
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = sysfs_create_link(&tzdev->kobj,
-> +                                  &tz->device->dev.kobj, "device");
-> +       if (ret)
-> +               sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-> +
-> +       return ret;
-> +}
-> +
-> +static void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
-> +{
-> +       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-> +
-> +       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-> +       sysfs_remove_link(&tzdev->kobj, "device");
-> +}
-> +#else
-> +static inline int acpi_thermal_zone_sysfs_add(struct acpi_thermal *tz)
-> +{
-> +       return 0;
-> +}
-> +static inline void acpi_thermal_zone_sysfs_remove(struct acpi_thermal *tz)
-> +{
-> +}
-> +#endif
-> +
->  static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
->  {
-> -       struct device *tzdev;
->         int trips = 0;
->         int result;
->         acpi_status status;
-> @@ -821,23 +856,15 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
->         if (IS_ERR(tz->thermal_zone))
->                 return -ENODEV;
->
-> -       tzdev = thermal_zone_device(tz->thermal_zone);
-> -
-> -       result = sysfs_create_link(&tz->device->dev.kobj,
-> -                                  &tzdev->kobj, "thermal_zone");
-> +       result = acpi_thermal_zone_sysfs_add(tz);
->         if (result)
->                 goto unregister_tzd;
-> -
-> -       result = sysfs_create_link(&tzdev->kobj,
-> -                                  &tz->device->dev.kobj, "device");
-> -       if (result)
-> -               goto remove_tz_link;
-> -
-> +
->         status =  acpi_bus_attach_private_data(tz->device->handle,
->                                                tz->thermal_zone);
->         if (ACPI_FAILURE(status)) {
->                 result = -ENODEV;
-> -               goto remove_dev_link;
-> +               goto remove_links;
->         }
->
->         result = thermal_zone_device_enable(tz->thermal_zone);
-> @@ -851,10 +878,8 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
->
->  acpi_bus_detach:
->         acpi_bus_detach_private_data(tz->device->handle);
-> -remove_dev_link:
-> -       sysfs_remove_link(&tzdev->kobj, "device");
-> -remove_tz_link:
-> -       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-> +remove_links:
-> +       acpi_thermal_zone_sysfs_remove(tz);
->  unregister_tzd:
->         thermal_zone_device_unregister(tz->thermal_zone);
->
-> @@ -863,10 +888,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
->
->  static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
->  {
-> -       struct device *tzdev = thermal_zone_device(tz->thermal_zone);
-> -
-> -       sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
-> -       sysfs_remove_link(&tzdev->kobj, "device");
-> +       acpi_thermal_zone_sysfs_remove(tz);
->         thermal_zone_device_unregister(tz->thermal_zone);
->         tz->thermal_zone = NULL;
->         acpi_bus_detach_private_data(tz->device->handle);
-> --
-> 2.34.1
->
+Hm ... do we need to make component more visible in sysfs, with _looooots_
+of links? Atm it's just not even there.
+
+> Getting all these items together in a platform-independent way would
+> be definitely an important but complex topic.
+
+Yeah this sounds like some work. But also sounds like it's all generic
+issues (thermal zones above and component here) that really should be
+fixed at that level?
+
+Cheers, Daniel
+
+
+> > > What might be needed is better glue to go from the fd or fdinfo to the
+> > > right hw device and then crawl around the hwmon in sysfs automatically. I
+> > > would not be surprised at all if we really suck on this, probably more
+> > > likely on SoC than pci gpus where at least everything should be under the
+> > > main pci sysfs device.
+> >
+> > yeah, I *think* userspace would have to look at /proc/device-tree to
+> > find the cooling device(s) associated with the gpu.. at least I don't
+> > see a straightforward way to figure it out just for sysfs
+> >
+> > BR,
+> > -R
+> >
+> > > -Daniel
+> > >
+> > > >
+> > > > BR,
+> > > > -R
+> > > >
+> > > >
+> > > > > [1] https://patchwork.freedesktop.org/series/112397/
+> > > > >
+> > > > > Rob Clark (2):
+> > > > >   drm: Add fdinfo memory stats
+> > > > >   drm/msm: Add memory stats to fdinfo
+> > > > >
+> > > > >  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+> > > > >  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++++++
+> > > > >  drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+> > > > >  drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+> > > > >  include/drm/drm_file.h                | 10 ++++
+> > > > >  5 files changed, 134 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > --
+> > > > > 2.39.2
+> > > > >
+> > >
+> > > --
+> > > Daniel Vetter
+> > > Software Engineer, Intel Corporation
+> > > http://blog.ffwll.ch
+> 
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
