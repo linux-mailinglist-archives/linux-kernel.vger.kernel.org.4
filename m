@@ -2,80 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1E86DD095
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B841B6DD097
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjDKD7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S229938AbjDKD7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDKD7B (ORCPT
+        with ESMTP id S229975AbjDKD7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:59:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1635998;
-        Mon, 10 Apr 2023 20:59:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 10 Apr 2023 23:59:16 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F3F26B8;
+        Mon, 10 Apr 2023 20:59:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A77F761A70;
-        Tue, 11 Apr 2023 03:59:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03B7C433EF;
-        Tue, 11 Apr 2023 03:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1681185540;
-        bh=ysMBOb2Dvl1FfFehaRIlhqrwfBY5Os8ctxq9hZuc2vQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BInDaczbywhfbiGGix6YCGkT73PVOcZhQHfpOAuaEd4J0IGYaohvGY+JHeNIhas5I
-         EdXKmeXJGS6vHjP6me/MoSRy2uJ5NqkIEjGJxNVBqNo6osnjbWhCAs+khJC5Tdd8/A
-         p77yVj5wmTQiE/eN1GH/1zeKzbXQpCvcsvh0SNh8=
-Date:   Mon, 10 Apr 2023 20:58:59 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Liam.Howlett@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org,
-        David Binderman <dcb314@hotmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] maple_tree: Use correct variable type in sizeof
-Message-Id: <20230410205859.8dca31a8c0cd54484c60c07c@linux-foundation.org>
-In-Reply-To: <f132db6d-5b5f-cf18-3e4e-2f3053c93033@bytedance.com>
-References: <20230411023513.15227-1-zhangpeng.00@bytedance.com>
-        <20230410202935.d1abf62f386eefb1efa36ce4@linux-foundation.org>
-        <ZDTXE8jKMz802jqR@casper.infradead.org>
-        <f132db6d-5b5f-cf18-3e4e-2f3053c93033@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwXCL52fyz4xGq;
+        Tue, 11 Apr 2023 13:59:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1681185551;
+        bh=PSnq4tRQyq3JySukDjQbFoPm5z5kwIh+DBQ57ICUdtg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nPcZq8NBvd4BfeoqNtwk4KK8wEqzBEsJNfxjTcixOIzvivA5EmOP/0ujAdqHuz6cC
+         QZAaTd/MHXZ/+c+aOgqylWtvlNvxwl90uY0kpY/3nlA+8Ha2Hs/BuUZ3KkJcdUSJF9
+         kGPhnblfzQRyPNCfmR0D7ZDPXsjzn6ou0xoDJF4CjDeZcPCHnt6ZB4TRRHIdnFCTDB
+         6QBfE7fsE/S1pfuPLbQiK2h/3dfBE2+BQyh9WIj5rJpKSJ6rdvvf/uA1+pNzo8useX
+         zFTJoNnUYIr7nWflpwVOlZ5ncM/D2ZiRCfpXFqO8p21wXXpucieOzZQLl3eFcJ1T0X
+         knKwZ8wQ6Q/LQ==
+Date:   Tue, 11 Apr 2023 13:59:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        Vinay Belgaumkar <vinay.belgaumkar@intel.com>
+Subject: linux-next: manual merge of the tip tree with the drm tree
+Message-ID: <20230411135909.140d2560@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/.NNZGSTud6NfEMVRK7cv_aG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 11:49:56 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
+--Sig_/.NNZGSTud6NfEMVRK7cv_aG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> 在 2023/4/11 11:42, Matthew Wilcox 写道:
-> > On Mon, Apr 10, 2023 at 08:29:35PM -0700, Andrew Morton wrote:
-> >> On Tue, 11 Apr 2023 10:35:13 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
-> >>
-> >>> The type of variable pointed to by pivs is unsigned long, but the type
-> >>> used in sizeof is a pointer type. Change it to unsigned long.
-> >> Thanks, but there's nothing in this changelog which explains why a
-> >> -stable backport is being proposed.  When fixing a bug, please always
-> >> describe the user-visible effects of that bug.
-> > There is no user-visible effect of this bug as the assembly code
-> > generated will be identical.
-> 
-> Therefore, if this has always been the case, cc stable
-> is also unnecessary.
+Hi all,
 
-I removed the cc:stable, added
+Today's linux-next merge of the tip tree got a conflict in:
 
-	This change has no runtime effect, as sizeof(ul) == sizeof(ul *).
+  drivers/gpu/drm/i915/gt/intel_rc6.c
 
-and staged the patch for next merge window, thanks.
+between commit:
+
+  3735040978a4 ("drm/i915/mtl: Synchronize i915/BIOS on C6 enabling")
+
+from the drm tree and commit:
+
+  f7faedffa92c ("drm/i915/gt: use __xchg instead of internal helper")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gt/intel_rc6.c
+index 8f3cd68d14f8,3d6109f1d05c..000000000000
+--- a/drivers/gpu/drm/i915/gt/intel_rc6.c
++++ b/drivers/gpu/drm/i915/gt/intel_rc6.c
+@@@ -733,11 -710,7 +733,11 @@@ void intel_rc6_fini(struct intel_rc6 *r
+ =20
+  	intel_rc6_disable(rc6);
+ =20
+ +	/* We want the BIOS C6 state preserved across loads for MTL */
+ +	if (IS_METEORLAKE(rc6_to_i915(rc6)) && rc6->bios_state_captured)
+ +		set(uncore, GEN6_RC_STATE, rc6->bios_rc_state);
+ +
+- 	pctx =3D fetch_and_zero(&rc6->pctx);
++ 	pctx =3D __xchg(&rc6->pctx, 0);
+  	if (pctx)
+  		i915_gem_object_put(pctx);
+ =20
+
+--Sig_/.NNZGSTud6NfEMVRK7cv_aG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ02w0ACgkQAVBC80lX
+0Gzz6Af+Kqi6ltNLwjSVgFO/jvvYFbgsdgms1KACMQ+OHv1UUAEfkRCvWVpCs/kr
+qYJErWGOYMLEo0aV/ij9wemmh6ANm80tFbk1dFZATl8XAvqnjKYUIDcprBFE5How
+ic+rIc5CEhZj4xRcnlLMt68YOp/8NMI4s7kBzqCUv0B15oE2QqtxKvc0bcWXu1IK
+norQvy4Zg9EnEQ+YNkLnio6oYUzmRYX6GGgFWuuJdEJLP3or5AiYKXRC1BpNmzHp
+jklfoDET9DyfdAq7Sig1+MhMVkQ4gLpTQ6h0VpoUbChtqRq4hL9qoC+gwdkpbSTo
+EaTNu8peSj5SOE1pqJM5YZ5VfTDWig==
+=Agzv
+-----END PGP SIGNATURE-----
+
+--Sig_/.NNZGSTud6NfEMVRK7cv_aG--
