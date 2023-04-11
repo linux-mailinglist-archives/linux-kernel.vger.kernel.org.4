@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBB26DE510
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0CE6DE514
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjDKTnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S229682AbjDKTny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKTnQ (ORCPT
+        with ESMTP id S229598AbjDKTnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:43:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B711BC0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681242154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vDGG6I72DGNLSlLBi7Xz84qe/ZKZYj60eVqrVPgCV+c=;
-        b=WSkE7x7MXJlrnIIrOmBmnuE6Qh8Qi4Pdm8AVAyVpL3eAVyNBQdYcTwWkfrH3wCwJY11Ndi
-        u9h9sTElJzqYVhAT7Ywra+MAyBUfGUSuT8+uIx5MU1sNRw9Kcoa34KXfiUau6/zgiiK8IZ
-        19jfLfX89V+LO9lTOABt5e45d//qmpA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-379-MYvl6sYANAapU8StQ7OU9A-1; Tue, 11 Apr 2023 15:42:33 -0400
-X-MC-Unique: MYvl6sYANAapU8StQ7OU9A-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5e8ebec3e31so4263906d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:42:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681242153; x=1683834153;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vDGG6I72DGNLSlLBi7Xz84qe/ZKZYj60eVqrVPgCV+c=;
-        b=tNaxmz1gZs8AWgoquIcatZQzklbXit1Net1j1EHrgJp3YO8VyBEjozf/gixTEaIhju
-         xHZb6LTkDKerke3lHh1jcfMmCyitf7fbIf3PHsYsswyyL/jjqG0Ug3uE0msqrj+ZeCCW
-         xnXjNSybp55xrUIbkDTAtvppL832Hp4ag9lpvWGqmiqnuAHMUEz1dbWAP0n73KNX7hGx
-         FYRorP5ocCSWUAwH0YAQ3MvfyNB+qDKRXmssI7X9tGUG777XQ/L5gypqt8VchCKc0d2Y
-         gXCjWf0/MssJNQ9B6U3Ecd/DtWNfuHfggVGdsiKpEMSLX6ORhZyjvtJkaFjczlUo9Loe
-         hMzw==
-X-Gm-Message-State: AAQBX9cPl6geEGWoEKX30L6INrxeitbbP1EAZZrYpZ+mQPGCCu4JHAL7
-        Folf9+Ikdyw/2NHZOrJaMJpByT1TCqE2Tbr4HrjLepu/7xGOaP2Fc6pPw53RWkvH0RWswomjuU2
-        SsDdSVlQO7qo2O99ya+TB1Jq9
-X-Received: by 2002:a05:6214:3016:b0:5df:55b5:b1a with SMTP id ke22-20020a056214301600b005df55b50b1amr490752qvb.4.1681242153353;
-        Tue, 11 Apr 2023 12:42:33 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b1ec2JaF/t4uHrZI54ZzDcHsbsRXV0xnsq3DieFoFTOvn6YjfJs0ypCL9RbMfJELZ9L5H4pg==
-X-Received: by 2002:a05:6214:3016:b0:5df:55b5:b1a with SMTP id ke22-20020a056214301600b005df55b50b1amr490720qvb.4.1681242153069;
-        Tue, 11 Apr 2023 12:42:33 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id q26-20020a05620a025a00b0070648cf78bdsm4143980qkn.54.2023.04.11.12.42.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 12:42:32 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 15:42:31 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH 20/29] selftests/mm: Allow allocate_area() to fail
- properly
-Message-ID: <ZDW4J5X/fnynwo5L@x1n>
-References: <20230330155707.3106228-1-peterx@redhat.com>
- <20230330160815.3107534-1-peterx@redhat.com>
- <ZDU+Rudfi2BUsMHP@linux.ibm.com>
+        Tue, 11 Apr 2023 15:43:24 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEEA1BCE;
+        Tue, 11 Apr 2023 12:43:23 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pmJtb-00082q-2B;
+        Tue, 11 Apr 2023 21:43:15 +0200
+Date:   Tue, 11 Apr 2023 20:43:10 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net-next] net: dsa: mt7530: fix support for MT7531BE
+Message-ID: <ZDW4Tr4bIGcxwDgs@makrotopia.org>
+References: <ZDSlm-0gyyDZXy_k@makrotopia.org>
+ <13aedaa6-6b7b-727e-e932-4a5139c54f39@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZDU+Rudfi2BUsMHP@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <13aedaa6-6b7b-727e-e932-4a5139c54f39@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 02:02:30PM +0300, Mike Rapoport wrote:
-> On Thu, Mar 30, 2023 at 12:08:15PM -0400, Peter Xu wrote:
-> > Mostly to detect hugetlb allocation errors and skip hugetlb tests when
-> > pages are not allocated.
+On Tue, Apr 11, 2023 at 10:30:06PM +0300, Arınç ÜNAL wrote:
+> On 11.04.2023 03:11, Daniel Golle wrote:
+> > There are two variants of the MT7531 switch IC which got different
+> > features (and pins) regarding port 5:
+> >   * MT7531AE: SGMII/1000Base-X/2500Base-X SerDes
+> >   * MT7531BE: RGMII
+> > 
+> > Moving the creation of the SerDes PCS from mt753x_setup to mt7530_probe
+> > with commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to
+> > mt7530_probe function") works fine for MT7531AE which got two instances
+> > of mtk-pcs-lynxi, however, MT7531BE requires mt7531_pll_setup to setup
+> > clocks before the single PCS on port 6 (usually used as CPU port)
+> > starts to work and hence the PCS creation failed on MT7531BE.
+> > 
+> > Fix this by introducing a pointer to mt7531_create_sgmii function in
+> > struct mt7530_priv and call it again at the end of mt753x_setup like it
+> > was before commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS
+> > creation to mt7530_probe function").
 > 
-> Wouldn't we want to skip anon and shmem tests as well for consistency?
+> If I understand correctly, this patch does two things.
+> 
+> Run mt7531_create_sgmii() from mt753x_setup(), after mt7531_setup() and
+> mt7531_setup_common() is run so that PCS on MT7531BE works.
 
-Much less possibile (and useful) than hugetlb for sure, but it's indeed
-more consistent.  Will do.
+> 
+> Run the PCS creation code inside the loop only once if
+> mt7531_dual_sgmii_supported() is false so it doesn't set the nonexistent
+> port 5 SGMII on MT7531BE.
 
--- 
-Peter Xu
+Yes, both is correct.
 
+> 
+> Regarding the first part:
+> I was actually in the middle of moving the code until after
+> mt7530_pll_setup() and mt7531_pll_setup() on mt7530_setup() and
+> mt7531_setup() to mt7530_probe(). To me it makes more sense to run them on
+> mt7530_probe() as there's a good amount of duplicate code on mt7530_setup()
+> and mt7531_setup().
+
+I thought about doing that as well, however, note that you will have to
+move all the reset and regulator setup procedure to mt7530_probe() as
+well then, as PLL setup currently happens after that, and that's
+probably for a reason.
+
+As the reset and regulator setup works differently on MT7530 and
+MT7531, and depending on whether it's a standalone IC package or MCM, I
+believe changes unifying this will have to be tested on a lot of
+boards...
+
+> 
+> This will resolve the problem here, and make my future work regarding the
+> PHY muxing feature on the MT7530 switch possible to do.
+> 
+> Regarding the second part:
+> I'll take your changes to my current RFC patch series while addressing
+> Jesse's suggestion if this is fine by you.
+
+Yes, I'd appreciate that and I'm ready to test and review once you post
+your updated series.
