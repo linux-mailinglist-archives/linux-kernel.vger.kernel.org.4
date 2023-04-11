@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DCB6DE4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197ED6DE4E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjDKT0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S229564AbjDKTXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjDKT0D (ORCPT
+        with ESMTP id S229503AbjDKTXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:26:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963215590
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681241028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qhq9dpmn2VnCwqB0zz5VnZkW7xe5Ahb4i2F79uPfYtI=;
-        b=AIquNZrOvUeKxJdSXBfmwIByQXR2EVwqbAyfRgXxYCjxuTU5/4v4KlQvPcah/r0bfjUBLe
-        Qz0fm5JbggXJu44o78/PHMTkr+ewMAOqQ4fMIyUZ/NG2LFy0gQTArMG4bKnrV9QqeTwiVW
-        av8Aj1xJmBO7VnqMvKjClKhqw6EybHE=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-2-DxK9xDEeMFWrPi16RtqXpw-1; Tue, 11 Apr 2023 15:22:05 -0400
-X-MC-Unique: DxK9xDEeMFWrPi16RtqXpw-1
-Received: by mail-yb1-f199.google.com with SMTP id c67-20020a254e46000000b00b88f1fd158fso25289097ybb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:22:05 -0700 (PDT)
+        Tue, 11 Apr 2023 15:23:32 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7074C65AB;
+        Tue, 11 Apr 2023 12:22:56 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id y69so16261879ybe.2;
+        Tue, 11 Apr 2023 12:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681240971; x=1683832971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ukcprm4MtRUZ8SSk6iEMFicwVrkbDf1R8WwFeEURnh8=;
+        b=hipGDRtfsSZLaiJPNi+pA9Ar1HO6B8FDUNQ66RZ/D0MJwP4R6DeUdH80mip6LiPXUM
+         e7F1ltJL7D1bWOpQs1l1LI/dWu3+O0tyiFlB+iQpfx5QSUS54WRuuTXwL2XbE9EG3I6C
+         O8hN6r2gVJjMaMcOQW832veY1oLMVF3O9FlDfu+SEZ539Q5oIeYyoMs3C9EWjD6lem86
+         h8pqKA+I4oFYzFBqhNmGUxMiQPffphr3tiN+/eQmKvswrpoouohiFHX5qHgkclEIdrH7
+         iSybXat1kWa5+bc0b4PmqZ9hiLDipD1mCutsRtBK/nagWRf/HDSwbl8Bny5xLZABTBFn
+         0wlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681240925;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qhq9dpmn2VnCwqB0zz5VnZkW7xe5Ahb4i2F79uPfYtI=;
-        b=BFJC20XXFWSG6CtSqSz9kcgKDEqTDLT2W3/h5XyeG4omE7QpgQT4iLmqSPQj2CwqSx
-         f5PMkHywLpvRlw7dpliXwn0FQs+QnbU6o3fsi5oArs6ULZkwrSo5a5SGk1xcRPB4D4VC
-         JOTLxFR1QfgdkeYJyT7Ebpzd3bXUkmKKPa750d51xddmfk3GdkCpcA32MItWLkZYNCZq
-         3FFWECylKKb6AbN5qZ3oVkTJqZ68hb06DSH7AjjXWr1Wl25zkDflJzivAAwmecTZHGfV
-         6vfJcyFOcSXN6WU2ukNjr0js1qTGPzTeQqqJWPj50GVYizqpP795kGeVzY6/36pwFfqr
-         CV9A==
-X-Gm-Message-State: AAQBX9evv5Gd2uHsWMx6FjUqJFx/5ADkc05t4iy9J3MDlNkeOk3G/WzB
-        w7hYrZ3ah8PHAnrgStK1kRe1hcABtH/M0G78raCO5+q1o3JF0X+nSSWC4bgQC5cNS+n25ziayWA
-        xLGLvS6mxnUcdtXzXgZ/lD+A5
-X-Received: by 2002:a81:4fc1:0:b0:54e:a6e3:4f28 with SMTP id d184-20020a814fc1000000b0054ea6e34f28mr11197578ywb.20.1681240924943;
-        Tue, 11 Apr 2023 12:22:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bAvGxiyboI6lM0HhwWpo/+tevQ7im6CkFWSvHGl5+7rsYinPvTzZuQW64FTQLBwLf4ZWk5xg==
-X-Received: by 2002:a81:4fc1:0:b0:54e:a6e3:4f28 with SMTP id d184-20020a814fc1000000b0054ea6e34f28mr11197566ywb.20.1681240924699;
-        Tue, 11 Apr 2023 12:22:04 -0700 (PDT)
-Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id f10-20020a81414a000000b00545a08184desm3687792ywk.110.2023.04.11.12.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 12:22:03 -0700 (PDT)
-From:   Brian Masney <bmasney@redhat.com>
-To:     corbet@lwn.net, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, linux-doc@vger.kernel.org
-Subject: [PATCH] docs: clk: add documentation to log which clocks have been disabled
-Date:   Tue, 11 Apr 2023 15:21:53 -0400
-Message-Id: <20230411192153.289688-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1681240971; x=1683832971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ukcprm4MtRUZ8SSk6iEMFicwVrkbDf1R8WwFeEURnh8=;
+        b=KzUqN0FSJs3LO5ABEjcYpZ+8+DgGdQ61BEa2QKBEgA6SPivp0b/se0mcxpdd4dfIIf
+         lZqx+bk567erkFTiqBqHLB1FUgEw58r8WniAmdarRqCBm3VbUNYYFpC2Uq7u7cMZIC0U
+         O3NGer56huebXeze5SsZZ3OiEp/66AUORf8fHDNHovQqc2mNSLK3EpSQQaZbVqhMNMpK
+         YStrYuvInb0FMeQI/hMm7o9Ib+8s7OYpIc2SKv76L/3F9xrxqYA7hOWJDRPVQDHRmmF3
+         G6JnltsI1vO88HBtH5P3M73+IOJ70ooA7e9Rsgv5jufZZ5+NP8S7MFxEqW8rO27bBP8w
+         QyxA==
+X-Gm-Message-State: AAQBX9ci2XgS81OGfWD2xEBhQReG+BO+bFzvloN005STz7sg5krlFrIY
+        jH7LNKaRNU5ZVmnSfyopzJ5assHNXPrdmrJA94M=
+X-Google-Smtp-Source: AKy350a8Fb4jXbSRnyKjTHLpgFd/b2sdAHA+d+9PTx67HoSAK/6KfCZs3WVdagU0OtBgB7lNyhTAq8Bzx7Bb8pLuxQg=
+X-Received: by 2002:a25:df88:0:b0:b8f:3647:d757 with SMTP id
+ w130-20020a25df88000000b00b8f3647d757mr158847ybg.11.1681240971586; Tue, 11
+ Apr 2023 12:22:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
+ <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org> <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
+ <9f896097-8410-4d09-b614-6e792b2160f4@selasky.org> <CANiq72mv2uYe1x6cy4zUq8XHhAZcYYpt6hVXMG4yQZeqw1kY7Q@mail.gmail.com>
+ <1d50d25c-e64b-01f4-029f-8b40b46848fd@selasky.org> <CANiq72mbM+WBcvj1TwU2u9kLz=EucLhLR-a5nzZEDa7VJ0s2_A@mail.gmail.com>
+ <ca17f815-5779-d37c-e3f8-2a6c2983fe45@selasky.org>
+In-Reply-To: <ca17f815-5779-d37c-e3f8-2a6c2983fe45@selasky.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 21:22:40 +0200
+Message-ID: <CANiq72mn1nD38DGHpFQzerC=_ifR39Vpbb_PzLv5Q75SdzTxQg@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing clk documentation has a section that talks about the
-clk_ignore_unused kernel parameter. Add additional documentation that
-describes how to log which clocks the kernel disables on bootup. This
-will log messages like the following to the console on bootup:
+On Tue, Apr 11, 2023 at 5:33=E2=80=AFPM Hans Petter Selasky <hps@selasky.or=
+g> wrote:
+>
+> Similarly rustc may depend on an incorrectly specified ioctl()
+> definition, also via other libraries and static linking, that just have
+> to stay incorrectly defined, because it was initially incorrectly defined=
+.
 
-    [    1.268115] clk: Disabling unused clocks
-    [    1.272167] clk_disable: gcc_usb_clkref_en
-    [    1.276389] clk_disable: gcc_usb30_sec_sleep_clk
-    [    1.281131] clk_disable: gcc_usb30_prim_sleep_clk
-    ...
+Why would a compiler depend on random ioctls? Even if it did, how is
+that related to the previous discussion? A compiler is just one more
+userspace application. Whether the kernel uses C or Rust internally
+has nothing to do with that.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
----
- Documentation/driver-api/clk.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+Also, I don't follow your logic. You said you cannot upgrade your
+toolchain (for some reason), and your argument is that the kernel
+keeps interfaces stable? Well, yes, that is the point and what allows
+you to upgrade.
 
-diff --git a/Documentation/driver-api/clk.rst b/Documentation/driver-api/clk.rst
-index 3cad45d14187..2199c0042e75 100644
---- a/Documentation/driver-api/clk.rst
-+++ b/Documentation/driver-api/clk.rst
-@@ -258,6 +258,11 @@ clocks properly but rely on them being on from the bootloader, bypassing
- the disabling means that the driver will remain functional while the issues
- are sorted out.
- 
-+You can see which clocks have been disabled by booting your kernel with these
-+parameters:
-+
-+ tp_printk trace_event=clk:clk_disable
-+
- To bypass this disabling, include "clk_ignore_unused" in the bootargs to the
- kernel.
- 
--- 
-2.39.2
+Moreover, what is special about `rustc` here? What about your C toolchain?
 
+> I'm trying to explain something difficult. And I'm OK that you neither
+> understand nor agree about my viewpoint. See my replies above.
+
+No, it is not a matter of being difficult. It is just that you have
+not shown how you would be prevented from upgrading a toolchain.
+
+Cheers,
+Miguel
