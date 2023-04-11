@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8227C6DD372
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4589A6DD379
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjDKGw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
+        id S230515AbjDKGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjDKGwn (ORCPT
+        with ESMTP id S229886AbjDKGyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:52:43 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E1340D7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:52:10 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6343fe70a2aso683158b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681195901;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KlxuVrTXd7ERz588z7U+eZpNrX8JYOeBVv8I4S7vc10=;
-        b=FToH5sNIXgA98Z2/xnoL6eiMqcGn+g4OwC5NmpIX47R/Wh24/AVqhSttBiaHjxcwi9
-         Wd/lHvrVCQNYeZjeEEiMOq4pv7l01a6iR9yVvKp3GaHe2moQP2DZuGkYizqbv5iv4jJp
-         admwOSz07PguwdAu82mL6e5HZ1Rlj4dKINciI=
+        Tue, 11 Apr 2023 02:54:04 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6E830FA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:53:47 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id n14-20020a056e02140e00b003259a56715bso5289866ilo.15
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:53:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681195901;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlxuVrTXd7ERz588z7U+eZpNrX8JYOeBVv8I4S7vc10=;
-        b=2zMpa46aawV399oJWiqwbvxLS4TQuBTsyVlTg9S2gkp0rSz7R6ZVjxvpI72mRJZ7kF
-         6e8huTpRNZ/hAHp+8q293nO5Vlp6M3yn1y3pEmwniZNDsCJ+AChNoOW8CfVgSVaOlUcC
-         DBYx5WOL7uYYJvD2OAN5XGq7w4b4kh2i5G0R3vKl3tcUJ6ltRvUuGPciNphl8fMwTSR6
-         iUgo5+foRiB+YdD3Zr5EblqR7uWFMkiUj3kQaBzxZrf1SGHMcbgs77CE0xcBq0ugxViz
-         AN4RrFFl9kHYYPnFFzZUL7dbImXHbqjIqU0ZONNDoak18vpacw8PwsM1AFuZ3ILla5Xz
-         bi+w==
-X-Gm-Message-State: AAQBX9dg38AlGTChLvobqd21LBzP5JSbzaOxkXCXC5k/NeN8Adm+YWH6
-        C4OFwk2gtyhAXTg2+EFIWTFNnQ==
-X-Google-Smtp-Source: AKy350YQEUV5pUQHBKD8Dgh+Enk+75ndcS0fIIDWKAs5lTVZqtNqneAeD13tp5iU4Z9oxI6dTOybWQ==
-X-Received: by 2002:aa7:9e88:0:b0:637:703e:533b with SMTP id p8-20020aa79e88000000b00637703e533bmr6921141pfq.4.1681195900883;
-        Mon, 10 Apr 2023 23:51:40 -0700 (PDT)
-Received: from ?IPV6:2401:fa00:8f:203:44a9:ac98:7606:2cd0? ([2401:fa00:8f:203:44a9:ac98:7606:2cd0])
-        by smtp.gmail.com with ESMTPSA id i16-20020aa78d90000000b0062e00158bf4sm8968739pfr.208.2023.04.10.23.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 23:51:40 -0700 (PDT)
-Message-ID: <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
-Date:   Tue, 11 Apr 2023 15:51:36 +0900
+        d=1e100.net; s=20210112; t=1681196026; x=1683788026;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jI0t9CKpLEy7cRn9Iv23vial1fs2NkaigNh4cR6XeE4=;
+        b=necgVZCqc+k/LAjZKSPFff6Qu4OF3s6jjoO3edhbYlt5xMRMDCqhPMZaMSZgxDwOrg
+         Um8Ahi2f9OxrBXI8DSndSkNDvItnyuKd83OXt2L6vbFTo6BsUC52OE8UZM+uV09XVQx7
+         VFJ3ENTSZ+s99XmYJcqjOVpfTuW0F5sdRKexEvrwjDKyBsO2MroVttDU4Jiseh0Oe1BV
+         b96Svwac4AhJP8zGsmLn+4WWHd/Jn+5wE/Lb2ErXwrm8Rk5rT5M83wYcBQNXjPf/b+pz
+         vAx6qe5VNaY4L6xiENGoAzgo7f4cqZ0yQH6EWIzN2Mvm3BuRp+CHAXT1N4rbQ30ScSnE
+         x5XQ==
+X-Gm-Message-State: AAQBX9egtcKsNMdvgidHsNHAQRd00YKOUi7mf1T0sSxND4oQEHh4l20+
+        Kt7POQQkXHL/SMoe4cp3fs9fLv9EK4bWUEe684QLIZo/f2tJ
+X-Google-Smtp-Source: AKy350ZLKKG6NjcZn5zksCALbm7zJZYFGl7+MNLVp2vZLVu6k/onk9MJi94z8Jn5oc8DwKBhuI3AEmI4gntQiobkXYbGKIAgLtsp
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] media: vivid: Add webcam parameter for (un)limited
- bandwidth
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20230410063356.3894767-1-mstaudt@chromium.org>
- <20230410102350.382f7d02@sal.lan>
-From:   Max Staudt <mstaudt@chromium.org>
-In-Reply-To: <20230410102350.382f7d02@sal.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a6b:a1a:0:b0:758:cc6f:32f4 with SMTP id
+ z26-20020a6b0a1a000000b00758cc6f32f4mr5115978ioi.4.1681196026262; Mon, 10 Apr
+ 2023 23:53:46 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 23:53:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f1a9d205f909f327@google.com>
+Subject: [syzbot] [fs?] possible deadlock in quotactl_fd
+From:   syzbot <syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you Mauro for having a first look!
+Hello,
 
-Questions below.
+syzbot found the following issue on:
 
+HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11798e4bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On 4/10/23 18:23, Mauro Carvalho Chehab wrote:
-> IMO, instead of a parameter that just enables/disables the bandwidth
-> limit, the best would be to have a parameter specifying the bandwidth
-> (with 0 meaning unlimited).
-> 
-> If not used, vivid would initialize it to dev->webcam_bandwidth_limit,
-> so a read operation will show the current limit.
-Up until now, the bandwidth limit is a rather arbitrary reduction of two 
-interval sizes per frame size.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-How would you prefer to define a limited bandwidth in this parameter? 
-How would it affect the simulated camera, do you have a suggestion for a 
-formula from bandwidth to frame/interval sizes offered?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com
 
->> +/* Default: limited webcam bandwidth */
->> +static bool webcam_bandwidth_limit[VIVID_MAX_DEVS] = { [0 ... (VIVID_MAX_DEVS - 1)] = true };
->> +module_param_array(webcam_bandwidth_limit, bool, NULL, 0444);
-> 
-> I would also use 0666, to allow changing this on runtime.
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0 Not tainted
+------------------------------------------------------
+syz-executor.3/11858 is trying to acquire lock:
+ffff88802a3bc0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
 
-I guess that's possible, though it would add complexity.
+but task is already holding lock:
+ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
 
-Currently we can ask for two instances, each with a different setting:
-
-   n_devs=2 webcam_bandwidth_limit=1,0
-
-This creates /dev/video0 which is limited, and /dev/video4 which is 
-unlimited.
-
-Maybe this already sufficiently covers the case you are looking for, and 
-we can keep the complexity low? A real webcam won't suddenly offer new 
-frame rates either...
+which lock already depends on the new lock.
 
 
+the existing dependency chain (in reverse order) is:
 
-Max
+-> #1 (sb_writers#4){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1477 [inline]
+       sb_start_write include/linux/fs.h:1552 [inline]
+       write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
+       ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
+       __ext4_remount fs/ext4/super.c:6543 [inline]
+       ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
+       reconfigure_super+0x40c/0xa30 fs/super.c:956
+       vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+       __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+-> #0 (&type->s_umount_key#31){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain kernel/locking/lockdep.c:3832 [inline]
+       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+       lock_acquire kernel/locking/lockdep.c:5669 [inline]
+       lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_writers#4);
+                               lock(&type->s_umount_key#31);
+                               lock(sb_writers#4);
+  lock(&type->s_umount_key#31);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.3/11858:
+ #0: ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
+
+stack backtrace:
+CPU: 0 PID: 11858 Comm: syz-executor.3 Not tainted 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain kernel/locking/lockdep.c:3832 [inline]
+ __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+ lock_acquire kernel/locking/lockdep.c:5669 [inline]
+ lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+ down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+ __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f81d2e8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f81d3b29168 EFLAGS: 00000246 ORIG_RAX: 00000000000001bb
+RAX: ffffffffffffffda RBX: 00007f81d2fabf80 RCX: 00007f81d2e8c169
+RDX: 0000000000000000 RSI: ffffffff80000300 RDI: 0000000000000003
+RBP: 00007f81d2ee7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffeeb18d7f R14: 00007f81d3b29300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
