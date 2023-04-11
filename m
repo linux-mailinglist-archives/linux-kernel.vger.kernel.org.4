@@ -2,153 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894356DDCCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1C26DDCCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjDKNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S230457AbjDKNuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjDKNuA (ORCPT
+        with ESMTP id S230504AbjDKNue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:50:00 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B0E525E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:41 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso9626569wmo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681220980;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRMC5iFofoKktGidEDO+nRAZWqOxvRlQKeJzDZZ9bBc=;
-        b=gXQ3ca40eFlGA4Hoz/INT+Ar9rGM4EfT+6AD5PotZ487coDbSqFCPFYB7c+D8uz18l
-         M0PLaBkzncs9DBCJr997F7Fw7gbyx4FhZ+P6sJfFiu3ISD73QswGhBIKZ8igcqrzwpPI
-         krKuiQ1wrAkf9+Lg8RhLYmGI0T8Prssaa/NDc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681220980;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eRMC5iFofoKktGidEDO+nRAZWqOxvRlQKeJzDZZ9bBc=;
-        b=hlqsg16sY27a9OLWRo2WOoxeBAzfp1hh6hw7J4tZLFuW5hZ0qWs3P0AOt6BKNJZN5/
-         99zS8h3yp17MFq3PYA1Zl+P66PLeWo0P4v8M9FyglDPU5EDrtz6accK1wo1jOEXF0vAw
-         BltoTuZnhcOUhlZ+hQOACw1U9G/Uub/kuctHsl0DZCmcBaXLYICzGcpGvuewsgFCl0Do
-         COJobw0Rrwrq+/DeH1wKDtS83BjDcvSGlK/INQuk4P2aiV9zwpjhSZjRc2LcpdGsCcal
-         NCg4NAR/3N4AtWve2OAqJd+UKbIqNTFr5UGpcxC6SjzpvZ+8dvJ1upKFhAlBrCiQudrg
-         Rkzg==
-X-Gm-Message-State: AAQBX9dekwV1eTorMxzU/+8ngTtkJEVK8gTrOCYcIb08NUBSmDQrzOvi
-        NITUMI5S+1KylK2vlOphu+e1pQ==
-X-Google-Smtp-Source: AKy350Zr1fK8+7gCRz5xWYNdcIUOGijel6dNT+C0SWtjTZxVN1plQHjMDuzT220lCqxmsLndIV5pFA==
-X-Received: by 2002:a7b:c842:0:b0:3ed:88f5:160a with SMTP id c2-20020a7bc842000000b003ed88f5160amr2125195wml.11.1681220980405;
-        Tue, 11 Apr 2023 06:49:40 -0700 (PDT)
-Received: from orzel1.c.googlers.com.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id l13-20020a1c790d000000b003f071466229sm16665401wme.17.2023.04.11.06.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:49:39 -0700 (PDT)
-From:   =?UTF-8?q?Kornel=20Dul=C4=99ba?= <korneld@chromium.org>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
-        Gong Richard <richard.gong@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        =?UTF-8?q?Kornel=20Dul=C4=99ba?= <korneld@chromium.org>
-Subject: [PATCH] Revert "pinctrl: amd: Disable and mask interrupts on resume"
-Date:   Tue, 11 Apr 2023 13:49:32 +0000
-Message-Id: <20230411134932.292287-1-korneld@chromium.org>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+        Tue, 11 Apr 2023 09:50:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779D035B3;
+        Tue, 11 Apr 2023 06:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681221020; x=1712757020;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JFPGu+gyKqMOZ64dcu+rRARx61M4gkcolxvEsNoV1FM=;
+  b=JyB7ksgP40Ym1rsgSvYqJO+sxmqOV2d+2CHw/MDuOfcludv9iTtyo8m0
+   MU/DtpqgGsBep9a7EfZTy/0QBUR0gxbrDiiFbnwH9emu0j3RyZ4+vyHuY
+   W8+iyAU0JDZYWjNauopCWgtkpWawKaJM3jjG0phkhyoHJecYpn8GbNGXA
+   osaOfdc7UZUtVHQX0MU+k37gjUrYvOQWD61nqM7zyeiyBWZHIfFl9nhds
+   0L3v15IFxYAgFomlvl7inPbTZ2KOczV4mmiEVFkqor7h97ax0yYU5bo5V
+   8OOOWQJoh9tUQeaimNoS6ZD0blDMuLOG6k5ZgOOJ2FGsOEVsNzRgLVcSU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="345403987"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="345403987"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:50:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="721200052"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="721200052"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 06:50:05 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pmENn-00FHll-1U;
+        Tue, 11 Apr 2023 16:50:03 +0300
+Date:   Tue, 11 Apr 2023 16:50:03 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v3 3/3] counter: 104-quad-8: Utilize helper functions to
+ handle PR, FLAG and PSC
+Message-ID: <ZDVli05x7u/bg7Zc@smile.fi.intel.com>
+References: <cover.1681134558.git.william.gray@linaro.org>
+ <669c8f782f11fe27c4568e4fc3ba459c4f954874.1681134558.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <669c8f782f11fe27c4568e4fc3ba459c4f954874.1681134558.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit b26cd9325be4c1fcd331b77f10acb627c560d4d7.
+On Mon, Apr 10, 2023 at 10:03:13AM -0400, William Breathitt Gray wrote:
+> The Preset Register (PR), Flag Register (FLAG), and Filter Clock
+> Prescaler (PSC) have common usage patterns. Wrap up such usage into
+> dedicated functions to improve code clarity.
 
-This patch introduces a regression on Lenovo Z13, which can't wake
-from the lid with it applied; and some unspecified AMD based Dell
-platforms are unable to wake from hitting the power button
+...
 
-Signed-off-by: Kornel Dulęba <korneld@chromium.org>
----
- drivers/pinctrl/pinctrl-amd.c | 36 ++++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 20 deletions(-)
+>  	*val = 0;
 
-diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
-index 609821b756c2..9236a132c7ba 100644
---- a/drivers/pinctrl/pinctrl-amd.c
-+++ b/drivers/pinctrl/pinctrl-amd.c
-@@ -872,34 +872,32 @@ static const struct pinconf_ops amd_pinconf_ops = {
- 	.pin_config_group_set = amd_pinconf_group_set,
- };
- 
--static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
-+static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
- {
--	const struct pin_desc *pd;
-+	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
- 	unsigned long flags;
- 	u32 pin_reg, mask;
-+	int i;
- 
- 	mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
- 		BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
- 		BIT(WAKE_CNTRL_OFF_S4);
- 
--	pd = pin_desc_get(gpio_dev->pctrl, pin);
--	if (!pd)
--		return;
-+	for (i = 0; i < desc->npins; i++) {
-+		int pin = desc->pins[i].number;
-+		const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
- 
--	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
--	pin_reg = readl(gpio_dev->base + pin * 4);
--	pin_reg &= ~mask;
--	writel(pin_reg, gpio_dev->base + pin * 4);
--	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
--}
-+		if (!pd)
-+			continue;
- 
--static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
--{
--	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
--	int i;
-+		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
- 
--	for (i = 0; i < desc->npins; i++)
--		amd_gpio_irq_init_pin(gpio_dev, i);
-+		pin_reg = readl(gpio_dev->base + i * 4);
-+		pin_reg &= ~mask;
-+		writel(pin_reg, gpio_dev->base + i * 4);
-+
-+		raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-+	}
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -952,10 +950,8 @@ static int amd_gpio_resume(struct device *dev)
- 	for (i = 0; i < desc->npins; i++) {
- 		int pin = desc->pins[i].number;
- 
--		if (!amd_gpio_should_save(gpio_dev, pin)) {
--			amd_gpio_irq_init_pin(gpio_dev, pin);
-+		if (!amd_gpio_should_save(gpio_dev, pin))
- 			continue;
--		}
- 
- 		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
- 		gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4) & PIN_IRQ_PENDING;
+Is not needed now as always being initialized by below call.
+
+>  	spin_lock_irqsave(&priv->lock, irqflags);
+>  
+>  	iowrite8(SELECT_RLD | RESET_BP | TRANSFER_CNTR_TO_OL, &chan->control);
+> -
+> -	for (i = 0; i < 3; i++)
+> -		*val |= (unsigned long)ioread8(&chan->data) << (8 * i);
+> +	ioread8_rep(&chan->data, val, 3);
+>  
+>  	spin_unlock_irqrestore(&priv->lock, irqflags);
+
+...
+
+> +	struct channel_reg __iomem *const chan = priv->reg->channel + id;
+
+Not sure if array representation will look better here and elsewhere.
+
+	struct channel_reg __iomem *const chan = &priv->reg->channel[id];
+
 -- 
-2.40.0.577.gac1e443424-goog
+With Best Regards,
+Andy Shevchenko
+
 
