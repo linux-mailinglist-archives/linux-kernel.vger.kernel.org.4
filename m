@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B8C6DE236
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737F86DE23D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjDKRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S230024AbjDKRQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDKRPi (ORCPT
+        with ESMTP id S230103AbjDKRQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:15:38 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A5C5FFB;
-        Tue, 11 Apr 2023 10:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681233331; x=1712769331;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hkjCkl5c+7zSxcTy7EubOaO/P5T/a3MNoi17HIee2x8=;
-  b=nHml3D/orgRA4H0jDsYVLB/YRZkiiA4BQo+w/OBhISLDOQfQDz0cI7XV
-   rVh6KTkaxWnVG3hls975Js6s9lWnpVlMNv2BagCAeElKY131LSVTobUra
-   lmX+Cq6eyTGaF7PBDUVm8NpndZ4Qw5BYhGsjkbfWtux+v6c9bA5HtBqFS
-   zOE0o4HgBIfd2cq2PJDBmMRUlv2AOjzeOTxDjNj2rALMnBosOPdmxIJxV
-   qqKA8GIdqVpqSrokvZx+e9SlZVI8SNTNOk59wzew97vwFNa5eAssPACrw
-   ms15PueDPpVRRMAbUXH3l+5CK2iTQ/sspb5K2p2bcD8P2mVX6+V9wWNZk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="341172119"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341172119"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:15:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="862951139"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="862951139"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 11 Apr 2023 10:15:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7D0E669A; Tue, 11 Apr 2023 20:15:31 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bamvor Jian Zhang <bamv2005@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] selftests: gpio: gpio-sim: Use same variable name for sysfs pathname
-Date:   Tue, 11 Apr 2023 20:15:21 +0300
-Message-Id: <20230411171521.29678-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
-References: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
+        Tue, 11 Apr 2023 13:16:00 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F0F5B9E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:15:51 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F295F1EC063A;
+        Tue, 11 Apr 2023 19:15:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681233350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=QChcpsW/a1y2GcGXWZK0Bb5Ly48wnhgUxis8hhbCnZg=;
+        b=fYn2n+9lEmCDg/wqPOa9ss/3WrIClEwx+rx/t38ifVXsia6jpbD6zGlqGidKrcAvLt2rHi
+        d7d7fsPwB73mxC5RWMQqLn8utBOaB17JgIYxHE2RQdyhUms4TfSrQn2Z2DjIP9v3CuvO39
+        BGqGrVZkbFzSc1HZRysdxyOfilGl6RA=
+Date:   Tue, 11 Apr 2023 19:15:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
+ software defined MTRRs
+Message-ID: <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-5-jgross@suse.com>
+ <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
+ <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
+ <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
+ <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,30 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SYSFS_PATH can be used locally and globally, especially that has
-the same content.
+On Tue, Apr 11, 2023 at 05:57:07PM +0200, Juergen Gross wrote:
+> Short answer: You asked me to add it in V2 of the series.
+> 
+> Longer answer: SEV_SNP guests and TDX guests would cause #VE when writing
+>   MTRR MSRs.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- tools/testing/selftests/gpio/gpio-sim.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ah, sorry. Let's extend the comment then and use your original check:
 
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index fa2ce2b9dd5f..6fb66a687f17 100755
---- a/tools/testing/selftests/gpio/gpio-sim.sh
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -152,9 +152,9 @@ sysfs_set_pull() {
- 	local PULL=$4
- 	local DEVNAME=`configfs_dev_name $DEV`
- 	local CHIPNAME=`configfs_chip_name $DEV $BANK`
--	local SYSFSPATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio$OFFSET/pull"
-+	local SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio$OFFSET/pull"
- 
--	echo $PULL > $SYSFSPATH || fail "Unable to set line pull in sysfs"
-+	echo $PULL > $SYSFS_PATH || fail "Unable to set line pull in sysfs"
- }
- 
- # Load the gpio-sim module. This will pull in configfs if needed too.
+       /*
+        * Only allowed for special virtualization cases:
+        * - when running as Hyper-V, SEV-SNP guest using vTOM
+        * - when running as Xen PV guest
+        * - when running as SEV-SNP or TSX guest to avoid unnecessary
+	*   VMM communication/Virtualization exceptions (#VC, #VE)
+        */
+	if (!hv_is_isolation_supported() &&
+	    !cpu_feature_enabled(X86_FEATURE_XENPV) &&
+	    !cc_platform_has(CC_ATTR_GUEST_SEV_SNP) &&
+	    !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+		return;
+
+Thx.
+
 -- 
-2.40.0.1.gaa8946217a0b
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
