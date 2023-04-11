@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C956DE295
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827E46DE2A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjDKReS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S229483AbjDKRfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjDKReO (ORCPT
+        with ESMTP id S229478AbjDKRfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:34:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D3D65B5;
-        Tue, 11 Apr 2023 10:33:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DB646200A;
-        Tue, 11 Apr 2023 17:33:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA6CC4339B;
-        Tue, 11 Apr 2023 17:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681234432;
-        bh=ScMA2ZLrRu9taa5IpwTR7DDfb0acMaFdpECEOOkl7Oc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=i7r9+z+qDXFqq8/KDKOj1TPB+VYfdv/2dvD2gi0kaQ61lxfdOObCaXkp3Di8VY9bG
-         u0geIPFCEgig+y/jEWpQmUNP1owtXZwKg7lRGCEd7KhDIgjRkxBtJ0yagyZn9NHT1n
-         FJ8pAD/+Yaxp2T3iT7M+UpguZsZcueVMAchD3ONqg4Rf+2pc2S7Foa8ncUQAFsdmzm
-         8SrfbZ1Y7q+X/b0ofHlQhDTtv5pnaJbMbnxg1s+lIevlCPdoHTiRKMys2waQENzo37
-         U6qJ2DPp++F2VzE4m5K4n4wgsRl5G4O5hWbF+cjYDHPKGOKSel1dPBE5eVrs4U5PGr
-         y1/hrMleBZ/OQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com,
-        Saalim Quadri <danascape@gmail.com>
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230405205820.6836-1-danascape@gmail.com>
-References: <20230405205820.6836-1-danascape@gmail.com>
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8711: Convert to dtschema
-Message-Id: <168123443056.491748.13637746465528590932.b4-ty@kernel.org>
-Date:   Tue, 11 Apr 2023 18:33:50 +0100
+        Tue, 11 Apr 2023 13:35:11 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96D5B81;
+        Tue, 11 Apr 2023 10:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=9ycQhMAP8bYuSeQBFYr21ByNHZMBYNV4KYFk5ii2JBk=; b=XBv5tjhMDhhsbCSCOI1Dp4ly+K
+        6PNv65eFtmKV2RcE0jUNPkq8KHWuN/svKV4Ps/AOBxwQbEPKHqNWw8k8/rIacSw5PicQ2tz7OXlRa
+        zm0EIiA5bUXIbqJXAuyoWmCrkqAn3BTe4zf6xmlUL6mVURGroj/sMJsYf+bYf1X3iWiZnGvX5hMaD
+        Jq2FpuxlVPElAH/LlHmYMcluX4i66ertxw9sRCEC2EaZw9kXmnZYZg7EvDFWXjiFlfb1U2A2cyb8m
+        OKIZ76CwNIDqKnmQQvj6t+u9TgWpuITrMLXnzdVyKp01vtudA5rBvADHm9/mENVb2c/CGmU+/Bf06
+        WKDoXhXw==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pmHtW-0007ES-TX; Tue, 11 Apr 2023 19:35:02 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pmHtW-000Qov-JE; Tue, 11 Apr 2023 19:35:02 +0200
+Subject: Re: [PATCH bpf-next] tools headers: Remove s390 ptrace.h in
+ check-headers.sh
+To:     Jiri Olsa <olsajiri@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <1680834090-2322-1-git-send-email-yangtiezhu@loongson.cn>
+ <ZC/wA2NoO7yI/xNm@krava>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <0f77e29c-e384-1d67-a99c-91e6091ec7db@iogearbox.net>
+Date:   Tue, 11 Apr 2023 19:35:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <ZC/wA2NoO7yI/xNm@krava>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26872/Tue Apr 11 09:26:30 2023)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 02:28:20 +0530, Saalim Quadri wrote:
-> Convert the WM8711 audio CODEC bindings to DT schema
+On 4/7/23 12:27 PM, Jiri Olsa wrote:
+> On Fri, Apr 07, 2023 at 10:21:30AM +0800, Tiezhu Yang wrote:
+>> After commit 1f265d2aea0d ("selftests/bpf: Remove not used headers"),
+>> tools/arch/s390/include/uapi/asm/ptrace.h has been removed, so remove
+>> it in check-headers.sh too, otherwise we can see the following build
+>> warning:
+>>
+>>    diff: tools/arch/s390/include/uapi/asm/ptrace.h: No such file or directory
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202304050029.38NdbQPf-lkp@intel.com/
+>> Fixes: 1f265d2aea0d ("selftests/bpf: Remove not used headers")
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > 
-> 
+> not sure this should go through Arnaldo's tree instead,
+> either way is fine with me
 
-Applied to
+Agree, perf tree is better given the script is located there, so:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: dt-bindings: wm8711: Convert to dtschema
-      commit: 25500613de4a867d16068b28faa963cd3ce0a11a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
