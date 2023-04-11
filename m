@@ -2,115 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB3D6DE74B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 00:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8128D6DE751
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 00:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjDKWaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 18:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S229630AbjDKWcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 18:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDKWaM (ORCPT
+        with ESMTP id S229458AbjDKWcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 18:30:12 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315074C1B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 15:30:09 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6323870b5d4so578547b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 15:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681252208;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QKBhoDP+sP3T2nnParrcD9Nl7mDJF/BQppydlUzHoVg=;
-        b=ppIQMuKaJsl4nmCDvoLnNaGHRTl3fy8ZJnTim7m+CAoZlk2cI19ue6Qwr3wF4CULRa
-         8R1XCkP9nl1T7OaGT73D2jf2HxGCCFhHBendL/+3jCpxjPEDfuV0MwZC1vG6ObvPtSDd
-         nAUCkFZd3W90mTsW4m3L8gVdEUch5goD10VFVu/plYWDCktHJsiySH3McdLGq79+QJ0+
-         FWarpfnrJOGdxHTKt0Q70vi4fjHugObGLHZla5j0boc7GRuT4X5YEg4HkOnCQ1lBwhYj
-         iubNvBlqj6xGVqMvvm3VGeGd5eSZkvfWgh0+zYvyXTD7vq5mhSm6eFQXBORkHhhV0hya
-         DGPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681252208;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKBhoDP+sP3T2nnParrcD9Nl7mDJF/BQppydlUzHoVg=;
-        b=UYUEkKerfbOzIiYSTdugqtXbmHX9uzu7ARjnKjKqLVhRn0CmIHRFm79fVFdre7y5MI
-         VgwreiWb7sJDluilpAqpFUVOyEF+o75UsIqIpRdc+MqVdPn58BnRF+OaXEgb+MVTegM7
-         ZKCQS1fxmGaq35HXTcuM+vua6Po3dsNoqS6bfcaw0WmBA0GUDJxukpwspO22dKQehL9t
-         BE2qfpLoy08QiM+ehGLM2cuYFfFNmHicVDwrQmM6R+4vRyILRYwby2Q+QH2H5g6LE7Um
-         OuPGvsnxEWi4h0oHLSYRrmsOs1xAo3nbU14tUf1v/JZ8fN7AGfC8MdrQr6+MSh8hf+S/
-         cfbg==
-X-Gm-Message-State: AAQBX9dgtOwZw5HmJcvoDE3mrvW5WtgbeEzy8JydME4F7uw31wCPEk0Y
-        XBReIHN3CP7IYaIHKRXc2UjwpbvriaxHfzkhePw=
-X-Google-Smtp-Source: AKy350bgytSfQoCBdzIljJdVL7dc7jpGWxSHkSREDMiKD/9cP3MFpAhTJYWkhDo6j9aQ7/1eCry7Qw==
-X-Received: by 2002:a05:6a00:190f:b0:638:abf4:d49c with SMTP id y15-20020a056a00190f00b00638abf4d49cmr511087pfi.3.1681252208638;
-        Tue, 11 Apr 2023 15:30:08 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v5-20020a62a505000000b00625e14d3a15sm10215338pfm.166.2023.04.11.15.30.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 15:30:08 -0700 (PDT)
-Message-ID: <4d015798-84d8-ed15-393b-105f9f315e25@kernel.dk>
-Date:   Tue, 11 Apr 2023 16:30:07 -0600
+        Tue, 11 Apr 2023 18:32:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6774546B8;
+        Tue, 11 Apr 2023 15:32:20 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BMStLg031622;
+        Tue, 11 Apr 2023 22:32:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Mr6GXrTuhEUBqy88mYBuWY/Dl14Q3Lg1h/xPDdKoBic=;
+ b=DSx6Qagq+IjlIrVsPz1QRaG/poZCRzj9KiWQGbhXV3aKF8I3CdzgKfFLprUtoG1TAPRD
+ usM46d7Mtd4fxWB27WSRsZqQacY08oFl6lREsz9zg5BxDzXLj8N2NwovOxdgAvB4Jtft
+ /mSs6fbE3Rl7zmgy+Hauy27Mv/NTRthjEhuu/CUZY5hogmC1nqcjna9SpOPwXUi8227X
+ 6D9nedbvMA/ta+7xr+TR6qF/t8Cgx1TMsVBItAyZjY4pfxfNjbFQ0gG0jXOvNOHoTNQV
+ 88EfluutGNxFTQbJaGlj/rHCM/U1X789ECBEl10XM0LXHZ580TV6elI9PDkPUi1eXg61 Sw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw3cehrmw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 22:32:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BMW7cX015787
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 22:32:07 GMT
+Received: from [10.110.115.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 15:32:06 -0700
+Message-ID: <96416911-bca3-b007-b036-1c4463e83aaa@quicinc.com>
+Date:   Tue, 11 Apr 2023 15:32:05 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: build warnings after merge of the block tree
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: add DSC range checking during
+ resource reservation
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230327120017.6bb826d7@canb.auug.org.au>
- <20230327162630.wmxpycxhllt4clpt@treble>
- <20230328104719.65133586@canb.auug.org.au>
- <20230412073416.73a8ea1a@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230412073416.73a8ea1a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+CC:     <freedreno@lists.freedesktop.org>, <quic_sbillaka@quicinc.com>,
+        <airlied@gmail.com>, <andersson@kernel.org>, <robdclark@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <agross@kernel.org>, <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <swboyd@chromium.org>, <sean@poorly.run>,
+        <linux-kernel@vger.kernel.org>
+References: <1681247380-1607-1-git-send-email-quic_khsieh@quicinc.com>
+ <qvgbm3wimai3jytnikbcixipvwqn2uywqpg4mn6mjh5atergfx@wa4edsrp7y22>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <qvgbm3wimai3jytnikbcixipvwqn2uywqpg4mn6mjh5atergfx@wa4edsrp7y22>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xsU1Py_vZuZpRTn7y_nnQww8idMIm17b
+X-Proofpoint-GUID: xsU1Py_vZuZpRTn7y_nnQww8idMIm17b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110202
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 3:34?PM, Stephen Rothwell wrote:
-> Hi all,
+Hi Marijn
+
+On 4/11/2023 3:24 PM, Marijn Suijten wrote:
+> Again, don't forget to include previous reviewers in cc, please :)
 > 
-> On Tue, 28 Mar 2023 10:47:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> On Mon, 27 Mar 2023 09:26:30 -0700 Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->>>
->>> On Mon, Mar 27, 2023 at 12:00:17PM +1100, Stephen Rothwell wrote:  
->>>>
->>>> After merging the block tree, today's linux-next build (x86_64
->>>> allnoconfig) produced these warnings:
->>>>
->>>> lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant UACCESS d
->>>> isable
->>>> lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call to copy_comp
->>>> at_iovec_from_user.part.0() with UACCESS enabled
->>>> lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_compat_iovec_from_user.part.0() with UACCESS enabled
->>>>
->>>> Presumably introduced by commit
->>>>
->>>>   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF")    
->>>
->>> I'm not able to recreate.  What's your compiler version?  
->>
->> $ x86_64-linux-gnu-gcc --version
->> x86_64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0
+> On 2023-04-11 14:09:40, Kuogee Hsieh wrote:
+>> Perform DSC range checking to make sure correct DSC is requested before
+>> reserve resource for it.
 > 
-> Any progress?
+> This isn't performing any range checking for resource reservations /
+> requests: this is only validating the constants written in our catalog
+> and seems rather useless.  It isn't fixing any real bug either, so the
+> Fixes: tag below seems extraneous.
+> 
+> Given prior comments from Abhinav that "the kernel should be trusted",
+> we should remove this validation for all the other blocks instead.
+> 
 
-Honestly I have no idea what it's complaining about. It's obviously the
-compat copy, but everything seems fine to me?
+The purpose of this check is that today all our blocks in RM use the 
+DSC_* enum as the size.
 
--- 
-Jens Axboe
+struct dpu_hw_blk *dsc_blks[DSC_MAX - DSC_0];
 
+If the device tree ends up with more DSC blocks than the DSC_* enum, how 
+can we avoid this issue today? Not because its a bug in device tree but 
+how many static number of DSCs are hard-coded in RM.
+
+And like you said, this is not specific to DSC. Such checks are present 
+for other blocks too.
+
+>> Fixes: c985d7bb64ff ("drm/msm/disp/dpu1: Add DSC support in RM")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 10 +++++++++-
+>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>> index f4dda88..95e58f1 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>> @@ -1,6 +1,7 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>   /*
+>>    * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>    */
+>>   
+>>   #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
+>> @@ -250,6 +251,11 @@ int dpu_rm_init(struct dpu_rm *rm,
+>>   		struct dpu_hw_dsc *hw;
+>>   		const struct dpu_dsc_cfg *dsc = &cat->dsc[i];
+>>   
+>> +		if (dsc->id < DSC_0 || dsc->id >= DSC_MAX) {
+>> +			DPU_ERROR("skip dsc %d with invalid id\n", dsc->id);
+>> +			continue;
+>> +		}
+>> +
+>>   		hw = dpu_hw_dsc_init(dsc->id, mmio, cat);
+>>   		if (IS_ERR_OR_NULL(hw)) {
+>>   			rc = PTR_ERR(hw);
+>> @@ -557,8 +563,10 @@ static int _dpu_rm_make_reservation(
+>>   	}
+>>   
+>>   	ret  = _dpu_rm_reserve_dsc(rm, global_state, enc, &reqs->topology);
+>> -	if (ret)
+>> +	if (ret) {
+>> +		DPU_ERROR("unable to find appropriate DSC\n");
+> 
+> This, while a nice addition, should go in a different patch.
+> 
+> Thanks!
+> 
+> - Marijn
+> 
+>>   		return ret;
+>> +	}
+>>   
+>>   	return ret;
+>>   }
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
