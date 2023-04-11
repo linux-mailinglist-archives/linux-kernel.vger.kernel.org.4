@@ -2,83 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07A16DD6AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A4A6DD6B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjDKJ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S229844AbjDKJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjDKJ2z (ORCPT
+        with ESMTP id S229811AbjDKJaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:28:55 -0400
-Received: from out-12.mta1.migadu.com (out-12.mta1.migadu.com [IPv6:2001:41d0:203:375::c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BFF272D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:28:53 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 11:28:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681205332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=herqdWTSpQzIg4qxrA3Oi6bo3dutKqr8QPmPpf/XCig=;
-        b=XrEy6Y82J+f6A5SrwL6EnMQ1YyNXk9Irj2fGdVsvyJYveUSX3YYzS6HiVSkYCaOvlqZZh4
-        wQ1KG/AKUbmtPvGIm0YVTIpyfkTDynWwxr5mVPf2AjT5HzTy9mcs7PJrG8lLRWqNHP06Jt
-        mYB0rFw1kJJD5kZBvsbg7ArSPx89Qfs=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Richard Leitner <richard.leitner@linux.dev>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH RESEND v2 0/2] panel-simple: Add InnoLux G070ACE-L01
- support
-Message-ID: <20230411092849.GB4993@g0hl1n.net>
-References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
+        Tue, 11 Apr 2023 05:30:00 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2F3C04
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id j17so9023150ejs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681205397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
+        b=FhUN32+q9jPdgf97VAaqXvf8IScUuRysz38fQkweVq+QLxWO/S2VPxcB+Qra0cqTXQ
+         DtKxdwM0c4aDN8Vjr37sLs5OIJ750plHhvw4RIlibWv36S8feJJ6E0gw7j3/K8m2SdBR
+         lXRWVDa8fKPoNrLAfpuAgYZO4Kv1GqlYQ3orj3DhgB/2xC0Vl+Ip0J44oJYPsRguLxu8
+         o1zGRE8Q6fBpRs44zqc9poxIovdoonRREuuNqA9OC8Yu37zQBxA6eV9rpf2Dvke8Yh1x
+         Pa6Mx+lhdT46XqV9rT8hZtXXed0gSq3C4Pp2U2lqKXWSGu2AtU4k91ilBtZ+CVa8PMp4
+         cK4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681205397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
+        b=TIMrRjr2l60ohMxZwmxUdJfqPCnRYQh1Wg3yvJC1D1BG1/DdnPRBIDdvSJTj5jFfBv
+         QezdOg6kvi/Li5i1enMRH71YdJgU8LbV6Wc4zyEtGZf0xT9a2UgDWIzwxsKDkDRX1cit
+         Qu+JqIH+4Dczbqu2RrMPEAzxdyT256w9AOk/mxT9L0nF2rRyIEwj0kqOZP0bB47CjhCw
+         QpncqLUCIp/eKPR0kNpmG2/9DA8lTh9d7IAWlqsAmSKseLSvFqwtnIip1OBvPmWC0UAW
+         rVY1UhRrE14pV+8Tl0AERVWByitzwiyuRQFuZUDrgth/RrNlZqoWBpDKz9vO7JR5LyhT
+         rd8Q==
+X-Gm-Message-State: AAQBX9cEMrgZZDzPMr5s6SExigEJEMnyI1NhJjB02ohcQGA7+cX/61BH
+        +7jH5r9UdeROT0SAU8UtdZTz8HoDoH6/mZE1P/U5Ww==
+X-Google-Smtp-Source: AKy350YciC056geHubwxcdJsmaoBPi16cp8aurI4qOglRyDHG/cvxK/Ql9YEmFxW0jx+zwWEqAPGI0ZBL6z80oGpEw0=
+X-Received: by 2002:a17:906:11d8:b0:94e:fdd:9319 with SMTP id
+ o24-20020a17090611d800b0094e0fdd9319mr1132630eja.15.1681205396442; Tue, 11
+ Apr 2023 02:29:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+ <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+ <8a837998-604f-a871-729e-aa274a621481@collabora.com> <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
+ <c5b9201d-141c-10ae-0475-4b230d36508b@collabora.com> <CABb0KFH3mj5qt22qDLHRKjh-wB7Jrn6Pz8h-QARaf9oR65U0Qg@mail.gmail.com>
+ <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
+In-Reply-To: <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 11 Apr 2023 11:29:44 +0200
+Message-ID: <CABb0KFE6Y=a5DQKjy3vKeP9YURwri3JHNKTCnN7PzOPOxr9SKQ@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:50:15AM +0100, richard.leitner@linux.dev wrote:
-> This series adds support for the InnoLux G070ACE-L01 7" 800x480 TFT LCD
-> panel with WLED backlight.
+On Fri, 7 Apr 2023 at 13:11, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 4/7/23 3:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Fri, 7 Apr 2023 at 12:04, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 4/7/23 12:34=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> > [...]
+> >>>>>>>> +       /*
+> >>>>>>>> +        * Allocate smaller buffer to get output from inside the=
+ page walk
+> >>>>>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE si=
+ze chunks. As
+> >>>>>>>> +        * we want to return output to user in compact form wher=
+e no two
+> >>>>>>>> +        * consecutive regions should be continuous and have the=
+ same flags.
+> >>>>>>>> +        * So store the latest element in p.cur between differen=
+t walks and
+> >>>>>>>> +        * store the p.cur at the end of the walk to the user bu=
+ffer.
+> >>>>>>>> +        */
+> >>>>>>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_re=
+gion),
+> >>>>>>>> +                             GFP_KERNEL);
+> >>>>>>>> +       if (!p.vec)
+> >>>>>>>> +               return -ENOMEM;
+> >>>>>>>> +
+> >>>>>>>> +       walk_start =3D walk_end =3D start;
+> >>>>>>>> +       while (walk_end < end && !ret) {
+> >>>>>>>
+> >>>>>>> The loop will stop if a previous iteration returned ENOSPC (and t=
+he
+> >>>>>>> error will be lost) - is it intended?
+> >>>>>> It is intentional. -ENOSPC means that the user buffer is full even=
+ though
+> >>>>>> there was more memory to walk over. We don't treat this error. So =
+when
+> >>>>>> buffer gets full, we stop walking over further as user buffer has =
+gotten
+> >>>>>> full and return as success.
+> >>>>>
+> >>>>> Thanks. What's the difference between -ENOSPC and
+> >>>>> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (co=
+de
+> >>>>> flow).
+> >>>> -ENOSPC --> user buffer has been filled completely
+> >>>> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer m=
+ay
+> >>>>                             still have more space
+> >>>
+> >>> What is the difference in code behaviour when those two cases are
+> >>> compared? (I'd expect none.)
+> >> There is difference:
+> >> We add data to user buffer. If it succeeds with return code 0, we enga=
+ge
+> >> the WP. If it succeeds with PM_SCAN_FOUND_MAX_PAGES, we still engage t=
+he
+> >> WP. But if we get -ENOSPC, we don't perform engage as the data wasn't =
+added
+> >> to the user buffer.
+> >
+> > Thanks! I see it now. I see a few more corner cases here:
+> > 1. If we did engage WP but fail to copy the vector we return -EFAULT
+> > but the WP is already engaged. I'm not sure this is something worth
+> > guarding against, but documenting that would be helpful I think.
+> Sure.
+>
+> > 2. If uffd_wp_range() fails, but we have already processed pages
+> > earlier, we should treat the error like ENOSPC and back out the failed
+> > range (the earier changes would be lost otherwise).
+> Backing out is easier to do for hugepages. But for normal pages, we'll ha=
+ve
+> to write some code to find where the current data was added (in cur or in
+> vec) and back out from that. I'll have to write some more code to avoid t=
+he
+> side-effects as well.
 
-Friendly reminder for this small series 😉
+If I read the code correctly, the last page should always be in `cur`
+and on failure only a single page is needed to be backed out. Did I
+miss something?
 
-> 
-> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
-> ---
-> Richard Leitner (2):
->       dt-bindings: display: simple: add support for InnoLux G070ACE-L01
->       drm/panel: simple: Add InnoLux G070ACE-L01
-> 
->  .../bindings/display/panel/panel-simple.yaml       |  2 ++
->  drivers/gpu/drm/panel/panel-simple.c               | 35 ++++++++++++++++++++++
->  2 files changed, 37 insertions(+)
-> ---
-> base-commit: c0b67534c95c537f7a506a06b98e5e85d72e2b7d
-> change-id: 20230201-innolux-g070ace-fda21c89efe2
-> 
-> Best regards,
-> -- 
-> Richard Leitner <richard.leitner@skidata.com>
-> 
+> But aren't we going over-engineering here? Error occurred and we are tryi=
+ng
+> to keep the previously generated correct data and returning successfully
+> still to the user? I don't think we should do this. An error is error. We
+> should return the error simply even if the memory flags would get lost. W=
+e
+> don't know what caused the error in uffd_wp_range(). Under normal
+> situation, we there shouldn't have had error.
+
+In this case it means that on (intermittent) allocation error we get
+inconsistent or non-deterministic results. I wouldn't want to be the
+one debugging this later - I'd prefer either the syscall be
+"exception-safe" (give consistent and predictable output) or kill the
+process.
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
