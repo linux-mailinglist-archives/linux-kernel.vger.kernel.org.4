@@ -2,127 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF4E6DE470
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F36C6DE473
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjDKTCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S229523AbjDKTEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDKTCS (ORCPT
+        with ESMTP id S229643AbjDKTEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:02:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B533AA3;
-        Tue, 11 Apr 2023 12:02:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5CF8625F7;
-        Tue, 11 Apr 2023 19:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3D2C433A0;
-        Tue, 11 Apr 2023 19:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681239736;
-        bh=QNGFZG+0FP4MiP9ZLTe2C0i6kcwFZTtZnUc+WXNjaSk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YsWsRQhKUjx5BxlD7iVZrSSuZgX5yGMQvuP42NmdhMO92CGcuJfMDJ20qCtRsRJcD
-         F94KeXCJBpPKn+OGzbcVZ4hpThDDRFv62ka4idJ0uOxRrOX+YkGMKRGzYPrN9038Wl
-         vOq+fy3/4bw0Ntz7fQWs7qBVm9/C3pkleMErfKUnvWvexjNTwoXz/7dAU3VUkf8x96
-         VZqy2u/bQ3SJpYsXXz9g8aZp6MpCWqW3jMreA+jsaoWNtWmfGMOfyoM3xuqMHmQuT5
-         l1hBDVf0iL3o1GcqZRRITl1TXmWr2ZVCJzsRFIEO2uzWRWmZUKAJKkn4PF8n1HDNWB
-         kRU962nVpaZEw==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-54ee0b73e08so178749447b3.0;
-        Tue, 11 Apr 2023 12:02:16 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dcsZBghpXQPLjXqyA3hjzEMtHEUZlC3BiIHLLyx5w9RYgAJ7Ys
-        jOxC4uzo/CgXJJ3/pNDYwKGTv5TsoBvIETQhxw==
-X-Google-Smtp-Source: AKy350Ze5hfFXMFMJbWjbNiov/fFkM8IZsuKDtzpLuSJGb+QEwiRJ6fkdrKag9pzHkolT1dcPO8Kc5+KO6orbOrnTZM=
-X-Received: by 2002:a81:ae1d:0:b0:54f:84c0:93ff with SMTP id
- m29-20020a81ae1d000000b0054f84c093ffmr717809ywh.5.1681239735149; Tue, 11 Apr
- 2023 12:02:15 -0700 (PDT)
+        Tue, 11 Apr 2023 15:04:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FB03C31
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681239822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RxO1n2PWxys5TFVibtUzDwp6ndZRuDOsr/RkUx0+dQ0=;
+        b=EM5Si4q9R9MT9CWrN4WcDwXJO76dhE0VoS4Tt5/UaXKROA3R+bXQ7pjhy+3/ReXq/nqryA
+        fmoVV+QDMzDQyWYcuImasM+RKXQjZZjr0koXnZKpeSNnDIz2omWKNW6HhsQb3yr9g/AyV+
+        YCAH0goFFMKEVtYwKJHVqn6auzWNxCY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-503-48DQgEx5PAGzmOGZmvqz2w-1; Tue, 11 Apr 2023 15:03:41 -0400
+X-MC-Unique: 48DQgEx5PAGzmOGZmvqz2w-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-5eee59cadefso1013446d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:03:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681239820; x=1683831820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RxO1n2PWxys5TFVibtUzDwp6ndZRuDOsr/RkUx0+dQ0=;
+        b=jnYZnbPPMFFCHRGN41nPgwLbvj+Z0eDH+hiLu+1kBOFJuBJXcOydJHN1e68mrFH2lu
+         nd73GmD87x1xqGwXbVWbO76QsIPYjCCtljumBtcSRV1VMjPYaS0VCClyD54UB/ljB+zH
+         G3VMFfkbfxHaASa6yor0te8Eho6bseXQavxYdYCwCykMjxhsJ8FfG19PHezMQ4rEajBt
+         Y5pNmKZiTxnwmCEtIUGrixJy6w7ynmLfA5jzt51URrt/CjWhxwrqrslS1PbszOUE9VFA
+         au6Y8kRFZT3Z5khMo67xKN5S7FFki7yfd9PyjQCGoobzYFzZTzECWTnDaVEPbIkST1Lp
+         Edfg==
+X-Gm-Message-State: AAQBX9eA8EpwuHaT5Toimdyc7tcCiUggD+Avw0xjN5SKTS9/QMb4Bim/
+        t7sh52gz2fk/hoLMy+6h3889U9hkNt641UZTKeeyHDJeHrXHBskFU+/Nq6DPMA+GCQfSbBwuIZg
+        ODNBEaWd/FLOa/7lSJs9qR+Yx
+X-Received: by 2002:a05:6214:3016:b0:5df:55b5:b1a with SMTP id ke22-20020a056214301600b005df55b50b1amr294205qvb.4.1681239820615;
+        Tue, 11 Apr 2023 12:03:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y6QOiRlYeQAmlr91U5Ze9LR4gX32PPzEF3QLXPxjseSyjVWH5jZY/RSGgRKUCXmiA3/yHu9g==
+X-Received: by 2002:a05:6214:3016:b0:5df:55b5:b1a with SMTP id ke22-20020a056214301600b005df55b50b1amr294129qvb.4.1681239819739;
+        Tue, 11 Apr 2023 12:03:39 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05621402ae00b005ea34e69373sm2334001qvv.37.2023.04.11.12.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 12:03:39 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 15:03:37 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 10/29] selftests/mm: Test UFFDIO_ZEROPAGE only when
+ !hugetlb
+Message-ID: <ZDWvCXArb/88rdpL@x1n>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160714.3106999-1-peterx@redhat.com>
+ <20230331183726.GD12460@monkey>
+ <CAJHvVcjOqShPeu3mYk2Xu1ZyMfFLuPCUp8+8nQ+CUyCj4nZVqA@mail.gmail.com>
+ <cfc0d7c8-edb5-ae5d-8edf-d4f7ee18b877@redhat.com>
+ <ZCr6g3RDwt1pWTkx@x1n>
+ <ZC/lhZlcDaDCErsz@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230410213754.GA4064490@bhelgaas> <m27cuih96y.fsf@gmail.com>
-In-Reply-To: <m27cuih96y.fsf@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 11 Apr 2023 14:02:03 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
-Message-ID: <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
-Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
- with igb
-To:     Donald Hunter <donald.hunter@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZC/lhZlcDaDCErsz@linux.ibm.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Rafael, Andy
+On Fri, Apr 07, 2023 at 12:42:29PM +0300, Mike Rapoport wrote:
+> > +/*
+> > + * Registers a range with MISSING mode only for zeropage test.  Return true
+> > + * if UFFDIO_ZEROPAGE supported, false otherwise. Can't use uffd_register()
+> > + * because we want to detect .ioctls along the way.
+> > + */
+> > +static bool
+> > +uffd_register_detect_zp(int uffd, void *addr, uint64_t len)
+> 
+> Let's spell out 'zp' as zeropage, what do you say?
 
-On Tue, Apr 11, 2023 at 7:53=E2=80=AFAM Donald Hunter <donald.hunter@gmail.=
-com> wrote:
->
-> Bjorn Helgaas <helgaas@kernel.org> writes:
->
-> > On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
-> >> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
-> >> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
-> >> > > >
-> >> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in =
-card)
-> >> > > > because it apparently has an ACPI firmware node, and there's som=
-ething
-> >> > > > we don't expect about its status?
-> >> > >
-> >> > > Yes they are built-in, to my knowledge.
-> >> > >
-> >> > > > Hopefully Rob will look at this.  If I were looking, I would be
-> >> > > > interested in acpidump to see what's in the DSDT.
-> >> > >
-> >> > > I can get an acpidump. Is there a preferred way to share the files=
-, or just
-> >> > > an email attachment?
-> >> >
-> >> > I think by default acpidump produces ASCII that can be directly
-> >> > included in email.  http://vger.kernel.org/majordomo-info.html says
-> >> > 100K is the limit for vger mailing lists.  Or you could open a repor=
-t
-> >> > at https://bugzilla.kernel.org and attach it there, maybe along with=
- a
-> >> > complete dmesg log and "sudo lspci -vv" output.
-> >>
-> >> Apologies for the delay, I was unable to access the machine while trav=
-elling.
-> >>
-> >> https://bugzilla.kernel.org/show_bug.cgi?id=3D217317
-> >
-> > Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
-> > with this in the kernel parameters:
-> >
-> >   dyndbg=3D"file drivers/acpi/* +p"
-> >
-> > and collect the entire dmesg log?
->
-> Added to the bugzilla report.
+Definitely can do. :)
 
-Rafael, Andy, Any ideas why fwnode_device_is_available() would return
-false for a built-in PCI device with a ACPI device entry? The only
-thing I see in the log is it looks like the parent PCI bridge/bus
-doesn't have ACPI device entry (based on "[    0.913389] pci_bus
-0000:07: No ACPI support"). For DT, if the parent doesn't have a node,
-then the child can't. Not sure on ACPI.
+Thanks,
 
-Rob
+-- 
+Peter Xu
+
