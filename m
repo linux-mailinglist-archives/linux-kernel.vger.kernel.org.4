@@ -2,132 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DD06DCF53
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1B06DCF56
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjDKBaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 21:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S229973AbjDKBbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 21:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDKBaP (ORCPT
+        with ESMTP id S229808AbjDKBb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 21:30:15 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D45230FC;
-        Mon, 10 Apr 2023 18:29:53 -0700 (PDT)
+        Mon, 10 Apr 2023 21:31:29 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D1E2D5B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681176663; x=1712712663;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WGZIYBMEkUoN7eZ+BBrBmtqReWSwRgkLmOyuaXxqj1I=;
+  b=Fkiqnlj/07etPCFFRCFkK3BvtzJiCC25FafzuOhrQWmAcglgwPiiNbJ0
+   huWTgn9P9N4zVreGrPS5UCPA1a6f3mAsi8g6+iKwDvfMnM9Qyk03QrpRY
+   +XEMJwbdmdjG7+HegHAYYRorH4m4OTsVtp4ARskDgd7ChZpMVzidAQtK+
+   1HVH/jsQThqwQss/j2qLbGrfBdgTVY9Crmz5NS9bbhZSLvRGdK4+cS95l
+   PhYyv4ZHATIFbU9U3dN4b6p/xQc0sGM4DkcVU7Bc2xBS8ZLgbIA1QVR52
+   ppDsJKRdTHwNMgf7BinAwQGMM5tK+t1CxRBvLIm4FVGieQHlc1y+NXOlH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="340988126"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="340988126"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 18:31:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="862673875"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="862673875"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 10 Apr 2023 18:31:02 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 10 Apr 2023 18:31:02 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 10 Apr 2023 18:31:00 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 10 Apr 2023 18:31:00 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 10 Apr 2023 18:31:00 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n2FBJiK7OYJSlSYhPd/pZdYx2YwBjkjXCAJtDN9s1dVWPdq1M197TiFWJiHsL2lK9p1kOQa2ZlkXgHJO3cV6rUIo57Nr/C4rsfYpWg/BPCckaFNUa+sG4AbNjYpzbgdtWJ29P7xYMDcJOIQrTDfmoAE9PozybXglP1s6ONthQjUHwL73CwK0xG+P8RqWCsIU75JZk/1yvqf3Uelvqoe3oy3VVvAzm/epnKZ7dWgORLT/jnerIkI1NuCaTFLECNCu/ZmkcwGLGg+hBy64IEbe5cQgMp2oMlOe2nJm6v39vsLhdWbuWIY8lRsIUKMK8YflyB+60UYihEuoGBjy44jy5w==
+ b=cFXTb0ohiVcv+TA883otdieb/nEHlouDMpKDfmJyHCcQR73ic3Qnkh34hx7SSSVnUdI+fgfiKhCG1zf5Om3u463oGFqAfiK/m9kcXeJY/E9uqxjaoZJihcQGzBf4bOYRRvF72/n7d7BDCyBtMm+rLj7SVFz0Juo9TplvM/aFeX4HvH8gnGHzHtGVbXn7fgmjpqr/hx8PBtoeFqMN1Mop69J+y8u/4PF4fibB29ELpm/6XJghVK3QRqut6Oho99bLtgps4jfUIJEOAEyk+ynC6/TnHFIzjmVum0PuOZ+WOtXN0ZySIjmC/38IawU6I8ARm5wzlxs2SIZwN6nOzju16Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lMpb19sYuD2Zo323h/cDpGUFPTLYCTAQbVEBG9XUHL4=;
- b=MTK9DUJkHxL0ZA6wfrAcXdGfZ8DXOuV6kpnA3ILPq0IBN6he4JFdPOsC9sN0c+hXGMtg57w5GUt5QIH3SYssxh8mb5W4sUogow9TbzWi5ft7g/MExGTmIk3bNLXSAs9JWB15BYmCTHVminc9d55kiF+pQdgtIqxaom9hjYJxLKUTdohIlVbVCW6M6bJhv4mdXc2UAUi74zGMKWSTxsnZPKS8tnigyaeEJGE+3ZMLjQq4XNbcWOzGvajrxk/39KrnbN1EVYAr511LYj9oReczFe/4DHsz2+LmihfR9Ty0dd5DjycybXbOjuYz7LcIKVFhlm52Lo6kTzzLINmZpzfWSg==
+ bh=XClaCXzakO5ZHxPNUIu6FjlKkj86/SU8t9PolpiyAD8=;
+ b=HLs0j4fqAs0PiFJg0GweFhgAtzdFIwGnmWMkUOGYqlI7VaZAfz95rLPARCjcOzgfqQTqiSfMk3iNgItsVoWT7S9FSjzin5U/I8sM3ufcjYLtQWSLTIXwnzTSMrFPJu3MmV6OCSPXs4RI4L03rj7wuJnssQzUXt/n2t+TR/LLH04pxLQMHkfJ9N0D7QvFL1iicba9phSiKEtGkLbwgmuFUYhrnBBiKAbcluOR+I5SqFERB5P+DwPBqSMJadM+J4z654kUV8sDF3jAG3ixF5IjaxWA/FpD6OiW6jP6mu5ChxprnhG7XSADQBLuu1VF0HfEj4smW56eTN3AX3eOdP5sIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lMpb19sYuD2Zo323h/cDpGUFPTLYCTAQbVEBG9XUHL4=;
- b=U3gjgJ2svAeoDEHh7THquz0rBPk2mLIF5aNVF32tJoLSw3mXkTKOBFmD2IGzmHpiVG8CziMk0nHSy3kSDLoepdCKu3kpPtWrFMe9GMLQI3x+hsTsI5jgKvqQ02Wf9rm77IBxk+/ziFacS6SumeE4+djDIJuDgOPgAeVyQh7Frzw=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN2PR12MB4454.namprd12.prod.outlook.com (2603:10b6:208:26c::18) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by IA1PR11MB7725.namprd11.prod.outlook.com (2603:10b6:208:3fd::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
- 2023 01:29:50 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6277.036; Tue, 11 Apr 2023
- 01:29:50 +0000
-Message-ID: <0adc0b89-768e-0f8b-3fd3-4bb7cb3ac3c8@amd.com>
-Date:   Mon, 10 Apr 2023 20:29:47 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
-To:     =?UTF-8?Q?Kornel_Dul=c4=99ba?= <korneld@chromium.org>,
-        "Gong, Richard" <richard.gong@amd.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@leemhuis.info,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
-        gregkh@linuxfoundation.org, stable@vger.kernel.org
-References: <20230320093259.845178-1-korneld@chromium.org>
- <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
- <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
- <CAD=NsqxSDUu3wpfhUCDJgP2TaKb7dudB90snROQpPJPj3fdFgQ@mail.gmail.com>
- <CAD=NsqyAXK0z7XqVy=coSm40zOe0yS+h=oiDD8a-udDT5WKMdw@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Tue, 11 Apr
+ 2023 01:30:58 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::f670:cacc:d75f:fcc4]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::f670:cacc:d75f:fcc4%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 01:30:58 +0000
+Message-ID: <9ba8e120-a505-bc1a-7f63-c3a5e68ce8c8@intel.com>
+Date:   Tue, 11 Apr 2023 09:30:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH v5 3/6] userfaultfd: convert copy_huge_page_from_user() to
+ copy_folio_from_user()
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        "zhangpeng (AS)" <zhangpeng362@huawei.com>
+CC:     Vishal Moola <vishal.moola@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <willy@infradead.org>, <sidhartha.kumar@oracle.com>,
+        <muchun.song@linux.dev>, <wangkefeng.wang@huawei.com>,
+        <sunnanyong@huawei.com>
+References: <20230331093937.945725-1-zhangpeng362@huawei.com>
+ <20230331093937.945725-4-zhangpeng362@huawei.com>
+ <CAOzc2pzr7VJRdsx1ud_ceBhbu2XP7Ay72jFETtN8eOt5yR7S=Q@mail.gmail.com>
+ <a874c84b-4a83-c12f-e064-eab6a792c1e6@huawei.com>
+ <20230410212612.GA8315@monkey>
 Content-Language: en-US
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <CAD=NsqyAXK0z7XqVy=coSm40zOe0yS+h=oiDD8a-udDT5WKMdw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   "Yin, Fengwei" <fengwei.yin@intel.com>
+In-Reply-To: <20230410212612.GA8315@monkey>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR13CA0179.namprd13.prod.outlook.com
- (2603:10b6:806:28::34) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+X-ClientProxiedBy: SG2PR06CA0199.apcprd06.prod.outlook.com (2603:1096:4:1::31)
+ To CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN2PR12MB4454:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6eba212c-859e-47d9-4872-08db3a2c3e26
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4820:EE_|IA1PR11MB7725:EE_
+X-MS-Office365-Filtering-Correlation-Id: 797f67be-7c18-432b-4a69-08db3a2c6676
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZgS6md4btCEGORiHt0mfLqscORYGtUEUvQD63P7oKsIYee5mA5VsIBB4mKtzW6JYdUXAOhjZHsGg1+ulCYg/ZLLGuT5W8ysy2f+ULmGsE0TV4FvpSyO7kfjvaDqdtA9BUC99NmYdoTunmYjwgZFuXZK0tLGuYlJG+0DzFv0gNtxoAVY3V3biBYGq3GBP4D9rqpIojmJHRB5b9IJ650hdGWGwV20J9nJjnQ8fsdSmZ2FvBcd6fpT5b096yvycYym8/7QXk+OJ9bx/qXxe7TH/uLuazhMEWX+AH+DWZzExTcr5jn+OX9Iao+kHRYsJhWBlLj1ed5O7wdd1wECwZncBqDueb8HQXk3I5OpP0oRpLD1h3U0V3OemF+eEeYewQGGnUmHg6Z9MUtvkTvwCiPxfdSSuWDh3zVDLk4XdCqjmFE/WTBzH2v2ZRAKAq/GqDRIkfqoNXU43q5tXfD45wM3gSGreAEX35S1ajjxAK+LCh5iVzrdCoODtSWiYXnWTPTs8AXSAYeaTUIfFTDA3mQQtAupWGJ2AZVgkd45fvc17unz0PhOsPYfoBFKwEQ1r28sJNmLXTXTJ/e8i001/cSWgoz+sb70RdJ05XGWaM7PVwyehI63HWweqVPUjnIuw1K/CTNRNlHxDPZRDi+FNQK5PJQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199021)(36756003)(31696002)(86362001)(41300700001)(316002)(110136005)(478600001)(8676002)(66946007)(66476007)(54906003)(6486002)(66556008)(4326008)(966005)(6636002)(5660300002)(7416002)(2906002)(8936002)(44832011)(66574015)(186003)(38100700002)(6666004)(6512007)(6506007)(2616005)(83380400001)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: v5vzLbXGkK8MVkx4R5Lqjs8OoIY0dT/sRWooM7Bfn+Geb7x2ZPuUOO7Rk9WPK022mJMqsf9FBp6sDlbuxBXMy1PMVjXp/b4uq/YIxTx0ol/RS3PGaeMm4ZMglzGYB03on1/uYxRQdcFEFaK8w+Byr0KJteR8ZOx8d6R00RrGcRfi8lNgr4+KjITwb4ViVzLe0ALPGA09V1aEBlJtByw7MKTvEp8ckwt8+jQ526L3IkRLbk2KBpuxUTAfjO5m0Slv7COm8L2bvJfcN9Egf9GNWtFLEFTTANbmgEV1lywZ0R/u4dKqcgl30mXe8iBxNU4TTXHkbglDjnxK1pgwid+i8tCDyswTgT6xhUaVflZAIW0cMYyf1Y65Rl0ykkLBdOiTwydXvsCLfBD4O++RgbTgpjNZYLLOKmckbWy/8TAqtV18yWVkVKBAuFLZBM0vhimV/uK+9KZtoOcchfGNXtKQamQrTvUsSidJsCJWbnGtrIito/XnS57x2BmHQWUZHc4PtuOhU+dv7o/6v/fkQxNsN9eYPqpQSEhO/4Q+dF6gCgyMTnrhGUJRAAgDyMR+ysIMXpCgmM4DEu8euXRjE8iS6qC5p8z1N6LcIQGYrIriEMjTiL4fLREG24RzTeBoG7rUYSMhlLXHaimiFhP4tYl42UIpkombJ9+C9MUBnpMghhg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(366004)(396003)(136003)(39860400002)(451199021)(478600001)(6666004)(53546011)(110136005)(26005)(316002)(6506007)(6512007)(186003)(6486002)(2906002)(66946007)(66556008)(41300700001)(8676002)(7416002)(5660300002)(66476007)(8936002)(4326008)(82960400001)(38100700002)(86362001)(31696002)(36756003)(2616005)(31686004)(14583001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTU2SXNZR2s0T0lVbFJnUW4yQWd1ZmRzdk1XQlpyTGdRbVhhQW1iRzVXU0da?=
- =?utf-8?B?QTBJcTF4YzN3SjlaVGNHdGdYN1RaSEhNN1dCeXZsdXN3SUFwcVJNQVJWUGpI?=
- =?utf-8?B?ZVdZdEFkREcrRy9hTTZoVnd3Yi8yQkdQQ3NGYmRIWDVQT1hBcm1RdlRzNDhJ?=
- =?utf-8?B?RnA3M1Mya3NJTGI4UGdtZlZITGRpakx2NHMyOUsyVnBiZHRkcmRxa0JHVDJy?=
- =?utf-8?B?YTFDVGo4Z1E2OWphOWtRWGlUUmxSYlgvYzJ4TVg5WmdNSUtySXVKbEkrYVUx?=
- =?utf-8?B?M1Z5RGY5VWJ5UGlaY3FpcFFIN2hjYWxYeWpuR2xwb0gvVHR5cVdyU2VyZkxr?=
- =?utf-8?B?clBZRDdGd054YXpRL09KQUo4Z2dmOFUxK2pGMlRINlhiSGdyVFAycVhzeTUw?=
- =?utf-8?B?T1lvRWQzTkMzN3BiUVdmOWRDRHZjYzBoZVFZakdyMUZBNVphbWNxREtYc1NB?=
- =?utf-8?B?TERFNVZYWXBRT2lpMkVUK2ZJK3pNUERGSlgxcGtZRmVMQktGOGkwb0MrL3Jm?=
- =?utf-8?B?dVI0ekZHRUdyYWxxUW9CU1htcSt0NVhlZXljMVBuY2NCak1yWFltYlVNb0Z0?=
- =?utf-8?B?NWhuQVdpVEdoK0xWa3hrcFdrTmc2U1Y2bHljdDM1b1VqUlZibU12MzBpbG5s?=
- =?utf-8?B?UkRqYjVBQXNxemhjU2NtOVJlRUtUNnFWVDIzT3Q2NnR3bTBldlRyTXhvRnJD?=
- =?utf-8?B?S0tNZkhHbjVreklmZWt6SFdHc0YyMEdKbkpnaVowR3N6YkYyT3E0N2krUDh6?=
- =?utf-8?B?d2dyWERjZUg5UndsZk03WG1EaXBxRFhhRVJHTWFma0NPRmxKWjltdFo2ZkZH?=
- =?utf-8?B?bXZDUk9tMmF4d0dza2E3U3BMMWxQb2RQYUNpT1Z6WVZGMGUwTU5FSnhGaWtz?=
- =?utf-8?B?clhOdzV3b3Z5SGpESUZjMzVxOTcyMmN4YkFXSWY1VngydlpBL0F5YVVlQjQ0?=
- =?utf-8?B?WFZ0Z1hkZW1RMGNVRTBnRURzVXZUOUNxKzZEUXoxQkQyV1J1QTI3SlgwVzUv?=
- =?utf-8?B?VW5TclFTN0lxeHg4OGR0d0RieDFBQkljeGM2ZmE3cktXbkVtQkhnRWRhQ1NP?=
- =?utf-8?B?ajRkR0wzZUlmUng0b29GSzNXK0hacEZ0cjZ5NkhENkhzdkFONjVNTW1WT0ZH?=
- =?utf-8?B?S2ZFNWE0UTlndDE2bnFJeFZqVVR2djFJV21ETUtUdVN2aEZGT0VnaXRzd3hl?=
- =?utf-8?B?QzJHVHY0R1VDWnZBeFRWZTEwbjNYQ3dFeTZScjRoSjQrRVM2WEM2b3JBQ2Jy?=
- =?utf-8?B?bEFydUYrSjVpMzhtTlhmVy9MMXdqbWxEOHViTFQycnluMy9EOEh4MVF0MlZy?=
- =?utf-8?B?NlJDQmptaW9TVTB3OGxiVnNjMWFrT0JYMWd3MkE3cTgyM3EyMGhCSmxFS243?=
- =?utf-8?B?YVZOMVprZUVMSHVydEJDS2dJYUVEaWRRY3ZQTTQwVythZ0c5ekhPSVFFZENS?=
- =?utf-8?B?Z1V2eVE3enVJVExFWUVJaDdIajR3NWE0cmV5bmpYaHR6N3RDWVd5VHhWcW92?=
- =?utf-8?B?WXB3UU5IMmZ2NkxDY0k1UHBQYlZqb2lOKzdLRkR2NktMa2RzQ2UvWlJVeUJQ?=
- =?utf-8?B?T0J0N0xWZnJ4Y0RIa0xndGhLQWM4QVdEY3ZTRFBUdHVyTUQxOVFpRDIxeFRC?=
- =?utf-8?B?Ym1HSnlHVkRob1NDRk9DSURBTldtRnFzSnQ0b25Sa3VMMXZicTRtbDN2c2tQ?=
- =?utf-8?B?NnRadkF3K3dyTFlLQ1RTQ29iTDFHbVQ3bS8yd1BRamRxL2FmVkUvODE2d3pn?=
- =?utf-8?B?UndKMVdkTTU4RUVleEg2ZHNkSmcxMVBuYUxkWE5ROTVTU2V5bkxOYktKclAr?=
- =?utf-8?B?bHZUV1hUNGNYNkh3TmU1UUJkRlVaTFhvV29lWnF5RUd0ek9LeStxTUNvdHYy?=
- =?utf-8?B?R1VVVUxrV3pHUHFUbDN3bE9XRnFZaE15Qm4zZll0VnJtZFV6US9EWFpHTmUx?=
- =?utf-8?B?NTE1NWlFWC9iWjR3bmFLVlBVbG5jQVp0cWIvTUd6QzNzWTRVRUluc3hzQmJa?=
- =?utf-8?B?emJIYlVPRVY2M2MyYzZ1clY5bUl3Vkkvclhkb1RETVhabzYzQWJtZjZIU29p?=
- =?utf-8?B?YkVNY29YZGx4VHpoRnNZQVZiTXlJNWxVaW0yUk1VN21mMjNpZmdCMjdScElN?=
- =?utf-8?B?Q0NRRzBrYkl3WUhuOGZaM29CcTRmRzNlcndiSXRySFhDMmRxdVRZQkhkY1BP?=
- =?utf-8?Q?JV5vPeakTz71hvnDoXOH/XEyQpHzoWaVgVfj2zmUIEw9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6eba212c-859e-47d9-4872-08db3a2c3e26
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzhuV2JSNm12RUNSaER5OTNadERWT2w1NnRRRnRBTHdEZUtlTmlEUTExaUNY?=
+ =?utf-8?B?WXAvREJpd3VvaHFXclp6NGZFTTY3b2pTYlA5UktkTVZPZCtwR2pHaGVGTlJN?=
+ =?utf-8?B?WWNQa2c0UDJrL0V0SDRtNjB4OWVWSnNGcFZwUFVnMFZDY0tqaGMxbyt4Smtt?=
+ =?utf-8?B?NjBJclpOTy9leE93OUJhaCtIQVdYWHM0VEtjVXVOYlVwZnhhN3IrRkJkdXdB?=
+ =?utf-8?B?bzJCdlZWT1pEMGVYVGJDQURnSzVCV0x4TmlYb0JqaERvdzJ3K1VGbTFUZkVT?=
+ =?utf-8?B?SWhsUjBpazhSSCtsRGVHYTNqWi95dEV4U2s0dWRTM1FPUllZOEkwQmsrWE5H?=
+ =?utf-8?B?dHB1TFYwalBrNGNNQkdCaiszbEpQc2pTWE1EUjVsSVBCdjJEeE1qMmNCOUVH?=
+ =?utf-8?B?YTJCNG50QjN4VGNQK25VejNFVE9NYkh0akczL25JV1YzSmZxYUY4YVBacEVC?=
+ =?utf-8?B?dVlRZkdSU2lDMDgyWVE4SUVzV0tFTldRUERDVElLQkxYRWxmTHlFd3V3TEY1?=
+ =?utf-8?B?RlpqU1JhYkk3UENLMEg4aXBvb2d1KzIxbmR5Q1M5V1dBZGlLZS9qakpDb1Ur?=
+ =?utf-8?B?OXBOalYycnpTZGZJemZYdTFBYW9WMWFBSjEybGUrNUNtUlVOYWU3NmpuOGZn?=
+ =?utf-8?B?eW9IdXRlT0IvcTNHSnI0bW9IQTRsNTg0STV1NFg2dlR4SFBaNlNydzdWZ0lW?=
+ =?utf-8?B?KzdVQXJoVmsveW1YUUlrZEUvL2Rka0F0c0dRRm5KcExmeksxMnl2OUY0NWFZ?=
+ =?utf-8?B?RzhUdFRaRXJvaTdKenRGamdBNjVHRElDUW1QcVZ4R2xVK1UyTEd3K2xVeWpW?=
+ =?utf-8?B?cUcxN3ZyOGQyYkJIa1ZOVzUzRGhpaEVJVy9TOFZOMmlUV0VSTFNrVkNWTGc3?=
+ =?utf-8?B?U1BoSGJLZ3I5bkNlTE1peWZGTWRHYU5wdHB6anhEamhIMUVhNlBoNWNBaS95?=
+ =?utf-8?B?WW9nU0wzcFJmNHp2ZEZvUys4TFoxZS9wT0ptV0lrT3BBZHBST282RnRpekJW?=
+ =?utf-8?B?YVJpRFVvZTZiYXJZY3ZidlZNa2VHdzh1ZitlWmY2STdPOHg5eGk4S282K2U3?=
+ =?utf-8?B?WXJKc2N5WmtvOFdpWFRhRUdBN0Z5UEVYYkF6RXBkaVdYS2Q0dUNnK1AvRWR1?=
+ =?utf-8?B?WFpDNWhxS0F5MFRsbXRmUllXK2xIVVN3R0tya0NyVVY3aUlvaXBqWVo4RlVi?=
+ =?utf-8?B?aExKcU1hSnVrRDVRZm1nUjFoSm9tMGFaY0V2Wk45akczUGtUZk0vNjYwOSt3?=
+ =?utf-8?B?MG9wMzFzWkc3cklQUUw5cThXYzZ0UU4vVlh6VTJOQ1ZaeHF2WldNY3JmbGNB?=
+ =?utf-8?B?czJ4ZXhOVVdoZzVCTFdxdTdDWVBpTEJ5WWlsS1Zwb1dpVVdxZ2tHdnAvODht?=
+ =?utf-8?B?UHpRS0xDcWEwaWNzaUdNdGU5OWorNzRzcFg5ZTJrMHk5ZWUzRGcvbWlBMnQz?=
+ =?utf-8?B?cGNXdlNKRDNSOFhqNjVLZDZYRno5RnBnV0dra0VrZmt5WXljVDdiekw0NnlV?=
+ =?utf-8?B?TklMR1ppSVBLMVU5b1lqUGZhTDZlZjRKOUlJUGl4NVZWZktZK3pyMzUxTmU4?=
+ =?utf-8?B?ZEhoZDhWRDFBYVFubjJJVnpveEIvTUVFQnUzSm9tY2NYWnBRczBsZ0JGLzBr?=
+ =?utf-8?B?dkFxclp0Rlk5bXpFWjVxWU5oanJ1Rk1sd3gxcVM2QUN6YXlOby9vYlVwd2xj?=
+ =?utf-8?B?RGpydXlUS2hlb3F0aXRxUHJ3S1RlTlVIQ2xKUUl0bHF5QUc1T3p0R09HUGpr?=
+ =?utf-8?B?MjVKZlVmWTF2d09DNmJ6S1Nob29MclFCRjVFUndqZ2k5c0ZndEFndTd6TkRz?=
+ =?utf-8?B?RWtFYW5yU09TZjVoaFN3NGd5Q0UzNld6MkhsSVptN05rNzVNZFRDTVFJdzRM?=
+ =?utf-8?B?WXZPMFZRcGt3YStUOVgvd1g0MkQ3WWpvd3NFaFJYUmcybjFxbXRQYW40ck1H?=
+ =?utf-8?B?S09qU29QblQvZXpvb3d4V2lTcHZhcDNmS0tXcnYwQmwzb045K0ZzTmtYZmdp?=
+ =?utf-8?B?MTdKQWI3UXc4U05tTE9HS0VtYnQ1K1VWNFZqZDZIZElQSHVXUi9MVTVRQ0R6?=
+ =?utf-8?B?OERPaUwya2VyRlZqNFRpekZQL3hoQnJZeEs4WU9RWEtiWDZUSEVtY0xObTAr?=
+ =?utf-8?Q?tx9abFdVWDC5fHSv2481CpfVi?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 797f67be-7c18-432b-4a69-08db3a2c6676
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 01:29:50.1345
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 01:30:57.8480
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LCYP+uoRJzmkkxDan10b2l+r79rGYWYlDcm1kGAKH6n1HgJIP1iIUIy1prUMkeNieZGFsEuEu1T4x8HItWVqOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4454
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: NpLyivD31/ke0Te+SmUGZKkOqxGEWXpmfMqaLxbOnM6PevIE6erR2cLuSG+PjEO6xSNYzJWdaksU9T/nhGiVEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7725
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -135,148 +169,81 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/10/23 11:32, Kornel Dulęba wrote:
-> On Mon, Apr 10, 2023 at 6:17 PM Kornel Dulęba <korneld@chromium.org> wrote:
->> On Mon, Apr 10, 2023 at 5:29 PM Gong, Richard <richard.gong@amd.com> wrote:
->>> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
->>>> On 3/20/23 04:32, Kornel Dulęba wrote:
->>>>
->>>>> This fixes a similar problem to the one observed in:
->>>>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
->>>>> probe").
->>>>>
->>>>> On some systems, during suspend/resume cycle firmware leaves
->>>>> an interrupt enabled on a pin that is not used by the kernel.
->>>>> This confuses the AMD pinctrl driver and causes spurious interrupts.
->>>>>
->>>>> The driver already has logic to detect if a pin is used by the kernel.
->>>>> Leverage it to re-initialize interrupt fields of a pin only if it's not
->>>>> used by us.
->>>>>
->>>>> Signed-off-by: Kornel Dulęba <korneld@chromium.org>
->>>>> ---
->>>>>    drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++----------------
->>>>>    1 file changed, 20 insertions(+), 16 deletions(-)
->>>>>
->>>>> diff --git a/drivers/pinctrl/pinctrl-amd.c
->>>>> b/drivers/pinctrl/pinctrl-amd.c
->>>>> index 9236a132c7ba..609821b756c2 100644
->>>>> --- a/drivers/pinctrl/pinctrl-amd.c
->>>>> +++ b/drivers/pinctrl/pinctrl-amd.c
->>>>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
->>>>> = {
->>>>>        .pin_config_group_set = amd_pinconf_group_set,
->>>>>    };
->>>>>    -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
->>>>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
->>>>>    {
->>>>> -    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
->>>>> +    const struct pin_desc *pd;
->>>>>        unsigned long flags;
->>>>>        u32 pin_reg, mask;
->>>>> -    int i;
->>>>>          mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
->>>>>            BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
->>>>>            BIT(WAKE_CNTRL_OFF_S4);
->>>>>    -    for (i = 0; i < desc->npins; i++) {
->>>>> -        int pin = desc->pins[i].number;
->>>>> -        const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
->>>>> -
->>>>> -        if (!pd)
->>>>> -            continue;
->>>>> +    pd = pin_desc_get(gpio_dev->pctrl, pin);
->>>>> +    if (!pd)
->>>>> +        return;
->>>>>    -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>>>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>>>> +    pin_reg = readl(gpio_dev->base + pin * 4);
->>>>> +    pin_reg &= ~mask;
->>>>> +    writel(pin_reg, gpio_dev->base + pin * 4);
->>>>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
->>>>> +}
->>>>>    -        pin_reg = readl(gpio_dev->base + i * 4);
->>>>> -        pin_reg &= ~mask;
->>>>> -        writel(pin_reg, gpio_dev->base + i * 4);
->>>>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
->>>>> +{
->>>>> +    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
->>>>> +    int i;
->>>>>    -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
->>>>> -    }
->>>>> +    for (i = 0; i < desc->npins; i++)
->>>>> +        amd_gpio_irq_init_pin(gpio_dev, i);
->>>>>    }
->>>>>      #ifdef CONFIG_PM_SLEEP
->>>>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
->>>>>        for (i = 0; i < desc->npins; i++) {
->>>>>            int pin = desc->pins[i].number;
->>>>>    -        if (!amd_gpio_should_save(gpio_dev, pin))
->>>>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
->>>>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
->>>>>                continue;
->>>>> +        }
->>>>>              raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>>>>            gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4)
->>>>> & PIN_IRQ_PENDING;
->>>> Hello Kornel,
->>>>
->>>> I've found that this commit which was included in 6.3-rc5 is causing a
->>>> regression waking up from lid on a Lenovo Z13.
->>> observed "unable to wake from power button" on AMD based Dell platform.
->>> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
->>> top of 6.3-rc6 does fix the issue.
->> Whoops, sorry for the breakage.
->> Could you please share the output of "/sys/kernel/debug/gpio" before
->> and after the first suspend/resume cycle.
-> Oh and also I'd need to compare the output from this with and without
-> this patch reverted.
 
-I've attached the requested output to the bug for all 3 cases for the Z13.
-
-6.3-rc6 (broken lid resume)
-
-6.3-rc6 + patch below (broken lid resume)
-
-6.3-rc6 + revert (works from lid)
-
-https://bugzilla.kernel.org/show_bug.cgi?id=217315
-
->> I've looked at the patch again and found a rather silly mistake.
->> Please try the following.
->> Note that I don't have access to hardware with this controller at the
->> moment, so I've only compile tested it.
+On 4/11/2023 5:26 AM, Mike Kravetz wrote:
+> On 04/08/23 12:43, zhangpeng (AS) wrote:
+>> On 2023/4/7 10:28, Vishal Moola wrote:
 >>
->> diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
->> index 609821b756c2..7e7770152ca8 100644
->> --- a/drivers/pinctrl/pinctrl-amd.c
->> +++ b/drivers/pinctrl/pinctrl-amd.c
->> @@ -899,7 +899,7 @@ static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
->>          int i;
+>>> On Fri, Mar 31, 2023 at 2:41 AM Peng Zhang <zhangpeng362@huawei.com> wrote:
+>>>> From: ZhangPeng <zhangpeng362@huawei.com>
+>>>>
+>>>> Replace copy_huge_page_from_user() with copy_folio_from_user().
+>>>> copy_folio_from_user() does the same as copy_huge_page_from_user(), but
+>>>> takes in a folio instead of a page. Convert page_kaddr to kaddr in
+>>>> copy_folio_from_user() to do indenting cleanup.
+>>>>
+>>>> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+>>>> Reviewed-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+>>>> ---
+>>>> -                               bool allow_pagefault)
+>>>> +long copy_folio_from_user(struct folio *dst_folio,
+>>>> +                          const void __user *usr_src,
+>>>> +                          bool allow_pagefault)
+>>>>   {
+>>>> -       void *page_kaddr;
+>>>> +       void *kaddr;
+>>>>          unsigned long i, rc = 0;
+>>>> -       unsigned long ret_val = pages_per_huge_page * PAGE_SIZE;
+>>>> +       unsigned int nr_pages = folio_nr_pages(dst_folio);
+>>>> +       unsigned long ret_val = nr_pages * PAGE_SIZE;
+>>>>          struct page *subpage;
+>>>>
+>>>> -       for (i = 0; i < pages_per_huge_page; i++) {
+>>>> -               subpage = nth_page(dst_page, i);
+>>>> -               page_kaddr = kmap_local_page(subpage);
+>>>> +       for (i = 0; i < nr_pages; i++) {
+>>>> +               subpage = folio_page(dst_folio, i);
+>>>> +               kaddr = kmap_local_page(subpage);
+>>>>                  if (!allow_pagefault)
+>>>>                          pagefault_disable();
+>>>> -               rc = copy_from_user(page_kaddr,
+>>>> -                               usr_src + i * PAGE_SIZE, PAGE_SIZE);
+>>>> +               rc = copy_from_user(kaddr, usr_src + i * PAGE_SIZE, PAGE_SIZE);
+>>>>                  if (!allow_pagefault)
+>>>>                          pagefault_enable();
+>>>> -               kunmap_local(page_kaddr);
+>>>> +               kunmap_local(kaddr);
+>>>>
+>>>>                  ret_val -= (PAGE_SIZE - rc);
+>>>>                  if (rc)
+>>>>                          break;
+>>>>
+>>>> -               flush_dcache_page(subpage);
+>>>> -
+>>>>                  cond_resched();
+>>>>          }
+>>>> +       flush_dcache_folio(dst_folio);
+>>>>          return ret_val;
+>>>>   }
+>>> Moving the flush_dcache_page() outside the loop to be
+>>> flush_dcache_folio() changes the behavior of the function.
+>>>
+>>> Initially, if it fails to copy the entire page, the function breaks out
+>>> of the loop and returns the number of unwritten bytes without
+>>> flushing the page from the cache. Now if it fails, it will still flush
+>>> out the page it failed on, as well as any later pages it may not
+>>> have gotten to yet.
 >>
->>          for (i = 0; i < desc->npins; i++)
->> -               amd_gpio_irq_init_pin(gpio_dev, i);
->> +               amd_gpio_irq_init_pin(gpio_dev, desc->pins[i].number);
->>   }
->>
-This unfortunately doesn't help the behavior at all.
->>>> Reverting it on top of 6.3-rc6 resolves the problem.
->>>>
->>>> I've collected what I can into this bug report:
->>>>
->>>> https://bugzilla.kernel.org/show_bug.cgi?id=217315
->>>>
->>>> Linus Walleij,
->>>>
->>>> It looks like this was CC to stable.  If we can't get a quick solution
->>>> we might want to pull this from stable.
->>> this commit landed into 6.1.23 as well
->>>
->>>           d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resume
->>>
->>>> Thanks,
->>>>
->>>>
->>> Regards,
->>>
->>> Richard
->>>
+>> Agreed. If it fails, could we just not flush the folio?
+> 
+> I believe that should be OK.  If returning an error, nobody should be
+> depending on any part of the page being present or not in the cache.
+Maybe we should flush_dcache because this function returns the 
+bytes copied successfully? flushing cache to make sure the copied
+pieces to RAM for sure.
+
+For the range not copied yet, flushing cache or not doesn't make
+difference. Thanks.
+
+Regards
+Yin, Fengwei
