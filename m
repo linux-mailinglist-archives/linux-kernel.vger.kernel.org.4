@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25CA6DE035
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241626DE032
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjDKP7W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 11:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S229581AbjDKP7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjDKP7T (ORCPT
+        with ESMTP id S229641AbjDKP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:59:19 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFB8F9;
-        Tue, 11 Apr 2023 08:59:10 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id sh8so21568744ejc.10;
-        Tue, 11 Apr 2023 08:59:10 -0700 (PDT)
+        Tue, 11 Apr 2023 11:59:18 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961A94EDA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:59:07 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-504718a2265so3374452a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681228746;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HuLKaVpqWP7mcBL6Va5Q6AmbfGLfH0Ywuo6SlIN5+HI=;
+        b=lvxPfM8pF4k7O2Lg3VLCu9K5GPO9jyWxvj4IHAqR/RPyls6W2HA033ataUHE+gqDI9
+         DBhU6dQmXT239qaiaKugflHr79gur8BX2toxtbaNIXDNrbhFAIZK+8PDjeT76BcStMYZ
+         PrReP3uLUBz8/IOCC9f9XozZOo7bSwyq0qj5eL3oRFB14QtHwRfWvZmvW8gg7HLISRMz
+         NO1K021Jbgll+t898NmGvGc1qW76ddjmiYc9tbkLPfjWvlrImk7jPLJX4rlfQWNg3CGK
+         73Uxe60eY2kLkIk7nDs3DF/SEcmkLqVDzI1h8kgTRxjLfANGDYzQlBOxjOhZyFqqp4X9
+         xdtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681228749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+t+hSLymjtcl9tDYP+77CnMcRbQzN7gTbEgZPOkpgNo=;
-        b=eJ/PIU//IcsWj32g+XcGXJ4OcrjnsnjsGUGPqs2uZsAIXaq9iOp0s7qchxxDH39dy2
-         oP0FXrGlFCnEq6XM9pkY0Y+A+SFZfgQ/YoV/j3MpcWfwSMm/a0J2XjGmeVRHevnehikH
-         CqbdnMv2Czw3Os59fatiftCiXtnv9gQMdft/AOsg0Ppb6ISlbmR523328hs9aDUc0TEt
-         LtT4SOC9SEFuaVBMpvf0w3/aE5o6a7zNtgdImKwzb1zGd02f+/Lx70LyKrRWSRzWtsPp
-         q1McPGq7zWhchHu7T+3NUdzWlxlqFmFuamyWuDTDi3n9c59hDUONNLTH/Fx3q6zWSKDU
-         Ws7w==
-X-Gm-Message-State: AAQBX9d3Yuv33NqlntxUndYoR8fNIw8Pk4YpIC7HP+y913Y2vIdw+909
-        jMdBnAenON7weO/RAtPHkAaONd8dM+7umj9koyM=
-X-Google-Smtp-Source: AKy350bNaptOkAI1KLdu2T1meyD/APPTK9ZKzELBXmDXzLaPX7iTDs2GdfkgJS/ZGwOadRpz+hvMivBZgH9t1VCwwCU=
-X-Received: by 2002:a17:907:8a0e:b0:94e:7ce:4d1f with SMTP id
- sc14-20020a1709078a0e00b0094e07ce4d1fmr1675049ejc.2.1681228748909; Tue, 11
- Apr 2023 08:59:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681228746;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HuLKaVpqWP7mcBL6Va5Q6AmbfGLfH0Ywuo6SlIN5+HI=;
+        b=DUdtmQgzgphc+QeN+2RzjtBB31fUCapk8oLruwcSOJlO18eCOAH7bTbihTY/7r2w2T
+         Gl60T+jopkxLCnWVz8HA68nueSUmB+OwzgYLr9I4QYKIHqr7UF/qFlAkfvcGAMw3m2Fg
+         oKlLJBQet7QUoDV6qU+gA//vsRWScEGQ3ayUhhifVoKYX8UfOm1FaxggJ44elIg0TteK
+         wXCfRRMrCnmAy4fhlTnF41KmMQbJBGed2CjsOHE4vpT/JJI6PQIGNFdJtPHs0IqUzy6x
+         cc6zkd0JW5XLsNR9W578HUX92dEDjiMpjBw59Uueobg/aytttrB31t6u9rad1GUsiMec
+         yylQ==
+X-Gm-Message-State: AAQBX9ccAntKWVILlJHN0LROOQ1H5IBZa6VLTdaUmUqznE4/fKkdyW9w
+        LLbyO79p7iWAsAOFgvyfwEq7WA==
+X-Google-Smtp-Source: AKy350Y5CR7tYp8NsWFjkTYbI+F0Ye+qaeSHHHlVAklG30GRD47NiW1USk+vZaeKXZvsOfP0/XQq4g==
+X-Received: by 2002:aa7:d60c:0:b0:502:9578:38ed with SMTP id c12-20020aa7d60c000000b00502957838edmr10337957edr.27.1681228746037;
+        Tue, 11 Apr 2023 08:59:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:f1da:c117:3657:c8a? ([2a02:810d:15c0:828:f1da:c117:3657:c8a])
+        by smtp.gmail.com with ESMTPSA id ec20-20020a0564020d5400b00504a1313bafsm2332200edb.95.2023.04.11.08.59.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 08:59:05 -0700 (PDT)
+Message-ID: <e75a5a75-ea42-6c7c-f6ee-b32ef735cd81@linaro.org>
+Date:   Tue, 11 Apr 2023 17:59:04 +0200
 MIME-Version: 1.0
-References: <20230411083257.16155-1-mason.huo@starfivetech.com>
-In-Reply-To: <20230411083257.16155-1-mason.huo@starfivetech.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 17:58:57 +0200
-Message-ID: <CAJZ5v0j_MCv6e08qYKMhiZ2kKzovO+W4scMAKUokNJvt2myS-A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Add JH7110 cpufreq support
-To:     Mason Huo <mason.huo@starfivetech.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: Convert ATH10K to YAML
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
+ <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:33 AM Mason Huo <mason.huo@starfivetech.com> wrote:
->
-> The StarFive JH7110 SoC has four RISC-V cores,
-> and it supports up to 4 cpu frequency loads.
->
-> This patchset adds the compatible strings into the allowlist
-> for supporting the generic cpufreq driver on JH7110 SoC.
-> Also, it enables the axp15060 pmic for the cpu power source.
->
-> The series has been tested on the VisionFive 2 boards which
-> are equipped with JH7110 SoC and axp15060 pmic.
->
->
-> This patchset is based on v6.3-rc4 with these patches applied:
-> [1] ("Basic clock, reset & device tree support for StarFive JH7110 RISC-V SoC")
->     https://lore.kernel.org/all/20230401111934.130844-1-hal.feng@starfivetech.com/
-> [2] ("Add X-Powers AXP15060 PMIC support")
->     https://lore.kernel.org/all/TY3P286MB2611A814E580C96DC6F187B798969@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
->
-> Mason Huo (3):
->   riscv: dts: starfive: Enable axp15060 pmic for cpufreq
->   cpufreq: dt-platdev: Add JH7110 SOC to the allowlist
->   riscv: dts: starfive: Add cpu scaling for JH7110 SoC
->
->  .../jh7110-starfive-visionfive-2.dtsi         | 40 +++++++++++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 25 ++++++++++++
->  drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
->  3 files changed, 66 insertions(+)
+On 06/04/2023 14:55, Konrad Dybcio wrote:
+> Convert the ATH10K bindings to YAML.
+> 
+> Dropped properties that are absent at the current state of mainline:
+> - qcom,msi_addr
+> - qcom,msi_base
+> 
+> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
+> be reconsidered on the driver side, especially the latter one.
+> 
+> Somewhat based on the ath11k bindings.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/net/wireless/qcom,ath10k.txt          | 215 -------------
+>  .../bindings/net/wireless/qcom,ath10k.yaml         | 357 +++++++++++++++++++++
+>  2 files changed, 357 insertions(+), 215 deletions(-)
 
-Viresh, can you have a look at this, please?
+You should have received kernel test robot warning. If not, just
+confirming here - you need to fix paths (docs, maintainers).
 
-It is very similar to the ARM thing AFAICS.
+Best regards,
+Krzysztof
+
