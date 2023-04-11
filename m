@@ -2,183 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B114E6DDD42
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBFC6DDD46
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjDKOH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S229648AbjDKOIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjDKOHV (ORCPT
+        with ESMTP id S229510AbjDKOIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:07:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91CF10FD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681222038; x=1712758038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xQc90EsiSgEeU2LsTXTSVoxUv73F2XLPrJjotGxGPEA=;
-  b=ktjZDILdXKAtSz1DH3QtpT1PAD+5iJinXBZXi6b8WupBS52LZikVeP9i
-   pWYqVlw3KzMEnfb48h7f7kE07jxELuZYuGCBgwoOzal/lVl2exMj1XV61
-   MqpBF5vG8oKzfoRrVJvWalQCsRPutd4y3GfTrjsnZs/dzZaRW9WGwDTng
-   XkxUDCl5/DqDGZNO2PcF47MTDI/IZMh3oD7s58xzkZEM3vGBeahqV+CtW
-   Q6eVAtR1L2FBqOvtwUmJw6O4hjEgm5Wyzeo35TbI47cZBl6RAW9PU5SS4
-   ALNcfcEftOAiBJLZdj6/FFeFkHv62r04A/lD5RoOvTZo3O5B6AxikVmtI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="408760516"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="408760516"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 07:07:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="721202911"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="721202911"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 07:07:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmEeO-000WMf-0L;
-        Tue, 11 Apr 2023 14:07:12 +0000
-Date:   Tue, 11 Apr 2023 22:07:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qyousef@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Zimuzo Ezeozue <zezeozue@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v3 08/14] sched: Replace rq->curr access w/ rq_curr(rq)
-Message-ID: <202304112129.2DLHpwAl-lkp@intel.com>
-References: <20230411042511.1606592-9-jstultz@google.com>
+        Tue, 11 Apr 2023 10:08:31 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750F197
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:08:10 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a52648fcddso2176075ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681222089; x=1683814089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U/FuUBX/oF7NlHyBeA4tCFMg08z1lRlCt7snQ+IazRc=;
+        b=ZGQN5zSPpnt9Gr1BTrqkXN1evZuAqurPhKj7vfdZedWsMBx9/8buvIj9JD67dQipmx
+         VCWCR1nyWiIVGts1LB3aLAVr3Ztl0vD9HBB1VD+FQRXySUy5NXLUokW56RYI33TBmtuo
+         XHUf5MoBdM60D6qfs2MeHfgxm6dtlJA1Xr74wxJl0IFBEe0qdOr08v3QZ2tCQvjL7w3D
+         fC+iKD6AerXomXzioNocXZKkim1biNzIYLqt+c7BWrbjKykiaoBMnjhmIK8ypzjKyWLc
+         X8ZdMCmVxIB5hCGQtFpOBStEmIynJBo2f1oPcqxi++RHHTk1HeXBonkg5ST/oGb4rRmg
+         II4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681222089; x=1683814089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/FuUBX/oF7NlHyBeA4tCFMg08z1lRlCt7snQ+IazRc=;
+        b=lW0+HKw9roZdv0UyeBkOg90FBOsq37TRY6Idon6MKgjhidJ1yhQKMLBcUdEfJOqPC0
+         v4cMEMRuSesTQB8sb70aC1iZy0iuZ9hDCWlEcWABxaXrdlW+HoomLPBn3feSo7TX3Y7i
+         XdwWTCoq7i/oi07xslBm2UIrHh5dO/f55tnW08sx+XoRk6X/XNR/3dyFViNqy3aDETcu
+         oyPM/4fbztw4MEf13hCTdaUdnxQUPyMGBQdwHN+75Owg/npGMp6g5U6DyGglSgA0tb54
+         8eAl9UtTIwA3b6XzoupV7lUpNC0LK2Tj8Be5/PL/ul/iKeA3NLqxYe7qppImvhTWWTkR
+         uGxg==
+X-Gm-Message-State: AAQBX9d/j180agNDEkU4sTb1SzVy3yXzMUXk/gPOmq5mm27lZzP7ohLa
+        GyA8gi2GICJWclx13iNmtRoKrg==
+X-Google-Smtp-Source: AKy350Y0ucw/4ZrTHcZLDUPrDQNrdscqkfy1vGI2p/5yLdQsTXgObQ0lOKINHgGJ5Lb77YesOypQDQ==
+X-Received: by 2002:a17:902:fb4f:b0:1a5:aca9:50c5 with SMTP id lf15-20020a170902fb4f00b001a5aca950c5mr8257942plb.6.1681222089487;
+        Tue, 11 Apr 2023 07:08:09 -0700 (PDT)
+Received: from [10.200.10.123] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170902988400b0019cd1ee1523sm9758946plp.30.2023.04.11.07.08.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 07:08:09 -0700 (PDT)
+Message-ID: <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
+Date:   Tue, 11 Apr 2023 22:08:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411042511.1606592-9-jstultz@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] mm: slub: annotate kmem_cache_node->list_lock as
+ raw_spinlock
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, 42.hyeyoo@gmail.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
+        cl@linux.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zhao Gongyi <zhaogongyi@bytedance.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+References: <20230411130854.46795-1-zhengqi.arch@bytedance.com>
+ <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/locking/core]
-[also build test ERROR on tip/master tip/auto-latest linus/master v6.3-rc6 next-20230411]
-[cannot apply to tip/sched/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/locking-ww_mutex-Remove-wakeups-from-under-mutex-wait_lock/20230411-122859
-patch link:    https://lore.kernel.org/r/20230411042511.1606592-9-jstultz%40google.com
-patch subject: [PATCH v3 08/14] sched: Replace rq->curr access w/ rq_curr(rq)
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230411/202304112129.2DLHpwAl-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b562351b6a0f874c80020dfc83b22a6f8959aaec
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Stultz/locking-ww_mutex-Remove-wakeups-from-under-mutex-wait_lock/20230411-122859
-        git checkout b562351b6a0f874c80020dfc83b22a6f8959aaec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304112129.2DLHpwAl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/include/asm/rwonce.h:29,
-                    from include/linux/compiler.h:247,
-                    from include/linux/kernel.h:20,
-                    from include/linux/cpumask.h:10,
-                    from include/linux/energy_model.h:4,
-                    from kernel/sched/fair.c:23:
-   kernel/sched/fair.c: In function 'task_numa_compare':
->> include/asm-generic/rwonce.h:44:71: error: lvalue required as unary '&' operand
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                       ^
-   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |         ^~~~~~~~~~~
-   include/linux/rcupdate.h:462:50: note: in expansion of macro 'READ_ONCE'
-     462 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
-         |                                                  ^~~~~~~~~
-   include/linux/rcupdate.h:610:9: note: in expansion of macro '__rcu_dereference_check'
-     610 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:682:28: note: in expansion of macro 'rcu_dereference_check'
-     682 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
-         |                            ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:1961:15: note: in expansion of macro 'rcu_dereference'
-    1961 |         cur = rcu_dereference(rq_curr(dst_rq));
-         |               ^~~~~~~~~~~~~~~
-   kernel/sched/fair.c: In function 'task_numa_group':
->> include/asm-generic/rwonce.h:44:71: error: lvalue required as unary '&' operand
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                       ^
-   include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |         ^~~~~~~~~~~
-   kernel/sched/fair.c:2750:15: note: in expansion of macro 'READ_ONCE'
-    2750 |         tsk = READ_ONCE(cpu_curr(cpu));
-         |               ^~~~~~~~~
-   kernel/sched/fair.c: At top level:
-   kernel/sched/fair.c:11908:6: warning: no previous prototype for 'task_vruntime_update' [-Wmissing-prototypes]
-   11908 | void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
-         |      ^~~~~~~~~~~~~~~~~~~~
 
 
-vim +44 include/asm-generic/rwonce.h
+On 2023/4/11 21:40, Vlastimil Babka wrote:
+> On 4/11/23 15:08, Qi Zheng wrote:
+>> The list_lock can be held in the critical section of
+>> raw_spinlock, and then lockdep will complain about it
+>> like below:
+>>
+>>   =============================
+>>   [ BUG: Invalid wait context ]
+>>   6.3.0-rc6-next-20230411 #7 Not tainted
+>>   -----------------------------
+>>   swapper/0/1 is trying to lock:
+>>   ffff888100055418 (&n->list_lock){....}-{3:3}, at: ___slab_alloc+0x73d/0x1330
+>>   other info that might help us debug this:
+>>   context-{5:5}
+>>   2 locks held by swapper/0/1:
+>>    #0: ffffffff824e8160 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic+0x22/0x2d0
+>>    #1: ffff888136bede50 (&ACCESS_PRIVATE(rtpcp, lock)){....}-{2:2}, at: cblist_init_generic+0x232/0x2d0
+>>   stack backtrace:
+>>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc6-next-20230411 #7
+>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>   Call Trace:
+>>    <TASK>
+>>    dump_stack_lvl+0x77/0xc0
+>>    __lock_acquire+0xa65/0x2950
+>>    ? arch_stack_walk+0x65/0xf0
+>>    ? arch_stack_walk+0x65/0xf0
+>>    ? unwind_next_frame+0x602/0x8d0
+>>    lock_acquire+0xe0/0x300
+>>    ? ___slab_alloc+0x73d/0x1330
+>>    ? find_usage_forwards+0x39/0x50
+>>    ? check_irq_usage+0x162/0xa70
+>>    ? __bfs+0x10c/0x2c0
+>>    _raw_spin_lock_irqsave+0x4f/0x90
+>>    ? ___slab_alloc+0x73d/0x1330
+>>    ___slab_alloc+0x73d/0x1330
+>>    ? fill_pool+0x16b/0x2a0
+>>    ? look_up_lock_class+0x5d/0x160
+>>    ? register_lock_class+0x48/0x500
+>>    ? __lock_acquire+0xabc/0x2950
+>>    ? fill_pool+0x16b/0x2a0
+>>    kmem_cache_alloc+0x358/0x3b0
+>>    ? __lock_acquire+0xabc/0x2950
+>>    fill_pool+0x16b/0x2a0
+>>    ? __debug_object_init+0x292/0x560
+>>    ? lock_acquire+0xe0/0x300
+>>    ? cblist_init_generic+0x232/0x2d0
+>>    __debug_object_init+0x2c/0x560
+>>    cblist_init_generic+0x147/0x2d0
+>>    rcu_init_tasks_generic+0x15/0x190
+>>    kernel_init_freeable+0x6e/0x3e0
+>>    ? rest_init+0x1e0/0x1e0
+>>    kernel_init+0x1b/0x1d0
+>>    ? rest_init+0x1e0/0x1e0
+>>    ret_from_fork+0x1f/0x30
+>>    </TASK>
+>>
+>> The fill_pool() can only be called in the !PREEMPT_RT kernel
+>> or in the preemptible context of the PREEMPT_RT kernel, so
+>> the above warning is not a real issue, but it's better to
+>> annotate kmem_cache_node->list_lock as raw_spinlock to get
+>> rid of such issue.
+> 
+> + CC some RT and RCU people
 
-e506ea451254ab Will Deacon 2019-10-15  28  
-e506ea451254ab Will Deacon 2019-10-15  29  /*
-e506ea451254ab Will Deacon 2019-10-15  30   * Yes, this permits 64-bit accesses on 32-bit architectures. These will
-e506ea451254ab Will Deacon 2019-10-15  31   * actually be atomic in some cases (namely Armv7 + LPAE), but for others we
-e506ea451254ab Will Deacon 2019-10-15  32   * rely on the access being split into 2x32-bit accesses for a 32-bit quantity
-e506ea451254ab Will Deacon 2019-10-15  33   * (e.g. a virtual address) and a strong prevailing wind.
-e506ea451254ab Will Deacon 2019-10-15  34   */
-e506ea451254ab Will Deacon 2019-10-15  35  #define compiletime_assert_rwonce_type(t)					\
-e506ea451254ab Will Deacon 2019-10-15  36  	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),	\
-e506ea451254ab Will Deacon 2019-10-15  37  		"Unsupported access size for {READ,WRITE}_ONCE().")
-e506ea451254ab Will Deacon 2019-10-15  38  
-e506ea451254ab Will Deacon 2019-10-15  39  /*
-e506ea451254ab Will Deacon 2019-10-15  40   * Use __READ_ONCE() instead of READ_ONCE() if you do not require any
-3c9184109e78ea Will Deacon 2019-10-30  41   * atomicity. Note that this may result in tears!
-e506ea451254ab Will Deacon 2019-10-15  42   */
-b78b331a3f5c07 Will Deacon 2019-10-15  43  #ifndef __READ_ONCE
-e506ea451254ab Will Deacon 2019-10-15 @44  #define __READ_ONCE(x)	(*(const volatile __unqual_scalar_typeof(x) *)&(x))
-b78b331a3f5c07 Will Deacon 2019-10-15  45  #endif
-e506ea451254ab Will Deacon 2019-10-15  46  
+Thanks.
+
+> 
+> AFAIK raw_spinlock is not just an annotation, but on RT it changes the
+> implementation from preemptible mutex to actual spin lock, so it would be
+
+Yeah.
+
+> rather unfortunate to do that for a spurious warning. Can it be somehow
+> fixed in a better way?
+
+It's indeed unfortunate for the warning in the commit message. But
+functions like kmem_cache_alloc(GFP_ATOMIC) may indeed be called
+in the critical section of raw_spinlock or in the hardirq context, which
+will cause problem in the PREEMPT_RT kernel. So I still think it is
+reasonable to convert kmem_cache_node->list_lock to raw_spinlock type.
+
+In addition, there are many fix patches for this kind of warning in the
+git log, so I also think there should be a general and better solution. :)
+
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Qi
