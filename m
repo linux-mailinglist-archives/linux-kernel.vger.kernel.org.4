@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FAF6DE83A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BC86DE83F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjDKXpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S229749AbjDKXpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjDKXpE (ORCPT
+        with ESMTP id S229742AbjDKXpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:45:04 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78DD40CA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:03 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee397553eso102375097b3.19
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:03 -0700 (PDT)
+        Tue, 11 Apr 2023 19:45:22 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC7F4C24
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 184-20020a2515c1000000b009419f64f6afso10625085ybv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681256703;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OqBPoR7yC2WC9K+J9X1igm9CprBeNgj2/yZlay6QTRM=;
-        b=QUCJXTqDyqtyFgj2kkmJ9kcW+s2Uoz4xNdnUfA6u7s+oyxdPie6RTyfyHRrQ/Vg2Uw
-         Dy9G7mph/wMJ14t9dodSFYDAujvA4sSE8qqrkmRkmXl7LrISyFADkPpRsHeKAbrgbOeh
-         5rpJ+C+1wl7WsSkNY5siuWvsYba6rQ1rVvZWoFRXfNn0RvoOMyDGmqC0DTiw1GrLN8kJ
-         NB4AJaPu7vY3kgVDTobZFm00Lwyd4AjoicQwMb6ardOTtWP+Tn0JCbR6v+STSSTTr1vp
-         VD4irqbKQLR3VhaOLYSchLLl4cW2210+kSPvgB2QkfXJifVzsvda5n41TEsPfUba39TI
-         4fHw==
+        d=google.com; s=20221208; t=1681256711;
+        h=content-transfer-encoding:to:from:subject:references:mime-version
+         :message-id:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d/T/xU2Yq1vEePI3qmWUebnXaaSA90g08mbqWgT1W7g=;
+        b=kFpOWipksCFKkTuBB67SPcDa84cXE/AcAl5wC7jtN/tR8oVz0EqII+UlF1WKDUSnVL
+         KlF43QwLk4z5PtA7qAdnLjjmAuezxP2zSoEjKP2cu8eJIuPCXjxmTdK0hFIfMfXMIwAN
+         lJ0oCwsW/076uHgz7Ms+0m/uYBmkWuWd7Aa5bo0ouuKyeLVo3gw6MyNQdu/cSuRVmcyH
+         4UOB4C91h1oRlpMKKnMCiwno0nvKW1pGPZiIVKTwmDJKBJ2ZFTvXrUg7rWygJsjU/4P1
+         apSgn3xZreHvd9unH0kkW5QhxDFEhQ6CbfepmQY0opKgJT5EqotDnELC64VNMZDYqIYz
+         TRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681256703;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqBPoR7yC2WC9K+J9X1igm9CprBeNgj2/yZlay6QTRM=;
-        b=RTwrP+RA5m7AnofzmifKPBu7MLEMZv3xJOrToBkGUAwiSlaI0/3Y8E5/RXiU+c0505
-         WTz5k5epJuDg9rUBqgVMq78yl4rAts+zBYSGF7DQREURS4VUZyXAIVyPPjLlSz5Pufqy
-         zpTmbrCIqhLGycZD9obfm80/zsk3xW8uLb6Gy9NJL8SGyCCMuoppZt5G4Mot+GBjp0mQ
-         bKmSaqw3hoiNuWqMJZwzhLguqjspAYnB+A0w7wCuRk1r0cEIrSfkJeCsWQ3tUuz/7ew2
-         m7U4AaXdv1BuzmjC+44DrXFuBbQxbarwA9x4QIUzaM8Rp26zxOzNVyXNgjQuPi2tjFM7
-         GUiQ==
-X-Gm-Message-State: AAQBX9dsUHm4okEIQZ3K9oAaIPL3xq09gS8+Tk2N+a/zmFFskdKETLIr
-        RIDPf/4V7bVGGgtdlGAMsu1LuC6dcX3y
-X-Google-Smtp-Source: AKy350YT4i/gFFt4h/ZXmy6/dVVhSu6MaYU7giH4teNURs95UM/7QxkZ9FFdCTkNmneDFwVfq4Ftw+Jn0qof
+        d=1e100.net; s=20210112; t=1681256711;
+        h=content-transfer-encoding:to:from:subject:references:mime-version
+         :message-id:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=d/T/xU2Yq1vEePI3qmWUebnXaaSA90g08mbqWgT1W7g=;
+        b=OFXd/8XR+NvlLnG6Pv8galFoHmGvSVPEK2JEF56Ck98VwoJTe+GcQsWuONFKcFPD0L
+         w234LVwNfn54t2g7X0sM6g7S+6Lll5NaD4HBZE+BgvFl/pYLoeQ/SW5k+oVEpo+u/f28
+         mP+6/EtjUaKQKwUBnPV1s0Mar0AncMba1j5p3JdUN4Zy5FNWX3RkcUS7sql1Wznd5uWE
+         MgOTHnJnhkOSWwSxPCw1if+zTc9U66nb1R/kj/LMjtfAd2lYNVM9jmvE+1N9LSDmlXU0
+         7hONu1lxBSvGxLNmXghkLJm9oCsTL70WXiTtA9m+uRhpvyjYkY3KfhSCbGhVHQ77wDbh
+         4xkQ==
+X-Gm-Message-State: AAQBX9dB0ZPJs+nGbbYcHfLw0Dnn+3QDr1gUpWctVXpUAZbM64yj6Z6O
+        P0IPub4zCcJNCNvBrKkU2pTxCnB0AOk1
+X-Google-Smtp-Source: AKy350b9Wk2xCPmmLf4lePEkpgpZ7ITKF2nGF7HAaI42QviYndH0AFqfwFszHKGB2NTFLAys0zyYXnyd9Stc
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:f663:83e0:f9b2:5a17])
- (user=irogers job=sendgmr) by 2002:a05:690c:730:b0:54f:899f:890f with SMTP id
- bt16-20020a05690c073000b0054f899f890fmr813697ywb.9.1681256703143; Tue, 11 Apr
- 2023 16:45:03 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:44:38 -0700
+ (user=irogers job=sendgmr) by 2002:a25:76c7:0:b0:b75:8ac3:d5d2 with SMTP id
+ r190-20020a2576c7000000b00b758ac3d5d2mr437284ybc.4.1681256711807; Tue, 11 Apr
+ 2023 16:45:11 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:44:39 -0700
 In-Reply-To: <20230411234440.3313680-1-irogers@google.com>
-Message-Id: <20230411234440.3313680-2-irogers@google.com>
+Message-Id: <20230411234440.3313680-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230411234440.3313680-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v1 1/3] perf vendor events: Update alderlake to v1.20
+Subject: [PATCH v1 2/3] perf vendor events: Update icelakex to v1.20
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -67,6 +69,7 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -77,71 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update from v1.19 to v1.20 affecting the performance/goldencove
-events. Adds cmask=1 for ARITH.IDIV_ACTIVE, and updates event
-descriptions.
+Update from v1.19 to v1.20 affecting the uncore
+UNC_CHA_CORE_SNP.REMOTE_GTONE event's umask.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/arch/x86/alderlake/other.json    | 3 ++-
- tools/perf/pmu-events/arch/x86/alderlake/pipeline.json | 4 +++-
- tools/perf/pmu-events/arch/x86/mapfile.csv             | 4 ++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json | 2 +-
+ tools/perf/pmu-events/arch/x86/mapfile.csv                | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/other.json b/tools/perf/pmu-events/arch/x86/alderlake/other.json
-index 329c611d7cf7..1db73e020215 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/other.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/other.json
-@@ -162,10 +162,11 @@
-         "Unit": "cpu_core"
+diff --git a/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json b/to=
+ols/perf/pmu-events/arch/x86/icelakex/uncore-other.json
+index 8210e286eec1..134b54da0869 100644
+--- a/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
+@@ -981,7 +981,7 @@
+         "EventName": "UNC_CHA_CORE_SNP.REMOTE_GTONE",
+         "PerPkg": "1",
+         "PublicDescription": "Core Cross Snoops Issued : Multiple Snoop Ta=
+rgets from Remote : Counts the number of transactions that trigger a config=
+urable number of cross snoops.  Cores are snooped if the transaction looks =
+up the cache and determines that it is necessary based on the operation typ=
+e and what CoreValid bits are set.  For example, if 2 CV bits are set on a =
+data read, the cores must have the data in S state so it is not necessary t=
+o snoop them.  However, if only 1 CV bit is set the core my have modified t=
+he data.  If the transaction was an RFO, it would need to invalidate the li=
+nes.  This event can be filtered based on who triggered the initial snoop(s=
+).",
+-        "UMask": "0x22",
++        "UMask": "0x12",
+         "Unit": "CHA"
      },
      {
--        "BriefDescription": "XQ.FULL_CYCLES",
-+        "BriefDescription": "Cycles the uncore cannot take further requests",
-         "CounterMask": "1",
-         "EventCode": "0x2d",
-         "EventName": "XQ.FULL_CYCLES",
-+        "PublicDescription": "number of cycles when the thread is active and the uncore cannot take any further requests (for example prefetches, loads or stores initiated by the Core that miss the L2 cache).",
-         "SampleAfterValue": "1000003",
-         "UMask": "0x1",
-         "Unit": "cpu_core"
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-index f848530fbf07..cb5b8611064b 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-@@ -31,6 +31,7 @@
-     },
-     {
-         "BriefDescription": "This event counts the cycles the integer divider is busy.",
-+        "CounterMask": "1",
-         "EventCode": "0xb0",
-         "EventName": "ARITH.IDIV_ACTIVE",
-         "SampleAfterValue": "1000003",
-@@ -1079,9 +1080,10 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "MISC2_RETIRED.LFENCE",
-+        "BriefDescription": "LFENCE instructions retired",
-         "EventCode": "0xe0",
-         "EventName": "MISC2_RETIRED.LFENCE",
-+        "PublicDescription": "number of LFENCE retired instructions",
-         "SampleAfterValue": "400009",
-         "UMask": "0x20",
-         "Unit": "cpu_core"
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-index 97b3ffc284a6..9e7545d09b23 100644
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
+ents/arch/x86/mapfile.csv
+index 9e7545d09b23..58faf18474b5 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -1,6 +1,6 @@
- Family-model,Version,Filename,EventType
--GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
--GenuineIntel-6-BE,v1.19,alderlaken,core
-+GenuineIntel-6-(97|9A|B7|BA|BF),v1.20,alderlake,core
-+GenuineIntel-6-BE,v1.20,alderlaken,core
- GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
- GenuineIntel-6-(3D|47),v27,broadwell,core
- GenuineIntel-6-56,v9,broadwellde,core
--- 
+@@ -13,7 +13,7 @@ GenuineIntel-6-A[DE],v1.01,graniterapids,core
+ GenuineIntel-6-(3C|45|46),v33,haswell,core
+ GenuineIntel-6-3F,v27,haswellx,core
+ GenuineIntel-6-(7D|7E|A7),v1.17,icelake,core
+-GenuineIntel-6-6[AC],v1.19,icelakex,core
++GenuineIntel-6-6[AC],v1.20,icelakex,core
+ GenuineIntel-6-3A,v24,ivybridge,core
+ GenuineIntel-6-3E,v23,ivytown,core
+ GenuineIntel-6-2D,v23,jaketown,core
+--=20
 2.40.0.577.gac1e443424-goog
 
