@@ -2,120 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE8C6DE7BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6F16DE7C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjDKXBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S229509AbjDKXES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKXBF (ORCPT
+        with ESMTP id S229450AbjDKXER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:01:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500DDA;
-        Tue, 11 Apr 2023 16:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=uA2hCTgdMV/heqzAqJQlXsa/2lF8jk1ShKW1BBduEvY=; b=2D+cwJvW1+x3eLKfERE1bHV1LO
-        0eBxeeMsrwpGmo4KgsDzPRvt/Tt/LX1E37lv71F1ftbMxFZ3+Kr6kytOJArFe7Gct2noVjklKJ1lW
-        nlaj27OlEPyXUBfMISmBlCDjcLIiUYwT6Io4mgmNvTAZHV3xUoAOwngzRaTm5ogr6g1ZxDiaqOnvy
-        2ZTvT0lNiUDLuBpSeSNlh3EIywIEpbQ+o+N3oGG9njWAR8JivVb8cO5UZ107xoYV5khOG9YGc5IjI
-        qsPvpRgMeQ9DIudoXubV9T9xZQ9cP7w6ASS1lk8TYskPgx6d/B187ayuTxfrNvNqCaTYK4QZijYbx
-        LIpvKcjg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmMyx-001IjV-1M;
-        Tue, 11 Apr 2023 23:00:59 +0000
-Date:   Tue, 11 Apr 2023 16:00:59 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Song Liu <song@kernel.org>, jim.cromie@gmail.com,
-        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
- module_memory")
-Message-ID: <ZDXmq1B2W0h2rrYW@bombadil.infradead.org>
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
- <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
- <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
- <ZDV4YGjRpuqcI7F3@arm.com>
- <ZDWT6UoWshTUBU+u@bombadil.infradead.org>
+        Tue, 11 Apr 2023 19:04:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8149199D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:04:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F75762AA9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7979C433D2;
+        Tue, 11 Apr 2023 23:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681254255;
+        bh=CcQzzv/cLNqrvnmKPDrfU/4VZ9/4YNiP/gDgXxLe94A=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=AlKHLzQ8MZj9FA0JpXzDNQCqlnLtdOT4LZHOgFsjxCBbBck8rsD76rE/LuxJAUyMc
+         fiFGaODr4o/onzwe38w5XDEhZjdSaDryU4gxm9c5HtMoJo1FTJmcBGEPb0BUP6f6Nc
+         Dmxw+xwuYANZJKhCjMa0Q0s0pMtdUHl4ICK0OmvY5Cw+QTB5NMcmHnbNq/iEx+yiUy
+         TqApKvvCDZhnrvMB/j3nio2lQX1Ld9ErlqxvhynxjhjnNmE2p1Ouhc+kR5EmSdGCCk
+         PZaDEA39zolWH+RzhFL2cymMSOBz3qR6fJHwHBcBBzlU1O4kjb2qbXSFwYDkchci+P
+         aSw4EVAvYpkBQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 385431540478; Tue, 11 Apr 2023 16:04:15 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:04:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        kasan-dev@googlegroups.com, elver@google.com, rdunlap@infradead.org
+Subject: [GIT PULL] KCSAN changes for v6.4
+Message-ID: <147f3556-8e34-4bc3-a6d9-b9528c4eb429@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZDWT6UoWshTUBU+u@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:07:53AM -0700, Luis Chamberlain wrote:
-> On Tue, Apr 11, 2023 at 04:10:24PM +0100, Catalin Marinas wrote:
-> > On Mon, Apr 03, 2023 at 01:43:58PM -0700, Luis Chamberlain wrote:
-> > > On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
-> > > > On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
-> > > > > > kmemleak is reporting 19 leaks during boot
-> > > > > >
-> > > > > > because the hexdumps appeared to have module-names,
-> > > > > > and Ive been hacking nearby, and see the same names
-> > > > > > every time I boot my test-vm, I needed a clearer picture
-> > > > > > Jason corroborated and bisected.
-> > > > > >
-> > > > > > the 19 leaks split into 2 groups,
-> > > > > > 9 with names of builtin modules in the hexdump,
-> > > > > > all with the same backtrace
-> > > > > > 9 without module-names (with a shared backtrace)
-> > > > > > +1 wo name-ish and a separate backtrace
-> > > > >
-> > > > > Song, please take a look.
-> > > > 
-> > > > I will look into this next week.
-> > > 
-> > > I'm thinking this may be it, at least this gets us to what we used to do
-> > > as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
-> > > support") and right before Song's patch.
-> > > 
-> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > > index 6b6da80f363f..3b9c71fa6096 100644
-> > > --- a/kernel/module/main.c
-> > > +++ b/kernel/module/main.c
-> > > @@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
-> > >  		 * which is inside the block. Just mark it as not being a
-> > >  		 * leak.
-> > >  		 */
-> > > -		kmemleak_ignore(ptr);
-> > > +		if (type == MOD_INIT_TEXT)
-> > > +			kmemleak_ignore(ptr);
-> > > +		else
-> > > +			kmemleak_not_leak(ptr);
-> > >  		if (!ptr) {
-> > >  			t = type;
-> > >  			goto out_enomem;
-> > > 
-> > > We used to use the grey area for the TEXT but the original commit
-> > > doesn't explain too well why we grey out init but not the others. Ie
-> > > why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
-> > 
-> > It's safe to use the 'grey' colour in all cases. For text sections that
-> > don't need scanning, there's a slight chance of increasing the false
-> > negatives, 
-> 
-> It turns out that there are *tons* of false positives today, unless
-> these are real leaks.
+Hello, Linus,
 
-I should clarify: *if* we leave things as-is, we seem to get tons of
-false positives.
+Once the v6.4 merge window opens, please pull the latest KCSAN git
+tree from:
 
-  Luis
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/kcsan.2023.04.04a
+  # HEAD: 8dec88070d964bfeb4198f34cb5956d89dd1f557: kcsan: Avoid READ_ONCE() in read_instrumented_memory() (2023-03-11 12:28:07 -0800)
+
+----------------------------------------------------------------
+Kernel concurrency sanitizer (KCSAN) updates for v6.4
+
+This update fixes kernel-doc warnings and also updates instrumentation
+from READ_ONCE() to volatile in order to avoid unaligned load-acquire
+instructions on arm64 in kernels built with LTO.
+
+----------------------------------------------------------------
+Marco Elver (1):
+      kcsan: Avoid READ_ONCE() in read_instrumented_memory()
+
+Randy Dunlap (1):
+      instrumented.h: Fix all kernel-doc format warnings
+
+ include/linux/instrumented.h | 63 ++++++++++++++++++--------------------------
+ kernel/kcsan/core.c          | 17 +++++++++---
+ 2 files changed, 39 insertions(+), 41 deletions(-)
