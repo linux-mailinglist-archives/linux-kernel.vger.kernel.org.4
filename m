@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910806DD349
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C856DD358
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjDKGrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S230352AbjDKGsU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 02:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjDKGrj (ORCPT
+        with ESMTP id S230225AbjDKGry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:47:39 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C7C1BD5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:47:36 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id i25-20020a056e021d1900b00316f1737173so5559310ila.16
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:47:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681195656; x=1683787656;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t0+L91n2dh8XpNcdDIiasQ/kBtXvv2t09DbzRtTFuLE=;
-        b=Jjh16nqjoBuUeBkVH9c/BJgvSRhQBSn/Be/my8SSnxjEsyfyA7lAl80PCHBHgtxj+v
-         AOTMtFzhtLjlseuRHnfeJI7hwpdxGVailkL+MqcRR2dh706hkDJ/X8EqFJpa1MR7lGud
-         LG06czAB/BlNwlHJwE8tPhKE38s+1R9IcokfvhlyiFHC9AzSoX0a7asHMinXvPtUaqaO
-         4PJEEpcALQHw3Cr3njWxi6I9D8gZmPNy4Ue6antgq2JH/32O6toFOC3/CYZn9jX2GgEt
-         pT3eEnuoqwjvriVU0Xi5WZwWYIJ+vL4iX5NtdtMrJqBM5AgjMHD/fknyYIBiONB01qNH
-         xdYw==
-X-Gm-Message-State: AAQBX9fex3RmcqC4ZqpVncupLSJ0pHfjd7ZzJP4eQlNozr1wGzbsTHws
-        skvs7eqg9OasjhzKUsp1ftxp3/7xUFvB+mdvGQ7SEBH/doD4
-X-Google-Smtp-Source: AKy350bfWJntDqNIVyx7xzI7nakcpj5Hti4YhlMS+6memh1XKTrz5B0CfRrgjBdiYM4ljjJ46PI4MMakabgyOZFvi4w00eTZUGqi
+        Tue, 11 Apr 2023 02:47:54 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40183213D;
+        Mon, 10 Apr 2023 23:47:51 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 08D6324E208;
+        Tue, 11 Apr 2023 14:47:45 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
+ 2023 14:47:44 +0800
+Received: from ubuntu.localdomain (113.72.145.176) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
+ 2023 14:47:44 +0800
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     Walker Chen <walker.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: [PATCH v1 0/7] Add JH7110 DPHY PMU support
+Date:   Mon, 10 Apr 2023 23:47:36 -0700
+Message-ID: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:96c:b0:326:4af5:28b5 with SMTP id
- q12-20020a056e02096c00b003264af528b5mr12103738ilt.3.1681195655888; Mon, 10
- Apr 2023 23:47:35 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 23:47:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000de083b05f909dd53@google.com>
-Subject: [syzbot] [btrfs?] WARNING: refcount bug in btrfs_evict_inode
-From:   syzbot <syzbot+1d4df08e85265d1ee63d@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patchset adds mipi dphy power domain driver for the StarFive JH7110
+SoC. It is used to turn on dphy power switch. The series has been tested
+on the VisionFive 2 board.
 
-syzbot found the following issue on:
+This patchset should be applied after the patchset [1]:
+[1] https://lore.kernel.org/all/20230406103308.1280860-1-william.qiu@starfivetech.com/
 
-HEAD commit:    99ddf2254feb Merge tag 'trace-v6.3-rc5' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ed5eddc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d4df08e85265d1ee63d
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+Changhuang Liang (7):
+  dt-bindings: power: Constrain properties for JH7110 PMU
+  soc: starfive: Replace SOC_STARFIVE with ARCH_SATRFIVE
+  soc: starfive: Modify ioremap to regmap
+  soc: starfive: Add pmu type operation
+  soc: starfive: Use call back to parse device tree resources
+  soc: starfive: Add dphy pmu support
+  riscv: dts: starfive: Add dphy rx pmu node
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/907a43450c5c/disk-99ddf225.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a142637e5396/vmlinux-99ddf225.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/447736ad6200/bzImage-99ddf225.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d4df08e85265d1ee63d@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 0 PID: 5092 at lib/refcount.c:28 refcount_warn_saturate+0x144/0x1b0 lib/refcount.c:28
-Modules linked in:
-CPU: 0 PID: 5092 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00032-g99ddf2254feb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:refcount_warn_saturate+0x144/0x1b0 lib/refcount.c:28
-Code: 0a 01 48 c7 c7 e0 be 37 8b e8 08 72 22 fd 0f 0b eb a9 e8 8f 5a 5a fd c6 05 7a 19 0f 0a 01 48 c7 c7 40 bf 37 8b e8 ec 71 22 fd <0f> 0b eb 8d e8 73 5a 5a fd c6 05 5b 19 0f 0a 01 48 c7 c7 80 be 37
-RSP: 0018:ffffc900041ff9c8 EFLAGS: 00010246
-RAX: 5ddc86e7f0714d00 RBX: ffff88802aa43ab8 RCX: ffff88807c5457c0
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000003 R08: ffffffff81527c82 R09: fffff5200083feb1
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: 1ffff9200083ff50 R14: ffff888037c1dd70 R15: 1ffff11006f83c40
-FS:  00005555556a6400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fecb9181690 CR3: 000000002d624000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_evict_inode+0x6f4/0x1090 fs/btrfs/inode.c:5398
- evict+0x2a4/0x620 fs/inode.c:665
- dispose_list fs/inode.c:698 [inline]
- evict_inodes+0x5f8/0x690 fs/inode.c:748
- generic_shutdown_super+0x98/0x340 fs/super.c:479
- kill_anon_super+0x3b/0x60 fs/super.c:1107
- btrfs_kill_super+0x41/0x50 fs/btrfs/super.c:2133
- deactivate_locked_super+0xa4/0x110 fs/super.c:331
- cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fdd1e48d5d7
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffda94ec348 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fdd1e48d5d7
-RDX: 00007ffda94ec41a RSI: 000000000000000a RDI: 00007ffda94ec410
-RBP: 00007ffda94ec410 R08: 00000000ffffffff R09: 00007ffda94ec1e0
-R10: 00005555556a78b3 R11: 0000000000000246 R12: 00007fdd1e4e6cdc
-R13: 00007ffda94ed4d0 R14: 00005555556a7810 R15: 00007ffda94ed510
- </TASK>
+ .../bindings/power/starfive,jh7110-pmu.yaml   |  14 +-
+ MAINTAINERS                                   |   1 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |   5 +
+ drivers/soc/starfive/Kconfig                  |   4 +-
+ drivers/soc/starfive/jh71xx_pmu.c             | 213 ++++++++++++++----
+ .../dt-bindings/power/starfive,jh7110-pmu.h   |   3 +
+ 6 files changed, 187 insertions(+), 53 deletions(-)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+prerequisite-patch-id: 388b8adbb0fe2daf4d07a21eafd4f1bd50ce2403
+prerequisite-patch-id: 1117ecaa40a353c667b71802ab34ecf9568d8bb2
+prerequisite-patch-id: b00c6b21fbd0353d88b7c9b09093ba30b765f45b
+prerequisite-patch-id: 08ec9027e8a5c6fdf201726833168c7464a9b94d
+prerequisite-patch-id: fb5120248e48fe1faf053ae0b490c92507ec2b44
+prerequisite-patch-id: 4b93d8d590b0a2abe7b4be5287232c494c35be4a
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: c09c4c68af017b8e5c97b515cb50b70c18a2e705
+prerequisite-patch-id: 0df8ccb0e848c2df4c2da95026494bebecede92d
+prerequisite-patch-id: 315303931e4b6499de7127a88113763f86e97e16
+prerequisite-patch-id: 40cb8212ddb024c20593f73d8b87d9894877e172
+prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
+prerequisite-patch-id: d57cc467fb036241b9276320ff076c4a30d376d6
+prerequisite-patch-id: 6e563d68bc5dbf951d4ced17897f9cc4d56169fe
+prerequisite-patch-id: 61ec2caa21fd0fc60e57977f7d16d3f72b135745
+prerequisite-patch-id: 1387a7e87b446329dfc21f3e575ceae7ebcf954c
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: 9007c8610fdcd387592475949864edde874c20a2
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 0a0ac5a8a90655b415f6b62e324f3db083cdaaee
+prerequisite-patch-id: 7ff6864ac74df5392c8646fe756cadd584fcc813
+prerequisite-patch-id: 284b5d1b95c6d68bca08db1e82ed14930c98b777
+--
+2.25.1
