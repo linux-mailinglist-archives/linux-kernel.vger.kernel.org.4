@@ -2,120 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BC46DDA27
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F176DDA2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjDKL6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        id S229711AbjDKMAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjDKL6D (ORCPT
+        with ESMTP id S229853AbjDKMAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:58:03 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DDF1BD1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:58:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id g19so53051867lfr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681214280;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aapgAIG6r1gVGZnUHo/96o38L20O2dFsi2Xt6bv67J8=;
-        b=kZQipqGbczW6Tr+ISim8GGtVZ+UtkGTfUeq4QsulHt8vB69B2s4suwdlPYu6gBDuwe
-         L/ckfN2HvJaH1xEugA3W8jmkUifUyB/YflfXbORw414IAbwZqo2rwpY9VgI9a7/sAU+1
-         sAqFeT7znHG9N2NOJkKiDmeqMtfxnkSLsZDwFjmQ0jhBAGU8FyfG7HnlVKamBNnFV3ND
-         3WR8mZ/5Qzm1WtkYyxVq1RZFSsGAQ7ZsA6lIMSz8qEauH32tZ8vBHsMrYgpz+t3YSFyv
-         XpIuzzd3YcN+FxnuHPvLeMWGQ7rHxJTiDu6jYVH6+w3SJmGdoZUuf3pXP1lgG3shQTkK
-         SC2A==
+        Tue, 11 Apr 2023 08:00:18 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B712D4E;
+        Tue, 11 Apr 2023 05:00:14 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id q29so7133948wrc.3;
+        Tue, 11 Apr 2023 05:00:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681214280;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1681214413; x=1683806413;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aapgAIG6r1gVGZnUHo/96o38L20O2dFsi2Xt6bv67J8=;
-        b=XtUv3YexE/yuc69ab1bxxSyR5EQKn/Qqpu/60Kb9dEzaqXABdPpy45A2BmVh/mr+vD
-         o8Z1g1rxoifNgjaObE6oICSuM8KLZ8c5NCvFHagyXJwTCzk+JExgEMBpwoHuS7fhWU6M
-         n+7Zbz8RPESF5uqCyiGHnkuASQ7V8+8l8Pm4Tb/W2cZD3LE0pf+esLbC5z2o0DWOpMx/
-         6lKMTWBzpt9Cd91P4rwn/8dJUPHNsWsR4PVI2f+y9LE3TaQZYKrnrZQhD1TLMIMRmoPY
-         kRI260bJzApBC0dNeqVabL2vsY2JGwhXKONJzaC6SqqvT/xcQ9J+n5noK7uXdGmxjZhM
-         zl7A==
-X-Gm-Message-State: AAQBX9dU80fkHb4WyAAwY9VShZV2F04a5Y9lwz+TfZI2Y/Xu3roxEIRI
-        KYlQI0uPr77sRHa/Eo4+Fqw+Ow==
-X-Google-Smtp-Source: AKy350bzg+dGCnFbrYvUrKMXicSL2i74wKjBNT8MOUw9IP/fkam5MNgvx2YIqhIhmVkcwRvh6T+Fug==
-X-Received: by 2002:ac2:5a41:0:b0:4eb:1e87:b1fe with SMTP id r1-20020ac25a41000000b004eb1e87b1femr757356lfn.58.1681214280579;
-        Tue, 11 Apr 2023 04:58:00 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id q10-20020ac2510a000000b004ec5229092dsm2446846lfb.34.2023.04.11.04.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 04:58:00 -0700 (PDT)
-Message-ID: <ff5691b4-df1a-57a8-6e96-f997bbe340f4@linaro.org>
-Date:   Tue, 11 Apr 2023 13:57:58 +0200
+        bh=eCeJQ8Y5The4MUdS/4f9gKqVtO4sNeOkKJxYqWcKYY0=;
+        b=tMxpxkqvktPoJLkoMz0zK6713TGbgOk5UJMtdshGCvxcyIothDz8TkRfvoz/EedmzD
+         ayHopIOJM2TKH1mgSNh11mcflkat9ueCgPCTNFtm8hk6GpBEHuzj0J8zYo9vKNHrtD/Q
+         QC95OUa+27NqDd9Is6ro55qV2aZ9unSYK6H4HInopTkMqrEg/co8M22J7cSNJ1+L0nLa
+         34h4OBPtkcjAzJ6GlnnJqLFrJfvJsMQa/Cf7X7sPYMe627KKbfvo3QbrQQVPxknJiL5R
+         hsABQvH4cy+W4dGWLs8B3Tgr4BFFeMMxbqODhpPJ0KNo6WHFIugCPS9dtUva5AvK2xos
+         ARSg==
+X-Gm-Message-State: AAQBX9d/VCHeNEoIFxpt483ZsfYk3aXT/vE8LNWZWe32zStLB7Gr15y9
+        a6cYOunZ4F9AJCQldMhvV/w=
+X-Google-Smtp-Source: AKy350YwPnDkYtmsUiWpDHZ3kyfoMSgnHSDhVmxZzEoLgVN4UZtcjS871jnCvl0D+BQ4jZjy1R7vxQ==
+X-Received: by 2002:adf:fd81:0:b0:2ef:1088:1100 with SMTP id d1-20020adffd81000000b002ef10881100mr7411094wrr.52.1681214412737;
+        Tue, 11 Apr 2023 05:00:12 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-026.fbsv.net. [2a03:2880:31ff:1a::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d4cc5000000b002f2794a6ee6sm3706526wrt.112.2023.04.11.05.00.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 05:00:12 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 05:00:10 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        axboe@kernel.dk, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Message-ID: <ZDVLyi1PahE0sfci@gmail.com>
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: qrb4210-rb2: Increase load on
- l22 and l24 for uSD and eMMC
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
-References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
- <20230411072840.2751813-4-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230411072840.2751813-4-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11.04.2023 09:28, Bhupesh Sharma wrote:
-> Increase the l22 and l24 load used for uSD and eMMC VMMC.
-> These need to be increased in order to prevent any voltage drop
-> issues due to limited current happening during specific operations
-> (e.g. write).
+On Thu, Apr 06, 2023 at 08:46:38PM -0600, David Ahern wrote:
+> On 4/6/23 12:16 PM, Willem de Bruijn wrote:
+> > On Thu, Apr 6, 2023 at 11:59 AM Breno Leitao <leitao@debian.org> wrote:
+> >>
+> >> On Thu, Apr 06, 2023 at 11:34:28AM -0400, Willem de Bruijn wrote:
+> >>> On Thu, Apr 6, 2023 at 10:45 AM Breno Leitao <leitao@debian.org> wrote:
+> >>>>
+> >>>> From: Breno Leitao <leit@fb.com>
+> >>>>
+> >>>> This patchset creates the initial plumbing for a io_uring command for
+> >>>> sockets.
+> >>>>
+> >>>> For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
+> >>>> and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
+> >>>> SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself is
+> >>>> heavily based on the ioctl operations.
+> >>>
+> >>> This duplicates all the existing ioctl logic of each protocol.
+> >>>
+> >>> Can this just call the existing proto_ops.ioctl internally and translate from/to
+> >>> io_uring format as needed?
+> >>
+> >> This is doable, and we have two options in this case:
+> >>
+> >> 1) Create a ioctl core function that does not call `put_user()`, and
+> >> call it from both the `udp_ioctl` and `udp_uring_cmd`, doing the proper
+> >> translations. Something as:
+> >>
+> >>         int udp_ioctl_core(struct sock *sk, int cmd, unsigned long arg)
+> >>         {
+> >>                 int amount;
+> >>                 switch (cmd) {
+> >>                 case SIOCOUTQ: {
+> >>                         amount = sk_wmem_alloc_get(sk);
+> >>                         break;
+> >>                 }
+> >>                 case SIOCINQ: {
+> >>                         amount = max_t(int, 0, first_packet_length(sk));
+> >>                         break;
+> >>                 }
+> >>                 default:
+> >>                         return -ENOIOCTLCMD;
+> >>                 }
+> >>                 return amount;
+> >>         }
+> >>
+> >>         int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+> >>         {
+> >>                 int amount = udp_ioctl_core(sk, cmd, arg);
+> >>
+> >>                 return put_user(amount, (int __user *)arg);
+> >>         }
+> >>         EXPORT_SYMBOL(udp_ioctl);
+> >>
+> >>
+> >> 2) Create a function for each "case entry". This seems a bit silly for
+> >> UDP, but it makes more sense for other protocols. The code will look
+> >> something like:
+> >>
+> >>          int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+> >>          {
+> >>                 switch (cmd) {
+> >>                 case SIOCOUTQ:
+> >>                 {
+> >>                         int amount = udp_ioctl_siocoutq();
+> >>                         return put_user(amount, (int __user *)arg);
+> >>                 }
+> >>                 ...
+> >>           }
+> >>
+> >> What is the best approach?
+> > 
+> > A, the issue is that sock->ops->ioctl directly call put_user.
+> > 
+> > I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
+> > sock_do_ioctl.
+> > 
+> > But that would require those callbacks to return a negative error or
+> > positive integer, rather than calling put_user. And then move the
+> > put_user to sock_do_ioctl. Such a change is at least as much code
+> > change as your series. Though without the ending up with code
+> > duplication. It also works only if all ioctls only put_user of integer
+> > size. That's true for TCP, UDP and RAW, but not sure if true more
+> > broadly.
+> > 
+> > Another approach may be to pass another argument to the ioctl
+> > callbacks, whether to call put_user or return the integer and let the
+> > caller take care of the output to user. This could possibly be
+> > embedded in the a high-order bit of the cmd, so that it fails on ioctl
+> > callbacks that do not support this mode.
+> > 
+> > Of the two approaches you suggest, I find the first preferable.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-You could have simply squashed this into the patch where
-you enabled the controllers, so that that commit works
-reliably for e.g. bisect
+> The first approach sounds better to me and it would be good to avoid
+> io_uring details in the networking code (ie., cmd->sqe->cmd_op).
 
-Konrad
->  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> index c9c6e3787462..dc80f0bca767 100644
-> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> @@ -171,6 +171,8 @@ vreg_l21a_2p704: l21 {
->  		vreg_l22a_2p96: l22 {
->  			regulator-min-microvolt = <2952000>;
->  			regulator-max-microvolt = <3304000>;
-> +			regulator-system-load = <100000>;
-> +			regulator-allow-set-load;
->  		};
->  
->  		vreg_l23a_3p3: l23 {
-> @@ -181,6 +183,8 @@ vreg_l23a_3p3: l23 {
->  		vreg_l24a_2p96: l24 {
->  			regulator-min-microvolt = <2704000>;
->  			regulator-max-microvolt = <3600000>;
-> +			regulator-system-load = <100000>;
-> +			regulator-allow-set-load;
->  		};
->  	};
->  };
+I am not sure if avoiding io_uring details in network code is possible.
+
+The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+in the TCP case) could be somewhere else, such as in the io_uring/
+directory, but, I think it might be cleaner if these implementations are
+closer to function assignment (in the network subsystem).
+
+And this function (tcp_uring_cmd() for instance) is the one that I am
+planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+-> SIOCINQ.
+
+Please let me know if you have any other idea in mind.
