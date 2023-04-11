@@ -2,133 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2AA6DDBE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CD86DDBED
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjDKNRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
+        id S230423AbjDKNRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjDKNRe (ORCPT
+        with ESMTP id S230407AbjDKNRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:17:34 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EC330FE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:17:33 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso6356774pjt.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681219053;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NYzMqMQLWwJeC6OGUwmJWcqketmIRYbxIgkEUyuEFt4=;
-        b=P1erKL2EU4UpxT3LNTe4A5/bZ8blCn0k9bzNo/S562ki4ed2xT7q7WtfsuY1bJt4rs
-         X+hWnFXwZSOGMWe53hmqw4kufYfrMOQrJ0Bd8zld2rnQv0a9JIyOX9mii3aPzX3mAX2F
-         HcLbqqUFZmx74vhjdKoyBNgwTuz838ddshZe2qotABo4tHJH1B8sqN/fq/b5Mb6M+u5u
-         0LvNHchxcevPWHmxTzgk6xauQkC0R9cI6ZyJt+Zv9rVp0N8TZcaFBeNGTWHEKo6msBkI
-         KERk1aC60cvZl3R3KieEsJZKgCwW9UoBCNMScvmIPUmywUUl2gVLQ4aiVpld2gEuyqcr
-         jFfQ==
+        Tue, 11 Apr 2023 09:17:44 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A43740C5;
+        Tue, 11 Apr 2023 06:17:43 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1845f865452so4452753fac.12;
+        Tue, 11 Apr 2023 06:17:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681219053;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYzMqMQLWwJeC6OGUwmJWcqketmIRYbxIgkEUyuEFt4=;
-        b=j7pl9lqjLqRrGMFb24DpUCCsDvqKl8a/PtKMbYVz4/UAazGfRnRjj5h2g6X3P+/9J6
-         cFOmu3fy4v2VLYMKiQ8QYNAOWdNz1ptzZU3iovHIwGDopjBED/M24Af8HqxqlO0WwHqE
-         aD75mlffVfD/VjGiiO2ejm+PheXCRsx9jD3XK2vnJiP6FnmFyVFehTNMaDYZamV1P941
-         EOMlEH8Xpo/ggRVdGApNsQjaHyd2hEpTXRUiIjjKjrTZ3o2ZO/txXqQuo+nc2ib+GMj0
-         4UQSZjO2mDU2FVHdJ7lJ3KYnL/141PLYMICP2whTwWFJkY0EoevEL405HlA9yl/JHwTZ
-         +35A==
-X-Gm-Message-State: AAQBX9drCqunpoHyX/jfHEleNtneKsdxpQtA1x+/paGPDiDNGdpbT9ol
-        Nrt8dHE7FO/GXgx7jkikmlPy/A==
-X-Google-Smtp-Source: AKy350YAGaeIEzPbfbi2Wxc4GVr9yYYxoy6vhvkknSyhnDHERSJjog9wfEWDOpHDUCdeEii5MO3thw==
-X-Received: by 2002:a05:6a20:ba95:b0:d9:ec4b:82c8 with SMTP id fb21-20020a056a20ba9500b000d9ec4b82c8mr14565681pzb.48.1681219053308;
-        Tue, 11 Apr 2023 06:17:33 -0700 (PDT)
-Received: from [10.2.117.253] ([61.213.176.5])
-        by smtp.gmail.com with ESMTPSA id h20-20020aa786d4000000b00638ac6f9a0bsm3601096pfo.11.2023.04.11.06.17.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 06:17:32 -0700 (PDT)
-Message-ID: <e6ff9768-f41d-553c-e858-1b244a461526@bytedance.com>
-Date:   Tue, 11 Apr 2023 21:17:27 +0800
+        d=1e100.net; s=20210112; t=1681219062; x=1683811062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TMLSRWyO7youDUneN+C7njAPNFs3dU8flMJ2s0JdZA0=;
+        b=DFYLCQ2dAwIP15nfgTkurS5lmSAJqs33lkONFJ8+VFpKc7BYwZk9w3qGbB1wiUPSxB
+         AJj67DCr1ZN4h5G+Asthu+kY4ZKgLb20d6oDuwdkrhuKx7tZczW+qPuLiHZUveEOxNuu
+         HxvhDFHgxuQ0J7qtbtrSzCouKumi4zqlM6SQkzuEPk+8GIqdR11PISOl/IngOuUg7sXg
+         P9as961j06SzHyDKLtZgDV/nHB/j5g3jOFkX6tqu6JCH5WMG+ffIcFeXgJpR3hd9tPzQ
+         CJCgHJHJKsiTfFE5PlQYrMZ1PE+y+T7f+MBqWrXEcoBReLowW20mB+rJibWzgOliigK0
+         pTFA==
+X-Gm-Message-State: AAQBX9ccDY4dzTSxm/baewm5brz+awsqtCFpCg2YLaSXLNPDrGd0CrF7
+        V6eZ1EbFALTbJqjymc0oJg==
+X-Google-Smtp-Source: AKy350YA//UYYJ8sXvuwCAQ8mbEa46N6fYC1rhOajj2sQmniVNMtERZmWIhA2Bf01C2K7AO7TFp7lQ==
+X-Received: by 2002:a05:6870:8a1e:b0:17a:c83d:8f9d with SMTP id p30-20020a0568708a1e00b0017ac83d8f9dmr6442101oaq.19.1681219061723;
+        Tue, 11 Apr 2023 06:17:41 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id zp2-20020a0568718e0200b0017ae909afe8sm5024441oab.34.2023.04.11.06.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 06:17:41 -0700 (PDT)
+Received: (nullmailer pid 2915066 invoked by uid 1000);
+        Tue, 11 Apr 2023 13:17:40 -0000
+Date:   Tue, 11 Apr 2023 08:17:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v2 2/5] dt-bindings: phy: qmp-ufs: describe the UFS PHY
+ for sa8775p
+Message-ID: <20230411131740.GA2913234-robh@kernel.org>
+References: <20230406194703.495836-1-brgl@bgdev.pl>
+ <20230406194703.495836-3-brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: Re: Re: [PATCH v4] mm: oom: introduce cpuset oom
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-References: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
- <3myr57cw3qepul7igpifypxx4xd2buo2y453xlqhdw4xgjokc4@vi3odjfo3ahc>
- <aa3382b4-4046-988f-42ea-8812dba7882b@bytedance.com>
- <ZDVcwuiu3rWEFiTE@dhcp22.suse.cz>
-From:   Gang Li <ligang.bdlg@bytedance.com>
-In-Reply-To: <ZDVcwuiu3rWEFiTE@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406194703.495836-3-brgl@bgdev.pl>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/11 21:12, Michal Hocko wrote:
-> On Tue 11-04-23 21:04:18, Gang Li wrote:
->>
->>
->> On 2023/4/11 20:23, Michal Koutný wrote:
->>> Hello.
->>>
->>> On Tue, Apr 11, 2023 at 02:58:15PM +0800, Gang Li <ligang.bdlg@bytedance.com> wrote:
->>>> +	cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
->>>> +		if (nodes_equal(cs->mems_allowed, task_cs(current)->mems_allowed)) {
->>>> +			css_task_iter_start(&(cs->css), CSS_TASK_ITER_PROCS, &it);
->>>> +			while (!ret && (task = css_task_iter_next(&it)))
->>>> +				ret = fn(task, arg);
->>>> +			css_task_iter_end(&it);
->>>> +		}
->>>> +	}
->>>> +	rcu_read_unlock();
->>>> +	cpuset_read_unlock();
->>>> +	return ret;
->>>> +}
->>>
->>> I see this traverses all cpusets without the hierarchy actually
->>> mattering that much. Wouldn't the CONSTRAINT_CPUSET better achieved by
->>> globally (or per-memcg) scanning all processes and filtering with:
->>
->> Oh I see, you mean scanning all processes in all cpusets and scanning
->> all processes globally are equivalent.
+On Thu, Apr 06, 2023 at 09:47:00PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Why cannot you simple select a process from the cpuset the allocating
-> process belongs to? I thought the whole idea was to handle well
-> partitioned workloads.
->
-
-Yes I can :) It's much easier.
-
->>> 	nodes_intersect(current->mems_allowed, p->mems_allowed
->>
->> Perhaps it would be better to use nodes_equal first, and if no suitable
->> victim is found, then downgrade to nodes_intersect?
+> Add a new compatible for the QMP UFS PHY found on sa8775p platforms and
+> update the clocks property to accommodate three clocks.
 > 
-> How can this happen?
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 26 ++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
 > 
->> NUMA balancing mechanism tends to keep memory on the same NUMA node, and
->> if the selected victim's memory happens to be on a node that does not
->> intersect with the current process's node, we still won't be able to
->> free up any memory.
-> 
-> AFAIR NUMA balancing doesn't touch processes with memory policies.
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
+> index cd0fbbd3593d..5bc93acccbad 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
+> @@ -16,6 +16,7 @@ description:
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,sa8775p-qmp-ufs-phy
+>        - qcom,sc8280xp-qmp-ufs-phy
+>        - qcom,sm6125-qmp-ufs-phy
+>        - qcom,sm7150-qmp-ufs-phy
+> @@ -25,12 +26,15 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> -    maxItems: 2
+> +    minItems: 2
+> +    maxItems: 3
+>  
+>    clock-names:
+> +    minItems: 2
+>      items:
+>        - const: ref
+>        - const: ref_aux
+> +      - const: qref
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -52,6 +56,26 @@ properties:
+>    "#phy-cells":
+>      const: 0
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sa8775p-qmp-ufs-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          maxItems: 3
 
+The max is already 3. Did you mean 'minItems: 3' or 2 or 3 clocks are 
+valid?
+
+> +    else:
+> +      properties:
+> +        clocks:
+> +          maxItems: 2
+> +        clock-names:
+> +          maxItems: 2
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.37.2
+> 
