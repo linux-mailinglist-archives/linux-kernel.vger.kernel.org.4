@@ -2,233 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9036DDA3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0446DDA42
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjDKMFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S229778AbjDKMH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDKMFg (ORCPT
+        with ESMTP id S229633AbjDKMH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:05:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8821B2683
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681214686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RIqxLLJNdpzj/dhOUNV64sjQ4VepHfKl/8XXcn7wBeQ=;
-        b=VCjYECmzu/nfMwJ+0cSAlGf+XPMFD72/PXvGqy3Y66YrF7V3MlSeHMhkmnHFtIf4oMQySd
-        xGp3OcgLc7K3PrHxvtGpZPIPv/tq+zVUsoGgJFNYyajjxtGi+Iweg66O9DvtdAmp1A7cG4
-        Res99gNQnShYcNw7MWXHXWb+5AWADis=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-uBZ3tM9tPFuSXy1F4evVwQ-1; Tue, 11 Apr 2023 08:04:45 -0400
-X-MC-Unique: uBZ3tM9tPFuSXy1F4evVwQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 11 Apr 2023 08:07:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA38272A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:07:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B78A2A59557;
-        Tue, 11 Apr 2023 12:04:45 +0000 (UTC)
-Received: from p1.luc.cera.cz (unknown [10.43.2.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D4D88492B00;
-        Tue, 11 Apr 2023 12:04:43 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     mschmidt@redhat.com, Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next v2] bnxt_en: Allow to set switchdev mode without existing VFs
-Date:   Tue, 11 Apr 2023 14:04:42 +0200
-Message-Id: <20230411120443.126055-1-ivecera@redhat.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 40E311FDE0;
+        Tue, 11 Apr 2023 12:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681214845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CY6u9OiVsw2eK1cAkqe1rwv42GQahD0MpOgUCcwxNro=;
+        b=fdp7+GD3t7pSVJ1rpRXaheEYW4rNDZwC7DQLwYC2RUVcrWJRYWiFujYybk8WJ4ftqpKveK
+        8TjSNULrfn9uFN4glq9mR5DLRObjJxe98X+D7A0qeS0/IfRjgvzPvtyZsMNqwDLWlFi4ut
+        5CjsypOAU/NqIgrookaC49G6/9knSZY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681214845;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CY6u9OiVsw2eK1cAkqe1rwv42GQahD0MpOgUCcwxNro=;
+        b=x37nl0mnwX8qkg1vZyDo0G8yolfNzS9X3SAFlc0knrlH5aTTUGGU6dEikrgfMbToRmYmj4
+        s0fQR6o584CmOEAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 323E113638;
+        Tue, 11 Apr 2023 12:07:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ecc2DH1NNWR3BgAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 11 Apr 2023 12:07:25 +0000
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v2 0/4] nvmet-fcloop: unblock module removal
+Date:   Tue, 11 Apr 2023 14:07:14 +0200
+Message-Id: <20230411120718.14477-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove an inability of bnxt_en driver to set eswitch to switchdev
-mode without existing VFs by:
+blktests is not able to unload the FC related modules. It is possible to unload
+the modules but it still will not work correctly. The host and the controller
+seem to be in a kind of live deadlock:
 
-1. Allow to set switchdev mode in bnxt_dl_eswitch_mode_set() so
-   representors are created only when num_vfs > 0 otherwise just
-   set bp->eswitch_mode
-2. Do not automatically change bp->eswitch_mode during
-   bnxt_vf_reps_create() and bnxt_vf_reps_destroy() calls so
-   the eswitch mode is managed only by an user by devlink.
-   Just set temporarily bp->eswitch_mode to legacy to avoid
-   re-opening of representors during destroy.
-3. Create representors in bnxt_sriov_enable() if current eswitch
-   mode is switchdev one
+ loop: module loaded
+ run blktests nvme/003 at 2023-04-11 13:55:57
+ nvmet: adding nsid 1 to subsystem blktests-subsystem-1
+ nvme nvme0: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ (NULL device *): {0:0} Association created
+ [71] nvmet: ctrl 1 start keep-alive timer for 120 secs
+ nvmet: creating discovery controller 1 for subsystem nqn.2014-08.org.nvmexpress.discovery for NQN nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8.
+ nvme nvme0: NVME-FC{0}: controller connect complete
+ nvme nvme0: NVME-FC{0}: new ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ nvme nvme1: NVME-FC{1}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "blktests-subsystem-1"
+ (NULL device *): {0:1} Association created
+ [453] nvmet: ctrl 2 start keep-alive timer for 5 secs
+ nvmet: creating nvm controller 2 for subsystem blktests-subsystem-1 for NQN nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8.
+ [71] nvmet: adding queue 1 to ctrl 2.
+ [45] nvmet: adding queue 2 to ctrl 2.
+ [453] nvmet: adding queue 3 to ctrl 2.
+ [105] nvmet: adding queue 4 to ctrl 2.
+ nvme nvme1: NVME-FC{1}: controller connect complete
+ nvme nvme1: NVME-FC{1}: new ctrl: NQN "blktests-subsystem-1"
+ [453] nvmet: ctrl 2 reschedule traffic based keep-alive timer
+ [105] nvmet: ctrl 2 update keep-alive timer for 5 secs
+ [105] nvmet: ctrl 2 update keep-alive timer for 5 secs
+ nvme nvme0: Removing ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ [45] nvmet: ctrl 1 stop keep-alive
+ (NULL device *): {0:0} Association deleted
+ (NULL device *): {0:0} Association freed
+ (NULL device *): Disconnect LS failed: No Association
+ nvme nvme1: rescanning namespaces.
+ nvme nvme1: NVME-FC{1}: io failed due to lldd error 6
+ nvme nvme1: NVME-FC{1}: transport association event: transport detected io error
+ nvme nvme1: NVME-FC{1}: resetting controller
+ [105] nvmet: ctrl 2 stop keep-alive
+ nvme nvme0: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ (NULL device *): {0:1} Association deleted
+ (NULL device *): {0:0} Association created
+ (NULL device *): {0:1} Association freed
+ nvmet: connect request for invalid subsystem nqn.2014-08.org.nvmexpress.discovery!
+ nvme nvme0: Connect Invalid Data Parameter, subsysnqn "nqn.2014-08.org.nvmexpress.discovery"
+ (NULL device *): Disconnect LS failed: No Association
+ nvme nvme1: NVME-FC{1}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "blktests-subsystem-1"
+ nvme nvme0: NVME-FC{0}: reset: Reconnect attempt failed (16770)
+ (NULL device *): {0:1} Association created
+ nvme nvme0: NVME-FC{0}: reconnect failure
+ nvmet: connect request for invalid subsystem blktests-subsystem-1!
+ nvme nvme0: Removing ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ nvme nvme1: Connect Invalid Data Parameter, subsysnqn "blktests-subsystem-1"
+ nvme nvme0: NVME-FC{0}: new ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+ nvme nvme1: NVME-FC{1}: reset: Reconnect attempt failed (16770)
+ nvme nvme1: NVME-FC{1}: reconnect failure
+ nvme nvme1: Removing ctrl: NQN "blktests-subsystem-1"
+ (NULL device *): {0:0} Association deleted
+ (NULL device *): {0:0} Association freed
+ (NULL device *): Disconnect LS failed: No Association
+ (NULL device *): {0:1} Association deleted
+ (NULL device *): {0:1} Association freed
+ (NULL device *): Disconnect LS failed: No Association
+ nvmet_fc: nvmet_fc_exit_module: targetport list not empty
 
-Tested by this sequence:
-1. Set PF interface up
-2. Set PF's eswitch mode to switchdev
-3. Created N VFs
-4. Checked that N representors were created
-5. Set eswitch mode to legacy
-6. Checked that representors were deleted
-7. Set eswitch mode back to switchdev
-8. Checked that representors exist again for VFs
-9. Deleted all VFs
-10. Checked that all representors were deleted as well
-11. Checked that current eswitch mode is still switchdev
+I think these patches here are not very controversial and should propably go in
+even if we still haven't fix for the above scenario.
 
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- .../net/ethernet/broadcom/bnxt/bnxt_sriov.c   | 16 ++++++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c | 29 ++++++++++++-------
- drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.h |  6 ++++
- 3 files changed, 41 insertions(+), 10 deletions(-)
+v2:
+  - added additional fixes
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_sriov.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_sriov.c
-index 3ed3a2b3b3a9..dde327f2c57e 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_sriov.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_sriov.c
-@@ -825,8 +825,24 @@ static int bnxt_sriov_enable(struct bnxt *bp, int *num_vfs)
- 	if (rc)
- 		goto err_out2;
- 
-+	if (bp->eswitch_mode != DEVLINK_ESWITCH_MODE_SWITCHDEV)
-+		return 0;
-+
-+	/* Create representors for VFs in switchdev mode */
-+	devl_lock(bp->dl);
-+	rc = bnxt_vf_reps_create(bp);
-+	devl_unlock(bp->dl);
-+	if (rc) {
-+		netdev_info(bp->dev, "Cannot enable VFS as representors cannot be created\n");
-+		goto err_out3;
-+	}
-+
- 	return 0;
- 
-+err_out3:
-+	/* Disable SR-IOV */
-+	pci_disable_sriov(bp->pdev);
-+
- err_out2:
- 	/* Free the resources reserved for various VF's */
- 	bnxt_hwrm_func_vf_resource_free(bp, *num_vfs);
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-index fcc65890820a..2f1a1f2d2157 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-@@ -356,10 +356,15 @@ void bnxt_vf_reps_destroy(struct bnxt *bp)
- 	/* un-publish cfa_code_map so that RX path can't see it anymore */
- 	kfree(bp->cfa_code_map);
- 	bp->cfa_code_map = NULL;
--	bp->eswitch_mode = DEVLINK_ESWITCH_MODE_LEGACY;
- 
--	if (closed)
-+	if (closed) {
-+		/* Temporarily set legacy mode to avoid re-opening
-+		 * representors and restore switchdev mode after that.
-+		 */
-+		bp->eswitch_mode = DEVLINK_ESWITCH_MODE_LEGACY;
- 		bnxt_open_nic(bp, false, false);
-+		bp->eswitch_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
-+	}
- 	rtnl_unlock();
- 
- 	/* Need to call vf_reps_destroy() outside of rntl_lock
-@@ -482,7 +487,7 @@ static void bnxt_vf_rep_netdev_init(struct bnxt *bp, struct bnxt_vf_rep *vf_rep,
- 	dev->min_mtu = ETH_ZLEN;
- }
- 
--static int bnxt_vf_reps_create(struct bnxt *bp)
-+int bnxt_vf_reps_create(struct bnxt *bp)
- {
- 	u16 *cfa_code_map = NULL, num_vfs = pci_num_vf(bp->pdev);
- 	struct bnxt_vf_rep *vf_rep;
-@@ -535,7 +540,6 @@ static int bnxt_vf_reps_create(struct bnxt *bp)
- 
- 	/* publish cfa_code_map only after all VF-reps have been initialized */
- 	bp->cfa_code_map = cfa_code_map;
--	bp->eswitch_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
- 	netif_keep_dst(bp->dev);
- 	return 0;
- 
-@@ -559,6 +563,7 @@ int bnxt_dl_eswitch_mode_set(struct devlink *devlink, u16 mode,
- 			     struct netlink_ext_ack *extack)
- {
- 	struct bnxt *bp = bnxt_get_bp_from_dl(devlink);
-+	int ret = 0;
- 
- 	if (bp->eswitch_mode == mode) {
- 		netdev_info(bp->dev, "already in %s eswitch mode\n",
-@@ -570,7 +575,7 @@ int bnxt_dl_eswitch_mode_set(struct devlink *devlink, u16 mode,
- 	switch (mode) {
- 	case DEVLINK_ESWITCH_MODE_LEGACY:
- 		bnxt_vf_reps_destroy(bp);
--		return 0;
-+		break;
- 
- 	case DEVLINK_ESWITCH_MODE_SWITCHDEV:
- 		if (bp->hwrm_spec_code < 0x10803) {
-@@ -578,15 +583,19 @@ int bnxt_dl_eswitch_mode_set(struct devlink *devlink, u16 mode,
- 			return -ENOTSUPP;
- 		}
- 
--		if (pci_num_vf(bp->pdev) == 0) {
--			netdev_info(bp->dev, "Enable VFs before setting switchdev mode\n");
--			return -EPERM;
--		}
--		return bnxt_vf_reps_create(bp);
-+		/* Create representors for existing VFs */
-+		if (pci_num_vf(bp->pdev) > 0)
-+			ret = bnxt_vf_reps_create(bp);
-+		break;
- 
- 	default:
- 		return -EINVAL;
- 	}
-+
-+	if (!ret)
-+		bp->eswitch_mode = mode;
-+
-+	return ret;
- }
- 
- #endif
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.h
-index 5637a84884d7..33a965631d0b 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.h
-@@ -14,6 +14,7 @@
- 
- #define	MAX_CFA_CODE			65536
- 
-+int bnxt_vf_reps_create(struct bnxt *bp);
- void bnxt_vf_reps_destroy(struct bnxt *bp);
- void bnxt_vf_reps_close(struct bnxt *bp);
- void bnxt_vf_reps_open(struct bnxt *bp);
-@@ -37,6 +38,11 @@ int bnxt_dl_eswitch_mode_set(struct devlink *devlink, u16 mode,
- 
- #else
- 
-+static inline int bnxt_vf_reps_create(struct bnxt *bp)
-+{
-+	return 0;
-+}
-+
- static inline void bnxt_vf_reps_close(struct bnxt *bp)
- {
- }
+v1:
+  - initial version
+  - https://lore.kernel.org/linux-nvme/20230411092209.12719-1-dwagner@suse.de/
+
+Daniel Wagner (4):
+  nvmet-fcloop: Remove remote port from list when unlinking
+  nvmet-fcloop: Do not wait on completion when unregister fails
+  nvmet-fc: Do not wait in vain when unloading module
+  nvmet-fc: Release reference on target port
+
+ drivers/nvme/host/fc.c       | 20 +++++++++++++-------
+ drivers/nvme/target/fc.c     |  1 +
+ drivers/nvme/target/fcloop.c |  5 ++++-
+ 3 files changed, 18 insertions(+), 8 deletions(-)
+
 -- 
-2.39.2
+2.40.0
 
