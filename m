@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290646DD53E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9E36DD539
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjDKIYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S230431AbjDKIX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjDKIXk (ORCPT
+        with ESMTP id S230334AbjDKIXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:23:40 -0400
+        Tue, 11 Apr 2023 04:23:36 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7453D4C2E;
-        Tue, 11 Apr 2023 01:22:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4A330D6;
+        Tue, 11 Apr 2023 01:22:20 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B677466031E8;
-        Tue, 11 Apr 2023 09:21:50 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C97A466031E9;
+        Tue, 11 Apr 2023 09:22:17 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681201311;
-        bh=cGTjcdHaCk+Cz3+rwZvQWzXjlMNMHcsr2xUn8AitwAw=;
+        s=mail; t=1681201339;
+        bh=hvRLTruikuzHoGIAziMiEYGR8Or1q+1dehgCP7XVjVQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AxXC+x+rSXSCMVoGcWUPKsXDJZjyWHRTEc5mmJY1DnD10gofdzPwGN9GPPMXwYAwp
-         +et2mzF3ZA0archXSj1DNDQPm1HD4ysPGa0xmrrNoqC+Jv/VH4Id1kLb0RucbWTJG4
-         r7uP7RgjYkHvFVRaOkBZy4XmsGyiPoTeVCbbTddwZkSSeI7+vi0npuJU6JM3MiQT2t
-         cNXyEu6EhaSvu86z2qs6tsL8MnLtwLtHEeQdsyF5Bbh2xJlGvfrZgI8Lr1va/rVFsr
-         obKOcEJ8EvQa19HilSCuCGKP/PWKSfQ74Iu+4qL+ytaD64a8p9nu2ruSLYEWsIvzpQ
-         h9bcAkIXifx1g==
-Message-ID: <8c51efb7-544d-33eb-8a02-0b3f92ad34de@collabora.com>
-Date:   Tue, 11 Apr 2023 10:21:48 +0200
+        b=is+TzxSxRy6Qy2649H3i4F1Dihqygvu9Lwy1R/C5+F1F4ZjBj/+wVssxtH3tWUhxe
+         fxoIbU6RU15oDJDVXSB0m897UTWeXAUBgWGcY6CnexyR1bgmikJWmCgJlM82s5MSGX
+         j6S7VSciCZ06l13HuIfBmewhwj0VzGfSoAIY8RMS8F7NblZUwpFx7I9erZBAqMcoqc
+         sOSFBGO/L3lmSfDUOXiF47u4MKfgmIgJMkIzFqc+hbKBup7f9QbCUAEVBxuzxxTMl5
+         5JqkETcWEuLmCjQy2jIp15oOvbeFJAntf/O8fyzdasJs6h6zkyxNE1WqmV+sEzOh4b
+         DrWwHOckVZUPw==
+Message-ID: <b968a3f6-1aba-fc72-a2fc-1b0d7944b07c@collabora.com>
+Date:   Tue, 11 Apr 2023 10:22:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v5 01/12] arm64: defconfig: enable MT6357 regulator
+Subject: Re: [PATCH v5 05/12] arm64: dts: mediatek: add mt6357 PMIC support
+ for mt8365-evk
 Content-Language: en-US
 To:     Alexandre Mergnat <amergnat@baylibre.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -59,10 +60,10 @@ Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         Fabien Parent <fparent@baylibre.com>,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>
 References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
- <20230203-evk-board-support-v5-1-1883c1b405ad@baylibre.com>
+ <20230203-evk-board-support-v5-5-1883c1b405ad@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v5-1-1883c1b405ad@baylibre.com>
+In-Reply-To: <20230203-evk-board-support-v5-5-1883c1b405ad@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -75,10 +76,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 07/04/23 14:59, Alexandre Mergnat ha scritto:
+> This power management system chip integration helps to manage regulators
+> and keys.
+> 
 > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Commit description please.
 
-Regards,
-Angelo
