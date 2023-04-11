@@ -2,248 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642996DD77D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104956DD786
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDKKIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229609AbjDKKJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKKIi (ORCPT
+        with ESMTP id S229604AbjDKKJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:08:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3504B172C;
-        Tue, 11 Apr 2023 03:08:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DE20C1FE09;
-        Tue, 11 Apr 2023 10:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681207714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lR71N1mYm36JOq5VF9CaSZ6QT7xQUnDPq3n8X/2hNUA=;
-        b=OHtmcVW/1PLrds+bk1wJbaT0/VSElwTMtqL3RObpXG0Y3czGe55zl2TYdJboVgbebhSu//
-        DRrWo/PFctezzue0a4fnn3wdAJTKlR6YysJy+7IjwkVgaxNunCDs1swxBKGysUO+KZQHbM
-        wXyivsTEydWZQgHuRaerWWS8V5MXayE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681207714;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lR71N1mYm36JOq5VF9CaSZ6QT7xQUnDPq3n8X/2hNUA=;
-        b=JaXpYwHfOL7K2A339hNzEy/0W47aGoheDtgbI9Vb9SVPLhHuMyr4jRLJ++t37r0Rdu1y/b
-        uaoJfCypNgIkl3DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEFBE13638;
-        Tue, 11 Apr 2023 10:08:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OXZuLqIxNWRDQAAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 11 Apr 2023 10:08:34 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9B03CA0732; Tue, 11 Apr 2023 12:08:33 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 12:08:33 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, jack@suse.cz, tj@kernel.org, dennis@kernel.org,
-        adilger.kernel@dilger.ca, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, houtao1@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] writeback, cgroup: fix null-ptr-deref write in
- bdi_split_work_to_wbs
-Message-ID: <20230411100833.jlqyprce6qbphr6q@quack3>
-References: <20230410130826.1492525-1-libaokun1@huawei.com>
+        Tue, 11 Apr 2023 06:09:18 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518FE2683;
+        Tue, 11 Apr 2023 03:09:16 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2a76ef2a6cbso218731fa.0;
+        Tue, 11 Apr 2023 03:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681207754; x=1683799754;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bwleV0CUAeGT8tuXPsQz1019CH9QCgOOPQO59NHIIRw=;
+        b=clUeZ+QvxtRjRj7B2vuPh0lY8+ZZOu8MT1JB5FvsLsJ3662gfX0I2moNA+CahTmgzU
+         arhfbJyxg9Za6AiCWFz0ZEIwUMYqnQQ2KjnP8LcEY/pLaoI10nbdvacjzJ/RDnmyZycJ
+         VnuRVTWfxWSjrGdUxfusJAvZ1fBzTo1YtpkVjmtYlukLIiBeg5MD0V5hyZ3lz1xOM0PI
+         o8Szyl2JqKYcTr6ict3BvdjOA99r8VkbHvRntOj2ryeJTvs4LrgDAdk74y8H2rpG/2Pw
+         6OV/aWA6dkTM78hmvhrLPC0vySeHkd435t/iROE57cpw/FeOuKNtem5wwAKEwsnyAE8c
+         Gc1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681207754; x=1683799754;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bwleV0CUAeGT8tuXPsQz1019CH9QCgOOPQO59NHIIRw=;
+        b=OmAGpvKVk9frhFglPt1WmEAHxds7hIYibMxtVfvTq0qWvh11sDswHhp8gvsDgfHs3F
+         XodzZ/n5A/cKdnmuZJOwDeYyZOWK6bsHP2wSpstKDcHRHrkZ15/8oHpjJuU0bfYONzLy
+         gs1+7cP5qnhAAVvIZYnvECdARWiQdDMgapQcdmWG/+3GDsigqqmWurQyn0/rv1b466Vd
+         ob1tLmYXZLuWQkmyXIfsxpTlsO+rI6jZCm6LcmDuaUbt4qBAP8Xcn/ps1+k9H+BTJEDa
+         kBNq6GUOKDfTE20bbaWD7SidqSWjVnxfuEujDVmkeYtS/cLabpzgfPq6nfG8VN2MBICl
+         iv7w==
+X-Gm-Message-State: AAQBX9eQcP0q3n5Ik27hKQ8sHusvsIKA2fx25TwVyJTdn0yqNvvUpduR
+        w97yYEcq7KRJiN3+Hn9XiuJfaaqStbM=
+X-Google-Smtp-Source: AKy350btViDBPpoHkPC4lScvfYpmg0cCX0/vWXAhc1HACNR4t2sBzJL/nVAa70Z3Fg9wM1TlNydyYA==
+X-Received: by 2002:a05:651c:897:b0:298:a8bc:b4d4 with SMTP id d23-20020a05651c089700b00298a8bcb4d4mr3116350ljq.4.1681207754304;
+        Tue, 11 Apr 2023 03:09:14 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id e22-20020a2e9e16000000b0029df8e31785sm2634849ljk.107.2023.04.11.03.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 03:09:14 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 13:09:11 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [PATCH v12 5/6] KVM: x86: Introduce vm_type to differentiate
+ default VMs from confidential VMs
+Message-ID: <20230411130911.000070ed.zhi.wang.linux@gmail.com>
+In-Reply-To: <fa6b8135913c7ad7c616da1dba162c860c246dfb.1677632938.git.isaku.yamahata@intel.com>
+References: <b17eee6a7d5379bf16419c0b38ed99433afbf62f.1677632938.git.isaku.yamahata@intel.com>
+        <fa6b8135913c7ad7c616da1dba162c860c246dfb.1677632938.git.isaku.yamahata@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230410130826.1492525-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 10-04-23 21:08:26, Baokun Li wrote:
-> KASAN report null-ptr-deref:
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x5c5/0x7b0
-> Write of size 8 at addr 0000000000000000 by task sync/943
-> CPU: 5 PID: 943 Comm: sync Tainted: 6.3.0-rc5-next-20230406-dirty #461
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x7f/0xc0
->  print_report+0x2ba/0x340
->  kasan_report+0xc4/0x120
->  kasan_check_range+0x1b7/0x2e0
->  __kasan_check_write+0x24/0x40
->  bdi_split_work_to_wbs+0x5c5/0x7b0
->  sync_inodes_sb+0x195/0x630
->  sync_inodes_one_sb+0x3a/0x50
->  iterate_supers+0x106/0x1b0
->  ksys_sync+0x98/0x160
-> [...]
-> ==================================================================
+On Tue, 28 Feb 2023 17:19:15 -0800
+isaku.yamahata@intel.com wrote:
+
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> The race that causes the above issue is as follows:
+> Unlike default VMs, confidential VMs (Intel TDX and AMD SEV-ES) don't allow
+> some operations (e.g., memory read/write, register state access, etc).
 > 
->            cpu1                     cpu2
-> -------------------------|-------------------------
-> inode_switch_wbs
->  INIT_WORK(&isw->work, inode_switch_wbs_work_fn)
->  queue_rcu_work(isw_wq, &isw->work)
->  // queue_work async
->   inode_switch_wbs_work_fn
->    wb_put_many(old_wb, nr_switched)
->     percpu_ref_put_many
->      ref->data->release(ref)
->      cgwb_release
->       queue_work(cgwb_release_wq, &wb->release_work)
->       // queue_work async
->        &wb->release_work
->        cgwb_release_workfn
->                             ksys_sync
->                              iterate_supers
->                               sync_inodes_one_sb
->                                sync_inodes_sb
->                                 bdi_split_work_to_wbs
->                                  kmalloc(sizeof(*work), GFP_ATOMIC)
->                                  // alloc memory failed
->         percpu_ref_exit
->          ref->data = NULL
->          kfree(data)
->                                  wb_get(wb)
->                                   percpu_ref_get(&wb->refcnt)
->                                    percpu_ref_get_many(ref, 1)
->                                     atomic_long_add(nr, &ref->data->count)
->                                      atomic64_add(i, v)
->                                      // trigger null-ptr-deref
+> Introduce vm_type to track the type of the VM to x86 KVM.  Other arch KVMs
+> already use vm_type, KVM_INIT_VM accepts vm_type, and x86 KVM callback
+> vm_init accepts vm_type.  So follow them.  Further, a different policy can
+> be made based on vm_type.  Define KVM_X86_DEFAULT_VM for default VM as
+> default and define KVM_X86_TDX_VM for Intel TDX VM.  The wrapper function
+> will be defined as "bool is_td(kvm) { return vm_type == VM_TYPE_TDX; }"
 > 
-> bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
-> If the allocation of new work fails, the on-stack fallback will be used and
-> the reference count of the current wb is increased afterwards. If cgroup
-> writeback membership switches occur before getting the reference count and
-> the current wb is released as old_wd, then calling wb_get() or wb_put()
-> will trigger the null pointer dereference above.
+
+Where is the KVM_X86_TDX_VM? It seems the comments are out of date. I guess
+KVM_X86_PROTECTED_VM means a generic CC VM now, not specifically to SNP
+or TDX.
+
+Is it possible to have an additional vendor (TDX/SNP) VM type besides
+KVM_X86_PROTECTED_VM? Although QEMU knows if SEV driver is existing or not
+in a system by checking "/dev/sev", the only way it can know if KVM supports
+SNP is to check KVM_X86_PROTECTED_VM through the KVM_CAP_VM_TYPES. For TDX,
+QEMU only sees KVM_X86_PROTECTED_VM is set and !SEV_DRIVER. This doesn't
+seems very clear to QEMU.
+
+Is it better to split the bits in vm_type into two parts of bit fields: a.
+generic part: (KVM_X86_{DEFAULT,PROTECTED}_VM). b. vendor part:
+KVM_X86_{TDX,SNP}_PROTECTED_VM?
+
+The KVM can still use KVM_X86_PROTECTED_VM in the code flow to deal with non-
+vendor specific matter.
+
+When QEMU queries the KVM_CAP_VM_TYPES, besides checking the vm_type in kvm_x86_is_vm_type_supported, KVM also let the vendor callback to set the
+KVM_X86_{TDX,SNP}_PROTECTED_VM in the vendor part. Then QEMU would receive a
+cap return value with (KVM_X86_PROTECTED_VM | KVM_X86_{TDX,SNP}_PROTECTED_VM)
+and immediately know which bunch of the ioctls {TDX/SNP} are available in KVM.
+
+> Add a capability KVM_CAP_VM_TYPES to effectively allow device model,
+> e.g. qemu, to query what VM types are supported by KVM.  This (introduce a
+> new capability and add vm_type) is chosen to align with other arch KVMs
+> that have VM types already.  Other arch KVMs use different names to query
+> supported vm types and there is no common name for it, so new name was
+> chosen.
 > 
-> This issue was introduced in v4.3-rc7 (see fix tag1). Both sync_inodes_sb()
-> and __writeback_inodes_sb_nr() calls to bdi_split_work_to_wbs() can trigger
-> this issue. For scenarios called via sync_inodes_sb(), originally commit
-> 7fc5854f8c6e ("writeback: synchronize sync(2) against cgroup writeback
-> membership switches") reduced the possibility of the issue by adding
-> wb_switch_rwsem, but in v5.14-rc1 (see fix tag2) removed the
-> "inode_io_list_del_locked(inode, old_wb)" from inode_switch_wbs_work_fn()
-> so that wb->state contains WB_has_dirty_io, thus old_wb is not skipped
-> when traversing wbs in bdi_split_work_to_wbs(), and the issue becomes
-> easily reproducible again.
-> 
-> To solve this problem, percpu_ref_exit() is called under RCU protection
-> to avoid race between cgwb_release_workfn() and bdi_split_work_to_wbs().
-> Moreover, replace wb_get() with wb_tryget() in bdi_split_work_to_wbs(),
-> and skip the current wb if wb_tryget() fails because the wb has already
-> been shutdown.
-> 
-> Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
-> Fixes: f3b6a6df38aa ("writeback, cgroup: keep list of inodes attached to bdi_writeback")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Co-developed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
-> V1->V2:
-> 	Use RCU instead of wb_switch_rwsem to avoid race.
-
-The cgwb shutdown code is really messy. But your change looks good to me
-and I don't see an easier way around this race. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+>  Documentation/virt/kvm/api.rst        | 4 +++-
+>  arch/x86/include/asm/kvm-x86-ops.h    | 1 +
+>  arch/x86/include/asm/kvm_host.h       | 1 +
+>  arch/x86/kvm/svm/svm.c                | 7 +++++++
+>  arch/x86/kvm/vmx/main.c               | 1 +
+>  arch/x86/kvm/vmx/vmx.c                | 5 +++++
+>  arch/x86/kvm/vmx/x86_ops.h            | 1 +
+>  arch/x86/kvm/x86.c                    | 8 +++++++-
+>  arch/x86/kvm/x86.h                    | 2 ++
+>  tools/arch/x86/include/uapi/asm/kvm.h | 3 +++
+>  tools/include/uapi/linux/kvm.h        | 1 +
+>  11 files changed, 32 insertions(+), 2 deletions(-)
 > 
->  fs/fs-writeback.c | 17 ++++++++++-------
->  mm/backing-dev.c  | 12 ++++++++++--
->  2 files changed, 20 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 195dc23e0d83..1db3e3c24b43 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -978,6 +978,16 @@ static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
->  			continue;
->  		}
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 191aabc3af8c..fbff5cd6e404 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -150,7 +150,9 @@ You probably want to use 0 as machine type.
+>  X86:
+>  ^^^^
 >  
-> +		/*
-> +		 * If wb_tryget fails, the wb has been shutdown, skip it.
-> +		 *
-> +		 * Pin @wb so that it stays on @bdi->wb_list.  This allows
-> +		 * continuing iteration from @wb after dropping and
-> +		 * regrabbing rcu read lock.
-> +		 */
-> +		if (!wb_tryget(wb))
-> +			continue;
-> +
->  		/* alloc failed, execute synchronously using on-stack fallback */
->  		work = &fallback_work;
->  		*work = *base_work;
-> @@ -986,13 +996,6 @@ static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
->  		work->done = &fallback_work_done;
+> -Supported X86 VM types can be queried via KVM_CAP_VM_TYPES.
+> +Supported X86 VM types can be queried via KVM_CAP_VM_TYPES, which returns the
+> +bitmap of supported vm types. The 1-setting of bit @n means vm type with value
+> +@n is supported.
 >  
->  		wb_queue_work(wb, work);
-> -
-> -		/*
-> -		 * Pin @wb so that it stays on @bdi->wb_list.  This allows
-> -		 * continuing iteration from @wb after dropping and
-> -		 * regrabbing rcu read lock.
-> -		 */
-> -		wb_get(wb);
->  		last_wb = wb;
+>  S390:
+>  ^^^^^
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 8dc345cc6318..eac4b65d1b01 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -20,6 +20,7 @@ KVM_X86_OP(hardware_disable)
+>  KVM_X86_OP(hardware_unsetup)
+>  KVM_X86_OP(has_emulated_msr)
+>  KVM_X86_OP(vcpu_after_set_cpuid)
+> +KVM_X86_OP(is_vm_type_supported)
+>  KVM_X86_OP(vm_init)
+>  KVM_X86_OP_OPTIONAL(vm_destroy)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8344945dece3..ffb85c35cacc 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1546,6 +1546,7 @@ struct kvm_x86_ops {
+>  	bool (*has_emulated_msr)(struct kvm *kvm, u32 index);
+>  	void (*vcpu_after_set_cpuid)(struct kvm_vcpu *vcpu);
 >  
->  		rcu_read_unlock();
-> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-> index ad011308cebe..43b48750b491 100644
-> --- a/mm/backing-dev.c
-> +++ b/mm/backing-dev.c
-> @@ -507,6 +507,15 @@ static LIST_HEAD(offline_cgwbs);
->  static void cleanup_offline_cgwbs_workfn(struct work_struct *work);
->  static DECLARE_WORK(cleanup_offline_cgwbs_work, cleanup_offline_cgwbs_workfn);
->  
-> +static void cgwb_free_rcu(struct rcu_head *rcu_head)
-> +{
-> +	struct bdi_writeback *wb = container_of(rcu_head,
-> +			struct bdi_writeback, rcu);
-> +
-> +	percpu_ref_exit(&wb->refcnt);
-> +	kfree(wb);
-> +}
-> +
->  static void cgwb_release_workfn(struct work_struct *work)
->  {
->  	struct bdi_writeback *wb = container_of(work, struct bdi_writeback,
-> @@ -529,11 +538,10 @@ static void cgwb_release_workfn(struct work_struct *work)
->  	list_del(&wb->offline_node);
->  	spin_unlock_irq(&cgwb_lock);
->  
-> -	percpu_ref_exit(&wb->refcnt);
->  	wb_exit(wb);
->  	bdi_put(bdi);
->  	WARN_ON_ONCE(!list_empty(&wb->b_attached));
-> -	kfree_rcu(wb, rcu);
-> +	call_rcu(&wb->rcu, cgwb_free_rcu);
+> +	bool (*is_vm_type_supported)(unsigned long vm_type);
+>  	unsigned int vm_size;
+>  	int (*vm_init)(struct kvm *kvm);
+>  	void (*vm_destroy)(struct kvm *kvm);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 8ed7e177e73d..d0b01956e420 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4682,6 +4682,12 @@ static void svm_vm_destroy(struct kvm *kvm)
+>  	sev_vm_destroy(kvm);
 >  }
 >  
->  static void cgwb_release(struct percpu_ref *refcnt)
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +static bool svm_is_vm_type_supported(unsigned long type)
+> +{
+> +	/* FIXME: Check if CPU is capable of SEV. */
+> +	return __kvm_is_vm_type_supported(type);
+> +}
+> +
+>  static int svm_vm_init(struct kvm *kvm)
+>  {
+>  	if (!pause_filter_count || !pause_filter_thresh)
+> @@ -4710,6 +4716,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.vcpu_free = svm_vcpu_free,
+>  	.vcpu_reset = svm_vcpu_reset,
+>  
+> +	.is_vm_type_supported = svm_is_vm_type_supported,
+>  	.vm_size = sizeof(struct kvm_svm),
+>  	.vm_init = svm_vm_init,
+>  	.vm_destroy = svm_vm_destroy,
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index d21a7c7d18ea..e1bbe06517b7 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -45,6 +45,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  	.hardware_disable = vmx_hardware_disable,
+>  	.has_emulated_msr = vmx_has_emulated_msr,
+>  
+> +	.is_vm_type_supported = vmx_is_vm_type_supported,
+>  	.vm_size = sizeof(struct kvm_vmx),
+>  	.vm_init = vmx_vm_init,
+>  	.vm_destroy = vmx_vm_destroy,
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index bddbdd2988f4..5bfdfc6f2190 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7470,6 +7470,11 @@ int vmx_vcpu_create(struct kvm_vcpu *vcpu)
+>  	return err;
+>  }
+>  
+> +bool vmx_is_vm_type_supported(unsigned long type)
+> +{
+> +	return type == KVM_X86_DEFAULT_VM;
+> +}
+> +
+>  #define L1TF_MSG_SMT "L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
+>  #define L1TF_MSG_L1D "L1TF CPU bug present and virtualization mitigation disabled, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
+>  
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 0f200aead411..e4dae9842550 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -32,6 +32,7 @@ void vmx_hardware_unsetup(void);
+>  int vmx_check_processor_compat(void);
+>  int vmx_hardware_enable(void);
+>  void vmx_hardware_disable(void);
+> +bool vmx_is_vm_type_supported(unsigned long type);
+>  int vmx_vm_init(struct kvm *kvm);
+>  void vmx_vm_destroy(struct kvm *kvm);
+>  int vmx_vcpu_precreate(struct kvm *kvm);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 45330273bad6..589844a27349 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4352,12 +4352,18 @@ static int kvm_ioctl_get_supported_hv_cpuid(struct kvm_vcpu *vcpu,
+>  	return 0;
+>  }
+>  
+> -static bool kvm_is_vm_type_supported(unsigned long type)
+> +bool __kvm_is_vm_type_supported(unsigned long type)
+>  {
+>  	return type == KVM_X86_DEFAULT_VM ||
+>  	       (type == KVM_X86_PROTECTED_VM &&
+>  	        IS_ENABLED(CONFIG_KVM_PROTECTED_VM) && tdp_enabled);
+>  }
+> +EXPORT_SYMBOL_GPL(__kvm_is_vm_type_supported);
+> +
+> +static bool kvm_is_vm_type_supported(unsigned long type)
+> +{
+> +	return static_call(kvm_x86_is_vm_type_supported)(type);
+> +}
+>  
+>  int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  {
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 9de72586f406..888f34224bba 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -8,6 +8,8 @@
+>  #include "kvm_cache_regs.h"
+>  #include "kvm_emulate.h"
+>  
+> +bool __kvm_is_vm_type_supported(unsigned long type);
+> +
+>  struct kvm_caps {
+>  	/* control of guest tsc rate supported? */
+>  	bool has_tsc_control;
+> diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
+> index e48deab8901d..53ce363ba5fe 100644
+> --- a/tools/arch/x86/include/uapi/asm/kvm.h
+> +++ b/tools/arch/x86/include/uapi/asm/kvm.h
+> @@ -529,4 +529,7 @@ struct kvm_pmu_event_filter {
+>  #define KVM_VCPU_TSC_CTRL 0 /* control group for the timestamp counter (TSC) */
+>  #define   KVM_VCPU_TSC_OFFSET 0 /* attribute for the TSC offset */
+>  
+> +#define KVM_X86_DEFAULT_VM	0
+> +#define KVM_X86_PROTECTED_VM	1
+> +
+>  #endif /* _ASM_X86_KVM_H */
+> diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+> index 55155e262646..63474f72ea34 100644
+> --- a/tools/include/uapi/linux/kvm.h
+> +++ b/tools/include/uapi/linux/kvm.h
+> @@ -1175,6 +1175,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+>  #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
+> +#define KVM_CAP_VM_TYPES 227
+>  
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>  
+
