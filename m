@@ -2,366 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5F96DD239
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CD36DD23A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDKFz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 01:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S230182AbjDKF4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDKFzk (ORCPT
+        with ESMTP id S230097AbjDKFzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:55:40 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A81B10DA;
-        Mon, 10 Apr 2023 22:55:39 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 77E952174E58;
-        Mon, 10 Apr 2023 22:55:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 77E952174E58
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681192536;
-        bh=kOT3ibvD8lYQupJbVimNWJ394pTLR6UA9Inug5i1mHs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=AjaoVE+AQv84DM10aWK1r2yI6XwDtpYm3LcJZihcAatb6AocNgrCpOJT7pgQtqbos
-         SkqzcqiQ8QxfBiotpnybbQB/tRucTpRy5uQ3jCx6XHbw7/fMEEGHHCSjQuFd8PtLj6
-         YioybGOxUnZS2Mrg3zV9bvX0kqvLftErEEwcRSpw=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        jgross@suse.com, mat.jonczyk@o2.pl
-Subject: [PATCH v5 5/5] x86/hyperv: VTL support for Hyper-V
-Date:   Mon, 10 Apr 2023 22:55:32 -0700
-Message-Id: <1681192532-15460-6-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
-References: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 01:55:44 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA28170A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:55:42 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50489c6171dso1911968a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681192541;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fIcu/5Vwec/5pmDwua6bnzxrZjxm6tYfo6xjgw1aQHk=;
+        b=E5jbpYtMChv4wnKHQBV1sgtQMtfvAnAqYOFbf9v9NvIbVBCisFzEDLeNgxGzA8mzxG
+         F4twwOCb2CowY08cCpc2qlbLWk5IKswvsGSNgpqIlLX4aigXpY/ts/WdeJMIWAvDGyF6
+         NjXYCE0mxT7hYj/JxNOws/gVsFEIJbaBLSAHwT26Wh2kqDBZjQraT+yUbe1vEy8wL3mE
+         QTxL962tJTvy7qb1N9rA1bcSIbHCj9QqxQM4PceCi5MnPoLvXV1laXnXCXCz236FG9ce
+         cshMNCHLqsUuFgtID4orwDUdbec0V/DMvaHxZj1oZfA5UuBdaqzXcoL/BG2UumQ8s/8G
+         5Jug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681192541;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fIcu/5Vwec/5pmDwua6bnzxrZjxm6tYfo6xjgw1aQHk=;
+        b=5AhcOnM67ffZbGkSg3YuEgHqSkk8oe51paGmqNvS4GDsqTowGMDdLADlFE5i6P3fSg
+         pGkisvCtSuXkMxHLg4w8Ng1vNwyjm2geEjEbuv7vFmkFCwLoiE2N2o/4hQUs+slpadbC
+         P6Hcji8qa3z2XF9DlFcBaXElZf+7//WfuGCN5urEiqsEhB1ty43HRdU3Pp3/xHjE3ohQ
+         0G21cIroXtGI8NxYMYiECLVe7hgo6ftMhdLuoRGoyn0681nowxZPhO+xVomjM3A4L3Gt
+         dFIC2lamlY+ktC4dVMWh27G8DmAmaCTcTTlR9Nj4wzM+/5Qnr8xoPZd8b3iu/gePuMaV
+         JtuQ==
+X-Gm-Message-State: AAQBX9fJrinUr1k+CjM8dQKn6yqw0WPwZZzXfnLgJGqF/ZUVx1T9qxT9
+        uFkq3/z4FY+93XQBJ0GXOhbBMg==
+X-Google-Smtp-Source: AKy350bGvkN4SiYmY0SbOi6V11nu//NdPAdQmWpaiIwCulyUglnQHN+JIG8OT1crzFfyzP8mLu8xHA==
+X-Received: by 2002:aa7:cd69:0:b0:504:a317:b9de with SMTP id ca9-20020aa7cd69000000b00504a317b9demr1369584edb.28.1681192540770;
+        Mon, 10 Apr 2023 22:55:40 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:dad2:72b7:3626:af61? ([2a02:810d:15c0:828:dad2:72b7:3626:af61])
+        by smtp.gmail.com with ESMTPSA id i13-20020a50c3cd000000b004fa012332ecsm4122296edf.1.2023.04.10.22.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 22:55:40 -0700 (PDT)
+Message-ID: <f9552bb6-ea73-93b4-f15d-d5d7c326c708@linaro.org>
+Date:   Tue, 11 Apr 2023 07:55:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/5] dt-bindings: input: touchscreen: add bindings for
+ focaltech,fts5452
+Content-Language: en-US
+To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Job Noorman <job@noorman.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230410160200.57261-1-joelselvaraj.oss@gmail.com>
+ <20230410160200.57261-2-joelselvaraj.oss@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230410160200.57261-2-joelselvaraj.oss@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
-feature. VSM is a set of hypervisor capabilities and enlightenments
-offered to host and guest partitions which enable the creation and
-management of new security boundaries within operating system software.
-VSM achieves and maintains isolation through VTLs.
+On 10/04/2023 18:01, Joel Selvaraj wrote:
+> Add devicetree bindings for the Focaltech FTS touchscreen drivers.
+> 
 
-Add early initialization for Virtual Trust Levels (VTL). This includes
-initializing the x86 platform for VTL and enabling boot support for
-secondary CPUs to start in targeted VTL context. For now, only enable
-the code for targeted VTL level as 2.
+Subject: drop second/last, redundant "bindings for". The "dt-bindings"
+prefix is already stating that these are bindings.
 
-When starting an AP at a VTL other than VTL0, the AP must start directly
-in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
-transition sequence that occurs after waking up an AP with SIPI whose
-vector points to the 16-bit AP startup trampoline code.
+> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+>  .../input/touchscreen/focaltech,fts5452.yaml  | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml b/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+> new file mode 100644
+> index 000000000000..f42868293439
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/touchscreen/focaltech,fts5452.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Focaltech FTS I2C Touchscreen Controller
+> +
+> +maintainers:
+> +  - Joel Selvaraj <joelselvaraj.oss@gmail.com>
+> +  - Caleb Connolly <caleb@connolly.tech>
+> +
+> +allOf:
+> +  - $ref: touchscreen.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - focaltech,fts5452
+> +      - focaltech,fts8719
+> +
+> +  reg:
+> +    const: 0x38
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  avdd-supply:
+> +    description: regulator supplying analog power (2.6V to 3.3V).
+> +
+> +  vddio-supply:
+> +    description: regulator supplying IO power (1.8V).
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - touchscreen-size-x
+> +  - touchscreen-size-y
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
----
- arch/x86/hyperv/Makefile        |   1 +
- arch/x86/hyperv/hv_vtl.c        | 227 ++++++++++++++++++++++++++++++++
- arch/x86/include/asm/mshyperv.h |  10 ++
- arch/x86/kernel/cpu/mshyperv.c  |   1 +
- 4 files changed, 239 insertions(+)
- create mode 100644 arch/x86/hyperv/hv_vtl.c
+We always put required: before unevaluatedProperties. Base your schema
+on example-schema.yaml.
 
-diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-index 5d2de10809ae..3a1548054b48 100644
---- a/arch/x86/hyperv/Makefile
-+++ b/arch/x86/hyperv/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
- obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-+obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
- 
- ifdef CONFIG_X86_64
- obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-new file mode 100644
-index 000000000000..1ba5d3b99b16
---- /dev/null
-+++ b/arch/x86/hyperv/hv_vtl.c
-@@ -0,0 +1,227 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023, Microsoft Corporation.
-+ *
-+ * Author:
-+ *   Saurabh Sengar <ssengar@microsoft.com>
-+ */
-+
-+#include <asm/apic.h>
-+#include <asm/boot.h>
-+#include <asm/desc.h>
-+#include <asm/i8259.h>
-+#include <asm/mshyperv.h>
-+#include <asm/realmode.h>
-+
-+extern struct boot_params boot_params;
-+static struct real_mode_header hv_vtl_real_mode_header;
-+
-+void __init hv_vtl_init_platform(void)
-+{
-+	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
-+
-+	x86_init.irqs.pre_vector_init = x86_init_noop;
-+	x86_init.timers.timer_init = x86_init_noop;
-+
-+	x86_platform.get_wallclock = get_rtc_noop;
-+	x86_platform.set_wallclock = set_rtc_noop;
-+	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-+
-+	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
-+	x86_platform.legacy.rtc = 0;
-+	x86_platform.legacy.warm_reset = 0;
-+	x86_platform.legacy.reserve_bios_regions = 0;
-+	x86_platform.legacy.devices.pnpbios = 0;
-+}
-+
-+static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
-+{
-+	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
-+		(desc->base1 << 16) | desc->base0;
-+}
-+
-+static inline u32 hv_vtl_system_desc_limit(struct ldttss_desc *desc)
-+{
-+	return ((u32)desc->limit1 << 16) | (u32)desc->limit0;
-+}
-+
-+typedef void (*secondary_startup_64_fn)(void*, void*);
-+static void hv_vtl_ap_entry(void)
-+{
-+	((secondary_startup_64_fn)secondary_startup_64)(&boot_params, &boot_params);
-+}
-+
-+static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
-+{
-+	u64 status;
-+	int ret = 0;
-+	struct hv_enable_vp_vtl *input;
-+	unsigned long irq_flags;
-+
-+	struct desc_ptr gdt_ptr;
-+	struct desc_ptr idt_ptr;
-+
-+	struct ldttss_desc *tss;
-+	struct ldttss_desc *ldt;
-+	struct desc_struct *gdt;
-+
-+	u64 rsp = current->thread.sp;
-+	u64 rip = (u64)&hv_vtl_ap_entry;
-+
-+	native_store_gdt(&gdt_ptr);
-+	store_idt(&idt_ptr);
-+
-+	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
-+	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
-+	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
-+
-+	local_irq_save(irq_flags);
-+
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	memset(input, 0, sizeof(*input));
-+
-+	input->partition_id = HV_PARTITION_ID_SELF;
-+	input->vp_index = target_vp_index;
-+	input->target_vtl.target_vtl = HV_VTL_MGMT;
-+
-+	/*
-+	 * The x86_64 Linux kernel follows the 16-bit -> 32-bit -> 64-bit
-+	 * mode transition sequence after waking up an AP with SIPI whose
-+	 * vector points to the 16-bit AP startup trampoline code. Here in
-+	 * VTL2, we can't perform that sequence as the AP has to start in
-+	 * the 64-bit mode.
-+	 *
-+	 * To make this happen, we tell the hypervisor to load a valid 64-bit
-+	 * context (most of which is just magic numbers from the CPU manual)
-+	 * so that AP jumps right to the 64-bit entry of the kernel, and the
-+	 * control registers are loaded with values that let the AP fetch the
-+	 * code and data and carry on with work it gets assigned.
-+	 */
-+
-+	input->vp_context.rip = rip;
-+	input->vp_context.rsp = rsp;
-+	input->vp_context.rflags = 0x0000000000000002;
-+	input->vp_context.efer = __rdmsr(MSR_EFER);
-+	input->vp_context.cr0 = native_read_cr0();
-+	input->vp_context.cr3 = __native_read_cr3();
-+	input->vp_context.cr4 = native_read_cr4();
-+	input->vp_context.msr_cr_pat = __rdmsr(MSR_IA32_CR_PAT);
-+	input->vp_context.idtr.limit = idt_ptr.size;
-+	input->vp_context.idtr.base = idt_ptr.address;
-+	input->vp_context.gdtr.limit = gdt_ptr.size;
-+	input->vp_context.gdtr.base = gdt_ptr.address;
-+
-+	/* Non-system desc (64bit), long, code, present */
-+	input->vp_context.cs.selector = __KERNEL_CS;
-+	input->vp_context.cs.base = 0;
-+	input->vp_context.cs.limit = 0xffffffff;
-+	input->vp_context.cs.attributes = 0xa09b;
-+	/* Non-system desc (64bit), data, present, granularity, default */
-+	input->vp_context.ss.selector = __KERNEL_DS;
-+	input->vp_context.ss.base = 0;
-+	input->vp_context.ss.limit = 0xffffffff;
-+	input->vp_context.ss.attributes = 0xc093;
-+
-+	/* System desc (128bit), present, LDT */
-+	input->vp_context.ldtr.selector = GDT_ENTRY_LDT * 8;
-+	input->vp_context.ldtr.base = hv_vtl_system_desc_base(ldt);
-+	input->vp_context.ldtr.limit = hv_vtl_system_desc_limit(ldt);
-+	input->vp_context.ldtr.attributes = 0x82;
-+
-+	/* System desc (128bit), present, TSS, 0x8b - busy, 0x89 -- default */
-+	input->vp_context.tr.selector = GDT_ENTRY_TSS * 8;
-+	input->vp_context.tr.base = hv_vtl_system_desc_base(tss);
-+	input->vp_context.tr.limit = hv_vtl_system_desc_limit(tss);
-+	input->vp_context.tr.attributes = 0x8b;
-+
-+	status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
-+
-+	if (!hv_result_success(status) &&
-+	    hv_result(status) != HV_STATUS_VTL_ALREADY_ENABLED) {
-+		pr_err("HVCALL_ENABLE_VP_VTL failed for VP : %d ! [Err: %#llx\n]",
-+		       target_vp_index, status);
-+		ret = -EINVAL;
-+		goto free_lock;
-+	}
-+
-+	status = hv_do_hypercall(HVCALL_START_VP, input, NULL);
-+
-+	if (!hv_result_success(status)) {
-+		pr_err("HVCALL_START_VP failed for VP : %d ! [Err: %#llx]\n",
-+		       target_vp_index, status);
-+		ret = -EINVAL;
-+	}
-+
-+free_lock:
-+	local_irq_restore(irq_flags);
-+
-+	return ret;
-+}
-+
-+static int hv_vtl_apicid_to_vp_id(u32 apic_id)
-+{
-+	u64 control;
-+	u64 status;
-+	unsigned long irq_flags;
-+	struct hv_get_vp_from_apic_id_in *input;
-+	u32 *output, ret;
-+
-+	local_irq_save(irq_flags);
-+
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	memset(input, 0, sizeof(*input));
-+	input->partition_id = HV_PARTITION_ID_SELF;
-+	input->apic_ids[0] = apic_id;
-+
-+	output = (u32 *)input;
-+
-+	control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
-+	status = hv_do_hypercall(control, input, output);
-+	ret = output[0];
-+
-+	local_irq_restore(irq_flags);
-+
-+	if (!hv_result_success(status)) {
-+		pr_err("failed to get vp id from apic id %d, status %#llx\n",
-+		       apic_id, status);
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int hv_vtl_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
-+{
-+	int vp_id;
-+
-+	pr_debug("Bringing up CPU with APIC ID %d in VTL2...\n", apicid);
-+	vp_id = hv_vtl_apicid_to_vp_id(apicid);
-+
-+	if (vp_id < 0) {
-+		pr_err("Couldn't find CPU with APIC ID %d\n", apicid);
-+		return -EINVAL;
-+	}
-+	if (vp_id > ms_hyperv.max_vp_index) {
-+		pr_err("Invalid CPU id %d for APIC ID %d\n", vp_id, apicid);
-+		return -EINVAL;
-+	}
-+
-+	return hv_vtl_bringup_vcpu(vp_id, start_eip);
-+}
-+
-+static int __init hv_vtl_early_init(void)
-+{
-+	/*
-+	 * `boot_cpu_has` returns the runtime feature support,
-+	 * and here is the earliest it can be used.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_XSAVE))
-+		panic("XSAVE has to be disabled as it is not supported by this module.\n"
-+			  "Please add 'noxsave' to the kernel command line.\n");
-+
-+	real_mode_header = &hv_vtl_real_mode_header;
-+	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
-+
-+	return 0;
-+}
-+early_initcall(hv_vtl_early_init);
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 71ed240ef66d..de4ad38f7d74 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -19,6 +19,10 @@
-  */
- #define HV_IOAPIC_BASE_ADDRESS 0xfec00000
- 
-+#define HV_VTL_NORMAL 0x0
-+#define HV_VTL_SECURE 0x1
-+#define HV_VTL_MGMT   0x2
-+
- union hv_ghcb;
- 
- DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-@@ -276,6 +280,12 @@ static inline u64 hv_get_non_nested_register(unsigned int reg) { return 0; }
- #endif /* CONFIG_HYPERV */
- 
- 
-+#ifdef CONFIG_HYPERV_VTL_MODE
-+void __init hv_vtl_init_platform(void);
-+#else
-+static inline void __init hv_vtl_init_platform(void) {}
-+#endif
-+
- #include <asm-generic/mshyperv.h>
- 
- #endif
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 5ee02af57dac..5180e3c50184 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -519,6 +519,7 @@ static void __init ms_hyperv_init_platform(void)
- 
- 	/* Register Hyper-V specific clocksource */
- 	hv_init_clocksource();
-+	hv_vtl_init_platform();
- #endif
- 	/*
- 	 * TSC should be marked as unstable only after Hyper-V
--- 
-2.34.1
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
