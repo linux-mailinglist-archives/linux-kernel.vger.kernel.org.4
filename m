@@ -2,416 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B486DE374
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F95A6DE376
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDKSFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S230303AbjDKSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjDKSFE (ORCPT
+        with ESMTP id S230281AbjDKSF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:05:04 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADC261BD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:04:23 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id y15-20020a17090a784f00b0023d35ae431eso2617133pjl.8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:04:23 -0700 (PDT)
+        Tue, 11 Apr 2023 14:05:57 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459C76B1;
+        Tue, 11 Apr 2023 11:05:22 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id y69so16014054ybe.2;
+        Tue, 11 Apr 2023 11:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681236252; x=1683828252;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjIVL6mmCivSCS5ANyA7IVNTB8W1dGHTK4d2Nb546I8=;
-        b=C7swYJZ/06p6bW7lQXORgjhqj1TzxbtXYJoLgFI85/CetkU58PAslkTQVye9cJN+Ku
-         OTkPTe4ney5TkxV3JSab6pNnK3tT9q6+QgFExji4cHhaRdzp0tGgnI/QuaCNNyoGlZzC
-         n7iKqpfJ845atPf6SvFE9RfOU8Kr8WPba24O+XU/Gn+R5lz6/zSRhPXTwi1+G8S2axGC
-         iUedJ5uN2wP0KnhAAUycovst44FYfpJ0KMaw+Lwgi9CE+CD6IXQgjX7Uat+F83VywyAg
-         jX0WDuNt4fiwBJKw8gdBaOxii4pA+r1ZofSaWiQH+6WViB17ponaM5tiC8CWT9XEyJ+Y
-         ho7g==
+        d=gmail.com; s=20210112; t=1681236313;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+na8MfW+GAHqXa6WOo9dywQDhpNy1/XvjZ3S9OfmjGo=;
+        b=Hj5pHh3SjaTuu4FZhTIl3ygx9Ofc7zHkrot2wCNVZBVWZg2d0yjGc5lmN9M3H0kZab
+         Tuy0Q+XUeZXLN2XizhoXqPpnyDqdpvgWtn6SuTUZv6m4IuDjcfRbxsMFFljsA8wK2OhZ
+         Vnl+QU0NcvoGWcbivjPnPk5O8prHrrRoewne8uhr5wp+bF6HjilDJ9kPXjtz9YhYLOYj
+         ZTL1kyJUusAV0iP7850/sI67ZE2JMhs4khQrU5jNiVI3JBF/t45dOqHgP+4LE8i1l08e
+         FJFDE/kj4W+ZiM9YUuLSNC/4NL83LfBOIOEwO8r0QyDlJkyGJGHGsONOpORczFWFZ9sA
+         5NDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681236252; x=1683828252;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EjIVL6mmCivSCS5ANyA7IVNTB8W1dGHTK4d2Nb546I8=;
-        b=dcgdcBQHeENbvv0iL/NwB5/3HgJbVdaQPPmwJ9VH7qDayBk8cGR3GFePWrMxJhmf3k
-         gJeF1Yj2+eLv5gTas+aGo81bFh7jX07e7UV+9dNI9xBkXdvC1D/j513Bj7zOWiw10aUD
-         +u5cGOV2M5zJUdsSmt0Huun+3gecVXiNalB+hr2uccp1St9RcJRCIDBlLS5eUekoF6xI
-         H4CnMZpBYtQAOLWsvJUGJQf7nzs5sx/BHtGmAxJEJER6y6c4X3tOAVUlPHfGHNur2Zoz
-         8AoM7M98Ori8kStG7iH7Ptqbz32n3WHug93LdXFT4ZChrlqSoq94XT4DZ02JSKpqJHzj
-         SFPw==
-X-Gm-Message-State: AAQBX9cwSkaUjr+x7lcyXlWBXBYIcrUVpfmHj3XGCYehMuY5GzZj3hsp
-        02phd1u2gUSBkpMtR7SP84nbb6M3rq4ZMvc1CCFs2hqsaYLcYsfjgWdDLFkqP79nIcIiokjaKRU
-        smmLTQnn/wIlm7q/a6WPosTxEmR5/3ozM/+YPtarbuc9Xi0CY2sec80O5AYxSWzftDi1Mibo=
-X-Google-Smtp-Source: AKy350bxofpiLEMknsLpSQJa31v4mZOhmQVMYcwYTW3ovDxnijCBD3TmCdh4eEJt2x3PY35BII5JS/8qtfMq
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a63:5859:0:b0:513:9235:55e3 with SMTP id
- i25-20020a635859000000b00513923555e3mr3113342pgm.5.1681236252239; Tue, 11 Apr
- 2023 11:04:12 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 18:04:09 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230411180409.1706067-1-jstultz@google.com>
-Subject: [RFC][PATCH] kernel/configs: Drop Android config fragments
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>, Rob Herring <robh@kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com
+        d=1e100.net; s=20210112; t=1681236313;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+na8MfW+GAHqXa6WOo9dywQDhpNy1/XvjZ3S9OfmjGo=;
+        b=RLhDj70svHxPACR+sCdFRolGe3Vjal0pf9ozKrUHq8w6MBoGXwD0kXaipJiJw7WAyb
+         u1UOxKWfS3S36bHzOr7EaiRt7Jr2ay0Dg6CiD+mhGkGzYgOYqMGEisYJClPe1oqOWq19
+         pxOujWSXv0Vb6cdGvpu7xYKZ08Mvayf8cj9qhl3VoohvZfboKU9lpE3d+CTz0zAWb2WB
+         DQfOHdEtfXTD3PLFhck6g67+w3hJvvqImvAVS+PcLa5+SVmkbr3l37KStu5WXX/s6/Hu
+         CztuqzJxGqoLPyYJCVaY7zMx5qCe/ywnm1Mgie8FIzlkmn8Mji1/ccsMicKauRCceXhk
+         hOew==
+X-Gm-Message-State: AAQBX9ezJaY90tiwELDCQsgmw2nvvSBtve6JSaGZeW0HfSwtbkAGPpWm
+        Kurs4npjmQtD/pSVaWrK7FXqxgPF6n+8RzzvL6M=
+X-Google-Smtp-Source: AKy350a/lhAd+WCwEd8SwsYEyEyDohgcXZkNuv5mS7JvnoJ0T8e/XLEy9453AcEGb9z0NnCrFNNwnnXdRgsTQaTfoKg=
+X-Received: by 2002:a25:d210:0:b0:b8f:1d90:e62a with SMTP id
+ j16-20020a25d210000000b00b8f1d90e62amr2158490ybg.6.1681236312987; Tue, 11 Apr
+ 2023 11:05:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-4-wedsonaf@gmail.com>
+In-Reply-To: <20230411054543.21278-4-wedsonaf@gmail.com>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Tue, 11 Apr 2023 15:05:07 -0300
+Message-ID: <CANeycqqM5o_4gj2rT=8yV0NGTRWY=jTA6HT4F2Esho-WAJCPOQ@mail.gmail.com>
+Subject: Re: [PATCH v4 04/13] locking/spinlock: introduce spin_lock_init_with_key
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the old days where each device had a custom kernel, the
-android config fragments were useful to provide the required
-and reccomended options expected by userland.
+On Tue, 11 Apr 2023 at 02:46, Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+>
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> Rust cannot call C macros, so it has its own macro to create a new lock
+> class when a spin lock is initialised. This new function allows Rust
+> code to pass the lock class it generates to the C implementation.
+>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> ---
+> v1 -> v2: No changes
+> v2 -> v3: No changes
+> v3 -> v4: No changes
+>
+>  include/linux/spinlock.h | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+> index be48f1cb1878..cdc92d095133 100644
+> --- a/include/linux/spinlock.h
+> +++ b/include/linux/spinlock.h
+> @@ -327,12 +327,17 @@ static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+>
+>  #ifdef CONFIG_DEBUG_SPINLOCK
+>
+> +static inline void spin_lock_init_with_key(spinlock_t *lock, const char *name,
+> +                                          struct lock_class_key *key)
+> +{
+> +       __raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
+> +}
+> +
+>  # define spin_lock_init(lock)                                  \
+>  do {                                                           \
+>         static struct lock_class_key __key;                     \
+>                                                                 \
+> -       __raw_spin_lock_init(spinlock_check(lock),              \
+> -                            #lock, &__key, LD_WAIT_CONFIG);    \
+> +       spin_lock_init_with_key(lock, #lock, &__key);           \
+>  } while (0)
 
-However, these days devices are expected to use the GKI kernel,
-so these config fragments no longer needed, and out of date, so
-they seem to only cause confusion.
+Peter, the code above is just factoring out spin lock init when
+lockdep is enabled to take a lock class key.
 
-So lets drop them. If folks are curious what configs are
-expected by the Android environment, check out the gki_defconfig
-file in the latest android common kernel tree.
+Would you be able to review it?
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: Amit Pundir <amit.pundir@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel-team@android.com
-Signed-off-by: John Stultz <jstultz@google.com>
----
- MAINTAINERS                               |   5 -
- kernel/configs/android-base.config        | 159 ----------------------
- kernel/configs/android-recommended.config | 127 -----------------
- 3 files changed, 291 deletions(-)
- delete mode 100644 kernel/configs/android-base.config
- delete mode 100644 kernel/configs/android-recommended.config
+If it's ok with you, we'd like to carry it through the rust tree
+because we have code that depends on it.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90abe83c02f3..541296ecc879 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1428,11 +1428,6 @@ S:	Supported
- F:	drivers/clk/analogbits/*
- F:	include/linux/clk/analogbits*
-=20
--ANDROID CONFIG FRAGMENTS
--M:	Rob Herring <robh@kernel.org>
--S:	Supported
--F:	kernel/configs/android*
--
- ANDROID DRIVERS
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- M:	Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
-diff --git a/kernel/configs/android-base.config b/kernel/configs/android-ba=
-se.config
-deleted file mode 100644
-index 44b0f0146a3f..000000000000
---- a/kernel/configs/android-base.config
-+++ /dev/null
-@@ -1,159 +0,0 @@
--#  KEEP ALPHABETICALLY SORTED
--# CONFIG_DEVMEM is not set
--# CONFIG_FHANDLE is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_NFSD is not set
--# CONFIG_NFS_FS is not set
--# CONFIG_OABI_COMPAT is not set
--# CONFIG_SYSVIPC is not set
--# CONFIG_USELIB is not set
--CONFIG_ANDROID_BINDER_IPC=3Dy
--CONFIG_ANDROID_BINDER_DEVICES=3Dbinder,hwbinder,vndbinder
--CONFIG_ANDROID_LOW_MEMORY_KILLER=3Dy
--CONFIG_ARMV8_DEPRECATED=3Dy
--CONFIG_ASHMEM=3Dy
--CONFIG_AUDIT=3Dy
--CONFIG_BLK_DEV_INITRD=3Dy
--CONFIG_CGROUPS=3Dy
--CONFIG_CGROUP_BPF=3Dy
--CONFIG_CGROUP_CPUACCT=3Dy
--CONFIG_CGROUP_DEBUG=3Dy
--CONFIG_CGROUP_FREEZER=3Dy
--CONFIG_CGROUP_SCHED=3Dy
--CONFIG_CP15_BARRIER_EMULATION=3Dy
--CONFIG_DEFAULT_SECURITY_SELINUX=3Dy
--CONFIG_EMBEDDED=3Dy
--CONFIG_FB=3Dy
--CONFIG_HARDENED_USERCOPY=3Dy
--CONFIG_HIGH_RES_TIMERS=3Dy
--CONFIG_IKCONFIG=3Dy
--CONFIG_IKCONFIG_PROC=3Dy
--CONFIG_INET6_AH=3Dy
--CONFIG_INET6_ESP=3Dy
--CONFIG_INET6_IPCOMP=3Dy
--CONFIG_INET=3Dy
--CONFIG_INET_DIAG_DESTROY=3Dy
--CONFIG_INET_ESP=3Dy
--CONFIG_INET_XFRM_MODE_TUNNEL=3Dy
--CONFIG_IP6_NF_FILTER=3Dy
--CONFIG_IP6_NF_IPTABLES=3Dy
--CONFIG_IP6_NF_MANGLE=3Dy
--CONFIG_IP6_NF_RAW=3Dy
--CONFIG_IP6_NF_TARGET_REJECT=3Dy
--CONFIG_IPV6=3Dy
--CONFIG_IPV6_MIP6=3Dy
--CONFIG_IPV6_MULTIPLE_TABLES=3Dy
--CONFIG_IPV6_OPTIMISTIC_DAD=3Dy
--CONFIG_IPV6_ROUTER_PREF=3Dy
--CONFIG_IPV6_ROUTE_INFO=3Dy
--CONFIG_IP_ADVANCED_ROUTER=3Dy
--CONFIG_IP_MULTICAST=3Dy
--CONFIG_IP_MULTIPLE_TABLES=3Dy
--CONFIG_IP_NF_ARPFILTER=3Dy
--CONFIG_IP_NF_ARPTABLES=3Dy
--CONFIG_IP_NF_ARP_MANGLE=3Dy
--CONFIG_IP_NF_FILTER=3Dy
--CONFIG_IP_NF_IPTABLES=3Dy
--CONFIG_IP_NF_MANGLE=3Dy
--CONFIG_IP_NF_MATCH_AH=3Dy
--CONFIG_IP_NF_MATCH_ECN=3Dy
--CONFIG_IP_NF_MATCH_TTL=3Dy
--CONFIG_IP_NF_NAT=3Dy
--CONFIG_IP_NF_RAW=3Dy
--CONFIG_IP_NF_SECURITY=3Dy
--CONFIG_IP_NF_TARGET_MASQUERADE=3Dy
--CONFIG_IP_NF_TARGET_NETMAP=3Dy
--CONFIG_IP_NF_TARGET_REDIRECT=3Dy
--CONFIG_IP_NF_TARGET_REJECT=3Dy
--CONFIG_MODULES=3Dy
--CONFIG_MODULE_UNLOAD=3Dy
--CONFIG_MODVERSIONS=3Dy
--CONFIG_NET=3Dy
--CONFIG_NETDEVICES=3Dy
--CONFIG_NETFILTER=3Dy
--CONFIG_NETFILTER_TPROXY=3Dy
--CONFIG_NETFILTER_XT_MATCH_COMMENT=3Dy
--CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=3Dy
--CONFIG_NETFILTER_XT_MATCH_CONNMARK=3Dy
--CONFIG_NETFILTER_XT_MATCH_CONNTRACK=3Dy
--CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=3Dy
--CONFIG_NETFILTER_XT_MATCH_HELPER=3Dy
--CONFIG_NETFILTER_XT_MATCH_IPRANGE=3Dy
--CONFIG_NETFILTER_XT_MATCH_LENGTH=3Dy
--CONFIG_NETFILTER_XT_MATCH_LIMIT=3Dy
--CONFIG_NETFILTER_XT_MATCH_MAC=3Dy
--CONFIG_NETFILTER_XT_MATCH_MARK=3Dy
--CONFIG_NETFILTER_XT_MATCH_PKTTYPE=3Dy
--CONFIG_NETFILTER_XT_MATCH_POLICY=3Dy
--CONFIG_NETFILTER_XT_MATCH_QUOTA=3Dy
--CONFIG_NETFILTER_XT_MATCH_SOCKET=3Dy
--CONFIG_NETFILTER_XT_MATCH_STATE=3Dy
--CONFIG_NETFILTER_XT_MATCH_STATISTIC=3Dy
--CONFIG_NETFILTER_XT_MATCH_STRING=3Dy
--CONFIG_NETFILTER_XT_MATCH_TIME=3Dy
--CONFIG_NETFILTER_XT_MATCH_U32=3Dy
--CONFIG_NETFILTER_XT_TARGET_CLASSIFY=3Dy
--CONFIG_NETFILTER_XT_TARGET_CONNMARK=3Dy
--CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=3Dy
--CONFIG_NETFILTER_XT_TARGET_IDLETIMER=3Dy
--CONFIG_NETFILTER_XT_TARGET_MARK=3Dy
--CONFIG_NETFILTER_XT_TARGET_NFLOG=3Dy
--CONFIG_NETFILTER_XT_TARGET_NFQUEUE=3Dy
--CONFIG_NETFILTER_XT_TARGET_SECMARK=3Dy
--CONFIG_NETFILTER_XT_TARGET_TCPMSS=3Dy
--CONFIG_NETFILTER_XT_TARGET_TPROXY=3Dy
--CONFIG_NETFILTER_XT_TARGET_TRACE=3Dy
--CONFIG_NET_CLS_ACT=3Dy
--CONFIG_NET_CLS_U32=3Dy
--CONFIG_NET_EMATCH=3Dy
--CONFIG_NET_EMATCH_U32=3Dy
--CONFIG_NET_KEY=3Dy
--CONFIG_NET_SCHED=3Dy
--CONFIG_NET_SCH_HTB=3Dy
--CONFIG_NF_CONNTRACK=3Dy
--CONFIG_NF_CONNTRACK_AMANDA=3Dy
--CONFIG_NF_CONNTRACK_EVENTS=3Dy
--CONFIG_NF_CONNTRACK_FTP=3Dy
--CONFIG_NF_CONNTRACK_H323=3Dy
--CONFIG_NF_CONNTRACK_IPV4=3Dy
--CONFIG_NF_CONNTRACK_IPV6=3Dy
--CONFIG_NF_CONNTRACK_IRC=3Dy
--CONFIG_NF_CONNTRACK_NETBIOS_NS=3Dy
--CONFIG_NF_CONNTRACK_PPTP=3Dy
--CONFIG_NF_CONNTRACK_SANE=3Dy
--CONFIG_NF_CONNTRACK_SECMARK=3Dy
--CONFIG_NF_CONNTRACK_TFTP=3Dy
--CONFIG_NF_CT_NETLINK=3Dy
--CONFIG_NF_CT_PROTO_DCCP=3Dy
--CONFIG_NF_CT_PROTO_SCTP=3Dy
--CONFIG_NF_CT_PROTO_UDPLITE=3Dy
--CONFIG_NF_NAT=3Dy
--CONFIG_NO_HZ=3Dy
--CONFIG_PACKET=3Dy
--CONFIG_PM_AUTOSLEEP=3Dy
--CONFIG_PM_WAKELOCKS=3Dy
--CONFIG_PPP=3Dy
--CONFIG_PPP_BSDCOMP=3Dy
--CONFIG_PPP_DEFLATE=3Dy
--CONFIG_PPP_MPPE=3Dy
--CONFIG_PREEMPT=3Dy
--CONFIG_QUOTA=3Dy
--CONFIG_RANDOMIZE_BASE=3Dy
--CONFIG_RTC_CLASS=3Dy
--CONFIG_RT_GROUP_SCHED=3Dy
--CONFIG_SECCOMP=3Dy
--CONFIG_SECURITY=3Dy
--CONFIG_SECURITY_NETWORK=3Dy
--CONFIG_SECURITY_SELINUX=3Dy
--CONFIG_SETEND_EMULATION=3Dy
--CONFIG_STAGING=3Dy
--CONFIG_SWP_EMULATION=3Dy
--CONFIG_SYNC=3Dy
--CONFIG_TUN=3Dy
--CONFIG_UNIX=3Dy
--CONFIG_USB_GADGET=3Dy
--CONFIG_USB_CONFIGFS=3Dy
--CONFIG_USB_CONFIGFS_F_FS=3Dy
--CONFIG_USB_CONFIGFS_F_MIDI=3Dy
--CONFIG_USB_OTG_WAKELOCK=3Dy
--CONFIG_XFRM_USER=3Dy
-diff --git a/kernel/configs/android-recommended.config b/kernel/configs/and=
-roid-recommended.config
-deleted file mode 100644
-index e400fbbc8aba..000000000000
---- a/kernel/configs/android-recommended.config
-+++ /dev/null
-@@ -1,127 +0,0 @@
--#  KEEP ALPHABETICALLY SORTED
--# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_NF_CONNTRACK_SIP is not set
--# CONFIG_PM_WAKELOCKS_GC is not set
--# CONFIG_VT is not set
--CONFIG_ARM64_SW_TTBR0_PAN=3Dy
--CONFIG_BACKLIGHT_LCD_SUPPORT=3Dy
--CONFIG_BLK_DEV_DM=3Dy
--CONFIG_BLK_DEV_LOOP=3Dy
--CONFIG_BLK_DEV_RAM=3Dy
--CONFIG_BLK_DEV_RAM_SIZE=3D8192
--CONFIG_STACKPROTECTOR_STRONG=3Dy
--CONFIG_COMPACTION=3Dy
--CONFIG_CPU_SW_DOMAIN_PAN=3Dy
--CONFIG_DM_CRYPT=3Dy
--CONFIG_DM_UEVENT=3Dy
--CONFIG_DM_VERITY=3Dy
--CONFIG_DM_VERITY_FEC=3Dy
--CONFIG_DRAGONRISE_FF=3Dy
--CONFIG_ENABLE_DEFAULT_TRACERS=3Dy
--CONFIG_EXT4_FS=3Dy
--CONFIG_EXT4_FS_SECURITY=3Dy
--CONFIG_FUSE_FS=3Dy
--CONFIG_GREENASIA_FF=3Dy
--CONFIG_HIDRAW=3Dy
--CONFIG_HID_A4TECH=3Dy
--CONFIG_HID_ACRUX=3Dy
--CONFIG_HID_ACRUX_FF=3Dy
--CONFIG_HID_APPLE=3Dy
--CONFIG_HID_BELKIN=3Dy
--CONFIG_HID_CHERRY=3Dy
--CONFIG_HID_CHICONY=3Dy
--CONFIG_HID_CYPRESS=3Dy
--CONFIG_HID_DRAGONRISE=3Dy
--CONFIG_HID_ELECOM=3Dy
--CONFIG_HID_EMS_FF=3Dy
--CONFIG_HID_EZKEY=3Dy
--CONFIG_HID_GREENASIA=3Dy
--CONFIG_HID_GYRATION=3Dy
--CONFIG_HID_HOLTEK=3Dy
--CONFIG_HID_KENSINGTON=3Dy
--CONFIG_HID_KEYTOUCH=3Dy
--CONFIG_HID_KYE=3Dy
--CONFIG_HID_LCPOWER=3Dy
--CONFIG_HID_LOGITECH=3Dy
--CONFIG_HID_LOGITECH_DJ=3Dy
--CONFIG_HID_MAGICMOUSE=3Dy
--CONFIG_HID_MICROSOFT=3Dy
--CONFIG_HID_MONTEREY=3Dy
--CONFIG_HID_MULTITOUCH=3Dy
--CONFIG_HID_NTRIG=3Dy
--CONFIG_HID_ORTEK=3Dy
--CONFIG_HID_PANTHERLORD=3Dy
--CONFIG_HID_PETALYNX=3Dy
--CONFIG_HID_PICOLCD=3Dy
--CONFIG_HID_PRIMAX=3Dy
--CONFIG_HID_PRODIKEYS=3Dy
--CONFIG_HID_ROCCAT=3Dy
--CONFIG_HID_SAITEK=3Dy
--CONFIG_HID_SAMSUNG=3Dy
--CONFIG_HID_SMARTJOYPLUS=3Dy
--CONFIG_HID_SONY=3Dy
--CONFIG_HID_SPEEDLINK=3Dy
--CONFIG_HID_SUNPLUS=3Dy
--CONFIG_HID_THRUSTMASTER=3Dy
--CONFIG_HID_TIVO=3Dy
--CONFIG_HID_TOPSEED=3Dy
--CONFIG_HID_TWINHAN=3Dy
--CONFIG_HID_UCLOGIC=3Dy
--CONFIG_HID_WACOM=3Dy
--CONFIG_HID_WALTOP=3Dy
--CONFIG_HID_WIIMOTE=3Dy
--CONFIG_HID_ZEROPLUS=3Dy
--CONFIG_HID_ZYDACRON=3Dy
--CONFIG_INPUT_EVDEV=3Dy
--CONFIG_INPUT_GPIO=3Dy
--CONFIG_INPUT_JOYSTICK=3Dy
--CONFIG_INPUT_MISC=3Dy
--CONFIG_INPUT_TABLET=3Dy
--CONFIG_INPUT_UINPUT=3Dy
--CONFIG_JOYSTICK_XPAD=3Dy
--CONFIG_JOYSTICK_XPAD_FF=3Dy
--CONFIG_JOYSTICK_XPAD_LEDS=3Dy
--CONFIG_KALLSYMS_ALL=3Dy
--CONFIG_KSM=3Dy
--CONFIG_LOGIG940_FF=3Dy
--CONFIG_LOGIRUMBLEPAD2_FF=3Dy
--CONFIG_LOGITECH_FF=3Dy
--CONFIG_MD=3Dy
--CONFIG_MEDIA_SUPPORT=3Dy
--CONFIG_MSDOS_FS=3Dy
--CONFIG_PANIC_TIMEOUT=3D5
--CONFIG_PANTHERLORD_FF=3Dy
--CONFIG_PERF_EVENTS=3Dy
--CONFIG_PM_DEBUG=3Dy
--CONFIG_PM_RUNTIME=3Dy
--CONFIG_PM_WAKELOCKS_LIMIT=3D0
--CONFIG_POWER_SUPPLY=3Dy
--CONFIG_PSTORE=3Dy
--CONFIG_PSTORE_CONSOLE=3Dy
--CONFIG_PSTORE_RAM=3Dy
--CONFIG_SCHEDSTATS=3Dy
--CONFIG_SMARTJOYPLUS_FF=3Dy
--CONFIG_SND=3Dy
--CONFIG_SOUND=3Dy
--CONFIG_STRICT_KERNEL_RWX=3Dy
--CONFIG_SUSPEND_TIME=3Dy
--CONFIG_TABLET_USB_ACECAD=3Dy
--CONFIG_TABLET_USB_AIPTEK=3Dy
--CONFIG_TABLET_USB_HANWANG=3Dy
--CONFIG_TABLET_USB_KBTAB=3Dy
--CONFIG_TASKSTATS=3Dy
--CONFIG_TASK_DELAY_ACCT=3Dy
--CONFIG_TASK_IO_ACCOUNTING=3Dy
--CONFIG_TASK_XACCT=3Dy
--CONFIG_TIMER_STATS=3Dy
--CONFIG_TMPFS=3Dy
--CONFIG_TMPFS_POSIX_ACL=3Dy
--CONFIG_UHID=3Dy
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=3Dy
--CONFIG_USB_EHCI_HCD=3Dy
--CONFIG_USB_HIDDEV=3Dy
--CONFIG_USB_USBNET=3Dy
--CONFIG_VFAT_FS=3Dy
---=20
-2.40.0.577.gac1e443424-goog
+Thanks,
+-Wedson
 
+>
+>  #else
+> --
+> 2.34.1
+>
