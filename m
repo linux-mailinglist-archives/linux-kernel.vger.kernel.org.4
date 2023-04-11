@@ -2,305 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F50F6DD6C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BAA6DD6EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjDKJcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S230345AbjDKJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjDKJcQ (ORCPT
+        with ESMTP id S230153AbjDKJeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:32:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A126AB;
-        Tue, 11 Apr 2023 02:32:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8774862341;
-        Tue, 11 Apr 2023 09:32:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3184C4339C;
-        Tue, 11 Apr 2023 09:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681205533;
-        bh=q0ZTXmT4VfDvhWXXY60IXbSIe33IYr0NpEYnP6exzrk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=p0QNsfAJNOe7++bf3ZN4j0c0u9XyyGox9QS0blCxhkN9s/LSAk96y8hXStyhWIB0v
-         jis9vzKmUsmLhkX2xbem+QcJVUaL0nWrr8O1HvZCrEbwgolBTYhLAPfwjbCZ0qWR5S
-         tHkw6WFE7cEb4oX6F7uDFCBXDsNnKyz5GergwiTPll21VU1L4PUsdm1llA0VNO5nGU
-         ErC5P/dVndFMg6YX9Jb68Z0ADPe8LL0rNnuREsabPNBWOBrOnSDmkLHJ+SexdAM4sj
-         SD+pCixTDvjrLhHWUZ5bvGq0CmMHMPapQZkYMO7i7RTccmHN69hPmAZEEwVIR2h/yN
-         saZvBbte7aTYg==
-Message-ID: <8f5cc243398d5bae731a26e674bdeff465da3968.camel@kernel.org>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Date:   Tue, 11 Apr 2023 05:32:11 -0400
-In-Reply-To: <20230411-umgewandelt-gastgewerbe-870e4170781c@brauner>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
-         <20230409-genick-pelikan-a1c534c2a3c1@brauner>
-         <b2591695afc11a8924a56865c5cd2d59e125413c.camel@kernel.org>
-         <20230411-umgewandelt-gastgewerbe-870e4170781c@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 11 Apr 2023 05:34:16 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2045.outbound.protection.outlook.com [40.107.6.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19163C2A;
+        Tue, 11 Apr 2023 02:33:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZGVWt8iu20xA4Iv3Bxo9RPGPcFO1wSd4Jp35fbKkT5GSx/2A2AHr3Tiw2vCrqvp+sYbeCpoBDD2tAhI01wrLMGblFQ5zGmY0bgirG2Kx+CnQapoQSTmeBk2U21bQplEy8au5w53TAfRv4lRIj1ox5shrqylPXOMBLHSPW3sNvCCo2Y+SiFNDjP9rpVYyXSxVSfHVSf/8uf02EJq0w9lHASKQAErjkHzbSkXBNGksTo8X4xU4u5oDwh0zFtI4qYFXQMfLoFKouXhzRLLpS6pLYQT5dRt1cn0bTXyQD6rRJ6rZf7tnH/soa4pShjxVpQUxX4PbIXkBJlDMYjqSaMdj+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LIgOMlBQZu6tXSklCJJDZW++dQYKkPInGELXZBALRxU=;
+ b=JHm+01GyppuCZgMPiyXC/TrPnG6toBSj/+FDO5vBhwUplqqp4PnCz2LsVLm33ZhaKslb6BB7sE4uyKfT3CFy0ZXNcMsSFFaxuceGXjoJAa1V7zUdU6dmDadbQbvZ2b3nU7H12i5NNYYatUI3ggrly+gov4ImTgJ1+04K8dJVYB4YZXV6c4NU5GwFd5gBPy+8WWRa4xjSH99BDYuiqHvTrgTcouZpmYY+EcYCG7R7SU0ZutSfRORhZT/oevrfrm0gMTsocvHE5Qey/0mZsifz+N/A1H65hGbxEfC6ZvJGW+RNyXFGgmOTAs8OFUgntg5hPAxwqU9H8yxIR6V65wN1jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LIgOMlBQZu6tXSklCJJDZW++dQYKkPInGELXZBALRxU=;
+ b=Pkox4WJCZCoQE8tps0h26mCYCGHYCguwxhiY9+xzyi0Te9O6TUzALHx57nB4mLfGETdlHZ1+AHFHsvATHz7BGXWc+oOcCtFBIQWEwLguUQDz/QlA6IPLgWF79ZyLK1bkxDwk79RpttWdFP7WafLDI3hYZqMEmyFe2kheyZ2zncjX8QS5tQIe5vQjqPdmivGxG6GeF51giikUcXNwOv1FqiP9PngDXV9InWnPdtn1bMivEf+pUBFa0kyKukOh37K7NSpbpQREX4SvBskRKSf0WMwk+MPbe1iWlmjDy5fwcBdz0rlaFokfIHh8zo1DPwn1g/FBzcl/82IrWZveLoMJSQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by DBAPR04MB7238.eurprd04.prod.outlook.com (2603:10a6:10:1aa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 09:33:55 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::74bd:991c:527d:aa61%9]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 09:33:55 +0000
+Message-ID: <cbb850f7-86db-3ddd-cece-c4e0d413c298@suse.com>
+Date:   Tue, 11 Apr 2023 11:33:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] usb: core: hub: Disable autosuspend for VIA VL813 USB3.0
+ hub
+Content-Language: en-US
+To:     Jimmy Hu <hhhuuu@google.com>, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230411083145.2214105-1-hhhuuu@google.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20230411083145.2214105-1-hhhuuu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0096.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBAPR04MB7238:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9e7ba23-048c-4f7a-d140-08db3a6fde3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b02vshFX6wUbAG2kx1lm1OqfrhzTGHjuCrhFUbS48dn7elJX2ZuarYGZo5bJt2LB11bVf7ToaqyyDlrtNKFBSSw4r7zAq59+SzO1kpqekleHSninMrp+fTZqJVrOQYX8kgC1lC/XkS/qm5yzLUz1KGj0Q7NMfdQI5gRNjsDTjTLoM3VLN5MKwlBEkQcr/tInHhOnBVI30YwpTDpifKwErre1Y2wg+VfvINke44L0A95Fj0HVwX1PDdRzkjFBkCVNj/0WuCfo05reS4irLvwTvPEmBU4n1PEmJscdy+l+Iw1g9C7g7n4cVggp5t2ub3MSyzBGhjn8ez5EbIlccv8Ut+y/EKmYNNJ78qoO05a8EUmG+t7iHSBgDv8Dg7wj2h2vlLQiwV4WMBNPGeVJnYYrmJ4+orWoJ2OtP0+8VvAtLp/HdLvacgQ2lbVFhE5Q7KOJ8glFrkyKINXw37LTzERkpDByi01UrKNd8WfvUJC5iBSjQKW8WFmz+LJBOQGAKAbPEQHrBW5MAeFBd1a9P66CBTTFwMdSvDU7tqf0wNVPhOrCCcQ6tFcmJX4Yrg7STZVXeHZV0jUhd3nEvkZv36nbvDNlxpuc1IhEAom7uhjKBK3d64misfANLIWzfxIb9fFMO3PFpWvd9Bbqw+l0VE9F+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39850400004)(396003)(346002)(366004)(136003)(451199021)(36756003)(86362001)(31696002)(6486002)(41300700001)(316002)(66556008)(478600001)(4326008)(8676002)(66946007)(66476007)(5660300002)(2906002)(8936002)(4744005)(38100700002)(186003)(53546011)(6666004)(6506007)(6512007)(2616005)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmtRcFI5TG5TZHlsODJYRGRwb0lFZkJPKzdrcWhoYmsyR0lpeDVtcjlJa2ty?=
+ =?utf-8?B?elNtaXczMjQwK3B2VkYyNmhiNXAzaVdkYXB5citQcGJmaytrZWNLYk9OcWFJ?=
+ =?utf-8?B?ZTFOV3lCN0txenZOOVF0eGdWMmJlRU5lNTBrNUd1K1cxVHpEQk9qYlNRZ0FX?=
+ =?utf-8?B?Qmc5cUgxcUcyaHB3UjJOeUFkQTdwMzBidjFLWjlQVHhNTHZSdTEycXJEc1NW?=
+ =?utf-8?B?QURJYzFEVENTRVZIWUxsd3dRdE53aTloajFtZHIyTFMzamFtNGRHWnpwWHQr?=
+ =?utf-8?B?Wi9mcEVVYzNZNFBQSnNKVldyUWxObWZVY1dsNjcvZHVHTnA3ckxEUVArcXRy?=
+ =?utf-8?B?eERVYVZHeXNRU2x3bVdXanNEZlRKVHZlWjNmdk4rb0Mra09oZ3U1NzB2Z2Zy?=
+ =?utf-8?B?RlN4UmVWbUVHZUtRUXNOd3ZCdUkzY3VmV3dkdklQSnpubkgxeWpsblpOZEZH?=
+ =?utf-8?B?L1RuZG16aUkrMUE0TTBMaGJGd3p6L3NpeEg2WE5ZLzdzQzlyN1JMeFRydndC?=
+ =?utf-8?B?cFVDMHE4ZWN4V0h4VG9wMXhIdVc4Z21ickVuUERkMGhOVDV0aVJFTDhKYlFt?=
+ =?utf-8?B?d1dzdDgvQjVUbVJucWorVG5ZZVp3cUdqYzRxSGd3dkVrWkZQWWpRVUxHejBU?=
+ =?utf-8?B?bHk1NGZiZjFWNDhQTGVlNlhya2R0Q1dDMjBMZk5PazAzSFU5Zm15ZGErVWNE?=
+ =?utf-8?B?TmpGNHBqMUFFVDhBMEs1Y2lwZ2E2OXFQcTExN2s1WFpkc2RYZmV1emR5VFFF?=
+ =?utf-8?B?b3RtV0FCUzhQQVhSL0Vpa1d0dUJHRi9OYk9KampTREJPeXhyWDBYR3MzQ0V6?=
+ =?utf-8?B?cy8vSG5zZTRpZnVsbTRkNFpYblFlaWdqOFJEcm5Vang3M1dmeUhwdzgrNE4r?=
+ =?utf-8?B?TEVzWEJya2dxckpnQU1TYmpzTG1LR2lJWjYxSGY3OTVjcWRZNjBJcGlJanBI?=
+ =?utf-8?B?VWR1cFBCS2NyUlpFbUp4bUFvT0tic1VrUVNUZE5QNWRqdjJrSnRHWnJvN0tI?=
+ =?utf-8?B?RDRtd1REcUJPRmtKdTBtRE4xYmQyQWs0VFU2ZDZoUGlXM1pxUUJjRUxZZXlU?=
+ =?utf-8?B?NzRTQzloTmZ6WDU5QStXMkpnMmV5ZXJGanpBVXQ4RVkxanpuVXhzY0oyNjV5?=
+ =?utf-8?B?ZnlvUS9KWmRldTRtVDg1Tks0RmRNOFI3MGJCdmxydEJMOG80Wnp2aXJQTnly?=
+ =?utf-8?B?SWRyMHhJL3pYOGJxeGpLdlpuTzllN0ZBSHhMdXd3MTFyN3FZY1R4bFoxdkJa?=
+ =?utf-8?B?WkExRjhVUWtMYnozZ2xKUTkvTEZNTXk0anlsREFtb1I1MEpNQjBqMVJ0QWFZ?=
+ =?utf-8?B?Qmh1RFNYcUZoWEhkSUFuUW11WGNxODZ2ZFpramZ2UE1tOUVCbms1SHpUczZS?=
+ =?utf-8?B?T3kwdWUzQW8yN2NOMHpMU2tqbUZXZVRCSER0L3MzL0xncXNSckVlQ2NnOFI2?=
+ =?utf-8?B?dmt6OXlSSzNrbGdQblo5aEZIQ0dlQmwrNGFtVGRubDE3cmNtSTZjVXdndnZ2?=
+ =?utf-8?B?MjhCckZzKzZxM25QMUU1RFVnenpoMm1XNGQ0ZThXTTNHaHAybGM3ZlArV2dV?=
+ =?utf-8?B?TE00UjV3TXc1TEJxTTJpRFdKT1ZJczZMUGNKSTRhVjAvZnh0aXZSWCthMGZF?=
+ =?utf-8?B?VUtYU0MvZ1dMZ2ZMMk96R1hWLzlXZXRXRlM3bTlwdVNLcGQyUFJObEdTeXBX?=
+ =?utf-8?B?M1pnMHJ3SG16TnZKTXdDazhsWlF6NWFBY1Z5TnZHSVhoMSs2WGcyek5CQ012?=
+ =?utf-8?B?RWxqQmwxbS9NeHFtcDF2TUhWZWt0bVd0VkVCMmNuREZJRjJ1OFJNajlHSkJC?=
+ =?utf-8?B?KzJkWVJJdldmN2ovZjFpQUp6R3dEMmxscTIzdTBwVnBPcVpLT29xbWdFcU5a?=
+ =?utf-8?B?Q092SjNKTzdYSVU0OFFsQ2grYkc0QlJEVWVyYkJrWnMyaks4TlUwSDBEV0Fj?=
+ =?utf-8?B?WnlreW91L1V1OHRqd3BkL1hEMjVzSkZsVmpYSXBXR3NSdXBnVXVUdit6Tlpk?=
+ =?utf-8?B?QTJha2lnS0RsbC90QzhJZ3B3SEpuemtyd3FicjZrZHM5R2hZVGdRUk9kaGVh?=
+ =?utf-8?B?MlRlNlJrU0pldVdFZzJxcG5vcFdnd0NSTGliOFFOQ0RxZFZtakhwZWM4VHhC?=
+ =?utf-8?B?SWtiS05GMkR2T244dUdodWM3VzdsSVYxcVV4VnBqQ0RTTldmYzB2YXVVczlj?=
+ =?utf-8?Q?hv7qmZXdGY7QEg7GvUqkyzAGwic1tq9tAHLW/VHrY6cv?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9e7ba23-048c-4f7a-d140-08db3a6fde3f
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 09:33:55.2274
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W32wTPiDXPTiaCw7e2PE0Zk2G4pUM35VHvnxxWWbL+OEUtuHObTqcJ/HJs3zGD+/UYOACHk4HzPiqev3Ms53Hw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7238
+X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-11 at 10:38 +0200, Christian Brauner wrote:
-> On Sun, Apr 09, 2023 at 06:12:09PM -0400, Jeff Layton wrote:
-> > On Sun, 2023-04-09 at 17:22 +0200, Christian Brauner wrote:
-> > > On Fri, Apr 07, 2023 at 09:29:29AM -0400, Jeff Layton wrote:
-> > > > > > > >=20
-> > > > > > > > I would ditch the original proposal in favor of this 2-line=
- patch shown here:
-> > > > > > > >=20
-> > > > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-=
-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd4323=
-2
-> > > > >=20
-> > > > > We should cool it with the quick hacks to fix things. :)
-> > > > >=20
-> > > >=20
-> > > > Yeah. It might fix this specific testcase, but I think the way it u=
-ses
-> > > > the i_version is "gameable" in other situations. Then again, I don'=
-t
-> > > > know a lot about IMA in this regard.
-> > > >=20
-> > > > When is it expected to remeasure? If it's only expected to remeasur=
-e on
-> > > > a close(), then that's one thing. That would be a weird design thou=
-gh.
-> > > >=20
-> > > > > > > >=20
-> > > > > > > >=20
-> > > > > > >=20
-> > > > > > > Ok, I think I get it. IMA is trying to use the i_version from=
- the
-> > > > > > > overlayfs inode.
-> > > > > > >=20
-> > > > > > > I suspect that the real problem here is that IMA is just doin=
-g a bare
-> > > > > > > inode_query_iversion. Really, we ought to make IMA call
-> > > > > > > vfs_getattr_nosec (or something like it) to query the getattr=
- routine in
-> > > > > > > the upper layer. Then overlayfs could just propagate the resu=
-lts from
-> > > > > > > the upper layer in its response.
-> > > > > > >=20
-> > > > > > > That sort of design may also eventually help IMA work properl=
-y with more
-> > > > > > > exotic filesystems, like NFS or Ceph.
-> > > > > > >=20
-> > > > > > >=20
-> > > > > > >=20
-> > > > > >=20
-> > > > > > Maybe something like this? It builds for me but I haven't teste=
-d it. It
-> > > > > > looks like overlayfs already should report the upper layer's i_=
-version
-> > > > > > in getattr, though I haven't tested that either:
-> > > > > >=20
-> > > > > > -----------------------8<---------------------------
-> > > > > >=20
-> > > > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
-> > > > > >=20
-> > > > > > IMA currently accesses the i_version out of the inode directly =
-when it
-> > > > > > does a measurement. This is fine for most simple filesystems, b=
-ut can be
-> > > > > > problematic with more complex setups (e.g. overlayfs).
-> > > > > >=20
-> > > > > > Make IMA instead call vfs_getattr_nosec to get this info. This =
-allows
-> > > > > > the filesystem to determine whether and how to report the i_ver=
-sion, and
-> > > > > > should allow IMA to work properly with a broader class of files=
-ystems in
-> > > > > > the future.
-> > > > > >=20
-> > > > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > > > ---
-> > > > >=20
-> > > > > So, I think we want both; we want the ovl_copyattr() and the
-> > > > > vfs_getattr_nosec() change:
-> > > > >=20
-> > > > > (1) overlayfs should copy up the inode version in ovl_copyattr().=
- That
-> > > > >     is in line what we do with all other inode attributes. IOW, t=
-he
-> > > > >     overlayfs inode's i_version counter should aim to mirror the
-> > > > >     relevant layer's i_version counter. I wouldn't know why that
-> > > > >     shouldn't be the case. Asking the other way around there does=
-n't
-> > > > >     seem to be any use for overlayfs inodes to have an i_version =
-that
-> > > > >     isn't just mirroring the relevant layer's i_version.
-> > > >=20
-> > > > It's less than ideal to do this IMO, particularly with an IS_I_VERS=
-ION
-> > > > inode.
-> > > >=20
-> > > > You can't just copy=A0up the value from the upper. You'll need to c=
-all
-> > > > inode_query_iversion(upper_inode), which will flag the upper inode =
-for a
-> > > > logged i_version update on the next write. IOW, this could create s=
-ome
-> > > > (probably minor) metadata write amplification in the upper layer in=
-ode
-> > > > with IS_I_VERSION inodes.
-> > >=20
-> > > I'm likely just missing context and am curious about this so bear wit=
-h me. Why
-> > > do we need to flag the upper inode for a logged i_version update? Any=
- required
-> > > i_version interactions should've already happened when overlayfs call=
-ed into
-> > > the upper layer. So all that's left to do is for overlayfs' to mirror=
- the
-> > > i_version value after the upper operation has returned.
-> >=20
-> > > ovl_copyattr() - which copies the inode attributes - is always called=
- after the
-> > > operation on the upper inode has finished. So the additional query se=
-ems odd at
-> > > first glance. But there might well be a good reason for it. In my nai=
-ve
-> > > approach I would've thought that sm along the lines of:
-> > >=20
-> > > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-> > > index 923d66d131c1..8b089035b9b3 100644
-> > > --- a/fs/overlayfs/util.c
-> > > +++ b/fs/overlayfs/util.c
-> > > @@ -1119,4 +1119,5 @@ void ovl_copyattr(struct inode *inode)
-> > >         inode->i_mtime =3D realinode->i_mtime;
-> > >         inode->i_ctime =3D realinode->i_ctime;
-> > >         i_size_write(inode, i_size_read(realinode));
-> > > +       inode_set_iversion_raw(inode, inode_peek_iversion_raw(realino=
-de));
-> > >  }
-> > >=20
-> > > would've been sufficient.
-> > >=20
-> >=20
-> > Nope, because then you wouldn't get any updates to i_version after that
-> > point.
-> >=20
-> > Note that with an IS_I_VERSION inode we only update the i_version when
-> > there has been a query since the last update. What you're doing above i=
-s
-> > circumventing that mechanism. You'll get the i_version at the time of o=
-f
-> > the ovl_copyattr, but there won't be any updates of it after that point
-> > because the QUERIED bit won't end up being set on realinode.
->=20
-> I get all that.
-> But my understanding had been that the i_version value at the time of
-> ovl_copyattr() would be correct. Because when ovl_copyattr() is called
-> the expected i_version change will have been done in the relevant layer
-> includig raising the QUERIED bit. Since the layers are not allowed to be
-> changed outside of the overlayfs mount any change to them can only
-> originate from overlayfs which would necessarily call ovl_copyattr()
-> again. IOW, overlayfs would by virtue of its implementation keep the
-> i_version value in sync.
->
-> Overlayfs wouldn't even raise SB_I_VERSION. It would indeed just be a
-> cache of i_version of the relevant layer.
->=20
-> >=20
-> >=20
-> > > Since overlayfs' does explicitly disallow changes to the upper and lo=
-wer trees
-> > > while overlayfs is mounted it seems intuitive that it should just mir=
-ror the
-> > > relevant layer's i_version.
-> > >=20
-> > >=20
-> > > If we don't do this, then we should probably document that i_version =
-doesn't
-> > > have a meaning yet for the inodes of stacking filesystems.
-> > >=20
-> >=20
-> > Trying to cache the i_version is counterproductive, IMO, at least with
-> > an IS_I_VERSION inode.
-> >=20
-> > The problem is that a query against the i_version has a side-effect. It
-> > has to (atomically) mark the inode for an update on the next change.
-> >=20
-> > If you try to cache that value, you'll likely end up doing more queries
-> > than you really need to (because you'll need to keep the cache up to
-> > date) and you'll have an i_version that will necessarily lag the one in
-> > the upper layer inode.
-> >=20
-> > The whole point of the change attribute is to get the value as it is at
-> > this very moment so we can check whether there have been changes. A
-> > laggy value is not terribly useful.
-> >=20
-> > Overlayfs should just always call the upper layer's ->getattr to get th=
-e
-> > version. I wouldn't even bother copying it up in the first place. Doing
-> > so is just encouraging someone to try use the value in the overlayfs
-> > inode, when they really need to go through ->getattr and get the one
-> > from the upper layer.
->=20
-> That seems reasonable to me. I read this as an agreeing with my earlier
-> suggestion to document that i_version doesn't have a meaning for the
-> inodes of stacking filesystems and that we should spell out that
-> vfs_getattr()/->getattr() needs to be used to interact with i_version.
->=20
 
-It really has no meaning in the stacked filesystem's _inode_. The only
-i_version that has any meaning in a (simple) stacking setup is the upper
-layer inode.
 
-> We need to explain to subsystems such as IMA somwhere what the correct
-> way to query i_version agnostically is; independent of filesystem
-> implementation details.
->=20
-> Looking at IMA, it queries the i_version directly without checking
-> whether it's an IS_I_VERSION() inode first. This might make a
-> difference.
->=20
+On 11.04.23 10:31, Jimmy Hu wrote:
+> The VIA VL813 USB3.0 hub appears to have an issue with autosuspend and
+> detecting USB3 devices. This can be reproduced by connecting a USB3
+> device to the hub after the hub enters autosuspend mode.
 
-IMA should just use getattr. That allows the filesystem to present the
-i_version to the caller as it sees fit. Fetching i_version directly
-without testing for IS_I_VERSION is wrong, because you don't know what
-that field contains, or whether the fs supports it at all.
+Hi,
 
-> Afaict, filesystems that persist i_version to disk automatically raise
-> SB_I_VERSION. I would guess that it be considered a bug if a filesystem
-> would persist i_version to disk and not raise SB_I_VERSION. If so IMA
-> should probably be made to check for IS_I_VERSION() and it will probably
-> get that by switching to vfs_getattr_nosec().
+out of interest, could you test whether this also applies to disconnections?
+That is, does the hub reliably wake up if you unplug a device?
 
-Not quite. SB_I_VERSION tells the vfs that the filesystem wants the
-kernel to manage the increment of the i_version for it. The filesystem
-is still responsible for persisting that value to disk (if appropriate).
+	Regards
+		Oliver
 
-Switching to vfs_getattr_nosec should make it so IMA doesn't need to
-worry about the gory details of all of this. If STATX_CHANGE_COOKIE is
-set in the response, then it can trust that value. Otherwise, it's no
-good.
 
---=20
-Jeff Layton <jlayton@kernel.org>
