@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5A26DDB47
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB146DDB46
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjDKMxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S229998AbjDKMxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjDKMxf (ORCPT
+        with ESMTP id S230161AbjDKMx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:53:35 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0A040C1;
-        Tue, 11 Apr 2023 05:53:34 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id eo6-20020a05600c82c600b003ee5157346cso5964415wmb.1;
-        Tue, 11 Apr 2023 05:53:34 -0700 (PDT)
+        Tue, 11 Apr 2023 08:53:28 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B040C8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:53:26 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54c0c86a436so275709897b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681217612;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9yZ+qnUfIedOP16sqw/n0wk0WAmpKQ2BM/zcb4X7c8=;
-        b=FEqA8zIiXQo1JgRyGbmoTOBWasmNdOU1p+Jfx1mKzePVIJFwbUh2gS+SovCjj/P4kl
-         s6cCpRy1rpNR2BAh4DuFEjOHp8djEDmwZcdRHT2Lflkyk4cyJy6XiTpV0tkaoXK5ff0a
-         36l9wP0yEWdbvCIo40oHD5T4wlvvE5PvOnjnGJ5e6NBQ4I5Pd6TX0BFAjmZApNZ9iBAi
-         cI0OU+VfjFdzAs4CPulzv8nH9I08XufU2Pzb28571Z5LZQlhdAkqODCDKgizenk+R8SI
-         4/G26CpbXtT+PKcKn5XvUHhSq4nu/2VtgavErMGMWGjWr9PeoZSMVaPsrqH2lMhsnIoc
-         pviQ==
+        d=linaro.org; s=google; t=1681217606;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fFv74P1KCayojYjxtK5/a2IFMIj+yPaoo8Ew1qIsSEg=;
+        b=sMWRCSjOMPVp5si/XP2v82kjVrx83Nszx7XXfiUQ+4WWfr+Aun0q5zNh0TbCkLLrmv
+         55qBvqAizK9Ib/ushXLC3pixTWaCqBTWRq2OghKIZKAO3c8aB4NXecWVCi46LhnivDh6
+         rEH/S76ZH7I/zoDt9n95RFEryypfxnLPpohemb+RndwF3uYLOUa10SqfseE95Ih5aFwL
+         J5cBuiYPpSO3NPLjGDX4umb2eLJqU+lzKEcPPkgYspNOJm9bDJduGJCQUHTYKyr1wo0i
+         FOvd8m51xCg7kwV16LK3iJ7VO4v2z5el1fDOH4sWMg3kSwSvmhHg/f+WnFhkFhOwmdxm
+         INqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681217612;
-        h=mime-version:user-agent:references:message-id:date:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x9yZ+qnUfIedOP16sqw/n0wk0WAmpKQ2BM/zcb4X7c8=;
-        b=pue33kXH5fDJzzMw2Jt46BK80PM0UWrkxXBCoQPHymYR/VDDH+NCnCf9Vy/wFPpAVm
-         ordbqU/FD/2IVWGlZaUVqm5T4WkoLMPwHAunnnK25Twn9KP8YwVee2wZ6qUkk4cGz6SG
-         QFx8I+9TFH71lo59O0cZgfqmqsppcLgzru3qsgsHldmTAQuAaV4DtnABg0vqSRmnYLQz
-         Xh+AnaxkoGQP2mGn4l8empDz0LOACQZFTbMLJBfK7torTxluXWoyZEts9cxVuf/HRwOU
-         8wjrKDOyDrxOQBDoUAGQ9XG2D0yZeoFzkQvrjpgH22t3K+zwF7swPnSknuYBceFHdD1O
-         F0TQ==
-X-Gm-Message-State: AAQBX9fu3quuEBzkP695WRE1WKQQ73rmw784cS//Er2BsBqXFcbWpNv9
-        UGs0IE5b4ZEFLIr9ax3JA5Y=
-X-Google-Smtp-Source: AKy350a7/C5fkIWINCl0pxOpgu8uM2Qbd7glWkBEvzl1kM7rMBd1tJS81vJ1qW3TfQDn6oEnlllD8g==
-X-Received: by 2002:a7b:ce16:0:b0:3ee:2b04:e028 with SMTP id m22-20020a7bce16000000b003ee2b04e028mr9178810wmc.14.1681217612343;
-        Tue, 11 Apr 2023 05:53:32 -0700 (PDT)
-Received: from imac ([88.97.103.74])
-        by smtp.gmail.com with ESMTPSA id n23-20020a7bcbd7000000b003e20cf0408esm16924764wmi.40.2023.04.11.05.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 05:53:31 -0700 (PDT)
-From:   Donald Hunter <donald.hunter@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
- with igb
-In-Reply-To: <20230410213754.GA4064490@bhelgaas> (Bjorn Helgaas's message of
-        "Mon, 10 Apr 2023 16:37:54 -0500")
-Date:   Tue, 11 Apr 2023 13:53:09 +0100
-Message-ID: <m27cuih96y.fsf@gmail.com>
-References: <20230410213754.GA4064490@bhelgaas>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        d=1e100.net; s=20210112; t=1681217606;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fFv74P1KCayojYjxtK5/a2IFMIj+yPaoo8Ew1qIsSEg=;
+        b=hOSV4QcGDXJUckiXxCReNOtBEX/Y/o1N11AGZTwWvbUD2YKb9EiLHe6F+mm8pHw8kZ
+         uuDBKCi1xFQdYH5Rs3XqAIYu3kdE777cg9YicbcpxvEmCTLfYqJ8Wlh4/DKu3tz+ZTDb
+         9nb90gKAqEcA/VH6J8EBZ0J540y2KSqsY3wnT6TK4jo0/u1Kqbxjaf+soY9GjXkBuMaj
+         Mxd6Iqx2Wz1IuLALiTUll41N1O8DBxyjjewF4RfGEOD1TrV9x3u8WNnRU4o7s4Nu35D5
+         bNjXk9uIxL3VJ8tzb9duDc9TqVq/gn63vGfko04+uvdVr60Jfo6QDmxZMxEuc/As3MEa
+         KW/A==
+X-Gm-Message-State: AAQBX9c8GekNgItReyMBogitAKjnAwsrMAiZwqRmq/av49cbfYNx3yGJ
+        HdNg/S6bc0RCqYPrxyxH+vxkGeY6a2ej4/dqS1OL8g==
+X-Google-Smtp-Source: AKy350Y4X7sWd/sMQ10PeBq1usb+QKgdwjKDQyYcRyuD5lp1mmERKPgxY9L+t5XfRBFRr6SmHLi0cZYny6S114tUDXA=
+X-Received: by 2002:a81:ca53:0:b0:54c:a67:90b with SMTP id y19-20020a81ca53000000b0054c0a67090bmr8186037ywk.5.1681217605731;
+ Tue, 11 Apr 2023 05:53:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20230410171010.2561393-1-bhupesh.sharma@linaro.org>
+ <20230410171010.2561393-3-bhupesh.sharma@linaro.org> <1552aad0-4b84-b508-bc05-610edb3cccff@linaro.org>
+ <CAH=2NtyP8zkOetnH-i8TLBGBQnjH4f569PxjzW_84HZXeCFGNw@mail.gmail.com>
+In-Reply-To: <CAH=2NtyP8zkOetnH-i8TLBGBQnjH4f569PxjzW_84HZXeCFGNw@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 11 Apr 2023 15:53:14 +0300
+Message-ID: <CAA8EJprCUSvtC4Os0X==E418ZyPB1sBDP18Z5Ng-zPE0=+1rXQ@mail.gmail.com>
+Subject: Re: [PATCH v8 2/2] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org, kishon@kernel.org,
+        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn Helgaas <helgaas@kernel.org> writes:
-
-> On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
->> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
->> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
->> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
->> > > >
->> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
->> > > > because it apparently has an ACPI firmware node, and there's something
->> > > > we don't expect about its status?
->> > >
->> > > Yes they are built-in, to my knowledge.
->> > >
->> > > > Hopefully Rob will look at this.  If I were looking, I would be
->> > > > interested in acpidump to see what's in the DSDT.
->> > >
->> > > I can get an acpidump. Is there a preferred way to share the files, or just
->> > > an email attachment?
->> >
->> > I think by default acpidump produces ASCII that can be directly
->> > included in email.  http://vger.kernel.org/majordomo-info.html says
->> > 100K is the limit for vger mailing lists.  Or you could open a report
->> > at https://bugzilla.kernel.org and attach it there, maybe along with a
->> > complete dmesg log and "sudo lspci -vv" output.
->> 
->> Apologies for the delay, I was unable to access the machine while travelling.
->> 
->> https://bugzilla.kernel.org/show_bug.cgi?id=217317
+On Tue, 11 Apr 2023 at 15:18, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
 >
-> Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
-> with this in the kernel parameters:
+> On Tue, 11 Apr 2023 at 13:17, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On 10/04/2023 20:10, Bhupesh Sharma wrote:
+> > > Add USB superspeed qmp phy node to dtsi.
+> > >
+> > > Make sure that the various board dts files (which include sm4250.dtsi file)
+> > > continue to work as intended.
+> > >
+> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > > ---
+> > >   .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
+> > >   arch/arm64/boot/dts/qcom/sm6115.dtsi          | 29 +++++++++++++++++--
+> > >   .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    |  3 ++
+> > >   3 files changed, 33 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > > index a1f0622db5a0..75951fd439df 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > > @@ -242,6 +242,9 @@ &usb {
+> > >   &usb_dwc3 {
+> > >       maximum-speed = "high-speed";
+> > >       dr_mode = "peripheral";
+> > > +
+> > > +     phys = <&usb_hsphy>;
+> > > +     phy-names = "usb2-phy";
+> > >   };
+> > >
+> > >   &usb_hsphy {
+> > > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > index 2505c815c65a..b2ea8f13e827 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > @@ -651,6 +651,31 @@ usb_hsphy: phy@1613000 {
+> > >                       status = "disabled";
+> > >               };
+> > >
+> > > +             usb_qmpphy: phy@1615000 {
+> > > +                     compatible = "qcom,sm6115-qmp-usb3-phy";
+> > > +                     reg = <0x0 0x01615000 0x0 0x200>;
+> > > +
+> > > +                     clocks = <&gcc GCC_AHB2PHY_USB_CLK>,
+> > > +                              <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> > > +                              <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> > > +                              <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> > > +                     clock-names = "cfg_ahb",
+> > > +                                   "ref",
+> > > +                                   "com_aux",
+> > > +                                   "pipe";
+> > > +
+> > > +                     resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> > > +                              <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> > > +                     reset-names = "phy", "phy_phy";
+> > > +
+> > > +                     #clock-cells = <0>;
+> > > +                     clock-output-names = "usb3_phy_pipe_clk_src";
+> > > +
+> > > +                     #phy-cells = <0>;
+> > > +
+> > > +                     status = "disabled";
+> >
+> >
+> > Please excuse me if I'm wrong, but this will not work with the current
+> > PHY driver. It was not updated to handle new bindings. Please provide
+> > relevant driver patches too.
 >
->   dyndbg="file drivers/acpi/* +p"
+> Oh.. from your previous emails, I got the feeling that you were
+> already reworking the existing PHY driver as part of enabling it for
+> newer bindings.
 >
-> and collect the entire dmesg log?
+> No issues, I will send the PHY patches as well in the next version.
 
-Added to the bugzilla report.
+Then this dependency should have been declared in the cover letter.
 
-Thanks!
+
+-- 
+With best wishes
+Dmitry
