@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FFB6DD9FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE146DDAA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjDKLrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        id S229579AbjDKMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDKLrb (ORCPT
+        with ESMTP id S229477AbjDKMVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:47:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CC949D3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681213628; x=1712749628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eUX+Mcn7t6+AxvlSTyQrQHuBTa6YiZOFiRNNNVZZIsw=;
-  b=ZVtCLk4vWpmqeJ7CYds8pOS122ZHvoZiZjW4rB7KcvKiGt7eN+PUOeuj
-   txSqcbNdV3qcs1rZChT7JnSO+8819O7fW2EEYolAgjiGjd3fQMHLNvq5f
-   R1oRBTVDncgzFAyLhP0+NuX82d1Ou32zc6TJOdp2y+YGc9niaKEXXx0/S
-   bnDNwyRF+9UZ76sUXurygQUwuOmr8XLCw1yRD1j7YmRrgDL+2GJ2lr+40
-   cpxDz8qIumHNk+SnLxCJMk5kTx1GpgQ1tSHbAnNo9uFSA59NS5hYut8XB
-   qMOB71BjF5bXruZ4PO5UKMyAPK7Q4F070I5QND8DmzlL4Vuq69syJoMZT
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="323229498"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="323229498"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:43:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="688573197"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="688573197"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2023 04:43:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pmCPa-00FFEb-11;
-        Tue, 11 Apr 2023 14:43:46 +0300
-Date:   Tue, 11 Apr 2023 14:43:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Bumwoo Lee <bw365.lee@samsung.com>
-Subject: Re: [PATCH v2 5/5] extcon: Drop unneeded assignments
-Message-ID: <ZDVH8tfJGrxOeqm9@smile.fi.intel.com>
-References: <20230405152745.24959-1-andriy.shevchenko@linux.intel.com>
- <20230405152745.24959-6-andriy.shevchenko@linux.intel.com>
- <faf0b76d-b7ad-0326-1058-ae879167d6db@gmail.com>
+        Tue, 11 Apr 2023 08:21:47 -0400
+X-Greylist: delayed 1377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Apr 2023 05:21:46 PDT
+Received: from mail.munisantanita.gob.pe (mail.munisantanita.gob.pe [161.132.178.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BC9E62
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:21:45 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.munisantanita.gob.pe (Postfix) with ESMTP id A30B46F562CCB;
+        Tue, 11 Apr 2023 06:47:36 -0500 (-05)
+Received: from mail.munisantanita.gob.pe ([127.0.0.1])
+        by localhost (mail.munisantanita.gob.pe [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id u29NCtSxsN85; Tue, 11 Apr 2023 06:47:35 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.munisantanita.gob.pe (Postfix) with ESMTP id 4CBC06C1A52B2;
+        Tue, 11 Apr 2023 06:46:00 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.munisantanita.gob.pe 4CBC06C1A52B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=munisantanita.gob.pe; s=95120F7E-CC3C-11ED-B14D-4E8AB78ABDAE;
+        t=1681213560; bh=eADsa+9clW57ixcP+Z+dgCk7bsU1862258kreC9LcYs=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=d9KI9OIZvPM3wgCG6KZ5q6dD5CNDQpeC/jrfZT2M+dk5OsOUrUaKfeQzG5pUM/KQb
+         cJH6ZEWnDzex8DSNnf/WPqZHEz7uMoIxV3BEJfq5LBNntC36Soxg0CjLqdBaYreNKa
+         VlR57DlBqfZaOUkj1HdAUFUxBphJJMNbowvEKhvXH2YWH8ZcMNNBj17R+s4qeL+U6M
+         SE4HPYfZuehocrv0td9qQ0Qj2DuGxNNetec0cChdnslD6WfR+z9Z8wxgwUofW/gi5L
+         VD7m/SX7OrObJkdT9hZ5aAKi18u3/gTR+6xlYaetlKVIoTO/PyzlSK+mPNptqwoLya
+         KWbTWXNb4Y4VA==
+X-Virus-Scanned: amavisd-new at munisantanita.gob.pe
+Received: from mail.munisantanita.gob.pe ([127.0.0.1])
+        by localhost (mail.munisantanita.gob.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XmXy0Q8R5u_7; Tue, 11 Apr 2023 06:46:00 -0500 (-05)
+Received: from [45.80.158.229] (unknown [45.80.158.229])
+        by mail.munisantanita.gob.pe (Postfix) with ESMTPSA id 303616CF1E294;
+        Tue, 11 Apr 2023 06:44:36 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faf0b76d-b7ad-0326-1058-ae879167d6db@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: GOOD NEWS:
+To:     Recipients <lalcarraz@munisantanita.gob.pe>
+From:   "Maria Elisabeth Schaeffler" <lalcarraz@munisantanita.gob.pe>
+Date:   Tue, 11 Apr 2023 13:44:32 +0200
+Reply-To: info.mariaelisabethschaeffler0@gmail.com
+Message-Id: <20230411114437.303616CF1E294@mail.munisantanita.gob.pe>
+X-Spam-Status: No, score=4.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:35:53AM +0900, Chanwoo Choi wrote:
-> On 23. 4. 6. 00:27, Andy Shevchenko wrote:
+Hello,
 
-...
-
-> But this version doesn't contain my ack tag.
-
-Oh, sorry, I somehow missed that.
-
-> So that 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com> again.
-
-Thank you and thanks for the review, I'll issue a v3 shortly.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+I'm Ms. Maria Elisabeth Schaeffler, a German business magnate, Investor and=
+ philanthropist. I am the chairman of Wipro Limited. 25% of my personal wea=
+lth is spent on charity. And I also promised to give the rest of 25% away t=
+o individuals this year. I have decided to donate 1,000,000.00 euros to you=
+. If you are interested in my donation, contact me for more information via=
+: info.mariaelisabethschaeffler0@gmail.com
