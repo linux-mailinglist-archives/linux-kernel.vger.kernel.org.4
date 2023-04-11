@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B209F6DDB95
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E476DDB97
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjDKNEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S230237AbjDKNET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjDKNEB (ORCPT
+        with ESMTP id S230294AbjDKNEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:04:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC6246A8;
-        Tue, 11 Apr 2023 06:03:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D04162567;
-        Tue, 11 Apr 2023 13:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53ACC433EF;
-        Tue, 11 Apr 2023 13:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681218215;
-        bh=w233m1At44CuD4oKEJ9ouw0Upf9V5ee3kLtIQj5vlrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y5/0JgdS+Qr2qZ7XdcZPhRHpMfesXfjmLBCm3XoA8RgzWD/4lV1oW3sdU23SBX4Qe
-         vPWinCQ3+2feUoPSfyqb85oOWr/ew3ofucTzQ01Qyh5bks8pLd6uAnAwDWmSFDm24E
-         bYRNs2aOZpOlaxUDk6BtX7sE4VWxP43x34DIifWTjHdq8s32eo1HMcmpJjHNKO2YBt
-         Y4/CdQE2bBNHLNXfm4BIlrqXUcUnBDWQdcxe7p/MXSh7NObLj9TdBNnwJOq4z/q1Cm
-         PAqaiMYdfh+2oVEl75aynMukmDf08EQxkfMCB1sRY++LL+EqaVyL8UJQYaS2lmaB0S
-         xbZBHqMe1T33A==
-Date:   Tue, 11 Apr 2023 14:03:29 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, mark.rutland@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V9 00/10] arm64/perf: Enable branch stack sampling
-Message-ID: <20230411130326.GA22736@willie-the-truck>
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+        Tue, 11 Apr 2023 09:04:12 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F625273;
+        Tue, 11 Apr 2023 06:03:50 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso6316050pjt.4;
+        Tue, 11 Apr 2023 06:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681218229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DGPsZgWveJxj8Dn+JY/R3MDE1ywwia78QYoiL5Lim/Y=;
+        b=dnHqZC/0oeXGXGbNKCR7IbA/S6vUmwRZaRKhzBcG1vfikiAjudQRVgFqtxioPYu1LL
+         WGeLVQQPYB7XI410D0VdxKEUvJcokUk6KuphqI7LS/AeTPcgFAapd1wh2Q1njd+AYev0
+         CY6Bk+csVKlHGKjPDjUD/5C8Nbj5Viu47keO9ZP5lJs68c1QBbVdGglhHGZF0YkGm8tr
+         T2+JSgOUzM/8lo+He0SfgLmKdd9lgqMObh0fIyEhuI8Sk2F1DPB7vzt9Svf4OHzPvC+X
+         gAhWNgL1ibAumkfqrHR1nEKD7/AgiZgJpurznrCVQ5ctKxIXUj1hHr5FRhWraGFS6EHy
+         frkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DGPsZgWveJxj8Dn+JY/R3MDE1ywwia78QYoiL5Lim/Y=;
+        b=QjwVZmzti056NgNZNYtZjCF1qSw0ZP1FTeSdEIVOVSGTOkW8davqjXMMruozJoi9R4
+         buf3ylZIhQ70ii5/OqAUtj+Klo9tYzS0n68q6jthGNrBac2LbGzxxhk7WA4oOK1TdeqS
+         a8SknJ1kK6ZmDVdfLqSHJeTKm+HxNat99aQhY+VnE3Ugd+/RapGX5szS34n+CDpBom+N
+         mOpc8fSP55uztGuv9WxExi+VGxhZ5L9yxq4argUu9z4bTvP+H+lR7pIsK0iBeZSDV0xL
+         /0/5fxlp4paAHzdj28OMLSETFCVslsdMJWNxxXj90w6RJLcSenHxqpqwkTX2GLW1PdcN
+         75yQ==
+X-Gm-Message-State: AAQBX9dhHZS10ggi57rTjT9HrFMC0qdyrV4UWXEVp2i9gmgPk2ZFQAk+
+        cu4bjbY7dfkJWh/ZvSzo7C8=
+X-Google-Smtp-Source: AKy350aKCsAD2r5D8fmvW4B6NhiTUAp74QYcGu/SmHvcLWzuncyduCGC2UAXTfkU4oNJbZ1KI8Q6UQ==
+X-Received: by 2002:a17:902:d40d:b0:1a6:4b2f:9a2f with SMTP id b13-20020a170902d40d00b001a64b2f9a2fmr4470258ple.59.1681218229492;
+        Tue, 11 Apr 2023 06:03:49 -0700 (PDT)
+Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170902724900b001a060007fcbsm9598506pll.213.2023.04.11.06.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 06:03:49 -0700 (PDT)
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Remove redundant check for MSR_IA32_DS_AREA set handler
+Date:   Tue, 11 Apr 2023 21:03:38 +0800
+Message-Id: <20230411130338.8592-1-cloudliang@tencent.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman
+From: Jinrong Liang <cloudliang@tencent.com>
 
-On Wed, Mar 15, 2023 at 10:44:34AM +0530, Anshuman Khandual wrote:
-> This series enables perf branch stack sampling support on arm64 platform
-> via a new arch feature called Branch Record Buffer Extension (BRBE). All
-> relevant register definitions could be accessed here.
-> 
-> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> 
-> This series applies on 6.3-rc1 after applying the following patch from Mark
-> which allows enums in SysregFields blocks in sysreg tools.
-> 
-> https://lore.kernel.org/all/20230306114836.2575432-1-mark.rutland@arm.com/
+After commit 2de154f541fc ("KVM: x86/pmu: Provide "error" semantics
+for unsupported-but-known PMU MSRs"), the guest_cpuid_has(DS) check
+is not necessary any more since if the guest supports X86_FEATURE_DS,
+it never returns 1. And if the guest does not support this feature,
+the set_msr handler will get false from kvm_pmu_is_valid_msr() before
+reaching this point. Therefore, the check will not be true in all cases
+and can be safely removed, which also simplifies the code and improves
+its readability.
 
-As mentioned by Mark at:
+Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+---
+ arch/x86/kvm/vmx/pmu_intel.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-https://lore.kernel.org/r/ZB2sGrsbr58ttoWI@FVFF77S0Q05N
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e8a3be0b9df9..b0d70a8b7613 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -443,8 +443,6 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		}
+ 		break;
+ 	case MSR_IA32_DS_AREA:
+-		if (msr_info->host_initiated && data && !guest_cpuid_has(vcpu, X86_FEATURE_DS))
+-			return 1;
+ 		if (is_noncanonical_address(data, vcpu))
+ 			return 1;
+ 		pmu->ds_area = data;
+-- 
+2.31.1
 
-this conflicts with supporting PMUv3 on AArch32. Please can you rebase onto
-for-next/perf, which will mean moving this driver back into drivers/perf/
-now?
-
-Thanks,
-
-Will
