@@ -2,186 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C630A6DE3F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F122E6DE3F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjDKSdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S229866AbjDKSdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjDKSdf (ORCPT
+        with ESMTP id S229815AbjDKSdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:33:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C00172D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681238014; x=1712774014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SL5gzX/bq5eZJotzApGP7ZSuine7/TF6+8YCFeFeHjs=;
-  b=EWYdKMc9bJY0hIj9iYv77mvWXtXchytSAdIGUTHbWzRpDvsBNY6gX/wQ
-   1RIc+WxVmOIJW6lwPf+jvI3K1fqMdULzt9rRTkaWO6EB3xbprgDhQqUoN
-   WPVZS5+N8ZLY1mIrPCeLNmLI1vLspd0WNN5QWAVQysgBqHxF8p4ADGRoD
-   HioApEH6tQaSRR79Q+eqtGpUzOmuiXw9MaCgIc8mRWlKY9kw81FxjyJQg
-   pbUPM3Pzej6sDPwwHSqa6kyvWf0WX1rveDn1+b48uVZ4PLk3067h+qmud
-   zGMTjewOw/iaWAJn4qyHq14SOtDx1gyZDSsBHXNx0qHTQPJ4oT8TEyB8X
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="345492032"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="345492032"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 11:33:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="682178402"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="682178402"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Apr 2023 11:33:23 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmIny-000Wbd-2f;
-        Tue, 11 Apr 2023 18:33:22 +0000
-Date:   Wed, 12 Apr 2023 02:33:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument
- 1 (different address spaces)
-Message-ID: <202304120259.7D9gPp1F-lkp@intel.com>
+        Tue, 11 Apr 2023 14:33:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E514C3D;
+        Tue, 11 Apr 2023 11:33:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7E11621FD;
+        Tue, 11 Apr 2023 18:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440C5C433D2;
+        Tue, 11 Apr 2023 18:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681238023;
+        bh=FgzA+wAQOhvwLPFEU0HXw3rNNZIT+sR+BkcnhuK0cso=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=M6b/gJ2gWuWAdiFoUnfld6Y/G5/BDCSCbnak0Pe+uP5BYjHpWF1iWwB9AxFmDXRce
+         kGFg5pOmvTzaOl2xDoXcb/LtV340BO9NXypXG00cOy4szlFYBVZifM7257F7CDYoMJ
+         bgZ2lYhwZr6wP0E3PKUo6EefvNV3zCPo+bo9XW7NlY7rK/SPR1cnkYjntmeSR2IHl0
+         HHjiZBdvZJxF7A7SowyfjaJyiHse7cpaSBZmFEd7MNjInr93CNlhclydTQaD2WbZiE
+         U5Niv8wxCQ7qscG5QTNWUngsBg21He/2V+jeuqZ8zhNUQ4x/2VmdBg401XIbg+dSKN
+         ioBbW6nJACBMQ==
+Message-ID: <683cbe934d1df9436e003466d2a419ef.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230411135558.44282-8-xingyu.wu@starfivetech.com>
+References: <20230411135558.44282-1-xingyu.wu@starfivetech.com> <20230411135558.44282-8-xingyu.wu@starfivetech.com>
+Subject: Re: [PATCH v4 07/10] clk: starfive: Add StarFive JH7110 Video-Output clock driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+To:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
+Date:   Tue, 11 Apr 2023 11:33:41 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0d3eb744aed40ffce820cded61d7eac515199165
-commit: 93a4fa622eb061f75f87f0cf9609ab4e69c67d01 LoongArch: Add STACKTRACE support
-date:   8 months ago
-config: loongarch-randconfig-s053-20230411 (https://download.01.org/0day-ci/archive/20230412/202304120259.7D9gPp1F-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash net/core/
+Quoting Xingyu Wu (2023-04-11 06:55:55)
+> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-vout.c b/drivers/cl=
+k/starfive/clk-starfive-jh7110-vout.c
+> new file mode 100644
+> index 000000000000..4c6f5ae198cf
+> --- /dev/null
+> +++ b/drivers/clk/starfive/clk-starfive-jh7110-vout.c
+> @@ -0,0 +1,239 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * StarFive JH7110 Video-Output Clock Driver
+> + *
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/io.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/reset.h>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304120259.7D9gPp1F-lkp@intel.com/
+Include module.h, device.h, and kernel.h for things like ERR_PTR().
+Probably need to include a reset header as well for reset APIs.
 
-sparse warnings: (new ones prefixed by >>)
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got int [noderef] __percpu *
->> net/core/netpoll.c:317:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/netpoll.c:317:9: sparse:     expected void *ptr
-   net/core/netpoll.c:317:9: sparse:     got int [noderef] __percpu *
-   net/core/netpoll.c:348:25: sparse: sparse: context imbalance in '__netpoll_send_skb' - different lock contexts for basic block
+> +
+> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+> +
+> +#include "clk-starfive-jh7110.h"
+> +
+> +/* external clocks */
+> +#define JH7110_VOUTCLK_VOUT_SRC                        (JH7110_VOUTCLK_E=
+ND + 0)
+> +#define JH7110_VOUTCLK_VOUT_TOP_AHB            (JH7110_VOUTCLK_END + 1)
+> +#define JH7110_VOUTCLK_VOUT_TOP_AXI            (JH7110_VOUTCLK_END + 2)
+> +#define JH7110_VOUTCLK_VOUT_TOP_HDMITX0_MCLK   (JH7110_VOUTCLK_END + 3)
+> +#define JH7110_VOUTCLK_I2STX0_BCLK             (JH7110_VOUTCLK_END + 4)
+> +#define JH7110_VOUTCLK_HDMITX0_PIXELCLK                (JH7110_VOUTCLK_E=
+ND + 5)
+> +#define JH7110_VOUTCLK_EXT_END                 (JH7110_VOUTCLK_END + 6)
+> +
+> +/* VOUT domian clocks */
+> +struct vout_top_crg {
+> +       struct clk_bulk_data *top_clks;
+> +       int top_clks_num;
 
-vim +317 net/core/netpoll.c
+size_t?
 
-bea3348eef27e6 Stephen Hemminger   2007-10-03  307  
-2899656b494dcd Amerigo Wang        2012-08-10  308  /* call with IRQ disabled */
-1ddabdfaf70c20 Eric Dumazet        2020-05-07  309  static netdev_tx_t __netpoll_send_skb(struct netpoll *np, struct sk_buff *skb)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  310  {
-a54776f2c4939b Yunjian Wang        2020-04-29  311  	netdev_tx_t status = NETDEV_TX_BUSY;
-307f660d056b5e Eric Dumazet        2020-05-07  312  	struct net_device *dev;
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  313  	unsigned long tries;
-de85d99eb7b595 Herbert Xu          2010-06-10  314  	/* It is up to the caller to keep npinfo alive. */
-2899656b494dcd Amerigo Wang        2012-08-10  315  	struct netpoll_info *npinfo;
-f0d3459d072278 Matt Mackall        2005-08-11  316  
-af0733937317e1 Frederic Weisbecker 2017-11-06 @317  	lockdep_assert_irqs_disabled();
-2899656b494dcd Amerigo Wang        2012-08-10  318  
-307f660d056b5e Eric Dumazet        2020-05-07  319  	dev = np->dev;
-307f660d056b5e Eric Dumazet        2020-05-07  320  	npinfo = rcu_dereference_bh(dev->npinfo);
-307f660d056b5e Eric Dumazet        2020-05-07  321  
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  322  	if (!npinfo || !netif_running(dev) || !netif_device_present(dev)) {
-080b3c19a4ffe4 Eric W. Biederman   2014-03-27  323  		dev_kfree_skb_irq(skb);
-1ddabdfaf70c20 Eric Dumazet        2020-05-07  324  		return NET_XMIT_DROP;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  325  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  326  
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  327  	/* don't get messages out of order, and no recursion */
-bea3348eef27e6 Stephen Hemminger   2007-10-03  328  	if (skb_queue_len(&npinfo->txq) == 0 && !netpoll_owner_active(dev)) {
-fd2ea0a79faad8 David S. Miller     2008-07-17  329  		struct netdev_queue *txq;
-a49f99ffca57a2 Andrew Morton       2006-12-11  330  
-4bd97d51a5e602 Paolo Abeni         2019-03-20  331  		txq = netdev_core_pick_tx(dev, skb, NULL);
-fd2ea0a79faad8 David S. Miller     2008-07-17  332  
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  333  		/* try until next clock tick */
-e37b8d931936f8 Andrew Morton       2006-12-09  334  		for (tries = jiffies_to_usecs(1)/USEC_PER_POLL;
-e37b8d931936f8 Andrew Morton       2006-12-09  335  		     tries > 0; --tries) {
-5efeac44cfca62 Eric W. Biederman   2014-03-27  336  			if (HARD_TX_TRYLOCK(dev, txq)) {
-944e294857033d Eric W. Biederman   2014-03-27  337  				if (!netif_xmit_stopped(txq))
-944e294857033d Eric W. Biederman   2014-03-27  338  					status = netpoll_start_xmit(skb, dev, txq);
-689971b4461388 Amerigo Wang        2012-08-10  339  
-5efeac44cfca62 Eric W. Biederman   2014-03-27  340  				HARD_TX_UNLOCK(dev, txq);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  341  
-2c1644cf6d46a8 Feng Sun            2019-08-26  342  				if (dev_xmit_complete(status))
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  343  					break;
-8834807b43200b Jeremy Fitzhardinge 2006-06-26  344  
-0db3dc73f7a3a7 Stephen Hemminger   2007-06-27  345  			}
-0db3dc73f7a3a7 Stephen Hemminger   2007-06-27  346  
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  347  			/* tickle device maybe there is some cleanup */
-2a49e001cbe3eb Joe Perches         2011-06-30  348  			netpoll_poll_dev(np->dev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  349  
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  350  			udelay(USEC_PER_POLL);
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  351  		}
-79b1bee888d43b Dongdong Deng       2009-08-21  352  
-79b1bee888d43b Dongdong Deng       2009-08-21  353  		WARN_ONCE(!irqs_disabled(),
-d75f773c86a2b8 Sakari Ailus        2019-03-25  354  			"netpoll_send_skb_on_dev(): %s enabled interrupts in poll (%pS)\n",
-944e294857033d Eric W. Biederman   2014-03-27  355  			dev->name, dev->netdev_ops->ndo_start_xmit);
-79b1bee888d43b Dongdong Deng       2009-08-21  356  
-e37b8d931936f8 Andrew Morton       2006-12-09  357  	}
-f0d3459d072278 Matt Mackall        2005-08-11  358  
-2c1644cf6d46a8 Feng Sun            2019-08-26  359  	if (!dev_xmit_complete(status)) {
-5de4a473bda495 Stephen Hemminger   2006-10-26  360  		skb_queue_tail(&npinfo->txq, skb);
-4c1ac1b49122b8 David Howells       2006-12-05  361  		schedule_delayed_work(&npinfo->tx_work,0);
-2bdfe0baeca0e2 Stephen Hemminger   2006-10-26  362  	}
-1ddabdfaf70c20 Eric Dumazet        2020-05-07  363  	return NETDEV_TX_OK;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  364  }
-fb1eee476b0d3b Eric Dumazet        2020-05-07  365  
+> +       void __iomem *base;
+> +};
+> +
+> +static struct clk_bulk_data jh7110_vout_top_clks[] =3D {
+> +       { .id =3D "vout_src" },
+> +       { .id =3D "vout_top_ahb" }
+> +};
+> +
+> +static const struct jh71x0_clk_data jh7110_voutclk_data[] =3D {
+> +       /* divider */
+> +       JH71X0__DIV(JH7110_VOUTCLK_APB, "apb", 8, JH7110_VOUTCLK_VOUT_TOP=
+_AHB),
+> +       JH71X0__DIV(JH7110_VOUTCLK_DC8200_PIX, "dc8200_pix", 63, JH7110_V=
+OUTCLK_VOUT_SRC),
+> +       JH71X0__DIV(JH7110_VOUTCLK_DSI_SYS, "dsi_sys", 31, JH7110_VOUTCLK=
+_VOUT_SRC),
+> +       JH71X0__DIV(JH7110_VOUTCLK_TX_ESC, "tx_esc", 31, JH7110_VOUTCLK_V=
+OUT_TOP_AHB),
+> +       /* dc8200 */
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_AXI, "dc8200_axi", 0, JH7110_VO=
+UTCLK_VOUT_TOP_AXI),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_CORE, "dc8200_core", 0, JH7110_=
+VOUTCLK_VOUT_TOP_AXI),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DC8200_AHB, "dc8200_ahb", 0, JH7110_VO=
+UTCLK_VOUT_TOP_AHB),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DC8200_PIX0, "dc8200_pix0", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DC8200_PIX1, "dc8200_pix1", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       /* LCD */
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DOM_VOUT_TOP_LCD, "dom_vout_top_lcd", =
+0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX0,
+> +                   JH7110_VOUTCLK_DC8200_PIX1),
+> +       /* dsiTx */
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_APB, "dsiTx_apb", 0, JH7110_VOUT=
+CLK_DSI_SYS),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_SYS, "dsiTx_sys", 0, JH7110_VOUT=
+CLK_DSI_SYS),
+> +       JH71X0_GMUX(JH7110_VOUTCLK_DSITX_DPI, "dsiTx_dpi", 0, 2,
+> +                   JH7110_VOUTCLK_DC8200_PIX,
+> +                   JH7110_VOUTCLK_HDMITX0_PIXELCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_DSITX_TXESC, "dsiTx_txesc", 0, JH7110_=
+VOUTCLK_TX_ESC),
+> +       /* mipitx DPHY */
+> +       JH71X0_GATE(JH7110_VOUTCLK_MIPITX_DPHY_TXESC, "mipitx_dphy_txesc"=
+, 0,
+> +                   JH7110_VOUTCLK_TX_ESC),
+> +       /* hdmi */
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_MCLK, "hdmi_tx_mclk", 0,
+> +                   JH7110_VOUTCLK_VOUT_TOP_HDMITX0_MCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_BCLK, "hdmi_tx_bclk", 0,
+> +                   JH7110_VOUTCLK_I2STX0_BCLK),
+> +       JH71X0_GATE(JH7110_VOUTCLK_HDMI_TX_SYS, "hdmi_tx_sys", 0, JH7110_=
+VOUTCLK_APB),
+> +};
+> +
+> +static struct vout_top_crg *top_crg_from(void __iomem **base)
+> +{
+> +       return container_of(base, struct vout_top_crg, base);
+> +}
+> +
+> +static int jh7110_vout_top_crg_init(struct jh71x0_clk_priv *priv, struct=
+ vout_top_crg *top)
+> +{
+> +       struct reset_control *top_rst;
+> +       int ret;
+> +
+> +       top->top_clks =3D jh7110_vout_top_clks;
+> +       top->top_clks_num =3D ARRAY_SIZE(jh7110_vout_top_clks);
+> +       ret =3D devm_clk_bulk_get(priv->dev, top->top_clks_num, top->top_=
+clks);
+> +       if (ret)
+> +               return dev_err_probe(priv->dev, ret, "failed to get top c=
+locks\n");
+> +
+> +       /* The reset should be shared and other Vout modules will use its=
+. */
+> +       top_rst =3D devm_reset_control_get_shared(priv->dev, NULL);
+> +       if (IS_ERR(top_rst))
+> +               return dev_err_probe(priv->dev, PTR_ERR(top_rst), "failed=
+ to get top reset\n");
+> +
+> +       ret =3D clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
+> +       if (ret)
+> +               return dev_err_probe(priv->dev, ret, "failed to enable to=
+p clocks\n");
+> +
+> +       return reset_control_deassert(top_rst);
+> +}
+> +
+> +static struct clk_hw *jh7110_voutclk_get(struct of_phandle_args *clkspec=
+, void *data)
+> +{
+> +       struct jh71x0_clk_priv *priv =3D data;
+> +       unsigned int idx =3D clkspec->args[0];
+> +
+> +       if (idx < JH7110_VOUTCLK_END)
+> +               return &priv->reg[idx].hw;
+> +
+> +       return ERR_PTR(-EINVAL);
+> +}
+> +
+> +static int jh7110_voutcrg_probe(struct platform_device *pdev)
+> +{
+> +       struct jh71x0_clk_priv *priv;
+> +       struct vout_top_crg *top;
+> +       unsigned int idx;
+> +       int ret;
+> +
+> +       priv =3D devm_kzalloc(&pdev->dev,
+> +                           struct_size(priv, reg, JH7110_VOUTCLK_END),
+> +                           GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       top =3D devm_kzalloc(&pdev->dev, sizeof(*top), GFP_KERNEL);
+> +       if (!top)
+> +               return -ENOMEM;
+> +
+> +       spin_lock_init(&priv->rmw_lock);
+> +       priv->dev =3D &pdev->dev;
+> +       priv->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(priv->base))
+> +               return PTR_ERR(priv->base);
+> +
+> +       pm_runtime_enable(priv->dev);
 
-:::::: The code at line 317 was first introduced by commit
-:::::: af0733937317e1e03b60f3af8cf9cd59d665593c netpoll: Use lockdep to assert IRQs are disabled/enabled
+Use devm_pm_runtime_enable()?
 
-:::::: TO: Frederic Weisbecker <frederic@kernel.org>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+> +       ret =3D pm_runtime_get_sync(priv->dev);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+And use pm_runtime_resume_and_get() here?
+
+> +       if (ret < 0)
+> +               return dev_err_probe(priv->dev, ret, "failed to turn on p=
+ower\n");
+> +
+> +       ret =3D jh7110_vout_top_crg_init(priv, top);
+> +       if (ret)
+> +               goto err_clk;
+> +
+> +       top->base =3D priv->base;
+> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
+
+See comment later about setting this to 'top' instead. Casting away
+iomem markings is not good hygiene.
+
+> +
+> +       for (idx =3D 0; idx < JH7110_VOUTCLK_END; idx++) {
+> +               u32 max =3D jh7110_voutclk_data[idx].max;
+> +               struct clk_parent_data parents[4] =3D {};
+> +               struct clk_init_data init =3D {
+> +                       .name =3D jh7110_voutclk_data[idx].name,
+> +                       .ops =3D starfive_jh71x0_clk_ops(max),
+> +                       .parent_data =3D parents,
+> +                       .num_parents =3D
+> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CL=
+K_MUX_SHIFT) + 1,
+> +                       .flags =3D jh7110_voutclk_data[idx].flags,
+> +               };
+> +               struct jh71x0_clk *clk =3D &priv->reg[idx];
+> +               unsigned int i;
+> +               const char *fw_name[JH7110_VOUTCLK_EXT_END - JH7110_VOUTC=
+LK_END] =3D {
+> +                       "vout_src",
+> +                       "vout_top_ahb",
+> +                       "vout_top_axi",
+> +                       "vout_top_hdmitx0_mclk",
+> +                       "i2stx0_bclk",
+> +                       "hdmitx0_pixelclk"
+> +               };
+> +
+> +               for (i =3D 0; i < init.num_parents; i++) {
+> +                       unsigned int pidx =3D jh7110_voutclk_data[idx].pa=
+rents[i];
+> +
+> +                       if (pidx < JH7110_VOUTCLK_END)
+> +                               parents[i].hw =3D &priv->reg[pidx].hw;
+> +                       else if (pidx < JH7110_VOUTCLK_EXT_END)
+> +                               parents[i].fw_name =3D fw_name[pidx - JH7=
+110_VOUTCLK_END];
+
+Can you use .index instead?
+
+> +               }
+> +
+> +               clk->hw.init =3D &init;
+> +               clk->idx =3D idx;
+> +               clk->max_div =3D max & JH71X0_CLK_DIV_MASK;
+> +
+> +               ret =3D devm_clk_hw_register(&pdev->dev, &clk->hw);
+> +               if (ret)
+> +                       goto err_exit;
+> +       }
+> +
+> +       ret =3D devm_of_clk_add_hw_provider(&pdev->dev, jh7110_voutclk_ge=
+t, priv);
+> +       if (ret)
+> +               goto err_exit;
+> +
+> +       ret =3D jh7110_reset_controller_register(priv, "rst-vout", 4);
+> +       if (ret)
+> +               goto err_exit;
+> +
+> +       return 0;
+> +
+> +err_exit:
+> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
+> +err_clk:
+> +       pm_runtime_put_sync(priv->dev);
+> +       pm_runtime_disable(priv->dev);
+> +       return ret;
+> +}
+> +
+> +static int jh7110_voutcrg_remove(struct platform_device *pdev)
+> +{
+> +       void __iomem **base =3D dev_get_drvdata(&pdev->dev);
+
+Why not set the driver data to be vout_top_crg?
+
+> +       struct vout_top_crg *top =3D top_crg_from(base);
+
+And get rid of this top_crg_from() API?
+
+> +
+> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
+> +       pm_runtime_disable(&pdev->dev);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id jh7110_voutcrg_match[] =3D {
+> +       { .compatible =3D "starfive,jh7110-voutcrg" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_voutcrg_match);
+> +
+> +static struct platform_driver jh7110_voutcrg_driver =3D {
+> +       .probe =3D jh7110_voutcrg_probe,
+> +       .remove =3D jh7110_voutcrg_remove,
+
+Use remove_new please.
