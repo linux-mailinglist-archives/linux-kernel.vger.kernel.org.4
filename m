@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF426DDEFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEC26DDF01
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjDKPJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S229985AbjDKPJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjDKPI7 (ORCPT
+        with ESMTP id S230296AbjDKPJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:08:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB215267;
-        Tue, 11 Apr 2023 08:08:39 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54D6A66031EA;
-        Tue, 11 Apr 2023 16:08:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681225717;
-        bh=076CzJvPOPKrvq+MGxxB4wZDMf27bcPrUtizfOd0u4Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=T9sqm70h7J7oaiuU67WzBUMIQBqkQlP3kEAMaYwOUOn8EdVh8dpBYOlSlRvwEfuHA
-         U6aAjG5OZB86zADQEjkuWhUSySyZSwh3S/SrGLeFIM5NX0TuwVsAqmXscvVEYC4JO5
-         ABDQnFbcqlThss8JCmtsHv3W6e4CYlO6TO7iGs/Dm/08pVIjKcnOapLBHosuE8lFpf
-         sypiCU9ofXYqyiNDk/9tro41zQIhGbvdiTDrMW0gqjup6fhTlluQZ9FcnKrkGKY0pk
-         CykGkxTVDxl3iXgi1RINxy7t/K1hgJlSs/6xQCWhgv7Qgk6TJO/FdJmVi5BQRi4zLd
-         A8DwQn0sbAEhg==
-Message-ID: <46703c104c57d7b192f3e19860809e8e71016997.camel@collabora.com>
-Subject: Re: [PATCH v5 04/13] media: verisilicon: Get bit depth for
- V4L2_PIX_FMT_NV12_10LE40_4L4
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Date:   Tue, 11 Apr 2023 11:08:26 -0400
-In-Reply-To: <20230330154043.1250736-5-benjamin.gaignard@collabora.com>
-References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
-         <20230330154043.1250736-5-benjamin.gaignard@collabora.com>
+        Tue, 11 Apr 2023 11:09:10 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D168F5256
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:08:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id gb34so21409138ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1681225724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+CKtT5Jvf3f0JgKYZh7PXFqhEMkaUpMPr+pEhO6IQ30=;
+        b=L4f4rl0cnkxJoP0/ReN7wsAGlmTTMsW0Yid+qhHquTtauzUtz9uoaqBMWJOSc1s6f+
+         k9y/UrAki3869xJUZXC2DJHg7qCUcnxDBU6FzuY8k5QzlVSjISZMCnfEt0vIwvoaAj0k
+         rUn5E6g57n/D1EcfV7g26SZbv43MRsWsr6MCXOKcet5UXADhqqVQe2SU7ArZWXtd1koQ
+         wa76Fs/5DvIne1g0uZ5VJRMPWqusM0iKuIbLJZKC5gxtmbDgn6E7HiuEjQYQ5EU3q6sk
+         xN+7HHAJUAEni/wVLSoTduKPHJzfuMF/BfEFHerR0bBZ24LmcT/nEXm9LekkvjZJKSoO
+         5vjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681225724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+CKtT5Jvf3f0JgKYZh7PXFqhEMkaUpMPr+pEhO6IQ30=;
+        b=HRb74iBlIvL1ibHNB46VfjYhTxDvi2UTZeH9fJN8lELvUWJFhhdvprzVdGw8W/1vRr
+         NmwtWmnvP1ZLny83/flSwT1sdaXTSfP06gsreEHzEEollI/fIG4iy76VCRG7QN4O0YnO
+         Q+DxzXCfpIhk7EIkYHepLIfX49/Geca830LQLBaWjUo9oOvRMMXmOsYK0LPnYUqAryjm
+         GdRrybg7zAdyYmmAB+hBfr5okFKNIZ5rFs/3nFtHm5BP2C3DcEDVCR4bqr7hxi8QkKhK
+         SJHoQa2vtQ0Lb+nByKeRT3ze921HykjJ4FLp1UKXZKan1GqfSqR0ECx863qmkVAg8iZt
+         B6nA==
+X-Gm-Message-State: AAQBX9esDsm14nRRr9t+V02GV3b0c69LO0uENnQIrteWLF1NDTW5ko48
+        B0RPD1VocxWY7iC5N9ZYCDMq3Z3B9CeBENyyCBaL8A==
+X-Google-Smtp-Source: AKy350arniCGBsMeQ/B/9V1F5ZCcTIUWRYoaxrt/sLV/Wbp04zqFjFkuKph/IMSp06UofYm5hMkq/SUhexA3pnq2IHw=
+X-Received: by 2002:a17:907:7f23:b0:94a:8300:7246 with SMTP id
+ qf35-20020a1709077f2300b0094a83007246mr3468304ejc.14.1681225723956; Tue, 11
+ Apr 2023 08:08:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
+ <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
+ <ZBiAPngOtzSwDhFz@kroah.com> <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+In-Reply-To: <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Tue, 11 Apr 2023 16:08:32 +0100
+Message-ID: <CAN+4W8j5qe6p3YV90g-E0VhV7AmYyAvt0z50dfDSombbGghkww@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
+        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 30 mars 2023 =C3=A0 17:40 +0200, Benjamin Gaignard a =C3=A9crit=C2=
-=A0:
-> Let's the driver knows that V4L2_PIX_FMT_NV12_10LE40_4L4 is a 10bits
-> pixel format.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+On Tue, Mar 28, 2023 at 11:18=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> w=
+rote:
+>
+> On Mon, Mar 20, 2023 at 3:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.o=
+rg> wrote:
+> >
+> > Why would it break?  Is that because the test is buggy, or the kernel i=
+s
+> > buggy?
+>
+> This test will be fine, but there have been several times when
+> selftests/bpf for stable kernel releases didn't actually compile due
+> to backported tests. This is because macros we're redefined, etc.
+> Unless those also get picked (seems like a sisyphean task) we'll keep
+> seeing broken selftests/bpf on stable.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hi Greg, Sasha,
 
-> ---
->  drivers/media/platform/verisilicon/hantro_v4l2.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/m=
-edia/platform/verisilicon/hantro_v4l2.c
-> index d238d407f986..7ed2dfd4aefa 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> @@ -71,6 +71,7 @@ int hantro_get_format_depth(u32 fourcc)
->  	switch (fourcc) {
->  	case V4L2_PIX_FMT_P010:
->  	case V4L2_PIX_FMT_P010_4L4:
-> +	case V4L2_PIX_FMT_NV12_10LE40_4L4:
->  		return 10;
->  	default:
->  		return 8;
+Following up on this since it seems to have fallen through the cracks.
 
+Lorenz
