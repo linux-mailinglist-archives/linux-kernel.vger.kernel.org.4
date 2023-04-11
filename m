@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827E46DE2A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B0D6DE2B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjDKRfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S229906AbjDKRgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDKRfL (ORCPT
+        with ESMTP id S229478AbjDKRgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:35:11 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96D5B81;
-        Tue, 11 Apr 2023 10:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=9ycQhMAP8bYuSeQBFYr21ByNHZMBYNV4KYFk5ii2JBk=; b=XBv5tjhMDhhsbCSCOI1Dp4ly+K
-        6PNv65eFtmKV2RcE0jUNPkq8KHWuN/svKV4Ps/AOBxwQbEPKHqNWw8k8/rIacSw5PicQ2tz7OXlRa
-        zm0EIiA5bUXIbqJXAuyoWmCrkqAn3BTe4zf6xmlUL6mVURGroj/sMJsYf+bYf1X3iWiZnGvX5hMaD
-        Jq2FpuxlVPElAH/LlHmYMcluX4i66ertxw9sRCEC2EaZw9kXmnZYZg7EvDFWXjiFlfb1U2A2cyb8m
-        OKIZ76CwNIDqKnmQQvj6t+u9TgWpuITrMLXnzdVyKp01vtudA5rBvADHm9/mENVb2c/CGmU+/Bf06
-        WKDoXhXw==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pmHtW-0007ES-TX; Tue, 11 Apr 2023 19:35:02 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pmHtW-000Qov-JE; Tue, 11 Apr 2023 19:35:02 +0200
-Subject: Re: [PATCH bpf-next] tools headers: Remove s390 ptrace.h in
- check-headers.sh
-To:     Jiri Olsa <olsajiri@gmail.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <1680834090-2322-1-git-send-email-yangtiezhu@loongson.cn>
- <ZC/wA2NoO7yI/xNm@krava>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0f77e29c-e384-1d67-a99c-91e6091ec7db@iogearbox.net>
-Date:   Tue, 11 Apr 2023 19:35:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 11 Apr 2023 13:36:02 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8A96A54
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:36:00 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id y69so15921737ybe.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681234559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+kyBvTzdzIu1H+Ec72ru36ICQw3wemFp5ak3AycFoQ8=;
+        b=oP5s/x3IrjFEbxhZPWV3IVDz/ByDv2Ls5x0O904x2AuYnjvT2xICE5jp4Tqycen2Q0
+         doWB5C4gJbHjt9YBfJZZ74qhwDSO3keTBaDVOCqmLMK1KqZX+5iIVtXBR873RnMbYtQN
+         6qhq10qLHF5GjQwzQRpQcqE40Zs9A5kSMovizD+QwySni7mjunbPGP0Mx1H6jwk8yYqJ
+         MlIgwBp/dj6LRDnIcO8xxmjGN2EN2EcUy1cMHEOv0gC/M9temGqgAVyIuqZbdYacn2av
+         AX0UDtOnbtdAnhuxSth4XG1PDFyojl13Jw2ik9uGUyRJ5joiPzEI+YJz+yPFcLTtnDcj
+         IkVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681234559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+kyBvTzdzIu1H+Ec72ru36ICQw3wemFp5ak3AycFoQ8=;
+        b=g1fIXNkn8Sdv3teFqZwI9zoww1OFigyrUNh4ZrzNMAglfFlxq+qjOaOnKd3m+FaNWk
+         JzAjSl7oUileqMZ3zdhVG6/kaCDRmh6kFRhkqC4TUEaOxsda2u0JTVo/bWkFmxM2siYR
+         UxPft6ZMdkiQrpsELBbNX6AO4gTBu+2ZaGBwnyJ2xY06oUUTfWLR6Ial+qEYd6Cy7I/E
+         YLurkNzSfZqL8qfq31riFRvvnjYf3sGFfjclZ8+v8/9hfpiXwfD2E4m3+mH0dHqJ9n+j
+         016bU4qliLDAUeYULmvuD55jTxMnmcAFWR1dLrG/eul9YNYl2sL1Hn5XMesFeliCQQyt
+         4D3Q==
+X-Gm-Message-State: AAQBX9fxx61g8BEaJ8prosM754RXv/nGqN0+cgtNXKN6H1o9/gUZG/Ef
+        mY9kRLKsB3OfwLS8V7DjpqPTkQfNyEuRYOH/m7ex4w==
+X-Google-Smtp-Source: AKy350ZiUDyr5F4QFXUjDcGVrWsOHV3bIsrNR3l2Wz60yKVwYn0KzTnbePAGa2kKqDroE8ZtTbd5mUm6RcQfhdr2vEY=
+X-Received: by 2002:a25:d649:0:b0:b8a:7b2d:6555 with SMTP id
+ n70-20020a25d649000000b00b8a7b2d6555mr2048091ybg.9.1681234559624; Tue, 11 Apr
+ 2023 10:35:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ZC/wA2NoO7yI/xNm@krava>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26872/Tue Apr 11 09:26:30 2023)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+References: <20230410210608.1873968-1-robdclark@gmail.com> <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+ <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local> <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+In-Reply-To: <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 11 Apr 2023 20:35:48 +0300
+Message-ID: <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v2 0/2] drm: fdinfo memory stats
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,23 +78,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 12:27 PM, Jiri Olsa wrote:
-> On Fri, Apr 07, 2023 at 10:21:30AM +0800, Tiezhu Yang wrote:
->> After commit 1f265d2aea0d ("selftests/bpf: Remove not used headers"),
->> tools/arch/s390/include/uapi/asm/ptrace.h has been removed, so remove
->> it in check-headers.sh too, otherwise we can see the following build
->> warning:
->>
->>    diff: tools/arch/s390/include/uapi/asm/ptrace.h: No such file or directory
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202304050029.38NdbQPf-lkp@intel.com/
->> Fixes: 1f265d2aea0d ("selftests/bpf: Remove not used headers")
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> not sure this should go through Arnaldo's tree instead,
-> either way is fine with me
+On Tue, 11 Apr 2023 at 20:13, Rob Clark <robdclark@gmail.com> wrote:
+>
+> On Tue, Apr 11, 2023 at 9:53=E2=80=AFAM Daniel Vetter <daniel@ffwll.ch> w=
+rote:
+> >
+> > On Tue, Apr 11, 2023 at 09:47:32AM -0700, Rob Clark wrote:
+> > > On Mon, Apr 10, 2023 at 2:06=E2=80=AFPM Rob Clark <robdclark@gmail.co=
+m> wrote:
+> > > >
+> > > > From: Rob Clark <robdclark@chromium.org>
+> > > >
+> > > > Similar motivation to other similar recent attempt[1].  But with an
+> > > > attempt to have some shared code for this.  As well as documentatio=
+n.
+> > > >
+> > > > It is probably a bit UMA-centric, I guess devices with VRAM might w=
+ant
+> > > > some placement stats as well.  But this seems like a reasonable sta=
+rt.
+> > > >
+> > > > Basic gputop support: https://patchwork.freedesktop.org/series/1162=
+36/
+> > > > And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+> > >
+> > > On a related topic, I'm wondering if it would make sense to report
+> > > some more global things (temp, freq, etc) via fdinfo?  Some of this,
+> > > tools like nvtop could get by trawling sysfs or other driver specific
+> > > ways.  But maybe it makes sense to have these sort of things reported
+> > > in a standardized way (even though they aren't really per-drm_file)
+> >
+> > I think that's a bit much layering violation, we'd essentially have to
+> > reinvent the hwmon sysfs uapi in fdinfo. Not really a business I want t=
+o
+> > be in :-)
+>
+> I guess this is true for temp (where there are thermal zones with
+> potentially multiple temp sensors.. but I'm still digging my way thru
+> the thermal_cooling_device stuff)
 
-Agree, perf tree is better given the script is located there, so:
+It is slightly ugly. All thermal zones and cooling devices are virtual
+devices (so, even no connection to the particular tsens device). One
+can either enumerate them by checking
+/sys/class/thermal/thermal_zoneN/type or enumerate them through
+/sys/class/hwmon. For cooling devices again the only enumeration is
+through /sys/class/thermal/cooling_deviceN/type.
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Probably it should be possible to push cooling devices and thermal
+zones under corresponding providers. However I do not know if there is
+a good way to correlate cooling device (ideally a part of GPU) to the
+thermal_zone (which in our case is provided by tsens / temp_alarm
+rather than GPU itself).
+
+>
+> But what about freq?  I think, esp for cases where some "fw thing" is
+> controlling the freq we end up needing to use gpu counters to measure
+> the freq.
+
+For the freq it is slightly easier: /sys/class/devfreq/*, devices are
+registered under proper parent (IOW, GPU). So one can read
+/sys/class/devfreq/3d00000.gpu/cur_freq or
+/sys/bus/platform/devices/3d00000.gpu/devfreq/3d00000.gpu/cur_freq.
+
+However because of the components usage, there is no link from
+/sys/class/drm/card0
+(/sys/devices/platform/soc@0/ae00000.display-subsystem/ae01000.display-cont=
+roller/drm/card0)
+to /sys/devices/platform/soc@0/3d00000.gpu, the GPU unit.
+
+Getting all these items together in a platform-independent way would
+be definitely an important but complex topic.
+
+>
+> > What might be needed is better glue to go from the fd or fdinfo to the
+> > right hw device and then crawl around the hwmon in sysfs automatically.=
+ I
+> > would not be surprised at all if we really suck on this, probably more
+> > likely on SoC than pci gpus where at least everything should be under t=
+he
+> > main pci sysfs device.
+>
+> yeah, I *think* userspace would have to look at /proc/device-tree to
+> find the cooling device(s) associated with the gpu.. at least I don't
+> see a straightforward way to figure it out just for sysfs
+>
+> BR,
+> -R
+>
+> > -Daniel
+> >
+> > >
+> > > BR,
+> > > -R
+> > >
+> > >
+> > > > [1] https://patchwork.freedesktop.org/series/112397/
+> > > >
+> > > > Rob Clark (2):
+> > > >   drm: Add fdinfo memory stats
+> > > >   drm/msm: Add memory stats to fdinfo
+> > > >
+> > > >  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+> > > >  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++=
+++++
+> > > >  drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+> > > >  drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+> > > >  include/drm/drm_file.h                | 10 ++++
+> > > >  5 files changed, 134 insertions(+), 3 deletions(-)
+> > > >
+> > > > --
+> > > > 2.39.2
+> > > >
+> >
+> > --
+> > Daniel Vetter
+> > Software Engineer, Intel Corporation
+> > http://blog.ffwll.ch
+
+
+
+--=20
+With best wishes
+Dmitry
