@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754E96DE385
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD42D6DE38C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjDKSIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S230310AbjDKSKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjDKSIb (ORCPT
+        with ESMTP id S230440AbjDKSJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:08:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2D272BD;
-        Tue, 11 Apr 2023 11:08:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15F5662A97;
-        Tue, 11 Apr 2023 18:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B49C433D2;
-        Tue, 11 Apr 2023 18:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681236490;
-        bh=72azhK5a4Tm/QmKpsinq8I4kCaXD/G/VL613SGoswso=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=COsl7hYIeE07a2xkdxFTWGNh8u40vqAvQ0Frcb6sdYYGAx2IrY8BKDH95mnUfNZuB
-         hRS/W3sNpHU+smmQfTYA45Tce1WSdjGPiUIHbcmFOAoP79fjfraAgtTxaQBWd/p/RG
-         DY4bqXn/DTB3BlYAvPSxDoTaPXo7I1RSMClUbSWGrVoTgtQWehymQd44AxgyHNH+Cg
-         vSiTQs0WqZpXpc7NhI6rIJJegpTJaJPnXGZjxXaXX+qGW/Xv4dkGMEEFxfm+gJVkO+
-         2G2LH0D8WSwRp3A+HhmXTLXsY3h4XW7SEoOwvsSln8XM/vu+Hf292zyLx3sQQX4hd7
-         5UR6GvLArscRQ==
-Date:   Tue, 11 Apr 2023 13:08:08 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ron Lee <ron.lee.intel@gmail.com>
-Cc:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, lmajczak@google.com, rajatja@google.com,
-        Ron Lee <ron.lee@intel.com>
-Subject: Re: [PATCH v4] PCI: Fix up L1SS capability for Intel Apollo Lake
- Root Port
-Message-ID: <20230411180808.GA4164437@bhelgaas>
+        Tue, 11 Apr 2023 14:09:59 -0400
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9C965AC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:09:44 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id mIR2plxDOpFivmIR2p9idX; Tue, 11 Apr 2023 20:09:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681236582;
+        bh=M7S+qYYKm3F1E+ZKhxHIt6xFK2OD6F3sGIISrUwFXqQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=bgdaZUdIDannUwcYDuOG2m7OtaTtOHCYjdl2FvDtWhXJRMo98O0OkPXgyoG5/7qru
+         3m6wxBKJ7wcXA1vjNwb2HNODxD26r0gPI28DBUp7AqQsTQ7UsLsHN1eqEnOd1ZXVKM
+         0oVcD7flwQ3loZ4xYsqejVTkA8p8mWXhAZCCh/WDEZVYhD8L2kytALajKGpjw+A4Hi
+         RoR6IxsndRcpH3bmnQ/xMd/MgC95L5IUwg9VQoiFjF6Jfzsc1eezuRrskSEIhpfZli
+         h/KCIZiB4FssH3Spz8mHvRAxH0IClcpCUqGxeWi0pJ37ZPTSwyqCIZwPXhnldTVDs6
+         03mR4gH5lT6qg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 11 Apr 2023 20:09:42 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <b3c82938-7db0-2c0b-7784-c2096570c940@wanadoo.fr>
+Date:   Tue, 11 Apr 2023 20:09:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411160213.4453-1-ron.lee@intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/armada: Fix a potential double free in an error
+ handling path
+Content-Language: fr, en-US
+To:     linux@armlinux.org.uk, daniel@ffwll.ch,
+        David Airlie <airlied@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <c4f3c9207a9fce35cb6dd2cc60e755275961588a.1640536364.git.christophe.jaillet@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <c4f3c9207a9fce35cb6dd2cc60e755275961588a.1640536364.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,96 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:02:13AM +0800, Ron Lee wrote:
-> On Google Coral and Reef family Chromebooks with Intel Apollo Lake
-> SoC, firmware clobbers the header of the L1 PM Substates capability and
-> the previous capability when returning D3cold to D0.
+Le 26/12/2021 à 17:34, Christophe JAILLET a écrit :
+> 'priv' is a managed resource, so there is no need to free it explicitly or
+> there will be a double free().
 > 
-> Save those header at enumeration-time and restore them at resume.
-> 
-> Link: https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
-> Signed-off-by: Ron Lee <ron.lee@intel.com>
-
-Applied to pci/aspm for v6.4, thanks!
-
+> Fixes: 90ad200b4cbc ("drm/armada: Use devm_drm_dev_alloc")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> Changes from v3: 
-> - Move to arch/x86/pci/fixup.c
-> - Save prev cap offset & header, L1SS offset & header at enumeration-time
->   and restore them at resume
-> - Remove CONFIG_PCIEASPM directive
-> - Stop traversal if L1SS capability was found
+>   drivers/gpu/drm/armada/armada_drv.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
->  arch/x86/pci/fixup.c | 59 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
-> index 615a76d70019..28335aaa6c33 100644
-> --- a/arch/x86/pci/fixup.c
-> +++ b/arch/x86/pci/fixup.c
-> @@ -824,3 +824,62 @@ static void rs690_fix_64bit_dma(struct pci_dev *pdev)
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x7910, rs690_fix_64bit_dma);
->  
->  #endif
-> +
-> +/*
-> + * When returning from D3cold to D0, firmware on some Google Coral and Reef
-> + * family Chromebooks with Intel Apollo Lake SoC clobbers the headers of
-> + * both the L1 PM Substates capability and the previous capability for the
-> + * "Celeron N3350/Pentium N4200/Atom E3900 Series PCI Express Port B #1".
-> + *
-> + * Save those values at enumeration-time and restore them at resume.
-> + */
-> +
-> +static u16 prev_cap, l1ss_cap;
-> +static u32 prev_header, l1ss_header;
-> +
-> +static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *dev)
-> +{
-> +	int pos = PCI_CFG_SPACE_SIZE, prev = 0;
-> +	u32 header, pheader = 0;
-> +
-> +	while (pos) {
-> +		pci_read_config_dword(dev, pos, &header);
-> +		if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS) {
-> +			prev_cap = prev;
-> +			prev_header = pheader;
-> +			l1ss_cap = pos;
-> +			l1ss_header = header;
-> +			return;
-> +		}
-> +
-> +		prev = pos;
-> +		pheader = header;
-> +		pos = PCI_EXT_CAP_NEXT(header);
-> +	}
-> +}
-> +
-> +static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *dev)
-> +{
-> +	u32 header;
-> +
-> +	if (!prev_cap || !prev_header || !l1ss_cap || !l1ss_header)
-> +		return;
-> +
-> +	/* Fixup the header of L1SS Capability if missing */
-> +	pci_read_config_dword(dev, l1ss_cap, &header);
-> +	if (header != l1ss_header) {
-> +		pci_write_config_dword(dev, l1ss_cap, l1ss_header);
-> +		pci_info(dev, "restore L1SS Capability header (was %#010x now %#010x)\n",
-> +			 header, l1ss_header);
-> +	}
-> +
-> +	/* Fixup the link to L1SS Capability if missing */
-> +	pci_read_config_dword(dev, prev_cap, &header);
-> +	if (header != prev_header) {
-> +		pci_write_config_dword(dev, prev_cap, prev_header);
-> +		pci_info(dev, "restore previous Capability header (was %#010x now %#010x)\n",
-> +			 header, prev_header);
-> +	}
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
-> +DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
-> -- 
-> 2.17.1
-> 
+> diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
+> index 8e3e98f13db4..54168134d9b9 100644
+> --- a/drivers/gpu/drm/armada/armada_drv.c
+> +++ b/drivers/gpu/drm/armada/armada_drv.c
+> @@ -99,7 +99,6 @@ static int armada_drm_bind(struct device *dev)
+>   	if (ret) {
+>   		dev_err(dev, "[" DRM_NAME ":%s] can't kick out simple-fb: %d\n",
+>   			__func__, ret);
+> -		kfree(priv);
+>   		return ret;
+>   	}
+>   
+
+Hi,
+
+polite reminder. (I've updated the mails according to the output of 
+get_maintainer.pl)
+
+The patch still LGTM and should apply cleanly.
+
+CJ
