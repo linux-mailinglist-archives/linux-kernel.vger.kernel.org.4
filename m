@@ -2,263 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8B06DD5FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391AA6DD5FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjDKIwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S230036AbjDKIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjDKIwA (ORCPT
+        with ESMTP id S229721AbjDKIxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:52:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9C51724;
-        Tue, 11 Apr 2023 01:51:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F3E24B3;
-        Tue, 11 Apr 2023 01:52:40 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C31A63F73F;
-        Tue, 11 Apr 2023 01:51:54 -0700 (PDT)
-Message-ID: <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
-Date:   Tue, 11 Apr 2023 10:51:44 +0200
+        Tue, 11 Apr 2023 04:53:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675D9E76
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DYZqFeT2TkDql7LNr9KHtQzkAfQ3U+U8rxb08iVVG8k=; b=ANfLtIK31XNIkd7xjVRtNNRwiA
+        xBY9XVTDaO7y7O1ptc7tPHUb96LAHbeoDa8j/awII5eLEQp5J65eN8mPbXEIAo7cmhPcjS+j/bSj6
+        3PaFxh4lxO1jR/9V5grKWHRIPo4NLIP8hK2y/87PESjrtUI2uVGitKjrL+D+nF86nMUYLks0AFaUD
+        C/ekRkWRvYeac3efpN7XXLTLHoOeDTn1U+x+gt7PtZtEGKiXPV+LBAlfdyUFBDADMk0tikP2Eodzp
+        e6zMB4oiS9yfLQZspZ+vFAkiw3+lv/ypx2TiWuT2+nlZFgiMgXCZ7Cm2crrUAy3khXBM5ITd5BRkS
+        wNyY2YFg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pm9kP-00DIBx-29;
+        Tue, 11 Apr 2023 08:53:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 152D830002F;
+        Tue, 11 Apr 2023 10:53:05 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F257E2BC3D07B; Tue, 11 Apr 2023 10:53:04 +0200 (CEST)
+Date:   Tue, 11 Apr 2023 10:53:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
+Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230411085304.GB576825@hirez.programming.kicks-ass.net>
+References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
- high error
-Content-Language: en-US
-To:     Yang Shi <yang@os.amperecomputing.com>
-Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20230328193846.8757-1-yang@os.amperecomputing.com>
- <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
- <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
- <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
- <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
- <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
- <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yang,
+On Wed, Apr 05, 2023 at 12:26:35PM -0400, Mathieu Desnoyers wrote:
+> +void sched_mm_cid_migrate_from(struct task_struct *t)
+> +{
 
->>>>
->>>> -
->>>> According to the same ACPI 6.5 s8.4.6.1.2.5 "Time Window Register"
->>>> paragraph,
->>>> and assuming we are in the 'Autonomous Selection is not enabled' case,
->>>> the OS is supposed to write (not read) the delta between successive
->>>> reads of the
->>>> counter, so using this field as is would be bending the definition I
->>>> think.
->>>>
->>>> -
->>>> It is correct that the "Time Window Register" field specifies a value
->>>> in ms,
->>>> but it seems a long time to wait for with irqs off.
->>>
->>> AFAIK, our platforms don't support "Time Window Register".
->>>
->>>>
->>>> -
->>>> Theoretically, the perf/ref counters should accumulate to allow
->>>> computing
->>>> a correct frequency. Is it possible to know how these counters are
->>>> accessed ?
->>>> Is it through PCC channels and there is some undesired delay between
->>>> the
->>>> reads of the perf/ref counters ?
->>>
->>> The counters are implemented via mmio instead of PCC channels. So the
->>> cpc_read() calls should go to ACPI_ADR_SPACE_SYSTEM_MEMORY IIRC.
->>>
->>>>
->>>> -
->>>> About making the delay:
->>>>       max(cppc_cpufreq_get_transition_delay_us(), Time Winder Register)
->>>> I think it would be good to know why the values of the counters
->>>> don't accumulate correctly, ideally by getting a trace where a
->>>> frequency
->>>> above the maximum frequency is computed, and with the timestamps at
->>>> which
->>>> the counters are read.
->>>> If the values are coming from PCC channels / the firmware, it might be
->>>> difficult
->>>> to get.
->>>
->>> I wrote a bpftrace script to trace the below data:
->>>        - The CPU number
->>>        - The frequency
->>>        - The start and end timestamp of the first cppc_get_perf_ctrs()
->>> call
->>>        - The duration/latency of the first cppc_get_perf_ctrs() call
->>>        - The start and end timestamp of the second
->>> cppc_get_perf_ctrs() call
->>>        - The duration/latency of the second cppc_get_perf_ctrs() call
->>>
->>> The typical logs look like below.
->>> Good
->>> CPU: 1
->>> Freq: 2801485KHz
->>> First:  2489382384  2489387084 4700ns
->>> Second: 2489390824  2489394024  3200ns
->>> --------------------------------------------------
->>> CPU:    2
->>> Freq:   2797956KHz
->>> First:  2490406524  2490411204  4680ns
->>> Second: 2490414764  2490417684  2920ns
->>>
->>> Bad:
->>> CPU:    55
->>> Freq:   3969372KHz
->>> First:  875659868  875721568  61700ns
->>> Second: 875725148  875727708  2560ns
->>> --------------------------------------------------
->>> CPU: 65
->>> Freq: 3829744KHz
->>> First:  3854951136  3854995896 44760ns
->>> Second: 3854999416  3855002696 3280ns
->>> --------------------------------------------------
->>> CPU: 21
->>> Freq: 4279242KHz
->>> First:  240834204  240910484 76280ns
->>> Second: 240914264  240916944  2680ns
->>>
->>>
->>> The first line is cpu number, the second line is frequency returned by
->>> cppc_cpufreq_get_rate(), the third line is the start and end timestamps
->>> and duration of the first cppc_get_perf_ctrs(), the fourth line is the
->>> start and end timestamps and duration of the second
->>> cppc_get_perf_ctrs().
->>>
->>> So per the log I think we can tell basically the longer the duration the
->>> higher the error. The 2us delay is not long enough to offset the impact
->>> from unexpected latency of reading the counters.
->>>
->>> In the worst case the frequency is 4279242KHz, comparing 2800000KHz the
->>> error is over 50%. So the delay should be 4ms ~ 5ms in order to offset
->>> the impact from reading the counters if I do the math correctly.
->>>
->>> Hope the trace data is helpful to diagnose the problem.
->>
->>
->> Thanks for the data. I was thinking the following was happening:
->>
->>   cppc_get_perf_ctrs()[0] cppc_get_perf_ctrs()[1]
->> /                    \ /                         \
->> ref[0]    delivered[0]                    ref[1] delivered[1]
->>    |            |                              |                  |
->>    v            v                              v                  v
->> ---------------------------------------------------------------------->
->> time
->>     <-delta[0]-> <-------------2us------------> <----delta[1]---->
->>
->> If delta[0] is really different from delta[1] like above, then the
->> reference and delivered counters would have accumulated during different
->> intervals, resulting in a wrong frequency.
-> 
-> Yeah, it looks like so.
-> 
->> If more/less than 2us elapse between the two cppc_get_perf_ctrs() calls,
->> then it shouldn't have any impact. So waiting ~10ms should theoretically
->> not solve the issue.
-> 
-> I'm not sure whether the 10ms delay really resolved the issue, but it
-> did reduce the magnitude of the error.
-> 
-> BTW, I don't see irq is disabled when reading cpuinfo_cur_freq, so it
-> looks like interrupts could easily result in the difference between
-> delta[0] and delta[1]. And it seems like the difference matters.
+> +	/*
+> +	 * If the source cpu cid is set, and matches the last cid of the
+> +	 * migrated task, clear the source cpu cid to keep cid allocation
+> +	 * compact to cover the case where this task is the last task using
+> +	 * this mm on the source cpu. If there happens to be other tasks left
+> +	 * on the source cpu using this mm, the next task using this mm will
+> +	 * reallocate its cid on context switch.
+> +	 *
+> +	 * We cannot keep ownership of concurrency ID without runqueue
+> +	 * lock held when it is not used by a current task, because it
+> +	 * would lead to allocation of more concurrency ids than there
+> +	 * are possible cpus in the system. The last_mm_cid is used as
+> +	 * a hint to conditionally unset the dst cpu cid, keeping
+> +	 * allocated concurrency ids compact.
+> +	 */
+> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
+> +		return;
+> +
 
-Ok, maybe disabling irqs would have an impact ?
+FWIW, I'm thinking that if we write this using try_cmpxchg() it'll be a
+little nicer:
 
-> 
-> And the counters are accessed through an interconnect on our platform,
-> so the interconnect congestion may result in the difference as well.
-> 
->>
->> freq = ref_freq * (delivered[1] - delivered[0]) / (ref[1] - ref[0])
->>
->> If the counters are accessed through mmio, I don't see anything that
->> would
->> make delta[x] vary when calling cppc_get_perf_ctrs(), cf. cpc_read().
->> Do you know if the address represents real counters or a place in memory
->> representing something else ?
-> 
-> The address does represent real counters.
+	lazy_cid = mm_cid_set_lazy_put(src_cid);
+	if (!try_cmpxchg(src_pcpu_cid, &src_cid, lazy_cid))
+		return;
 
-Oh ok, is it possible to know what is there ?
+> +	/*
+> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+> +	 * rq->curr->mm matches the scheduler barrier in context_switch()
+> +	 * between store to rq->curr and load of prev and next task's
+> +	 * per-mm/cpu cid.
+> +	 *
+> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+> +	 * rq->curr->mm_cid_active matches the barrier in
+> +	 * sched_mm_cid_exit_signals(), sched_mm_cid_before_execve(), and
+> +	 * sched_mm_cid_after_execve() between store to t->mm_cid_active and
+> +	 * load of per-mm/cpu cid.
+> +	 */
+> +
+> +	/*
+> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
+> +	 * flag, this task will be responsible for transitioning from lazy-put
+> +	 * flag set to MM_CID_UNSET.
+> +	 */
+> +	rcu_read_lock();
+> +	src_task = rcu_dereference(src_rq->curr);
+> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+> +		rcu_read_unlock();
+> +		/*
+> +		 * We observed an active task for this mm, clearing the destination
+> +		 * cpu mm_cid is not relevant for compactness.
+> +		 */
+> +		t->last_mm_cid = -1;
+> +		return;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	/*
+> +	 * The src_cid is unused, so it can be unset.
+> +	 */
+> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
+> +		return;
 
-> 
->>
->> Would it be possible to try setting the CPU frequency to one unique value
->> and get a serie of values like:
->> [timestamp, ref_counter_value, deliverd_counter_value]
-> 
-> Could you please elaborate regarding "setting the CPU frequency to one
-> unique value"? What value is unique?
+	if (!try_cmpxchg(src_pcpu_cid, &lazy_cid, MM_CID_UNSET))
+		return;
 
-I meant having the CPUs using only on frequency. The following should work:
-cat /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_min_freq > /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_max_freq
-
-> 
->>
->> This would allow to check that the counters are accumulating at a valid
->> pace. Also you said there were frequencies above the maximum value, but
->> are there also frequencies below the minimum value ?
-> 
-> I've never seen the frequency below the minimum value.
-
-Maybe this is because the CPUs are running at their maximum frequency,
-so when the computed frequency is below the actual running frequency,
-it still doesn't go below the minimum frequency.
-Meaning that if the CPUs were limited to their lowest frequency (with
-the command above), maybe the get_rate() function would return values
-in a range [[1]:[2]]:
-- [1]: frequency below the lowest frequency
-- [2]: frequency above the lowest frequency, but below the maximum
-   frequency of 2.8GHz
-
-Would it be possible to do the following:
-
-# Shut down all the CPUs except the last one just to have less logs
-for i in /sys/devices/system/cpu/cpu[0-9]* ; do echo 0 > $i/online ; done
-
-cd /sys/kernel/debug/tracing
-
-# Add a kprobe to cppc_cpufreq_get_rate to get the computed freq
-echo 'r:myretprobe cppc_cpufreq_get_rate $retval:u32' >> /sys/kernel/debug/tracing/kprobe_events
-echo 1 > events/kprobes/enable
-
-# Setup ftrace to trace cppc_cpufreq_get_rate() calls
-# (and maybe see if something undesired happens in the call)
-echo function_graph > current_tracer
-echo funcgraph-abstime > trace_options
-echo cppc_cpufreq_get_rate > set_graph_function
-
-# Do the tracing
-echo 1 > tracing_on
-# Wait a bit for a call to cppc_cpufreq_get_rate() to happen
-echo 0 > tracing_on
-
-Also adding the following in cppc_perf_from_fbctrs() should allow
-tracking the counter values:
-trace_printk("get_cntrs: ref0=%lx ref1=%lx del0=%lx del1=%lx",
-     fb_ctrs_t0->reference, fb_ctrs_t1->reference,
-     fb_ctrs_t0->delivered, fb_ctrs_t1->delivered);
-
-Regards,
-Pierre
+> +	__mm_cid_put(mm, src_cid);
+> +}
