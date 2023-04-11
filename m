@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B3E6DE003
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B889B6DE005
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjDKPwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S230428AbjDKPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjDKPwe (ORCPT
+        with ESMTP id S230211AbjDKPwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:52:34 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED34C2C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id z9so8651657ybs.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
+        Tue, 11 Apr 2023 11:52:35 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F8A4EF1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:34 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id u13so8777667ybu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681228353; x=1683820353;
+        d=linaro.org; s=google; t=1681228354; x=1683820354;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R2fQ8lpuhAnY5CWWZIXFfg7wKiEfX2djoV2eUnsPPVc=;
-        b=QeRpnyUOHzGwuIeP0MNJJWJHdCioAjOAx1apI5BRCq0IYAMc/njk8B75syYr9AqXE2
-         tejgjgi07wNgTlMzVt7hopwjrFADlgs/D92apR5rb+ejmRJ1nEJbnEZMC4oLtN44t4DM
-         /ZUauG7kYMGyCJXUv0YDarqKe929Ac22GVOww4nsqChyhez7viGB6+dBIDD5fe7F3Li1
-         56IEUCdZw0+Fuws9CIpj52fOiWM6wGDf7RSk00d8j5XtxHmb+NcXuTmq2FBUtp68BGO2
-         LFMnOce6hRQsYFA+/EhCW/NTi8KUgCXbqsgC4dzdfX3DUnbV/GBcjOe5RXfUea1y+7Zo
-         Kq8Q==
+        bh=fqIfvm1jwgfEXPWpkKRz5ERVmmhoVaNqmhNdHXexQ4w=;
+        b=IXFXL/AL+uZl+iYIcoG9aarge/H8K1NeyCmpcIUo+APyfhlvVFnXUhfeKab+TZ37Wv
+         uyul1KitAUjiHkMRUztnQZkI3MFselOfNNdKztA0TfZNzN4pRnL7etXrUiBWr0dgthEI
+         K2v1DO4n5ASENLCSxuOKPvPIVYKSOWrSpYXS1/QIzniYOrH9fnsdF1bHbjqcpDXdN2eJ
+         5OfJdSops0MEQNTu01FWfRtLsSvlpEu4itzmlWjh/s+1yf8MiWAbzrJ9Zxb1MK9XnMp3
+         ZOl1XXoGT77K37S7zBfeQOp2jNSX+IVrki2zrQhW0UYfSSYNYOw2VGeCS1wLt+fk0AK/
+         I5+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681228353; x=1683820353;
+        d=1e100.net; s=20210112; t=1681228354; x=1683820354;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R2fQ8lpuhAnY5CWWZIXFfg7wKiEfX2djoV2eUnsPPVc=;
-        b=uNdxHM1I4r1w+mpjVOq2VP5Qv+wBdh2x1LzK1rVCzXFOfMrSECGp7Jktst6lvKdu2H
-         wDJM2CxtVOz3b5hMbIrg0ViPb42+kR7r0rBnMCAPt13VMgV0cdvnU9IxdAhW0J9NWQnF
-         UY9F8QR6ZLvE6JE2PQBvwGjpkAPOHTY8xrA6sAuZTaNJ/zhsB1Rse5k41nxiDxJjk6lp
-         zed6firQxLeT13Oz52DK4+a7dA8Y1usX5wU85ZRjA901++rkuPnaU5yVuBLxS1awhEZA
-         trV4zUFw0ew74xmMQjJrFOzeCPHFXkbx1exn9ebwu4KIhsAb/d3bmoy9spNJrmSQZhGw
-         RbdA==
-X-Gm-Message-State: AAQBX9fKoAjN52uY8Mf7dRMOlDZfZWKO8z4VJMcM2Q3irPlgs0agoMZz
-        rjHZVrUjlexYq2kASKV8pJJxBw==
-X-Google-Smtp-Source: AKy350YaiHBMwi9YMqi/fZ+eHfktwCe2cCyF5zaXDxiQxeUqS2HU922wdMU3rxmLbgmRzBoeF8wuaA==
-X-Received: by 2002:a25:688a:0:b0:b8f:227a:b080 with SMTP id d132-20020a25688a000000b00b8f227ab080mr2237727ybc.18.1681228353118;
+        bh=fqIfvm1jwgfEXPWpkKRz5ERVmmhoVaNqmhNdHXexQ4w=;
+        b=GpvyCsspIHTeet832rNCSm8fa1AWqw5gUX+i90W/ZYXQ7CTRGhqAyaLwI0FYlaN9eh
+         5TYqN4YQugZZvvizI41Y0eXmZPhFFi+8wWg4RJ5t4mcYiXCN/Fnd5XdtpJd7qd2SgIWE
+         URgBwTfKAK/IXYTG6iuNw3pLLTAZELG6BQVuXfxr3x/O8l0tb0cn5XP0X6hifFfKO8z+
+         PZ58p0+WXuk35zncobSP7ialLd3glRBd0HjhqC5rFXvMQRiucA1b7mTVanbpUInpivnc
+         yTtg2AvQ8Z32mAeE6sSz2zc9M6OUtUMSjlkB2nuqNtDsL0zmj9OB/ikwKtuuYA55vLJV
+         lKNA==
+X-Gm-Message-State: AAQBX9fa2ONCX6KDnNWZ2b7nmTcXlVYliZDvmnf65Y01URHvTQuE3tIK
+        OVBJ/IE+nJlOiqQOTESG/j2lXqsoKfaJCtecqfp+sA==
+X-Google-Smtp-Source: AKy350aT0zxuuJUmLFgMSJj+vRNJhxHu2iFB85HVTAvunu3Pqv7KMsK/TGtVpKpmFb+IOxFMWXsb2g==
+X-Received: by 2002:a25:d3d0:0:b0:b8f:2033:c10d with SMTP id e199-20020a25d3d0000000b00b8f2033c10dmr2581494ybf.59.1681228353960;
         Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056902068d00b00b7767ca749fsm3683390ybt.60.2023.04.11.08.52.32
+        by smtp.gmail.com with ESMTPSA id i13-20020a056902068d00b00b7767ca749fsm3683390ybt.60.2023.04.11.08.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 08:52:32 -0700 (PDT)
+        Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Cameron <jic23@kernel.org>,
         William Breathitt Gray <william.gray@linaro.org>,
         stable@vger.kernel.org
-Subject: [RESEND PATCH 4.19 v3 2/5] iio: counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
-Date:   Tue, 11 Apr 2023 11:52:17 -0400
-Message-Id: <20230411155220.9754-2-william.gray@linaro.org>
+Subject: [RESEND PATCH 5.4 v3 3/5] counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
+Date:   Tue, 11 Apr 2023 11:52:18 -0400
+Message-Id: <20230411155220.9754-3-william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230411155220.9754-1-william.gray@linaro.org>
 References: <20230411155220.9754-1-william.gray@linaro.org>
@@ -86,17 +86,17 @@ Since the race condition could result in an incorrect 25-bit count
 value, remove support for 25-bit count values from this driver.
 
 Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
-Cc: <stable@vger.kernel.org> # 4.19.x
+Cc: <stable@vger.kernel.org> # 5.4.x
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- drivers/iio/counter/104-quad-8.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ drivers/counter/104-quad-8.c | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/iio/counter/104-quad-8.c b/drivers/iio/counter/104-quad-8.c
-index 92be8d0f77..92e68cada8 100644
---- a/drivers/iio/counter/104-quad-8.c
-+++ b/drivers/iio/counter/104-quad-8.c
-@@ -61,10 +61,6 @@ struct quad8_iio {
+diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+index f261a57af1..48de69f58e 100644
+--- a/drivers/counter/104-quad-8.c
++++ b/drivers/counter/104-quad-8.c
+@@ -57,10 +57,6 @@ struct quad8_iio {
  
  #define QUAD8_REG_CHAN_OP 0x11
  #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
@@ -107,32 +107,40 @@ index 92be8d0f77..92e68cada8 100644
  /* Error flag */
  #define QUAD8_FLAG_E BIT(4)
  /* Up/Down flag */
-@@ -97,9 +93,6 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+@@ -639,19 +635,9 @@ static int quad8_count_read(struct counter_device *counter,
  {
- 	struct quad8_iio *const priv = iio_priv(indio_dev);
- 	const int base_offset = priv->base + 2 * chan->channel;
+ 	struct quad8_iio *const priv = counter->priv;
+ 	const int base_offset = priv->base + 2 * count->id;
 -	unsigned int flags;
 -	unsigned int borrow;
 -	unsigned int carry;
+-	unsigned long position;
++	unsigned long position = 0;
  	int i;
  
- 	switch (mask) {
-@@ -110,12 +103,7 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
- 			return IIO_VAL_INT;
- 		}
- 
--		flags = inb(base_offset + 1);
--		borrow = flags & QUAD8_FLAG_BT;
--		carry = !!(flags & QUAD8_FLAG_CT);
+-	flags = inb(base_offset + 1);
+-	borrow = flags & QUAD8_FLAG_BT;
+-	carry = !!(flags & QUAD8_FLAG_CT);
 -
--		/* Borrow XOR Carry effectively doubles count range */
--		*val = (borrow ^ carry) << 24;
-+		*val = 0;
+-	/* Borrow XOR Carry effectively doubles count range */
+-	position = (unsigned long)(borrow ^ carry) << 24;
+-
+ 	mutex_lock(&priv->lock);
  
- 		/* Reset Byte Pointer; transfer Counter to Output Latch */
- 		outb(QUAD8_CTR_RLD | QUAD8_RLD_RESET_BP | QUAD8_RLD_CNTR_OUT,
+ 	/* Reset Byte Pointer; transfer Counter to Output Latch */
+@@ -1204,8 +1190,8 @@ static ssize_t quad8_count_ceiling_read(struct counter_device *counter,
+ 
+ 	mutex_unlock(&priv->lock);
+ 
+-	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
+-	return sprintf(buf, "33554431\n");
++	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
++	return sprintf(buf, "16777215\n");
+ }
+ 
+ static ssize_t quad8_count_ceiling_write(struct counter_device *counter,
 
-base-commit: 5c0966408dee90137adf2e96f949e50a2ba7e401
+base-commit: 32bea3bac5ca484c6f7e302c8c96fc686f62e7b4
 -- 
 2.39.2
 
