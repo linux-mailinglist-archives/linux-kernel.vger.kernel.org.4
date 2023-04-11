@@ -2,260 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5876E6DDF45
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A136DDF21
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjDKPNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S230452AbjDKPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjDKPNO (ORCPT
+        with ESMTP id S230368AbjDKPL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:13:14 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753415FDE;
-        Tue, 11 Apr 2023 08:12:18 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BF1VMh017728;
-        Tue, 11 Apr 2023 15:11:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=KwTRZvfmXg8ueSr2QlXbeN2FLpmUcJMtKSU/NB0envU=;
- b=m5m3eAl2Ck308B4f/Q0O6r/4wFLWBW22P5NE5jswH8sqRv4qDmmdhkkmahFqAfbRekPn
- fPsaNKo37SJiXCFW+u8merWcn5ps8C/m8hXm0M43XGQZVhX3FntI/RfmWzoGlFznluh+
- TnMSMYuPVfHazZRF/PzV86JXQgEF3K0OMZdAYm2LvbNSXZtNH1YHX5s4FPOw8OIMolEr
- 4EjOADa9eyDuFC3xMjdXjzSQcOQzzGs6lcBDB6DKX6JQSyEcucz4ZJA5d+tkYDEVq6QB
- j3MpUbpcnMy7KufUOaLNvM2Ys1accOkH3wJo89zZafkxqIp/BQWnBLkftZ9zgHHt8VFN DA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0bvwr6v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 15:11:59 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33BETset025052;
-        Tue, 11 Apr 2023 15:11:58 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3puwe78w90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 15:11:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FG2MxUwNfere9JKzUKKZaqmTbN2YTfNlT13RwMDbHVjBDaDIMsOIvb1IB3pHxUvc/R7uk9+UED9NOwlsRSKofI2/M1dN00A+U45raOkfrVA80P7DzVZvEDOiJdwtbx48D+uo5GuwGOPwCqXlbtcd/LoKs4TEngqx8AUSr+RIAnZXZE2uswJwtXijAtS5kIk/+ar/0zGCseEELbjEz4Vt4yem5Si4ShC0udeEp4OPyDcu8pe13wb8J1yGBfVHhdvcMUcxNYp/xu3OZI9Ho2Al/X69bEIrZFi5wDZ/X1YEuDTT6SLpoxpwrWAUIeBEX/0P048ltOzIDGiwoukGJvCw3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KwTRZvfmXg8ueSr2QlXbeN2FLpmUcJMtKSU/NB0envU=;
- b=enilCYkoZdJ23RkETTB5yo2Rm8Nzogjh2+EGbnPsG17C1+Ok+4jO8pdxWdlzsAiPxj4MfX3U3LRiXW6TjQLLqY2g+9LCZK0s5NzDUELJo9fL5YpLZ6YuSsOPfl529hTCJ7XzHUlSfT5Y6rWYuqLFIIg97gc7HIRFsRQqWX8v+GZZydKkrjaUhYVrkzSKDk6OaxZMLH2AiW+a4PoW8BGoP2zIwiocbbffBWc7Pv3fwyTiqqmUwV+/JMteCMuChfW7GeA3sBZvCyNh/gv1zd7clPo8QWuPmZu1cfOStzp240g1VDtxQvKSJZUrrmYO70OZHqQsRUGOYFMPvXkOgV45Ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 11 Apr 2023 11:11:28 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85C45FCA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:11:02 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f05f61adbeso1596075e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:11:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KwTRZvfmXg8ueSr2QlXbeN2FLpmUcJMtKSU/NB0envU=;
- b=B5O5oSSPGNpvlB7KuGCHOrtzo2dsnySDGfT0aEjqGA/F7RA2flJQe2PjjqJWlnyiJoe6P9q/SrQYanG0NFm75JMJQlDDN4AV2Cc2687j5Y1wwfsAh5aCwzYNSFbEMPdVEPPboyFENPtWqyH5MZzEz4+IVbQCY95XbyDsnyInoSs=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH0PR10MB4807.namprd10.prod.outlook.com (2603:10b6:510:3f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Tue, 11 Apr
- 2023 15:11:55 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6277.035; Tue, 11 Apr 2023
- 15:11:55 +0000
-From:   "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com
-Subject: [PATCH 6.1 14/14] mm: enable maple tree RCU mode by default.
-Date:   Tue, 11 Apr 2023 11:10:55 -0400
-Message-Id: <20230411151055.2910579-15-Liam.Howlett@oracle.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230411151055.2910579-1-Liam.Howlett@oracle.com>
-References: <20230411151055.2910579-1-Liam.Howlett@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YT4PR01CA0062.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:111::23) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=ffwll.ch; s=google; t=1681225861;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xkBc8y85Toy8UTcXfQtWXbFA44zHzGMNAbB/qPFb8v0=;
+        b=HudeJ0HfHwO6pVrBeBRsojqT8vHIe9KBuB5ATmGTODShfva0z04Os9nVeGorEN/ige
+         peI5SidBvXShYK+9Au/tW2hkiGsZo9/9j2P8Z5Eh94DyFtIl4RKockTBdfh8h6xdyqG2
+         Alm+HV8cVj5oSC775K3aKn2VX9ix8xJEuEtp8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681225861;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xkBc8y85Toy8UTcXfQtWXbFA44zHzGMNAbB/qPFb8v0=;
+        b=1S3kc5nfnYB/8RBRssgyhBV9BHUnB7K5VfM8qtJzrWYyABEY7LnaFhNoCjZBbX+vLD
+         d1y3XL/Oi1jSmDP6Acmqa60zGJbMkEB/l/WS568OmHQ1o9r5bmUAT/FlyS9fN5Yx3NSA
+         WWMqBvUVeUZdbgMDzMtRwizdmj/lJeObrdlTu4SOAHGoe0C+c5e6yveG68izV6OoKA94
+         GfC9nIv3fJECRVbRl0AuBaFuoqKYCvp0sx4aEMMjRBsitY0I8yz6h+OMKOwInqkdhGtN
+         YxtBIt52OcENFwwC8482S4rBfYaKR9CqZHJ4/8WD+xdun+EuUPcTq04GRx8noRpCi1qT
+         ZLjA==
+X-Gm-Message-State: AAQBX9d64ekf19cjuk+YTyslP1wYfufvHaqczUicDbPcrlwt5ABZxreL
+        WzIOEvyDkDiQ5qspBu2rMmQGag==
+X-Google-Smtp-Source: AKy350Y7pJFFUoSYllXIEIad8W16svuGH0/mEehPGIXlC3q688kHpiU5nMeUx6zeDfGEnqW0xHK8Fg==
+X-Received: by 2002:a05:600c:1d1d:b0:3f0:34c4:e76d with SMTP id l29-20020a05600c1d1d00b003f034c4e76dmr8176835wms.0.1681225861099;
+        Tue, 11 Apr 2023 08:11:01 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id o11-20020a05600c4fcb00b003ebff290a52sm21197394wmq.28.2023.04.11.08.10.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 08:11:00 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 17:10:58 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v2 1/2] drm: Add fdinfo memory stats
+Message-ID: <ZDV4gl2t4Yt9KD5d@phenom.ffwll.local>
+Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230410210608.1873968-1-robdclark@gmail.com>
+ <20230410210608.1873968-2-robdclark@gmail.com>
+ <ZDU5vvc4V85E9hqP@phenom.ffwll.local>
+ <CAF6AEGuzfvC0v7bo_OD7mP6C9cA4mJeTvdM+i7e1hVS-Tv+AFQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|PH0PR10MB4807:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a26aef0-c898-413c-368c-08db3a9f1647
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wQCHhqd2yiOW15ifxXZqka0drYtLzTqLOSYQlYtPSVzbf9Jt0oWui7QMARyYzVAB1bIpaDdSOKcNVBnbcm9Dv3IBPMS5aEon5+0Y/1xYM++RalN2+gl5Rv7KKmMqrWMC+NfiOyV+FYX0iwNUdGtlCht9LyGH8ajEQq5jE4K8GrzWMAbTPuHq+JYWdvsRaViAAk7mJMZwK/5a3/lvmUBESAJDbOpRLjtZjWNazv76FRaQxNb1mjodfqpdQt2dZpDunYVztwdnxFCG8r7JLpMOryhm6dVFbxOmoHtRYC+kqezuzkJ9ep0vC8z47c3EobCFRsaiQGehBLA+mB37OAJH+Aj4J0ivgC2ydLimSBvyPkR1XEjWWyQsRhyfBhQFhUSI/46bvGMo7sQ0YnXwjeZzu522ZeehNsHE2bKADrLcfamKd38lh1GfOapgOrphI87oJY3Z3oYIgA3i5iVTV0/U3WtyOVxiy7Xb8gnHO8SOfXwAZS1ZqwBRvEQFBER00kOYv1DwFcGQJpwbXGJpNTQudG9kBOdB9LEuqS/L0o9Pccw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(346002)(376002)(39860400002)(451199021)(478600001)(1076003)(6506007)(316002)(6512007)(26005)(186003)(54906003)(966005)(6486002)(2906002)(66476007)(66946007)(4326008)(8936002)(66556008)(8676002)(5660300002)(41300700001)(38100700002)(83380400001)(86362001)(36756003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EA3AGAnh94CTLQzCTUqeV70TWjxUYnnj+aCz1V3gA7o0/5xLeTwoyrDc+kUD?=
- =?us-ascii?Q?wP0DaQwbZxuU4z8oIpA3Dm0u+pO9Q9mN3ZURz0J/VAKXR7dPGrqg4syHE/ut?=
- =?us-ascii?Q?otL1ZSE5mDgRfhij+xPwK+BguvNWSg/WKQBXTLgtJa77yos7KRv6tB9vznmZ?=
- =?us-ascii?Q?fixd7Up2wJHuMlZ4XknyfXTy7D74uWDybW2BpMUYex4zZGPq8v46sio8UVTB?=
- =?us-ascii?Q?QEHqDFDeuCavYhIPx+8fA1gjORoNmw8D+612UqDt3kJHVx+DaNdsgmwFLJvT?=
- =?us-ascii?Q?6zD17q0A7NEsxg0qvyFMhGqNdMD9SG2DeOxIdt6dZX3dHr2Pp5iA70J816WY?=
- =?us-ascii?Q?lrBUa4iOimvMA4aefuzLNG2l5xHe+zGs6UNmD6PD9FEhZ+3PkroYhBxQYAdo?=
- =?us-ascii?Q?SqCrn3TMRUz8gc1Qx/71A9Cy6YJ9tFHeoFG7V5L2Ke32KlXw36TkmZCpibl7?=
- =?us-ascii?Q?uxfoh1KN7Bccr9nkAgGa0k9DQ3H/GqFLizeaD31OYRiEhTrhphHNlrvd4qHf?=
- =?us-ascii?Q?YKSYATKm8n/4+g8P44nBdTkxz9PrLrG+mw4cte4K658g8zG8JyuAHq6HfjHT?=
- =?us-ascii?Q?QBRxEgC5O1T6YUMm6RRx5GanIxtrU+TazRj+DbvHj37IZZAMZHAuADBZ+8X/?=
- =?us-ascii?Q?rKh1n/aFZsXU8KSaRATDFNBYva7XsxaT81PY80bP6EUrpWqUcCqrB9F/D9+u?=
- =?us-ascii?Q?RZoNPrtJCXRTJNu5cI4CzsyYeD/stQO/p3mgpQ6w/8Ub913K4GCeyUEo5Lm6?=
- =?us-ascii?Q?iAs9sEQxZwzv7THCZXtFZ7wFsPf2Z6I7cj24U7NkmBliBhY7bEEJDXr9YIzG?=
- =?us-ascii?Q?c40aTbcGY0YYnVVZATluKkj0g/8EcvMxVwbc/SI9E7dtDlYhoBlp5v/+H+Up?=
- =?us-ascii?Q?Kw4TtM3x7NhAlfIKhKYLSkWIBg9POVppKMvLpkoKCtfpyHZVf20CS+W0RXcg?=
- =?us-ascii?Q?y5vix4B7CFu2evhu/8cjliP8J8uwzRZQU27uWFGjyc/tbPXmM5YTF3AYwEK2?=
- =?us-ascii?Q?f80ZaGdXwKFFMU5zbLv1QeBUuPChmGCbgs3nMOgBvy+wfLHANMroR4yZw10N?=
- =?us-ascii?Q?S4kl+lsxuoADGe29lLYVZ50AfTjzUVSUmONevbaPkITCOsMsMyim7GoKUcss?=
- =?us-ascii?Q?J02AfM+kY9qWUmzVWnBajfHzteAeTj/ZmS3wc1+VukKwtm8lxcHhG6OQEtrK?=
- =?us-ascii?Q?YU+XHYO6HLMm+Cp4/KS9n4f5CwCtW4BI9tYyWWJuMq0b4zpUQf8W3wP0n7EP?=
- =?us-ascii?Q?LOUqRxDSFKZvYl0NazqOxvJNeUfv7gbUoZrTapWiS3km7e5QPnz30N6FvJW+?=
- =?us-ascii?Q?E06WCJXdfqkVs5kbZ0uMB8RkK2hyD9PFvVL61yHiovCvRGEghII+HOWmJOCf?=
- =?us-ascii?Q?iOQTR8slFIef+kKhrvE42/NXqpWlpamVk5++gzv+26o9TQ9t0XTFENSw2zAs?=
- =?us-ascii?Q?VQshellfAkSd/y6Ou8lyu0V6WapZUgy15/Lux1aP+E6+MTKR9tCIFYRUtLN1?=
- =?us-ascii?Q?tNnSe8oUiT9OizxfvV4Wzc50Bue9IW8LfgWwL+jpyApMUMAOkqVtJ80qTTYO?=
- =?us-ascii?Q?6WP3zIo5SXpI4kzXoa9H+t7f9iuD1qXJ0NIP30zvmrFBlc2zHyRQcsJrSUaV?=
- =?us-ascii?Q?9Q=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?oZFFVcvED3/sy04GtX76RA3x+tZ8igdSetfWQayRREdK29TLI1ffHMFgps8T?=
- =?us-ascii?Q?8tRVd/ySFNn7Rt3CjCxHVuS6JSDPXiNqo8ZGBE/Hox68SHfSx1fGkKLmZB0J?=
- =?us-ascii?Q?7gb4sp+ewssO8kUv5N50OBBJsV+NkK0o9xw1BUqWDaV4bWo2/ySpjX1zRyjm?=
- =?us-ascii?Q?lWDyR91us7qb1X3qQU3zekfu0UqFrOECQ7nZO6/zmb57TJzHNSl2Nn00ETw+?=
- =?us-ascii?Q?TULmXJu5Nds2b13dHz+ejaqex2dPHJM3msVddeOoOJoZtyQomqUbH432/bDm?=
- =?us-ascii?Q?kkmci9WRXt5EciQpKhux/U/ZzyggxVWsC3iGnbYbubdkfsfN3gN7tt9RrQsG?=
- =?us-ascii?Q?4WbcejYPz4BCvboijLTuW6BvevtAxH3mB3aGPf59q7JX1jEKkyaw2Obtafg9?=
- =?us-ascii?Q?3t7EWrTFYvWiEWRgicCezbZBERP0M+Da3QcY6bOt6363lfXIJw2wf6KxHJGj?=
- =?us-ascii?Q?L672Uzwb5qmBeb1aLdMUQV/WTjq58AcUKJO1sgRnOqzGSJP138Y1AHKQivHr?=
- =?us-ascii?Q?QzY1daciFp5vK/O4mr9etBFI2MHXsbw8kdHn9VErAL1r7lZupRygteO2phhY?=
- =?us-ascii?Q?IjTMPJgX1dxRwbGjZuFFtooZRIFvPgrbLjCCvApNvSTIUdgaaxPJFEJRelkX?=
- =?us-ascii?Q?fFfzcLdrUHeIAWbt3vEhn27ndovYj+Crhf9bvo6b7fe7WfjMXBS5Y578lkKF?=
- =?us-ascii?Q?cKmY2eF97bs4Z4046ZcNozgQUhKN6PBM9Adf+xuJFuOq2Z6vT8azQ2ipSvMA?=
- =?us-ascii?Q?rzNYYgS+xoCLVEy8ul23vrAhJYChl4ITOKDQAdYEWJiylwge31opDQNzGrE/?=
- =?us-ascii?Q?ufH1obVUw4z03EwRhIM7roIH53BuuyeZPmi6iCpfijLxJ5Odo4g5L9vrShXo?=
- =?us-ascii?Q?Jj7Xn5Fy2wLWlIDTjmQTfi4e+dBm9RNlBtL4EmiQYU2FTwZsw5E3UJavFIJD?=
- =?us-ascii?Q?4oMnOUSbThycpZ9S+YFtTA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a26aef0-c898-413c-368c-08db3a9f1647
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 15:11:55.2052
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1F6ajSxra640PPO//3v/yjr1gwQ9oQ2ThwtjUBbq8V3XsdhfSCiUsnufWJYE8rOn8vrmFnCWh7UYBRMQnu8Mqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4807
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_10,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110138
-X-Proofpoint-GUID: Wq1DbiT2f0YinvcTIZlN3kicYqXofriS
-X-Proofpoint-ORIG-GUID: Wq1DbiT2f0YinvcTIZlN3kicYqXofriS
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF6AEGuzfvC0v7bo_OD7mP6C9cA4mJeTvdM+i7e1hVS-Tv+AFQ@mail.gmail.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Tue, Apr 11, 2023 at 08:02:09AM -0700, Rob Clark wrote:
+> On Tue, Apr 11, 2023 at 3:43 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > On Mon, Apr 10, 2023 at 02:06:06PM -0700, Rob Clark wrote:
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > Add a helper to dump memory stats to fdinfo.  For the things the drm
+> > > core isn't aware of, use a callback.
+> > >
+> > > v2: Fix typos, change size units to match docs, use div_u64
+> > >
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+> >
+> > Uh can't we wire this up by default? Having this as a per-driver opt-in
+> > sounds like we'll get maximally fragmented drm fd_info, and since that's
+> > uapi I don't think that's any good at all.
+> 
+> That is the reason for the centralized documentation of the props (and
+> why for this one I added a helper, rather than continuing the current
+> pattern of everyone rolling their own)..
 
-commit 3dd4432549415f3c65dd52d5c687629efbf4ece1 upstream.
+Yeah, but we all know how consistent specs are without either a common
+implementation or a test suite (or better, both) :-)
 
-Use the maple tree in RCU mode for VMA tracking.
+It's imo good to kick of new things, but anything that multiple drivers
+could/should implement or once we have multiple drivers implementing
+something should be common code.
 
-The maple tree tracks the stack and is able to update the pivot
-(lower/upper boundary) in-place to allow the page fault handler to write
-to the tree while holding just the mmap read lock.  This is safe as the
-writes to the stack have a guard VMA which ensures there will always be
-a NULL in the direction of the growth and thus will only update a pivot.
+I'm doing the same pushing for the fd_info around ctx, at least all
+drivers using drm/sched should mostly just get this stuff instead of tons
+of driver glue that then blows up in interesting ways because people
+discover new ways to get lifetime rules wrong ...
 
-It is possible, but not recommended, to have VMAs that grow up/down
-without guard VMAs.  syzbot has constructed a testcase which sets up a
-VMA to grow and consume the empty space.  Overwriting the entire NULL
-entry causes the tree to be altered in a way that is not safe for
-concurrent readers; the readers may see a node being rewritten or one
-that does not match the maple state they are using.
+> We _could_ (and I had contemplated) doing this all in core if (a) we
+> move madv to drm_gem_object, and (b) track
+> drm_gem_get_pages()/drm_gem_put_pages().  I guess neither is totally
+> unreasonable, pretty much all the non-ttm/non-cma GEM drivers have
+> some form of madvise ioctl and use
+> drm_gem_get_pages()/drm_gem_put_pages()..
 
-Enabling RCU mode allows the concurrent readers to see a stable node and
-will return the expected result.
+The active part shouldn't need anything new, you should be able to compute
+that by looking at dma_resv (which is still ok under the spinlock, we
+still have the lockless stuff to check status afaik).
 
-Link: https://lkml.kernel.org/r/20230227173632.3292573-9-surenb@google.com
-Cc: stable@vger.kernel.org
-Fixes: d4af56c5c7c6 ("mm: start tracking VMAs with maple tree")
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Reported-by: syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com
----
- include/linux/mm_types.h | 3 ++-
- kernel/fork.c            | 3 +++
- mm/mmap.c                | 3 ++-
- 3 files changed, 7 insertions(+), 2 deletions(-)
+The other bits are a bit more work, and I guess you could sort that out
+for now by making the status callback optional. Long term pushing
+purgeable as a concept one level up might make sense, but that's maybe a
+bit too much refactoring for this.
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 500e536796ca..247aedb18d5c 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -725,7 +725,8 @@ struct mm_struct {
- 	unsigned long cpu_bitmap[];
- };
- 
--#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN)
-+#define MM_MT_FLAGS	(MT_FLAGS_ALLOC_RANGE | MT_FLAGS_LOCK_EXTERN | \
-+			 MT_FLAGS_USE_RCU)
- extern struct mm_struct init_mm;
- 
- /* Pointer magic because the dynamic array size confuses some compilers. */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index a6d243a50be3..ec913b13c5ed 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -617,6 +617,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 	if (retval)
- 		goto out;
- 
-+	mt_clear_in_rcu(mas.tree);
- 	mas_for_each(&old_mas, mpnt, ULONG_MAX) {
- 		struct file *file;
- 
-@@ -703,6 +704,8 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 	retval = arch_dup_mmap(oldmm, mm);
- loop_out:
- 	mas_destroy(&mas);
-+	if (!retval)
-+		mt_set_in_rcu(mas.tree);
- out:
- 	mmap_write_unlock(mm);
- 	flush_tlb_mm(oldmm);
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 177714886849..fe1db604dc49 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2308,7 +2308,7 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 	int count = 0;
- 	int error = -ENOMEM;
- 	MA_STATE(mas_detach, &mt_detach, 0, 0);
--	mt_init_flags(&mt_detach, MT_FLAGS_LOCK_EXTERN);
-+	mt_init_flags(&mt_detach, mas->tree->ma_flags & MT_FLAGS_LOCK_MASK);
- 	mt_set_external_lock(&mt_detach, &mm->mmap_lock);
- 
- 	if (mas_preallocate(mas, vma, GFP_KERNEL))
-@@ -3095,6 +3095,7 @@ void exit_mmap(struct mm_struct *mm)
- 	 */
- 	set_bit(MMF_OOM_SKIP, &mm->flags);
- 	mmap_write_lock(mm);
-+	mt_clear_in_rcu(&mm->mm_mt);
- 	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
- 		      USER_PGTABLES_CEILING);
- 	tlb_finish_mmu(&tlb);
+I think just the minimal to get at least infra in place and the fully
+driver-agnostic stuff computed for every gem driver would be great
+already. And it makes it much easier for the next fd_info thing to become
+fully generic, which hopefully motivates people to do that.
+-Daniel
+
+> 
+> BR,
+> -R
+> 
+> > I think it's time we have
+> > - drm_fd_info
+> > - rolled out to all drivers in their fops
+> > - with feature checks as appropriate
+> > - push the driver-specific things into a drm_driver callback
+> >
+> > And I guess start peopling giving a hard time for making things needless
+> > driver-specifict ... there's really no reason at all this is not
+> > consistent across drivers.
+> > -Daniel
+> >
+> > > ---
+> > >  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+> > >  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++++++
+> > >  include/drm/drm_file.h                | 10 ++++
+> > >  3 files changed, 110 insertions(+)
+> > >
+> > > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+> > > index b46327356e80..b5e7802532ed 100644
+> > > --- a/Documentation/gpu/drm-usage-stats.rst
+> > > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > > @@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
+> > >  Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> > >  indicating kibi- or mebi-bytes.
+> > >
+> > > +- drm-shared-memory: <uint> [KiB|MiB]
+> > > +
+> > > +The total size of buffers that are shared with another file (ie. have more
+> > > +than a single handle).
+> > > +
+> > > +- drm-private-memory: <uint> [KiB|MiB]
+> > > +
+> > > +The total size of buffers that are not shared with another file.
+> > > +
+> > > +- drm-resident-memory: <uint> [KiB|MiB]
+> > > +
+> > > +The total size of buffers that are resident in system memory.
+> > > +
+> > > +- drm-purgeable-memory: <uint> [KiB|MiB]
+> > > +
+> > > +The total size of buffers that are purgeable.
+> > > +
+> > > +- drm-active-memory: <uint> [KiB|MiB]
+> > > +
+> > > +The total size of buffers that are active on one or more rings.
+> > > +
+> > >  - drm-cycles-<str> <uint>
+> > >
+> > >  Engine identifier string must be the same as the one specified in the
+> > > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> > > index a51ff8cee049..085b01842a87 100644
+> > > --- a/drivers/gpu/drm/drm_file.c
+> > > +++ b/drivers/gpu/drm/drm_file.c
+> > > @@ -42,6 +42,7 @@
+> > >  #include <drm/drm_client.h>
+> > >  #include <drm/drm_drv.h>
+> > >  #include <drm/drm_file.h>
+> > > +#include <drm/drm_gem.h>
+> > >  #include <drm/drm_print.h>
+> > >
+> > >  #include "drm_crtc_internal.h"
+> > > @@ -868,6 +869,84 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e)
+> > >  }
+> > >  EXPORT_SYMBOL(drm_send_event);
+> > >
+> > > +static void print_size(struct drm_printer *p, const char *stat, size_t sz)
+> > > +{
+> > > +     const char *units[] = {"", " KiB", " MiB"};
+> > > +     unsigned u;
+> > > +
+> > > +     for (u = 0; u < ARRAY_SIZE(units) - 1; u++) {
+> > > +             if (sz < SZ_1K)
+> > > +                     break;
+> > > +             sz = div_u64(sz, SZ_1K);
+> > > +     }
+> > > +
+> > > +     drm_printf(p, "%s:\t%zu%s\n", stat, sz, units[u]);
+> > > +}
+> > > +
+> > > +/**
+> > > + * drm_print_memory_stats - Helper to print standard fdinfo memory stats
+> > > + * @file: the DRM file
+> > > + * @p: the printer to print output to
+> > > + * @status: callback to get driver tracked object status
+> > > + *
+> > > + * Helper to iterate over GEM objects with a handle allocated in the specified
+> > > + * file.  The optional status callback can return additional object state which
+> > > + * determines which stats the object is counted against.  The callback is called
+> > > + * under table_lock.  Racing against object status change is "harmless", and the
+> > > + * callback can expect to not race against object destruction.
+> > > + */
+> > > +void drm_print_memory_stats(struct drm_file *file, struct drm_printer *p,
+> > > +                         enum drm_gem_object_status (*status)(struct drm_gem_object *))
+> > > +{
+> > > +     struct drm_gem_object *obj;
+> > > +     struct {
+> > > +             size_t shared;
+> > > +             size_t private;
+> > > +             size_t resident;
+> > > +             size_t purgeable;
+> > > +             size_t active;
+> > > +     } size = {0};
+> > > +     int id;
+> > > +
+> > > +     spin_lock(&file->table_lock);
+> > > +     idr_for_each_entry (&file->object_idr, obj, id) {
+> > > +             enum drm_gem_object_status s = 0;
+> > > +
+> > > +             if (status)
+> > > +                     s = status(obj);
+> > > +
+> > > +             if (obj->handle_count > 1) {
+> > > +                     size.shared += obj->size;
+> > > +             } else {
+> > > +                     size.private += obj->size;
+> > > +             }
+> > > +
+> > > +             if (s & DRM_GEM_OBJECT_RESIDENT) {
+> > > +                     size.resident += obj->size;
+> > > +                     s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> > > +             }
+> > > +
+> > > +             if (s & DRM_GEM_OBJECT_ACTIVE) {
+> > > +                     size.active += obj->size;
+> > > +                     s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> > > +             }
+> > > +
+> > > +             if (s & DRM_GEM_OBJECT_PURGEABLE)
+> > > +                     size.purgeable += obj->size;
+> > > +     }
+> > > +     spin_unlock(&file->table_lock);
+> > > +
+> > > +     print_size(p, "drm-shared-memory", size.shared);
+> > > +     print_size(p, "drm-private-memory", size.private);
+> > > +
+> > > +     if (status) {
+> > > +             print_size(p, "drm-resident-memory", size.resident);
+> > > +             print_size(p, "drm-purgeable-memory", size.purgeable);
+> > > +             print_size(p, "drm-active-memory", size.active);
+> > > +     }
+> > > +}
+> > > +EXPORT_SYMBOL(drm_print_memory_stats);
+> > > +
+> > >  /**
+> > >   * mock_drm_getfile - Create a new struct file for the drm device
+> > >   * @minor: drm minor to wrap (e.g. #drm_device.primary)
+> > > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+> > > index 0d1f853092ab..7bd8a1374f39 100644
+> > > --- a/include/drm/drm_file.h
+> > > +++ b/include/drm/drm_file.h
+> > > @@ -41,6 +41,7 @@
+> > >  struct dma_fence;
+> > >  struct drm_file;
+> > >  struct drm_device;
+> > > +struct drm_printer;
+> > >  struct device;
+> > >  struct file;
+> > >
+> > > @@ -438,6 +439,15 @@ void drm_send_event_timestamp_locked(struct drm_device *dev,
+> > >                                    struct drm_pending_event *e,
+> > >                                    ktime_t timestamp);
+> > >
+> > > +enum drm_gem_object_status {
+> > > +     DRM_GEM_OBJECT_RESIDENT  = BIT(0),
+> > > +     DRM_GEM_OBJECT_PURGEABLE = BIT(1),
+> > > +     DRM_GEM_OBJECT_ACTIVE    = BIT(2),
+> > > +};
+> > > +
+> > > +void drm_print_memory_stats(struct drm_file *file, struct drm_printer *p,
+> > > +                         enum drm_gem_object_status (*status)(struct drm_gem_object *));
+> > > +
+> > >  struct file *mock_drm_getfile(struct drm_minor *minor, unsigned int flags);
+> > >
+> > >  #endif /* _DRM_FILE_H_ */
+> > > --
+> > > 2.39.2
+> > >
+> >
+> > --
+> > Daniel Vetter
+> > Software Engineer, Intel Corporation
+> > http://blog.ffwll.ch
+
 -- 
-2.39.2
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
