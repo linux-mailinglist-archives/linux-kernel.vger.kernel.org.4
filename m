@@ -2,103 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEE56DD6FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD43A6DD5D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjDKJiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S230190AbjDKIqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjDKJhs (ORCPT
+        with ESMTP id S229458AbjDKIqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:37:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644AC44B9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B66B60B54
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC62C433D2;
-        Tue, 11 Apr 2023 09:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681205788;
-        bh=WEgeJJ235CsYCN2OoVm6GINomtvNXOkXvhHRyZUs60I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m0VqFC0xFAsDasZAsP7OhPssUKQjnN8XkHJmnuNVbxXTnWhIpL0oeakjlYFRXClgn
-         /28xY8KVY5sX0QjsvnV1VL5+U5a4hQlGmR2QJQHRjBMjFPtpzG2tm0CKIr5BwV6V/z
-         Sq6Nqzp0YFp23Nd28pmtElanFoW1TCNLk02SLNsxqEtx0hfaVeCzR3jVdLAckf9W8N
-         nZ/tcFXH9r/GlNRSbtPnPfM7WCzGsOAzKEJ2D9z1XYCUEX6NE3D/C6F2HUbml9K1y/
-         /ul/kH7khukx/X3UEzedSdz5/rrtOHmrR0v1QwTTz7S5nRyn8yX/cJEFDi4JZcEQgO
-         Crf2oz1Ny/NJg==
-Date:   Tue, 11 Apr 2023 11:36:24 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v5 02/18] timer: Add comment to
- get_next_timer_interrupt() description
-Message-ID: <ZDUqGCU3O7pIzn0O@lothringen>
-References: <20230301141744.16063-1-anna-maria@linutronix.de>
- <20230301141744.16063-3-anna-maria@linutronix.de>
+        Tue, 11 Apr 2023 04:46:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6649F121
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:46:32 -0700 (PDT)
+Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PwfYJ4cSqznVXH;
+        Tue, 11 Apr 2023 16:45:08 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 11 Apr
+ 2023 16:46:30 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next v9 0/3] Delay the initialization of zswap
+Date:   Tue, 11 Apr 2023 17:36:29 +0800
+Message-ID: <20230411093632.822290-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301141744.16063-3-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 03:17:28PM +0100, Anna-Maria Behnsen wrote:
-> get_next_timer_interrupt() does more than simply getting the next timer
-> interrupt. The timer bases are forwarded and also marked as idle whenever
-> possible.
-> 
-> To get not confused, add a comment to function description.
-> 
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> ---
-> v5: New patch, which adds only a comment to get_next_timer_interrupt()
-> instead of changing the function name
-> ---
->  kernel/time/timer.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> index 63a8ce7177dd..ffb94bc3852f 100644
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1915,6 +1915,10 @@ static u64 cmp_next_hrtimer_event(u64 basem, u64 expires)
->   * @basej:	base time jiffies
->   * @basem:	base time clock monotonic
->   *
-> + * If required, base->clk is forwarded and base is also marked as
-> + * idle. Idle handling of timer bases is allowed only to be done by CPU
-> + * itself.
+In the initialization of zswap, about 18MB memory will be allocated for
+zswap_pool. Since some users may not use zswap, the zswap_pool is wasted.
+Save memory by delaying the initialization of zswap until enabled.
 
-Idle marking you mean? Because idle handling can be done remotely after
-this patchset.
+v8->v9: Fix some pattern problem suggested by Christoph.
+v7->v8: Do some cleanup. And remove the second patch in v7 which is unrelated
+	to the initialization of zswap.
+v6->v7: Add two new patch[1,3] to cleanup the code. And cover zswap_init_*
+	parameter by zswap_init_lock to protect against conflicts.
+v5->v6: Simplify the code and delete the patches about frontswap suggested
+	by Christoph.
 
-Thanks.
+Liu Shixin (3):
+  mm/zswap: remove zswap_entry_cache_{create,destroy} helper function
+  mm/zswap: replace zswap_init_{started/failed} with zswap_init_state
+  mm/zswap: delay the initialization of zswap
 
-> + *
->   * Returns the tick aligned clock monotonic time of the next pending
->   * timer or KTIME_MAX if no timer is pending.
->   */
-> -- 
-> 2.30.2
-> 
+ mm/zswap.c | 122 +++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 77 insertions(+), 45 deletions(-)
+
+-- 
+2.25.1
+
