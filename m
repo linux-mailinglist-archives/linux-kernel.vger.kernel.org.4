@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB03D6DD4BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165906DD4C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjDKIEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S230099AbjDKIJH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 04:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDKIEC (ORCPT
+        with ESMTP id S229794AbjDKIJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:04:02 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A90130EC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:03:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id qb20so17706125ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1681200238; x=1683792238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k3Azqi0PzzANZ2Rni8AADHxyvhPXgRP3KYAVzLP4PpE=;
-        b=UVDFhFMczoGb5yiDNS1TI66Sb20eqDUD+eJbsyOVBoYGQeTQV4wdBK+bMKV/onsr/8
-         B+mAWm96B8bw4aZ5GP6ZT0KUBR8u1zeSHLGelX3CwrW8yPTz3ZPAO9kfGzAP31k2syfD
-         wsPSLc2nYR3deHV0XBZMGVLOFvcz5uZRZhxR/P+98GBO3UzSK/4PsQD+vKkAUFxi3Eve
-         pjB/nVFEQO0UN+1G6awcdyAMOz3d1RZpU9Lo0LRclae9nXgF7Ratg/l0z0kDL/v1nJSX
-         U1Icua1Dhjnjrswa1x5KIok6g5L32KSZLUljk65OT4ZH9Ww4pMkMsRaptMXhkqM40HyR
-         Irqw==
+        Tue, 11 Apr 2023 04:09:05 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCA030D6;
+        Tue, 11 Apr 2023 01:09:01 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id z9so7150298ybs.9;
+        Tue, 11 Apr 2023 01:09:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681200238; x=1683792238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3Azqi0PzzANZ2Rni8AADHxyvhPXgRP3KYAVzLP4PpE=;
-        b=ISq4bzvflieIF86G34NgW36WD9DaNt2duF9muW6zjDwGqVPJifONiGhbXLVCvPend6
-         vPbDiIeVZq73qNDIAc4BehYY3E9WZVDAvQut9iY3Sy4DJ2c5SOU3NE4H6gpkRdNHfkk5
-         G7NPZ0q/WBeoLknKhjEHCM9xbiWWfAVBIqHezWufB7EE3Zj9Fz4/8EqZpAtQ41NEvE0J
-         BscVHYRiBuDm+24gqIHyyWYIB4iYDbbMqa8ClEPFXm4nXwEHDAVnVirG6V0rEwZ40d/x
-         6wbLkPzvwlOq6mhIEB4lPcRJ4PNaUUR/EI3i2IN0qt/Rhn760pNmWAy3Iu+G/iSHEsl4
-         Z14w==
-X-Gm-Message-State: AAQBX9cue8TfiCEyKLcpcNw4oRREMWwwnZsqFlilZ9drGBjKL2CTig6w
-        qggoFhhsDKumun6EInTcxtJHtw==
-X-Google-Smtp-Source: AKy350bl5w/PbRVFk4NpsgpRWwUcUWZERdrRniZxsq9xv12GADdShhdRCVLeLu/fF+uZBvRDF6WzIA==
-X-Received: by 2002:a17:907:674e:b0:94b:466b:a492 with SMTP id qm14-20020a170907674e00b0094b466ba492mr4511085ejc.19.1681200237539;
-        Tue, 11 Apr 2023 01:03:57 -0700 (PDT)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id wg11-20020a17090705cb00b0093a0e5977e2sm5861263ejb.225.2023.04.11.01.03.55
+        d=1e100.net; s=20210112; t=1681200541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hALJfm4jnccIo090MDgna4b/Z74t0kji7w+cuP7uYXI=;
+        b=diOdfJ+5MEbvvS+d4irokqTEqdfQy/cDAeLGlnQpYEBJRVx+fwr91Clxi5Dbl6Zbd2
+         KQynU9XXtmCnAGJ3FSZbWyMsCNJtu+w8vFeb28fqPFiWd6a7zgA6o31yc/3oQ+gRwtRb
+         CT9C+lVrZuo0vT5ewGl2ycmwjIQG8zCH0Vz02aIpfTFliF7t8CEzd1uDL1M4V3vMen1y
+         6uKN6mi4lnW0WG45shxTfttZUwN8rzLoWzTDAMWrWDj5HQufTEvCZZEzgKxtfrGI8EgM
+         SEl5isF62Hn/ozwwKCAG5V4c3Epb/4gg785CaSH9hSn7mwTaoT6gen9fIJFQlTkcKVIx
+         9U9A==
+X-Gm-Message-State: AAQBX9eR0O7zjPzIIyfdViK5jTktrSRJ/1x278OX0tGZPITcw259ZK4n
+        eoL5i+jnbaPwfqwDZ54cnicJOMp+zztoUg==
+X-Google-Smtp-Source: AKy350ZKl290x9Uv5XUDA4jbcsgDvbpvRrqTTEJs0QkosRLBLV3Bj5NjStNJthQd6VGt+sQ4vVGl0Q==
+X-Received: by 2002:a05:6902:102c:b0:b8c:4e00:2136 with SMTP id x12-20020a056902102c00b00b8c4e002136mr8450910ybt.27.1681200540827;
+        Tue, 11 Apr 2023 01:09:00 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id d191-20020a25e6c8000000b00b784b00772esm3503422ybh.50.2023.04.11.01.09.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 01:03:56 -0700 (PDT)
-Message-ID: <87e5f12f-ec66-817a-9937-2db0e067d171@blackwall.org>
-Date:   Tue, 11 Apr 2023 11:03:54 +0300
+        Tue, 11 Apr 2023 01:09:00 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-54ee108142eso146195987b3.2;
+        Tue, 11 Apr 2023 01:09:00 -0700 (PDT)
+X-Received: by 2002:a81:e401:0:b0:54c:19a6:480 with SMTP id
+ r1-20020a81e401000000b0054c19a60480mr7173247ywl.4.1681200539960; Tue, 11 Apr
+ 2023 01:08:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] net/bridge: add drop reasons for bridge
- forwarding
-Content-Language: en-US
-To:     yang.yang29@zte.com.cn, davem@davemloft.net
-Cc:     edumazet@google.com, pabeni@redhat.com, roopa@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org, kuba@kernel.org,
-        zhang.yunkai@zte.com.cn, jiang.xuexin@zte.com.cn
-References: <202304061930349843930@zte.com.cn>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <202304061930349843930@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406143019.6709-1-tzimmermann@suse.de> <20230406143019.6709-2-tzimmermann@suse.de>
+In-Reply-To: <20230406143019.6709-2-tzimmermann@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Apr 2023 10:08:47 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
+Message-ID: <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/19] fbdev: Prepare generic architecture helpers
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
+        javierm@redhat.com, gregkh@linuxfoundation.org,
+        linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 14:30, yang.yang29@zte.com.cn wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> This creates six drop reasons as follows, which will help users know the
-> specific reason why bridge drops the packets when forwarding.
-> 
-> 1) SKB_DROP_REASON_BRIDGE_FWD_NO_BACKUP_PORT: failed to get a backup
->    port link when the destination port is down.
-> 
-> 2) SKB_DROP_REASON_BRIDGE_FWD_SAME_PORT: destination port is the same
->    with originating port when forwarding by a bridge.
-> 
-> 3) SKB_DROP_REASON_BRIDGE_NON_FORWARDING_STATE: the bridge's state is
->    not forwarding.
-> 
-> 4) SKB_DROP_REASON_BRIDGE_NOT_ALLOWED_EGRESS: the packet is not allowed
->    to go out through the port due to vlan filtering.
-> 
-> 5) SKB_DROP_REASON_BRIDGE_SWDEV_NOT_ALLOWED_EGRESS: the packet is not
->    allowed to go out through the port which is offloaded by a hardware
->    switchdev, checked by nbp_switchdev_allowed_egress().
-> 
-> 6) SKB_DROP_REASON_BRIDGE_BOTH_PORT_ISOLATED: both source port and dest
->    port are in BR_ISOLATED state when bridge forwarding.
-> 
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
-> Reviewed-by: Yang Yang <yang.yang19@zte.com.cn>
-> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-> ---
->  include/net/dropreason.h | 33 ++++++++++++++++++++++++++++++++
->  net/bridge/br_forward.c  | 49 +++++++++++++++++++++++++++++++++++++-----------
->  2 files changed, 71 insertions(+), 11 deletions(-)
-> 
+Hi Thomas,
 
-In addition to Jakub's comments, next time please CC bridge maintainers.
-I just noticed this patch now.
+On Thu, Apr 6, 2023 at 4:30 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Generic implementations of fb_pgprotect() and fb_is_primary_device()
+> have been in the source code for a long time. Prepare the header file
+> to make use of them.
+>
+> Improve the code by using an inline function for fb_pgprotect()
+> and by removing include statements. The default mode set by
+> fb_pgprotect() is now writecombine, which is what most platforms
+> want.
+>
+> Symbols are protected by preprocessor guards. Architectures that
+> provide a symbol need to define a preprocessor token of the same
+> name and value. Otherwise the header file will provide a generic
+> implementation. This pattern has been taken from <asm/io.h>.
+>
+> v2:
+>         *  use writecombine mappings by default (Arnd)
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Thanks,
- Nik
+Thanks for your patch!
 
+> --- a/include/asm-generic/fb.h
+> +++ b/include/asm-generic/fb.h
+> @@ -1,13 +1,32 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> +
+>  #ifndef __ASM_GENERIC_FB_H_
+>  #define __ASM_GENERIC_FB_H_
+> -#include <linux/fb.h>
+>
+> -#define fb_pgprotect(...) do {} while (0)
+> +/*
+> + * Only include this header file from your architecture's <asm/fb.h>.
+> + */
+> +
+> +#include <asm/page.h>
+> +
+> +struct fb_info;
+> +struct file;
+> +
+> +#ifndef fb_pgprotect
+> +#define fb_pgprotect fb_pgprotect
+> +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> +                               unsigned long off)
 
+Does this affect any noMMU platforms that relied on fb_pgprotect()
+doing nothing before?
+Perhaps the body below should be protected by "#ifdef CONFIG_MMU"?
+
+> +{
+> +       vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+
+Shouldn't this use the pgprot_val() wrapper?
+
+> +}
+> +#endif
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
