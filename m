@@ -2,143 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04556DE007
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEC96DE00E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjDKPws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S229551AbjDKPxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjDKPwh (ORCPT
+        with ESMTP id S231211AbjDKPxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:52:37 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB435246
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:36 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id h198so15159889ybg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681228355; x=1683820355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YVnzCMuG8yOr6jsr0GEp0cpvdQzZRFZZBcpuklzVomM=;
-        b=MP3/MBQD+/KeXIGk4Kq2i951jxW+nIqkXxpC4/5Ve3x6RHWDhUhRiLM5bhHVzAz46J
-         LFwbUIMhG2IhEDlG6Bp9RQgJvMtkye5PzZldbGZQr83UyNzvyAGjI9GGIpKwkLGnk8Mf
-         CdkJ7zJAWpyapByQSRGQuo/SKPvlSNySk6iZx5Lj9bZdfVe0xLA5YGLtJYlgS5NnJm5v
-         Ms4LeTJoxunl2EvuENwyZtsEqQRqF4PkpNd9nbQLBsV/jE/muQ5JsmgmvjIqBPT+iuHP
-         2e4YxRUUIUkWKgSUKkgkPCiOn1ZVvVdNlEVI0AVljrjWP8g+8TTBwpiaq78o4KOsRrEV
-         cNIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681228355; x=1683820355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YVnzCMuG8yOr6jsr0GEp0cpvdQzZRFZZBcpuklzVomM=;
-        b=gOGUvmcH9OFFe5aoGPeaAh7eZRx3DrSPXgjYsEfgl+CaPVLyVe6qDW9DJR7OJtDQUm
-         gR6dSf+PUbN2wp7nSFGxyA324rDtuwThco6Vg65/egvV0BQ84cG96XxgP2hjFUAdiuMi
-         QESgvLivMjF/A9FdzNmPkSF+3YVSjPdph31II3RuRA4p1JVAnGR7a0lYL+08qdo6UR0n
-         X6AEqJNtrdXdA6sABBBIOe3sFaB04o2WEBgBi2h2k3iX4/KVhr5f2SQarrpyoQ9wfp3R
-         IhUiGjSsZAt5fRK6hLoVFvfCXE3ejQU05fx8uMxQQcPg0Hy1395r6OYadb6O014ZVFlc
-         atcQ==
-X-Gm-Message-State: AAQBX9ejayTQKoCFWnRDvtXJ7UbGZGBFAO1dBr7zoVbcLLTumE+TD48M
-        niHGUTTKSdjkjKOvc0aVgmuMRA==
-X-Google-Smtp-Source: AKy350a2r0p6xSocXox5/NbH6U0w0MyqWWZVnRpVrTTXIQZjimC9nR1mrVSwDRzh9GaQCiZHx2TSIQ==
-X-Received: by 2002:a25:ab0a:0:b0:b72:245f:4411 with SMTP id u10-20020a25ab0a000000b00b72245f4411mr2396336ybi.46.1681228355448;
-        Tue, 11 Apr 2023 08:52:35 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056902068d00b00b7767ca749fsm3683390ybt.60.2023.04.11.08.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 08:52:35 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        stable@vger.kernel.org
-Subject: [RESEND PATCH 5.15 v3 5/5] counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
-Date:   Tue, 11 Apr 2023 11:52:20 -0400
-Message-Id: <20230411155220.9754-5-william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230411155220.9754-1-william.gray@linaro.org>
-References: <20230411155220.9754-1-william.gray@linaro.org>
+        Tue, 11 Apr 2023 11:53:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BB5FDE;
+        Tue, 11 Apr 2023 08:53:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14C2C61F63;
+        Tue, 11 Apr 2023 15:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA167C433EF;
+        Tue, 11 Apr 2023 15:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681228397;
+        bh=kEGv9Qpwl20xnx3B2UscGqU7o9pj7FAf2kZu43eWHHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zr6rNQU3Ih2CGRLfL2hImIWXcbX1eR5t/ji6L3M1ccKZhGWtcfosKlXJCQ6iT4h8Z
+         o4/rxH4ylQdUzorXkwqtiuy2ocyFXmAxEyTRSqahnuTc2jH2O8QcXojJAjCnFNFnS9
+         qyp3BaeWzPF6OjcYbj7dgKEJ+bOX9jTgfNMIiUwAcdTKPCuG/SXRG4Ei0zjFND6ski
+         8Wtkkdr14nsjZ0IXr2bu7Z+fHHkgSFm4cPimV9oM7mMxRnUcg5jX/iqmPaTfjKPRga
+         Y3ZvY948GTgVIZwjm2yPfdfEYZ0QSNwgXaJd7kOGhPsQtMVwqnEL3TrTjnxBVyiUcn
+         jZ9KvVivi/qjg==
+Date:   Tue, 11 Apr 2023 17:53:10 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH net-next v3 2/4] net: socket: add sockopts blacklist for
+ BPF cgroup hook
+Message-ID: <20230411-nudelsalat-spreu-3038458f25c4@brauner>
+References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
+On Tue, Apr 11, 2023 at 12:42:29PM +0200, Alexander Mikhalitsyn wrote:
+> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
+> that bpf cgroup hook can cause FD leaks when used with sockopts which
+> install FDs into the process fdtable.
+> 
+> After some offlist discussion it was proposed to add a blacklist of
+> socket options those can cause troubles when BPF cgroup hook is enabled.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> Suggested-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
 
-The Counter (CNTR) register is 24 bits wide, but we can have an
-effective 25-bit count value by setting bit 24 to the XOR of the Borrow
-flag and Carry flag. The flags can be read from the FLAG register, but a
-race condition exists: the Borrow flag and Carry flag are instantaneous
-and could change by the time the count value is read from the CNTR
-register.
+Just some background for kicks
 
-Since the race condition could result in an incorrect 25-bit count
-value, remove support for 25-bit count values from this driver.
+A crucial point for SO_PEERPIDFD is the allocation of a pidfd and to
+place it into the optval buffer for userspace to retrieve.
 
-Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/counter/104-quad-8.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+The way we orginally envisioned this working is by splitting this into
+an fd and file allocation phase, then get past the point of failure in
+sockopt processing and then call fd_install(fd, pidfd_file).
 
-diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-index 0caa60537b..643aae0c9f 100644
---- a/drivers/counter/104-quad-8.c
-+++ b/drivers/counter/104-quad-8.c
-@@ -61,10 +61,6 @@ struct quad8 {
- #define QUAD8_REG_CHAN_OP 0x11
- #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
- #define QUAD8_DIFF_ENCODER_CABLE_STATUS 0x17
--/* Borrow Toggle flip-flop */
--#define QUAD8_FLAG_BT BIT(0)
--/* Carry Toggle flip-flop */
--#define QUAD8_FLAG_CT BIT(1)
- /* Error flag */
- #define QUAD8_FLAG_E BIT(4)
- /* Up/Down flag */
-@@ -121,17 +117,9 @@ static int quad8_count_read(struct counter_device *counter,
- {
- 	struct quad8 *const priv = counter->priv;
- 	const int base_offset = priv->base + 2 * count->id;
--	unsigned int flags;
--	unsigned int borrow;
--	unsigned int carry;
- 	int i;
- 
--	flags = inb(base_offset + 1);
--	borrow = flags & QUAD8_FLAG_BT;
--	carry = !!(flags & QUAD8_FLAG_CT);
--
--	/* Borrow XOR Carry effectively doubles count range */
--	*val = (unsigned long)(borrow ^ carry) << 24;
-+	*val = 0;
- 
- 	mutex_lock(&priv->lock);
- 
-@@ -699,8 +687,8 @@ static ssize_t quad8_count_ceiling_read(struct counter_device *counter,
- 
- 	mutex_unlock(&priv->lock);
- 
--	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
--	return sprintf(buf, "33554431\n");
-+	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
-+	return sprintf(buf, "16777215\n");
- }
- 
- static ssize_t quad8_count_ceiling_write(struct counter_device *counter,
+While looking at this I realized that there's a generic problem in this
+code:
 
-base-commit: d86dfc4d95cd218246b10ca7adf22c8626547599
--- 
-2.39.2
+	if (level == SOL_SOCKET)
+		err = sock_getsockopt(sock, level, optname, optval, optlen);
+	else if (unlikely(!sock->ops->getsockopt))
+	        err = -EOPNOTSUPP;
+	else
+	        err = sock->ops->getsockopt(sock, level, optname, optval, optlen);
+	
+	if (!in_compat_syscall())
+	        err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname, optval, optlen, max_optlen, err);
 
+That BPF_CGROUP_RUN_PROG_GETSOCKOPT hook can fail after getsockopt
+itself succeeded. So anything that places an fd into optval risks
+leaking an fd into the caller's fdtable if the bpf hook fails.
+
+If we do a pidfd_create() and place the pidfd into the optval buffer the
+the bpf hook could reasonably interact with the fd but if it fails the
+fd would be leaked. It could clean this up calling close_fd() but it
+would be ugly since the fd has already been visible in the caller's
+fdtable. Someone might've snatched it already even.
+
+If we delay installing the fd and file past the bpf hook then the fd is
+meaningless for the bpf hook but we wouldn't risk leaking the fd.
+
+It should also be noted that the hook does a copy_from_user() on the
+optval right after the prior getsockopt did a copy_to_user() into that
+optval. This is not just racy it's also a bit wasteful. Userspace could
+try to retrieve the optval and then copy another value over it so that
+the bpf hook operates on another value than getsockopt originally placed
+into optval. If the bpf hook wants to care about fd resources in the
+future it should probably be passed the allocated struct file.
+
+This should be addressed separately though. The solution here works for
+me,
+
+Acked-by: Christian Brauner <brauner@kernel.org>
+
+>  net/socket.c | 38 +++++++++++++++++++++++++++++++++++---
+>  1 file changed, 35 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/socket.c b/net/socket.c
+> index 73e493da4589..9c1ef11de23f 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -108,6 +108,8 @@
+>  #include <linux/ptp_clock_kernel.h>
+>  #include <trace/events/sock.h>
+>  
+> +#include <linux/sctp.h>
+> +
+>  #ifdef CONFIG_NET_RX_BUSY_POLL
+>  unsigned int sysctl_net_busy_read __read_mostly;
+>  unsigned int sysctl_net_busy_poll __read_mostly;
+> @@ -2227,6 +2229,36 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
+>  	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+>  }
+>  
+> +#ifdef CONFIG_CGROUP_BPF
+> +static bool sockopt_installs_fd(int level, int optname)
+> +{
+> +	/*
+> +	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
+> +	 * hook returns an error after success of the original handler
+> +	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
+> +	 * syscall and will be not aware that fd was successfully installed into fdtable.
+> +	 *
+> +	 * Let's prevent bpf cgroup hook from running on them.
+> +	 */
+> +	if (level == SOL_SCTP) {
+> +		switch (optname) {
+> +		case SCTP_SOCKOPT_PEELOFF:
+> +		case SCTP_SOCKOPT_PEELOFF_FLAGS:
+> +			return true;
+> +		default:
+> +			return false;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +#else /* CONFIG_CGROUP_BPF */
+> +static inline bool sockopt_installs_fd(int level, int optname)
+> +{
+> +	return false;
+> +}
+> +#endif /* CONFIG_CGROUP_BPF */
+> +
+>  /*
+>   *	Set a socket option. Because we don't know the option lengths we have
+>   *	to pass the user mode parameter for the protocols to sort out.
+> @@ -2250,7 +2282,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+>  	if (err)
+>  		goto out_put;
+>  
+> -	if (!in_compat_syscall())
+> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+>  		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
+>  						     user_optval, &optlen,
+>  						     &kernel_optval);
+> @@ -2304,7 +2336,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+>  	if (err)
+>  		goto out_put;
+>  
+> -	if (!in_compat_syscall())
+> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+>  		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
+>  
+>  	if (level == SOL_SOCKET)
+> @@ -2315,7 +2347,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+>  		err = sock->ops->getsockopt(sock, level, optname, optval,
+>  					    optlen);
+>  
+> -	if (!in_compat_syscall())
+> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
+>  		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
+>  						     optval, optlen, max_optlen,
+>  						     err);
+> -- 
+> 2.34.1
+> 
