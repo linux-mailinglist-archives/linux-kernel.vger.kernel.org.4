@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2011B6DCE5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE546DCE5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDKAGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 20:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S229841AbjDKAH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 20:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDKAGS (ORCPT
+        with ESMTP id S229591AbjDKAHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 20:06:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC85526AB;
-        Mon, 10 Apr 2023 17:06:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A68661D4D;
-        Tue, 11 Apr 2023 00:06:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B143DC4339B;
-        Tue, 11 Apr 2023 00:06:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681171576;
-        bh=bWRz8OyAWyQZif69js29490nzzm0uqWpXjQqYdYUP7E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Pb46S1J+ffLTBdLF7BBE5derRzv62t49YqZpGPwjvS3iKDkgKfAe1aoUsUPckTRgt
-         sp3opna6qsXx6VOjMlX8Yzk6rhCEiDy4q+Orz7umpEuzFpeQvUpvOxIVocUluGm2S0
-         rQKSMGSsC8Wp1rOZiqRmEiUJfNuRADiI6J7J6RIQ0kBdXuWePUJQOy9q+6QSvxO+Oo
-         DVWiEc2L9oZ1rxoy+LyxEf1Zp7OGIedslcrP5dMzM3xYo8p9baVYFGJ9gFGY7AY13s
-         wjX+VsiNVg7e8AZDBZIAtvUyUoA0sR/Ps6d3tsAqVnMuN/v2jtubbf/DSpvGCsyFXB
-         6PSSue3BdLzfQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 4FC7B1540478; Mon, 10 Apr 2023 17:06:16 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 17:06:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     urezki@gmail.com, frederic@kernel.org, joel@joelfernandes.org,
-        qiang.zhang1211@gmail.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu/kvfree: Make page cache growing happen on the
- correct krcp
-Message-ID: <628ee057-d957-431b-be4a-0bf893bf56ef@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230408142530.800612-1-qiang1.zhang@intel.com>
+        Mon, 10 Apr 2023 20:07:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D671BE7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 17:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681171641; x=1712707641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/SkNd/K8iVvE77gyQWPYM8xlrW/4KpOW5swb5hDLO/8=;
+  b=gjmdvN21O+JasG2DSHCvRQmXCFeBFEnbjl3wHP4oQ9iJWEu8oJkH2kZu
+   iPSCYxL4aWiKRPBTcDaw7dthNF3RhmafzPjlEfN9oWzfge3gbm2/goyfj
+   1gj+UPwDzLE4EtvzjhFvn2yDs7xCFtvvmBgNAqIP532AQeikNCZIBiM7h
+   4IPAJPOOKEUFXCG5GXiZQNpZHRhfIqQOmtSf/vW6J16cEpel8BQpNkGwK
+   W0RDqRDElnnzHH1+JKDYDMhMpp0Z/w5p/sjJCFX4dNATVYGDMhcPpQisP
+   CRWHTy8Q1Ar1FsK7ujVHb2LaDq4j66SZQ7+g2GH641LUu3YnN8vc33ex4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="371328674"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="371328674"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 17:07:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="638617968"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="638617968"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.230.103])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 17:07:14 -0700
+Date:   Mon, 10 Apr 2023 17:07:12 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192e: Fix logical operator continuations
+Message-ID: <ZDSksGyxnu5eIo+1@aschofie-mobl2>
+References: <20230408171803.GA262580@sumitra.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408142530.800612-1-qiang1.zhang@intel.com>
+In-Reply-To: <20230408171803.GA262580@sumitra.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 10:25:30PM +0800, Zqiang wrote:
-> When invoke add_ptr_to_bulk_krc_lock() to queue ptr, will invoke
-> krc_this_cpu_lock() return current CPU's krcp structure and get a
-> bnode object from the krcp structure's ->bulk_head, if return is
-> empty or the returned bnode object's nr_records is KVFREE_BULK_MAX_ENTR,
-> when the can_alloc is set, will unlock current CPU's krcp->lock and
-> allocate bnode, after that, will invoke krc_this_cpu_lock() again to
-> return current CPU's krcp structure, if the CPU migration occurs,
-> the krcp obtained at this time will not be consistent with the previous
-> one, this causes the bnode will be added to the wrong krcp structure's
-> ->bulk_head or trigger fill page work on wrong krcp.
+On Sat, Apr 08, 2023 at 10:18:03AM -0700, Sumitra Sharma wrote:
+> Fix logical operator continuation as suggested by Linux kernel
+> coding-style. Check reported by checkpatch:
 > 
-> This commit therefore re-hold krcp->lock after allocated page instead
-> of re-call krc_this_cpu_lock() to ensure the consistency of krcp.
+> CHECK: Logical continuations should be on the previous line
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
 
-Very good, thank you!  Queued for testing and further review, but
-please check my wordsmithing.
+Hi Sumitra,
 
-							Thanx, Paul
+That commit message can be explicit, like "Move logical operator
+to previous line"
 
-------------------------------------------------------------------------
+Alison
 
-commit a0bbb5785539ed846f4769368f24a296d54bc801
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Sat Apr 8 22:25:30 2023 +0800
 
-    rcu/kvfree: Use consistent krcp when growing kfree_rcu() page cache
-    
-    The add_ptr_to_bulk_krc_lock() function is invoked to allocate a new
-    kfree_rcu() page, also known as a kvfree_rcu_bulk_data structure.
-    The kfree_rcu_cpu structure's lock is used to protect this operation,
-    except that this lock must be momentarily dropped when allocating memory.
-    It is clearly important that the lock that is reacquired be the same
-    lock that was acquired initially via krc_this_cpu_lock().
-    
-    Unfortunately, this same krc_this_cpu_lock() function is used to
-    re-acquire this lock, and if the task migrated to some other CPU during
-    the memory allocation, this will result in the kvfree_rcu_bulk_data
-    structure being added to the wrong CPU's kfree_rcu_cpu structure.
-    
-    This commit therefore replaces that second call to krc_this_cpu_lock()
-    with raw_spin_lock_irqsave() in order to explicitly acquire the lock on
-    the correct kfree_rcu_cpu structure, thus keeping things straight even
-    when the task migrates.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 2699b7acf0e3..41daae3239b5 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3301,7 +3301,7 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
- 			// scenarios.
- 			bnode = (struct kvfree_rcu_bulk_data *)
- 				__get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
--			*krcp = krc_this_cpu_lock(flags);
-+			raw_spin_lock_irqsave(&(*krcp)->lock, *flags);
- 		}
- 
- 		if (!bnode)
+> ---
+>  drivers/staging/rtl8192e/rtl8192e/rtl_ps.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+> index 5a1cd22f5e25..58ed394202ae 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+> @@ -209,8 +209,8 @@ void rtl92e_leisure_ps_enter(struct net_device *dev)
+>  					&priv->rtllib->pwr_save_ctrl;
+>  
+>  	if (!((priv->rtllib->iw_mode == IW_MODE_INFRA) &&
+> -	    (priv->rtllib->state == RTLLIB_LINKED))
+> -	    || (priv->rtllib->iw_mode == IW_MODE_ADHOC) ||
+> +	    (priv->rtllib->state == RTLLIB_LINKED)) ||
+> +	    (priv->rtllib->iw_mode == IW_MODE_ADHOC) ||
+>  	    (priv->rtllib->iw_mode == IW_MODE_MASTER))
+>  		return;
+>  
+> -- 
+> 2.25.1
+> 
