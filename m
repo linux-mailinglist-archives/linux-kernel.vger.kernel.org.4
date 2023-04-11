@@ -2,223 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEC96DE00E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA066DE014
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjDKPxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S230492AbjDKPzP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 11:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjDKPxm (ORCPT
+        with ESMTP id S229953AbjDKPzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BB5FDE;
-        Tue, 11 Apr 2023 08:53:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14C2C61F63;
-        Tue, 11 Apr 2023 15:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA167C433EF;
-        Tue, 11 Apr 2023 15:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681228397;
-        bh=kEGv9Qpwl20xnx3B2UscGqU7o9pj7FAf2kZu43eWHHQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zr6rNQU3Ih2CGRLfL2hImIWXcbX1eR5t/ji6L3M1ccKZhGWtcfosKlXJCQ6iT4h8Z
-         o4/rxH4ylQdUzorXkwqtiuy2ocyFXmAxEyTRSqahnuTc2jH2O8QcXojJAjCnFNFnS9
-         qyp3BaeWzPF6OjcYbj7dgKEJ+bOX9jTgfNMIiUwAcdTKPCuG/SXRG4Ei0zjFND6ski
-         8Wtkkdr14nsjZ0IXr2bu7Z+fHHkgSFm4cPimV9oM7mMxRnUcg5jX/iqmPaTfjKPRga
-         Y3ZvY948GTgVIZwjm2yPfdfEYZ0QSNwgXaJd7kOGhPsQtMVwqnEL3TrTjnxBVyiUcn
-         jZ9KvVivi/qjg==
-Date:   Tue, 11 Apr 2023 17:53:10 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH net-next v3 2/4] net: socket: add sockopts blacklist for
- BPF cgroup hook
-Message-ID: <20230411-nudelsalat-spreu-3038458f25c4@brauner>
-References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
- <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
+        Tue, 11 Apr 2023 11:55:14 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FF9E58;
+        Tue, 11 Apr 2023 08:55:13 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-94a34a0baf9so202023366b.1;
+        Tue, 11 Apr 2023 08:55:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681228512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bn1y14BjDhP//nrN2QdcKOf1bYDsUrxiG7mmqhmvXP0=;
+        b=XQPWg3R6XjwCEpTTLKpLxgiyI1fIXNaBuu3/m/KN3rRdUsvN+vEl1Kb8iTBxGSd1z0
+         OmyV/AU8EgaMFYTizq3fxPRieIizcFW5Re1Wztw15my8SBDcQiPh/cfR6Xt7OAsMQ6g+
+         GyBUirl2y6rt34kmJI55nly+zWWhi0goTs9iscvWQfrJeQ4g5z9zBXH4Dy+Ahp9qMvbM
+         VLy+M7/PC9XhCpQNj5Sc4QyEJ9Sa4sIjUn8l6d5FKYpr9UYwlojlGpwCj9UggvCMVxDo
+         N9vnxyZahn56d4eJbWVi3gcNqZ8vdhff7EwqVl6KAd7ZpHw80T9oUdz+GKm43BqinGD9
+         V0QA==
+X-Gm-Message-State: AAQBX9cZ50E2jTkYLgcL6K2i9499I71AOOLyJIpBXkuZG1jJFB7rbY/T
+        3eadqD0cMHd6nOJys6ka3nvM9s/ZkFrSDOWDN+UdhpSwBG4=
+X-Google-Smtp-Source: AKy350a1iBepfUVKkwKC63B/e2nAl1t2cKQisZ8M8ijwWnXhvgEiEzp0dKjhhj4DeCQBJNMvVIoF9tAprPRT8NzpLo8=
+X-Received: by 2002:a50:d0d9:0:b0:4fb:f19:87f with SMTP id g25-20020a50d0d9000000b004fb0f19087fmr6811181edf.3.1681228511745;
+ Tue, 11 Apr 2023 08:55:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230410095045.14872-1-wyes.karny@amd.com> <20230410095250.14908-1-wyes.karny@amd.com>
+In-Reply-To: <20230410095250.14908-1-wyes.karny@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Apr 2023 17:55:00 +0200
+Message-ID: <CAJZ5v0jH4uatAR7HiGY_MYASOcdwxvwkUZaMCHcznd-0idLCUA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq/schedutil: Add fast_switch callback check
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joel@joelfernandes.org,
+        gautham.shenoy@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:42:29PM +0200, Alexander Mikhalitsyn wrote:
-> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
-> that bpf cgroup hook can cause FD leaks when used with sockopts which
-> install FDs into the process fdtable.
-> 
-> After some offlist discussion it was proposed to add a blacklist of
-> socket options those can cause troubles when BPF cgroup hook is enabled.
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: Lennart Poettering <mzxreary@0pointer.de>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Suggested-by: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+On Mon, Apr 10, 2023 at 11:53 AM Wyes Karny <wyes.karny@amd.com> wrote:
+>
+> The set value of `fast_switch_enabled` flag doesn't guarantee that
+> fast_switch callback is set. For some drivers such as amd_pstate, the
+> adjust_perf callback is used but it still sets `fast_switch_possible`
+> flag. This is not wrong because this flag doesn't imply fast_switch
+> callback is set, it implies whether the driver can guarantee that
+> frequency can be changed on any CPU sharing the policy and that the
+> change will affect all of the policy CPUs without the need to send any
+> IPIs or issue callbacks from the notifier chain.  Therefore add an extra
+> NULL check before calling fast_switch in sugov_update_single_freq
+> function.
+>
+> Ideally `sugov_update_single_freq` function should not be called with
+> amd_pstate. But in a corner case scenario, when aperf/mperf overflow
+> occurs, kernel disables frequency invariance calculation which causes
+> schedutil to fallback to sugov_update_single_freq which currently relies
+> on the fast_switch callback.
+
+Yes, it does.  Which is why that callback must be provided if the
+driver sets fast_switch_enabled.
+
+Overall, adjust_perf is optional, but fast_switch_enabled can only be
+set if fast_switch is actually present.
+
+Please fix the driver.
+
+>
+> Normal flow:
+>   sugov_update_single_perf
+>     cpufreq_driver_adjust_perf
+>       cpufreq_driver->adjust_perf
+>
+> Error case flow:
+>   sugov_update_single_perf
+>     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+>       cpufreq_driver_fast_switch
+>          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+>
+> Fix this NULL pointer dereference issue by doing a NULL check.
+>
+> Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: stable@vger.kernel.org
 > ---
-
-Just some background for kicks
-
-A crucial point for SO_PEERPIDFD is the allocation of a pidfd and to
-place it into the optval buffer for userspace to retrieve.
-
-The way we orginally envisioned this working is by splitting this into
-an fd and file allocation phase, then get past the point of failure in
-sockopt processing and then call fd_install(fd, pidfd_file).
-
-While looking at this I realized that there's a generic problem in this
-code:
-
-	if (level == SOL_SOCKET)
-		err = sock_getsockopt(sock, level, optname, optval, optlen);
-	else if (unlikely(!sock->ops->getsockopt))
-	        err = -EOPNOTSUPP;
-	else
-	        err = sock->ops->getsockopt(sock, level, optname, optval, optlen);
-	
-	if (!in_compat_syscall())
-	        err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname, optval, optlen, max_optlen, err);
-
-That BPF_CGROUP_RUN_PROG_GETSOCKOPT hook can fail after getsockopt
-itself succeeded. So anything that places an fd into optval risks
-leaking an fd into the caller's fdtable if the bpf hook fails.
-
-If we do a pidfd_create() and place the pidfd into the optval buffer the
-the bpf hook could reasonably interact with the fd but if it fails the
-fd would be leaked. It could clean this up calling close_fd() but it
-would be ugly since the fd has already been visible in the caller's
-fdtable. Someone might've snatched it already even.
-
-If we delay installing the fd and file past the bpf hook then the fd is
-meaningless for the bpf hook but we wouldn't risk leaking the fd.
-
-It should also be noted that the hook does a copy_from_user() on the
-optval right after the prior getsockopt did a copy_to_user() into that
-optval. This is not just racy it's also a bit wasteful. Userspace could
-try to retrieve the optval and then copy another value over it so that
-the bpf hook operates on another value than getsockopt originally placed
-into optval. If the bpf hook wants to care about fd resources in the
-future it should probably be passed the allocated struct file.
-
-This should be addressed separately though. The solution here works for
-me,
-
-Acked-by: Christian Brauner <brauner@kernel.org>
-
->  net/socket.c | 38 +++++++++++++++++++++++++++++++++++---
->  1 file changed, 35 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/socket.c b/net/socket.c
-> index 73e493da4589..9c1ef11de23f 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -108,6 +108,8 @@
->  #include <linux/ptp_clock_kernel.h>
->  #include <trace/events/sock.h>
->  
-> +#include <linux/sctp.h>
-> +
->  #ifdef CONFIG_NET_RX_BUSY_POLL
->  unsigned int sysctl_net_busy_read __read_mostly;
->  unsigned int sysctl_net_busy_poll __read_mostly;
-> @@ -2227,6 +2229,36 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
->  	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+>  drivers/cpufreq/cpufreq.c        | 11 +++++++++++
+>  include/linux/cpufreq.h          |  1 +
+>  kernel/sched/cpufreq_schedutil.c |  2 +-
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6d8fd3b8dcb5..364d31b55380 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2138,6 +2138,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
 >  }
->  
-> +#ifdef CONFIG_CGROUP_BPF
-> +static bool sockopt_installs_fd(int level, int optname)
+>  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+>
+> +/**
+> + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
+> + *
+> + * Return 'true' if the ->fast_switch callback is present for the
+> + * current driver or 'false' otherwise.
+> + */
+> +bool cpufreq_driver_has_fast_switch(void)
 > +{
-> +	/*
-> +	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-> +	 * hook returns an error after success of the original handler
-> +	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
-> +	 * syscall and will be not aware that fd was successfully installed into fdtable.
-> +	 *
-> +	 * Let's prevent bpf cgroup hook from running on them.
-> +	 */
-> +	if (level == SOL_SCTP) {
-> +		switch (optname) {
-> +		case SCTP_SOCKOPT_PEELOFF:
-> +		case SCTP_SOCKOPT_PEELOFF_FLAGS:
-> +			return true;
-> +		default:
-> +			return false;
-> +		}
-> +	}
-> +
-> +	return false;
+> +       return !!cpufreq_driver->fast_switch;
 > +}
-> +#else /* CONFIG_CGROUP_BPF */
-> +static inline bool sockopt_installs_fd(int level, int optname)
-> +{
-> +	return false;
-> +}
-> +#endif /* CONFIG_CGROUP_BPF */
 > +
->  /*
->   *	Set a socket option. Because we don't know the option lengths we have
->   *	to pass the user mode parameter for the protocols to sort out.
-> @@ -2250,7 +2282,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
->  	if (err)
->  		goto out_put;
->  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
->  						     user_optval, &optlen,
->  						     &kernel_optval);
-> @@ -2304,7 +2336,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
->  	if (err)
->  		goto out_put;
->  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
->  
->  	if (level == SOL_SOCKET)
-> @@ -2315,7 +2347,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
->  		err = sock->ops->getsockopt(sock, level, optname, optval,
->  					    optlen);
->  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
->  						     optval, optlen, max_optlen,
->  						     err);
-> -- 
+>  /**
+>   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+>   * @cpu: Target CPU.
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 65623233ab2f..8a9286fc718b 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -604,6 +604,7 @@ struct cpufreq_governor {
+>  /* Pass a target to the cpufreq driver */
+>  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+>                                         unsigned int target_freq);
+> +bool cpufreq_driver_has_fast_switch(void);
+>  void cpufreq_driver_adjust_perf(unsigned int cpu,
+>                                 unsigned long min_perf,
+>                                 unsigned long target_perf,
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index e3211455b203..a1c449525ac2 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -364,7 +364,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>          * concurrently on two different CPUs for the same target and it is not
+>          * necessary to acquire the lock in the fast switch case.
+>          */
+> -       if (sg_policy->policy->fast_switch_enabled) {
+> +       if (sg_policy->policy->fast_switch_enabled && cpufreq_driver_has_fast_switch()) {
+>                 cpufreq_driver_fast_switch(sg_policy->policy, next_f);
+>         } else {
+>                 raw_spin_lock(&sg_policy->update_lock);
+> --
 > 2.34.1
-> 
+>
