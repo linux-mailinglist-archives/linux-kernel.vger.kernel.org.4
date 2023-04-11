@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1686DE518
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DA66DE522
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjDKTro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S229680AbjDKTvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjDKTrm (ORCPT
+        with ESMTP id S229659AbjDKTvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:47:42 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F96A19AB;
-        Tue, 11 Apr 2023 12:47:41 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4ec83ae6138so125589e87.0;
-        Tue, 11 Apr 2023 12:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681242459; x=1683834459;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yWI1GYvy4sv56NhdeKq21wPrANW9nlIGdEFnO+dXMc=;
-        b=mVWiCfzU19nSgq6qzDog/4fwK8EY3rylgG6pCL2B+G80FBLeE6biiQHwwQb01ORjst
-         cJxwBjAPwah0wNo3Sc7RJH2SmiiVEtmxNnjV991a1qUkIsRkJ15+ow/EDR1B2aHyt9cG
-         eIqjqswSKB579zcx0bjbcO/FGMZyrTZILWKDmIwUatptcmGk2mb0hIag6fnZgevlD04i
-         wKE+CdfTg+Uz1Tqzm4xGFV27VZHayeXD+59jnfCAtnOifggODiL84KAhKK4ungkLjBkZ
-         DFz/kQpHH1K1X7TgWODItZ86Jydz7MkmNqS0SDradh29dpRTQS2uSbuL4my9PF610EcU
-         9whg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681242459; x=1683834459;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+yWI1GYvy4sv56NhdeKq21wPrANW9nlIGdEFnO+dXMc=;
-        b=W4NFTZg7HWrB1oog6wuuS9cxsRf82H71OdSVFEwd6dBMJ2u1JXQ0Pr/sRF18j7YQpZ
-         mTVEv1oy9qFUxmOdO0AAybrNd5078sHfb3j+inVfQvIhzP8crJUSga5YjQxx6fB2gpcD
-         C+rbtq7teFSk7Uj31JHjz2xHmwFL4A7GZCZ3F095b/PKHJ46w7oz+BrpQgPmROFu/PQs
-         THRl3Ec9UYJ/7TGdtYupdORALXf1ui0ufYgAInftyhjVHYLflX/Z9t34mjTxQGsik8jb
-         MzAZK9OX2bwq6KxFCjceVJ83DXDHPAMylinbf852yrzWnCD9XSD1MCOQsEdPWifsISg7
-         GLgA==
-X-Gm-Message-State: AAQBX9eRt3/GxKBHVa20Ws1jzPOrdQzVgcSPTNyLca++VlCgMSmrd8Ld
-        okuvROQifpbZAbpdEYxEEP0=
-X-Google-Smtp-Source: AKy350Y/IFLeVJFDWLPQp4usoKK3c/UClhpxOIydcm+Qaqf0ZUCCmCwtYz47NmZD/UYMazubM+bTIA==
-X-Received: by 2002:a19:ac06:0:b0:4e9:c792:c950 with SMTP id g6-20020a19ac06000000b004e9c792c950mr2763589lfc.1.1681242459288;
-        Tue, 11 Apr 2023 12:47:39 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id n9-20020a195509000000b004ec56240335sm2460269lfe.112.2023.04.11.12.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 12:47:39 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 22:47:37 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     pbonzini@redhat.com, Sean Christopherson <seanjc@google.com>,
-        =?ISO-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: SVM: free sev_*asid_bitmap init if SEV init
- fails
-Message-ID: <20230411224737.00001d67.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230404122652.275005-2-aleksandr.mikhalitsyn@canonical.com>
-References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com>
-        <20230404122652.275005-2-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 11 Apr 2023 15:51:00 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694802D66;
+        Tue, 11 Apr 2023 12:50:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681242633; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=JqZQu0/1zwEpuh2JcCHJXbityLwgMsFgMYjOJfZmEYovU2KTCQlA0NW5r1riQe4QVmFC8CFI6KKRoyrbqPwvieb8lY41XgzeMheJrd9ErxwtEzv0dnmYwk/mgu4Xp3zGCt/Pq199BTzRE54UJH6B+g4W3x1uPn+oEl6L1R00M84=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681242633; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=k0q9m1x0Kzm672Wv2uZ8p+u8ZZVwbvW5fTmdCfljt3s=; 
+        b=QY4VO4boUGLwt9Yxhtaqd5+U4Q7Md6paeVRlr/mvt5jH55NcJIFALF1cACd+KrvIAoPKwaoZMZFVlSZn7IburNSev8q3i6OaXuolV6xCNRc3vK9dQKKBjs+FH9f2sCrO4hMsj5+aWvO4GBSUEACHAiMK+p1U3q45ixwT/5rKwUM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681242633;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=k0q9m1x0Kzm672Wv2uZ8p+u8ZZVwbvW5fTmdCfljt3s=;
+        b=EYQu2ZV53EXtJYTbLhEXJrYVkjM91zZ0DjFxMmN/HncbxMX7qlWwjQMnaLG260N8
+        5gfK3+ovIyZ5HgxdAON3hClGH1R3a2wi0AsbSeExfEucOeCK+fkRqnb+HNCYfWJ/1n6
+        fsoEBAAMVkyCc+ZTgzqBM1lpU+c+ubUtWR5Gc/bg=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681242631921471.7121572372041; Tue, 11 Apr 2023 12:50:31 -0700 (PDT)
+Message-ID: <e5cb12f2-c89e-9cf9-5fbe-cfeeb14512be@arinc9.com>
+Date:   Tue, 11 Apr 2023 22:50:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH net-next] net: dsa: mt7530: fix support for MT7531BE
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <ZDSlm-0gyyDZXy_k@makrotopia.org>
+ <13aedaa6-6b7b-727e-e932-4a5139c54f39@arinc9.com>
+ <ZDW4Tr4bIGcxwDgs@makrotopia.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZDW4Tr4bIGcxwDgs@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  4 Apr 2023 14:26:51 +0200
-Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com> wrote:
+On 11.04.2023 22:43, Daniel Golle wrote:
+> On Tue, Apr 11, 2023 at 10:30:06PM +0300, Arınç ÜNAL wrote:
+>> On 11.04.2023 03:11, Daniel Golle wrote:
+>>> There are two variants of the MT7531 switch IC which got different
+>>> features (and pins) regarding port 5:
+>>>    * MT7531AE: SGMII/1000Base-X/2500Base-X SerDes
+>>>    * MT7531BE: RGMII
+>>>
+>>> Moving the creation of the SerDes PCS from mt753x_setup to mt7530_probe
+>>> with commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to
+>>> mt7530_probe function") works fine for MT7531AE which got two instances
+>>> of mtk-pcs-lynxi, however, MT7531BE requires mt7531_pll_setup to setup
+>>> clocks before the single PCS on port 6 (usually used as CPU port)
+>>> starts to work and hence the PCS creation failed on MT7531BE.
+>>>
+>>> Fix this by introducing a pointer to mt7531_create_sgmii function in
+>>> struct mt7530_priv and call it again at the end of mt753x_setup like it
+>>> was before commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS
+>>> creation to mt7530_probe function").
+>>
+>> If I understand correctly, this patch does two things.
+>>
+>> Run mt7531_create_sgmii() from mt753x_setup(), after mt7531_setup() and
+>> mt7531_setup_common() is run so that PCS on MT7531BE works.
+> 
+>>
+>> Run the PCS creation code inside the loop only once if
+>> mt7531_dual_sgmii_supported() is false so it doesn't set the nonexistent
+>> port 5 SGMII on MT7531BE.
+> 
+> Yes, both is correct.
+> 
+>>
+>> Regarding the first part:
+>> I was actually in the middle of moving the code until after
+>> mt7530_pll_setup() and mt7531_pll_setup() on mt7530_setup() and
+>> mt7531_setup() to mt7530_probe(). To me it makes more sense to run them on
+>> mt7530_probe() as there's a good amount of duplicate code on mt7530_setup()
+>> and mt7531_setup().
+> 
+> I thought about doing that as well, however, note that you will have to
+> move all the reset and regulator setup procedure to mt7530_probe() as
+> well then, as PLL setup currently happens after that, and that's
+> probably for a reason.
+> 
+> As the reset and regulator setup works differently on MT7530 and
+> MT7531, and depending on whether it's a standalone IC package or MCM, I
+> believe changes unifying this will have to be tested on a lot of
+> boards...
 
-> If misc_cg_set_capacity() fails for some reason then we have
-> a memleak for sev_reclaim_asid_bitmap/sev_asid_bitmap. It's
-> not a case right now, because misc_cg_set_capacity() just can't
-> fail and check inside it is always successful.
->=20
-> But let's fix that for code consistency.
->=20
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: St=E9phane Graber <stgraber@ubuntu.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
->  arch/x86/kvm/svm/sev.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index c25aeb550cd9..a42536a0681a 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2213,8 +2213,13 @@ void __init sev_hardware_setup(void)
->  	}
-> =20
->  	sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
-> -	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
-> +	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count)) {
-> +		bitmap_free(sev_reclaim_asid_bitmap);
-> +		sev_reclaim_asid_bitmap =3D NULL;
-> +		bitmap_free(sev_asid_bitmap);
-> +		sev_asid_bitmap =3D NULL;
->  		goto out;
-> +	}
-> =20
->  	pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
->  	sev_supported =3D true;
+Not if we don't change the behaviour at all for both switches, which is 
+what I intend to do.
 
-It would be nice that another case can also be fixed:
+> 
+>>
+>> This will resolve the problem here, and make my future work regarding the
+>> PHY muxing feature on the MT7530 switch possible to do.
+>>
+>> Regarding the second part:
+>> I'll take your changes to my current RFC patch series while addressing
+>> Jesse's suggestion if this is fine by you.
+> 
+> Yes, I'd appreciate that and I'm ready to test and review once you post
+> your updated series.
 
-        sev_es_asid_count =3D min_sev_asid - 1;
-        if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
-                goto out; /* <----HERE */
+Sounds good, cheers.
 
-Maybe it would be a good idea to factor out an common error handling path.
+Arınç
