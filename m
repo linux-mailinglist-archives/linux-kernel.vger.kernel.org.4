@@ -2,236 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7059E6DD392
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681406DD396
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjDKHDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S229773AbjDKHG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjDKHDS (ORCPT
+        with ESMTP id S229697AbjDKHGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:03:18 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA8010EC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:03:16 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l26-20020a05600c1d1a00b003edd24054e0so5378657wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:03:16 -0700 (PDT)
+        Tue, 11 Apr 2023 03:06:25 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0210510EC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:06:23 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v9so12418276pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681196594; x=1683788594;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8hfUaJK5K49gfETGPOisBCfJxa2HZGrxX8QV+fOnnOk=;
-        b=HnYFK4qZqI4RcIXlAvUrDPNcSifFMcVs8GEkxM0XP7F+xTSBSNj/S7IiVL0iGDSoFy
-         pRqgAqa/xOFc0p/iNoWRXqes2yZZ6L168sZJR7TGUA9ylELoqrMdSJLDOBlh1hMBLpob
-         yvDnmI6GszfQ6KYoSKVsMMfzYVDk5EmCE6jhxYSehWFN8SBgZ/ReFYsShee1Gdytf2X2
-         riJ1rHZEh/69HQvHFsInHqTbwPJEj8aOvWF7A5+ABkyqPi7XDWm0l62zy/5L6NVIY45A
-         5Oxx+55Ss7yvmexk/9StbJuIunmqcDfef6fEBTzXOCdfk7zTBGttdyj5sXaF19YkgEzG
-         mBXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681196594; x=1683788594;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+        d=linaro.org; s=google; t=1681196782;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=8hfUaJK5K49gfETGPOisBCfJxa2HZGrxX8QV+fOnnOk=;
-        b=li+K88q6zc+g1YJqU81x2Avkx+sXk9J4dl86kzVZH/lKzTlDCYP7shGPA5kIeFkVKe
-         Rol9uyDD25H/7wpEy9Y23k6xN6TwDtXss0RqfErTTLI4X65ewi3yUgIDaPjtYkYlw1Va
-         4rirC23PWpSIVYoCgw3j19HCZwL5PiQaKcvgwfnsfld54G1CFEkz0qrv869FQK8HFXj2
-         EDkcKFvZIDdSfQLcFP0oeYt+dTjzABgPmbeiWRAByCQXKXmcaYKnDmryTaO7RNZVv7dx
-         cSCsMa2WuBYhT5L5/9bh84jc2avlpBG60bo4PgfH8bBwIvLSG7OMOWJp1VD7jkNQ4iIx
-         eVsQ==
-X-Gm-Message-State: AAQBX9fmo91RDiL7jCMwkL4M/l8tKxV4trRrA1P5AQRu+n6YoEukrtvy
-        V8i0gfSDWaYc8FViRKJ1qeen8Q==
-X-Google-Smtp-Source: AKy350a8CllWGeVxvR6LgE7adUkYW/miVmQdA9w/Zz0JH4Oqzoo7pwigEO21rIknjgkedlOCSp0FfQ==
-X-Received: by 2002:a05:600c:20e:b0:3ed:29db:cb80 with SMTP id 14-20020a05600c020e00b003ed29dbcb80mr6010292wmi.18.1681196594540;
-        Tue, 11 Apr 2023 00:03:14 -0700 (PDT)
-Received: from localhost ([2a04:cec0:11b6:9335:e66a:358b:d934:608b])
-        by smtp.gmail.com with ESMTPSA id fm7-20020a05600c0c0700b003f063a709dbsm1688043wmb.2.2023.04.11.00.03.12
+        bh=dg3py+d1d8voix5Nhdaz+jzbS21GJeHZT0Py1g4YyaM=;
+        b=LkxT9gO8/NppwcJwgE57gyk+V86zc0W5i5FL0G1ZCy3FQyPh+mOvkWTXTT+MUvEhnX
+         Y6dCNmOUoJFa/UYMXd9IQbwUUHLPupgOhVjGW4cJgYstyM6cQ/CpDWDHJnVaoWpwbzPI
+         LEwxvQ1kzRiofohUiVp+Y4Gjtnf7Vp0IJfE3vsh8/Alpn+fIXDEwIcNvBMgOtUD0lVNV
+         FWTI6l6nIYvZZG4HsretIdaNeDRl1cwWVe+dSNRn3zNQlnWtXc9ZDcIJUISlR7Ihxqdd
+         Ws/GZZzl9xOKehHnkMj/YwiYCddQjoHn61ySi3HK9cNLB2MRHc//r34ElCdu7wP4T8pe
+         lmGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681196782;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dg3py+d1d8voix5Nhdaz+jzbS21GJeHZT0Py1g4YyaM=;
+        b=CmAA4kJCzNHmCgbbtUZF7UiF3m9pLUaNM5kuwADnXjhKeacMXNLTra3rD3II9MHCVY
+         CnOPf+LviabtNDqd7KsNuQ6W71S9Nv9QkervkdhNj2xdpas59DsQp8XRUlp8/BT9qSYw
+         QsLbFqgEwMdblDDTODFpR+bsr0GMmGl0u+P2eSofBIfCrv/l/EDIfGFRj5XByklQyY0o
+         dqiZzGaQH5lAwWMmw8JWcemSYZ2ziWJAyarkbNsQQhQTQWOtlfmvKXz1FWel8nVJATPT
+         JlqdQzMwc2NjTae64WWpI5/TKTBcbkVuWYTxEQbe2SdOMQPwDeVbA7ISuYgZ1CufMhuv
+         0GNA==
+X-Gm-Message-State: AAQBX9ejCw/IwfF17vIx3kjcoONVgwjGccFv8X7F0/risuc8SwUxGaPY
+        AKUyKKfDjjceJAJaqY8nshRl
+X-Google-Smtp-Source: AKy350ZV5bF2x0y0NqljiX1IQdz7pjKc0oiwRZpHDDEkCTOeAcl4il9uZBO6/2P1eJYS5OQLRRObCg==
+X-Received: by 2002:a17:902:6b04:b0:1a2:87a2:c910 with SMTP id o4-20020a1709026b0400b001a287a2c910mr13291521plk.53.1681196782274;
+        Tue, 11 Apr 2023 00:06:22 -0700 (PDT)
+Received: from thinkpad ([117.248.3.87])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b0019edc1b9eb2sm8969140pls.238.2023.04.11.00.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 00:03:13 -0700 (PDT)
-References: <20230320113445.17260-1-yu.tu@amlogic.com>
- <CAFBinCAE-ihq9oeXc=GqUEHVKUYM+n_e+2_5+gDMTGQcEEhRtg@mail.gmail.com>
- <b5e647e2-4561-e6c1-016f-2c3b260916bb@amlogic.com>
- <1jsfdy77n8.fsf@starbuckisacylon.baylibre.com>
- <d403dda4-e3db-4f26-6996-090a8c520b94@amlogic.com>
- <1j8rfp6u0h.fsf@starbuckisacylon.baylibre.com>
- <2e68acd1-f3d1-adbc-5ed2-66c40e006579@amlogic.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, kelvin.zhang@amlogic.com,
-        qi.duan@amlogic.com
-Subject: Re: [PATCH V2] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
+        Tue, 11 Apr 2023 00:06:21 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 12:36:13 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc:     Luca Weiss <luca@z3ntu.xyz>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
+        dianders@chromium.org, linux-clk@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
  support
-Date:   Tue, 11 Apr 2023 09:02:11 +0200
-In-reply-to: <2e68acd1-f3d1-adbc-5ed2-66c40e006579@amlogic.com>
-Message-ID: <1jleiyyk7k.fsf@starbuckisacylon.baylibre.com>
+Message-ID: <20230411070613.GA5333@thinkpad>
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+ <5c2442d3-1f65-9106-2ef4-d6beec159538@quicinc.com>
+ <2619574.X9hSmTKtgW@z3ntu.xyz>
+ <2674085.mvXUDI8C0e@z3ntu.xyz>
+ <016fd82f-b0a6-d8e8-769f-ddee63d22eb4@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <016fd82f-b0a6-d8e8-769f-ddee63d22eb4@quicinc.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 10:20:47AM +0530, Rajendra Nayak wrote:
+> 
+> 
+> On 4/11/2023 1:05 AM, Luca Weiss wrote:
+> > Hi Rajendra,
+> > 
+> > On Mittwoch, 1. Februar 2023 19:04:37 CEST Luca Weiss wrote:
+> > > On Montag, 23. Jänner 2023 05:30:55 CET Rajendra Nayak wrote:
+> > > > On 1/22/2023 5:45 AM, Luca Weiss wrote:
+> > > > > Hi Rajendra,
+> > > > > 
+> > > > > On Dienstag, 20. September 2022 13:15:15 CET Rajendra Nayak wrote:
+> > > > > > GDSCs cannot be transitioned into a Retention state in SW.
+> > > > > > When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+> > > > > > RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+> > > > > > takes care of retaining the memory/logic for the domain when
+> > > > > > the parent domain transitions to power collapse/power off state.
+> > > > > > 
+> > > > > > On some platforms where the parent domains lowest power state
+> > > > > > itself is Retention, just leaving the GDSC in ON (without any
+> > > > > > RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+> > > > > > it to Retention.
+> > > > > > 
+> > > > > > The existing logic handling the PWRSTS_RET seems to set the
+> > > > > > RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
+> > > > > > but then explicitly turns the GDSC OFF as part of _gdsc_disable().
+> > > > > > Fix that by leaving the GDSC in ON state.
+> > > > > > 
+> > > > > > Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> > > > > > Cc: AngeloGioacchino Del Regno
+> > > > > > <angelogioacchino.delregno@collabora.com>
+> > > > > > ---
+> > > > > > v3:
+> > > > > > Updated changelog
+> > > > > > 
+> > > > > > There are a few existing users of PWRSTS_RET and I am not
+> > > > > > sure if they would be impacted with this change
+> > > > > > 
+> > > > > > 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
+> > > > > > gdsc is actually transitioning to OFF and might be left
+> > > > > > ON as part of this change, atleast till we hit system wide
+> > > > > > low power state.
+> > > > > > If we really leak more power because of this
+> > > > > > change, the right thing to do would be to update .pwrsts for
+> > > > > > mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+> > > > > > I dont have a msm8974 hardware, so if anyone who has can report
+> > > > > > any issues I can take a look further on how to fix it.
+> > > > > 
+> > > > > Unfortunately indeed this patch makes problems on msm8974, at least on
+> > > > > fairphone-fp2 hardware.
+> > > > > 
+> > > > > With this patch in place, the screen doesn't initialize correctly in
+> > > > > maybe
+> > > > > 80% of boots and is stuck in weird states, mostly just becomes
+> > > > > completely
+> > > > > blue.
+> > > > > 
+> > > > > Kernel log at least sometimes includes messages like this:
+> > > > > [   25.847541] dsi_cmds2buf_tx: cmd dma tx failed, type=0x39,
+> > > > > data0=0x51,
+> > > > > len=8, ret=-110
+> > > > > 
+> > > > > Do you have anything I can try on msm8974? For now, reverting this patch
+> > > > > makes display work again on v6.1
+> > > > 
+> > > > hmm, I was really expecting this to leak more power than break anything
+> > > > functionally, Did you try moving to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+> > > > for mdss_gdsc?
+> > > 
+> > > Hi Rajendra,
+> > > 
+> > > yes with this change the display init works fine again. Do you think this is
+> > > the intended solution then? I also haven't tested really more than this
+> > > simple case.
+> > > 
+> > > Let me know what you think.
+> > 
+> > Any feedback on this? Would be great to get this fixed sometime soon, quite
+> > annoying to carry a patch for this locally.
+> 
+> Hi Luca, really sorry I seem to have completely missed your previous
+> email. Yes, moving the gdsc from PWRSTS_RET_ON to PWRSTS_OFF_ON seems to
+> be the right thing to do. The behavior of the RET state was same as that
+> of OFF prior to my patch, so the change should ideally make display go
+> back to having the same behavior as before.
+> I can certainly ack the change if you send in a patch.
 
-On Fri 07 Apr 2023 at 18:08, Yu Tu <yu.tu@amlogic.com> wrote:
+I fail to understand how enabling retention state affects a peripheral during
+boot. It could've some effect during suspend but an issue during boot fuzzies
+me.
 
-> On 2023/3/22 16:41, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> On Wed 22 Mar 2023 at 15:46, Yu Tu <yu.tu@amlogic.com> wrote:
->>=20
->>> On 2023/3/21 17:41, Jerome Brunet wrote:
->>>> [ EXTERNAL EMAIL ]
->>> Hi Jerome,
->>> 	Thank you for your reply.
->>>> On Tue 21 Mar 2023 at 10:29, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>
->>>>> Hi Martin=EF=BC=8C
->>>>> 	First of all, thank you for your reply.
->>>>>
->>>>> On 2023/3/20 23:35, Martin Blumenstingl wrote:
->>>>>> [ EXTERNAL EMAIL ]
->>>>>> Hello Yu Tu,
->>>>>> On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Yu Tu <yu.tu@amlogic.com> w=
-rote:
->>>>>>>
->>>>>>> Since the previous code only provides "ro_ops" for the vid_pll_div
->>>>>>> clock. In fact, the clock can be set. So add "ops" that can set the
->>>>>>> clock, especially for later chips like S4 SOC and so on.
->>>>>>>
->>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>>>> ---
->>>>>> please describe the changes you did compared to the previous version=
-(s)
->>>>>
->>>>> I'll add it in the next version.
->>>>>
->>>>>> [...]
->>>>>>> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vi=
-d-pll-div.h
->>>>>>> index c0128e33ccf9..bbccab340910 100644
->>>>>>> --- a/drivers/clk/meson/vid-pll-div.h
->>>>>>> +++ b/drivers/clk/meson/vid-pll-div.h
->>>>>>> @@ -10,11 +10,14 @@
->>>>>>>     #include <linux/clk-provider.h>
->>>>>>>     #include "parm.h"
->>>>>>>
->>>>>>> +#define VID_PLL_DIV_TABLE_SIZE         14
->>>>>> In v1 you used ARRAY_SIZE(vid_pll_div_table) wherever this new macro
->>>>>> is used instead.
->>>>>> I think using ARRAY_SIZE is the better approach because it means the
->>>>>> references will update automatically if an entry is added/removed fr=
-om
->>>>>> vid_pll_div_table
->>>>>
->>>>> I agree with you. Perhaps the key is to understand what Jerome said.
->>>> I asked you to describe how this divider actually works. Not remove
->>>> ARRAY_SIZE().
->>>
->>> OKay! I misunderstood your meaning.
->>>
->>>> This divider uses tables only because the parameters are "magic".
->>>> I'd like the driver to be able come up with "computed" values instead.
->>>> What I requested is some explanation about how this HW clock works
->>>> because the documentation is not very clear when it comes to this. The=
-se
->>>> values must come from somewhere, I'd like to understand "how".
->>>> This is the same as the PLL driver which can take a range and come up
->>>> with the different parameters, instead of using big pre-computed table=
-s.
->>>>
->>>>>
->>>>>> Also I think there's a different understanding about what Jerome
->>>>>> previously wrote:
->>>>>>> It would be nice to actually describe how this vid pll work so we c=
-an
->>>>>>> stop using precompute "magic" values and actually use the IP to its=
- full
->>>>>>> capacity.
->>>>>>    From what I understand is that you interpreted this as "let's cha=
-nge
->>>>>> ARRAY_SIZE(vid_pll_div_table) to a new macro called
->>>>>> VID_PLL_DIV_TABLE_SIZE".
->>>>>> But I think what Jerome meant is: "let's get rid of vid_pll_div_table
->>>>>> and implement how to actually calculate the clock rate - without
->>>>>> hard-coding 14 possible clock settings in vid_pll_div_table". Look at
->>>>>> clk-mpll.c and/or clk-pll.c which allow calculating arbitrary rates
->>>>>> without any hard-coded tables.
->>>>>
->>>> exactly ... or at least an explanation about how it works and
->>>> why it is too complicated to compute the values at runtime.
->>>>
->>>>> In fact, pll and mpll are also fixed register writes corresponding
->>>>> values.
->>>> That is not true. The pll and mpll drivers are able to compute their
->>>> values at runtime. Please have a look at the drivers.
->>>>
->>>
->>> After consulting the engineer of the chip design, the clock is a digital
->>> frequency divider, and the frequency divider is verified by the sequence
->>> generator, which is bit0-bi15. bit16-bit17 confirms the size of the
->>> frequency division.
->> That, we already know. This is what the datasheet already give us.
->> It is still a bit light.
->> You don't set the bit randomly and check the output, do you ?
->> The question is how setting this bit impact the relation between
->> the input and output rate? IOW, from these 17bits, how do you come up
->> with the multiplier and divider values (and the other way around) ?
->>=20
->>> Whereas other PLLS and MPLLS are analog dividers so
->>> there are fixed formulas to calculate.
->>>
->>> So Neil had no problem implementing it this way. So now I want to know =
-your
->>> advice what should I do next?
->> 1) Neil did what he could to get compute the rate (RO) which the little
->> information he had. You are trying to extend the driver, keeping an
->> dummy approach. It is only fair that I ask you to make this a real
->> driver.
->> 2) Because something has been done once, it not necessarily appropriate
->> to continue ... this type of argument hardly a valid reason.
->> I don't want to keep adding table based driver unless necessary.
->> So far, you have not proved this approach is really required, nor
->> provided the necessary information to make the calculation.
->
-> Technically you are right. I am communicating and confirming with the chip
-> designer to see if the general calculation formula can be given. If not, I
-> will explain why. Please give me some time.
->
-> But I have to mention that the SOC, although there is this register but
-> actually does not use the clock. Can we treat this as a separate patch th=
-at
-> we will continue to send and explain later?
->
-> This way I can continue with the other patches of S4 SOC first, and this
-> clock stays the same way as the G12A first. Later, after the patch of the
-> clock is corrected, it can be corrected to "ops" as required.Otherwise, we
-> cannot continue other driver patches. I don't know if you agree?
->
+- Mani
 
-Sure you can send your s4 series with RO ops and change to RW later on
-if necessary.
+> thanks,
+> Rajendra
+> 
+> > 
+> > Regards
+> > Luca
+> > 
+> > > 
+> > > Regards
+> > > Luca
+> > > 
+> > > diff --git a/drivers/clk/qcom/mmcc-msm8974.c
+> > > b/drivers/clk/qcom/mmcc-msm8974.c index 26f3f8f06edf..f95e38abde13 100644
+> > > --- a/drivers/clk/qcom/mmcc-msm8974.c
+> > > +++ b/drivers/clk/qcom/mmcc-msm8974.c
+> > > @@ -2389,7 +2389,7 @@ static struct gdsc mdss_gdsc = {
+> > >   	.pd = {
+> > >   		.name = "mdss",
+> > >   	},
+> > > -	.pwrsts = PWRSTS_RET_ON,
+> > > +	.pwrsts = PWRSTS_OFF_ON,
+> > >   };
+> > > 
+> > >   static struct gdsc camss_jpeg_gdsc = {
+> > > 
+> > > > > Regards
+> > > > > Luca
+> > > > > 
+> > > > > > 2. gpu_gx_gdsc in gpucc-msm8998.c and
+> > > > > > 
+> > > > > >      gpu_gx_gdsc in gpucc-sdm660.c
+> > > > > > 
+> > > > > > Both of these seem to add support for 3 power state
+> > > > > > OFF, RET and ON, however I dont see any logic in gdsc
+> > > > > > driver to handle 3 different power states.
+> > > > > > So I am expecting that these are infact just transitioning
+> > > > > > between ON and OFF and RET state is never really used.
+> > > > > > The ideal fix for them would be to just update their resp.
+> > > > > > .pwrsts to PWRSTS_OFF_ON only.
+> > > > > > 
+> > > > > >    drivers/clk/qcom/gdsc.c | 10 ++++++++++
+> > > > > >    drivers/clk/qcom/gdsc.h |  5 +++++
+> > > > > >    2 files changed, 15 insertions(+)
+> > > > > > 
+> > > > > > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> > > > > > index d3244006c661..ccf63771e852 100644
+> > > > > > --- a/drivers/clk/qcom/gdsc.c
+> > > > > > +++ b/drivers/clk/qcom/gdsc.c
+> > > > > > @@ -368,6 +368,16 @@ static int _gdsc_disable(struct gdsc *sc)
+> > > > > > 
+> > > > > >    	if (sc->pwrsts & PWRSTS_OFF)
+> > > > > >    	
+> > > > > >    		gdsc_clear_mem_on(sc);
+> > > > > > 
+> > > > > > +	/*
+> > > > > > +	 * If the GDSC supports only a Retention state, apart from ON,
+> > > > > > +	 * leave it in ON state.
+> > > > > > +	 * There is no SW control to transition the GDSC into
+> > > > > > +	 * Retention state. This happens in HW when the parent
+> > > > > > +	 * domain goes down to a Low power state
+> > > > > > +	 */
+> > > > > > +	if (sc->pwrsts == PWRSTS_RET_ON)
+> > > > > > +		return 0;
+> > > > > > +
+> > > > > > 
+> > > > > >    	ret = gdsc_toggle_logic(sc, GDSC_OFF);
+> > > > > >    	if (ret)
+> > > > > >    	
+> > > > > >    		return ret;
+> > > > > > 
+> > > > > > diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> > > > > > index 5de48c9439b2..981a12c8502d 100644
+> > > > > > --- a/drivers/clk/qcom/gdsc.h
+> > > > > > +++ b/drivers/clk/qcom/gdsc.h
+> > > > > > @@ -49,6 +49,11 @@ struct gdsc {
+> > > > > > 
+> > > > > >    	const u8			pwrsts;
+> > > > > >    /* Powerdomain allowable state bitfields */
+> > > > > >    #define PWRSTS_OFF		BIT(0)
+> > > > > > 
+> > > > > > +/*
+> > > > > > + * There is no SW control to transition a GDSC into
+> > > > > > + * PWRSTS_RET. This happens in HW when the parent
+> > > > > > + * domain goes down to a low power state
+> > > > > > + */
+> > > > > > 
+> > > > > >    #define PWRSTS_RET		BIT(1)
+> > > > > >    #define PWRSTS_ON		BIT(2)
+> > > > > >    #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
+> > 
+> > 
+> > 
+> > 
 
->>=20
->>>
->>>>> But every SOC is different, so it makes more sense to set it
->>>>> outside. The VID PLL is a fixed value for all current SoCs.
->>>>>
->>>>>> Best regards,
->>>>>> Martin
->>>>>>
->>>>
->>=20
-
+-- 
+மணிவண்ணன் சதாசிவம்
