@@ -2,189 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855AA6DDEF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D34F6DDEF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjDKPHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S229747AbjDKPIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjDKPHi (ORCPT
+        with ESMTP id S229490AbjDKPIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:07:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7925278;
-        Tue, 11 Apr 2023 08:07:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81D7B6282F;
-        Tue, 11 Apr 2023 15:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C16C433EF;
-        Tue, 11 Apr 2023 15:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681225638;
-        bh=sZyOp9FyHjFY8Ijg56XZndRZkaDLI3AILJspX6fqzyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=faSha008mhaP7F6Mb6PjpHGM8UWH6bJuVHhtAaUybY1IhSeqSDKwk3Xkl01Hf6wgq
-         vtHVzTLvioS4dReDgA0w8F21rX3+s+KfJiPan+Y1ABiR/KYdfaX60GwQyd3DZ0RrfN
-         nH45POKQrFDpdS7deCs4xmnqrYnS9fHzvJ3jpJYcbNbI6OseG4pUlgskvhFBzCldTv
-         UwgyDWlC8onNuaXfWQ2Nv3MPknICoLOtVUM1iDWWzX7oy/Zp3zm6C3CyyLF5gsOVAE
-         nocFI4Ul9FXxGMGoh/4r4BOHNnGMzGIIDqYgPmzigBwpxoiOjCBVb8eDfe6dJ7wlTN
-         wbMzsf3CBFGZA==
-Date:   Tue, 11 Apr 2023 17:07:12 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3][RESEND] fs: add infrastructure for opportunistic
- high-res ctime/mtime updates
-Message-ID: <20230411-unwesen-prunk-cb7de3cc6cc8@brauner>
-References: <20230411143702.64495-1-jlayton@kernel.org>
- <20230411143702.64495-2-jlayton@kernel.org>
+        Tue, 11 Apr 2023 11:08:14 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7280049FD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:07:46 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54c17fa9ae8so262608787b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681225665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9PSuQdFw67OdfJka21SpX+ck/dMbcmU+4LZ8fmiBHQY=;
+        b=f60hJyL0f50g0ycAuZcH5/F0BREXbNOfNXKc3bOf4hufb3VBWanzUEgIkp0mimVyf1
+         TLAoNGyqU9ezk8CtSOf9AesYomBYuxfI6V+0fjiOPuewCgjyg3xDBPhix/iB0Z/umb3k
+         cGNelsXYX5ejumj92gc4hHB172XyYdPyHVASkKFV14+b27sz4fWRwbnFV/1SfmimdXkO
+         dLP7W/mRmgdFOreswUAmCT6n8+uFRbAUgBMt/1QpDEm3zJ4+dDWXGs6onsddziPTRHJC
+         rdI8XFxmiuXOPZzuMw5kkW4EpwbvLSs3ROhH1zOLCZbSx769c08uM0fHVxyXGIxZQEnD
+         Ff8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681225665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9PSuQdFw67OdfJka21SpX+ck/dMbcmU+4LZ8fmiBHQY=;
+        b=ElsjlCB2/pkk1cmqE+B7410OHXAYYMymdF1re/UlCm3fyydYlFDIsSJuFqoxmgI4Qe
+         DNrl80OaKLcjkBP+pbo+ObNqox4tUcZQdrbbUQkaWAmQI3cKtDzgt8WAfv4b2aMB0t8Q
+         1QJA9qkb+jLdf5m6RQ3mNko99HG7PlNpMJ1kiLXrQb5FNU49oD38vL8RrFflj38to0ev
+         NjBglh8XtjOslSCd/Py2zvKWIZfu+KPAlCAEkAkzAVh1EfCjrV84WNq5aN+Jc96ZwglF
+         aL+YyLtMPOQJAi/0a8N3uqvK4pNGUKS/6koDMPXjP+I/5AqxGBzXAuq9D4qkbbMZIQV9
+         JLyg==
+X-Gm-Message-State: AAQBX9dJhw2oqPti34pWFuDgyMgQoQflIt4D3rXgCfQTpb2hKrHhbmLi
+        uSAzaEL2YKVewkBqBGOx1kdM/Q98LN5QtTZwe8guVg==
+X-Google-Smtp-Source: AKy350Y6K0kJlfIed6W39qBzz38TW3EONSttk7PSDtQjhPb1wAjOu/SDALBFlpcxs4YTfJERKF0xgSDJ/ZFPi2060MM=
+X-Received: by 2002:a81:ad5e:0:b0:541:8c77:93b1 with SMTP id
+ l30-20020a81ad5e000000b005418c7793b1mr7886674ywk.8.1681225664692; Tue, 11 Apr
+ 2023 08:07:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230411143702.64495-2-jlayton@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-3-joychakr@google.com>
+ <ZDVQGu/gBPTNbQPU@smile.fi.intel.com> <CAOSNQF0R7p7kW04w0nKF2egv1+8NrMhSXpggunYhjQnA+v-qMQ@mail.gmail.com>
+In-Reply-To: <CAOSNQF0R7p7kW04w0nKF2egv1+8NrMhSXpggunYhjQnA+v-qMQ@mail.gmail.com>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Tue, 11 Apr 2023 20:37:33 +0530
+Message-ID: <CAOSNQF2zg5ymTfZWWbFLAgvKdcxRcggAjGt+Zy+qUzrR5=MERw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] spi: dw: Add dma controller capability checks
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:37:00AM -0400, Jeff Layton wrote:
-> The VFS always uses coarse-grained timestamp updates for filling out the
-> ctime and mtime after a change. This has the benefit of allowing
-> filesystems to optimize away metadata updates.
-> 
-> Unfortunately, this has always been an issue when we're exporting via
-> NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
-> lot of exported filesystems don't properly support a change attribute
-> and are subject to the same problem of timestamp granularity. Other
-> applications have similar issues (e.g backup applications).
-> 
-> Switching to always using high resolution timestamps would improve the
-> situation for NFS, but that becomes rather expensive, as we'd have to
-> log a lot more metadata updates.
-> 
-> This patch grabs a new i_state bit to use as a flag that filesystems can
-> set in their getattr routine to indicate that the mtime or ctime was
-> queried since it was last updated.
-> 
-> It then adds a new current_cmtime function that acts like the
-> current_time helper, but will conditionally grab high-res timestamps
-> when the i_state flag is set in the inode.
-> 
-> This allows NFS and other applications to reap the benefits of high-res
-> ctime and mtime timestamps, but at a substantially lower cost than
-> fetching them every time.
-> 
-> Cc: Dave Chinner <david@fromorbit.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/inode.c         | 40 ++++++++++++++++++++++++++++++++++++++--
->  fs/stat.c          | 10 ++++++++++
->  include/linux/fs.h |  5 ++++-
->  3 files changed, 52 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 4558dc2f1355..3630f67fd042 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -2062,6 +2062,42 @@ static int __file_update_time(struct file *file, struct timespec64 *now,
->  	return ret;
->  }
->  
-> +/**
-> + * current_cmtime - Return FS time (possibly high-res)
-> + * @inode: inode.
-> + *
-> + * Return the current time truncated to the time granularity supported by
-> + * the fs, as suitable for a ctime or mtime change. If something recently
-> + * fetched the ctime or mtime out of the inode via getattr, then get a
-> + * high-resolution timestamp.
-> + *
-> + * Note that inode and inode->sb cannot be NULL.
-> + * Otherwise, the function warns and returns coarse time without truncation.
-> + */
-> +struct timespec64 current_cmtime(struct inode *inode)
-> +{
-> +	struct timespec64 now;
-> +
-> +	if (unlikely(!inode->i_sb)) {
-> +		WARN(1, "%s() called with uninitialized super_block in the inode", __func__);
+Sorry I think the emails crossed.
 
-How would this happen? Seems weird to even bother checking this.
+So as per the discussion, are these the possible changes:
+1> Move "dw_spi_dma_convert_width" to avoid forward declaration .
+2> Update the commit text to include more explanation.
+3> Divide this into 2 patches?
 
-> +		ktime_get_coarse_real_ts64(&now);
-> +		return now;
-> +	}
-> +
-> +	/* Do a lockless check for the flag before taking the spinlock */
-> +	if (READ_ONCE(inode->i_state) & I_CMTIME_QUERIED) {
-> +		ktime_get_real_ts64(&now);
-> +		spin_lock(&inode->i_lock);
-> +		inode->i_state &= ~I_CMTIME_QUERIED;
-> +		spin_unlock(&inode->i_lock);
-> +	} else {
-> +		ktime_get_coarse_real_ts64(&now);
-> +	}
-> +
-> +	return timestamp_truncate(now, inode);
-> +}
-> +EXPORT_SYMBOL(current_cmtime);
-> +
->  /**
->   * file_update_time - update mtime and ctime time
->   * @file: file accessed
-> @@ -2080,7 +2116,7 @@ int file_update_time(struct file *file)
->  {
->  	int ret;
->  	struct inode *inode = file_inode(file);
-> -	struct timespec64 now = current_time(inode);
-> +	struct timespec64 now = current_cmtime(inode);
->  
->  	ret = inode_needs_update_time(inode, &now);
->  	if (ret <= 0)
-> @@ -2109,7 +2145,7 @@ static int file_modified_flags(struct file *file, int flags)
->  {
->  	int ret;
->  	struct inode *inode = file_inode(file);
-> -	struct timespec64 now = current_time(inode);
-> +	struct timespec64 now = current_cmtime(inode);
->  
->  	/*
->  	 * Clear the security bits if the process is not being run by root.
-> diff --git a/fs/stat.c b/fs/stat.c
-> index 7c238da22ef0..d8b80a2e36b7 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -64,6 +64,16 @@ void generic_fillattr(struct mnt_idmap *idmap, struct inode *inode,
->  }
->  EXPORT_SYMBOL(generic_fillattr);
->  
-> +void fill_cmtime_and_mark(struct inode *inode, struct kstat *stat)
-> +{
-> +	spin_lock(&inode->i_lock);
-> +	inode->i_state |= I_CMTIME_QUERIED;
-> +	stat->ctime = inode->i_ctime;
-> +	stat->mtime = inode->i_mtime;
-> +	spin_unlock(&inode->i_lock);
-> +}
-> +EXPORT_SYMBOL(fill_cmtime_and_mark);
+Thanks
+Joy
 
-So that means that each stat call would mark an inode for a
-high-resolution update. There's some performance concerns here. Calling
-stat() is super common and it would potentially make the next iop more
-expensive. Recursively changing ownership in the container use-case come
-to mind which are already expensive.
+Joy
+
+On Tue, Apr 11, 2023 at 8:30=E2=80=AFPM Joy Chakraborty <joychakr@google.co=
+m> wrote:
+>
+> Hello Andy,
+>
+> On Tue, Apr 11, 2023 at 5:48=E2=80=AFPM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 06:34:50AM +0000, Joy Chakraborty wrote:
+> > > Check capabilities of DMA controller during init to make sure it is
+> > > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
+> > > and store addr_width capabilities to check per transfer to make sure =
+the
+> > > bits/word requirement can be met for that transfer.
+> >
+> > ...
+> >
+> > > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
+> >
+> > Can we avoid forward declarations please?
+>
+> We can, but for that I would have to move this api somewhere else in
+> the file is that acceptable?
+>
+> >
+> > ...
+> >
+> > > +     if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
+> > > +           rx.directions & BIT(DMA_DEV_TO_MEM)))
+> > > +             return -ENXIO;
+> >
+> > What about simplex transfers where we only care about sending or receiv=
+ing data
+> > and using dummy data for the other channel? Doesn't this make a regress=
+ion for
+> > that types of transfers? (Or, if we don't support such, this should be =
+explained
+> > in the commit message at least.)
+> >
+>
+> Yes we can have simplex transfers for TX only, but for RX only there
+> is dummy data added by the SPI core as the dw-core driver adds
+> "SPI_CONTROLLER_MUST_TX".
+>
+> But transfers aside, as per the current driver design the dw dma
+> driver needs both valid tx and rx channels to exist and be functional
+> as per implementation of api "dw_spi_dma_init_generic" :
+> ...
+> dws->rxchan =3D dma_request_chan(dev, "rx");
+> if (IS_ERR(dws->rxchan)) {
+> ret =3D PTR_ERR(dws->rxchan);
+> dws->rxchan =3D NULL;
+> goto err_exit;
+> }
+>
+> dws->txchan =3D dma_request_chan(dev, "tx");
+> if (IS_ERR(dws->txchan)) {
+> ret =3D PTR_ERR(dws->txchan);
+> dws->txchan =3D NULL;
+> goto free_rxchan;
+> }
+> ...
+>
+> Hence in terms of capability check we should check for directional
+> capability of both TX and RX is what I understand.
+> Please let me know if you think otherwise.
+>
+> > ...
+> >
+> > > +     /*
+> > > +      * Assuming both channels belong to the same DMA controller hen=
+ce the
+> > > +      * address width capabilities most likely would be the same.
+> > > +      */
+> > > +     dws->dma_addr_widths =3D tx.dst_addr_widths & rx.src_addr_width=
+s;
+> >
+> > I don't think so this is correct.
+> >
+> > Theoretically it's possible to have simplex transfers on which the one =
+of
+> > the channel is simply ignored / not used. See above.
+> >
+>
+> Yes, it is possible to have tx only transfers which would still be
+> possible to do with this implementation. What we have assumed here is
+> since the tx and rx channel both are a requirement for the dw dma
+> driver to be functional it would most likely have the same address
+> width capability.
+>
+> But we can make this more elaborate by checking it for both tx and rx
+> separately.
+> Something like this
+> ...
+>  dws->tx_dma_addr_widths =3D tx.dst_addr_widths;
+>  dws->rx_dma_addr_widths =3D rx.src_addr_widths;
+> ...
+> ...
+> static bool dw_spi_can_dma(struct spi_controller *master,
+> struct spi_device *spi, struct spi_transfer *xfer)
+> {
+> struct dw_spi *dws =3D spi_controller_get_devdata(master);
+> enum dma_slave_buswidth dma_bus_width;
+>
+> if (xfer->len <=3D dws->fifo_len)
+> return false;
+>
+> dma_bus_width =3D dw_spi_dma_convert_width(dws->n_bytes);
+>
+> if (xfer->rx_buf && !(dws->rx_dma_addr_widths & BIT(dma_bus_width)))
+> return false;
+>
+> return dws->tx_dma_addr_widths & BIT(dma_bus_width);
+> }
+> ...
+>
+> @Serge Semin Please share your thoughts on the same.
+>
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+> >
+> >
+>
+> I shall break this into 2 patches as per Serge(y)'s recommendation and
+> make changes as per replies.
+>
+> Thanks
+> Joy
