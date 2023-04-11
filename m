@@ -2,250 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C806DE5B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F0D6DE5BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDKU00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S229828AbjDKU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDKU0X (ORCPT
+        with ESMTP id S229776AbjDKU05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:26:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8B399;
-        Tue, 11 Apr 2023 13:26:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4B860FA2;
-        Tue, 11 Apr 2023 20:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EF5C433EF;
-        Tue, 11 Apr 2023 20:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681244781;
-        bh=8C08BxU77JUv8mmpWOav5Tsv5cZUhSHIWXcmPnHUWHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=krEFiQ17SNGsWnW5jv659a3Mia7qM1YvhByX3x/EeR+I/IdJvrVib1mxw9DNWNwKJ
-         koK3h09soCbNCudtki19VQr6iv2MAcd6+sGckC743zPV03cvWjraP8aYECfoIJXXXm
-         rErD/xQctp1s4C6QuvB3N3CsoLMRB6M7l201u4KS4vqFj1rol20c8aIsEJ0h/SeMgq
-         7K778arwYp6rspEb2IKldFhh50FObInyk3NZLEmGuQsRGx/IwtKKFQ6s44cj/yLi9u
-         eIdQrvmjLTnm6zzgUSZv6eykez8xKnFZn370nq8GGehk0GwNGFcIqsn2xaBtXHFUK9
-         uzqQHNQlhfbow==
-Date:   Tue, 11 Apr 2023 21:26:16 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/7] soc: starfive: Modify ioremap to regmap
-Message-ID: <20230411-sanctuary-impotent-92964df67a26@spud>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
- <20230411064743.273388-4-changhuang.liang@starfivetech.com>
+        Tue, 11 Apr 2023 16:26:57 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED63B4C31;
+        Tue, 11 Apr 2023 13:26:43 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 33BKQWvN011451;
+        Tue, 11 Apr 2023 22:26:32 +0200
+Date:   Tue, 11 Apr 2023 22:26:32 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Message-ID: <ZDXCeKkbPoZi5k6t@1wt.eu>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+ <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <ZDVXbw/097jvjKvK@1wt.eu>
+ <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
+ <ZDWQXDRknzFhngyk@1wt.eu>
+ <CANiq72n=s23naD4-UkmuLesekDTf4b5bsmWc+fYANYPq+X1R9w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5sQq71yDp6ZVer9U"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230411064743.273388-4-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72n=s23naD4-UkmuLesekDTf4b5bsmWc+fYANYPq+X1R9w@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 09:27:35PM +0200, Miguel Ojeda wrote:
+> On Tue, Apr 11, 2023 at 6:52 PM Willy Tarreau <w@1wt.eu> wrote:
+> >
+> > But if that code is only under a module, there's no need to turn all
+> > that code off if it's sufficient to be certain the module was no loaded.
+> > Plus it's more friendly to the user who doesn't have to rebuild a kernel,
+> > just blacklist a module and check that the kernel doesn't get tainted
+> > again.
+> 
+> That could apply to any foreign-to-us subsystems, including C code
+> too. Should we taint per subsystem so that we can easily check for
+> those that we may not trust?
 
---5sQq71yDp6ZVer9U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't know, maybe that would be a bit too fine. But at least a tainted
+flag is much less intrusive than forcing a user to rebuild and disable
+possibly important features that they would only be willing to disable
+for just a test.
 
-On Mon, Apr 10, 2023 at 11:47:39PM -0700, Changhuang Liang wrote:
-> Modify ioremap to regmap, easy to simplify code.
+> I see one could argue for an experimental taint or making it depend on
+> something like `STAGING`, i.e. based on grounds of being new code.
 
-This doesn't simplify anything, adding regmap to the mix actually makes
-it less obvious what is going on here & it's not even fewer LoC:
-1 file changed, 23 insertions(+), 20 deletions(-)
+It could also be an idea.
 
-Please write a commit message that explains the real motivation for
-this change.
+> But
+> I don't see why that should be grounded on just being a different
+> language or not being able to read the code.
 
-Thanks,
-Conor.
+Because being a different language means some maintainers will always
+have a hard time understanding that code that interacts with their
+subsystems, even if they try hard. It's exactly the same reason why
+25 years ago Linus asked to stop abusing assembly code. If a language
+is only understood by a subset of developers, by nature it becomes
+more difficult to maintain in some areas.
 
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  drivers/soc/starfive/jh71xx_pmu.c | 43 +++++++++++++++++--------------
->  1 file changed, 23 insertions(+), 20 deletions(-)
->=20
-> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh7=
-1xx_pmu.c
-> index 7d5f50d71c0d..306218c83691 100644
-> --- a/drivers/soc/starfive/jh71xx_pmu.c
-> +++ b/drivers/soc/starfive/jh71xx_pmu.c
-> @@ -6,13 +6,13 @@
->   */
-> =20
->  #include <linux/interrupt.h>
-> -#include <linux/io.h>
-> -#include <linux/iopoll.h>
-> +#include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
-> +#include <linux/regmap.h>
->  #include <dt-bindings/power/starfive,jh7110-pmu.h>
-> =20
->  /* register offset */
-> @@ -59,7 +59,7 @@ struct jh71xx_pmu_match_data {
->  struct jh71xx_pmu {
->  	struct device *dev;
->  	const struct jh71xx_pmu_match_data *match_data;
-> -	void __iomem *base;
-> +	struct regmap *base;
->  	struct generic_pm_domain **genpd;
->  	struct genpd_onecell_data genpd_data;
->  	int irq;
-> @@ -75,11 +75,14 @@ struct jh71xx_pmu_dev {
->  static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bo=
-ol *is_on)
->  {
->  	struct jh71xx_pmu *pmu =3D pmd->pmu;
-> +	unsigned int val;
-> =20
->  	if (!mask)
->  		return -EINVAL;
-> =20
-> -	*is_on =3D readl(pmu->base + JH71XX_PMU_CURR_POWER_MODE) & mask;
-> +	regmap_read(pmu->base, JH71XX_PMU_CURR_POWER_MODE, &val);
-> +
-> +	*is_on =3D val & mask;
-> =20
->  	return 0;
->  }
-> @@ -130,7 +133,7 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev=
- *pmd, u32 mask, bool on)
->  		encourage_hi =3D JH71XX_PMU_SW_ENCOURAGE_DIS_HI;
->  	}
-> =20
-> -	writel(mask, pmu->base + mode);
-> +	regmap_write(pmu->base, mode, mask);
-> =20
->  	/*
->  	 * 2.Write SW encourage command sequence to the Software Encourage Reg =
-(offset 0x44)
-> @@ -140,21 +143,21 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_d=
-ev *pmd, u32 mask, bool on)
->  	 *   Then write the lower bits of the command sequence, followed by the=
- upper
->  	 *   bits. The sequence differs between powering on & off a domain.
->  	 */
-> -	writel(JH71XX_PMU_SW_ENCOURAGE_ON, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
-> -	writel(encourage_lo, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
-> -	writel(encourage_hi, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
-> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, JH71XX_PMU_SW_ENCOURAG=
-E_ON);
-> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_lo);
-> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_hi);
-> =20
->  	spin_unlock_irqrestore(&pmu->lock, flags);
-> =20
->  	/* Wait for the power domain bit to be enabled / disabled */
->  	if (on) {
-> -		ret =3D readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MO=
-DE,
-> -						val, val & mask,
-> -						1, JH71XX_PMU_TIMEOUT_US);
-> +		ret =3D regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POW=
-ER_MODE,
-> +						      val, val & mask,
-> +						      1, JH71XX_PMU_TIMEOUT_US);
->  	} else {
-> -		ret =3D readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MO=
-DE,
-> -						val, !(val & mask),
-> -						1, JH71XX_PMU_TIMEOUT_US);
-> +		ret =3D regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POW=
-ER_MODE,
-> +						      val, !(val & mask),
-> +						      1, JH71XX_PMU_TIMEOUT_US);
->  	}
-> =20
->  	if (ret) {
-> @@ -190,14 +193,14 @@ static void jh71xx_pmu_int_enable(struct jh71xx_pmu=
- *pmu, u32 mask, bool enable)
->  	unsigned long flags;
-> =20
->  	spin_lock_irqsave(&pmu->lock, flags);
-> -	val =3D readl(pmu->base + JH71XX_PMU_TIMER_INT_MASK);
-> +	regmap_read(pmu->base, JH71XX_PMU_TIMER_INT_MASK, &val);
-> =20
->  	if (enable)
->  		val &=3D ~mask;
->  	else
->  		val |=3D mask;
-> =20
-> -	writel(val, pmu->base + JH71XX_PMU_TIMER_INT_MASK);
-> +	regmap_write(pmu->base, JH71XX_PMU_TIMER_INT_MASK, val);
->  	spin_unlock_irqrestore(&pmu->lock, flags);
->  }
-> =20
-> @@ -206,7 +209,7 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void=
- *data)
->  	struct jh71xx_pmu *pmu =3D data;
->  	u32 val;
-> =20
-> -	val =3D readl(pmu->base + JH71XX_PMU_INT_STATUS);
-> +	regmap_read(pmu->base, JH71XX_PMU_INT_STATUS, &val);
-> =20
->  	if (val & JH71XX_PMU_INT_SEQ_DONE)
->  		dev_dbg(pmu->dev, "sequence done.\n");
-> @@ -220,8 +223,8 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void=
- *data)
->  		dev_err(pmu->dev, "p-channel fail event.\n");
-> =20
->  	/* clear interrupts */
-> -	writel(val, pmu->base + JH71XX_PMU_INT_STATUS);
-> -	writel(val, pmu->base + JH71XX_PMU_EVENT_STATUS);
-> +	regmap_write(pmu->base, JH71XX_PMU_INT_STATUS, val);
-> +	regmap_write(pmu->base, JH71XX_PMU_EVENT_STATUS, val);
-> =20
->  	return IRQ_HANDLED;
->  }
-> @@ -271,7 +274,7 @@ static int jh71xx_pmu_probe(struct platform_device *p=
-dev)
->  	if (!pmu)
->  		return -ENOMEM;
-> =20
-> -	pmu->base =3D devm_platform_ioremap_resource(pdev, 0);
-> +	pmu->base =3D device_node_to_regmap(np);
->  	if (IS_ERR(pmu->base))
->  		return PTR_ERR(pmu->base);
-> =20
-> --=20
-> 2.25.1
->=20
+> > It could depend on the layer where it plugs and the level of intimacy
+> > with the core. Sometimes you need a deep understanding of all interactions
+> > between elements to imagine possible scenarios.
+> 
+> Please note that the policy for submitting new Rust code is that the
+> respective kernel maintainers and their lists are contacted. We also
+> request that maintainers take the code through their tree if they can,
+> rather than going through the Rust tree, precisely so that maintainers
+> are aware of these potential interactions. See
+> https://rust-for-linux.com/contributing#the-rust-subsystem for
+> details.
 
---5sQq71yDp6ZVer9U
-Content-Type: application/pgp-signature; name="signature.asc"
+Sure, but as you said, "if they can". I thought that it could be both
+elegant, lightweight and convenient. But I'm not trying to sell this
+idea, just sharing it.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDXCaAAKCRB4tDGHoIJi
-0nNUAP9dxn5jSBbjcHeX8s96ct0sLLOaVQ8hzg7DhS1ZgVp1ugD/eC24zDTOc6J5
-dyl/DNgsTEYKRPf8mOQhYWXU+YjniAI=
-=AvFp
------END PGP SIGNATURE-----
-
---5sQq71yDp6ZVer9U--
+Cheers,
+Willy
