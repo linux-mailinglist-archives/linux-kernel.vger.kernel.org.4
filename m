@@ -2,91 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F86DE23D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5CD6DE240
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjDKRQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S229585AbjDKRQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjDKRQA (ORCPT
+        with ESMTP id S229556AbjDKRQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:16:00 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F0F5B9E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:15:51 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F295F1EC063A;
-        Tue, 11 Apr 2023 19:15:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681233350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QChcpsW/a1y2GcGXWZK0Bb5Ly48wnhgUxis8hhbCnZg=;
-        b=fYn2n+9lEmCDg/wqPOa9ss/3WrIClEwx+rx/t38ifVXsia6jpbD6zGlqGidKrcAvLt2rHi
-        d7d7fsPwB73mxC5RWMQqLn8utBOaB17JgIYxHE2RQdyhUms4TfSrQn2Z2DjIP9v3CuvO39
-        BGqGrVZkbFzSc1HZRysdxyOfilGl6RA=
-Date:   Tue, 11 Apr 2023 19:15:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
- software defined MTRRs
-Message-ID: <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-5-jgross@suse.com>
- <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
- <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
- <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
- <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
+        Tue, 11 Apr 2023 13:16:43 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7973D5598;
+        Tue, 11 Apr 2023 10:16:20 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id o1so11366825lfc.2;
+        Tue, 11 Apr 2023 10:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681233379; x=1683825379;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zRtwsRyVIGqbkmiCnDqCsYdQjOk1l7EH31DIMvx2aYo=;
+        b=QN4AgX1vG6TwvXQ6XOCqMVOZuOC4Ru5G1vKdR5L6LPPsHkM3tGW+XPrXX09zkc6j2S
+         +xPSm2znuJ8gvEhplWMtooiJusbJB8ZpA6EYHagHeNKic56w9GWMbEhPoRNVAHGOEGnL
+         k0iQXP0rBybo/qdK0qWNDK44bEFMFG4Bwf9NSpCLrM92JxDag+WDEqXV2JjxKhYa64zW
+         fhqxfu4SZFj5CbRY6YGcuuDEDHr+71ucCWLzWEyFdLgRKxLvl3Ez8ttMic61YQcBuV0e
+         EEmuH7oVQ2ZZgRaldisW9NB8vZIy42tZruIrYNdtKnGXjo1u31WFxV5gKncgZP8Ne9Bs
+         sA4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681233379; x=1683825379;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRtwsRyVIGqbkmiCnDqCsYdQjOk1l7EH31DIMvx2aYo=;
+        b=jYnD2W4pgmih8T4R+8T7+Mrf3+2fXkwQ+zOKFAwTjleOWHAyttmdW0sBrHJ+Y9twJA
+         UjZKtZBFSKQ4SOlWZEMEo8wvFw6ruVdGeR3MwoYRft4VAUuR3Vd+r/oAKr1A+YHWDnIx
+         22qE6f6WxQgAzzOfghSen6rWuH7QzqSq45QsPL4O6NOHjUIedAbuWmy9MEwCWfikBLth
+         iqdRp6yRPY8KAdD1WYmpxNpQdl4uRFz6OkJ3ssFOz+m8scbacu+7X5aenSaTvaul/MYR
+         TxUWFKenN30Nh+hAX28UiAhrykHw/mZYemShAwklBIUhtM+P8spSuzVjkJPO8e5U7MAA
+         DHEA==
+X-Gm-Message-State: AAQBX9eiTWPMTtLcRkwrwlSPqvzrKGPfrukf2g0KYavfDcfcsHBFwkzA
+        For1+fcDdndlIGyA9bY0pIA=
+X-Google-Smtp-Source: AKy350aU2RyTu7csMgtptLshnV8XaxjcWlEXI5Nbb6vLFCW/PoKY/nJF++O4isukO/xLPd/Ba3Xn1g==
+X-Received: by 2002:a05:6512:244:b0:4e9:c327:dd81 with SMTP id b4-20020a056512024400b004e9c327dd81mr3582478lfo.63.1681233378577;
+        Tue, 11 Apr 2023 10:16:18 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id x4-20020a19f604000000b004ebae99cc1dsm2614134lfe.159.2023.04.11.10.16.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 10:16:17 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 20:16:15 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 09/10] MAINTAINERS: Add myself as the DW PCIe
+ core reviewer
+Message-ID: <20230411171615.gezxhjcndpkrts2b@mobilestation>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411033928.30397-10-Sergey.Semin@baikalelectronics.ru>
+ <20230411112416.GK5333@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230411112416.GK5333@thinkpad>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 05:57:07PM +0200, Juergen Gross wrote:
-> Short answer: You asked me to add it in V2 of the series.
+On Tue, Apr 11, 2023 at 04:54:16PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Apr 11, 2023 at 06:39:27AM +0300, Serge Semin wrote:
+> > No actions have been spotted from the driver maintainers for almost two
+> > years now. It significantly delays the review process of the relatively
+> > often incoming updates. Since that IP-core has been used in several our
+> > SoCs adding myself to the list of reviewers will help in the evolving the
+> > driver faster and in catching any potential problem as early as possible.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Longer answer: SEV_SNP guests and TDX guests would cause #VE when writing
->   MTRR MSRs.
+> If the Maintainers were not responding for these long years, then it implies
+> that they are not maintaining at all. So I'm inclined to remove their entries
+> too but I'll defer that decision to Lorenzo.
 
-Ah, sorry. Let's extend the comment then and use your original check:
+To be completely honest @Jingoo responded to a few patches with minor
+comments lately meanwhile @Gustavo has been completely silent for
+about two years now.
 
-       /*
-        * Only allowed for special virtualization cases:
-        * - when running as Hyper-V, SEV-SNP guest using vTOM
-        * - when running as Xen PV guest
-        * - when running as SEV-SNP or TSX guest to avoid unnecessary
-	*   VMM communication/Virtualization exceptions (#VC, #VE)
-        */
-	if (!hv_is_isolation_supported() &&
-	    !cpu_feature_enabled(X86_FEATURE_XENPV) &&
-	    !cc_platform_has(CC_ATTR_GUEST_SEV_SNP) &&
-	    !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-		return;
+> 
+> For this patch,
+> 
+> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Thx.
+Thanks.
 
--- 
-Regards/Gruss,
-    Boris.
+-Serge(y)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> - Mani
+> 
+> > ---
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 489fd4b4c7ae..51adcafa0f0c 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -16061,6 +16061,7 @@ F:	drivers/pci/controller/dwc/pci-exynos.c
+> >  PCI DRIVER FOR SYNOPSYS DESIGNWARE
+> >  M:	Jingoo Han <jingoohan1@gmail.com>
+> >  M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+> > +R:	Serge Semin <fancer.lancer@gmail.com>
+> >  L:	linux-pci@vger.kernel.org
+> >  S:	Maintained
+> >  F:	Documentation/devicetree/bindings/pci/snps,dw-pcie*.yaml
+> > -- 
+> > 2.40.0
+> > 
+> > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
