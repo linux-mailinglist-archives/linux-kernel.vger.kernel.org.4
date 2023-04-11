@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504226DDA8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81066DDA91
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjDKMPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S229950AbjDKMQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDKMPn (ORCPT
+        with ESMTP id S229617AbjDKMP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:15:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46623C25
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:15:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a2dcf00b0023efab0e3bfso10674770pjm.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681215341;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jl6l4pmsVIKYsgnNA2+nACABPsEa8mbnnBa/Av4PeQM=;
-        b=xWYHxr5HtfgeiK3Om+VC8yvjGyC1aXQONqcDB4WqO5IRE24MbwxPoFa+tfmj9t0YDU
-         RrXLj21NztqOELflD7ho3wDonXE3pg6fE+vVOxpIR8hsLgRyb2oOi3Ag7G94Tie1511N
-         bCiBez8s9hpAbtKWsorpQgYxNZ4XQzALO03BNe4Md1gOe2bIioqYhvpcdZP2orFTf4F6
-         WcyJb0I95p7zNr3adPihAR9gwQ2hpntSpyfUfIBX/jvxPuiBB67oP1cWBCTdxuGpO/Wn
-         9nuws8n6EgTDePJFaP/DgL1wOLI1uGVeQVE5ACTtPusqeYCN1mz+JlppufZxzwiaG2Wt
-         wsAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681215341;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jl6l4pmsVIKYsgnNA2+nACABPsEa8mbnnBa/Av4PeQM=;
-        b=jHUL84oje3SX+sLK9JolX5Sw/U2oPyDfrpl4TkYBSkDcGqa4RqirddgzL5e9LpLXH9
-         3AGIF0yoPQiUpxn43xP+gDy5vn5kjG/padDnGBkNv9/VEaT65NHngZoHAR5TxDDy/Z6S
-         nABeeanZTPS+UpYg8rhOwYfHxJcOsRy8N1zlgHvmsuXo7f6nITKy3TsZFg/7Vfau71PW
-         dT8hfLMeTc/2HkdnFMnWfr+GRQgpd4gplr2Xdto7cQiC8DtycB80UlV0TI1xvtq9bqVW
-         k3RFM/+95xXe08CjbxSrTRQlrN55K7/wf6uaFEfLhmmqgQPLdtBEHi9NZpZ68FfdFfMJ
-         deTA==
-X-Gm-Message-State: AAQBX9f4GjFeGg7RMSVz0yLJsJHhvVU5FNJdCg9vJv8czGPlsQvGJAse
-        OELy9PVH2DMkVsZPTApUGqvt
-X-Google-Smtp-Source: AKy350Y5ZPEcFroY7YBGQtp21m1/nnED3TktLrG5ktmD6zwCyz7sBUsShfHcjgTxcB3ZMyW2k0fhLA==
-X-Received: by 2002:a17:903:22c9:b0:1a6:3d6d:3157 with SMTP id y9-20020a17090322c900b001a63d6d3157mr8819044plg.62.1681215341176;
-        Tue, 11 Apr 2023 05:15:41 -0700 (PDT)
-Received: from localhost.localdomain ([117.216.120.128])
-        by smtp.gmail.com with ESMTPSA id g24-20020a170902fe1800b0019aa5e0aadesm7238309plj.110.2023.04.11.05.15.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 05:15:40 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lpieralisi@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] Revert "dt-bindings: PCI: qcom: Add iommu-map properties"
-Date:   Tue, 11 Apr 2023 17:45:33 +0530
-Message-Id: <20230411121533.22454-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Apr 2023 08:15:59 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BAA93A91;
+        Tue, 11 Apr 2023 05:15:54 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:43318.1095697603
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 7164810020E;
+        Tue, 11 Apr 2023 20:15:51 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id c863400433aa4172ade34a0a231e4e5e for emil.l.velikov@gmail.com;
+        Tue, 11 Apr 2023 20:15:53 CST
+X-Transaction-ID: c863400433aa4172ade34a0a231e4e5e
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <ee115204-880e-f1c1-a9d3-0ad0875f748e@189.cn>
+Date:   Tue, 11 Apr 2023 20:15:50 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nathan@kernel.org, linux-media@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
+ <20230403171304.2157326-3-suijingfeng@loongson.cn>
+ <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 6ebfa40b63ae65eac20834ef4f45355fc5ef6899.
+Hi,
 
-"iommu-map" property is already documented in commit
-("dt-bindings: PCI: qcom: Add SM8550 compatible") along with the "iommus"
-property.
+On 2023/4/4 22:10, Emil Velikov wrote:
+>> +++ b/drivers/gpu/drm/loongson/lsdc_drv.h
+>> @@ -0,0 +1,324 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2022 Loongson Corporation
+>> + *
+> We're in 2023, update the year across the files?
+>
+OK, it just that we started to upstream this driver since 2022.
+>> +struct lsdc_gem {
+>> +       /* @mutex: protect objects list */
+>> +       struct mutex mutex;
+>> +       struct list_head objects;
+>> +};
+>> +
+>> +struct lsdc_device {
+>> +       struct drm_device base;
+>> +       struct ttm_device bdev;
+>> +
+>> +       /* @descp: features description of the DC variant */
+>> +       const struct lsdc_desc *descp;
+>> +
+>> +       struct pci_dev *gpu;
+>> +
+>> +       /* @reglock: protects concurrent access */
+>> +       spinlock_t reglock;
+>> +       void __iomem *reg_base;
+>> +       resource_size_t vram_base;
+>> +       resource_size_t vram_size;
+>> +
+>> +       resource_size_t gtt_size;
+>> +
+>> +       struct lsdc_display_pipe dispipe[LSDC_NUM_CRTC];
+>> +
+>> +       struct lsdc_gem gem;
+>> +
+> Last time I looked there was no other driver with a list of gem
+> objects (and a mutex) in its device struct. Are you sure we need this?
 
-So let's revert the commit that just added "iommu-map" to avoid
-duplication.
+Sure, this is absolutely necessary.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 2 --
- 1 file changed, 2 deletions(-)
+Without this I can't see how much buffer object has been created.
 
-diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-index 5d236bac99b6..a1318a4ecadf 100644
---- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-@@ -78,8 +78,6 @@ properties:
- 
-   dma-coherent: true
- 
--  iommu-map: true
--
-   interconnects:
-     maxItems: 2
- 
--- 
-2.25.1
+where they are(SYETEM, GTT or VRAM) and how much size it the buffer is.
+
+When sharing buffer with other driver,   cat /sys/kernel/debug/dri/0/bos
+
+can be used to see that the shared buffer is pinned in the GTT.
+
+> Very few drivers use TTM directly and I think you want to use
+> drm_gem_vram_helper or drm_gem_ttm_helper instead.
+
+We love you reviews,  yet...
+
+yet using the TTM is pretty good.
+
+drm_gem_vram_helper is also good for beginners.
+
+We can explicitly specify where to put the bo with TTM,
+
+We also need this to implement the S3 properly.
+
+Thomas also recommend us switch to TTM.
+
+>> +static int ls7a1000_pixpll_param_update(struct lsdc_pll * const this,
+>> +                                       struct lsdc_pll_parms const *pin)
+>> +{
+>> +       void __iomem *reg = this->mmio;
+>> +       unsigned int counter = 0;
+>> +       bool locked;
+>> +       u32 val;
+>> +
+>> +       /* Bypass the software configured PLL, using refclk directly */
+>> +       val = readl(reg + 0x4);
+>> +       val &= ~(1 << 8);
+>> +       writel(val, reg + 0x4);
+>> +
+> There are a lot of magic numbers in this function. Let's define them
+> properly in the header.
+>
+Ok, I  will improve this function at the next version.
+>> +/* Helpers for chip detection */
+>> +bool lsdc_is_ls2k2000(void);
+>> +bool lsdc_is_ls2k1000(void);
+>> +unsigned int loongson_cpu_get_prid(u8 *impl, u8 *rev);
+> Since this revision does pci_devices only, we don't need this detection right?
+
+No, we need it.
+
+In order to get a fine control, we need to know what the host is.
 
