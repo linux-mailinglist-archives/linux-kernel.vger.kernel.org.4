@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446726DE675
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980066DE67B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjDKVda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S229832AbjDKVeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDKVd2 (ORCPT
+        with ESMTP id S229452AbjDKVeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:33:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569F64C2E;
-        Tue, 11 Apr 2023 14:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681248807; x=1712784807;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Qbs/+BT7zaXH0NFJ1Etj/EqbkrZR4YTOBmmPKWBUP3c=;
-  b=C9flPaXtToLgleIzt/nALNSQMxpPFms9FFn3H/OlU78I271HbjrSO+eE
-   /E4wOs2ACux9mLwYbRfll6YAL4eD/+r/NnNBSszsQzH1iRJZc62Tg4FK0
-   R/qimeQ8f3KkHv0EY6sC02DcL7jZehQLNpsQ8Gux7K3ylJvLL6u6Q3C55
-   T3orG6WsElcHXK8MzI43xs26SAynf1et39KDzY//qw6uQTN4Avcrx6KcE
-   VgkKz4ZipXNBEJOQEKjVWh8Mn7GF9QucCKn+pVIuR8nzCBiyMMQEJ6vm7
-   q9sGUeUPCEXlbqFwAs2D1KaigJPX5GZlcAZ7BPmfPrU/Dc1Vsh8qofEWL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="408880800"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="408880800"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 14:33:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="753285746"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="753285746"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Apr 2023 14:33:26 -0700
-Received: from debox1-desk4.lan (unknown [10.209.9.147])
-        by linux.intel.com (Postfix) with ESMTP id A8F65580AFF;
-        Tue, 11 Apr 2023 14:33:25 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     david.e.box@linux.intel.com, ville.syrjala@linux.intel.com,
-        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org
-Cc:     me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: [PATCH V2] PCI: Move VMD ASPM/LTR fix to PCI quirk
-Date:   Tue, 11 Apr 2023 14:33:23 -0700
-Message-Id: <20230411213323.1362300-1-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Apr 2023 17:34:36 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159504228;
+        Tue, 11 Apr 2023 14:34:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pwzd405nrz4xGK;
+        Wed, 12 Apr 2023 07:34:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1681248872;
+        bh=NdF58jLHx4n+4W97Ekl7289ni3p0YZEUJn6YKApCCNA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ferQ/4U4HZViVUp+nilMKGhbvcfbNMFfPb82e33THuNvGjLVRssGo2BvQqL2DHExG
+         61X3e7rp+IiZHwN6rAvVgNqEYOmJKgZZnUbqcy/7ZiSK4l4ZPJxogsEkEBSjW/8Hnl
+         pwp3EeGs3Vn18ZkxVQPtSydcACRaqsDKjWPbA75pwZt21AjfiVukOcTDX4zb3XyeqA
+         OG6N7W6C37pRdL6IImbUxK0Kc6GXBWBSTL6W8KYZo3230eYS3sZ5BcWE3fv//MIkUB
+         5etxLEJdLN2qIVzQqC0XGj86LJRicBWsjnwOqy7yqZPMXM2EMv1ZMFoikkqgqfloiA
+         m0dbmqK9Ytsfg==
+Date:   Wed, 12 Apr 2023 07:34:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the block tree
+Message-ID: <20230412073416.73a8ea1a@canb.auug.org.au>
+In-Reply-To: <20230328104719.65133586@canb.auug.org.au>
+References: <20230327120017.6bb826d7@canb.auug.org.au>
+ <20230327162630.wmxpycxhllt4clpt@treble>
+ <20230328104719.65133586@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/qrK=WyadaQFbKuH9/nY8L+F";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,188 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit f492edb40b54 ("PCI: vmd: Add quirk to configure PCIe ASPM and
-LTR") the VMD driver calls pci_enabled_link_state as a callback from
-pci_bus_walk. Both will acquire the pci_bus_sem lock leading to a lockdep
-warning. Instead of doing the pci_bus_walk, move the fix to quirks.c using
-DECLARE_PCI_FIXUP_FINAL.
+--Sig_/qrK=WyadaQFbKuH9/nY8L+F
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: f492edb40b54 ("PCI: vmd: Add quirk to configure PCIe ASPM and LTR")
-Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
+Hi all,
 
-V2 - Instead of adding a lock flag argument to pci_enabled_link_state, move
-     the fix to quirks.c
+On Tue, 28 Mar 2023 10:47:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Mon, 27 Mar 2023 09:26:30 -0700 Josh Poimboeuf <jpoimboe@kernel.org> w=
+rote:
+> >
+> > On Mon, Mar 27, 2023 at 12:00:17PM +1100, Stephen Rothwell wrote: =20
+> > >=20
+> > > After merging the block tree, today's linux-next build (x86_64
+> > > allnoconfig) produced these warnings:
+> > >=20
+> > > lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundan=
+t UACCESS d
+> > > isable
+> > > lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call t=
+o copy_comp
+> > > at_iovec_from_user.part.0() with UACCESS enabled
+> > > lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_=
+compat_iovec_from_user.part.0() with UACCESS enabled
+> > >=20
+> > > Presumably introduced by commit
+> > >=20
+> > >   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF")=
+   =20
+> >=20
+> > I'm not able to recreate.  What's your compiler version? =20
+>=20
+> $ x86_64-linux-gnu-gcc --version
+> x86_64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0
 
- drivers/pci/controller/vmd.c | 55 +--------------------------
- drivers/pci/quirks.c         | 72 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 73 insertions(+), 54 deletions(-)
+Any progress?
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 990630ec57c6..47fa3e5f2dc5 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -66,22 +66,11 @@ enum vmd_features {
- 	 * interrupt handling.
- 	 */
- 	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
--
--	/*
--	 * Enable ASPM on the PCIE root ports and set the default LTR of the
--	 * storage devices on platforms where these values are not configured by
--	 * BIOS. This is needed for laptops, which require these settings for
--	 * proper power management of the SoC.
--	 */
--	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
- };
- 
--#define VMD_BIOS_PM_QUIRK_LTR	0x1003	/* 3145728 ns */
--
- #define VMD_FEATS_CLIENT	(VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |	\
- 				 VMD_FEAT_HAS_BUS_RESTRICTIONS |	\
--				 VMD_FEAT_OFFSET_FIRST_VECTOR |		\
--				 VMD_FEAT_BIOS_PM_QUIRK)
-+				 VMD_FEAT_OFFSET_FIRST_VECTOR)
- 
- static DEFINE_IDA(vmd_instance_ida);
- 
-@@ -724,46 +713,6 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
- 	vmd_bridge->native_dpc = root_bridge->native_dpc;
- }
- 
--/*
-- * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-- */
--static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
--{
--	unsigned long features = *(unsigned long *)userdata;
--	u16 ltr = VMD_BIOS_PM_QUIRK_LTR;
--	u32 ltr_reg;
--	int pos;
--
--	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
--		return 0;
--
--	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
--
--	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
--	if (!pos)
--		return 0;
--
--	/*
--	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
--	 * so the LTR quirk is not needed.
--	 */
--	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
--	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
--		return 0;
--
--	/*
--	 * Set the default values to the maximum required by the platform to
--	 * allow the deepest power management savings. Write as a DWORD where
--	 * the lower word is the max snoop latency and the upper word is the
--	 * max non-snoop latency.
--	 */
--	ltr_reg = (ltr << 16) | ltr;
--	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
--	pci_info(pdev, "VMD: Default LTR value set by driver\n");
--
--	return 0;
--}
--
- static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- {
- 	struct pci_sysdata *sd = &vmd->sysdata;
-@@ -936,8 +885,6 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 
- 	pci_assign_unassigned_bus_resources(vmd->bus);
- 
--	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, &features);
--
- 	/*
- 	 * VMD root buses are virtual and don't return true on pci_is_pcie()
- 	 * and will fail pcie_bus_configure_settings() early. It can instead be
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 44cab813bf95..2d86623f96e3 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -6023,3 +6023,75 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
- #endif
-+
-+#ifdef CONFIG_VMD
-+/*
-+ * Enable ASPM on the PCIE root ports under VMD and set the default LTR of the
-+ * storage devices on platforms where these values are not configured by BIOS.
-+ * This is needed for laptops, which require these settings for proper power
-+ * management of the SoC.
-+ */
-+#define VMD_DEVICE_LTR	0x1003	/* 3145728 ns */
-+static void quirk_intel_vmd(struct pci_dev *pdev)
-+{
-+	struct pci_dev *parent;
-+	u16 ltr = VMD_DEVICE_LTR;
-+	u32 ltr_reg;
-+	int pos;
-+
-+	/* Check in VMD domain */
-+	if (pci_domain_nr(pdev->bus) < 0x10000)
-+		return;
-+
-+	/* Get Root Port */
-+	parent = pci_upstream_bridge(pdev);
-+	if (!parent || parent->vendor != PCI_VENDOR_ID_INTEL)
-+		return;
-+
-+	/* Get VMD Host Bridge */
-+	parent = to_pci_dev(parent->dev.parent);
-+	if (!parent)
-+		return;
-+
-+	/* Get RAID controller */
-+	parent = to_pci_dev(parent->dev.parent);
-+	if (!parent)
-+		return;
-+
-+	switch (parent->device) {
-+	case 0x467f:
-+	case 0x4c3d:
-+	case 0xa77f:
-+	case 0x7d0b:
-+	case 0xad0b:
-+	case 0x9a0b:
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-+
-+	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-+	if (!pos)
-+		return;
-+
-+	/* Skip if the max snoop LTR is non-zero, indicating BIOS has set it */
-+	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
-+	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
-+		return;
-+
-+	/*
-+	 * Set the LTR values to the maximum required by the platform to
-+	 * allow the deepest power management savings. Write as a DWORD where
-+	 * the lower word is the max snoop latency and the upper word is the
-+	 * max non-snoop latency.
-+	 */
-+	ltr_reg = (ltr << 16) | ltr;
-+	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
-+	pci_info(pdev, "LTR set by VMD PCI quick\n");
-+
-+}
-+DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_ANY_ID, PCI_ANY_ID,
-+			      PCI_CLASS_STORAGE_EXPRESS, 0, quirk_intel_vmd);
-+#endif
--- 
-2.34.1
+--Sig_/qrK=WyadaQFbKuH9/nY8L+F
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ10lgACgkQAVBC80lX
+0GyxTgf/S/DpX0i3xcxkRMLHaD9vn/nsWzi1FcbKT6J2tHPbSw32j+gyNzNpjWcf
+uvJZV3kPoWEQf3Xu+awn06dfk2vXLdaAvc1zAIK98Qk9K8dPFzpBUEfB2ZUA8+Du
+d0lqUrR/xa+IYhFVWoWA64isNi/jK3uU/IgVq2FkuAlT7rd722sLS618NLyCQIsv
+ntKvTN2luABb5nlhd/BFGqJ1KBldqc/KK/Jr7awrp/91Y7Tj10GcfJFOXrxTjtgd
+MB5P8b5/SkoQhJrqmZKjoekgTluKmyavv/SpAuWEBvduVqlLztKrvX2ikl0JLT7+
+e2FdLGYj55d2aYdOM+/rZ+SgWGdunQ==
+=VA7W
+-----END PGP SIGNATURE-----
+
+--Sig_/qrK=WyadaQFbKuH9/nY8L+F--
