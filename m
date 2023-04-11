@@ -2,140 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7403E6DDDA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245116DDDAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDKOWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S229626AbjDKOXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjDKOWO (ORCPT
+        with ESMTP id S229581AbjDKOX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:22:14 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D7569E;
-        Tue, 11 Apr 2023 07:22:14 -0700 (PDT)
-Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 470262174E58;
-        Tue, 11 Apr 2023 07:22:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 470262174E58
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681222933;
-        bh=9f8MMAF+5nW8ggEdvvifzFTTUP6zaiECoccXN8eh5Uo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Poj+4wi3KaDcVfDdah1YnqjfdC5XU/aW78RDB+DFGVCsO8nZAtr+cQTBqc/STdT7o
-         p6dhgtr4zdWAe3CF8yZg6zCPRtbwMcqoiKQd/pXemgBQ8IWM/5QMa+2UyEB9w/ZrMx
-         U+ltYikZ/zAx5XE4zVu5QmN13AVpgMQ1pZtFYrj8=
-Message-ID: <ecd3d8de-859b-e5dd-c3bf-ea9c3c0aac60@linux.microsoft.com>
-Date:   Tue, 11 Apr 2023 16:22:10 +0200
+        Tue, 11 Apr 2023 10:23:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B423A4C0E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:23:25 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=irc.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1pmEtk-0000iH-T0; Tue, 11 Apr 2023 16:23:05 +0200
+Message-ID: <b394b456540943b1022a7b093bf369924fca0566.camel@pengutronix.de>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: imx8mq-usb: add phy tuning
+ properties
+From:   Johannes Zink <j.zink@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        vkoul@kernel.org, kishon@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jun.li@nxp.com,
+        haibo.chen@nxp.com, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Date:   Tue, 11 Apr 2023 16:22:37 +0200
+In-Reply-To: <95b4afd4-c93e-628b-fd22-6fcbc1d1234e@linaro.org>
+References: <20230405112118.1256151-1-j.zink@pengutronix.de>
+         <20230405112118.1256151-2-j.zink@pengutronix.de>
+         <5398cbe0-c681-5dd7-0b3e-3a586cc4915f@linaro.org>
+         <3f7257ee36dc44f162a87281c8279fd5bad91dea.camel@pengutronix.de>
+         <95b4afd4-c93e-628b-fd22-6fcbc1d1234e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1+deb11u1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com>
- <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
- <ZDSa9Bbqvh0btgQo@google.com>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <ZDSa9Bbqvh0btgQo@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: j.zink@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/2023 1:25 AM, Sean Christopherson wrote:
-> On Wed, Apr 05, 2023, Jeremi Piotrowski wrote:
->> On 3/7/2023 6:36 PM, Sean Christopherson wrote:
->>> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
->>> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
->>> doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
->>> happens to get lucky and not run afoul of the underlying bugs.  The revert appears
->>> to be reasonably straightforward (see bottom).
->>
->> Hi Sean,
->>
->> I'm back, and I don't have good news. The fix for the missing hyperv TLB flushes has
->> landed in Linus' tree and I now had the chance to test things outside Azure, in WSL on my
->> AMD laptop.
->>
->> There is some seriously weird interaction going on between TDP MMU and Hyper-V, with
->> or without enlightened TLB. My laptop has 16 vCPUs, so the WSL VM also has 16 vCPUs.
->> I have hardcoded the kernel to disable enlightened TLB (so we know that is not interfering).
->> I'm running a Flatcar Linux VM inside the WSL VM using legacy BIOS, a single CPU
->> and 4GB of RAM.
->>
->> If I run with `kvm.tdp_mmu=0`, I can boot and shutdown my VM consistently in 20 seconds.
->>
->> If I run with TDP MMU, the VM boot stalls for seconds at a time in various spots
->> (loading grub, decompressing kernel, during kernel boot), the boot output feels like
->> it's happening in slow motion. The fastest I see it finish the same cycle is 2 minutes,
->> I have also seen it take 4 minutes, sometimes even not finish at all. Same everything,
->> the only difference is the value of `kvm.tdp_mmu`.
+Hi Krzystof,
+
+thank you for your explanations. As I'm still quite new to writing
+bindings, I still have some questions:
+
+On Fri, 2023-04-07 at 11:03 +0200, Krzysztof Kozlowski wrote:
+> On 05/04/2023 14:14, Johannes Zink wrote:
+> > Hi Krysztof,
+> > 
+> > thanks for your review, please find my questions below.
+> > 
+> > On Wed, 2023-04-05 at 13:51 +0200, Krzysztof Kozlowski wrote:
+> > > [snip]
+> > > >        A phandle to the regulator for USB VBUS.
+> > > >  
+> > > > +  fsl,phy-tx-vref-tune:
+> > > > +    description:
+> > > > +      HS DC Voltage level adjustment
+> > > 
+> > > "Level" in what units?
+> > > 
+> > 
+> > The datasheet just shows percent, ranging from -6 to +24%, in 2%
+> > increments. What unit would you suggest?
 > 
-> When a stall occurs, can you tell where the time is lost?  E.g. is the CPU stuck
-> in L0, L1, or L2?  L2 being a single vCPU rules out quite a few scenarios, e.g.
-> lock contention and whatnot.
+> percent
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
 
-It shows up as around 90% L2 time, 10% L1 time. I don't have great visibility into L0 time
-right now, I'm trying to find someone who might be able to help with that.
+I am still a bit confused how to use this properly. How can I restrict
+the values to multiples of 2 in order to avoid illegal values?
 
-> 
-> If you can run perf in WSL, that might be the easiest way to suss out what's going
-> on.
+At the moment the only thing I could come up with is something like
 
-I can run perf, what trace would help?
+fsl,phy-tx-vref-tune-percent:                 
+  description: |                              
+    Adjusts the high-speed DC level voltage   
+  $ref: /schemas/types.yaml#/definitions/int32
+  minimum: -6                                 
+  maximum: 24                                 
+  default: 0                                  
 
-> 
->> So I would like to revisit disabling tdp_mmu on hyperv altogether for the time being but it
->> should probably be with the following condition:
->>
->>   tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && !hypervisor_is_type(X86_HYPER_MS_HYPERV)
->>
->> Do you have an environment where you would be able to reproduce this? A Windows server perhaps
->> or an AMD laptop?
-> 
-> Hrm, not easily, no.  Can you try two things?
-> 
->   1. Linus' tree on Intel hardware
-This shows the same problematic behavior (tested commit 0d3eb744aed40ffce820cded61d7eac515199165).
+Does something like this work? I am not quite sure if I am on the right
+track here, especially as this requires a signed int, of which I have
+not seen many examples so far.
 
->   2. kvm-x86/next[*] on Intel hardware
-
-Same here (tested kvm-x86-next-2023.04.10)
+Also, as far as the description is concerned: This is almost the entire
+information I there is in the datasheet. As I try to upstream some of
+the vendor downstream patches, I do not have any additional
+information.
 
 > 
-> Don't bother with #2 if #1 (Linus' tree) does NOT suffer the same stalls as AMD.
-> #2 is interesting iff Intel is also affected as kvm-x86/next has an optimization
-> for CR0.WP toggling, which was the achilles heel of the TDP MMU.  If Intel isn't
-> affected, then something other than CR0.WP is to blame.
+> > 
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+> > > > 15,
+> > > > 16]
+> > > > +
+> > > > +  fsl,phy-tx-rise-tune:
+> > > > +    description:
+> > > > +      HS Transmitter Rise/Fall Time Adjustment
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    enum: [0, 1, 2, 3]
+> > > > +
+> > > > +  fsl,phy-tx-preemp-amp-tune:
+> > > > +    description:
+> > > > +      HS Transmitter Pre-Emphasis Current Control
+> > > 
+> > > If this is current then use standard unit suffixes.
+> > 
+> > According to the datasheet this is in "unit amonts" of 600uA,
+> > basically
+> > 0x600uA, 1x600uA etc. Should I just suffix it with uA then?
 > 
-> I fully expect both experiments to show the same behavior as AMD, but if for some
-> reason they don't, the results should help narrow the search.
+> Yes
+>  
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+> 
+> The register values can work sometimes fine but also do not scale at
+> all. For any other variant all the meanings will differ. Any other
+> IMX8
+> phy will need new bindings and new description/values for your
+> register-like-fields.
 
-The results are the same for both branches, and it does look like this affects AMD and
-Intel equally.
+I think this particular property should work, probably its something
+like
 
-So seeing as this will likely take a while to figure out (and I know I won't be able to
-spend too many cycles on this in the next few weeks), what do you think of a patch to
-disable tdp_mmu in this configuration (for the time being?).
+fsl,phy-tx-preemp-amp-tune-microamps:                                 
+  description: |                                                      
+    Transmitter Pre-Emphasis Current Control                          
+    Controls the amount of current sourced to DPn and DMn after a J-to-
+K or K-to-J transition.                                                
+  $ref: /schemas/types.yaml#/definitions/uint32                       
+  minimum: 0                                                          
+  maximum: 1800                                                       
+  default: 0                                                          
 
-Something else I've been wondering: in a KVM-on-KVM setup, is tdp_mmu used in both L0
-and L1 hypervisors right now?
+What's the right way to communicate that the value is in multiples of
+600uA and that this is only an approximate Value? Add some free-text to
+the description?
+
+
+For some other properties, such as fsl,phy-pcs-tx-swing-full or
+fsl,phy-pcs-tx-deemph-3p5db the datasheet provides no information at
+all, neither on the unit nor on a valid range. What is the proper way
+for something like them (I try to get some of the freescale downstream
+patches to mainline, but they did not even provide bindings for their
+driver...)
+
+
+For fsl,phy-comp-dis-tune-percent, the actual values to not map well to
+integer amount of percent, but I have not found a permill in property-
+units. Also, as the steps appear quite arbitrary large, what is the
+correct way of restricting the values to valid values that the hardware
+can actually support? As reference, I have only seen stuff like the
+st,trim-hs-current in Documentation/devicetree/bindings/phy/phy-stm32-
+usbphyc.yaml so far...
+
+Thanks for helping me and best regards
+Johannes
+
 
 > 
-> [*] https://github.com/kvm-x86/linux/tree/next
+> Best regards,
+> Krzysztof
+> 
+> 
+> 
+
+-- 
+Pengutronix e.K.                | Johannes Zink                  |
+Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
 
