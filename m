@@ -2,167 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8B46DDC83
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294A86DDC84
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjDKNpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S230252AbjDKNpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjDKNpQ (ORCPT
+        with ESMTP id S229848AbjDKNpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:45:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E6BBB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681220668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7LHoWentTrJwKTS60Ole0svRMERDtF/mH3xPr83oEY=;
-        b=GdyBSmMCfa7eyh/V8pksMUS08FwMoPf7JtJwrmURNYgWrIut+rCkCuyC95a7GnN+kKyK5B
-        adKUWS+0R2Bc76j81zTOEoI/I13igpcVGaB1mSH1UcjRH6EHPK6TPysGOYW8xhqq9eFwVQ
-        eKP7vswfaWX2lDVOozsk7uUMM6JCXTI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-DyOtc7AvO5euJA7Tsi1L-w-1; Tue, 11 Apr 2023 09:44:23 -0400
-X-MC-Unique: DyOtc7AvO5euJA7Tsi1L-w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AC548067FA;
-        Tue, 11 Apr 2023 13:44:23 +0000 (UTC)
-Received: from [10.22.33.155] (unknown [10.22.33.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EAB1247CD0;
-        Tue, 11 Apr 2023 13:44:22 +0000 (UTC)
-Message-ID: <5a3d4bed-e59c-5728-ce92-c97c905cb0c8@redhat.com>
-Date:   Tue, 11 Apr 2023 09:44:22 -0400
+        Tue, 11 Apr 2023 09:45:17 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E741B10C3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:45:14 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id d7so21560063lfj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681220713;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i8j4IUlVj3riTiWQmjJ2d73DxaHhOYBTiZKwAU5TtVk=;
+        b=Nmxt/npRMsGRl91Njy5uOxNJ5ZRJhRyCTrLxKD/Im/NDTaIgtmneBfPNbAruinun7N
+         3xxyphT+PJ3k1wYimkETsSUmNMrA0nkqltYApc7EPmzqLqKmimOf3dDLFlTM4R7PT4fu
+         JwYNREFqbZPPnfJlXWHla/k3hr1P9Dd98fOJpXLHwGlp/f6k42UgDXZzPyVcAPCswcWC
+         e6LAjm9WFUKcS1GHS3AM9u2vteWpjLxasAlp4WhwJSeGA/5BFkp8BWklwpXInYHZRTxF
+         lQfp2paWZX3THOc3prZdCfhTi3oWEwv6UR8hcziugtLy+siHknPG5CddfAhl364umhVU
+         xadA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681220713;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8j4IUlVj3riTiWQmjJ2d73DxaHhOYBTiZKwAU5TtVk=;
+        b=n2IgrH6ahk3eqcQWDKhtZsMyqSK3PXpAFWtW3UvkO8YNC7bxXDB3wGKxWskGKkx+f3
+         xDTwIfOkVoh+PWBv3mGETs8KJlW+BNYnTFK/skSpuNXG5dpWdr0EyM+ztMmbE6TBhuki
+         7cK/kGz2aK9dVHch+t+PjyV6shG3yd+/1u9zj2Z+2c+kgfbRIV19fBMaAdQXELmr4zr+
+         bK+CazwRi3aiEFpzQNPpCjXdhrECgviZpuTJmY/iOCkElHnRTqXRk3VQ5EXL95Hh12TC
+         FfIX4ahVfwYik38h/4lqrfI3PaVpLU6lOwPeYSBhcWN2myki+2/Lz7mNkNPPcreYmkeO
+         GwxA==
+X-Gm-Message-State: AAQBX9dMaO3UWJnvK5LQ4lBmUN2n3Sj1EEWA9dSt0TvP5QnNX0oEJmH6
+        t4ylUwrrEtMs3UPwdKLoLoItog==
+X-Google-Smtp-Source: AKy350adz8ggqqAG288YMHm5u14GdIex1vPv1WF39fLVqGlUbAg65w3Uv4Sc4D2fh9YQ6CmM4Vqpfw==
+X-Received: by 2002:a05:6512:11ef:b0:4db:3847:12f0 with SMTP id p15-20020a05651211ef00b004db384712f0mr3366560lfs.50.1681220713146;
+        Tue, 11 Apr 2023 06:45:13 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id r6-20020a056512102600b004e843d6244csm2569541lfr.99.2023.04.11.06.45.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 06:45:12 -0700 (PDT)
+Message-ID: <6406469d-289b-af4e-83f8-8259f5dcaf00@linaro.org>
+Date:   Tue, 11 Apr 2023 15:45:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] perf/arm-dmc620: Reverse locking order in
- dmc620_pmu_get_irq()
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,gcc-sc7180: document CX
+ power domain
 Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tuanphan@os.amperecomputing.com, robin.murphy@arm.com,
-        suzuki.poulose@arm.com
-References: <20230405172842.2663770-1-longman@redhat.com>
- <20230411123823.GA22686@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230411123823.GA22686@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
+ <20230408134820.76050-2-krzysztof.kozlowski@linaro.org>
+ <4757c33c-7e71-262d-a51a-c5f9fb53ff41@linaro.org>
+ <d4a8054c-443e-d9ba-9641-ff721254d254@quicinc.com>
+ <c70c1a4d-50c5-2b50-18c9-7c46c3803cd4@linaro.org>
+ <2f9f9cdd-cfbe-ca22-7308-d6b1f0c1c455@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <2f9f9cdd-cfbe-ca22-7308-d6b1f0c1c455@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 08:38, Will Deacon wrote:
-> Hi Waiman,
->
-> [+Tuan Phan, Robin and Suzuki]
->
-> On Wed, Apr 05, 2023 at 01:28:42PM -0400, Waiman Long wrote:
->> The following circular locking dependency was reported when running
->> cpus online/offline test on an arm64 system.
->>
->> [   84.195923] Chain exists of:
->>                   dmc620_pmu_irqs_lock --> cpu_hotplug_lock --> cpuhp_state-down
->>
->> [   84.207305]  Possible unsafe locking scenario:
->>
->> [   84.213212]        CPU0                    CPU1
->> [   84.217729]        ----                    ----
->> [   84.222247]   lock(cpuhp_state-down);
->> [   84.225899]                                lock(cpu_hotplug_lock);
->> [   84.232068]                                lock(cpuhp_state-down);
->> [   84.238237]   lock(dmc620_pmu_irqs_lock);
->> [   84.242236]
->>                  *** DEADLOCK ***
->>
->> The problematic locking order seems to be
->>
->> 	lock(dmc620_pmu_irqs_lock) --> lock(cpu_hotplug_lock)
->>
->> This locking order happens when dmc620_pmu_get_irq() is called from
->> dmc620_pmu_device_probe(). Fix this possible deadlock scenario by
->> reversing the locking order.
->>
->> Also export __cpuhp_state_add_instance_cpuslocked() so that it can be
->> accessed by kernel modules.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   drivers/perf/arm_dmc620_pmu.c | 4 +++-
->>   kernel/cpu.c                  | 1 +
->>   2 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
->> index 54aa4658fb36..78d3bfbe96a6 100644
->> --- a/drivers/perf/arm_dmc620_pmu.c
->> +++ b/drivers/perf/arm_dmc620_pmu.c
->> @@ -425,7 +425,7 @@ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
->>   	if (ret)
->>   		goto out_free_irq;
->>   
->> -	ret = cpuhp_state_add_instance_nocalls(cpuhp_state_num, &irq->node);
->> +	ret = cpuhp_state_add_instance_nocalls_cpuslocked(cpuhp_state_num, &irq->node);
->>   	if (ret)
->>   		goto out_free_irq;
->>   
->> @@ -445,9 +445,11 @@ static int dmc620_pmu_get_irq(struct dmc620_pmu *dmc620_pmu, int irq_num)
->>   {
->>   	struct dmc620_pmu_irq *irq;
->>   
->> +	cpus_read_lock();
->>   	mutex_lock(&dmc620_pmu_irqs_lock);
->>   	irq = __dmc620_pmu_get_irq(irq_num);
->>   	mutex_unlock(&dmc620_pmu_irqs_lock);
->> +	cpus_read_unlock();
->>   
->>   	if (IS_ERR(irq))
->>   		return PTR_ERR(irq);
->> diff --git a/kernel/cpu.c b/kernel/cpu.c
->> index 6c0a92ca6bb5..05daaef362e6 100644
->> --- a/kernel/cpu.c
->> +++ b/kernel/cpu.c
->> @@ -2036,6 +2036,7 @@ int __cpuhp_state_add_instance_cpuslocked(enum cpuhp_state state,
->>   	mutex_unlock(&cpuhp_state_mutex);
->>   	return ret;
->>   }
->> +EXPORT_SYMBOL_GPL(__cpuhp_state_add_instance_cpuslocked);
-> Thanks for the fix, but I think it would be much cleaner if we could handle
-> this internally to the driver without having to export additional symbols
-> from the hotplug machinery.
->
-> Looking at the driver, it looks like it would make more sense to register
-> each PMU instance with the cpuhp state machine and avoid having to traverse
-> a mutable list, rather than add irq instances.
->
-> That said, I really don't grok this comment:
->
-> 	/* We're only reading, but this isn't the place to be involving RCU */
->
-> Given that perf_pmu_migrate_context() calls synchronize_rcu()...
->
-> So perhaps we could just walk the list using RCU as the easiest fix?
 
-My patch is just one of the possible fixes. I don't mind if you have a 
-better fix in mind. My knowledge about the internal working of the 
-driver is limited. So it will be great if someone more familiar with the 
-driver can come up with a better fix.
 
-Thanks,
-longman
+On 11.04.2023 15:31, Rajendra Nayak wrote:
+> 
+> On 4/11/2023 4:57 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 11.04.2023 06:56, Rajendra Nayak wrote:
+>>>
+>>>
+>>> On 4/8/2023 7:33 PM, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 8.04.2023 15:48, Krzysztof Kozlowski wrote:
+>>>>> The GCC clock controller needs CX power domain, at least according to
+>>>>> DTS:
+>>>>>
+>>>>>     sc7180-trogdor-pompom-r3.dtb: clock-controller@100000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+>>>>>
+>>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>> ---
+>>>> +CC Rajendra (author of 5d6fc6321db1 ("arm64: dts: qcom:
+>>>> sc7180: Add required-opps for USB"))
+>>>>
+>>>> Rajendra, shouldn't SC7180 GCC have PM ops to make sure a vote
+>>>> is only there when AP is active?
+>> So IIUC, CX is never supposed to be shut down?
+> 
+> Atleast sc7180 and sc7280 do not support full CX shutdown (or power
+> collapse as its called), it only transitions to a Retention state
+> and even that in the system-wide suspend path only
+And won't outstanding votes on that resource prevent the system
+from entering a system-wide low power state?
 
+Konrad
+> 
+>>
+>> Konrad
+>>>
+>>> hmm, I am not quite sure why we would want the performance votes
+>>> from peripherals dropped when CPUs go down in idle?
+>>>
+>>>> Are all GDSCs powered by CX?
+>>>> If not, wouldn't this also need power-domain-names to
+>>>> facilitate e.g. potential MX-powered ones?
+>>>
+>>> For sc7180 GCC, yes.
+>>>
+>>>>
+>>>> Konrad
+>>>>>    .../devicetree/bindings/clock/qcom,gcc-sc7180.yaml         | 7 +++++++
+>>>>>    1 file changed, 7 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>> index 06dce0c6b7d0..8bf9b6f49550 100644
+>>>>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>> @@ -32,6 +32,10 @@ properties:
+>>>>>          - const: bi_tcxo_ao
+>>>>>          - const: sleep_clk
+>>>>>    +  power-domains:
+>>>>> +    items:
+>>>>> +      - description: CX domain
+>>>>> +
+>>>>>    required:
+>>>>>      - compatible
+>>>>>      - clocks
+>>>>> @@ -45,6 +49,8 @@ unevaluatedProperties: false
+>>>>>    examples:
+>>>>>      - |
+>>>>>        #include <dt-bindings/clock/qcom,rpmh.h>
+>>>>> +    #include <dt-bindings/power/qcom-rpmpd.h>
+>>>>> +
+>>>>>        clock-controller@100000 {
+>>>>>          compatible = "qcom,gcc-sc7180";
+>>>>>          reg = <0x00100000 0x1f0000>;
+>>>>> @@ -52,6 +58,7 @@ examples:
+>>>>>                   <&rpmhcc RPMH_CXO_CLK_A>,
+>>>>>                   <&sleep_clk>;
+>>>>>          clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
+>>>>> +      power-domains = <&rpmhpd SC7180_CX>;
+>>>>>          #clock-cells = <1>;
+>>>>>          #reset-cells = <1>;
+>>>>>          #power-domain-cells = <1>;
