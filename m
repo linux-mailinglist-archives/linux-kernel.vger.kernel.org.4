@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73BE6DDE34
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67EB6DDE35
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjDKOic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S229576AbjDKOjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjDKOiL (ORCPT
+        with ESMTP id S229659AbjDKOjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:38:11 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80738448E;
-        Tue, 11 Apr 2023 07:38:03 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id h12so5752456lfj.8;
-        Tue, 11 Apr 2023 07:38:03 -0700 (PDT)
+        Tue, 11 Apr 2023 10:39:02 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E7A2683
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:39:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-246a1c48021so349309a91.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:39:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681223881; x=1683815881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6HfxwgTBgQXWC6fG+aiC6jOWHTPMJBQRX3DVcb99zZo=;
-        b=i7pz3ot8hLcJhgDkQjOjtEL+XNljQTYUxvVad/zSVIzphX3Mi7AuYMpDd3Ud1Jwuph
-         1ppkuxwFfT0rqm4iIT1MpHRI35IgZw6tGEGrQkf+wPHOyqQs4rsNEb6hzIpP1yXJf+ki
-         buLMyVfbyJjs2f1lW4f2JP8pEHcNISDpCk/X8ECycwTcRST8asczc39pYomv3b7Uast/
-         64NMZc40Lin7VCqNRQGFGeZO9B2cR5XXB2r53Zwl3zQgP9N2Nyza4hr+uCyjDgZAqNZU
-         ovO3LsNvn5Q23kuC3JlpEQeBZg0qK7etFzGzKdplRLoIws4icx9EYOKbWxUxCWk1So82
-         Ru2w==
+        d=chromium.org; s=google; t=1681223941; x=1683815941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3POXpBLOYkBNAqAT4V8Vzl8XKzx70OKFxmrdLGlI7U=;
+        b=G1vyVng5aGWTk1Uq+ONgBFyZF/zKnJYI6UZMPEViRLwOA1kthwmJlZvq7JcygFc61l
+         HlzEPjljVorrtzNSwZ3snpgIo85FrK8X3Cm5YwC1Y8D1hJ5AbaFE/jcAlhVdw6n/qj/d
+         e6Ma4T/ZGuS8k5jNeuTDjeASqx/3qBEMRC8Ww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681223881; x=1683815881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6HfxwgTBgQXWC6fG+aiC6jOWHTPMJBQRX3DVcb99zZo=;
-        b=DM0AGuNgKFD5hxHxBzhAQO5HUDxJrGIUUqF0iYKLE40dtwZUCn9X/V/jg+3ck3wEMA
-         Bx4MmHu7xOz+LKYx7InoLqjHMXeua7qHrOlpYRLKIubr0sqav+dKGfgYAS0olxWgmJlI
-         9jAfkS1PxUK8AQREtJi12X3eW87PDtEze6dQbhggFcjkWNPzjz3pYZtvMvs0mZH9Bq1R
-         DFR5qEsDTB89WM6XefsCnq1B1j8kv5tWYl8ErC2Ozu6HvxU113pryyaZxwnq02xQYCEk
-         mxYwuhx59o8RliDV9jOiagvfc9kqMKSV/JDW98lgMbaoQrEvt6wFCNrr9kUdl/jBATcB
-         wLGw==
-X-Gm-Message-State: AAQBX9dR/jiJdIs2oWAtNr+kuectBwE0S1s/ljCcZsFfORx43cQkGNL8
-        Ckd0tcz/HwsAs71isjoJ36c=
-X-Google-Smtp-Source: AKy350a5Uh/F6sTGc4L+Fe7bAKFsCd9WDVCeqHJFjZHNcaIt+kgMf2vTS5okEmNmOw/i4rzBUmxI0A==
-X-Received: by 2002:ac2:4883:0:b0:4ec:5607:9055 with SMTP id x3-20020ac24883000000b004ec56079055mr3976585lfc.31.1681223881090;
-        Tue, 11 Apr 2023 07:38:01 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id l29-20020ac24a9d000000b004eae73a0530sm2593770lfp.39.2023.04.11.07.38.00
+        d=1e100.net; s=20210112; t=1681223941; x=1683815941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t3POXpBLOYkBNAqAT4V8Vzl8XKzx70OKFxmrdLGlI7U=;
+        b=sMhtvJJLrW/xNxHzWPDkXAmxxlnAKPecg6HGvRKwFQWi9ATm9TVSyZmtySD8qU7jjC
+         zZfRE4tC1cdTK4Wbx1m5nuKrWLUvp7eGTeB2Muy2pIJIuVSYrIAjeGgdEaxYKDjuxJJF
+         LOUGrtPhqcKpKaWIziihgR7XhsY+mb2/bAEp+kMJztRCBl0RYaQIA0R0E3ngjSTJihCE
+         f2OhrIpDtS0xQaFbH8KOZW8WmgeEDYJHTkJL6+khvYKo31E2k6VDMP87p1mFCPg/3cwy
+         hFLvLao026rayzE/9kB+6kssYB3ZmM/t9FPkS5pYUoOVkNCZpvogrLr6dLwHxvbhtgub
+         wYlw==
+X-Gm-Message-State: AAQBX9dKlNRaokpLuWQKOS1DXcC6zJNUOi1V4Sg/S6c2s9IzEntimHaS
+        T1tSz+pk4uf7iB3PaushrQsCcQ==
+X-Google-Smtp-Source: AKy350bMuVL92dqZWO2yg0IrJyEZRI7Oi/TOcVmN0FZHJYilmGl32j1KaRME49/fg/vxl62XwxIPTA==
+X-Received: by 2002:aa7:9a41:0:b0:63a:38d2:d41f with SMTP id x1-20020aa79a41000000b0063a38d2d41fmr5346199pfj.29.1681223941186;
+        Tue, 11 Apr 2023 07:39:01 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:c8e3:b775:3b12:ac9e])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa790ce000000b005abc0d426c4sm9897799pfk.54.2023.04.11.07.38.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 07:38:00 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 17:37:58 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Joy Chakraborty <joychakr@google.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Subject: Re: [PATCH v5 2/2] spi: dw: Add dma controller capability checks
-Message-ID: <20230411143758.2rpaxux6esiln26q@mobilestation>
-References: <20230330063450.2289058-1-joychakr@google.com>
- <20230330063450.2289058-3-joychakr@google.com>
- <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
+        Tue, 11 Apr 2023 07:39:00 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCHv2] seq_buf: add seq_buf_do_printk() helper
+Date:   Tue, 11 Apr 2023 23:38:52 +0900
+Message-Id: <20230411143852.868524-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDVQGu/gBPTNbQPU@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,76 +69,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 03:18:34PM +0300, Andy Shevchenko wrote:
-> On Thu, Mar 30, 2023 at 06:34:50AM +0000, Joy Chakraborty wrote:
-> > Check capabilities of DMA controller during init to make sure it is
-> > capable of handling MEM2DEV for tx channel, DEV2MEM for rx channel
-> > and store addr_width capabilities to check per transfer to make sure the
-> > bits/word requirement can be met for that transfer.
-> 
-> ...
-> 
-> > +static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes);
-> 
-> Can we avoid forward declarations please?
-> 
-> ...
-> 
-> > +	if (!(tx.directions & BIT(DMA_MEM_TO_DEV) &&
-> > +	      rx.directions & BIT(DMA_DEV_TO_MEM)))
-> > +		return -ENXIO;
-> 
+Sometimes we use seq_buf to format a string buffer, which
+we then pass to printk(). However, in certain situations
+the seq_buf string buffer can get too big, exceeding the
+PRINTKRB_RECORD_MAX bytes limit, and causing printk() to
+truncate the string.
 
-> What about simplex transfers where we only care about sending or receiving data
-> and using dummy data for the other channel? Doesn't this make a regression for
-> that types of transfers? (Or, if we don't support such, this should be explained
-> in the commit message at least.)
+Add a new seq_buf helper. This helper prints the seq_buf
+string buffer line by line, using \n as a delimiter,
+rather than passing the whole string buffer to printk()
+at once.
 
-I don't think the code above is that much relevant for the half-duplex
-transfers. The DW APB SSI-DMA driver requires both Tx and Rx channels
-being specified thus supporting the Full-duplex transfers at least in
-case of the TxRx and Rx-only SPI-transfers (the later case relies on
-having the dummy buffers supplied by the SPI-core). Thus the channels
-must support the corresponding DMA-directions.
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ include/linux/seq_buf.h |  2 ++
+ lib/seq_buf.c           | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-Indeed the Tx-only DMA-based SPI-transfers implementation in the
-driver implies not using the Rx DMA-channel, but even in that case the
-Rx-channel still needs to be specified otherwise the DW APB SSI-DMA
-setup methods will halt with error returned. So unless there are cases
-with dummy Rx DMA-channels (which I very much doubt there is) I don't
-see the suggested update causing a regression. Am I missing something?
+diff --git a/include/linux/seq_buf.h b/include/linux/seq_buf.h
+index 5b31c5147969..515d7fcb9634 100644
+--- a/include/linux/seq_buf.h
++++ b/include/linux/seq_buf.h
+@@ -159,4 +159,6 @@ extern int
+ seq_buf_bprintf(struct seq_buf *s, const char *fmt, const u32 *binary);
+ #endif
+ 
++void seq_buf_do_printk(struct seq_buf *s, const char *lvl);
++
+ #endif /* _LINUX_SEQ_BUF_H */
+diff --git a/lib/seq_buf.c b/lib/seq_buf.c
+index 0a68f7aa85d6..be7227d42b20 100644
+--- a/lib/seq_buf.c
++++ b/lib/seq_buf.c
+@@ -93,6 +93,40 @@ int seq_buf_printf(struct seq_buf *s, const char *fmt, ...)
+ }
+ EXPORT_SYMBOL_GPL(seq_buf_printf);
+ 
++/**
++ * seq_buf_do_printk - printk seq_buf line by line
++ * @s: seq_buf descriptor
++ * @lvl: printk level
++ *
++ * printk()-s a multi-line sequential buffer line by line. The function
++ * makes sure that the buffer in @s is nul terminated and safe to read
++ * as a string.
++ */
++void seq_buf_do_printk(struct seq_buf *s, const char *lvl)
++{
++	const char *start, *lf;
++	int len;
++
++	if (s->size == 0 || s->len == 0)
++		return;
++
++	seq_buf_terminate(s);
++
++	start = s->buffer;
++	while ((lf = strchr(start, '\n'))) {
++		len = lf - start + 1;
++		printk("%s%.*s", lvl, len, start);
++		start = ++lf;
++	}
++
++	/* No trailing LF */
++	if (start < s->buffer + s->len) {
++		len = s->buffer + s->len - start;
++		printk("%s%.*s\n", lvl, len, start);
++	}
++}
++EXPORT_SYMBOL_GPL(seq_buf_do_printk);
++
+ #ifdef CONFIG_BINARY_PRINTF
+ /**
+  * seq_buf_bprintf - Write the printf string from binary arguments
+-- 
+2.40.0.577.gac1e443424-goog
 
-> 
-> ...
-> 
-> > +	/*
-> > +	 * Assuming both channels belong to the same DMA controller hence the
-> > +	 * address width capabilities most likely would be the same.
-> > +	 */
-> > +	dws->dma_addr_widths = tx.dst_addr_widths & rx.src_addr_widths;
-> 
-
-> I don't think so this is correct.
-> 
-> Theoretically it's possible to have simplex transfers on which the one of
-> the channel is simply ignored / not used. See above.
-
-Please see my explanation above. To cut it short even in case of the
-half-duplex SPI-xfers both channels need to be specified with the
-respective capabilities. It's implied by the DW APB SSI-DMA setup
-methods design (see dw_spi_dma_init_mfld() and
-dw_spi_dma_init_generic()).
-
-So until the DW APB SSI-DMA driver is re-developed to supporting true
-Tx-only and Rx-only transfers with no requirement one of the channels
-being specified I don't see any problem with the code above. Do you
-still think otherwise?
-
--Serge(y)
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
