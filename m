@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C908D6DE64A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3D26DE648
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDKVRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S229774AbjDKVRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDKVRQ (ORCPT
+        with ESMTP id S229737AbjDKVRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 17:17:16 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91CFF3594;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A42EC40E4;
         Tue, 11 Apr 2023 14:17:15 -0700 (PDT)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C741921779A1;
-        Tue, 11 Apr 2023 14:17:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C741921779A1
+        by linux.microsoft.com (Postfix) with ESMTPSA id 13A5621779A4;
+        Tue, 11 Apr 2023 14:17:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 13A5621779A4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681247834;
-        bh=oBm7UAgWYx2ikyJKWEAABOUG7UTL+PiB3Yh06pGj3g4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z1at4qah8WLFhkDhgppqXLfGtmJesTfcpCqNdRs5uL5vtv/r8RSyI0GKqfIvr2IM+
-         RZiEH9lth5WwyGRJaJ5ISnlyjQw5e8CTtosRcPVUqH8MIPC/g0V9CpadyRFfnvEke+
-         TLuscezLrkws+N7xej1QA+SxPkUXprULy2b1C0zk=
+        s=default; t=1681247835;
+        bh=9bQADjcnzfitEajWNwld8GIEX6pWZSTccoW5aErnhjg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hLTVNCA0O8jYUr2YSxF7S20EZevHhSS/9dTrPFg2hvlFJ6IEAxWhdsbjTUrcmFZi1
+         EUgVH9kuhoHibBtrQzPGme+e6qWp3lmCw/a8oYGfoklkDlj7Szay0ZntAjeiFhgL4r
+         QeFOE0accT+P5qSlSSj0/HMouLXnC+EqOEoEOlk8=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
         alanau@linux.microsoft.com
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [PATCH 0/3] tracing/user_events: Fixes and improvements for 6.4
-Date:   Tue, 11 Apr 2023 14:17:06 -0700
-Message-Id: <20230411211709.15018-1-beaub@linux.microsoft.com>
+Subject: [PATCH 1/3] tracing/user_events: Ensure write index cannot be negative
+Date:   Tue, 11 Apr 2023 14:17:07 -0700
+Message-Id: <20230411211709.15018-2-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230411211709.15018-1-beaub@linux.microsoft.com>
+References: <20230411211709.15018-1-beaub@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -47,39 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that user_events is in for-next we broadened our integration of
-user_events. During this integration we found a few things that can
-help prevent the debugging of issues for user_events when user
-processes use the ABI directly.
+The write index indicates which event the data is for and accesses a
+per-file array. The index is passed by user processes during write()
+calls as the first 4 bytes. Ensure that it cannot be negative by
+returning -EINVAL to prevent out of bounds accesses.
 
-The most important thing found is an out of bounds fix with the
-write index. If it is negative, an out of bounds access is attempted.
-This bug was introduced on one of the very first user_events patches
-and remained unseen for a long time. Apologies for not catching that
-sooner.
+Update ftrace self-test to ensure this occurs properly.
 
-We think users will expect the kernel to always clear the registered
-bit when events are unregistered, even if the event is still enabled
-in a kernel tracer. The user process could do this after unregistering,
-but it seems appropriate for the kernel side to attempt this. We also
-discussed if it makes sense for the kernel to allow user processes
-to tie multiple events to the same value and bit. While this doesn't
-cause any issues on the kernel side, it leads to very undefined
-behavior for the user process. Depending on which event gets enabled
-when, the bit will vary.
+Fixes: 7f5a08c79df3 ("user_events: Add minimal support for trace_event into ftrace")
+Reported-by: Doug Cook <dcook@linux.microsoft.com>
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+---
+ kernel/trace/trace_events_user.c                  | 3 +++
+ tools/testing/selftests/user_events/ftrace_test.c | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-Beau Belgrave (3):
-  tracing/user_events: Ensure write index cannot be negative
-  tracing/user_events: Ensure bit is cleared on unregister
-  tracing/user_events: Prevent same address and bit per process
-
- kernel/trace/trace_events_user.c              | 77 +++++++++++++++++++
- .../testing/selftests/user_events/abi_test.c  |  9 ++-
- .../selftests/user_events/ftrace_test.c       | 14 +++-
- 3 files changed, 96 insertions(+), 4 deletions(-)
-
-
-base-commit: 88fe1ec75fcb296579e05eaf3807da3ee83137e4
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index cc8c6d8b69b5..e7dff24aa724 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -1821,6 +1821,9 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+ 	if (unlikely(copy_from_iter(&idx, sizeof(idx), i) != sizeof(idx)))
+ 		return -EFAULT;
+ 
++	if (idx < 0)
++		return -EINVAL;
++
+ 	rcu_read_lock_sched();
+ 
+ 	refs = rcu_dereference_sched(info->refs);
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index aceafacfb126..91272f9d6fce 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -296,6 +296,11 @@ TEST_F(user, write_events) {
+ 	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 3));
+ 	after = trace_bytes();
+ 	ASSERT_GT(after, before);
++
++	/* Negative index should fail with EINVAL */
++	reg.write_index = -1;
++	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
++	ASSERT_EQ(EINVAL, errno);
+ }
+ 
+ TEST_F(user, write_fault) {
 -- 
 2.25.1
 
