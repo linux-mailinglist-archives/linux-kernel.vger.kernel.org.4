@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD42D6DE38C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AE86DE391
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjDKSKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S230337AbjDKSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjDKSJ7 (ORCPT
+        with ESMTP id S229579AbjDKSMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:09:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9C965AC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:09:44 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id mIR2plxDOpFivmIR2p9idX; Tue, 11 Apr 2023 20:09:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
-        s=t20230301; t=1681236582;
-        bh=M7S+qYYKm3F1E+ZKhxHIt6xFK2OD6F3sGIISrUwFXqQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=bgdaZUdIDannUwcYDuOG2m7OtaTtOHCYjdl2FvDtWhXJRMo98O0OkPXgyoG5/7qru
-         3m6wxBKJ7wcXA1vjNwb2HNODxD26r0gPI28DBUp7AqQsTQ7UsLsHN1eqEnOd1ZXVKM
-         0oVcD7flwQ3loZ4xYsqejVTkA8p8mWXhAZCCh/WDEZVYhD8L2kytALajKGpjw+A4Hi
-         RoR6IxsndRcpH3bmnQ/xMd/MgC95L5IUwg9VQoiFjF6Jfzsc1eezuRrskSEIhpfZli
-         h/KCIZiB4FssH3Spz8mHvRAxH0IClcpCUqGxeWi0pJ37ZPTSwyqCIZwPXhnldTVDs6
-         03mR4gH5lT6qg==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 11 Apr 2023 20:09:42 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <b3c82938-7db0-2c0b-7784-c2096570c940@wanadoo.fr>
-Date:   Tue, 11 Apr 2023 20:09:40 +0200
+        Tue, 11 Apr 2023 14:12:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CB11713;
+        Tue, 11 Apr 2023 11:12:30 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6BD6E1F74A;
+        Tue, 11 Apr 2023 18:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681236748; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=P3X3oJy/OBZsq1k20V6/GD69j5FU6jGKXyMOSg/ZOsU=;
+        b=BI9ihQRdzt8yyKGDgZ04jE1UIQbAUj30zHMUYwtUWGHz0dxM8xsB9QiQOL4pHBM1tAVdwH
+        TUzFOzqA9UYJ9JEvR4AkymqGDqqkKn2tIugP0uexTLDBATJHPEPL+W/NZLH/uNM3jLq8yT
+        YFgQVweyqxp/LUDfOxD+dbK7K2vc+pk=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 59E932C141;
+        Tue, 11 Apr 2023 18:12:28 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 0CD5ADA7DE; Tue, 11 Apr 2023 20:12:23 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.3-rc7
+Date:   Tue, 11 Apr 2023 20:12:23 +0200
+Message-Id: <cover.1681236364.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/armada: Fix a potential double free in an error
- handling path
-Content-Language: fr, en-US
-To:     linux@armlinux.org.uk, daniel@ffwll.ch,
-        David Airlie <airlied@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <c4f3c9207a9fce35cb6dd2cc60e755275961588a.1640536364.git.christophe.jaillet@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <c4f3c9207a9fce35cb6dd2cc60e755275961588a.1640536364.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 26/12/2021 à 17:34, Christophe JAILLET a écrit :
-> 'priv' is a managed resource, so there is no need to free it explicitly or
-> there will be a double free().
-> 
-> Fixes: 90ad200b4cbc ("drm/armada: Use devm_drm_dev_alloc")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/gpu/drm/armada/armada_drv.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
-> index 8e3e98f13db4..54168134d9b9 100644
-> --- a/drivers/gpu/drm/armada/armada_drv.c
-> +++ b/drivers/gpu/drm/armada/armada_drv.c
-> @@ -99,7 +99,6 @@ static int armada_drm_bind(struct device *dev)
->   	if (ret) {
->   		dev_err(dev, "[" DRM_NAME ":%s] can't kick out simple-fb: %d\n",
->   			__func__, ret);
-> -		kfree(priv);
->   		return ret;
->   	}
->   
-
 Hi,
 
-polite reminder. (I've updated the mails according to the output of 
-get_maintainer.pl)
+two more fixes that have some user visible effects. Please pull, thanks.
 
-The patch still LGTM and should apply cleanly.
+- fix fast checksum detection, this affects filesystems with non-crc32c
+  checksum, calculation would not be offloaded to worker threads
 
-CJ
+- restore thread_pool mount option behaviour for endio workers, the
+  new value for maximum active threads would not be set to the actual
+  work queues
+
+----------------------------------------------------------------
+The following changes since commit 2280d425ba3599bdd85c41bd0ec8ba568f00c032:
+
+  btrfs: ignore fiemap path cache when there are multiple paths for a node (2023-03-29 01:16:23 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-rc6-tag
+
+for you to fetch changes up to 68d99ab0e9221ef54506f827576c5a914680eeaf:
+
+  btrfs: fix fast csum implementation detection (2023-04-06 16:34:13 +0200)
+
+----------------------------------------------------------------
+Christoph Hellwig (2):
+      btrfs: restore the thread_pool= behavior in remount for the end I/O workqueues
+      btrfs: fix fast csum implementation detection
+
+ fs/btrfs/disk-io.c | 14 ++++++++++++++
+ fs/btrfs/super.c   |  4 ++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
