@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EB66DE60B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6F36DE610
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjDKUyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S229516AbjDKU4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDKUyT (ORCPT
+        with ESMTP id S229598AbjDKU4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:54:19 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2102.outbound.protection.outlook.com [40.107.11.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3203B18E;
-        Tue, 11 Apr 2023 13:54:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fW7Cy3vgQQG2jAHsp6lwZCPRPyt3oJ3jshXmqklj2bNgzTLpLX3uKkJwtD84Kx4WttvccLVR/NVF/BQYznVETDbVg0fUbEySH39WYFBLd1m93vf/coQPqIUE51uY187+cK6b2YqDpL2Xv6ArFAE0L/NmFqbS0iXfPLOaJvMJmocxoqeZxnDCBWQQQ2l870/5WU3htrkH6msuKWKzoQ34W3SZYmsdYIAlpVpMdw42wk/IfHQ2VGn52WLIx73WBDecIv+mwPhtkNVGS977mvM7y3SMZtpuNIsIsWyJ0k1Bf2c4MVbsoJ7/MwW35rvSWxOzsmJ9opXoOeSCUeObXPJygA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UHT9/3IgM5DNaAMZXlnaYpZVXq8+qLlTkVCrgCGuvjQ=;
- b=RNFsUtmIC3wZF2VhHg1sEynhehm/JoqSubRF6JUghkCvGxuvCWBfpeLCuq3G2EOr+/okqZvt9l+hDSlKRa0Tuk5q4/DXNuOHShAnA5Md9H32GpfY84EeiWDkNXgmKyYW+ofMey8H+jB2g/wBZSEXWqiHaJv5KGk6NJYSPTEDK2sUWxJ2ko5CUQob8mxp3sGHaAk0IUKX6qzrnJMwTgYpwOjJHd21wh5I6Dgm3Dx+5sstmijymqcAYoHImrroC+eHU1D5oCuw7Rp9addZfjb37mZXWEC43cj5AcZ7Sz6ECRaRwk+IOciiydBo2lmuI/8SgU0zpEU2XNCxulfP9B747Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UHT9/3IgM5DNaAMZXlnaYpZVXq8+qLlTkVCrgCGuvjQ=;
- b=eGO6oL3eYoAHWM749nzDpZ/oD/gxFv1ElRD/FZNZjBqtL/MZsi1SI8YSlSZd9BqyKbwCWdURHawVO7KmfpLGxzaHEoUgz3NCdPCp2PX8n+n9HA3HlHYvhmc6zy+yKIQliZXE2zsB9ESSQ0yqub5TqHYyJ9r5JwJivb7z8htV8yA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB6850.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2d7::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
- 2023 20:54:15 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::e1a3:5e38:b483:8161]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::e1a3:5e38:b483:8161%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
- 20:54:15 +0000
-Date:   Tue, 11 Apr 2023 21:54:13 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v4 11/13] rust: lock: add `Guard::do_unlocked`
-Message-ID: <20230411215413.7720246f.gary@garyguo.net>
-In-Reply-To: <20230411054543.21278-11-wedsonaf@gmail.com>
-References: <20230411054543.21278-1-wedsonaf@gmail.com>
-        <20230411054543.21278-11-wedsonaf@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO0P265CA0011.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:355::19) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6850:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2cdcbdb9-8fb2-492f-0a8c-08db3acee8fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7smx6Pe1/DdfkpSXQaQMeRKkCmkkH8iQXrRUJpntTofGXbbflk2hTCT+U8x7moNfzVHIDa3VY05fvmyINBCgX0Y+YqfyQCy2+uT9Jhw+zoqZKeARmKa4adyjeaDNUYnTJIlYB0+RHWJuu9xP2HKrs9CYkO4c0FunSyhyA253brw9aPJjwgGTLjz/eko/OjrBcJOE9D1Xt/60iKCGv4+g0hhBrpT1jQGtbeKI9BVB2UCpxEfT++ouFxlzNU9pAUASnqStHc11yIQMOFiD9/j+TMkSMnqf742mojxzUus7wQ12kQJExOJGxcBq1OG1DjTjjUGQQJrEl+XLJeikaK0uUIFzMMfkY1YQsx94TOjnIZ7vjjaa0N/mXZssuT6iG6e3iIs04eV2k5wKM1MGHsffXZLt+0KUhKnQFt8eqkvx1cJChNgpDRkCFwG539mF/W6U76TAUZ9645BoBUJVjC7MlfBcw8e4+fDqazPTk4lAg47mA9tZEKn+Qd+0RF2j7ms7fYarkQWN1PmgMAElf96IU3pL0LzGXRUqhCFYB1vOL2iswaLJ7oq9XDJIlylMX0zCwsVqim0+4i97ju3XIZ4YYHbebGRJPyE0fdg39z/GYaw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(39830400003)(346002)(136003)(376002)(366004)(451199021)(478600001)(45080400002)(1076003)(26005)(316002)(6506007)(186003)(54906003)(2906002)(5660300002)(4326008)(66946007)(8676002)(6916009)(66476007)(6486002)(41300700001)(8936002)(66556008)(83380400001)(86362001)(36756003)(6512007)(2616005)(38100700002)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Pyjhf0djOQxuI94h03sKck/YHgQJ6RmGx8rxjs+QBw0f+bHOReS951PtStMQ?=
- =?us-ascii?Q?sCJg0x/MPghsQkZUSCEuwviXxjOHpvp6gFWYnbdh2FPmtAVk71K9Sl00wnfk?=
- =?us-ascii?Q?b3JQKoUBCObs5VmYAfmlUcpwdClr9k0IzGXdoKfVTbIsCS/q+9WUNRbxD5tr?=
- =?us-ascii?Q?CxkwPadYKXkxxonUpobKz5oc4p8TB8YJk1gus7ckvsrNlq/GVTvLGubiV0cJ?=
- =?us-ascii?Q?Pq3Jjc9bMP+DxHP4+MauiufPwV6ezugSA/wVCtCA4SAj9AtKidwOf3YvfOX7?=
- =?us-ascii?Q?R3EI1Enz76Ou/6otpFOU3xvPlZLpOb5+JMw0yZPr7Vp6oSN7Ych5rsOZ3Cwp?=
- =?us-ascii?Q?cMbsk0xEiyFisVJp+NA4JZeKWi0qW6Pw2XET6yA3eVXre51vUe/MTcZQR2Zg?=
- =?us-ascii?Q?IcFCWfXPcxrux7ksTigFjob/rNalHz5ToGkJoSMlF1gbHGNfmy+pGyDaf3DB?=
- =?us-ascii?Q?+fL9R2Q3CVuJqXxfUeSmukBAKnxIX2FGMJvxZJVmLS5UuK+zNb1L8HPOzXsQ?=
- =?us-ascii?Q?iCzHV2h19EL/Ok3omQt5S4O23jd2AAffIytkbhpppY+/oBJTb2qShxnkQcYq?=
- =?us-ascii?Q?R2vV041t+sI3Rbg4M4p1WOKbWPbyPde7jikFlaovFnT3SWVBlO//jY9NAn1g?=
- =?us-ascii?Q?tKW4PknRwnahi1ByKLTkw91Ieizsw/1fncsmUKr4C4A38RGTuKpCXDonLSKe?=
- =?us-ascii?Q?pTmFMT+3FXx8de96nJGGrbeh6t5xiR6hHUvGPcr9MHpY6HVX+JZ0g4QUmFew?=
- =?us-ascii?Q?rs8Lnp50FzA5caJqRccq8yoBJNxICmJDa/V3i5ohjbjb8Q/ZDrPyUzEyWwSe?=
- =?us-ascii?Q?1CHVeeQaQ0OwvoaxO36Ugt86gUgTHZsj2i0Ih3bz/+I35Wr1wQiaXj+Hm2Dk?=
- =?us-ascii?Q?9nG76gUwJlOUCzncZR+2ovcIZc0EKlOVAgS1Y0LZ2ZJrnbDugDUBtP0paeu3?=
- =?us-ascii?Q?WJg6VTFTBvt23+u/9kQuqji8wAsDt6W/NOX/Gx9XzB7vExXA8qzWI5aw6J8l?=
- =?us-ascii?Q?jGIMl9+BLnVIZ9oBGBUF14lU3UhfqV4NRSrmhSvPGU1WwmCQUpHzPzn8Baip?=
- =?us-ascii?Q?1vZO2xFakKEK3haChmW3XhnaXn2IQEhKiHrxiv4nJ6bbncnMKj5EU9sQQ+f/?=
- =?us-ascii?Q?1FhRjc2wL6pAvvdLD1CRLr1INcY/BB5Wt3yvemvSd9jrzxMC1dJ9ovPBjFA8?=
- =?us-ascii?Q?E0o91tO3ViF5jVcFWmdHplE7rAkAb6MPnG9IgyBmcLJzUCDmvB2Fa87naBnq?=
- =?us-ascii?Q?26Th9MksDh9ESH7FIitmG4GzpQj62rcRIAoHN4qH5rs+s4U/W4Jf0ySsdVsn?=
- =?us-ascii?Q?4psqZaUL2tWM5IwbT5aZOwyGWEBrFCB7qYH5zqBIC0kdFDNQc6KavNqhPeyQ?=
- =?us-ascii?Q?CmcKMHsNxJT4hOm+mVJyHVRxMCCs96ivrwNk7pMhyh+h/0ZbFWqmT1KvQhRG?=
- =?us-ascii?Q?nUxNfmzr5SOFUoG5Skv9IAslE/jBRRFo/n8NRCqcandeXO3m1dyd2UcBAwz+?=
- =?us-ascii?Q?nHRvA3RDyZZvidT4qlRSsvp5Fb36JCjHLPkZdbCZzjfbJjtfyBqzNqFBXYVY?=
- =?us-ascii?Q?YI++k7QQ7GNFhfU1IporYDSjqcGnHQtTH6DZoarG?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cdcbdb9-8fb2-492f-0a8c-08db3acee8fa
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 20:54:15.0681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yRPwjD7rtM+ob2uvUZn4Jl4MAJAzs2OxgMrrfdK9xMf58cJBmvQB84FsRCzPZkiJa2SjIFNnP56dT0ShbQ9yXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6850
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Tue, 11 Apr 2023 16:56:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A762418E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:56:36 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 85-20020a250d58000000b00b8f380b2bccso206870ybn.14
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681246596;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FEI6nzWWR+WddKH/7cQsZpyDFQ7PjyBu53tq/lHMWqI=;
+        b=S7YtXkouzCnAbpJtZBh09HWdFYVUcXLmY8KbZ0Ge1slYzdZ8J7G6G+ePc6Gp73cdX9
+         bGcUhueSk/z1gp1+XYdJKMcnY3A+vKPmggQs2rRvpoYkpRJ0ABSw/lNCk2tABR68iiwb
+         rRN4BoEcuAzcBvmsqjSN4IjmBN7/wwPX1f2sriNm1vRqLgzITae4P3M13qFfNN7SguxG
+         EazdkKt1MLfvya/PZU8EBQr6eeEDkBxfmhnSkePAsNTcKh9ASVjnXB/VRV60J9QJ3ZGq
+         MUO8SGnjA+q94/XWfjTMgNb3fzulMnD/8lXqwqeGHE/j3ml8Zp5oA1u6cIFk24IcWnNk
+         8TTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681246596;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FEI6nzWWR+WddKH/7cQsZpyDFQ7PjyBu53tq/lHMWqI=;
+        b=F9x/6QJgWQG0tdoE1FUTynkJ36b2e3YgqAdDf9Gm5t5cmyCyG9bnCOQs7BeXEotl8S
+         MZdfAnIbXNZ3tsj7/v/OMegyFBm8QojyoGPtFffdbg+ve3Ykrq7xQUYIdh9nSyAges1m
+         GVbUHv1HJaSCujWvuGwQyyPIN4o6O4wPP3q4lWbh1V9ZA2TYP0RY5BUgZczsekXSM3zA
+         4x0dBxjVJCXjXvSURyYyG5GqudhksSpfzi7TCniAqO5A1S9fvTUO7tTt3wiaoT0kvun1
+         C56s89zLIHcxtJ9ZdkFikzXFxl4R/vuGaD1P9wh8ieApiJEOaXlDiFDeqoIcIKZNeU+J
+         tSug==
+X-Gm-Message-State: AAQBX9eBVtCnb3X+qkXFG+6dIHNlE+iEy2XJfHoNnx7d5SPAij0URueS
+        0d/kJ5nLUa2gyS5rQKcXNKxoIQk+dWop
+X-Google-Smtp-Source: AKy350bjWpS4nJrh1LEEwU/S+eGt0lghXqTqy2iXVDH+JoT/aZt4s0tbX+bITIF3jB0PqqQvGObwuNKuCfCx
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:f663:83e0:f9b2:5a17])
+ (user=irogers job=sendgmr) by 2002:a81:b184:0:b0:545:f7cc:f30 with SMTP id
+ p126-20020a81b184000000b00545f7cc0f30mr6810565ywh.0.1681246595935; Tue, 11
+ Apr 2023 13:56:35 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 13:56:22 -0700
+Message-Id: <20230411205622.3266490-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Subject: [PATCH v1] perf stat: Introduce skippable evsels
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,140 +75,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 02:45:41 -0300
-Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+Perf stat with no arguments will use default events and metrics. These
+events may fail to open even with kernel and hypervisor disabled. When
+these fail then the permissions error appears even though they were
+implicitly selected. This is particularly a problem with the automatic
+selection of the TopdownL1 metric group on certain architectures like
+Skylake:
 
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
-> 
-> It releases the lock, executes some function provided by the caller,
-> then reacquires the lock. This is preparation for the implementation of
-> condvars, which will sleep after between unlocking and relocking.
-> 
-> We need an explicit `relock` method for primitives like `SpinLock` that
-> have an irqsave variant: we use the guard state to determine if the lock
-> was originally acquired with the regular `lock` function or
-> `lock_irqsave`.
-> 
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> ---
-> v1 -> v2: No changes
-> v2 -> v3: No changes
-> v3 -> v4: No changes
-> 
->  rust/kernel/sync/lock.rs          | 25 +++++++++++++++++++++++++
->  rust/kernel/sync/lock/spinlock.rs | 17 +++++++++++++++--
->  2 files changed, 40 insertions(+), 2 deletions(-)
-> 
-> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-> index 819b8ea5ba2b..cde57756795f 100644
-> --- a/rust/kernel/sync/lock.rs
-> +++ b/rust/kernel/sync/lock.rs
-> @@ -22,6 +22,9 @@ pub mod spinlock;
->  ///
->  /// - Implementers must ensure that only one thread/CPU may access the protected data once the lock
->  /// is owned, that is, between calls to `lock` and `unlock`.
-> +/// - Implementers must also ensure that `relock` uses the same locking method as the original
-> +/// lock operation. For example, it should disable interrupts if [`IrqSaveBackend::lock_irqsave`]
-> +/// is used.
->  pub unsafe trait Backend {
->      /// The state required by the lock.
->      type State;
-> @@ -55,6 +58,17 @@ pub unsafe trait Backend {
->      ///
->      /// It must only be called by the current owner of the lock.
->      unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState);
-> +
-> +    /// Reacquires the lock, making the caller its owner.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Callers must ensure that `state` comes from a previous call to [`Backend::lock`] (or
-> +    /// variant) that has been unlocked with [`Backend::unlock`] and will be relocked now.
-> +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> +        // SAFETY: The safety requirements ensure that the lock is initialised.
-> +        *guard_state = unsafe { Self::lock(ptr) };
-> +    }
->  }
->  
->  /// The "backend" of a lock that supports the irq-save variant.
-> @@ -164,6 +178,17 @@ pub struct Guard<'a, T: ?Sized, B: Backend> {
->  // SAFETY: `Guard` is sync when the data protected by the lock is also sync.
->  unsafe impl<T: Sync + ?Sized, B: Backend> Sync for Guard<'_, T, B> {}
->  
-> +impl<T: ?Sized, B: Backend> Guard<'_, T, B> {
-> +    #[allow(dead_code)]
-> +    pub(crate) fn do_unlocked(&mut self, cb: impl FnOnce()) {
-> +        // SAFETY: The caller owns the lock, so it is safe to unlock it.
-> +        unsafe { B::unlock(self.lock.state.get(), &self.state) };
-> +        cb();
-> +        // SAFETY: The lock was just unlocked above and is being relocked now.
-> +        unsafe { B::relock(self.lock.state.get(), &mut self.state) };
+```
+$ perf stat true
+Error:
+Access to performance monitoring and observability operations is limited.
+Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+access to performance monitoring and observability operations for processes
+without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+More information can be found at 'Perf events and tool security' document:
+https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+perf_event_paranoid setting is 2:
+  -1: Allow use of (almost) all events by all users
+      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>= 0: Disallow raw and ftrace function tracepoint access
+>= 1: Disallow CPU event access
+>= 2: Disallow kernel profiling
+To make the adjusted perf_event_paranoid setting permanent preserve it
+in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
+```
 
-This should be
+This patch adds skippable evsels that when they fail to open will be
+skipped. The TopdownL1 events are marked as skippable. This turns the
+failure above to:
 
-	let _guard = ScopeGuard::new(|| unsafe {
-	    B::relock(self.lock.state.get(), &mut self.state) }
-	});
-	cb();
+```
+$ perf stat true
 
-Although we currently use `-Cpanic=abort`, I think as a general rule we
-should still try to make code unwind-safe, so it can remain sound if
-someone takes the code and use it for userspace (e.g. for testing
-purpose, or maybe sharing codebase with tools).
+ Performance counter stats for 'true':
 
-> +    }
-> +}
-> +
->  impl<T: ?Sized, B: Backend> core::ops::Deref for Guard<'_, T, B> {
->      type Target = T;
->  
-> diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-> index 34dec09a97c0..e2a2f68e6d93 100644
-> --- a/rust/kernel/sync/lock/spinlock.rs
-> +++ b/rust/kernel/sync/lock/spinlock.rs
-> @@ -4,6 +4,7 @@
->  //!
->  //! This module allows Rust code to use the kernel's `spinlock_t`.
->  
-> +use super::IrqSaveBackend;
->  use crate::bindings;
->  
->  /// Creates a [`SpinLock`] initialiser with the given name and a newly-created lock class.
-> @@ -95,7 +96,8 @@ pub type SpinLock<T> = super::Lock<T, SpinLockBackend>;
->  /// A kernel `spinlock_t` lock backend.
->  pub struct SpinLockBackend;
->  
-> -// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
-> +// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. `relock` uses the
-> +// same scheme as `unlock` to figure out which locking method was used originally.
->  unsafe impl super::Backend for SpinLockBackend {
->      type State = bindings::spinlock_t;
->      type GuardState = Option<core::ffi::c_ulong>;
-> @@ -127,13 +129,24 @@ unsafe impl super::Backend for SpinLockBackend {
->              None => unsafe { bindings::spin_unlock(ptr) },
->          }
->      }
-> +
-> +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> +        let _ = match guard_state {
-> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> +            // initialised.
-> +            None => unsafe { Self::lock(ptr) },
-> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> +            // initialised.
-> +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
-> +        };
-> +    }
->  }
->  
->  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
->  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
->  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
->  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
-> -unsafe impl super::IrqSaveBackend for SpinLockBackend {
-> +unsafe impl IrqSaveBackend for SpinLockBackend {
->      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
->          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
->          // memory, and that it has been initialised before.
+              1.28 msec task-clock:u                     #    0.323 CPUs utilized
+                 0      context-switches:u               #    0.000 /sec
+                 0      cpu-migrations:u                 #    0.000 /sec
+                48      page-faults:u                    #   37.550 K/sec
+           206,228      cycles:u                         #    0.161 GHz                         (44.07%)
+           122,904      instructions:u                   #    0.60  insn per cycle
+            28,263      branches:u                       #   22.110 M/sec
+             2,461      branch-misses:u                  #    8.71% of all branches
+     <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+   <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+     <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+     <not counted>      CPU_CLK_UNHALTED.THREAD:u
+     <not counted>      UOPS_RETIRED.RETIRE_SLOTS:u
+     <not counted>      UOPS_ISSUED.ANY:u
+     <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+     <not counted>      IDQ_UOPS_NOT_DELIVERED.CORE:u
+   <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+     <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+     <not counted>      CPU_CLK_UNHALTED.THREAD:u
+     <not counted>      UOPS_ISSUED.ANY:u
+
+       0.003958627 seconds time elapsed
+
+       0.000000000 seconds user
+       0.004263000 seconds sys
+
+Some events weren't counted. Try disabling the NMI watchdog:
+        echo 0 > /proc/sys/kernel/nmi_watchdog
+        perf stat ...
+        echo 1 > /proc/sys/kernel/nmi_watchdog
+The events in group usually have to be from the same PMU. Try reorganizing the group.
+```
+
+When the events can have kernel/hypervisor disabled, like on
+Tigerlake, then it continues to succeed as:
+
+```
+$ perf stat true
+
+ Performance counter stats for 'true':
+
+              0.57 msec task-clock:u                     #    0.385 CPUs utilized
+                 0      context-switches:u               #    0.000 /sec
+                 0      cpu-migrations:u                 #    0.000 /sec
+                47      page-faults:u                    #   82.329 K/sec
+           287,017      cycles:u                         #    0.503 GHz
+           133,318      instructions:u                   #    0.46  insn per cycle
+            31,396      branches:u                       #   54.996 M/sec
+             2,442      branch-misses:u                  #    7.78% of all branches
+           998,790      TOPDOWN.SLOTS:u                  #     14.5 %  tma_retiring
+                                                  #     27.6 %  tma_backend_bound
+                                                  #     40.9 %  tma_frontend_bound
+                                                  #     17.0 %  tma_bad_speculation
+           144,922      topdown-retiring:u
+           411,266      topdown-fe-bound:u
+           258,510      topdown-be-bound:u
+           184,090      topdown-bad-spec:u
+             2,585      INT_MISC.UOP_DROPPING:u          #    4.528 M/sec
+             3,434      cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/u #    6.015 M/sec
+
+       0.001480954 seconds time elapsed
+
+       0.000000000 seconds user
+       0.001686000 seconds sys
+```
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-stat.c | 39 ++++++++++++++++++++++++++++++---------
+ tools/perf/util/evsel.c   | 15 +++++++++++++--
+ tools/perf/util/evsel.h   |  1 +
+ 3 files changed, 44 insertions(+), 11 deletions(-)
+
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 38133afda7fc..024fda0dd943 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -667,6 +667,13 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
+ 			evsel_list->core.threads->err_thread = -1;
+ 			return COUNTER_RETRY;
+ 		}
++	} else if (counter->skippable) {
++		if (verbose > 0)
++			ui__warning("skipping event %s that kernel failed to open .\n",
++				    evsel__name(counter));
++		counter->supported = false;
++		counter->errored = true;
++		return COUNTER_SKIP;
+ 	}
+ 
+ 	evsel__open_strerror(counter, &target, errno, msg, sizeof(msg));
+@@ -1885,15 +1892,29 @@ static int add_default_attributes(void)
+ 		 * Add TopdownL1 metrics if they exist. To minimize
+ 		 * multiplexing, don't request threshold computation.
+ 		 */
+-		if (metricgroup__has_metric("TopdownL1") &&
+-		    metricgroup__parse_groups(evsel_list, "TopdownL1",
+-					    /*metric_no_group=*/false,
+-					    /*metric_no_merge=*/false,
+-					    /*metric_no_threshold=*/true,
+-					    stat_config.user_requested_cpu_list,
+-					    stat_config.system_wide,
+-					    &stat_config.metric_events) < 0)
+-			return -1;
++		if (metricgroup__has_metric("TopdownL1")) {
++			struct evlist *metric_evlist = evlist__new();
++			struct evsel *metric_evsel;
++
++			if (!metric_evlist)
++				return -1;
++
++			if (metricgroup__parse_groups(metric_evlist, "TopdownL1",
++							/*metric_no_group=*/false,
++							/*metric_no_merge=*/false,
++							/*metric_no_threshold=*/true,
++							stat_config.user_requested_cpu_list,
++							stat_config.system_wide,
++							&stat_config.metric_events) < 0)
++				return -1;
++
++			evlist__for_each_entry(metric_evlist, metric_evsel) {
++				metric_evsel->skippable = true;
++			}
++			evlist__splice_list_tail(evsel_list, &metric_evlist->core.entries);
++			evlist__delete(metric_evlist);
++		}
++
+ 		/* Platform specific attrs */
+ 		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
+ 			return -1;
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index dc3faf005c3b..a09654ea18ec 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -290,6 +290,7 @@ void evsel__init(struct evsel *evsel,
+ 	evsel->per_pkg_mask  = NULL;
+ 	evsel->collect_stat  = false;
+ 	evsel->pmu_name      = NULL;
++	evsel->skippable     = false;
+ }
+ 
+ struct evsel *evsel__new_idx(struct perf_event_attr *attr, int idx)
+@@ -1717,9 +1718,13 @@ static int get_group_fd(struct evsel *evsel, int cpu_map_idx, int thread)
+ 		return -1;
+ 
+ 	fd = FD(leader, cpu_map_idx, thread);
+-	BUG_ON(fd == -1);
++	BUG_ON(fd == -1 && !leader->skippable);
+ 
+-	return fd;
++	/*
++	 * When the leader has been skipped, return -2 to distinguish from no
++	 * group leader case.
++	 */
++	return fd == -1 ? -2 : fd;
+ }
+ 
+ static void evsel__remove_fd(struct evsel *pos, int nr_cpus, int nr_threads, int thread_idx)
+@@ -2101,6 +2106,12 @@ static int evsel__open_cpu(struct evsel *evsel, struct perf_cpu_map *cpus,
+ 
+ 			group_fd = get_group_fd(evsel, idx, thread);
+ 
++			if (group_fd == -2) {
++				pr_debug("broken group leader for %s\n", evsel->name);
++				err = -EINVAL;
++				goto out_close;
++			}
++
+ 			test_attr__ready();
+ 
+ 			/* Debug message used by test scripts */
+diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+index 68072ec655ce..98afe3351176 100644
+--- a/tools/perf/util/evsel.h
++++ b/tools/perf/util/evsel.h
+@@ -95,6 +95,7 @@ struct evsel {
+ 		bool			weak_group;
+ 		bool			bpf_counter;
+ 		bool			use_config_name;
++		bool			skippable;
+ 		int			bpf_fd;
+ 		struct bpf_object	*bpf_obj;
+ 		struct list_head	config_terms;
+-- 
+2.40.0.577.gac1e443424-goog
 
