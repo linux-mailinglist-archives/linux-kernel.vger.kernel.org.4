@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB716DD368
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963D26DD369
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjDKGuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S230038AbjDKGun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjDKGuR (ORCPT
+        with ESMTP id S230417AbjDKGuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:50:17 -0400
+        Tue, 11 Apr 2023 02:50:18 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB7E423F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:49:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F673AB8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681195784; x=1712731784;
+  t=1681195786; x=1712731786;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fHc/Dt3WZSFDnH//DR0PtW4o8sOEHZYZ41tbx+9UmIU=;
-  b=dwVhYuC2L1KsP/sTK63g3tc+rivKc/wENqYW8HWayZq2XZqNBc1r0RFe
-   TYmd8gUEfEB7fR3S3nBuCfXv4cbcDZDyAeHUQJjIpjzHMQBQW4mv5/B5v
-   P8VlcFxG/ymsuzAT96l7eIEujR+56Vrkm2/a6rcyKdKUIfcGZ1zU/rbIt
-   T3kzz1pHBTOf9TguFoozkGjqdeLiRrpIdDdFmucQd7TWUwQnsdU1X146J
-   oCQI4RX/bMUPEs245jCbxTAmElITh2wL/L5e/lamg8leiLXJ/R0dwTYnT
-   KGPhSZIRohnIJzaGrvU+hQ7TfH+GesVjYHivmpTYNeOZdyi2AaUpXolmG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341028600"
+  bh=fSH+9CuukwrVCuz9aJxEFN4y0MR5HKb9VSv4IIAZmfM=;
+  b=ai0sXJeg+xpfqy16spN0Y5xT8RWsQ14duWiBqNrHWgerd2B9sJnRvC+w
+   dGyHwCjA4GH1f/D5dF/3ATwYs9kaT+xqRjP74kCljco+5dpcv0Wg4JJi2
+   5ztxAo/y+1aQvkBQi3qPY8vBQTB3QFg4QOoSj82+e8JMkGFkAe09sUKI9
+   78dTL1aH7UtcOsa2wk5hNaEY91DsO7QATTAgA/SCzHVdh9QXm8DHDyIzQ
+   5L3+PtVUAFd+CW9BC75m6XGTnKQKmfeKbXpjmP7jsG0yYZyselbdfvFy+
+   DmAsJqSh94nP8mav56QGMDGGxLWGWUGT0LLy+Sv4SDiRo/l8A8ZvFxirr
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341028610"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341028600"
+   d="scan'208";a="341028610"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 23:48:35 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 23:48:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018256620"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018256626"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="1018256620"
+   d="scan'208";a="1018256626"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Apr 2023 23:48:33 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 10 Apr 2023 23:48:35 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Vinod Koul <vkoul@kernel.org>, Tina Zhang <tina.zhang@intel.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
-Date:   Tue, 11 Apr 2023 14:48:09 +0800
-Message-Id: <20230411064815.31456-12-baolu.lu@linux.intel.com>
+Subject: [PATCH 12/17] iommu/vt-d: Remove BUG_ON on checking valid pfn range
+Date:   Tue, 11 Apr 2023 14:48:10 +0800
+Message-Id: <20230411064815.31456-13-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230411064815.31456-1-baolu.lu@linux.intel.com>
 References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
@@ -64,54 +64,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tina Zhang <tina.zhang@intel.com>
 
-The patch fixes the klocwork issues that operands in a bitwise operation
-have different size at line 1692 of dmar.c, line 1898 and line 1907 of
-iommu.c.
+When encountering an unexpected invalid pfn range, the kernel should
+attempt recovery and proceed with execution. Therefore, using WARN_ON to
+replace BUG_ON to avoid halting the machine.
 
-Reported-by: Yongwei Ma <yongwei.ma@intel.com>
+Besides, one redundant checking is reduced.
+
 Signed-off-by: Tina Zhang <tina.zhang@intel.com>
-Link: https://lore.kernel.org/r/20230406065944.2773296-2-tina.zhang@intel.com
+Link: https://lore.kernel.org/r/20230406065944.2773296-3-tina.zhang@intel.com
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/dmar.c  | 2 +-
- drivers/iommu/intel/iommu.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/iommu/intel/iommu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 23828d189c2a..f0f51c957ccb 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -1690,7 +1690,7 @@ static void __dmar_enable_qi(struct intel_iommu *iommu)
- 	 * is present.
- 	 */
- 	if (ecap_smts(iommu->ecap))
--		val |= (1 << 11) | 1;
-+		val |= BIT_ULL(11) | BIT_ULL(0);
- 
- 	raw_spin_lock_irqsave(&iommu->register_lock, flags);
- 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index f4e536fd5a28..acbf82fa90e7 100644
+index acbf82fa90e7..c4847a5aaf52 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -1870,7 +1870,7 @@ context_set_sm_rid2pasid(struct context_entry *context, unsigned long pasid)
-  */
- static inline void context_set_sm_dte(struct context_entry *context)
- {
--	context->lo |= (1 << 2);
-+	context->lo |= BIT_ULL(2);
- }
+@@ -1005,9 +1005,9 @@ static void dma_pte_clear_range(struct dmar_domain *domain,
+ 	unsigned int large_page;
+ 	struct dma_pte *first_pte, *pte;
  
- /*
-@@ -1879,7 +1879,7 @@ static inline void context_set_sm_dte(struct context_entry *context)
-  */
- static inline void context_set_sm_pre(struct context_entry *context)
- {
--	context->lo |= (1 << 4);
-+	context->lo |= BIT_ULL(4);
- }
+-	BUG_ON(!domain_pfn_supported(domain, start_pfn));
+-	BUG_ON(!domain_pfn_supported(domain, last_pfn));
+-	BUG_ON(start_pfn > last_pfn);
++	if (WARN_ON(!domain_pfn_supported(domain, last_pfn)) ||
++	    WARN_ON(start_pfn > last_pfn))
++		return;
  
- /* Convert value to context PASID directory size field coding. */
+ 	/* we don't need lock here; nobody else touches the iova range */
+ 	do {
+@@ -1166,9 +1166,9 @@ static void dma_pte_clear_level(struct dmar_domain *domain, int level,
+ static void domain_unmap(struct dmar_domain *domain, unsigned long start_pfn,
+ 			 unsigned long last_pfn, struct list_head *freelist)
+ {
+-	BUG_ON(!domain_pfn_supported(domain, start_pfn));
+-	BUG_ON(!domain_pfn_supported(domain, last_pfn));
+-	BUG_ON(start_pfn > last_pfn);
++	if (WARN_ON(!domain_pfn_supported(domain, last_pfn)) ||
++	    WARN_ON(start_pfn > last_pfn))
++		return;
+ 
+ 	/* we don't need lock here; nobody else touches the iova range */
+ 	dma_pte_clear_level(domain, agaw_to_level(domain->agaw),
 -- 
 2.34.1
 
