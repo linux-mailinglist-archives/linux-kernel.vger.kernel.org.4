@@ -2,181 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1316DD49C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CA76DD49F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjDKHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S230151AbjDKHvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjDKHrj (ORCPT
+        with ESMTP id S229773AbjDKHvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:47:39 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2755172E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:47:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t14so9106269lft.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681199252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg7sIU4syKVdSy8LOtYkilZC80DMuyLCGHqWZ1NEyKI=;
-        b=I8lZf6iR7StToEKVoaHAu+vZVEcFaXC5mSpr+Me1rg/+LkdH/e7eRZKPg5A4bnWsQZ
-         P8kQHxInoeJyf9IhagruXh5Ld/3bAmv0xXyRbhUApcnwtp50cvNtEyOMW3mQ9MClQwoL
-         etxkhG9pW0cPFO00Pkwfmv2Ny93UrAlG9RN0QEzB6Cw/OSvEWEgVgAlX5hS5Qa/URDf9
-         uzzfd4pyZFuXsz9U6UQz53Bioo3W87BjigJ0b+07P3N/JIQLRxnJWs0HWDcNd3P66Qas
-         uq37Vz6I5Hf5DdFZTEoA7FisnRXiL8l3xS7MGGKBLBdW8Jj6lxybA2qwsqcNZeEbz9Fi
-         Jwtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681199252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg7sIU4syKVdSy8LOtYkilZC80DMuyLCGHqWZ1NEyKI=;
-        b=K4OWB/HBEyc4Eu+WAc3WMwgzXjLH4VzgbfLzH4ay/iuXIDOoQ/Z0TZpqIKVgFStORv
-         DL0/rRhq1pOMsBluVmSpU7XZA9sTjYQbgs/bSCIm6h1GpypImbJklvo9bf8lG+N4u5R3
-         hsd8Si//yM4WPe/jZrIh+Sddxd5Mhto09NEyUr8rSLPqsqP1hN2Lxau6tG399Pl3T8IG
-         H1KgwtrnNiDBz0RhEvwRzXjgsQHJ989V5Ob8b1Xo6Vp6ICJ6pmZY11QnIdJi3jKYnY1E
-         Qi48RiBHQyRYwAX0J+kBPgy7pATVMM8zeFYWtTPDtPr4o1GzOmh6ks8B736Gd1ZYEqZ2
-         SxgA==
-X-Gm-Message-State: AAQBX9cD9bW5J0pAiqhBlamm4wiVtyXxpG0lYgT2712E3kA2ebxbi+zn
-        b1mTWpU8scME5g2CNvQX68jqUw==
-X-Google-Smtp-Source: AKy350Z7/M6uSptsCaQyLk5cixXpi5u01LLvz6VhqVaoT7HRdgUV6kdsm7qDyb3IQISGHuruvPf5jA==
-X-Received: by 2002:a05:6512:2191:b0:4e9:8994:49bd with SMTP id b17-20020a056512219100b004e9899449bdmr4738898lft.3.1681199251896;
-        Tue, 11 Apr 2023 00:47:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id h22-20020a2eb0f6000000b0029aa0b6b41asm2660925ljl.115.2023.04.11.00.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 00:47:31 -0700 (PDT)
-Message-ID: <1552aad0-4b84-b508-bc05-610edb3cccff@linaro.org>
-Date:   Tue, 11 Apr 2023 10:47:30 +0300
+        Tue, 11 Apr 2023 03:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394D1B9;
+        Tue, 11 Apr 2023 00:51:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C852B61BCD;
+        Tue, 11 Apr 2023 07:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D739C433D2;
+        Tue, 11 Apr 2023 07:51:08 +0000 (UTC)
+Message-ID: <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+Date:   Tue, 11 Apr 2023 09:51:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 2/2] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-Content-Language: en-GB
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, kishon@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20230410171010.2561393-1-bhupesh.sharma@linaro.org>
- <20230410171010.2561393-3-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230410171010.2561393-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Content-Language: en-US
+To:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230406215615.122099-1-daniel.almeida@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/2023 20:10, Bhupesh Sharma wrote:
-> Add USB superspeed qmp phy node to dtsi.
+Hi Daniel,
+
+On 06/04/2023 23:56, Daniel Almeida wrote:
+> Hi all, this is my first attempt at adding Rust support to the
+> media subsystem.
 > 
-> Make sure that the various board dts files (which include sm4250.dtsi file)
-> continue to work as intended.
+> It adds just enough support to write a clone of the virtio-camera
+> prototype written by my colleague, Dmitry Osipenko, available at [0].
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->   .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  3 ++
->   arch/arm64/boot/dts/qcom/sm6115.dtsi          | 29 +++++++++++++++++--
->   .../boot/dts/qcom/sm6115p-lenovo-j606f.dts    |  3 ++
->   3 files changed, 33 insertions(+), 2 deletions(-)
+> Basically, there's support for video_device_register,
+> v4l2_device_register and for some ioctls in v4l2_ioctl_ops. There is
+> also some initial vb2 support, alongside some wrappers for some types
+> found in videodev2.h.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> index a1f0622db5a0..75951fd439df 100644
-> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> @@ -242,6 +242,9 @@ &usb {
->   &usb_dwc3 {
->   	maximum-speed = "high-speed";
->   	dr_mode = "peripheral";
-> +
-> +	phys = <&usb_hsphy>;
-> +	phy-names = "usb2-phy";
->   };
->   
->   &usb_hsphy {
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 2505c815c65a..b2ea8f13e827 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -651,6 +651,31 @@ usb_hsphy: phy@1613000 {
->   			status = "disabled";
->   		};
->   
-> +		usb_qmpphy: phy@1615000 {
-> +			compatible = "qcom,sm6115-qmp-usb3-phy";
-> +			reg = <0x0 0x01615000 0x0 0x200>;
-> +
-> +			clocks = <&gcc GCC_AHB2PHY_USB_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +			clock-names = "cfg_ahb",
-> +				      "ref",
-> +				      "com_aux",
-> +				      "pipe";
-> +
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
-> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
-> +			reset-names = "phy", "phy_phy";
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "usb3_phy_pipe_clk_src";
-> +
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
+> I wrote a sample Rust driver just to prove that this probes, and
+> that you get a message on dmesg whenever an ioctl is called.
+> 
+> As there is no actual implementation for any of the ioctls, this module
+> can misbehave with some programs. I can work around this in a future
+> submission.
+> 
+> Note that this is based on the rust branch, as opposed to rust-next. The
+> reasoning is simple: I expect this series to just kickstart some
+> discussion around the subject. Actual upstreaming can come up much
+> later, at which point I can rebase on the rust branch.
+> 
+> Lastly, the origins of this series trace back to a v4l2 virtIO driver I
+> was writing in Rust. As the project was eventually shelved for other
+> reasons, I picked both the virtIO and the v4l2 bindings into their own
+> patches which I am now in the process of submitting. This is to say that
+> I tested this code with said driver and CrosVM in the past, and it
+> worked ok.
+> 
+> Please let me know your thoughts.
 
+I think this could be a good topic to discuss at the upcoming media summit:
 
-Please excuse me if I'm wrong, but this will not work with the current 
-PHY driver. It was not updated to handle new bindings. Please provide 
-relevant driver patches too.
+https://lore.kernel.org/linux-media/893a7e34-1d98-23e2-4d27-d25cb3ee5bf0@xs4all.nl/
 
-> +		};
-> +
->   		qfprom@1b40000 {
->   			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->   			reg = <0x0 0x01b40000 0x0 0x7000>;
-> @@ -1101,8 +1126,8 @@ usb_dwc3: usb@4e00000 {
->   				compatible = "snps,dwc3";
->   				reg = <0x0 0x04e00000 0x0 0xcd00>;
->   				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
-> -				phys = <&usb_hsphy>;
-> -				phy-names = "usb2-phy";
-> +				phys = <&usb_hsphy>, <&usb_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
->   				iommus = <&apps_smmu 0x120 0x0>;
->   				snps,dis_u2_susphy_quirk;
->   				snps,dis_enblslpm_quirk;
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> index 10c9d338446c..d60cc024749b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> @@ -280,6 +280,9 @@ &usb {
->   &usb_dwc3 {
->   	maximum-speed = "high-speed";
->   	dr_mode = "peripheral";
-> +
-> +	phys = <&usb_hsphy>;
-> +	phy-names = "usb2-phy";
->   };
->   
->   &usb_hsphy {
+Please reply to that message with a topic description if you are interested.
 
--- 
-With best wishes
-Dmitry
+One of my main concerns here is time: as subsystem maintainers we can barely
+keep up with all the incoming patches. Introducing support for a new language
+would add only more pressure. Even though these are mainly bindings (as I
+understand it), this would still require that every change to a C kAPI is
+duplicated in rust, requiring someone to do that work, and have maintainers
+with enough rust knowledge to verify it.
+
+And just reading about a new programming language is not enough to be able to
+properly review code: that requires far more experience IMHO. The only way
+to acquire that experience is by writing non-trivial drivers in rust.
+
+And that in turn takes a lot of time. Which we do not have.
+
+Regards,
+
+	Hans
+
+> 
+> [0]: https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/commit/055a2c322e931a8b388f864f1db81bbdfd525602
+> 
+> Daniel Almeida (6):
+>   rust: media: add the media module
+>   rust: media: add initial videodev2.h abstractions
+>   rust: sync: introduce FfiMutex
+>   rust: media: videobuf2: add a videobuf2 abstraction
+>   rust: media: add {video|v4l2}_device_register support
+>   rust: media: add v4l2 rust sample
+> 
+>  rust/bindings/bindings_helper.h        |   8 +
+>  rust/kernel/lib.rs                     |   2 +
+>  rust/kernel/media/mod.rs               |   6 +
+>  rust/kernel/media/v4l2/capabilities.rs |  80 ++++
+>  rust/kernel/media/v4l2/dev.rs          | 369 +++++++++++++++
+>  rust/kernel/media/v4l2/device.rs       | 115 +++++
+>  rust/kernel/media/v4l2/enums.rs        | 135 ++++++
+>  rust/kernel/media/v4l2/format.rs       | 178 ++++++++
+>  rust/kernel/media/v4l2/framesize.rs    | 176 +++++++
+>  rust/kernel/media/v4l2/inputs.rs       | 104 +++++
+>  rust/kernel/media/v4l2/ioctls.rs       | 608 +++++++++++++++++++++++++
+>  rust/kernel/media/v4l2/mmap.rs         |  81 ++++
+>  rust/kernel/media/v4l2/mod.rs          |  13 +
+>  rust/kernel/media/videobuf2/core.rs    | 552 ++++++++++++++++++++++
+>  rust/kernel/media/videobuf2/mod.rs     |   5 +
+>  rust/kernel/sync.rs                    |   1 +
+>  rust/kernel/sync/ffi_mutex.rs          |  70 +++
+>  samples/rust/Kconfig                   |  11 +
+>  samples/rust/Makefile                  |   1 +
+>  samples/rust/rust_v4l2.rs              | 403 ++++++++++++++++
+>  20 files changed, 2918 insertions(+)
+>  create mode 100644 rust/kernel/media/mod.rs
+>  create mode 100644 rust/kernel/media/v4l2/capabilities.rs
+>  create mode 100644 rust/kernel/media/v4l2/dev.rs
+>  create mode 100644 rust/kernel/media/v4l2/device.rs
+>  create mode 100644 rust/kernel/media/v4l2/enums.rs
+>  create mode 100644 rust/kernel/media/v4l2/format.rs
+>  create mode 100644 rust/kernel/media/v4l2/framesize.rs
+>  create mode 100644 rust/kernel/media/v4l2/inputs.rs
+>  create mode 100644 rust/kernel/media/v4l2/ioctls.rs
+>  create mode 100644 rust/kernel/media/v4l2/mmap.rs
+>  create mode 100644 rust/kernel/media/v4l2/mod.rs
+>  create mode 100644 rust/kernel/media/videobuf2/core.rs
+>  create mode 100644 rust/kernel/media/videobuf2/mod.rs
+>  create mode 100644 rust/kernel/sync/ffi_mutex.rs
+>  create mode 100644 samples/rust/rust_v4l2.rs
+> 
 
