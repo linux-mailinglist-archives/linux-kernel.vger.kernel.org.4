@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7F96DDB06
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5F16DDB07
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjDKMiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S230044AbjDKMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjDKMix (ORCPT
+        with ESMTP id S229652AbjDKMjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:38:53 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597A749D0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681216697;
-        bh=CynmrVctmOLW2VdIhjAbLNRUDPLW50bg0JK95n3w3yA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Yyt7rlfT16P9dEJWmzIhqKm3Z8pr40LcTVkgQNNJfgBsIm6RWwE/eeUzgp2wx2OlE
-         nd4UVtHuAimhYMlk7dFqlJ2I1u8symyb0EfLwqQ8F36Wf7BF0J03RcNvps/t7G00QP
-         KTKN5n1wT74zKwT0qurwiqVN2ugShJsAVVPqrwTljoijZSYSFlIeFlBf/oBuJTC7ku
-         QNs7zaT2pNKDtC12olxDayiJruvJtoZaOuOjQJS/unKd0c5e65/a7sMLqSVVLEWLPc
-         kycxT5x1BjqIjwyYQ5AZuM8uIP9IK+l+hECxmjqCoefG14AuztKXAst+ER+jtWZtw3
-         hLrWvzaWKNBiQ==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PwlkK3kWkzvTX;
-        Tue, 11 Apr 2023 08:38:17 -0400 (EDT)
-Message-ID: <29deabdb-5317-d64d-e05f-9bbe4438711d@efficios.com>
-Date:   Tue, 11 Apr 2023 08:38:17 -0400
+        Tue, 11 Apr 2023 08:39:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6F51FE4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:38:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B879960DDC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:38:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBF9C433D2;
+        Tue, 11 Apr 2023 12:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681216710;
+        bh=9p1kY1s+7Url6KLLgVchnGKkLKzSxT34GC4qnc9lzuo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bSDiAjGeOY0ohQTlG7VP5N/7tt+77Ml6R2XgmXiqWJLUNmV0IY+4EvG6DzC9DlWr+
+         QLcxchBtjjgHZ7zOaIYUU51vra0Zth0TOtCYJAMJlaGc3LklC90n8+3jkUaFUTmj5n
+         AH3g6f9yYjVjsZ/vUCERWH7YeO7/ozrfXyoDs3KykygHflzwSqJIIdYB/AWsRpTGHg
+         T7sfZTdC6ROonzGiT9Gv4fBfmitVexzXLAW78jzvDaMGCe2sr2i6XEjkTOEmlafyxU
+         bsxOkUKct5QYr+USrc0ex2KkkgAZ5Qwievck/dBYBmo6yxHVYkb8QWSPd98vB/LwQx
+         YGUrJfg1do1rw==
+Date:   Tue, 11 Apr 2023 13:38:25 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tuanphan@os.amperecomputing.com, robin.murphy@arm.com,
+        suzuki.poulose@arm.com
+Subject: Re: [PATCH] perf/arm-dmc620: Reverse locking order in
+ dmc620_pmu_get_irq()
+Message-ID: <20230411123823.GA22686@willie-the-truck>
+References: <20230405172842.2663770-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
- <20230411084634.GA576825@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230411084634.GA576825@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405172842.2663770-1-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,89 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-11 04:46, Peter Zijlstra wrote:
-> On Fri, Apr 07, 2023 at 07:50:42PM -0400, Mathieu Desnoyers wrote:
+Hi Waiman,
+
+[+Tuan Phan, Robin and Suzuki]
+
+On Wed, Apr 05, 2023 at 01:28:42PM -0400, Waiman Long wrote:
+> The following circular locking dependency was reported when running
+> cpus online/offline test on an arm64 system.
 > 
->> Let's looks at the relevant combinations of TSA/TSB, and TMA transitions.
->>
->> Scenario A) (TSA)+(TMA) (from next task perspective)
->>
->> CPU0                                                 CPU1
->>
->> Context switch CS-1                                  Migrate-from
->>    - store to rq->curr: (N)->(Y) (TSA)                - cmpxchg to *pcpu_id to LAZY (TMA)
->>       *** missing barrier ?? ***                        (implied barrier after cmpxchg)
->>    - prepare_task_switch()
->>      - switch_mm_cid()
->>        - mm_cid_get (next)
->>          - READ_ONCE(*pcpu_cid)                       - rcu_dereference(src_rq->curr)
->>
->> This Dekker ensures that either task (Y) is observed by the rcu_dereference() or the LAZY
->> flag is observed by READ_ONCE(), or both are observed.
->>
->> If task (Y) store is observed by rcu_dereference(), it means that there is still
->> an active task on the cpu. Migrate-from will therefore not transition to UNSET, which
->> fulfills property (1). That observed task will itself eventually need a migrate-from
->> to be migrated away from that cpu, which fulfills property (2).
->>
->> If task (Y) is not observed, but the lazy flag is observed by READ_ONCE(), it will
->> move its state to UNSET, which clears the percpu cid perhaps uselessly (which is not
->> an issue for correctness). Because task (Y) is not observed, CPU1 can move ahead to
->> set the state to UNSET. Because moving state to UNSET is done with a cmpxchg expecting
->> that the old state has the LAZY flag set, only one thread will successfully UNSET.
->>
->> If both states (LAZY flag and task (Y)) are observed, the thread on CPU0 will observe
->> the LAZY flag and transition to UNSET (perhaps uselessly), and CPU1 will observe task
->> (Y) and do nothing more, which is fine.
->>
->> What we are effectively preventing with this Dekker is a scenario where neither LAZY
->> flag nor store (Y) are observed, which would fail property (1) because this would
->> UNSET a cid which is actively used.
+> [   84.195923] Chain exists of:
+>                  dmc620_pmu_irqs_lock --> cpu_hotplug_lock --> cpuhp_state-down
 > 
-> OK, this I'll buy. Let me go stare at this more.
+> [   84.207305]  Possible unsafe locking scenario:
 > 
->> Scenario B) (TSB)+(TMA) (from prev task perspective)
->>
->> CPU0                                                 CPU1
->>
->> Context switch CS-1                                  Migrate-from
->>    - store to rq->curr: (Y)->(N) (TSB)                - cmpxchg to *pcpu_id to LAZY (TMA)
->>      *** missing barrier ?? ***                         (implied barrier after cmpxchg)
->>    - prepare_task_switch()
->>      - switch_mm_cid()
->>        - cid_put_lazy() (prev)
->>          - READ_ONCE(*pcpu_cid)                       - rcu_dereference(src_rq->curr)
->>
+> [   84.213212]        CPU0                    CPU1
+> [   84.217729]        ----                    ----
+> [   84.222247]   lock(cpuhp_state-down);
+> [   84.225899]                                lock(cpu_hotplug_lock);
+> [   84.232068]                                lock(cpuhp_state-down);
+> [   84.238237]   lock(dmc620_pmu_irqs_lock);
+> [   84.242236]
+>                 *** DEADLOCK ***
 > 
-> This I'm conflicted about, if we're running Y, then how the heck do we
-> get to setting LAZY in the first place?
+> The problematic locking order seems to be
 > 
-> For this scenario there must be at least an N->Y->N transition, such
-> that the first:
+> 	lock(dmc620_pmu_irqs_lock) --> lock(cpu_hotplug_lock)
 > 
->    if (src_task->mm_cid_active && src_task->mm == mm) {
+> This locking order happens when dmc620_pmu_get_irq() is called from
+> dmc620_pmu_device_probe(). Fix this possible deadlock scenario by
+> reversing the locking order.
 > 
-> can observe N and proceed to setting LAZY. But that then leads us to the
-> scenario above.
+> Also export __cpuhp_state_add_instance_cpuslocked() so that it can be
+> accessed by kernel modules.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  drivers/perf/arm_dmc620_pmu.c | 4 +++-
+>  kernel/cpu.c                  | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+> index 54aa4658fb36..78d3bfbe96a6 100644
+> --- a/drivers/perf/arm_dmc620_pmu.c
+> +++ b/drivers/perf/arm_dmc620_pmu.c
+> @@ -425,7 +425,7 @@ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
+>  	if (ret)
+>  		goto out_free_irq;
+>  
+> -	ret = cpuhp_state_add_instance_nocalls(cpuhp_state_num, &irq->node);
+> +	ret = cpuhp_state_add_instance_nocalls_cpuslocked(cpuhp_state_num, &irq->node);
+>  	if (ret)
+>  		goto out_free_irq;
+>  
+> @@ -445,9 +445,11 @@ static int dmc620_pmu_get_irq(struct dmc620_pmu *dmc620_pmu, int irq_num)
+>  {
+>  	struct dmc620_pmu_irq *irq;
+>  
+> +	cpus_read_lock();
+>  	mutex_lock(&dmc620_pmu_irqs_lock);
+>  	irq = __dmc620_pmu_get_irq(irq_num);
+>  	mutex_unlock(&dmc620_pmu_irqs_lock);
+> +	cpus_read_unlock();
+>  
+>  	if (IS_ERR(irq))
+>  		return PTR_ERR(irq);
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 6c0a92ca6bb5..05daaef362e6 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -2036,6 +2036,7 @@ int __cpuhp_state_add_instance_cpuslocked(enum cpuhp_state state,
+>  	mutex_unlock(&cpuhp_state_mutex);
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(__cpuhp_state_add_instance_cpuslocked);
 
-Remember that migrate-from does not hold any rq lock. Therefore, it's 
-very much possible that the first check:
+Thanks for the fix, but I think it would be much cleaner if we could handle
+this internally to the driver without having to export additional symbols
+from the hotplug machinery.
 
-   if (src_task->mm_cid_active && src_task->mm == mm) {
+Looking at the driver, it looks like it would make more sense to register
+each PMU instance with the cpuhp state machine and avoid having to traverse
+a mutable list, rather than add irq instances.
 
-observes (N), then gets delayed for a while, and then only sets the
-LAZY flag when (Y) has been scheduled, leading us to Scenario B).
+That said, I really don't grok this comment:
 
-Thanks,
+	/* We're only reading, but this isn't the place to be involving RCU */
 
-Mathieu
+Given that perf_pmu_migrate_context() calls synchronize_rcu()...
 
+So perhaps we could just walk the list using RCU as the easiest fix?
 
-
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Will
