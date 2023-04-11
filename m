@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F306DD6DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0C16DD6DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjDKJd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S230240AbjDKJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjDKJdq (ORCPT
+        with ESMTP id S230113AbjDKJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:33:46 -0400
+        Tue, 11 Apr 2023 05:33:51 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C653C0C;
-        Tue, 11 Apr 2023 02:33:25 -0700 (PDT)
-X-UUID: e500594ed84b11edb6b9f13eb10bd0fe-20230411
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB08C4218;
+        Tue, 11 Apr 2023 02:33:31 -0700 (PDT)
+X-UUID: e8d2b7e2d84b11edb6b9f13eb10bd0fe-20230411
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5TzwrGm8MDwxREZVxNarlcOBJfzC0Abb3wd33GfWDz4=;
-        b=bbcKZviRCE/rngFKkW2wzWlxn2bIiMkH5VibDZQXrFShmDuq1yyjdO+0jKURP2R/8OzejPCD0p/kzQLC6pIgNzT1Ys/Nr1n/ARt2mDw6nl1OsQ2ViBkZxtsIFEPmLlLDZ0rURF++Ms9ePaDnCaBLRlOKDL1t2PPxEnoLpt4D0G8=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4RaT+9nrF2MCl8+ZR9wc/aV9OmM6fg58sYHW4ls9iwI=;
+        b=saccAJwNvBUERSxJI4EmJyIn8nj2zlvfFwsDj8vdGWZMQG5M6Y8i8/QYnuF/2pRvveotz4SCP6TXxTAwc57XrZLfiTGi+5dHde7H0GXyjANwBrOKmo5kAwi29WTPSRuW/wYLYnpF6c/OABEvndjS9T1IAN+CqyVzM/iwbmNZieE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:6d6a3152-5f04-4de4-98af-b546c7d22f17,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:8d0995ea-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.22,REQID:5064716e-da08-47f6-a45e-b35562215621,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.22,REQID:5064716e-da08-47f6-a45e-b35562215621,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:120426c,CLOUDID:3e7bf3a0-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:2304111733269YG265MO,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-UUID: e500594ed84b11edb6b9f13eb10bd0fe-20230411
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+X-UUID: e8d2b7e2d84b11edb6b9f13eb10bd0fe-20230411
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1731459184; Tue, 11 Apr 2023 17:33:19 +0800
+        with ESMTP id 1809009958; Tue, 11 Apr 2023 17:33:25 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 11 Apr 2023 17:33:18 +0800
+ 15.2.1118.25; Tue, 11 Apr 2023 17:33:24 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 17:33:17 +0800
+ 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 17:33:23 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -60,9 +64,9 @@ CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
         <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
         <anan.sun@mediatek.com>, Yong Wu <yong.wu@mediatek.com>
-Subject: [PATCH v7 07/14] iommu/mediatek: mt8186: Add iova_region_larb_msk
-Date:   Tue, 11 Apr 2023 17:31:37 +0800
-Message-ID: <20230411093144.2690-8-yong.wu@mediatek.com>
+Subject: [PATCH v7 08/14] iommu/mediatek: Add a gap for the iova regions
+Date:   Tue, 11 Apr 2023 17:31:38 +0800
+Message-ID: <20230411093144.2690-9-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230411093144.2690-1-yong.wu@mediatek.com>
 References: <20230411093144.2690-1-yong.wu@mediatek.com>
@@ -80,48 +84,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iova_region_larb_msk for mt8186. We separate the 16GB iova regions
-by each device's larbid/portid.
-Note: larb5/6/10/12/14/15/18 connect nothing in this SoC.
-Refer to include/dt-bindings/memory/mt8186-memory-port.h
+As the removed property in the vcodec dt-binding, the property is:
+dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+
+The length is 0xfff0_0000 rather than 0x1_0000_0000, this means it
+requires 1M as a gap. This is because the end address for some vcodec
+HW is (address + size). If the size is 4G, the end address may be
+0x2_0000_0000, and the width for vcodec register only is 32, then the
+HW may get the ZERO address.
+
+Currently the consumer's dma-ranges property doesn't work, IOMMU
+has to consider this case. Add a bigger gap(8M) for all the regions
+to avoid it.
 
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/iommu/mtk_iommu.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index bb3734378934..2c2a64c1712a 100644
+index 2c2a64c1712a..0e104bb27010 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -1525,6 +1525,18 @@ static const struct mtk_iommu_plat_data mt8183_data = {
- 	.larbid_remap = {{0}, {4}, {5}, {6}, {7}, {2}, {3}, {1}},
- };
+@@ -332,8 +332,10 @@ static LIST_HEAD(m4ulist);	/* List all the M4U HWs */
  
-+static const unsigned int mt8186_larb_region_msk[MT8192_MULTI_REGION_NR_MAX][MTK_LARB_NR_MAX] = {
-+	[0] = {~0, ~0, ~0},			/* Region0: all ports for larb0/1/2 */
-+	[1] = {0, 0, 0, 0, ~0, 0, 0, ~0},	/* Region1: larb4/7 */
-+	[2] = {0, 0, 0, 0, 0, 0, 0, 0,		/* Region2: larb8/9/11/13/16/17/19/20 */
-+	       ~0, ~0, 0, ~0, 0, ~(u32)(BIT(9) | BIT(10)), 0, 0,
-+						/* larb13: the other ports except port9/10 */
-+	       ~0, ~0, 0, ~0, ~0},
-+	[3] = {0},
-+	[4] = {[13] = BIT(9) | BIT(10)},	/* larb13 port9/10 */
-+	[5] = {[14] = ~0},			/* larb14 */
-+};
+ #define for_each_m4u(data, head)  list_for_each_entry(data, head, list)
+ 
++#define MTK_IOMMU_IOVA_SZ_4G		(SZ_4G - SZ_8M) /* 8M as gap */
 +
- static const struct mtk_iommu_plat_data mt8186_data_mm = {
- 	.m4u_plat       = M4U_MT8186,
- 	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS | OUT_ORDER_WR_EN |
-@@ -1537,6 +1549,7 @@ static const struct mtk_iommu_plat_data mt8186_data_mm = {
- 	.banks_enable   = {true},
- 	.iova_region    = mt8192_multi_dom,
- 	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
-+	.iova_region_larb_msk = mt8186_larb_region_msk,
+ static const struct mtk_iommu_iova_region single_domain[] = {
+-	{.iova_base = 0,		.size = SZ_4G},
++	{.iova_base = 0,		.size = MTK_IOMMU_IOVA_SZ_4G},
  };
  
- static const unsigned int mt8192_larb_region_msk[MT8192_MULTI_REGION_NR_MAX][MTK_LARB_NR_MAX] = {
+ #define MT8192_MULTI_REGION_NR_MAX	6
+@@ -342,11 +344,11 @@ static const struct mtk_iommu_iova_region single_domain[] = {
+ 				 MT8192_MULTI_REGION_NR_MAX : 1)
+ 
+ static const struct mtk_iommu_iova_region mt8192_multi_dom[MT8192_MULTI_REGION_NR] = {
+-	{ .iova_base = 0x0,		.size = SZ_4G},		/* 0 ~ 4G */
++	{ .iova_base = 0x0,		.size = MTK_IOMMU_IOVA_SZ_4G},	/* 0 ~ 4G,  */
+ 	#if IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT)
+-	{ .iova_base = SZ_4G,		.size = SZ_4G},		/* 4G ~ 8G */
+-	{ .iova_base = SZ_4G * 2,	.size = SZ_4G},		/* 8G ~ 12G */
+-	{ .iova_base = SZ_4G * 3,	.size = SZ_4G},		/* 12G ~ 16G */
++	{ .iova_base = SZ_4G,		.size = MTK_IOMMU_IOVA_SZ_4G},	/* 4G ~ 8G */
++	{ .iova_base = SZ_4G * 2,	.size = MTK_IOMMU_IOVA_SZ_4G},	/* 8G ~ 12G */
++	{ .iova_base = SZ_4G * 3,	.size = MTK_IOMMU_IOVA_SZ_4G},	/* 12G ~ 16G */
+ 
+ 	{ .iova_base = 0x240000000ULL,	.size = 0x4000000},	/* CCU0 */
+ 	{ .iova_base = 0x244000000ULL,	.size = 0x4000000},	/* CCU1 */
 -- 
 2.25.1
 
