@@ -2,142 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7F26DCFEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BD96DCFEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjDKDDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S229950AbjDKDDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjDKDDQ (ORCPT
+        with ESMTP id S229626AbjDKDCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:03:16 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AD630F0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:03:07 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5491fa028adso458185397b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681182186; x=1683774186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e/ZlRoiu1wIxay9eSAG+82IQcuZBJKitlsbCIfhB1ls=;
-        b=p23peQSBESFfKBX5qzUaFFuQlNCoNnYCcRzo4X01hLqp5yyb/EXyJ5tARG/xr3o47a
-         lsw0uM1NYxVK8XD6kyiKMF2RZlz7LESjvR01hLARpXLbsNuumYzza0kNrcjRoqaFadt7
-         Dlu7zl5WXscb2tsuZ3fYxy9yyNkoV4HVWEO85924Cg2p9fCjRx8D0MMpx8uL6hZKsCts
-         LHP+LWP5N5cFtRMFNzij1IKncHGBrOvocZnOiixo87iJwkQYGFqIgpndRoTPzZ/SrxvM
-         J8a9GINg+YQf4YnNYojwcF2xXyphK+m5MBSHRscMbmYBUDPQSXMvM8tk0TIZWHwhRYHL
-         vO1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681182186; x=1683774186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/ZlRoiu1wIxay9eSAG+82IQcuZBJKitlsbCIfhB1ls=;
-        b=z1KabmcmvbhWAhagEePTCRKk+/04KtEEuflUM4fy0hpOWOSSuMLmLRjqjgGPNeW22v
-         X6jou+3EdXktLyb0/lQ3TznEGE+bcifKlPnHArdl8r7yjyV+FibBt+7i8g0k8Vg+hKro
-         4DqOVLK9mX3+UIkWy7PBYcU2pNJXKLCXpMQtD7QMwILOY51WasoiOJ+EpVdTMvSjMGvb
-         oFzA2X6ZC/RpBGzfv3Jyalkidfj3LAqp8iDWQS/km/aTB7rt4jb4567JUT1GXRxNRZAQ
-         fRG+YDTDF7ci1sqQFJgcWXy3ZObZTMqpf6tI5uTQdF48sPRhPNXEDn/FEbgn9atsiXdQ
-         hSgg==
-X-Gm-Message-State: AAQBX9elA0sCRmKVXretY5HvVBjCaAqgg2JhQQjDrU+M2uRAo+9d9EzW
-        U/eLrXR+HT+uixVuEl2di4uT4j+BvIUJrkASbJMvZg==
-X-Google-Smtp-Source: AKy350bGTe9O8VOwunq6lfwiyzTvnTDU4MVjsdYYrKAlp1XxALqKFbfbn4DnPg7sET9+7AXo84pBp+w0Qgzjnf7nl58=
-X-Received: by 2002:a81:c509:0:b0:54c:2409:c306 with SMTP id
- k9-20020a81c509000000b0054c2409c306mr6819141ywi.6.1681182185494; Mon, 10 Apr
- 2023 20:03:05 -0700 (PDT)
+        Mon, 10 Apr 2023 23:02:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC092D6D;
+        Mon, 10 Apr 2023 20:02:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A187A6209E;
+        Tue, 11 Apr 2023 03:02:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA33DC433EF;
+        Tue, 11 Apr 2023 03:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681182169;
+        bh=W5LkOo7VObRorAOwM+Ysl+U3TaX0yQUWO6dGaS2s9/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e3UF/BZ1HAjWlEtz7VkRn9CMskyu9E3pWhCFv8dX+rD0WHM5TvoWMJOSojWd6ntPA
+         ywa0+1Vd1zQOH6mNDSWreD/s+oFdVDHbbFpjlbUikUQl4XBe4bZf7mbI8U6G6lPIhQ
+         HChDd563Gum1iJAVIq6EjBOKtyiZO2VcZ15ctRDv3tHCIGlLD2k1Q17+/PA6TLPZca
+         qyzonBkzId5V2HCtlAQIV/uLbchVJfjwsOL9RelF4pU2cg20P+Ird99MQX0lGhHMh8
+         kCcpOXFDb+c4P2bMnDfsiljROzSXHiDjbKD98aRtbtGtZz7xnXlBK5S4UMNzG49O2/
+         mOAfMORkyFA5w==
+Date:   Mon, 10 Apr 2023 20:06:30 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v3 2/4] soc: qcom: rpmhpd: Do proper power off when state
+ synced
+Message-ID: <20230411030630.z5nl5ynjl6wzp3bh@ripper>
+References: <20230327193829.3756640-1-abel.vesa@linaro.org>
+ <20230327193829.3756640-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-References: <20230411003431.4048700-1-shraash@google.com>
-In-Reply-To: <20230411003431.4048700-1-shraash@google.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 10 Apr 2023 20:02:54 -0700
-Message-ID: <CABXOdTcDfy3oDVy6+FAg+jkqnCJABOq=VokWQ1q4QByKbo5UJQ@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: mediatek: common: Fix refcount leak in parse_dai_link_info
-To:     Aashish Sharma <shraash@google.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@inria.fr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327193829.3756640-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 5:34=E2=80=AFPM Aashish Sharma <shraash@google.com>=
- wrote:
->
-> Add missing of_node_put()s before the returns to balance
-> of_node_get()s and of_node_put()s, which may get unbalanced
-> in case the for loop 'for_each_available_child_of_node' returns
-> early.
->
-> Fixes: 4302187d955f ("ASoC: mediatek: common: add soundcard driver common=
- code")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Julia Lawall <julia.lawall@inria.fr>
-> Link: https://lore.kernel.org/r/202304090504.2K8L6soj-lkp@intel.com/
-> Signed-off-by: Aashish Sharma <shraash@google.com>
-
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-
+On Mon, Mar 27, 2023 at 10:38:27PM +0300, Abel Vesa wrote:
+> Instead of aggregating different corner values on sync state callback,
+> call the genpd API for queuing up the power off. This will also mark the
+> domain as powered off in the debugfs genpd summary. Also, until sync
+> state has been reached, return busy on power off request, in order to
+> allow genpd core to know that the actual domain hasn't been powered of
+> from the "disable unused" late initcall.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  sound/soc/mediatek/common/mtk-soundcard-driver.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/sound/soc/mediatek/common/mtk-soundcard-driver.c b/sound/soc=
-/mediatek/common/mtk-soundcard-driver.c
-> index 7c55c2cb1f21..738093451ccb 100644
-> --- a/sound/soc/mediatek/common/mtk-soundcard-driver.c
-> +++ b/sound/soc/mediatek/common/mtk-soundcard-driver.c
-> @@ -47,20 +47,26 @@ int parse_dai_link_info(struct snd_soc_card *card)
->         /* Loop over all the dai link sub nodes */
->         for_each_available_child_of_node(dev->of_node, sub_node) {
->                 if (of_property_read_string(sub_node, "link-name",
-> -                                           &dai_link_name))
-> +                                           &dai_link_name)) {
-> +                       of_node_put(sub_node);
->                         return -EINVAL;
-> +               }
->
->                 for_each_card_prelinks(card, i, dai_link) {
->                         if (!strcmp(dai_link_name, dai_link->name))
->                                 break;
->                 }
->
-> -               if (i >=3D card->num_links)
-> +               if (i >=3D card->num_links) {
-> +                       of_node_put(sub_node);
->                         return -EINVAL;
-> +               }
->
->                 ret =3D set_card_codec_info(card, sub_node, dai_link);
-> -               if (ret < 0)
-> +               if (ret < 0) {
-> +                       of_node_put(sub_node);
->                         return ret;
-> +               }
->         }
->
->         return 0;
-> --
-> 2.40.0.577.gac1e443424-goog
->
+>  drivers/soc/qcom/rpmhpd.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
+> index f20e2a49a669..ec7926820772 100644
+> --- a/drivers/soc/qcom/rpmhpd.c
+> +++ b/drivers/soc/qcom/rpmhpd.c
+> @@ -649,8 +649,12 @@ static int rpmhpd_power_off(struct generic_pm_domain *domain)
+>  	mutex_lock(&rpmhpd_lock);
+>  
+>  	ret = rpmhpd_aggregate_corner(pd, 0);
+> -	if (!ret)
+> -		pd->enabled = false;
+> +	if (!ret) {
+> +		if (!pd->state_synced)
+> +			ret = -EBUSY;
+> +		else
+> +			pd->enabled = false;
+> +	}
+>  
+>  	mutex_unlock(&rpmhpd_lock);
+>  
+> @@ -810,10 +814,8 @@ static void rpmhpd_sync_state(struct device *dev)
+>  {
+>  	const struct rpmhpd_desc *desc = of_device_get_match_data(dev);
+>  	struct rpmhpd **rpmhpds = desc->rpmhpds;
+> -	unsigned int corner;
+>  	struct rpmhpd *pd;
+>  	unsigned int i;
+> -	int ret;
+>  
+>  	mutex_lock(&rpmhpd_lock);
+>  	for (i = 0; i < desc->num_pds; i++) {
+> @@ -822,14 +824,7 @@ static void rpmhpd_sync_state(struct device *dev)
+>  			continue;
+>  
+>  		pd->state_synced = true;
+> -		if (pd->enabled)
+> -			corner = max(pd->corner, pd->enable_corner);
+
+Note that the intent of this line is to lower the corner from max to
+either a requested performance_state or the lowest non-disabled corner.
+I don't think your solution maintains this behavior?
+
+> -		else
+> -			corner = 0;
+> -
+> -		ret = rpmhpd_aggregate_corner(pd, corner);
+> -		if (ret)
+> -			dev_err(dev, "failed to sync %s\n", pd->res_name);
+> +		pm_genpd_queue_power_off(&pd->pd);
+
+In the event that the power-domain has a single device attached, and no
+subdomains, wouldn't pm_genpd_queue_power_off() pass straight through
+all checks and turn off the power domain? Perhaps I'm just missing
+something?
+
+Regards,
+Bjorn
+
+>  	}
+>  	mutex_unlock(&rpmhpd_lock);
+>  }
+> -- 
+> 2.34.1
+> 
