@@ -2,109 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983046DE7CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDDC6DE7CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDKXJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S229485AbjDKXIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDKXJb (ORCPT
+        with ESMTP id S229499AbjDKXIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:09:31 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C91FE0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:09:30 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee397553eso101612847b3.19
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:09:30 -0700 (PDT)
+        Tue, 11 Apr 2023 19:08:13 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9885F199D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:08:09 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id q5so12777348ybk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681254569; x=1683846569;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vOZGDB1tEns0ICitKu53mE4nvsxHCRDQzBuBh0aiQXo=;
-        b=lgZi8uglWKHWhlXre4/ek2jQLOH6P1XWQav0/oTO33kn6oS/pGGIErN4evvKuwF0Vd
-         Hr1TwkJDwSytn+K0vjw44D9QWqzU1QsWosxJXsWRy06T3WWUhm90RUJL0Fdn6D07Z8hQ
-         1F5FTm7ycHRinDKxnMKO6SaaXE2OrXtRgSZKTQV4gxphwvJoHMqqf8+nAKv0IJQ3UaIG
-         FLPoCUSCT4Y03iYtS237wvRS1kv3Z9w2BG8jiiPFop/H3VSr73ElY+MNbVIDflvxweby
-         JKt7hpqChemH9QHLcVFo8EV5hEufC+Z2cUVQ4bMAezsoomraxAm++s22xFy9mZfZ8v7+
-         XF5A==
+        d=paul-moore.com; s=google; t=1681254489; x=1683846489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eIyxfCRdtVW6DZEqESNyM82Zcjpw6q1yxE2SLi7Q/10=;
+        b=XXnbf3ZXHmVyyAWosjbgtLtVe0obVxWMHT6ER5WKVjE2//n1kQT1vqGfH+itDlXM2k
+         2fneTH+5x2uocctQ6SccdU559tW16dOAzYZt4SUNr3SQZoWWsatyRHmcKNDLHGZiFZX1
+         ngNGr73HAG/JBY+0W9DmkWkoC+3V3vgClv7PS81c7UdnCx+3aMFz1Ishp4aKe2GcG+9q
+         +3SRRyJSTGsRHSMejxxYLambtKEVZffeY9ZCgEkqByHxjKnrI4D7N/WlEOpBuqUt0lI4
+         YOvKnY4/lPDxTBJnhmllQ0VSpmZ1AJLwV7aGqPZH7Infu2EyjgWnt0Qsp4/uyydvAv+I
+         TYrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681254569; x=1683846569;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vOZGDB1tEns0ICitKu53mE4nvsxHCRDQzBuBh0aiQXo=;
-        b=nwXV9CJqyVYywRrlOiWl0OBsaEp2QVt1eUKnivheSpdqlrSszF7onD4EH82rN+ZFws
-         4QInJTfKA0O5TipkZBuE5bPCKqW2bMZ1BTDSAFDiH9UuhpdABrlBqTzdHKDjxHPI80fD
-         9sk4fZanGUxLV2ZxXARqv4nl/Bcg8zTRbzYEilNZcvX3PEApcy5uk7jh9chsOikNRzyB
-         apdj2wW5pTVqRsoTTsBivJJesPj7vRB34yOO6f6FhhjK7okx9QrzsAYs+sB5Awf0ouiF
-         R5TIyiYIM7N/Xip8EBCztV7yNU/Mh7meZ6p61JCwoc5HxfQFs+4iqBY1wH3TwKbOeem2
-         Jouw==
-X-Gm-Message-State: AAQBX9cH5APeUD8C0mRVhtm4xr/dnPu1+hzPwipH/kYfjrcX00ZJPxIf
-        UMFqFLTOKJtk25QrgZIPtddySRNg2yRFHw==
-X-Google-Smtp-Source: AKy350YIK1EZL1Y0TVSqyu3cdqYhqXtb6pb5aYRyZU8d6A+nXo20/b2ezoiZVi5EQq4vABuq7+bkN6hQ3uUEvw==
-X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
- (user=pranavpp job=sendgmr) by 2002:a25:6c41:0:b0:b75:3fd4:1b31 with SMTP id
- h62-20020a256c41000000b00b753fd41b31mr384659ybc.1.1681254569324; Tue, 11 Apr
- 2023 16:09:29 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 23:06:50 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230411230650.1760757-1-pranavpp@google.com>
-Subject: [PATCH] scsi: pm80xx: Log device registration
-From:   Pranav Prasad <pranavpp@google.com>
-To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akshat Jain <akshatzen@google.com>,
-        Pranav Prasad <pranavpp@google.com>
+        d=1e100.net; s=20210112; t=1681254489; x=1683846489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eIyxfCRdtVW6DZEqESNyM82Zcjpw6q1yxE2SLi7Q/10=;
+        b=m27I7t8S8BRrq+GU28JH99Y4V0HWq1jf2w4EWg9Zvo6M08hzXJeSFtnYvybzg55EBS
+         +cXI38lu1Ffai5J6s4Ro7WkZkq4hvQUjsYu13QhykOjZJKp8uDsn4CB39Sr4xAMhIRYC
+         PK8bzmgozDLRIQtj+aMBpo6OIrwQ4bAjfT/eCFcHYMAczonsasVrxPHB1AWm+oOCIJt3
+         itZwAKbVQfCKmnv3bCQ7c6FLNZdlwwkCyMOQjsJt+Qb9EeY7XvowpoiZy5ckuV9uWIR1
+         /+fqxU3HZukH/fHF+5ph6ZExIuZ8JHCcIBhI4U3/UfSgaqSa8oU3xC+6gmEukNIA4IR1
+         XS1w==
+X-Gm-Message-State: AAQBX9fCY9jmsRt6E/EFZV8GTzLnz6vTkQaUth1xk/3CICdVzhPuDfOe
+        k5lCh2AS/8Pg8ks2qtJcTGd992gUagbMCzaW6zIu
+X-Google-Smtp-Source: AKy350YGpKFShus1wXg4P7JDpOEQwCA2ZUIAFxOOzluNG03DhrMlLa19ZC7t5ZHiN0J6rZ9Xc6wbx1W+NEq2mwRq1zY=
+X-Received: by 2002:a25:d702:0:b0:b68:7a4a:5258 with SMTP id
+ o2-20020a25d702000000b00b687a4a5258mr377571ybg.3.1681254488697; Tue, 11 Apr
+ 2023 16:08:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-8-git-send-email-wufan@linux.microsoft.com>
+ <3723852.kQq0lBPeGt@x2> <CAHC9VhRqMrTuvVtwzJoK2U=6O1QuaQ8ceA6+qm=6ib0TOUEeSw@mail.gmail.com>
+ <20230316225340.GB22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230316225340.GB22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 11 Apr 2023 19:07:57 -0400
+Message-ID: <CAHC9VhQxxrDnzJmUitMid3fk-VwNRU3NWoqjpj1=rhrtpoE=7w@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 07/16] uapi|audit|ipe: add ipe auditing support
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     Steve Grubb <sgrubb@redhat.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        linux-audit@redhat.com, dm-devel@redhat.com,
+        linux-doc@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akshat Jain <akshatzen@google.com>
+On Thu, Mar 16, 2023 at 6:53=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On Thu, Mar 02, 2023 at 02:05:33PM -0500, Paul Moore wrote:
+> > On Tue, Jan 31, 2023 at 12:11???PM Steve Grubb <sgrubb@redhat.com> wrot=
+e:
+> > >
+> > > Hello,
+> > >
+> > > On Monday, January 30, 2023 5:57:22 PM EST Fan Wu wrote:
+> > > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > > >
+> > > > Users of IPE require a way to identify when and why an operation fa=
+ils,
+> > > > allowing them to both respond to violations of policy and be notifi=
+ed
+> > > > of potentially malicious actions on their systens with respect to I=
+PE
+> > > > itself.
+> > > >
+> > > > The new 1420 audit, AUDIT_IPE_ACCESS indicates the result of a poli=
+cy
+> > > > evaulation of a resource. The other two events, AUDIT_MAC_POLICY_LO=
+AD,
+> > > > and AUDIT_MAC_CONFIG_CHANGE represent a new policy was loaded into =
+the
+> > > > kernel and the currently active policy changed, respectively.
+> > >
+> > > Typically when you reuse an existing record type, it is expected to m=
+aintain
+> > > the same fields in the same order. Also, it is expect that fields tha=
+t are
+> > > common across diferent records have the same meaning. To aid in this,=
+ we have
+> > > a field dictionary here:
+> > >
+> > > https://github.com/linux-audit/audit-documentation/blob/main/specs/fi=
+elds/
+> > > field-dictionary.csv
+> > >
+> > > For example, dev is expected to be 2 hex numbers separated by a colon=
+ which
+> > > are the device major and minor numbers. But down a couple lines from =
+here, we
+> > > find dev=3D"tmpfs". But isn't that a filesystem type?
+> >
+> > What Steve said.
+> >
+> > I'll also add an administrative note, we just moved upstream Linux
+> > audit development to a new mailing list, audit@vger.kernel.org, please
+> > use that in future patch submissions.  As a positive, it's a fully
+> > open list so you won't run into moderation delays/notifications/etc.
+> >
+> Thanks for the info, I will update the address.
+>
+> > > > This patch also adds support for success auditing, allowing users t=
+o
+> > > > identify how a resource passed policy. It is recommended to use thi=
+s
+> > > > option with caution, as it is quite noisy.
+> > > >
+> > > > This patch adds the following audit records:
+> > > >
+> > > >   audit: AUDIT1420 path=3D"/tmp/tmpwxmam366/deny/bin/hello" dev=3D"=
+tmpfs"
+> > > >     ino=3D72 rule=3D"DEFAULT op=3DEXECUTE action=3DDENY"
+> > >
+> > > Do we really need to log the whole rule?
+> >
+> > Fan, would it be reasonable to list the properties which caused the
+> > access denial?  That seems like it might be more helpful than the
+> > specific rule, or am I missing something?
+>
+> Audit the whole rule can let the user find the reason of a policy decisio=
+n.
+> We need the whole rule because an allow/block is not caused by a specific
+> property, but the combination of all property conditions in a rule.
 
-Log combination of phy_id and device_id in device registration
-response.
+Okay, that's a reasonable argument for logging the rule along with the
+decision.  I think it helps that the IPE policy rules are not
+particularly long.
 
-Signed-off-by: Akshat Jain <akshatzen@google.com>
-Signed-off-by: Pranav Prasad <pranavpp@google.com>
----
- drivers/scsi/pm8001/pm8001_hwi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+> We could also add a verbose switch such that we only audit
+> the whole rule when a user turned the verbose switch on.
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index ec1a9ab61814..73cd25f30ca5 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -3362,8 +3362,9 @@ int pm8001_mpi_reg_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 	pm8001_dev = ccb->device;
- 	status = le32_to_cpu(registerRespPayload->status);
- 	device_id = le32_to_cpu(registerRespPayload->device_id);
--	pm8001_dbg(pm8001_ha, MSG, " register device is status = %d\n",
--		   status);
-+	pm8001_dbg(pm8001_ha, INIT,
-+		   "register device status %d phy_id 0x%x device_id %d\n",
-+		   status, pm8001_dev->attached_phy, device_id);
- 	switch (status) {
- 	case DEVREG_SUCCESS:
- 		pm8001_dbg(pm8001_ha, MSG, "DEVREG_SUCCESS\n");
-@@ -4278,7 +4279,7 @@ int pm8001_chip_dereg_dev_req(struct pm8001_hba_info *pm8001_ha,
- 	memset(&payload, 0, sizeof(payload));
- 	payload.tag = cpu_to_le32(1);
- 	payload.device_id = cpu_to_le32(device_id);
--	pm8001_dbg(pm8001_ha, MSG, "unregister device device_id = %d\n",
-+	pm8001_dbg(pm8001_ha, INIT, "unregister device device_id %d\n",
- 		   device_id);
- 
- 	return pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &payload,
--- 
-2.40.0.577.gac1e443424-goog
+I'm not sure that's necessary, and honestly it might be annoying as we
+would still need to output a 'rule=3D"?"' field in the audit record as
+it is considered good practice to not have fields magically appear and
+disappear from the record format.  However, if there are concerns
+about record sizes, that could be a potential mitigation.
 
+--=20
+paul-moore.com
