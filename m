@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32946DE67F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8796DE684
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDKVer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S229802AbjDKVfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjDKVeo (ORCPT
+        with ESMTP id S229679AbjDKVfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:34:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7242F5599
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:34:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-206-zsA8Q_GJNdGPDl24cMCxtg-1; Tue, 11 Apr 2023 22:34:38 +0100
-X-MC-Unique: zsA8Q_GJNdGPDl24cMCxtg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 11 Apr
- 2023 22:34:35 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 11 Apr 2023 22:34:35 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     Uros Bizjak <ubizjak@gmail.com>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
-Subject: RE: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Topic: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Index: AQHZbHulp5OquwuviUmDAgAFAiF/7K8moCeA
-Date:   Tue, 11 Apr 2023 21:34:35 +0000
-Message-ID: <bd5753622f2f42248495a42593b497f3@AcuMS.aculab.com>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
- <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
- <1fee0372-3a3b-5e09-38c3-ffb3523fe195@intel.com>
-In-Reply-To: <1fee0372-3a3b-5e09-38c3-ffb3523fe195@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 11 Apr 2023 17:35:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24509558D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:35:03 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z26so12049270lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681248901; x=1683840901;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vgjk5+7IjN8Jw3X+GOTozhyftZCcRJijaSMlBqwvNWk=;
+        b=WThnyX2+GwrspIZFSKQDpOX5ESi2oznurZGDtC/OQB6/11eIajgq27TLC0YuU5g8/m
+         B9rmC1mW4cP4jCQtkdeC2FIiQJPkjnxiwv2CWZ8Wsms9tKlWmKHgkPnZa6/ZI8JrDp2w
+         gzFp6KyiKU/n1ZL/EHcGfzqmOQyfDzX0HMOrJ6ElBFvVLZ7sB3MUYGKr6wCbdcC5nk3q
+         FQrBC6M1bPPDDNZ2Y740JTRmm3mXATVFc2QP+2GtPFWtxue6XQOgKKgrAEXVmMO4Q4re
+         TnnO7wz2BT61Io+P6QR9ppnBIHhGvM9Vy3cgsihmW+pQ1MLAioqevNMrDRlZCOLNf75C
+         oFRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681248901; x=1683840901;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgjk5+7IjN8Jw3X+GOTozhyftZCcRJijaSMlBqwvNWk=;
+        b=RuqD/8ZCH7uTNPDBInHs6ckbc8iYfgsJEFD7mTcXnv1MfM6fXtPRjVxRw/a1z8gcqc
+         9Kes0skQgayUgRjITkZEA/mydwLLmwEapgzNY0I7Ynyqnpk+LocApox4FDbSV3gAuKst
+         1vg+88PAeeVq9Qsbr/C5x3aPlNEDZ3KcWgS21Sbw8b3645I9KJeVo9n49AOnB1jy3zzS
+         ghvVtCgPseA4i/HyqsiL1EKS69Xm3sWB+dohDt7vQUn1v1cZhJABBZSLwiWiZHBnR4Q8
+         LsCX0cL4YeZ5hz2nvcKDNNt4iKesIvf1goeAhBQvbNsa2XwNEB+JuX0hpJDydRCzV00m
+         nuCw==
+X-Gm-Message-State: AAQBX9f4Zaj1te1VBZHCGPhPpJfpl5W5Les9UQ/RGk9wf76W0gTuO+gF
+        PLaMvMwLgy7d0tao+rOm+Cgk0w==
+X-Google-Smtp-Source: AKy350bd1PrnBQbb66BSBlCiFWEHWfiNqi7ZGdlXv9ZyKjsQ2ZAvnfRuDJ6wPwJyPzzuziqRfAcgIw==
+X-Received: by 2002:ac2:443c:0:b0:4ea:eadf:2a53 with SMTP id w28-20020ac2443c000000b004eaeadf2a53mr4534002lfl.63.1681248901323;
+        Tue, 11 Apr 2023 14:35:01 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id q29-20020ac2515d000000b004ea018bb8f7sm2695471lfd.77.2023.04.11.14.35.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 14:35:00 -0700 (PDT)
+Message-ID: <a97aacb4-e880-9665-4837-7af207f0ac77@linaro.org>
+Date:   Tue, 11 Apr 2023 23:34:59 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
+ enable unused clock cleanup
 Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+ <20230316225803.GA4036689-robh@kernel.org>
+ <62533d5a-f39a-0806-b4d9-932e2af6beef@linaro.org>
+ <5601e0edc19dc03d0fc516f9ffe4d1aa.sboyd@kernel.org>
+ <2a379401-fe87-9e30-5449-513dd23c52f5@linaro.org>
+ <422abc8b-5c01-238b-7793-212597dbffc8@linaro.org>
+In-Reply-To: <422abc8b-5c01-238b-7793-212597dbffc8@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,34 +88,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMTEgQXByaWwgMjAyMyAxNDo0NA0KPiANCj4gT24g
-NC8xMS8yMyAwNDozNSwgTWFyayBSdXRsYW5kIHdyb3RlOg0KPiA+IEkgYWdyZWUgaXQnZCBiZSBu
-aWNlIHRvIGhhdmUgcGVyZm9ybWFuY2UgZmlndXJlcywgYnV0IEkgdGhpbmsgdGhvc2Ugd291bGQg
-b25seQ0KPiA+IG5lZWQgdG8gZGVtb25zdHJhdGUgYSBsYWNrIG9mIGEgcmVncmVzc2lvbiByYXRo
-ZXIgdGhhbiBhIHBlcmZvcm1hbmNlDQo+ID4gaW1wcm92ZW1lbnQsIGFuZCBJIHRoaW5rIGl0J3Mg
-ZmFpcmx5IGNsZWFyIGZyb20gZXllYmFsbGluZyB0aGUgZ2VuZXJhdGVkDQo+ID4gaW5zdHJ1Y3Rp
-b25zIHRoYXQgYSByZWdyZXNzaW9uIGlzbid0IGxpa2VseS4NCj4gDQo+IFRoYW5rcyBmb3IgdGhl
-IGFkZGl0aW9uYWwgY29udGV4dC4NCj4gDQo+IEkgdG90YWxseSBhZ3JlZSB0aGF0IHRoZXJlJ3Mg
-emVybyBidXJkZW4gaGVyZSB0byBzaG93IGEgcGVyZm9ybWFuY2UNCj4gaW5jcmVhc2UuICBJZiBh
-bnlvbmUgY2FuIHRoaW5rIG9mIGEgcXVpY2sgd2F5IHRvIGRvIF9zb21lXyBraW5kIG9mDQo+IGJl
-bmNobWFyayBvbiB0aGUgY29kZSBiZWluZyBjaGFuZ2VkIGFuZCBqdXN0IHNob3cgdGhhdCBpdCdz
-IGZyZWUgb2YNCj4gYnJvd24gcGFwZXIgYmFncywgaXQgd291bGQgYmUgYXBwcmVjaWF0ZWQuICBO
-b3RoaW5nIGNyYXp5LCBqdXN0IHRoaW5rIG9mDQo+IG9uZSB3b3JrbG9hZCAoc3ludGhldGljIG9y
-IG5vdCkgdGhhdCB3aWxsIHN0cmVzcyB0aGUgcGF0aHMgYmVpbmcgY2hhbmdlZA0KPiBhbmQgcnVu
-IGl0IHdpdGggYW5kIHdpdGhvdXQgdGhlc2UgY2hhbmdlcy4gIE1ha2Ugc3VyZSB0aGVyZSBhcmUg
-bm90DQo+IHN1cnByaXNlcy4NCj4gDQo+IEkgYWxzbyBhZ3JlZSB0aGF0IGl0J3MgdW5saWtlbHkg
-dG8gYmUgYnJvd24gcGFwZXIgYmFnIG1hdGVyaWFsLg0KDQpUaGUgb25seSB0aGluZyBJIGNhbiB0
-aGluayBvZiBpcyB0aGF0LCBvbiB4ODYsIHRoZSBsb2NrZWQNCnZhcmlhbnQgbWF5IGFjdHVhbGx5
-IGJlIGZhc3RlciENCkJvdGggcmVxdWlyZSBleGNsdXNpdmUgYWNjZXNzIHRvIHRoZSBjYWNoZSBs
-aW5lICh0aGUgdW5sb2NrZWQNCnZhcmlhbnQgYWx3YXlzIGRvZXMgdGhlIHdyaXRlISBbMV0pLg0K
-U28gaWYgdGhlIGNhY2hlIGxpbmUgaXMgY29udGVuZGVkIGJldHdlZW4gY3B1IHRoZSB1bmxvY2tl
-ZA0KdmFyaWFudCBtaWdodCBwaW5nLXBvbmcgdGhlIGNhY2hlIGxpbmUgdHdpY2UhDQpPZiBjb3Vy
-c2UsIGlmIHRoZSBsaW5lIGlzIHNoYXJlZCBsaWtlIHRoYXQgdGhlbiBwZXJmb3JtYW5jZQ0KaXMg
-aG9ycmlkLg0KDQpbMV0gSSBjaGVja2VkIG9uIGFuIHVuY2FjaGVkIFBDSWUgYWRkcmVzcyBvbiB3
-aGljaCBJIGNhbiBtb25pdG9yDQp0aGUgVExQLiBUaGUgd3JpdGUgYWx3YXlzIGhhcHBlbnMgc28g
-eW91IGNhbiB1c2UgY21weGNoZzE4Yg0Kd2l0aCBhICdrbm93biBiYWQgdmFsdWUnIHRvIGRvIGEg
-MTYgYnl0ZSByZWFkIGFzIGEgc2luZ2xlIFRMUA0KKHdpdGhvdXQgdXNpbmcgYW4gU1NFIHJlZ2lz
-dGVyKS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
+
+On 7.04.2023 22:17, Konrad Dybcio wrote:
+> 
+> 
+> On 6.04.2023 16:44, Konrad Dybcio wrote:
+>>
+>>
+>> On 17.03.2023 19:20, Stephen Boyd wrote:
+>>> Quoting Konrad Dybcio (2023-03-16 17:31:34)
+>>>>
+>>>> On 16.03.2023 23:58, Rob Herring wrote:
+>>>>> On Wed, Mar 08, 2023 at 10:35:17PM +0100, Konrad Dybcio wrote:
+>>>>>>  
+>>>>>> +  qcom,clk-disable-unused:
+>>>>>> +    type: boolean
+>>>>>> +    description:
+>>>>>> +      Indicates whether unused RPM clocks can be shut down with the common
+>>>>>> +      unused clock cleanup. Requires a functional interconnect driver.
+>>>>>
+>>>>> I don't think this should be QCom specific. Come up with something 
+>>>>> common (which will probably have some debate). 
+>>>> Generally the opposite (ignoring unused clocks during the cleanup) is
+>>>> the thing you need to opt into.
+>>>>
+>>>> I can however see how (especially with the focus on not breaking things
+>>>> for older DTs) somebody else may also decide to only allow them to be
+>>>> cleaned up conditionally (by marking the clocks that were enabled earlier
+>>>> as enabled in Linux OR not addding clk.flags |= CLK_IGNORE_UNUSED) as we
+>>>> do here.
+>>>>
+>>>> Stephen, Rob, would `clk-disable-unused` be a fitting generic property
+>>>> name for that? Should we also think about `clk-ignore-unused` as a
+>>>> clock-controller-specific alternative to the CCF-wide clk_ignore_unused
+>>>> cmdline?
+>>>>
+>>>
+>>> There are multiple threads on the list about disabling unused clks.
+>>> Moving the decision to disable unused clks to a DT property is yet
+>>> another approach. I'd rather not do that, because it really isn't
+>>> describing the hardware configuration. If anything, I'd expect the
+>>> property to be describing which clks are enabled by the firmware and
+>>> then leave the decision to disable them because they're unused up to the
+>>> software.
+>> After some more thinking, I realized that this could be made opt-in
+>> simply with driver_data..
+>>
+>> WDYT?
+> ..on a re-evaluation, obviously not a great idea.. Old DTBs will not
+> be happy about that.
+Another idea would be to yank out the not-very-useful "qcom,rpmcc"
+fallback compatible and present .is_enabled etc. when it's absent..
+
+Directly checking for the interconnect handle to rpmcc is not possible,
+as interconnect requires rpmcc.. And then somebody's interconnect
+driver may not be "good enough" (like 8996 and pre-6.3 DTs).
+
+Konrad
+> 
+> Konrad
+>>
+>> Konrad
