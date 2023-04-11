@@ -2,100 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96E86DCF64
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F63B6DCF67
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDKBez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 21:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S229741AbjDKBfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 21:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDKBey (ORCPT
+        with ESMTP id S230031AbjDKBfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 21:34:54 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5039D1723;
-        Mon, 10 Apr 2023 18:34:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PwT0m0fFhz4f3ppl;
-        Tue, 11 Apr 2023 09:34:48 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCnUyE4uTRkJuc_Gg--.27205S3;
-        Tue, 11 Apr 2023 09:34:49 +0800 (CST)
-Subject: Re: [PATCH -next v5 1/6] md: pass a md_thread pointer to
- md_register_thread()
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     logang@deltatee.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230410113559.1610455-1-yukuai1@huaweicloud.com>
- <20230410113559.1610455-2-yukuai1@huaweicloud.com>
- <CAPhsuW7rUQ9KFxCQw-iAAA64=x==b-Qu0nnp32TXn-85Okb00w@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <daa344fe-9d8d-16f9-aded-513f250928b9@huaweicloud.com>
-Date:   Tue, 11 Apr 2023 09:34:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 10 Apr 2023 21:35:18 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910E6213D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:35:16 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id v9so11754970pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1681176916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S518XHoIGyP+f1W0+oLc45AmArtwLicSVB0jPKCMEaE=;
+        b=XP6OuqjHAxklvaB1XLZhIKDQny0K8+ZkV2w+KqCh+ECxPbZPLbKX+xYe5m06qHXJ81
+         8ZfWlcmtMxNzgIGZLLlcWwpyiJGxEDgCf9n02GAbBS0eOeB5JVDYsJh/ZnMoLu3du9n+
+         FGQ/THIb2mCXZ9++QkLllYhUPmaH/lhO897p/B0QKhGiII8oLe7hT8Hl5Z5A9fOkQgeF
+         Cy+mfRNjp8MgLEj5kirtE5JOWTFcN+YfKt3Og2p3Fczv5s1kHm9i8cE9Vc15xGbMgUSY
+         iRpuflu/gqrI/GmmX2B0MCTaYNNLcVGA8bz7n68iJW+xQCrKv4dR4N067BAVlUhBat8X
+         XONw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681176916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S518XHoIGyP+f1W0+oLc45AmArtwLicSVB0jPKCMEaE=;
+        b=vHhsXkeGce82UvFbaCbvRIJFWjDY5OxiAGy5yQVc9TvkXM/1K6gN4IMf5kUD4M4zJ0
+         VL+/8A4HcFo9VEkWzNCF8BEC0f715tdRuKawqyrB84I/X8IhYQ+A6YsSpm5t/E67HsYj
+         f80nuR7NeqLdTmNaBQfELGEXw35nUcxk52qeRF0FVeRAT1ILNyhDJYCGlusHk9b7y0lj
+         NMw8lbGMl9hCtnV+C+nlfknIz0Cf9XTQanCAG1WaMF63xT2ONq7TBKEXKkKJBxbau2DD
+         4Yox6RayJDKqOlBAPagUZqB6pVszslJcRkiMQ6ZS4KwXnMmDOtoPILZcnQyuYDGKQhDQ
+         TweQ==
+X-Gm-Message-State: AAQBX9cuz+pZCwZE8uRDHDlbkxn8ocUyJkyp6xqPTAmbs3cZczZl+Avo
+        11OYnPIdgBes/DMhdU6CUqniBA==
+X-Google-Smtp-Source: AKy350a5yTDJ/77c3MBtQrXVH4tcuNMWZG9l8/8jGYSJQlNEGhs9lC+lFEf2Z96Aqe7w9jXg5LWn+Q==
+X-Received: by 2002:a05:6a20:b930:b0:c7:717f:4863 with SMTP id fe48-20020a056a20b93000b000c7717f4863mr13355983pzb.21.1681176916062;
+        Mon, 10 Apr 2023 18:35:16 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-41-174.pa.nsw.optusnet.com.au. [49.180.41.174])
+        by smtp.gmail.com with ESMTPSA id w26-20020aa7859a000000b0063418ea5032sm4490115pfn.1.2023.04.10.18.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 18:35:15 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pm2ue-001uua-Od; Tue, 11 Apr 2023 11:35:12 +1000
+Date:   Tue, 11 Apr 2023 11:35:12 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+listea0b12829deaef4101fd@syzkaller.appspotmail.com>
+Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] Monthly xfs report
+Message-ID: <20230411013512.GX3223426@dread.disaster.area>
+References: <000000000000529f1805f81b23c2@google.com>
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW7rUQ9KFxCQw-iAAA64=x==b-Qu0nnp32TXn-85Okb00w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCnUyE4uTRkJuc_Gg--.27205S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw17ZFy8ZFy3tw1Dur13CFg_yoW3XFb_Zr
-        1vkasrGr17Jr97t3Wjvw40yFsrCrW5Cr17XrWDtrWUKa4FgFyUXr1vv34FyFyxAFWFq39a
-        gr95Z3yUK397GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000529f1805f81b23c2@google.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/04/11 9:15, Song Liu 写道:
-> On Mon, Apr 10, 2023 at 4:37 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Prepare to protect md_thread with rcu, there are no functional changes.
+On Thu, Mar 30, 2023 at 02:58:43AM -0700, syzbot wrote:
+> Hello xfs maintainers/developers,
 > 
-> Why do we need this change? To add __rcu later?
-
-Add __rcu is one reason, more importantly is to assign md_thread inside
-md_register_thread in patch 6:
-
-rcu_assign_pointer(*threadp, thread);
-
+> This is a 30-day syzbot report for the xfs subsystem.
+> All related reports/information can be found at:
+> https://syzkaller.appspot.com/upstream/s/xfs
 > 
-> Can we do something like:
+> During the period, 5 new issues were detected and 0 were fixed.
+> In total, 23 issues are still open and 15 have been fixed so far.
 > 
-> struct md_thread __rcu *md_register_thread(void (*run) (struct md_thread *),
->                 struct mddev *mddev, const char *name)
-
-I think this is not necessary, if we don't want to change api, we must
-use rcu_assign_pointer for each caller to set md_thread.
-
-Thanks,
-Kuai
+> Some of the still happening issues:
 > 
-> Thanks,
-> Song
-> .
-> 
+> Crashes Repro Title
+> 327     Yes   INFO: task hung in xlog_grant_head_check
+>               https://syzkaller.appspot.com/bug?extid=568245b88fbaedcb1959
 
+[  501.289306][ T5098] XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
+[  501.299015][ T5098] XFS (loop0): Log size 128 blocks too small, minimum size is 2880 blocks
+[  501.307608][ T5098] XFS (loop0): Log size out of supported range.
+[  501.313866][ T5098] XFS (loop0): Continuing onwards, but if log hangs are experienced then please report this message in the bug report.
+
+Syzbot doing something stupid - syzbot needs to stop testing the
+deprecated and soon to be unsupported v4 filesystem format.
+
+Invalid.
+
+> 85      Yes   KASAN: stack-out-of-bounds Read in xfs_buf_lock
+>               https://syzkaller.appspot.com/bug?extid=0bc698a422b5e4ac988c
+
+Bisection result is garbage.
+
+Looks like a race between dquot shrinker grabbing a dquot buffer to
+write back a dquot and the dquot buffer being reclaimed before it is
+submitted from the delwri list. Something is dropping a buffer
+reference on the floor...
+
+More investigation needed.
+
+> 81      Yes   WARNING in xfs_qm_dqget_cache_insert
+>               https://syzkaller.appspot.com/bug?extid=6ae213503fb12e87934f
+
+That'll be an ENOMEM warning on radix tree insert.
+
+No big deal, the code cleans up and retries the lookup/insert
+process cleanly. Could just remove the warning.
+
+Low priority, low severity.
+
+> 47      Yes   WARNING in xfs_bmapi_convert_delalloc
+>               https://syzkaller.appspot.com/bug?extid=53b443b5c64221ee8bad
+
+Unexpected ENOSPC because syzbot has created a inconsistency between
+superblock counters and the free space btrees.  Warning is expected
+as it indicates user data loss is going to occur, doesn't happen in
+typical production operation, generally requires malicious
+corruption of the filesystem to trigger.
+
+Not a bug, won't fix.
+
+> 44      Yes   INFO: task hung in xfs_buf_item_unpin
+>               https://syzkaller.appspot.com/bug?extid=3f083e9e08b726fcfba2
+
+Yup, that's a deadlock on the superblock buffer.
+
+xfs_sync_sb_buf() is called from an ioctl of some kind, gets stuck
+in the log force waiting for iclogs to complete. xfs_sync_sb_buf()
+holds the buffer across the transaction commit, so the sb buffer is
+locked while waiting for the log force.
+
+At just the wrong time, the filesystem gets shut down:
+
+  [  484.946965][ T5959] syz-executor360: attempt to access beyond end of device
+  [  484.946965][ T5959] loop0: rw=432129, sector=65536, nr_sectors = 64 limit=65536
+  [  484.950756][   T52] XFS (loop0): log I/O error -5
+  [  484.952017][   T52] XFS (loop0): Filesystem has been shut down due to log error (0x2).
+  [  484.953902][   T52] XFS (loop0): Please unmount the filesystem and rectify the problem(s).
+  [  714.735393][   T28] INFO: task kworker/1:1H:52 blocked for more than 143 seconds.
+
+And the iclog IO completion tries to unpin and abort all the log
+items in the current checkpoint. One of those is the superblock
+buffer, and because this is an abort:
+
+[  714.754433][   T28]  xfs_buf_lock+0x264/0xa68
+[  714.755623][   T28]  xfs_buf_item_unpin+0x2c4/0xc18
+[  714.756875][   T28]  xfs_trans_committed_bulk+0x2d8/0x73c
+[  714.758236][   T28]  xlog_cil_committed+0x210/0xef8
+
+The unpin code tries to lock the buffer to pass it through to IO
+completion to mark it as failed.
+
+Real deadlock, I think it might be able to occur on any synchronous
+transaction commit that holds a buffer locked across it. No
+immediate fix comes to mind right now. Can only occur on a journal
+IO triggered shutdown, so not somethign that happens typically in
+production systems.
+
+Low priority, medium severity.
+
+
+> 13      Yes   general protection fault in __xfs_free_extent
+>               https://syzkaller.appspot.com/bug?extid=bfbc1eecdfb9b10e5792
+
+Growfs issue. Looks like a NULL pag, which means the fsbno passed
+to __xfs_free_extent() is invalid. Without looking further, this
+looks like it's a corrupt AGF length or superblock size and this has
+resulted in the calculated fsbno starting beyond the end of the last
+AG that we are about to grow. That means the agno is beyond EOFS,
+xfs_perag_get(agno) ends up NULL, and __xfs_free_extent() goes
+splat.  Likely requires corruption to trigger.
+
+Low priority, low severity.
+
+> 5       Yes   KASAN: use-after-free Read in xfs_btree_lookup_get_block
+>               https://syzkaller.appspot.com/bug?extid=7e9494b8b399902e994e
+
+Recovery of reflink COW extents, we have a corrupted journal
+
+   [   52.495566][ T5067] XFS (loop0): Mounting V5 Filesystem bfdc47fc-10d8-4eed-a562-11a831b3f791
+   [   52.599681][ T5067] XFS (loop0): Torn write (CRC failure) detected at log block 0x180. Truncating head block from 0x200.
+   [   52.636680][ T5067] XFS (loop0): Starting recovery (logdev: internal)
+
+And then it looks to have a UAF on the refcountbt cursor that is
+first initialised in xfs_refcount_recover_cow_leftovers(). Likely
+tripping over a corrupted refcount btree of some kind. Probably one
+for Darrick to look into.
+
+Low priority, low severity.
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
