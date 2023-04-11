@@ -2,95 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FE06DE0EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94936DDF2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjDKQYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S231159AbjDKPMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjDKQYw (ORCPT
+        with ESMTP id S230516AbjDKPMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:24:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94ED1999;
-        Tue, 11 Apr 2023 09:24:50 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFGqli003050;
-        Tue, 11 Apr 2023 16:24:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Nzq6IMaf+v4naZmcNk65CmHgfAB4uZmQQqrjKIoECSA=;
- b=S8Q7FmernMvI6zcc6P6UjCJb5aHih8+6mpdyPCgaEqDcMYI2BYfXIxzUIFCpjXCNDooC
- LYavpjJ3JP97w6VA5Tp5R9RWhcOPlUjNjNTc/ngz8CMIG4kuVtlMK9yxTx41+SIdp8YS
- XTGrPrcm0zh5h/hqW3DN14QUmGVkhmXpML5zgfXMbhQKjVMwfgfs4o+GIjgB03dj63Ty
- mgkuZ2DudCUZCx3p96u/dkWEtAByiYSux0K8t+bXn49bkFV2QiGTYqmzgUsOaUMXoQ4G
- U3e0mFg38ep6RiDJrA9IOZt+JKlENov4Xhg5KGalDPQeQj68QO9E8W3DRHDmmlB7pg8q 3w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw9b9g952-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 16:24:22 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BGO3M3026631
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 16:24:03 GMT
-Received: from [10.216.22.209] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
- 2023 09:23:56 -0700
-Message-ID: <24804682-6ead-03b1-8b21-3ac413187c4a@quicinc.com>
-Date:   Tue, 11 Apr 2023 21:53:53 +0530
+        Tue, 11 Apr 2023 11:12:08 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2060.outbound.protection.outlook.com [40.107.105.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB025BB1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:11:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RtfOQ/YjJzg0f8d02d8y6AC39pWbSIJXaJbIAAiijgowLa5oZLAExzKT+Vmv7vwo1T5lkQxzXT63kp9vhlSVeqSkBsxch3weRSlylwCN21WOUa+kNuGV4GlHVtCGom5KJWx9Wr0y3hweuDOXKPiV6WklSl/ueQOu4+QLD5XyKonRspkGrf7blWb8uCENnbMMVbMjqxsC+QRy9qxTxrf8aTRDrgFLnJGVQGE8hdSNTz75vhRxQFiA6S8nglZFika+u+DZ9SdTYGnGxlmbT2xqfNW+k2M7RC0lM+O4JHd3jG1TLyNKZnz1qfoisz9vFmpXcO5QFACK25OUsvM7X7x7tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=epOg+TaATSU9yswWrbY7l+uvP2X5RvFImlrNro8jRQs=;
+ b=RpGUi8dHyHNXo4Oc/iaXGnKe+uJR/nwhAj5sEG4126Q9AjRRCox8xAw+vw1QUn70mhv5YQRcFzXF3HsNW2HLjPghL6tSPUZKOhrIiAaFVgQggv6iW3Yeuds7ufXPkp8soFuE47b0Ts9O2Q/NUw3lUSU1+4WD9+KpxSDUQA9HZWBZFa1aFcfnJIFHfXRKtkx7U9wZujtO2QAYdHxbR3MN4ECXb4viovEu0jV+Ihs4CLgsW/c4T3ly2R8VlGsAKCapaLQooeo0mTDj+2O/fhr8bwDlT40IcIKuWyq/EZsS33czsXJmar6IsAgUBg+Dz5WReIHN3YEONp+AUN94CiqZdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=epOg+TaATSU9yswWrbY7l+uvP2X5RvFImlrNro8jRQs=;
+ b=mBXHjtHZIQOdAfTd9cRVptZ3ANk9d6MfcBsw6G2Bf2ieyCVGMHirDbEsDG9k1cznkPTU0Lx2OosZle6KO1C0XlcQm8w0R/TZHY/S/GYy8jWpZkaGH7Rd1yYtgyVu0eWrOYt1Gwms9mI2IigCDAT8oxFUAY6vbdb2ye/okj1qQ80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
+ by VE1PR04MB7454.eurprd04.prod.outlook.com (2603:10a6:800:1a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 15:11:35 +0000
+Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::bb08:83bc:69ce:21ed]) by DU2PR04MB8630.eurprd04.prod.outlook.com
+ ([fe80::bb08:83bc:69ce:21ed%8]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 15:11:35 +0000
+From:   Pankaj Gupta <pankaj.gupta@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        gaurav.jain@nxp.com, sahil.malhotra@nxp.com, aisheng.dong@nxp.com,
+        V.Sethi@nxp.com
+Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>
+Subject: [NXP ELE-MUAP Driver 0/7] *** firmware: imx: NXP Edgelock Enclave MUAP Driver ***
+Date:   Tue, 11 Apr 2023 21:55:29 +0530
+Message-Id: <20230411162536.30604-1-pankaj.gupta@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0035.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::14) To AM9PR04MB8636.eurprd04.prod.outlook.com
+ (2603:10a6:20b:43f::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 5/7] arm64: dts: qcom: sa8775p: add the pcie smmu node
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Eric Chanudet <echanude@redhat.com>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        Parikshit Pareek <quic_ppareek@quicinc.com>
-References: <20230406200723.552644-1-brgl@bgdev.pl>
- <20230406200723.552644-6-brgl@bgdev.pl>
- <20230410201145.6e2qsl5gtwh7n3k7@echanude>
- <CAMRc=MdSTqO0bW1=_it43K_pn7EuBWRPvBF29N1gdqsh3TpAcg@mail.gmail.com>
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <CAMRc=MdSTqO0bW1=_it43K_pn7EuBWRPvBF29N1gdqsh3TpAcg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LuM71LE-Ip_VE-JInf-pi73Ip0TTRoI9
-X-Proofpoint-ORIG-GUID: LuM71LE-Ip_VE-JInf-pi73Ip0TTRoI9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_11,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110150
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8630:EE_|VE1PR04MB7454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80778f1c-9906-41a6-4fb9-08db3a9f09e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zUnpHS1MHHKo/q4pa2Po7lIWXi7BQw+4C+crM+KgQILO9i+tCEP07yfPh+OzXjC2GWUgWrDtHa0+AKTI6QdSfviT3z6ezSNr0HsSLKbaUx5mhtGuuQQKOY2Pbnvrn/44zNWtACD7Oi/9INiAifSbCTzjTTbtIIeOX9iI+oeZVu//3L2Phcn5OU+RByy+yCXKC2/iomaIz+w+n99/kz/Pn3o8WjVhghFH2+UyAX6wb2kbW0O6UpggWTOInYp2azg4w6bRtGyBr9SkVhiW5C2EzcR6kCu9pUY+Bfti6GgeWCU7/TfsRANV5upmKA87VwdZGxRDhg38clwqetFEiXxFsq0/gJv7J58MROxC1A06VxdU8q6fXW4HKQC8kxLo21PJsj7G/+un6GkDwJyW4Qf0bfEHVLt8CaAWHp6G6LFyLryFx/WGvVJW5RfufuMXtz+i3JRcwvR8K9A9dJvq6Qobj58eHkoJ5QDUOXeSPUhHieX+OWf/QXP8KMIQfbqVEgTiPs0bv4PqDvcZApaZ/eAVcSewdrg7NnvYqfk/2yjxoNYIodwxhGXhBva5miOo/gU8e1jOh+tr2gRXemH+yFH6yotaxHDUexmpAomYC7b8fEzzpNqJOPzayk8uwbQE/u+PTVQxSe2Tdrf/9KWt41zZTA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(136003)(376002)(346002)(451199021)(6486002)(478600001)(4326008)(52116002)(6636002)(8676002)(66946007)(66476007)(66556008)(41300700001)(316002)(86362001)(36756003)(83380400001)(2616005)(26005)(1076003)(6512007)(6506007)(6666004)(2906002)(8936002)(44832011)(5660300002)(38100700002)(38350700002)(186003)(921005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7PruVFk7zJBl0on0OUt/zHeXQlSwusJEn+PV+SYA5IUMcONC3Ed3BoWujSjo?=
+ =?us-ascii?Q?n+6n/hRw+FDXcnu538jmgr22kRj7mnQu+VtI9r4cH9fB74nRXCdLcK3VWI6e?=
+ =?us-ascii?Q?8RBe7wa2ssAVecJAOheNTdl2HzV6x5G3rJ3vL1XK7q0bU7N5ywjwVae7Hbjb?=
+ =?us-ascii?Q?f4YxtEXg9nhEObAL3YdHYdhW+fP5z2/f1BvoAP5FqU7Mma9Hzcjr14mBqeCo?=
+ =?us-ascii?Q?M3zxU9X6aRMF2gRCADkyCsKcu7ql25JmMkxn1kpLTbTs0lif5LIe5xOh+A32?=
+ =?us-ascii?Q?m/5lBoxYBMoEevip+OclSy++9Q5AHoihHrhFANg1RozjQlLOQ+pGIMqgG4lz?=
+ =?us-ascii?Q?IvbxkWhLE2j6FdIKbsiTybE67RlGxb96xeADVhH353X3xVz/0mOPsPLBLRQo?=
+ =?us-ascii?Q?8qB7okzbVhPZHKZZXRMZDTF0ljvjV0IkSlxZqdhjc/52Xhc4xCcqXtTQAYCL?=
+ =?us-ascii?Q?prb+LtC8L0Gc2Ewj48iXpKk2z6RDkjvCCsFJUJgYgtmP12IJNMKMYnRW263J?=
+ =?us-ascii?Q?UVeUS6L/o4TcabYubL6orYs7PRRdMMtdvp8lvvxnKmiw+H8VRbypY6IbxTNb?=
+ =?us-ascii?Q?YKfxJPwzJvXM75W4tWvak0ub33eKjV4h9lrxdUBPu3hviCMqB5ouV+jHvk5O?=
+ =?us-ascii?Q?L7f8RpgrmD6SPPgYJKpYQULf+V42xfRsvRpXZfnHeYUQlqsHA0DonIPgcYKb?=
+ =?us-ascii?Q?Xm0eH8rnmwOA2QlCke6xZ/9zOnktt1CgUrhFeLSQJNYFYIDMtJwsswxfwc/G?=
+ =?us-ascii?Q?DR9A+ESDHUxP3kjKIZpMEKqT7AhiY6qv7zVNVQv05b/CyCdgm6ZRENG4a/lo?=
+ =?us-ascii?Q?epWVy+nSAObgu8oIt+1kT2nV14AKuPtqZK7G4q68qjDOOaO9u0q6Q7v86PF0?=
+ =?us-ascii?Q?xRPQnGek8Fte22qtrjjzDylEdk0OwNoK1CTt1VBGjsag+u0tcNLNk3kHF4Va?=
+ =?us-ascii?Q?pk82SqXK1u6FHWXqmnZVEMHUsHicldQi/8iROg2ssTyamQTM+hdWpooNcnkm?=
+ =?us-ascii?Q?0IkawF0xgRK4UdT6Sd1JOh5XtX4KwAenjWqCop8CrbvoJCtbgKXD8rCKzy0S?=
+ =?us-ascii?Q?9dabeeLA+SgBP5OY7x++/WuiHaNro34cxb7JMaOmsCkdLd/vkp1QRNIdreBH?=
+ =?us-ascii?Q?73d47101DQxDgLEXCx56/0ehR6Vu6waWY/xI6jBYCIDRGBG8S5jAvcs/6AYm?=
+ =?us-ascii?Q?trOMfXNlUjPmJYSLazogETxY68l3ut2cl0H8JSF6EznsV21tvqYEdyiVy0gJ?=
+ =?us-ascii?Q?luJCiOa6tjjLmLNssX4vAFjDypDF0yvBQtTH2Vdd6w9eWVyD5P27K5f1NmhZ?=
+ =?us-ascii?Q?zb+WpZrdFqfgzi1VBBenB8bjeoi+gr7SL3QImX6mcmBN30oLiDBOcR7haRrn?=
+ =?us-ascii?Q?NmSWZCxHvobdvAu7RCr/b0jkj6hIF+OwnERNkhksr/mezGXLjahmsUm7kp6k?=
+ =?us-ascii?Q?EHfo/YzGrOy6OAkH6tkOkvlNVT5bAwPLChTHmiOVfSdTGW0pQsFGBBEvwt2n?=
+ =?us-ascii?Q?EpVJ5xWf2/lvScYFdRSfoCLvzP1GTTLD0JQLlQ957iLO9OkAWsKWlKQIjXb4?=
+ =?us-ascii?Q?u+O/chbSAFQKoeKlAdUuTQTdY8CJCTI45chkrHKG?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80778f1c-9906-41a6-4fb9-08db3a9f09e4
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8636.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 15:11:34.9310
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rh/w+zuCTq9rY51qaoJWcngcZQF4mN2V8fwf3vNbUcjS1z77VbzoZVDnGe0Ra7SoY87hCjvPQUPEwqz4RL7EIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7454
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,175 +113,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Messaging Unit module enables two processing elements within the SoC to
+communicate and coordinate by passing messages (e.g., data, status and control)
+through its interfaces.
 
+The NXP i.MX EdgeLock Enclave Message Unit (ELE-MUAP) is specifically targeted
+for use between application core and Edgelocke Enclave. It allows to send
+messages to the EL Enclave using a shared mailbox.
 
-On 4/11/2023 5:20 PM, Bartosz Golaszewski wrote:
-> On Mon, Apr 10, 2023 at 10:11 PM Eric Chanudet <echanude@redhat.com> wrote:
->>
->> On Thu, Apr 06, 2023 at 10:07:21PM +0200, Bartosz Golaszewski wrote:
->>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>
->>> Add the PCIe SMMU node for sa8775p platforms.
->>>
->>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>   arch/arm64/boot/dts/qcom/sa8775p.dtsi | 74 +++++++++++++++++++++++++++
->>>   1 file changed, 74 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->>> index 2343df7e0ea4..9ab630c7d81b 100644
->>> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
->>> @@ -809,6 +809,80 @@ apps_smmu: iommu@15000000 {
->>>                                     <GIC_SPI 891 IRQ_TYPE_LEVEL_HIGH>;
->>>                };
->>>
->>> +             pcie_smmu: iommu@15200000 {
->>> +                     compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
->>> +                     reg = <0x0 0x15200000 0x0 0x800000>;
->>
->> Testing on the board, applying on next-20230406:
->> [    1.041869] arm-smmu 15200000.iommu: SMMU address space size (0x80000) differs from mapped region size (0x800000)!
->>
->> In the downstream sources, the size is 0x80000[1].
->>
->> On reboot, I also get a synchronous abort, but the second line, from the
->> following output on the serial, could indicate the hypervisor is behind
->> it:
->>
->> [   26.906206] arm-smmu 15200000.iommu: disabling translation
->> 3      33.244434 Injecting instruction/data abort to VM 3, original ESR_EL2 = 0x93800047, fault VA = 0xffff80000a380000, fault IPA = 0x15200000, ELR_EL2 = 0xffffd064f70c9de8
->> [   26.942083] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
->> [   26.948506] Modules linked in: nvmem_qcom_spmi_sdam qcom_pon spi_geni_qcom nvmem_reboot_mode crct10dif_ce i2c_qcom_geni phy_qcom_qmp_ufs gpucc_sa8775p ufs_qcom socinfo fuse ipv6
->> [   26.966702] CPU: 3 PID: 1 Comm: systemd-shutdow Not tainted 6.3.0-rc5-next-20230406-00019-g9d08a3c17f54-dirty #134
->> [   26.977315] Hardware name: Qualcomm SA8775P Ride (DT)
->> [   26.982505] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [   26.989651] pc : arm_smmu_device_shutdown+0x88/0x1d8
->> [   26.994773] lr : arm_smmu_device_shutdown+0x70/0x1d8
->> [   26.999875] sp : ffff80000805bbf0
->> [   27.003283] x29: ffff80000805bbf0 x28: ffff0e69400a0000 x27: 0000000000000000
->> [   27.010608] x26: ffffd064f8130f38 x25: 0000000000000001 x24: ffffd064f8eac028
->> [   27.017932] x23: ffff0e6940eeb490 x22: ffffd064f8f24f80 x21: ffff0e6940eeb410
->> [   27.025254] x20: ffff0e6940808c80 x19: ffff0e6940eeb410 x18: 0000000000000006
->> [   27.032579] x17: 0000000000000001 x16: 0000000000000014 x15: ffff80000805b5c0
->> [   27.039903] x14: 0000000000000000 x13: ffffd064f8ac19a8 x12: 0000000000000606
->> [   27.047226] x11: 0000000000000202 x10: ffffd064f8b199a8 x9 : ffffd064f8ac19a8
->> [   27.054549] x8 : 00000000ffffefff x7 : ffffd064f8b199a8 x6 : 80000000fffff000
->> [   27.061872] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
->> [   27.069195] x2 : 0000000000000000 x1 : ffff80000a380000 x0 : 0000000000000001
->> [   27.076520] Call trace:
->> [   27.079041]  arm_smmu_device_shutdown+0x88/0x1d8
->> [   27.083787]  platform_shutdown+0x24/0x34
->> [   27.087825]  device_shutdown+0x150/0x258
->> [   27.091859]  kernel_restart+0x40/0xc0
->> [   27.095632]  __do_sys_reboot+0x1f0/0x274
->> [   27.099664]  __arm64_sys_reboot+0x24/0x30
->> [   27.103786]  invoke_syscall+0x48/0x114
->> [   27.107644]  el0_svc_common+0x40/0xf4
->> [   27.111410]  do_el0_svc+0x3c/0x9c
->> [   27.114822]  el0_svc+0x2c/0x84
->> [   27.117969]  el0t_64_sync_handler+0xf4/0x120
->> [   27.122357]  el0t_64_sync+0x190/0x194
->> [   27.126126] Code: f9400404 b50008e4 f9400681 52800020 (b9000020)
->> [   27.132385] ---[ end trace 0000000000000000 ]---
->>
-> 
-> Adding Shazad
-> 
-> Eric: This is supposedly gone in the latest meta but I thought you're
-> already on the most recent release?
-> 
-> Shazad, what version exactly should Eric test this on?
-> 
-> Bart
-> 
+Patch-set add the ELE-MU  kernel driver for exchanging messages with i.MX NXP
+ELE IP; both from:
+- User-Space Applications via character driver.
+- Kernel-space, used by kernel management layers like DM-Crypt.
 
-Hi Bart, We should use r00004.1 to verify this. Adding Parikshit to
-confirm on the same.
+Pankaj Gupta (7):
+  doc: device tree binding addition for ele MU
+  arm64: dts: imx93-11x11-evk: added ele-mu
+  arm64: dts: imx93-11x11-evk: reserved mem-ranges to constrain ele-mu
+    dma-range
+  arm64: dts: imx8ulp-evk: added ele-mu
+  arm64: dts: imx8ulp-evk: reserved mem-ranges to constrain ele-mu
+    dma-range
+  firmware: imx: add ELE MU driver support
+  MAINTAINERS: Added maintainer details
 
--Shazad
+ .../bindings/arm/freescale/fsl,ele_mu.yaml    |   90 ++
+ .../devicetree/bindings/mailbox/fsl,muap.txt  |   89 ++
+ MAINTAINERS                                   |    7 +
+ arch/arm64/boot/dts/freescale/imx8ulp-evk.dts |   15 +
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi    |   13 +-
+ .../boot/dts/freescale/imx93-11x11-evk.dts    |   15 +
+ arch/arm64/boot/dts/freescale/imx93.dtsi      |   11 +-
+ drivers/firmware/imx/Kconfig                  |   11 +
+ drivers/firmware/imx/Makefile                 |    2 +
+ drivers/firmware/imx/ele_base_msg.c           |  377 +++++
+ drivers/firmware/imx/ele_mu.c                 | 1284 +++++++++++++++++
+ drivers/firmware/imx/ele_mu.h                 |  174 +++
+ include/linux/firmware/imx/ele_base_msg.h     |   66 +
+ include/linux/firmware/imx/ele_mu_ioctl.h     |   52 +
+ 14 files changed, 2204 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,ele_mu.yaml
+ create mode 100644 Documentation/devicetree/bindings/mailbox/fsl,muap.txt
+ create mode 100644 drivers/firmware/imx/ele_base_msg.c
+ create mode 100644 drivers/firmware/imx/ele_mu.c
+ create mode 100644 drivers/firmware/imx/ele_mu.h
+ create mode 100644 include/linux/firmware/imx/ele_base_msg.h
+ create mode 100644 include/linux/firmware/imx/ele_mu_ioctl.h
 
->> [1] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/blob/ES2/arch/arm64/boot/dts/qcom/lemans.dtsi#L3498
->>
->>> +                     #iommu-cells = <2>;
->>> +                     #global-interrupts = <2>;
->>> +
->>> +                     interrupts = <GIC_SPI 920 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 921 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 925 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 926 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 927 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 928 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 950 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 951 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 954 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 955 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 956 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 957 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 958 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 885 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 886 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 887 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 888 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 842 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 843 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 844 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 845 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 847 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 802 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 803 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 804 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 805 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 806 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 807 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 808 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 809 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 810 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 812 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 813 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 814 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 837 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 838 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 839 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 854 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 855 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 790 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 791 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 792 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 793 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 794 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 795 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 796 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 639 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                  <GIC_SPI 640 IRQ_TYPE_LEVEL_HIGH>;
->>> +             };
->>> +
->>>                intc: interrupt-controller@17a00000 {
->>>                        compatible = "arm,gic-v3";
->>>                        reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
->>> --
->>> 2.37.2
->>>
->>
->> --
->> Eric Chanudet
->>
+-- 
+2.34.1
+
