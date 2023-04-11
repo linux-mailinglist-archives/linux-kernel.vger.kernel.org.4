@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759D76DE17D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C6D6DE185
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjDKQw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S230213AbjDKQxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjDKQw4 (ORCPT
+        with ESMTP id S230241AbjDKQxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:52:56 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 678781991;
-        Tue, 11 Apr 2023 09:52:54 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 33BGqie2009276;
-        Tue, 11 Apr 2023 18:52:44 +0200
-Date:   Tue, 11 Apr 2023 18:52:44 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-Message-ID: <ZDWQXDRknzFhngyk@1wt.eu>
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
- <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
- <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
- <ZDVXbw/097jvjKvK@1wt.eu>
- <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
+        Tue, 11 Apr 2023 12:53:09 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25599E5E;
+        Tue, 11 Apr 2023 09:53:05 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pmHEs-00051b-Qy; Tue, 11 Apr 2023 18:53:02 +0200
+Message-ID: <10076b2c-1f20-378d-6eb0-d7c352b4660e@leemhuis.info>
+Date:   Tue, 11 Apr 2023 18:53:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/3] ARM: dts: meson: Fix the UART compatible strings
+Content-Language: en-US, de-DE
+To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
+ <20211227180026.4068352-2-martin.blumenstingl@googlemail.com>
+ <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
+ <fdffc009-47cf-e88d-5b9e-d6301f7f73f2@leemhuis.info>
+ <44556911-e56e-6171-07dd-05cc0e30c732@collabora.com>
+ <71816e38-f919-11a4-1ac9-71416b54b243@leemhuis.info>
+ <2023040604-washtub-undivided-5763@gregkh>
+ <d7f389ab-914b-c48e-dc8e-290fb72f345e@collabora.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <d7f389ab-914b-c48e-dc8e-290fb72f345e@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681231986;901f67e3;
+X-HE-SMSGID: 1pmHEs-00051b-Qy
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:13:36PM +0200, Miguel Ojeda wrote:
-> On Tue, Apr 11, 2023 at 2:49 PM Willy Tarreau <w@1wt.eu> wrote:
-> >
-> > This might sound strange, but I suspect that having a TAINT_RUST flag
-> > could possibly help maintainers that are already lacking time, because
-> > it may quickly allow some of them to ask "please try again without the
-> > Rust code to see if the problem is still there", just like happens with
-> > out-of-tree code for which the knowledge is limited to null. This could
-> > allow to route issue reports to one maintainer when an issue is confirmed
-> > in both cases or to another one when it only happens in a single case.
-> >
-> > Of course it will not help with code reviews but we know that a great
-> > part of maintainers' time it spent trying to analyse problem reports
-> > that happen under vague conditions. All the time not spent debugging
-> > something not well understood is more time available for reviews.
+On 10.04.23 08:09, Ricardo CaÃ±uelo wrote:
 > 
-> You can already ask to disable `CONFIG_RUST`.
-> 
-> In fact, we asked that a few times, when people reported a problem
-> that looked unrelated to Rust, to confirm that was the case and thus
-> redirect the report.
-> 
-> So it is definitely a good idea to ask for that when you get a report
-> with `RUST=y` and you suspect it may be related to that, especially in
-> the beginning where `RUST=y` should not be common.
+> I sent the original report to stable@vger.kernel.org. 
 
-But if that code is only under a module, there's no need to turn all
-that code off if it's sufficient to be certain the module was no loaded.
-Plus it's more friendly to the user who doesn't have to rebuild a kernel,
-just blacklist a module and check that the kernel doesn't get tainted
-again.
+thx! let me tell regzbot about it:
 
-> However, I think Rust in-tree code is different to out-of-tree code,
-> since you do have the code, and thus (in general) you should be able
-> to reproduce the build, and you can ask for help to the given
-> maintainers to understand it.
+#regzbot monitor:
+https://lore.kernel.org/all/1fcff522-337a-c334-42a7-bc9b4f0daec4@collabora.com/
+#regzbot ignore-activity
 
-It could depend on the layer where it plugs and the level of intimacy
-with the core. Sometimes you need a deep understanding of all interactions
-between elements to imagine possible scenarios.
+> Sorry for
+> the confusion, I'm still learning about how report regressions
+> properly using regzbot, specially for stable branches. Thorsten's
+> guidelines are being very helpful here.
 
-Cheers,
-Willy
+Great to hear! But FWIW, I really should try to find some time to fine
+tune reporting-issues.rst, reporting-regressions.rst, and
+handling-regressions.rst some more, as there are quite a few things that
+afaics could or need to be improved. Especially the aspect
+"stable/longterm is handled by different set of people (but regular
+developers might help)" is something that needs to become clearer afaics.
+
+But there is still this "there are only 24 hours in a day, but so many
+things to do" problem...
+
+Ciao, Thorsten
