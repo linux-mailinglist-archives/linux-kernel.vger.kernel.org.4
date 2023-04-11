@@ -2,160 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7586DDDFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B336DDDFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjDKObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S230163AbjDKObh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjDKObF (ORCPT
+        with ESMTP id S229797AbjDKObT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:31:05 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4534459F6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:30:36 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id h198so14833842ybg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681223435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhZDKAKLAWGqCJBxTZUcUQG85cdkTJ5f9dPKGGpJSYU=;
-        b=impGA6PnoheZ3/kNSdj48madwyqtSp8uwFpVqXaHo4fJYxur1yrek3rD0q43T4Ylmb
-         +Zy/RLj4cE79Jx23sy64iCtVvzaqZBglEH6XxBrKzT344sUgGtMemT3C5tVXzFOgcgPm
-         8pGWq29bArxe1i9ka94yUiAdJgU8LwKY9dHATG4ekhxY2axPudXqSuBw/EE2tkwcdgTx
-         DjG9l5rDYfeRoG8BlO6wtCZpL+j4GDTNNwTBwuMhh8P+lyyH90+0u9pkXml6lOQvI2Iv
-         zENVQVgIEfD6LbqI4LZNKjTykwAFY24oASOWFcnMUwL8JhDABE9G8iNJ0upmIX5uVSMX
-         GEkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681223435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhZDKAKLAWGqCJBxTZUcUQG85cdkTJ5f9dPKGGpJSYU=;
-        b=HwZFsFkimndJ4XilHS1XHrLQdiNgqy6C8XIPsEFGilB2SZa0WHLlDg8uJvKaxElLWt
-         z6JHo9eiXdpsFKBEc6qBxyEx1jNZeOYackGqx6gGHE5y30eoX5EXRX7NJ/hYN9T6ryii
-         eL4o2a7LnHOpOCl6XWMVjAApMiMYl02/gBgTV1f/Sfraqd6QkqJ2VNkJCGdRZSyI6QG0
-         jHAo7isQPZ+6SRHmRdpRh8r2VrhNzn5yZahcxjSiFwVWiPF6HEPltpygkAMS1+TNKhHK
-         O9c+n3n5D8EL29eCOuE7vHuorgKMjnVANr/9HDp7mNFJT4W8GJf012NsB/+g0BU96OIG
-         0G1A==
-X-Gm-Message-State: AAQBX9e+6rAFlpw+YTYlcnDYtVIigM7A22i9FdPCHtU9ncU5AWU2VgNx
-        fO22N+Hi8svULlGairCg9W664cvuzvRrfL6429rXjQ==
-X-Google-Smtp-Source: AKy350aSUHNDMEBQHFG51I1T55aiT6TeeXEf5g5emI6PyKSBf+xqjNfWYf2DETRlgxuADXZLz5MoJiKdsU4AV2xlJQA=
-X-Received: by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with SMTP id
- bu9-20020a056902090900b00a273eccffe7mr11984613ybb.3.1681223435308; Tue, 11
- Apr 2023 07:30:35 -0700 (PDT)
+        Tue, 11 Apr 2023 10:31:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB246A4;
+        Tue, 11 Apr 2023 07:31:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FAA61DB6;
+        Tue, 11 Apr 2023 14:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21C5C433EF;
+        Tue, 11 Apr 2023 14:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681223475;
+        bh=FxshusFhkLSqD8VVFjKAZ0lTKteKhqRO31rZyJhDFaw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DPi6ss7Cj9TPuKQ+4yhmLMQqjuvGY3aLMiq6Z4PI3hXcK4Uh2EdVZ+C+SMar2lmuk
+         O9Yc+71Z0yCO9y39kgnZUz5iSRqjl+tnvvL6/mmjsYm1S4nolpwQyVSfmInlO7+XIZ
+         JC2u+EbHSoxYw10i+5OxSMT85dZ5fjx3TeMIuBQL7RuOksnggGIrt3hYgHcSzfDxK1
+         hEup2sAqXgZReh5GMSlkNu0tOk5YY62/DL73El/UbwxF7t7D+v6GefFYHIHpZR4aLO
+         lMc+fC80ZOxwEvXUsxEFBpwX9YpOkVbocsC3zi2fHAtdJLEkk/cwJyi5uGhGMvcXVd
+         ZLX0ceZaLq5ag==
+Date:   Tue, 11 Apr 2023 15:31:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     paulmck@kernel.org, Willy Tarreau <w@1wt.eu>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Message-ID: <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
+ <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230330063450.2289058-1-joychakr@google.com> <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com> <20230411141115.vrfd6sud66u6xeog@mobilestation>
-In-Reply-To: <20230411141115.vrfd6sud66u6xeog@mobilestation>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Tue, 11 Apr 2023 20:00:23 +0530
-Message-ID: <CAOSNQF3MM6BLi=xs6VJFn9gWHU_00M--akcpsA=Jm=6U=3LZnQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ikaMBnalE2kSmUMA"
+Content-Disposition: inline
+In-Reply-To: <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+X-Cookie: In the war of wits, he's unarmed.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
 
-On Tue, Apr 11, 2023 at 7:41=E2=80=AFPM Serge Semin <fancer.lancer@gmail.co=
-m> wrote:
->
-> On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote:
-> > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
-> >
-> > First of all the Subject is wrong. You are not touching DMA controller.
-> > Needs to be rephrased.
+--ikaMBnalE2kSmUMA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sure, will rephrase this to "SPI DMA Driver" instead of controller.
+On Mon, Apr 10, 2023 at 12:30:04PM -0600, Shuah Khan wrote:
+> On 4/6/23 12:43, Paul E. McKenney wrote:
 
-> >
-> > > Add Support for AxSize =3D 4 bytes configuration from dw dma driver i=
-f
-> >
-> > SPI DMA driver
-> >
-> > (or something like this, note capital letters for acronyms).
-> >
-> > > n_bytes i.e. number of bytes per write to fifo is 3 or 4.
-> > >
-> > > Number of bytes written to fifo per write is depended on the bits/wor=
-d
-> > > configuration being used which the DW core driver translates to n_byt=
-es.
-> >
-> > ...
-> >
-> > >  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
-> > >  {
-> > > -   if (n_bytes =3D=3D 1)
-> > > +   switch (n_bytes) {
-> > > +   case 1:
-> > >             return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > -   else if (n_bytes =3D=3D 2)
-> > > +   case 2:
-> > >             return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > -
-> > > -   return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> >
-> > > +   case 3:
-> >
-> > I'm not sure about this.
->
-> This actually makes sense seeing the function argument can have values
-> 1, 2, _3_ and 4:
-> dws->n_bytes =3D DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-> transfer->bits_per_word =3D __F__(master->bits_per_word_mask =3D SPI_BPW_=
-RANGE_MASK(4, 32));
-> ...
-> dw_spi_dma_convert_width(dws->n_bytes)
->
-> The spi_transfer.bits_per_word field value depends on the
-> SPI peripheral device communication protocol requirements which may
-> imply the 3-bytes word xfers (even though it's indeed unluckily).
->
-> This semantic will also match to what we currently have in the
-> IRQ-based SPI-transfer implementation (see dw_writer() and
-> dw_reader()).
->
-> -Serge(y)
->
+> > Alternatively, if it would be more convenient for Mark to send this
+> > up via kselftest:
 
-Will keep this as is to be similar to dw_writer() / dw_reader() as
-explained by Serge(y).
+> > Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-> >
-> > > +   case 4:
-> > > +           return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > +   default:
-> > > +           return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > +   }
-> > >  }
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-> >
-> >
+> > It currently merges cleanly with the -rcu tree's dev branch, so this
+> > should not be a problem.
 
-I shall create another patch series with the same.
+> > Either way, please let me know, Mark!
 
-Thanks
-Joy
+> I can take these through kselftest or can go through arm64
+
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+It seems like more of a kselftest change than anything else so probably
+makes sense for it to go that way?  The example user isn't really even
+needed.
+
+--ikaMBnalE2kSmUMA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ1by0ACgkQJNaLcl1U
+h9AdOwf/ef2K4FS5NC2X5JFtmHxasft3ExxGAIzwI2FFzmPKRLOJwLctThZFfYIb
+2x6bej5BCZ6nQjDUrckEglZ5rRlb/s9VzGELvn3w0RsR0dnPQtYQXfYt4zR2pSVt
+OWLN2AznoWmaMCx2FZc5nWgiaTxW32BrBIfaOHfF3nV2mrXO1qbCNzgdbQIkydJf
+HN9gZRdKJAfKFHIKIyiQ0Pkng7k2u+9NnyEkSmOSMlUVWCpEHTiYIGO2xh6D4bME
+0Nbm+MhRjs0h5okPFnFioyCNey4noUN1zASYmTk+TBMeKIc0GcgRsmzMmOTKESMR
+KGetRNC2Sm57xIzbjD5lJNCv3OGIvA==
+=YHmn
+-----END PGP SIGNATURE-----
+
+--ikaMBnalE2kSmUMA--
