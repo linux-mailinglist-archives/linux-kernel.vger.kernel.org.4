@@ -2,331 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFF36DE441
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5709B6DE443
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDKSrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S229933AbjDKSrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDKSrT (ORCPT
+        with ESMTP id S229936AbjDKSrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:47:19 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F7CED
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:47:14 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f080f4fbe1so3369385e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:47:14 -0700 (PDT)
+        Tue, 11 Apr 2023 14:47:43 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFC259E0;
+        Tue, 11 Apr 2023 11:47:37 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id bm45so402493oib.4;
+        Tue, 11 Apr 2023 11:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681238833; x=1683830833;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SHeREDmQpF1mKkKAj+Xbt8r1WK0XBs3O/3ntkX9N1rw=;
-        b=kPgmgIXWIZTesK91wTRlpqTe/xQDNTPoo3C7Ch3801m5db0nhWRFUXFY4ACWBP9d7n
-         dM1oz22uuXBn47mShrH3CHc8bDCRX+W3bxBMBSi+FMxSvQ38gYQBS51Agcp6gX0VNq0d
-         MpkA0a5uZdB28VbymoN2W5oRt4rBeEYKr8OB8=
+        d=gmail.com; s=20221208; t=1681238856;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kk477w1X5WRzFsI1J9lBfe7oTm+OO75NUtps8CJqs0w=;
+        b=nPEr2GaeemD9D86mbdw4y/kZkBnw6V7zIcxBhtxwmzBu4md6A8WwUq2b4vzfPKb6js
+         7JyXhB9OJwnhb0QsXdgF0P8W1L+qQbOqBR7/C5Qce1E4T9x6gln2AigU0v+bkTByMpxv
+         lNdkcdGb30wj/YAXPf6RJOizeKcJ0BZEYc6e2czmz5n0F2ZjBgj15dNCJ6srf3ia6jai
+         SYu0Zgn6LRfKYdb6I7YmczgYKydCzc/cHb6lYNhdVzIPwczPi3utTBj6h3Myxi+azkPI
+         C53W76gXYuLzTX24TTCZvvz9BMOUYYbLYGXQG/7XDnkrcUjBCbGWSe9gM17UH4v9JiVL
+         UqKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681238833; x=1683830833;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SHeREDmQpF1mKkKAj+Xbt8r1WK0XBs3O/3ntkX9N1rw=;
-        b=Y7rn6aQ9mgNfz9C3YGyVgjtOuJkoII0nJ7xjoDxP7Q6tD3/VXu+MeeHGljOU+LHwcN
-         wodpvLizD0mUE6SST2mFBRLBzlXCYwWu7/2ImR4gscJMT/4t4ENZHb2UJkaVzvBQlUNI
-         7iYLuQOSEfgFdry2gpX9BSteIeyrR5qjKNRScZXKu6nhF4xs2e7mTo9Hu446TREYXMDS
-         0zwiDqHY05/ja7txE82D+eM51ixgnVWHutYQCI1cueaozv1vYrp0u+5cSOe+zQiGgW8S
-         uh5f8ypqwTkPLs8wdxtZp68KMIjdQXI4+6Zf6PSa7hV+j5g+aRjptFh/mwobwMIh7pLb
-         aiSQ==
-X-Gm-Message-State: AAQBX9d33wl5a0dNLNF6I7CzrdCVWZubo68YYGQkXAgi9Jky9TCtlkrb
-        DZXZbvVqxMfGUc87+8Kc8d+xkA==
-X-Google-Smtp-Source: AKy350YIJ+wd41FkvyLdeW1IvqtDNkeZwwqaD0Nc7eYH3PgJnve+msZuxlyvl9B9v5feaT1LXXxc/A==
-X-Received: by 2002:a5d:6588:0:b0:2e4:aa61:a50 with SMTP id q8-20020a5d6588000000b002e4aa610a50mr8066217wru.1.1681238833028;
-        Tue, 11 Apr 2023 11:47:13 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id k8-20020adfd848000000b002f0075ccf7bsm7893314wrl.71.2023.04.11.11.47.12
+        d=1e100.net; s=20210112; t=1681238856;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kk477w1X5WRzFsI1J9lBfe7oTm+OO75NUtps8CJqs0w=;
+        b=TfU17abysAp1GnLfJVTol5WoWQrhwYG5p9tJcYEXfvgagaN8JfVdfO/eqSYvhzjq/B
+         ULmu2CFHj5tmfX3jIMi8GGJdn4zchShG/10nIhiEx2KPOqBynlU60lXrrN2Nus5/kB82
+         A1ePAz5FyxLzqqRJFB2yktTat/EeoEuRiP+/hZJxEVnXLfH8vFc0iqBPNVtUMFkmud12
+         i82MDHR22avOxJ8SMDT8/TEmmDuAWyPAtHjYUM4I4hFfwSlsxzdqtAEX0VEYfIbnd7hV
+         WQZvjkesxo84h4FRNY97l/QV0EaM5vlZyVS1VSdSxZaS9eCZ7mQCHxNboGaNtEsphqDK
+         mdww==
+X-Gm-Message-State: AAQBX9f/Krzvs8YXUM/SyQ/rWEjHdCJHO+SegQJ6xbTeDr+RWXbHeycW
+        +0Kjid9aqTqcOTdq2G45eXi4yo9v2zg=
+X-Google-Smtp-Source: AKy350bhbKuClLWPAR6pCoY/cFQZR5hrEldPIUh9unJdIFLO4niQZV2+pyhkBDL35GAId5Iv8l/Tzg==
+X-Received: by 2002:a05:6808:194:b0:387:53ce:4eb3 with SMTP id w20-20020a056808019400b0038753ce4eb3mr4894301oic.48.1681238856255;
+        Tue, 11 Apr 2023 11:47:36 -0700 (PDT)
+Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:54ed:46b2:3609:5e1a])
+        by smtp.gmail.com with ESMTPSA id o7-20020acad707000000b0038b0dd1c040sm5937771oig.3.2023.04.11.11.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 11:47:12 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 20:47:10 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <ZDWrLnWCzIrybHWB@phenom.ffwll.local>
-Mail-Followup-To: Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-References: <2023041123-tractor-quake-c44d@gregkh>
- <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
- <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
- <2023041131-boxy-excavator-1183@gregkh>
- <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
- <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
- <ZDWLRxkFjsGZazXD@phenom.ffwll.local>
- <19e3438f-8e85-9da4-cd9d-8fc19559abd7@quicinc.com>
- <ZDWlIuRHYPP1DeYi@phenom.ffwll.local>
- <086e08a2-13b3-870c-4b17-1fdc9d56d551@quicinc.com>
+        Tue, 11 Apr 2023 11:47:35 -0700 (PDT)
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
+To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v8] HP BIOSCFG driver - Documentation
+Date:   Tue, 11 Apr 2023 13:47:34 -0500
+Message-Id: <20230411184734.7011-1-jorge.lopez2@hp.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <086e08a2-13b3-870c-4b17-1fdc9d56d551@quicinc.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:37:23PM -0600, Jeffrey Hugo wrote:
-> On 4/11/2023 12:21 PM, Daniel Vetter wrote:
-> > On Tue, Apr 11, 2023 at 11:18:29AM -0600, Jeffrey Hugo wrote:
-> > > On 4/11/2023 10:31 AM, Daniel Vetter wrote:
-> > > > On Tue, Apr 11, 2023 at 09:29:27AM -0600, Jeffrey Hugo wrote:
-> > > > > On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
-> > > > > > On 4/11/2023 9:13 AM, Greg KH wrote:
-> > > > > > > On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
-> > > > > > > > On 4/11/2023 9:01 AM, Daniel Vetter wrote:
-> > > > > > > > > On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
-> > > > > > > > > > On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
-> > > > > > > > > > > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
-> > > > > > > > > > > > Hi all,
-> > > > > > > > > > > > 
-> > > > > > > > > > > > After merging the driver-core tree, today's linux-next build (x86_64
-> > > > > > > > > > > > allmodconfig) failed like this:
-> > > > > > > > > > > > 
-> > > > > > > > > > > > In file included from include/linux/linkage.h:7,
-> > > > > > > > > > > >                      from include/linux/kernel.h:17,
-> > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
-> > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function
-> > > > > > > > > > > > 'mhi_qaic_ctrl_init':
-> > > > > > > > > > > > include/linux/export.h:27:22: error: passing
-> > > > > > > > > > > > argument 1 of 'class_create' from incompatible
-> > > > > > > > > > > > pointer type
-> > > > > > > > > > > > [-Werror=incompatible-pointer-types]
-> > > > > > > > > > > >        27 | #define THIS_MODULE (&__this_module)
-> > > > > > > > > > > >           |                     ~^~~~~~~~~~~~~~~
-> > > > > > > > > > > >           |                      |
-> > > > > > > > > > > >           |                      struct module *
-> > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note:
-> > > > > > > > > > > > in expansion of macro 'THIS_MODULE'
-> > > > > > > > > > > >       544 |         mqc_dev_class =
-> > > > > > > > > > > > class_create(THIS_MODULE,
-> > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > > > > > > > > >           |                                      ^~~~~~~~~~~
-> > > > > > > > > > > > In file included from include/linux/device.h:31,
-> > > > > > > > > > > >                      from include/linux/mhi.h:9,
-> > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
-> > > > > > > > > > > > include/linux/device/class.h:229:54: note:
-> > > > > > > > > > > > expected 'const char *' but argument is of type
-> > > > > > > > > > > > 'struct module *'
-> > > > > > > > > > > >       229 | struct class * __must_check
-> > > > > > > > > > > > class_create(const char *name);
-> > > > > > > > > > > >           |                                          ~~~~~~~~~~~~^~~~
-> > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25:
-> > > > > > > > > > > > error: too many arguments to function
-> > > > > > > > > > > > 'class_create'
-> > > > > > > > > > > >       544 |         mqc_dev_class =
-> > > > > > > > > > > > class_create(THIS_MODULE,
-> > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > > > > > > > > >           |                         ^~~~~~~~~~~~
-> > > > > > > > > > > > include/linux/device/class.h:229:29: note: declared here
-> > > > > > > > > > > >       229 | struct class * __must_check
-> > > > > > > > > > > > class_create(const char *name);
-> > > > > > > > > > > >           |                             ^~~~~~~~~~~~
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Caused by commit
-> > > > > > > > > > > > 
-> > > > > > > > > > > >       1aaba11da9aa ("driver core: class: remove
-> > > > > > > > > > > > module * from class_create()")
-> > > > > > > > > > > > 
-> > > > > > > > > > > > interacting with commit
-> > > > > > > > > > > > 
-> > > > > > > > > > > >       566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
-> > > > > > > > > > > > 
-> > > > > > > > > > > > from the drm tree.
-> > > > > > > > > > > > 
-> > > > > > > > > > > > I have applied the following merge fix patch for today.
-> > > > > > > > > > > > 
-> > > > > > > > > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > > > > > > > > Date: Tue, 11 Apr 2023 14:16:57 +1000
-> > > > > > > > > > > > Subject: [PATCH] fixup for "driver core: class:
-> > > > > > > > > > > > remove module * from class_create()"
-> > > > > > > > > > > > 
-> > > > > > > > > > > > interacting with "accel/qaic: Add mhi_qaic_cntl"
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > > > > > > > 
-> > > > > > > > > > > Thanks for the fixup. Since Dave is out I've made a
-> > > > > > > > > > > note about this in my
-> > > > > > > > > > > handover mail so it won't get lost in the drm-next
-> > > > > > > > > > > merge window pull. I
-> > > > > > > > > > > don't think we need any other coordination than
-> > > > > > > > > > > mention it in each pull to
-> > > > > > > > > > > Linus, topic tree seems overkill for this. Plus there's no way I can
-> > > > > > > > > > > untangle the drm tree anyway :-).
-> > > > > > > > > > 
-> > > > > > > > > > Want me to submit a patch for the drm tree that moves this to use
-> > > > > > > > > > class_register() instead, which will make the
-> > > > > > > > > > merge/build issue go away
-> > > > > > > > > > for you?  That's my long-term goal here anyway, so converting this new
-> > > > > > > > > > code to this api today would be something I have to do eventually :)
-> > > > > > > > > 
-> > > > > > > > > We kinda closed drm-next for feature work mostly already (just pulling
-> > > > > > > > > stuff in from subtrees), so won't really help for this merge window.
-> > > > > > > > > 
-> > > > > > > > > For everything else I think this is up to Oded, I had no
-> > > > > > > > > idea qaic needed
-> > > > > > > > > it's entire own dev class and I don't want to dig into this
-> > > > > > > > > for the risk I
-> > > > > > > > > might freak out :-)
-> > > > > > > > > 
-> > > > > > > > > Adding Oded.
-> > > > > > > > > 
-> > > > > > > > > Cheers, Daniel
-> > > > > > > > 
-> > > > > > > > Sorry for the mess.
-> > > > > > > > 
-> > > > > > > > I made a note to update to class_register() once my drm-misc access is
-> > > > > > > > sorted out.  Looks like we'll address the conflict in the merge
-> > > > > > > > window, and
-> > > > > > > > catch the update to the new API in the following release.
-> > > > > > > 
-> > > > > > > Wait, I think the large question is, "why does this need a separate
-> > > > > > > class"?  Why are you not using the accel char device and class?  That is
-> > > > > > > what everything under accel/ should be using, otherwise why put it in
-> > > > > > > there?
-> > > > > > > 
-> > > > > > > And what exactly are you using that class for?  Just device nodes?  If
-> > > > > > > so, how many?
-> > > > > > > 
-> > > > > > > thanks,
-> > > > > > > 
-> > > > > > > greg k-h
-> > > > > > 
-> > > > > > 
-> > > > > > Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed
-> > > > > > out at the time that AIC100/QAIC would need the same functionality.
-> > > > > > You/Jakub told myself/Mani/Loic that a combined implementation is not
-> > > > > > acceptable, and every area needs to implement their own version of
-> > > > > > MHI_UCI.
-> > > > > > 
-> > > > > > We took the WWAN subsystem and simplified it to meet our needs.
-> > > > > > 
-> > > > > > The functionality is QAIC specific, so wedging it into the Accel node
-> > > > > > seems to be a poor fit as it would subject Habana and iVPU to the same.
-> > > > > 
-> > > > > Also, I forgot to mention.  QAIC is sharing userspace components with WWAN,
-> > > > > so we really cannot diverge from what WWAN has done and define a new API
-> > > > > through the Accel node.
-> > > > 
-> > > > So there is an accel/drm_device in the qaic driver, but there's also this
-> > > > different class thing, which I don't get.
-> > > > 
-> > > > And yeah if that's an entirely orthogonal thing then I guess that should
-> > > > be in a different driver/subsystem, all supported with the aux bus to
-> > > > multiplex the underlying device.
-> > > > 
-> > > > I haven't found any explanation for what MHI is (or any of the other
-> > > > acrynoms), so I'm entirely lost.
-> > > 
-> > > MHI is documented at Documentation/mhi/
-> > > It is also referenced in the QAIC documentation - Documentation/accel/qaic/
-> > > 
-> > > It stands for "Modem Host Interface" (arguably a bad name now, but you can
-> > > guess where it came from).  It is a Qualcomm hardware block and associated
-> > > software protocol that provides logical channels over a hardware link.  Most
-> > > commonly used for PCIe.
-> > > 
-> > > Pretty much any modern Qualcomm PCIe device implements it.  4G modems, 5G
-> > > modems, Wifi adapters, AIC100, etc.  Instead of talking "PCIe", the host
-> > > talks "MHI" to the devices in most cases.
-> > > 
-> > > The core implementation for MHI exists in drivers/bus/mhi
-> > > 
-> > > MHI_UCI is the MHI Userspace Character Interface.  It looked like most buses
-> > > (eg USB) provide some direct device access to userspace.  MHI_UCI was
-> > > formulated along those same lines - provide direct userspace access to a
-> > > whitelist of channels.  Qualcomm provides some fairly extensive userspace
-> > > utilities, and various communities have developed open source alternatives
-> > > using this mechanism.
-> > > 
-> > > MHI_UCI was proposed to the community as the common driver (misc device) for
-> > > all of the MHI devices.  The Net folks came along, saw that it was used for
-> > > 4G/5G modems (Wireless Wide Area Network devices or WWAN) and decided that
-> > > they would not tolerate a common implementation.  They NACK'd MHI_UCI and
-> > > required that a WWAN specific subsystem be developed which would only
-> > > service WWAN devices.  The Net folks decreed that other subsystems which
-> > > needed the same functionality need to have their own copy of the
-> > > implementation.
-> > > 
-> > > QAIC devices expose Sahara (a boot time protocol) which has an existing
-> > > userspace that is also used with Modems, although it looks like WWAN doesn't
-> > > currently support those generations of products today.  QAIC devices also
-> > > support DIAG, which is currently supported in WWAN.  The intent was to add
-> > > the QAIC support for DIAG at a later time since it is not required for the
-> > > bare minimum viable driver.
-> > > 
-> > > So, QAIC devices support the same services, would use the same userspace,
-> > > but can't use a common implementation because Jakub(net) doesn't want to
-> > > share and convinced Greg to go along.  I'm not interested in pushing a cross
-> > > tree fight (arguably already did that with MHI_UCI).  If neither Greg nor
-> > > Net will accept a common implementation that accelerators can use (QAIC),
-> > > then the only place I can fit this is in the Accel area.
-> > > 
-> > > Using aux bus seems to make little difference if QAIC is the only consumer
-> > > of this.  I'm willing to refactor the implementation with some feedback and
-> > > guidence, but the uAPI seems set in stone due to the existing userspace and
-> > > WWAN (char devs with open/close/read/write/poll).
-> > 
-> > Ok, so MHI _is_ the bus. Thanks for the explainer, I should have searched
-> > a bit more in Documentation/
-> > 
-> > > What would make you less unhappy?
-> > 
-> > The MHI generic userspace driver interface needs to be in drivers/bus/mhi,
-> > not in a random driver. I think we should revert 566fc96198b4
-> > ("accel/qaic: Add mhi_qaic_cntl") and re-land that through Greg's tree (or
-> > wherever mhi patches go to). This of course assuming that the accel
-> > userspace on top of the accel/drm_device does work stand-alone, and it's
-> > just the tooling and other userspace that needs MHI_UCI. If we end with a
-> > non-functional stack due to that, then I guess the entire driver is a bit
-> > up for questions, because at least the accel runtime is supposed to just
-> > run on top of the accel devnode and nothing else. Otherwise container
-> > stuff gets really bad, among a lot of other things.
-> > 
-> 
-> Looping in the MHI maintainer for your proposal.
-> 
-> The accel userspace can work without MHI_UCI.
-> 
-> The revert will be non-trivial so I'll look at posting that tomorrow.
+HP BIOS Configuration driver purpose is to provide a driver supporting
+the latest sysfs class firmware attributes framework allowing the user
+to change BIOS settings and security solutions on HP Inc.â€™s commercial
+notebooks.
 
-Yeah if the full revert is invasive then could we just do a minimal one
-that drops the various register_chrdev/class_create/device_create calls?
-That avoids the conflict plus makes sure no uabi is registers for the
-MHI_UCI. Anything else we can sort out later.
--Daniel
+Many features of HP Commercial notebooks can be managed using Windows
+Management Instrumentation (WMI). WMI is an implementation of Web-Based
+Enterprise Management (WBEM) that provides a standards-based interface
+for changing and monitoring system settings. HP BIOSCFG driver provides
+a native Linux solution and the exposed features facilitates the
+migration to Linux environments.
+
+The Linux security features to be provided in hp-bioscfg driver enables
+managing the BIOS settings and security solutions via sysfs, a virtual
+filesystem that can be used by user-mode applications. The new
+documentation cover features such Secure Platform Management and Sure
+Start. Each section provides security feature description and
+identifies sysfs directories and files exposed by the driver.
+
+Many HP Commercial notebooks include a feature called Secure Platform
+Management (SPM), which replaces older password-based BIOS settings
+management with public key cryptography. PC secure product management
+begins when a target system is provisioned with cryptographic keys
+that are used to ensure the integrity of communications between system
+management utilities and the BIOS.
+
+HP Commercial notebooks have several BIOS settings that control its
+behaviour and capabilities, many of which are related to security.
+To prevent unauthorized changes to these settings, the system can
+be configured to use a cryptographic signature-based authorization
+string that the BIOS will use to verify authorization to modify the
+setting.
+
+Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+
+---
+Based on the latest platform-drivers-x86.git/for-next
+
+History
+
+Version 8
+	Includes only sysfs-class-firmware-attributes documentation
+
+Version 7
+	Includes only sysfs-class-firmware-attributes documentation
+---
+ .../testing/sysfs-class-firmware-attributes   | 104 +++++++++++++++++-
+ 1 file changed, 103 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+index 4cdba3477176..574cdd8a6cc6 100644
+--- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
++++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+@@ -22,6 +22,12 @@ Description:
+ 			- integer: a range of numerical values
+ 			- string
+ 
++		HP specific types
++		-----------------
++			- ordered-list - a set of ordered list valid values
++			- sure-start - report audit logs read from BIOS
++
++
+ 		All attribute types support the following values:
+ 
+ 		current_value:
+@@ -126,6 +132,44 @@ Description:
+ 					value will not be effective through sysfs until this rule is
+ 					met.
+ 
++		HP specific class extensions
++		------------------------------
++
++		On HP systems the following additional attributes are available:
++
++		"ordered-list"-type specific properties:
++
++		elements:
++					A file that can be read to obtain the possible
++					list of values of the <attr>. Values are separated using
++					semi-colon (``;``). The order individual elements are listed
++					according to their priority.  An Element listed first has the
++					highest priority. Writing the list in a different order to
++					current_value alters the priority order for the particular
++					attribute.
++
++		"sure-start"-type specific properties:
++
++		audit_log_entries:
++					A read-only file that returns the events in the log.
++					Values are separated using semi-colon (``;``)
++
++					Audit log entry format
++
++					Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
++					Byte 16-127: Unused
++
++		audit_log_entry_count:
++					A read-only file that returns the number of existing audit log events available to be read.
++					Values are separated using comma (``,``)
++
++					[No of entries],[log entry size],[Max number of entries supported]
++
++					log entry size identifies audit log size for the current BIOS version.
++					The current size is 16 bytes but it can be to up to 128 bytes long
++					in future BIOS versions.
++
++
+ What:		/sys/class/firmware-attributes/*/authentication/
+ Date:		February 2021
+ KernelVersion:	5.11
+@@ -206,7 +250,7 @@ Description:
+ 		Drivers may emit a CHANGE uevent when a password is set or unset
+ 		userspace may check it again.
+ 
+-		On Dell and Lenovo systems, if Admin password is set, then all BIOS attributes
++		On Dell, Lenovo and HP systems, if Admin password is set, then all BIOS attributes
+ 		require password validation.
+ 		On Lenovo systems if you change the Admin password the new password is not active until
+ 		the next boot.
+@@ -296,6 +340,15 @@ Description:
+ 						echo "signature" > authentication/Admin/signature
+ 						echo "password" > authentication/Admin/certificate_to_password
+ 
++		HP specific class extensions
++		--------------------------------
++
++		On HP systems the following additional settings are available:
++
++		role: enhanced-bios-auth:
++					This role is specific to Secure Platform Management (SPM) attribute.
++					It requires configuring an endorsement (kek) and signing certificate (sk).
++
+ 
+ What:		/sys/class/firmware-attributes/*/attributes/pending_reboot
+ Date:		February 2021
+@@ -364,3 +417,52 @@ Description:
+ 		use it to enable extra debug attributes or BIOS features for testing purposes.
+ 
+ 		Note that any changes to this attribute requires a reboot for changes to take effect.
++
++
++		HP specific class extensions - Secure Platform Manager (SPM)
++		--------------------------------
++
++What:		/sys/class/firmware-attributes/*/authentication/SPM/kek
++Date:		March 29
++KernelVersion:	5.18
++Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
++Description:	'kek' Key-Encryption-Key is a write-only file that can be used to configure the
++		RSA public key that will be used by the BIOS to verify
++		signatures when setting the signing key.  When written,
++		the bytes should correspond to the KEK certificate
++		(x509 .DER format containing an OU).  The size of the
++		certificate must be less than or equal to 4095 bytes.
++
++
++What:		/sys/class/firmware-attributes/*/authentication/SPM/sk
++Date:		March 29
++KernelVersion:	5.18
++Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
++Description:	'sk' Signature Key is a write-only file that can be used to configure the RSA
++		public key that will be used by the BIOS to verify signatures
++		when configuring BIOS settings and security features.  When
++		written, the bytes should correspond to the modulus of the
++		public key.  The exponent is assumed to be 0x10001.
++
++
++What:		/sys/class/firmware-attributes/*/authentication/SPM/status
++Date:		March 29
++KernelVersion:	5.18
++Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
++Description:	'status' is a read-only file that returns ASCII text reporting
++		the status information.
++
++		  State:  Not Provisioned / Provisioned / Provisioning in progress
++		  Version:  Major.   Minor
++		  Feature Bit Mask: <16-bit unsigned number display in hex>
++		  SPM Counter: <16-bit unsigned number display in base 10>
++		  Signing Key Public Key Modulus (base64): <256 bytes base64 in hex>
++		  KEK Public Key Modulus (base64): <256 bytes base64 in hex>
++
++
++What:		/sys/class/firmware-attributes/*/authentication/SPM/statusbin
++Date:		March 29
++KernelVersion:	5.18
++Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
++Description:	'statusbin' is a read-only file that returns identical status
++		information reported by 'status' file in binary format.
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
