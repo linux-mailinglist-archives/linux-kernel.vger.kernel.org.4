@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B0B6DD07D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45156DD080
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjDKDuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S229827AbjDKDvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDKDuF (ORCPT
+        with ESMTP id S229688AbjDKDvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:50:05 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DE61BFC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso5150189pjt.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681185002; x=1683777002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CjEAid20/hS5TioSfuhZ2hRVRcGGbWFkXT5AztmUYLU=;
-        b=LYKP57CzAcxQ5gab4YwR9v6vaxhR/4P+GionA8yCWLZ/9hlqmF6jK2Rc7Hkr+pYJ4k
-         VXiDq5ZX5hi4on79vEZq0YxeTPOC7e3+GHpqMEQGRRqjd/zSf+X9k2tX9OYO0Nnc7Uqu
-         1RusCPGRGIRm768m7eDnzYpfYH4RFQ1dLFZa//rUISjWoXkzVJWR/E6DmSvq+jgunVk0
-         GlgTAFS9vuG8ltgVdj6Uplw53WEfZZRY9R6/w0AJoTurl+/cvfqFcOH7MZoaiSEGKgsQ
-         unrBv6AgheR1VbEjJIccmEaHodDAELANBNqlpkS6ySpkAEfP43TmwlinKsO/rKzEUpYo
-         a03A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681185002; x=1683777002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CjEAid20/hS5TioSfuhZ2hRVRcGGbWFkXT5AztmUYLU=;
-        b=Kb2ARKeq4d/Mpvok80rV183e9LVQhT0imjJa89TX+SMch6WFtsIglqBNPQOxeqU+OS
-         D7SDZ+Z+nU7u6938AQpsz9LiVOMII8+a0tC78yMENpm2Lvg1M/XwuDQC6EI6WWEbeJ5e
-         scEDODBfjfnCAaBE7RUyjYYcAeW6cTREOOCQ+C9EX6n32dDUEp0vTfk6KSEgU2w+zHf4
-         39Bc584XNUvYp+mHYD7xpXGP+y+d5baJrlZqfRJMSJ9ztgVVXsGwBBTLSe4yMRqGcdZK
-         2U5TNqJP6au4u1pOgML8Fz4hEiu1oiDV9cZL+2/gbwN89WqhOs8mBbLrqMFGQJnPfIUc
-         PrSw==
-X-Gm-Message-State: AAQBX9eHNsDuDZE+JzgogBldx2Am2YSTVt4viTPTWCZ9cbuOJaiL2vGC
-        wnWhDorsFxwIXd7P4dxoWP59qQ==
-X-Google-Smtp-Source: AKy350YTCKN8pXK1GPOoitNCP80wKJNKIMZKz3O+cK/gOeA1J9898z6qCW9KcqZVIWDDqcWSHJd/hg==
-X-Received: by 2002:a17:90b:1644:b0:23f:7ff6:eb8 with SMTP id il4-20020a17090b164400b0023f7ff60eb8mr1994829pjb.31.1681185002391;
-        Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
-Received: from [10.200.10.217] ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id t7-20020a6549c7000000b005136b93f8e9sm7579138pgs.14.2023.04.10.20.49.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
-Message-ID: <f132db6d-5b5f-cf18-3e4e-2f3053c93033@bytedance.com>
-Date:   Tue, 11 Apr 2023 11:49:56 +0800
+        Mon, 10 Apr 2023 23:51:38 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E012118;
+        Mon, 10 Apr 2023 20:51:36 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E4D5E68BEB; Tue, 11 Apr 2023 05:51:31 +0200 (CEST)
+Date:   Tue, 11 Apr 2023 05:51:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexander Graf <graf@amazon.com>
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce
+ buffers
+Message-ID: <20230411035131.GA15795@lst.de>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com> <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com> <20230328040724.GB25506@lst.de> <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com> <20230407055548.GC6803@lst.de> <20230407124627.74528415@meshulam.tesarici.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v2] maple_tree: Use correct variable type in sizeof
-To:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, Liam.Howlett@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org,
-        David Binderman <dcb314@hotmail.com>, stable@vger.kernel.org
-References: <20230411023513.15227-1-zhangpeng.00@bytedance.com>
- <20230410202935.d1abf62f386eefb1efa36ce4@linux-foundation.org>
- <ZDTXE8jKMz802jqR@casper.infradead.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <ZDTXE8jKMz802jqR@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230407124627.74528415@meshulam.tesarici.cz>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 07, 2023 at 12:46:27PM +0200, Petr Tesařík wrote:
+> >  b) find a way to migrate a buffer into other memory, similar to
+> >     how page migration works for page cache
+> 
+> Let me express the idea in my own words to make sure I get it right.
+> When a DMA buffer is imported, but before it is ultimately pinned in
+> memory, the importing device driver checks whether the buffer meets its
+> DMA constraints. If not, it calls a function provided by the exporting
+> device driver to migrate the buffer.
 
-在 2023/4/11 11:42, Matthew Wilcox 写道:
-> On Mon, Apr 10, 2023 at 08:29:35PM -0700, Andrew Morton wrote:
->> On Tue, 11 Apr 2023 10:35:13 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
->>
->>> The type of variable pointed to by pivs is unsigned long, but the type
->>> used in sizeof is a pointer type. Change it to unsigned long.
->> Thanks, but there's nothing in this changelog which explains why a
->> -stable backport is being proposed.  When fixing a bug, please always
->> describe the user-visible effects of that bug.
-> There is no user-visible effect of this bug as the assembly code
-> generated will be identical.
+Yes.
 
-Therefore, if this has always been the case, cc stable
-is also unnecessary.
+> This makes sense, but:
+> 
+>   1) The operation must be implemented in the exporting driver; this
+>      will take some time.
+> 
+>   2) In theory, there may be no overlap between the exporting device
+>      and the importing device. OTOH I'm not aware of any real-world
+>      example, so we can probably return a suitable error code, and
+>      that's it.
 
->
->>> --- a/lib/maple_tree.c
->>> +++ b/lib/maple_tree.c
->>> @@ -3255,7 +3255,7 @@ static inline void mas_destroy_rebalance(struct ma_state *mas, unsigned char end
->>>   
->>>   		if (tmp < max_p)
->>>   			memset(pivs + tmp, 0,
->>> -			       sizeof(unsigned long *) * (max_p - tmp));
->>> +			       sizeof(unsigned long) * (max_p - tmp));
->>>   
->>>   		if (tmp < mt_slots[mt])
->>>   			memset(slots + tmp, 0, sizeof(void *) * (max_s - tmp));
->> Is there any situation in which
->> sizeof(unsigned long *) != sizeof(unsigned long)?
-> Windows 64-bit (pointer 64-bit, unsigned long is 32 bit) is the only
-> one I know.  Linux is all ILP32 or LP64.  There may be some embedded
-> environments which are different, but I have no idea what they might be.
->
+Indeed.  And if there is no overlap, which as you said is indeed
+very unlikely but in theory possible, we could still keep migrating
+forther and back.
+
+One important thing that we should do is to consolidate more of the
+dma-buf implementation code.  Right now they just seem to be a wild
+mess of copy and pasted boilerplate code unfortunately.
+
+> Anyway, I have already written in another reply that my original use
+> case is moot, because a more recent distribution can do the job without
+> using dma-buf, so it has been fixed in user space, be it in GNOME,
+> pipewire, or Mesa (I don't really have to know).
+> 
+> At this point I would go with the assumption that large buffers
+> allocated by media subsystems will not hit swiotlb. Consequently, I
+> don't plan to spend more time on this branch of the story.
+
+Sounds fine to me, and thanks for taking the effort so far.
+
+> > > BTW my testing also suggests that the streaming DMA API is quite
+> > > inefficient, because UAS performance _improved_ with swiotlb=force.
+> > > Sure, this should probably be addressed in the UAS and/or xHCI driver,
+> > > but what I mean is that moving away from swiotlb may even cause
+> > > performance regressions, which is counter-intuitive. At least I would
+> > > _not_ have expected it.  
+> > 
+> > That is indeed very odd.  Are you running with a very slow iommu
+> > driver there?   Or what is the actual use case there in general?
+> 
+> This was on a Raspberry Pi 4, which does not have any IOMMU. IOW it
+> looks like copying data around can be faster than sending it straight
+> to the device. When I have some more time, I must investigate what is
+> really happening there, because it does not make any sense to me.
+
+If you're not using an IOMMU that doesn't actually make any sense to
+me.  swiotlb calls into exactly the same routines as dma-direct does
+for the dma setup on each I/O, just after copying the data.  So if you
+do have some spare cycles to investigate what is going on here, I'd
+be really curious about the results.
