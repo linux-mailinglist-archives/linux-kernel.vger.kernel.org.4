@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6AD6DE45D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9856DE45F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjDKSyY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 14:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229514AbjDKSyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDKSyV (ORCPT
+        with ESMTP id S229634AbjDKSyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:54:21 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E59558B;
-        Tue, 11 Apr 2023 11:54:19 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id dm2so23000475ejc.8;
-        Tue, 11 Apr 2023 11:54:19 -0700 (PDT)
+        Tue, 11 Apr 2023 14:54:35 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260962136
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:54:31 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-32931475169so56675ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681239270;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZV1VFO4BwOGmTu5eeP/n7pt3iT6IE643agWTPuh3G3Q=;
+        b=DaVl9mSDc2bA1XJpVY/OPzKb4MvDhkvQlDbt5I/XunPwitCBKGSX1bEpm/5dM2k+Xi
+         ml3kg+m66A57SjWHLnEOrJCnNTBeufUP4scPzA+IJza7ycm5cZIeSpuNACLxoEMwnVVx
+         vd9R58YLw57t/FfCiuhKBKh0hv73g0bE3s2yo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681239258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E4sDlaAqhvNysrKAM2xiktRjb3nWENL9FOHGuHRar+k=;
-        b=WbFSEJdKAA0kDYyzTzxkQhzhUOUTJNGxoWUFzlEx7XS1Thkncmjy+8mlHQ27e9Wetu
-         57Ei17qs7IKxRKrVWBzXcN/hPydA+tRel170GK4o7CnsKg42kAiwzrVxg+gp9hayQ/Om
-         fQ9Un5qouxqpDvSSKyXBfjIkwbAGShwTU8hpfI1afnZai2tvao4ID4WVH/rKfp9g3qtg
-         8pjgSRwIE6uT9JGOdOwlipJ7UPIftP8XowJcYPGuPYnVjHO+fX+zFmRYJ6uPI4phW6B3
-         1TfDEKD8f3jzaBr3CgrsIKXE7NI2nJBvNrxmq1VhNPZukqJMcEQugsgBr0Iqtxx8D9hl
-         10mQ==
-X-Gm-Message-State: AAQBX9dV0NibdzrLb863Lj8xjNymwGeBZzqSG1NEwQ7yLsgEDWKmfqaE
-        PtUn0nXCT1kibx/wllsCUtKIKy3dGdYrmJhXBkI9i4En
-X-Google-Smtp-Source: AKy350bQ4dy15N9Thf6G6/SVmVqW42B1BAnNkqNB9HpbL1DOl2z8zAqczCGktsApBM+OL29mEeGQa64OBmo3ymUJ4Ao=
-X-Received: by 2002:a17:907:8a0e:b0:94e:7ce:4d1f with SMTP id
- sc14-20020a1709078a0e00b0094e07ce4d1fmr1950390ejc.2.1681239258238; Tue, 11
- Apr 2023 11:54:18 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681239270;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZV1VFO4BwOGmTu5eeP/n7pt3iT6IE643agWTPuh3G3Q=;
+        b=EIS3tsNkBFIveNriL9mWOO/wLiElfQF3OdS52+nwx95NbQHjQfAwxZ9tesz9i4PTVt
+         TCbyYJqA6vFYwqZNXlnuK2ahJD5uPnTzpz/TCigHdbMaI99qK0YSgd3wCBds81YIbQuW
+         v0+Q5QQMCRTv06aAktq9pAbfd9Vd1dW3+GWLUw/FMbyb3P5LJXhAHBwltTsYuo5slRcQ
+         OujTay4XEjCvEuedcKMzeP5d9ywcuo9JviQOSIOou6uqge1aRKqL74jh+/Fu/eXJrgwX
+         nMgAgrNqj6snX+xQkHyFBMFmAdOHbJgrJ54tcILroTstgWIXo442ngmWZ014YivCAb52
+         f1hQ==
+X-Gm-Message-State: AAQBX9fzwj+jnexF+MqYoHn0lBInM8qbe+Vtn0RBbdTM1XIk/+IeqWcU
+        tqZ95QxHRAHYGr9n6xkpCqPhuw==
+X-Google-Smtp-Source: AKy350YXICKD5X2IKxUuBIcAPBrrCjd+CmVQG6MMNHZTmReDEB8r7kzQBe0IDZV9T2VfGHNp3b/mfA==
+X-Received: by 2002:a05:6e02:12c9:b0:326:3b2e:95b1 with SMTP id i9-20020a056e0212c900b003263b2e95b1mr83576ilm.2.1681239270390;
+        Tue, 11 Apr 2023 11:54:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i4-20020a056638380400b00408d59eccdcsm4218785jav.20.2023.04.11.11.54.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 11:54:29 -0700 (PDT)
+Message-ID: <e81d0c3b-f301-e2cf-077d-fe9a934e7590@linuxfoundation.org>
+Date:   Tue, 11 Apr 2023 12:54:29 -0600
 MIME-Version: 1.0
-References: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
-In-Reply-To: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:54:07 +0200
-Message-ID: <CAJZ5v0hbWerXrBG0K20xHEOajhYunqxNs+R6awA03tYpCwRKKg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: resource: Skip IRQ override on ASUS ExpertBook B1502CBA
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, lore982@yahoo.com,
-        Tamim Khan <tamim@fusetak.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Content-Language: en-US
+To:     paulmck@kernel.org, Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
+ <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+ <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
+ <20230411150320.GA23045@willie-the-truck>
+ <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
+ <6a323775-6274-4d0c-844a-da53146c2abe@paulmck-laptop>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <6a323775-6274-4d0c-844a-da53146c2abe@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 8:32 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Like the ASUS ExpertBook B2502CBA and various ASUS Vivobook laptops, the
-> ASUS ExpertBook B1502CBA has an ACPI DSDT table that describes IRQ 1 as
-> ActiveLow while the kernel overrides it to Edge_High.
->
->     $ sudo dmesg | grep DMI
->     DMI: ASUSTeK COMPUTER INC. ASUS EXPERTBOOK B1502CBA_B1502CBA/B1502CBA, BIOS B1502CBA.300 01/18/2023
->     $ grep -A 40 PS2K dsdt.dsl | grep IRQ -A 1
->                     IRQ (Level, ActiveLow, Exclusive, )
->                         {1}
->
-> This prevents the keyboard from working. To fix this issue, add this laptop
-> to the skip_override_table so that the kernel does not override IRQ 1.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217323
-> Cc: lore982@yahoo.com
-> Cc: Tamim Khan <tamim@fusetak.com>
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/acpi/resource.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> index a222bda7e15b..cade3a9e38bb 100644
-> --- a/drivers/acpi/resource.c
-> +++ b/drivers/acpi/resource.c
-> @@ -432,6 +432,13 @@ static const struct dmi_system_id asus_laptop[] = {
->                         DMI_MATCH(DMI_BOARD_NAME, "S5602ZA"),
->                 },
->         },
-> +       {
-> +               .ident = "Asus ExpertBook B1502CBA",
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "B1502CBA"),
-> +               },
-> +       },
->         {
->                 .ident = "Asus ExpertBook B2402CBA",
->                 .matches = {
-> --
+On 4/11/23 10:44, Paul E. McKenney wrote:
+> On Tue, Apr 11, 2023 at 04:13:11PM +0100, Mark Brown wrote:
+>> On Tue, Apr 11, 2023 at 04:03:21PM +0100, Will Deacon wrote:
+>>> On Tue, Apr 11, 2023 at 03:31:10PM +0100, Mark Brown wrote:
+>>
+>>>> It seems like more of a kselftest change than anything else so probably
+>>>> makes sense for it to go that way?  The example user isn't really even
+>>>> needed.
+>>
+>>> Fine by me, as long as it doesn't conflict with any other arm64 selftest
+>>> changes you hope to land for 6.4.
+>>
+>> That shouldn't be an issue.
+> 
+> Shuah, looks to me like this one is yours in kselftest, then.  ;-)
+> 
+> 							Thanx, Paul
 
-Applied as 6.3-rc material, thanks!
+I will pick these up for Linux 6.4
+thanks,
+-- Shuah
