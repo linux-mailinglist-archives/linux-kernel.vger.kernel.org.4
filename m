@@ -2,74 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699276DD08D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B0B6DD07D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjDKD5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S229933AbjDKDuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjDKD5L (ORCPT
+        with ESMTP id S229671AbjDKDuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:57:11 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Apr 2023 20:57:08 PDT
-Received: from pesi.com.tw (mail.pesi.com.tw [59.120.71.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FA21BC9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:57:08 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by pesi.com.tw (Postfix) with SMTP id 1335C61170
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:50:33 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 pesi.com.tw 1335C61170
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pesi.com.tw;
-        s=default; t=1681185033;
-        bh=GXg5TNPseTLX/q3lrTI4oKFUZtKZaCTZne4J784F/dY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=r6BtIqbvJnIUQj/pR7cO5x/4yOHjGAitm7yPN5nivl6X8QO5T9krEq3IYHkviXbwx
-         aXhvZxiTEZSWzSrh3T7ziALVSusXn7QrIPS9gUmFjHrdQ9kYFlefstqfanXOjQO5ap
-         D5pYUVDMm20GdfWnhW6TZyCIyuDSSQt8dzysI8ow=
-Received: from localhost.localdomain (125-228-196-244.hinet-ip.hinet.net [125.228.196.244])
-        by pesi.com.tw (Postfix) with ESMTPA id C239961101;
-        Tue, 11 Apr 2023 11:50:28 +0800 (CST)
-From:   Steve Chou <steve_chou@pesi.com.tw>
-To:     akpm@linux-foundation.org
-Cc:     Steve Chou <steve_chou@pesi.com.tw>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] tools/mm/page_owner_sort.c: fix TGID output when cull=tg is used
-Date:   Tue, 11 Apr 2023 11:49:28 +0800
-Message-Id: <20230411034929.2071501-1-steve_chou@pesi.com.tw>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Apr 2023 23:50:05 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DE61BFC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso5150189pjt.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681185002; x=1683777002;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjEAid20/hS5TioSfuhZ2hRVRcGGbWFkXT5AztmUYLU=;
+        b=LYKP57CzAcxQ5gab4YwR9v6vaxhR/4P+GionA8yCWLZ/9hlqmF6jK2Rc7Hkr+pYJ4k
+         VXiDq5ZX5hi4on79vEZq0YxeTPOC7e3+GHpqMEQGRRqjd/zSf+X9k2tX9OYO0Nnc7Uqu
+         1RusCPGRGIRm768m7eDnzYpfYH4RFQ1dLFZa//rUISjWoXkzVJWR/E6DmSvq+jgunVk0
+         GlgTAFS9vuG8ltgVdj6Uplw53WEfZZRY9R6/w0AJoTurl+/cvfqFcOH7MZoaiSEGKgsQ
+         unrBv6AgheR1VbEjJIccmEaHodDAELANBNqlpkS6ySpkAEfP43TmwlinKsO/rKzEUpYo
+         a03A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681185002; x=1683777002;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CjEAid20/hS5TioSfuhZ2hRVRcGGbWFkXT5AztmUYLU=;
+        b=Kb2ARKeq4d/Mpvok80rV183e9LVQhT0imjJa89TX+SMch6WFtsIglqBNPQOxeqU+OS
+         D7SDZ+Z+nU7u6938AQpsz9LiVOMII8+a0tC78yMENpm2Lvg1M/XwuDQC6EI6WWEbeJ5e
+         scEDODBfjfnCAaBE7RUyjYYcAeW6cTREOOCQ+C9EX6n32dDUEp0vTfk6KSEgU2w+zHf4
+         39Bc584XNUvYp+mHYD7xpXGP+y+d5baJrlZqfRJMSJ9ztgVVXsGwBBTLSe4yMRqGcdZK
+         2U5TNqJP6au4u1pOgML8Fz4hEiu1oiDV9cZL+2/gbwN89WqhOs8mBbLrqMFGQJnPfIUc
+         PrSw==
+X-Gm-Message-State: AAQBX9eHNsDuDZE+JzgogBldx2Am2YSTVt4viTPTWCZ9cbuOJaiL2vGC
+        wnWhDorsFxwIXd7P4dxoWP59qQ==
+X-Google-Smtp-Source: AKy350YTCKN8pXK1GPOoitNCP80wKJNKIMZKz3O+cK/gOeA1J9898z6qCW9KcqZVIWDDqcWSHJd/hg==
+X-Received: by 2002:a17:90b:1644:b0:23f:7ff6:eb8 with SMTP id il4-20020a17090b164400b0023f7ff60eb8mr1994829pjb.31.1681185002391;
+        Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
+Received: from [10.200.10.217] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id t7-20020a6549c7000000b005136b93f8e9sm7579138pgs.14.2023.04.10.20.49.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 20:50:02 -0700 (PDT)
+Message-ID: <f132db6d-5b5f-cf18-3e4e-2f3053c93033@bytedance.com>
+Date:   Tue, 11 Apr 2023 11:49:56 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v2] maple_tree: Use correct variable type in sizeof
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, Liam.Howlett@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org,
+        David Binderman <dcb314@hotmail.com>, stable@vger.kernel.org
+References: <20230411023513.15227-1-zhangpeng.00@bytedance.com>
+ <20230410202935.d1abf62f386eefb1efa36ce4@linux-foundation.org>
+ <ZDTXE8jKMz802jqR@casper.infradead.org>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <ZDTXE8jKMz802jqR@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using cull option with 'tg' flag, the fprintf is using pid instead
-of tgid. It should use tgid instead.
 
-Signed-off-by: Steve Chou <steve_chou@pesi.com.tw>
----
- tools/mm/page_owner_sort.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+在 2023/4/11 11:42, Matthew Wilcox 写道:
+> On Mon, Apr 10, 2023 at 08:29:35PM -0700, Andrew Morton wrote:
+>> On Tue, 11 Apr 2023 10:35:13 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
+>>
+>>> The type of variable pointed to by pivs is unsigned long, but the type
+>>> used in sizeof is a pointer type. Change it to unsigned long.
+>> Thanks, but there's nothing in this changelog which explains why a
+>> -stable backport is being proposed.  When fixing a bug, please always
+>> describe the user-visible effects of that bug.
+> There is no user-visible effect of this bug as the assembly code
+> generated will be identical.
 
-diff --git a/tools/mm/page_owner_sort.c b/tools/mm/page_owner_sort.c
-index 7c2ac124cdc8..99798894b879 100644
---- a/tools/mm/page_owner_sort.c
-+++ b/tools/mm/page_owner_sort.c
-@@ -857,7 +857,7 @@ int main(int argc, char **argv)
- 			if (cull & CULL_PID || filter & FILTER_PID)
- 				fprintf(fout, ", PID %d", list[i].pid);
- 			if (cull & CULL_TGID || filter & FILTER_TGID)
--				fprintf(fout, ", TGID %d", list[i].pid);
-+				fprintf(fout, ", TGID %d", list[i].tgid);
- 			if (cull & CULL_COMM || filter & FILTER_COMM)
- 				fprintf(fout, ", task_comm_name: %s", list[i].comm);
- 			if (cull & CULL_ALLOCATOR) {
--- 
-2.25.1
+Therefore, if this has always been the case, cc stable
+is also unnecessary.
 
-
+>
+>>> --- a/lib/maple_tree.c
+>>> +++ b/lib/maple_tree.c
+>>> @@ -3255,7 +3255,7 @@ static inline void mas_destroy_rebalance(struct ma_state *mas, unsigned char end
+>>>   
+>>>   		if (tmp < max_p)
+>>>   			memset(pivs + tmp, 0,
+>>> -			       sizeof(unsigned long *) * (max_p - tmp));
+>>> +			       sizeof(unsigned long) * (max_p - tmp));
+>>>   
+>>>   		if (tmp < mt_slots[mt])
+>>>   			memset(slots + tmp, 0, sizeof(void *) * (max_s - tmp));
+>> Is there any situation in which
+>> sizeof(unsigned long *) != sizeof(unsigned long)?
+> Windows 64-bit (pointer 64-bit, unsigned long is 32 bit) is the only
+> one I know.  Linux is all ILP32 or LP64.  There may be some embedded
+> environments which are different, but I have no idea what they might be.
+>
