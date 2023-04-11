@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49326DE53A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383276DE547
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjDKUDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S229693AbjDKUFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjDKUDV (ORCPT
+        with ESMTP id S229485AbjDKUFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:03:21 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2417A4228
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:03:20 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6346aa0a227so740685b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681243398; x=1683835398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1QIvtNOZpjFXcu94e1ZYRZNGqBLek5acvR5DAimawdo=;
-        b=c0yUYijCoz7BQlVO1A8/4q0a0aQARahXSrZKdwBCNSn1h+KuFpf6Zw9MUHfjn9a6H7
-         JZQ1ENtObsHnvxNPguDD1SvANqglY0KcTb1RkSk1UMHk5NnqkbP7TaJgvdPbEVT7VqNC
-         VzO9NOn4xGa0Psb0nfeqon8YS9cib59nUCq/S30xUBJWL2MF1zHANqZ331J4p1tAyXxB
-         QvSN99qxtt3GyirxxgzQJaflUQFQ/EfHMvUSOExjXluT0Ei5hBl/BDYDTDOOzj7MG0Wo
-         SdjevGj+r2uPrfywMGeSuGQYMGKr1SrZRtcvy6EDX4+Ti11IIxuXHwJLAj0ZPxwOZ0uI
-         Yejg==
+        Tue, 11 Apr 2023 16:05:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC784228
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681243466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cxcg4D7oOn+vhVnnmmIAydop7TdCDBp1rp6PwiTdQPw=;
+        b=iNGUMYXgOsuDTVO1ldoAGf09MRwjRca251MVio7z/NRinx5IeDuPLxr9ylk+wKm0ejuc7s
+        PsLQQdZT2roF+tTCgVAAn9Fy1gHcpTf2STZNey5r9xImH8voFy/mmeNs7zNSK/9S5jp8pA
+        y1zkzJ7d3RyttT5VyDP00/3TDHKTaWk=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-DH4_6QzbPwapVfGdL7pWXg-1; Tue, 11 Apr 2023 16:04:25 -0400
+X-MC-Unique: DH4_6QzbPwapVfGdL7pWXg-1
+Received: by mail-ot1-f71.google.com with SMTP id r16-20020a9d7cd0000000b006a149b4ad1cso562786otn.23
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:04:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681243398; x=1683835398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1QIvtNOZpjFXcu94e1ZYRZNGqBLek5acvR5DAimawdo=;
-        b=USsT9LeqSZ5bALEuwkz6eLLyhXdrIR4Ucsp5uUIBDUbPxvTXbY8sOgpXur0fqy8yRg
-         zztC4x1csUSg0JJK+htTBazFrKloU/4DLc+QeSuORPBB1YfJrhQE+pmOuJKLLbtGnVDd
-         RyqNlvLlwHllinRlj6gBzc5RhKqTgkguNX9J3C1dylYo79KFc9BaQs8gKWUoC+wkJbIV
-         nKAwfwMc7QaZmOqPmmwqYqmHQ0oazEyvUuwL2bQQ3Z3YedfW0yL7x+ngpWKn1qfXPrHI
-         2zeC/p59BTvUKgsV7DIh7Sk/7x1JUfPG9kI5vCQHzByOFsGGcfx8D5GgtpLbyycUu9wc
-         HXhg==
-X-Gm-Message-State: AAQBX9eF2hUejwmHaqT6JIsuESZh/Ur31Z8D1NlJqNYhuxdR8iP3VOBL
-        iEKLOTlMEMcpvVqgFVL1C5YxECG6Lms1yPlNsP9msg==
-X-Google-Smtp-Source: AKy350Yj++7oOxO2QLb08w/0xfk0wmzTO10oSqB5jYN2g0CTsbzoP24SZY8H1V8XPYI27fb+SE6gOPXDk28jZek/AQM=
-X-Received: by 2002:a05:6a00:1251:b0:625:c832:6a10 with SMTP id
- u17-20020a056a00125100b00625c8326a10mr5776657pfi.4.1681243397790; Tue, 11 Apr
- 2023 13:03:17 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681243464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cxcg4D7oOn+vhVnnmmIAydop7TdCDBp1rp6PwiTdQPw=;
+        b=5nabmWVbeF1R6tvX5EfVFKm1u5RQm/2yzZvkFnN/mDbKKIWTNb6cB/hvMOqaM8WwIX
+         fKbRgwP5/JPw5MAUVR+6M237y3SlznvSItBzZTrlrD5P/ElyS9PDoW7gfTgM78hOfGkm
+         GQ9nPxlXq0tUo4mV+QtMpHiIJnut/G6CZ7OHjkhfM+MsZo4GzM9mpZVMBAkLw60wAbte
+         fENqWUwdCtW1de/T8tbhoOuR65vAgxPhSrobyu2BkoJSq0TiAj6LujN3ceakbp3A/lKq
+         LTquZV3FYP+V4WJdZ3CyBCq5P7IHrA7MW0SpBVPM9su5J6YhUJSo0kb7p+g0RNdaq4KM
+         e02A==
+X-Gm-Message-State: AAQBX9cIj1qoem43B3g4jHFCDROmGskH8EGD5mrHxWcVUCKbV4e/T2tq
+        m8gWGZe7lGwutdGj0q4sqEjo1yfDEwKmTBcMRo8Msw3HmxiXrbxP2r86JDGgArXMNOkrQgoAuTy
+        +qZ857kCWL2Oox/SQNz+8n/tY+bkKjpOkOd0C84IrrdfltCHg2pdf4afWMmhYYwGEO0cSrAcIz+
+        flIF98PPLIvxY=
+X-Received: by 2002:aca:d743:0:b0:386:9720:77da with SMTP id o64-20020acad743000000b00386972077damr5007485oig.26.1681243464629;
+        Tue, 11 Apr 2023 13:04:24 -0700 (PDT)
+X-Google-Smtp-Source: AKy350azWr6mlU8tkLsqApkkAbbpQnuMkm8iMeE0b6zA76CdTeqoq06KhY/ps1Hoi3qB/iOjMgYrUA==
+X-Received: by 2002:aca:d743:0:b0:386:9720:77da with SMTP id o64-20020acad743000000b00386972077damr5007433oig.26.1681243464151;
+        Tue, 11 Apr 2023 13:04:24 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id e20-20020a056808149400b00387764759a3sm5868545oiw.24.2023.04.11.13.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 13:04:23 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, mturquette@baylibre.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next v4 00/12] Add EMAC3 support for sa8540p-ride
+Date:   Tue, 11 Apr 2023 15:03:57 -0500
+Message-Id: <20230411200409.455355-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230324212210.1001990-1-maskray@google.com> <CAKwvOd=QXGbrxct20cBia92=QonWtfWdC21WK4w2bRBprPXh=w@mail.gmail.com>
- <CAFP8O3JSs1bOYrqWpzXiv9fEEfMwiJwcTMBX6v3C654niksN2Q@mail.gmail.com>
-In-Reply-To: <CAFP8O3JSs1bOYrqWpzXiv9fEEfMwiJwcTMBX6v3C654niksN2Q@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 11 Apr 2023 13:03:06 -0700
-Message-ID: <CAKwvOdnAjeHYuDHKQgr8VFAem+sK05gdoC6KZea8MCw2pdFdPw@mail.gmail.com>
-Subject: Re: [PATCH v2] Makefile: use -z pack-relative-relocs
-To:     Fangrui Song <maskray@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Collingbourne <pcc@google.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,128 +92,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 11:44=E2=80=AFAM Fangrui Song <maskray@google.com> =
-wrote:
->
-> On Fri, Apr 7, 2023 at 11:35=E2=80=AFAM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 2:22=E2=80=AFPM Fangrui Song <maskray@google.co=
-m> wrote:
-> > >
-> > > Commit 27f2a4db76e8 ("Makefile: fix GDB warning with CONFIG_RELR")
-> > > added --use-android-relr-tags to fix a GDB warning
-> > >
-> > > BFD: /android0/linux-next/vmlinux: unknown type [0x13] section `.relr=
-.dyn'
-> > >
-> > > The GDB warning has been fixed in version 11.2.
-> > >
-> > > The DT_ANDROID_RELR tag was deprecated since DT_RELR was standardized=
-.
-> > > Thus, --use-android-relr-tags should be removed. While making the
-> > > change, try -z pack-relative-relocs, which is supported since LLD 15.
-> > > Keep supporting --pack-dyn-relocs=3Drelr as well for older LLD versio=
-ns.
-> > >
-> > > As of today, GNU ld supports the latter option for x86 and powerpc64
-> > > ports and has no intention to support --pack-dyn-relocs=3Drelr. In th=
-e
-> > > absence of the glibc symbol version GLIBC_ABI_DT_RELR,
-> > > --pack-dyn-relocs=3Drelr and -z pack-relative-relocs are identical in
-> > > ld.lld.
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1057
-> > > Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=
-=3Da619b58721f0a03fd91c27670d3e4c2fb0d88f1e
-> > > Signed-off-by: Fangrui Song <maskray@google.com>
-> >
-> > Thanks v2 looks better. IIUC, this will first try to test+use
-> > `--pack-dyn-relocs=3Drelr` in preference to `-z pack-relative-relocs`.
-> > Do we want to reorder the preference, for both the test and actual
-> > flag used?
->
-> Thanks for the comment. The order is deliberate and there is no
-> obsolescence indication of --pack-dyn-relocs=3Drelr.
->
-> GNU ld and newer lld report warnings (instead of errors) for unknown
-> -z options, and only errors lead to non-zero exit codes.
+This is a forward port / upstream refactor of code delivered
+downstream by Qualcomm over at [0] to enable the DWMAC5 based
+implementation called EMAC3 on the sa8540p-ride dev board.
 
-That makes sense; consider adding a note about that intention to the
-commit message in a v3 along with:
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+From what I can tell with the board schematic in hand,
+as well as the code delivered, the main changes needed are:
 
->
-> Therefore, $(call ld-option,--pack-dyn-relocs=3Drelr,-z
-> pack-relative-relocs) has to place --pack-dyn-relocs=3Drelr first.
-> scripts/tools-support-relr.sh has to test --pack-dyn-relocs=3Drelr first =
-as well.
->
-> > > ---
-> > >  Makefile                      | 3 ++-
-> > >  scripts/tools-support-relr.sh | 8 ++++++--
-> > >  2 files changed, 8 insertions(+), 3 deletions(-)
-> > > ---
-> > > Changes from v1:
-> > > * Keep supporting --pack-dyn-relocs=3Drelr for older ld.lld versions
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index a2c310df2145..e23a85476d5d 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -1113,7 +1113,8 @@ LDFLAGS_vmlinux   +=3D -X
-> > >  endif
-> > >
-> > >  ifeq ($(CONFIG_RELR),y)
-> > > -LDFLAGS_vmlinux        +=3D --pack-dyn-relocs=3Drelr --use-android-r=
-elr-tags
-> > > +# ld.lld before 15 did not support -z pack-relative-relocs.
-> > > +LDFLAGS_vmlinux        +=3D $(call ld-option,--pack-dyn-relocs=3Drel=
-r,-z pack-relative-relocs)
-> > >  endif
-> > >
-> > >  # We never want expected sections to be placed heuristically by the
-> > > diff --git a/scripts/tools-support-relr.sh b/scripts/tools-support-re=
-lr.sh
-> > > index cb55878bd5b8..4c121946e517 100755
-> > > --- a/scripts/tools-support-relr.sh
-> > > +++ b/scripts/tools-support-relr.sh
-> > > @@ -7,8 +7,12 @@ trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXI=
-T
-> > >  cat << "END" | $CC -c -x c - -o $tmp_file.o >/dev/null 2>&1
-> > >  void *p =3D &p;
-> > >  END
-> > > -$LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr \
-> > > -  --use-android-relr-tags -o $tmp_file
-> > > +
-> > > +# ld.lld before 15 did not support -z pack-relative-relocs.
-> > > +if ! $LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr -o =
-$tmp_file 2>/dev/null; then
-> > > +       $LD $tmp_file.o -shared -Bsymbolic -z pack-relative-relocs -o=
- $tmp_file 2>&1 |
-> > > +               grep -q pack-relative-relocs && exit 1
-> > > +fi
-> > >
-> > >  # Despite printing an error message, GNU nm still exits with exit co=
-de 0 if it
-> > >  # sees a relr section. So we need to check that nothing is printed t=
-o stderr.
-> > > --
-> > > 2.40.0.348.gf938b09366-goog
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
->
-> --
-> =E5=AE=8B=E6=96=B9=E7=9D=BF
+    1. A new address space layout for dwmac5/EMAC3 MTL/DMA regs
+    2. A new programming sequence required for the EMAC3 based platforms
 
+This series makes the changes above as well as other housekeeping items
+such as converting dt-bindings to yaml, etc.
 
+As requested[1], it has been split up by compilation deps / maintainer tree.
+I will post a link to the associated devicetree changes that together
+with this series get the hardware functioning.
 
---=20
+Patches 1-3 are clean ups of the currently supported dt-bindings and
+IMO could be picked up as is independent of the rest of the series to
+improve the current codebase. They've all been reviewed in prior
+versions of the series.
+
+Patches 5-7 are also clean ups of the driver and are worth picking up
+independently as well. They don't all have explicit reviews but should
+be good to go (trivial changes on non-reviewed bits).
+
+The rest of the patches have new changes, lack review, or are specificly
+being made to support the new hardware, so they should wait until the
+series as a whole is deemed ready to go by the community.
+
+[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
+[1] https://lore.kernel.org/netdev/20230320202802.4e7dc54c@kernel.org/
+
+v3: https://lore.kernel.org/netdev/20230331214549.756660-1-ahalaney@redhat.com/
+v2: https://lore.kernel.org/netdev/20230320221617.236323-1-ahalaney@redhat.com/
+v1: https://lore.kernel.org/netdev/20230313165620.128463-1-ahalaney@redhat.com/
+
 Thanks,
-~Nick Desaulniers
+Andrew
+
+Andrew Halaney (9):
+  dt-bindings: net: qcom,ethqos: Add Qualcomm sc8280xp compatibles
+  net: stmmac: Remove unnecessary if statement brackets
+  net: stmmac: Fix DMA typo
+  net: stmmac: Remove some unnecessary void pointers
+  net: stmmac: Pass stmmac_priv in some callbacks
+  net: stmmac: dwmac4: Allow platforms to specify some DMA/MTL offsets
+  net: stmmac: dwmac-qcom-ethqos: Respect phy-mode and TX delay
+  net: stmmac: dwmac-qcom-ethqos: Use loopback_en for all speeds
+  net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support
+
+Bhupesh Sharma (3):
+  dt-bindings: net: snps,dwmac: Update interrupt-names
+  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
+
+ .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ------
+ .../devicetree/bindings/net/qcom,ethqos.yaml  | 111 ++++++++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |   9 +-
+ MAINTAINERS                                   |   2 +-
+ .../net/ethernet/stmicro/stmmac/chain_mode.c  |  10 +-
+ drivers/net/ethernet/stmicro/stmmac/common.h  |   2 +-
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 178 ++++++++++++----
+ .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c |  36 ++--
+ .../ethernet/stmicro/stmmac/dwmac1000_core.c  |   3 +-
+ .../ethernet/stmicro/stmmac/dwmac1000_dma.c   |  19 +-
+ .../ethernet/stmicro/stmmac/dwmac100_dma.c    |  14 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac4.h  | 101 +++++++--
+ .../net/ethernet/stmicro/stmmac/dwmac4_core.c |  50 +++--
+ .../ethernet/stmicro/stmmac/dwmac4_descs.c    |   8 +-
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 201 +++++++++++-------
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  92 +++++---
+ .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  | 105 +++++----
+ .../net/ethernet/stmicro/stmmac/dwmac_dma.h   |  22 +-
+ .../net/ethernet/stmicro/stmmac/dwmac_lib.c   |  18 +-
+ .../ethernet/stmicro/stmmac/dwxgmac2_core.c   |   9 +-
+ .../ethernet/stmicro/stmmac/dwxgmac2_descs.c  |   6 +-
+ .../ethernet/stmicro/stmmac/dwxgmac2_dma.c    |  71 ++++---
+ .../net/ethernet/stmicro/stmmac/enh_desc.c    |  11 +-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    | 176 ++++++++-------
+ .../net/ethernet/stmicro/stmmac/norm_desc.c   |   8 +-
+ .../net/ethernet/stmicro/stmmac/ring_mode.c   |  10 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   3 +-
+ include/linux/stmmac.h                        |  19 ++
+ 28 files changed, 886 insertions(+), 474 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+
+-- 
+2.39.2
+
