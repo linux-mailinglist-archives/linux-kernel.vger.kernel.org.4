@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73516DE331
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA436DE334
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjDKRye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S229846AbjDKRyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDKRyd (ORCPT
+        with ESMTP id S229490AbjDKRye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:54:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ACB5241;
-        Tue, 11 Apr 2023 10:54:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB1B625B5;
-        Tue, 11 Apr 2023 17:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634C6C4339E;
-        Tue, 11 Apr 2023 17:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681235671;
-        bh=54LJu/uSR+OsrlePoQijbNxy1ZDn64og6zc21iXSGBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FZM7uyjNGHb190bgTNK8XIfUWc5OWWpnCC2DBIMmQ0TOjo8htAv2XNx2Mg+0YBHhS
-         BSeyE2SA9B8oxWjfSu/2Na+nvWy+upQ4VyB9OdYWwm6Hr7Ma3Xw17W3arxD9KayRwT
-         HmIPJ8NTIoyLmiw95MjWATlmInH5pX2zxPfljlImUnhkSDcYBwlUPbJ9RFor+5H0+g
-         GLF4YJWt59Oy8p/ME+f7vAW+/2alSHw6Gh0RrbtYVR42eyP1ZqstkUzE2qeAahk1Du
-         NjgRtXpolpQ/7ZMUu1BSJyOQ28v6iAtN50jLnQVlZcEvjL7CmwG5b8XIkDOhe7Zxmf
-         hzo/Z9oXsk15A==
-Date:   Tue, 11 Apr 2023 18:54:24 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com, lihuafei1@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v6 0/5] Add ftrace direct call for arm64
-Message-ID: <20230411175423.GD23143@willie-the-truck>
-References: <20230405180250.2046566-1-revest@chromium.org>
- <ZDWDPUY2tZiMbk8V@FVFF77S0Q05N>
- <20230411124749.7aeea715@gandalf.local.home>
- <20230411170807.GA23143@willie-the-truck>
- <20230411134456.728551f8@gandalf.local.home>
+        Tue, 11 Apr 2023 13:54:34 -0400
+Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013012.outbound.protection.outlook.com [52.101.49.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C76A5270
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:54:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UNr0yLV0CCoKTjQfCoJqME2SgA3yYtoXiVauvymMaiR+aueXPCpHTwN1sN+mORq30m/PLb5z3YAA71EbqO3D/VVGA+UqPP9dfeC5ZaIGmIdB4rIHiV6xT1XNnX0zhf3ccj8BM2NveLgCgFF35S6XzGCUPhzkXlbROGNfjNTSNyCl4jYvK7Hc7Hly3EBamODVaYuvufZxpi6lps3vaHg8ufYPwXqdsrDaksnry13QICY9m9ItE2T82zqhnPigfDMDLAOmiPZEbGWPIRJw8EZC2tjbpgVm/HQnDIRjeVCmzFtPSV/tN6g9svpqrSf9Ez5sTyPU9nI0lMATzApg+DdVrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
+ b=ZMqfdMY3J/p9REJZP6zk7flwTGcmgNXz8Nbm9kBBEs8eI+/snRBE6S3E6vOrKcyXSVVkoKlO9GE1Ko2eQ/XnqBlAysloKQ1tuIclghU7437AtNb+HO76B0i7elr1F9CCEJfEjIcLpgkVXOPMEw7/zBI+mJyyoBwJzOeOKzknNpbOgyXDCqUL5b0Fo70uG79qMeNTLmW5qDb4cwHvCfJocMWTnY2sOVa2r9ZER6oGqjNlX9gOBoNvQWpIzJmi4I/d7LvptCvwcbN6CUt5T3DMlAgHQRlk9hsD4YLxbHE1Yxd82v9Jk3wQF7uOSRpEWZECygyH9UhrZpsIYcAQoAOGoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
+ b=EvoLoI/EUghGnqu2vNNZlQKHvFmKqUEWUyBSPR5bSgSCfnQ641AHfjY/gWqVlAb6IvCn2gbYS1H3V0jlZCBTPWp4l4fvkkuHRMS0WFlh8gAIKQI2xntzCOqBlzSgGDh3uIrs5X9OiI28UrtDyFX0hZRwYVHKmDGa4dpTPw1PsyE=
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ (2603:10b6:610:155::10) by MN2PR05MB6048.namprd05.prod.outlook.com
+ (2603:10b6:208:d0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
+ 2023 17:54:26 +0000
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8]) by CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8%6]) with mapi id 15.20.6298.028; Tue, 11 Apr 2023
+ 17:54:26 +0000
+From:   Zack Rusin <zackr@vmware.com>
+To:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "airlied@gmail.com" <airlied@gmail.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+Thread-Topic: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+Thread-Index: AQHZXCJfQ+s7JMgTuEarwKwV+53z968mhQmA
+Date:   Tue, 11 Apr 2023 17:54:26 +0000
+Message-ID: <466f4517100964537142f698e82cffb87acd39fb.camel@vmware.com>
+References: <20230321182414.1826372-1-trix@redhat.com>
+In-Reply-To: <20230321182414.1826372-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.0-1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|MN2PR05MB6048:EE_
+x-ms-office365-filtering-correlation-id: b21a6cca-89a6-47df-2466-08db3ab5caa8
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: puq21ZqvtA/7MGmyx2xXaRiFzwcS+IaPSlMH+dpdWPq40MX7kMaPwkjPfS0c/cgR+MINy+5yWsqz2LQMSm+QDSs4Ant48Cg+l1Tw9+od+GwNL6DJO2ArxPaMIuMo1iFpMtFplTuMhUihK7Z6lQUPxqRp0K982kboJOQvsDqD2e0DnzDIfFy4sJXtf7aVNW3l1bD8SAx79TN7185e0/XnmdRRxlxECfKa2jCq1vrc5b9Ow9tURNl9OuKm8SHKVnfwK7yVswUX5ahoSlmflA012CJD0zhwby+mbCCpirSAOiWXbMHgXeFrML55ku2sDgELE5hRO498BGzGSWFzTPL7shsoLZ9mGdOmSPhs29SPBVjWpA3JujtIGckFpiuHRcoiAHz2X3zSDgvYXyHu0D7zPN9pcjncJOv18oQo45eE2LKJv2sCzalEtNxZoq5GYRXVEq1SLaI8SRgcbtHsHoi9kiJWq32ivyg1CTSr8n/ytLH7rtdXWuqYwEKjyucCZSwPt+HQWDWXP2uHYRVG1kfueYhahq/Xlm6w8D+aLAELzDL+9RQiSAK27bJrF7QpftazLHvVJyAQgPe+GdB7LsbLh+syQaGZ1TLhJ7Uro6xDiwn9iKww3wNPo10LS5bXL0B2
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(478600001)(71200400001)(6506007)(316002)(6512007)(110136005)(26005)(54906003)(186003)(5660300002)(6486002)(91956017)(4744005)(2906002)(66556008)(76116006)(66946007)(4326008)(64756008)(41300700001)(66446008)(8676002)(8936002)(66476007)(38100700002)(122000001)(36756003)(2616005)(38070700005)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M3FZSE5naVpNVHk5aFR2Sk85ZHgrdldQSmk4NVJCaTZ0REpnM3JaOWxlLzNl?=
+ =?utf-8?B?Q3Q1MlpFZDJRMEFHK1VJcnFyUlY3bXZ5M0xSUVU2RkEvOXc4ZE1YWmd2aERV?=
+ =?utf-8?B?STYya3prelVrQ2RGR2pTeklWbHpseGdTNU1RcitPMWQ5eVg1RHFzQkM0MFZx?=
+ =?utf-8?B?NFR2N3g1MTJuYUMxT1U4SmxQdENpNlBqTUZXK3ExMlEzT29XbGUyOFErUkti?=
+ =?utf-8?B?UWJTV015enlyWlh3YnVOb0Q4c2s4RitVRXR6K21JZ1BiVWVhaW8ya1BWK3Mv?=
+ =?utf-8?B?ejJLRUdXR3VlcDIxMGw5OGY3TG9EQlgxbklvMXpRbHZSL2VKcXpaTGREamJG?=
+ =?utf-8?B?bUpESkpKZWFydGFPTkRNaUtRbU9mSVVWWVVncXN3a2RpOWhncXBQaUxFYVJB?=
+ =?utf-8?B?UFhaVEpnVWFvVVZTQ2tWWFZhUjJXb0g2OUgxejVNRG5DOUQrZWFiN3pmYjRV?=
+ =?utf-8?B?bmIraW9hU2d0UHV4VEpzWlJSdTRRc1AwSjNGTjh0cncxbFNKaHZZY1BpcmVo?=
+ =?utf-8?B?QkFKS1Nkc05hOERsU05WeXljeDlwYW1YS0FVMDlEVE05dkx5T21XK3hiNkdt?=
+ =?utf-8?B?L1cyVUpjK1JWQktsRndSMlJyUDZ4Z1lHUnZUNXlHZEVCeFhXNFVCVXdsVnZP?=
+ =?utf-8?B?bEF1TE5XenBoSzR4bTFLQ2YzQVlaeWw3U1VUY0JhcXdxcXE0RWZPUUxvckEr?=
+ =?utf-8?B?cnJqdXJBLzJDNW52bjFWS2tNZkFwdk9aMzRWY1RZQyswWmVDcU9QUTY1SjAy?=
+ =?utf-8?B?bXRGYzVCRHg1MkZoL2ZZR0VjVDJNVW5oYU5OeWJES1E3Q2FndlFpWTFjSVhT?=
+ =?utf-8?B?NEhJOGFsYnIrQ0ZPeUVhRHpOY29Mc2R0ZGtXWWlMK29TRm1GOTdKRkpJbnpl?=
+ =?utf-8?B?V3UyZXNqd05YY2dheHVJZE9YbEtIT0FwWEdlTjdhbzBkWUxiY0ZzYUY3MldR?=
+ =?utf-8?B?K01FZ010TnJMQmVhSndhRXFsczBncnQ3dU9SUTJmdHUzNUc1T2tRdUg2NHlY?=
+ =?utf-8?B?MDdVbzNDSnlLUWl2Mmoxd3NoOE1rU3NyUWtaQWdQSEVTL2ErT1M1NzY5ZGZ5?=
+ =?utf-8?B?c0dvNFdHd21rUnV3ZXdYdTc1bWlSZGUrS0pIeGpJOFo3U3dzYUtPaDg5WUdS?=
+ =?utf-8?B?ZXRnRVA4bEx0em91YURFUk1sck1DUUJUd0VBU0xmWThsMGh2VjhyZ1NUVm1M?=
+ =?utf-8?B?Y1BMaGF4UkR6Ri9CZHFaZHN0bzF0QzVIaWtqdzV5UE1EWTlFU2x4NGZobkVL?=
+ =?utf-8?B?VWpUSWlWdGpyOTBHOS82QWd2eFNiNHRoS0R1bEZUZm8wbER1alZDK3U1cGZG?=
+ =?utf-8?B?RVlnYVd4QWplWTB5UkNaVU1KV3dIbWR4U2I1T2t5T1FlTTNqOExFQjJiTlVO?=
+ =?utf-8?B?dS95aUx1MGdwZVFhRXh3MUNHcmZrNFcyM0RDMmU3UHQwWkEwZ3NOV05qVnlN?=
+ =?utf-8?B?VWxDVVhTTkxTZjNJejdmSmdUUzZ5V1ZSTHVFR01PSFQ1VWFXUnN6dE1oQkNE?=
+ =?utf-8?B?RkdGcHZBbWFRL1dsM0ViS0pyTXM2bGwyTysxb3lyS1UxclNvM3lYekVlL2NW?=
+ =?utf-8?B?Q09YMVRHMUE5VEEyOWN5aU1lYWI3bkh5ZWZWYlhpQ1BGempYR3Fyakp4STlZ?=
+ =?utf-8?B?SWVFUm5hREx2NUZiQjhMQWtndVllN3lGV2J4enJBYXhFcFZkbVd6SmFZQ3Bp?=
+ =?utf-8?B?OFp2dDZacjlpMXNEM2JKSWN3R2NKWU9rVVZsQno5c0JjSmRXVk8xOEJkcUFl?=
+ =?utf-8?B?amV4QkJJNk84cTZLcHNDMGticlkra1Z0QTVoZ3lHY0VWZld5eTgrUXVFMGVD?=
+ =?utf-8?B?MEM3elhCeHlPK3FmbnZwR1IxNFRaVDlJUS9UWUFTQXluai9WV3FDT3BTVmdR?=
+ =?utf-8?B?Q20yNDVJY09RQU5qWmdwWFl4ZktGTjdEc1dkKzgrMEIwNWd0VWJMS09GY3No?=
+ =?utf-8?B?TFIwdWVYc1pLREpGakFNekVtVFhqb1NPNGdlaUQ1RVRYem92ak4yWXNmMTNu?=
+ =?utf-8?B?TkdjZFcwcUtWQy91WXJHaWNXNEF4NjQ0M0plQ3VNY2JoWVBkMTErcjJ6cmJw?=
+ =?utf-8?B?dVRkdnlXblVhYVNwdW1udmdYbVpGVEptbTRFYUhRZzhDOStETm9YTE5CREpt?=
+ =?utf-8?Q?ziVy3XOXqA8XATEcxykYnWTF/?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A30070B6451B3E4C9233F0734BD70154@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411134456.728551f8@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b21a6cca-89a6-47df-2466-08db3ab5caa8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 17:54:26.6202
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aJOECwb//QAFF13BxPX4fQeidI3xmLVOCAI7uB7clGS7WQRq9KFkASWgv3+x2jN7LrDPwgEocX4hX2VRCmAXZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6048
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 01:44:56PM -0400, Steven Rostedt wrote:
-> On Tue, 11 Apr 2023 18:08:08 +0100
-> Will Deacon <will@kernel.org> wrote:
-> 
-> > On Tue, Apr 11, 2023 at 12:47:49PM -0400, Steven Rostedt wrote:
-> > > On Tue, 11 Apr 2023 16:56:45 +0100
-> > > Mark Rutland <mark.rutland@arm.com> wrote:
-> > >   
-> > > > IIUC Steve was hoping to take the FUNCTION_GRAPH_RETVAL series through the
-> > > > trace tree, and if that's still the plan, maybe both should go that way?  
-> > > 
-> > > The conflict is minor, and I think I prefer to still have the ARM64 bits go
-> > > through the arm64 tree, as it will get better testing, and I don't like to
-> > > merge branches ;-)
-> > > 
-> > > I've added Linus to the Cc so he knows that there will be conflicts, but as
-> > > long as we mention it in our pull request, with a branch that includes the
-> > > solution, it should be fine going through two different trees.  
-> > 
-> > If it's just the simple asm-offsets conflict that Mark mentioned, then that
-> > sounds fine to me. However, patches 3-5 don't seem to have anything to do
-> 
-> I guess 3 and 5 are not, but patch 4 adds arm64 code to the samples (as
-> it requires arch specific asm to handle the direct trampolines).
-
-Sorry, yes, I was thinking of arch/arm64/ and then failed spectacularly
-at communicating :)
-
-> > with arm64 at all and I'd prefer those to go via other trees (esp. as patch
-> > 3 is an independent -stable candidate and the last one is a bpf selftest
-> > change which conflicts in -next).
-> > 
-> > So I'll queue the first two in arm64 on a branch (or-next/ftrace) based
-> > on trace-direct-v6.3-rc3.
-> 
-> Are 3-5 dependent on those changes? If not, I can pull them into my tree.
-
-Good question. Florent?
-
-Will
+T24gVHVlLCAyMDIzLTAzLTIxIGF0IDE0OjI0IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBjbGFu
+ZyB3aXRoIFc9MSByZXBvcnRzDQo+IGRyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4X292ZXJs
+YXkuYzo1NjozNTogZXJyb3I6DQo+IMKgIHVudXNlZCBmdW5jdGlvbiAndm13X292ZXJsYXknIFst
+V2Vycm9yLC1XdW51c2VkLWZ1bmN0aW9uXQ0KPiBzdGF0aWMgaW5saW5lIHN0cnVjdCB2bXdfb3Zl
+cmxheSAqdm13X292ZXJsYXkoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF4N
+Cj4gVGhpcyBmdW5jdGlvbiBpcyBub3QgdXNlZCwgc28gcmVtb3ZlIGl0Lg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQuY29tPg0KDQpUaGFuayB5b3UgZm9yIHRoZSBw
+YXRjaC4gSSB3ZW50IGFoZWFkIGFuZCBwdXNoZWQgaXQgdG8gdGhlIGRybS1taXNjLW5leHQgYnJh
+bmNoIGluDQpkcm0tbWlzYyB0cmVlLg0KDQp6DQo=
