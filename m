@@ -2,178 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727596DDB8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE6E6DDB50
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjDKNCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S229707AbjDKM4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjDKNC0 (ORCPT
+        with ESMTP id S229581AbjDKM4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:02:26 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F195273;
-        Tue, 11 Apr 2023 06:01:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ud9so19925170ejc.7;
-        Tue, 11 Apr 2023 06:01:58 -0700 (PDT)
+        Tue, 11 Apr 2023 08:56:13 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56BC40C8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:56:10 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id e11so10220887lfc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681218079;
+        d=linaro.org; s=google; t=1681217769;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gjfKHiTAelHKNBBiZ32rOlQe2iBqnhIwDJ/F7afqrdI=;
-        b=RNXfuUX/MwoaEzkPLZbxur959pNK0xSVw/gPGRsMzx6f52TyDeq92xgmqeZGW/nvtM
-         KNMoR2k9ilXJPSnVTFgSxEJgFUgkSCAd8EZzm44kQy3zfh6ohn+zXfrx1YljwsSMkmId
-         oObACbJRFfm9kWqRd8B2d4G7u9qe2xCYuLQXkBZLXEPDbfyDaVaLQGqAkESsIouqUrYM
-         8qbdI1YKDZOpImcKXHolp8tvRLZ1nXQatw6QwCb09tcc3ap+Qtd/WzWzoSNU0JyfMYKD
-         Yj3kqpuPdCtVXBBYWkRCVAXGrls1X7xPI1zoyEoYitNQ12eI2W10WgMIapg5e10ps271
-         iZLQ==
+        bh=p59U/MidztXKvUHX3x4iKgmMCkXfcEm0tuGKGeli3EQ=;
+        b=cucQ3h4DO0/QUJTeJK2Z6K1Y3AmBhtS9dIxDq9CZh2AOpGfoRVsKwU35FBq616tuED
+         Z6Q1cB1nEL0g+1qHs6Zdhn4YNWSm2HXqpjjxmbmDshXZ8T2Jvan1Q2b3cA0kR0hmPkko
+         asEGupj1WPZ43KapY4CTBn0ypdDXnlbRR1jOlakm+yFaR1mwq7MHf4qDSfuERBm/bMSI
+         OaI5gps5unremrp0xfuMx2HO0EsSxZ3a+SZewcQ7Pel99vKUQAXvxrYWNfLiVN3PFtFX
+         TXz6JJy1vUJNHeBQbDG1gSHkCs0Pmo8rBwBfMO4D7VwliY9YTXfblA4vNCoCbw2NkgSB
+         VQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681218079;
+        d=1e100.net; s=20210112; t=1681217769;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjfKHiTAelHKNBBiZ32rOlQe2iBqnhIwDJ/F7afqrdI=;
-        b=10YsDIhzHRkuVFaxDNaR8ncbX/KJAfVxTAt1JSU/fdIf/FRuiUZ3qVJsBZ/GgshIGK
-         JqAHHhjHenQztPkLl1vNhRmXAOXIPkuTSV3N/VrGRr7QEz8Wt8F1A3viNpk3hYXYlZHU
-         /Z7qm/mgPcnMg6DCasI/UEnHrG6gc+S5ybyopxcPEMYqmWKp1vqZ50aDerdXFKFUKWHu
-         uNVRiElAx8TaGSHswWRc+gVSpCvzeTEz7FOdRutuaCWs4F1cfGmn5pRbQ3ZnsI6d1/IV
-         uE38gsxmL0+zDzwwG8tqnAB9+kesJLW3HPcgqVzuwe8CNELdWfHWW/Uvsy9rN5SjFaE6
-         6bLg==
-X-Gm-Message-State: AAQBX9dioctkGZT+guGa0umb3sQXwL8sxAykBFU1dRe/zD7mVBjwMPFT
-        OTaduf89d3bcbeEch6wyc2w=
-X-Google-Smtp-Source: AKy350aW0nWZOzSh162Acl+sBUA3ly4jFNnSh2K8bVA/yYWF+mvJPnzOEjXTZ9+bw0enj2qBSQ+9Kw==
-X-Received: by 2002:a17:906:17c9:b0:92f:7c42:8637 with SMTP id u9-20020a17090617c900b0092f7c428637mr12650457eje.30.1681218079336;
-        Tue, 11 Apr 2023 06:01:19 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:ddc3])
-        by smtp.gmail.com with ESMTPSA id oz19-20020a1709077d9300b00947ae870e78sm6084005ejc.203.2023.04.11.06.01.18
+        bh=p59U/MidztXKvUHX3x4iKgmMCkXfcEm0tuGKGeli3EQ=;
+        b=LlLLmJK1AZN7IhbmF2WwJTOLraqOwwC3z4DbbQf8xxxRDSew3vid8bWrzlBVD7E3k5
+         eiiDOZsCGY7TCGrG7E4VgRlQC1ifwHvJwwDECejm4WjPqBxI/pMSnFOMWt2AUk0Q4yvc
+         gWfH8kWwrHBxwiLJ6+2uvcOaBtg4XWCXXkfRvAyLJJeuYKa5pI9AaXEzL6/PqY3/3w0j
+         bwdemiaAJGoj6oM/EWG6oenQNYg564QQUKsxHSUOA2ryCOHE87Hn1IDDIGvCZYkj2mjD
+         lVKFqYJ3ZO3Isna8MPqvTOkqSqawTqTU3tQcTV5BeoHIQqKu3rpnSKLFKUC0pAC8PjhO
+         81Yg==
+X-Gm-Message-State: AAQBX9cWgh1idmgoWFIKAmK/59EK7ceG/AogKK3RjOh7kaLLmXNfR7VK
+        YC8lMGny6cTfS6w3WYpriWSMcQ==
+X-Google-Smtp-Source: AKy350a/nlAv6EQaVMDDtX7UwvD9JRmUg+BukSidmParaor5epxiPNDYQWuKjpm8YL65cdtci6mT9Q==
+X-Received: by 2002:a19:700b:0:b0:4e9:cb57:8fdc with SMTP id h11-20020a19700b000000b004e9cb578fdcmr4049342lfc.46.1681217768995;
+        Tue, 11 Apr 2023 05:56:08 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id r7-20020ac25a47000000b004e846175329sm2522743lfn.202.2023.04.11.05.56.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 06:01:19 -0700 (PDT)
-Message-ID: <75efd3a5-dc32-eb06-ed50-8ca0688747e0@gmail.com>
-Date:   Tue, 11 Apr 2023 13:54:33 +0100
+        Tue, 11 Apr 2023 05:56:08 -0700 (PDT)
+Message-ID: <9130c1cb-4081-b21c-7c1b-2e0c9879e66a@linaro.org>
+Date:   Tue, 11 Apr 2023 14:56:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [RFC PATCH 2/4] net: add uring_cmd callback to UDP
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: Add base qrb4210-rb2 board dts
 Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, axboe@kernel.dk
-Cc:     leit@fb.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <20230406144330.1932798-3-leitao@debian.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20230406144330.1932798-3-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
+References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
+ <20230411072840.2751813-3-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230411072840.2751813-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 15:43, Breno Leitao wrote:
-> This is the implementation of uring_cmd for the udp protocol. It
-> basically encompasses SOCKET_URING_OP_SIOCOUTQ and
-> SOCKET_URING_OP_SIOCINQ, which is similar to the SIOCOUTQ and SIOCINQ
-> ioctls.
+
+
+On 11.04.2023 09:28, Bhupesh Sharma wrote:
+> Add DTS for Qualcomm qrb4210-rb2 board which uses SM4250 SoC.
 > 
-> The return value is exactly the same as the regular ioctl (udp_ioctl()).
+> This adds debug uart, emmc, uSD and tlmm support along with
+> regulators found on this board.
 > 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Also defines the 'xo_board' and 'sleep_clk' frequencies for
+> this board.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->   include/net/udp.h        |  2 ++
->   include/uapi/linux/net.h |  5 +++++
->   net/ipv4/udp.c           | 16 ++++++++++++++++
->   3 files changed, 23 insertions(+)
+>  arch/arm64/boot/dts/qcom/Makefile        |   1 +
+>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 223 +++++++++++++++++++++++
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
 > 
-> diff --git a/include/net/udp.h b/include/net/udp.h
-> index de4b528522bb..c0e829dacc2f 100644
-> --- a/include/net/udp.h
-> +++ b/include/net/udp.h
-> @@ -283,6 +283,8 @@ void udp_flush_pending_frames(struct sock *sk);
->   int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
->   void udp4_hwcsum(struct sk_buff *skb, __be32 src, __be32 dst);
->   int udp_rcv(struct sk_buff *skb);
-> +int udp_uring_cmd(struct sock *sk, struct io_uring_cmd *cmd,
-> +		  unsigned int issue_flags);
->   int udp_ioctl(struct sock *sk, int cmd, unsigned long arg);
->   int udp_init_sock(struct sock *sk);
->   int udp_pre_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len);
-> diff --git a/include/uapi/linux/net.h b/include/uapi/linux/net.h
-> index 4dabec6bd957..dd8e7ced7d24 100644
-> --- a/include/uapi/linux/net.h
-> +++ b/include/uapi/linux/net.h
-> @@ -55,4 +55,9 @@ typedef enum {
->   
->   #define __SO_ACCEPTCON	(1 << 16)	/* performed a listen		*/
->   
-> +enum {
-> +	SOCKET_URING_OP_SIOCINQ		= 0,
-> +	SOCKET_URING_OP_SIOCOUTQ,
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index e0e2def48470..d42c59572ace 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -74,6 +74,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb2210-rb1.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= qrb4210-rb2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5-vision-mezzanine.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qru1000-idp.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> new file mode 100644
+> index 000000000000..c9c6e3787462
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -0,0 +1,223 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sm4250.dtsi"
+> +
+> +/ {
+> +	model = "Qualcomm Technologies, Inc. QRB4210 RB2";
+> +	compatible = "qcom,qrb4210-rb2", "qcom,qrb4210", "qcom,sm4250";
+> +
+> +	aliases {
+> +		serial0 = &uart4;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	vph_pwr: vph-pwr-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vph_pwr";
+> +		regulator-min-microvolt = <3700000>;
+> +		regulator-max-microvolt = <3700000>;
+> +
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
 > +};
 > +
->   #endif /* _UAPI_LINUX_NET_H */
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index c605d171eb2d..d6d60600831b 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -113,6 +113,7 @@
->   #include <net/sock_reuseport.h>
->   #include <net/addrconf.h>
->   #include <net/udp_tunnel.h>
-> +#include <linux/io_uring.h>
->   #if IS_ENABLED(CONFIG_IPV6)
->   #include <net/ipv6_stubs.h>
->   #endif
-> @@ -1711,6 +1712,20 @@ static int first_packet_length(struct sock *sk)
->   	return res;
->   }
->   
-> +int udp_uring_cmd(struct sock *sk, struct io_uring_cmd *cmd,
-> +		  unsigned int issue_flags)
-> +{
-> +	switch (cmd->sqe->cmd_op) {
+> +&qupv3_id_0 {
+> +	status = "okay";
+> +};
+> +
+> +&rpm_requests {
+> +	regulators {
+> +		compatible = "qcom,rpm-pm6125-regulators";
+> +
+> +		vdd-s1-supply = <&vph_pwr>;
+> +		vdd-s2-supply = <&vph_pwr>;
+> +		vdd-s3-supply = <&vph_pwr>;
+> +		vdd-s4-supply = <&vph_pwr>;
+> +		vdd-s5-supply = <&vph_pwr>;
+> +		vdd-s6-supply = <&vph_pwr>;
+> +		vdd-s7-supply = <&vph_pwr>;
+> +		vdd-s8-supply = <&vph_pwr>;
+> +		vdd-s9-supply = <&vph_pwr>;
+> +		vdd-s10-supply = <&vph_pwr>;
+> +
+> +		vdd-l1-l7-l17-l18-supply = <&vreg_s6a_1p352>;
+> +		vdd-l2-l3-l4-supply = <&vreg_s6a_1p352>;
+> +		vdd-l5-l15-l19-l20-l21-l22-supply = <&vph_pwr>;
+> +		vdd-l6-l8-supply = <&vreg_s5a_0p848>;
+> +		vdd-l9-l11-supply = <&vreg_s7a_2p04>;
+> +		vdd-l10-l13-l14-supply = <&vreg_s7a_2p04>;
+> +		vdd-l12-l16-supply = <&vreg_s7a_2p04>;
+> +		vdd-l23-l24-supply = <&vph_pwr>;
+> +
+> +		vreg_s5a_0p848: s5 {
+I think going with pmicname_regulatorname (e.g. pm6125_s5) here
+and adding:
 
-Not particularly a problem of this series, but what bothers
-me is the quite unfortunate placement of cmd_op in SQE.
+regulator-name = "vreg_s5a_0p848"
 
-struct io_uring_sqe {
-	...
-	union {
-		__u64	d1;
-		struct {
-			__u32	cmd_op;
-			__u32	__pad1;
-		};
-	};
-	__u64	d2;
-	__u32	d3;
-	...
-};
+would make this more maintainable.
 
-I'd much prefer it like this:
+[...]
 
-struct io_uring_sqe {
-	...
-	__u64 d1[2];
-	__u32 cmd_op;
-	...
-};
+> +&sdhc_1 {
+> +	vmmc-supply = <&vreg_l24a_2p96>;
+> +	vqmmc-supply = <&vreg_l11a_1p8>;
+> +	no-sdio;
+> +	non-removable;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&sdhc_2 {
+> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
+This comment is still pretty much spam.
 
+> +	vmmc-supply = <&vreg_l22a_2p96>;
+> +	vqmmc-supply = <&vreg_l5a_2p96>;
+> +	no-sdio;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&sleep_clk {
+> +	clock-frequency = <32000>;
+> +};
+> +
+> +&tlmm {
+> +	gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
+> +			       <49 1>, <52 1>, <54 1>,
+> +			       <56 3>, <61 2>, <64 1>,
+> +			       <68 1>, <72 8>, <96 1>;
+> +};
+> +
+> +&uart4 {
+> +	status = "okay";
+> +};
+This is not the correct SE for the production board. People
+booting this will get a tz bite.
 
-We can't change it for NVMe, but at least new commands can have
-a better layout. It's read in the generic cmd path, i.e.
-io_uring_cmd_prep(), so will need some refactoring to make
-the placement cmd specific.
+LGTM otherwise.
 
--- 
-Pavel Begunkov
+Konrad
+> +
+> +&xo_board {
+> +	clock-frequency = <19200000>;
+> +};
