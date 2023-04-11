@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B214A6DDFF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8357B6DDFFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjDKPvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S229949AbjDKPwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDKPvC (ORCPT
+        with ESMTP id S229533AbjDKPwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:51:02 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2282723;
-        Tue, 11 Apr 2023 08:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=qSaxyYQdKwgFEK0nqBsLj18c+ve44So2muQ8Wi6MeVs=; b=KsZCRkuppWJIR/T1aGry0SdCYQ
-        huSZJ0IZlIW2D26QHXeB7IdNI/RcbQ8qX+G+DnpjsL+Ahza1CHVxwK4y+myeWHSvRBhPRu2y1X0pc
-        uC264dEqBx/DV9bZ5EhA4nPsmvWK2+HlxeyCojKRL+wtGJvYtmsZVmYZI7F7aeHVxSXGW4s9Qb1Ye
-        lfSdCd4ShpTU7GdL+f7kHECRH947Lye0/lLJ/RvI2M2mLQySsD1NndfvzAyqPM1BS+6b0vPSZZzU6
-        45NX1w3Jjwk2VvLzhLV3SCeEhMtZNq1ssiGK2vL8W26p9kRP5/az0g3oiO5w5TaCOZXFnoz9Jcoxv
-        EMdu+Q/Q==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pmGGZ-00054z-Dk; Tue, 11 Apr 2023 17:50:43 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pmGGY-000HnH-Tk; Tue, 11 Apr 2023 17:50:42 +0200
-Subject: Re: [PATCH bpf-next] tools/resolve_btfids: Ignore libsubcmd
-To:     Rong Tao <rtoax@foxmail.com>, ast@kernel.org
-Cc:     rongtao@cestc.cn, Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-References: <tencent_D5422A55AFF3A307880D06AD42D559739708@qq.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <211a783e-bd22-9e83-3622-0a83b0dd0002@iogearbox.net>
-Date:   Tue, 11 Apr 2023 17:50:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 11 Apr 2023 11:52:34 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2991646B3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id i20so12334232ybg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681228352; x=1683820352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7DQjB9jjSniX8WUn0hxZzli/VJttza7GiVrQjQV9IoA=;
+        b=dpyrf0ifpUMeAEvu8Wf578r8CUr/1v6SAD7UgK0B3YcGvaSKQ3g2wlO2F7wbE09ACW
+         +80MxGqHgY9PUMgzKrtA96in292vvDoNetsu6pJHqDaTXVDcvi3MtnqLQvRbFfrpNlAv
+         tPzlU1PvUacXf3sd3OYkdq8l3tlDRsxDMoZKBNZx/SAzrJU1TGZjUnflNmA0x6Y0OIic
+         d2ucXIikHJeU5BYCm6xr1EQNtKZ1uW+nyqt+OCFJ/qE8LtMyQLupVNMTfdiEOgFkyd1T
+         cp3Ih6v/GvBGoKcgEQfJaAUiglhOk/x/Z8zMh/bvqd2VJlzkCgzAX+FN3WJWEsHM5PX/
+         hW4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681228352; x=1683820352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7DQjB9jjSniX8WUn0hxZzli/VJttza7GiVrQjQV9IoA=;
+        b=FSsBACFOimnFrKPF9y4sgpthWUOOfSMB+yw0yKDxaOm7GcDPYNdTWsFr/dy1DdDKSg
+         yYdSEYLsd+uG3j1J8+2THIJvAIAmcdUTylyXfrn0viKpkzH9ilXH3cpvBbQXpcx2k6Rr
+         HqEJiA+f4ePzCv+57h1iADSwDoQV4m9UvPYsfamLc66qPuHNOkicnOmxh6Z9yf8Vswgg
+         yUkX5jDBh6Kca/sGclJnwWAo89eYBZRBpqweOu3No809e3IDI9ustTl5pwLHqYbc98li
+         dOoEiKGDu+WgaeehnnGLhPx9iBD7QG1YM66cZXqqWSLxTf4NrKcWcNblMuC+yOVn4AuS
+         TPmg==
+X-Gm-Message-State: AAQBX9eCjZsm9h4mlR0KWwVQ37wJ8M+LBIM3/HxiBgPcKITi1JUr4ODv
+        sTc5sYWuF4PPy0BqqwkJByi3mw==
+X-Google-Smtp-Source: AKy350bvU9oF7Z3oiDlXBWDjKnr5iukeWwTFd1dtkT3Gt8bLaR4FVVNT+wSpGQYLJwyBBI20EpbPWw==
+X-Received: by 2002:a25:e78e:0:b0:b8e:e4be:923a with SMTP id e136-20020a25e78e000000b00b8ee4be923amr6238760ybh.4.1681228352348;
+        Tue, 11 Apr 2023 08:52:32 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id i13-20020a056902068d00b00b7767ca749fsm3683390ybt.60.2023.04.11.08.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 08:52:31 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        stable@vger.kernel.org
+Subject: [RESEND PATCH 4.14 v3 1/5] iio: counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
+Date:   Tue, 11 Apr 2023 11:52:16 -0400
+Message-Id: <20230411155220.9754-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <tencent_D5422A55AFF3A307880D06AD42D559739708@qq.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26872/Tue Apr 11 09:26:30 2023)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 11:17 AM, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> Since commit af03299d8536("tools/resolve_btfids: Install subcmd headers")
-> introduce subcmd headers directory, we should ignore it.
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->   tools/bpf/resolve_btfids/.gitignore | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/bpf/resolve_btfids/.gitignore b/tools/bpf/resolve_btfids/.gitignore
-> index 16913fffc985..52d5e9721d92 100644
-> --- a/tools/bpf/resolve_btfids/.gitignore
-> +++ b/tools/bpf/resolve_btfids/.gitignore
-> @@ -1,3 +1,4 @@
->   /fixdep
->   /resolve_btfids
->   /libbpf/
-> +/libsubcmd/
-> 
+commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
 
-Please rebase, this has already been fixed in bpf-next:
+The Counter (CNTR) register is 24 bits wide, but we can have an
+effective 25-bit count value by setting bit 24 to the XOR of the Borrow
+flag and Carry flag. The flags can be read from the FLAG register, but a
+race condition exists: the Borrow flag and Carry flag are instantaneous
+and could change by the time the count value is read from the CNTR
+register.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=fd4cb29f2a3d54ec7b4e012300321601af10bd68
+Since the race condition could result in an incorrect 25-bit count
+value, remove support for 25-bit count values from this driver.
 
-Thanks,
-Daniel
+Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
+Cc: <stable@vger.kernel.org> # 4.14.x
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/iio/counter/104-quad-8.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/drivers/iio/counter/104-quad-8.c b/drivers/iio/counter/104-quad-8.c
+index 181585ae6..bdb07694e 100644
+--- a/drivers/iio/counter/104-quad-8.c
++++ b/drivers/iio/counter/104-quad-8.c
+@@ -64,9 +64,6 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+ {
+ 	struct quad8_iio *const priv = iio_priv(indio_dev);
+ 	const int base_offset = priv->base + 2 * chan->channel;
+-	unsigned int flags;
+-	unsigned int borrow;
+-	unsigned int carry;
+ 	int i;
+ 
+ 	switch (mask) {
+@@ -76,12 +73,7 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+ 			return IIO_VAL_INT;
+ 		}
+ 
+-		flags = inb(base_offset + 1);
+-		borrow = flags & BIT(0);
+-		carry = !!(flags & BIT(1));
+-
+-		/* Borrow XOR Carry effectively doubles count range */
+-		*val = (borrow ^ carry) << 24;
++		*val = 0;
+ 
+ 		/* Reset Byte Pointer; transfer Counter to Output Latch */
+ 		outb(0x11, base_offset + 1);
+
+base-commit: f03c8bbaf6d9cbebee390e8353c5df75293aff7c
+-- 
+2.39.2
+
