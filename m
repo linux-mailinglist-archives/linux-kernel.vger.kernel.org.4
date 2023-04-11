@@ -2,145 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70BE6DE064
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C10E6DE071
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjDKQDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S230127AbjDKQFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDKQC4 (ORCPT
+        with ESMTP id S230337AbjDKQE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:02:56 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEA1E76
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:02:55 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54ef5a44bd9so82637287b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681228974;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAeE7rBx2LrEXGBOeJAa11rA6LzPuJMSc3yrCGL+cOo=;
-        b=yHKE0ADk4mlLhhfRhtgCadpVkMpvaHdD8O+iQcvjrzCzWiWCoMxJ5B6WSy8oSIrtU+
-         86IzlzFKFuCL/splmCmz4Y+fXbPQeHRrrVeQ+fp1Zod8GOX1yf6SIb2XwpKJF2DaXbiH
-         addi8Cj3zaUQD9mEDa5w9UMN9fbhWcC0M8q3n01RY8du83aaL27mCvHpFnmkP4CPdio+
-         RG5//irHEyT9DFgwyTszL4Au6tMwBD4ko1UI3T5Ti+vyGLSb50Fzz/L9e+R+6H3pfWE4
-         cjjomGR/siYxw8Zw1Vi7iFRkAD6mV5w3EPJjtgz1yxif0YQZAHJlSKHB8MoMvYIQ8xCs
-         i6Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681228974;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAeE7rBx2LrEXGBOeJAa11rA6LzPuJMSc3yrCGL+cOo=;
-        b=JYFNH6jBpQ8LXLBG7nPrtNarwKagHMseQgZ2LesGd9bqxZPcSBo1MY+pNHueuGSUay
-         7thWEaOUupJkrSMvPnjZKBmktaG/KJNVcvOEV4Wt+IfisBqVNHdtFG7bjC4oahswbuDW
-         hsZ6Vgx7d/aIH7jLRu3L0qNhYjSS3f39esNwNtELoaHrlkGNIZUobqNl+WPG1aCxidzP
-         a9ONEV0CFmip1Jbb0HI7K8jSUWPzu/E5cHVDLnx+dqf/PyG+Z+zrCL67qX2vPBOEtTy/
-         l70xT15MJ08l+YIJ5QYnxd2P67zkkelV5rAhAhFZr7bqZkBe8+HvO+7UTHj0xuVg+6QS
-         UPpw==
-X-Gm-Message-State: AAQBX9feRmeoJglk/1Oeaf4nDgnkHufqVlw/jF1pHZQoct1/csZqIXIg
-        K4mCBliGiwC5a/nTYodgyht9NTWmSdM=
-X-Google-Smtp-Source: AKy350bPU43l2NGxsAIr+vg/0jzFplV883M5PQxzo3Pp2tOzb6IG6EspbBN7X/pTYgjclcvEKd4crZlm/tg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:c9a:b0:533:a15a:d33e with SMTP id
- cm26-20020a05690c0c9a00b00533a15ad33emr9641481ywb.5.1681228974368; Tue, 11
- Apr 2023 09:02:54 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 09:02:52 -0700
-In-Reply-To: <ecd3d8de-859b-e5dd-c3bf-ea9c3c0aac60@linux.microsoft.com>
-Mime-Version: 1.0
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com> <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
- <ZDSa9Bbqvh0btgQo@google.com> <ecd3d8de-859b-e5dd-c3bf-ea9c3c0aac60@linux.microsoft.com>
-Message-ID: <ZDWEgXM/UILjPGiG@google.com>
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 12:04:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BE95FEE;
+        Tue, 11 Apr 2023 09:04:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A116860EF6;
+        Tue, 11 Apr 2023 16:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E679AC433D2;
+        Tue, 11 Apr 2023 16:04:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681229079;
+        bh=sg3ars22NaLIXIe2ZO1UoTD/MqpXK8flFXvuIOjDZS8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=G7U/TKV0Y6Xptjc7ysYQtum28tdrTzvmsUNerw1jXRI/qBh4j/S1lbQerQWPfxmqj
+         T1JvRYcu13V8NuHvwwbE7GnXgb65+xIYTMuYdg22lU46Moz4twI+wu8u1eqw4z69D0
+         q92AOB3B0p1cOFkwX7izGXCI75JnsMTaARmAPBctGezKr0eEzKk1k5QgxXtz80nPCa
+         j/nZhC708VdAqcUt4Y0qZFQdOQQZgqFOWxAYzKRhkxq8yMZaE83gR0O6g3ABdGoUXG
+         k+hWSq1cO++EGXQINkHNu5ire/LbNmJFGX9kKRvEHuEBp4RagLJ5PZhGddRH3UURbO
+         G8etQIIxCzejA==
+Message-ID: <c63c4c811cfa6c6396674e497920ec984cb476d1.camel@kernel.org>
+Subject: Re: [RFC PATCH 1/3][RESEND] fs: add infrastructure for
+ opportunistic high-res ctime/mtime updates
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org
+Date:   Tue, 11 Apr 2023 12:04:36 -0400
+In-Reply-To: <20230411-unwesen-prunk-cb7de3cc6cc8@brauner>
+References: <20230411143702.64495-1-jlayton@kernel.org>
+         <20230411143702.64495-2-jlayton@kernel.org>
+         <20230411-unwesen-prunk-cb7de3cc6cc8@brauner>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023, Jeremi Piotrowski wrote:
-> On 4/11/2023 1:25 AM, Sean Christopherson wrote:
-> > On Wed, Apr 05, 2023, Jeremi Piotrowski wrote:
-> >> On 3/7/2023 6:36 PM, Sean Christopherson wrote:
-> >>> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
-> >>> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
-> >>> doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
-> >>> happens to get lucky and not run afoul of the underlying bugs.  The revert appears
-> >>> to be reasonably straightforward (see bottom).
-> >>
-> >> Hi Sean,
-> >>
-> >> I'm back, and I don't have good news. The fix for the missing hyperv TLB flushes has
-> >> landed in Linus' tree and I now had the chance to test things outside Azure, in WSL on my
-> >> AMD laptop.
-> >>
-> >> There is some seriously weird interaction going on between TDP MMU and Hyper-V, with
-> >> or without enlightened TLB. My laptop has 16 vCPUs, so the WSL VM also has 16 vCPUs.
-> >> I have hardcoded the kernel to disable enlightened TLB (so we know that is not interfering).
-> >> I'm running a Flatcar Linux VM inside the WSL VM using legacy BIOS, a single CPU
-> >> and 4GB of RAM.
-> >>
-> >> If I run with `kvm.tdp_mmu=0`, I can boot and shutdown my VM consistently in 20 seconds.
-> >>
-> >> If I run with TDP MMU, the VM boot stalls for seconds at a time in various spots
-> >> (loading grub, decompressing kernel, during kernel boot), the boot output feels like
-> >> it's happening in slow motion. The fastest I see it finish the same cycle is 2 minutes,
-> >> I have also seen it take 4 minutes, sometimes even not finish at all. Same everything,
-> >> the only difference is the value of `kvm.tdp_mmu`.
-> > 
-> > When a stall occurs, can you tell where the time is lost?  E.g. is the CPU stuck
-> > in L0, L1, or L2?  L2 being a single vCPU rules out quite a few scenarios, e.g.
-> > lock contention and whatnot.
-> 
-> It shows up as around 90% L2 time, 10% L1 time.
+On Tue, 2023-04-11 at 17:07 +0200, Christian Brauner wrote:
+> On Tue, Apr 11, 2023 at 10:37:00AM -0400, Jeff Layton wrote:
+> > The VFS always uses coarse-grained timestamp updates for filling out th=
+e
+> > ctime and mtime after a change. This has the benefit of allowing
+> > filesystems to optimize away metadata updates.
+> >=20
+> > Unfortunately, this has always been an issue when we're exporting via
+> > NFSv3, which relies on timestamps to validate caches. Even with NFSv4, =
+a
+> > lot of exported filesystems don't properly support a change attribute
+> > and are subject to the same problem of timestamp granularity. Other
+> > applications have similar issues (e.g backup applications).
+> >=20
+> > Switching to always using high resolution timestamps would improve the
+> > situation for NFS, but that becomes rather expensive, as we'd have to
+> > log a lot more metadata updates.
+> >=20
+> > This patch grabs a new i_state bit to use as a flag that filesystems ca=
+n
+> > set in their getattr routine to indicate that the mtime or ctime was
+> > queried since it was last updated.
+> >=20
+> > It then adds a new current_cmtime function that acts like the
+> > current_time helper, but will conditionally grab high-res timestamps
+> > when the i_state flag is set in the inode.
+> >=20
+> > This allows NFS and other applications to reap the benefits of high-res
+> > ctime and mtime timestamps, but at a substantially lower cost than
+> > fetching them every time.
+> >=20
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/inode.c         | 40 ++++++++++++++++++++++++++++++++++++++--
+> >  fs/stat.c          | 10 ++++++++++
+> >  include/linux/fs.h |  5 ++++-
+> >  3 files changed, 52 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/fs/inode.c b/fs/inode.c
+> > index 4558dc2f1355..3630f67fd042 100644
+> > --- a/fs/inode.c
+> > +++ b/fs/inode.c
+> > @@ -2062,6 +2062,42 @@ static int __file_update_time(struct file *file,=
+ struct timespec64 *now,
+> >  	return ret;
+> >  }
+> > =20
+> > +/**
+> > + * current_cmtime - Return FS time (possibly high-res)
+> > + * @inode: inode.
+> > + *
+> > + * Return the current time truncated to the time granularity supported=
+ by
+> > + * the fs, as suitable for a ctime or mtime change. If something recen=
+tly
+> > + * fetched the ctime or mtime out of the inode via getattr, then get a
+> > + * high-resolution timestamp.
+> > + *
+> > + * Note that inode and inode->sb cannot be NULL.
+> > + * Otherwise, the function warns and returns coarse time without trunc=
+ation.
+> > + */
+> > +struct timespec64 current_cmtime(struct inode *inode)
+> > +{
+> > +	struct timespec64 now;
+> > +
+> > +	if (unlikely(!inode->i_sb)) {
+> > +		WARN(1, "%s() called with uninitialized super_block in the inode", _=
+_func__);
+>=20
+> How would this happen? Seems weird to even bother checking this.
+>=20
 
-Are those numbers coming from /proc/<pid>/stat?  Something else?
+Agreed. I copied this from current_time. I'm fine with leaving that out.
+Maybe we should remove it from current_time as well?
 
-> I don't have great visibility into L0 time right now, I'm trying to find
-> someone who might be able to help with that.
-> 
-> > 
-> > If you can run perf in WSL, that might be the easiest way to suss out what's going
-> > on.
-> 
-> I can run perf, what trace would help?
+> > +		ktime_get_coarse_real_ts64(&now);
+> > +		return now;
+> > +	}
+> > +
+> > +	/* Do a lockless check for the flag before taking the spinlock */
+> > +	if (READ_ONCE(inode->i_state) & I_CMTIME_QUERIED) {
+> > +		ktime_get_real_ts64(&now);
+> > +		spin_lock(&inode->i_lock);
+> > +		inode->i_state &=3D ~I_CMTIME_QUERIED;
+> > +		spin_unlock(&inode->i_lock);
+> > +	} else {
+> > +		ktime_get_coarse_real_ts64(&now);
+> > +	}
+> > +
+> > +	return timestamp_truncate(now, inode);
+> > +}
+> > +EXPORT_SYMBOL(current_cmtime);
+> > +
+> >  /**
+> >   * file_update_time - update mtime and ctime time
+> >   * @file: file accessed
+> > @@ -2080,7 +2116,7 @@ int file_update_time(struct file *file)
+> >  {
+> >  	int ret;
+> >  	struct inode *inode =3D file_inode(file);
+> > -	struct timespec64 now =3D current_time(inode);
+> > +	struct timespec64 now =3D current_cmtime(inode);
+> > =20
+> >  	ret =3D inode_needs_update_time(inode, &now);
+> >  	if (ret <=3D 0)
+> > @@ -2109,7 +2145,7 @@ static int file_modified_flags(struct file *file,=
+ int flags)
+> >  {
+> >  	int ret;
+> >  	struct inode *inode =3D file_inode(file);
+> > -	struct timespec64 now =3D current_time(inode);
+> > +	struct timespec64 now =3D current_cmtime(inode);
+> > =20
+> >  	/*
+> >  	 * Clear the security bits if the process is not being run by root.
+> > diff --git a/fs/stat.c b/fs/stat.c
+> > index 7c238da22ef0..d8b80a2e36b7 100644
+> > --- a/fs/stat.c
+> > +++ b/fs/stat.c
+> > @@ -64,6 +64,16 @@ void generic_fillattr(struct mnt_idmap *idmap, struc=
+t inode *inode,
+> >  }
+> >  EXPORT_SYMBOL(generic_fillattr);
+> > =20
+> > +void fill_cmtime_and_mark(struct inode *inode, struct kstat *stat)
+> > +{
+> > +	spin_lock(&inode->i_lock);
+> > +	inode->i_state |=3D I_CMTIME_QUERIED;
+> > +	stat->ctime =3D inode->i_ctime;
+> > +	stat->mtime =3D inode->i_mtime;
+> > +	spin_unlock(&inode->i_lock);
+> > +}
+> > +EXPORT_SYMBOL(fill_cmtime_and_mark);
+>=20
+> So that means that each stat call would mark an inode for a
+> high-resolution update.
+>=20
 
-Good question.  I'm not exactly a perf expert and almost never do anything beyond
-`perf top`.  That's probably sufficient for now, I really just want to confirm that
-L1 doesn't appear to be stuck, e.g. in KVM's page fault handler.
+Yep. At least any statx call with STATX_CTIME|STATX_MTIME set (which
+includes legacy stat() calls of course).
 
-> The results are the same for both branches, and it does look like this affects AMD and
-> Intel equally.
+> There's some performance concerns here. Calling
+> stat() is super common and it would potentially make the next iop more
+> expensive. Recursively changing ownership in the container use-case come
+> to mind which are already expensive.
 
-Nice.  I have Intel hardware at home that I'll try to repro on, though it will
-be several weeks until I can dive into this.
+stat() is common, but not generally as common as write calls are. I
+expect that we'll get somewhat similar results tochanged i_version over
+to use a similar QUERIED flag.
 
-> So seeing as this will likely take a while to figure out (and I know I won't be able to
-> spend too many cycles on this in the next few weeks), what do you think of a patch to
-> disable tdp_mmu in this configuration (for the time being?).
+The i_version field was originally very expensive and required metadata
+updates on every write. After making that change, we got the same
+performance back in most tests that we got without the i_version field
+being enabled at all. Basically, this just means we'll end up logging an
+extra journal transaction on some writes that follow a stat() call,
+which turns out to be line noise for most workloads.
 
-I don't particularly love the idea of disabling the TDP MMU without having the
-slightest clue what's going wrong, but I'm not totally opposed to it.
-
-Paolo, any thoughts?  You have far more experience with supporting downstream
-consumers of KVM.
-
-> Something else I've been wondering: in a KVM-on-KVM setup, is tdp_mmu used in both L0
-> and L1 hypervisors right now?
-
-By default, yes.  I double checked that L2 has similar boot times for KVM-on-KVM
-with and without the TDP MMU.  Certainly nothing remotely close to 2 minutes.
+I do agree that performance is a concern here though. We'll need to
+benchmark this somehow.
+--=20
+Jeff Layton <jlayton@kernel.org>
