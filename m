@@ -2,207 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FCA6DE0D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03666DE0D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjDKQSR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 12:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S230115AbjDKQSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjDKQRx (ORCPT
+        with ESMTP id S230293AbjDKQRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:17:53 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689345251;
-        Tue, 11 Apr 2023 09:16:57 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id gb34so21958028ejc.12;
-        Tue, 11 Apr 2023 09:16:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681229816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z3ITv/vwrFDX7sYlzoF644RlJZcwlzODzuaMxOLuck8=;
-        b=tKDdwxiVRX5/QTrfCpBOZ/KytM9uQqpvQ+U9NOj/iyfkPgmuLMfbXOyO+Sc9eGqpO1
-         3WdxNQgvlgJ8SGPF7/NOY5ABmxgYfxpYDKad0aXKoV7Agfr30uR8IZ5fnipZVRb1O/Db
-         FlN0yrRvHQ/BG+xmj/gv5fVlCg2FJZirN33mPAgHTfOafSUM8AhylW9dwkxIVYhNmofh
-         mY+DrVXPv3rqVcsIG844oDnMucgqUwCcVtk/2K4L7sMxYeGkyygR7tnmqXgSMd+sFMvN
-         IkcbPCkTRmWFBQWMKBUzEQzi2ve0CdTXKhYzjuUQq1WO1Bb7AFGAknfx6XisNnm/wSf7
-         pagQ==
-X-Gm-Message-State: AAQBX9dzlE3zWLry+qtL2JqikvpsP1Br/EmbdVHi8JPg1FmEDOKyX7q3
-        sDyxTQzxB/j6bDgmQDNKLtLStmEUyjZhSokYJa4=
-X-Google-Smtp-Source: AKy350ZjuHx4d562qUue3FORfHEXX3QonWvdKxaU+gmEhl8iQtoJ6Ly+7aQw3jmu/6b9ujlBdFoyamBkfah7pbj2XvQ=
-X-Received: by 2002:a17:907:6287:b0:93e:c1ab:ae67 with SMTP id
- nd7-20020a170907628700b0093ec1abae67mr5882234ejc.2.1681229815612; Tue, 11 Apr
- 2023 09:16:55 -0700 (PDT)
+        Tue, 11 Apr 2023 12:17:52 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E704212;
+        Tue, 11 Apr 2023 09:16:49 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 18:16:44 +0200 (GMT+02:00)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1681229807; bh=uKtjoYbKhktr7/nGPcAk75+/mu0TF7uA+IjJqmhqVyw=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=n1g3M+W+Uwtysoh+M3KHQuIzdOc3O870NZhyc5hP8vHkhoqmHsnRQpHBh6VFtoEVg
+         nJH5/KgztbbMLImU1WJ/dtKWjFoh+vhvObTz4UQcIAMHKjGeT/0ce74kuuhxooF9U8
+         Rb3I7Y5X85heDodSYbsgtgGqZNarqoBtH4yfNegY=
+From:   =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-ID: <e656fc58-a910-44b3-adb2-56f952dd740e@t-8ch.de>
+In-Reply-To: <CAOOmCE8z_UDs8dG0MqX+SFcvd-CTX12XXKzOrVOKDuvrPkyeCQ@mail.gmail.com>
+References: <20230403211548.6253-1-jorge.lopez2@hp.com> <d5fbc118-3b33-44b8-a7b6-4738e121b170@t-8ch.de> <CAOOmCE8z_UDs8dG0MqX+SFcvd-CTX12XXKzOrVOKDuvrPkyeCQ@mail.gmail.com>
+Subject: Re: [PATCH v7] Introduction-of-HP-BIOSCFG-driver-documentation
 MIME-Version: 1.0
-References: <20230410173501.3743570-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230410173501.3743570-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 18:16:44 +0200
-Message-ID: <CAJZ5v0iAHY6pOQb2N=AQbks7JKnVa1T29-zTT1XFBcVXEdZuwg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: Fix unchecked MSR issue
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bp@alien8.de, Rui Salvaterra <rsalvaterra@gmail.com>,
-        stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <e656fc58-a910-44b3-adb2-56f952dd740e@t-8ch.de>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 7:35 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Some older processors don't allow BIT(13) and BIT(15) in the current
-> mask set by "THERM_STATUS_CLEAR_CORE_MASK". This results in:
->
-> unchecked MSR access error: WRMSR to 0x19c (tried to
-> write 0x000000000000aaa8) at rIP: 0xffffffff816f66a6
-> (throttle_active_work+0xa6/0x1d0)
->
-> To avoid unchecked MSR issues, check cpuid for each feature and then
-> form core mask. Do the same for package mask set by
-> "THERM_STATUS_CLEAR_PKG_MASK".
->
-> Introduce functions thermal_intr_core_clear_mask() and
-> thermal_intr_pkg_clear_mask()
+Hi Jorge!
 
-I've renamed these two functions to
-thermal_intr_init_core_clear_mask() and
-thermal_intr_init_pkg_clear_mask(), respectively.
 
-> to set core and package mask respectively.
-> These functions are called during initialization.
->
-> Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
-> Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> Link: https://lore.kernel.org/lkml/cdf43fb423368ee3994124a9e8c9b4f8d00712c6.camel@linux.intel.com/T/
-> Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: stable@kernel.org # 6.2+
-> ---
->  drivers/thermal/intel/therm_throt.c | 73 ++++++++++++++++++++++++++---
->  1 file changed, 66 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-> index 2e22bb82b738..d5047676f3d2 100644
-> --- a/drivers/thermal/intel/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -193,8 +193,67 @@ static const struct attribute_group thermal_attr_group = {
->  #define THERM_THROT_POLL_INTERVAL      HZ
->  #define THERM_STATUS_PROCHOT_LOG       BIT(1)
->
-> -#define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
-> -#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
-> +static u64 def_therm_core_clear_mask;
-> +static u64 def_therm_pkg_clear_mask;
+Apr 4, 2023 22:24:36 Jorge Lopez <jorgealtxwork@gmail.com>:
 
-And I've renamed these two variables to therm_intr_core_clear_mask and
-therm_intr_pkg_clear_mask, respectively.
+> Hi Thomas,
+>
+> BTW, I decided to submit all files individually to facilitate the
+> review process.=C2=A0 Only Makefile and Kconfig files will be provided as=
+ a
+> single patch.
+> I will be out of town until April 11 and will reply back upon my return.
 
-Also I've changed the subject (to "thermal: intel: Avoid updating
-unsupported THERM_STATUS_CLEAR mask bits") and made some assorted
-changelog edits.
+Sorry for the slow response.
 
-With the above changes, the patch has been queued up for 6.3-rc7.
+>
+> Please see my comments below.
+>
+>>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 HP specific types
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 -----------------
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ordered-list - a set =
+of ordered list valid values
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - sure-start
+>>
+>> Could you explain what "sure-start" does?
+>> Is it actually an attribute type of which multiple attributes can exist?
+>>
+>
+> It is an attribute type of which multiple attributes can exist.
+> At this moment=C2=A0 Sure-Start reports both the number of audit logs and
+> all logs reported by BIOS.
+> Sure-Start is exposed directly under
+> /sys/class/firmware-attributes/*/attributes/.=C2=A0=C2=A0 Sure Start does=
+ not
+> provide any authentication.
 
-> +
-> +static void thermal_intr_core_clear_mask(void)
-> +{
-> +       if (def_therm_core_clear_mask)
-> +               return;
-> +
-> +       /*
-> +        * Reference: Intel SDM  Volume 4
-> +        * "Table 2-2. IA-32 Architectural MSRs", MSR 0x19C
-> +        * IA32_THERM_STATUS.
-> +        */
-> +
-> +       /*
-> +        * Bit 1, 3, 5: CPUID.01H:EDX[22] = 1. This driver will not
-> +        * enable interrupts, when 0 as it checks for X86_FEATURE_ACPI.
-> +        */
-> +       def_therm_core_clear_mask = (BIT(1) | BIT(3) | BIT(5));
-> +
-> +       /*
-> +        * Bit 7 and 9: Thermal Threshold #1 and #2 log
-> +        * If CPUID.01H:ECX[8] = 1
-> +        */
-> +       if (boot_cpu_has(X86_FEATURE_TM2))
-> +               def_therm_core_clear_mask |= (BIT(7) | BIT(9));
-> +
-> +       /* Bit 11: Power Limitation log (R/WC0) If CPUID.06H:EAX[4] = 1 */
-> +       if (boot_cpu_has(X86_FEATURE_PLN))
-> +               def_therm_core_clear_mask |= BIT(11);
-> +
-> +       /*
-> +        * Bit 13: Current Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
-> +        * Bit 15: Cross Domain Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
-> +        */
-> +       if (boot_cpu_has(X86_FEATURE_HWP))
-> +               def_therm_core_clear_mask |= (BIT(13) | BIT(15));
-> +}
-> +
-> +static void thermal_intr_pkg_clear_mask(void)
-> +{
-> +       if (def_therm_pkg_clear_mask)
-> +               return;
-> +
-> +       /*
-> +        * Reference: Intel SDM  Volume 4
-> +        * "Table 2-2. IA-32 Architectural MSRs", MSR 0x1B1
-> +        * IA32_PACKAGE_THERM_STATUS.
-> +        */
-> +
-> +       /* All bits except BIT 26 depends on CPUID.06H: EAX[6] = 1 */
-> +       if (boot_cpu_has(X86_FEATURE_PTS))
-> +               def_therm_pkg_clear_mask = (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11));
-> +
-> +       /*
-> +        * Intel SDM Volume 2A: Thermal and Power Management Leaf
-> +        * Bit 26: CPUID.06H: EAX[19] = 1
-> +        */
-> +       if (boot_cpu_has(X86_FEATURE_HFI))
-> +               def_therm_pkg_clear_mask |= BIT(26);
-> +}
+But what does it mean?
+For ordered-list there is a nice explanation.
+
 >
->  /*
->   * Clear the bits in package thermal status register for bit = 1
-> @@ -207,13 +266,10 @@ void thermal_clear_package_intr_status(int level, u64 bit_mask)
+>> Or are there just some global properties that need to be exposed?
+>> If it is global it should be directly under
+>> /sys/class/firmware-attributes/*/authentication/
+>> without needing the type.
+>>
+>>> +
+>>> +
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 All attribute types support the following values:
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 current_value:
+>>> @@ -42,16 +48,16 @@ Description:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description of the at <attr>
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 display_name_language_code:
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 A file that can be read to ob=
+tain
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the IETF language tag corresp=
+onding to the
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "display_name" of the <attr>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 A file that can be read to obtain
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 the IETF language tag corresponding to the
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 "display_name" of the <attr>
+>>
+>> Are these reindentations and other cleanups intentional?
+>>
+>> If they are intentional and there are no interactions with your actual
+>> patch you could split them into their own patch and submit them
+>> separately.
+>>
+>> This way we wouldn't have to worry about them here anymore.
 >
->         if (level == CORE_LEVEL) {
->                 msr  = MSR_IA32_THERM_STATUS;
-> -               msr_val = THERM_STATUS_CLEAR_CORE_MASK;
-> +               msr_val = def_therm_core_clear_mask;
->         } else {
->                 msr  = MSR_IA32_PACKAGE_THERM_STATUS;
-> -               msr_val = THERM_STATUS_CLEAR_PKG_MASK;
-> -               if (boot_cpu_has(X86_FEATURE_HFI))
-> -                       msr_val |= BIT(26);
-> -
-> +               msr_val = def_therm_pkg_clear_mask;
->         }
+> They were unintentionally.=C2=A0 I will reset them back in the next revie=
+w
+>>
+>> Note:
+>> These indentations are different from the newly introduced documentation=
+.
+>>
+>>>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 audit_log_entries:
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 A =
+read-only file that returns the events in the log.
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Va=
+lues are separated using semi-colon (``;``)
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Au=
+dit log entry format
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 By=
+te 0-15:=C2=A0=C2=A0 Requested Audit Log entry=C2=A0 (Each Audit log is 16 =
+bytes)
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 By=
+te 16-127: Unused
+>>
+>> How to interpret each log entry?
+>>
 >
->         msr_val &= ~bit_mask;
-> @@ -708,6 +764,9 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
->         h = THERMAL_APIC_VECTOR | APIC_DM_FIXED | APIC_LVT_MASKED;
->         apic_write(APIC_LVTTHMR, h);
+> Byte 0: status
+> 1: event id
+> 2: msg number
+> 3: severity
+> 4: source ID
+> 5: system state at event
+> 6-12 Time stamp
+> 13-15: internal buffer data
 >
-> +       thermal_intr_core_clear_mask();
-> +       thermal_intr_pkg_clear_mask();
-> +
->         rdmsr(MSR_IA32_THERM_INTERRUPT, l, h);
->         if (cpu_has(c, X86_FEATURE_PLN) && !int_pln_enable)
->                 wrmsr(MSR_IA32_THERM_INTERRUPT,
-> --
-> 2.39.1
+> Application needs to have knowledge of the data provided by BIOS in
+> order to interpret the audit log.
 >
+>> If it is an opaque thing from the firmware that would also be useful to
+>> know.
+>>
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 audit_log_entry_count:
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 A =
+read-only file that returns the number of existing audit log events availab=
+le to be read.
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Va=
+lues are separated using comma (``,``)
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [N=
+o of entries],[log entry size],[Max number of entries supported]
+>>
+>> Will log entry size always be 16? Or can it be bigger in the future when
+>> more bytes are used?
+>> This should be mentioned.
+>
+> Log entry size is always 16 bytes in size.=C2=A0 The reason is to report =
+a
+> maximum of 256 entries.=C2=A0 Total 4096 bytes
+
+Does it make sense to expose the number 16 from sysfs if it never can chang=
+e anyways?
+
+Note you can also customize the filesize reported in sysfs to expose the ma=
+ximum size to be used by userspace.
+
+>>
+>> Is audit_log_entry_count ever used without reading audit_log_entries
+>> right after?
+> Yes. The counter is necessary to determine how many logs are available
+> to be read.
+
+I think the cleaner interface would be to have users provide a buffer to re=
+ad into and then they check the return value of read().
+Users can't trust the count value anyways as it is prone to TOCTOU races.
+
+>
+>> If not the count file could be dropped.
+>>
+>>> +What:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 /sys/class/firmware-attributes/*/authentication=
+/SPM/status
+>>> +Date:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 March 29
+>>> +KernelVersion:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5.18
+>>> +Contact:=C2=A0=C2=A0=C2=A0=C2=A0 "Jorge Lopez" <jorge.lopez2@hp.com>
+>>> +Description: 'status' is a read-only file that returns ASCII text repo=
+rting
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 the status information.
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 State:=C2=A0 Not Provisioned / Provisioned / Provisioning i=
+n progress
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 Version:=C2=A0 Major.=C2=A0=C2=A0 Minor
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 Feature Bit Mask: <16-bit unsigned number display in hex>
+>>
+>> How are these bits to be interpreted?
+> This information is provided by BIOS.=C2=A0 It is one of those obscure
+> values from BIOS.
+>>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 SPM Counter: <16-bit unsigned number display in base 10>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 Signing Key Public Key Modulus (base64):
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 KEK Public Key Modulus (base64):
+>>
+>> Is " (base64)" supposed to be part of the contents of the file?
+>
+> The information reported for Signing Key and KEK public key are
+> reported as base64 values.=C2=A0 It applies only to the data and not to t=
+he
+> file contents.
+
+Put is the file format:
+KEK Public Key Modulus (base64): ...
+KEK Public Key Modulus: ...
+
+The docs indicate the former.
+
+>>
+>>> +
+>>> +
+>>> +What:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 /sys/class/firmware-attributes/*/authentication=
+/SPM/statusbin
+>>> +Date:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 March 29
+>>> +KernelVersion:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5.18
+>>> +Contact:=C2=A0=C2=A0=C2=A0=C2=A0 "Jorge Lopez" <jorge.lopez2@hp.com>
+>>> +Description: 'statusbin' is a read-only file that returns identical st=
+atus
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 information reported by 'status' file in binary format.
+>>
+>> This documentation should contain enough information to understand the
+>> files contents.
+>>
+>>
+>> I understand that one WMI call will return all the fields that are part
+>> of the "status" and "statusbin" in one response.
+>>
+>> Are these WMI calls especially expensive or called especially
+>> frequently?
+>>
+>
+> Unfortunately the WMI to read the Status binary data is expensive
+> hence the reason of only calling once.
+
+Hm, I still dislike the interface, sorry.
+What about caching the values in the driver and exposing them via different=
+ files?
+
+>> If not I would still argue to split them into one file per field and
+>> remove the statusbin file.
+>>
+>
+> Regards,
+> > Jorge
+
