@@ -2,68 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA5F6DD38F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8227C6DD372
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjDKG7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S230476AbjDKGw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjDKG7d (ORCPT
+        with ESMTP id S230252AbjDKGwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:59:33 -0400
-X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Apr 2023 23:59:31 PDT
-Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760D172C;
-        Mon, 10 Apr 2023 23:59:31 -0700 (PDT)
-Received: by ubuntu20 (Postfix, from userid 1003)
-        id C0849E0362; Tue, 11 Apr 2023 06:51:09 +0000 (UTC)
-From:   Yang Yang <yang.yang29@zte.com.cn>
-To:     akpm@linux-foundation.org
-Cc:     a.p.zijlstra@chello.nl, bsingharora@gmail.com, corbet@lwn.net,
-        juri.lelli@redhat.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mingo@redhat.com, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn, huang.junhua@zte.com.cn,
-        jiang.xuexin@zte.com.cn
-Subject: Re: [PATCH linux-next] delayacct: track delays from IRQ/SOFTIRQ
-Date:   Tue, 11 Apr 2023 14:51:09 +0800
-Message-Id: <20230411065109.172037-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230410213129.1d11261892767a61eacaefba@linux-foundation.org>
-References: <20230410213129.1d11261892767a61eacaefba@linux-foundation.org>
+        Tue, 11 Apr 2023 02:52:43 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E1340D7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:52:10 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6343fe70a2aso683158b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681195901;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KlxuVrTXd7ERz588z7U+eZpNrX8JYOeBVv8I4S7vc10=;
+        b=FToH5sNIXgA98Z2/xnoL6eiMqcGn+g4OwC5NmpIX47R/Wh24/AVqhSttBiaHjxcwi9
+         Wd/lHvrVCQNYeZjeEEiMOq4pv7l01a6iR9yVvKp3GaHe2moQP2DZuGkYizqbv5iv4jJp
+         admwOSz07PguwdAu82mL6e5HZ1Rlj4dKINciI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681195901;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KlxuVrTXd7ERz588z7U+eZpNrX8JYOeBVv8I4S7vc10=;
+        b=2zMpa46aawV399oJWiqwbvxLS4TQuBTsyVlTg9S2gkp0rSz7R6ZVjxvpI72mRJZ7kF
+         6e8huTpRNZ/hAHp+8q293nO5Vlp6M3yn1y3pEmwniZNDsCJ+AChNoOW8CfVgSVaOlUcC
+         DBYx5WOL7uYYJvD2OAN5XGq7w4b4kh2i5G0R3vKl3tcUJ6ltRvUuGPciNphl8fMwTSR6
+         iUgo5+foRiB+YdD3Zr5EblqR7uWFMkiUj3kQaBzxZrf1SGHMcbgs77CE0xcBq0ugxViz
+         AN4RrFFl9kHYYPnFFzZUL7dbImXHbqjIqU0ZONNDoak18vpacw8PwsM1AFuZ3ILla5Xz
+         bi+w==
+X-Gm-Message-State: AAQBX9dg38AlGTChLvobqd21LBzP5JSbzaOxkXCXC5k/NeN8Adm+YWH6
+        C4OFwk2gtyhAXTg2+EFIWTFNnQ==
+X-Google-Smtp-Source: AKy350YQEUV5pUQHBKD8Dgh+Enk+75ndcS0fIIDWKAs5lTVZqtNqneAeD13tp5iU4Z9oxI6dTOybWQ==
+X-Received: by 2002:aa7:9e88:0:b0:637:703e:533b with SMTP id p8-20020aa79e88000000b00637703e533bmr6921141pfq.4.1681195900883;
+        Mon, 10 Apr 2023 23:51:40 -0700 (PDT)
+Received: from ?IPV6:2401:fa00:8f:203:44a9:ac98:7606:2cd0? ([2401:fa00:8f:203:44a9:ac98:7606:2cd0])
+        by smtp.gmail.com with ESMTPSA id i16-20020aa78d90000000b0062e00158bf4sm8968739pfr.208.2023.04.10.23.51.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 23:51:40 -0700 (PDT)
+Message-ID: <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
+Date:   Tue, 11 Apr 2023 15:51:36 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,HEADER_FROM_DIFFERENT_DOMAINS,
-        HELO_NO_DOMAIN,NO_DNS_FOR_FROM,RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL_NO_RDNS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.4 NO_DNS_FOR_FROM DNS: Envelope sender has no MX or A DNS records
-        *  0.0 FSL_HELO_NON_FQDN_1 No description available.
-        *  3.6 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [193.203.214.57 listed in zen.spamhaus.org]
-        *  1.0 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      ["yangyang[at]cgel.zte"[at]gmail.com]
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.2 FREEMAIL_FORGED_FROMDOMAIN 2nd level domains in From and
-        *      EnvelopeFrom freemail headers are different
-        *  1.3 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  0.0 HELO_NO_DOMAIN Relay reports its domain incorrectly
-        *  0.0 SPOOFED_FREEMAIL_NO_RDNS From SPOOFED_FREEMAIL and no rDNS
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] media: vivid: Add webcam parameter for (un)limited
+ bandwidth
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20230410063356.3894767-1-mstaudt@chromium.org>
+ <20230410102350.382f7d02@sal.lan>
+From:   Max Staudt <mstaudt@chromium.org>
+In-Reply-To: <20230410102350.382f7d02@sal.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> We're somewhat double-accounting.  Delays due to, for example, IO will
-> already include delays from IRQ activity.  But it's presumably a minor
-> thing and I don't see why anyone would care.
+Thank you Mauro for having a first look!
 
-Thanks for your reviewing! I also think double-accounting should be OK, some
-one who is tunning IO or IRQ could focus on the related delay respectively.
-And PSI has the same logic when calculate IRQ or IO pressure. 
+Questions below.
+
+
+On 4/10/23 18:23, Mauro Carvalho Chehab wrote:
+> IMO, instead of a parameter that just enables/disables the bandwidth
+> limit, the best would be to have a parameter specifying the bandwidth
+> (with 0 meaning unlimited).
+> 
+> If not used, vivid would initialize it to dev->webcam_bandwidth_limit,
+> so a read operation will show the current limit.
+Up until now, the bandwidth limit is a rather arbitrary reduction of two 
+interval sizes per frame size.
+
+How would you prefer to define a limited bandwidth in this parameter? 
+How would it affect the simulated camera, do you have a suggestion for a 
+formula from bandwidth to frame/interval sizes offered?
+
+
+>> +/* Default: limited webcam bandwidth */
+>> +static bool webcam_bandwidth_limit[VIVID_MAX_DEVS] = { [0 ... (VIVID_MAX_DEVS - 1)] = true };
+>> +module_param_array(webcam_bandwidth_limit, bool, NULL, 0444);
+> 
+> I would also use 0666, to allow changing this on runtime.
+
+I guess that's possible, though it would add complexity.
+
+Currently we can ask for two instances, each with a different setting:
+
+   n_devs=2 webcam_bandwidth_limit=1,0
+
+This creates /dev/video0 which is limited, and /dev/video4 which is 
+unlimited.
+
+Maybe this already sufficiently covers the case you are looking for, and 
+we can keep the complexity low? A real webcam won't suddenly offer new 
+frame rates either...
+
+
+
+Max
+
