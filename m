@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776766DE68B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8886DE690
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjDKVfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S229564AbjDKVgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjDKVfT (ORCPT
+        with ESMTP id S229549AbjDKVg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:35:19 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E725260
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:35:14 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i20so13431547ybg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681248913; x=1683840913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pLFX6ad4QGodETcTebKk90wi9LId4RBUIMWZKtUXWgs=;
-        b=H1jjBhJlCRiwvmJgfzDzJtiLeCpBky/cuZNIhbbXEJlUS8VsV7V07b9c/rDpW4PZOz
-         aOQkZ/NUkADy8AXoHP5Wn0siXfOG497CWEsug5aC3d7m5P0jdNMsRLgokaRcTc9kkgu/
-         l1o08zASPpBHXGvGmaC7mu7PE9vxT4slcMYGOtxmMiOkdksClNH3sfMDoHKZhjKKNOJ3
-         Pa7cis4rOLf+06CUeBDS1wiZXkkAuiMwLBb8dGNjHvBq44g8hwAtikJLzPOuRG8u3NHB
-         a2KqkT+fN/mIBzhDshRWgGOQTrehT4wZvEP2VP/jWLQyhFmMECY0LbjT3e/xIN97Hcfc
-         +/6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681248913; x=1683840913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pLFX6ad4QGodETcTebKk90wi9LId4RBUIMWZKtUXWgs=;
-        b=iwcZgoZp9zTrjnEoCopgnxDxITHsNtSuAe1HtwaNOzjfLmJMDYHm8IQtqDBGa9louV
-         9yu3jta6pXM6elopwo2QIExFASq8pmH6q2ch0HcHAeGSGscpYDahyAK6F6sVPTpK9oxh
-         VBFv3wv3gXvbzllGt80tb/M3QKt4G18v0MaCjpIbd2Dg1jU7qphbENNyEzV1eokdKh7u
-         cPrxPFp3AcjOXvgebYU/cALreltb4euNOyYwxTKD8Ecc8zW48wnreu8NrtogZ4mnnzfb
-         XJVf92JN6PJqwWrhG+G2Io4P3DNgetLS70jXNOrrrQJD2DGVd5AUtOQndtBYtDYSr0pq
-         4qxQ==
-X-Gm-Message-State: AAQBX9ceVNMHQ8+CwfwoyxWNW1Ra+qLxi3N80GEpbybWIPEMKdx0G/Mn
-        Dg62B8BUW1sThZraooRHi2KVKrSflJPhC9jQOFZdew==
-X-Google-Smtp-Source: AKy350b9kOBVpIqWF0DXrV+eKfcz0GLC4Hdl/0P4dk0vGd4xc0O64N3qVKyw/nRxN4IuA+BGE1/pHg==
-X-Received: by 2002:a25:a187:0:b0:b8e:fc1f:acff with SMTP id a7-20020a25a187000000b00b8efc1facffmr2849082ybi.23.1681248913304;
-        Tue, 11 Apr 2023 14:35:13 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id k6-20020a25bec6000000b00b8bfb4c4f1esm3518999ybm.62.2023.04.11.14.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 14:35:12 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 17:35:10 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v3 1/2] gpio: 104-dio-48e: Implement struct dio48e_gpio
-Message-ID: <ZDXSjsjryXn0pHCz@fedora>
-References: <cover.1679323449.git.william.gray@linaro.org>
- <ca710d14a710fee44f7911f2a84b6a55570561ee.1679323449.git.william.gray@linaro.org>
- <571b4df1-91ea-481c-9797-842974dfa922@sirena.org.uk>
- <ZDWopwozNjFg/9NX@fedora>
- <db1edaaa-ea56-4f21-bc69-43f648e79c5b@sirena.org.uk>
+        Tue, 11 Apr 2023 17:36:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD930F5;
+        Tue, 11 Apr 2023 14:36:20 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BLZoHq005235;
+        Tue, 11 Apr 2023 21:36:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yi66xqTXmrXM4706RJ42Os6COYBm/l9WO25/oo1BeUg=;
+ b=A5JuXgOxleIaKb3vY9kfRLaWU3C7o67EYuyrtk519pHTuMFgQEXzFDd2H0J8Usyh0gqb
+ hhXAt53FswBRD2Rigx79w1rGN4EWz3RbjAfBo55LT9YhqDrxVN5pBeBDjAwrEx4BXqy1
+ w2c/omWnu2eYwgibgYxkTGGAuPTJR3tQ416nGWXLveyo0aXWLZjYVKBz0gCikc9cfhRb
+ An38Dx+6ANSOIrqolMD7LzEjMEGKuwC5SFXrZ6KXFvlo8h9AaX6wILq0gkJ4wBnzms9I
+ r0FzMp+q8cwqbH+usGpKDFy2h4FhdOpKFwCspOo+mJquKp6wBlxjsmOz3G++F2jpNcpb yg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwe5j857r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 21:36:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BLaBm1020690
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 21:36:11 GMT
+Received: from [10.110.115.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 14:36:10 -0700
+Message-ID: <a8deba9a-0be1-b70b-8a6d-4a35d5788b2f@quicinc.com>
+Date:   Tue, 11 Apr 2023 14:36:09 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="48Noe0+nb7AHw+BE"
-Content-Disposition: inline
-In-Reply-To: <db1edaaa-ea56-4f21-bc69-43f648e79c5b@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: add DSC range checking during resource
+ reservation
+Content-Language: en-US
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681247380-1607-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <1681247380-1607-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oWsQaHGVlIiu9QRQ01kTCu0iF4WKLSrj
+X-Proofpoint-ORIG-GUID: oWsQaHGVlIiu9QRQ01kTCu0iF4WKLSrj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_14,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110193
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,51 +85,22 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---48Noe0+nb7AHw+BE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 11, 2023 at 10:15:54PM +0100, Mark Brown wrote:
-> On Tue, Apr 11, 2023 at 02:36:23PM -0400, William Breathitt Gray wrote:
-> > On Tue, Apr 11, 2023 at 09:23:55PM +0100, Mark Brown wrote:
-> > > On Mon, Mar 20, 2023 at 10:50:15AM -0400, William Breathitt Gray wrot=
-e:
-> > > > A private data structure struct dio48e_gpio is introduced to facili=
-tate
-> > > > passage of the regmap and IRQ mask state for the device to the call=
-back
-> > > > dio48e_handle_mask_sync(). This is in preparation for the removal o=
-f the
-> > > > handle_mask_sync() map parameter in a subsequent patch.
->=20
-> > > What's the story with this patch?
->=20
-> > Currently dio48e_handle_mask_sync() uses the map argument in its
-> > implementation. Once the map parameter is removed, the current
-> > implementation of dio48e_handle_mask_sync() will no longer build, so we
-> > must adjust the implementation to no longer depend on map.
->=20
-> I mean what's the story with getting this patch applied?  It doesn't
-> seem to have been reviewed...
+On 4/11/2023 2:09 PM, Kuogee Hsieh wrote:
+> Perform DSC range checking to make sure correct DSC is requested before
+> reserve resource for it.
+> 
+> Fixes: c985d7bb64ff ("drm/msm/disp/dpu1: Add DSC support in RM")
 
-I'm sorry, I forgot to add Linus' tag from v2 [0]. Linus, would you
-confirm you're still okay with this patch?
+I cannot find any fixes tag with this hash.
 
-William Breathitt Gray
+This is the right one.
 
-[0] https://lore.kernel.org/all/CACRpkdYFSu3DAY4+EeoRk4cTkypgWg1C=3DUgforDO=
-7mT96f0GDQ@mail.gmail.com/
+Fixes: f2803ee91a41 ("drm/msm/disp/dpu1: Add DSC support in RM")
 
---48Noe0+nb7AHw+BE
-Content-Type: application/pgp-signature; name="signature.asc"
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
 
------BEGIN PGP SIGNATURE-----
+Otherwise, seems quite reasonable to me,
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZDXSjgAKCRC1SFbKvhIj
-KwrCAP9VYpmQaYtooKnX1jtXhKeFvVEc7Z9Ji8JwIxbhtXtN9wD8CaSYLVG1F8fT
-MkfffK9DI7xn64NaLkukyDhgCASR6g0=
-=NyAF
------END PGP SIGNATURE-----
-
---48Noe0+nb7AHw+BE--
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
