@@ -2,149 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5F16DDB07
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3986DDB21
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjDKMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S230150AbjDKMqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjDKMjA (ORCPT
+        with ESMTP id S229853AbjDKMqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:39:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6F51FE4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:38:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B879960DDC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:38:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBF9C433D2;
-        Tue, 11 Apr 2023 12:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681216710;
-        bh=9p1kY1s+7Url6KLLgVchnGKkLKzSxT34GC4qnc9lzuo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSDiAjGeOY0ohQTlG7VP5N/7tt+77Ml6R2XgmXiqWJLUNmV0IY+4EvG6DzC9DlWr+
-         QLcxchBtjjgHZ7zOaIYUU51vra0Zth0TOtCYJAMJlaGc3LklC90n8+3jkUaFUTmj5n
-         AH3g6f9yYjVjsZ/vUCERWH7YeO7/ozrfXyoDs3KykygHflzwSqJIIdYB/AWsRpTGHg
-         T7sfZTdC6ROonzGiT9Gv4fBfmitVexzXLAW78jzvDaMGCe2sr2i6XEjkTOEmlafyxU
-         bsxOkUKct5QYr+USrc0ex2KkkgAZ5Qwievck/dBYBmo6yxHVYkb8QWSPd98vB/LwQx
-         YGUrJfg1do1rw==
-Date:   Tue, 11 Apr 2023 13:38:25 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tuanphan@os.amperecomputing.com, robin.murphy@arm.com,
-        suzuki.poulose@arm.com
-Subject: Re: [PATCH] perf/arm-dmc620: Reverse locking order in
- dmc620_pmu_get_irq()
-Message-ID: <20230411123823.GA22686@willie-the-truck>
-References: <20230405172842.2663770-1-longman@redhat.com>
+        Tue, 11 Apr 2023 08:46:23 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317F22690;
+        Tue, 11 Apr 2023 05:46:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ud9so19812100ejc.7;
+        Tue, 11 Apr 2023 05:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681217179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bWaTRf6C8YWdWPQrffxy6ZlIMtLUhDaV8mY6LY1gQgY=;
+        b=DypWss9CZJkO5B5b1OUOCh/xUD01zAu9Ehet/SEmAQmYF8yQDZDx43eN621l/XLpTl
+         R7jUoyef+zoEtkjD1V6JnXeSJ7fzimQfmOev6tk73qf4RdeAMB1fuyvFlsXtII3VDt1U
+         LOPHfVowMYHrpzlfAEAVI7tpo3RaXKQVQOkdIt3PjUFK0JuNBdr+pltbcqAFAmSOZa5Z
+         HTrLZ1x9019LbQpRzd/3C6UI2VrRHovGG+mcbaEtNY4z3Dgh1d0AbmWwXEW4wDUzdahd
+         aG2VmK83sPmVJvoVaeN7inirfGngkbl7GPnlRFoJ4jLOPoas/XUMApdUsgjbfgaXw/uK
+         g8Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681217179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bWaTRf6C8YWdWPQrffxy6ZlIMtLUhDaV8mY6LY1gQgY=;
+        b=ldCLkPqnxDf0ly1xFGxBo8TmijfdpmDHtrp5N0vSLwxXlvV4g/0wA28A8lOC08T4mF
+         HiOz047sEzlB0LzyFdHz/AI1oqCsJkcEE9YchUKI2XRp9VeU9RA/+ywWRMlngV3Vlwa/
+         Qmh7UEOy/TxnvIGj6QEk/j9wLjyelFt7/cbZ7NWhn1jLSz2oweLTjBsNJI/3vxuyo/uZ
+         sO5Aj574z0DC5N2v84rFHfv4o6ZxEPGevveBn0nVk5gxk8vZ20zp01aoWFAoY1XuCsTB
+         J5y0qHEpnP77x89BemJ04hK4hDVkQn8wyrjGfMjaTYKuCwj/Jb2u4D1TXgPgztujUceI
+         PIrQ==
+X-Gm-Message-State: AAQBX9cD54x1eTbknDbfUan/0GLqBOSPDUpzNvoSfK0+4LNWUydp3ioB
+        YNPDZVBBrag2o5jvm25J2AM=
+X-Google-Smtp-Source: AKy350arumFB0mJu7EyJDwqsMue34wX4DmWd+2t2TdPJaSNbLOAjr/rDXTk4LJjLzAXi1kfinbcSCA==
+X-Received: by 2002:a17:906:9455:b0:94a:5911:b475 with SMTP id z21-20020a170906945500b0094a5911b475mr7593307ejx.52.1681217179336;
+        Tue, 11 Apr 2023 05:46:19 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:ddc3])
+        by smtp.gmail.com with ESMTPSA id k23-20020a170906971700b0094a53055894sm3129519ejx.78.2023.04.11.05.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 05:46:19 -0700 (PDT)
+Message-ID: <09f51486-5c27-6fd8-d3c5-0edadef30f81@gmail.com>
+Date:   Tue, 11 Apr 2023 13:39:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405172842.2663770-1-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFC] io_uring: Pass whole sqe to commands
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>, Keith Busch <kbusch@kernel.org>
+Cc:     axboe@kernel.dk, davem@davemloft.net, dccp@vger.kernel.org,
+        dsahern@kernel.org, edumazet@google.com, io-uring@vger.kernel.org,
+        kuba@kernel.org, leit@fb.com, linux-kernel@vger.kernel.org,
+        marcelo.leitner@gmail.com, matthieu.baerts@tessares.net,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org, pabeni@redhat.com,
+        willemdebruijn.kernel@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <20230406165705.3161734-1-leitao@debian.org>
+ <ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com>
+ <ZDVRGoDZo1tTbmZu@gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZDVRGoDZo1tTbmZu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Waiman,
-
-[+Tuan Phan, Robin and Suzuki]
-
-On Wed, Apr 05, 2023 at 01:28:42PM -0400, Waiman Long wrote:
-> The following circular locking dependency was reported when running
-> cpus online/offline test on an arm64 system.
+On 4/11/23 13:22, Breno Leitao wrote:
+> On Fri, Apr 07, 2023 at 12:51:44PM -0600, Keith Busch wrote:
+>>> @@ -63,14 +63,15 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+>>>   int io_uring_cmd_prep_async(struct io_kiocb *req)
+>>>   {
+>>>   	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+>>> -	size_t cmd_size;
+>>> +	size_t size = sizeof(struct io_uring_sqe);
+>>>   
+>>>   	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
+>>>   	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
+>>
+>> One minor suggestion. The above is the only user of uring_cmd_pdu_size() now,
+>> which is kind of a convoluted way to enfoce the offset of the 'cmd' field. It
+>> may be more clear to replace these with:
 > 
-> [   84.195923] Chain exists of:
->                  dmc620_pmu_irqs_lock --> cpu_hotplug_lock --> cpuhp_state-down
+> I agree with you here. Basically it is a bug if the payload (pdu) size is
+> is different than 16 for single SQE or != 80 for extended SQE.
 > 
-> [   84.207305]  Possible unsafe locking scenario:
+> So, basically it is checking for two things:
+>     * the cmd offset is 48
+>     * the io_uring_sqe struct is 64
 > 
-> [   84.213212]        CPU0                    CPU1
-> [   84.217729]        ----                    ----
-> [   84.222247]   lock(cpuhp_state-down);
-> [   84.225899]                                lock(cpu_hotplug_lock);
-> [   84.232068]                                lock(cpuhp_state-down);
-> [   84.238237]   lock(dmc620_pmu_irqs_lock);
-> [   84.242236]
->                 *** DEADLOCK ***
+> Since this is a uapi, I am not confidence that they will change at all.
+> I can replace the code with your suggestion.
 > 
-> The problematic locking order seems to be
+>> 	BUILD_BUG_ON(offsetof(struct io_uring_sqe, cmd) == 48);
 > 
-> 	lock(dmc620_pmu_irqs_lock) --> lock(cpu_hotplug_lock)
-> 
-> This locking order happens when dmc620_pmu_get_irq() is called from
-> dmc620_pmu_device_probe(). Fix this possible deadlock scenario by
-> reversing the locking order.
-> 
-> Also export __cpuhp_state_add_instance_cpuslocked() so that it can be
-> accessed by kernel modules.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  drivers/perf/arm_dmc620_pmu.c | 4 +++-
->  kernel/cpu.c                  | 1 +
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
-> index 54aa4658fb36..78d3bfbe96a6 100644
-> --- a/drivers/perf/arm_dmc620_pmu.c
-> +++ b/drivers/perf/arm_dmc620_pmu.c
-> @@ -425,7 +425,7 @@ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
->  	if (ret)
->  		goto out_free_irq;
->  
-> -	ret = cpuhp_state_add_instance_nocalls(cpuhp_state_num, &irq->node);
-> +	ret = cpuhp_state_add_instance_nocalls_cpuslocked(cpuhp_state_num, &irq->node);
->  	if (ret)
->  		goto out_free_irq;
->  
-> @@ -445,9 +445,11 @@ static int dmc620_pmu_get_irq(struct dmc620_pmu *dmc620_pmu, int irq_num)
->  {
->  	struct dmc620_pmu_irq *irq;
->  
-> +	cpus_read_lock();
->  	mutex_lock(&dmc620_pmu_irqs_lock);
->  	irq = __dmc620_pmu_get_irq(irq_num);
->  	mutex_unlock(&dmc620_pmu_irqs_lock);
-> +	cpus_read_unlock();
->  
->  	if (IS_ERR(irq))
->  		return PTR_ERR(irq);
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 6c0a92ca6bb5..05daaef362e6 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -2036,6 +2036,7 @@ int __cpuhp_state_add_instance_cpuslocked(enum cpuhp_state state,
->  	mutex_unlock(&cpuhp_state_mutex);
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(__cpuhp_state_add_instance_cpuslocked);
+> It should be "offset(struct io_uring_sqe, cmd) != 48)", right?
 
-Thanks for the fix, but I think it would be much cleaner if we could handle
-this internally to the driver without having to export additional symbols
-from the hotplug machinery.
+Which is already checked, see io_uring_init()
 
-Looking at the driver, it looks like it would make more sense to register
-each PMU instance with the cpuhp state machine and avoid having to traverse
-a mutable list, rather than add irq instances.
-
-That said, I really don't grok this comment:
-
-	/* We're only reading, but this isn't the place to be involving RCU */
-
-Given that perf_pmu_migrate_context() calls synchronize_rcu()...
-
-So perhaps we could just walk the list using RCU as the easiest fix?
-
-Will
+-- 
+Pavel Begunkov
