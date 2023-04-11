@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9826DD979
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2C16DD97E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjDKLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S229678AbjDKLgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDKLfB (ORCPT
+        with ESMTP id S229469AbjDKLf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:35:01 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925B4E60;
-        Tue, 11 Apr 2023 04:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681212901; x=1712748901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rCpRx8zrwmywWfUW2YxiAvJ2J1O/eklkQmlDcOmjNXM=;
-  b=fhAKYZ41cHJHfbwdsQOuVm7zIQzmM1Y7NfILam97srLnMnG72a/IPMyU
-   MUOpFIDgdIKKA8C5LdKLc5Ioz366hcEP0y4fCWCEnEd19VKwVPUQf3dtq
-   1Gs933GhUxvw0vargbJM0E8xIeReVkfw3XkqxW/XcSVNBa2F9e7l28xUf
-   GlZxFmxv+JRIe4jKjtMkA9jGPAnZ2dFnxvFDb9H0xfbEWMSXFfHsmgEv/
-   UtKsHU/VGNa8BGi7UCVfTzbYWuLT04FtyBfAACya6KPbcwOfABlqSuJhN
-   PDRTI78UeJKJIpwDGfGIIEGz/qGu4OLEZ0pZKFK+06yAEP5iZHZ9ysP8q
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="scan'208";a="209023260"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 04:34:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 04:34:51 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 04:34:50 -0700
-Date:   Tue, 11 Apr 2023 13:34:50 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Simon Horman <horms@kernel.org>
-CC:     Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <lvs-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-        <coreteam@netfilter.org>
-Subject: Re: [PATCH nf-next v2 2/4] ipvs: Consistently use array_size() in
- ip_vs_conn_init()
-Message-ID: <20230411113450.ky4jp6jsptvlzrtx@soft-dev3-1>
-References: <20230409-ipvs-cleanup-v2-0-204cd17da708@kernel.org>
- <20230409-ipvs-cleanup-v2-2-204cd17da708@kernel.org>
+        Tue, 11 Apr 2023 07:35:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 887CDE60;
+        Tue, 11 Apr 2023 04:35:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96259D75;
+        Tue, 11 Apr 2023 04:36:42 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.20.166])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DAD93F6C4;
+        Tue, 11 Apr 2023 04:35:53 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 12:35:50 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Uros Bizjak <ubizjak@gmail.com>, linux-alpha@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>
+Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+Message-ID: <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
+References: <20230405141710.3551-1-ubizjak@gmail.com>
+ <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230409-ipvs-cleanup-v2-2-204cd17da708@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/11/2023 09:10, Simon Horman wrote:
+On Wed, Apr 05, 2023 at 09:37:04AM -0700, Dave Hansen wrote:
+> On 4/5/23 07:17, Uros Bizjak wrote:
+> > Add generic and target specific support for local{,64}_try_cmpxchg
+> > and wire up support for all targets that use local_t infrastructure.
 > 
-> Consistently use array_size() to calculate the size of ip_vs_conn_tab
-> in bytes.
+> I feel like I'm missing some context.
 > 
-> Flagged by Coccinelle:
->  WARNING: array_size is already used (line 1498) to compute the same size
-> 
-> No functional change intended.
-> Compile tested only.
+> What are the actual end user visible effects of this series?  Is there a
+> measurable decrease in perf overhead?  Why go to all this trouble for
+> perf?  Who else will use local_try_cmpxchg()?
 
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Overall, the theory is that it can generate slightly better code (e.g. by
+reusing the flags on x86). In practice, that might be in the noise, but as
+demonstrated in prior postings the code generation is no worse than before.
 
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
-> v2
-> * Retain division by 1024, which was lost in v1
-> ---
->  net/netfilter/ipvs/ip_vs_conn.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-> index 13534e02346c..84d273a84dc8 100644
-> --- a/net/netfilter/ipvs/ip_vs_conn.c
-> +++ b/net/netfilter/ipvs/ip_vs_conn.c
-> @@ -1481,6 +1481,7 @@ void __net_exit ip_vs_conn_net_cleanup(struct netns_ipvs *ipvs)
-> 
->  int __init ip_vs_conn_init(void)
->  {
-> +       size_t tab_array_size;
->         int idx;
-> 
->         /* Compute size and mask */
-> @@ -1494,8 +1495,9 @@ int __init ip_vs_conn_init(void)
->         /*
->          * Allocate the connection hash table and initialize its list heads
->          */
-> -       ip_vs_conn_tab = vmalloc(array_size(ip_vs_conn_tab_size,
-> -                                           sizeof(*ip_vs_conn_tab)));
-> +       tab_array_size = array_size(ip_vs_conn_tab_size,
-> +                                   sizeof(*ip_vs_conn_tab));
-> +       ip_vs_conn_tab = vmalloc(tab_array_size);
->         if (!ip_vs_conn_tab)
->                 return -ENOMEM;
-> 
-> @@ -1508,10 +1510,8 @@ int __init ip_vs_conn_init(void)
->                 return -ENOMEM;
->         }
-> 
-> -       pr_info("Connection hash table configured "
-> -               "(size=%d, memory=%ldKbytes)\n",
-> -               ip_vs_conn_tab_size,
-> -               (long)(ip_vs_conn_tab_size*sizeof(*ip_vs_conn_tab))/1024);
-> +       pr_info("Connection hash table configured (size=%d, memory=%zdKbytes)\n",
-> +               ip_vs_conn_tab_size / 1024, tab_array_size);
->         IP_VS_DBG(0, "Each connection entry needs %zd bytes at least\n",
->                   sizeof(struct ip_vs_conn));
-> 
-> 
-> --
-> 2.30.2
-> 
+From my perspective, the more important part is that this aligns local_t with
+the other atomic*_t APIs, which all have ${atomictype}_try_cmpxchg(), and for
+consistency/legibility/maintainability it's nice to be able to use the same
+code patterns, e.g.
 
--- 
-/Horatiu
+	${inttype} new, old = ${atomictype}_read(ptr);
+	do {
+		...
+		new = do_something_with(old);
+	} while (${atomictype}_try_cmpxvhg(ptr, &oldval, newval);
+
+> I'm all for improving things, and perf is an important user.  But, if
+> the goal here is improving performance, it would be nice to see at least
+> a stab at quantifying the performance delta.
+
+IIUC, Steve's original request for local_try_cmpxchg() was a combination of a
+theoretical performance benefit and a more general preference to use
+try_cmpxchg() for consistency / better structure of the source code:
+
+  https://lore.kernel.org/lkml/20230301131831.6c8d4ff5@gandalf.local.home/
+
+I agree it'd be nice to have performance figures, but I think those would only
+need to demonstrate a lack of a regression rather than a performance
+improvement, and I think it's fairly clear from eyeballing the generated
+instructions that a regression isn't likely.
+
+Thanks,
+Mark.
