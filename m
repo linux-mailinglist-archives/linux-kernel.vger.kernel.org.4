@@ -2,118 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AA96DE65F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C16C6DE663
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjDKVUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S229939AbjDKVVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjDKVU2 (ORCPT
+        with ESMTP id S229481AbjDKVVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66815FC0;
-        Tue, 11 Apr 2023 14:19:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98812628A3;
-        Tue, 11 Apr 2023 21:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C98AC433EF;
-        Tue, 11 Apr 2023 21:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681247998;
-        bh=xYmomJOIpStQiY1yV+hCngqUM+Bx3dX+DeJaga9RHmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rhhu/Cl5XMiHoIBrJ8flvp9biCJEEw+bFAY2Tfrd6WKtoMCdaN0XM7kf9Zddkvx9g
-         tOhd7zFD9dCfc+yOgSTxGks9FD5fdRn4gI24ko35zZGBMYVR43mu1kGcLI7fXEW4ah
-         edFiJ1xmHJy8zdo0CsDEX477PFOd1xenQmWk9A3dlASHOqDMdJ15IlGekOPGdV2U6L
-         GJt/+3xk8fqS/5CRpLc1agfzRWz+A+Vhd2+SicC88f6ropLraRixcdT8WE5XKXrmfp
-         j6yxmMv+s+6l70bbJVKEvoIBWQ8WzMPenMBdeWi8IbrjMlrqNnvrhSYgk2Ymp7A9OF
-         98rp+Z0eYgDKg==
-Date:   Tue, 11 Apr 2023 22:19:50 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v11 12/26] gunyah: vm_mgr: Add/remove user memory regions
-Message-ID: <20230411211940.GC23890@willie-the-truck>
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-13-quic_eberman@quicinc.com>
- <20230324183659.GB28266@willie-the-truck>
- <5d1c6160-6bc4-5246-2a0b-de5ddcbbc2c4@quicinc.com>
+        Tue, 11 Apr 2023 17:21:08 -0400
+Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [IPv6:2001:41d0:1004:224b::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08C5FD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:21:04 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 14:20:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681248062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ix+xTKLRyryO0kML26qRvChiIo9OGMDZjWZ1lxLLx9Q=;
+        b=fM9p+0inVptO2bEu5CpucNL5vQK7/2aItlM1bTjn8GGhPOx7fyzLhLE4ikio4htJhPuPQ4
+        imHlHsAqctsfFG6HAYN7j42YljHLsC3kDz+1LTWayjxntXD9nDCUEMvQSI5o6Kd+Jbyrwh
+        gHbZFLysyIHBZ5pATrD9ylRlhUFh8p8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
+Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended
+ buffer descriptor mode
+Message-ID: <ZDXPLtmzG0+3uZAV@P9FQF9L96D.corp.robot.car>
+References: <20230407172402.103168-1-roman.gushchin@linux.dev>
+ <ZDWk8vjvk7HO4I7o@P9FQF9L96D.corp.robot.car>
+ <20230411-turbulent-caddie-de82cf1a0f8f@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d1c6160-6bc4-5246-2a0b-de5ddcbbc2c4@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230411-turbulent-caddie-de82cf1a0f8f@spud>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 01:34:34PM -0700, Elliot Berman wrote:
-> On 3/24/2023 11:37 AM, Will Deacon wrote:
-> > On Fri, Mar 03, 2023 at 05:06:18PM -0800, Elliot Berman wrote:
-> > > +
-> > > +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
-> > > +					FOLL_WRITE | FOLL_LONGTERM, mapping->pages);
-> > > +	if (pinned < 0) {
-> > > +		ret = pinned;
-> > > +		mapping->npages = 0; /* update npages for reclaim */
-> > > +		goto reclaim;
-> > > +	} else if (pinned != mapping->npages) {
-> > > +		ret = -EFAULT;
-> > > +		mapping->npages = pinned; /* update npages for reclaim */
-> > > +		goto reclaim;
-> > > +	}
-> > 
-> > I think Fuad mentioned this on an older version of these patches, but it
-> > looks like you're failing to account for the pinned memory here which is
-> > a security issue depending on who is able to issue the ioctl() calling
-> > into here.
-> > 
-> > Specifically, I'm thinking that your kXalloc() calls should be using
-> > GFP_KERNEL_ACCOUNT in this function and also that you should be calling
-> > account_locked_vm() for the pages being pinned.
-> > 
+On Tue, Apr 11, 2023 at 07:30:00PM +0100, Conor Dooley wrote:
+> On Tue, Apr 11, 2023 at 11:20:34AM -0700, Roman Gushchin wrote:
+> > Friendly ping.
 > 
-> Added the accounting for the v12.
-> 
-> > Finally, what happens if userspace passes in a file mapping?
-> 
-> Userspace will get EBADADDR (-14) back when trying to launch the VM
-> (pin_user_pages_fast returns this as you might have been expecting). We
-> haven't yet had any need to support file-backed mappings.
+> Nicolas and Claudiu look after the macb stuff, it's a good idea to CC
+> the people that get_maintainer.pl says are supporters of the code!
 
-Hmm, no, that's actually surprising to me. I'd have thought GUP would
-happily pin page-cache pages for file mappings, so I'm intrigued as to
-which FOLL_ flag is causing you to get an error code back. Can you
-enlighten me on where the failure originates, please?
+My fault, probably I was too happy to finally find it :)
 
-Will
+> 
+> > Also cc'ing Dave.
+> 
+> +CC Nicolas & Claudiu ;)
+
+Thank you, appreciate it!
