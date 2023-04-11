@@ -2,163 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB406DDFB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5888B6DDFBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjDKP31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S230414AbjDKPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjDKP3X (ORCPT
+        with ESMTP id S229571AbjDKPaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:29:23 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300CF5261
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:29:17 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7606d7ca422so4687539f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681226956; x=1683818956;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LY7YABVANJBpnoGShMcSEGz2zmHaSs72D2YD+dvEB/o=;
-        b=ZWrZYfxohRGNPyYVlwzZUd5gQvb0wTWEee+Sxa0LCjDgo/Nx9goOCVGN1ZhnS2P0jL
-         i5DPkiH3Puod6ziLgypR/OS5UxpWT2TBfaSCSpCF+tHebPCFT7ESdPLULIunYzFtzNW/
-         k31xn+gNlN+5maMjymgBg5DTnosmu/WZnPXv5IgkBgn/BI2t4I5B+vC9/zSJIQS67DbX
-         HjtA/YuQ3zHqcqjx9MTEwJMU0YbMKcVmB/gJMBfo+kMTvxVMGOdinj5BHkVRobw1fnH6
-         YAPqyTXFdGmroG0hI2ZCyRs4Va2oHUoCSrVqj4IGVYvCyByZSsFDcrIuCEqU3odnT9Tw
-         qw6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681226956; x=1683818956;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LY7YABVANJBpnoGShMcSEGz2zmHaSs72D2YD+dvEB/o=;
-        b=AJtpBZB0S2f/PtnIz9tRxnRhKmkrI5xPHPXOdBDIKto18RD64YWYz8CPeITRM7L/IN
-         9TFffkH7tFHGchr0q3gP2sMxXDQKlq6dJBRTGxASDDJSZpNOhq8x9Ek7OAkUfOHcJfxs
-         wQlyfG4Dh0bZByqgNSNrihiXpnNangh43b3VntaSpelHo7x0Dv72UCdNz5elwz/bu9T7
-         iZ3rJCkeQxCPcVBIzd6942B30wFvr25ThsAqCWi0gM+gnD2MXpK92OZbzTtxLrN4FBCt
-         BEPKdEaBqtbJL6raHF+waK/PJN/YOsS3MjoGBSqucPn3nHc3SKdr0CqZRNr4S5F8/pJn
-         Y37A==
-X-Gm-Message-State: AAQBX9dfGHOGKXv5hDVHfwiCQeBteHDrnC4Y1vFlBkbzfrdP9MBVNGeN
-        NK4rKDhcyrihZxKf8KZyN2Hxgw==
-X-Google-Smtp-Source: AKy350YTQzwtVs+fobpu4VlZXmN6QjQ8Crt7xuEhF8qtkl8AUI5eJ6G7pwRhzeqzoKUNI7xlvPDHKg==
-X-Received: by 2002:a05:6602:2d08:b0:758:9dcb:5d1a with SMTP id c8-20020a0566022d0800b007589dcb5d1amr6232653iow.2.1681226956457;
-        Tue, 11 Apr 2023 08:29:16 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h35-20020a05663833a300b0040bce6160e1sm1554966jav.12.2023.04.11.08.29.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 08:29:16 -0700 (PDT)
-Message-ID: <78abce6b-709b-7309-2ee1-5370d05748b6@kernel.dk>
-Date:   Tue, 11 Apr 2023 09:29:15 -0600
+        Tue, 11 Apr 2023 11:30:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899EC26BE;
+        Tue, 11 Apr 2023 08:29:56 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFCPr7003942;
+        Tue, 11 Apr 2023 15:29:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=NXavlX3EV8sFIR/LzYDmEJH/U5nEoxc0lBizQkprCwE=;
+ b=kSCAagRsHx2ajmaK/9UQpiSqm5sllOEyXW/Btur3QH3aUAaEaebPNFSZUirMzP8VVqKp
+ EmQdmxdE8yxElStzh9PvclR1dPzws83A7ECwJPAk9M4JGh6H4Dcyk0SXuLFpU4Aju2lx
+ 5lH7D7n5xQEA1jz/tqcOEfon9YOJKYc3GhTqm4gMvMnTNzoDH1prhoPv7aycpunBerAX
+ xdcnDnKl4LdRPlpgnNyBDJTOMfzzDvUeOz350jZD2xDWA/s3IvEKQR47kWCjemtCoiP2
+ dXCGGsepYiF87AxgK5aeF5kTwLDng5ZN0boaeczs+a0r2kGFdGAxv+7l56FnV6N8o3It qg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw3cv8xtw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:29:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BFTT7t030331
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:29:29 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 08:29:28 -0700
+Message-ID: <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
+Date:   Tue, 11 Apr 2023 09:29:27 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: linux-next: build failure after merge of the driver-core tree
 Content-Language: en-US
-To:     David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>
-Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
-        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
-        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
- <ZC7seVq7St6UnKjl@gmail.com>
- <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
- <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
- <ZDVLyi1PahE0sfci@gmail.com>
- <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
- <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
- <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
- <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
- <a9858183-8f69-7aff-51ac-122f627ba66f@kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <a9858183-8f69-7aff-51ac-122f627ba66f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     Greg KH <greg@kroah.com>
+CC:     Oded Gabbay <ogabbay@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local> <2023041123-tractor-quake-c44d@gregkh>
+ <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+ <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
+ <2023041131-boxy-excavator-1183@gregkh>
+ <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+In-Reply-To: <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JJtxyihkfiO8aAl-4pOEOVGV12uRvcQV
+X-Proofpoint-ORIG-GUID: JJtxyihkfiO8aAl-4pOEOVGV12uRvcQV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_10,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ suspectscore=0 phishscore=0 adultscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110142
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 9:27?AM, David Ahern wrote:
-> On 4/11/23 9:17 AM, Jens Axboe wrote:
->> On 4/11/23 9:10?AM, David Ahern wrote:
->>> On 4/11/23 8:41 AM, Jens Axboe wrote:
->>>> On 4/11/23 8:36?AM, David Ahern wrote:
->>>>> On 4/11/23 6:00 AM, Breno Leitao wrote:
->>>>>> I am not sure if avoiding io_uring details in network code is possible.
+On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
+> On 4/11/2023 9:13 AM, Greg KH wrote:
+>> On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
+>>> On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+>>>> On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+>>>>> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+>>>>>> On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+>>>>>>> Hi all,
+>>>>>>>
+>>>>>>> After merging the driver-core tree, today's linux-next build (x86_64
+>>>>>>> allmodconfig) failed like this:
+>>>>>>>
+>>>>>>> In file included from include/linux/linkage.h:7,
+>>>>>>>                    from include/linux/kernel.h:17,
+>>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+>>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 
+>>>>>>> 'mhi_qaic_ctrl_init':
+>>>>>>> include/linux/export.h:27:22: error: passing argument 1 of 
+>>>>>>> 'class_create' from incompatible pointer type 
+>>>>>>> [-Werror=incompatible-pointer-types]
+>>>>>>>      27 | #define THIS_MODULE (&__this_module)
+>>>>>>>         |                     ~^~~~~~~~~~~~~~~
+>>>>>>>         |                      |
+>>>>>>>         |                      struct module *
+>>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of 
+>>>>>>> macro 'THIS_MODULE'
+>>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, 
+>>>>>>> MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>>         |                                      ^~~~~~~~~~~
+>>>>>>> In file included from include/linux/device.h:31,
+>>>>>>>                    from include/linux/mhi.h:9,
+>>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+>>>>>>> include/linux/device/class.h:229:54: note: expected 'const char 
+>>>>>>> *' but argument is of type 'struct module *'
+>>>>>>>     229 | struct class * __must_check class_create(const char 
+>>>>>>> *name);
+>>>>>>>         |                                          ~~~~~~~~~~~~^~~~
+>>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many 
+>>>>>>> arguments to function 'class_create'
+>>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, 
+>>>>>>> MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>>         |                         ^~~~~~~~~~~~
+>>>>>>> include/linux/device/class.h:229:29: note: declared here
+>>>>>>>     229 | struct class * __must_check class_create(const char 
+>>>>>>> *name);
+>>>>>>>         |                             ^~~~~~~~~~~~
+>>>>>>>
+>>>>>>> Caused by commit
+>>>>>>>
+>>>>>>>     1aaba11da9aa ("driver core: class: remove module * from 
+>>>>>>> class_create()")
+>>>>>>>
+>>>>>>> interacting with commit
+>>>>>>>
+>>>>>>>     566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+>>>>>>>
+>>>>>>> from the drm tree.
+>>>>>>>
+>>>>>>> I have applied the following merge fix patch for today.
+>>>>>>>
+>>>>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>>>> Date: Tue, 11 Apr 2023 14:16:57 +1000
+>>>>>>> Subject: [PATCH] fixup for "driver core: class: remove module * 
+>>>>>>> from class_create()"
+>>>>>>>
+>>>>>>> interacting with "accel/qaic: Add mhi_qaic_cntl"
+>>>>>>>
+>>>>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 >>>>>>
->>>>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
->>>>>> in the TCP case) could be somewhere else, such as in the io_uring/
->>>>>> directory, but, I think it might be cleaner if these implementations are
->>>>>> closer to function assignment (in the network subsystem).
->>>>>>
->>>>>> And this function (tcp_uring_cmd() for instance) is the one that I am
->>>>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
->>>>>> -> SIOCINQ.
->>>>>>
->>>>>> Please let me know if you have any other idea in mind.
+>>>>>> Thanks for the fixup. Since Dave is out I've made a note about 
+>>>>>> this in my
+>>>>>> handover mail so it won't get lost in the drm-next merge window 
+>>>>>> pull. I
+>>>>>> don't think we need any other coordination than mention it in each 
+>>>>>> pull to
+>>>>>> Linus, topic tree seems overkill for this. Plus there's no way I can
+>>>>>> untangle the drm tree anyway :-).
 >>>>>
->>>>> I am not convinced that this io_uring_cmd is needed. This is one
->>>>> in-kernel subsystem calling into another, and there are APIs for that.
->>>>> All of this set is ioctl based and as Willem noted a little refactoring
->>>>> separates the get_user/put_user out so that in-kernel can call can be
->>>>> made with existing ops.
+>>>>> Want me to submit a patch for the drm tree that moves this to use
+>>>>> class_register() instead, which will make the merge/build issue go 
+>>>>> away
+>>>>> for you?  That's my long-term goal here anyway, so converting this new
+>>>>> code to this api today would be something I have to do eventually :)
 >>>>
->>>> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
->>>> obviously, and we already have ->uring_cmd() for this purpose.
+>>>> We kinda closed drm-next for feature work mostly already (just pulling
+>>>> stuff in from subtrees), so won't really help for this merge window.
 >>>>
->>>> I do think the right thing to do is have a common helper that returns
->>>> whatever value you want (or sets it), and split the ioctl parts into a
->>>> wrapper around that that simply copies in/out as needed. Then
->>>> ->uring_cmd() could call that, or you could some exported function that
->>>> does supports that.
+>>>> For everything else I think this is up to Oded, I had no idea qaic 
+>>>> needed
+>>>> it's entire own dev class and I don't want to dig into this for the 
+>>>> risk I
+>>>> might freak out :-)
 >>>>
->>>> This works for the basic cases, though I do suspect we'll want to go
->>>> down the ->uring_cmd() at some point for more advanced cases or cases
->>>> that cannot sanely be done in an ioctl fashion.
+>>>> Adding Oded.
 >>>>
+>>>> Cheers, Daniel
 >>>
->>> My meta point is that there are uapis today to return this information
->>> to applications (and I suspect this is just the start of more networking
->>> changes - both data retrieval and adjusting settings). io_uring is
->>> wanting to do this on behalf of the application without a syscall. That
->>> makes io_uring yet another subsystem / component managing a socket. Any
->>> change to the networking stack required by io_uring should be usable by
->>> all other in-kernel socket owners or managers. ie., there is no reason
->>> for io_uring specific code here.
+>>> Sorry for the mess.
+>>>
+>>> I made a note to update to class_register() once my drm-misc access is
+>>> sorted out.  Looks like we'll address the conflict in the merge 
+>>> window, and
+>>> catch the update to the new API in the following release.
 >>
->> I think we are in violent agreement here, what I'm describing is exactly
->> that - it'd make ioctl/{set,get}sockopt call into the same helpers that
->> ->uring_cmd() would, with the only difference being that the former
->> would need copy in/out and the latter would not.
+>> Wait, I think the large question is, "why does this need a separate
+>> class"?  Why are you not using the accel char device and class?  That is
+>> what everything under accel/ should be using, otherwise why put it in
+>> there?
 >>
->> But let me just stress that for direct descriptors, we cannot currently
->> call ioctl or set/getsockopt. This means we have to instantiate a
->> regular descriptor first, do those things, then register it to never use
->> the regular file descriptor again. That's wasteful, and this is what we
->> want to enable (direct use of ioctl set/getsockopt WITHOUT a normal file
->> descriptor). It's not just for "oh it'd be handy to also do this from
->> io_uring" even if that would be a worthwhile goal in itself.
+>> And what exactly are you using that class for?  Just device nodes?  If
+>> so, how many?
 >>
+>> thanks,
+>>
+>> greg k-h
 > 
-> Christoph's patch set a few years back that removed set_fs broke the
-> ability to do in-kernel ioctl and {s,g}setsockopt calls. I did not
-> follow that change; was it a deliberate intent to not allow these
-> in-kernel calls vs wanting to remove the set_fs? e.g., can we add a
-> kioctl variant for in-kernel use of the APIs?
+> 
+> Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed 
+> out at the time that AIC100/QAIC would need the same functionality. 
+> You/Jakub told myself/Mani/Loic that a combined implementation is not 
+> acceptable, and every area needs to implement their own version of MHI_UCI.
+> 
+> We took the WWAN subsystem and simplified it to meet our needs.
+> 
+> The functionality is QAIC specific, so wedging it into the Accel node 
+> seems to be a poor fit as it would subject Habana and iVPU to the same.
 
-I think it'd be much better to cleanly split it out rather than try and
-hack around it.
+Also, I forgot to mention.  QAIC is sharing userspace components with 
+WWAN, so we really cannot diverge from what WWAN has done and define a 
+new API through the Accel node.
 
--- 
-Jens Axboe
+> 
+> We need (eventually) 128 device nodes.  We have systems with 32 QAIC 
+> devices, and each QAIC device uses 4 device nodes (32 * 4 = 128).  WWAN 
+> subsystem would be similar.  Looks like each 5G modem is 6 nodes per 
+> device, so if you had 22 5G modems on a system, you'd have 132 device 
+> nodes.  I'm not aware of any such system, but it could exist.
+> 
+> -Jeff
 
