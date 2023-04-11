@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F426DCFB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2008A6DCFC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDKC3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 22:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S229877AbjDKChC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 22:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjDKC27 (ORCPT
+        with ESMTP id S229701AbjDKChA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 22:28:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9981982;
-        Mon, 10 Apr 2023 19:28:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwVC85ZDvz4xDh;
-        Tue, 11 Apr 2023 12:28:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681180133;
-        bh=6e/jGpYDTAVw88CVqimS+a5Lt1DPmUftbnGWNhtg8oo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qp7qUKOZN3NpYLS8Vhe3ldz3K7BJodvVUfG/G0LiHStWw/lT+Opw/mkhahnskU3ls
-         MBr0BfaRXB/DqAEMXBbQh+w0RdchJPWPPO1PuJFYg3doNiizWm3YTIuMw8ZLkV4t2M
-         cWm70kPsbXn94qgsSCWlXh9pMhImJIvjpDYzdueoy+hNrkUfSg3/yJZYC/hCUCzlTO
-         NoMhSJ6dg5MbyKO3fGr9Xzm54gaOPoaGMlhnOF2BHxdPyBVusVqyZ5TXdx6u81oPXR
-         LIkRD0lwv6quiHxcM1tAVsOAhU8PMdDepdPVw+l6LYVFCKp1MQMtIOjXNEgGUUvliD
-         TOF89gPwGEPGA==
-Date:   Tue, 11 Apr 2023 12:28:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the devicetree tree
-Message-ID: <20230411122851.57f3dac6@canb.auug.org.au>
+        Mon, 10 Apr 2023 22:37:00 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F9826B8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:36:38 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso9544005pjs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681180598; x=1683772598;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RNoPx/yBxCZUTMcdePk1dw8S6b4kcsgqSpybXY5Vu6U=;
+        b=T/yh3klPi5R2cYV6zCyK8ibu6E2FcPeL8pzCGeIS3i3FD+rM6gX63DX2cMEEZV5h5W
+         xo7/0WsHP0UXa76/NWJ28BXTWil8mgFsuFelHYkggZDEKvFP0TBk70um8lUZacbvVqzA
+         rFrh893Gxk5pqX9VBZK7P3Dix0UUcnxyS+QAi7376sJJoAxRd/znnjmZyJvrkHBaHIgk
+         6TFEyIBAD9bM1LyjbkZORmwl2nCS0fx47IXyge9XFdZpGI1/9fBzQKsQcYTS3aksFgtG
+         c5nt/xbFxADD4SCGkfj2kSG3Igz5U+22+bvFLXRotUkJcP8CuqY3wOAevmGQaWjdkjO+
+         auIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681180598; x=1683772598;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RNoPx/yBxCZUTMcdePk1dw8S6b4kcsgqSpybXY5Vu6U=;
+        b=t3HTyt6MvmSf7OQVfrjBqrJtlS1pDAwYImIkINgwMxMfUuh9630RLao84Fp5Vfb/mH
+         9z/G6WNTqGX7ruzSd5L0s7Ux8mFzCVxE7BB9ICQiCKOgZ1JKZI0AvsRpPhlt4EOz5rCC
+         Gq1mlHCaF9T+Pexd06wBMSt7RZVonPAedzV0UpAE7YzXTCT7terGseE2gt/KMrY9WS/S
+         inG2slWXU6M5KRjh/fIPvzoVkTPl5Gcycmf2z3wr7Iix8lX6WlEG016prG4fpDhJTguE
+         oZ9lbr4nNCOC2nISHweevBvIHkO/XbnBTI0pZi8lfc5DW1h5WOHZ1PlgC2MVySozHRMv
+         8xlg==
+X-Gm-Message-State: AAQBX9fRSpW/qrHW15XCLQ8b2vczKLOzqHNSQwop87vD8CT+0gyEqunS
+        KgcF1qEcuIQEmSOyi9nzcNPF2g==
+X-Google-Smtp-Source: AKy350Y6pna196VqU9EK7w/o9fP+cR/2XAxUmYPJ10WtEGhPidBPTy2mekD5/X4+9kn5qjoC2NsA7Q==
+X-Received: by 2002:a05:6a20:bf22:b0:d5:6e91:f019 with SMTP id gc34-20020a056a20bf2200b000d56e91f019mr11138424pzb.33.1681180597778;
+        Mon, 10 Apr 2023 19:36:37 -0700 (PDT)
+Received: from GL4FX4PXWL.bytedance.net ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id y1-20020a63de41000000b00513092bdca1sm7811785pgi.73.2023.04.10.19.36.34
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 10 Apr 2023 19:36:37 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     Liam.Howlett@oracle.com
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>,
+        David Binderman <dcb314@hotmail.com>, stable@vger.kernel.org
+Subject: [PATCH v2] maple_tree: Use correct variable type in sizeof
+Date:   Tue, 11 Apr 2023 10:35:13 +0800
+Message-Id: <20230411023513.15227-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BprD_/xTEOv=gen9_bAa.hx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,130 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BprD_/xTEOv=gen9_bAa.hx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The type of variable pointed to by pivs is unsigned long, but the type
+used in sizeof is a pointer type. Change it to unsigned long.
 
-Hi all,
-
-After merging the devicetree tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/cpufreq/acpi-cpufreq.c:1024:15: error: variable 'acpi_cpufreq_platd=
-rv' has initializer but incomplete type
- 1024 | static struct platform_driver acpi_cpufreq_platdrv =3D {
-      |               ^~~~~~~~~~~~~~~
-drivers/cpufreq/acpi-cpufreq.c:1025:10: error: 'struct platform_driver' has=
- no member named 'driver'
- 1025 |         .driver =3D {
-      |          ^~~~~~
-drivers/cpufreq/acpi-cpufreq.c:1025:19: error: extra brace group at end of =
-initializer
- 1025 |         .driver =3D {
-      |                   ^
-drivers/cpufreq/acpi-cpufreq.c:1025:19: note: (near initialization for 'acp=
-i_cpufreq_platdrv')
-drivers/cpufreq/acpi-cpufreq.c:1025:19: error: excess elements in struct in=
-itializer [-Werror]
-drivers/cpufreq/acpi-cpufreq.c:1025:19: note: (near initialization for 'acp=
-i_cpufreq_platdrv')
-drivers/cpufreq/acpi-cpufreq.c:1028:10: error: 'struct platform_driver' has=
- no member named 'remove'
- 1028 |         .remove         =3D acpi_cpufreq_remove,
-      |          ^~~~~~
-drivers/cpufreq/acpi-cpufreq.c:1028:27: error: excess elements in struct in=
-itializer [-Werror]
- 1028 |         .remove         =3D acpi_cpufreq_remove,
-      |                           ^~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/acpi-cpufreq.c:1028:27: note: (near initialization for 'acp=
-i_cpufreq_platdrv')
-drivers/cpufreq/acpi-cpufreq.c: In function 'acpi_cpufreq_init':
-drivers/cpufreq/acpi-cpufreq.c:1033:16: error: implicit declaration of func=
-tion 'platform_driver_probe' [-Werror=3Dimplicit-function-declaration]
- 1033 |         return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cp=
-ufreq_probe);
-      |                ^~~~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/acpi-cpufreq.c: In function 'acpi_cpufreq_exit':
-drivers/cpufreq/acpi-cpufreq.c:1038:9: error: implicit declaration of funct=
-ion 'platform_driver_unregister'; did you mean 'driver_unregister'? [-Werro=
-r=3Dimplicit-function-declaration]
- 1038 |         platform_driver_unregister(&acpi_cpufreq_platdrv);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-      |         driver_unregister
-drivers/cpufreq/acpi-cpufreq.c: At top level:
-drivers/cpufreq/acpi-cpufreq.c:1024:31: error: storage size of 'acpi_cpufre=
-q_platdrv' isn't known
- 1024 | static struct platform_driver acpi_cpufreq_platdrv =3D {
-      |                               ^~~~~~~~~~~~~~~~~~~~
-
-I am not sure which of the include file update commits were the direct
-cause but they interacted with commit
-
-  691a63712347 ("ACPI: cpufreq: Use platform devices to load ACPI PPC and P=
-CC drivers")
-
-from the pm tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 11 Apr 2023 12:15:29 +1000
-Subject: [PATCH] devicetree: fix up for include rationalisation
-
-interacting with "ACPI: cpufreq: Use platform devices to load ACPI PPC and =
-PCC drivers"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+Reported-by: David Binderman <dcb314@hotmail.com>
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Cc: <stable@vger.kernel.org>
 ---
- drivers/cpufreq/acpi-cpufreq.c | 1 +
- drivers/cpufreq/pcc-cpufreq.c  | 1 +
- 2 files changed, 2 insertions(+)
+ lib/maple_tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index e1a5384cf21c..29904395e95f 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -20,6 +20,7 @@
- #include <linux/dmi.h>
- #include <linux/slab.h>
- #include <linux/string_helpers.h>
-+#include <linux/platform_device.h>
-=20
- #include <linux/acpi.h>
- #include <linux/io.h>
-diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-index 0c362932ca60..b4318a1a9335 100644
---- a/drivers/cpufreq/pcc-cpufreq.c
-+++ b/drivers/cpufreq/pcc-cpufreq.c
-@@ -36,6 +36,7 @@
- #include <linux/io.h>
- #include <linux/spinlock.h>
- #include <linux/uaccess.h>
-+#include <linux/platform_device.h>
-=20
- #include <acpi/processor.h>
-=20
---=20
-2.39.2
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 88c44f6d6cee..b06fc5f19b31 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -3255,7 +3255,7 @@ static inline void mas_destroy_rebalance(struct ma_state *mas, unsigned char end
+ 
+ 		if (tmp < max_p)
+ 			memset(pivs + tmp, 0,
+-			       sizeof(unsigned long *) * (max_p - tmp));
++			       sizeof(unsigned long) * (max_p - tmp));
+ 
+ 		if (tmp < mt_slots[mt])
+ 			memset(slots + tmp, 0, sizeof(void *) * (max_s - tmp));
+-- 
+2.20.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BprD_/xTEOv=gen9_bAa.hx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ0xeQACgkQAVBC80lX
-0GwkBQgAl8bZzR2qrb78D0W9Mvb7FH6hEyViM4Wnm2y8a8AO5ihwTaOMFNO3vZZp
-1UR/uNKhky3v2DvqT0CLfReEOHtf+U6WbipYkp+5ofmI7HaPMRx5e+zUSfJzhSya
-5YTRHtLF8JmIWlFuQ6bKNrVvjZw/KFDmRYZNlNmruM+gqfq+MqVxnxjfoNqy5UaF
-WeVALYuk55RIcMZSRqSaQQGcavXEfF+sorC5xqoPvvmJLj3k/YPEHWhTvN3sdCsw
-7ZaYZDjozKoKh2eli3YGNaN1O2qPwpokMJrpB82K6zjEBeqlp41ya8FvVShclDh0
-yh23DL57VEWWv+z8oAuWe7Rqg3tCxg==
-=JMvZ
------END PGP SIGNATURE-----
-
---Sig_/BprD_/xTEOv=gen9_bAa.hx--
