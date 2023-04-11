@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153E56DD43D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7740A6DD44E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjDKHbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S229971AbjDKHdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjDKHbU (ORCPT
+        with ESMTP id S229822AbjDKHdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:31:20 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFCD30FE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:31:19 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id h24so7171897plr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681198279;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GzxsqcD6Sc+PmDKvNFlBYwFz6G7VU/UIKdRlK8mGXOM=;
-        b=GRxxPaU22umS1uYCV+9yikXUTklhnJwXYsFyC7Ty2O1dg5zmMg2kENcTCdlrPLiXPt
-         sMk+n2UUh2nEEhR6eKCuOYB2E/FwmkdR6s8zMeiADGzaIs1NsvobqoO28c3zk0KI3v6z
-         70otlDgu1WUGcdQk5zkwC+W2OLkB+3fGpJL3o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681198279;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GzxsqcD6Sc+PmDKvNFlBYwFz6G7VU/UIKdRlK8mGXOM=;
-        b=cB5KnXUoX79ujQsxQce982fPK2f5H/UfUSPFKEdbsbWFuVXl9OgQbHaT53W2R7TKII
-         jqiGSBxK221TXGVCt5f4jrl1tftIJZzrNgEMNOCuwYu4NejL+qskBU7UyaEVHY4MRvi+
-         CyT5lc68kUi37mhfcsPMv8r4qHetnmW+PmIdgXaq4XPJ79tM/kJtvgSpShdJIrkMzmLn
-         ceJttCoccwzjV9sF+uvbMuglAKwNd3a2EQk96Yst327Zca1Y/b+XjjqBtsb7D/lAQJ4X
-         YoizJczcP1m0zTaewTK3fh4MHQ8orgckR0S8W79ZS8i9l0LnHHokJeYraaVGe/5ms2OG
-         cyhA==
-X-Gm-Message-State: AAQBX9fWPCgr1LKJm8fE+bVjFMJQesFNDArOYRsV2swUtP4e6EBskFYR
-        LPsRrR1XVJpZhU6oD0Jgwcbfjg==
-X-Google-Smtp-Source: AKy350aM66w5ZHFyQ8qUOmWgv3xl6EqbRj5xvGyndQBvZSs7W3lqF5xWQPnEQ0eXwHqWO2Gb0/KXQQ==
-X-Received: by 2002:a17:90b:3b85:b0:23e:7254:e319 with SMTP id pc5-20020a17090b3b8500b0023e7254e319mr16975542pjb.39.1681198278987;
-        Tue, 11 Apr 2023 00:31:18 -0700 (PDT)
-Received: from ?IPV6:2401:fa00:8f:203:44a9:ac98:7606:2cd0? ([2401:fa00:8f:203:44a9:ac98:7606:2cd0])
-        by smtp.gmail.com with ESMTPSA id w2-20020a170902a70200b001a04d27ee92sm7082700plq.241.2023.04.11.00.31.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 00:31:18 -0700 (PDT)
-Message-ID: <c6d5be4c-42c9-b8fa-fbd7-108c5da694bc@chromium.org>
-Date:   Tue, 11 Apr 2023 16:31:15 +0900
+        Tue, 11 Apr 2023 03:33:36 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F387F1734;
+        Tue, 11 Apr 2023 00:33:35 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9D3F95C00D4;
+        Tue, 11 Apr 2023 03:33:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 11 Apr 2023 03:33:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1681198413; x=1681284813; bh=X4
+        vFSoqy0z0ajTuhuTZo3O3BR+PJhFn0c0EBeaLNQMM=; b=RDaptidWqQdgfTCSoX
+        GBVot7dZQRGSl78+taVd1AEGguBkbbax+WgrWH2Uds8O0obI21bwZoTO8ol1hFPM
+        e3bh+aXN/h0X18PtA2GZybFkz4R59IQoJOMCqfbPyJUyrD6OY1ykVNS+otTFa9fM
+        +7F1pt02fKp3+W1A5b3u7W5OTOl/cjtBDMRm9lQYqXe+KsMddyF1yEbrlnqBADoW
+        jbvLPgVUFxCYnV0HzpzxVdBn7bypq202j7BLQpkwa98XZXJrW8jDKcHxdjf3uzWP
+        oy1OQGaQe+Zq6vXR8ITA0Bumj4zYdmoz3gH3+vEvtavlRirXNoOFJ9y0puy8rdcJ
+        cHrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681198413; x=1681284813; bh=X4vFSoqy0z0aj
+        TuhuTZo3O3BR+PJhFn0c0EBeaLNQMM=; b=NQnty+W1btVshIWNUGoVOUcUcvNbx
+        xq1+yRIC2WrsUMg6JgFYdUCiGrm3oVB2MhZQ8jg50KJXk+28JWn4P6TYTGsK2U2S
+        KyjbBQU6IojKgA3YEEDiN208VdpV2YGSdGr81THW0oDa+FIwt0cz/fMUryz29yXp
+        /OdvcL98ihnbuE/qc0Kki0E+GEvjj74Kv/sipxc8vYbI9dN8AxDKPFKQF13M9ogx
+        +txITUCYpfGzKZpYubkF4N0lem7z5F7+RFsIGTOCGNgYPtJVF/XvgkW5l7pNbkMi
+        TX/nsXpxu+L9bgTytCziMldIfJ/YTNOtltyeVSTw3CZvrmH+3bOTT3MCw==
+X-ME-Sender: <xms:TQ01ZKjhvFnjWd4aAYL_q6KWnaN5y-09hVUyooDn63MnnbQ5Be2nng>
+    <xme:TQ01ZLAg_-YQuCwZy56vNB2N8p3n9Nek-CPISNfEslbF341ZqjSozEAS3IH3dqeTU
+    R6CftQ9k50JRQ>
+X-ME-Received: <xmr:TQ01ZCFjn0vjFapARaZmv0c3vzddJH5lboSYSap9FfZOMI65WxSYPlxHBm7ekn4h1phb4Xp-TAfaKkU04EgsEqbxpCkfmPvTTJ3Ung>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekfedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:TQ01ZDRHPKuQdFeknyUeN5jcoPpfUTyhpGaKCei9K1c1yTSnoha1qw>
+    <xmx:TQ01ZHzN1gjmkD5GJybhsjIQ7rrmPODBIg5dIwogdUm1vv86f04a5Q>
+    <xmx:TQ01ZB6CSTe-VyNDb1cPDOy5j5ElSXZWpO0pQ9aI2oRB12JQSdGcGA>
+    <xmx:TQ01ZMK8NnhvRMeqdnvP4Ev8t7yKGNSWXlLkWisQHRD5MCe55Dbyjg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Apr 2023 03:33:32 -0400 (EDT)
+Date:   Tue, 11 Apr 2023 09:33:30 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robherring2@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ devicetree tree
+Message-ID: <2023041121-hazily-dedicator-f7b4@gregkh>
+References: <20230411135728.07539d81@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] media: vivid: Add webcam parameter for (un)limited
- bandwidth
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20230410063356.3894767-1-mstaudt@chromium.org>
- <20230410102350.382f7d02@sal.lan>
- <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
- <6ee01cf1-5a8b-081f-e218-8c7da39343bc@xs4all.nl>
-From:   Max Staudt <mstaudt@chromium.org>
-In-Reply-To: <6ee01cf1-5a8b-081f-e218-8c7da39343bc@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411135728.07539d81@canb.auug.org.au>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 16:26, Hans Verkuil wrote:
-> I think we either use this bandwidth option and calculate the max fps based on
-> that (basically the bandwidth divided by (image_size + some blanking factor)),
-> or we keep it simple and instead of going down two steps in fps we allow up to
-> 60 fps up to 720p, then 30 fps for 1080p and 15 fps for 4k.
+On Tue, Apr 11, 2023 at 01:57:28PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> The fps values currently used are a bit outdated w.r.t. modern webcams, so
-> upgrading it wouldn't hurt. And this is a lot simpler than doing bandwidth
-> calculations.
+> Today's linux-next merge of the char-misc tree got a conflict in:
+> 
+>   drivers/of/Makefile
+> 
+> between commit:
+> 
+>   bac06718990c ("of: Move CPU node related functions to their own file")
+> 
+> from the devicetree tree and commit:
+> 
+>   bd7a7ed774af ("of: Move of_modalias() to module.c")
+> 
+> from the char-misc tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/of/Makefile
+> index 10f704592561,ae9923fd2940..000000000000
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@@ -1,5 -1,5 +1,5 @@@
+>   # SPDX-License-Identifier: GPL-2.0
+> - obj-y = base.o cpu.o device.o platform.o property.o
+>  -obj-y = base.o device.o module.o platform.o property.o
+> ++obj-y = base.o cpu.o device.o module.o platform.o property.o
+>   obj-$(CONFIG_OF_KOBJ) += kobj.o
+>   obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
+>   obj-$(CONFIG_OF_FLATTREE) += fdt.o
 
-Do I understand you correctly, are you suggesting to simply update the 
-FPS limits to a new fixed schema, and not have an option at all?
 
-I'm happy to prepare an alternative patch for that, too.
+Merge looks good to me, thanks!
 
-
-
-Max
-
+greg k-h
