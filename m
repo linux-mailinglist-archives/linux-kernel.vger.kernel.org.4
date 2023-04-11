@@ -2,277 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713836DE0CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985FB6DE0CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjDKQRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S229815AbjDKQSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDKQQz (ORCPT
+        with ESMTP id S229535AbjDKQRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:16:55 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020025.outbound.protection.outlook.com [52.101.56.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D816583;
-        Tue, 11 Apr 2023 09:15:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RQyBSJ0IOoCjHyUQNmJ6ppxiFbTXPxJuv9zp4PclPdZrvG4PTmAghwlGifQnVffSIg3HScJscd6MWXqAGa1OZjTmuV56zztP7hNYfU76eXJ3/3Nx8ePNzHwcGso/DkJLQX2cc6I+BPcQDcsI7gTI7yFn5EC3yw09U2bPBfN/C5hgH35rqdoLcAEFC4dJW8km0s3VTbW9PIOsBdvsXQ8IK6qEXuuDnXMUDC1aR1D+AcKv4+r0p+pEIF+epHc93L0uChJJ+FkocWQZItrmuTpYmZJtHN1Xt7wzDwmhXq2fTfzcjXjuPOW5DkVatyrLu3biPZU1tI5/uY58qYnLz20Vmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T6jTvi4cBN9STOzvdb1EtOfWEJn1iawTSHED6TlWv9c=;
- b=E/yIDw4IUX0BQdq+Qy7FcEyfV9CfB2GS54b3NhGcBywg32j1G17qISJ8SNopepWUQ9l3ZdFo4SqcmDTHfHlGXViLlS5pY53sEl47z3ARoyCMR93mvws7TImb6mCUr9pZ4jr6Gf+30u3T1CUNQyPr/0Apgg05EIi2rNyjYNHjkLvZhyIpyVogf0ZVrgae005AHHizPICvWzO8F5uVkijSGUdMa4MdJSGOeKokeYyoeNdvM8zaNhKdgBCWx3N0WApn4yCEWd1+zPPNmDVnhulVeYurkGYUNIiLYqza9HMRw4x/h+97RFlQ9NFwO5l9cp5RmZQYk3/bZladhFayuLuY1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T6jTvi4cBN9STOzvdb1EtOfWEJn1iawTSHED6TlWv9c=;
- b=CRg5OiLzTMSq2jBeX9VVy2rVFYiPHG/nxnTQ5G+zcTnMXcW//0ijmSRmA+D2lwjP5vh+YYG6OE1abowmzW8a/kwiJxANT7ZDb/FDwRdVomdZ44sXRq8rG4RSU6RlfC7KJAJjEMXX6vZ01VTh8lCKcqGWJDGqgsRb6X3Od8+HxxQ=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by BY5PR21MB1474.namprd21.prod.outlook.com (2603:10b6:a03:21f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.3; Tue, 11 Apr
- 2023 16:15:16 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6319.003; Tue, 11 Apr 2023
- 16:15:16 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dexuan Cui <decui@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-Subject: RE: [PATCH v4 1/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Thread-Topic: [PATCH v4 1/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Thread-Index: AQHZalucCeL8OJ6U9EuS9cHI1Uigha8mTGcA
-Date:   Tue, 11 Apr 2023 16:15:16 +0000
-Message-ID: <BYAPR21MB168819E464EF7243D6215D10D79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230408204759.14902-1-decui@microsoft.com>
- <20230408204759.14902-2-decui@microsoft.com>
-In-Reply-To: <20230408204759.14902-2-decui@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=27285f65-d218-4c19-8147-87fb203e2454;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-11T16:13:32Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1474:EE_
-x-ms-office365-filtering-correlation-id: ceac6b52-987c-4a8d-5687-08db3aa7f001
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MV2nDw7bRxahe1rjr1Pue2FfAg/KivhYe4ygozigpqx8FrnvYKwHGyY7rX1wrWfj4pczpKXmVgfVMzk+TiNG+1F0SfRJzigi8FHsFB5lfD1uCQlxItVkPnAj8pMKi0Hds5CwXx+38dVymtqUQNC6M6Ew6e2YqJ7hkoWZKzD4C0osGKqglK/KBIrjG82+/u7nLSBCA4iNYbn8R4OHBln5OfOewpDDtSMLwZPIyQn+juwSgmb3Yvgf3dAoIb+xRCXKW0hD8rsnazzcBpo7JmBW/iu5cpvZmeyD4kgCsoY7t1Jk2VhP7CBOJhRSdb/X2p0N6DLSO0xTaomWWGvlYQjBKUl+YsdkCkvc3juUtHFMhAD+ZSz6lGWpMWvKdzzLv86vPFxfY9iVNCB4atMBPi+QIT5KlhogOfh/GvB/GHjUtU/MyTWKyOmA3RDwJMdGgyJwjzzuGwdMi1U/S0YO/en9e6ZuTJfOKfQ96KiKgeTX8nIH0zEBuL6lw73iHBTZ6muJIT02p0Tu6rDIWI8uD9Hkm7zBSPAS9aX4nBoOXmPasbTwt9cn2IuV3RzVyTbviXY7hL8cZoLLxg+qCpxGSkMOYukYMA7pZY+XR2czRCAp0IXff1tCZq+EIqxLAfemJ8EDCWLVzavgOReiCFY+A49HFjwIjtPICNqbe9s8GKCeheot/ue5V0Gzs1Yq5Z4neoXQ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(376002)(136003)(346002)(451199021)(9686003)(6506007)(26005)(107886003)(2906002)(7416002)(5660300002)(83380400001)(186003)(82960400001)(82950400001)(66476007)(52536014)(8936002)(7696005)(54906003)(38100700002)(71200400001)(478600001)(122000001)(921005)(10290500003)(41300700001)(55016003)(110136005)(38070700005)(316002)(86362001)(786003)(4326008)(33656002)(64756008)(66946007)(66446008)(8990500004)(76116006)(8676002)(66556008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sUya2fxSyuXLEvnOM2R+sX+Y/ZFB5CCHY+KVzvVjrtJexMMT1FqiiZw0PboK?=
- =?us-ascii?Q?0VrWw25q2GPkZl7xTm4kwi1M1fdeTN4RnEDz6Dv/xKK+nV9Yi6FmYRSka3M7?=
- =?us-ascii?Q?ueupz0E/huTozx2U9IPlCeplbU2q8bU6WLkfeCiDab35L/YKncCHrCLB0E37?=
- =?us-ascii?Q?7Lob9h2FhM9nrBrIGx6oPZ/7+wBzLbIHNh6fkbk3g2pw0cHU9qsG/ADFOreS?=
- =?us-ascii?Q?TCBIDIXejdMdzsoLM30+2UEuFhkJIZiWB8zjyk2L2yQbvB4A9NVayKuMZd0W?=
- =?us-ascii?Q?TiGNAglmb9RUcPv+H61yoMWIodkmL6pcRejB63vCqTiu9vMGU+o/aYGBBAuN?=
- =?us-ascii?Q?uWTg/uWZkB14qz9p33LkmYwoiJeX4TvmATi23oZ08t3EiUehZ1p7Eq+8LmZm?=
- =?us-ascii?Q?ahVE7gud0oOw8wIYCqFizDIC1bqur7iCiV6w/79q1NgNU2UxPduxeRulSIpg?=
- =?us-ascii?Q?v/eLUE6rgXcbMNN7+S1eZLkvqOEsKyBnHgBEhH/+38DbLNEE5srdrjY0m8xP?=
- =?us-ascii?Q?M+h2xLc5H2gUymvtHu32JAXy8rsDTK6mgO4+VDGdAvuUcsFbavUOiI4R9NcJ?=
- =?us-ascii?Q?hco1++7cLf/eVpxEjol9uS7STl2yIrDtsD2mkuAsSvNA53i3toTXDgx9O/TG?=
- =?us-ascii?Q?ZxV295A4WkhTDG6cSJhXqdF4EAOdqVlMZXnU5YzjTs+iKnYr8t7O2EXbgzpq?=
- =?us-ascii?Q?kojKtFwjm+8shRppySrYsGI9OdCOd1M3MULnLRhS/OYVMXDv7fms+w/ki+DI?=
- =?us-ascii?Q?U8fT6m6dOaX6+tYo82CsmpyJUZp2a/HS7v/0bxaLfj9dmaEUHALeYrR6dH1/?=
- =?us-ascii?Q?KF0Wd43XRZuk+aHMof64zLV4sjnC45qYyGrJnOC7BSr7Z7/d7h/fXa6zwS5J?=
- =?us-ascii?Q?vBN3cSdcLJJW6sMtriwzL1B405LRxNd2ce++yu2suaBg31L1JZSl3ZqkBPzb?=
- =?us-ascii?Q?9ffldo3q0Dt8ngY3NbOW4yR3Et1kRqPfQ7kcFiLi3u44eqfr3rCGS+jBf4H0?=
- =?us-ascii?Q?EOhvq8BBlQSoxWivwWBD3K0J+TgxUKUBTcCRWPu+6he+s5/vtJ+2u2WrnjM5?=
- =?us-ascii?Q?yWb6iYZvGg2V34ZOWu4bujCfHw88j4d/xgc+F71MlkxRepF8Hv3JrQH4mCfB?=
- =?us-ascii?Q?TV6zJZmLCJU0IwT41lHtXNuX352NFTWAt2TCFN+zNhRAxfad27YuPvqs+SRJ?=
- =?us-ascii?Q?9osP2RxIE8WSetBmun3On7XnC/KsHT4n5DZuh2GbeUntSac0ZpfUSlE/iB+c?=
- =?us-ascii?Q?xeOEyHtb99PdmTtSDiLHjScTcvo8BZ0rp/Uoa4PWV/KDoQ9EKyqwZAj9YXJu?=
- =?us-ascii?Q?LyXD/Nzc+R4z6H4BPtLdBiQKP2/m1vr+R4bLquJowSrZ48ANLgx0lsCf8um2?=
- =?us-ascii?Q?9NAdZt2l9tIUZTJAZ0rnB7pBTJb611knDu33RExhlJU5i4GxvcITohCqWXlr?=
- =?us-ascii?Q?tkBSAVuaooHCZ+uIBxbNm6gmskkD/+KdYBX4vC+8fAgSE05KEh3btGDZXT+u?=
- =?us-ascii?Q?EF/pPlJh4scmK3Ku/3jWXrwUIV+pb1pqEcPF1+BQMW8jEyQMiqgpQvkM9veK?=
- =?us-ascii?Q?8vhsmceOHAxVbmjmaRnKHYbkpSUljLM/9C/rYfKaBXaVPSh9iOqQCypzoPZD?=
- =?us-ascii?Q?Og=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Apr 2023 12:17:47 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A75FFB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:16:26 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so4614296wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681229785; x=1683821785;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rQOU2NxcA3yCNJObcmxy+gfhS7V/5K9QCr7rxWQRSCc=;
+        b=w4nLujlkK2kPUHBbGgWURVjMNtN7wv3feP7uzPldzYCs/EZ0GmNCQhhHFGLTAY+Gi5
+         +Lp8L9G1hkQsoR4T/dP2rnFkQKkZXj7JVGKt2lrBdp2Y9cUjeunzhGlijbiFiuE09YMq
+         8oYD9lZ/+fe3Tmd7PwYMP9Neo0olfAjzmJV4bg+3wvDDwtBoIp95WGcK3lzcKDyPBQbo
+         xr5gW0S3s9YIrEBW+lx4H009CWTnN7QSRWYImt3lc7oi4UOHjQVAn+FI7WBpxxNs7mMA
+         oYTwb7x0T2CieNCJ+JHcPAG+ZgWjhkKlYOaEY5U39P11b+wlJGKSllAt7arcPFJdCxn+
+         S4Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681229785; x=1683821785;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rQOU2NxcA3yCNJObcmxy+gfhS7V/5K9QCr7rxWQRSCc=;
+        b=duEzpgMPYKP8lqXH1GTsdxpXkUBRDchW2GKf4114iKJNRlavQD7NifBfkEX2ut7uj7
+         PHnTERLheA/ZjZgPcoB/NQ49Q77mRBy0gzF+McK+qFG2nc0Ze7Az5rcec0gGvuge/KsU
+         2h2X8dNzB3YjkCL/z6OmJmGjHEmKx0YXNulYZb0poKS44k9RHbLtDXIvWPQEbBxKSZNz
+         RBfDHrzw4DSiLLwUdf+kdSVlMrKjafg/z0VzIRMP+qqnpHe1yXj9GN3sDUA5DfldXEQP
+         qq2kk8TI0gnR0U+RVQC0RwMFac2+D9yaDh26Z16ZHEmPO0HBkETnPAnBID24sjtaU29x
+         srsQ==
+X-Gm-Message-State: AAQBX9ebiNMzMFvbntbK6Zb/IhrYndZHA4p206jilMYAOlo+H+l7J7T3
+        RQFlDgNPE4YHiog+WcQc1Vy2HQ==
+X-Google-Smtp-Source: AKy350ZI3OMMZN8klF1UVUUig8s+iGaTms+boTblI8oKaQxUKj3bSCRKrhXp0lQDjqs/Ax6/me7yQA==
+X-Received: by 2002:a05:600c:4da5:b0:3f0:4275:395f with SMTP id v37-20020a05600c4da500b003f04275395fmr9211597wmp.13.1681229785055;
+        Tue, 11 Apr 2023 09:16:25 -0700 (PDT)
+Received: from klimova1.roam.corp.google.com ([194.75.181.122])
+        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003f0652084b8sm21282192wms.20.2023.04.11.09.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 09:16:24 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 17:16:21 +0100
+From:   Alexey Klimov <alexey.klimov@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     draszik@google.com, peter.griffin@linaro.org,
+        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
+        tony@atomide.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        alim.akhtar@samsung.com, regressions@lists.linux.dev,
+        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
+ and slow-stuck reboots
+Message-ID: <20230411171621.0544249a.alexey.klimov@linaro.org>
+In-Reply-To: <20230320093614.GB2196776@hirez.programming.kicks-ass.net>
+References: <20230314230004.961993-1-alexey.klimov@linaro.org>
+        <20230315111606.GB2006103@hirez.programming.kicks-ass.net>
+        <CANgGJDpd4Gm5HhQW__oMAv1yUqSPZ7FSGoQLYTmug=TUk4cn4g@mail.gmail.com>
+        <20230320090558.GF2194297@hirez.programming.kicks-ass.net>
+        <20230320093614.GB2196776@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ceac6b52-987c-4a8d-5687-08db3aa7f001
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 16:15:16.3153
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kYUlKwtwDJdEk8A4zmbiIqfv2kXLzwd1n1Hlv8MpPH+hosJrXg18Jj7KCGHOSr0o/4/yoradDvMk7SCTGQCsSdwXn6pNKnMVEdzQCDLfbNk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1474
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dexuan Cui <decui@microsoft.com> Sent: Saturday, April 8, 2023 1:48 P=
-M
->=20
-> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
-> error code =3D TDG.VP.VMCALL_RETRY (1), and the guest must retry this
-> operation for the pages in the region starting at the GPA specified
-> in R11.
->=20
-> When a TDX guest runs on Hyper-V, Hyper-V returns the retry error
-> when hyperv_init() -> swiotlb_update_mem_attributes() ->
-> set_memory_decrypted() decrypts up to 1GB of swiotlb bounce buffers.
->=20
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
->  arch/x86/coco/tdx/tdx.c | 64 +++++++++++++++++++++++++++++++++--------
->  1 file changed, 52 insertions(+), 12 deletions(-)
->=20
-> Changes in v2:
->   Used __tdx_hypercall() directly in tdx_map_gpa().
->   Added a max_retry_cnt of 1000.
->   Renamed a few variables, e.g., r11 -> map_fail_paddr.
->=20
-> Changes in v3:
->   Changed max_retry_cnt from 1000 to 3.
->=20
-> Changes in v4:
->   __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT) -> __tdx_hypercall_ret()
->   Added Kirill's Acked-by.
->=20
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 4c4c6db39eca3..5574c91541a2d 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -28,6 +28,8 @@
->  #define TDVMCALL_MAP_GPA		0x10001
->  #define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->=20
-> +#define TDVMCALL_STATUS_RETRY		1
-> +
->  /* MMIO direction */
->  #define EPT_READ	0
->  #define EPT_WRITE	1
-> @@ -788,14 +790,15 @@ static bool try_accept_one(phys_addr_t *start, unsi=
-gned long len,
->  }
->=20
->  /*
-> - * Inform the VMM of the guest's intent for this physical page: shared w=
-ith
-> - * the VMM or private to the guest.  The VMM is expected to change its m=
-apping
-> - * of the page in response.
-> + * Notify the VMM about page mapping conversion. More info about ABI
-> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> + * section "TDG.VP.VMCALL<MapGPA>".
->   */
-> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bo=
-ol enc)
-> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
->  {
-> -	phys_addr_t start =3D __pa(vaddr);
-> -	phys_addr_t end   =3D __pa(vaddr + numpages * PAGE_SIZE);
-> +	int max_retry_cnt =3D 3, retry_cnt =3D 0;
-> +	struct tdx_hypercall_args args;
-> +	u64 map_fail_paddr, ret;
->=20
->  	if (!enc) {
->  		/* Set the shared (decrypted) bits: */
-> @@ -803,12 +806,49 @@ static bool tdx_enc_status_changed(unsigned long va=
-ddr, int numpages, bool enc)
->  		end   |=3D cc_mkdec(0);
->  	}
->=20
-> -	/*
-> -	 * Notify the VMM about page mapping conversion. More info about ABI
-> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> -	 * section "TDG.VP.VMCALL<MapGPA>"
-> -	 */
-> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-> +	while (1) {
-> +		memset(&args, 0, sizeof(args));
-> +		args.r10 =3D TDX_HYPERCALL_STANDARD;
-> +		args.r11 =3D TDVMCALL_MAP_GPA;
-> +		args.r12 =3D start;
-> +		args.r13 =3D end - start;
-> +
-> +		ret =3D __tdx_hypercall_ret(&args);
-> +		if (ret !=3D TDVMCALL_STATUS_RETRY)
-> +			break;
-> +		/*
-> +		 * The guest must retry the operation for the pages in the
-> +		 * region starting at the GPA specified in R11. Make sure R11
-> +		 * contains a sane value.
-> +		 */
-> +		map_fail_paddr =3D args.r11;
-> +		if (map_fail_paddr < start || map_fail_paddr >=3D end)
-> +			return false;
-> +
-> +		if (map_fail_paddr =3D=3D start) {
-> +			retry_cnt++;
-> +			if (retry_cnt > max_retry_cnt)
-> +				return false;
-> +		} else {
-> +			retry_cnt =3D 0;
-> +			start =3D map_fail_paddr;
-> +		}
-> +	}
-> +
-> +	return !ret;
-> +}
-> +
-> +/*
-> + * Inform the VMM of the guest's intent for this physical page: shared w=
-ith
-> + * the VMM or private to the guest. The VMM is expected to change its ma=
-pping
-> + * of the page in response.
-> + */
-> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bo=
-ol enc)
-> +{
-> +	phys_addr_t start =3D __pa(vaddr);
-> +	phys_addr_t end   =3D __pa(vaddr + numpages * PAGE_SIZE);
-> +
-> +	if (!tdx_map_gpa(start, end, enc))
->  		return false;
->=20
->  	/* private->shared conversion  requires only MapGPA call */
-> --
-> 2.25.1
+On Mon, 20 Mar 2023 10:36:14 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Sorry for the delay.
+(adding Mark in c/c)
+
+> On Mon, Mar 20, 2023 at 10:05:58AM +0100, Peter Zijlstra wrote:
+> > On Fri, Mar 17, 2023 at 02:11:25AM +0000, Alexey Klimov wrote:  
+> > > On Wed, 15 Mar 2023 at 11:16, Peter Zijlstra
+> > > <peterz@infradead.org> wrote:  
+> > > >
+> > > >
+> > > > (could you wrap your email please)  
+> > > 
+> > > Ouch. Sorry.
+> > >   
+> > > > On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:  
+> > > > > #regzbot introduced: 0c5ffc3d7b15 #regzbot title:
+> > > > > CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and
+> > > > > slow-stuck reboots
+> > > > >
+> > > > > The upstream changes are being merged into android-mainline
+> > > > > repo and at some point we started to observe kernel panics on
+> > > > > reboot or long reboot times.  
+> > > >
+> > > > On what hardware? I find it somewhat hard to follow this DT
+> > > > code :/  
+> > > 
+> > > Pixel 6.  
+> > 
+> > What actual cpuidle driver is that thing using? Is there any
+> > out-of-tree code involved? Mark tells me anything arm64 should be
+> > using PSCI, so let me to stare hard at that again.
+
+Yep, it uses PSCI (psci_idle). But there is some out-of-tree code
+involved.
+
+> So specifically, your problem sounds like rcu_synchronize() is taking
+> very much longer than it used to. Specifically combined with the patch
+> that makes it 'go-away' this seems to indicate you lost a
+> ct_cpuidle_enter() call, which is what ends up telling RCU the cpu is
+> idle and no longer partakes in the whole grace period machinery. Not
+> telling RCU this results in RCU waiting for an idle cpu to report back
+> on it's RCU progress, but it being idle means it's not going to be
+> doing that and things sorta wait around until RCU gets fed up and
+> starts spraying IPIs to try and get things moving.
+ 
+rcu_barrier().
+
+Eventually managed to make sysrq work and blocked tasks point to
+rcu_barrier():
+
+[  454.626264][    C4] task:init state:D stack:9728 pid:1 ppid:0
+flags:0x04000008
+[  454.626463][    C4] Call trace:
+[  454.626570][    C4]  __switch_to+0x180/0x308
+[  454.626733][    C4]  __schedule+0x620/0x9e4
+[  454.626892][    C4]  schedule+0x84/0xf4
+[  454.627039][    C4]  schedule_timeout+0x48/0x1d8
+[  454.627215][    C4]  wait_for_common+0xe0/0x1a8
+[  454.627388][    C4]  wait_for_completion+0x20/0x30
+[  454.627571][    C4]  rcu_barrier+0x3f8/0x674
+[  454.627734][    C4]  netdev_run_todo+0x74/0x5d8
+[  454.627907][    C4]  rtnl_unlock+0x18/0x2c
+[  454.628063][    C4]  dhd_unregister_net+0x30/0x54 [bcmdhd4389]
+[  454.629084][    C4]  wl_cfg80211_unregister_static_if+0x98/0x18c
+[bcmdhd4389]
+[  454.630101][    C4]  wl_cfg80211_detach+0xcc/0x344
+[bcmdhd4389]
+[  454.631091][    C4]  dhd_detach+0x4d0/0xc78 [bcmdhd4389]
+[  454.632064][    C4]  dhdpcie_bus_release+0x28c/0x6bc [bcmdhd4389]
+[  454.633052][    C4]  dhdpcie_pci_remove+0xb4/0x1a4 [bcmdhd4389]
+[  454.634036][    C4]  pci_device_remove+0x60/0x118
+[  454.634152][    C4]  device_release_driver_internal+0x19c/0x2f0
+[  454.634291][    C4]  driver_detach+0x98/0xe0
+[  454.634395][    C4]  bus_remove_driver+0x80/0xbc
+[  454.634504][    C4]  driver_unregister+0x38/0x64
+[  454.634616][    C4]  pci_unregister_driver+0x2c/0xb8
+[  454.634735][    C4]  dhdpcie_bus_unregister+0xd8/0x1b0 [bcmdhd4389]
+[  454.635739][    C4]  dhd_bus_unregister+0x24/0x50 [bcmdhd4389]
+[  454.636722][    C4]  dhd_reboot_callback+0x19c/0x1d8 [bcmdhd4389]
+[  454.637709][    C4]  blocking_notifier_call_chain+0x78/0xc8
+[  454.637836][    C4]  kernel_power_off+0x2c/0xfc
+[  454.637946][    C4]  __arm64_sys_reboot+0x270/0x27c
+[  454.638060][    C4]  invoke_syscall+0x60/0x130
+[  454.638169][    C4]  el0_svc_common+0xbc/0x100
+[  454.638278][    C4]  do_el0_svc+0x38/0xb0
+[  454.638377][    C4]  el0_svc+0x34/0xc4
+[  454.638464][    C4]  el0t_64_sync_handler+0x8c/0xfc
+[  454.638573][    C4]  el0t_64_sync+0x1a8/0x1ac
+
+and
+
+[   13.799675][    C2] task:kworker/1:1     state:D stack:12784 pid:97
+  ppid:2      flags:0x00000008
+[   13.799879][    C2] Workqueue: events
+slab_caches_to_rcu_destroy_workfn
+[   13.800112][    C2] Call trace:
+[   13.800231][    C2]  __switch_to+0x180/0x308
+[   13.800394][    C2]  __schedule+0x620/0x9e4
+[   13.800553][    C2]  schedule+0x84/0xf4
+[   13.800700][    C2]  schedule_timeout+0x48/0x1d8
+[   13.800876][    C2]  wait_for_common+0xe0/0x1a8
+[   13.801049][    C2]  wait_for_completion+0x20/0x30
+[   13.801232][    C2]  rcu_barrier+0x3f8/0x674
+[   13.801394][    C2]  slab_caches_to_rcu_destroy_workfn+0x90/0x108
+[   13.801627][    C2]  process_one_work+0x1f0/0x454
+[   13.801807][    C2]  worker_thread+0x330/0x43c
+[   13.801977][    C2]  kthread+0x10c/0x1b8
+[   13.802127][    C2]  ret_from_fork+0x10/0x20
+
+ 
+> Now...  if a driver sets CPUIDLE_FLAG_RCU_IDLE it promises to call
+> ct_cpuidle_{enter,exit}() itself. Hence for any driver that does *NOT*
+> set that flag, cpuidle_enter_state() calls these functions.
+> 
+> Now, fo PSCI, the DT handler is psci_enter_idle_state(), which uses
+> CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(), which per the other email, means
+> that it's low_level_idle_enter := psci_cpu_suspend_enter(), *will*
+> call ct_cpuidle_{enter,exit}().
+> 
+> Then if we look at psci_cpu_suspend_enter(), it has two cases
+> depending on psci_power_state_loses_context(). If it doesn't lose
+> context it does ct_cpuidle_enter() right there and proceeds to call
+> psci_ops.cpu_suspend() -- whatever that does.
+> 
+> If it does lose state, then it depends on CONFIG_ARM64, on arm64 we do
+> not call ct_cpuidle_{enter,exit}() but proceed into cpu_suspend().
+> 
+> We can find that function in arch/arm64/kernel/suspend.c, and if you
+> look at it, you'll note it does in fact call ct_cpuidle_{enter,exit}()
+> as per promises made.
+> 
+> So AFAICT every path into idle will pass through ct_cpuidle_enter().
+ 
+I tried to understand where ct_cpuidle_{enter,exit}() is missing and
+narrow it down until found out that the problem is cpu pm notifier
+returning NOTIFY_BAD during reboot and calls to ct_cpuidle_{enter,exit}
+are correct. Thanks for checking.
+
+In __CPU_PM_CPU_IDLE_ENTER() macro we have:
+
+	if (!is_retention)
+		__ret =  cpu_pm_enter();
+	if (!__ret) {
+		if (!is_rcu)
+			ct_cpuidle_enter();
+		__ret = low_level_idle_enter(state);
+		if (!is_rcu)
+			ct_cpuidle_exit();
+		if (!is_retention)
+			cpu_pm_exit();
+	}
+
+While rebooting cpu_pm_enter() returns an error since one of the
+notifiers starts to return NOTIFY_BAD. Looks like kernel starts to
+"spin" trying to put CPUs in idle state and always gets an error from
+cpu_pm_enter() never reaching the section covered by
+ct_cpuidle_{enter,exit}. Before the mentioned commit all of this were
+under ct_cpuidle_{enter,exit}. Hence, yes, in some sense we lost a
+ct_cpuidle_enter+exit() call. As long as I manually cover this small
+piece with ct_cpuidle_{enter,exit} for testing, the reboot times return
+back to as it was before the commit. Currently I removed returning
+NOTIFY_BAD from notifier when rebooting.
+
+It seems RCU waits for these CPUs to attend RCU machinery.
+Also it probably does not count as an upstream regression since it
+involves out of tree code but in theory this could happen with any
+other notifier. Probably WARN_ONCE() will be too bad too.
+
+The cpu pm notifier is this one, line 972,
+exynos_cpu_pm_notify_callback():
+https://android.googlesource.com/kernel/gs/+/refs/tags/android-t-qpr3-beta-2_r0.5/drivers/soc/google/exynos-cpupm.c#972
+
+Thank you for checking all this!
+
+Best regards,
+Alexey
 
