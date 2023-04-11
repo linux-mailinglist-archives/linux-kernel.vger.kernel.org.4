@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DAD6DD42C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065176DD41B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjDKHaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 03:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229946AbjDKH25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjDKH3x (ORCPT
+        with ESMTP id S229624AbjDKH2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 03:29:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF917199A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681198141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L4fqI8bKtaB0NcHDktrPl8MWeP7RL/mWq8oUINt/T54=;
-        b=iz4redSlKxm/x8XHUq7dazkO96A8tVAm85PDby7WPt9/85uRsQxDWWsKxsfR05mMwVNOb5
-        2pqAaBLYT6UUn80e0CVV66poe8megRnYyfuNRMdsTTwLhanjdUeMr8QFH5F70e/wkQPNpt
-        Ptx4ju3wS9SjOfv8qmSwQbFxA6i2o7k=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-Db4LT0dzPaGYnKia0bXzNg-1; Tue, 11 Apr 2023 03:29:00 -0400
-X-MC-Unique: Db4LT0dzPaGYnKia0bXzNg-1
-Received: by mail-wm1-f72.google.com with SMTP id d8-20020a05600c3ac800b003edf7d484d4so1399388wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:29:00 -0700 (PDT)
+        Tue, 11 Apr 2023 03:28:55 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDBF10D9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:28:54 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id q2so11904713pll.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681198134;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gYIzKSwGvXgmY04hGg8wntK0YcMOF3CTzRnRLf+lmfo=;
+        b=e6OfinFL6B6gdg/sJAGuLAhGXAyEHGQoZxFCxUIg+v9m0JVdVVaV9DIHI4uJiIHqkU
+         5lw43+apQZR1B7d/GX2LyV0NikJvmvv4D+MtE4GFcUagGspsqEdHY4ZkAgakMI1x5HEx
+         NnD2hGbX+okDo3T4dF0ALSiQr3ScWMnfEclK/VueuB1FngF2hgHcUzQysAG5oSNlAw/D
+         h1lJNs1JKLB3p1hzkohhHCg9HtDHzEpeePkD1IEou3QsRpWvoI6uo0Y6jUPGMqu7Pdqw
+         fVBOdLXMgRriDdfpJB4kWbf7ZZXKSn5cEBRVM8TRK/nKrG0s+7zy1rpFiR199UV26UbZ
+         rs5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681198139; x=1683790139;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L4fqI8bKtaB0NcHDktrPl8MWeP7RL/mWq8oUINt/T54=;
-        b=AbVrDotnernoCVTW9Ab/mqGnQIt4iYsiGGCEIUEQgm3OiM73KEmlTPb879HtSiQFGl
-         Z7XmIkPY2KU96vFk58NzZ/9RMeKR5Pcms0qBzY9gYye5K0DatT3JQqfVE19sIgPqmMGK
-         aFmly55jd5cb1vou+z+CLbYvtys2suoHhjgdLFlHdIVfbTJtfT3xgXkhHD26YwtQcNlM
-         azyAvEF9Uki8n/Yj0Qr/F0hPGW1f2vUkfCqmDFadz6rtfjV8sOMF3u2uCTTwILLr8uMq
-         YA46X75z7BvvniOdTW/bHTYL+JrsW8n/cAKRDlAQoQc3lKyFeSh6cWpGjdfFkmbb/mxg
-         BZSA==
-X-Gm-Message-State: AAQBX9f84v9F1ma1LJyDYzWEclXOpKYDfLlGmGB7E+/32maD7tI3bZBo
-        je2dy7ltmWghaqnhTJl2aGj/7aeyRTm4ARb3TIqAM/wHBVitv9ZHiUL1djz5KN9jAS2rlcapt2q
-        13qZMhElUhHOTTUgy0/2VmsIGqlQGrSfscaq3DK92
-X-Received: by 2002:a05:600c:3792:b0:3ed:d2ae:9aeb with SMTP id o18-20020a05600c379200b003edd2ae9aebmr2632742wmr.8.1681198139433;
-        Tue, 11 Apr 2023 00:28:59 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YW5IDOn+UtOVz4OnXhruknCN/7VUTSpUco2yUncWsdK7SLQjHRkIf40YFOegmhheb0QRHRYZwy7kM7Amph3GY=
-X-Received: by 2002:a05:600c:3792:b0:3ed:d2ae:9aeb with SMTP id
- o18-20020a05600c379200b003edd2ae9aebmr2632737wmr.8.1681198139119; Tue, 11 Apr
- 2023 00:28:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681198134;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gYIzKSwGvXgmY04hGg8wntK0YcMOF3CTzRnRLf+lmfo=;
+        b=EyxI5A//8yvzSicu8TJ293ZhYCKZ+OiH2aKN147Z0lFv52EN293gx9fdUgAyg8Kbbn
+         jHHRiBFPLxGEF6PeI8m8Ot86WKAVeoN18/QCfQFnnU2OR5ILdjcniKiN/so9SCYV95u+
+         CM1UAXQMxPBiEMgc4WGPr2a4YNoW+kt3B779XSmn4d6NwEUZV/8oURM1tR6ciLOCvnGM
+         6FJgr8YubrSwFneP0MpJ+PhoNlcjWDO8rmm+UnrW0iNoIrb36YT7nzsX0ZMjrWQeXxEJ
+         voBbIcHl7uQ6P63XZWnlo9LbmW6rO+Rk2ogHNjvnYXpXF/rYDjGpgIzBfYOz6NJj4yos
+         HWdQ==
+X-Gm-Message-State: AAQBX9cvSFiZE4EN0fVnHsP0+rdHsx/3d6AArrr6Ii6UmxdmEtW/hRvn
+        0M1ulP+62OTWa+LuSmWUZN6jmA==
+X-Google-Smtp-Source: AKy350ZJeDMak23Z7LaNvanfRFivkMlcjclZLWaRbaa7GoUajg5ks3HHywtS5GNqiNKPpeg5jf5QAw==
+X-Received: by 2002:a17:903:1c4:b0:1a0:7584:f46f with SMTP id e4-20020a17090301c400b001a07584f46fmr25167435plh.9.1681198133612;
+        Tue, 11 Apr 2023 00:28:53 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:6a11:8ba1:beba:def7:a4ae])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001a043e84bf0sm8946612plp.209.2023.04.11.00.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 00:28:53 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org
+Subject: [PATCH v3 0/3] arm64: dts: qcom: Add Qualcomm RB2 board dts
+Date:   Tue, 11 Apr 2023 12:58:37 +0530
+Message-Id: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230410150130.837691-1-lulu@redhat.com> <CACGkMEvTdgvqacFmMJZD4u++YJwESgSmLF6CMdAJBBqkxpZKgg@mail.gmail.com>
-In-Reply-To: <CACGkMEvTdgvqacFmMJZD4u++YJwESgSmLF6CMdAJBBqkxpZKgg@mail.gmail.com>
-From:   Cindy Lu <lulu@redhat.com>
-Date:   Tue, 11 Apr 2023 15:28:21 +0800
-Message-ID: <CACLfguWKw68=wZNa7Ga+Jm8xTE93A_5za3Dc=S_z7ds9FCkRKg@mail.gmail.com>
-Subject: Re: [PATCH] vhost_vdpa: fix unmap process in no-batch mode
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 11:10=E2=80=AFAM Jason Wang <jasowang@redhat.com> w=
-rote:
->
-> On Mon, Apr 10, 2023 at 11:01=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote=
-:
-> >
-> > While using the no-batch mode, the process will not begin with
-> > VHOST_IOTLB_BATCH_BEGIN, so we need to add the
-> > VHOST_IOTLB_INVALIDATE to get vhost_vdpa_as, the process is the
-> > same as VHOST_IOTLB_UPDATE
-> >
-> > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > ---
-> >  drivers/vhost/vdpa.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > index 7be9d9d8f01c..32636a02a0ab 100644
-> > --- a/drivers/vhost/vdpa.c
-> > +++ b/drivers/vhost/vdpa.c
-> > @@ -1074,6 +1074,7 @@ static int vhost_vdpa_process_iotlb_msg(struct vh=
-ost_dev *dev, u32 asid,
-> >                 goto unlock;
-> >
-> >         if (msg->type =3D=3D VHOST_IOTLB_UPDATE ||
-> > +           msg->type =3D=3D VHOST_IOTLB_INVALIDATE ||
->
-> I'm not sure I get here, invalidation doesn't need to create a new AS.
->
-> Or maybe you can post the userspace code that can trigger this issue?
->
-> Thanks
->
-sorry I didn't write it clearly
-For this issue can reproduce in vIOMMU no-batch mode support because
-while the vIOMMU enabled, it will
-flash a large memory to unmap, and this memory are haven't been mapped
-before, so this unmapping will fail
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230315210145.2221116-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Bjorn about load conditions for vmmc
+  ldos and added [PATCH 3/3] accordingly in v3.
+- Collected Krzysztof's Ack for [PATCH 1/3].
 
-qemu-system-x86_64: failed to write, fd=3D12, errno=3D14 (Bad address)
-qemu-system-x86_64: vhost_vdpa_dma_unmap(0x7fa26d1dd190, 0x0,
-0x80000000) =3D -5 (Bad address)
-qemu-system-x86_64: failed to write, fd=3D12, errno=3D14 (Bad address)
-....
-in batch mode this operation will begin with VHOST_IOTLB_BATCH_BEGIN,
-so don't have this issue
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230314210828.2049720-1-bhupesh.sharma@linaro.org/
+- Addressed review comments from Konrad and fixed the board dts and also
+  added a new 'qcom,qrb4210' compatible.
+- Although Krzysztof provided an Ack for [PATCH 1/2] from the v1 series,
+  since this series introduces the new 'qcom,qrb4210' compatible, so I
+  have dropped the same for now.
+ 
+Add an initial device tree for Qualcomm RB2 board (see [1]).
+It is based on the Robotics version of the Snapdragon SM4250
+Soc, i.e. QRB4210.
 
-Thanks
-cindy
-> >             msg->type =3D=3D VHOST_IOTLB_BATCH_BEGIN) {
-> >                 as =3D vhost_vdpa_find_alloc_as(v, asid);
-> >                 if (!as) {
-> > --
-> > 2.34.3
-> >
->
+Currently it enables:
+    - eMMC via SDHC1,
+    - uSD card via SDHC2,
+    - RPM regulators,
+    - Debug UART (via micro USB port).
+
+Subsequent patchset(s) will add more peripherals like USB, etc.
+
+This patchset is dependent on the QRB4210 SocInfo patchset sent out
+earlier (see [2]).
+
+To get a successful boot run:
+    
+   $ cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/\
+    qrb4210-rb2.dtb > ./Image-adp.gz+dtb
+
+   $ mkbootimg --kernel ./Image-adp.gz+dtb \
+     --ramdisk ./some-initramfs-image.rootfs.img \
+     --output ./rb2-boot.img --pagesize 4096 \
+     --base 0x80000000 --cmdline 'SOME_CMDLINE'
+    
+   $ fastboot boot ./rb2-boot.img
+
+[1]. https://www.qualcomm.com/products/internet-of-things/industrial/industrial-automation/qualcomm-robotics-rb2-platform#Overview
+[2]. https://lore.kernel.org/linux-arm-msm/20230315160151.2166861-1-bhupesh.sharma@linaro.org/
+
+Bhupesh Sharma (3):
+  dt-bindings: arm: qcom: Document the Qualcomm qrb4210-rb2 board
+  arm64: dts: qcom: Add base qrb4210-rb2 board dts
+  arm64: dts: qcom: qrb4210-rb2: Increase load on l22 and l24 for uSD
+    and eMMC
+
+ .../devicetree/bindings/arm/qcom.yaml         |   8 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts      | 227 ++++++++++++++++++
+ 3 files changed, 236 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+
+-- 
+2.38.1
 
