@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C106DCF5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFE96DCF59
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDKBcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 21:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S229990AbjDKBcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 21:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjDKBcf (ORCPT
+        with ESMTP id S229775AbjDKBca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 21:32:35 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545601718
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681176754; x=1712712754;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=6uciC4UroIaZtzRZeYdo8iufB2WP1MTDBI57Zm/g/XA=;
-  b=F1S2HHscI8OKegyzV+WvX/PwLnKhumU2bTJRMzi03tqa3euFZMbX63us
-   qm+D+Fde04f6inpFNSxETSjQvsENReffHeXq46/UarxWQ0h7fQ9XDgvXB
-   8163NMaxpw41c57zyA9cvmEgZDwit2o9sYKu7k5b0aBmwoGoTZCdYCUBZ
-   1OrNIXIhtvlMd73/Xr46OSDtnKT79+A5nmcgRWaoBzCjKXtx2dfckkMD7
-   E5gDkJ+/W3E2GnWfMfr9lOUI1otre+Kz7gvuZ9MpvlWRzSb1NodldxMN+
-   Vu/8nbBZ5EAic2ykTq1GAPPDuj4QdYvc3K92DdI+3XctOT4HDdubYQLcV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="371343467"
-X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
-   d="scan'208";a="371343467"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 18:32:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="688434314"
-X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
-   d="scan'208";a="688434314"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 18:32:31 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        "Mel Gorman" <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-References: <20230410075224.827740-1-ying.huang@intel.com>
-        <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com>
-Date:   Tue, 11 Apr 2023 09:31:25 +0800
-In-Reply-To: <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com> (Nadav Amit's
-        message of "Mon, 10 Apr 2023 19:47:30 +0000")
-Message-ID: <87zg7f19xu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 10 Apr 2023 21:32:30 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3BE10F7;
+        Mon, 10 Apr 2023 18:32:29 -0700 (PDT)
+Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PwSxD3mCLzKrtw;
+        Tue, 11 Apr 2023 09:31:44 +0800 (CST)
+Received: from huawei.com (10.174.179.93) by kwepemi500007.china.huawei.com
+ (7.221.188.207) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 11 Apr
+ 2023 09:32:25 +0800
+From:   Hangliang Lai <laihangliang1@huawei.com>
+To:     <namhyung@kernel.org>
+CC:     <acme@kernel.org>, <adrian.hunter@intel.com>,
+        <alexander.shishkin@linux.intel.com>, <brauner@kernel.org>,
+        <hewenliang4@huawei.com>, <irogers@google.com>, <jolsa@kernel.org>,
+        <laihangliang1@huawei.com>, <linfeilong@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <liuwenyu7@huawei.com>, <mark.rutland@arm.com>, <mingo@redhat.com>,
+        <yeyunfeng@huawei.com>
+Subject: [PATCH v4] perf top: expand the range of multithreaded phase
+Date:   Tue, 11 Apr 2023 09:32:24 +0800
+Message-ID: <20230411013224.2079-1-laihangliang1@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <CAM9d7cjy-XivELAgq49YF9RKxFZ3M+H3V6s6zVboenRT3oRFDA@mail.gmail.com>
+References: <CAM9d7cjy-XivELAgq49YF9RKxFZ3M+H3V6s6zVboenRT3oRFDA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.179.93]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500007.china.huawei.com (7.221.188.207)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Amit,
+In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
+donw_read and down_write can work to handle concurrency problems. Then top
+use perf_set_singlethreaded and switch to single threaded phase, assuming
+that no thread concurrency will happen later.
+However, a UAF problem could occur in perf top in single threaded phase,
+The concurrent procedure is like this:
+display_thread                              process_thread
+--------------                              --------------
+thread__comm_len
+  -> thread__comm_str
+    -> __thread__comm_str(thread)
+                                            thread__delete
+                                             -> comm__free
+                                              -> comm_str__put
+                                               -> zfree(&cs->str)
+    -> thread->comm_len = strlen(comm);
+Since in single thread phase, perf_singlethreaded is true, down_read and
+down_write can not work to avoid concurrency problems.
+This patch put perf_set_singlethreaded to the function tail to expand the
+multithreaded phase range, make display_thread and process_thread run
+safe.
 
-Thank you very much for review!
+Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
+Co-developed-by: Wenyu Liu <liuwenyu7@huawei.com>
+Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+---
+v3 -> v4
+ - Add Acked-by and Co-developed-by. 
 
-Nadav Amit <namit@vmware.com> writes:
+ tools/perf/builtin-top.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->> On Apr 10, 2023, at 12:52 AM, Huang Ying <ying.huang@intel.com> wrote:
->>=20
->> 0Day/LKP reported a performance regression for commit
->> 7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
->> TLB flushing during page migration is batched.  So, in
->> try_to_migrate_one(), ptep_clear_flush() is replaced with
->> set_tlb_ubc_flush_pending().  In further investigation, it is found
->> that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
->> is inaccessible.  In fact, we can optimize in similar way for the
->> batched TLB flushing too to improve the performance.
->>=20
->> So in this patch, we check pte_accessible() before
->> set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
->> that the benchmark score of the anon-cow-rand-mt test case of
->> vm-scalability test suite can improve up to 2.1% with the patch on a
->> Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
->
-> LGTM.
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index d4b5b02bab73..ae96ddaf85c4 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -1273,8 +1273,7 @@ static int __cmd_top(struct perf_top *top)
+ 				    top->evlist->core.threads, true, false,
+ 				    top->nr_threads_synthesize);
+ 
+-	if (top->nr_threads_synthesize > 1)
+-		perf_set_singlethreaded();
++	perf_set_multithreaded();
+ 
+ 	if (perf_hpp_list.socket) {
+ 		ret = perf_env__read_cpu_topology_map(&perf_env);
+@@ -1352,6 +1351,7 @@ static int __cmd_top(struct perf_top *top)
+ out_join_thread:
+ 	cond_signal(&top->qe.cond);
+ 	pthread_join(thread_process, NULL);
++	perf_set_singlethreaded();
+ 	return ret;
+ }
+ 
+-- 
+2.33.0
 
-Thanks!
-
-> I know it=E2=80=99s meaningless for x86 (but perhaps ARM would use this i=
-nfra
-> too): do we need smp_mb__after_atomic() after ptep_get_and_clear() and
-> before pte_accessible()?
-
-Why do we need the memory barrier?  IIUC, the PTL is locked, so PTE
-value will not be changed under us.  Anything else?
-
-> In addition, if this goes into stable (based on the Fixes tag), consider
-> breaking it into 2 patches, when only one would be backported.
-
-The fixed commit (7e12beb8ca2a ("migrate_pages: batch flushing TLB")) is
-merged by v6.3-rc1.  So this patch will only be backported to v6.3 and
-later.  Is it OK?
-
-Best Regards,
-Huang, Ying
