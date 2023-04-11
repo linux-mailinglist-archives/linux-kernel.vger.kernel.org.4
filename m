@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB6A6DD364
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CD96DD365
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjDKGuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S230416AbjDKGuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjDKGtt (ORCPT
+        with ESMTP id S229766AbjDKGtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:49:49 -0400
+        Tue, 11 Apr 2023 02:49:50 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA6240F6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:49:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275922D6B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681195750; x=1712731750;
+  t=1681195755; x=1712731755;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EXw7iRfpei7pJiqdEoClA47q842CS/GvW0oVWNgTE1k=;
-  b=Kf8vI4wTA4MbtkAn6UOrlzFV9ziKBhCkMEnXypOe0WDkNiRNsCEJlRPi
-   bysGOKzNJZmqP4+jcR4h17ZP44FxfVM8Wo35+w7hezPVwc4f0YoVimVBF
-   HdqKfwRuc/ACIJlkU6/UJO6dK2cz7jgDfuEWytxE7v1VaWA4bK9zFehXC
-   iDmRzoau/Ted+aIGabybd95Sy8G5XcmKpNlI4ZPgioQ7PR7x4+CmGB3gC
-   6eEOkSVIsUH4o19178DqTYf8tDWP7f7z9nHUURXwmNZ3Ekw1lnHcBMDwc
-   9ki68fKkk/X37koeP0qrQ2tXASRcC3TEnvq8VPuPDR1VN14KhID3wH0J2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341028565"
+  bh=BV5LLOlacNTt4g++kWcPPRqikSTDi86tcqNaVPEHCy0=;
+  b=WXJ3PtYfwrE0YDj0S1yGMr/0aaNQoCWDT3x4QcCajDQhxXaynhXZ9a1Y
+   Hw5di0n+GXUmCjsQ6PFqRW2JqVRZ6MHm+N1Otudr0ryh0ttzRjWh/2KWb
+   8TlST+JP5UhvqRGIu8ULTKJX+Anp9HcqbjVlagdV3oGY190PbUT/UX1EH
+   6+OOaBj5FLIqo4s1mKM/6kNRTZ/hgL2jhBwI/IS889Xr44b0mIMRdJgD5
+   XkV/rsC9Pi34czv+MCcGeSyKW2E0Gn0CHZA2pXz3TbOJiJEe6xs22F5Vs
+   C32NM1OjfBMigNn+evfp7LRTPSLXpxXguVFtn6IYjZdqBsaHR3ZdPu7gm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341028574"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341028565"
+   d="scan'208";a="341028574"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 23:48:29 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 23:48:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018256599"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018256606"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="1018256599"
+   d="scan'208";a="1018256606"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Apr 2023 23:48:27 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 10 Apr 2023 23:48:29 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Vinod Koul <vkoul@kernel.org>, Tina Zhang <tina.zhang@intel.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/17] iommu/vt-d: Remove extern from function prototypes
-Date:   Tue, 11 Apr 2023 14:48:06 +0800
-Message-Id: <20230411064815.31456-9-baolu.lu@linux.intel.com>
+Subject: [PATCH 09/17] iommu/vt-d: Use non-privileged mode for all PASIDs
+Date:   Tue, 11 Apr 2023 14:48:07 +0800
+Message-Id: <20230411064815.31456-10-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230411064815.31456-1-baolu.lu@linux.intel.com>
 References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
@@ -62,84 +62,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel coding style does not require 'extern' in function prototypes
-in .h files, so remove them from drivers/iommu/intel/iommu.h as they are
-not needed.
+From: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
+Supervisor Request Enable (SRE) bit in a PASID entry is for permission
+checking on DMA requests. When SRE = 0, DMA with supervisor privilege
+will be blocked. However, for in-kernel DMA this is not necessary in that
+we are targeting kernel memory anyway. There's no need to differentiate
+user and kernel for in-kernel DMA.
+
+Let's use non-privileged (user) permission for all PASIDs used in kernel,
+it will be consistent with DMA without PASID (RID_PASID) as well.
+
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Link: https://lore.kernel.org/r/20230331231137.1947675-2-jacob.jun.pan@linux.intel.com
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20230331045452.500265-1-baolu.lu@linux.intel.com
 ---
- drivers/iommu/intel/iommu.h | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ drivers/iommu/intel/iommu.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 694ab9b7d3e9..19494713d6b3 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -798,18 +798,18 @@ static inline bool context_present(struct context_entry *context)
- 	return (context->lo & 1);
- }
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index c771233d6f2a..f4e536fd5a28 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -2316,8 +2316,6 @@ static int domain_setup_first_level(struct intel_iommu *iommu,
+ 	if (level != 4 && level != 5)
+ 		return -EINVAL;
  
--extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
--
--extern int dmar_enable_qi(struct intel_iommu *iommu);
--extern void dmar_disable_qi(struct intel_iommu *iommu);
--extern int dmar_reenable_qi(struct intel_iommu *iommu);
--extern void qi_global_iec(struct intel_iommu *iommu);
--
--extern void qi_flush_context(struct intel_iommu *iommu, u16 did, u16 sid,
--			     u8 fm, u64 type);
--extern void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
--			  unsigned int size_order, u64 type);
--extern void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
-+struct dmar_drhd_unit *dmar_find_matched_drhd_unit(struct pci_dev *dev);
-+
-+int dmar_enable_qi(struct intel_iommu *iommu);
-+void dmar_disable_qi(struct intel_iommu *iommu);
-+int dmar_reenable_qi(struct intel_iommu *iommu);
-+void qi_global_iec(struct intel_iommu *iommu);
-+
-+void qi_flush_context(struct intel_iommu *iommu, u16 did,
-+		      u16 sid, u8 fm, u64 type);
-+void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
-+		    unsigned int size_order, u64 type);
-+void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
- 			u16 qdep, u64 addr, unsigned mask);
+-	if (pasid != PASID_RID2PASID)
+-		flags |= PASID_FLAG_SUPERVISOR_MODE;
+ 	if (level == 5)
+ 		flags |= PASID_FLAG_FL5LP;
  
- void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
-@@ -832,7 +832,7 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
-  */
- #define QI_OPT_WAIT_DRAIN		BIT(0)
- 
--extern int dmar_ir_support(void);
-+int dmar_ir_support(void);
- 
- void *alloc_pgtable_page(int node, gfp_t gfp);
- void free_pgtable_page(void *vaddr);
-@@ -840,9 +840,9 @@ void iommu_flush_write_buffer(struct intel_iommu *iommu);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
- 
- #ifdef CONFIG_INTEL_IOMMU_SVM
--extern void intel_svm_check(struct intel_iommu *iommu);
--extern int intel_svm_enable_prq(struct intel_iommu *iommu);
--extern int intel_svm_finish_prq(struct intel_iommu *iommu);
-+void intel_svm_check(struct intel_iommu *iommu);
-+int intel_svm_enable_prq(struct intel_iommu *iommu);
-+int intel_svm_finish_prq(struct intel_iommu *iommu);
- int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
- 			    struct iommu_page_response *msg);
- struct iommu_domain *intel_svm_domain_alloc(void);
-@@ -889,8 +889,8 @@ extern const struct iommu_ops intel_iommu_ops;
- 
- #ifdef CONFIG_INTEL_IOMMU
- extern int intel_iommu_sm;
--extern int iommu_calculate_agaw(struct intel_iommu *iommu);
--extern int iommu_calculate_max_sagaw(struct intel_iommu *iommu);
-+int iommu_calculate_agaw(struct intel_iommu *iommu);
-+int iommu_calculate_max_sagaw(struct intel_iommu *iommu);
- int ecmd_submit_sync(struct intel_iommu *iommu, u8 ecmd, u64 oa, u64 ob);
- 
- static inline bool ecmd_has_pmu_essential(struct intel_iommu *iommu)
 -- 
 2.34.1
 
