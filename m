@@ -2,99 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448BD6DD30C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B546DD310
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjDKGlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S230035AbjDKGmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjDKGlC (ORCPT
+        with ESMTP id S229688AbjDKGme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:41:02 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BA3358E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:40:55 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a64b65b2a0so2938215ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681195255; x=1683787255;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P9E3QUvAQUl3o+y94u92fiPsX7FeUqAvp4hYEOQvbNI=;
-        b=bwSwwNrwlSHWxctuiILVq87IWdaCXi4nEQhZKXaFKHGDV/tZDxpAQPzI+p6nuAZ9oG
-         n1bGcDq6OmaIFf4BQ0LvKfD3Sci1+HNPwXeZR0+OBAbB4KcqUumNf/FomVxTcM5mTv+X
-         U+gGK4q/s7oHdLvaIguwGGZNi6Vu4uBzRO/7q8ZxfUuf4FlS/D26aoriZzdzM0kLOMLq
-         hIpZgKcLXDwwgf9rqcRDE5C68WH45Nzr5xchIIECs8/4QL8284IRb9FR0zfEF+yGY473
-         DhZNzPwfq6EM5wGOPi/L7GvR6Q36+NW1KHS4uhqNAkD6KpzaPr5t354cEGzZzKLmCtns
-         JxHw==
+        Tue, 11 Apr 2023 02:42:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42919100
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681195307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cir0Gnf4lO73dXx+ll4SEClofyoM/9KDMaw0DZ/d7mE=;
+        b=QofxRbIKtfkK0IvPhnN8SbaabNav8SvxLeJPyKtvwN+ZIKHbPQDdDsN1BJ44d4GcsA61lV
+        bQIKET7pvCJjUAxcl5Ma4ISuQ93rjN0PR/svvFi5gbkF9yUnNJKiRymG63MfNLUucCS38N
+        Aql/UGYHCAwI/JZS9gheQD1DBDQs68w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-dpZ8XSXjO7OC5ATSzkD0ow-1; Tue, 11 Apr 2023 02:41:46 -0400
+X-MC-Unique: dpZ8XSXjO7OC5ATSzkD0ow-1
+Received: by mail-wm1-f69.google.com with SMTP id t8-20020a05600c450800b003ee6dbceb81so1336114wmo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:41:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681195255; x=1683787255;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P9E3QUvAQUl3o+y94u92fiPsX7FeUqAvp4hYEOQvbNI=;
-        b=ibxcXgHAZ5vs7wIrVJENbfc3n35tZN5wGQWbp9TCVGkAy++UXVR94Gf/TRn85DczBA
-         mUbWQ/zzgvm4TQ55ZSnaUSMIEynDt3Rv+ZYYCKEKY1426vs2J9UiB/tNgzOm3n3CPUx7
-         qdjT+4wpUb9BhS3aiijD6LE7ox4xKiEmQx+hTTOUipst/2l3PRbvjIfN+aKaQ6WNpVmC
-         6sxcT0vT0/dP4xY7JmCfy2uncImZywbqLqOaHDUYynK05aP/r17LCJR6lMpA2mE5lwjz
-         WxFfdO1w8JQnut5Cjxi1dMV6k9PLZegflQOjt7xcAEeSzb10Jtz14BlNH+iYXcusIxrq
-         gHrg==
-X-Gm-Message-State: AAQBX9f+Z0reCOnvphSLNgbrMUw4RbPLOiKDFszfrNnMZKFDTofTjYFp
-        Uqy1dt+tFGFAg/B83Sm/fCSJucFeCBb1xJSWGMw=
-X-Google-Smtp-Source: AKy350bAlb+cDbia8QKfCMxPUZQ30JZAbWebYQ1BSofjHaVQ6jNlpGiW52J3dB+BLo3Ik/HcvQl1ug==
-X-Received: by 2002:a62:3802:0:b0:633:5c46:5a68 with SMTP id f2-20020a623802000000b006335c465a68mr9465898pfa.10.1681195254722;
-        Mon, 10 Apr 2023 23:40:54 -0700 (PDT)
-Received: from localhost ([122.172.85.8])
-        by smtp.gmail.com with ESMTPSA id d21-20020aa78155000000b0062e0010c6c1sm8836856pfn.164.2023.04.10.23.40.53
+        d=1e100.net; s=20210112; t=1681195305;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cir0Gnf4lO73dXx+ll4SEClofyoM/9KDMaw0DZ/d7mE=;
+        b=yliPnemgQUO5T/xEk91uj9CSqz7X+hZZUoKV8JisTVMCN7by0nfHqe5XqTb8xYWt7f
+         f3cpphN87oV+UUDQlf3FPc+HH8ee2ZHbegUhbIOicxTILQN+wQh5eGRmvWwxRAKV8Kde
+         PqglO6i42+wadltCFcxRTr0Q6dsvci0dDKtO2roOG5d6nQCTuVij/d+s9AWjLAM4dDb/
+         vbU6LtEiQuDTdqqqb1vQRsbd2rAuxx8jCoSnBrgvVRtyNeYYOulo5aWJggYsJU3LqMxo
+         H9jtKy4LU8FTIMnDoujMTD9ZE4Ix9ObYNWxaAD8lMPzVmc01KGVK1L2khfnXqTjntLtP
+         SpaA==
+X-Gm-Message-State: AAQBX9fLwe99ou1iDZGk5IZt9fNP6xLqcZXV9OrIQJZXHTYUXCuDgOap
+        Is5xnUR2FaoqgPKojlj0vbD6BJWVJB8OC1CCam/imweDZAojkG/PT5+fcxThizTyenSrpLt2ydS
+        HZ1PBrm3A+7oshiEPUZi1eT+p
+X-Received: by 2002:a5d:4b43:0:b0:2ef:b051:95c5 with SMTP id w3-20020a5d4b43000000b002efb05195c5mr6596130wrs.60.1681195305250;
+        Mon, 10 Apr 2023 23:41:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aDk+askyEP9RLvZG0DjWMCmGyHnqPWpVQgma3u2M6tHEB57yytv6JeU13SIHx3VDd2TjQTtg==
+X-Received: by 2002:a5d:4b43:0:b0:2ef:b051:95c5 with SMTP id w3-20020a5d4b43000000b002efb05195c5mr6596114wrs.60.1681195304960;
+        Mon, 10 Apr 2023 23:41:44 -0700 (PDT)
+Received: from redhat.com ([2.52.10.80])
+        by smtp.gmail.com with ESMTPSA id w9-20020adfec49000000b002cde25fba30sm13785542wrn.1.2023.04.10.23.41.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 23:40:53 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 12:10:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [v2] cpufreq: sparc: Fix exception handling in two functions
-Message-ID: <20230411064051.qyioheeoectj2lv3@vireshk-i7>
-References: <b3cce5b3-2e68-180c-c293-74d4d9d4032c@web.de>
- <2d125f3e-4de6-cfb4-2d21-6e1ec04bc412@web.de>
- <20230403033529.x6n3ihhkypwizq3b@vireshk-i7>
- <39342542-9353-6a7b-0aa9-f9c294b158cb@web.de>
- <20230403230432.xeubpa3cc2gt4mw3@vireshk-i7>
- <68b1988b-987f-fa2b-111e-b1b42f9767ab@web.de>
- <20230409235511.7xxqdxsqtflrhifk@vireshk-i7>
- <f9f40c8a-a392-27e3-b19c-c8985a163159@web.de>
- <20230411033048.zwsijlyiksjcmgcc@vireshk-i7>
- <e53bfa4f-c4b0-ee80-a64c-be8e9af76230@web.de>
+        Mon, 10 Apr 2023 23:41:44 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 02:41:40 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
+Message-ID: <20230411024109-mutt-send-email-mst@kernel.org>
+References: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
+ <20230411022329-mutt-send-email-mst@kernel.org>
+ <TY2PR06MB34242144FB4F944DD866567B859A9@TY2PR06MB3424.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e53bfa4f-c4b0-ee80-a64c-be8e9af76230@web.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <TY2PR06MB34242144FB4F944DD866567B859A9@TY2PR06MB3424.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-23, 08:15, Markus Elfring wrote:
-> >> The setting of the variables “cpufreq_us…_driver” influences the need
-> >> to reset them to null pointers for the desired exception handling,
-> >> doesn't it?
-> >
-> > This is what all should be done for these drivers I guess. There is no
-> > points doing the dance of {de}allocating resources unnecessarily.
+On Tue, Apr 11, 2023 at 06:39:16AM +0000, Angus Chen wrote:
+> Hi mst.
 > 
-> Are you going to integrate your source code adjustment according to
-> reduced dynamic memory allocation?
+> > -----Original Message-----
+> > From: Michael S. Tsirkin <mst@redhat.com>
+> > Sent: Tuesday, April 11, 2023 2:30 PM
+> > To: Angus Chen <angus.chen@jaguarmicro.com>
+> > Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
+> > 
+> > On Tue, Apr 11, 2023 at 09:38:32AM +0800, Angus Chen wrote:
+> > > We read the status of device after reset,
+> > > It is not guaranteed that the device be reseted successfully.
+> > 
+> > Sorry not guaranteed by what? I am guessing you have a legacy device
+> > that does not reset fully on write, and you need to wait?
+>  When the card not finished reset, the read only return the middle state of card.
+> > 
+> > > We can use a while loop to make sure that,like the modern device did.
+> > > The spec is not request it ,but it work.
+> > >
+> > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> > 
+> > Generally I don't much like touching legacy, no telling what
+> > that will do. Case in point, is your device a pure
+> > legacy device or a transitional device?
+>  Yes.,we have a real card which is use vitio spec.
 
-You can prepare and send a patch for this if you want, else I will do
-it.
+So is it a transitional device?
 
--- 
-viresh
+
+>  Thank you.
+> > 
+> > > ---
+> > >  drivers/virtio/virtio_pci_legacy.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+> > > index 2257f1b3d8ae..f2d241563e4f 100644
+> > > --- a/drivers/virtio/virtio_pci_legacy.c
+> > > +++ b/drivers/virtio/virtio_pci_legacy.c
+> > > @@ -14,6 +14,7 @@
+> > >   *  Michael S. Tsirkin <mst@redhat.com>
+> > >   */
+> > >
+> > > +#include <linux/delay.h>
+> > >  #include "linux/virtio_pci_legacy.h"
+> > >  #include "virtio_pci_common.h"
+> > >
+> > > @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
+> > >  	vp_legacy_set_status(&vp_dev->ldev, 0);
+> > >  	/* Flush out the status write, and flush in device writes,
+> > >  	 * including MSi-X interrupts, if any. */
+> > > -	vp_legacy_get_status(&vp_dev->ldev);
+> > > +	while (vp_legacy_get_status(&vp_dev->ldev))
+> > > +		msleep(1);
+> > 
+> > The problem with this is that it will break surprise
+> > removal even worse than it's already broken.
+> > 
+> > 
+> > >  	/* Flush pending VQ/configuration callbacks. */
+> > >  	vp_synchronize_vectors(vdev);
+> > >  }
+> > > --
+> > > 2.25.1
+> 
+
