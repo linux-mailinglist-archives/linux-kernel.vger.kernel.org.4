@@ -2,90 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF99E6DDD91
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504E16DDD93
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjDKOTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S230147AbjDKOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjDKOTV (ORCPT
+        with ESMTP id S229776AbjDKOTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:19:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AB7212F;
-        Tue, 11 Apr 2023 07:19:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 11 Apr 2023 10:19:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4D4680;
+        Tue, 11 Apr 2023 07:19:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7BBA6258A;
-        Tue, 11 Apr 2023 14:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77521C4339B;
-        Tue, 11 Apr 2023 14:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681222749;
-        bh=YFzILxpIYiv63ImDz5bEYdEX92IZXgELxHml31Egi9w=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tYOiw23H9xCmwv7lxuKfWTY+u4Mr5SGESCD2nPbHJQCm2POY2NGFGv1XyMgGIjBwN
-         RF9vFT9yZeJo8zU+1NLC9D5UiGRuaZ9af5tlexNI0bUYZEicW4ImdNIZIpeM0ZRra8
-         TgOExksGs1nvAIlN1e7AFAXnP6vqMpDI0GImVGOnwKf6mbLagutxCgHiXz1151Wu14
-         6SE+QQNwzDbqIVlUjZFEd/CB39nw5qYURnH5G0CB6AM87y5jsJkefxLhSDlJJqKhsF
-         VK+zn0woJV6CKxrcHQVxILYIvjGTY/+vBj5w88G4w8J9q3rQD8isiPp/w1cpHSXaFW
-         489SQA60dewPg==
-From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, perex@perex.cz, Cem Kaya <cemkaya.boun@gmail.com>
-Cc:     mario.limonciello@amd.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        stable@vger.kernel.org
-In-Reply-To: <20230410183814.260518-1-cemkaya.boun@gmail.com>
-References: <20230410183814.260518-1-cemkaya.boun@gmail.com>
-Subject: Re: [PATCH v5] ASoC: amd: Add Dell G15 5525 to quirks list
-Message-Id: <168122274720.54453.13789305143841583675.b4-ty@kernel.org>
-Date:   Tue, 11 Apr 2023 15:19:07 +0100
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 08067219D4;
+        Tue, 11 Apr 2023 14:19:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681222775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BV/iOuY3tZ30InHD5r4cvxoa3TS4xAh5ueSwnmy0PUI=;
+        b=crdDxRaBGzyB3zB0DL1Kg4gQ1WCo2jvVvFNkRIhz3KimP4omI5TwRwL/nAXz3tG3c2ElZc
+        jhDHt5N1fZaPOP7+25uTcrsykzfJbq6Q0jzZjsIvggDb9sl/oNRkveFD80krveiwNWe03g
+        DzyIz/IoTwiWe6y7KuYLg02GCRdkgh4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681222775;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BV/iOuY3tZ30InHD5r4cvxoa3TS4xAh5ueSwnmy0PUI=;
+        b=ByqMOCwojdA9dsMWcuK6BbwAOTKrFQ4DgFdf1zXapgeMlAX555Mddlr73GFZo2pSdG3ZaV
+        9ksEujjGUUXvAqCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C0BF13638;
+        Tue, 11 Apr 2023 14:19:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CmiHJXZsNWSQVAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 11 Apr 2023 14:19:34 +0000
+Message-ID: <f54cfeb9-f1c3-e656-d344-4cbf97a7c28a@suse.cz>
+Date:   Tue, 11 Apr 2023 16:19:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mm: slub: annotate kmem_cache_node->list_lock as
+ raw_spinlock
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, 42.hyeyoo@gmail.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
+        cl@linux.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zhao Gongyi <zhaogongyi@bytedance.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+References: <20230411130854.46795-1-zhengqi.arch@bytedance.com>
+ <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
+ <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Apr 2023 20:38:15 +0200, Cem Kaya wrote:
-> Add Dell G15 5525 Ryzen Edition to quirks list for acp6x so that
-> internal mic works.
+On 4/11/23 16:08, Qi Zheng wrote:
 > 
 > 
+> On 2023/4/11 21:40, Vlastimil Babka wrote:
+>> On 4/11/23 15:08, Qi Zheng wrote:
+>>> The list_lock can be held in the critical section of
+>>> raw_spinlock, and then lockdep will complain about it
+>>> like below:
+>>>
+>>>   =============================
+>>>   [ BUG: Invalid wait context ]
+>>>   6.3.0-rc6-next-20230411 #7 Not tainted
+>>>   -----------------------------
+>>>   swapper/0/1 is trying to lock:
+>>>   ffff888100055418 (&n->list_lock){....}-{3:3}, at: ___slab_alloc+0x73d/0x1330
+>>>   other info that might help us debug this:
+>>>   context-{5:5}
+>>>   2 locks held by swapper/0/1:
+>>>    #0: ffffffff824e8160 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic+0x22/0x2d0
+>>>    #1: ffff888136bede50 (&ACCESS_PRIVATE(rtpcp, lock)){....}-{2:2}, at: cblist_init_generic+0x232/0x2d0
+>>>   stack backtrace:
+>>>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc6-next-20230411 #7
+>>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>>   Call Trace:
+>>>    <TASK>
+>>>    dump_stack_lvl+0x77/0xc0
+>>>    __lock_acquire+0xa65/0x2950
+>>>    ? arch_stack_walk+0x65/0xf0
+>>>    ? arch_stack_walk+0x65/0xf0
+>>>    ? unwind_next_frame+0x602/0x8d0
+>>>    lock_acquire+0xe0/0x300
+>>>    ? ___slab_alloc+0x73d/0x1330
+>>>    ? find_usage_forwards+0x39/0x50
+>>>    ? check_irq_usage+0x162/0xa70
+>>>    ? __bfs+0x10c/0x2c0
+>>>    _raw_spin_lock_irqsave+0x4f/0x90
+>>>    ? ___slab_alloc+0x73d/0x1330
+>>>    ___slab_alloc+0x73d/0x1330
+>>>    ? fill_pool+0x16b/0x2a0
+>>>    ? look_up_lock_class+0x5d/0x160
+>>>    ? register_lock_class+0x48/0x500
+>>>    ? __lock_acquire+0xabc/0x2950
+>>>    ? fill_pool+0x16b/0x2a0
+>>>    kmem_cache_alloc+0x358/0x3b0
+>>>    ? __lock_acquire+0xabc/0x2950
+>>>    fill_pool+0x16b/0x2a0
+>>>    ? __debug_object_init+0x292/0x560
+>>>    ? lock_acquire+0xe0/0x300
+>>>    ? cblist_init_generic+0x232/0x2d0
+>>>    __debug_object_init+0x2c/0x560
+>>>    cblist_init_generic+0x147/0x2d0
+>>>    rcu_init_tasks_generic+0x15/0x190
+>>>    kernel_init_freeable+0x6e/0x3e0
+>>>    ? rest_init+0x1e0/0x1e0
+>>>    kernel_init+0x1b/0x1d0
+>>>    ? rest_init+0x1e0/0x1e0
+>>>    ret_from_fork+0x1f/0x30
+>>>    </TASK>
+>>>
+>>> The fill_pool() can only be called in the !PREEMPT_RT kernel
+>>> or in the preemptible context of the PREEMPT_RT kernel, so
+>>> the above warning is not a real issue, but it's better to
+>>> annotate kmem_cache_node->list_lock as raw_spinlock to get
+>>> rid of such issue.
+>> 
+>> + CC some RT and RCU people
+> 
+> Thanks.
+> 
+>> 
+>> AFAIK raw_spinlock is not just an annotation, but on RT it changes the
+>> implementation from preemptible mutex to actual spin lock, so it would be
+> 
+> Yeah.
+> 
+>> rather unfortunate to do that for a spurious warning. Can it be somehow
+>> fixed in a better way?
+> 
+> It's indeed unfortunate for the warning in the commit message. But
+> functions like kmem_cache_alloc(GFP_ATOMIC) may indeed be called
+> in the critical section of raw_spinlock or in the hardirq context, which
 
-Applied to
+Hmm, I thought they may not, actually.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> will cause problem in the PREEMPT_RT kernel. So I still think it is
+> reasonable to convert kmem_cache_node->list_lock to raw_spinlock type.
 
-Thanks!
+It wouldn't be the complete solution anyway. Once we allow even a GFP_ATOMIC
+slab allocation for such context, it means also page allocation can happen
+to refill the slabs, so lockdep will eventually complain about zone->lock,
+and who knows what else.
 
-[1/1] ASoC: amd: Add Dell G15 5525 to quirks list
-      commit: faf15233e59052f4d61cad2da6e56daf33124d96
+> In addition, there are many fix patches for this kind of warning in the
+> git log, so I also think there should be a general and better solution. :)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Maybe, but given above, I doubt it's this one.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> 
+>> 
+> 
 
