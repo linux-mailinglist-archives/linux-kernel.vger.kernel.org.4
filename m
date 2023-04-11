@@ -2,130 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA9E6DDBC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2E36DDBC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjDKNKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S230238AbjDKNLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjDKNKO (ORCPT
+        with ESMTP id S230047AbjDKNLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:10:14 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400C34691
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681218611;
-        bh=F4WwQC4ssFxJtwjW/TnXAnGUbfZVX9MmC9hHRnJil/k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gPXDLOW2v+xI5Io3c1VmebBRotqPAv9B6jeMs+h8Bdjcz+BSTkqp76NU1NAi/hDDZ
-         hkhHdjmMdERL8/gv7T7uMh9N7gfrD6Mx/6QVULxDKrjSzLKANQEpIFulHRwvKmvdRb
-         xYrF0sYjkuKp+5TH9+6VLbdk7/OmclTkKaDCpG7uocU8Qv9zgz8aSh1m0RwGrPUS50
-         1tSYcPXY03xj5f9uZT7jDILXO2nqMYgkWnvHj/R3D/Fbi+84oWRFcGk/NPOd2zT/uV
-         vEzfhcvwXE3o3wGDEPPgDhjbBUxbGoj1iy57HMm8a++UL02ghu4jHLLLTjS5VBm4Ql
-         8I7L9kP1SRzYg==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PwmR65HddzvR0;
-        Tue, 11 Apr 2023 09:10:10 -0400 (EDT)
-Message-ID: <d97b567d-a86b-c180-a019-f66962c4a6ac@efficios.com>
-Date:   Tue, 11 Apr 2023 09:10:10 -0400
+        Tue, 11 Apr 2023 09:11:49 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413643AB6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:11:48 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id dg15so33685911vsb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681218707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GonC8IX0js+OVi94Wk4G2xkTnBOQ98tF+JQsSsp/P+Q=;
+        b=xcJRS2UHnJF4qMLv4zXTiL1wmsA2j57YKkXofoZoG/nncFZ9Dc1hTwLN9PxOK66kSn
+         mz5KoPN9Le33iDewCg+LcdfbSvEsXPwZX+o6OB81EpOzNNkDtFiXuemIctsk56gBvpCC
+         wDInekSq7XXxuRAZSFDN+SVTjC0FN04Oh7DdCusqwKQ8b4Fga6xT4XzMEc0v9bldQ9Ez
+         dAgN26c61YqIQFVmFY94LfFbXWjGBpZmtDSFpAPxfM5ShpqBMCeOaneCk3slWVYcWVcA
+         pTI/4tv2eM4KsYmeCwLjBPhsy9AF78MmkekST/L15qszuiH85CAGdjRrRpkonzJhc9h+
+         hwXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GonC8IX0js+OVi94Wk4G2xkTnBOQ98tF+JQsSsp/P+Q=;
+        b=Wr19DsH58+Wi94s4c9IuaJYZqcIuuDrEjCewjsMaKAGaQr/vyQJiXaW3FQYhG0evz6
+         8nETkv98Gn34JJPhWXPyzDhC6ri/yVDrwLuSlPRepCJ9Ac+4l3Jqc9r/f94lHQZBf5io
+         gFWluSLzrXks4Io2b45dmXtJnNlpkkOxwy5VAmQHi/XSubxEvGdV768KL0unds46ToD0
+         GBSK8lWk7s7vpaIdA663rg8eohfEyTXP8ldkv/6HyH6XCJjT/6ldLGIVz2km532zaGlW
+         DaJCo26JkUSdGI9X275IHVXRsPFMbqQLgxp7pqkU4bDftLhnsLXMZ0f9Gvn8LVIzTH3K
+         mUoA==
+X-Gm-Message-State: AAQBX9dO5xRrjJteFMXPiv21EeIpL8MktJnryDgJ5RgeHfOnbWRfBzgs
+        2Xw9rxfaMYyQRq2Lqct95bc+eia06EjyZibzciUw2Q==
+X-Google-Smtp-Source: AKy350YbgCCHeeQll+PtCuIJBiGVDqYrDGK7d5MCr7dW/WF0/1JpvIxP/7GIUb8Prhz1Fy5k/YBRj+Zy3NIQvBwzyTk=
+X-Received: by 2002:a67:ca81:0:b0:426:7730:1b89 with SMTP id
+ a1-20020a67ca81000000b0042677301b89mr1904738vsl.0.1681218707036; Tue, 11 Apr
+ 2023 06:11:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
- <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
- <20230411093705.GB578657@hirez.programming.kicks-ass.net>
- <20230411102532.GA580235@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230411102532.GA580235@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
+ <ZAocZRZh4FQRH3lc@smile.fi.intel.com> <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
+ <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
+In-Reply-To: <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 11 Apr 2023 15:11:36 +0200
+Message-ID: <CAMRc=MeivPz2nOjgFwYscZQpbuXnt=z5JAVMB4uzahQJgKjdKg@mail.gmail.com>
+Subject: Re: selftests: gpio: crash on arm64
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-11 06:25, Peter Zijlstra wrote:
-> On Tue, Apr 11, 2023 at 11:37:05AM +0200, Peter Zijlstra wrote:
->> On Fri, Apr 07, 2023 at 09:14:36PM -0400, Mathieu Desnoyers wrote:
->>
->>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
->>> index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
->>> --- a/kernel/sched/sched.h
->>> +++ b/kernel/sched/sched.h
->>> @@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
->>>   static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
->>>   {
->>> +	/*
->>> +	 * Provide a memory barrier between rq->curr store and load of
->>> +	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
->>> +	 *
->>> +	 * Should be adapted if context_switch() is modified.
->>> +	 */
->>> +	if (!next->mm) {                                // to kernel
->>> +		/*
->>> +		 * user -> kernel transition does not guarantee a barrier, but
->>> +		 * we can use the fact that it performs an atomic operation in
->>> +		 * mmgrab().
->>> +		 */
->>> +		if (prev->mm)                           // from user
->>> +			smp_mb__after_mmgrab();
->>> +		/*
->>> +		 * kernel -> kernel transition does not change rq->curr->mm
->>> +		 * state. It stays NULL.
->>> +		 */
->>> +	} else {                                        // to user
->>> +		/*
->>> +		 * kernel -> user transition does not provide a barrier
->>> +		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
->>> +		 * Provide it here.
->>> +		 */
->>> +		if (!prev->mm)                          // from kernel
->>> +			smp_mb();
->>> +		/*
->>> +		 * user -> user transition guarantees a memory barrier through
->>> +		 * switch_mm().
->>> +		 */
->>
->> What about the user->user case where next->mm == prev->mm ? There
->> sys_membarrier() relies on finish_task_switch()'s mmdrop(), but we
->> can't.
-> 
-> Ah, I suppose that's either a N->N or Y->Y transition and we don't care.
-> 
-> Not the clearest comment though.
+On Tue, Apr 11, 2023 at 10:57=E2=80=AFAM Linus Walleij <linus.walleij@linar=
+o.org> wrote:
+>
+> On Mon, Apr 10, 2023 at 11:16=E2=80=AFAM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> (...)
+> > Anders performed bisection on this problem.
+> > The bisection have been poing to this commit log,
+> >   first bad commit: [24c94060fc9b4e0f19e6e018869db46db21d6bc7]
+> >     gpiolib: ensure that fwnode is properly set
+>
+> I don't think this is the real issue.
+>
+> (...)
+> > # 2.  Module load error tests
+> > # 2.1 gpio overflow
+> (...)
+> > [   88.900984] Freed in software_node_release+0xdc/0x108 age=3D34 cpu=
+=3D1 pid=3D683
+> > [   88.907899]  __kmem_cache_free+0x2a4/0x2e0
+> > [   88.912024]  kfree+0xc0/0x1a0
+> > [   88.915015]  software_node_release+0xdc/0x108
+> > [   88.919402]  kobject_put+0xb0/0x220
+> > [   88.922919]  software_node_notify_remove+0x98/0xe8
+> > [   88.927741]  device_del+0x184/0x380
+> > [   88.931259]  platform_device_del.part.0+0x24/0xa8
+> > [   88.935995]  platform_device_unregister+0x30/0x50
+>
+> I think the refcount is wrong on the fwnode.
+>
+> The chip is allocated with devm_gpiochip_add_data() which will not call
+> gpiochip_remove() until all references are removed by calling
+> devm_gpio_chip_release().
+>
+> Add a pr_info() devm_gpio_chip_release() in drivers/gpio/gpiolib-devres.c
+> and see if the callback is even called. I think this could be the
+> problem: if that isn't cleaned up, there will be dangling references.
+>
+> diff --git a/drivers/gpio/gpiolib-devres.c b/drivers/gpio/gpiolib-devres.=
+c
+> index fe9ce6b19f15..30a0622210d7 100644
+> --- a/drivers/gpio/gpiolib-devres.c
+> +++ b/drivers/gpio/gpiolib-devres.c
+> @@ -394,6 +394,7 @@ static void devm_gpio_chip_release(void *data)
+>  {
+>         struct gpio_chip *gc =3D data;
+>
+> +       pr_info("GPIOCHIP %s WAS REMOVED BY DEVRES\n", gc->label);
+>         gpiochip_remove(gc);
+>  }
+>
+> If this isn't working we need to figure out what is holding a reference t=
+o
+> the gpiochip.
+>
+> I don't know how the references to the gpiochip fwnode is supposed to
+> drop to zero though? I didn't work with mockup much ...
+>
+> What I could think of is that maybe the mockup driver need a .shutdown()
+> callback to forcibly call gpiochip_remove(), and in that case it should
+> be wrapped in a non-existining devm_gpiochip_remove() since devres
+> is used to register it.
+>
+> Bartosz will know better though! I am pretty sure he has this working
+> flawlessly so the tests must be doing something weird which is leaving
+> references around.
+>
+> Yours,
+> Linus Walleij
 
-For sake of completeness, here is the updated comment:
+Interestingly I'm not seeing this neither with gpio-sim selftests nor
+with any of the libgpiod tests which suggests it's the gpio-mockup
+module that's doing something wrong (or very right in which case it
+uncovers some otherwise hidden bug). Anyway, I'll try to spend some
+time on it and figure it out, although I'd like to be done with
+gpio-mockup altogether already.
 
-
-
-                 /*
-                  * user -> user transition guarantees a memory barrier through
-                  * switch_mm() when current->mm changes. If current->mm is
-                  * unchanged, no barrier is needed.
-                  */
-
-Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Bart
