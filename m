@@ -2,237 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D06DE20C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11376DE21B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjDKRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S229894AbjDKRN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDKRND (ORCPT
+        with ESMTP id S229922AbjDKRNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:13:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828DE1734;
-        Tue, 11 Apr 2023 10:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681233182; x=1712769182;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=x2cHjkwBxGYSbkJZWI4hIuuAU2TM4vLbR84QKJrgVNo=;
-  b=guBkxOTlczhxZEdx+ICXi/0xTmfI9fDvgIcIrEDXWsmRQwYHXBnCpYY9
-   DKfUCgawdW6FitoW+ijrAK/Xjs6bmdwioDlXbPnj2t/JJMbw7Mrybq4HD
-   gOsugBfNzj/pETTm+7YBdiiiZmtz8plYVLhlm+YHpdTly9uePzE58bhU+
-   1GAbVGIlpihN57qcnRbOfyCaezCIaz1eSZVC88UagPwhjrT85SazCUWBG
-   CMx+yiqwVK/kkGwasxx3ZGo304MiotvlS2cIkzQsktlouSDgkVUR97fQn
-   ZY+F4h7vxvtUMurx0Fi5AKxwLK6z09SVgWiMLF82xvzPqjYdZaJA6j53S
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="332368162"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="332368162"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:12:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="721264097"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="721264097"
-Received: from pkobayas-mobl3.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.251.5.228])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:12:07 -0700
-Message-ID: <26bea1012a0a02895e30f6a33a4ebfe6ec8ba4b2.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: intel: Fix unchecked MSR issue
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bp@alien8.de, Rui Salvaterra <rsalvaterra@gmail.com>,
-        stable@kernel.org
-Date:   Tue, 11 Apr 2023 10:12:07 -0700
-In-Reply-To: <CAJZ5v0iAHY6pOQb2N=AQbks7JKnVa1T29-zTT1XFBcVXEdZuwg@mail.gmail.com>
-References: <20230410173501.3743570-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0iAHY6pOQb2N=AQbks7JKnVa1T29-zTT1XFBcVXEdZuwg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 11 Apr 2023 13:13:25 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675AF449E;
+        Tue, 11 Apr 2023 10:13:22 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id l13-20020a0568302b0d00b006a416ec44ccso124504otv.2;
+        Tue, 11 Apr 2023 10:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681233201;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DxtzPcW3Ex5kMGD7sa+/5wWtmpcBmZsy3edwHTQbrFE=;
+        b=hUdi5klm1amL18vIBphzpl7YJCKzA7wc0SjMwOMy6c6GMOfnFpG9mGtJ25V+UYaVQq
+         2fDyeLg24ZpdsPq07LjMfs+8kkQRct/Q0bZZ8Q8izB9jT0SaHHhbBDyB8+vHVeBCQR2A
+         S9KipMuDJpJp39e04BPyhZIQ4iGNC5FDJZX8Ch7TieL7LLlVMX4p5xDTAJsgLZtOJe/n
+         5cuzoi3W5QuFWgNLejG40+9AMzIOkAySqYy27yd2LUcqf74bkfJVKB0rze8wtmM+BuMf
+         8ND4yGMHYzPlkvxNYXLedui3s9QcvZyoj6UzC8ngzlrZfUWc/gPt6PpV8+YDSIQ+jYVB
+         ICrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681233201;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DxtzPcW3Ex5kMGD7sa+/5wWtmpcBmZsy3edwHTQbrFE=;
+        b=Pij8cW83o/WDFJ4LsAi/PxaC2xziCNbHqLnbooLNHivUBdZB8hx+TG1L05Ohx/8Ne0
+         NhD1uRzsWDGv5kxuXkOWzsczMJ6j7HAPIQNf1dn0Yb0KxifHonAMjknasrYBueUmNNKT
+         8k1ic30bKATaDrt5zQYqcXNDciup5jWEPhRjfN9ZFIhf6TqJlU3I9AmJfL3uSk8Uqp8J
+         ebl3I8KWtFLYFQhGcyGR8aLlMrk3m7eJ5XzhzQG4JtAs2JkUK6jZyMHGTKCPYBXKLFEN
+         hGvJU4zddvP53PNyyKXlJ4SBsb8Dxdbqh6niYqiTh/QQk9MEKTjMB5uvhsOrIEtyG2g3
+         GQAQ==
+X-Gm-Message-State: AAQBX9e6VelTMV72In+SRS+1y9mrgILdqlaWzqBetj259JIJZkDgSJHk
+        +OV0z3wsEwO9MZY3SEaCz23ADU8rg+3/y5ebkCY=
+X-Google-Smtp-Source: AKy350ZJXfWSqMLKwYKQjji07J9nMEef1IpUVstXdq+Nzk9LgEtRt9GxW0qAMsQE3ccyyrXnl53Y7VyMzoN5lu5dGCE=
+X-Received: by 2002:a05:6830:1d73:b0:69f:abec:b057 with SMTP id
+ l19-20020a0568301d7300b0069fabecb057mr3650582oti.7.1681233201703; Tue, 11 Apr
+ 2023 10:13:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230410210608.1873968-1-robdclark@gmail.com> <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+ <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local>
+In-Reply-To: <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 11 Apr 2023 10:13:10 -0700
+Message-ID: <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm: fdinfo memory stats
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-11 at 18:16 +0200, Rafael J. Wysocki wrote:
-> On Mon, Apr 10, 2023 at 7:35 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > Some older processors don't allow BIT(13) and BIT(15) in the
-> > current
-> > mask set by "THERM_STATUS_CLEAR_CORE_MASK". This results in:
-> > 
-> > unchecked MSR access error: WRMSR to 0x19c (tried to
-> > write 0x000000000000aaa8) at rIP: 0xffffffff816f66a6
-> > (throttle_active_work+0xa6/0x1d0)
-> > 
-> > To avoid unchecked MSR issues, check cpuid for each feature and
-> > then
-> > form core mask. Do the same for package mask set by
-> > "THERM_STATUS_CLEAR_PKG_MASK".
-> > 
-> > Introduce functions thermal_intr_core_clear_mask() and
-> > thermal_intr_pkg_clear_mask()
-> 
-> I've renamed these two functions to
-> thermal_intr_init_core_clear_mask() and
-> thermal_intr_init_pkg_clear_mask(), respectively.
-> 
-> > to set core and package mask respectively.
-> > These functions are called during initialization.
-> > 
-> > Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing
-> > of HFI status")
-> > Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> > Link:
-> > https://lore.kernel.org/lkml/cdf43fb423368ee3994124a9e8c9b4f8d00712c6.camel@linux.intel.com/T/
-> > Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > Cc: stable@kernel.org # 6.2+
-> > ---
-> >  drivers/thermal/intel/therm_throt.c | 73
-> > ++++++++++++++++++++++++++---
-> >  1 file changed, 66 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/intel/therm_throt.c
-> > b/drivers/thermal/intel/therm_throt.c
-> > index 2e22bb82b738..d5047676f3d2 100644
-> > --- a/drivers/thermal/intel/therm_throt.c
-> > +++ b/drivers/thermal/intel/therm_throt.c
-> > @@ -193,8 +193,67 @@ static const struct attribute_group
-> > thermal_attr_group = {
-> >  #define THERM_THROT_POLL_INTERVAL      HZ
-> >  #define THERM_STATUS_PROCHOT_LOG       BIT(1)
-> > 
-> > -#define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) |
-> > BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
-> > -#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) |
-> > BIT(7) | BIT(9) | BIT(11))
-> > +static u64 def_therm_core_clear_mask;
-> > +static u64 def_therm_pkg_clear_mask;
-> 
-> And I've renamed these two variables to therm_intr_core_clear_mask
-> and
-> therm_intr_pkg_clear_mask, respectively.
-> 
-> Also I've changed the subject (to "thermal: intel: Avoid updating
-> unsupported THERM_STATUS_CLEAR mask bits") and made some assorted
-> changelog edits.
-> 
-> With the above changes, the patch has been queued up for 6.3-rc7.
-Thanks!
+On Tue, Apr 11, 2023 at 9:53=E2=80=AFAM Daniel Vetter <daniel@ffwll.ch> wro=
+te:
+>
+> On Tue, Apr 11, 2023 at 09:47:32AM -0700, Rob Clark wrote:
+> > On Mon, Apr 10, 2023 at 2:06=E2=80=AFPM Rob Clark <robdclark@gmail.com>=
+ wrote:
+> > >
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > Similar motivation to other similar recent attempt[1].  But with an
+> > > attempt to have some shared code for this.  As well as documentation.
+> > >
+> > > It is probably a bit UMA-centric, I guess devices with VRAM might wan=
+t
+> > > some placement stats as well.  But this seems like a reasonable start=
+.
+> > >
+> > > Basic gputop support: https://patchwork.freedesktop.org/series/116236=
+/
+> > > And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+> >
+> > On a related topic, I'm wondering if it would make sense to report
+> > some more global things (temp, freq, etc) via fdinfo?  Some of this,
+> > tools like nvtop could get by trawling sysfs or other driver specific
+> > ways.  But maybe it makes sense to have these sort of things reported
+> > in a standardized way (even though they aren't really per-drm_file)
+>
+> I think that's a bit much layering violation, we'd essentially have to
+> reinvent the hwmon sysfs uapi in fdinfo. Not really a business I want to
+> be in :-)
 
--Srinivas
+I guess this is true for temp (where there are thermal zones with
+potentially multiple temp sensors.. but I'm still digging my way thru
+the thermal_cooling_device stuff)
 
-> 
-> > +
-> > +static void thermal_intr_core_clear_mask(void)
-> > +{
-> > +       if (def_therm_core_clear_mask)
-> > +               return;
-> > +
-> > +       /*
-> > +        * Reference: Intel SDM  Volume 4
-> > +        * "Table 2-2. IA-32 Architectural MSRs", MSR 0x19C
-> > +        * IA32_THERM_STATUS.
-> > +        */
-> > +
-> > +       /*
-> > +        * Bit 1, 3, 5: CPUID.01H:EDX[22] = 1. This driver will not
-> > +        * enable interrupts, when 0 as it checks for
-> > X86_FEATURE_ACPI.
-> > +        */
-> > +       def_therm_core_clear_mask = (BIT(1) | BIT(3) | BIT(5));
-> > +
-> > +       /*
-> > +        * Bit 7 and 9: Thermal Threshold #1 and #2 log
-> > +        * If CPUID.01H:ECX[8] = 1
-> > +        */
-> > +       if (boot_cpu_has(X86_FEATURE_TM2))
-> > +               def_therm_core_clear_mask |= (BIT(7) | BIT(9));
-> > +
-> > +       /* Bit 11: Power Limitation log (R/WC0) If CPUID.06H:EAX[4]
-> > = 1 */
-> > +       if (boot_cpu_has(X86_FEATURE_PLN))
-> > +               def_therm_core_clear_mask |= BIT(11);
-> > +
-> > +       /*
-> > +        * Bit 13: Current Limit log (R/WC0) If CPUID.06H:EAX[7] =
-> > 1
-> > +        * Bit 15: Cross Domain Limit log (R/WC0) If
-> > CPUID.06H:EAX[7] = 1
-> > +        */
-> > +       if (boot_cpu_has(X86_FEATURE_HWP))
-> > +               def_therm_core_clear_mask |= (BIT(13) | BIT(15));
-> > +}
-> > +
-> > +static void thermal_intr_pkg_clear_mask(void)
-> > +{
-> > +       if (def_therm_pkg_clear_mask)
-> > +               return;
-> > +
-> > +       /*
-> > +        * Reference: Intel SDM  Volume 4
-> > +        * "Table 2-2. IA-32 Architectural MSRs", MSR 0x1B1
-> > +        * IA32_PACKAGE_THERM_STATUS.
-> > +        */
-> > +
-> > +       /* All bits except BIT 26 depends on CPUID.06H: EAX[6] = 1
-> > */
-> > +       if (boot_cpu_has(X86_FEATURE_PTS))
-> > +               def_therm_pkg_clear_mask = (BIT(1) | BIT(3) |
-> > BIT(5) | BIT(7) | BIT(9) | BIT(11));
-> > +
-> > +       /*
-> > +        * Intel SDM Volume 2A: Thermal and Power Management Leaf
-> > +        * Bit 26: CPUID.06H: EAX[19] = 1
-> > +        */
-> > +       if (boot_cpu_has(X86_FEATURE_HFI))
-> > +               def_therm_pkg_clear_mask |= BIT(26);
-> > +}
-> > 
-> >  /*
-> >   * Clear the bits in package thermal status register for bit = 1
-> > @@ -207,13 +266,10 @@ void thermal_clear_package_intr_status(int
-> > level, u64 bit_mask)
-> > 
-> >         if (level == CORE_LEVEL) {
-> >                 msr  = MSR_IA32_THERM_STATUS;
-> > -               msr_val = THERM_STATUS_CLEAR_CORE_MASK;
-> > +               msr_val = def_therm_core_clear_mask;
-> >         } else {
-> >                 msr  = MSR_IA32_PACKAGE_THERM_STATUS;
-> > -               msr_val = THERM_STATUS_CLEAR_PKG_MASK;
-> > -               if (boot_cpu_has(X86_FEATURE_HFI))
-> > -                       msr_val |= BIT(26);
-> > -
-> > +               msr_val = def_therm_pkg_clear_mask;
-> >         }
-> > 
-> >         msr_val &= ~bit_mask;
-> > @@ -708,6 +764,9 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
-> >         h = THERMAL_APIC_VECTOR | APIC_DM_FIXED | APIC_LVT_MASKED;
-> >         apic_write(APIC_LVTTHMR, h);
-> > 
-> > +       thermal_intr_core_clear_mask();
-> > +       thermal_intr_pkg_clear_mask();
-> > +
-> >         rdmsr(MSR_IA32_THERM_INTERRUPT, l, h);
-> >         if (cpu_has(c, X86_FEATURE_PLN) && !int_pln_enable)
-> >                 wrmsr(MSR_IA32_THERM_INTERRUPT,
-> > --
-> > 2.39.1
-> > 
+But what about freq?  I think, esp for cases where some "fw thing" is
+controlling the freq we end up needing to use gpu counters to measure
+the freq.
 
+> What might be needed is better glue to go from the fd or fdinfo to the
+> right hw device and then crawl around the hwmon in sysfs automatically. I
+> would not be surprised at all if we really suck on this, probably more
+> likely on SoC than pci gpus where at least everything should be under the
+> main pci sysfs device.
+
+yeah, I *think* userspace would have to look at /proc/device-tree to
+find the cooling device(s) associated with the gpu.. at least I don't
+see a straightforward way to figure it out just for sysfs
+
+BR,
+-R
+
+> -Daniel
+>
+> >
+> > BR,
+> > -R
+> >
+> >
+> > > [1] https://patchwork.freedesktop.org/series/112397/
+> > >
+> > > Rob Clark (2):
+> > >   drm: Add fdinfo memory stats
+> > >   drm/msm: Add memory stats to fdinfo
+> > >
+> > >  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+> > >  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++++=
+++
+> > >  drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+> > >  drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+> > >  include/drm/drm_file.h                | 10 ++++
+> > >  5 files changed, 134 insertions(+), 3 deletions(-)
+> > >
+> > > --
+> > > 2.39.2
+> > >
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
