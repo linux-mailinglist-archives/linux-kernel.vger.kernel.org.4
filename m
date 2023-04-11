@@ -2,149 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F366DDB5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4291A6DDB65
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDKM7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S230129AbjDKM7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDKM7T (ORCPT
+        with ESMTP id S230056AbjDKM73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:59:19 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D770E4694
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:59:09 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id bh10so5410852oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:59:09 -0700 (PDT)
+        Tue, 11 Apr 2023 08:59:29 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5AA49E1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:59:16 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso10958122wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681217949; x=1683809949;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oxCP1A0+vJC6rGQA6qVogYfyo3XWYkt2ipQ4u9C+9Vo=;
-        b=gghZTbYWLEKhTXXH+mFPU2gDRnLmMwf5Fl9ypn03IS+Y+H8057BjEVr5ykex3eyuFO
-         swk6sjSdyBXaZhedLClbY7ok86tiHw0zr4LkjOhr3QIMY36ua4MQ5i13dkHKt7uioI3w
-         2Vxm3ZuJi9lVAa5L8jWkLuLTi2AZ1HbyGJhC7Ii0swcGz/5eSWJudCF8F88qtvqzx2oH
-         fKJXL1Bvk3e4BSoVl4EeR98gqE5muWY4U1l7et4NehOeTy3J81V+uxJcgB+co+ZsGeFk
-         5Y8QlvbbUZIFcJX8UQgixmgsO6i4D/0NxcL/SThL8sx9aWFnJ1NRZUB4DKhT30VtDUt/
-         XQqg==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681217954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gVuMmsSUuik77Ijx/8EU9TNPivGbNCZ9khKZD4i9/BM=;
+        b=ZNuwfNHT1p/L4mQ0ZKMicW8hWuIsz23tQW+92LtMGchp7cQfdHi55p/378Z65ZNORl
+         5wA/raAbIQ+z7XxlNbE65524TZQE9Z7dvQO/hs7lHAunBYZlFFMxcS2O2WUpETnnO9UH
+         oW7yjNgm8VW/3XEBEEriKW4GSpvJzu+VxGvT+I3t9yMlDKn7wOAKBanGiWijKhshS8yw
+         du040ueDH5DdkeR1iCqcuXOtzN2i5OE/oNryHRwqzcCdi4dUNYJbF+lYwe8gZ7o9vZ50
+         iL7ilCvX306s+8CeSaQxzTH4TfcmyD2iP70nIj51mqqbIIgk0FiCtKfiaVB/NeRc66HP
+         RWrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681217949; x=1683809949;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oxCP1A0+vJC6rGQA6qVogYfyo3XWYkt2ipQ4u9C+9Vo=;
-        b=OWAeMlfGaUhsRdvUe5ZBwC7OYsrvWMnAJnMtUkcXbOP+IQV5icr1i8VyNhFjxNmoat
-         lmGTs5SHJhLjq6j2N4Jzxv68MbxnP6Pmeu4pjmNMHl5bd82v6cy7C4nFzdqB63uBqUB3
-         0osL3F+CNT7agMJpjwQZWWHjWWXYmkej01PiUNJBl2pawmqT9MYjNUjqydZOWz036O1Y
-         jq+UEggH0tEotJxpzegII2RqEwF54r9nr8+IF14ZRvZ8xg74PkQh4NXYN1D3Wgn6Gezg
-         88LZfvUUHuc1zEnRToTO9D+7mdVHPxRpYvVa6/JNKGP4SIt2ldTzPwgDzeXG+1vxIokF
-         fvnw==
-X-Gm-Message-State: AAQBX9dl5p6itE0QhiSejWuoEPzMOpY+athtMq+lepu6xxscL4tBkhsF
-        3XkWWHOC61GzzQSHMQe+4fyhQzegp5ScRngnbVCdKw==
-X-Google-Smtp-Source: AKy350bcNVrc7qnqc359b3WNy8WohYCXK5agomPwbAjVaUs8VyzzhZ7/AQ2DQDh76keg1NybpWlZjvAVc/7cE92qJZA=
-X-Received: by 2002:a05:6808:3307:b0:383:fef9:6cac with SMTP id
- ca7-20020a056808330700b00383fef96cacmr3751840oib.9.1681217948915; Tue, 11 Apr
- 2023 05:59:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681217954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gVuMmsSUuik77Ijx/8EU9TNPivGbNCZ9khKZD4i9/BM=;
+        b=dprGEYaDDd6WluXG4079QkByHSDUiE2hji8wMAn7HzMfiAQq7+XeVf2/QmVNTFPm/c
+         3MYw9oWnb7KqcJ/P6gpr0I2LliscyXLEE2azeEzCu5wF0kPieTJiJWs+rzWRG9obW0eQ
+         tU9dOqOrkqNGU2L6OC9MNNkpLerHHkFP/ntORxoszkFmHyz2Lo7NaClxHpGcdH6R5aiF
+         47TOu3NMyncnSHT14bYC8SBCFnTbkjfO/kOe63wF3PX5eitlCPVTVpcPYKaqwqUlxW8d
+         3sjC0oko5/Rr0j2/6ntj60zsKzZh3yjMWLTsaeYu4K136YkUd49va/C4dZDKQGUzmYcw
+         ms/w==
+X-Gm-Message-State: AAQBX9fDuBxlXCSCGpEbKTnhSe/aEDaDXAo/UlZXGn2vaQwfUVJ9Itqp
+        UZPR/hryLhYv2aS2EASbl71WlQ==
+X-Google-Smtp-Source: AKy350ZFwGmF0uWrr2tG/BrpiE90COQA60InF2b3iXCaBkZ98ODQnmuu5K1WHIogyJwqSY4ZJbpkTQ==
+X-Received: by 2002:a7b:ca54:0:b0:3eb:39c3:8844 with SMTP id m20-20020a7bca54000000b003eb39c38844mr9829158wml.12.1681217954605;
+        Tue, 11 Apr 2023 05:59:14 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a099:fc1d:c99a:bfc3])
+        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b003eae73f0fc1sm16944591wme.18.2023.04.11.05.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 05:59:14 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3 0/7] arm64: dts: qcom: sa8775p: add more IOMMUs
+Date:   Tue, 11 Apr 2023 14:59:03 +0200
+Message-Id: <20230411125910.401075-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230410105056.60973-1-likexu@tencent.com> <20230410105056.60973-6-likexu@tencent.com>
- <CALMp9eTLvJ6GW1mfgjO7CL7tW-79asykyz9=Fb=FfT74VRkDVA@mail.gmail.com> <9a7d5814-9eb1-d7af-7968-a6e3ebb90248@gmail.com>
-In-Reply-To: <9a7d5814-9eb1-d7af-7968-a6e3ebb90248@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 11 Apr 2023 05:58:57 -0700
-Message-ID: <CALMp9eR6DwY0EjAb1hcV9XGWQizN6R0dXtLaC4NXDgtCqv5cTA@mail.gmail.com>
-Subject: Re: [PATCH V5 05/10] KVM: x86/pmu: Disable vPMU if the minimum num of
- counters isn't met
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 11:17=E2=80=AFPM Like Xu <like.xu.linux@gmail.com> =
-wrote:
->
-> On 11/4/2023 1:36 pm, Jim Mattson wrote:
-> > On Mon, Apr 10, 2023 at 3:51=E2=80=AFAM Like Xu <like.xu.linux@gmail.co=
-m> wrote:
-> >>
-> >> From: Like Xu <likexu@tencent.com>
-> >>
-> >> Disable PMU support when running on AMD and perf reports fewer than fo=
-ur
-> >> general purpose counters. All AMD PMUs must define at least four count=
-ers
-> >> due to AMD's legacy architecture hardcoding the number of counters
-> >> without providing a way to enumerate the number of counters to softwar=
-e,
-> >> e.g. from AMD's APM:
-> >>
-> >>   The legacy architecture defines four performance counters (PerfCtrn)
-> >>   and corresponding event-select registers (PerfEvtSeln).
-> >>
-> >> Virtualizing fewer than four counters can lead to guest instability as
-> >> software expects four counters to be available.
-> >
-> > I'm confused. Isn't zero less than four?
->
-> As I understand it, you are saying that virtualization of zero counter is=
- also
-> reasonable.
-> If so, the above statement could be refined as:
->
->         Virtualizing fewer than four counters when vPMU is enabled may le=
-ad to guest
-> instability
->         as software expects at least four counters to be available, thus =
-the vPMU is
-> disabled if the
->         minimum number of KVM supported counters is not reached during in=
-itialization.
->
-> Jim, does this help you or could you explain more about your confusion ?
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-You say that "fewer than four counters can lead to guest instability
-as software expects four counters to be available." Your solution is
-to disable the PMU, which leaves zero counters available. Zero is less
-than four. Hence, by your claim, disabling the PMU can lead to guest
-instability. I don't see how this is an improvement over one, two, or
-three counters.
+Add the GPU and PCIe IOMMUs for sa8775p platforms as well as the required
+GPU clock controller driver.
 
-> >
-> >> Suggested-by: Sean Christopherson <seanjc@google.com>
-> >> Signed-off-by: Like Xu <likexu@tencent.com>
-> >> ---
-> >>   arch/x86/kvm/pmu.h | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> >> index dd7c7d4ffe3b..002b527360f4 100644
-> >> --- a/arch/x86/kvm/pmu.h
-> >> +++ b/arch/x86/kvm/pmu.h
-> >> @@ -182,6 +182,9 @@ static inline void kvm_init_pmu_capability(const s=
-truct kvm_pmu_ops *pmu_ops)
-> >>                          enable_pmu =3D false;
-> >>          }
-> >>
-> >> +       if (!is_intel && kvm_pmu_cap.num_counters_gp < AMD64_NUM_COUNT=
-ERS)
-> >> +               enable_pmu =3D false;
-> >> +
-> >>          if (!enable_pmu) {
-> >>                  memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
-> >>                  return;
-> >> --
-> >> 2.40.0
-> >>
+NOTE: I didn't pick up Krzysztof's tag for patch 4/7 as the patch changed
+significantly.
+
+v2 -> v3:
+- select QCOM_GDSC in Kconfig for the GPUCC module
+- the GPU SMMU is actually an adreno SMMU so describe it as such and
+  fix the DT
+- fix the mapped memory size for the PCIe SMMU
+
+v1 -> v2:
+- remove unused include in the GPUCC driver
+- remove unused clock from the GPUCC driver and make it compatible
+  with the generic QCom GPUCC bindings
+- put the new defconfig option in the right place (as per savedefconfig)
+  and make the GPUCC driver a module rather than built-in
+- describe the smmu clocks for sa8775p in dt-bindings
+
+Bartosz Golaszewski (6):
+  dt-bindings: clock: qcom: describe the GPUCC clock for SA8775P
+  arm64: defconfig: enable the SA8775P GPUCC driver
+  arm64: dts: qcom: sa8775p: add the pcie smmu node
+  arm64: dts: qcom: sa8775p: add the GPU clock controller node
+  dt-bindings: iommu: arm,smmu: enable clocks for sa8775p Adreno SMMU
+  arm64: dts: qcom: sa8775p: add the GPU IOMMU node
+
+Shazad Hussain (1):
+  clk: qcom: add the GPUCC driver for sa8775p
+
+ .../devicetree/bindings/clock/qcom,gpucc.yaml |   2 +
+ .../devicetree/bindings/iommu/arm,smmu.yaml   |   6 +-
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 125 ++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/qcom/Kconfig                      |   9 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/gpucc-sa8775p.c              | 625 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,sa8775p-gpucc.h    |  50 ++
+ 8 files changed, 817 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/qcom/gpucc-sa8775p.c
+ create mode 100644 include/dt-bindings/clock/qcom,sa8775p-gpucc.h
+
+-- 
+2.37.2
+
