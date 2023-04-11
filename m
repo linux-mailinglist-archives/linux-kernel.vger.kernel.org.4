@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5010F6DDCF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17146DDCF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjDKN4X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 09:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S230514AbjDKN40 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 09:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjDKN4N (ORCPT
+        with ESMTP id S230495AbjDKN4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 09:56:13 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750D32D50;
-        Tue, 11 Apr 2023 06:56:09 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36672D48;
+        Tue, 11 Apr 2023 06:56:08 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 8781E24E1D4;
-        Tue, 11 Apr 2023 21:56:05 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
- 2023 21:56:05 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 54A4624E30E;
+        Tue, 11 Apr 2023 21:56:06 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
+ 2023 21:56:06 +0800
 Received: from localhost.localdomain (113.72.145.176) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
- 2023 21:56:04 +0800
+ 2023 21:56:05 +0800
 From:   Xingyu Wu <xingyu.wu@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
         "Michael Turquette" <mturquette@baylibre.com>,
@@ -41,9 +41,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Hal Feng <hal.feng@starfivetech.com>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v4 01/10] reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
-Date:   Tue, 11 Apr 2023 21:55:49 +0800
-Message-ID: <20230411135558.44282-2-xingyu.wu@starfivetech.com>
+Subject: [PATCH v4 02/10] dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and reset generator
+Date:   Tue, 11 Apr 2023 21:55:50 +0800
+Message-ID: <20230411135558.44282-3-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230411135558.44282-1-xingyu.wu@starfivetech.com>
 References: <20230411135558.44282-1-xingyu.wu@starfivetech.com>
@@ -62,63 +62,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new struct members and auxiliary_device_id of resets to support
-System-Top-Group, Image-Signal-Process and Video-Output on the StarFive
-JH7110 SoC.
+Add bindings for the System-Top-Group clock and reset generator (STGCRG)
+on the JH7110 RISC-V SoC by StarFive Ltd.
 
 Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../reset/starfive/reset-starfive-jh7110.c    | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../clock/starfive,jh7110-stgcrg.yaml         | 82 +++++++++++++++++++
+ .../dt-bindings/clock/starfive,jh7110-crg.h   | 34 ++++++++
+ .../dt-bindings/reset/starfive,jh7110-crg.h   | 28 +++++++
+ 3 files changed, 144 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
 
-diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
-index c1b3a490d951..4eb2da4a22c4 100644
---- a/drivers/reset/starfive/reset-starfive-jh7110.c
-+++ b/drivers/reset/starfive/reset-starfive-jh7110.c
-@@ -29,6 +29,24 @@ static const struct jh7110_reset_info jh7110_aon_info = {
- 	.status_offset = 0x3C,
- };
+diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+new file mode 100644
+index 000000000000..b64ccd84200a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/starfive,jh7110-stgcrg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive JH7110 System-Top-Group Clock and Reset Generator
++
++maintainers:
++  - Xingyu Wu <xingyu.wu@starfivetech.com>
++
++properties:
++  compatible:
++    const: starfive,jh7110-stgcrg
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Main Oscillator (24 MHz)
++      - description: HIFI4 core
++      - description: STG AXI/AHB
++      - description: USB (125 MHz)
++      - description: CPU Bus
++      - description: HIFI4 Axi
++      - description: NOC STG Bus
++      - description: APB Bus
++
++  clock-names:
++    items:
++      - const: osc
++      - const: hifi4_core
++      - const: stg_axiahb
++      - const: usb_125m
++      - const: cpu_bus
++      - const: hifi4_axi
++      - const: nocstg_bus
++      - const: apb_bus
++
++  '#clock-cells':
++    const: 1
++    description:
++      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
++
++  '#reset-cells':
++    const: 1
++    description:
++      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - '#clock-cells'
++  - '#reset-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/starfive,jh7110-crg.h>
++
++    stgcrg: clock-controller@10230000 {
++        compatible = "starfive,jh7110-stgcrg";
++        reg = <0x10230000 0x10000>;
++        clocks = <&osc>,
++                 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
++                 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
++                 <&syscrg JH7110_SYSCLK_USB_125M>,
++                 <&syscrg JH7110_SYSCLK_CPU_BUS>,
++                 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
++                 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
++                 <&syscrg JH7110_SYSCLK_APB_BUS>;
++        clock-names = "osc", "hifi4_core",
++                      "stg_axiahb", "usb_125m",
++                      "cpu_bus", "hifi4_axi",
++                      "nocstg_bus", "apb_bus";
++        #clock-cells = <1>;
++        #reset-cells = <1>;
++    };
+diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
+index 06257bfd9ac1..6c8e8b4cf1f6 100644
+--- a/include/dt-bindings/clock/starfive,jh7110-crg.h
++++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+ /*
+  * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
++ * Copyright 2022 StarFive Technology Co., Ltd.
+  */
  
-+static const struct jh7110_reset_info jh7110_stg_info = {
-+	.nr_resets = JH7110_STGRST_END,
-+	.assert_offset = 0x74,
-+	.status_offset = 0x78,
-+};
+ #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+@@ -218,4 +219,37 @@
+ 
+ #define JH7110_AONCLK_END			14
+ 
++/* STGCRG clocks */
++#define JH7110_STGCLK_HIFI4_CLK_CORE		0
++#define JH7110_STGCLK_USB0_APB			1
++#define JH7110_STGCLK_USB0_UTMI_APB		2
++#define JH7110_STGCLK_USB0_AXI			3
++#define JH7110_STGCLK_USB0_LPM			4
++#define JH7110_STGCLK_USB0_STB			5
++#define JH7110_STGCLK_USB0_APP_125		6
++#define JH7110_STGCLK_USB0_REFCLK		7
++#define JH7110_STGCLK_PCIE0_AXI_MST0		8
++#define JH7110_STGCLK_PCIE0_APB			9
++#define JH7110_STGCLK_PCIE0_TL			10
++#define JH7110_STGCLK_PCIE1_AXI_MST0		11
++#define JH7110_STGCLK_PCIE1_APB			12
++#define JH7110_STGCLK_PCIE1_TL			13
++#define JH7110_STGCLK_PCIE_SLV_MAIN		14
++#define JH7110_STGCLK_SEC_AHB			15
++#define JH7110_STGCLK_SEC_MISC_AHB		16
++#define JH7110_STGCLK_GRP0_MAIN			17
++#define JH7110_STGCLK_GRP0_BUS			18
++#define JH7110_STGCLK_GRP0_STG			19
++#define JH7110_STGCLK_GRP1_MAIN			20
++#define JH7110_STGCLK_GRP1_BUS			21
++#define JH7110_STGCLK_GRP1_STG			22
++#define JH7110_STGCLK_GRP1_HIFI			23
++#define JH7110_STGCLK_E2_RTC			24
++#define JH7110_STGCLK_E2_CORE			25
++#define JH7110_STGCLK_E2_DBG			26
++#define JH7110_STGCLK_DMA1P_AXI			27
++#define JH7110_STGCLK_DMA1P_AHB			28
 +
-+static const struct jh7110_reset_info jh7110_isp_info = {
-+	.nr_resets = JH7110_ISPRST_END,
-+	.assert_offset = 0x38,
-+	.status_offset = 0x3C,
-+};
++#define JH7110_STGCLK_END			29
 +
-+static const struct jh7110_reset_info jh7110_vout_info = {
-+	.nr_resets = JH7110_VOUTRST_END,
-+	.assert_offset = 0x48,
-+	.status_offset = 0x4C,
-+};
+ #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
+diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
+index d78e38690ceb..4e96ab81dd8e 100644
+--- a/include/dt-bindings/reset/starfive,jh7110-crg.h
++++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+ /*
+  * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
++ * Copyright (C) 2022 StarFive Technology Co., Ltd.
+  */
+ 
+ #ifndef __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__
+@@ -151,4 +152,31 @@
+ 
+ #define JH7110_AONRST_END			8
+ 
++/* STGCRG resets */
++#define JH7110_STGRST_SYSCON			0
++#define JH7110_STGRST_HIFI4_CORE		1
++#define JH7110_STGRST_HIFI4_AXI			2
++#define JH7110_STGRST_SEC_AHB			3
++#define JH7110_STGRST_E24_CORE			4
++#define JH7110_STGRST_DMA1P_AXI			5
++#define JH7110_STGRST_DMA1P_AHB			6
++#define JH7110_STGRST_USB0_AXI			7
++#define JH7110_STGRST_USB0_APB			8
++#define JH7110_STGRST_USB0_UTMI_APB		9
++#define JH7110_STGRST_USB0_PWRUP		10
++#define JH7110_STGRST_PCIE0_AXI_MST0		11
++#define JH7110_STGRST_PCIE0_AXI_SLV0		12
++#define JH7110_STGRST_PCIE0_AXI_SLV		13
++#define JH7110_STGRST_PCIE0_BRG			14
++#define JH7110_STGRST_PCIE0_CORE		15
++#define JH7110_STGRST_PCIE0_APB			16
++#define JH7110_STGRST_PCIE1_AXI_MST0		17
++#define JH7110_STGRST_PCIE1_AXI_SLV0		18
++#define JH7110_STGRST_PCIE1_AXI_SLV		19
++#define JH7110_STGRST_PCIE1_BRG			20
++#define JH7110_STGRST_PCIE1_CORE		21
++#define JH7110_STGRST_PCIE1_APB			22
 +
- static int jh7110_reset_probe(struct auxiliary_device *adev,
- 			      const struct auxiliary_device_id *id)
- {
-@@ -55,6 +73,18 @@ static const struct auxiliary_device_id jh7110_reset_ids[] = {
- 		.name = "clk_starfive_jh7110_sys.rst-aon",
- 		.driver_data = (kernel_ulong_t)&jh7110_aon_info,
- 	},
-+	{
-+		.name = "clk_starfive_jh7110_sys.rst-stg",
-+		.driver_data = (kernel_ulong_t)&jh7110_stg_info,
-+	},
-+	{
-+		.name = "clk_starfive_jh7110_sys.rst-isp",
-+		.driver_data = (kernel_ulong_t)&jh7110_isp_info,
-+	},
-+	{
-+		.name = "clk_starfive_jh7110_sys.rst-vout",
-+		.driver_data = (kernel_ulong_t)&jh7110_vout_info,
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
++#define JH7110_STGRST_END			23
++
+ #endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__ */
 -- 
 2.25.1
 
