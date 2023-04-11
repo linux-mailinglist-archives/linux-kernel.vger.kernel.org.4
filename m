@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79376DD5CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733386DD5D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjDKInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S230496AbjDKInS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjDKInP (ORCPT
+        with ESMTP id S229491AbjDKInQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:43:15 -0400
+        Tue, 11 Apr 2023 04:43:16 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73774121
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB62E6A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681202547;
+        s=mimecast20190719; t=1681202549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
-        b=ObBOH/fGlAUO6NQSk42MpU7rJiZ5bRMHscB7sYHunkJl6MvvD1M+OQOg2Z4CkqiHcN3k1S
-        adxi4DoGJqISJUJjvg5EOPk4cw2bRxU0Z77UzwEy4Q/ZPj1BFl7xonOswB0WA6pRifi6LG
-        AecxrsLzm5oL9VkQG0JN0KVz/miPNQE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=YBm1DJo+O34kGFp5j7ZIGRS2RcBv14D2xSf4Qhrz/60=;
+        b=JTpe1v93qhIk0im1BnqiwhhMMOUELts1l7pdSSkWmA5QWWEVbxChaq5qEjT1YetJc3yCX7
+        U3rgA8Dhkecjw5EbKsFvnf0bpsTYvwcv83cPbw75vMZoin96hVZNsgfq+LhyYoUJZnyNF5
+        i4u66oNm+sWeYszUnoPmkBaCC2lPbz0=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-588-rb7ZVuphMTq6c_brDin0xg-1; Tue, 11 Apr 2023 04:42:26 -0400
-X-MC-Unique: rb7ZVuphMTq6c_brDin0xg-1
-Received: by mail-wr1-f72.google.com with SMTP id s30-20020adf979e000000b002eeddf27e71so1735487wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:26 -0700 (PDT)
+ us-mta-616-xBEcbnzSMPyV_7c1QPgm-Q-1; Tue, 11 Apr 2023 04:42:28 -0400
+X-MC-Unique: xBEcbnzSMPyV_7c1QPgm-Q-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5048993067dso5783351a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681202545; x=1683794545;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
-        b=pc11tgmFJFkI6WZRWtQZzlNMIENQr6WgfvWOpD2fod6Es6m1kBpZ5r+NGnKglaLipv
-         B6Y9pnRzfEvVTnl+CtWKfD0fN6fGkWIPlOXfVoo3WduJp1QwfhGqrdp6Cux9s9Ow75x9
-         0mK/nE500UTcls64LNLd9FgdpGcQnHG5x/XlzW5i04L15Luwt8gOygNGeScgKOOIP/Jg
-         sCJJbN0cbZCwoGGXDDINRvvv/bkr1+SItdoqB94bfrUzuM3QLqmWyIzwh01nn2rdbR0O
-         9EhXu9yOhseAJGjh4XM+2GZu0YQ/ZM6fDKAsHhX0vU2BrXHxu4Rk4XYJBveEmJF7p4Rf
-         0pSw==
-X-Gm-Message-State: AAQBX9dY6k1ebG9idFovOIw2JeLX8lgnXiodJp0EtdtTiTIXQNq1rSqV
-        ncppgFZyTgUhG+fOtNVG/jdUqdtagQ8v1k80puvkQ6kHB8hnhGVAI1g/6m0IRngco1bxBt4DPpY
-        +9TxAxdJ+xT85rZu2ENH2cp5D
-X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362634wmi.34.1681202545156;
-        Tue, 11 Apr 2023 01:42:25 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y0ozkUapL4MwnXUftzJoDwFRIUNHeFl1HSv1T0LtFvCqpcIZ1xQSSekp/uyzdWD3ViMfmTvg==
-X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362604wmi.34.1681202544706;
-        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
-        by smtp.gmail.com with ESMTPSA id 22-20020a05600c021600b003dc522dd25esm16326602wmi.30.2023.04.11.01.42.22
+        d=1e100.net; s=20210112; t=1681202547; x=1683794547;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YBm1DJo+O34kGFp5j7ZIGRS2RcBv14D2xSf4Qhrz/60=;
+        b=6OUU1goOajvew/556TPB5arwlNvKa8yQPcL8Bxc5wRUzEa6iXUYA7bJ6INsSe1Gmu+
+         H3/YxtnqdXGM30ub2rq2ihmGe4si8KmVTXg+luQWy04h5bpUovDEoe4nJ9uyMPimb17K
+         FzTaCz6U2Y4McVtIQda6M3kbzJ7hBd5dFIkqgfxCurtPxg38DxGA5P45LMB4Ooo7zyWv
+         1H5aNDTxt7y5TH8TTwd+I4WspVyTT1i9qBCLHpKa+HlaXqCHX5v2yTGSxnINtU2YmJGn
+         ZXnU/vpFjnRhRRpuklsWhh+V2hfYAGNbSH6SEpl4TZbpXiUuMa7U41eE16mfwOEOndYq
+         stlQ==
+X-Gm-Message-State: AAQBX9fYbX7Qm5DvUeTCXNfU/bIaopmNeNfHN2pG2XI6zXRPsTJ+8M8Y
+        ryqDwXshbKbrSVMZG72fa/k712xzzNHdKG/qCwAjezse6/jxeAwiw+StFZQzPciH+I0y9XhTEZv
+        87OYXrBM8yBUDYcP+gHX4xzUc
+X-Received: by 2002:a05:6402:3550:b0:504:6f39:8d1e with SMTP id f16-20020a056402355000b005046f398d1emr14162223edd.0.1681202547285;
+        Tue, 11 Apr 2023 01:42:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aIUSinhP/9bUwKFEOSeh/E3DYXxAQfvWzJdnl5A9NC/jcS/NRd1jzjEnDwQu+FF+CX3e0fAQ==
+X-Received: by 2002:a05:6402:3550:b0:504:6f39:8d1e with SMTP id f16-20020a056402355000b005046f398d1emr14162212edd.0.1681202546909;
+        Tue, 11 Apr 2023 01:42:26 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id fy36-20020a1709069f2400b00927f6c799e6sm5839867ejc.132.2023.04.11.01.42.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
-Message-ID: <3132a8ca-49a3-3d6a-09fe-984293116d76@redhat.com>
-Date:   Tue, 11 Apr 2023 10:42:22 +0200
+        Tue, 11 Apr 2023 01:42:26 -0700 (PDT)
+Message-ID: <ed988e83-ad6b-f648-4555-d78500fea3b1@redhat.com>
+Date:   Tue, 11 Apr 2023 10:42:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
- sempahore
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-References: <20230405203505.1343562-1-mcgrof@kernel.org>
- <20230405203505.1343562-3-mcgrof@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in
+ D3
+Content-Language: en-US, nl
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
+        david.e.box@intel.com, markgross@kernel.org, rjw@rjwysocki.net
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230409192535.914540-1-david.e.box@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230409192535.914540-1-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -95,85 +83,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.04.23 22:35, Luis Chamberlain wrote:
-> Simplfy the concurrency delimiter we user for kmod with the semaphore.
-> I had used the kmod strategy to try to implement a similar concurrency
-> delimiter for the kernel_read*() calls from the finit_module() path
-> so to reduce vmalloc() memory pressure. That effort didn't provid yet
-> conclusive results, but one thing that did became clear is we can use
-> the suggested alternative solution with semaphores which Linus hinted
-> at instead of using the atomic / wait strategy.
+Hi,
+
+On 4/9/23 21:25, David E. Box wrote:
+> On Meteor Lake, the GNA, IPU, and VPU devices are booted in D0 power state
+> and will block the SoC from going into the deepest Package C-state if a
+> driver is not present. Put each device in D3hot if no driver is found.
 > 
-> I've stress tested this with kmod test 0008:
-> 
-> time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
-> 
-> And I get only a *slight* delay. That delay however is small, a few
-> seconds for a full test loop run that runs 150 times, for about ~30-40
-> seconds. The small delay is worth the simplfication IMHO.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->   kernel/module/kmod.c | 26 +++++++-------------------
->   1 file changed, 7 insertions(+), 19 deletions(-)
 > 
-> diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
-> index b717134ebe17..925eb85b8346 100644
-> --- a/kernel/module/kmod.c
-> +++ b/kernel/module/kmod.c
-> @@ -40,8 +40,7 @@
->    * effect. Systems like these are very unlikely if modules are enabled.
->    */
->   #define MAX_KMOD_CONCURRENT 50
-> -static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
-> -static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
-> +static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
->   
->   /*
->    * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
-> @@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
->   	if (ret)
->   		return ret;
->   
-> -	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
-> -		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
-> -				    atomic_read(&kmod_concurrent_max),
-> -				    MAX_KMOD_CONCURRENT, module_name);
-> -		ret = wait_event_killable_timeout(kmod_wq,
-> -						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
-> -						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
-> -		if (!ret) {
-> -			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-> -					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-> -			return -ETIME;
-> -		} else if (ret == -ERESTARTSYS) {
-> -			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
-> -			return ret;
-> -		}
-> +	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
-> +	if (ret) {
-> +		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-> +				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-> +		return ret;
->   	}
->   
->   	trace_module_request(module_name, wait, _RET_IP_);
->   
->   	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
->   
-> -	atomic_inc(&kmod_concurrent_max);
-> -	wake_up(&kmod_wq);
-> +	up(&kmod_concurrent_max);
->   
->   	return ret;
->   }
+> V2 - Fix missing static reported by lkp
 
-Much cleaner
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
--- 
-Thanks,
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-David / dhildenb
+Regards,
+
+Hans
+
+
+
+
+> 
+>  drivers/platform/x86/intel/pmc/mtl.c | 31 ++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
+> index eeb3bd8c2502..33aa98b54049 100644
+> --- a/drivers/platform/x86/intel/pmc/mtl.c
+> +++ b/drivers/platform/x86/intel/pmc/mtl.c
+> @@ -8,6 +8,7 @@
+>   *
+>   */
+>  
+> +#include <linux/pci.h>
+>  #include "core.h"
+>  
+>  const struct pmc_reg_map mtl_reg_map = {
+> @@ -45,8 +46,38 @@ void mtl_core_configure(struct pmc_dev *pmcdev)
+>  	pmc_core_send_ltr_ignore(pmcdev, 3);
+>  }
+>  
+> +#define MTL_GNA_PCI_DEV	0x7e4c
+> +#define MTL_IPU_PCI_DEV	0x7d19
+> +#define MTL_VPU_PCI_DEV	0x7d1d
+> +static void mtl_set_device_d3(unsigned int device)
+> +{
+> +	struct pci_dev *pcidev;
+> +
+> +	pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, device, NULL);
+> +	if (pcidev) {
+> +		if (!device_trylock(&pcidev->dev)) {
+> +			pci_dev_put(pcidev);
+> +			return;
+> +		}
+> +		if (!pcidev->dev.driver) {
+> +			dev_info(&pcidev->dev, "Setting to D3hot\n");
+> +			pci_set_power_state(pcidev, PCI_D3hot);
+> +		}
+> +		device_unlock(&pcidev->dev);
+> +		pci_dev_put(pcidev);
+> +	}
+> +}
+> +
+>  void mtl_core_init(struct pmc_dev *pmcdev)
+>  {
+>  	pmcdev->map = &mtl_reg_map;
+>  	pmcdev->core_configure = mtl_core_configure;
+> +
+> +	/*
+> +	 * Set power state of select devices that do not have drivers to D3
+> +	 * so that they do not block Package C entry.
+> +	 */
+> +	mtl_set_device_d3(MTL_GNA_PCI_DEV);
+> +	mtl_set_device_d3(MTL_IPU_PCI_DEV);
+> +	mtl_set_device_d3(MTL_VPU_PCI_DEV);
+>  }
+> 
+> base-commit: 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
 
