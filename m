@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB846DDA78
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496006DDA80
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDKMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S229688AbjDKMN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjDKMLf (ORCPT
+        with ESMTP id S229531AbjDKMNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:11:35 -0400
+        Tue, 11 Apr 2023 08:13:55 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939282D61;
-        Tue, 11 Apr 2023 05:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428363581;
+        Tue, 11 Apr 2023 05:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681215094; x=1712751094;
+  t=1681215234; x=1712751234;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5BT3BOmfFOrJL/K8+Lh7oMPYlXgAXEEjdOA14LXUTlA=;
-  b=TrH6YmFAlpZYyfaZ6v/251WsAgtrkRLeX4mBIFiIGPOlRIH4OdnIkiVv
-   txVdRBriKiWrMN88RqsouQLoEViYnCyau+XXod3TjXPeKyd6U2kqEF6Iz
-   vR3cMS+KtVsOTdFuuBYbyfLxGoM6w4qTett8W26qJWmPn3UzadFuVQ+8Y
-   iPVIIoUrYxRWW2ECGzMiP2GGsa6wxVGQSkLdhAqKihYDitcORXEdoehxV
-   GH3W89Cpv/rC4anU42m2ivwDtvglZhK2dxpNLJFGYGGoshPaDdFcE/m1y
-   7seKwz3dLjKNZl7/JeRDuvrAZWVVH5Qp9wKRKJQ5R8ixGgnZXrKp+UDMK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="406426061"
+  bh=/E7uLg3CXBVdDMjNrQzi7EHdi99oJj+BrcE9HoD6thY=;
+  b=JFtsmzM+MsKtQgtrPoZ8uQ++1ScWZqbL7Os3HagJcxnlyYjNtGWPa9Zv
+   4ox7drRhVpdQv53GzmLbL6T6r9e5tF8KF82vRnd22aKGSN5zaNg6UKpuW
+   eobgUOOQvHfol6ehD8y34zjs518H6Qax4grLdBqHfD+fUF1csODMNRPWF
+   F1v+0gmI37DXwuQYclTogcm0uF3GCW3U26bAYp2xDBiHxqjGYqShnpzW9
+   BsBeYY24qbIqkjpCldRkW5RrRw16CU9Mz3lZyfb/7qErWIyHU+Sip3x/L
+   P6G9K2ofKYSqrDE1sALF4dcJS2yGQmqm8ddw7CqD93T/k9EbwhbGiTt/h
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="406426457"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="406426061"
+   d="scan'208";a="406426457"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 05:11:34 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 05:13:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="812546833"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="812547591"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="812546833"
+   d="scan'208";a="812547591"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2023 05:11:32 -0700
+  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2023 05:13:50 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pmCqQ-00FFl0-1P;
-        Tue, 11 Apr 2023 15:11:30 +0300
-Date:   Tue, 11 Apr 2023 15:11:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Joy Chakraborty <joychakr@google.com>,
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pmCsf-00FFnN-1V;
+        Tue, 11 Apr 2023 15:13:49 +0300
+Date:   Tue, 11 Apr 2023 15:13:49 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, manugautam@google.com,
         rohitner@google.com
-Subject: Re: [PATCH v5 0/2] spi: dw: DW SPI DMA Driver updates
-Message-ID: <ZDVOcvdrsvI8cCsH@smile.fi.intel.com>
+Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
+Message-ID: <ZDVO/fpOZm+lGVZE@smile.fi.intel.com>
 References: <20230330063450.2289058-1-joychakr@google.com>
- <20230411051233.aps5g2eq4qt4iumt@mobilestation>
+ <20230330063450.2289058-2-joychakr@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411051233.aps5g2eq4qt4iumt@mobilestation>
+In-Reply-To: <20230330063450.2289058-2-joychakr@google.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 08:12:33AM +0300, Serge Semin wrote:
-> Cc+=Andy
+On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
 
-Thank for Cc'ing me. I'll go through individual patches and give my comments
-if any.
+First of all the Subject is wrong. You are not touching DMA controller.
+Needs to be rephrased.
 
-> On Thu, Mar 30, 2023 at 06:34:48AM +0000, Joy Chakraborty wrote:
-> > This Patch series adds support for 32 bits per word trasfers using DMA
-> > and some defensive checks around dma controller capabilities.
-> > ---
-> > V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
-> > ---
-> > V1->V2 Changes : Add dma capability check to make sure address widths
-> > are supported.
-> > ---
-> > V2->V3 Changes : Split changes , add DMA direction check and other
-> > cosmetic chnages.
-> > ---
-> > V3->V4 Changes : Fix Sparce Warning
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
-> > ---
-> > V4->V5 Changes : Preserve reverse xmas Tree order, move direction
-> > check before initalisation of further capabilities, remove zero
-> > initialisations, remove error OR'ing.
+> Add Support for AxSize = 4 bytes configuration from dw dma driver if
+
+SPI DMA driver
+
+(or something like this, note capital letters for acronyms).
+
+> n_bytes i.e. number of bytes per write to fifo is 3 or 4.
 > 
-> The series looks good to me now. Though if I were you I would have
-> split up the last patch into two ones.
-> 
-> Anyway I tested the patchset on Baikal-T1 SoC with DW APB SSI 3.22b +
-> DW DMAC 2.18b and looped back SPI-interface. So feel free to add:
-> Tested-by: Serge Semin <fancer.lancer@gmail.com>
-> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-> 
-> @Andy, anything to add from your side?
-> @Mark, if you are ok with the series content please merge in.
+> Number of bytes written to fifo per write is depended on the bits/word
+> configuration being used which the DW core driver translates to n_bytes.
+
+...
+
+>  static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
+>  {
+> -	if (n_bytes == 1)
+> +	switch (n_bytes) {
+> +	case 1:
+>  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
+> -	else if (n_bytes == 2)
+> +	case 2:
+>  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
+> -
+> -	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+
+> +	case 3:
+
+I'm not sure about this.
+
+> +	case 4:
+> +		return DMA_SLAVE_BUSWIDTH_4_BYTES;
+> +	default:
+> +		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> +	}
+>  }
 
 -- 
 With Best Regards,
