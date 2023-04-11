@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB486DDF7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E946DDF6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjDKPVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S231367AbjDKPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDKPVF (ORCPT
+        with ESMTP id S230456AbjDKPTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:21:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0302618E;
-        Tue, 11 Apr 2023 08:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681226433; x=1712762433;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FRHq5ZmffdYtJuEIeovcz27g4gO+MO+kJRQT8B7616Q=;
-  b=SUtiMEStQQyJet+cA20yMibOfbV6iGlEZORGPn5DE5jr4Bj+S/hsRRqg
-   pEkq1RdtdBVc1VIA5seQYdtOSfXpul12AYOGTgmGhYoc7Nr9DkAF5j7vx
-   T+NNYhlemDUMfllE/9HFV0Aw/yAAGMUlx8ZqWDtRgPCiG9r3bGBa0O28P
-   o43Hba2WbLolPUSofmMQKYAtVJhEMbxRA+hsV+hSEenUW+FYZlynmzY8j
-   eWfjoXONOUnkjF3GqikqVBXi9YBJ+tbwaOQg0byuaVK32wXlukxPufjc5
-   ZOTZ58Lv4pkZh01lQhVe7etv+JTzXBWlxk3v6Arzim6YmgnQ8ahi/WFvu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="371495970"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="371495970"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 08:17:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="753179074"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="753179074"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Apr 2023 08:17:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pmFkb-00FLmV-0i;
-        Tue, 11 Apr 2023 18:17:41 +0300
-Date:   Tue, 11 Apr 2023 18:17:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Joy Chakraborty <joychakr@google.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
-Message-ID: <ZDV6FKd/TupHEPMf@smile.fi.intel.com>
-References: <20230330063450.2289058-1-joychakr@google.com>
- <20230330063450.2289058-2-joychakr@google.com>
- <ZDVO/fpOZm+lGVZE@smile.fi.intel.com>
- <20230411141115.vrfd6sud66u6xeog@mobilestation>
- <ZDVyyoN71cB7dvWW@smile.fi.intel.com>
- <20230411150916.24vagjzbhshaujse@mobilestation>
+        Tue, 11 Apr 2023 11:19:14 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1265FCA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:18:51 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7603c5af4a9so7076639f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681226275;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EKa9vfhk8fWfVEyyFRSYlQGodtOxRM3cBgC7nPc2RUw=;
+        b=0wa2bOqaU+MMRmMY52v0O1jnHzxBGA60OdAJeGWlzzPGGR9oN4Acfx8NJMjzQe8F/M
+         ou21tMDCsa1i1pEt481881+H/O6S5KsnhIUfSXPH6kxnk3lPjg6XrwzbMehzS4eAUtai
+         csP+DrgYpgTrntay5AE+YW0PSAw50GKLATwO7PluUS0rxGZs2npLjcPPNoPilYiZe3XF
+         enziKtkF4hOa8DMd6wPtlV4Wf8WF+69kU/ebhkUn4P5rVBxafFztysDJKDVWTEhOeCEC
+         7mumjYFYaaG2+g3MMmTE/Bi3w/nb3p6pK2AVj0gY6iDvUbaFonWfjgDbIQVJVlB90BGn
+         XjtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681226275;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EKa9vfhk8fWfVEyyFRSYlQGodtOxRM3cBgC7nPc2RUw=;
+        b=IC5cfcIV+I+EhtwDVDpUAqSPD4oj8swmBkKxsI/RUjs8qM0/z0ULzVw4EyhnYWiMO4
+         mg68JmFhb4ntW7sRIFWMureqkdA1SP+bLrYKMypmSvTqXMtzihJcQpaY8AYIaEJnCrrI
+         80ME9txHlI6ZVuBZApsjLNDPKR5DMMPUyAJkmbNQ3M2PwAHvUcEG37oGgMoGzzE6DowO
+         HOz7n/F2OxQ9KkZNa4po2J15lexoMsIR3bQZ6m/vpoDwNNdlaEKQMCL9rizIxIwcPOLl
+         HaL4ahD2oWLwjdiO/kzqeO40HN0MJh6FpFob/K/lJiAMrIppDD0qca/TwKO2CGCwpEGA
+         5PeA==
+X-Gm-Message-State: AAQBX9fZSIMIrGSJcrcnConb2opr4llbIf9AFStzWBP0sbNBdtRQKuJ4
+        dNydhKFAJ6aUmcRaqpiCR0wiDg==
+X-Google-Smtp-Source: AKy350awgP7upH1oGzwb0nt0C364ALZg4lHY8iZS5MvbkBnmbmAvrYl10aLtZIQ+uIzLTrIEeDbKWQ==
+X-Received: by 2002:a05:6602:2b91:b0:75c:f48c:2075 with SMTP id r17-20020a0566022b9100b0075cf48c2075mr7019947iov.2.1681226275104;
+        Tue, 11 Apr 2023 08:17:55 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id z27-20020a056638215b00b003acde48bdc3sm3940376jaj.111.2023.04.11.08.17.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 08:17:54 -0700 (PDT)
+Message-ID: <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
+Date:   Tue, 11 Apr 2023 09:17:52 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411150916.24vagjzbhshaujse@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
+        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+ <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+ <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,79 +86,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:09:16PM +0300, Serge Semin wrote:
-> On Tue, Apr 11, 2023 at 05:46:34PM +0300, Andy Shevchenko wrote:
-> > On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote:
-> > > On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote:
-> > > > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
-
-...
-
-> > > > > -	if (n_bytes == 1)
-> > > > > +	switch (n_bytes) {
-> > > > > +	case 1:
-> > > > >  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > > > > -	else if (n_bytes == 2)
-> > > > > +	case 2:
-> > > > >  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
-> > > > > -
-> > > > > -	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > 
-> > > > > +	case 3:
-> > > > 
-> > > > I'm not sure about this.
-> > > 
-> > > This actually makes sense seeing the function argument can have values
-> > > 1, 2, _3_ and 4:
-> > > dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
-> > > transfer->bits_per_word = __F__(master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32));
-> > > ...
-> > > dw_spi_dma_convert_width(dws->n_bytes)
-> > > 
-> > > The spi_transfer.bits_per_word field value depends on the
-> > > SPI peripheral device communication protocol requirements which may
-> > > imply the 3-bytes word xfers (even though it's indeed unluckily).
-> > > 
-> > > This semantic will also match to what we currently have in the
-> > > IRQ-based SPI-transfer implementation (see dw_writer() and
-> > > dw_reader()).
+On 4/11/23 9:10?AM, David Ahern wrote:
+> On 4/11/23 8:41 AM, Jens Axboe wrote:
+>> On 4/11/23 8:36?AM, David Ahern wrote:
+>>> On 4/11/23 6:00 AM, Breno Leitao wrote:
+>>>> I am not sure if avoiding io_uring details in network code is possible.
+>>>>
+>>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+>>>> in the TCP case) could be somewhere else, such as in the io_uring/
+>>>> directory, but, I think it might be cleaner if these implementations are
+>>>> closer to function assignment (in the network subsystem).
+>>>>
+>>>> And this function (tcp_uring_cmd() for instance) is the one that I am
+>>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+>>>> -> SIOCINQ.
+>>>>
+>>>> Please let me know if you have any other idea in mind.
+>>>
+>>> I am not convinced that this io_uring_cmd is needed. This is one
+>>> in-kernel subsystem calling into another, and there are APIs for that.
+>>> All of this set is ioctl based and as Willem noted a little refactoring
+>>> separates the get_user/put_user out so that in-kernel can call can be
+>>> made with existing ops.
+>>
+>> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
+>> obviously, and we already have ->uring_cmd() for this purpose.
+>>
+>> I do think the right thing to do is have a common helper that returns
+>> whatever value you want (or sets it), and split the ioctl parts into a
+>> wrapper around that that simply copies in/out as needed. Then
+>> ->uring_cmd() could call that, or you could some exported function that
+>> does supports that.
+>>
+>> This works for the basic cases, though I do suspect we'll want to go
+>> down the ->uring_cmd() at some point for more advanced cases or cases
+>> that cannot sanely be done in an ioctl fashion.
+>>
 > 
-> > Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for that. Why we don't
-> > use it?
-> 
-> We could but there are two more-or-less firm reasons not to do
-> that:
-> 1. There aren't that much DMA-engines with the
-> DMA_SLAVE_BUSWIDTH_3_BYTES capability meanwhile the DW APB SSI just
-> ignores the upper bits if CTRLR0.DFS is less than the value actual
-> written to the DR registers. Note DW DMAC engine isn't one of such
-> controllers. So if we get to meet a peripheral SPI-device with 3-bytes
-> word protocol transfers and the DMA-engine doesn't support it the
-> DMA-based transfers may fail (depending on the DMA-engine driver
-> implementation).
-> 2. The DW APB SSIs (3.x and 4.x) can be synthesized with the APB Data
-> Bus Width of 8, 16 and 32. So no matter whether DMA-engine supports
-> the 3-bytes bus width the system bus most likely will either convert
-> the transfers to the proper sized bus-transactions or fail.
-> 
-> So taking all of the above into account not using the
-> DMA_SLAVE_BUSWIDTH_3_BYTES macro here seems better than using it with
-> a risk to fail some of the platform setups especially seeing the DW
-> APB SSI ignores the upper bits anyway.
+> My meta point is that there are uapis today to return this information
+> to applications (and I suspect this is just the start of more networking
+> changes - both data retrieval and adjusting settings). io_uring is
+> wanting to do this on behalf of the application without a syscall. That
+> makes io_uring yet another subsystem / component managing a socket. Any
+> change to the networking stack required by io_uring should be usable by
+> all other in-kernel socket owners or managers. ie., there is no reason
+> for io_uring specific code here.
 
-But this is not about SPI host hardware, it's about the consumers.
-They should know about supported sizes. Either we add the corresponding support
-to the driver or remove 3 case as I suggested. I don't think it's correct to
-use 3 as 4.
+I think we are in violent agreement here, what I'm describing is exactly
+that - it'd make ioctl/{set,get}sockopt call into the same helpers that
+->uring_cmd() would, with the only difference being that the former
+would need copy in/out and the latter would not.
 
-> > > > > +	case 4:
-> > > > > +		return DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > > > > +	default:
-> > > > > +		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
-> > > > > +	}
+But let me just stress that for direct descriptors, we cannot currently
+call ioctl or set/getsockopt. This means we have to instantiate a
+regular descriptor first, do those things, then register it to never use
+the regular file descriptor again. That's wasteful, and this is what we
+want to enable (direct use of ioctl set/getsockopt WITHOUT a normal file
+descriptor). It's not just for "oh it'd be handy to also do this from
+io_uring" even if that would be a worthwhile goal in itself.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Jens Axboe
 
