@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062D56DDD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F07C6DDD7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjDKOOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S229927AbjDKORV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjDKOOn (ORCPT
+        with ESMTP id S229957AbjDKORO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:14:43 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF231B1;
-        Tue, 11 Apr 2023 07:14:42 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso11108895pjs.0;
-        Tue, 11 Apr 2023 07:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681222482; x=1683814482;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUqBPGgh8CrNxczOidhg/CSqsuSy4JlqYBSAJ+z/y9s=;
-        b=Gu7+eyUOLclC1bTu8BcvYj14sC6QoGrw3NMzAIq+OpKET0Clg1rXkZkOAYAVNWpKgS
-         4sPHsUqgwrQi95ufUaMLK38qQrwVMIKkK0tfRxmt2QOkPnTA6NT7kNrMHEL2eBUuRrK+
-         GwIcQBD5HNK4f1EwsJ+NQnqIMhPCddh38R2fymNcDL7/GlirPWTIiRrZN70V2WNOEjBY
-         99bcfItjprKWxL3gH4SGTZwChBgUOGhqakf6niF3igEqtL5k0RB8uzLpl0QQYsgq3xja
-         Gb3wSqNGEfEYWkNfTuxBPQ1QceWaIzdHq8rt0OLhTeucqPd28FOd0pIFkhehHju4+CSs
-         7gHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681222482; x=1683814482;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nUqBPGgh8CrNxczOidhg/CSqsuSy4JlqYBSAJ+z/y9s=;
-        b=kTxW6iOJuusZAl0t4e99paoHBmvJJnOOJ6uyMfNBnudwLLbDSMZLuWHo42np1s++KW
-         VWze7YOVhkw8CSJVLfv4W5DuDCLIQNI8+JnJUNKLRIC3PSWn8J2gbN9E6ziIkc2JioO2
-         oV3kgoYBK1yCey4um03oIfJs8u03B1xJtt9DHqHYtmWya+4G+oN5JhOe082VfPDMp19Q
-         ri75BJdkRUIAWYPQmQk4aIdyUoPmQsy4k3na7KoD1hgLZmtaiq13jB81T/jmR0vt+Xdp
-         GlytKeUEKQrnVBqUsRxaQFRYN+oeZNwJ6z+TPuSqZLR+N2M6go+KzYkICb+v7wdBD/6L
-         w2lg==
-X-Gm-Message-State: AAQBX9fwB8pqY9rYR83gaaVkKWJAyOG7cA09MZ0/wMZkeWL4cdnwrANA
-        WAuL6FEz4oGFBvnzy+Qwo3k=
-X-Google-Smtp-Source: AKy350Yu36TtUThSJ9RIwGKPPMbCyhpU0MLUm4TlwkNqMALQCkJHYxd8RXFtTUPFEa2XbFYYLlKrOA==
-X-Received: by 2002:a17:902:cec6:b0:1a1:e112:4607 with SMTP id d6-20020a170902cec600b001a1e1124607mr3431694plg.50.1681222482287;
-        Tue, 11 Apr 2023 07:14:42 -0700 (PDT)
-Received: from localhost.localdomain (36-229-229-178.dynamic-ip.hinet.net. [36.229.229.178])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902988b00b001991f3d85acsm9691979plp.299.2023.04.11.07.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 07:14:42 -0700 (PDT)
-From:   Lin Yu Chen <starpt.official@gmail.com>
-To:     corbet@lwn.net
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lin Yu Chen <starpt.official@gmail.com>
-Subject: [PATCH] docs: Fix typo in Documentation/RCU/checklist.rst
-Date:   Tue, 11 Apr 2023 07:13:41 -0700
-Message-Id: <20230411141341.74133-1-starpt.official@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Apr 2023 10:17:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437CBE6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681222547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qzK4ogixuaREht4MpkiqqhFPvzGg6ALQmBRRBO9bEhw=;
+        b=Kwq3nV2qk0xO0Ne6RRdDvmjDTFVsboE4GBexKhuNhsq/wY7Hhcv3/R9zPmTfWmu/lbSuhq
+        cjRmxyXHS+tgTEqhw/VtBlPT8HB9vH52VyeDiFeQYp61OdPifp4yHvwP9UotX8b7jnKA+W
+        CwMgDI7sHk268elveK5I/MY0qKqPlf0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-bQTcdzQuNdGs3XWMcEGz2w-1; Tue, 11 Apr 2023 10:15:42 -0400
+X-MC-Unique: bQTcdzQuNdGs3XWMcEGz2w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FBF686A96C;
+        Tue, 11 Apr 2023 14:15:32 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB346400F284;
+        Tue, 11 Apr 2023 14:15:30 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: [PATCH] mm/huge_memory: conditionally call maybe_mkwrite() and drop pte_wrprotect() in __split_huge_pmd_locked()
+Date:   Tue, 11 Apr 2023 16:15:22 +0200
+Message-Id: <20230411141529.428991-1-david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit corrects the spelling of "not" to "note" to accurately
-convey the intended meaning.
+No need to call maybe_mkwrite() to then wrprotect if the source PMD was not
+writable.
 
-Signed-off-by: Lin Yu Chen <starpt.official@gmail.com>
+It's worth nothing that this now allows for PTEs to be writable even if
+the source PMD was not writable: if vma->vm_page_prot includes write
+permissions.
+
+As documented in commit 931298e103c2 ("mm/userfaultfd: rely on
+vma->vm_page_prot in uffd_wp_range()"), any mechanism that intends to
+have pages wrprotected (COW, writenotify, mprotect, uffd-wp, softdirty,
+...) has to properly adjust vma->vm_page_prot upfront, to not include
+write permissions. If vma->vm_page_prot includes write permissions, the
+PTE/PMD can be writable as default.
+
+This now mimics the handling in mm/migrate.c:remove_migration_pte() and in
+mm/huge_memory.c:remove_migration_pmd(), which has been in place for a
+long time (except that 96a9c287e25d ("mm/migrate: fix wrongly apply write
+bit after mkdirty on sparc64") temporarily changed it).
+
+Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- Documentation/RCU/checklist.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/huge_memory.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index cc361fb01ed4..bd3c58c44bef 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -70,7 +70,7 @@ over a rather long period of time, but improvements are always welcome!
- 	can serve as rcu_read_lock_sched(), but is less readable and
- 	prevents lockdep from detecting locking issues.
- 
--	Please not that you *cannot* rely on code known to be built
-+	Please note that you *cannot* rely on code known to be built
- 	only in non-preemptible kernels.  Such code can and will break,
- 	especially in kernels built with CONFIG_PREEMPT_COUNT=y.
- 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 6f3af65435c8..8332e16ac97b 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2235,11 +2235,10 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 				entry = pte_swp_mkuffd_wp(entry);
+ 		} else {
+ 			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
+-			entry = maybe_mkwrite(entry, vma);
++			if (write)
++				entry = maybe_mkwrite(entry, vma);
+ 			if (anon_exclusive)
+ 				SetPageAnonExclusive(page + i);
+-			if (!write)
+-				entry = pte_wrprotect(entry);
+ 			if (!young)
+ 				entry = pte_mkold(entry);
+ 			/* NOTE: this may set soft-dirty too on some archs */
 -- 
-2.25.1
+2.39.2
 
