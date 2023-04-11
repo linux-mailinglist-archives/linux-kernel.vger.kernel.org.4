@@ -2,327 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98056DD5B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D272E6DD5B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjDKIhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        id S230254AbjDKIgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjDKIg7 (ORCPT
+        with ESMTP id S229809AbjDKIgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:36:59 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6064219F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681202218; x=1712738218;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=xCD60pUtFq5X+vmcLrFss+cTndUk3KpHKOoOb2NCMDo=;
-  b=PnPaBbY/HNC8vhpSMw3cUKFqq5GeupU8F4Jc6pyfWU0sTNhXukz1nIAq
-   Ac8XhB4fUUQKEdIxajYrp4q24pszxYAfRA9eRGjtgLb8zsejR1EmGC4SS
-   3B3YNfpkhMSoM1vFq895WckHZvq8Qccoy2hECuHMYkg/Cs9YfimUqfU8r
-   FEEue0fK6/phYh+B8Sh4YxAVco7N4pOB+voeu2v9/T60TfDV/G/PFNWCU
-   /n/GTTJ9+ixQU1YOSv5hFnRPDrmDAIsbsia5iFGTNZtZux046LHase89b
-   V3e38BXZPjkm1L/Ca8XIbJZ4YHzXsBjMboy0xyARlTX0uVcsV7RtKmBWg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="323919910"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="323919910"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 01:36:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="934637486"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="934637486"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 01:36:55 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCHv2] mm: introduce defer free for cma
-References: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
-Date:   Tue, 11 Apr 2023 16:35:49 +0800
-In-Reply-To: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
-        (zhaoyang huang's message of "Mon, 10 Apr 2023 16:46:35 +0800")
-Message-ID: <87mt3e24uy.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 11 Apr 2023 04:36:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1121F12D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:36:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A14AA61997
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:36:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324CFC433EF;
+        Tue, 11 Apr 2023 08:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681202175;
+        bh=QK5lRHbzUyNcL/CLee7/EdTKhaXBSZZ5/FnxzE21Az0=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=nRcZZDOwjeYEkfJfwVrA0nHOxUuouvEMQfZLL+FTB3DIeS4jfxJHDaF3uNl0cGsLj
+         oX3IToNZLIkJAu7Z2NPpMf5K4cm47cWrVupf0+N3Gwfad9EhkHRchVbFnJ/S0XEsl/
+         i8w/Gm3dnB4RE48oj+TAzDdxngWsQS2Q3utX2wzq+ET+VN4uIapGecVnXDJYgDTre+
+         UBtMrGKn/x9m+0tDGJyDw2uIbKYa292nlG0ksu8DPkkxUvpIfvm19aJQ8fMNjGdRZG
+         NpcTYYQ01EeMLn/dJDmfL/FVbwKWGtWf6qXf5QtY10/bRKYNuNgqku0jFm7gfqPTa6
+         kjvQHeL9M9RCA==
+Message-ID: <2341db3b-5a40-a9f0-51f1-29a8908e3e98@kernel.org>
+Date:   Tue, 11 Apr 2023 16:36:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to tag FIEMAP_EXTENT_DELALLOC in
+ fiemap() for delay allocated extent
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230405144359.930253-1-chao@kernel.org>
+ <ZDCEK2OPkhTmRZrq@google.com>
+ <224e8756-7c63-fd53-a0f3-f3e2a7b4c13f@kernel.org>
+ <ZDROBJFxSUdGaqAa@google.com>
+ <538fd229-28ae-0ec5-ef07-35d505fbb8a9@kernel.org>
+In-Reply-To: <538fd229-28ae-0ec5-ef07-35d505fbb8a9@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"zhaoyang.huang" <zhaoyang.huang@unisoc.com> writes:
+On 2023/4/11 16:14, Chao Yu wrote:
+> On 2023/4/11 1:57, Jaegeuk Kim wrote:
+>> On 04/08, Chao Yu wrote:
+>>> On 2023/4/8 4:59, Jaegeuk Kim wrote:
+>>>> This breaks generic/009?
+>>>
+>>> I guess it is as expected?
+>>>
+>>> Please check description of fiemap ioctl manual from [1]:
+>>>
+>>> FIEMAP_EXTENT_UNKNOWN
+>>> The location of this extent is currently unknown. This may
+>>> indicate the data is stored on an inaccessible volume or that
+>>> no storage has been allocated for the file yet.
+>>>
+>>> FIEMAP_EXTENT_DELALLOC
+>>> This will also set FIEMAP_EXTENT_UNKNOWN.
+>>>
+>>> Delayed allocation - while there is data for this extent, its
+>>> physical location has not been allocated yet.
+>>>
+>>> FIEMAP_EXTENT_UNWRITTEN
+>>> Unwritten extent - the extent is allocated but its data has not
+>>> been initialized. This indicates the extent’s data will be all
+>>> zero if read through the filesystem but the contents are undefined
+>>> if read directly from the device.
+>>>
+>>> [1] https://www.kernel.org/doc/html/latest/filesystems/fiemap.html
+>>>
+>>> According to its description, f2fs only support
+>>> FIEMAP_EXTENT_{UNKNOWN, DELALLOC}, but not support
+>>> FIEMAP_EXTENT_UNWRITTEN.
+>>
+>> No, I don't think so.
+> 
+> Jaegeuk,
+> 
+> Could you please check the detailed description of FIEMAP_EXTENT_UNWRITTEN?
+> The flag indicates two conditions:
+> 1. on-disk blkaddrs were allocated for extent, and the extent is tagged as
+> unwritten status.
+> 2. data readed on those blocks will be all zero.
 
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->
-> Continues page blocks are expensive for the system. Introducing defer free
-> mechanism to buffer some which make the allocation easier. The shrinker will
-> ensure the page block can be reclaimed when there is memory pressure.
+Sorry, I mean:
 
-Why do you need this patch?  What is the problem that this patch want to
-address?  If this helps performance, can you provide some data to
-support it?
+1. on-disk blkaddrs were allocated for extent;
+2. extent is tagged as unwritten status, data readed on those blocks will be
+all zero.
 
-Best Regards,
-Huang, Ying
+Thanks,
 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> ---
-> v2: fix build warning and regist shrinker
-> ---
-> ---
->  mm/cma.c | 151 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  mm/cma.h |  11 +++++
->  2 files changed, 160 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/cma.c b/mm/cma.c
-> index 4a978e0..6d2fd24 100644
-> --- a/mm/cma.c
-> +++ b/mm/cma.c
-> @@ -39,6 +39,10 @@
->  unsigned cma_area_count;
->  static DEFINE_MUTEX(cma_mutex);
->  
-> +static unsigned long cma_defer_free_count(struct shrinker *shrinker,
-> +					struct shrink_control *sc);
-> +static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
-> +					struct shrink_control *sc);
->  phys_addr_t cma_get_base(const struct cma *cma)
->  {
->  	return PFN_PHYS(cma->base_pfn);
-> @@ -153,6 +157,20 @@ static int __init cma_init_reserved_areas(void)
->  }
->  core_initcall(cma_init_reserved_areas);
->  
-> +static unsigned long cma_free_get(struct cma *cma)
-> +{
-> +	unsigned long used;
-> +	unsigned long val;
-> +
-> +	spin_lock_irq(&cma->lock);
-> +	/* pages counter is smaller than sizeof(int) */
-> +	used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
-> +	val = cma->count - ((u64)used << cma->order_per_bit);
-> +	spin_unlock_irq(&cma->lock);
-> +
-> +	return val;
-> +}
-> +
->  void __init cma_reserve_pages_on_error(struct cma *cma)
->  {
->  	cma->reserve_pages_on_error = true;
-> @@ -212,6 +230,13 @@ int __init cma_init_reserved_mem(phys_addr_t base, phys_addr_t size,
->  	cma_area_count++;
->  	totalcma_pages += (size / PAGE_SIZE);
->  
-> +	cma->batch = cma->count >> 1;
-> +	cma->shrinker.count_objects = cma_defer_free_count;
-> +	cma->shrinker.scan_objects = cma_defer_free_scan;
-> +	cma->shrinker.seeks = DEFAULT_SEEKS;
-> +	cma->shrinker.batch = 0;
-> +
-> +	register_shrinker(&cma->shrinker, "cma-shrinker");
->  	return 0;
->  }
->  
-> @@ -411,6 +436,46 @@ static void cma_debug_show_areas(struct cma *cma)
->  static inline void cma_debug_show_areas(struct cma *cma) { }
->  #endif
->  
-> +static int cma_defer_area_fetch(struct cma *cma, unsigned long pfn,
-> +		unsigned long count)
-> +{
-> +	struct cma_defer_free_area *area;
-> +	unsigned long new_pfn;
-> +	int ret = -1;
-> +
-> +	if (!atomic64_read(&cma->defer_count))
-> +		return ret;
-> +	if (count <= atomic64_read(&cma->defer_count)) {
-> +		spin_lock_irq(&cma->lock);
-> +		list_for_each_entry(area, &cma->defer_free, list) {
-> +			/*area found for given pfn and count*/
-> +			if (pfn >= area->pfn && count <= area->count) {
-> +				list_del(&area->list);
-> +				/*set bits for allocated pfn*/
-> +				bitmap_set(cma->bitmap, pfn - cma->base_pfn, count);
-> +				kfree(area);
-> +				atomic64_sub(count, &cma->defer_count);
-> +				/*release the rest pfn to cma*/
-> +				if (!list_empty(&cma->defer_free) && (pfn == area->pfn)) {
-> +					new_pfn = pfn + count;
-> +					cma_release(cma, pfn_to_page(new_pfn), area->count - count);
-> +				}
-> +				ret = 0;
-> +				spin_unlock_irq(&cma->lock);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +	/*no area found, release all to buddy*/
-> +	list_for_each_entry(area, &cma->defer_free, list) {
-> +		list_del(&area->list);
-> +		free_contig_range(area->pfn, area->count);
-> +		cma_clear_bitmap(cma, area->pfn, area->count);
-> +		kfree(area);
-> +	}
-> +	spin_unlock_irq(&cma->lock);
-> +	return ret;
-> +}
->  /**
->   * cma_alloc() - allocate pages from contiguous area
->   * @cma:   Contiguous memory region for which the allocation is performed.
-> @@ -469,9 +534,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
->  		spin_unlock_irq(&cma->lock);
->  
->  		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
-> +
->  		mutex_lock(&cma_mutex);
-> -		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
-> -				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
-> +		/*search defer area first*/
-> +		ret = cma_defer_area_fetch(cma, pfn, count) ? alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
-> +				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0)) : 0;
->  		mutex_unlock(&cma_mutex);
->  		if (ret == 0) {
->  			page = pfn_to_page(pfn);
-> @@ -556,6 +623,8 @@ bool cma_release(struct cma *cma, const struct page *pages,
->  		 unsigned long count)
->  {
->  	unsigned long pfn;
-> +	unsigned long flags;
-> +	struct cma_defer_free_area *defer_area;
->  
->  	if (!cma_pages_valid(cma, pages, count))
->  		return false;
-> @@ -566,6 +635,19 @@ bool cma_release(struct cma *cma, const struct page *pages,
->  
->  	VM_BUG_ON(pfn + count > cma->base_pfn + cma->count);
->  
-> +	if (atomic64_read(&cma->defer_count) < cma->batch) {
-> +		defer_area = kmalloc(sizeof(struct cma_defer_free_area), GFP_KERNEL);
-> +		if (defer_area) {
-> +			defer_area->pfn = pfn;
-> +			defer_area->count = count;
-> +			spin_lock_irqsave(&cma->lock, flags);
-> +			list_add(&defer_area->list, &cma->defer_free);
-> +			atomic64_add(count, &cma->defer_count);
-> +			spin_unlock_irqrestore(&cma->lock, flags);
-> +			cma_clear_bitmap(cma, pfn, count);
-> +			return true;
-> +		}
-> +	}
->  	free_contig_range(pfn, count);
->  	cma_clear_bitmap(cma, pfn, count);
->  	trace_cma_release(cma->name, pfn, pages, count);
-> @@ -586,3 +668,68 @@ int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
->  
->  	return 0;
->  }
-> +
-> +static unsigned long cma_defer_free_count(struct shrinker *shrinker,
-> +					struct shrink_control *sc)
-> +{
-> +	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-> +	unsigned long val;
-> +
-> +	val = atomic64_read(&cma->defer_count);
-> +	return val;
-> +}
-> +
-> +static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
-> +					struct shrink_control *sc)
-> +{
-> +	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-> +	unsigned long to_scan;
-> +	struct cma_defer_free_area *area;
-> +	unsigned long new_pfn;
-> +	unsigned long defer_count;
-> +
-> +	if (sc->nr_to_scan < cma->batch)
-> +		return 0;
-> +
-> +	to_scan = cma->batch - sc->nr_to_scan;
-> +	defer_count = atomic64_read(&cma->defer_count);
-> +	spin_lock_irq(&cma->lock);
-> +
-> +	/*large to_scan, free all node*/
-> +	if (to_scan >= defer_count) {
-> +		list_for_each_entry(area, &cma->defer_free, list) {
-> +			list_del(&area->list);
-> +			free_contig_range(area->pfn, area->count);
-> +			cma_clear_bitmap(cma, area->pfn, area->count);
-> +			kfree(area);
-> +		}
-> +		atomic64_set(&cma->defer_count, 0);
-> +		return defer_count;
-> +	}
-> +	/*iterate all defer_area*/
-> +	list_for_each_entry(area, &cma->defer_free, list) {
-> +		if (to_scan <= area->count) {
-> +			list_del(&area->list);
-> +			free_contig_range(area->pfn, area->count);
-> +			cma_clear_bitmap(cma, area->pfn, area->count);
-> +			kfree(area);
-> +			atomic64_sub(to_scan, &cma->defer_count);
-> +			/*release the rest pfn to cma*/
-> +			if (!list_empty(&cma->defer_free)) {
-> +				new_pfn = area->pfn + to_scan;
-> +				cma_release(cma, pfn_to_page(new_pfn), area->count - to_scan);
-> +			}
-> +			break;
-> +		}
-> +		else {
-> +			list_del(&area->list);
-> +			free_contig_range(area->pfn, area->count);
-> +			cma_clear_bitmap(cma, area->pfn, area->count);
-> +			kfree(area);
-> +			to_scan = to_scan - atomic64_read(&cma->defer_count);
-> +			continue;
-> +		}
-> +	}
-> +	spin_unlock_irq(&cma->lock);
-> +	return 0;
-> +}
-> diff --git a/mm/cma.h b/mm/cma.h
-> index 88a0595..e1e3e2f 100644
-> --- a/mm/cma.h
-> +++ b/mm/cma.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/debugfs.h>
->  #include <linux/kobject.h>
-> +#include <linux/shrinker.h>
->  
->  struct cma_kobject {
->  	struct kobject kobj;
-> @@ -31,6 +32,16 @@ struct cma {
->  	struct cma_kobject *cma_kobj;
->  #endif
->  	bool reserve_pages_on_error;
-> +	struct list_head defer_free;
-> +	atomic64_t defer_count;
-> +	unsigned long batch;
-> +	struct shrinker shrinker;
-> +};
-> +
-> +struct cma_defer_free_area {
-> +	unsigned long pfn;
-> +	unsigned long count;
-> +	struct list_head list;
->  };
->  
->  extern struct cma cma_areas[MAX_CMA_AREAS];
+> 
+> So, let's check f2fs' status:
+> - fallocate only reserve valid block count and set NEW_ADDR in dnode, so
+> it does not match condition 1)
+> - pin & fallocate preallocates blkaddrs and set blkaddrs in dnode, but
+> content on those blkaddrs may contain zero or random data, so it does not
+> match  condition 2)
+> 
+> Christoph describes this issue in below patch as well, you can check it.
+> da8c7fecc9c7 ("f2fs: rename F2FS_MAP_UNWRITTEN to F2FS_MAP_DELALLOC")
+> 
+> Am I missing something?
+> 
+> Thanks,
+> 
+>>
+>>>
+>>> So 009, 092, 094 .. which expects unwritten status from extent will
+>>> fail.
+>>>
+>>> How about disabling those testcase?
+>>>
+>>> Thanks,
+>>>
+>>>>
+>>>> On 04/05, Chao Yu wrote:
+>>>>> xfstest generic/614 fails to run due below reason:
+>>>>>
+>>>>> generic/614 1s ... [not run] test requires delayed allocation buffered writes
+>>>>>
+>>>>> The root cause is f2fs tags wrong fiemap flag for delay allocated
+>>>>> extent.
+>>>>>
+>>>>> Quoted from fiemap.h:
+>>>>> FIEMAP_EXTENT_UNKNOWN        0x00000002 /* Data location unknown. */
+>>>>> FIEMAP_EXTENT_DELALLOC        0x00000004 /* Location still pending.
+>>>>>                             * Sets EXTENT_UNKNOWN. */
+>>>>> FIEMAP_EXTENT_UNWRITTEN        0x00000800 /* Space allocated, but
+>>>>>                             * no data (i.e. zero). */
+>>>>>
+>>>>> FIEMAP_EXTENT_UNWRITTEN means block address is preallocated, but w/o
+>>>>> been written any data, which status f2fs is not supported now, for all
+>>>>> NEW_ADDR block addresses, it means delay allocated blocks, so let's
+>>>>> tag FIEMAP_EXTENT_DELALLOC instead.
+>>>>>
+>>>>> Testcase:
+>>>>> xfs_io -f -c 'pwrite 0 64k' /mnt/f2fs/file;
+>>>>> filefrag -v /mnt/f2fs/file
+>>>>>
+>>>>> Output:
+>>>>> - Before
+>>>>> Filesystem type is: f2f52010
+>>>>> Fize of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+>>>>>    ext:     logical_offset:        physical_offset: length:   expected: flags:
+>>>>>      0:        0..      15:          0..        15:     16:             last,unwritten,merged,eof
+>>>>> /mnt/f2fs/file: 1 extent found
+>>>>>
+>>>>> After:
+>>>>> Filesystem type is: f2f52010
+>>>>> File size of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+>>>>>    ext:     logical_offset:        physical_offset: length:   expected: flags:
+>>>>>      0:        0..      15:          0..         0:      0:             last,unknown_loc,delalloc,eof
+>>>>> /mnt/f2fs/file: 1 extent found
+>>>>>
+>>>>> Fixes: 7f63eb77af7b ("f2fs: report unwritten area in f2fs_fiemap")
+>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>> ---
+>>>>>    fs/f2fs/data.c | 7 +++++--
+>>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>> index 359de650772e..3afc9764743e 100644
+>>>>> --- a/fs/f2fs/data.c
+>>>>> +++ b/fs/f2fs/data.c
+>>>>> @@ -1995,7 +1995,10 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>>>>        }
+>>>>>        if (size) {
+>>>>> -        flags |= FIEMAP_EXTENT_MERGED;
+>>>>> +        if (flags & FIEMAP_EXTENT_DELALLOC)
+>>>>> +            phys = 0;
+>>>>> +        else
+>>>>> +            flags |= FIEMAP_EXTENT_MERGED;
+>>>>>            if (IS_ENCRYPTED(inode))
+>>>>>                flags |= FIEMAP_EXTENT_DATA_ENCRYPTED;
+>>>>> @@ -2035,7 +2038,7 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>>>>                    size += blks_to_bytes(inode, 1);
+>>>>>                }
+>>>>>            } else if (map.m_flags & F2FS_MAP_DELALLOC) {
+>>>>> -            flags = FIEMAP_EXTENT_UNWRITTEN;
+>>>>> +            flags = FIEMAP_EXTENT_DELALLOC;
+>>>>>            }
+>>>>>            start_blk += bytes_to_blks(inode, size);
+>>>>> -- 
+>>>>> 2.36.1
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
