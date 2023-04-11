@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2143B6DD8D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9922D6DD8D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDKLFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S230041AbjDKLFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjDKLFn (ORCPT
+        with ESMTP id S229632AbjDKLFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 07:05:43 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A566726A6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:18 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o2so7455639plg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:18 -0700 (PDT)
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B83C1D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:21 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id b6so32579879ljr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681211116;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=io8UpU5dAmYXG11sIwaNdSii471vCcYFpdDyFDwKPgY=;
-        b=BAvnR27qwms7MKR6LP3NoeyT/Ghkxw6tRsZ6utkXZICaajKUMt75IRXj8JmnJl9Oya
-         sdNJmthl4XSlSOfr+xLK69CfbgVbIJGqYhIcbRfp6KRY3u9WKrcl0Nwmc0X5SomTa41P
-         Gnboi5DFZTigHhJn4VAbWqtUBO6shp+/stsftRZDkwQ0hQJJeX7jNEzBjmtUkVRfslmz
-         8+DRMHnqN/854QjVjqLe17bARvpT/Jf2ddjNz6gDzbihfavgMu0Pltiao0dMW+7bEjbK
-         FUiSeZTJU0XyttdNcMuR20Nvdn7CDXDkwZyiJ5j5HTItFhvtBQ4Lw/cCWYM63Szpc2Ml
-         S0kQ==
+        d=linaro.org; s=google; t=1681211117;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RuzBVtpFbPcKyoEX3tglBEiOQK0I0vGf1qNsgKXvqOs=;
+        b=AwuQZCuZlqD+ZeZkel+q+S2qqaICPkPfpx1JMxUR4+fGUFnJP5m6UWtVEwnD/w6nSZ
+         fBlfFQDm38Sl1ngfbL6Q8sIZsdvGpw0sP6IbvO6Rwt6NE0ZO4sRIzAz1Ossv5jIkzCZM
+         /mgPtQgBFl5wMrugc7rnN/Ue87mtzGHLyNNQz3tAPzDrZzIPKEp5FQW9trp2rePBBC35
+         qCZvBu12T165EYYiYd6nNa+L2iyuDWkPDkDmZfTRjkQqAdtjNE9tgmW8HcK7U4AZmgEe
+         roCxmlBVhd9cMjZScWGoE2Y51JpqWPR8fIOKXZaTTk+vT2k504Am/Qhv6HT3I3dk3t7h
+         dNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681211116;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1681211117;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=io8UpU5dAmYXG11sIwaNdSii471vCcYFpdDyFDwKPgY=;
-        b=v3mXfauCgcdQqKzgWY55YuJouNs9sxa9gM0c37/MkBETFMVNUtYx7AxCZScrw/ofVO
-         1tTVUhIDngX87nQX9Spcre/F9tLRMVLE6H26wGn66tDAEW0L8EjKio3aV9kLeJjfDjaG
-         V1rJcY/uTPpNrgehGKE9Zztd1beoFPaqzQu6Q+cu8r3hOzgofTPMOWF8vjEWRaSQWXue
-         TzIMt0EFuobfG25JT3g+8/y4/E+tORIwCx/uXVKaiuivq1ArXrvDkkRfEaylRPq3oU6j
-         lb/hGPW2vX34/pLevO9KoBC5RxsoCH46EkPpidHcnM8gvbFWGJpbGJZfazx2TddqNfoX
-         UZWQ==
-X-Gm-Message-State: AAQBX9cqXTvykdbZ6+mH6fKAdS6tp1/u2uMArUq312bfSBNBTdzxtyXt
-        dz0Y5Ne+KHMZ9j4m7SLmsbg0
-X-Google-Smtp-Source: AKy350auwVp798Y4nCCGwszWeeAy8RYT89ODx6HrKEQrzx+s92jgK5a09SHdRU0RH5JS692sJIV6fg==
-X-Received: by 2002:a05:6a20:77af:b0:de:af2f:fdeb with SMTP id c47-20020a056a2077af00b000deaf2ffdebmr9218828pzg.3.1681211115858;
-        Tue, 11 Apr 2023 04:05:15 -0700 (PDT)
-Received: from thinkpad ([117.216.120.128])
-        by smtp.gmail.com with ESMTPSA id j10-20020a62e90a000000b005a7f8a326a3sm9535165pfh.50.2023.04.11.04.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 04:05:15 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:35:07 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 02/10] PCI: dwc: Fix inbound iATU entries
- out-of-bounds warning message
-Message-ID: <20230411110507.GD5333@thinkpad>
-References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
- <20230411033928.30397-3-Sergey.Semin@baikalelectronics.ru>
+        bh=RuzBVtpFbPcKyoEX3tglBEiOQK0I0vGf1qNsgKXvqOs=;
+        b=uXtY9J3funR7iwJdInVccOURwzBWCrgcVhHxaNs4bZwNQmaae0rkvbfhUGREmiv+eW
+         3uzkPj8Lql17ivKnzMNRWJf0hZlY/Nj6o53nLJ3zErAyCQijzfHq5d6zKSIP1InivTuc
+         +ySxxnkUNcLacb9IqVIwYcclSEqQOmz3k07CefJpQX2NVWhOwiwVqHj/3aeuZmyflVMo
+         K0Y6iCD0C0b/KuVuJ8QrP1yu/A8L77Zc0IdkzzjXj8SmKsAdk2VVp5mnG9Fw1QlU+Gyy
+         8NN6iCDZFUnCPGlnONAPmJB+w79NUoCPrnRZW6g9NXFJc4qwhKk4sU4gi9bNBR1qJQOr
+         3lkQ==
+X-Gm-Message-State: AAQBX9d69bsu1M9cohBq57DPKm7Q3DpYitZ3fsfuLq5RyJmF5HD3Zp0V
+        cYfzlxnpufNl6CMrszWHiIG05w==
+X-Google-Smtp-Source: AKy350YPlyO1iPJRzkFwS0URN6dmUM9S/rE1UkL9lLML1IIDP7JFadR/9MW3iUWnbQHHf+QeKsFP/Q==
+X-Received: by 2002:a2e:9a8d:0:b0:2a7:7325:7e05 with SMTP id p13-20020a2e9a8d000000b002a773257e05mr2006303lji.20.1681211117017;
+        Tue, 11 Apr 2023 04:05:17 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id v9-20020a2e87c9000000b002a7852b60f6sm496132ljj.58.2023.04.11.04.05.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 04:05:16 -0700 (PDT)
+Message-ID: <61dacd01-ea28-3f3a-9af3-af6132cb11f6@linaro.org>
+Date:   Tue, 11 Apr 2023 13:05:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411033928.30397-3-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974: do not use underscore in node
+ name (again)
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230410175232.22317-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230410175232.22317-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:39:20AM +0300, Serge Semin wrote:
-> The message is printed if the number of requested inbound iATU windows
-> exceed the device capability. In that case the message should either refer
-> to the "dma-ranges" DT property or to the DMA-ranges mapping. We suggest
-> to use the later version as a counterpart to the just CPU-ranges mapping.
-> In any case the current "Dma-ranges" phrase seems incorrect.
+
+
+On 10.04.2023 19:52, Krzysztof Kozlowski wrote:
+> Align RPM requests node with DT schema by using hyphen instead of
+> underscore.
 > 
-> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-- Mani
-
+> Fixes: f300826d27be ("ARM: dts: qcom-msm8974: Sort and clean up nodes")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->  drivers/pci/controller/dwc/pcie-designware-host.c | 2 +-
+> 
+> I guess some changes has to be done more than once, to be sure they
+> get written properly to Git.
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 9952057c8819..5718b4bb67f0 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -723,7 +723,7 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
->  	}
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> index 8208012684d4..38d3ee152dcb 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -300,7 +300,7 @@ rpm {
+>  			qcom,ipc = <&apcs 8 0>;
+>  			qcom,smd-edge = <15>;
 >  
->  	if (pci->num_ib_windows <= i)
-> -		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
-> +		dev_warn(pci->dev, "DMA-ranges exceed inbound iATU size (%u)\n",
->  			 pci->num_ib_windows);
+> -			rpm_requests: rpm_requests {
+> +			rpm_requests: rpm-requests {
+>  				compatible = "qcom,rpm-msm8974";
+>  				qcom,smd-channels = "rpm_requests";
 >  
->  	return 0;
-> -- 
-> 2.40.0
-> 
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
