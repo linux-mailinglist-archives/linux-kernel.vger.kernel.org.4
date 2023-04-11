@@ -2,261 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FB6DE0CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2929C6DE0D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjDKQSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S229562AbjDKQSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDKQRr (ORCPT
+        with ESMTP id S230115AbjDKQRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:17:47 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A75FFB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:16:26 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so4614296wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681229785; x=1683821785;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQOU2NxcA3yCNJObcmxy+gfhS7V/5K9QCr7rxWQRSCc=;
-        b=w4nLujlkK2kPUHBbGgWURVjMNtN7wv3feP7uzPldzYCs/EZ0GmNCQhhHFGLTAY+Gi5
-         +Lp8L9G1hkQsoR4T/dP2rnFkQKkZXj7JVGKt2lrBdp2Y9cUjeunzhGlijbiFiuE09YMq
-         8oYD9lZ/+fe3Tmd7PwYMP9Neo0olfAjzmJV4bg+3wvDDwtBoIp95WGcK3lzcKDyPBQbo
-         xr5gW0S3s9YIrEBW+lx4H009CWTnN7QSRWYImt3lc7oi4UOHjQVAn+FI7WBpxxNs7mMA
-         oYTwb7x0T2CieNCJ+JHcPAG+ZgWjhkKlYOaEY5U39P11b+wlJGKSllAt7arcPFJdCxn+
-         S4Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681229785; x=1683821785;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rQOU2NxcA3yCNJObcmxy+gfhS7V/5K9QCr7rxWQRSCc=;
-        b=duEzpgMPYKP8lqXH1GTsdxpXkUBRDchW2GKf4114iKJNRlavQD7NifBfkEX2ut7uj7
-         PHnTERLheA/ZjZgPcoB/NQ49Q77mRBy0gzF+McK+qFG2nc0Ze7Az5rcec0gGvuge/KsU
-         2h2X8dNzB3YjkCL/z6OmJmGjHEmKx0YXNulYZb0poKS44k9RHbLtDXIvWPQEbBxKSZNz
-         RBfDHrzw4DSiLLwUdf+kdSVlMrKjafg/z0VzIRMP+qqnpHe1yXj9GN3sDUA5DfldXEQP
-         qq2kk8TI0gnR0U+RVQC0RwMFac2+D9yaDh26Z16ZHEmPO0HBkETnPAnBID24sjtaU29x
-         srsQ==
-X-Gm-Message-State: AAQBX9ebiNMzMFvbntbK6Zb/IhrYndZHA4p206jilMYAOlo+H+l7J7T3
-        RQFlDgNPE4YHiog+WcQc1Vy2HQ==
-X-Google-Smtp-Source: AKy350ZI3OMMZN8klF1UVUUig8s+iGaTms+boTblI8oKaQxUKj3bSCRKrhXp0lQDjqs/Ax6/me7yQA==
-X-Received: by 2002:a05:600c:4da5:b0:3f0:4275:395f with SMTP id v37-20020a05600c4da500b003f04275395fmr9211597wmp.13.1681229785055;
-        Tue, 11 Apr 2023 09:16:25 -0700 (PDT)
-Received: from klimova1.roam.corp.google.com ([194.75.181.122])
-        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003f0652084b8sm21282192wms.20.2023.04.11.09.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 09:16:24 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 17:16:21 +0100
-From:   Alexey Klimov <alexey.klimov@linaro.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     draszik@google.com, peter.griffin@linaro.org,
-        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
-        tony@atomide.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        alim.akhtar@samsung.com, regressions@lists.linux.dev,
-        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
- and slow-stuck reboots
-Message-ID: <20230411171621.0544249a.alexey.klimov@linaro.org>
-In-Reply-To: <20230320093614.GB2196776@hirez.programming.kicks-ass.net>
-References: <20230314230004.961993-1-alexey.klimov@linaro.org>
-        <20230315111606.GB2006103@hirez.programming.kicks-ass.net>
-        <CANgGJDpd4Gm5HhQW__oMAv1yUqSPZ7FSGoQLYTmug=TUk4cn4g@mail.gmail.com>
-        <20230320090558.GF2194297@hirez.programming.kicks-ass.net>
-        <20230320093614.GB2196776@hirez.programming.kicks-ass.net>
+        Tue, 11 Apr 2023 12:17:51 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0492D53;
+        Tue, 11 Apr 2023 09:16:44 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EF10F1BF203;
+        Tue, 11 Apr 2023 16:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681229803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YN1HFAut0wlkhACR1rC7RVWyzDX8GM5pnpZhh86udRk=;
+        b=EKMDssOG843Uardxa6RwBGRbMOzfLVszXIbDuTnWbFZ1B3lncrlUZE++iYyTOzyeat48k7
+        c4g0LlKJTXV/PvvYYgj+aPv3Dw/18k+BqyvXe00AhM2XJV+U5SpZp4EkWwodhOpAISw3y2
+        L5BKZTltFS0CREQXmMmorn5Ya56DHqZJuzUK1SI5i6oezMRh5WOsaOBuuCeUVzoZ6RLJ5V
+        05WE03kqdDkEv0aL/PaqbQfJKN4fDObGcDiEKaMLd4r9anaug2ArnmRnZF/kWNdeGak3pn
+        OcaJh4DOFkxBCDztunLHiPOHVG5Au+YsFQ4ttteU5CeI3yDs0HVDpwwm8YAvTA==
+Date:   Tue, 11 Apr 2023 18:16:40 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
+Message-ID: <20230411181640.50c19d4e@bootlin.com>
+In-Reply-To: <20230405180023.4aebaa08@bootlin.com>
+References: <20230331094208.41ab4420@bootlin.com>
+ <6d39e9c3-fb6a-4b2a-9889-8fe8d86716d5@linaro.org>
+ <20230331141104.42445da9@bootlin.com>
+ <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
+ <20230331165904.4e7f46a1@bootlin.com>
+ <20230403142822.GA8371@google.com>
+ <20230404092036.2d1cd5d9@bootlin.com>
+ <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
+ <20230404100759.5bc9cd20@bootlin.com>
+ <143754c2-9e37-4386-af92-174c0df2eb0a@linaro.org>
+ <20230405135450.GF8371@google.com>
+ <20230405180023.4aebaa08@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 10:36:14 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Lee,
 
-Sorry for the delay.
-(adding Mark in c/c)
+On Wed, 5 Apr 2023 18:00:23 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-> On Mon, Mar 20, 2023 at 10:05:58AM +0100, Peter Zijlstra wrote:
-> > On Fri, Mar 17, 2023 at 02:11:25AM +0000, Alexey Klimov wrote:  
-> > > On Wed, 15 Mar 2023 at 11:16, Peter Zijlstra
-> > > <peterz@infradead.org> wrote:  
+> Hi Lee,
+> On Wed, 5 Apr 2023 14:54:50 +0100
+> Lee Jones <lee@kernel.org> wrote:
+> 
+> > On Tue, 04 Apr 2023, Krzysztof Kozlowski wrote:
+> >   
+> > > On 04/04/2023 10:07, Herve Codina wrote:
+> > >    
+> > > >>> So, the structure I have in mind:
+> > > >>> - pef2256.c (MFD)
+> > > >>>   implement and do the setup at probe()
+> > > >>>   Add the children at probe():
+> > > >>>     - pef2256-pinctrl (pinctrl) added using mfd_add_devices()
+> > > >>>     - pef2256-codec (ASoC codec) added using devm_of_platform_populate()
+> > > >>>
+> > > >>> Lee, with this in mind, can the core pef2256.c be a MFD driver ?    
+> > > >>
+> > > >> You do not use MFD here, so why do you want to keep it in MFD? If you
+> > > >> disagree, please tell me where is the MFD code in your patch?    
 > > > >
+> > > > I don't want to absolutely use MFD.
+> > > > I just want to put my driver somewhere and I don't know the right location
+> > > > between MFD and Misc.
 > > > >
-> > > > (could you wrap your email please)  
-> > > 
-> > > Ouch. Sorry.
-> > >   
-> > > > On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:  
-> > > > > #regzbot introduced: 0c5ffc3d7b15 #regzbot title:
-> > > > > CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and
-> > > > > slow-stuck reboots
-> > > > >
-> > > > > The upstream changes are being merged into android-mainline
-> > > > > repo and at some point we started to observe kernel panics on
-> > > > > reboot or long reboot times.  
+> > > > Basically, the driver needs to do (little simplified and error path removed):
 > > > >
-> > > > On what hardware? I find it somewhat hard to follow this DT
-> > > > code :/  
-> > > 
-> > > Pixel 6.  
+> > > >   static const struct mfd_cell pef2256_devs[] = {
+> > > >   	{ .name = "lantiq-pef2256-pinctrl", },
+> > > >   };
+> > > >
+> > > >   static int pef2256_probe(struct platform_device *pdev)
+> > > >   {
+> > > > 	struct pef2256 *pef2256;
+> > > > 	void __iomem *iomem;
+> > > > 	int ret;
+> > > > 	int irq;
+> > > >
+> > > > 	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
+> > > > 	if (!pef2256)
+> > > > 		return -ENOMEM;
+> > > >
+> > > > 	pef2256->dev = &pdev->dev;
+> > > >
+> > > > 	iomem = devm_platform_ioremap_resource(pdev, 0);
+> > > >
+> > > > 	pef2256->regmap = devm_regmap_init_mmio(&pdev->dev, iomem,
+> > > > 						&pef2256_regmap_config);
+> > > >
+> > > > 	pef2256->mclk = devm_clk_get_enabled(&pdev->dev, "mclk");
+> > > > 	pef2256->sclkr = devm_clk_get_enabled(&pdev->dev, "sclkr");
+> > > > 	pef2256->sclkx = devm_clk_get_enabled(&pdev->dev, "sclkx");
+> > > >
+> > > > 	pef2256->reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
+> > > > 	if (pef2256->reset_gpio) {
+> > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 1);
+> > > > 		udelay(10);
+> > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 0);
+> > > > 		udelay(10);
+> > > > 	}
+> > > >
+> > > > 	pef2556_of_parse(pef2256, np);
+> > > >
+> > > > 	irq = platform_get_irq(pdev, 0);
+> > > > 	ret = devm_request_irq(pef2256->dev, irq, pef2256_irq_handler, 0, "pef2256", pef2256);
+> > > >
+> > > > 	platform_set_drvdata(pdev, pef2256);
+> > > >
+> > > > 	mfd_add_devices(pef2256->dev, PLATFORM_DEVID_NONE, pef2256_devs,
+> > > > 	      		ARRAY_SIZE(pef2256_devs), NULL, 0, NULL);    
+> > >
+> > > Wait, now you use MFD framework, so the driver is suitable for MFD.
+> > > Before there was nothing like that in your code.    
 > > 
-> > What actual cpuidle driver is that thing using? Is there any
-> > out-of-tree code involved? Mark tells me anything arm64 should be
-> > using PSCI, so let me to stare hard at that again.
-
-Yep, it uses PSCI (psci_idle). But there is some out-of-tree code
-involved.
-
-> So specifically, your problem sounds like rcu_synchronize() is taking
-> very much longer than it used to. Specifically combined with the patch
-> that makes it 'go-away' this seems to indicate you lost a
-> ct_cpuidle_enter() call, which is what ends up telling RCU the cpu is
-> idle and no longer partakes in the whole grace period machinery. Not
-> telling RCU this results in RCU waiting for an idle cpu to report back
-> on it's RCU progress, but it being idle means it's not going to be
-> doing that and things sorta wait around until RCU gets fed up and
-> starts spraying IPIs to try and get things moving.
- 
-rcu_barrier().
-
-Eventually managed to make sysrq work and blocked tasks point to
-rcu_barrier():
-
-[  454.626264][    C4] task:init state:D stack:9728 pid:1 ppid:0
-flags:0x04000008
-[  454.626463][    C4] Call trace:
-[  454.626570][    C4]  __switch_to+0x180/0x308
-[  454.626733][    C4]  __schedule+0x620/0x9e4
-[  454.626892][    C4]  schedule+0x84/0xf4
-[  454.627039][    C4]  schedule_timeout+0x48/0x1d8
-[  454.627215][    C4]  wait_for_common+0xe0/0x1a8
-[  454.627388][    C4]  wait_for_completion+0x20/0x30
-[  454.627571][    C4]  rcu_barrier+0x3f8/0x674
-[  454.627734][    C4]  netdev_run_todo+0x74/0x5d8
-[  454.627907][    C4]  rtnl_unlock+0x18/0x2c
-[  454.628063][    C4]  dhd_unregister_net+0x30/0x54 [bcmdhd4389]
-[  454.629084][    C4]  wl_cfg80211_unregister_static_if+0x98/0x18c
-[bcmdhd4389]
-[  454.630101][    C4]  wl_cfg80211_detach+0xcc/0x344
-[bcmdhd4389]
-[  454.631091][    C4]  dhd_detach+0x4d0/0xc78 [bcmdhd4389]
-[  454.632064][    C4]  dhdpcie_bus_release+0x28c/0x6bc [bcmdhd4389]
-[  454.633052][    C4]  dhdpcie_pci_remove+0xb4/0x1a4 [bcmdhd4389]
-[  454.634036][    C4]  pci_device_remove+0x60/0x118
-[  454.634152][    C4]  device_release_driver_internal+0x19c/0x2f0
-[  454.634291][    C4]  driver_detach+0x98/0xe0
-[  454.634395][    C4]  bus_remove_driver+0x80/0xbc
-[  454.634504][    C4]  driver_unregister+0x38/0x64
-[  454.634616][    C4]  pci_unregister_driver+0x2c/0xb8
-[  454.634735][    C4]  dhdpcie_bus_unregister+0xd8/0x1b0 [bcmdhd4389]
-[  454.635739][    C4]  dhd_bus_unregister+0x24/0x50 [bcmdhd4389]
-[  454.636722][    C4]  dhd_reboot_callback+0x19c/0x1d8 [bcmdhd4389]
-[  454.637709][    C4]  blocking_notifier_call_chain+0x78/0xc8
-[  454.637836][    C4]  kernel_power_off+0x2c/0xfc
-[  454.637946][    C4]  __arm64_sys_reboot+0x270/0x27c
-[  454.638060][    C4]  invoke_syscall+0x60/0x130
-[  454.638169][    C4]  el0_svc_common+0xbc/0x100
-[  454.638278][    C4]  do_el0_svc+0x38/0xb0
-[  454.638377][    C4]  el0_svc+0x34/0xc4
-[  454.638464][    C4]  el0t_64_sync_handler+0x8c/0xfc
-[  454.638573][    C4]  el0t_64_sync+0x1a8/0x1ac
-
-and
-
-[   13.799675][    C2] task:kworker/1:1     state:D stack:12784 pid:97
-  ppid:2      flags:0x00000008
-[   13.799879][    C2] Workqueue: events
-slab_caches_to_rcu_destroy_workfn
-[   13.800112][    C2] Call trace:
-[   13.800231][    C2]  __switch_to+0x180/0x308
-[   13.800394][    C2]  __schedule+0x620/0x9e4
-[   13.800553][    C2]  schedule+0x84/0xf4
-[   13.800700][    C2]  schedule_timeout+0x48/0x1d8
-[   13.800876][    C2]  wait_for_common+0xe0/0x1a8
-[   13.801049][    C2]  wait_for_completion+0x20/0x30
-[   13.801232][    C2]  rcu_barrier+0x3f8/0x674
-[   13.801394][    C2]  slab_caches_to_rcu_destroy_workfn+0x90/0x108
-[   13.801627][    C2]  process_one_work+0x1f0/0x454
-[   13.801807][    C2]  worker_thread+0x330/0x43c
-[   13.801977][    C2]  kthread+0x10c/0x1b8
-[   13.802127][    C2]  ret_from_fork+0x10/0x20
-
- 
-> Now...  if a driver sets CPUIDLE_FLAG_RCU_IDLE it promises to call
-> ct_cpuidle_{enter,exit}() itself. Hence for any driver that does *NOT*
-> set that flag, cpuidle_enter_state() calls these functions.
+> > Agree, the above is suitable for MFD, since it does all the things I
+> > said your last one did not.  You *can* also use of_platform_populate()
+> > here, since you are *also* requesting and initialising shared resources.
+> > You cannot do *both* however.
+> >   
 > 
-> Now, fo PSCI, the DT handler is psci_enter_idle_state(), which uses
-> CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(), which per the other email, means
-> that it's low_level_idle_enter := psci_cpu_suspend_enter(), *will*
-> call ct_cpuidle_{enter,exit}().
+> Thanks for having confirmed that this driver can be a MFD driver.
 > 
-> Then if we look at psci_cpu_suspend_enter(), it has two cases
-> depending on psci_power_state_loses_context(). If it doesn't lose
-> context it does ct_cpuidle_enter() right there and proceeds to call
-> psci_ops.cpu_suspend() -- whatever that does.
+> Related to of_platform_populate() / mfd_add_devices(), I wanted to use both
+> because:
+> - the pinctrl part does not have (and does not need to have) a specific node
+>   with a specific compatible property. In order to instantiate the related
+>   driver mfd_add_devices() is the only way I know.
+> - the audio component nodes have a compatible string and several components
+>   (ie several nodes) can be present. of_platform_populate() call seems the
+>   simple way to instantiate them.
 > 
-> If it does lose state, then it depends on CONFIG_ARM64, on arm64 we do
-> not call ct_cpuidle_{enter,exit}() but proceed into cpu_suspend().
+> Is there a way to use mfd_add_devices() in this case without the need to
+> count the audio component nodes in order to allocate as much mfd_cell as
+> nodes having a matching compatible property ? Is there an other API to do
+> it ?
 > 
-> We can find that function in arch/arm64/kernel/suspend.c, and if you
-> look at it, you'll note it does in fact call ct_cpuidle_{enter,exit}()
-> as per promises made.
-> 
-> So AFAICT every path into idle will pass through ct_cpuidle_enter().
- 
-I tried to understand where ct_cpuidle_{enter,exit}() is missing and
-narrow it down until found out that the problem is cpu pm notifier
-returning NOTIFY_BAD during reboot and calls to ct_cpuidle_{enter,exit}
-are correct. Thanks for checking.
 
-In __CPU_PM_CPU_IDLE_ENTER() macro we have:
+I looked deeper for using mfd_add_devices() only and found an issue (related
+to my use-case).
 
-	if (!is_retention)
-		__ret =  cpu_pm_enter();
-	if (!__ret) {
-		if (!is_rcu)
-			ct_cpuidle_enter();
-		__ret = low_level_idle_enter(state);
-		if (!is_rcu)
-			ct_cpuidle_exit();
-		if (!is_retention)
-			cpu_pm_exit();
+mfd_add_devices() calls mfd_add_device() and in this function we have:
+---- 8< ----
+	if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
+		for_each_child_of_node(parent->of_node, np) {
+			if (of_device_is_compatible(np, cell->of_compatible)) {
+				/* Ignore 'disabled' devices error free */
+				if (!of_device_is_available(np)) {
+					of_node_put(np);
+					ret = 0;
+					goto fail_alias;
+				}
+
+				ret = mfd_match_of_node_to_dev(pdev, np, cell);
+				if (ret == -EAGAIN)
+					continue;
+				of_node_put(np);
+				if (ret)
+					goto fail_alias;
+
+				break;
+			}
+		}
+
+		if (!pdev->dev.of_node)
+			pr_warn("%s: Failed to locate of_node [id: %d]\n",
+				cell->name, platform_id);
 	}
+---- 8< ----
 
-While rebooting cpu_pm_enter() returns an error since one of the
-notifiers starts to return NOTIFY_BAD. Looks like kernel starts to
-"spin" trying to put CPUs in idle state and always gets an error from
-cpu_pm_enter() never reaching the section covered by
-ct_cpuidle_{enter,exit}. Before the mentioned commit all of this were
-under ct_cpuidle_{enter,exit}. Hence, yes, in some sense we lost a
-ct_cpuidle_enter+exit() call. As long as I manually cover this small
-piece with ct_cpuidle_{enter,exit} for testing, the reboot times return
-back to as it was before the commit. Currently I removed returning
-NOTIFY_BAD from notifier when rebooting.
+My issue is related to the loop.
+The loop is aborted if the device is not available (typically 'Disabled' in the
+DT node).
 
-It seems RCU waits for these CPUs to attend RCU machinery.
-Also it probably does not count as an upstream regression since it
-involves out of tree code but in theory this could happen with any
-other notifier. Probably WARN_ONCE() will be too bad too.
+My full pef2256 node can have several pef2256 audio subnodes with compatible
+set to "lantiq,pef2256-codec" and some of them can have 'status = "Disabled";'
+As soon as one device (with my expected compatible) is found 'Disabled', there
+is no way to look at other children.
 
-The cpu pm notifier is this one, line 972,
-exynos_cpu_pm_notify_callback():
-https://android.googlesource.com/kernel/gs/+/refs/tags/android-t-qpr3-beta-2_r0.5/drivers/soc/google/exynos-cpupm.c#972
-
-Thank you for checking all this!
+Having 'continue' in case of device not available in the loop to look at the
+next child will change the behavior of mfd_add_device().
+Do you think that looking at next child if we find a 'not available' child
+can be correct for mfd_add_device() ?
+This probably will have impacts on other MFD drivers.
 
 Best regards,
-Alexey
-
+Hervé
