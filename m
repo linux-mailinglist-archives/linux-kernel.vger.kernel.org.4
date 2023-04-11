@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C266DE1CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDEF6DE1D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjDKRBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S229826AbjDKRCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjDKRBS (ORCPT
+        with ESMTP id S230042AbjDKRBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:01:18 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740225FC9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:00:53 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id v10so7990364vsf.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681232452;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tTnNjr1uayn9DfHicnDiCohK9FF3VkcIZ2I9QDxxN9s=;
-        b=ik88FVzdB/fLlZubiEFP1pinVCx6zFqLOt1NAX/LS7ITfx+fD9hceBtilIDfPFJzPM
-         rMJROSFsu2VAKTSu4yl2nM8mQApcHD5Fi6+BxPRfinbKSFsLKNAupsyi2ISzQguCePxR
-         GWcDOe9D6QOMTQS+wwpMk8Pbk4iYi/VS4BK7rm1u1GJNF0J3Mx3Mtf8MLpxP2nRrxLU9
-         uGVlBvuQvJS3TgjD+vWaege44pnwxBDj4OfzLYLSpVKxazcneKw1UVWgBYVsF7Csig0q
-         q1Pws7U0X3tiQGQTSIn4wWvpSINAgbumFGBeO7zgDw3VdhPVv/nlQtzNaPmNZIAJB+aD
-         0lng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681232452;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tTnNjr1uayn9DfHicnDiCohK9FF3VkcIZ2I9QDxxN9s=;
-        b=ur/8oztaaKDU5bIxFpZq5mjLVYtGKs3h2PWBgKIILJC9X3VKR3gLbh1YOr/64iAyin
-         6XxliwDt8ZxUIE50D9TSwiHcfUWBg17uhScpujinvkexyKhVwbXfbce4ScwuqWENZgRb
-         NR0xXHcfisqJvb0u9d5hfxVcph/mb+p6bTHy/25sm2iEjqrKcpqTvkfQPN+a879FzMQb
-         Y8txzLCFhP9XYnWMj2oqSPaPPMxGCvOcBGuKc+2UbEvqdcbbVKrWe8n5bw0v/qzyTbm1
-         kX6VlolDup8qTnkIOW633MaxB/YoCsaOlpzozznj6qaQ85e01gEQ3FysSSwErmMbdW8m
-         lUVQ==
-X-Gm-Message-State: AAQBX9fZjeRkJjT0yVY2v+gcOhIMX9oW0Y9/XzagswtRmdNN7PPFuXTN
-        7QVTy+GU6zQ3jxJ+eAZQ9cXCw9Vyq8yp8b7QqdQkzeHuIr5ABwkPpnQ=
-X-Google-Smtp-Source: AKy350YP5rmR9IrAZnEnf2OiQvArlRdvsAAYeUyys2gI81ewlVtz9CU7z3Z0IN55k5+QIepQBvkZ3WFhBebQoc41Ljw=
-X-Received: by 2002:a05:6102:4747:b0:42c:77e2:37f with SMTP id
- ej7-20020a056102474700b0042c77e2037fmr3340753vsb.1.1681232451954; Tue, 11 Apr
- 2023 10:00:51 -0700 (PDT)
+        Tue, 11 Apr 2023 13:01:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2217D6A4E;
+        Tue, 11 Apr 2023 10:01:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D54BE6299C;
+        Tue, 11 Apr 2023 17:01:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4CE1C433EF;
+        Tue, 11 Apr 2023 17:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681232460;
+        bh=Xq8P+RD4YgDPuo3ptNv5j3i63DAD9z61+4UfucIts88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A1uvHVnBIa+ewJJn3ce/1LScENzWOjjNFJ7xOuNkKnD5tBjmLqBQYHbZ/lfrtjOnB
+         Bhli5Wg5iHhLt4nqjEboJ0mW5I7PjDqkdLPw2SlbRgphQPTPNOLenpbgKXpM9c2wZQ
+         fq+RA2cp+rjlqmmcZdpI2EaoeLRvgJBkiKo3Xqp9Ej2Dv412aMQhJEfDzl9jFwA4B2
+         vD/g6k/cK1YQ0dYgf2M1mqPmt3ZmFZ1xHQpsrCe3VsWFYDSwVU4ISr8f4AdE/TLRM5
+         b/jI99QSnJezUKx+qDqV3yyC3hUo2E2IwKiXHKIXafnsCC2kif3Fpzftsz/mRbOqCR
+         2CojejthgVHPA==
+Date:   Tue, 11 Apr 2023 10:00:58 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Tianyi Liu <i.pear@outlook.com>
+Cc:     alexandref75@gmail.com, olsajiri@gmail.com, acme@kernel.org,
+        alan.maguire@oracle.com, bpf@vger.kernel.org, dxu@dxuuu.xyz,
+        yhs@fb.com, Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, ptalbert@redhat.com,
+        jforbes@redhat.com
+Subject: [PATCH] vmlinux.lds.h: Force-align ELF notes section to four bytes
+Message-ID: <20230411170058.7677oximl7oq4hkv@treble>
+References: <CAMHq1ZuhecqT-YX8+yzUyhx8tmnQ7CDyuXV4GOuG=z44XTFsaw@mail.gmail.com>
+ <SY4P282MB1084A0E31D4228DF89FC42639DA29@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Apr 2023 22:30:40 +0530
-Message-ID: <CA+G9fYuogkamdKf9+uwsvKh67NGTjZru3feRVyHhEQPhpqipVg@mail.gmail.com>
-Subject: selftests: net: sctp_vrf.sh: # sysctl: error: 'net.sctp/l3mdev_accept'
- is an unknown key
-To:     Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Xin Long <lucien.xin@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SY4P282MB1084A0E31D4228DF89FC42639DA29@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The selftests net sctp_vrf.sh test case failed due to following errors.
-Do you see these errors / warnings at your end ?
+On Tue, Feb 14, 2023 at 02:33:02PM +0800, Tianyi Liu wrote:
+> > LLVM_OBJCOPY=objcopy pahole -J --btf_gen_floats -j
+> > --skip_encoding_btf_inconsistent_proto --btf_gen_optimized
+> > .tmp_vmlinux.btf
+> > btf_encoder__encode: btf__dedup failed!
+> > Failed to encode BTF
+> >
+> > Thanks,
+> >
+> 
+> I encountered the same problem when building a new kernel and I found some
+> reasons for the error.
+> 
+> In short, enabling CONFIG_X86_KERNEL_IBT will change the order of records in
+> .notes section. In addition, due to historical problems, the alignment of
+> records in the .notes section is not unified, which leads to the inability of
+> gelf_getnote() to read the records after the wrong one.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Alexandre, Tianyi, are you still seeing this issue with the latest
+dwarves?  If so can you confirm the below patch fixes it?
 
-# selftests: net: sctp_vrf.sh
-# modprobe: FATAL: Module sctp not found in directory /lib/modules/6.3.0-rc6
-# modprobe: FATAL: Module sctp_diag not found in directory
-/lib/modules/6.3.0-rc6
-[ 2932.967517] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-[ 2933.005205] IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-[ 2933.012081] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-# Testing For SCTP VRF:
-# sysctl: error: 'net.sctp/l3mdev_accept' is an unknown key
-# TEST 01: nobind, connect from client 1, l3mdev_accept=1, Y [
-2933.314163] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-exec of \"pkill\" failed: No such file or directory
-# [FAIL]
-# exec of \"pkill\" failed: No such file or directory
-not ok 84 selftests: net: sctp_vrf.sh # exit=3
+Apparently the latest dwarves release fixes it on Fedora Rawhide [1],
+does anybody know if there a specific dwarves and/or libbpf change for
+this?
 
-details:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc6-16-g0d3eb744aed4/testrun/16161555/suite/kselftest-net/test/net_sctp_vrf_sh/details/
-https://lkft.validation.linaro.org/scheduler/job/6339612#L8152
+[1] https://gitlab.com/cki-project/kernel-ark/-/merge_requests/2346#note_1348057786
 
+---8<---
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 0d3eb744aed40ffce820cded61d7eac515199165
-  git_describe: v6.3-rc6-16-g0d3eb744aed4
-  kernel_version: 6.3.0-rc6
-  kernel-config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2OFj2KfCWPidsBVVNqWRhWTxZMD/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/833052206
-  artifact-location:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2OFj2KfCWPidsBVVNqWRhWTxZMD/
-  toolchain: gcc-11
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] vmlinux.lds.h: Force-align ELF notes section to four bytes
 
+When tooling reads ELF notes, it assumes each note entry is aligned to
+the value listed in the .note section header's sh_addralign field.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+The kernel-created ELF notes in the .note.Linux and .note.Xen sections
+are aligned to 4 bytes.  This causes the toolchain to set those
+sections' sh_addralign values to 4.
+
+On the other hand, the GCC-created .note.gnu.property section has an
+sh_addralign value of 8 for some reason, despite being based on struct
+Elf32_Nhdr which only needs 4-byte alignment.
+
+When the mismatched input sections get linked together into the vmlinux
+.notes output section, the higher alignment "wins", resulting in an
+sh_addralign of 8, which confuses tooling.  For example:
+
+  $ readelf -n .tmp_vmlinux.btf
+  ...
+  readelf: .tmp_vmlinux.btf: Warning: note with invalid namesz and/or descsz found at offset 0x170
+  readelf: .tmp_vmlinux.btf: Warning:  type: 0x4, namesize: 0x006e6558, descsize: 0x00008801, alignment: 8
+
+In this case readelf thinks there's alignment padding where there is
+none, so it starts reading an ELF note in the middle.
+
+With newer toolchains (e.g., latest Fedora Rawhide), a similar mismatch
+triggers a build failure when combined with CONFIG_X86_KERNEL_IBT:
+
+  btf_encoder__encode: btf__dedup failed!
+  Failed to encode BTF
+  libbpf: failed to find '.BTF' ELF section in vmlinux
+  FAILED: load BTF from vmlinux: No data available
+  make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 255
+
+Fix it by forcing the .notes section input and output alignments to 4 to
+match the kernel's note entry alignments.
+
+Note this doesn't break the 8-byte-aligned .note.gnu.property entries
+because their internal data representations fill the entire 8-byte
+alignment boundary, so there's no padding between entries to be
+misinterpreted.  And there's only a single entry in that section anyway.
+
+Reported-by: Daniel Xu <dxu@dxuuu.xyz>
+Debugged-by: Tianyi Liu <i.pear@outlook.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ include/asm-generic/vmlinux.lds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index d1f57e4868ed..1c7c87c9ae71 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -894,7 +894,7 @@
+  */
+ #define NOTES								\
+ 	/DISCARD/ : { *(.note.GNU-stack) }				\
+-	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
++	.notes ALIGN(4) : AT(ADDR(.notes) - LOAD_OFFSET) SUBALIGN(4) {	\
+ 		BOUNDED_SECTION_BY(.note.*, _notes)			\
+ 	} NOTES_HEADERS							\
+ 	NOTES_HEADERS_RESTORE
+-- 
+2.39.2
+
