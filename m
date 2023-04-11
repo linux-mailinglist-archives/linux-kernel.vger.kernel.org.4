@@ -2,185 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26816DDCD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404306DDCD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjDKNvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S230509AbjDKNvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjDKNuz (ORCPT
+        with ESMTP id S230477AbjDKNuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 09:50:55 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15CB5270;
-        Tue, 11 Apr 2023 06:50:40 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PwnGn3slLzKy2w;
-        Tue, 11 Apr 2023 21:48:01 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 21:50:34 +0800
-Subject: Re: [PATCH net] net: Add check for csum_start in
- skb_partial_csum_set()
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <asml.silence@gmail.com>, <imagedong@tencent.com>,
-        <brouer@redhat.com>, <keescook@chromium.org>, <jbenc@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230410022152.4049060-1-luwei32@huawei.com>
- <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
- <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
- <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
- <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
-From:   "luwei (O)" <luwei32@huawei.com>
-Message-ID: <95d0f4dd-3350-be65-27a8-2b41aee9df3d@huawei.com>
-Date:   Tue, 11 Apr 2023 21:50:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D37525B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:50:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 71A2A21A24;
+        Tue, 11 Apr 2023 13:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681221042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NvWVP5e+XAqpbnwMFQk6xu3LjJ/hip0XrESPfy8zT58=;
+        b=SZ+TeXNJfIO6OCuNqDZxmia5RGd5ZE0qlBwJWTgtdskS7Q0BXVsQu558yBQVWmtj7ectnI
+        5aNrRu1MGPcYRTHYxLxqJD73fu1LfbxNOTUOR6ZFH3kcJZsYueWoGQslWKydfy8xsGbjjx
+        ybDdeJuwkY1VNrUiD2YbIGyvzSBRcW8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681221042;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NvWVP5e+XAqpbnwMFQk6xu3LjJ/hip0XrESPfy8zT58=;
+        b=SRYEM8WpLIJBsO8UIOTYSIYYr8pk89zuOQ2bqPXiN3F92GW6KZ+vFbVWEvlkLKkRjgRJJB
+        waKxXjScLnWrZzAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DF9B13519;
+        Tue, 11 Apr 2023 13:50:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wM07FrJlNWTyQwAAMHmgww
+        (envelope-from <iivanov@suse.de>); Tue, 11 Apr 2023 13:50:42 +0000
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Ivan T. Ivanov" <iivanov@suse.de>
+Subject: [PATCH] nvmem: rmem: Make reserved region name unique
+Date:   Tue, 11 Apr 2023 16:50:35 +0300
+Message-Id: <20230411135035.106725-1-iivanov@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+They could be multiple reserved memory regions,
+so let's make their names unique.
 
-在 2023/4/11 4:13 PM, Eric Dumazet 写道:
-> On Tue, Apr 11, 2023 at 4:33 AM luwei (O) <luwei32@huawei.com> wrote:
->>
->> 在 2023/4/11 1:30 AM, Willem de Bruijn 写道:
->>
->> Eric Dumazet wrote:
->>
->> On Mon, Apr 10, 2023 at 4:22 AM Lu Wei <luwei32@huawei.com> wrote:
->>
->> If an AF_PACKET socket is used to send packets through a L3 mode ipvlan
->> and a vnet header is set via setsockopt() with the option name of
->> PACKET_VNET_HDR, the value of offset will be nagetive in function
->> skb_checksum_help() and trigger the following warning:
->>
->> WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
->> skb_checksum_help+0x2dc/0x390
->> ......
->> Call Trace:
->>   <TASK>
->>   ip_do_fragment+0x63d/0xd00
->>   ip_fragment.constprop.0+0xd2/0x150
->>   __ip_finish_output+0x154/0x1e0
->>   ip_finish_output+0x36/0x1b0
->>   ip_output+0x134/0x240
->>   ip_local_out+0xba/0xe0
->>   ipvlan_process_v4_outbound+0x26d/0x2b0
->>   ipvlan_xmit_mode_l3+0x44b/0x480
->>   ipvlan_queue_xmit+0xd6/0x1d0
->>   ipvlan_start_xmit+0x32/0xa0
->>   dev_hard_start_xmit+0xdf/0x3f0
->>   packet_snd+0xa7d/0x1130
->>   packet_sendmsg+0x7b/0xa0
->>   sock_sendmsg+0x14f/0x160
->>   __sys_sendto+0x209/0x2e0
->>   __x64_sys_sendto+0x7d/0x90
->>
->> The root cause is:
->> 1. skb->csum_start is set in packet_snd() according vnet_hdr:
->>     skb->csum_start = skb_headroom(skb) + (u32)start;
->>
->>     'start' is the offset from skb->data, and mac header has been
->>     set at this moment.
->>
->> 2. when this skb arrives ipvlan_process_outbound(), the mac header
->>     is unset and skb_pull is called to expand the skb headroom.
->>
->> 3. In function skb_checksum_help(), the variable offset is calculated
->>     as:
->>        offset = skb->csum_start - skb_headroom(skb);
->>
->>     since skb headroom is expanded in step2, offset is nagetive, and it
->>     is converted to an unsigned integer when compared with skb_headlen
->>     and trigger the warning.
->>
->> Not sure why it is negative ? This seems like the real problem...
->>
->> csum_start is relative to skb->head, regardless of pull operations.
->>
->> whatever set csum_start to a too small value should be tracked and fixed.
->>
->> Right. The only way I could see it go negative is if something does
->> the equivalent of pskb_expand_head with positive nhead, and without
->> calling skb_headers_offset_update.
->>
->> Perhaps the cause can be found by instrumenting all the above
->> functions in the trace to report skb_headroom and csum_start.
->> And also virtio_net_hdr_to_skb.
->> .
->>
->> Hi, Eric  and Willem,  sorry for not describing this issue clearly enough. Here is the detailed data path:
->>
->> 1.  Users call sendmsg() to send message with a AF_PACKET domain and SOCK_RAW type socket. Since vnet_hdr
->>
->> is set,  csum_start is calculated as:
->>
->>                        skb->csum_start = skb_headroom(skb) + (u32)start;     // see the following code.
->>
->> the varible "start" it passed from user data, in my case it is 5 and skb_headroom is 2, so skb->csum_start is 7.
->>
-> I think you are rephrasing, but you did not address my feedback.
->
-> Namely, "csum_start < skb->network_header" does not look sensical to me.
->
-> csum_start should be related to the transport header, not network header.
->
-> If you fix a bug, please fix it completely, instead of leaving room
-> for future syzbot reports.
->
-> Also, your reference to ipvlan pulling a mac header is irrelevant to
-> this bug, and adds confusion.
->
-> That is  because csum_start is relative to skb->head, not skb->data.
-> So ipvlan business does not change csum_start or skb->head.
+This fixes following kernel error:
 
-Hi, Eric, I have no doubt that skb->csum_start is relative to skb->head, 
-not skb->data.
+[    9.831285] sysfs: cannot create duplicate filename '/bus/nvmem/devices/rmem0'
+[    9.831304] CPU: 3 PID: 467 Comm: (udev-worker) Not tainted 6.2.9-1-default #1 openSUSE Tumbleweed a4aeb3a90c0f23041a8a7944b12739b07585f009
+[    9.831326] Hardware name: raspberrypi rpi/rpi, BIOS 2023.01 01/01/2023
+[    9.831335] Call trace:
+[    9.831343]  dump_backtrace+0xe4/0x140
+[    9.831366]  show_stack+0x20/0x30
+[    9.831379]  dump_stack_lvl+0x64/0x80
+[    9.831398]  dump_stack+0x18/0x34
+[    9.831410]  sysfs_warn_dup+0x6c/0x90
+[    9.831424]  sysfs_do_create_link_sd+0xf8/0x100
+[    9.831437]  sysfs_create_link+0x28/0x50
+[    9.831449]  bus_add_device+0x70/0x190
+[    9.831468]  device_add+0x3e8/0x84c
+[    9.831481]  nvmem_register+0x85c/0x9f0
+[    9.831500]  devm_nvmem_register+0x24/0x70
+[    9.831517]  rmem_probe+0xa0/0xf4 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
+[    9.831555]  platform_probe+0x70/0xd0
+[    9.831566]  really_probe+0xc8/0x3e4
+[    9.831582]  __driver_probe_device+0x84/0x190
+[    9.831598]  driver_probe_device+0x44/0x11c
+[    9.831613]  __driver_attach+0xf8/0x200
+[    9.831629]  bus_for_each_dev+0x78/0xd0
+[    9.831643]  driver_attach+0x2c/0x40
+[    9.831657]  bus_add_driver+0x188/0x250
+[    9.831672]  driver_register+0x80/0x13c
+[    9.831688]  __platform_driver_register+0x30/0x40
+[    9.831699]  rmem_driver_init+0x28/0x1000 [nvmem_rmem 649243b01e5e28ee94e4dd53bd13b6ececa836f8]
+[    9.831727]  do_one_initcall+0x48/0x2bc
+[    9.831740]  do_init_module+0x50/0x1f0
+[    9.831753]  load_module+0x1e54/0x2250
+[    9.831763]  __do_sys_init_module+0x2ac/0x2f0
+[    9.831774]  __arm64_sys_init_module+0x24/0x30
+[    9.831785]  invoke_syscall+0x78/0x100
+[    9.831803]  el0_svc_common.constprop.0+0x15c/0x180
+[    9.831820]  do_el0_svc+0x40/0xb0
+[    9.831836]  el0_svc+0x34/0x134
+[    9.831850]  el0t_64_sync_handler+0x114/0x120
+[    9.831865]  el0t_64_sync+0x1a4/0x1a8
+[    9.831956] rmem: probe of 3ef62ce0.nvram failed with error -17
 
-The problem is not skb->csum_start but variable "offset" in 
-skb_checksum_help() which triggers the warning.
+Some background information about the issue could be found here:
+https://bugzilla.suse.com/show_bug.cgi?id=1206846
 
-skb_checksum_help()
-     ...
-     offset = skb_checksum_start_offset(skb);      // offset is nagetive 
-here
-     ret = -EINVAL;
-     if (WARN_ON_ONCE(offset >= skb_headlen(skb)))
-         goto out;
-     ...
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+---
+ drivers/nvmem/rmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-"offset" here  means the offset from skb->data, it will change as 
-skb->data changes and can be nagetive.
-
-if "offset" is nagetive it will convert to a large unsigned int number 
-and trigger the warning and the root
-
-cause is csum_start is too small as I described previously.
-
-Besides, the raw socket may not have a transport header so the transport 
-header should not be used.
-
-> .
-
+diff --git a/drivers/nvmem/rmem.c b/drivers/nvmem/rmem.c
+index 80cb187f1481..77c70a47d519 100644
+--- a/drivers/nvmem/rmem.c
++++ b/drivers/nvmem/rmem.c
+@@ -70,7 +70,7 @@ static int rmem_probe(struct platform_device *pdev)
+ 
+ 	config.dev = dev;
+ 	config.priv = priv;
+-	config.name = "rmem";
++	config.name = dev_name(dev);
+ 	config.size = mem->size;
+ 	config.reg_read = rmem_read;
+ 
 -- 
-Best Regards,
-Lu Wei
+2.35.3
 
