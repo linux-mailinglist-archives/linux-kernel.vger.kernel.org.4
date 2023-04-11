@@ -2,364 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725016DD868
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42E06DD86A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjDKKzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S229813AbjDKK4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjDKKzr (ORCPT
+        with ESMTP id S230024AbjDKK4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:55:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0021640D7;
-        Tue, 11 Apr 2023 03:55:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AD98B21A2E;
-        Tue, 11 Apr 2023 10:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681210543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I9Y1+9/URd8NW7LOZ9kK1XWk3bMiok40L8IAsUI6bTs=;
-        b=zVW3gYqdFouypTbORdqY7WJPprJoiQArNEMq9fKY/u2PUPSCog8UmfU7DVNKsM3hQ3l87p
-        TApT1cLrV/TIyB6JBzEuoq5stmGsffbCj72W61yj7C3nbHH9RBf21dMN1AdzF96+jTaYTC
-        f7jg0RRFM9GdfyuyHX6DlvfYCdh2oHA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681210543;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I9Y1+9/URd8NW7LOZ9kK1XWk3bMiok40L8IAsUI6bTs=;
-        b=4iZf74Ttg67dzg+IONSF9LuslVkehjsbgzjUUdQ4bTa2LTc9sV/Sqvonc2WWdWXg2YCds2
-        7ctBegIGaPbUcXAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71A7C13519;
-        Tue, 11 Apr 2023 10:55:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T2K1G688NWSnWgAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 11 Apr 2023 10:55:43 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 14FEDA0732; Tue, 11 Apr 2023 12:55:42 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 12:55:42 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com>,
-        syzbot <syzbot+aacb82fca60873422114@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] [fs?] possible deadlock in quotactl_fd
-Message-ID: <20230411105542.6dee4qf2tgt5scwx@quack3>
-References: <000000000000f1a9d205f909f327@google.com>
- <000000000000ee3a3005f909f30a@google.com>
- <20230411-sendung-apokalypse-05af1adb8889@brauner>
+        Tue, 11 Apr 2023 06:56:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FE12D57
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:56:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pmBfC-0002Nf-UW; Tue, 11 Apr 2023 12:55:51 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pmBfA-00ATxI-QQ; Tue, 11 Apr 2023 12:55:48 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pmBf9-00CGCc-V2; Tue, 11 Apr 2023 12:55:47 +0200
+Date:   Tue, 11 Apr 2023 12:55:47 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v16 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <20230411105547.ypkktubgfx4jfen3@pengutronix.de>
+References: <20230411-wizard-cautious-3c048db6b4d2@wendy>
+ <20230411-bronzing-crust-d302408a1259@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="isiq27cyft363uqx"
 Content-Disposition: inline
-In-Reply-To: <20230411-sendung-apokalypse-05af1adb8889@brauner>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230411-bronzing-crust-d302408a1259@wendy>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-04-23 12:11:52, Christian Brauner wrote:
-> On Mon, Apr 10, 2023 at 11:53:46PM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=11798e4bc80000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com
-> > 
-> > ======================================================
-> > WARNING: possible circular locking dependency detected
-> > 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0 Not tainted
-> > ------------------------------------------------------
-> > syz-executor.3/11858 is trying to acquire lock:
-> > ffff88802a3bc0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
-> > 
-> > but task is already holding lock:
-> > ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
-> > 
-> > which lock already depends on the new lock.
-> > 
-> > 
-> > the existing dependency chain (in reverse order) is:
-> > 
-> > -> #1 (sb_writers#4){.+.+}-{0:0}:
-> >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> >        __sb_start_write include/linux/fs.h:1477 [inline]
-> >        sb_start_write include/linux/fs.h:1552 [inline]
-> >        write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
-> >        ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
-> >        __ext4_remount fs/ext4/super.c:6543 [inline]
-> >        ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
-> >        reconfigure_super+0x40c/0xa30 fs/super.c:956
-> >        vfs_fsconfig_locked fs/fsopen.c:254 [inline]
-> >        __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
-> >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > 
-> > -> #0 (&type->s_umount_key#31){++++}-{3:3}:
-> >        check_prev_add kernel/locking/lockdep.c:3098 [inline]
-> >        check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-> >        validate_chain kernel/locking/lockdep.c:3832 [inline]
-> >        __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-> >        lock_acquire kernel/locking/lockdep.c:5669 [inline]
-> >        lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
-> >        down_write+0x92/0x200 kernel/locking/rwsem.c:1573
-> >        __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
-> >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > 
-> > other info that might help us debug this:
-> > 
-> >  Possible unsafe locking scenario:
-> > 
-> >        CPU0                    CPU1
-> >        ----                    ----
-> >   lock(sb_writers#4);
-> >                                lock(&type->s_umount_key#31);
-> >                                lock(sb_writers#4);
-> >   lock(&type->s_umount_key#31);
-> > 
-> >  *** DEADLOCK ***
-> 
-> Hmkay, I understand how this happens, I think:
-> 
-> fsconfig(FSCONFIG_CMD_RECONFIGURE)                      quotactl_fd(Q_QUOTAON/Q_QUOTAOFF/Q_XQUOTAON/Q_XQUOTAOFF)
-> 							-> mnt_want_write(f.file->f_path.mnt);
-> -> down_write(&sb->s_umount);                              -> __sb_start_write(sb, SB_FREEZE_WRITE) 
-> -> reconfigure_super(fc);
->    -> ext4_multi_mount_protect()
->       -> __sb_start_write(sb, SB_FREEZE_WRITE)         -> down_write(&sb->s_umount);
-> -> up_write(&sb->s_umount);
 
-Thanks for having a look!
+--isiq27cyft363uqx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I have to step away from the computer now for a bit but naively it seem
-> that the locking order for quotactl_fd() should be the other way around.
-> 
-> But while I'm here, why does quotactl_fd() take mnt_want_write() but
-> quotactl() doesn't? It seems that if one needs to take it both need to
-> take it.
+Hello Conor,
 
-Couple of notes here:
+On Tue, Apr 11, 2023 at 09:56:34AM +0100, Conor Dooley wrote:
+> Add a driver that supports the Microchip FPGA "soft" PWM IP core.
+>=20
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  drivers/pwm/Kconfig              |  10 +
+>  drivers/pwm/Makefile             |   1 +
+>  drivers/pwm/pwm-microchip-core.c | 509 +++++++++++++++++++++++++++++++
+>  3 files changed, 520 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-microchip-core.c
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index dae023d783a2..f42756a014ed 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -393,6 +393,16 @@ config PWM_MEDIATEK
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called pwm-mediatek.
+> =20
+> +config PWM_MICROCHIP_CORE
+> +	tristate "Microchip corePWM PWM support"
+> +	depends on SOC_MICROCHIP_POLARFIRE || COMPILE_TEST
+> +	depends on HAS_IOMEM && OF
+> +	help
+> +	  PWM driver for Microchip FPGA soft IP core.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called pwm-microchip-core.
+> +
+>  config PWM_MXS
+>  	tristate "Freescale MXS PWM support"
+>  	depends on ARCH_MXS || COMPILE_TEST
+> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+> index 7bf1a29f02b8..a65625359ece 100644
+> --- a/drivers/pwm/Makefile
+> +++ b/drivers/pwm/Makefile
+> @@ -34,6 +34,7 @@ obj-$(CONFIG_PWM_LPSS_PCI)	+=3D pwm-lpss-pci.o
+>  obj-$(CONFIG_PWM_LPSS_PLATFORM)	+=3D pwm-lpss-platform.o
+>  obj-$(CONFIG_PWM_MESON)		+=3D pwm-meson.o
+>  obj-$(CONFIG_PWM_MEDIATEK)	+=3D pwm-mediatek.o
+> +obj-$(CONFIG_PWM_MICROCHIP_CORE)	+=3D pwm-microchip-core.o
+>  obj-$(CONFIG_PWM_MTK_DISP)	+=3D pwm-mtk-disp.o
+>  obj-$(CONFIG_PWM_MXS)		+=3D pwm-mxs.o
+>  obj-$(CONFIG_PWM_NTXEC)		+=3D pwm-ntxec.o
+> diff --git a/drivers/pwm/pwm-microchip-core.c b/drivers/pwm/pwm-microchip=
+-core.c
+> new file mode 100644
+> index 000000000000..0a69ec376c51
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-microchip-core.c
+> @@ -0,0 +1,509 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * corePWM driver for Microchip "soft" FPGA IP cores.
+> + *
+> + * Copyright (c) 2021-2023 Microchip Corporation. All rights reserved.
+> + * Author: Conor Dooley <conor.dooley@microchip.com>
+> + * Documentation:
+> + * https://www.microsemi.com/document-portal/doc_download/1245275-corepw=
+m-hb
+> + *
+> + * Limitations:
+> + * - If the IP block is configured without "shadow registers", all regis=
+ter
+> + *   writes will take effect immediately, causing glitches on the output.
+> + *   If shadow registers *are* enabled, a write to the "SYNC_UPDATE" reg=
+ister
+> + *   notifies the core that it needs to update the registers defining the
+> + *   waveform from the contents of the "shadow registers".
 
-1) quotactl() handles the filesystem freezing by grabbing the s_umount
-semaphore, checking the superblock freeze state (it cannot change while
-s_umount is held) and proceeding if fs is not frozen. This logic is hidden
-in quotactl_block().
+You only write once to the sync update register (i.e. during probe). So
+that register specifies that a period should be completed before a new
+setting becomes active, right? Even with sync update this is still racy,
+right?
 
-2) The proper lock ordering is indeed freeze-protection -> s_umount because
-that is implicitely dictated by how filesystem freezing works. If you grab
-s_umount and then try to grab freeze protection, you may effectively wait
-for fs to get unfrozen which cannot happen while s_umount is held as
-thaw_super() needs to grab it.
+> + * - The IP block has no concept of a duty cycle, only rising/falling ed=
+ges of
+> + *   the waveform. Unfortunately, if the rising & falling edges register=
+s have
+> + *   the same value written to them the IP block will do whichever of a =
+rising
+> + *   or a falling edge is possible. I.E. a 50% waveform at twice the req=
+uested
+> + *   period. Therefore to get a 0% waveform, the output is set the max h=
+igh/low
+> + *   time depending on polarity.
+> + *   If the duty cycle is 0%, and the requested period is less than the
+> + *   available period resolution, this will manifest as a ~100% waveform=
+ (with
+> + *   some output glitches) rather than 50%.
 
-3) Hence this could be viewed as ext4 bug that it tries to grab freeze
-protection from remount path. *But* reconfigure_super() actually has:
+The last paragraph refers to negedge =3D 0, posedge =3D 0 and period_steps =
+=3D
+0?
 
-	if (sb->s_writers.frozen != SB_UNFROZEN)
-		return -EBUSY;
+> + * - The PWM period is set for the whole IP block not per channel. The d=
+river
+> + *   will only change the period if no other PWM output is enabled.
+> + */
 
-so even ext4 is in fact safe because the filesystem is guaranteed to not be
-frozen during remount. But still we should probably tweak the ext4 code to
-avoid this lockdep warning...
+> +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_devic=
+e *pwm,
+> +				 bool enable, u64 period)
+> +{
+> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
+> +	u8 channel_enable, reg_offset, shift;
+> +
+> +	/*
+> +	 * There are two adjacent 8 bit control regs, the lower reg controls
+> +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
+> +	 * and if so, offset by the bus width.
+> +	 */
+> +	reg_offset =3D MCHPCOREPWM_EN(pwm->hwpwm >> 3);
+> +	shift =3D pwm->hwpwm & 7;
+> +
+> +	channel_enable =3D readb_relaxed(mchp_core_pwm->base + reg_offset);
+> +	channel_enable &=3D ~(1 << shift);
+> +	channel_enable |=3D (enable << shift);
+> +
+> +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
+> +	mchp_core_pwm->channel_enabled &=3D ~BIT(pwm->hwpwm);
+> +	mchp_core_pwm->channel_enabled |=3D enable << pwm->hwpwm;
+> +
+> +	/*
+> +	 * Notify the block to update the waveform from the shadow registers.
+> +	 * The updated values will not appear on the bus until they have been
+> +	 * applied to the waveform at the beginning of the next period.
+> +	 * This is a NO-OP if the channel does not have shadow registers.
+> +	 */
 
-								Honza
+The code doesn't match the comment. I think that is a relict from the
+times when we thought that a trigger was necessary to update the
+operating settings from the shadow registers?
 
-> > 1 lock held by syz-executor.3/11858:
-> >  #0: ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
-> > 
-> > stack backtrace:
-> > CPU: 0 PID: 11858 Comm: syz-executor.3 Not tainted 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
-> >  check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
-> >  check_prev_add kernel/locking/lockdep.c:3098 [inline]
-> >  check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-> >  validate_chain kernel/locking/lockdep.c:3832 [inline]
-> >  __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
-> >  lock_acquire kernel/locking/lockdep.c:5669 [inline]
-> >  lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
-> >  down_write+0x92/0x200 kernel/locking/rwsem.c:1573
-> >  __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f81d2e8c169
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f81d3b29168 EFLAGS: 00000246 ORIG_RAX: 00000000000001bb
-> > RAX: ffffffffffffffda RBX: 00007f81d2fabf80 RCX: 00007f81d2e8c169
-> > RDX: 0000000000000000 RSI: ffffffff80000300 RDI: 0000000000000003
-> > RBP: 00007f81d2ee7ca1 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007fffeeb18d7f R14: 00007f81d3b29300 R15: 0000000000022000
-> >  </TASK>
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> On Mon, Apr 10, 2023 at 11:53:46PM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    76f598ba7d8e Merge tag 'for-linus' of git://git.kernel.org..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13965b21c80000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=aacb82fca60873422114
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/1f01c9748997/disk-76f598ba.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/b3afb4fc86b9/vmlinux-76f598ba.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/8908040d7a31/bzImage-76f598ba.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+aacb82fca60873422114@syzkaller.appspotmail.com
-> > 
-> > ======================================================
-> > WARNING: possible circular locking dependency detected
-> > 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0 Not tainted
-> > ------------------------------------------------------
-> > syz-executor.0/17940 is trying to acquire lock:
-> > ffff88802a89e0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_quotactl_fd fs/quota/quota.c:999 [inline]
-> > ffff88802a89e0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __se_sys_quotactl_fd+0x2fb/0x440 fs/quota/quota.c:972
-> > 
-> > but task is already holding lock:
-> > ffff88802a89e460 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
-> > 
-> > which lock already depends on the new lock.
-> > 
-> > 
-> > the existing dependency chain (in reverse order) is:
-> > 
-> > -> #1 (sb_writers#4){.+.+}-{0:0}:
-> >        lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
-> >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> >        __sb_start_write include/linux/fs.h:1477 [inline]
-> >        sb_start_write include/linux/fs.h:1552 [inline]
-> >        write_mmp_block+0xe5/0x930 fs/ext4/mmp.c:50
-> >        ext4_multi_mount_protect+0x364/0x990 fs/ext4/mmp.c:343
-> >        __ext4_remount fs/ext4/super.c:6543 [inline]
-> >        ext4_reconfigure+0x29a8/0x3280 fs/ext4/super.c:6642
-> >        reconfigure_super+0x3c9/0x7c0 fs/super.c:956
-> >        vfs_fsconfig_locked fs/fsopen.c:254 [inline]
-> >        __do_sys_fsconfig fs/fsopen.c:439 [inline]
-> >        __se_sys_fsconfig+0xa29/0xf70 fs/fsopen.c:314
-> >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >        do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > 
-> > -> #0 (&type->s_umount_key#31){++++}-{3:3}:
-> >        check_prev_add kernel/locking/lockdep.c:3098 [inline]
-> >        check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-> >        validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3832
-> >        __lock_acquire+0x125b/0x1f80 kernel/locking/lockdep.c:5056
-> >        lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
-> >        down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-> >        __do_sys_quotactl_fd fs/quota/quota.c:999 [inline]
-> >        __se_sys_quotactl_fd+0x2fb/0x440 fs/quota/quota.c:972
-> >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >        do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > 
-> > other info that might help us debug this:
-> > 
-> >  Possible unsafe locking scenario:
-> > 
-> >        CPU0                    CPU1
-> >        ----                    ----
-> >   lock(sb_writers#4);
-> >                                lock(&type->s_umount_key#31);
-> >                                lock(sb_writers#4);
-> >   lock(&type->s_umount_key#31);
-> > 
-> >  *** DEADLOCK ***
-> > 
-> > 1 lock held by syz-executor.0/17940:
-> >  #0: ffff88802a89e460 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
-> > 
-> > stack backtrace:
-> > CPU: 0 PID: 17940 Comm: syz-executor.0 Not tainted 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
-> >  check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2178
-> >  check_prev_add kernel/locking/lockdep.c:3098 [inline]
-> >  check_prevs_add kernel/locking/lockdep.c:3217 [inline]
-> >  validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3832
-> >  __lock_acquire+0x125b/0x1f80 kernel/locking/lockdep.c:5056
-> >  lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
-> >  down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-> >  __do_sys_quotactl_fd fs/quota/quota.c:999 [inline]
-> >  __se_sys_quotactl_fd+0x2fb/0x440 fs/quota/quota.c:972
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f3c2aa8c169
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f3c2b826168 EFLAGS: 00000246 ORIG_RAX: 00000000000001bb
-> > RAX: ffffffffffffffda RBX: 00007f3c2ababf80 RCX: 00007f3c2aa8c169
-> > RDX: ffffffffffffffff RSI: ffffffff80000601 RDI: 0000000000000003
-> > RBP: 00007f3c2aae7ca1 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 00000000200024c0 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffd71f38adf R14: 00007f3c2b826300 R15: 0000000000022000
-> >  </TASK>
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm))
+> +		mchp_core_pwm->update_timestamp =3D ktime_add_ns(ktime_get(), period);
+> +}
+> +
+> +static void mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_chip=
+ *mchp_core_pwm,
+> +					       unsigned int channel)
+> +{
+> +	/*
+> +	 * If a shadow register is used for this PWM channel, and iff there is
+> +	 * a pending update to the waveform, we must wait for it to be applied
+> +	 * before attempting to read its state. Reading the registers yields
+> +	 * the currently implemented settings & the new ones are only readable
+> +	 * once the current period has ended.
+> +	 */
+> +
+> +	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
+> +		ktime_t current_time =3D ktime_get();
+> +		s64 remaining_ns;
+> +		u32 delay_us;
+> +
+> +		remaining_ns =3D ktime_to_ns(ktime_sub(mchp_core_pwm->update_timestamp,
+> +						     current_time));
+> +
+> +		/*
+> +		 * If the update has gone through, don't bother waiting for
+> +		 * obvious reasons. Otherwise wait around for an appropriate
+> +		 * amount of time for the update to go through.
+> +		 */
+> +		if (remaining_ns <=3D 0)
+> +			return;
+> +
+> +		delay_us =3D DIV_ROUND_UP_ULL(remaining_ns, NSEC_PER_USEC);
+> +		fsleep(delay_us);
+> +	}
+
+There is no way to query the hardware if there is still an update
+pending, right? Maybe that's possible implicitly by memoizing the
+expected read value? For me the current approach is fine enough though.
+This can be addressed in the future if needed.
+
+> +static u64 mchp_core_pwm_calc_duty(const struct pwm_state *state, u64 cl=
+k_rate,
+> +				   u8 prescale, u8 period_steps)
+> +{
+> +	u64 duty_steps, tmp;
+> +
+> +	/*
+> +	 * Calculate the duty cycle in multiples of the prescaled period:
+> +	 * duty_steps =3D duty_in_ns / step_in_ns
+> +	 * step_in_ns =3D (prescale * NSEC_PER_SEC) / clk_rate
+> +	 * The code below is rearranged slightly to only divide once.
+> +	 */
+> +	tmp =3D (prescale + 1) * NSEC_PER_SEC;
+> +	duty_steps =3D mul_u64_u64_div_u64(state->duty_cycle, clk_rate, tmp);
+> +
+> +	return duty_steps;
+> +}
+> +
+> +static void mchp_core_pwm_apply_duty(struct pwm_chip *chip, struct pwm_d=
+evice *pwm,
+> +				     const struct pwm_state *state, u64 duty_steps,
+> +				     u16 period_steps)
+> +{
+> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
+> +	u8 posedge, negedge;
+> +	u8 first_edge =3D 0, second_edge =3D duty_steps;
+> +
+> +	/*
+> +	 * Setting posedge =3D=3D negedge doesn't yield a constant output,
+> +	 * so that's an unsuitable setting to model duty_steps =3D 0.
+> +	 * In that case set the unwanted edge to a value that never
+> +	 * triggers.
+> +	 */
+> +	if (duty_steps =3D=3D 0)
+> +		first_edge =3D period_steps + 1;
+> +
+> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
+> +		negedge =3D first_edge;
+> +		posedge =3D second_edge;
+> +	} else {
+> +		posedge =3D first_edge;
+> +		negedge =3D second_edge;
+> +	}
+> +
+> +	writel_relaxed(posedge, mchp_core_pwm->base + MCHPCOREPWM_POSEDGE(pwm->=
+hwpwm));
+> +	writel_relaxed(negedge, mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE(pwm->=
+hwpwm));
+
+Is this racy with sync update implemented in the firmware? A comment
+about how the sync update is implemented would be good.
+
+> +}
+> +
+> +static int mchp_core_pwm_calc_period(const struct pwm_state *state, unsi=
+gned long clk_rate,
+> +				     u16 *prescale, u16 *period_steps)
+> +{
+> +	u64 tmp;
+> +	u32 remainder;
+> +
+> +	/*
+> +	 * Calculate the period cycles and prescale values.
+> +	 * The registers are each 8 bits wide & multiplied to compute the period
+> +	 * using the formula:
+> +	 *           (prescale + 1) * (period_steps + 1)
+> +	 * period =3D -------------------------------------
+> +	 *                      clk_rate
+> +	 * so the maximum period that can be generated is 0x10000 times the
+> +	 * period of the input clock.
+> +	 * However, due to the design of the "hardware", it is not possible to
+> +	 * attain a 100% duty cycle if the full range of period_steps is used.
+> +	 * Therefore period_steps is restricted to 0xfe and the maximum multiple
+> +	 * of the clock period attainable is (0xff + 1) * (0xfe + 1) =3D 0xff00
+> +	 *
+> +	 * The prescale and period_steps registers operate similarly to
+> +	 * CLK_DIVIDER_ONE_BASED, where the value used by the hardware is that
+> +	 * in the register plus one.
+> +	 * It's therefore not possible to set a period lower than 1/clk_rate, so
+> +	 * if tmp is 0, abort. Without aborting, we will set a period that is
+> +	 * greater than that requested and, more importantly, will trigger the
+> +	 * neg-/pos-edge issue described in the limitations.
+> +	 */
+> +	tmp =3D mul_u64_u64_div_u64(state->period, clk_rate, NSEC_PER_SEC);
+> +	if (!tmp)
+> +		return -EINVAL;
+> +
+> +	if (tmp >=3D MCHPCOREPWM_PERIOD_MAX) {
+> +		*prescale =3D MCHPCOREPWM_PRESCALE_MAX;
+> +		*period_steps =3D MCHPCOREPWM_PERIOD_STEPS_MAX;
+> +
+> +		return 0;
+> +	}
+> +
+> +	/*
+> +	 * There are multiple strategies that could be used to choose the
+> +	 * prescale & period_steps values.
+> +	 * Here the idea is to pick values so that the selection of duty cycles
+> +	 * is as finegrain as possible.
+> +	 * This "optimal" value for prescale can be calculated using the maximum
+> +	 * permitted value of period_steps, 0xfe.
+> +	 *
+> +	 *                period * clk_rate
+> +	 * prescale =3D ------------------------- - 1
+> +	 *            NSEC_PER_SEC * (0xfe + 1)
+> +	 *
+> +	 * However, we are purely interested in the integer upper bound of this
+> +	 * calculation, so this division should be rounded up before subtracting
+> +	 * 1
+> +	 *
+> +	 *  period * clk_rate
+> +	 * ------------------- was precomputed as `tmp`
+> +	 *    NSEC_PER_SEC
+> +	 */
+> +	*prescale =3D DIV64_U64_ROUND_UP(tmp, MCHPCOREPWM_PERIOD_STEPS_MAX + 1)=
+ - 1;
+
+If state->period * clk_rate is 765000000001 you get tmp =3D 765 and then
+*prescale =3D 2. However roundup(765000000001 / (1000000000 * 255)) - 1 is
+3. The problem here is that you're rounding down in the calculation of
+tmp. Of course this is constructed because 765000000001 is prime, but
+I'm sure you get the point :-)
+
+Also we know that tmp is < 0xff00, so we don't need a 64 bit division
+here.
+
+> +	/*
+> +	 * Because 0xff is not a permitted value some error will seep into the
+> +	 * calculation of prescale as prescale grows. Specifically, this error
+> +	 * occurs where the remainder of the prescale calculation is less than
+> +	 * prescale.
+> +	 * For small values of prescale, only a handful of values will need
+> +	 * correction, but overall this applies to almost half of the valid
+> +	 * values for tmp.
+> +	 *
+> +	 * To keep the algorithm's decision making consistent, this case is
+> +	 * checked for and the simple solution is to, in these cases,
+> +	 * decrement prescale and check that the resulting value of period_steps
+> +	 * is valid.
+> +	 *
+> +	 * period_steps can be computed from prescale:
+> +	 *                      period * clk_rate
+> +	 * period_steps =3D ----------------------------- - 1
+> +	 *                NSEC_PER_SEC * (prescale + 1)
+> +	 *
+> +	 */
+> +	div_u64_rem(tmp, (MCHPCOREPWM_PERIOD_STEPS_MAX + 1), &remainder);
+> +	if (remainder < *prescale) {
+> +		u16 smaller_prescale =3D *prescale - 1;
+> +
+> +		*period_steps =3D div_u64(tmp, smaller_prescale + 1) - 1;
+> +		if (*period_steps < 255) {
+> +			*prescale =3D smaller_prescale;
+> +
+> +			return 0;
+> +		}
+> +	}
+
+I don't understand that part. It triggers for tmp =3D 511. So you prefer
+
+	prescale =3D 1
+	period_steps =3D 254
+
+yielding period =3D 510 / clkrate over
+
+	prescale =3D 2
+	period_steps =3D 170
+
+yielding 513 / clkrate. I wonder why. Alsot tmp =3D 511 is the only value
+where this triggers. There is a mistake somewhere (maybe on my side).
+
+> +	*period_steps =3D div_u64(tmp, *prescale + 1);
+> +	if (*period_steps)
+> +		*period_steps -=3D 1;
+> +
+> +	return 0;
+> +}
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--isiq27cyft363uqx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQ1PLIACgkQj4D7WH0S
+/k5Xcgf9FT3tkfQsGg+xBd+hzd9VO8BsTBBnmX5ODSsUv/v+vh4IOAhnV8b5HFau
+KoS6xb5RjEdatx5HV0ppkTQZ0ZcWwlJzmS8PYk4h+ulO0GADVoIZCdnMgsACRwS1
+IrY9ypO+VK9Bu4NhUCV1yDKT8fMw+hUBHaPpFqShofvUWbQhDLup6ubPO5oy3+XZ
+3R3cLVPkBPfTp+l95YQOvTkMd81vStD11W5M+6XPsc9ogtAR57aHw9/9rfx+Worf
+9TaLYWPKn8y/AZ62dEsqudFSQ1Rv0yHJg+SaoQ5p8H/KYJCw7YXNjtvVkIfUJgJI
+OybSN8jvVXjzFvV/nPEjxZQwDf/yUw==
+=jNxm
+-----END PGP SIGNATURE-----
+
+--isiq27cyft363uqx--
