@@ -2,64 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D716DDF94
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFB76DDFA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjDKPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S229833AbjDKP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjDKPZj (ORCPT
+        with ESMTP id S229648AbjDKP1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:25:39 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48548469E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:25:37 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B5nsH8029336;
-        Tue, 11 Apr 2023 10:25:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=6ygy8yOQrMF4h+ESCpufA5eR+krnF14NouI1a2OY12M=;
- b=P0QbHwbRUFD8LR+OlFv+s1w80PsskSQY3RgbuvU0vVMTO4lGNfYZ3hg5fHJAFjm0WSDb
- zMsQNypXaO/+KlxLB6wKf8Ye7hebByj0ZKVfEc1daBTLM1xPT7+Gh0tDx2Sz+XhvdPX9
- XfhDBgTE/sfw3Ty9altzzDUOlWtoCsJCvMeZy61gHJK86GdReV+j1Dd5fc9bjnW0968b
- tomp8HlphuilxGCuvxafGZdPzEA3naVY5EWl+ZE/uxYq+3K/d3hQTJnTaDGtZXck0nNW
- 0HzHYQjSR+a27BWnR2nPfesqJtCem9deBMiWt16h2jg06AmulAXfmP9pe+NgZPp2/t+8 lg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pu4pq54a4-1
+        Tue, 11 Apr 2023 11:27:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565FC5BA9;
+        Tue, 11 Apr 2023 08:27:05 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFDBpC016282;
+        Tue, 11 Apr 2023 15:26:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=u4BG45uX+t6d+PhWOzuwZc2KIA6UpZ2/Lbu2IfmJJuk=;
+ b=HX75zuM+fRW2MLu3lx38j+78GR4sQX+CWik2LwMKDUQRl+O6xt7B0XVQ92Sq2c3gok1r
+ +zJ5kq3DhvsYHmrHlsnlR1N2/vG2htm7pS5EMsDO943hrObW+4yCayx83waKA94Bp+T3
+ ToWl05PkslaiM0AGw9Oz47myjvSl8v5tr6/nPLsy9KOJtfbnF2ZpIItyTUseeQIOeYAj
+ pOo5W/RTzRGWe0LrGseNDVwGa9jerxpFqIv4ogRA/PnOcNBBKUxQvRgac1oA4/7RPtn9
+ Anufm/OYdQXDg4pjUzgGcxZMwpzxJgCJy58anJJY9RTJklhwSpTVKb+U6vOU2YNJsB8u 1Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvq4djc28-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 10:25:30 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 11 Apr
- 2023 10:25:28 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Tue, 11 Apr 2023 10:25:28 -0500
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9A1753560;
-        Tue, 11 Apr 2023 15:25:28 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 6/6] ASoC: cs35l56: Re-patch firmware after system suspend
-Date:   Tue, 11 Apr 2023 16:25:28 +0100
-Message-ID: <20230411152528.329803-7-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230411152528.329803-1-rf@opensource.cirrus.com>
-References: <20230411152528.329803-1-rf@opensource.cirrus.com>
+        Tue, 11 Apr 2023 15:26:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BFQVvC029369
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:26:31 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 08:26:30 -0700
+Message-ID: <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+Date:   Tue, 11 Apr 2023 09:26:29 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: ktI1ak-rDsYuVepHDzrnjs6fl1D85HFD
-X-Proofpoint-ORIG-GUID: ktI1ak-rDsYuVepHDzrnjs6fl1D85HFD
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>
+CC:     Oded Gabbay <ogabbay@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local> <2023041123-tractor-quake-c44d@gregkh>
+ <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+ <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
+ <2023041131-boxy-excavator-1183@gregkh>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <2023041131-boxy-excavator-1183@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4z3jtjtH_--Gl6Z_JUdMhBL-anqBBjhA
+X-Proofpoint-GUID: 4z3jtjtH_--Gl6Z_JUdMhBL-anqBBjhA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_10,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 adultscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110141
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,183 +88,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check during cs35l56_system_resume() whether the firmware patch must
-be applied again.
+On 4/11/2023 9:13 AM, Greg KH wrote:
+> On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
+>> On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+>>> On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+>>>> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+>>>>> On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> After merging the driver-core tree, today's linux-next build (x86_64
+>>>>>> allmodconfig) failed like this:
+>>>>>>
+>>>>>> In file included from include/linux/linkage.h:7,
+>>>>>>                    from include/linux/kernel.h:17,
+>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
+>>>>>> include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>>>>>      27 | #define THIS_MODULE (&__this_module)
+>>>>>>         |                     ~^~~~~~~~~~~~~~~
+>>>>>>         |                      |
+>>>>>>         |                      struct module *
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
+>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>         |                                      ^~~~~~~~~~~
+>>>>>> In file included from include/linux/device.h:31,
+>>>>>>                    from include/linux/mhi.h:9,
+>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+>>>>>> include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
+>>>>>>     229 | struct class * __must_check class_create(const char *name);
+>>>>>>         |                                          ~~~~~~~~~~~~^~~~
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
+>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>         |                         ^~~~~~~~~~~~
+>>>>>> include/linux/device/class.h:229:29: note: declared here
+>>>>>>     229 | struct class * __must_check class_create(const char *name);
+>>>>>>         |                             ^~~~~~~~~~~~
+>>>>>>
+>>>>>> Caused by commit
+>>>>>>
+>>>>>>     1aaba11da9aa ("driver core: class: remove module * from class_create()")
+>>>>>>
+>>>>>> interacting with commit
+>>>>>>
+>>>>>>     566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+>>>>>>
+>>>>>> from the drm tree.
+>>>>>>
+>>>>>> I have applied the following merge fix patch for today.
+>>>>>>
+>>>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>>> Date: Tue, 11 Apr 2023 14:16:57 +1000
+>>>>>> Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
+>>>>>>
+>>>>>> interacting with "accel/qaic: Add mhi_qaic_cntl"
+>>>>>>
+>>>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>>
+>>>>> Thanks for the fixup. Since Dave is out I've made a note about this in my
+>>>>> handover mail so it won't get lost in the drm-next merge window pull. I
+>>>>> don't think we need any other coordination than mention it in each pull to
+>>>>> Linus, topic tree seems overkill for this. Plus there's no way I can
+>>>>> untangle the drm tree anyway :-).
+>>>>
+>>>> Want me to submit a patch for the drm tree that moves this to use
+>>>> class_register() instead, which will make the merge/build issue go away
+>>>> for you?  That's my long-term goal here anyway, so converting this new
+>>>> code to this api today would be something I have to do eventually :)
+>>>
+>>> We kinda closed drm-next for feature work mostly already (just pulling
+>>> stuff in from subtrees), so won't really help for this merge window.
+>>>
+>>> For everything else I think this is up to Oded, I had no idea qaic needed
+>>> it's entire own dev class and I don't want to dig into this for the risk I
+>>> might freak out :-)
+>>>
+>>> Adding Oded.
+>>>
+>>> Cheers, Daniel
+>>
+>> Sorry for the mess.
+>>
+>> I made a note to update to class_register() once my drm-misc access is
+>> sorted out.  Looks like we'll address the conflict in the merge window, and
+>> catch the update to the new API in the following release.
+> 
+> Wait, I think the large question is, "why does this need a separate
+> class"?  Why are you not using the accel char device and class?  That is
+> what everything under accel/ should be using, otherwise why put it in
+> there?
+> 
+> And what exactly are you using that class for?  Just device nodes?  If
+> so, how many?
+> 
+> thanks,
+> 
+> greg k-h
 
-The FIRMWARE_MISSING flag in the PROTECTION_STATUS register indicates
-whether the firmware has been patched.
 
-In non-secure mode the FIRMWARE_MISSING flag is cleared at the end of
-dsp_work(). If it is set after system-resume we know that dsp_work()
-must be run again.
+Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed 
+out at the time that AIC100/QAIC would need the same functionality. 
+You/Jakub told myself/Mani/Loic that a combined implementation is not 
+acceptable, and every area needs to implement their own version of MHI_UCI.
 
-In secure mode the pre-OS loader will have done the secure patching
-and cleared the FIRMWARE_MISSING flag. So this flag does not tell us
-whether firmware memory was lost. But the driver could only be
-downloading non-secure tunings, which is always safe to do.
+We took the WWAN subsystem and simplified it to meet our needs.
 
-If the driver has control of RESET we will have asserted it during
-suspend so the firmware patch will have been lost. The driver would only
-have control of RESET in non-secure mode.
+The functionality is QAIC specific, so wedging it into the Accel node 
+seems to be a poor fit as it would subject Habana and iVPU to the same.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- include/sound/cs35l56.h        |  4 ++
- sound/soc/codecs/cs35l56-sdw.c | 12 +++++-
- sound/soc/codecs/cs35l56.c     | 67 +++++++++++++++++++++++++++++++++-
- 3 files changed, 81 insertions(+), 2 deletions(-)
+We need (eventually) 128 device nodes.  We have systems with 32 QAIC 
+devices, and each QAIC device uses 4 device nodes (32 * 4 = 128).  WWAN 
+subsystem would be similar.  Looks like each 5G modem is 6 nodes per 
+device, so if you had 22 5G modems on a system, you'd have 132 device 
+nodes.  I'm not aware of any such system, but it could exist.
 
-diff --git a/include/sound/cs35l56.h b/include/sound/cs35l56.h
-index 5f8ea2dfaa21..b3300bce74f4 100644
---- a/include/sound/cs35l56.h
-+++ b/include/sound/cs35l56.h
-@@ -95,6 +95,7 @@
- #define CS35L56_MAIN_RENDER_USER_MUTE			0x3400024
- #define CS35L56_MAIN_RENDER_USER_VOLUME			0x340002C
- #define CS35L56_MAIN_POSTURE_NUMBER			0x3400094
-+#define CS35L56_PROTECTION_STATUS			0x34000D8
- #define CS35L56_TRANSDUCER_ACTUAL_PS			0x3400150
- #define CS35L56_DSP1_YMEM_UNPACKED24_6141		0x3405FF4
- #define CS35L56_DSP1_PMEM_0				0x3800000
-@@ -216,6 +217,9 @@
- #define CS35L56_MAIN_POSTURE_MAX			255
- #define CS35L56_MAIN_POSTURE_MASK			CS35L56_MAIN_POSTURE_MAX
- 
-+/* CS35L56_PROTECTION_STATUS */
-+#define CS35L56_FIRMWARE_MISSING			BIT(0)
-+
- /* Software Values */
- #define CS35L56_HALO_STATE_SHUTDOWN			1
- #define CS35L56_HALO_STATE_BOOT_DONE			2
-diff --git a/sound/soc/codecs/cs35l56-sdw.c b/sound/soc/codecs/cs35l56-sdw.c
-index 947d4e5f4dc9..e759347423cf 100644
---- a/sound/soc/codecs/cs35l56-sdw.c
-+++ b/sound/soc/codecs/cs35l56-sdw.c
-@@ -473,6 +473,16 @@ static int __maybe_unused cs35l56_sdw_system_suspend(struct device *dev)
- 	return cs35l56_system_suspend(dev);
- }
- 
-+static int __maybe_unused cs35l56_sdw_system_resume(struct device *dev)
-+{
-+	struct cs35l56_private *cs35l56 = dev_get_drvdata(dev);
-+
-+	cs35l56->sdw_irq_no_unmask = false;
-+	/* runtime_resume re-enables the interrupt */
-+
-+	return cs35l56_system_resume(dev);
-+}
-+
- static int cs35l56_sdw_probe(struct sdw_slave *peripheral, const struct sdw_device_id *id)
- {
- 	struct device *dev = &peripheral->dev;
-@@ -522,7 +532,7 @@ static int cs35l56_sdw_remove(struct sdw_slave *peripheral)
- 
- static const struct dev_pm_ops cs35l56_sdw_pm = {
- 	SET_RUNTIME_PM_OPS(cs35l56_sdw_runtime_suspend, cs35l56_sdw_runtime_resume, NULL)
--	SYSTEM_SLEEP_PM_OPS(cs35l56_sdw_system_suspend, cs35l56_system_resume)
-+	SYSTEM_SLEEP_PM_OPS(cs35l56_sdw_system_suspend, cs35l56_sdw_system_resume)
- 	LATE_SYSTEM_SLEEP_PM_OPS(cs35l56_system_suspend_late, cs35l56_system_resume_early)
- 	/* NOIRQ stage not needed, SoundWire doesn't use a hard IRQ */
- };
-diff --git a/sound/soc/codecs/cs35l56.c b/sound/soc/codecs/cs35l56.c
-index eb85c27ab087..18e341744839 100644
---- a/sound/soc/codecs/cs35l56.c
-+++ b/sound/soc/codecs/cs35l56.c
-@@ -946,6 +946,7 @@ static void cs35l56_dsp_work(struct work_struct *work)
- 		goto err_unlock;
- 	}
- 
-+	regmap_clear_bits(cs35l56->regmap, CS35L56_PROTECTION_STATUS, CS35L56_FIRMWARE_MISSING);
- 	cs35l56->fw_patched = true;
- 
- err_unlock:
-@@ -1026,6 +1027,8 @@ static const struct snd_soc_component_driver soc_component_dev_cs35l56 = {
- 	.num_controls = ARRAY_SIZE(cs35l56_controls),
- 
- 	.set_bias_level = cs35l56_set_bias_level,
-+
-+	.suspend_bias_off = 1, /* see cs35l56_system_resume() */
- };
- 
- static const struct reg_sequence cs35l56_hibernate_seq[] = {
-@@ -1156,6 +1159,47 @@ int cs35l56_runtime_resume_common(struct cs35l56_private *cs35l56)
- }
- EXPORT_SYMBOL_NS_GPL(cs35l56_runtime_resume_common, SND_SOC_CS35L56_CORE);
- 
-+static int cs35l56_is_fw_reload_needed(struct cs35l56_private *cs35l56)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	/* Nothing to re-patch if we haven't done any patching yet. */
-+	if (!cs35l56->fw_patched)
-+		return false;
-+
-+	/*
-+	 * If we have control of RESET we will have asserted it so the firmware
-+	 * will need re-patching.
-+	 */
-+	if (cs35l56->reset_gpio)
-+		return true;
-+
-+	/*
-+	 * In secure mode FIRMWARE_MISSING is cleared by the BIOS loader so
-+	 * can't be used here to test for memory retention.
-+	 * Assume that tuning must be re-loaded.
-+	 */
-+	if (cs35l56->secured)
-+		return true;
-+
-+	ret = pm_runtime_resume_and_get(cs35l56->dev);
-+	if (ret) {
-+		dev_err(cs35l56->dev, "Failed to runtime_get: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_read(cs35l56->regmap, CS35L56_PROTECTION_STATUS, &val);
-+	if (ret)
-+		dev_err(cs35l56->dev, "Failed to read PROTECTION_STATUS: %d\n", ret);
-+	else
-+		ret = !!(val & CS35L56_FIRMWARE_MISSING);
-+
-+	pm_runtime_put_autosuspend(cs35l56->dev);
-+
-+	return ret;
-+}
-+
- int cs35l56_system_suspend(struct device *dev)
- {
- 	struct cs35l56_private *cs35l56 = dev_get_drvdata(dev);
-@@ -1273,7 +1317,28 @@ int cs35l56_system_resume(struct device *dev)
- 	if (cs35l56->irq)
- 		enable_irq(cs35l56->irq);
- 
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	/* Firmware won't have been loaded if the component hasn't probed */
-+	if (!cs35l56->component)
-+		return 0;
-+
-+	ret = cs35l56_is_fw_reload_needed(cs35l56);
-+	dev_dbg(cs35l56->dev, "fw_reload_needed: %d\n", ret);
-+	if (ret < 1)
-+		return ret;
-+
-+	cs35l56->fw_patched = false;
-+	init_completion(&cs35l56->dsp_ready_completion);
-+	queue_work(cs35l56->dsp_wq, &cs35l56->dsp_work);
-+
-+	/*
-+	 * suspend_bias_off ensures we are now in BIAS_OFF so there will be
-+	 * a BIAS_OFF->BIAS_STANDBY transition to complete dsp patching.
-+	 */
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(cs35l56_system_resume);
- 
--- 
-2.30.2
-
+-Jeff
