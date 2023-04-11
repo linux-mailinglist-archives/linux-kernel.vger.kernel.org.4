@@ -2,196 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029426DE152
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4B66DE158
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjDKQoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S229820AbjDKQp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjDKQoc (ORCPT
+        with ESMTP id S229744AbjDKQpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:44:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6649F6;
-        Tue, 11 Apr 2023 09:44:21 -0700 (PDT)
+        Tue, 11 Apr 2023 12:45:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7E72690;
+        Tue, 11 Apr 2023 09:45:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A1D662956;
-        Tue, 11 Apr 2023 16:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C903C433D2;
-        Tue, 11 Apr 2023 16:44:05 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 12:44:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-Cc:     <mhiramat@kernel.org>, <bobule.chang@mediatek.com>,
-        <wsd_upstream@mediatek.com>, <cheng-jui.wang@mediatek.com>,
-        <npiggin@gmail.com>, <stable@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v3] ring-buffer: Prevent inconsistent operation on
- cpu_buffer->resize_disabled
-Message-ID: <20230411124403.2a31e12d@gandalf.local.home>
-In-Reply-To: <20230410073512.13362-1-Tze-nan.Wu@mediatek.com>
-References: <20230409024616.31099-1-Tze-nan.Wu@mediatek.com>
-        <20230410073512.13362-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A0A76241E;
+        Tue, 11 Apr 2023 16:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA0FC4339B;
+        Tue, 11 Apr 2023 16:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681231463;
+        bh=yxWndtrxm7KXvbmNlpUHoxZkfyHgM4MFEDIMiMnEyYQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=txzqcMuxReIUiyqf8Je/ZUFIKuSqiFS3/ibvncUcfHSG/SyAQG8G1iR+4UMcRMIfb
+         fmen+XKqhKS/sMrg62ZqvqKxXAY/u1ykj2KXQP8NFt+6pK4tS1qSAxgvW48/lBrqQx
+         4/geo+l3FslxuyNDsCWxnGY8wVwQ38S2HIT4Ka9YMzPhN4el32qh6stnbXgUv4+CIR
+         p0aBU9kppxS1ti9UnbEY5iduQtfR3qcy1oRLapcBtrI2uzZRlvAoXWoYTH3BO9nXet
+         9RUd99jPjPOgtSMawOHoXSYgpQdaGMt/hfdPDfMN21VicoeHxkeGJbFZnlwYnOGhVS
+         dsoe6UmCJSSPQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 677061540478; Tue, 11 Apr 2023 09:44:23 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 09:44:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Message-ID: <6a323775-6274-4d0c-844a-da53146c2abe@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
+ <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+ <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
+ <20230411150320.GA23045@willie-the-truck>
+ <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Please have each new patch be a new thread, and not a Cc to the previous
-version of the patch. As it makes it hard to find in INBOXs.
-
-On Mon, 10 Apr 2023 15:35:08 +0800
-Tze-nan Wu <Tze-nan.Wu@mediatek.com> wrote:
-
-> Write to buffer_size_kb can permanently fail, due to cpu_online_mask may
-> changed between two for_each_online_buffer_cpu loops.
-> The number of increasing and decreasing on cpu_buffer->resize_disable
-> may be inconsistent, leading that the resize_disabled in some CPUs
-> becoming none zero after ring_buffer_reset_online_cpus return.
+On Tue, Apr 11, 2023 at 04:13:11PM +0100, Mark Brown wrote:
+> On Tue, Apr 11, 2023 at 04:03:21PM +0100, Will Deacon wrote:
+> > On Tue, Apr 11, 2023 at 03:31:10PM +0100, Mark Brown wrote:
 > 
-> This issue can be reproduced by "echo 0 > trace" while hotplugging cpu.
-> After reproducing success, we can find out buffer_size_kb will not be
-> functional anymore.
+> > > It seems like more of a kselftest change than anything else so probably
+> > > makes sense for it to go that way?  The example user isn't really even
+> > > needed.
 > 
-> Prevent the two "loops" in this function from iterating through different
-> online cpus by copying cpu_online_mask at the entry of the function.
+> > Fine by me, as long as it doesn't conflict with any other arm64 selftest
+> > changes you hope to land for 6.4.
 > 
+> That shouldn't be an issue.
 
-The "Changes from" need to go below  the '---', otherwise they are added to
-the git commit (we don't want it there).
+Shuah, looks to me like this one is yours in kselftest, then.  ;-)
 
-> Changes from v1 to v3:
->   Declare the cpumask variable statically rather than dynamically.
-> 
-> Changes from v2 to v3:
->   Considering holding cpu_hotplug_lock too long because of the
->   synchronize_rcu(), maybe it's better to prevent the issue by copying
->   cpu_online_mask at the entry of the function as V1 does, instead of
->   using cpus_read_lock().
-> 
-> Link: https://lore.kernel.org/lkml/20230408052226.25268-1-Tze-nan.Wu@mediatek.com/
-> Link: https://lore.kernel.org/oe-kbuild-all/202304082051.Dp50upfS-lkp@intel.com/
-> Link: https://lore.kernel.org/oe-kbuild-all/202304081615.eiaqpbV8-lkp@intel.com/
-> 
-> Cc: stable@vger.kernel.org
-> Cc: npiggin@gmail.com
-> Fixes: b23d7a5f4a07 ("ring-buffer: speed up buffer resets by avoiding synchronize_rcu for each CPU")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-> Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-> ---
-
-This is where the "Changes from" go. And since this patch is not suppose to
-be a Cc. But since it's still good to have a link to it. You could do:
-
-Changes from v2 to v3: https://lore.kernel.org/linux-trace-kernel/20230409024616.31099-1-Tze-nan.Wu@mediatek.com/
-  Considering holding cpu_hotplug_lock too long because of the
-  synchronize_rcu(), maybe it's better to prevent the issue by copying
-  cpu_online_mask at the entry of the function as V1 does, instead of
-  using cpus_read_lock().
-
-
-Where the previous version changes has the lore link to the previous patch,
-in case someone wants to look at it.
-
-
->  kernel/trace/ring_buffer.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index 76a2d91eecad..dc758930dacb 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -288,9 +288,6 @@ EXPORT_SYMBOL_GPL(ring_buffer_event_data);
->  #define for_each_buffer_cpu(buffer, cpu)		\
->  	for_each_cpu(cpu, buffer->cpumask)
->  
-> -#define for_each_online_buffer_cpu(buffer, cpu)		\
-> -	for_each_cpu_and(cpu, buffer->cpumask, cpu_online_mask)
-> -
->  #define TS_SHIFT	27
->  #define TS_MASK		((1ULL << TS_SHIFT) - 1)
->  #define TS_DELTA_TEST	(~TS_MASK)
-> @@ -5353,12 +5350,19 @@ EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
->  void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
->  {
->  	struct ring_buffer_per_cpu *cpu_buffer;
-> +	cpumask_t reset_online_cpumask;
-
-It's usually considered bad form to put a cpumask on the stack. As it can
-be 128 bytes for a machine with 1024 CPUs (and yes they do exist). Also,
-the mask size is set to NR_CPUS not the actual size, so you do not even
-need to have it that big.
-
-
->  	int cpu;
->  
-> +	/*
-> +	 * Record cpu_online_mask here to make sure we iterate through the same
-> +	 * online CPUs in the following two loops.
-> +	 */
-> +	cpumask_copy(&reset_online_cpumask, cpu_online_mask);
-> +
->  	/* prevent another thread from changing buffer sizes */
->  	mutex_lock(&buffer->mutex);
->  
-> -	for_each_online_buffer_cpu(buffer, cpu) {
-> +	for_each_cpu_and(cpu, buffer->cpumask, &reset_online_cpumask) {
->  		cpu_buffer = buffer->buffers[cpu];
->  
->  		atomic_inc(&cpu_buffer->resize_disabled);
-
-Anyway, we don't need to modify any of the above, and just do the following
-instead of atomic_inc():
-
-#define RESET_BIT	(1 << 30)
-
-		atomic_add(&cpu_buffer->resize_disabled, RESET_BIT);
-
-
-> @@ -5368,7 +5372,7 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
->  	/* Make sure all commits have finished */
->  	synchronize_rcu();
->  
-> -	for_each_online_buffer_cpu(buffer, cpu) {
-> +	for_each_cpu_and(cpu, buffer->cpumask, &reset_online_cpumask) {
->  		cpu_buffer = buffer->buffers[cpu];
-
-Then here we can do:
-
-		/*
-		 * If a CPU came online during the synchronize_rcu(), then
-		 * ignore it.
-		 */
-		if (!atomic_read(&cpu_buffer->resize_disabled) & RESET_BIT))
-			continue;
-
-		atomic_sub(&cpu_buffer->resize_disabled, RESET_BIT);
-
-
-As the resize_disabled only needs to be set to something to make it
-disabled.
-
--- Steve
-
->  
->  		reset_disabled_cpu_buffer(cpu_buffer);
-
+							Thanx, Paul
