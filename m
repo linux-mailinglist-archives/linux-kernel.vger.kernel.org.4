@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6F36DDE3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19046DDE43
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjDKOkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229556AbjDKOlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjDKOka (ORCPT
+        with ESMTP id S229515AbjDKOlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:40:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA25DE;
-        Tue, 11 Apr 2023 07:40:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BAC0627DB;
-        Tue, 11 Apr 2023 14:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C5AC4339B;
-        Tue, 11 Apr 2023 14:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681224028;
-        bh=G9AYU0WN9fwVHfpl+j9W/uxt+uCAfsbXK2gGwD+3R2U=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eLyIa62oV66FBuzFpuVRcHuxaVvY97n2RorioenkTNckbs6KU04LWPu5nsx3N8/mP
-         o7gS3IKXUyUmbhRSpDkKFLenpQS6JcxpM/++rSjpgNU+sTJeSAa1+HdF9NfnSafeJp
-         KLYyN6abjCnWVH8rO/NHiFxNjf6ve5j35i0dMcvZdZgnS27t7LR+jCeadptVqOMtla
-         Y4nBnPP5EszUhCLSDXtjm9Vq2LmGUX2Kn/GolTliiz6o1oIeM06NMXa5uh+EdYwJap
-         UB/vTtyiU1jM5uqZcoQTraDvHUFxnQALBQ4OkEnAcHoRg5H5WwzuIkosruBEeYF7rq
-         fIdChet8zTN5w==
-From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Devi Priya <quic_devipriy@quicinc.com>
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com
-In-Reply-To: <20230407155727.20615-1-quic_devipriy@quicinc.com>
-References: <20230407155727.20615-1-quic_devipriy@quicinc.com>
-Subject: Re: (subset) [PATCH V4 0/5] Add regulator support for IPQ9574 SoC
-Message-Id: <168122402434.58187.8959222946426668128.b4-ty@kernel.org>
-Date:   Tue, 11 Apr 2023 15:40:24 +0100
+        Tue, 11 Apr 2023 10:41:19 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392B0DE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:41:18 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-760a1c94c28so178539f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681224077; x=1683816077;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n/FnNe6gGHiYX4mW0URPcwZFPNG4duBkLOZamx4qtC4=;
+        b=xmJtVtjgPQmT1ogKqCCR1Mio/dOc/kXdrdryozEgU+EUOo596wfHrTRTpe58rCU+ck
+         DtONu+tCp87Tm63513IkgyHJTOUSSVTG9146W0SssgEs97XSIhO8MFCwCngI2hkqbGir
+         lGb2G/RpF8PzKUyX4YuF02wDZl4MVDneAb/kmdnib1csj4qo/zegf4p8LklnUubS+/Rt
+         5eD4ijI15YvqAEnkts/9QjdNCM0WK9rs/gwVxblUmqF7QxYdgRU9ngZDCUivprys06TQ
+         jGxhvCbhJ5zieMdk9AmZPqohfZk/MLWJbkEwoHuQoFud0DXFRxog7iZZY7vRNU3Z/F6Q
+         NSVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681224077; x=1683816077;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/FnNe6gGHiYX4mW0URPcwZFPNG4duBkLOZamx4qtC4=;
+        b=IotLLQkmobN0K3Ltid/KlrlC86bV84rmf6b90irBTTHpWJTtLVuD03LPr21eRqThbQ
+         vorMHzs4GF8RvdU4tJslSoWz33+hM1iEefHhh6AnhPTSy/a3A6iaX6xd5e501NkTVvEr
+         XLccCjsnE+1kRthJD/JWlYDTbPS3aD8gUCHwjYOA7/dDyGb5B8rO03ocv71OyipoFQKJ
+         +pxrlSmrOeN/UNEzfz/c7EdUxR5B04VqjnjBsra5oklVA/zvz9U+rDQ2MmAW9apyLDNp
+         VROE2ZMsPuszUL/uCakDFwdRf8UJcJxYOyquzivzdikoYco3jrZFIBqu4zycIx4gCEiH
+         jnFA==
+X-Gm-Message-State: AAQBX9fBO65i4m7NWFUA3IwVx9FPx/7bK2W+5rmZLtxbiVahIgP9nbyR
+        rG8Eqh7Gqa0xCCc+NsQeGGXXfA==
+X-Google-Smtp-Source: AKy350bqIet+jHeVmNP8eeAveySST9WhBTl17M1vbaTgtBupFCT/VKMmZh0+xkyEsvrPTU6+2a+O3w==
+X-Received: by 2002:a05:6602:160f:b0:758:6517:c621 with SMTP id x15-20020a056602160f00b007586517c621mr9503137iow.2.1681224077431;
+        Tue, 11 Apr 2023 07:41:17 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id a63-20020a021642000000b00406356481casm4165714jaa.122.2023.04.11.07.41.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 07:41:17 -0700 (PDT)
+Message-ID: <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+Date:   Tue, 11 Apr 2023 08:41:15 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
+        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Apr 2023 21:27:22 +0530, Devi Priya wrote:
-> IPQ9574 SoC uses the PMIC MP5496 and SMPA1 regulator for APSS voltage scaling.
-> This patch series adds support for the same and also enables the RPM
-> communication over the RPMSG framework.
+On 4/11/23 8:36?AM, David Ahern wrote:
+> On 4/11/23 6:00 AM, Breno Leitao wrote:
+>> I am not sure if avoiding io_uring details in network code is possible.
+>>
+>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+>> in the TCP case) could be somewhere else, such as in the io_uring/
+>> directory, but, I think it might be cleaner if these implementations are
+>> closer to function assignment (in the network subsystem).
+>>
+>> And this function (tcp_uring_cmd() for instance) is the one that I am
+>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+>> -> SIOCINQ.
+>>
+>> Please let me know if you have any other idea in mind.
 > 
-> DTS patch depends on the below series
-> https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
-> 
-> [...]
+> I am not convinced that this io_uring_cmd is needed. This is one
+> in-kernel subsystem calling into another, and there are APIs for that.
+> All of this set is ioctl based and as Willem noted a little refactoring
+> separates the get_user/put_user out so that in-kernel can call can be
+> made with existing ops.
 
-Applied to
+How do you want to wire it up then? We can't use fops->unlocked_ioctl()
+obviously, and we already have ->uring_cmd() for this purpose.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+I do think the right thing to do is have a common helper that returns
+whatever value you want (or sets it), and split the ioctl parts into a
+wrapper around that that simply copies in/out as needed. Then
+->uring_cmd() could call that, or you could some exported function that
+does supports that.
 
-Thanks!
+This works for the basic cases, though I do suspect we'll want to go
+down the ->uring_cmd() at some point for more advanced cases or cases
+that cannot sanely be done in an ioctl fashion.
 
-[1/5] regulator: qcom_smd: Add s1 sub-node to mp5496 regulator
-      commit: e953450cf0f622e3249202e985c79d3faf9a58f2
-[2/5] regulator: qcom_smd: Add MP5496 S1 regulator
-      commit: 60bbee7db43b97bf8c0978cc91f78d1746351871
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Jens Axboe
 
