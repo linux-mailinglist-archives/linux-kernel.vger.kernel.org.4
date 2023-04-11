@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B594E6DD74C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD306DD751
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDKKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S229504AbjDKKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDKKAZ (ORCPT
+        with ESMTP id S229454AbjDKKD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:00:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC71989;
-        Tue, 11 Apr 2023 03:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 390CE6237E;
-        Tue, 11 Apr 2023 10:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF97C433EF;
-        Tue, 11 Apr 2023 10:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681207223;
-        bh=2Keq4mCspCfodAShTdZm6WYR/UkXTzR5FoMI1X1CAKA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HXDw27WS54Awt52Gw+8LzBkircV8TErUYRIznfxBuN/jzK6/GUPdHex2En9MtGFJ0
-         9ptyxr8wqorGkEkrtvSSeH9sEfrmRk04YjUrv9hjjDXnKL2wIEffC5eFFMRGJoa5we
-         VDYrxSWppJu27PR//I+53BjuAdyHXcA87n56WRkxoqaiyuHGb1alq8e085To+VhqVC
-         SEykm97mIXpqvdoVd2V3jnP5kfDQwTLBZZ6hGoywE8V+MqNCMqFxfOevyz65fhdgIg
-         fTp1DmKMaYNULypESgCaWHAvoOTQi5teNriZjmMcE8iiyPvaOTgioCBpQKDIdE4Qa7
-         ZsM8Wru2Z/4RA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     kw@linux.com, Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>, robh@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH v2] PCI: qcom: Add async probe support
-Date:   Tue, 11 Apr 2023 12:00:15 +0200
-Message-Id: <168120720036.16834.5098751319191987141.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320064644.5217-1-manivannan.sadhasivam@linaro.org>
-References: <20230320064644.5217-1-manivannan.sadhasivam@linaro.org>
+        Tue, 11 Apr 2023 06:03:56 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53FAC19A8;
+        Tue, 11 Apr 2023 03:03:54 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.98,336,1673881200"; 
+   d="scan'208";a="155587889"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 11 Apr 2023 19:03:53 +0900
+Received: from localhost.localdomain (unknown [10.226.93.123])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id EB88D400F2DA;
+        Tue, 11 Apr 2023 19:03:48 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/8] Enable DSI and ADV7535 on RZ/G2{L, LC} and RZ/V2L platforms
+Date:   Tue, 11 Apr 2023 11:03:38 +0100
+Message-Id: <20230411100346.299768-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.0 required=5.0 tests=AC_FROM_MANY_DOTS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 12:16:44 +0530, Manivannan Sadhasivam wrote:
-> Qcom PCIe RC driver waits for the PHY link to be up during the probe. This
-> consumes several milliseconds during boot. So add async probe support so
-> that other drivers can load in parallel while this driver waits for the
-> link to be up.
-> 
-> 
+This patch series aims to Enable DSI by linking with ADV7535 on SMARC EVK
+based on RZ/G2{L, LC} and RZ/V2L platforms.
 
-Applied to controller/qcom, thanks!
+patch#1 and #2 depend upon the binding patch [1]
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230406171324.837247-1-biju.das.jz@bp.renesas.com/
 
-[1/1] PCI: qcom: Add async probe support
-      https://git.kernel.org/pci/pci/c/2dee743c8b4d
+patch #4 depend upon the binding patch [2]
+[2] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230406171324.837247-2-biju.das.jz@bp.renesas.com/
 
-Thanks,
-Lorenzo
+Biju Das (8):
+  arm64: dts: renesas: r9a07g044: Add fcpvd node
+  arm64: dts: renesas: r9a07g054: Add fcpvd node
+  arm64: dts: renesas: r9a07g044: Add vspd node
+  arm64: dts: renesas: r9a07g054: Add vspd node
+  arm64: dts: renesas: r9a07g044: Add DSI node
+  arm64: dts: renesas: r9a07g054: Add DSI node
+  arm64: dts: renesas: rzg2l-smarc: Link DSI with ADV7535
+  arm64: dts: renesas: rzg2lc-smarc: Link DSI with ADV7535
+
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    | 53 +++++++++++++
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi    | 54 +++++++++++++
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi  | 79 +++++++++++++++++++
+ arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi | 79 +++++++++++++++++++
+ 4 files changed, 265 insertions(+)
+
+-- 
+2.25.1
+
