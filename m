@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EA16DDAB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9191A6DDAB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjDKMXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S229870AbjDKMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDKMXg (ORCPT
+        with ESMTP id S229450AbjDKMX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:23:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4411707;
-        Tue, 11 Apr 2023 05:23:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 11 Apr 2023 08:23:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E41707;
+        Tue, 11 Apr 2023 05:23:54 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E87821FD6A;
-        Tue, 11 Apr 2023 12:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681215813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zrc6f9m1IkUZIG9FYgI96c26lt3qznrpmnR3S4+Pvz4=;
-        b=o5SNl5syy5B3mqUwrBXxNR3RlyJ3lv8VJ8lbtzjQNV89dP9dYeYcXXmgAu1mxnhXVTwLIt
-        rvIkhS+3q5Ug7+SqqD6O1Egypv7DaxkYs0k9n7e8qv8nfHzgvqXz9Q1Jh+XtkMXBYoLTwY
-        YFcJ92qLpealU/gNva2WG24Psf7WfDg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD9EA13638;
-        Tue, 11 Apr 2023 12:23:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id l21LLUVRNWSoDwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 11 Apr 2023 12:23:33 +0000
-Date:   Tue, 11 Apr 2023 14:23:32 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Waiman Long <longman@redhat.com>, Michal Hocko <mhocko@suse.com>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] mm: oom: introduce cpuset oom
-Message-ID: <3myr57cw3qepul7igpifypxx4xd2buo2y453xlqhdw4xgjokc4@vi3odjfo3ahc>
-References: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 73BF51EC0102;
+        Tue, 11 Apr 2023 14:23:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681215833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=U91yrCJOeaVtdZbsR7c3QE7v7nHaAXGphx6CJX18KdU=;
+        b=Gg2BhMhs4U2g3JSr/wHcKxH+DS0dtgDgEa/5/Lap7Y8sfmv28i2jHD+Yx1z992I9m+D1fc
+        wC/bgI92Yvwv5XE9/Fk8rYVqznCn5rrhx+RT50S9uus+lScLaRrYJyjqFwVF5u0FORr8mL
+        S8ESuZ2V4xMlhLpLtNxgA5x+rjPleVE=
+Date:   Tue, 11 Apr 2023 14:23:48 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Wen Pu <puwen@hygon.cn>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "corbet@lwn.net" <corbet@lwn.net>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Jason@zx2c4.com" <Jason@zx2c4.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH 0/2] arch/x86: Set L2 Cache ID on AMD processors
+Message-ID: <20230411122348.GAZDVRVNvbbS8F5NUB@fat_crate.local>
+References: <20230410163527.1626-1-kprateek.nayak@amd.com>
+ <7d5f81e3-0890-ae35-2e5c-59d1b0950297@hygon.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qy2a2rv2poa26h7t"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <7d5f81e3-0890-ae35-2e5c-59d1b0950297@hygon.cn>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,63 +62,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 12:10:38PM +0000, Wen Pu wrote:
+> I have tested the function cacheinfo_amd_init_l2c_id() on Hygon machine,
+> it had the same result as yours above. So Hygon also should set the
+> l2c_id. Could you please set it for Hygon, or should I send a separate
+> patch?
 
---qy2a2rv2poa26h7t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Separate patch please.
 
-Hello.
+Thx.
 
-On Tue, Apr 11, 2023 at 02:58:15PM +0800, Gang Li <ligang.bdlg@bytedance.com> wrote:
-> +int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
-> +{
-> +	int ret = 0;
-> +	struct css_task_iter it;
-> +	struct task_struct *task;
-> +	struct cpuset *cs;
-> +	struct cgroup_subsys_state *pos_css;
-> +
-> +	/*
-> +	 * Situation gets complex with overlapping nodemasks in different cpusets.
-> +	 * TODO: Maybe we should calculate the "distance" between different mems_allowed.
-> +	 *
-> +	 * But for now, let's make it simple. Just iterate through all cpusets
-> +	 * with the same mems_allowed as the current cpuset.
-> +	 */
-> +	cpuset_read_lock();
-> +	rcu_read_lock();
-> +	cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
-> +		if (nodes_equal(cs->mems_allowed, task_cs(current)->mems_allowed)) {
-> +			css_task_iter_start(&(cs->css), CSS_TASK_ITER_PROCS, &it);
-> +			while (!ret && (task = css_task_iter_next(&it)))
-> +				ret = fn(task, arg);
-> +			css_task_iter_end(&it);
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +	cpuset_read_unlock();
-> +	return ret;
-> +}
+-- 
+Regards/Gruss,
+    Boris.
 
-I see this traverses all cpusets without the hierarchy actually
-mattering that much. Wouldn't the CONSTRAINT_CPUSET better achieved by
-globally (or per-memcg) scanning all processes and filtering with:
-	nodes_intersect(current->mems_allowed, p->mems_allowed)
-(`current` triggers the OOM, `p` is the iterated task)
-?
-
-Thanks,
-Michal
-
---qy2a2rv2poa26h7t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZDVRPwAKCRAkDQmsBEOq
-uVVFAP965wOBxTUUG+YbMpda2aYpjr/QsqcnSO6eT4AgpmO90gD+OHV1fcIafZ+J
-+SF+dtNZgMgKmvwZY6aKbUZOmnn7ewk=
-=h0ch
------END PGP SIGNATURE-----
-
---qy2a2rv2poa26h7t--
+https://people.kernel.org/tglx/notes-about-netiquette
