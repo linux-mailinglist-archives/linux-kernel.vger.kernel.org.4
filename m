@@ -2,91 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B916DE7E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784546DE7F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDKXQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S229670AbjDKXTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDKXQE (ORCPT
+        with ESMTP id S229515AbjDKXTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:16:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E86A171B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:16:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C479624C9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:16:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3E4C433EF;
-        Tue, 11 Apr 2023 23:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681254962;
-        bh=PRmWJI/rLQPSTnkIdRLTjYixj1KiDwH4/8ydLzFViTY=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=o35orVTnkTn5zZPXoQTPE2B4woFvyaOjtpKbFbWGD4g6WHvRdZFOwhc7iaCtD9Q6H
-         iyy9DA/WMZ5vbPhoXPSm1xYrBUaVW62dtxJj8t5Wsvnr9yALdMLzINDzigOt5EW7On
-         qNcJpFoRhElW0cXqRH2JksJoXLBpWCzJL/QOtm7bWhqpxh1yxfWmqW1jqFa5xZCLH/
-         6KLUtcEfzNPMoVef5tUS01HUeCCIHFJ2+ZMJSucq2Cm+CQHRrZyCzNOifexwsx8vxX
-         +mirI6lwgME27jG70Gt6UNRU9VPN/Jl6QOMsVQj42lwxpCnJaT4hBegWK2hIeAn7kA
-         UutOXpGDLqnvA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 02CD11540478; Tue, 11 Apr 2023 16:16:01 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:16:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        dave@stgolabs.net, josh@joshtriplett.org, jstultz@google.com,
-        qiang1.zhang@intel.com
-Subject: [GIT PULL] locktorture changes for v6.4
-Message-ID: <ad60da0b-2535-49ad-8b92-5c8264278e4f@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+        Tue, 11 Apr 2023 19:19:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9345C30FD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681255176; x=1712791176;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5lWfbaukBY0AMGMSMLq4CSRNcNltmmEQeJtpDY+cJQU=;
+  b=SChxuwzg4YvF56UFXA9tpi+CN4290QMEY6VJ4ZqKQFVcioEWqr3vIHac
+   iC7IkZ3EanEPgZSod8LCqBOZZWhhZhYwAR2H3J2l0pvYnRPBa0B4SSj7X
+   Mft9EI3wFsVIYW7pjdYK/adNUO9H8h/r+DGgNuY7LTWLjN2zKO8xNllk6
+   l2liv58X899IhM/rrEHH6er+7shuYTakvAJGmvAubsv+c98Y/uH8h7osZ
+   ecwQjuHuvoB29XdIq0bdH+3NwLUsKQRaQ1I8kVqDWESVf2r1nH4U/RoxF
+   EJ567R1lmN2ZNrRQbQg7huw7VMf8ugWw/kG6F4RsrbI1J6fMTRRUBC6g8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="343761861"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="343761861"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 16:19:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="721362136"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="721362136"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 16:19:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmNGt-000Wo1-2Y;
+        Tue, 11 Apr 2023 23:19:31 +0000
+Date:   Wed, 12 Apr 2023 07:19:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Yacoub <markyacoub@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     oe-kbuild-all@lists.linux.dev, seanpaul@chromium.org,
+        suraj.kandpal@intel.com, dianders@chromium.org,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for
+ enable/disable/check
+Message-ID: <202304120709.oF7BKZuf-lkp@intel.com>
+References: <20230411192134.508113-5-markyacoub@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230411192134.508113-5-markyacoub@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
+Hi Mark,
 
-Once the v6.4 merge window opens, please pull these locktorture changes
-from:
+kernel test robot noticed the following build warnings:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/locktorture.2023.04.04a
-  # HEAD: 5d65cf6ae6aea1a8d533d4499201a13d0068a0dc: locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels (2023-03-07 10:13:57 -0800)
+[auto build test WARNING on drm-intel/for-linux-next-fixes]
+[also build test WARNING on drm/drm-next linus/master v6.3-rc6 next-20230411]
+[cannot apply to drm-tip/drm-tip drm-misc/drm-misc-next drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-----------------------------------------------------------------
-locktorture updates for v6.4
+url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
+patch link:    https://lore.kernel.org/r/20230411192134.508113-5-markyacoub%40google.com
+patch subject: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for enable/disable/check
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230412/202304120709.oF7BKZuf-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/972a98f65fb56b3be4370593c2b81f1283750db7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
+        git checkout 972a98f65fb56b3be4370593c2b81f1283750db7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/display/
 
-This update adds tests for nested locking and also adds support for
-testing raw spinlocks in PREEMPT_RT kernels.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304120709.oF7BKZuf-lkp@intel.com/
 
-----------------------------------------------------------------
-John Stultz (4):
-      locktorture: Add nested_[un]lock() hooks and nlocks parameter
-      locktorture: Add nested locking to mutex torture tests
-      locktorture: Add nested locking to rtmutex torture tests
-      locktorture: With nested locks, occasionally skip main lock
+All warnings (new ones prefixed by >>):
 
-Zqiang (1):
-      locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
+>> drivers/gpu/drm/display/drm_hdcp_helper.c:675:5: warning: no previous prototype for 'drm_hdcp_helper_hdcp1_capable_dp' [-Wmissing-prototypes]
+     675 | int drm_hdcp_helper_hdcp1_capable_dp(struct drm_hdcp_helper_data *data,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/display/drm_hdcp_helper.c:1325:5: warning: no previous prototype for 'drm_hdcp_hdcp1_check_link_registers_dp' [-Wmissing-prototypes]
+    1325 | int drm_hdcp_hdcp1_check_link_registers_dp(struct drm_device *dev,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- kernel/locking/locktorture.c                       | 188 +++++++++++++++++++--
- .../selftests/rcutorture/configs/lock/CFLIST       |   2 +
- .../selftests/rcutorture/configs/lock/LOCK08       |   6 +
- .../selftests/rcutorture/configs/lock/LOCK08.boot  |   1 +
- .../selftests/rcutorture/configs/lock/LOCK09       |   6 +
- .../selftests/rcutorture/configs/lock/LOCK09.boot  |   1 +
- 6 files changed, 188 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK08
- create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK08.boot
- create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK09
- create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK09.boot
+
+vim +/drm_hdcp_helper_hdcp1_capable_dp +675 drivers/gpu/drm/display/drm_hdcp_helper.c
+
+   674	
+ > 675	int drm_hdcp_helper_hdcp1_capable_dp(struct drm_hdcp_helper_data *data,
+   676					     bool *capable)
+   677	{
+   678		int ret;
+   679		u8 bcaps;
+   680	
+   681		ret = data->display_type_funcs->remote_read(
+   682			data, data->hdcp1_lut->bcaps, &bcaps, 1);
+   683		*capable = !ret && (bcaps & DP_BCAPS_HDCP_CAPABLE);
+   684	
+   685		return 0;
+   686	}
+   687	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
