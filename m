@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6E06DD56A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0A66DD562
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjDKI2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S229976AbjDKI1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjDKI1q (ORCPT
+        with ESMTP id S230172AbjDKI1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:27:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCC535B5;
-        Tue, 11 Apr 2023 01:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d94WdOGKlgyLCpmEE9HUoxzwVon/CWYc2gTA65rEkLw=; b=jwr3fWUoxFDQwdNXMgNZGsAiWH
-        6uBwAeaj6fBLAhSU+ikjoqf87c6dT3y2vd5fZlDFOPRWproxKmvueJ/3+ZsYYSd6XnSh6sw/yGRJx
-        AmOa2Dhke3+kgUwvEBuXucMJKy7hFVUsSJqNeIcODQ/psk71Bw2vPuqjo7V2uB5fj38hYCaNpoTOx
-        tmgtu2B0GHPTWKkaWfEE3GTMz6OWQEgS09eEg8x1eWSQK3TQTqOuT1oPEogMbWlZ+h8bElUM2Rzrq
-        luHsX9j9ikDe/W+1N0O2BfgijPgZUyqjl/C9XIc/+4DJS/d3kFPC+CeAm/vF37dGUoitW044un5S5
-        W8fuFwyQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pm9Jv-005g72-Ka; Tue, 11 Apr 2023 08:25:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B037E300244;
-        Tue, 11 Apr 2023 10:25:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 696412CB2BF7D; Tue, 11 Apr 2023 10:25:38 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 10:25:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        corbet@lwn.net, jgross@suse.com, andrew.cooper3@citrix.com,
-        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
-        x86@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/Documentation: Add documentation about cluster
-Message-ID: <20230411082538.GA578657@hirez.programming.kicks-ass.net>
-References: <20230410163527.1626-1-kprateek.nayak@amd.com>
- <20230410163527.1626-3-kprateek.nayak@amd.com>
+        Tue, 11 Apr 2023 04:27:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFDC4C0A;
+        Tue, 11 Apr 2023 01:26:07 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A4E666031E2;
+        Tue, 11 Apr 2023 09:26:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681201566;
+        bh=XuOTH3cHEPlON9QnLhoyvLswIctTTjWgzKO4CZvmkes=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Edc9DbRKhBpaEXqrP8ICK2TJ3Y89+56BkJ8a1lCfkCbZpa9B0R9uYWVXktu8RLQDK
+         X17rYU65MQHvone0pf9E2HEI9fxeasyxrS2wITpgxpDuVOOPYSLJj76Fwv7zqCcgyx
+         HrmIU+Bd7nhVlQAJt5I8pNTQOVG1omkYnORVzx9bto6sGUaf++Rv4CTsiKtMn6LRXr
+         MdbSOYlPHLFIhD8zvUNaBNOfAGMM0JrJ4AxRvdHCt4xzwHiJLH69OWDBvMYIpTJ6Bi
+         AUUgSFLNqUa0Z3jMmOX6s+fcTIs1yVsCqmNpspKGhB+ZWWvhJJlb7mDjfmzcD14fJo
+         5KzBrgxXllVbg==
+Message-ID: <a62c279e-80be-9450-5891-74b4b3994dd8@collabora.com>
+Date:   Tue, 11 Apr 2023 10:26:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230410163527.1626-3-kprateek.nayak@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/7] arm64: dts: mediatek: add mmsys support for mt8365
+ SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v3-0-97e19ad4e85d@baylibre.com>
+ <20230207-iommu-support-v3-1-97e19ad4e85d@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230207-iommu-support-v3-1-97e19ad4e85d@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:05:27PM +0530, K Prateek Nayak wrote:
-> x86 processors map cluster to the L2 cache. Add documentation stating
-> the same, and provide more information on the values and API related to
-> CPU clusters exposed by the kernel.
+Il 07/04/23 11:34, Alexandre Mergnat ha scritto:
+> Multimedia subsystem (MMsys) contains multimedia controller, Multimedia
+> Data Path v2.0 (MDP 2.0) and Display (DISP). The multimedia controller
+> includes bus fabric control, Smart Memory Interface (SMI) control,
+> memory access second-level arbiter, and multimedia configuration. It
+> plays the key role in handling different handshakings between infra
+> subsystem, video subsystem, image subsystem and G3D subsystem.
 > 
-> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
-> ---
->  Documentation/x86/topology.rst | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
+> For more detail, ask Mediatek for the MT8365 AIoT application processor
+> functional specification.
 > 
-> diff --git a/Documentation/x86/topology.rst b/Documentation/x86/topology.rst
-> index 7f58010ea86a..35991d8cdef1 100644
-> --- a/Documentation/x86/topology.rst
-> +++ b/Documentation/x86/topology.rst
-> @@ -33,6 +33,7 @@ historical nature and should be cleaned up.
->  The topology of a system is described in the units of:
->  
->      - packages
-> +    - cluster
->      - cores
->      - threads
->  
-> @@ -90,6 +91,27 @@ Package-related topology information in the kernel:
->          Cache. In general, it is a number identifying an LLC uniquely on the
->          system.
->  
-> +
-> +Clusters
-> +========
-> +A cluster consists of 1 or more threads. It does not matter whether the threads
-> +are SMT- or CMT-type threads. All the threads of a cluster share the same L2
-> +cache.
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-I'm not quite sure that's a correct discription of what a cluster is.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Yes, SMT will fundamentally share core-level caches (and should we not
-always have SMT share all cache topoligies?)
-
-But there is also x86 where L2 is shared between multiple cores -- while
-the above seems to suggest L2 is single core only.
