@@ -2,121 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F276DD14B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 06:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E956B6DD161
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjDKE7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 00:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S229878AbjDKFFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDKE7j (ORCPT
+        with ESMTP id S229800AbjDKFFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 00:59:39 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C5E2709
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:59:38 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B2PDKq017265;
-        Tue, 11 Apr 2023 04:59:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=2gpbBAd0M/MqCf+Pbm/MQfvkVnmSgUR9efr7GxB9VeA=;
- b=WAWFcrpEF2QCHx/GyB+sx+UKBknRPh9ITKGCQFb+K2X/al5XpR9UhuJjBSylLKT7nbTh
- TqR5a4wWpVTd5cN2yXBy95cbruz5GTYrZcrNUv4LqHdvmXMY+L2xTSmwrgKpQ1QnnT6y
- r/Fx66sKsmQLPrUL5h1KcOq9Miv0X6DamY/fnj2OXoLRDPoxjWEejdhFr83QXSBIc1VH
- MZXUcIA/NDgZtCeBC9R3V7dZ+5IY/AR8qWMmvu8wflPitnUdcVZi2Jfje9xq6BSZ3aSb
- IzMDdaHdCcsRKYO8zb/Nm4yfOJODUmRP0L8+067JHLnRAXMXazxh6AfYTFbJjqdLeYZN vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78bxhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:59:25 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B4lL7t027599;
-        Tue, 11 Apr 2023 04:59:24 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78bxgv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:59:24 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ANUvQq029945;
-        Tue, 11 Apr 2023 04:59:22 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m21egw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:59:22 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33B4xKPn53805348
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 04:59:20 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D3F52004B;
-        Tue, 11 Apr 2023 04:59:20 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1E1E20043;
-        Tue, 11 Apr 2023 04:59:15 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.76.117])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 11 Apr 2023 04:59:15 +0000 (GMT)
-Date:   Tue, 11 Apr 2023 10:29:06 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
- prediction for k.alloc
-Message-ID: <ZDTpGsT15s0iOrTJ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
- <ZDAeuL2fz1aEW6rz@debian.me>
- <ZDA+WdiqB2931xHB@google.com>
+        Tue, 11 Apr 2023 01:05:07 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B4626B6;
+        Mon, 10 Apr 2023 22:05:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681189505; x=1712725505;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mcESEGx++s2OAhRhlRIbrr37ZoLPPyWFTrdbJYKRMKI=;
+  b=QNfVpmmA2sf1+GLXw6WZGQklIo1ovL7XkAGwNY0ezIAhUB2T3oSzvsyl
+   qaNIkthMuTPdmXuz0/dAaRvay4whKFjDVQ5+8hxuOeBOlts3KdZTq1+6G
+   Y+Zg6ko0zbpPDYqgYqnOZg0Nrn8DUiRjZ4SM6ZOLHBYtDuZvIhXQUccHo
+   ki2gYTZTfuH1C3tcrb4o1fnL+/DbDdwmbAh6WodUYTn/LSwhp7lOJQIA9
+   WionmsVIx+y4NGKOQ9bwJV8gErTCjV/v4bTOKiCC7FYhlyzzW5qwrDssE
+   Fu3nPWIVdccyhT6ujGLMfXRPDJVJS5ljqv7SaDfTH1F8TQOXTHbRjNW79
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="323159662"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="323159662"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 22:05:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="681944081"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="681944081"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 10 Apr 2023 22:04:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pm6BZ-000Vxu-2C;
+        Tue, 11 Apr 2023 05:04:53 +0000
+Date:   Tue, 11 Apr 2023 13:04:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Mao Jinlong <quic_jinlmao@quicinc.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+Subject: Re: [PATCH] coresight: Add support of setting trace id
+Message-ID: <202304111249.6nPH3yAY-lkp@intel.com>
+References: <20230410133930.30519-1-quic_jinlmao@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZDA+WdiqB2931xHB@google.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GEJGaPIwa8_Xc3ACgks7q0lmRWZj7mxi
-X-Proofpoint-ORIG-GUID: rdhtw1J9ftrrFevA9ilDvYDcFt9GbHdF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_01,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 phishscore=0 adultscore=0 suspectscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0
- mlxlogscore=841 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304110041
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230410133930.30519-1-quic_jinlmao@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-07 09:01:29, Sean Christopherson wrote:
-> On Fri, Apr 07, 2023, Bagas Sanjaya wrote:
-> > On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
-> > > I used the unlikely() macro on the return values of the k.alloc
-> > > calls and found that it changes the code generation a bit.
-> > > Optimize all return paths of k.alloc calls by improving
-> > > branch prediction on return value of k.alloc.
-> 
-> Nit, this is improving code generation, not branch prediction.
-Sorry my mistake.
-> 
-> > What about below?
-> > 
-> > "Improve branch prediction on kmalloc() and kzalloc() call by using
-> > unlikely() macro to optimize their return paths."
-> 
-> Another nit, using unlikely() doesn't necessarily provide a measurable optimization.
-> As above, it does often improve code generation for the happy path, but that doesn't
-> always equate to improved performance, e.g. if the CPU can easily predict the branch
-> and/or there is no impact on the cache footprint.
-I see. I will submit a v2 of the patch with a better and more accurate
-description. Does anyone else have any comments before I do so ?
+Hi Mao,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on atorgue-stm32/stm32-next]
+[also build test WARNING on soc/for-next linus/master v6.3-rc6 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mao-Jinlong/coresight-Add-support-of-setting-trace-id/20230410-214246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git stm32-next
+patch link:    https://lore.kernel.org/r/20230410133930.30519-1-quic_jinlmao%40quicinc.com
+patch subject: [PATCH] coresight: Add support of setting trace id
+config: arm-randconfig-r024-20230410 (https://download.01.org/0day-ci/archive/20230411/202304111249.6nPH3yAY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/f92c27be62a6b3cef125e80682d265773e65cd13
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mao-Jinlong/coresight-Add-support-of-setting-trace-id/20230410-214246
+        git checkout f92c27be62a6b3cef125e80682d265773e65cd13
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304111249.6nPH3yAY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwtracing/coresight/coresight-tpda.c:36:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (traceid < 0)
+                       ^~~~~~~~~~~
+   drivers/hwtracing/coresight/coresight-tpda.c:43:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hwtracing/coresight/coresight-tpda.c:36:3: note: remove the 'if' if its condition is always true
+                   if (traceid < 0)
+                   ^~~~~~~~~~~~~~~~
+   drivers/hwtracing/coresight/coresight-tpda.c:26:18: note: initialize the variable 'ret' to silence this warning
+           int traceid, ret;
+                           ^
+                            = 0
+   1 warning generated.
+
+
+vim +36 drivers/hwtracing/coresight/coresight-tpda.c
+
+    23	
+    24	static int tpda_configure_trace_id(struct tpda_drvdata *drvdata)
+    25	{
+    26		int traceid, ret;
+    27		/*
+    28		 * TPDA must has a unique atid. This atid can uniquely
+    29		 * identify the TPDM trace source connected to the TPDA.
+    30		 * The TPDMs which are connected to same TPDA share the
+    31		 * same trace-id. When TPDA does packetization, different
+    32		 * port will have unique channel number for decoding.
+    33		 */
+    34		if (!drvdata->traceid) {
+    35			traceid = coresight_trace_id_get_system_id();
+  > 36			if (traceid < 0)
+    37				return traceid;
+    38	
+    39			drvdata->traceid = traceid;
+    40		} else
+    41			ret = coresight_trace_id_set_system_id(drvdata->traceid);
+    42	
+    43		return ret;
+    44	}
+    45	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
