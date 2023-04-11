@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504E16DDD93
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627AB6DDD96
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjDKOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S229490AbjDKOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDKOTh (ORCPT
+        with ESMTP id S230411AbjDKOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:19:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4D4680;
-        Tue, 11 Apr 2023 07:19:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 08067219D4;
-        Tue, 11 Apr 2023 14:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681222775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BV/iOuY3tZ30InHD5r4cvxoa3TS4xAh5ueSwnmy0PUI=;
-        b=crdDxRaBGzyB3zB0DL1Kg4gQ1WCo2jvVvFNkRIhz3KimP4omI5TwRwL/nAXz3tG3c2ElZc
-        jhDHt5N1fZaPOP7+25uTcrsykzfJbq6Q0jzZjsIvggDb9sl/oNRkveFD80krveiwNWe03g
-        DzyIz/IoTwiWe6y7KuYLg02GCRdkgh4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681222775;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BV/iOuY3tZ30InHD5r4cvxoa3TS4xAh5ueSwnmy0PUI=;
-        b=ByqMOCwojdA9dsMWcuK6BbwAOTKrFQ4DgFdf1zXapgeMlAX555Mddlr73GFZo2pSdG3ZaV
-        9ksEujjGUUXvAqCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C0BF13638;
-        Tue, 11 Apr 2023 14:19:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CmiHJXZsNWSQVAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 11 Apr 2023 14:19:34 +0000
-Message-ID: <f54cfeb9-f1c3-e656-d344-4cbf97a7c28a@suse.cz>
-Date:   Tue, 11 Apr 2023 16:19:34 +0200
+        Tue, 11 Apr 2023 10:19:57 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2286E5259;
+        Tue, 11 Apr 2023 07:19:50 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54bfa5e698eso314220587b3.13;
+        Tue, 11 Apr 2023 07:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681222789; x=1683814789;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bJL8EDeskQ3buhuZ8RqVzrQqA4hbPhWzL08/j/4ZyRo=;
+        b=QhwckLrCQrR2ez/4jbDIdPlk6XKAtiDAf0x2Rf6RYj6bv0GVysc5m0bZHv+b78otjn
+         IUc1Ug3hhLMCIWxJC50l8ZW2p9HhR3/u0vjJSImCZlqByWpAwct4Ee3+d+O8Z4xzR5/M
+         IW4nAjZEvxjZOIJt//ib72v99BTQi4fxtZEUDU+z5B1Zmtyd8+pN1KJaW3e/J/2H77Y/
+         GOW9N31adcb230fW5nhZ9T3eWzc95CsJZs6+EaES9b6ei+E8oroKrVQnYxH1oY55K5QK
+         qmGD4EOj0Z6MQh6goqHsbJBzencKm8HCBsdsTmLsMCNV+Zo1cMA985Mej7BCqxwMX5tu
+         APeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681222789; x=1683814789;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bJL8EDeskQ3buhuZ8RqVzrQqA4hbPhWzL08/j/4ZyRo=;
+        b=TLn4AYTiwwH1Vr2S0f2Ju/xAq47rB0H238VI849z6F4HgUjUr0o9MClS7mQTiPkb2I
+         S3Igh6xZzIl6HiOC0rrmrPh9IrapZeE/Bc96OSABGbgEtjnmFKcPoa6dlvxtJadclPH8
+         GdANxrZKwzl5Wbn5DvJcELBVPedqwcnBkac9OdMjBgH4A9dukDr/oAxVs/CTHuuecOvd
+         bhGvud+5db0rQXtt2Y9eePYPqEQSRolZZ/UAcNNgdSZiGi6mVdqfc/bqsgvCkAhwzkFH
+         PnHzTq80CYUgXOG42W9VksJ0WE6qIlXqyw6jqtVyYW8rpTLQWxN3x6E9cZp1gkWjAeVw
+         cBhg==
+X-Gm-Message-State: AAQBX9d4yeyqrcSQX/c8/Xiu/TP/JiH8ZUwUiSj4/LNQq+fbuFp1I2jD
+        E+Yr2gM7SyUSeIMwo7bhKArylMBfooWn+QeI1qg=
+X-Google-Smtp-Source: AKy350Zds44P7TdR7/cQA7b8nkFOjg+S10X78uapMOOx7SnVXZupZRI/jvfa9Pk/gkd1MKqhSHdhVhTpID+W8UHs9gs=
+X-Received: by 2002:a81:b184:0:b0:545:f7cc:f30 with SMTP id
+ p126-20020a81b184000000b00545f7cc0f30mr6022073ywh.0.1681222789320; Tue, 11
+ Apr 2023 07:19:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mm: slub: annotate kmem_cache_node->list_lock as
- raw_spinlock
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, 42.hyeyoo@gmail.com,
-        akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
-        cl@linux.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zhao Gongyi <zhaogongyi@bytedance.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-References: <20230411130854.46795-1-zhengqi.arch@bytedance.com>
- <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
- <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
+ <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org> <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
+ <9f896097-8410-4d09-b614-6e792b2160f4@selasky.org> <CANiq72mv2uYe1x6cy4zUq8XHhAZcYYpt6hVXMG4yQZeqw1kY7Q@mail.gmail.com>
+ <1d50d25c-e64b-01f4-029f-8b40b46848fd@selasky.org>
+In-Reply-To: <1d50d25c-e64b-01f4-029f-8b40b46848fd@selasky.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 16:19:38 +0200
+Message-ID: <CANiq72mbM+WBcvj1TwU2u9kLz=EucLhLR-a5nzZEDa7VJ0s2_A@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,104 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 16:08, Qi Zheng wrote:
-> 
-> 
-> On 2023/4/11 21:40, Vlastimil Babka wrote:
->> On 4/11/23 15:08, Qi Zheng wrote:
->>> The list_lock can be held in the critical section of
->>> raw_spinlock, and then lockdep will complain about it
->>> like below:
->>>
->>>   =============================
->>>   [ BUG: Invalid wait context ]
->>>   6.3.0-rc6-next-20230411 #7 Not tainted
->>>   -----------------------------
->>>   swapper/0/1 is trying to lock:
->>>   ffff888100055418 (&n->list_lock){....}-{3:3}, at: ___slab_alloc+0x73d/0x1330
->>>   other info that might help us debug this:
->>>   context-{5:5}
->>>   2 locks held by swapper/0/1:
->>>    #0: ffffffff824e8160 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic+0x22/0x2d0
->>>    #1: ffff888136bede50 (&ACCESS_PRIVATE(rtpcp, lock)){....}-{2:2}, at: cblist_init_generic+0x232/0x2d0
->>>   stack backtrace:
->>>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc6-next-20230411 #7
->>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->>>   Call Trace:
->>>    <TASK>
->>>    dump_stack_lvl+0x77/0xc0
->>>    __lock_acquire+0xa65/0x2950
->>>    ? arch_stack_walk+0x65/0xf0
->>>    ? arch_stack_walk+0x65/0xf0
->>>    ? unwind_next_frame+0x602/0x8d0
->>>    lock_acquire+0xe0/0x300
->>>    ? ___slab_alloc+0x73d/0x1330
->>>    ? find_usage_forwards+0x39/0x50
->>>    ? check_irq_usage+0x162/0xa70
->>>    ? __bfs+0x10c/0x2c0
->>>    _raw_spin_lock_irqsave+0x4f/0x90
->>>    ? ___slab_alloc+0x73d/0x1330
->>>    ___slab_alloc+0x73d/0x1330
->>>    ? fill_pool+0x16b/0x2a0
->>>    ? look_up_lock_class+0x5d/0x160
->>>    ? register_lock_class+0x48/0x500
->>>    ? __lock_acquire+0xabc/0x2950
->>>    ? fill_pool+0x16b/0x2a0
->>>    kmem_cache_alloc+0x358/0x3b0
->>>    ? __lock_acquire+0xabc/0x2950
->>>    fill_pool+0x16b/0x2a0
->>>    ? __debug_object_init+0x292/0x560
->>>    ? lock_acquire+0xe0/0x300
->>>    ? cblist_init_generic+0x232/0x2d0
->>>    __debug_object_init+0x2c/0x560
->>>    cblist_init_generic+0x147/0x2d0
->>>    rcu_init_tasks_generic+0x15/0x190
->>>    kernel_init_freeable+0x6e/0x3e0
->>>    ? rest_init+0x1e0/0x1e0
->>>    kernel_init+0x1b/0x1d0
->>>    ? rest_init+0x1e0/0x1e0
->>>    ret_from_fork+0x1f/0x30
->>>    </TASK>
->>>
->>> The fill_pool() can only be called in the !PREEMPT_RT kernel
->>> or in the preemptible context of the PREEMPT_RT kernel, so
->>> the above warning is not a real issue, but it's better to
->>> annotate kmem_cache_node->list_lock as raw_spinlock to get
->>> rid of such issue.
->> 
->> + CC some RT and RCU people
-> 
-> Thanks.
-> 
->> 
->> AFAIK raw_spinlock is not just an annotation, but on RT it changes the
->> implementation from preemptible mutex to actual spin lock, so it would be
-> 
-> Yeah.
-> 
->> rather unfortunate to do that for a spurious warning. Can it be somehow
->> fixed in a better way?
-> 
-> It's indeed unfortunate for the warning in the commit message. But
-> functions like kmem_cache_alloc(GFP_ATOMIC) may indeed be called
-> in the critical section of raw_spinlock or in the hardirq context, which
+On Tue, Apr 11, 2023 at 3:15=E2=80=AFPM Hans Petter Selasky <hps@selasky.or=
+g> wrote:
+>
+> If you cannot build a new toolchain without a new kernel.
 
-Hmm, I thought they may not, actually.
+Why not?
 
-> will cause problem in the PREEMPT_RT kernel. So I still think it is
-> reasonable to convert kmem_cache_node->list_lock to raw_spinlock type.
+> Then you are stuck forever to build a new toolchain and kernel? Do you
+> agree?
 
-It wouldn't be the complete solution anyway. Once we allow even a GFP_ATOMIC
-slab allocation for such context, it means also page allocation can happen
-to refill the slabs, so lockdep will eventually complain about zone->lock,
-and who knows what else.
+No, I don't agree, because I don't understand why you cannot build the
+new toolchain in the old kernel, or use a pre-built toolchain for that
+matter (whether built by you or by somebody else).
 
-> In addition, there are many fix patches for this kind of warning in the
-> git log, so I also think there should be a general and better solution. :)
+> Or you can say, someone else needs to deal with it, but then you have a
+> single point of failure.
 
-Maybe, but given above, I doubt it's this one.
+No, you could build your own toolchain and save it somewhere, if you
+don't want to rely on a build from somebody else.
 
-> 
->> 
-> 
-
+Cheers,
+Miguel
