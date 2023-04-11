@@ -2,158 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7924C6DD143
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 06:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F276DD14B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 06:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDKE63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 00:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S229800AbjDKE7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 00:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjDKE61 (ORCPT
+        with ESMTP id S229624AbjDKE7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 00:58:27 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A78173E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:58:25 -0700 (PDT)
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 685153F236
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:58:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681189103;
-        bh=KZfBLpN/gahf4Na+DiCMXXdGEJe19xHkIm66KVYL3RU=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=wXVAx+NvdegvvpUD6OOFsuukq4xI5TADWG8uJEnaKwDNs8FqEyDKLD4sMrDLWboGM
-         RZajAd7tAOpmtmqoWM4q3mCbPAg2jME5IuvVTQZhyYuw3/5rfV+Y1mpFLURZQ4XU85
-         xye/sTagXn+seHcTsHXoLMly3xPUbKf+ZvfFeDnBCLGF8xHhNC6ffl5rQRdyEx3c3i
-         UfPgNC08rHsdA54gbnqAWMxMjSPjunjXiuxIEpCcdhV/CPJYJtd8LlRFgzzti2ac7w
-         AFkAvmT6OPAMvJoYMvt43h6CCfb4mOksRgC9lAgkLyX1AAmkzDtHB1Tqx4/Zs1lN+Y
-         mCwEix4Ubka5g==
-Received: by mail-pl1-f197.google.com with SMTP id c8-20020a170902d48800b001a1e0fd4085so4427179plg.20
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:58:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681189101; x=1683781101;
-        h=message-id:date:content-id:mime-version:comments:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KZfBLpN/gahf4Na+DiCMXXdGEJe19xHkIm66KVYL3RU=;
-        b=ybEyLfA79s2lpdd6hhBjPkEcWfTIEks0HXCcK0HJKzxuHL8Vv+CY765ooMTApB4rPs
-         ex2GCkDyx8Vfa/u7BPwzZNJmS0Tn48FvOfnywtvRVf0VHTIcEqYaBhltuYmIjU7kLCwi
-         TiZmob/Q/qXut60ifugcAoierk1WGOzZX5jlJYyI1n3HKuPqC+PeKeJ8HejIVwPg3+J6
-         W2+3jTceMJ0LxEgiz5GupTWfuONUfVLxIiTbrBxCjsnKXsJjp9tPDi6THLhXyw5o9kND
-         7lkcwgRhJ/vk1tcVUxy0HF+kHdm5i2tYhiTxVKWIzal8vmZOEV41cBaXntzGvw6YPnhm
-         ePKg==
-X-Gm-Message-State: AAQBX9dJwXG+Hm3kee3el93/A8dX8Am2YUe1uxtryM2/sjNdQBB2hwLN
-        Mbgw5mGtwN3BI7Oym55LJ1QItKKCgrZrBqpL4cogMZeFAaSDWN2QFCFXqj+tWLX3JqOK+/RMx0p
-        nCoS64vwKoOL6s6hEmsDz4RWfga3mOiabgNVvBkwM/Q==
-X-Received: by 2002:a05:6a20:33a8:b0:e3:8710:6848 with SMTP id f40-20020a056a2033a800b000e387106848mr8659164pzd.41.1681189101491;
-        Mon, 10 Apr 2023 21:58:21 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bEqfmn5biyh+6G1LBlXJucwKMd0MRFFYszdQXPYNvTuuWT+6lnsJYqDYeWyAEkzCrOoXsqvQ==
-X-Received: by 2002:a05:6a20:33a8:b0:e3:8710:6848 with SMTP id f40-20020a056a2033a800b000e387106848mr8659142pzd.41.1681189101180;
-        Mon, 10 Apr 2023 21:58:21 -0700 (PDT)
-Received: from famine.localdomain ([50.125.80.253])
-        by smtp.gmail.com with ESMTPSA id p25-20020a62ab19000000b00638c9a2ba5csm2351342pff.62.2023.04.10.21.58.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id 1772F61E6E; Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id 103909FB79;
-        Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Liang Li <liali@redhat.com>
-cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangbin Liu <haliu@redhat.com>,
-        "Toppins, Jonathan" <jtoppins@redhat.com>
-Subject: Re: [Question] About bonding offload
-In-reply-to: <CAKVySpzU_23Z6Gu1N=z0DRm+sUQDjyiyUc18r4rJ_YQ+YELuFg@mail.gmail.com>
-References: <CAKVySpzU_23Z6Gu1N=z0DRm+sUQDjyiyUc18r4rJ_YQ+YELuFg@mail.gmail.com>
-Comments: In-reply-to Liang Li <liali@redhat.com>
-   message dated "Tue, 11 Apr 2023 09:47:14 +0800."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        Tue, 11 Apr 2023 00:59:39 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C5E2709
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:59:38 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B2PDKq017265;
+        Tue, 11 Apr 2023 04:59:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=2gpbBAd0M/MqCf+Pbm/MQfvkVnmSgUR9efr7GxB9VeA=;
+ b=WAWFcrpEF2QCHx/GyB+sx+UKBknRPh9ITKGCQFb+K2X/al5XpR9UhuJjBSylLKT7nbTh
+ TqR5a4wWpVTd5cN2yXBy95cbruz5GTYrZcrNUv4LqHdvmXMY+L2xTSmwrgKpQ1QnnT6y
+ r/Fx66sKsmQLPrUL5h1KcOq9Miv0X6DamY/fnj2OXoLRDPoxjWEejdhFr83QXSBIc1VH
+ MZXUcIA/NDgZtCeBC9R3V7dZ+5IY/AR8qWMmvu8wflPitnUdcVZi2Jfje9xq6BSZ3aSb
+ IzMDdaHdCcsRKYO8zb/Nm4yfOJODUmRP0L8+067JHLnRAXMXazxh6AfYTFbJjqdLeYZN vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78bxhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 04:59:25 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B4lL7t027599;
+        Tue, 11 Apr 2023 04:59:24 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvr78bxgv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 04:59:24 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ANUvQq029945;
+        Tue, 11 Apr 2023 04:59:22 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m21egw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 04:59:22 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33B4xKPn53805348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Apr 2023 04:59:20 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4D3F52004B;
+        Tue, 11 Apr 2023 04:59:20 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1E1E20043;
+        Tue, 11 Apr 2023 04:59:15 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.76.117])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 11 Apr 2023 04:59:15 +0000 (GMT)
+Date:   Tue, 11 Apr 2023 10:29:06 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
+ prediction for k.alloc
+Message-ID: <ZDTpGsT15s0iOrTJ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
+ <ZDAeuL2fz1aEW6rz@debian.me>
+ <ZDA+WdiqB2931xHB@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <27296.1681189100.1@famine>
-Date:   Mon, 10 Apr 2023 21:58:20 -0700
-Message-ID: <27297.1681189100@famine>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDA+WdiqB2931xHB@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GEJGaPIwa8_Xc3ACgks7q0lmRWZj7mxi
+X-Proofpoint-ORIG-GUID: rdhtw1J9ftrrFevA9ilDvYDcFt9GbHdF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_01,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 phishscore=0 adultscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=841 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110041
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liang Li <liali@redhat.com> wrote:
-
->Hi Everyone,
->
->I'm a redhat network-qe and am testing bonding offload. e.g. gso,tso,gro,lro.
->I got two questions during my testing.
->
->1. The tcp performance has no difference when bonding GRO is on versus off.
->When testing with bonding, I always get ~890 Mbits/sec bandwidth no
->matter whether GRO is on.
->When testing with a physical NIC instead of bonding on the same
->machine, with GRO off, I get 464 Mbits/sec bandwidth, with GRO on, I
->get  897 Mbits/sec bandwidth.
->So looks like the GRO can't be turned off on bonding?
-
-	Well, it's probably more correct to say that GRO is
-unimplemented for "stacked on top" interfaces like bonding (or bridge,
-vlan, team, etc).  GRO operates early in the receive processing, when
-the device driver is receiving packets, typically by calling
-napi_gro_receive() from its NAPI poll function.  This is well before
-bonding, bridge, et al, are involved, as these drivers don't do NAPI at
-all.
-
->I used iperf3 to test performance.
->And I limited iperf3 process cpu usage during my testing to simulate a
->cpu bottleneck.
->Otherwise it's difficult to see bandwidth differences when offload is
->on versus off.
->
->I reported a bz for this: https://bugzilla.redhat.com/show_bug.cgi?id=2183434
->
->2.  Should bonding propagate offload configuration to slaves?
->For now, only "ethtool -K bond0 lro off" can be propagated to slaves,
->others can't be propagated to slaves, e.g.
->  ethtool -K bond0 tso on/off
->  ethtool -K bond0 gso on/off
->  ethtool -K bond0 gro on/off
->  ethtool -K bond0 lro on
->All above configurations can't be propagated to bonding slaves.
-
-	The LRO case is because it's set in NETIF_F_UPPER_DISABLES, as
-checked in netdev_sync_upper_features() and netdev_sync_lower_features().
-
-	A subset of features is handled in bond_compute_features().
-Some feature changes, e.g., scatter-gather, do propagate upwards (but
-not downwards), as bonding handles NETDEV_FEAT_CHANGE events for its
-members (but not vice versa).
-
-	TSO, GSO, and GRO aren't handled in either of these situations,
-and so changes don't propagate at all.  Whether they should or not is a
-separate, complicated, question.  E.g., should features propagate
-upwards, or downwards?  How many levels of nesting?
-
-	-J
-
->I reports a bz for this: https://bugzilla.redhat.com/show_bug.cgi?id=2183777
->
->I am using the RHEL with kernel 4.18.0-481.el8.x86_64.
->
->BR,
->Liang Li
->
-
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+On 2023-04-07 09:01:29, Sean Christopherson wrote:
+> On Fri, Apr 07, 2023, Bagas Sanjaya wrote:
+> > On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
+> > > I used the unlikely() macro on the return values of the k.alloc
+> > > calls and found that it changes the code generation a bit.
+> > > Optimize all return paths of k.alloc calls by improving
+> > > branch prediction on return value of k.alloc.
+> 
+> Nit, this is improving code generation, not branch prediction.
+Sorry my mistake.
+> 
+> > What about below?
+> > 
+> > "Improve branch prediction on kmalloc() and kzalloc() call by using
+> > unlikely() macro to optimize their return paths."
+> 
+> Another nit, using unlikely() doesn't necessarily provide a measurable optimization.
+> As above, it does often improve code generation for the happy path, but that doesn't
+> always equate to improved performance, e.g. if the CPU can easily predict the branch
+> and/or there is no impact on the cache footprint.
+I see. I will submit a v2 of the patch with a better and more accurate
+description. Does anyone else have any comments before I do so ?
