@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E5D6DE57B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD516DE556
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjDKUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S229521AbjDKUGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjDKUHN (ORCPT
+        with ESMTP id S229737AbjDKUGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:07:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97455FDA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681243534;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yIyyJ6/iqFSGQfiVtI3ePGIzEgxbMONnaoRyLHZKxFA=;
-        b=Igz06AypN+gM3Nm2UIJnsf67ZCUmXF6ma0T4XV/loZ6V7vBq8sFAgRlHddg01z6GHCJBdY
-        x6TtPnXPc36vG7mK6eSuWAuKGJNdIlwlqM+ghTkkVfF2vkmWfBqiWqurx500ZbZd3f9+1B
-        P4dFrqq2s9bjyk46LRNAr6ChiIf6iIo=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-259-RlIXGB4BOtCRjug5ZiKxJA-1; Tue, 11 Apr 2023 16:05:33 -0400
-X-MC-Unique: RlIXGB4BOtCRjug5ZiKxJA-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-180baff12ccso12563261fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:32 -0700 (PDT)
+        Tue, 11 Apr 2023 16:06:00 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11080558D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:08 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54f21cdfadbso128533367b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681243507; x=1683835507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qO8SDydNd+IrXInu2nXrTfrv/eWoGcO3nUlpv8kIz+w=;
+        b=G+KL9n8F2o5F1xizPS1iMiV6akiuzoW8/frfb3Ysj9ZZ0XyCjpL11PHn21/xL0RXzt
+         uq96fAhswYFJlWFhY/9OBgErWkwDreJCCHK/P1mgTQY0kJhJCWvo4U9aWXPDMXfiiGPC
+         JjxDNSOMA9t7W1KMRqS/2CRGiEcJPrZhQdJ8UCfO7j+tT7OBm5WIxwChlvuojkXnwgBP
+         D9hk8oOkWiQQwNOoPdubhxdgRPAqhOFl3LwQ/fxEPnDInGx6/+MB+08K+lyEsT3UWRXT
+         oNysdW8zFRbRYG5LlZ8Zf2HgKH7obQEYL9rpspO4UesK23KT5+pCcbkY5QmA2tdDdPsp
+         Rl8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681243532;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1681243507; x=1683835507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yIyyJ6/iqFSGQfiVtI3ePGIzEgxbMONnaoRyLHZKxFA=;
-        b=vgfDeIWG8rpuddHvWlof7nJUbKhM89LKfx395s4L8q/8fnkyexHBG/pbRMsM0ohNio
-         lllM8aouXdVSuT138SCqioN7jUl9T1yzt6/KCyYRO9wI4QIOsrFFKY1YSZ0JY5lZ2esn
-         TF2rh2UQiQDZUSKHgCZmdgSw5EGVLqBbh9sNtP2heyj7bYBdW7h35b7kH2rBM4DSmo8S
-         wFpMN2Qlff5mSTNnTYaxfrOKoBbEhMJiTnqIZPbGRqYV8KTbUekRUkreQ2Jt7aOIg3AW
-         oti1qJ5789hCl9o2sdUYeC7hJ0c+3vOEgmvRKbSGGhIUC1SQOkTFhxSYqOXydVammyzM
-         1v2Q==
-X-Gm-Message-State: AAQBX9e+4TdQZWGkCmdX+Z1zyOsiG8dhk/W5dP9aaj7Cu6K5wPg+Mml8
-        ZLU0LUdfVZ9JfVwAsH/V9lE49/hqHmE4w5blmJNp6wEyQUEoQ3f/CppigyvwfZ+6yD8jYkq16d2
-        SrOcdYMhL1hAs7ush0ouq2VM0n97oagQDVV10rS67bXxCKdz2AbcCIVD6eh2SOUSfVTreiBrF76
-        fGu96GEatJP8k=
-X-Received: by 2002:a05:6870:1f86:b0:16d:dbcc:fd7 with SMTP id go6-20020a0568701f8600b0016ddbcc0fd7mr9414567oac.14.1681243531925;
-        Tue, 11 Apr 2023 13:05:31 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bODoG1031hnNkOQja71SO+8vLxe1Vqjv94AqfEt55LqvoCAE83KMtychJkLFWKlUS03uf3Ag==
-X-Received: by 2002:a05:6870:1f86:b0:16d:dbcc:fd7 with SMTP id go6-20020a0568701f8600b0016ddbcc0fd7mr9414509oac.14.1681243531625;
-        Tue, 11 Apr 2023 13:05:31 -0700 (PDT)
-Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id e20-20020a056808149400b00387764759a3sm5868545oiw.24.2023.04.11.13.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:05:31 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next v4 12/12] net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support
-Date:   Tue, 11 Apr 2023 15:04:09 -0500
-Message-Id: <20230411200409.455355-13-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230411200409.455355-1-ahalaney@redhat.com>
-References: <20230411200409.455355-1-ahalaney@redhat.com>
+        bh=qO8SDydNd+IrXInu2nXrTfrv/eWoGcO3nUlpv8kIz+w=;
+        b=kes1XSctWeFp8PNCOrveMPvIqqDfILlj548OVBjunsN5KVpDQP+zRaIlaLY0IA9xHa
+         gWgQXim00gWCeHtVTQtJlzGSRNo90cfNOP/xMYfabZfBRJUJcztSiamej/edEA8t4Wlp
+         EA7H3584XNRIVExws85OODuoKsuz68Chak5nRv2VFM3a+nLOFNDQ9KcMnFL9fcbtaFeH
+         feU0EiZk/gKgvx59Cr0WnylQlh7Qil0yn2unZcE2BBUvbYttNR+FDdonMjTWVpy4Dxys
+         ihK7zP1LPR3vru1fuH5/1uSwkOWpx7dHMu88w6ydaS0PWcnjosTi9uJpW1X0KtIC9Wlw
+         NTEg==
+X-Gm-Message-State: AAQBX9c+7e5zR3S3KMiZ1mS588SZRMvi1oIRVbf56Ogwpile0GI7JRnY
+        P+RbwXcH5+GwrHl3HAos95yP9hP4/pdKCJ6JokY7
+X-Google-Smtp-Source: AKy350bzBr36gmvHkDb7HsTaZ6dYaCXyNbEjdyvMQi4LYv598zEptXnjPiUHqtXDKRAepxmnyYsy5eYS0y83+SbbXXQ=
+X-Received: by 2002:a81:b70e:0:b0:54c:5102:2196 with SMTP id
+ v14-20020a81b70e000000b0054c51022196mr8668345ywh.5.1681243507053; Tue, 11 Apr
+ 2023 13:05:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230411042511.1606592-9-jstultz@google.com> <202304112129.2DLHpwAl-lkp@intel.com>
+In-Reply-To: <202304112129.2DLHpwAl-lkp@intel.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 11 Apr 2023 13:04:56 -0700
+Message-ID: <CANDhNCrO282Hre0H4Yr+Qg1Nv+eAKGMoTHZ8r4Ka1fZhbVx8wA@mail.gmail.com>
+Subject: Re: [PATCH v3 08/14] sched: Replace rq->curr access w/ rq_curr(rq)
+To:     kernel test robot <lkp@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, oe-kbuild-all@lists.linux.dev,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,267 +86,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new programming sequence needed for EMAC3 based platforms such
-as the sc8280xp family.
+On Tue, Apr 11, 2023 at 7:07=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi John,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on tip/locking/core]
+> [also build test ERROR on tip/master tip/auto-latest linus/master v6.3-rc=
+6 next-20230411]
+> [cannot apply to tip/sched/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/lockin=
+g-ww_mutex-Remove-wakeups-from-under-mutex-wait_lock/20230411-122859
+> patch link:    https://lore.kernel.org/r/20230411042511.1606592-9-jstultz=
+%40google.com
+> patch subject: [PATCH v3 08/14] sched: Replace rq->curr access w/ rq_curr=
+(rq)
+> config: s390-allyesconfig (https://download.01.org/0day-ci/archive/202304=
+11/202304112129.2DLHpwAl-lkp@intel.com/config)
+> compiler: s390-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/b562351b6a0f874c8=
+0020dfc83b22a6f8959aaec
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review John-Stultz/locking-ww_mutex-Rem=
+ove-wakeups-from-under-mutex-wait_lock/20230411-122859
+>         git checkout b562351b6a0f874c80020dfc83b22a6f8959aaec
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Ds390 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Ds390 SHELL=3D/bin/bash kernel/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304112129.2DLHpwAl-lkp@i=
+ntel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from arch/s390/include/asm/rwonce.h:29,
+>                     from include/linux/compiler.h:247,
+>                     from include/linux/kernel.h:20,
+>                     from include/linux/cpumask.h:10,
+>                     from include/linux/energy_model.h:4,
+>                     from kernel/sched/fair.c:23:
+>    kernel/sched/fair.c: In function 'task_numa_compare':
+> >> include/asm-generic/rwonce.h:44:71: error: lvalue required as unary '&=
+' operand
+>       44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_type=
+of(x) *)&(x))
+>          |                                                               =
+        ^
+>    include/asm-generic/rwonce.h:50:9: note: in expansion of macro '__READ=
+_ONCE'
+>       50 |         __READ_ONCE(x);                                       =
+          \
+>          |         ^~~~~~~~~~~
+>    include/linux/rcupdate.h:462:50: note: in expansion of macro 'READ_ONC=
+E'
+>      462 |         typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p=
+); \
+>          |                                                  ^~~~~~~~~
+>    include/linux/rcupdate.h:610:9: note: in expansion of macro '__rcu_der=
+eference_check'
+>      610 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/rcupdate.h:682:28: note: in expansion of macro 'rcu_dere=
+ference_check'
+>      682 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+>          |                            ^~~~~~~~~~~~~~~~~~~~~
+>    kernel/sched/fair.c:1961:15: note: in expansion of macro 'rcu_derefere=
+nce'
+>     1961 |         cur =3D rcu_dereference(rq_curr(dst_rq));
+>          |               ^~~~~~~~~~~~~~~
+>    kernel/sched/fair.c: In function 'task_numa_group':
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
+Many thanks for this report! I've just fixed this up, and if any folks
+are hitting this, they can pull updated patches here:
+     https://github.com/johnstultz-work/linux-dev.git proxy-exec-WIP
 
-Changes since v3:
-    * if statement brackets because of comment (Paolo)
-
-Changes since v2:
-    * Adjust to the new method of defining the MTL/DMA offsets in the
-      platform glue
-
-Changes since v1:
-    * None
-
- .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 122 +++++++++++++++---
- 1 file changed, 101 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index ec9e93147716..16a8c361283b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -11,6 +11,7 @@
- 
- #define RGMII_IO_MACRO_CONFIG		0x0
- #define SDCC_HC_REG_DLL_CONFIG		0x4
-+#define SDCC_TEST_CTL			0x8
- #define SDCC_HC_REG_DDR_CONFIG		0xC
- #define SDCC_HC_REG_DLL_CONFIG2		0x10
- #define SDC4_STATUS			0x14
-@@ -49,6 +50,7 @@
- #define SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY	GENMASK(26, 21)
- #define SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_CODE	GENMASK(29, 27)
- #define SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_EN	BIT(30)
-+#define SDCC_DDR_CONFIG_TCXO_CYCLES_CNT		GENMASK(11, 9)
- #define SDCC_DDR_CONFIG_PRG_RCLK_DLY		GENMASK(8, 0)
- 
- /* SDCC_HC_REG_DLL_CONFIG2 fields */
-@@ -79,6 +81,8 @@ struct ethqos_emac_driver_data {
- 	const struct ethqos_emac_por *por;
- 	unsigned int num_por;
- 	bool rgmii_config_loopback_en;
-+	bool has_emac3;
-+	struct dwmac4_addrs dwmac4_addrs;
- };
- 
- struct qcom_ethqos {
-@@ -92,6 +96,7 @@ struct qcom_ethqos {
- 	const struct ethqos_emac_por *por;
- 	unsigned int num_por;
- 	bool rgmii_config_loopback_en;
-+	bool has_emac3;
- };
- 
- static int rgmii_readl(struct qcom_ethqos *ethqos, unsigned int offset)
-@@ -184,6 +189,7 @@ static const struct ethqos_emac_driver_data emac_v2_3_0_data = {
- 	.por = emac_v2_3_0_por,
- 	.num_por = ARRAY_SIZE(emac_v2_3_0_por),
- 	.rgmii_config_loopback_en = true,
-+	.has_emac3 = false,
- };
- 
- static const struct ethqos_emac_por emac_v2_1_0_por[] = {
-@@ -199,6 +205,39 @@ static const struct ethqos_emac_driver_data emac_v2_1_0_data = {
- 	.por = emac_v2_1_0_por,
- 	.num_por = ARRAY_SIZE(emac_v2_1_0_por),
- 	.rgmii_config_loopback_en = false,
-+	.has_emac3 = false,
-+};
-+
-+static const struct ethqos_emac_por emac_v3_0_0_por[] = {
-+	{ .offset = RGMII_IO_MACRO_CONFIG,	.value = 0x40c01343 },
-+	{ .offset = SDCC_HC_REG_DLL_CONFIG,	.value = 0x2004642c },
-+	{ .offset = SDCC_HC_REG_DDR_CONFIG,	.value = 0x80040800 },
-+	{ .offset = SDCC_HC_REG_DLL_CONFIG2,	.value = 0x00200000 },
-+	{ .offset = SDCC_USR_CTL,		.value = 0x00010800 },
-+	{ .offset = RGMII_IO_MACRO_CONFIG2,	.value = 0x00002060 },
-+};
-+
-+static const struct ethqos_emac_driver_data emac_v3_0_0_data = {
-+	.por = emac_v3_0_0_por,
-+	.num_por = ARRAY_SIZE(emac_v3_0_0_por),
-+	.rgmii_config_loopback_en = false,
-+	.has_emac3 = true,
-+	.dwmac4_addrs = {
-+		.dma_chan = 0x00008100,
-+		.dma_chan_offset = 0x1000,
-+		.mtl_chan = 0x00008000,
-+		.mtl_chan_offset = 0x1000,
-+		.mtl_ets_ctrl = 0x00008010,
-+		.mtl_ets_ctrl_offset = 0x1000,
-+		.mtl_txq_weight = 0x00008018,
-+		.mtl_txq_weight_offset = 0x1000,
-+		.mtl_send_slp_cred = 0x0000801c,
-+		.mtl_send_slp_cred_offset = 0x1000,
-+		.mtl_high_cred = 0x00008020,
-+		.mtl_high_cred_offset = 0x1000,
-+		.mtl_low_cred = 0x00008024,
-+		.mtl_low_cred_offset = 0x1000,
-+	},
- };
- 
- static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
-@@ -222,11 +261,13 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
- 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_DLL_EN,
- 		      SDCC_DLL_CONFIG_DLL_EN, SDCC_HC_REG_DLL_CONFIG);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_MCLK_GATING_EN,
--		      0, SDCC_HC_REG_DLL_CONFIG);
-+	if (!ethqos->has_emac3) {
-+		rgmii_updatel(ethqos, SDCC_DLL_MCLK_GATING_EN,
-+			      0, SDCC_HC_REG_DLL_CONFIG);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_CDR_FINE_PHASE,
--		      0, SDCC_HC_REG_DLL_CONFIG);
-+		rgmii_updatel(ethqos, SDCC_DLL_CDR_FINE_PHASE,
-+			      0, SDCC_HC_REG_DLL_CONFIG);
-+	}
- 
- 	/* Wait for CK_OUT_EN clear */
- 	do {
-@@ -261,18 +302,20 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
- 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_CAL_EN,
- 		      SDCC_DLL_CONFIG2_DDR_CAL_EN, SDCC_HC_REG_DLL_CONFIG2);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DLL_CLOCK_DIS,
--		      0, SDCC_HC_REG_DLL_CONFIG2);
-+	if (!ethqos->has_emac3) {
-+		rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DLL_CLOCK_DIS,
-+			      0, SDCC_HC_REG_DLL_CONFIG2);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_MCLK_FREQ_CALC,
--		      0x1A << 10, SDCC_HC_REG_DLL_CONFIG2);
-+		rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_MCLK_FREQ_CALC,
-+			      0x1A << 10, SDCC_HC_REG_DLL_CONFIG2);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SEL,
--		      BIT(2), SDCC_HC_REG_DLL_CONFIG2);
-+		rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SEL,
-+			      BIT(2), SDCC_HC_REG_DLL_CONFIG2);
- 
--	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SW,
--		      SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SW,
--		      SDCC_HC_REG_DLL_CONFIG2);
-+		rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SW,
-+			      SDCC_DLL_CONFIG2_DDR_TRAFFIC_INIT_SW,
-+			      SDCC_HC_REG_DLL_CONFIG2);
-+	}
- 
- 	return 0;
- }
-@@ -327,9 +370,18 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 			      RGMII_CONFIG2_RX_PROG_SWAP,
- 			      RGMII_IO_MACRO_CONFIG2);
- 
--		/* Set PRG_RCLK_DLY to 57 for 1.8 ns delay */
--		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
--			      57, SDCC_HC_REG_DDR_CONFIG);
-+		/* PRG_RCLK_DLY = TCXO period * TCXO_CYCLES_CNT / 2 * RX delay ns,
-+		 * in practice this becomes PRG_RCLK_DLY = 52 * 4 / 2 * RX delay ns
-+		 */
-+		if (ethqos->has_emac3) {
-+			/* 0.9 ns */
-+			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-+				      115, SDCC_HC_REG_DDR_CONFIG);
-+		} else {
-+			/* 1.8 ns */
-+			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-+				      57, SDCC_HC_REG_DDR_CONFIG);
-+		}
- 		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_DLY_EN,
- 			      SDCC_DDR_CONFIG_PRG_DLY_EN,
- 			      SDCC_HC_REG_DDR_CONFIG);
-@@ -355,8 +407,15 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 			      BIT(6), RGMII_IO_MACRO_CONFIG);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
- 			      0, RGMII_IO_MACRO_CONFIG2);
--		rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
--			      0, RGMII_IO_MACRO_CONFIG2);
-+
-+		if (ethqos->has_emac3)
-+			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-+				      RGMII_CONFIG2_RX_PROG_SWAP,
-+				      RGMII_IO_MACRO_CONFIG2);
-+		else
-+			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-+				      0, RGMII_IO_MACRO_CONFIG2);
-+
- 		/* Write 0x5 to PRG_RCLK_DLY_CODE */
- 		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_CODE,
- 			      (BIT(29) | BIT(27)), SDCC_HC_REG_DDR_CONFIG);
-@@ -389,8 +448,13 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 			      RGMII_IO_MACRO_CONFIG);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
- 			      0, RGMII_IO_MACRO_CONFIG2);
--		rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
--			      0, RGMII_IO_MACRO_CONFIG2);
-+		if (ethqos->has_emac3)
-+			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-+				      RGMII_CONFIG2_RX_PROG_SWAP,
-+				      RGMII_IO_MACRO_CONFIG2);
-+		else
-+			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-+				      0, RGMII_IO_MACRO_CONFIG2);
- 		/* Write 0x5 to PRG_RCLK_DLY_CODE */
- 		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_CODE,
- 			      (BIT(29) | BIT(27)), SDCC_HC_REG_DDR_CONFIG);
-@@ -433,6 +497,17 @@ static int ethqos_configure(struct qcom_ethqos *ethqos)
- 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_PDN,
- 		      SDCC_DLL_CONFIG_PDN, SDCC_HC_REG_DLL_CONFIG);
- 
-+	if (ethqos->has_emac3) {
-+		if (ethqos->speed == SPEED_1000) {
-+			rgmii_writel(ethqos, 0x1800000, SDCC_TEST_CTL);
-+			rgmii_writel(ethqos, 0x2C010800, SDCC_USR_CTL);
-+			rgmii_writel(ethqos, 0xA001, SDCC_HC_REG_DLL_CONFIG2);
-+		} else {
-+			rgmii_writel(ethqos, 0x40010800, SDCC_USR_CTL);
-+			rgmii_writel(ethqos, 0xA001, SDCC_HC_REG_DLL_CONFIG2);
-+		}
-+	}
-+
- 	/* Clear DLL_RST */
- 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_DLL_RST, 0,
- 		      SDCC_HC_REG_DLL_CONFIG);
-@@ -452,7 +527,9 @@ static int ethqos_configure(struct qcom_ethqos *ethqos)
- 			      SDCC_HC_REG_DLL_CONFIG);
- 
- 		/* Set USR_CTL bit 26 with mask of 3 bits */
--		rgmii_updatel(ethqos, GENMASK(26, 24), BIT(26), SDCC_USR_CTL);
-+		if (!ethqos->has_emac3)
-+			rgmii_updatel(ethqos, GENMASK(26, 24), BIT(26),
-+				      SDCC_USR_CTL);
- 
- 		/* wait for DLL LOCK */
- 		do {
-@@ -547,6 +624,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 	ethqos->por = data->por;
- 	ethqos->num_por = data->num_por;
- 	ethqos->rgmii_config_loopback_en = data->rgmii_config_loopback_en;
-+	ethqos->has_emac3 = data->has_emac3;
- 
- 	ethqos->rgmii_clk = devm_clk_get(&pdev->dev, "rgmii");
- 	if (IS_ERR(ethqos->rgmii_clk)) {
-@@ -566,6 +644,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
- 	plat_dat->dump_debug_regs = rgmii_dump;
- 	plat_dat->has_gmac4 = 1;
-+	plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
- 	plat_dat->pmt = 1;
- 	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
- 	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
-@@ -603,6 +682,7 @@ static int qcom_ethqos_remove(struct platform_device *pdev)
- 
- static const struct of_device_id qcom_ethqos_match[] = {
- 	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_v2_3_0_data},
-+	{ .compatible = "qcom,sc8280xp-ethqos", .data = &emac_v3_0_0_data},
- 	{ .compatible = "qcom,sm8150-ethqos", .data = &emac_v2_1_0_data},
- 	{ }
- };
--- 
-2.39.2
-
+thanks!
+-john
