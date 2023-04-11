@@ -2,236 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C646DE639
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520AF6DE63F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 23:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjDKVLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 17:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S229682AbjDKVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 17:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDKVLV (ORCPT
+        with ESMTP id S229481AbjDKVPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 17:11:21 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152863594
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:11:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RXcCk+S3m0KOZE3Fv3B5wEI15fKPMzOUiNefbDRpzsJAKKcdNtDNPNfj6Ygi8sarnhRtkOI5lJKvpc340LNfDAsaINP8YLX+zcCPBZRyLf0tBAkQLG0wEGZIZbbBqOWcfZMhFJFs54d/6+olCcgAKk06u2MSAOMJEHoPHvBMZBnZMZxw+3jr1Ngc4EwiC6Igm5Sx1sdmQsP6niLoKFktU7AbrbdgsLrOmsXcO9IrHHk6HZDRjtwa2+pfEnoQz2k8LFA+t+J3bnmxeXdNpCcF2SXhZrsvX1BGwSDVVKMzVVLRz1yjlQZkH4dIxlPKuoP1qP0ZwUFW611PGwMBHqy7/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WTwJZvJd/POIa5qMYAywSt/CoeSIRyELZbSi0PYNBGs=;
- b=Ywo0etQ5NNqu4A1Q1wFeGhnHOQyTzY80ghcxz6D8OReWFBjxHmtE4oAsXJAz1d30AobirvL1V5vjnhLsD2iMMZxG6roVxdwRoTquS43P6BfIgl8pxP9YKXMGvpTAmt0P8yOBIHuI1gV1FRcYFGASKHW6GlWsVytTQg28JCFoNcCLwMhBIyGk/GcbPwVfhmjj+zW6ZDf3++llY4VfOXJLzZbv4e6l9qSVzRu+9F/66hJC6JMgeMKNi6Vis8wtWARG7O5fhoSWUFwLqTf5iqXg5RQ5gTA8m4sk/nPdirGh5f024hJksvuZtY57qoNFshIv8oQ/2aJIW5pNOH8f2vkRSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WTwJZvJd/POIa5qMYAywSt/CoeSIRyELZbSi0PYNBGs=;
- b=Ryj7/3xBSlMkZyumcaJwlv/WqhhTX4XTqDNTlxNBUNDLbsMEqxWo2JE/BoPTprk6YijkgVXh92bmOoiSpANHGIUlfQM0IkYDlMqNJGf1mZJofd6GYMqaEXOO+6ian9A6a0zPHAFODcftiIJbAAe+MIE/QQ+dnMPBNZmbBzNOjuU=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by CH2PR12MB4056.namprd12.prod.outlook.com (2603:10b6:610:a5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.33; Tue, 11 Apr
- 2023 21:11:17 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::34de:5470:103b:594b]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::34de:5470:103b:594b%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
- 21:11:16 +0000
-From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-CC:     "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: RE: [PATCH] radeon: avoid double free in ci_dpm_init()
-Thread-Topic: [PATCH] radeon: avoid double free in ci_dpm_init()
-Thread-Index: AQHZZloezoDmDcU/3E6bPWpOEdBWkq8mp1yg
-Date:   Tue, 11 Apr 2023 21:11:16 +0000
-Message-ID: <BL1PR12MB51446866BAE5945297315399F79A9@BL1PR12MB5144.namprd12.prod.outlook.com>
-References: <20230403182808.8699-1-n.zhandarovich@fintech.ru>
-In-Reply-To: <20230403182808.8699-1-n.zhandarovich@fintech.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-04-11T21:11:15Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=06a776f3-ad00-48ac-88e2-12826d5b7364;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-04-11T21:11:15Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 6100d905-4478-4258-8335-5b0f4186cc67
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|CH2PR12MB4056:EE_
-x-ms-office365-filtering-correlation-id: bc8b8ac8-4228-40f8-f329-08db3ad149e1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W2iRPRIBkduU8sds1UXqjSX5taVg5dkkZJTHv2ONfffqpB28YmhOPoWlM83LXq9EqqGa5hFpUMcC2ceyXObGz26nZXM2GS6DhdsiwdD+4gG2nbWppMt7ZyMd4qRKc5GvgblqcEtT7QwWE2PheF5sYcEF2j7EDUpWueQuBuHtm9MVmLdw/0FDd42GhdRAEwOwkhT7NT731sKe5VO1WoD2SBbJvphisLuZZVu/3JXpF86G0ZJJlJBVzM/0omwBZIgJRJ1G1lHuUXf50baj7K7ocot0H+Qe40oA1WsMYPMlTzshGhLDfp8IYnP/rGZ9yAcDP/BtLl4oA9kCTrCe7nqfU4EsfUBHxLGknbElNdlOBc9P9Wg4oE17xZwcRax/AF6zXjouwGeVImDR/JGQLxq0PkWxU0jndBj3aBDVR5HIZJpFc2SrKR38U5BkTsHvEnnbnAEopb3JCy4B9ajqzCtr9AwWjx8mtKduL6WSl3yf4+O4rJHpVcg81XGAO2/CYPSOboWM0DtWp16wDQAjBUTXYEFqhAnGc05+xJgpYcAD6FxiIYaFRhz3ZC9EQlRhzD7PX+damhjBifn5X/0INJP6eMsAKNHOB0nElZlh4Ecb7hW7//WI2W5i1zDGuvCuYSPX
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(376002)(346002)(366004)(451199021)(316002)(55016003)(122000001)(41300700001)(8936002)(52536014)(71200400001)(38100700002)(33656002)(7696005)(86362001)(186003)(38070700005)(54906003)(9686003)(2906002)(5660300002)(26005)(6506007)(53546011)(66946007)(76116006)(478600001)(64756008)(6916009)(66446008)(4326008)(8676002)(66476007)(83380400001)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iLrXuXcce/CZRRxkhbdJjKA5pXQzykWIPZQQiA7FtWxh54Se1CRYT7nLZY+i?=
- =?us-ascii?Q?I0d1IiGk+DOJCHsoJIcsWemQN3/AyQCG41u2HXrz/zF2lhylXedET/PjpJLd?=
- =?us-ascii?Q?fmm1zHDXJlMeTRK+Im/6jKyIS0z6xf8BnE7Lps4X2wMktMJFn8S5CLfINdwF?=
- =?us-ascii?Q?WZZYpVBVx8n/jc/Z9CuvY7mKKM7sBtp8BxsT6H1+Tc4dzrkc6JbcYWzNOZ2q?=
- =?us-ascii?Q?bn5RTHR3VJN3x5yv/GsSpo1IlW82h4ZdqwFj/VACPwA4AoYFijCtuYZkeqn/?=
- =?us-ascii?Q?8FCttlqqv771JKPYW2RvPpEpMgFb/C5kkKSgyi2mb29ejq8uQlHwXtURUw5o?=
- =?us-ascii?Q?k3/WFX0MHb5uFXuSZJ/DNlCCs3P/ogZfGGEkjf3MryjhPF6Fyk65s1DMiBbP?=
- =?us-ascii?Q?EOWKf95HIkPwrvNep3Z2wJ2+KXkzP5Fczvp7kgm+VCyNB7Y9XcCWpgwLof+w?=
- =?us-ascii?Q?c34rGg6Tb5CrVbySFqr9P8GSPAHoYJGMy8d9XuPltOEl8ZpEGCNyys0MjBhK?=
- =?us-ascii?Q?G0xAFeVEA6e6g4XQXoC3ATT/kUyZ4/LCDHHnmd5PMDfIejTB6pBxm6aqED3k?=
- =?us-ascii?Q?zloEXXpEKzDoKRDGq2odix4tAmGoKjWReQ5so337l2UOdc1nLBrHisWEjKJF?=
- =?us-ascii?Q?b25ufKizY/6hOMXkjhPBhVl/6pxbLSwNxipXbmMSoLaNDkp9erH9rAP58u53?=
- =?us-ascii?Q?30tipz3hhnoqyiiBALuLiSBNmDNH9NJ8he8KhTVhE5+Hpov09whjJKzm1tVJ?=
- =?us-ascii?Q?yP1iUt0Yvb+/yZzMwbk8dfwlHAYsDPiCPFTArk5sfL/XwrK+49aXi50L9ENo?=
- =?us-ascii?Q?2lt+aoLiUeDKnOKyZIeVWOTpmRq7mn6LB8HqrUYv0kO6aciGnqh9KXa6EuVh?=
- =?us-ascii?Q?hNLo86OUYAf74ztvWJWBkrll2zq/lg5nIc5DcdcFzIu9xAMfbVmNcDTQkk2f?=
- =?us-ascii?Q?uIdfoB4OcogxxWOJYbQVPNFhkG/iZo+Kc79sqsYPZPbjRu677Eml0N/3iFvU?=
- =?us-ascii?Q?Tur2nHDf6BitwujyMMdj77ei/cuf5qv0IfIT60b+JEP9Wt4VzaPDi1SFeKqk?=
- =?us-ascii?Q?7dax5iBfKZE19JabOnc2PFM9fRPqPieG8GHtHdVeVyDFkLIGmk3+RdO8eO5V?=
- =?us-ascii?Q?1Z8XTYczult1Rujs8luuq006LEzmw62bNDej4NQ/JqbRgVaLLNaUSUiYEQJv?=
- =?us-ascii?Q?Y9yDDBU8fqmKCxZwyuTuelgYDtBl5smdbVBkw0yRNss0QKx7rgRXihWybFNy?=
- =?us-ascii?Q?EUdHAc8YumKHD3JMEQJJ4LzXg4RY9DW69+VNFXppm1Y7AWaECYyMyDkdzZ4Q?=
- =?us-ascii?Q?lxDcDOi2FRsvqv4Je4y38JwDXskLbtRpZoWmGph13tJsQttt01i/6dNSClP3?=
- =?us-ascii?Q?FD29S/4+3iJtQFbzYRp7FirVe1UOTT96XD4R55D9vumFUnQlREDfXt/43Mu7?=
- =?us-ascii?Q?6+61XPc3F3aDT/gneNxYsVNuTutQMUe0lpajwmo19rTi1rnnUGIMXt6BDT2h?=
- =?us-ascii?Q?DKHyblvnkv8zWAbw9BwMUixl5WbRGFSzUI38xz11f8YJhTrdrK2NLKZxSO25?=
- =?us-ascii?Q?pwXaCdj+xFHZHRmGIzg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Apr 2023 17:15:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCF8449A;
+        Tue, 11 Apr 2023 14:15:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E865B62B96;
+        Tue, 11 Apr 2023 21:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E05AC4339E;
+        Tue, 11 Apr 2023 21:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681247751;
+        bh=5utrGhW38HkoFEGqEf8o5TKntYH8lTNsjVLTn6Y7/CE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ADGZT1oAr0eMBerDMo2GwFSO6ntEnCVEi3CA6ynTF8RowoM3mxM21P0utx1ScKF58
+         qQCYUFaPDk/2fEAAmfzU5HoDp8G1D+wvmupqxzkbyRifxJCLpqD+LdjrizW8rBkmK/
+         0EPoJrD2zWTbUvWobpyNURCm2bdh8g2y4Msl7IgRbz3kXXAAYEK38Eez7YG+sYfgx9
+         v9/n27T3RC/Jf6oPcKYVAUkXkMvWhpcFy2UO/ECno1CmayFyVw5QVdMaHKtFrKfVZB
+         alXxAu17+KvG4h2zYUpz1AnTA66uwGgvtVl5rDn0aVHQo6Zc9JuEcA9AxEdW87GPm6
+         j9nKZLp7CJT/w==
+Date:   Tue, 11 Apr 2023 22:15:46 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 6/7] soc: starfive: Add dphy pmu support
+Message-ID: <20230411-iron-everybody-70b78e94aee5@spud>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-7-changhuang.liang@starfivetech.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc8b8ac8-4228-40f8-f329-08db3ad149e1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 21:11:16.5076
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ma/YTKXDYVZAS5TrztcsMtaIhqYVbZTl4qn4eHZVBuG9OxXZdeSm8gK8qjp5r7iilpsD7FQiA+jqVbfafcjmug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4056
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Xr1omY7vI0HCAtOr"
+Content-Disposition: inline
+In-Reply-To: <20230411064743.273388-7-changhuang.liang@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
 
-> -----Original Message-----
-> From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> Sent: Monday, April 3, 2023 2:28 PM
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>
-> Cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; amd-
-> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> kernel@vger.kernel.org; lvc-project@linuxtesting.org
-> Subject: [PATCH] radeon: avoid double free in ci_dpm_init()
->=20
-> There are several calls to ci_dpm_fini() in ci_dpm_init() when there occu=
-r
-> errors in functions like r600_parse_extended_power_table().
-> This is harmful as it can lead to double free situations: for instance,
-> r600_parse_extended_power_table() will call for
-> r600_free_extended_power_table() as will ci_dpm_fini(), both of which wil=
-l
-> try to free resources.
-> Other drivers do not call *_dpm_fini functions from their respective
-> *_dpm_init calls - neither should cpm_dpm_init().
->=20
-> Fix this by removing extra calls to ci_dpm_fini().
+--Xr1omY7vI0HCAtOr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You can't just drop the calls to fini().  You'll need to properly unwind to=
- avoid leaking memory.
-
-Alex
-
+On Mon, Apr 10, 2023 at 11:47:42PM -0700, Changhuang Liang wrote:
+> Add dphy pmu to turn on/off the dphy power switch.
 >=20
-> Found by Linux Verification Center (linuxtesting.org) with static analysi=
-s tool
-> SVACE.
->=20
-> Fixes: cc8dbbb4f62a ("drm/radeon: add dpm support for CI dGPUs (v2)")
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
->=20
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 > ---
->  drivers/gpu/drm/radeon/ci_dpm.c | 20 +++++---------------
->  1 file changed, 5 insertions(+), 15 deletions(-)
+>  MAINTAINERS                       |  1 +
+>  drivers/soc/starfive/jh71xx_pmu.c | 65 +++++++++++++++++++++++++++++++
+>  2 files changed, 66 insertions(+)
 >=20
-> diff --git a/drivers/gpu/drm/radeon/ci_dpm.c
-> b/drivers/gpu/drm/radeon/ci_dpm.c index 8ef25ab305ae..7b77d4c93f1d
-> 100644
-> --- a/drivers/gpu/drm/radeon/ci_dpm.c
-> +++ b/drivers/gpu/drm/radeon/ci_dpm.c
-> @@ -5677,28 +5677,20 @@ int ci_dpm_init(struct radeon_device *rdev)
->  	pi->pcie_lane_powersaving.min =3D 16;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0b2170e1e4ff..4d958f02403e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19944,6 +19944,7 @@ F:	include/dt-bindings/reset/starfive?jh71*.h
+> =20
+>  STARFIVE JH71XX PMU CONTROLLER DRIVER
+>  M:	Walker Chen <walker.chen@starfivetech.com>
+> +M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+
+Unmentioned in the commit message, plus I would like an R-b or an Ack
+=66rom Walker.
+
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/power/starfive*
+>  F:	drivers/soc/starfive/jh71xx_pmu.c
+> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh7=
+1xx_pmu.c
+> index 990db6735c48..d4092ca4dccf 100644
+> --- a/drivers/soc/starfive/jh71xx_pmu.c
+> +++ b/drivers/soc/starfive/jh71xx_pmu.c
+> @@ -24,6 +24,9 @@
+>  #define JH71XX_PMU_EVENT_STATUS		0x88
+>  #define JH71XX_PMU_INT_STATUS		0x8C
+> =20
+> +/* DPHY pmu register offset */
+> +#define JH71XX_PMU_DPHY_SWITCH		0x00
+> +
+>  /* sw encourage cfg */
+>  #define JH71XX_PMU_SW_ENCOURAGE_EN_LO	0x05
+>  #define JH71XX_PMU_SW_ENCOURAGE_EN_HI	0x50
+> @@ -94,6 +97,8 @@ static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *=
+pmd, u32 mask, bool *is_o
+> =20
+>  	if (pmu->match_data->pmu_type =3D=3D JH71XX_PMU_GENERAL)
+>  		offset =3D JH71XX_PMU_CURR_POWER_MODE;
+> +	else if (pmu->match_data->pmu_type =3D=3D JH71XX_PMU_DPHY)
+
+There are only two options for this "enum", so why `else if`?
+
+> +		offset =3D JH71XX_PMU_DPHY_SWITCH;
+> =20
+>  	regmap_read(pmu->base, offset, &val);
+> =20
+> @@ -170,6 +175,23 @@ static int jh71xx_pmu_general_set_state(struct jh71x=
+x_pmu_dev *pmd, u32 mask, bo
+>  	return 0;
+>  }
+> =20
+> +static int jh71xx_pmu_dphy_set_state(struct jh71xx_pmu_dev *pmd, u32 mas=
+k, bool on)
+> +{
+> +	struct jh71xx_pmu *pmu =3D pmd->pmu;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&pmu->lock, flags);
+> +
+> +	if (on)
+> +		regmap_update_bits(pmu->base, JH71XX_PMU_DPHY_SWITCH, mask, mask);
+> +	else
+> +		regmap_update_bits(pmu->base, JH71XX_PMU_DPHY_SWITCH, mask, 0);
+> +
+> +	spin_unlock_irqrestore(&pmu->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+>  static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bo=
+ol on)
+>  {
+>  	struct jh71xx_pmu *pmu =3D pmd->pmu;
+> @@ -191,6 +213,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev=
+ *pmd, u32 mask, bool on)
+> =20
+>  	if (pmu->match_data->pmu_type =3D=3D JH71XX_PMU_GENERAL)
+>  		ret =3D jh71xx_pmu_general_set_state(pmd, mask, on);
+> +	else if (pmu->match_data->pmu_type =3D=3D JH71XX_PMU_DPHY)
+> +		ret =3D jh71xx_pmu_dphy_set_state(pmd, mask, on);
+
+Perhaps I am verging on over-complication, but I dislike this carry on.
+Is this the only time we'll see a power domain provider coming out of
+a syscon, or are there likely to be more?
+Either way, I think having an ops struct w/ both parse_dt() and the
+set_state() implementations would be neater than what you have here.
+
+Very much open to dissenting opinions there though. Emil? Walker?
+
+Cheers,
+Conor.
+
+> =20
+>  	return ret;
+>  }
+> @@ -280,6 +304,25 @@ static int jh7110_pmu_general_parse_dt(struct platfo=
+rm_device *pdev,
+>  	return 0;
+>  }
+> =20
+> +static int jh7110_pmu_dphy_parse_dt(struct platform_device *pdev,
+> +				    struct jh71xx_pmu *pmu)
+> +{
+> +	struct device *parent;
+> +	struct device *dev =3D &pdev->dev;
+> +
+> +	parent =3D pdev->dev.parent;
+> +	if (!parent) {
+> +		dev_err(dev, "No parent for syscon pmu\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	pmu->base =3D syscon_node_to_regmap(parent->of_node);
+> +	if (IS_ERR(pmu->base))
+> +		return PTR_ERR(pmu->base);
+> +
+> +	return 0;
+> +}
+> +
+>  static int jh71xx_pmu_init_domain(struct jh71xx_pmu *pmu, int index)
+>  {
+>  	struct jh71xx_pmu_dev *pmd;
+> @@ -409,10 +452,31 @@ static const struct jh71xx_pmu_match_data jh7110_pm=
+u =3D {
+>  	.pmu_parse_dt =3D jh7110_pmu_general_parse_dt,
+>  };
+> =20
+> +static const struct jh71xx_domain_info jh7110_dphy_power_domains[] =3D {
+> +	[JH7110_PD_DPHY_TX] =3D {
+> +		.name =3D "DPHY-TX",
+> +		.bit =3D 30,
+> +	},
+> +	[JH7110_PD_DPHY_RX] =3D {
+> +		.name =3D "DPHY-RX",
+> +		.bit =3D 31,
+> +	},
+> +};
+> +
+> +static const struct jh71xx_pmu_match_data jh7110_pmu_dphy =3D {
+> +	.num_domains =3D ARRAY_SIZE(jh7110_dphy_power_domains),
+> +	.domain_info =3D jh7110_dphy_power_domains,
+> +	.pmu_type =3D JH71XX_PMU_DPHY,
+> +	.pmu_parse_dt =3D jh7110_pmu_dphy_parse_dt,
+> +};
+> +
+>  static const struct of_device_id jh71xx_pmu_of_match[] =3D {
+>  	{
+>  		.compatible =3D "starfive,jh7110-pmu",
+>  		.data =3D (void *)&jh7110_pmu,
+> +	}, {
+> +		.compatible =3D "starfive,jh7110-pmu-dphy",
+> +		.data =3D (void *)&jh7110_pmu_dphy,
+>  	}, {
+>  		/* sentinel */
+>  	}
+> @@ -429,5 +493,6 @@ static struct platform_driver jh71xx_pmu_driver =3D {
+>  builtin_platform_driver(jh71xx_pmu_driver);
+> =20
+>  MODULE_AUTHOR("Walker Chen <walker.chen@starfivetech.com>");
+> +MODULE_AUTHOR("Changhuang Liang <changhuang.liang@starfivetech.com>");
+>  MODULE_DESCRIPTION("StarFive JH71XX PMU Driver");
+>  MODULE_LICENSE("GPL");
+> --=20
+> 2.25.1
 >=20
->  	ret =3D ci_get_vbios_boot_values(rdev, &pi->vbios_boot_state);
-> -	if (ret) {
-> -		ci_dpm_fini(rdev);
-> +	if (ret)
->  		return ret;
-> -	}
->=20
->  	ret =3D r600_get_platform_caps(rdev);
-> -	if (ret) {
-> -		ci_dpm_fini(rdev);
-> +	if (ret)
->  		return ret;
-> -	}
->=20
->  	ret =3D r600_parse_extended_power_table(rdev);
-> -	if (ret) {
-> -		ci_dpm_fini(rdev);
-> +	if (ret)
->  		return ret;
-> -	}
->=20
->  	ret =3D ci_parse_power_table(rdev);
-> -	if (ret) {
-> -		ci_dpm_fini(rdev);
-> +	if (ret)
->  		return ret;
-> -	}
->=20
->  	pi->dll_default_on =3D false;
->  	pi->sram_end =3D SMC_RAM_END;
-> @@ -5749,10 +5741,8 @@ int ci_dpm_init(struct radeon_device *rdev)
->  		kcalloc(4,
->  			sizeof(struct
-> radeon_clock_voltage_dependency_entry),
->  			GFP_KERNEL);
-> -	if (!rdev-
-> >pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries) {
-> -		ci_dpm_fini(rdev);
-> +	if (!rdev-
-> >pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries)
->  		return -ENOMEM;
-> -	}
->  	rdev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.count =3D 4;
->  	rdev-
-> >pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].clk =3D 0;
->  	rdev-
-> >pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].v =3D 0;
+
+--Xr1omY7vI0HCAtOr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDXOAgAKCRB4tDGHoIJi
+0muRAQCRXx5SEVKeJdwy6ees0QA7i97tZDRPO26TmTzuFhmyagD/Xd0OesD2v+P9
+fzylrvgYbIioDk+jBC7VGTEeqry7/gg=
+=hxzn
+-----END PGP SIGNATURE-----
+
+--Xr1omY7vI0HCAtOr--
