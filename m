@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AEC6DE164
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593DE6DE16A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjDKQqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S230141AbjDKQr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjDKQqf (ORCPT
+        with ESMTP id S230091AbjDKQrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:46:35 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD2558E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:15 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id xi5so22001490ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:15 -0700 (PDT)
+        Tue, 11 Apr 2023 12:47:48 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5677C59E3;
+        Tue, 11 Apr 2023 09:47:44 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 39-20020a9d04aa000000b006a1370e214aso2414944otm.11;
+        Tue, 11 Apr 2023 09:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1681231573; x=1683823573;
+        d=gmail.com; s=20210112; t=1681231663;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nWck0qnNaoiFiCtCGNjSsTsFcMjQqGSwfdGnBkruvQE=;
-        b=MbVv3M5wjyeWsSWIRL4r5ZirT7K5n9QJ5g/k24GIIt1qkwdAek7yEMtNBg3EoO6d0I
-         F2AjeCQZWficlvHmS5wc4oe850OJRh6/7ccdaeoXIHdllOzLIEFksCCrG3d018hBKMN0
-         c8jpBDr9uoHQ8gTXgv193cG+89LSFZRveSDfI=
+        bh=OV/uuQZ41eH3AQ7KVpUu+AQP65VPVOJDNUkIUJlBcW8=;
+        b=M0JuxiDMCuw5UBrcSnwb9HMdF0X77GXMcLCxFtljkSQ17pMsAE5s6+iVvE8x1k64lk
+         bFXie5+nYrcwp/e2JgNUFyd35ZZWgyNZArZ+Wuq8LfFlylOY11Zl6h7r76dLM7Xt9Wdd
+         D82CHTUBVKnKyhf9KQIS2hQkLUYG42ti+02ifxh8vcbCaqfvbvpSrUFNlr1NYwlMIp3W
+         wRiFQu/5DfcEA0XLxhNgxHFFHISPgN2hIIokMRLq0lxk6UiIcSd5yIiiN9I/HGUhmvlQ
+         pLWaUSRGgkGWcbAaUWt3w7uNaAtNuyqxHMPEuzDdplBxkGdJlaW3Bhza+bcFOz7KDp3B
+         OHEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681231573; x=1683823573;
+        d=1e100.net; s=20210112; t=1681231663;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nWck0qnNaoiFiCtCGNjSsTsFcMjQqGSwfdGnBkruvQE=;
-        b=Jwnu8SEe/ueJxOqAAaN1N2sx2jyXW2Eg5VOdoKHF49W2ZdEHn74H8xTbsTRoTuRRMA
-         bO42V/vOGSl+f85o9PQwWdKDhDuoSTb/PFvnOpPvLYMGrDGCNhUIwVvTbF8rb7Cfg3xK
-         AUCDV+n30koDSUQTG6x0D/wNNM3Fb36SS1FE1vb1ZQaFtspIMrGTT+yTwh9Y4HwnBozg
-         5bY/I0611mnPL3VMTZJW1+a+ZHFKX+OABmadPvWF7AzoUFjPDerUjRRd9coa66WbtgVh
-         T+hFl5EYijP4jEhMRiP5U5ewj7DXXbt3/lxPCkJ6TD69AJC5Gt1SajbAv7Hqx0LWJtT0
-         5txA==
-X-Gm-Message-State: AAQBX9e7l1Z4WwI1QgtN6xP/7vFkM//qR1GtzDsh2xiuT7IOg5YpkQRC
-        yr9uT2cOlvGcIfkzou1jKFJYxU+PsMOA5pqTM6XW2A==
-X-Google-Smtp-Source: AKy350Z3ge2rAJKkXh1IQ4Mk59RaFDbL3Bz+8zCwpchHb+2gpODeKFQrHKi1OJ31MiDqtgwsIWqEGw==
-X-Received: by 2002:a17:906:c08a:b0:932:c1e2:9983 with SMTP id f10-20020a170906c08a00b00932c1e29983mr12872666ejz.15.1681231573205;
-        Tue, 11 Apr 2023 09:46:13 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id t6-20020a50ab46000000b0050499afe96bsm2866276edc.10.2023.04.11.09.46.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 09:46:12 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50489a2bc4dso2028766a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:12 -0700 (PDT)
-X-Received: by 2002:a50:baec:0:b0:504:9390:180f with SMTP id
- x99-20020a50baec000000b005049390180fmr4434766ede.2.1681231571945; Tue, 11 Apr
- 2023 09:46:11 -0700 (PDT)
+        bh=OV/uuQZ41eH3AQ7KVpUu+AQP65VPVOJDNUkIUJlBcW8=;
+        b=jGg9vnZvxgr2suM+ZMSPQ+5xn9u/aMKmxWc+UN+jJJkQVlq8u7EaCJHAU7QZ1vBH8L
+         zfTyxCDB9v6jHpFPkN3MHEGd4PojGHQFVBPEIt3bdM1W32WDxgyc2al3Juh/eG5wN7H8
+         4An5seHebE4SrXKbGs5Y5RWaaeaK5jlDal7zj6dosafqftX3syrRWzvmHIS5HHUj7BE5
+         6ZKJgUhB00fR7asfohfnriyD1PjbmiB+vsckwYZnKEtx6/z+PnTsse5hnQvz0RlN6DB3
+         ZN9k/SjzyDe9kRt/iv7w42YS4Eb8ikMLmGMDh+a8B6Fa4SuU4Xt4JtHIuUuzlGaE1PJt
+         srEA==
+X-Gm-Message-State: AAQBX9e5DZPWr/IwNzxsgpl1nEP0CuDLPXsePjo0RzZRh50bjp8gY4kA
+        OoZndD1H4IEsjrELfTD9yn8KZ15SiBemwICXnd8=
+X-Google-Smtp-Source: AKy350Zp/HByftvsIEBW+tEKszX5mY603bGDJCqGixLoxpUthI8l72LdtmsEHqerAO8/qJT918CEfStcjHdTFsPjnUU=
+X-Received: by 2002:a05:6830:1b62:b0:6a4:17b6:8767 with SMTP id
+ d2-20020a0568301b6200b006a417b68767mr12354ote.7.1681231663656; Tue, 11 Apr
+ 2023 09:47:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230410153917.1313858-1-pbonzini@redhat.com> <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
- <2560f4b4-8620-6160-eee5-4086630bb5cc@redhat.com>
-In-Reply-To: <2560f4b4-8620-6160-eee5-4086630bb5cc@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 11 Apr 2023 09:45:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whSZViPSuwTv02P34ncDJNFdZS4RoDxN4C2EEoff-W7Ew@mail.gmail.com>
-Message-ID: <CAHk-=whSZViPSuwTv02P34ncDJNFdZS4RoDxN4C2EEoff-W7Ew@mail.gmail.com>
-Subject: Re: [GIT PULL] KVM changes for Linux 6.3-rc7
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>
+References: <20230410210608.1873968-1-robdclark@gmail.com>
+In-Reply-To: <20230410210608.1873968-1-robdclark@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 11 Apr 2023 09:47:32 -0700
+Message-ID: <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm: fdinfo memory stats
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 11:34=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com=
-> wrote:
+On Mon, Apr 10, 2023 at 2:06=E2=80=AFPM Rob Clark <robdclark@gmail.com> wro=
+te:
 >
-> Out of curiosity, do you have some kind of script that parses the "git
-> request-pull" messages and does these checks?  Or was it just the
-> mismatch between diffstat and tag message?
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Similar motivation to other similar recent attempt[1].  But with an
+> attempt to have some shared code for this.  As well as documentation.
+>
+> It is probably a bit UMA-centric, I guess devices with VRAM might want
+> some placement stats as well.  But this seems like a reasonable start.
+>
+> Basic gputop support: https://patchwork.freedesktop.org/series/116236/
+> And already nvtop support: https://github.com/Syllo/nvtop/pull/204
 
-For me, it's manual - I check that the diffstat matches, but also
-check that the description matches the shortlog I get.
+On a related topic, I'm wondering if it would make sense to report
+some more global things (temp, freq, etc) via fdinfo?  Some of this,
+tools like nvtop could get by trawling sysfs or other driver specific
+ways.  But maybe it makes sense to have these sort of things reported
+in a standardized way (even though they aren't really per-drm_file)
 
-And if anything looks weird, I dig deeper (the diffstat often doesn't
-match - some people use "--patience" for the diff which can generate
-small differences, or there are other changes nearby so that the
-merged end result diffs differently from the pre-merge state etc etc).
+BR,
+-R
 
-But "git request-pull" should actually have warned you about the SHA's
-not matching. When it generates that
 
-  "are available in the Git repository at:
-
-     https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-
-   for you to fetch changes up to 0bf9601f8ef0703523018e975d6c1f3fdfcff4b9:=
-"
-
-verbiage, it should actually have verified that the tag matches
-locally, and it generates that commit ID and the shortlog from the
-local tag.
-
-And the fact that the shortlog (and commit ID) you had was the
-expected one, but the tag pointed to something else makes me suspect
-that you are mis-using "git request-pull".
-
-I strongly suspect that you did the request-pull *without* pointing at
-the tag (in fact, you cannot possibly have pointed at the correct tag,
-since the request-pull contents did *not* match the tag contents), and
-then fixed things up manually later when you created the tag.
-
-So you must have explicitly avoided all the automation that "git
-request-pull" does.
-
-              Linus
+> [1] https://patchwork.freedesktop.org/series/112397/
+>
+> Rob Clark (2):
+>   drm: Add fdinfo memory stats
+>   drm/msm: Add memory stats to fdinfo
+>
+>  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+>  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+>  drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+>  include/drm/drm_file.h                | 10 ++++
+>  5 files changed, 134 insertions(+), 3 deletions(-)
+>
+> --
+> 2.39.2
+>
