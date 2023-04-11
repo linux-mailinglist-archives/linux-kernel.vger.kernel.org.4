@@ -2,128 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039166DE59A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7901E6DE597
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjDKUVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S229469AbjDKUUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjDKUVU (ORCPT
+        with ESMTP id S229451AbjDKUUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:21:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8FF49ED
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681244426;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1X1257RiPm0+EqIQdLdY8EZJdNOboaVApm9s8W5RPoA=;
-        b=YsGpqhqsJ/n9guTZ4MZm8KB0ecKH5uDS5JPFPsSbBLHv9+ziWyzsjNPPfvXgX473e4rV5G
-        WmFfp/4mkAjB1hicsLtWyurseK/Uqtf+pglLWwQXZZpqNdfM4ApsTu7dvuyxvtxwRqwMSQ
-        hzM2c8oE9IM5mtMoKfEusIamuIKhGYA=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-498-iUt1n8crNTGvysHPaOX1Iw-1; Tue, 11 Apr 2023 16:20:24 -0400
-X-MC-Unique: iUt1n8crNTGvysHPaOX1Iw-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1842c947865so5249614fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:20:24 -0700 (PDT)
+        Tue, 11 Apr 2023 16:20:11 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36C1700
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso10318865wmo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681244408; x=1683836408;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
+        b=oZJnIqlHSfue/w6vkwGDSV0t3eV7u17CQKZ7YC4aIP5X9HDxh6+I4W8q/lrZIzhe35
+         Kdo77usH9syyoMQBzNMATRjH8ImAeRTamOEZLbV0yyyhiskRVy1+WgqyJxBcdgFNsSV6
+         JtEJKKHR7NZCDtQeAyv5sfuErx1LiBgIWDvnCoGgsYu10Dnj1E6EfjwGii8CQIf+GBLJ
+         8Xw5zKgc54Tv1TusAYRHXUUuHQR20Lhhbr92qb7op5p4ynS/4Bvxgz1XC8tGtnEWke6t
+         ovJtYnGCp4CAQD7xgE8dM9JTln9UTYoLrR8qLS6AzArV7ZS2M9ecs7jp5wuXbgBTZPHJ
+         tiyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681244423;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1X1257RiPm0+EqIQdLdY8EZJdNOboaVApm9s8W5RPoA=;
-        b=UZc5NwjKC42rXfVvDxcVVT2PB6MOMpqopNbVR13xwCEJzob0VU/SdAvMGkRf80Og2r
-         +i79JyD2K2n/1H2fQhHGhchx0ullVtrhGbVUm8opl9AOnF4Lb/UtnnqDKZsTZav9vY7B
-         MFfv7YaARzKSDLgk46ZczFFkPGA/roRYfCpjpo0iiD1VEg1t8BUdEvbkTbI8QAoe+IzE
-         7NM3aMQblzMIojD29mlSaMgorQeRLolB1w7TCX6/Fqfw4YBgdcFxjNgGOqZE4WvckQZy
-         1+rOl9r0LSWWhLAdONXsDCDL7wI3CM2a/UjIjvHG02Exa0EJF8TZ8z8GX6JlekhW8aDf
-         VMqw==
-X-Gm-Message-State: AAQBX9dORyZOCsf+Cn2q77klM+DP1K2NxZ/3j69XE8qmnYDXJHut2pLx
-        jtyc/T7b9mt6uOjngbRKnNR2dMPm2jkHqaToy+a1jjPabxhKLUjD+7nknDMspEJktKugVusN6o/
-        rmjRG2yKk9YAesmlhx6ELcM72LvXcZkT1ErM6sw03veNsQ8AbRoVulldXhmIeOGCTZ7a46Omxdt
-        zmjA34oDUR
-X-Received: by 2002:aca:2116:0:b0:384:2d3d:8dab with SMTP id 22-20020aca2116000000b003842d3d8dabmr6403631oiz.58.1681244423650;
-        Tue, 11 Apr 2023 13:20:23 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YJHMM7YveuM1hzKClhx7F7zKb9Wmh+6PKHIi//bXeiNy/POD5elG9ihQ3BmihU0dfLzqgvfg==
-X-Received: by 2002:aca:2116:0:b0:384:2d3d:8dab with SMTP id 22-20020aca2116000000b003842d3d8dabmr6403605oiz.58.1681244423339;
-        Tue, 11 Apr 2023 13:20:23 -0700 (PDT)
-Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b003874631e249sm5976710oil.36.2023.04.11.13.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:20:22 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        richardcochran@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        netdev@vger.kernel.org, bmasney@redhat.com, echanude@redhat.com,
-        ncai@quicinc.com, jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH v4 0/3] Add EMAC3 support for sa8540p-ride (devicetree/clk bits)
-Date:   Tue, 11 Apr 2023 15:20:06 -0500
-Message-Id: <20230411202009.460650-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1681244408; x=1683836408;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VZTODIYwa2LLMwlK/e5EWHCk+R2wg+1paQIcIlxs2w=;
+        b=0XG/50mTcd6HN7u8P6AWCBD4I4pS5H86/k+bEnl2jpDU60TjokXVCQf1LdDa5jkP6T
+         JNPFjkgUQgXAphA2/U7FZJZ29n8/6PC1wHF9bmmYY/28Pp026DsecyF7Tvig4iWVJr/Q
+         FiIbmd7uIiPf5uYUlx5EHBTrw0VXwnONvQPo6NiUquAbacUa6mcsugcUkkglZYbUZfxM
+         jJck0uyLVlmNk6/IXplj6oFDv2f05G3+d1OXs0LAimnYD/whAuSd8PTAVtVHoLcL1L36
+         7X8MlVCwWosfaCZvUCZfApchpOrvGfvP8Lqb337++Tq0L5Hyqjgu9iLcsf50AUXcsUR7
+         Odgg==
+X-Gm-Message-State: AAQBX9eo7HYV0ADlwwUWjjdmO9rhj7Ew2JnKey4s+h1V8IHYcHyG1HfT
+        2M0j0eGTrIh3epCWnLzCcYBdVA==
+X-Google-Smtp-Source: AKy350ZUblprExjuX6+jE5HBU86G18yD57JroHEF7F3UtgQLLmllv6bAVK1PzXBeo7F/H9vADM+avA==
+X-Received: by 2002:a05:600c:21c8:b0:3dc:4fd7:31f7 with SMTP id x8-20020a05600c21c800b003dc4fd731f7mr7587448wmj.41.1681244408526;
+        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3227:36b8:19f8:5420? ([2a05:6e02:1041:c10:3227:36b8:19f8:5420])
+        by smtp.googlemail.com with ESMTPSA id m21-20020a7bcb95000000b003ee4e99a8f6sm17904482wmi.33.2023.04.11.13.20.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 13:20:08 -0700 (PDT)
+Message-ID: <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
+Date:   Tue, 11 Apr 2023 22:20:07 +0200
 MIME-Version: 1.0
-Content-type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
+ <20230410205305.1649678-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a forward port / upstream refactor of code delivered
-downstream by Qualcomm over at [0] to enable the DWMAC5 based
-implementation called EMAC3 on the sa8540p-ride dev board.
+On 11/04/2023 20:19, Rafael J. Wysocki wrote:
+> On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> There are still some drivers needing to play with the thermal zone
+>> device internals. That is not the best but until we can figure out if
+>> the information is really needed, let's encapsulate the field used in
+>> the thermal zone device structure, so we can move forward relocating
+>> the thermal zone device structure definition in the thermal framework
+>> private headers.
+> 
+> I'm not really sure why this is needed, so please explain.
 
-From what I can tell with the board schematic in hand,
-as well as the code delivered, the main changes needed are:
+Some drivers are accessing tz->device, that implies they have the 
+knowledge of the thermal_zone_device structure but we want to 
+self-encapsulate this structure and reduce the scope of the structure to 
+the thermal core only.
 
-    1. A new address space layout for dwmac5/EMAC3 MTL/DMA regs
-    2. A new programming sequence required for the EMAC3 base platforms
+The ACPI and the Menlon drivers are the drivers accessing tz->device.
 
-This series addresses the devicetree and clock changes to support this
-hardware bringup.
+By adding this wrapper, these drivers do no longer need the thermal zone 
+device structure definition.
 
-As requested[1], it has been split up by compile deps / maintainer tree.
-The associated v4 of the netdev specific changes can be found at [2].
-Together, they result in the ethernet controller working for
-both controllers on this platform.
-
-[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
-[1] https://lore.kernel.org/netdev/20230320202802.4e7dc54c@kernel.org/
-[2] https://lore.kernel.org/netdev/20230411200409.455355-1-ahalaney@redhat.com/T/#t
-
-v3: https://lore.kernel.org/netdev/20230331215804.783439-1-ahalaney@redhat.com/T/#m2f267485d215903494d9572507417793e600b2bf
-v2: https://lore.kernel.org/netdev/20230320221617.236323-1-ahalaney@redhat.com/
-v1: https://lore.kernel.org/netdev/20230313165620.128463-1-ahalaney@redhat.com/
-
-Thanks,
-Andrew
-
-
-Andrew Halaney (3):
-  clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
-  arm64: dts: qcom: sc8280xp: Add ethernet nodes
-  arm64: dts: qcom: sa8540p-ride: Add ethernet nodes
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 180 ++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  59 ++++++
- drivers/clk/qcom/gcc-sc8280xp.c               |  18 ++
- include/dt-bindings/clock/qcom,gcc-sc8280xp.h |   2 +
- 4 files changed, 259 insertions(+)
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/thermal/thermal_core.c | 6 ++++++
+>>   include/linux/thermal.h        | 1 +
+>>   2 files changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index c5025aca22ee..842f678c1c3e 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
+>>   }
+>>   EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+>>
+>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
+>> +{
+>> +       return &tzd->device;
+>> +}
+>> +EXPORT_SYMBOL_GPL(thermal_zone_device);
+>> +
+>>   /**
+>>    * thermal_zone_device_unregister - removes the registered thermal zone device
+>>    * @tz: the thermal zone device to remove
+>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>> index 82ddb32f9876..87837094d549 100644
+>> --- a/include/linux/thermal.h
+>> +++ b/include/linux/thermal.h
+>> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
+>>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>>   const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+>>   int thermal_zone_device_id(struct thermal_zone_device *tzd);
+>> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
+>>
+>>   int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+>>                                       struct thermal_cooling_device *,
+>> --
+>> 2.34.1
+>>
 
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
