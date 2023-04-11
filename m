@@ -2,134 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9688D6DCFDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBBF6DCFDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjDKCuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 22:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S229806AbjDKCyy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Apr 2023 22:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDKCuQ (ORCPT
+        with ESMTP id S229485AbjDKCyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 22:50:16 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0BAE55
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:50:13 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230411025008epoutp0348d39b12e258e9986e2ec22601dd5b6f~UwZWGyggn2358623586epoutp03U
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:50:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230411025008epoutp0348d39b12e258e9986e2ec22601dd5b6f~UwZWGyggn2358623586epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681181408;
-        bh=bKN2lCoddiXVm6pUI8D2ej5iHDRTVAidYa5VCvdXMqQ=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=bYnFbVodglaL7wa1oQ90ZPafPbq8oFgofb+xotcqgvJ5oCoBHjGMx9W9lo+DGPIhR
-         kQGfFyRc9tXwwN5aaxLn2VMmp4ZRJ/GCMj4xiv2bJ359+WRSobaeqoMaOBdNX3mC94
-         wfWjDZKJffXlP6/C9m0VU6qmqBe6qC/Wg5HfI4fg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230411025008epcas2p427ce51ee81e997761eac4c0af6a0f996~UwZVrCA8y0570805708epcas2p46;
-        Tue, 11 Apr 2023 02:50:08 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PwVgh0ZJwz4x9Pv; Tue, 11 Apr
-        2023 02:50:08 +0000 (GMT)
-X-AuditID: b6c32a48-dc7ff700000025b2-7c-6434cadf780f
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FF.9B.09650.FDAC4346; Tue, 11 Apr 2023 11:50:07 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: core: Use proper power management API
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "dlunev@chromium.org" <dlunev@chromium.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac@epcms2p1>
-Date:   Tue, 11 Apr 2023 11:50:07 +0900
-X-CMS-MailID: 20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmme79UyYpBmfWWlg8mLeNzeLlz6ts
-        FgcfdrJYTPvwk9ni5SFNi0e3nzFaHD/0lcWit38rm8WiG9uYLC7vmsNm0X19B5vF8uP/mCy2
-        fvrN6sDrcfmKt8fshossHhMWHWD0aDm5n8Xj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAM6o
-        bJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoLOVFMoS
-        c0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ
-        M/t/MBesZ6841/mdrYFxPlsXIyeHhICJxN9125i6GLk4hAR2MEqsPXaMvYuRg4NXQFDi7w5h
-        kBphAUeJty0rWUBsIQElia6FW5kh4gYS66bvAbPZBPQkpvy+wwgyR0RgGYvEm/NvmCEW8ErM
-        aH/KAmFLS2xfvpURwtaQ+LGsF6pGVOLm6rfsMPb7Y/OhakQkWu+dhaoRlHjwczdUXFKi9cxW
-        qAfqJVrfn2IHWSwhMIFRovHYH6hB+hLXOjaCLeYV8JV4fLuZFcRmEVCVWLt1M9QgF4l9iw+B
-        1TMLyEtsfzuHGeR5ZgFNifW79EFMCQFliSO3WCAq+CQ6Dv9lh3mrYeNvrOwd854wQdhqEo8W
-        bGGFsGUkLs45B/WKh8Tck69YJjAqzkKE9CwkN8xCuGEBI/MqRrHUguLc9NRiowITeOQm5+du
-        YgSnYC2PHYyz337QO8TIxMF4iFGCg1lJhPfrf+MUId6UxMqq1KL8+KLSnNTiQ4ymQN9PZJYS
-        Tc4HZoG8knhDE0sDEzMzQ3MjUwNzJXHejx3KKUIC6YklqdmpqQWpRTB9TBycUg1MU178EXg/
-        bVpewzp75i/T7md8qEreZWypIsgwc/WFqdO6ll0vTQ1dXuTUZt1utz3yfNKU2cfPbDEyOlTI
-        UWJjynb51qbkixbyp+bM917jH/VO+egBfdUPdVFTFipvvbEnven/p12qF1NvPHiyrXKasOTv
-        t21O1ws2883Kb5SXnn7O74DoDpakefGLXkUem+f+tCurfPYpxes1ym2n00tf7Sn9aC21VDDE
-        ZbvyhkNsHsEPHPU71WY8sbt6a2dkgLlSQur8279SOHy3H/PptLWVvCbcte3w53/8i1LZ7Dcf
-        ly598P/aG7M15ypb+69qJtgEnT9dUfxaJ+l9/eW1W37/zDqs+tloq/LWCYkxJRqNdUosxRmJ
-        hlrMRcWJACdJrStKBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac
-References: <CGME20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac@epcms2p1>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 10 Apr 2023 22:54:49 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930211FE6;
+        Mon, 10 Apr 2023 19:54:44 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id AA21624E292;
+        Tue, 11 Apr 2023 10:54:42 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
+ 2023 10:54:42 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 11 Apr
+ 2023 10:54:42 +0800
+Message-ID: <c9e5e8cf-cfa9-0081-2851-2db46c2cddf3@starfivetech.com>
+Date:   Tue, 11 Apr 2023 10:54:42 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 2/4] mmc: starfive: Add sdio/emmc driver support
+To:     Shengyu Qu <wiagn233@outlook.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230215113249.47727-1-william.qiu@starfivetech.com>
+ <20230215113249.47727-3-william.qiu@starfivetech.com>
+ <TY3P286MB26115A8F90DAD2D7DA4DCBEB988B9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <TY3P286MB26115E6311132C791616D32B98889@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <cfde7320-323f-725e-8ed5-c8473bce1755@starfivetech.com>
+ <TY3P286MB26113FF6ABD3CBA616DEC6DC98959@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <TY3P286MB26113FF6ABD3CBA616DEC6DC98959@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-3.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
-modified the driver core to use ufshcd_rpm_{get,put}_sync() APIs.
 
-Switch to these APIs in sysfs as well.
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
----
- drivers/ufs/core/ufs-sysfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 2023/4/11 2:04, Shengyu Qu wrote:
+> Hello William,
+> 
+>> On 2023/3/29 0:08, Shengyu Qu wrote:
+>>> Hello William,
+>>>
+>>> Sorry for making noise about this, but seems deleted voltage swtich function
+>>>
+>>> doesn't help about this. But there's still a problem about eMMC speed. Currently
+>>>
+>>> only about 20MB/s maximum reading speed could be reached when using eMMC
+>>>
+>>> on VF2, any idea about this?
+>>>
+>>> Best regards,
+>>>
+>>> Shengyu
+>>>
+>>> 在 2023/3/28 0:01, Shengyu Qu 写道:
+>>>> Hello William,
+>>>>
+>>>> I'm digging into downstream mmc driver these days and found a problem
+>>>>
+>>>> that current version mainline driver doesn't has a voltage switch function for
+>>>>
+>>>> it. Downstream older version has one but was deleted in this commit [1].
+>>>>
+>>>> It was deleted since vf2's SD slot doesn't have 1.8V input but commiter forgot
+>>>>
+>>>> that vf2's eMMC slot has a proper 1.8V input.
+>>>>
+>>>> So could you add voltage switch function for mainline? I've met a eMMC speed
+>>>>
+>>>> problem possibly due to it.
+>>>>
+>>>> Best regards,
+>>>>
+>>>> Shengyu
+>>>>
+>> 
+>> Hi Shengyu,
+>> 
+>> Sorry for the late reply.
+>> 
+>> First of all, I will consider adding voltage switch function, but the implementation
+>> method is to configure the pmic register configuration in dts, and the implementation
+>> interface will use the voltage switch function in dw_mmc.c.
+>> 
+>> As for speed, the main reason for the low rate is the clock of JH7110 and the
+>> associated IO driving strength, in this limit, the maximum reading speed I tested was
+>> about 50Mb/s.
+>> 
+>> I will try to reproduce your problem and try to solve it. Thanks for suggestions.
+>> 
+>> Best regards,
+>> William
+> I found out the reason and fixed that. dmwci driver needs vqmmc supply
+> configured in device tree and a successful voltage change to actually
+> enable 1.8v mode, even 1.8 supply actually already physically exists.
+> So to solve this problem, I wrote AXP15060 driver and device tree
+> bindings basing on -upstream branch and gets over 75MB/s read speed. The
+> driver series is already under review here:
+> 
+> https://lore.kernel.org/all/TY3P286MB26117891DFB2DD615A7C54EF98969@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> 
+> Best regards,
+> Shengyu
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 883f0e44b54e..b683a43ea089 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -167,11 +167,11 @@ static ssize_t auto_hibern8_show(struct device *dev,
- 		goto out;
- 	}
- 
--	pm_runtime_get_sync(hba->dev);
-+	ufshcd_rpm_get_sync(hba);
- 	ufshcd_hold(hba, false);
- 	ahit = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
- 	ufshcd_release(hba);
--	pm_runtime_put_sync(hba->dev);
-+	ufshcd_rpm_put_sync(hba);
- 
- 	ret = sysfs_emit(buf, "%d\n", ufshcd_ahit_to_us(ahit));
- 
--- 
-2.17.1
+Hi Shengyu,
 
+Thanks for the patch series. I will try it on my branch.
+
+Best regards,
+William
