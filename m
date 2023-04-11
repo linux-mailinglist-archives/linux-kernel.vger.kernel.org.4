@@ -2,306 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FF96DD388
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7059E6DD392
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 09:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjDKG62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230391AbjDKHDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 03:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjDKG60 (ORCPT
+        with ESMTP id S230294AbjDKHDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:58:26 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181F710F0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:58:25 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6323e36064aso709157b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:58:25 -0700 (PDT)
+        Tue, 11 Apr 2023 03:03:18 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA8010EC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:03:16 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id l26-20020a05600c1d1a00b003edd24054e0so5378657wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 00:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681196304;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncPE3HgOzt6ii2dxf/TVQgxDoOPzo9kXvSGxZ1YSrno=;
-        b=U9X1HyoD7KFf5kQSoltVmCTUwDifCKSDJ0Mq0NJRRY5a7vfRwuuqxOqiKAry3M/XOW
-         zOFfNH7gfx1o120mDIzdrqkDD+wElOfP+3vKuPp2AEiHAMcgpxbi2Epvj8KiZSK0qfpP
-         9otCPc1QlqpuWD6tyIqym2Jg+0lo99z1DJK6Q8nYpDJ+XFPgosQ7QCEjkZ6HwYUJsC+O
-         Xx37gfiRuOJmqVjUYVESzD+eOkJu1JTR0/U7CGTzOodJk0NOSKPY3jHb345oz6p6fOxn
-         ckQlGs173omtz27f+C2EodDi3+krjrO1E9XxZlbA5pOCZtCJMimr7NPIqcgOH7rghnh7
-         uE+g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681196594; x=1683788594;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8hfUaJK5K49gfETGPOisBCfJxa2HZGrxX8QV+fOnnOk=;
+        b=HnYFK4qZqI4RcIXlAvUrDPNcSifFMcVs8GEkxM0XP7F+xTSBSNj/S7IiVL0iGDSoFy
+         pRqgAqa/xOFc0p/iNoWRXqes2yZZ6L168sZJR7TGUA9ylELoqrMdSJLDOBlh1hMBLpob
+         yvDnmI6GszfQ6KYoSKVsMMfzYVDk5EmCE6jhxYSehWFN8SBgZ/ReFYsShee1Gdytf2X2
+         riJ1rHZEh/69HQvHFsInHqTbwPJEj8aOvWF7A5+ABkyqPi7XDWm0l62zy/5L6NVIY45A
+         5Oxx+55Ss7yvmexk/9StbJuIunmqcDfef6fEBTzXOCdfk7zTBGttdyj5sXaF19YkgEzG
+         mBXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681196304;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ncPE3HgOzt6ii2dxf/TVQgxDoOPzo9kXvSGxZ1YSrno=;
-        b=5W/1CuZwQbmxPNoYZDwsnGVAszy+zRUFy+nFkyV7nNGCmW+U0p3oIGtvAHIydPrOWg
-         hLXlB4UTjrlNN7eQ42/7sEOwIF4F9AnvfsK/fiTKdocSQjUqnUUQt/OGTINMFxefybSZ
-         o9jPdjU4+TlXzI4YNKNUfdlXwx8KeCGsF2sDu2vs+/LEruAmvkRMS+rq0SV9ziepHnHF
-         2do2IZ/V/IBYI5j1eTZhKUljgEQ2Y3WyHn36KpyhmmOdgPMX72fEc8fPf7Ao8ZeTj2wE
-         ojNmcassHUz6jnkPJHJ1ASh7SicSAbWZn7udOY1wA6cCTNEVz7H8F4j4YXcxWM3f1++W
-         GIfw==
-X-Gm-Message-State: AAQBX9c1mLX768dA+tCZyJWP40or/2yla6M2QEisPY4/KUasYkjINaS/
-        losClzne9f3OsT+4ZEiYrvIiqQ==
-X-Google-Smtp-Source: AKy350at+azI+kWGdlkXmI4bpDXWT0RsYeV7z7NshkuWqXGxrTXNHokuIbpy+pF+zzCKIWWegENK8A==
-X-Received: by 2002:a62:1a8d:0:b0:636:f899:46a0 with SMTP id a135-20020a621a8d000000b00636f89946a0mr6340939pfa.15.1681196304384;
-        Mon, 10 Apr 2023 23:58:24 -0700 (PDT)
-Received: from C02FT5A6MD6R.bytedance.net ([61.213.176.7])
-        by smtp.gmail.com with ESMTPSA id 188-20020a6305c5000000b005186e562db0sm4247682pgf.82.2023.04.10.23.58.21
+        d=1e100.net; s=20210112; t=1681196594; x=1683788594;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8hfUaJK5K49gfETGPOisBCfJxa2HZGrxX8QV+fOnnOk=;
+        b=li+K88q6zc+g1YJqU81x2Avkx+sXk9J4dl86kzVZH/lKzTlDCYP7shGPA5kIeFkVKe
+         Rol9uyDD25H/7wpEy9Y23k6xN6TwDtXss0RqfErTTLI4X65ewi3yUgIDaPjtYkYlw1Va
+         4rirC23PWpSIVYoCgw3j19HCZwL5PiQaKcvgwfnsfld54G1CFEkz0qrv869FQK8HFXj2
+         EDkcKFvZIDdSfQLcFP0oeYt+dTjzABgPmbeiWRAByCQXKXmcaYKnDmryTaO7RNZVv7dx
+         cSCsMa2WuBYhT5L5/9bh84jc2avlpBG60bo4PgfH8bBwIvLSG7OMOWJp1VD7jkNQ4iIx
+         eVsQ==
+X-Gm-Message-State: AAQBX9fmo91RDiL7jCMwkL4M/l8tKxV4trRrA1P5AQRu+n6YoEukrtvy
+        V8i0gfSDWaYc8FViRKJ1qeen8Q==
+X-Google-Smtp-Source: AKy350a8CllWGeVxvR6LgE7adUkYW/miVmQdA9w/Zz0JH4Oqzoo7pwigEO21rIknjgkedlOCSp0FfQ==
+X-Received: by 2002:a05:600c:20e:b0:3ed:29db:cb80 with SMTP id 14-20020a05600c020e00b003ed29dbcb80mr6010292wmi.18.1681196594540;
+        Tue, 11 Apr 2023 00:03:14 -0700 (PDT)
+Received: from localhost ([2a04:cec0:11b6:9335:e66a:358b:d934:608b])
+        by smtp.gmail.com with ESMTPSA id fm7-20020a05600c0c0700b003f063a709dbsm1688043wmb.2.2023.04.11.00.03.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 23:58:23 -0700 (PDT)
-From:   Gang Li <ligang.bdlg@bytedance.com>
-To:     Waiman Long <longman@redhat.com>, Michal Hocko <mhocko@suse.com>
-Cc:     Gang Li <ligang.bdlg@bytedance.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] mm: oom: introduce cpuset oom
-Date:   Tue, 11 Apr 2023 14:58:15 +0800
-Message-Id: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 11 Apr 2023 00:03:13 -0700 (PDT)
+References: <20230320113445.17260-1-yu.tu@amlogic.com>
+ <CAFBinCAE-ihq9oeXc=GqUEHVKUYM+n_e+2_5+gDMTGQcEEhRtg@mail.gmail.com>
+ <b5e647e2-4561-e6c1-016f-2c3b260916bb@amlogic.com>
+ <1jsfdy77n8.fsf@starbuckisacylon.baylibre.com>
+ <d403dda4-e3db-4f26-6996-090a8c520b94@amlogic.com>
+ <1j8rfp6u0h.fsf@starbuckisacylon.baylibre.com>
+ <2e68acd1-f3d1-adbc-5ed2-66c40e006579@amlogic.com>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, kelvin.zhang@amlogic.com,
+        qi.duan@amlogic.com
+Subject: Re: [PATCH V2] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
+ support
+Date:   Tue, 11 Apr 2023 09:02:11 +0200
+In-reply-to: <2e68acd1-f3d1-adbc-5ed2-66c40e006579@amlogic.com>
+Message-ID: <1jleiyyk7k.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cpusets constrain the CPU and Memory placement of tasks.
-`CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
-has never been utilized.
 
-When a process in cpuset which constrain memory placement triggers
-oom, it may kill a completely irrelevant process on other numa nodes,
-which will not release any memory for this cpuset.
+On Fri 07 Apr 2023 at 18:08, Yu Tu <yu.tu@amlogic.com> wrote:
 
-We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
-selecting victim from cpusets with the same mems_allowed as the
-current one.
+> On 2023/3/22 16:41, Jerome Brunet wrote:
+>> [ EXTERNAL EMAIL ]
+>> On Wed 22 Mar 2023 at 15:46, Yu Tu <yu.tu@amlogic.com> wrote:
+>>=20
+>>> On 2023/3/21 17:41, Jerome Brunet wrote:
+>>>> [ EXTERNAL EMAIL ]
+>>> Hi Jerome,
+>>> 	Thank you for your reply.
+>>>> On Tue 21 Mar 2023 at 10:29, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>>
+>>>>> Hi Martin=EF=BC=8C
+>>>>> 	First of all, thank you for your reply.
+>>>>>
+>>>>> On 2023/3/20 23:35, Martin Blumenstingl wrote:
+>>>>>> [ EXTERNAL EMAIL ]
+>>>>>> Hello Yu Tu,
+>>>>>> On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Yu Tu <yu.tu@amlogic.com> w=
+rote:
+>>>>>>>
+>>>>>>> Since the previous code only provides "ro_ops" for the vid_pll_div
+>>>>>>> clock. In fact, the clock can be set. So add "ops" that can set the
+>>>>>>> clock, especially for later chips like S4 SOC and so on.
+>>>>>>>
+>>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>>>>> ---
+>>>>>> please describe the changes you did compared to the previous version=
+(s)
+>>>>>
+>>>>> I'll add it in the next version.
+>>>>>
+>>>>>> [...]
+>>>>>>> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vi=
+d-pll-div.h
+>>>>>>> index c0128e33ccf9..bbccab340910 100644
+>>>>>>> --- a/drivers/clk/meson/vid-pll-div.h
+>>>>>>> +++ b/drivers/clk/meson/vid-pll-div.h
+>>>>>>> @@ -10,11 +10,14 @@
+>>>>>>>     #include <linux/clk-provider.h>
+>>>>>>>     #include "parm.h"
+>>>>>>>
+>>>>>>> +#define VID_PLL_DIV_TABLE_SIZE         14
+>>>>>> In v1 you used ARRAY_SIZE(vid_pll_div_table) wherever this new macro
+>>>>>> is used instead.
+>>>>>> I think using ARRAY_SIZE is the better approach because it means the
+>>>>>> references will update automatically if an entry is added/removed fr=
+om
+>>>>>> vid_pll_div_table
+>>>>>
+>>>>> I agree with you. Perhaps the key is to understand what Jerome said.
+>>>> I asked you to describe how this divider actually works. Not remove
+>>>> ARRAY_SIZE().
+>>>
+>>> OKay! I misunderstood your meaning.
+>>>
+>>>> This divider uses tables only because the parameters are "magic".
+>>>> I'd like the driver to be able come up with "computed" values instead.
+>>>> What I requested is some explanation about how this HW clock works
+>>>> because the documentation is not very clear when it comes to this. The=
+se
+>>>> values must come from somewhere, I'd like to understand "how".
+>>>> This is the same as the PLL driver which can take a range and come up
+>>>> with the different parameters, instead of using big pre-computed table=
+s.
+>>>>
+>>>>>
+>>>>>> Also I think there's a different understanding about what Jerome
+>>>>>> previously wrote:
+>>>>>>> It would be nice to actually describe how this vid pll work so we c=
+an
+>>>>>>> stop using precompute "magic" values and actually use the IP to its=
+ full
+>>>>>>> capacity.
+>>>>>>    From what I understand is that you interpreted this as "let's cha=
+nge
+>>>>>> ARRAY_SIZE(vid_pll_div_table) to a new macro called
+>>>>>> VID_PLL_DIV_TABLE_SIZE".
+>>>>>> But I think what Jerome meant is: "let's get rid of vid_pll_div_table
+>>>>>> and implement how to actually calculate the clock rate - without
+>>>>>> hard-coding 14 possible clock settings in vid_pll_div_table". Look at
+>>>>>> clk-mpll.c and/or clk-pll.c which allow calculating arbitrary rates
+>>>>>> without any hard-coded tables.
+>>>>>
+>>>> exactly ... or at least an explanation about how it works and
+>>>> why it is too complicated to compute the values at runtime.
+>>>>
+>>>>> In fact, pll and mpll are also fixed register writes corresponding
+>>>>> values.
+>>>> That is not true. The pll and mpll drivers are able to compute their
+>>>> values at runtime. Please have a look at the drivers.
+>>>>
+>>>
+>>> After consulting the engineer of the chip design, the clock is a digital
+>>> frequency divider, and the frequency divider is verified by the sequence
+>>> generator, which is bit0-bi15. bit16-bit17 confirms the size of the
+>>> frequency division.
+>> That, we already know. This is what the datasheet already give us.
+>> It is still a bit light.
+>> You don't set the bit randomly and check the output, do you ?
+>> The question is how setting this bit impact the relation between
+>> the input and output rate? IOW, from these 17bits, how do you come up
+>> with the multiplier and divider values (and the other way around) ?
+>>=20
+>>> Whereas other PLLS and MPLLS are analog dividers so
+>>> there are fixed formulas to calculate.
+>>>
+>>> So Neil had no problem implementing it this way. So now I want to know =
+your
+>>> advice what should I do next?
+>> 1) Neil did what he could to get compute the rate (RO) which the little
+>> information he had. You are trying to extend the driver, keeping an
+>> dummy approach. It is only fair that I ask you to make this a real
+>> driver.
+>> 2) Because something has been done once, it not necessarily appropriate
+>> to continue ... this type of argument hardly a valid reason.
+>> I don't want to keep adding table based driver unless necessary.
+>> So far, you have not proved this approach is really required, nor
+>> provided the necessary information to make the calculation.
+>
+> Technically you are right. I am communicating and confirming with the chip
+> designer to see if the general calculation formula can be given. If not, I
+> will explain why. Please give me some time.
+>
+> But I have to mention that the SOC, although there is this register but
+> actually does not use the clock. Can we treat this as a separate patch th=
+at
+> we will continue to send and explain later?
+>
+> This way I can continue with the other patches of S4 SOC first, and this
+> clock stays the same way as the G12A first. Later, after the patch of the
+> clock is corrected, it can be corrected to "ops" as required.Otherwise, we
+> cannot continue other driver patches. I don't know if you agree?
+>
 
-Example:
+Sure you can send your s4 series with RO ops and change to RW later on
+if necessary.
 
-Create two processes named mem_on_node0 and mem_on_node1 constrained
-by cpusets respectively. These two processes alloc memory on their
-own node. Now node0 has run out of memory, OOM will be invokled by
-mem_on_node0.
+>>=20
+>>>
+>>>>> But every SOC is different, so it makes more sense to set it
+>>>>> outside. The VID PLL is a fixed value for all current SoCs.
+>>>>>
+>>>>>> Best regards,
+>>>>>> Martin
+>>>>>>
+>>>>
+>>=20
 
-Before this patch:
-
-Since `CONSTRAINT_CPUSET` do nothing, the victim will be selected from
-the entire system. Therefore, the OOM is highly likely to kill
-mem_on_node1, which will not free any memory for mem_on_node0. This
-is a useless kill.
-
-```
-[ 2786.519080] mem_on_node0 invoked oom-killer
-[ 2786.885738] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
-[ 2787.181724] [  13432]     0 13432   787016   786745  6344704        0             0 mem_on_node1
-[ 2787.189115] [  13457]     0 13457   787002   785504  6340608        0             0 mem_on_node0
-[ 2787.216534] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
-[ 2787.229991] Out of memory: Killed process 13432 (mem_on_node1)
-```
-
-After this patch:
-
-The victim will be selected only in all cpusets that have the same
-mems_allowed as the cpuset that invoked oom. This will prevent
-useless kill and protect innocent victims.
-
-```
-[  395.922444] mem_on_node0 invoked oom-killer
-[  396.239777] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
-[  396.246128] [   2614]     0  2614  1311294  1144192  9224192        0             0 mem_on_node0
-[  396.252655] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
-[  396.264068] Out of memory: Killed process 2614 (mem_on_node0)
-```
-
-Suggested-by: Michal Hocko <mhocko@suse.com>
-Cc: <cgroups@vger.kernel.org>
-Cc: <linux-mm@kvack.org>
-Cc: <rientjes@google.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Zefan Li <lizefan.x@bytedance.com>
-Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
----
-Changes in v4:
-- Modify comments and documentation.
-
-Changes in v3:
-- https://lore.kernel.org/all/20230410025056.22103-1-ligang.bdlg@bytedance.com/
-- Provide more details about the use case, testing, implementation.
-- Document the userspace visible change in Documentation.
-- Rename cpuset_cgroup_scan_tasks() to cpuset_scan_tasks() and add
-  a doctext comment about its purpose and how it should be used.
-- Take cpuset_rwsem to ensure that cpusets are stable.
-
-Changes in v2:
-- https://lore.kernel.org/all/20230404115509.14299-1-ligang.bdlg@bytedance.com/
-- Select victim from all cpusets with the same mems_allowed as the current cpuset.
-
-v1:
-- https://lore.kernel.org/all/20220921064710.89663-1-ligang.bdlg@bytedance.com/
-- Introduce cpuset oom.
----
- .../admin-guide/cgroup-v1/cpusets.rst         | 16 ++++++-
- Documentation/admin-guide/cgroup-v2.rst       |  4 ++
- include/linux/cpuset.h                        |  6 +++
- kernel/cgroup/cpuset.c                        | 43 +++++++++++++++++++
- mm/oom_kill.c                                 |  4 ++
- 5 files changed, 71 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v1/cpusets.rst b/Documentation/admin-guide/cgroup-v1/cpusets.rst
-index 5d844ed4df69..51ffdc0eb167 100644
---- a/Documentation/admin-guide/cgroup-v1/cpusets.rst
-+++ b/Documentation/admin-guide/cgroup-v1/cpusets.rst
-@@ -25,7 +25,8 @@ Written by Simon.Derr@bull.net
-      1.6 What is memory spread ?
-      1.7 What is sched_load_balance ?
-      1.8 What is sched_relax_domain_level ?
--     1.9 How do I use cpusets ?
-+     1.9 What is cpuset oom ?
-+     1.10 How do I use cpusets ?
-    2. Usage Examples and Syntax
-      2.1 Basic Usage
-      2.2 Adding/removing cpus
-@@ -607,8 +608,19 @@ If your situation is:
-  - The latency is required even it sacrifices cache hit rate etc.
-    then increasing 'sched_relax_domain_level' would benefit you.
- 
-+1.9 What is cpuset oom ?
-+--------------------------
-+If there is no available memory to allocate on the nodes specified by
-+cpuset.mems, then an OOM (Out-Of-Memory) will be invoked.
-+
-+Since the victim selection is a heuristic algorithm, we cannot select
-+the "perfect" victim. Therefore, currently, the victim will be selected
-+from all the cpusets that have the same mems_allowed as the cpuset
-+which invoked OOM.
-+
-+Cpuset oom works in both cgroup v1 and v2.
- 
--1.9 How do I use cpusets ?
-+1.10 How do I use cpusets ?
- --------------------------
- 
- In order to minimize the impact of cpusets on critical kernel
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index f67c0829350b..594aa71cf441 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2199,6 +2199,10 @@ Cpuset Interface Files
- 	a need to change "cpuset.mems" with active tasks, it shouldn't
- 	be done frequently.
- 
-+	When a process invokes oom due to the constraint of cpuset.mems,
-+	the victim will be selected from cpusets with the same
-+	mems_allowed as the current one.
-+
-   cpuset.mems.effective
- 	A read-only multiple values file which exists on all
- 	cpuset-enabled cgroups.
-diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-index 980b76a1237e..75465bf58f74 100644
---- a/include/linux/cpuset.h
-+++ b/include/linux/cpuset.h
-@@ -171,6 +171,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
- 	task_unlock(current);
- }
- 
-+int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
-+
- #else /* !CONFIG_CPUSETS */
- 
- static inline bool cpusets_enabled(void) { return false; }
-@@ -287,6 +289,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
- 	return false;
- }
- 
-+static inline int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
-+{
-+	return 0;
-+}
- #endif /* !CONFIG_CPUSETS */
- 
- #endif /* _LINUX_CPUSET_H */
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index bc4dcfd7bee5..cb6b49245e18 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -4013,6 +4013,49 @@ void cpuset_print_current_mems_allowed(void)
- 	rcu_read_unlock();
- }
- 
-+/**
-+ * cpuset_scan_tasks - specify the oom scan range
-+ * @fn: callback function to select oom victim
-+ * @arg: argument for callback function, usually a pointer to struct oom_control
-+ *
-+ * Description: This function is used to specify the oom scan range. Return 0 if
-+ * no task is selected, otherwise return 1. The selected task will be stored in
-+ * arg->chosen. This function can only be called in cpuset oom context.
-+ *
-+ * The selection algorithm is heuristic, therefore requires constant iteration
-+ * based on user feedback. Currently, we just iterate through all cpusets with
-+ * the same mems_allowed as the current cpuset.
-+ */
-+int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
-+{
-+	int ret = 0;
-+	struct css_task_iter it;
-+	struct task_struct *task;
-+	struct cpuset *cs;
-+	struct cgroup_subsys_state *pos_css;
-+
-+	/*
-+	 * Situation gets complex with overlapping nodemasks in different cpusets.
-+	 * TODO: Maybe we should calculate the "distance" between different mems_allowed.
-+	 *
-+	 * But for now, let's make it simple. Just iterate through all cpusets
-+	 * with the same mems_allowed as the current cpuset.
-+	 */
-+	cpuset_read_lock();
-+	rcu_read_lock();
-+	cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
-+		if (nodes_equal(cs->mems_allowed, task_cs(current)->mems_allowed)) {
-+			css_task_iter_start(&(cs->css), CSS_TASK_ITER_PROCS, &it);
-+			while (!ret && (task = css_task_iter_next(&it)))
-+				ret = fn(task, arg);
-+			css_task_iter_end(&it);
-+		}
-+	}
-+	rcu_read_unlock();
-+	cpuset_read_unlock();
-+	return ret;
-+}
-+
- /*
-  * Collection of memory_pressure is suppressed unless
-  * this flag is enabled by writing "1" to the special
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 044e1eed720e..228257788d9e 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -367,6 +367,8 @@ static void select_bad_process(struct oom_control *oc)
- 
- 	if (is_memcg_oom(oc))
- 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
-+	else if (oc->constraint == CONSTRAINT_CPUSET)
-+		cpuset_scan_tasks(oom_evaluate_task, oc);
- 	else {
- 		struct task_struct *p;
- 
-@@ -427,6 +429,8 @@ static void dump_tasks(struct oom_control *oc)
- 
- 	if (is_memcg_oom(oc))
- 		mem_cgroup_scan_tasks(oc->memcg, dump_task, oc);
-+	else if (oc->constraint == CONSTRAINT_CPUSET)
-+		cpuset_scan_tasks(dump_task, oc);
- 	else {
- 		struct task_struct *p;
- 
--- 
-2.20.1
