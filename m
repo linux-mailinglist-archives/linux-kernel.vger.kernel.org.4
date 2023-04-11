@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A486DE839
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FAF6DE83A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjDKXo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S229658AbjDKXpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDKXo4 (ORCPT
+        with ESMTP id S229700AbjDKXpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:44:56 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7B040EE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:44:55 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y4-20020a253204000000b00b392ae70300so10584128yby.21
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:44:55 -0700 (PDT)
+        Tue, 11 Apr 2023 19:45:04 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78DD40CA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:03 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee397553eso102375097b3.19
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681256694;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=62/kNJoA4s2dKsAyEe7r9x7u8uLxGrWSsgePXcOTh20=;
-        b=lZP1yOhZoGumt2nrO84vpDwA0fNmvdxqAjbOWiaovh0uxrxj8UGxz/VE6AacSV8Pm4
-         LqtzfOf/3jexb/l7GEdN/tejlOltJubCJu8bt8Xs5PqV8iKtV3g6SDTeBvDVcrQ/fJqX
-         r43WBT5cB6pYbNQxLSI5qcyMgI8hp/ltHs0EaDaKo/Ppx0YeXekBR61wnMyR/XPcMkXi
-         j+rGU4m1RUCqf/3eW9+SGJp1ufD3Z/hcqpyFRW5+P9c8Qd4Ou/W3nJJUsSJTzNfPhc4z
-         SqrscSBsH3iiReKmRWXHyWuuVOoeipqgCT82GY9Ns604ovIgXE6UX6EnXtaz5REZ5twN
-         sWxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681256694;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1681256703;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=62/kNJoA4s2dKsAyEe7r9x7u8uLxGrWSsgePXcOTh20=;
-        b=o3+9d4z/c5C3eSMuWFWHcVA24KSvh9ioOgFExffpKU17hehv6lYAFK3Hc/QqmvOGdP
-         MAnFtJ1Si6Mu5oYC2K1GVxw1fXWRA1DvLGtJxThTP7U61WUFe0HpNPEvu+ku+dmecsvD
-         Q2sBFNcUPQhPvLbkeZdL9MjgDV5lCs7KS/WdGQbOD1P4UlSyhatfkyxjK/J/14KUu4kl
-         rqsCrxJAMKnKVzZ+C0SnLRYKq1d0znypCpkI3jTCkJiyo4bd1sul9Lm5AxC7agqAZfgw
-         7YHCzdnlAAG3+hrsjCRQCDwPm1UMYRukP0kE6AGC2peQS3s96wnLrNvFALUzYfgJYE1P
-         dkfg==
-X-Gm-Message-State: AAQBX9crRPUio2/6fpwb8i2eOMJUZ4j/I9uMoFTpfnhNHhGd6J3WmYQg
-        vtwr2KHVp8EWL/Pvknv2TZrG7uqVXpHF
-X-Google-Smtp-Source: AKy350Z3iH2clixYdp5klNkpbMbnGGcdw8jBhdTFPopYxKAwEk8ysY2jy6rqmLLm5lMVFIL4YyA69zREHH5a
+        bh=OqBPoR7yC2WC9K+J9X1igm9CprBeNgj2/yZlay6QTRM=;
+        b=QUCJXTqDyqtyFgj2kkmJ9kcW+s2Uoz4xNdnUfA6u7s+oyxdPie6RTyfyHRrQ/Vg2Uw
+         Dy9G7mph/wMJ14t9dodSFYDAujvA4sSE8qqrkmRkmXl7LrISyFADkPpRsHeKAbrgbOeh
+         5rpJ+C+1wl7WsSkNY5siuWvsYba6rQ1rVvZWoFRXfNn0RvoOMyDGmqC0DTiw1GrLN8kJ
+         NB4AJaPu7vY3kgVDTobZFm00Lwyd4AjoicQwMb6ardOTtWP+Tn0JCbR6v+STSSTTr1vp
+         VD4irqbKQLR3VhaOLYSchLLl4cW2210+kSPvgB2QkfXJifVzsvda5n41TEsPfUba39TI
+         4fHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681256703;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqBPoR7yC2WC9K+J9X1igm9CprBeNgj2/yZlay6QTRM=;
+        b=RTwrP+RA5m7AnofzmifKPBu7MLEMZv3xJOrToBkGUAwiSlaI0/3Y8E5/RXiU+c0505
+         WTz5k5epJuDg9rUBqgVMq78yl4rAts+zBYSGF7DQREURS4VUZyXAIVyPPjLlSz5Pufqy
+         zpTmbrCIqhLGycZD9obfm80/zsk3xW8uLb6Gy9NJL8SGyCCMuoppZt5G4Mot+GBjp0mQ
+         bKmSaqw3hoiNuWqMJZwzhLguqjspAYnB+A0w7wCuRk1r0cEIrSfkJeCsWQ3tUuz/7ew2
+         m7U4AaXdv1BuzmjC+44DrXFuBbQxbarwA9x4QIUzaM8Rp26zxOzNVyXNgjQuPi2tjFM7
+         GUiQ==
+X-Gm-Message-State: AAQBX9dsUHm4okEIQZ3K9oAaIPL3xq09gS8+Tk2N+a/zmFFskdKETLIr
+        RIDPf/4V7bVGGgtdlGAMsu1LuC6dcX3y
+X-Google-Smtp-Source: AKy350YT4i/gFFt4h/ZXmy6/dVVhSu6MaYU7giH4teNURs95UM/7QxkZ9FFdCTkNmneDFwVfq4Ftw+Jn0qof
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:f663:83e0:f9b2:5a17])
- (user=irogers job=sendgmr) by 2002:a81:a887:0:b0:546:63a:6e23 with SMTP id
- f129-20020a81a887000000b00546063a6e23mr2900421ywh.0.1681256694649; Tue, 11
- Apr 2023 16:44:54 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:44:37 -0700
-Message-Id: <20230411234440.3313680-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:690c:730:b0:54f:899f:890f with SMTP id
+ bt16-20020a05690c073000b0054f899f890fmr813697ywb.9.1681256703143; Tue, 11 Apr
+ 2023 16:45:03 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:44:38 -0700
+In-Reply-To: <20230411234440.3313680-1-irogers@google.com>
+Message-Id: <20230411234440.3313680-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230411234440.3313680-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v1 0/3] Updates to sapphirerapids, alderlake and icelakex events
+Subject: [PATCH v1 1/3] perf vendor events: Update alderlake to v1.20
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -75,28 +77,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes largely stemming from:
-https://github.com/intel/perfmon/pull/68
+Update from v1.19 to v1.20 affecting the performance/goldencove
+events. Adds cmask=1 for ARITH.IDIV_ACTIVE, and updates event
+descriptions.
 
-Changes generated by:
-https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/pmu-events/arch/x86/alderlake/other.json    | 3 ++-
+ tools/perf/pmu-events/arch/x86/alderlake/pipeline.json | 4 +++-
+ tools/perf/pmu-events/arch/x86/mapfile.csv             | 4 ++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-Ian Rogers (3):
-  perf vendor events: Update alderlake to v1.20
-  perf vendor events: Update icelakex to v1.20
-  perf vendor events: Update sapphirerapids to v1.12
-
- .../pmu-events/arch/x86/alderlake/other.json  |     3 +-
- .../arch/x86/alderlake/pipeline.json          |     4 +-
- .../arch/x86/icelakex/uncore-other.json       |     2 +-
- tools/perf/pmu-events/arch/x86/mapfile.csv    |     8 +-
- .../arch/x86/sapphirerapids/other.json        |     3 +-
- .../arch/x86/sapphirerapids/pipeline.json     |     4 +-
- .../x86/sapphirerapids/uncore-memory.json     |   794 +-
- .../arch/x86/sapphirerapids/uncore-other.json | 18656 +++++++++++++---
- .../arch/x86/sapphirerapids/uncore-power.json |   107 +
- 9 files changed, 16977 insertions(+), 2604 deletions(-)
-
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/other.json b/tools/perf/pmu-events/arch/x86/alderlake/other.json
+index 329c611d7cf7..1db73e020215 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/other.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/other.json
+@@ -162,10 +162,11 @@
+         "Unit": "cpu_core"
+     },
+     {
+-        "BriefDescription": "XQ.FULL_CYCLES",
++        "BriefDescription": "Cycles the uncore cannot take further requests",
+         "CounterMask": "1",
+         "EventCode": "0x2d",
+         "EventName": "XQ.FULL_CYCLES",
++        "PublicDescription": "number of cycles when the thread is active and the uncore cannot take any further requests (for example prefetches, loads or stores initiated by the Core that miss the L2 cache).",
+         "SampleAfterValue": "1000003",
+         "UMask": "0x1",
+         "Unit": "cpu_core"
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
+index f848530fbf07..cb5b8611064b 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
+@@ -31,6 +31,7 @@
+     },
+     {
+         "BriefDescription": "This event counts the cycles the integer divider is busy.",
++        "CounterMask": "1",
+         "EventCode": "0xb0",
+         "EventName": "ARITH.IDIV_ACTIVE",
+         "SampleAfterValue": "1000003",
+@@ -1079,9 +1080,10 @@
+         "Unit": "cpu_core"
+     },
+     {
+-        "BriefDescription": "MISC2_RETIRED.LFENCE",
++        "BriefDescription": "LFENCE instructions retired",
+         "EventCode": "0xe0",
+         "EventName": "MISC2_RETIRED.LFENCE",
++        "PublicDescription": "number of LFENCE retired instructions",
+         "SampleAfterValue": "400009",
+         "UMask": "0x20",
+         "Unit": "cpu_core"
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+index 97b3ffc284a6..9e7545d09b23 100644
+--- a/tools/perf/pmu-events/arch/x86/mapfile.csv
++++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+@@ -1,6 +1,6 @@
+ Family-model,Version,Filename,EventType
+-GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
+-GenuineIntel-6-BE,v1.19,alderlaken,core
++GenuineIntel-6-(97|9A|B7|BA|BF),v1.20,alderlake,core
++GenuineIntel-6-BE,v1.20,alderlaken,core
+ GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
+ GenuineIntel-6-(3D|47),v27,broadwell,core
+ GenuineIntel-6-56,v9,broadwellde,core
 -- 
 2.40.0.577.gac1e443424-goog
 
