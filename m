@@ -2,118 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE236DD091
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7017A6DD093
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDKD5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S229874AbjDKD6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjDKD5h (ORCPT
+        with ESMTP id S229485AbjDKD6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:57:37 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F6A2683;
-        Mon, 10 Apr 2023 20:57:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwX9Q1P7qz4xD5;
-        Tue, 11 Apr 2023 13:57:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681185451;
-        bh=TuqiUlN1/UdfMhPLkBN3ZC9EuXuba2PpjuEIRG7lxaU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tABfIYGFXcmZQtCo+8wdZ2B0awu8NEuoCA/bDj+NEvTsp+jw70vuPyv9LPbXq6YWL
-         5uKNlZl2MZQZXEDb5azml3A9G1BwCE+1ezmKWbd37m/utDtHCwtdLATmFrx+Q5Zo6r
-         eZt061pidNhyQlenAMs4nbQ1CdlH36p7ovXoyRuYKauFCYA1JX5a5AhzBOrxuOyp1S
-         4U8uGijeKhZNJzBpSBXBhtS4EjR2z0fkbCNcNWweG3CcMysHmnmdHOjdodOWlWMrrP
-         xkVQd2o47BtezRzeTbEl1O8WSJZwutKla0/ZLWh4YPMBNcAd7tlSTRKesEhxY85kFC
-         iA2BwXjeSdhVA==
-Date:   Tue, 11 Apr 2023 13:57:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robherring2@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: linux-next: manual merge of the char-misc tree with the devicetree
- tree
-Message-ID: <20230411135728.07539d81@canb.auug.org.au>
+        Mon, 10 Apr 2023 23:58:18 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD898;
+        Mon, 10 Apr 2023 20:58:17 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5144043d9d1so388045a12.3;
+        Mon, 10 Apr 2023 20:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681185497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKdZbWy4jwijLOLOEbSGdVMaYn7h020PIX2k8NqOSZo=;
+        b=YrArys0C7zjnMXda4FNLCkoSe1ZR7omGasqB9hnue3Q7HAupxVPI6UK7beT/uGuvja
+         8y/LqVgcrR3izzc9X3/+OdYf2z37VnS7WXUXCWw6T+iqkAbZdnu+Cf7L9lMtgOG9NG1W
+         hoUcVNhKxbHCp8frLvuPSA9rs0U1o0VvdyitT1vEPfaNQuWJ9q2xYejzMuOXJt5ZwZbG
+         Dy2Fegfmn3Ullz8d56mPDmqsE66ZtaRK2itNkhntx36NKTUSPr8PvxyoFC2wz35JE3wW
+         Y+3Jz51rICr2drVzy1BZlekWvBehp1s5uRf4kTSRcQIOG0srViccIv9dRu+TVf7PT4Um
+         PU4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681185497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oKdZbWy4jwijLOLOEbSGdVMaYn7h020PIX2k8NqOSZo=;
+        b=ymhemzUwUXb6icS1uNGcgqN9lQ4+1mAqtC6SSX7wEGIDotjk9jKuqaCYkf6rySXsaM
+         G5zfo8TRAXzGchDa97ULQ3BR3dvokB5iDTsYIiQwlT3scQbZG1X8RBqi9jQJX3YnONG/
+         MpW0W/mLm1Rdapjz/BeSrXTuZcKu9rKY5/dRlCrxx4HCIR5U4aceQIhTrdNjuYIvt9s2
+         cMUGyIz/IIOViY7q+JaXFxgLRWpotTS9/vtJUHC+s+DIbKbI9pN57sr2t/Vn5sSS+0r7
+         qVWe7hPbQ+bn1VqbEO7PXYuwcyoTSKen3yRbVjTmniGZfMrRhWaIlkmVWXjfWNIUcxOJ
+         1a3Q==
+X-Gm-Message-State: AAQBX9eQhMgdnDkJHwv7OhwPzYSqYrFdikTRDnWyL55NIajqtiWF9Xl5
+        JIbuw+8En4MQKmaLS4gq4yg=
+X-Google-Smtp-Source: AKy350a8JeUjpoVeuqE3YRFo8p8V7nDdkF3nlUt2GK1vtwEhCLk5pvrKsjKo89MfDwv/aSNlxzxU7A==
+X-Received: by 2002:aa7:948b:0:b0:635:56c3:4bb6 with SMTP id z11-20020aa7948b000000b0063556c34bb6mr8221749pfk.27.1681185496759;
+        Mon, 10 Apr 2023 20:58:16 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id d1-20020a63ed01000000b005133f658f1asm7598272pgi.94.2023.04.10.20.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 20:58:16 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 09C681068DD; Tue, 11 Apr 2023 10:58:12 +0700 (WIB)
+Date:   Tue, 11 Apr 2023 10:58:12 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
+        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
+        x86@kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/Documentation: Add documentation about cluster
+Message-ID: <ZDTa1PbEqcyrhJsU@debian.me>
+References: <20230410163527.1626-1-kprateek.nayak@amd.com>
+ <20230410163527.1626-3-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+1=qpEmb_zakdLBx7VGzoDz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JhsElS4CpgPS1dxo"
+Content-Disposition: inline
+In-Reply-To: <20230410163527.1626-3-kprateek.nayak@amd.com>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+1=qpEmb_zakdLBx7VGzoDz
-Content-Type: text/plain; charset=US-ASCII
+
+--JhsElS4CpgPS1dxo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Apr 10, 2023 at 10:05:27PM +0530, K Prateek Nayak wrote:
+> diff --git a/Documentation/x86/topology.rst b/Documentation/x86/topology.=
+rst
+> index 7f58010ea86a..35991d8cdef1 100644
+> --- a/Documentation/x86/topology.rst
+> +++ b/Documentation/x86/topology.rst
+> @@ -33,6 +33,7 @@ historical nature and should be cleaned up.
+>  The topology of a system is described in the units of:
+> =20
+>      - packages
+> +    - cluster
+>      - cores
+>      - threads
+> =20
+> @@ -90,6 +91,27 @@ Package-related topology information in the kernel:
+>          Cache. In general, it is a number identifying an LLC uniquely on=
+ the
+>          system.
+> =20
+> +
+> +Clusters
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +A cluster consists of 1 or more threads. It does not matter whether the =
+threads
+> +are SMT- or CMT-type threads. All the threads of a cluster share the sam=
+e L2
+> +cache.
+> +
+> +Cluster-related topology information in the kernel:
+> +
+> +  - cluster_id:
+> +
+> +    A per-CPU variable containing:
+> +
+> +      - On Intel, the common upper bits of APIC ID of the list of CPUs s=
+haring
+> +        the L2 Cache with lower bits set to 0.
+> +
+> +      - On AMD, with Topology Extension, the common upper bits of the Ex=
+tended
+> +        APIC ID of the list of CPUs sharing the L2 Cache, left shifted to
+> +        remove trailing 0s.
+> +
+> +
+>  Cores
+>  =3D=3D=3D=3D=3D
+>  A core consists of 1 or more threads. It does not matter whether the thr=
+eads
+> @@ -125,6 +147,11 @@ Thread-related topology information in the kernel:
+> =20
+>      The number of online threads is also printed in /proc/cpuinfo "sibli=
+ngs."
+> =20
+> +  - topology_cluster_cpumask():
+> +
+> +    The cpumask contains all online threads in the cluster to which a th=
+read
+> +    belongs.
+> +
+>    - topology_sibling_cpumask():
+> =20
+>      The cpumask contains all online threads in the core to which a thread
+> @@ -138,6 +165,10 @@ Thread-related topology information in the kernel:
+> =20
+>      The physical package ID to which a thread belongs.
+> =20
+> +  - topology_cluster_id();
+> +
+> +    The ID of the cluster to which a thread belongs.
+> +
+>    - topology_core_id();
+> =20
+>      The ID of the core to which a thread belongs. It is also printed in =
+/proc/cpuinfo
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+The doc LGTM, thanks!
 
-  drivers/of/Makefile
-
-between commit:
-
-  bac06718990c ("of: Move CPU node related functions to their own file")
-
-from the devicetree tree and commit:
-
-  bd7a7ed774af ("of: Move of_modalias() to module.c")
-
-from the char-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
-Cheers,
-Stephen Rothwell
+An old man doll... just what I always wanted! - Clara
 
-diff --cc drivers/of/Makefile
-index 10f704592561,ae9923fd2940..000000000000
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@@ -1,5 -1,5 +1,5 @@@
-  # SPDX-License-Identifier: GPL-2.0
-- obj-y =3D base.o cpu.o device.o platform.o property.o
- -obj-y =3D base.o device.o module.o platform.o property.o
-++obj-y =3D base.o cpu.o device.o module.o platform.o property.o
-  obj-$(CONFIG_OF_KOBJ) +=3D kobj.o
-  obj-$(CONFIG_OF_DYNAMIC) +=3D dynamic.o
-  obj-$(CONFIG_OF_FLATTREE) +=3D fdt.o
-
---Sig_/+1=qpEmb_zakdLBx7VGzoDz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--JhsElS4CpgPS1dxo
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ02qgACgkQAVBC80lX
-0Gz0eAf9HceJZFa0zfssWzAPKiTo7VN/Zen2kWPHaaP5ZtQPxoICMunQzphusIw/
-3psQQwjId+I+QLlqXExHQGO2o264gH3VvALP7Xexb3t1+izq+gm3jkuWQyipxPNr
-GNSrNNVExUSzy/vYI383g7RLVrl1MGBICcVOVAqnppnK08AFrxBcz/hsZZDADrN3
-VXvfvamHDoosORRAnGHbZGirTNHDKDTVs4S804YTqH7psUQ+6iPSpRY3IdOyT2Ut
-CaZr5b2QvlIQWTRdx/YJRjQ1abWCLj9XEdJv13DKqoN69+1vrFtCXPjhIPv1pg6w
-2QmmdM5PhiFo0DrhSP5u6H+Hh19Y6g==
-=sUWK
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDTa0QAKCRD2uYlJVVFO
+o8bSAQCKg98KN3Qnlstb665jkFCvsedDcoxoMR2GR6qKmjGR9gD+IqyIoN/hwb22
+29qvJ4250RNiyDU/MpLzSvk5Pfm7MAY=
+=c5Hj
 -----END PGP SIGNATURE-----
 
---Sig_/+1=qpEmb_zakdLBx7VGzoDz--
+--JhsElS4CpgPS1dxo--
