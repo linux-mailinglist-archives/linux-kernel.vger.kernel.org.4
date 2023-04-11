@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5646DD199
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151896DD1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjDKF1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 01:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S229874AbjDKFbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDKF1O (ORCPT
+        with ESMTP id S229536AbjDKFbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:27:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5582118;
-        Mon, 10 Apr 2023 22:27:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5758C62164;
-        Tue, 11 Apr 2023 05:27:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4825C4339C;
-        Tue, 11 Apr 2023 05:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681190831;
-        bh=juqUx14jXbVE5rZmRH4YStnDhcyvxrgBYfHfpfe0lWU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PyEf9r8GU2wQ5I1/7BESGnlE0cGcdfizAgrRccP3HrXIfNwMzMn8D0XNZztBSlco/
-         kkG+VHqkHYfcanZ+EAe+wmQQeecVW2INKvDbHvB3oaxXPnuL2nO0sCjGUB9n6Netcx
-         VtgwJVTKTk6t3oRAcFtkeYzx9bmRK52EZbLD6CEGFO86tSGODQ11BYvVqz6Mk/aoDV
-         pd8F0xzaJfr1IBLSKPHbC6qQUig7sQGCi2GYaUvtdi2KR6DIVYcc8TWiYK2gMRgSXb
-         CsKK/o/vAfBKn2xGRg1cHA7zZA34UQbJgpq6j174bjZIqpGa1o/Q7wJneLAYpFtle5
-         HQs9ch6O7SuHg==
-Received: by mail-lf1-f47.google.com with SMTP id c9so54582639lfb.1;
-        Mon, 10 Apr 2023 22:27:11 -0700 (PDT)
-X-Gm-Message-State: AAQBX9en0UO4iQnA3NV4YBhiwodIIS4UBpSJ2akW+nM4GfOxbdqnhwEE
-        nUrG6+7GXTLAP0de4yT8tqt8u2fNNRle/uotc/U=
-X-Google-Smtp-Source: AKy350YgSrZvppMXVsdXbh5e6Hr/IYimDt0egy9FTWdgODG27dkV7YTqIyp5qm46OM64qbqr4YwdjtX4otqgU9EBtqQ=
-X-Received: by 2002:ac2:43dc:0:b0:4ec:7967:9e92 with SMTP id
- u28-20020ac243dc000000b004ec79679e92mr435204lfl.3.1681190829759; Mon, 10 Apr
- 2023 22:27:09 -0700 (PDT)
+        Tue, 11 Apr 2023 01:31:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3CF1BF7;
+        Mon, 10 Apr 2023 22:31:07 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4AXWl008192;
+        Tue, 11 Apr 2023 05:30:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Qh7i/6UPVa9oSp61OPGQ5X/b9iECb5umhdviZt8OscM=;
+ b=RQbpHJ156GrJcEeejCfYCzWC21RIssj/rPa8+g82EPYplu+n7q3FONj/VKxXtaBV9kcA
+ Zlrs4otQONO+OSoqHOw7k95EaPInMqJMs5n6aJc+Qp2oNwQX0aQQvwjagIm4KjoRuUrB
+ mS7sa4Mis5WlBfX2K+YhpY9OuQ8Zm4hZfElENKrLA0f+XtYJd3NfQKPdlGdIvT3HY0QI
+ 1kbcaEwMfKfP6/LlpbS3GJ8rPKcO50jVzHSb43qnHU1lQnpI/wVisujr0jRpiwBerVdB
+ XDqKMrK4LKw46V0JFsDa4/cW0Y7+P/n2brH1zltVaXV+5AhQ3aWKfXtpc0nX38MOJt6t Vg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvmb3hhq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 05:30:58 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33B5Uv42020828
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 05:30:57 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 10 Apr 2023 22:30:54 -0700
+Date:   Tue, 11 Apr 2023 11:00:50 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Chen Yu <yu.c.chen@intel.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] Fix test_resume failure by openning swap device
+ non-exclusively
+Message-ID: <20230411053050.GA4099424@hu-pkondeti-hyd.qualcomm.com>
+References: <cover.1681186310.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-References: <20230410113559.1610455-1-yukuai1@huaweicloud.com>
- <20230410113559.1610455-2-yukuai1@huaweicloud.com> <CAPhsuW7rUQ9KFxCQw-iAAA64=x==b-Qu0nnp32TXn-85Okb00w@mail.gmail.com>
- <daa344fe-9d8d-16f9-aded-513f250928b9@huaweicloud.com>
-In-Reply-To: <daa344fe-9d8d-16f9-aded-513f250928b9@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 10 Apr 2023 22:26:57 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7bBaVsneBHYqwN3yd5k3sg6ZUFqEJad3yOD0=N-e411g@mail.gmail.com>
-Message-ID: <CAPhsuW7bBaVsneBHYqwN3yd5k3sg6ZUFqEJad3yOD0=N-e411g@mail.gmail.com>
-Subject: Re: [PATCH -next v5 1/6] md: pass a md_thread pointer to md_register_thread()
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     logang@deltatee.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1681186310.git.yu.c.chen@intel.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IqrAYJ8pFJxLV_OXcWh9oDqdYd4e-3Gx
+X-Proofpoint-ORIG-GUID: IqrAYJ8pFJxLV_OXcWh9oDqdYd4e-3Gx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_02,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=828 suspectscore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 adultscore=0 phishscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304110050
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 6:34=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/04/11 9:15, Song Liu =E5=86=99=E9=81=93:
-> > On Mon, Apr 10, 2023 at 4:37=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.co=
-m> wrote:
-> >>
-> >> From: Yu Kuai <yukuai3@huawei.com>
-> >>
-> >> Prepare to protect md_thread with rcu, there are no functional changes=
-.
-> >
-> > Why do we need this change? To add __rcu later?
->
-> Add __rcu is one reason, more importantly is to assign md_thread inside
-> md_register_thread in patch 6:
->
-> rcu_assign_pointer(*threadp, thread);
+On Tue, Apr 11, 2023 at 08:18:43PM +0800, Chen Yu wrote:
+> test_resume does not work in current kernel when using swapfile for hibernation.
+> This is because the swap device should be openned non-exclusively in test_resume mode.
+> 
+> Patch 1 is a preparation for patch 2 and it turns snapshot_test into a global variable.
+> Patch 2 opens swap device non-exclusively for test_resume mode, and exclusively for manual
+> hibernation resume.
+> 
+> Change since v1:
+> Turn snapshot_test into global variable and do not introduce parameters for swsusp_check()
+> nor load_image_and_restore().
+> 
+> 
+> Chen Yu (2):
+>   PM: hibernate: Turn snapshot_test into global variable
+>   PM: hibernate: Do not get block device exclusively in test_resume mode
+> 
+>  kernel/power/hibernate.c | 12 +++++++++---
+>  kernel/power/power.h     |  1 +
+>  kernel/power/swap.c      |  5 +++--
+>  3 files changed, 13 insertions(+), 5 deletions(-)
+> 
+Looks good to me.
 
-Got it.
-
-> >
-> > Can we do something like:
-> >
-> > struct md_thread __rcu *md_register_thread(void (*run) (struct md_threa=
-d *),
-> >                 struct mddev *mddev, const char *name)
->
-> I think this is not necessary, if we don't want to change api, we must
-> use rcu_assign_pointer for each caller to set md_thread.
-
-I think it is better to use rcu_assign_pointer at the caller side.
+I have verified test_resume on QEMU arm64 and it worked fine with
+these two patches included.
 
 Thanks,
-Song
+Pavan
