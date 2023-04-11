@@ -2,161 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647FC6DDFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E936DDFE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjDKPqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229977AbjDKPrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjDKPqm (ORCPT
+        with ESMTP id S229533AbjDKPrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:46:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD4049EF;
-        Tue, 11 Apr 2023 08:46:40 -0700 (PDT)
-Received: from frapeml500002.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PwqtZ19r6z67b1p;
-        Tue, 11 Apr 2023 23:45:42 +0800 (CST)
-Received: from [10.48.147.90] (10.48.147.90) by frapeml500002.china.huawei.com
- (7.182.85.205) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 11 Apr
- 2023 17:46:36 +0200
-Message-ID: <7065e2ee-3de4-f54d-04a9-12bfcd3a9481@huawei.com>
-Date:   Tue, 11 Apr 2023 17:46:36 +0200
+        Tue, 11 Apr 2023 11:47:20 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8E0173A;
+        Tue, 11 Apr 2023 08:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:References:Cc:To:From:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=nWOSvYPI8zO7ZAkdm762g5PDgIPDFk/cAnxhVGSLo2k=; b=syEx1H15VEk8bLhBYcF461EYZf
+        1/zzgxbl8dXIvgP55XZSoVPv9MLD6X6hXUVZWcwXBpinZ2GhUZvg6YQJ5ZKMk1YgvhnWkgFMpRNcf
+        1tmUv+g4P1Gjpv9MpDfXcyBVznardKYgNFHwl1DsrhkS8yC67Nzf9esufmTqF3amwtTGkvnncaC5K
+        LN8uHxa4Y33huH91pFZ6IpDizx1zdLJnze9AuBp8SkuqHV1dy0VWgBlmJQaoPpNuV+1/dxREwJJl5
+        uutzHbpb4NdrGJY1+6wls1BfmMbtGBtKzbla+hO9KjKF6dxL2Y/B5eUVsJ0zRjtQMX8IbQ3V9eVdq
+        aCkOkKFQ==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1pmGDC-006ARM-LU; Tue, 11 Apr 2023 09:47:15 -0600
+Message-ID: <500092fe-71cc-b07c-fe6d-396a580c8252@deltatee.com>
+Date:   Tue, 11 Apr 2023 09:47:13 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
-To:     Kelsey Steele <kelseysteele@linux.microsoft.com>
-CC:     Petr Tesa????k <petr@tesarici.cz>,
-        Dexuan Cui <decui@microsoft.com>,
-        Dexuan-Linux Cui <dexuan.linux@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Jianxiong Gao <jxgao@google.com>,
-        David Stevens <stevensd@chromium.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
- <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
- <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
- <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
- <20230405064019.6258ebb3@meshulam.tesarici.cz>
- <SA1PR21MB1335C5F774195F2C3431BF93BF909@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20230405072801.05bb94ef@meshulam.tesarici.cz>
- <20230405075034.3c36bb77@meshulam.tesarici.cz>
- <20230406045204.GA20027@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <15d9dab3-379b-c62c-dd52-a810abe6985d@huaweicloud.com>
- <20230407041304.GA28729@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Language: en-US
-From:   Petr Tesarik <petr.tesarik.ext@huawei.com>
-In-Reply-To: <20230407041304.GA28729@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset="UTF-8"
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        Kelvin Cao <kelvin.cao@microchip.com>
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, george.ge@microchip.com
+References: <20230403180630.4186061-1-kelvin.cao@microchip.com>
+ <20230403180630.4186061-2-kelvin.cao@microchip.com>
+ <ZDQ8geSEauTsd2ME@infradead.org>
+Content-Language: en-CA
+In-Reply-To: <ZDQ8geSEauTsd2ME@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.147.90]
-X-ClientProxiedBy: frapeml500001.china.huawei.com (7.182.85.94) To
- frapeml500002.china.huawei.com (7.182.85.205)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: hch@infradead.org, kelvin.cao@microchip.com, vkoul@kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, george.ge@microchip.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/2023 6:13 AM, Kelsey Steele wrote:
-> On Thu, Apr 06, 2023 at 04:42:00PM +0200, Petr Tesarik wrote:
->> Hi Kelsey,
->>
->> On 4/6/2023 6:52 AM, Kelsey Steele wrote:
->>> On Wed, Apr 05, 2023 at 07:50:34AM +0200, Petr Tesa????k wrote:
->>>> On Wed, 5 Apr 2023 07:32:06 +0200
->>>> Petr Tesa????k <petr@tesarici.cz> wrote:
->>>>
->>>>> On Wed, 5 Apr 2023 05:11:42 +0000
->>>>> Dexuan Cui <decui@microsoft.com> wrote:
->>>>>
->>>>>>> From: Petr Tesa????k <petr@tesarici.cz>
->>>>>>> Sent: Tuesday, April 4, 2023 9:40 PM    
->>>>>>>>> ...
->>>>>>>>> Hi Petr, this patch has gone into the mainline:
->>>>>>>>> 0eee5ae10256 ("swiotlb: fix slot alignment checks")
->>>>>>>>>
->>>>>>>>> Somehow it breaks Linux VMs on Hyper-V: a regular VM with
->>>>>>>>> swiotlb=force or a confidential VM (which uses swiotlb) fails to boot.
->>>>>>>>> If I revert this patch, everything works fine.  
->>>>>>>>
->>>>>>>> The log is pasted below. Looks like the SCSI driver hv_storvsc fails to
->>>>>>>> detect the disk capacity:    
->>>>>>>
->>>>>>> The first thing I can imagine is that there are in fact no (free) slots
->>>>>>> in the SWIOTLB which match the alignment constraints, so the map
->>>>>>> operation fails. However, this would result in a "swiotlb buffer is
->>>>>>> full" message in the log, and I can see no such message in the log
->>>>>>> excerpt you have posted.
->>>>>>>
->>>>>>> Please, can you check if there are any "swiotlb" messages preceding the
->>>>>>> first error message?
->>>>>>>
->>>>>>> Petr T    
->>>>>>
->>>>>> There is no "swiotlb buffer is full" error.
->>>>>>
->>>>>> The hv_storvsc driver (drivers/scsi/storvsc_drv.c) calls scsi_dma_map(),
->>>>>> which doesn't return -ENOMEM when the failure happens.  
->>>>>
->>>>> I see...
->>>>>
->>>>> Argh, you're right. This is a braino. The alignment mask is in fact an
->>>>> INVERTED mask, i.e. it masks off bits that are not relevant for the
->>>>> alignment. The more strict alignment needed the more bits must be set,
->>>>> so the individual alignment constraints must be combined with an OR
->>>>> instead of an AND.
->>>>>
->>>>> Can you apply the following change and check if it fixes the issue?
->>>>
->>>> Actually, this will not work either. The mask is used to mask off both
->>>> high address bits and low address bits (below swiotlb slot granularity).
->>>>
->>>> What should help is this:
->>>>
->>>
->>> Hi Petr, 
->>>
->>> The suggested fix on this patch boots for me and initially looks ok,
->>> though when I start to use git commands I get flooded with "swiotlb
->>> buffer is full" messages and my session becomes unusable. This is on WSL
->>> which uses Hyper-V.
->>
->> Roberto noticed that my initial quick fix left iotlb_align_mask
->> uninitialized. As a result, high address bits are set randomly, and if
->> they do not match actual swiotlb addresses, allocations may fail with
->> "swiotlb buffer is full". I fixed it in the patch that I have just posted.
->>
->> HTH
->> Petr T
+
+
+On 2023-04-10 10:42, Christoph Hellwig wrote:
+> On Mon, Apr 03, 2023 at 11:06:28AM -0700, Kelvin Cao wrote:
+>> +#define HALT_RETRY 100
+>> +static int halt_channel(struct switchtec_dma_chan *swdma_chan)
+>> +{
+>> +	u32 status;
+>> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+>> +	int retry = HALT_RETRY;
+>> +	struct pci_dev *pdev;
+>> +	int ret;
+>> +
+>> +	rcu_read_lock();
+>> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+>> +	if (!pdev) {
+>> +		ret = -ENODEV;
+>> +		goto unlock_and_exit;
+>> +	}
 > 
-> I pulled the patches from dma-mapping after your fix got applied and
-> everything appears ok and goes back to the way it was; so no other
-> errors to report. :) Unfortunately still getting the "swiotlb buffer is
-> full" messages during kernel builds, though that was happening before
-> your patches hit.
+> This whole RCU critical section around every access to ->pdev scheme
+> looks a bit bothersome to me.  This means that all the low-level
+> PCI ops are done in RCU critical section.  Is this something you
+> came up with or is it copied from other drivers?
+
+I suspect they copied it from plx_dma driver that I wrote ;(, though
+that driver uses rcu_dereference a bit more sparingly (only on stop,
+issue_pending and when allocating and freeing a channel).
+
+> Normally we'd do an unregistration from the dmaengine subsystem
+> first, which might do a RCU synchronization at a high level,
+> and then we're sure that none of the methods gets called again
+> on the unregistered device.
 > 
-> Thanks so much, Petr!
+> Can't this driver (and the dmaengine core) support an operation
+> mode where you set a shutdown flag at the beginning 
 
-Sorry for breaking it in the first place. But the story also tells us
-that some drivers do not really need as strict alignment as they
-request, otherwise the kernel would have failed my smoke-testing.
+The dmaengine code didn't support hot unplug at all. I believe most
+drivers are likely to crash if this happens. When I wrote the plx-dma
+engine, I had to make a bunch of changes to dmaengine just so the
+framework didn't crash when I tested this. The framework is pretty thin,
+so there's not much to synchronize on to indicate other threads are not
+in the middle of issuing new IO when a flag is set.
 
-Petr T
+>> +	tasklet_schedule(&swdma_dev->chan_status_task);
+> 
+> What speaks against simply using threaded irqs here instead of the
+> tasklets?
 
+Almost all the dmaengine drivers use tasklets. I don't know if this is
+the best approach, but my understanding was that it was due to needing
+low latency in processing the completed descriptors, otherwise it can be
+hard to reach the full bandwidth of the dma engine.
+
+Logan
