@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1D26DD92D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D1B6DD936
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjDKLQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S229667AbjDKLRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjDKLP6 (ORCPT
+        with ESMTP id S229931AbjDKLRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:15:58 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AE43C25;
-        Tue, 11 Apr 2023 04:15:43 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 82E7D5C01E1;
-        Tue, 11 Apr 2023 07:15:42 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 11 Apr 2023 07:15:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1681211742; x=1681298142; bh=rNxd2zGmgkAmADZ+JZbkF3uw4Ve/3YJzCvs
-        xLSYPEwg=; b=BMW5j8L6xNOfYHv84A9/6RVR0mcIpsBIDHdaZ2DFEq9NRyIyOfO
-        VAe3gVhDcPS/n+SHKf3n7LVX+I0Fmlcabjo4xe3x2XgWHJSf3gXZWKhlEqSwrSCH
-        2pk55diKRZo04FctPe5d/UFRH58vDq+DXVuR6sQGpjJsyeyOPMX619XqwOaeelpI
-        Vtz0g/TZ/0xzVMEXr7Kp0/scypvsU1ttVFtIPlim+6fNb2O6g45GzZHKcU2MySlv
-        9NDFptmm79w3kmcZG0iOyu1ZCOJ+K9sVT+B9r0k7nudEjSQ6+AcEbZwYwtAF5/VR
-        mFG3YMdJb3pEA/j9OfagNg8v37GOo3CDmHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681211742; x=1681298142; bh=rNxd2zGmgkAmADZ+JZbkF3uw4Ve/3YJzCvs
-        xLSYPEwg=; b=g2DYhg5Z1dLc7RiFbdAXqGwt+YLpWHNVw7S9N5GvyNFliKw23+8
-        BEJL/xLH4/kNm346JAm1EhrLXvQaK0mcoDDy6RtTEhmy8hpLtbvHiv3+DILXVUU3
-        +e5FQL/JBIlRaNV8H7tYdirsPOXgGaG4WtIuqWBOTiMXPZAqYDsFQkCB0ApWXMoD
-        DRZlc0fFDCOZDfDCn0plXsc7yv2+SfiLESPfwAdRaTwcoXtjXo3+NVDzkUc5TySZ
-        RgOgCEEwyZLH0qdHeXckUl+4yS5EuKY3XV6LMzTFU0oHi+CvUJpws0grh759kOzH
-        EielPD16WZopvmfp8SYukKRdQmO0A/zEkqQ==
-X-ME-Sender: <xms:XkE1ZJ74szy2ZTNzomXRE5miE8h4zlbnlRA-jvJMeFc35vrUd3HcpA>
-    <xme:XkE1ZG7rnAchmTkyeFzcQ5InrZuELxm2bWZ7JtsIuwV5KkdSkkV4ivAgzorclT_eF
-    X97IpfhUaGLTBx-xPQ>
-X-ME-Received: <xmr:XkE1ZAdqHZ5SqSeiLLVrQOmbSzp3nwd7oDZVDZIJxoKIwcaop9BkREWDGUj5-UprFa9M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgedgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepgeejffefgfefudehfefftefhffdvteeuveeifeetiefffeeg
-    keehvdeggfejheejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrd
-    gtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    jhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:XkE1ZCLbH9UDFN40q7boLNbSUTVoOoOeabJ5fFQ-uMWZ4EbknxECMQ>
-    <xmx:XkE1ZNKdDBnflIrOITnXM4mW7QmkW2TUiHfsex7t8ulzOvLlKlrZag>
-    <xmx:XkE1ZLx6qBqo-DVz0Y7s3m6qwY6s9PhoWY1DG9d8kh0xTOETw4ZOCg>
-    <xmx:XkE1ZEXTygqIePEwsfYScnY2dyKfuNoHa13e2bafccQYG3oR41AyFA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Apr 2023 07:15:41 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 0/7] MIPS: LLVM build fixes
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230411111225.55725-1-jiaxun.yang@flygoat.com>
-Date:   Tue, 11 Apr 2023 12:15:30 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>, and@gmx.com
+        Tue, 11 Apr 2023 07:17:34 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D86421E;
+        Tue, 11 Apr 2023 04:17:31 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id ch3so8741391ybb.4;
+        Tue, 11 Apr 2023 04:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681211851; x=1683803851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fd3u6ypnNuoPbKSx66oxDBYsbBNUgXKJyWsz/Cc9XCs=;
+        b=hGLRl87JLi5CMoqAmhzXcPMA0V/AQ6lxdgw6dDTpjaCTjlEd39kmQ77M7zJc0LcHfx
+         DJOLQaK7n1O+kDx0oVukcENjRTOr8mXUGAMQsm8R8CGWXPJlb4g9ZCKeLPeJkEL5NG6x
+         h0rmyo+fq6N9WXMJaj5x/06twGYEvWz5UaxuSmbfCQ9aPsHlu3DIpOWJlLSPV0a8bAG2
+         fgZLFNI+MLdVfyjVSin3XhDHbGNGrYEUSVeN7+ik/jcpAf6tepTPFY3JWMb+uRs2ry00
+         xFLV4MGILZ+fDv9WOstqZ2BSVQh1sbid+Ouocqt/S/symCGAlQyFYahgWR+AcXpI3Y6W
+         mW1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681211851; x=1683803851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fd3u6ypnNuoPbKSx66oxDBYsbBNUgXKJyWsz/Cc9XCs=;
+        b=K2Gw2hy3mYLaRk/V2HQchB/zXc2G1W4bEJaSt61aZDuA4esEiUhD92ITpElMTisk1R
+         1gNdip0nxjOO62iPctNziDf9qOvSKVMQxkCMoUGHQ9mcadaubcwGcE0et9JTMimAR7xf
+         0OgI2upzJES11iEHO3P8SzM8hJpFT7NXD3Gcqsvn2ZWjQWHnTqrvqJ087x34xfXjjSW1
+         kbZOg5+AG7koaNx437/mOIXhNWyWYaZQAVySeHn8gL77+WQl1Rcf4uFtCHiWXaae1xlE
+         XgG5k9wfBIIMNVdQuTNFMYMPBSzU4FTiCKXE/PKdzqK/kQit7O2KNSyoWJeAknSWIVSe
+         A3ig==
+X-Gm-Message-State: AAQBX9c9q5uQmehPTeyVuPx9TZRxCGwWBtWUM4wY63xftzulkjSVqe+c
+        RxrhJAva3e/GJEbGDIpUTgcDIQ6SYkb4hXoHql4=
+X-Google-Smtp-Source: AKy350au3uYIW78d6r18IS62Iyy3h3HK3ZJChvUuw0OR4uM6IFzMNee3q+8sLaXzXyvJ+vmdhmtuDQsDdPRONr40Jio=
+X-Received: by 2002:a25:7781:0:b0:b8e:cad0:6e57 with SMTP id
+ s123-20020a257781000000b00b8ecad06e57mr5445631ybc.11.1681211850832; Tue, 11
+ Apr 2023 04:17:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230210215141.108958-1-andrea.righi@canonical.com>
+ <8178319F-4188-4F8E-AD8D-DCC392E26DBF@kernel.org> <Y+daEOZgaiF3IMTX@righiandr-XPS-13-7390>
+ <4E6FDE1C-47B6-46A6-AF31-28AEB2348344@kernel.org> <Y+entVlMoV83vyzz@righiandr-XPS-13-7390>
+ <CANiq72nQ4-md=KxtUcz3jHDXhLUdw1JxgbSKp7QsN0QKS3pV1A@mail.gmail.com>
+ <ZC+x8pqUVzWQ35fv@righiandr-XPS-13-7390> <CANiq72ngN9bAiWaVVyJkkEK_WAoTQVb5mmYLMqs5PK7pu6gV9A@mail.gmail.com>
+ <ZDUICqLhv6uSk9an@righiandr-XPS-13-7390>
+In-Reply-To: <ZDUICqLhv6uSk9an@righiandr-XPS-13-7390>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 13:17:19 +0200
+Message-ID: <CANiq72=JVJw_1vrecMDZhReYqJ2anGfhdkZW-ukt-ANDj_Fidw@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: allow to use INIT_STACK_ALL_ZERO
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Kees Cook <kees@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        bjorn3_gh@protonmail.com, Kees Cook <keescook@chromium.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <1D934EAE-574B-46B0-AC91-E71A96C10E8E@flygoat.com>
-References: <20230411111225.55725-1-jiaxun.yang@flygoat.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 9:11=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
+>
+> Yes, that looks more clear, the name of the option is a bit misleading. :=
+)
+>
+> To be clear what is going to be removed is
+> -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang,
+> in this way clang will be compatible with gcc and they can both use
+> -ftrivial-auto-var-init=3Dzero.
 
+Exactly, i.e. `-enable` is the one getting removed, but the wording
+within it (`knowing-it-will-be-removed-from-clang`) meant that the
+`-ftrivial...=3Dzero` one was the one that would be removed, not
+`-enable` itself (even if now what will happen is the opposite than
+what the option suggested originally).
 
-> 2023=E5=B9=B44=E6=9C=8811=E6=97=A5 12:12=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi all,
->=20
-> This series fixes some build errors when building with LLVM.
-> Some of them was discorved by inspecting the tree.
->=20
-> Tested with LLVM + LLVM_IAS=3D{0, 1} and GCC against:
->=20
-> allnoconfig, allmodconfig, 32r2_defconfig, 32r2el_defconfig, =
-64r2_defconfig,
-> 64r2el_defconfig, micro32r2el_defconfig, 32r6el_defconfig, =
-64r6el_defconfig,
-> loongson3_defconfig, lemote2f_defconfig, ip22_defconfig, =
-cavium_octeon_defconfig,
-> malta_defconfig
->=20
-> With other patchsets [1] [2] [3] I sent before, on my CI [4], with =
-tree [5].
->=20
-> allmodconfig is still failing but it's not related to MIPS.
+So when I read the commit message, the "this additional option ... is
+going to be removed in the future (as the name of the option
+suggests)" sounded wrong, since the name did not suggest that, but
+rather that `-ftrivial...=3Dzero` would be removed, not itself (since
+that was the original plan).
 
-Oops, not intended to resend that.
-Please ignore this thread.
-Sorry for the noise.
+If I understood the story properly, that is. :)
 
-Thanks
-- Jiaxun
+Thanks for taking a look!
 
->=20
-> [1]: =
-https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814=
--2-jiaxun.yang@flygoat.com/
-> [2]: =
-https://patchwork.kernel.org/project/linux-mips/patch/20230408115936.6631-=
-1-jiaxun.yang@flygoat.com/
-> [3]: =
-https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814=
--2-jiaxun.yang@flygoat.com/
-> [4]: =
-https://github.com/FlyGoat/kernel-action-ci/actions/runs/4649898964/jobs/8=
-228560848
-> [5]: =
-https://github.com/FlyGoat/kernel-action-ci/tree/71d3f53e9c44cebf62cfa4ed7=
-ec3b0ce6452555f
-
+Cheers,
+Miguel
