@@ -2,161 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81066DDA91
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F20A6DDA97
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjDKMQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S230008AbjDKMQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDKMP7 (ORCPT
+        with ESMTP id S229566AbjDKMQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:15:59 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BAA93A91;
-        Tue, 11 Apr 2023 05:15:54 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:43318.1095697603
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 7164810020E;
-        Tue, 11 Apr 2023 20:15:51 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id c863400433aa4172ade34a0a231e4e5e for emil.l.velikov@gmail.com;
-        Tue, 11 Apr 2023 20:15:53 CST
-X-Transaction-ID: c863400433aa4172ade34a0a231e4e5e
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <ee115204-880e-f1c1-a9d3-0ad0875f748e@189.cn>
-Date:   Tue, 11 Apr 2023 20:15:50 +0800
+        Tue, 11 Apr 2023 08:16:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B98535BB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PSKpztcZcWeU0kqRgz9frUyvV6Ecus1e6AXUQcG7EVg=; b=iIm8ek+8RoCroDqOegul4nnU9G
+        fn+k7FBPrkSlGGlzMcBn1uip3KN+bWl5RrpHgjUiGpUThJ9ehvN6HtImi0PApeN20gma3lcr9DwYs
+        GBbjYODLzLZAdzuYWya9CRZCpqn3YdGE/preUDPlc21mbwCr4p0ltdSXHiA1KGZvaReegUbopnFzl
+        CJ6kNV62NZwbRdj/0rBGMGcHAGOZpfLtwZ+ZMMNIA9kPze5y+3zpq3vabFw4iJ/4SrVwk1Ze52BIp
+        q3PsGFHHvPHbSXO8zO4XNCErP99CHupr22ClPJ9FEavw9unyEp7QcZLszAadOJIQ3jJzuJM6oDog6
+        xkMJDkrA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmCv4-005t7p-O1; Tue, 11 Apr 2023 12:16:18 +0000
+Date:   Tue, 11 Apr 2023 13:16:18 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "xiaosong.ma" <Xiaosong.Ma@unisoc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        yuming.han@unisoc.com, ke.wang@unisoc.com
+Subject: Re: [PATCH V2] fs: perform the check when page without mapping but
+ page->mapping contains junk or random bitscribble
+Message-ID: <ZDVPkljntjCr9/nX@casper.infradead.org>
+References: <1681091102-31907-1-git-send-email-Xiaosong.Ma@unisoc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
- <20230403171304.2157326-3-suijingfeng@loongson.cn>
- <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681091102-31907-1-git-send-email-Xiaosong.Ma@unisoc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 10, 2023 at 09:45:02AM +0800, xiaosong.ma wrote:
+> perform the check in dump_mapping() to print warning info and avoid crash with invalid non-NULL page->mapping.
+> For example, a panic with following backtraces show dump_page will show wrong info and panic when the bad page
+> is non-NULL mapping and page->mapping is 0x80000000000.
+> 
+>     crash_arm64> bt
+>     PID: 232    TASK: ffffff80e8c2c340  CPU: 0   COMMAND: "Binder:232_2"
+>      #0 [ffffffc013e5b080] sysdump_panic_event$b2bce43a479f4f7762201bfee02d7889 at ffffffc0108d7c2c
+>      #1 [ffffffc013e5b0c0] atomic_notifier_call_chain at ffffffc010300228
+>      #2 [ffffffc013e5b2c0] panic at ffffffc0102c926c
+>      #3 [ffffffc013e5b370] die at ffffffc010267670
+>      #4 [ffffffc013e5b3a0] die_kernel_fault at ffffffc0102808a4
+>      #5 [ffffffc013e5b3d0] __do_kernel_fault at ffffffc010280820
+>      #6 [ffffffc013e5b410] do_bad_area at ffffffc01028059c
+>      #7 [ffffffc013e5b440] do_translation_fault$4df5decbea5d08a63349aa36f07426b2 at ffffffc0111149c8
+>      #8 [ffffffc013e5b470] do_mem_abort at ffffffc0100a4488
+>      #9 [ffffffc013e5b5e0] el1_ia at ffffffc0100a6c00
+>      #10 [ffffffc013e5b5f0] __dump_page at ffffffc0104beecc
 
-On 2023/4/4 22:10, Emil Velikov wrote:
->> +++ b/drivers/gpu/drm/loongson/lsdc_drv.h
->> @@ -0,0 +1,324 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2022 Loongson Corporation
->> + *
-> We're in 2023, update the year across the files?
->
-OK, it just that we started to upstream this driver since 2022.
->> +struct lsdc_gem {
->> +       /* @mutex: protect objects list */
->> +       struct mutex mutex;
->> +       struct list_head objects;
->> +};
->> +
->> +struct lsdc_device {
->> +       struct drm_device base;
->> +       struct ttm_device bdev;
->> +
->> +       /* @descp: features description of the DC variant */
->> +       const struct lsdc_desc *descp;
->> +
->> +       struct pci_dev *gpu;
->> +
->> +       /* @reglock: protects concurrent access */
->> +       spinlock_t reglock;
->> +       void __iomem *reg_base;
->> +       resource_size_t vram_base;
->> +       resource_size_t vram_size;
->> +
->> +       resource_size_t gtt_size;
->> +
->> +       struct lsdc_display_pipe dispipe[LSDC_NUM_CRTC];
->> +
->> +       struct lsdc_gem gem;
->> +
-> Last time I looked there was no other driver with a list of gem
-> objects (and a mutex) in its device struct. Are you sure we need this?
+This doesn't show a crash in dump_mapping(), it shows a crash in
+__dump_page().
 
-Sure, this is absolutely necessary.
+> diff --git a/fs/inode.c b/fs/inode.c
+> index f453eb5..c9021e5 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -564,7 +564,8 @@ void dump_mapping(const struct address_space *mapping)
+>  	 * If mapping is an invalid pointer, we don't want to crash
+>  	 * accessing it, so probe everything depending on it carefully.
+>  	 */
+> -	if (get_kernel_nofault(host, &mapping->host) ||
+> +	if (get_kernel_nofault(mapping, &mapping) ||
+> +	    get_kernel_nofault(host, &mapping->host) ||
 
-Without this I can't see how much buffer object has been created.
-
-where they are(SYETEM, GTT or VRAM) and how much size it the buffer is.
-
-When sharing buffer with other driver,   cat /sys/kernel/debug/dri/0/bos
-
-can be used to see that the shared buffer is pinned in the GTT.
-
-> Very few drivers use TTM directly and I think you want to use
-> drm_gem_vram_helper or drm_gem_ttm_helper instead.
-
-We love you reviews,  yet...
-
-yet using the TTM is pretty good.
-
-drm_gem_vram_helper is also good for beginners.
-
-We can explicitly specify where to put the bo with TTM,
-
-We also need this to implement the S3 properly.
-
-Thomas also recommend us switch to TTM.
-
->> +static int ls7a1000_pixpll_param_update(struct lsdc_pll * const this,
->> +                                       struct lsdc_pll_parms const *pin)
->> +{
->> +       void __iomem *reg = this->mmio;
->> +       unsigned int counter = 0;
->> +       bool locked;
->> +       u32 val;
->> +
->> +       /* Bypass the software configured PLL, using refclk directly */
->> +       val = readl(reg + 0x4);
->> +       val &= ~(1 << 8);
->> +       writel(val, reg + 0x4);
->> +
-> There are a lot of magic numbers in this function. Let's define them
-> properly in the header.
->
-Ok, I  will improve this function at the next version.
->> +/* Helpers for chip detection */
->> +bool lsdc_is_ls2k2000(void);
->> +bool lsdc_is_ls2k1000(void);
->> +unsigned int loongson_cpu_get_prid(u8 *impl, u8 *rev);
-> Since this revision does pci_devices only, we don't need this detection right?
-
-No, we need it.
-
-In order to get a fine control, we need to know what the host is.
+This patch makes no sense.  Essentially, you're saying
+	mapping = &mapping
+which is obviously wrong.
 
