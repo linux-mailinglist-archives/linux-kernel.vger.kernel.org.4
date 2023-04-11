@@ -2,50 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3C96DD8FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E436DD905
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDKLKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S229626AbjDKLMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjDKLKt (ORCPT
+        with ESMTP id S229526AbjDKLMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:10:49 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DAF44BF;
-        Tue, 11 Apr 2023 04:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=4dLgDD+3t6//ujM7LIO0v5abyc8cvGvdK7uuYESrTfM=;
-        t=1681211442; x=1682421042; b=cQc+lgnLjda7gCYmTS3pyznzzig+AT7EVJzcojFdxxQeGEv
-        Qgs5pbr2lnPyhFOb/LqNqCZD2qK7OPzUH9SG6RbUMpkXJ0wNSWBoPb5t1ANxOh3HT+/w4uBYbzefp
-        Ot1OC4otheydzHeWKmIqvD4vp9HGaz2I2et32VhCXf8ihQFuMVQK6YGIB12+z2xXeaiICuQ7eHJOQ
-        ygK4uFZJg+zSDaiDZGNrZxv7DXiaif3SZa7H8Hz7eOjcCZHgXIcN/zZGgbDU/OgCo6hVV60uPshkS
-        gBuQCA8k3IHD/IQ7osGA8+5Y93V1kA3c7g08Gq1kLu++aw6W409Q/3+o2rqDaFcA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pmBtT-00ChI7-1V;
-        Tue, 11 Apr 2023 13:10:35 +0200
-Message-ID: <147d12620126c651c2487d731b82783b2c352452.camel@sipsolutions.net>
-Subject: Re: [PATCH] iwlwifi: cfg: Add missing MODULE_FIRMWARE() for *.pnvm
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Takashi Iwai <tiwai@suse.de>,
-        Gregory Greenman <gregory.greenman@intel.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 11 Apr 2023 13:10:34 +0200
-In-Reply-To: <20230405063546.12439-1-tiwai@suse.de>
-References: <20230405063546.12439-1-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 11 Apr 2023 07:12:41 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD14E5F;
+        Tue, 11 Apr 2023 04:12:39 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2836E5C0098;
+        Tue, 11 Apr 2023 07:12:39 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 11 Apr 2023 07:12:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm1; t=1681211559; x=
+        1681297959; bh=PMqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=S
+        Js5+f5AIDMKMpprBscSE7GMgHwHstngC7MN78l+7N7GzCEzfOTtfhTiLSCZxs3x/
+        9iLaeCDCy1Dy3WCzVjY6S5Mlc3Y+Fpr0EOIjNR4I4bfX2wjXvC9FzJidaaHBIulI
+        kUY4gkcvTxXerzE0nLWiRNlg6NiBl0xoCD0Cb8YjS9Ttk6THOi4Xd/8ix6Z+ETIr
+        4+HwIp2IYqjcO2AZtxBXo0mDrNbw8yR2VjPh8aE5kWLPxyqZZQSZqn+5uuVBbgA9
+        i78zNsOc1L6ITV0447/t6HlbP3cIaE/YeCn34NV3ns7HrCnSb2mopH0y9aAVO7hf
+        34p6qpC3sBabd1Ar8K7uA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1681211559; x=1681297959; bh=P
+        Mqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=WSXYfmv3bD7xpK39y
+        xtgqik5zXTvNddVhbO0KZRPFLFbuq7LgslTEwk1SuoUMLcJnQyEQvY7z2yl1EqDU
+        3JmXtgW6DAlT5YgAnT7c5GfisTTK1PpUY2P8dwvwn9fnYufOcFTMVSPSkJ32ll6E
+        2Rbs5quDsx295bvsiFqdTqQXorG0Vle7fn19PTMyWfTlqQifrXeOQ4BER0T0hNrL
+        xPyfT9iQAONB6NVfpocmGNqRp14Xt4Ec7J5MYkKEffuEzW4uWBKftXpyNXVEkPwA
+        20TmTwSKjZvFi5y8R8jNMfZoMqu/RB70OXjTuJ9M6hUNm4U9M+hcXm7oyOTYjV0H
+        DyDNA==
+X-ME-Sender: <xms:pkA1ZJpMK949mggMz6Nd8uMDj3nsYJoDMK_XHWQRoF7Q6ZX-Tsav-w>
+    <xme:pkA1ZLoVMPGdv4IroZLFHeOn9ZPya7UI-I8KbCQEnOBbnsXS0pU8gZfDM5FTcRfWC
+    9SAKyTM1rMeTt32iS8>
+X-ME-Received: <xmr:pkA1ZGO01i-L5g1R1gZOtMirdjSHRZUrSsG4fvug0MatqKN5AAB_oWl2gXkF>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekre
+    dtredtjeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejueekkedvfeekudfhhe
+    eliedugefgffduveeviedvffeiueekiefhtdekueeuudenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgt
+    ohhm
+X-ME-Proxy: <xmx:pkA1ZE4so64hSpnTAkJkksasijDc2iyaqROC4hEni87DjzsVVPbqxA>
+    <xmx:pkA1ZI61c63DFiXYqXdn08GQrRdrcQXFztZ4HZYmE627tt_L5Eh0mQ>
+    <xmx:pkA1ZMh9MNO_jSqvaXrbK8lxilJ1gVkrd5Vid2xWyZDH4cAtOZdV1Q>
+    <xmx:p0A1ZGnU76JpL9dC0ICqGUJ_6O5FPcPiXuuspj2M33Hn0-t1ySYDgg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Apr 2023 07:12:37 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        and@gmx.com, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS: LLVM build fixes
+Date:   Tue, 11 Apr 2023 12:12:17 +0100
+Message-Id: <20230411111225.55725-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,85 +84,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[removing Luca, he no longer works on wifi]
+Hi all,
 
-Hi,
+This series fixes some build errors when building with LLVM.
+Some of them was discorved by inspecting the tree.
 
-On Wed, 2023-04-05 at 08:35 +0200, Takashi Iwai wrote:
-> A few models require *.pnvm files while we don't declare them via
-> MODULE_FIRMWARE().  This resulted in the breakage of WiFi on the
-> system that relies on the information from modinfo (e.g. openSUSE
-> installer image).
->=20
-> This patch adds those missing MODULE_FIRMWARE() entries for *.pnvm
-> files.
+Tested with LLVM + LLVM_IAS={0, 1} and GCC against:
 
-Makes sense. They (may) also exist the previous generation of devices,
-but weren't strictly required then.
+allnoconfig, allmodconfig, 32r2_defconfig, 32r2el_defconfig, 64r2_defconfig,
+64r2el_defconfig, micro32r2el_defconfig, 32r6el_defconfig, 64r6el_defconfig,
+loongson3_defconfig, lemote2f_defconfig, ip22_defconfig, cavium_octeon_defconfig,
+malta_defconfig
 
-> The fix is obviously ad hoc.
+With other patchsets [1] [2] [3] I sent before, on my CI [4], with tree [5].
 
-Yeah. Maybe we'll merge it anyway though? Do you think this should still
-go to 6.3? Pretty close I guess.
+allmodconfig is still failing but it's not related to MIPS.
 
-> Here I added the lines with the explicit string since *_PRE definition
-> contains the tailing dash and can't be used for *.pnvm file.
+[1]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[2]: https://patchwork.kernel.org/project/linux-mips/patch/20230408115936.6631-1-jiaxun.yang@flygoat.com/
+[3]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[4]: https://github.com/FlyGoat/kernel-action-ci/actions/runs/4649898964/jobs/8228560848
+[5]: https://github.com/FlyGoat/kernel-action-ci/tree/71d3f53e9c44cebf62cfa4ed7ec3b0ce6452555f
 
-Yeah, we thought about changing that - but I have a larger set of rework
-in this area just done a short while ago, which would make it a bit hard
-to do. Hence maybe we should merge this for 6.3/6.4 and do the larger
-rework plus getting rid of the dash in the *_PRE definitions in 6.5,
-what do you think?
+Thanks
+Jiaxun
 
-> Alternatively, we may put a single line
->  MODULE_FIRMWARE("iwlwifi-*.pnvm");
-> to catch all, too.
->=20
+Jiaxun Yang (8):
+  MIPS: Replace assembly isa level directives with macros
+  MIPS: Set ISA level for MSA control reg helpers
+  MIPS: loongson2ef: Add missing break in cs5536_isa
+  MIPS: asmmacro: Restore fp macro after undef
+  MIPS: mipsregs: Parse fp and sp register by name in parse_r
+  MIPS: c-r4k: Use cache_op function for rm7k_erratum31
+  MIPS: octeon_switch: Remove duplicated labels
+  MIPS: Implement microMIPS MT ASE helpers
 
-Unrelated discussion, but ... I didn't even know that was possible.
+ arch/mips/alchemy/common/sleeper.S            |   6 +-
+ arch/mips/include/asm/asmmacro.h              |  57 ++--
+ arch/mips/include/asm/futex.h                 |   8 +-
+ arch/mips/include/asm/hazards.h               |   2 +-
+ arch/mips/include/asm/io.h                    |   4 +-
+ arch/mips/include/asm/mipsmtregs.h            | 256 +++++++++++-------
+ arch/mips/include/asm/mipsregs.h              |  63 +++--
+ arch/mips/include/asm/msa.h                   |   2 +
+ arch/mips/include/asm/stackframe.h            |   2 +-
+ arch/mips/kernel/bmips_vec.S                  |   4 +-
+ arch/mips/kernel/csrc-r4k.c                   |   2 +-
+ arch/mips/kernel/genex.S                      |   8 +-
+ arch/mips/kernel/idle.c                       |   6 +-
+ arch/mips/kernel/octeon_switch.S              |   6 -
+ arch/mips/kernel/r4k_fpu.S                    |   4 +-
+ arch/mips/kernel/syscall.c                    |   2 +-
+ arch/mips/lantiq/clk.c                        |   2 +-
+ arch/mips/lib/csum_partial.S                  |   5 +-
+ .../loongson2ef/common/cs5536/cs5536_isa.c    |   2 +-
+ arch/mips/mm/c-r4k.c                          |  33 +--
+ arch/mips/mm/cex-oct.S                        |   2 +-
+ arch/mips/mm/sc-ip22.c                        |   6 +-
+ 22 files changed, 277 insertions(+), 205 deletions(-)
 
-Maybe this gives us a way out of something else I was thinking about
-recently - the MODULE_FIRMWARE() here in iwlwifi usually only states the
-latest version that the driver accepts, however:
+-- 
+2.39.2 (Apple Git-143)
 
- * the driver might be ahead of the firmware releases - in fact that's
-   how it usually should be, just due to various issues we haven't been
-   upstreaming as quickly as we'd like
- * sometimes we (have to) skip firmware releases due to other issues
- * etc.
-
-So it could be that 6.4 kernel will state e.g. the max version is 78,
-but we end up never even releasing 78 firmware. The MODULE_FIRMWARE()
-would then state 78, but that file would never exist.
-
-Have we just been very lucky with never running into any of these
-issues, and the distro kernels being "old enough" that usually all the
-max version firmware was already released by the time it was used? Or
-did you work around this in some other way?
-
-Anyway, if we can use wildcards, maybe instead of stating the max API
-version number of the filename, we should have a wildcard there for the
-number? OTOH, iwlwifi *already* comes with a *lot* of firmware files for
-all the various families of devices and radios, and making the API
-version a wildcard would make it much bigger again, to the point where
-we might as well state something like
-
-  MODULE_FIRMWARE("iwlwifi-*")
-
-which is a lot of files ...
-
-Did you see any issues with this versioning thing in the past? And what
-would you think (from a distro POV) about making this a wildcard on the
-version, i.e. having, in things like
-
-#define IWL_QU_B_HR_B_MODULE_FIRMWARE(api) \
-        IWL_QU_B_HR_B_FW_PRE __stringify(api) ".ucode"
-
-
-"*" instead of __stringify(api).
-
-
-Some input on this would be nice.
-
-Thanks,
-johannes
