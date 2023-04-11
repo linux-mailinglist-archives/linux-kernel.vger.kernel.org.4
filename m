@@ -2,211 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217916DDBBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA0D6DDBC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDKNJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S230199AbjDKNKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjDKNJv (ORCPT
+        with ESMTP id S230047AbjDKNKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:09:51 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E014690;
-        Tue, 11 Apr 2023 06:09:47 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8667320007;
-        Tue, 11 Apr 2023 13:09:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681218585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zj1JtAKrv3GVkrzExsf9B7vpxAMSpGNgfjgQje0eTak=;
-        b=oNG2Rb7etLGd3op/Iz2fmq0xokA2awaHaTUwmpMIqfWRcdiVNffJhH1OiD/NJa8U8VhbyA
-        yF9MXtYH8Fxz3M+cAq/7V/oq1xoDx4mXB50I/MCViACuf5Xj/3sm+jiFSUhQyd/GFiKSU+
-        MvbhXoQ5xcQFvUgIZ6glZLEM1HPSvT3ZkSE8cIw3GiRKuf3ey7u+ch+9vo/URZlNg8hBkX
-        sdQ/9ZojYLUArwz1K4ERP3d5/cBFRF6/83yyqSdXppNVR0gRdgwuMipAeMDZ8IGKN7s335
-        n6r/K2t/A0PaaBtBH3FUkAWJV3CrDikEbkeZlUHa/BD6XrUBmGFFsgVYyetBaQ==
-Date:   Tue, 11 Apr 2023 15:09:30 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>
-Subject: Re: [PATCH v3 28/65] clk: renesas: r9a06g032: Add a determine_rate
- hook
-Message-ID: <20230411150930.4fb22d7e@xps-13>
-In-Reply-To: <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
-        <20221018-clk-range-checks-fixes-v3-28-9a1358472d52@cerno.tech>
-        <CAMuHMdXUEOP_3zjf8nwDyHvZVG-D0AsBjnr=esKzejMMcEiLSQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 11 Apr 2023 09:10:10 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E430FE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:10:08 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id bi39so9473245qkb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681218608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zf73QU/vp2FR2MAJTQ+Ali/CjjJipWz08ZhCoQgQ1ms=;
+        b=PHsTIwBY3MYsQ9dnFd+Ps0AgLQyXKa/g7dqspz1ZYbVa8+wrNGnkqtn8TZHNMkMUSr
+         og3xCWJDxpwBegBEV/xShi4Lz6ogAqCiCKiRCkkbY8CLqcaJrwHKCXeAD74+t/ZVR++Q
+         +bUahcSevbUmAy716SNvl6UHXnPAuHRYyAErI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zf73QU/vp2FR2MAJTQ+Ali/CjjJipWz08ZhCoQgQ1ms=;
+        b=1D4JbLySpmKAkq/R4uEXD5O3D+6+62vmCwPRl/rjeD9qb8iuTuY/2Lu1E2WUm2rzaC
+         Ud9NHzshAzBHAFPlUr+KYOES5uSrZpaXgTmUobscyhIL6qbPa4ocLByVj6qbPuSt3t08
+         KX/7Emhez3ohdhV7QokLmkW/JjpAUMc6w+wmaf8JjSKWYJoAyYYc9W/VAe7t5pnbZDeJ
+         pHBZvQtGftDgMNPA3VYCWEUqzdY2YdbXRozOla8QVbVi/jeFgVe1tF122B7crnsDV5KR
+         EYWwkjL7f2nUXqk7NySkDJ0WawgdQrEKR4dyaeYLGGSmbKCVPiHMbBJ5LcBzilAt45Zt
+         q7Aw==
+X-Gm-Message-State: AAQBX9fFO9UMXQCukc7fIIwOTZqojmJKg/fx+bsMhLxZaGxz/B+4xu4u
+        v8B3GFycli6YFuBn48X4HxpNPmndnCXFkRRCmYv1ZQ==
+X-Google-Smtp-Source: AKy350aytpXAmt2I4/HuOkFhNjWfbiyryLtfZciMpH4rg8ps+0TEo4wgOX9w5A+Nz5hz/IFjHMD3zaA2/sonr1A8iRs=
+X-Received: by 2002:a05:620a:28c4:b0:745:a35f:ad71 with SMTP id
+ l4-20020a05620a28c400b00745a35fad71mr4712462qkp.13.1681218607964; Tue, 11 Apr
+ 2023 06:10:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20230320093259.845178-1-korneld@chromium.org> <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
+ <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com> <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
+In-Reply-To: <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
+From:   =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
+Date:   Tue, 11 Apr 2023 15:09:56 +0200
+Message-ID: <CAD=NsqzFiQBxtVDmCiJ24HD0YZiwZ4PQkojHHic775EKfeuiaQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     gregkh@linuxfoundation.org,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        "Gong, Richard" <richard.gong@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert & Maxime,
-
-geert@linux-m68k.org wrote on Tue, 11 Apr 2023 12:27:38 +0200:
-
-> CC Gareth, Herv=C3=A9, Miquel, Ralph
->=20
-> On Tue, Apr 4, 2023 at 2:44=E2=80=AFPM Maxime Ripard <maxime@cerno.tech> =
-wrote:
-> > The Renesas r9a06g032 bitselect clock implements a mux with a set_parent
-> > hook, but doesn't provide a determine_rate implementation.
+On Tue, Apr 11, 2023 at 2:50=E2=80=AFPM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+>
+>
+> On 10.04.23 17:29, Gong, Richard wrote:
+> > On 4/10/2023 12:03 AM, Mario Limonciello wrote:
+> >> On 3/20/23 04:32, Kornel Dul=C4=99ba wrote:
+> >>
+> >>> This fixes a similar problem to the one observed in:
+> >>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
+> >>> probe").
+> >>>
+> >>> On some systems, during suspend/resume cycle firmware leaves
+> >>> an interrupt enabled on a pin that is not used by the kernel.
+> >>> This confuses the AMD pinctrl driver and causes spurious interrupts.
+> >>>
+> >>> The driver already has logic to detect if a pin is used by the kernel=
+.
+> >>> Leverage it to re-initialize interrupt fields of a pin only if it's n=
+ot
+> >>> used by us.
+> >>>
+> >>> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
+> >>> ---
+> >>>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++-------------=
+---
+> >>>   1 file changed, 20 insertions(+), 16 deletions(-)
+> >>>
+> >>> diff --git a/drivers/pinctrl/pinctrl-amd.c
+> >>> b/drivers/pinctrl/pinctrl-amd.c
+> >>> index 9236a132c7ba..609821b756c2 100644
+> >>> --- a/drivers/pinctrl/pinctrl-amd.c
+> >>> +++ b/drivers/pinctrl/pinctrl-amd.c
+> >>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
+> >>> =3D {
+> >>>       .pin_config_group_set =3D amd_pinconf_group_set,
+> >>>   };
+> >>>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> >>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin=
+)
+> >>>   {
+> >>> -    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> >>> +    const struct pin_desc *pd;
+> >>>       unsigned long flags;
+> >>>       u32 pin_reg, mask;
+> >>> -    int i;
+> >>>         mask =3D BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+> >>>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+> >>>           BIT(WAKE_CNTRL_OFF_S4);
+> >>>   -    for (i =3D 0; i < desc->npins; i++) {
+> >>> -        int pin =3D desc->pins[i].number;
+> >>> -        const struct pin_desc *pd =3D pin_desc_get(gpio_dev->pctrl, =
+pin);
+> >>> -
+> >>> -        if (!pd)
+> >>> -            continue;
+> >>> +    pd =3D pin_desc_get(gpio_dev->pctrl, pin);
+> >>> +    if (!pd)
+> >>> +        return;
+> >>>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >>> +    pin_reg =3D readl(gpio_dev->base + pin * 4);
+> >>> +    pin_reg &=3D ~mask;
+> >>> +    writel(pin_reg, gpio_dev->base + pin * 4);
+> >>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> >>> +}
+> >>>   -        pin_reg =3D readl(gpio_dev->base + i * 4);
+> >>> -        pin_reg &=3D ~mask;
+> >>> -        writel(pin_reg, gpio_dev->base + i * 4);
+> >>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+> >>> +{
+> >>> +    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
+> >>> +    int i;
+> >>>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+> >>> -    }
+> >>> +    for (i =3D 0; i < desc->npins; i++)
+> >>> +        amd_gpio_irq_init_pin(gpio_dev, i);
+> >>>   }
+> >>>     #ifdef CONFIG_PM_SLEEP
+> >>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
+> >>>       for (i =3D 0; i < desc->npins; i++) {
+> >>>           int pin =3D desc->pins[i].number;
+> >>>   -        if (!amd_gpio_should_save(gpio_dev, pin))
+> >>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
+> >>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
+> >>>               continue;
+> >>> +        }
+> >>>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+> >>>           gpio_dev->saved_regs[i] |=3D readl(gpio_dev->base + pin * 4=
+)
+> >>> & PIN_IRQ_PENDING;
+> >>
+> >> Hello Kornel,
+> >>
+> >> I've found that this commit which was included in 6.3-rc5 is causing a
+> >> regression waking up from lid on a Lenovo Z13.
+> > observed "unable to wake from power button" on AMD based Dell platform.
+>
+> This sounds like something that we want to fix quickly.
+>
+> > Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
+> > top of 6.3-rc6 does fix the issue.
+> >>
+> >> Reverting it on top of 6.3-rc6 resolves the problem.
+> >>
+> >> I've collected what I can into this bug report:
+> >>
+> >> https://bugzilla.kernel.org/show_bug.cgi?id=3D217315
+> >>
+> >> Linus Walleij,
+> >>
+> >> It looks like this was CC to stable.  If we can't get a quick solution
+> >> we might want to pull this from stable.
 > >
-> > This is a bit odd, since set_parent() is there to, as its name implies,
-> > change the parent of a clock. However, the most likely candidate to
-> > trigger that parent change is a call to clk_set_rate(), with
-> > determine_rate() figuring out which parent is the best suited for a
-> > given rate.
+> > this commit landed into 6.1.23 as well
 > >
-> > The other trigger would be a call to clk_set_parent(), but it's far less
-> > used, and it doesn't look like there's any obvious user for that clock.
-> >
-> > So, the set_parent hook is effectively unused, possibly because of an
-> > oversight. However, it could also be an explicit decision by the
-> > original author to avoid any reparenting but through an explicit call to
-> > clk_set_parent().
-> >
-> > The latter case would be equivalent to setting the flag
-> > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> > to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> > implementation is provided, clk_round_rate() (through
-> > clk_core_round_rate_nolock()) will call itself on the parent if
-> > CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> > otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> > CLK_SET_RATE_NO_REPARENT is set.
-> >
-> > And if it was an oversight, then we are at least explicit about our
-> > behavior now and it can be further refined down the line.
-> >
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech> =20
->=20
-> LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >         d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resu=
+me
+>
+> It made it back up to 5.10.y afaics.
+>
+> The culprit has no fixes tag, which makes me wonder: should we quickly
+> (e.g. today) revert this in mainline to get back to the previous state,
+> so that Greg can pick up the revert for the next stable releases he
+> apparently currently prepares?
+>
+> Greg, is there another way to make you quickly fix this in the stable
+> trees? One option obviously would be "revert this now in stable, reapply
+> it later together with a fix ". But I'm under the impression that this
+> is too much of a hassle and thus something you only do in dire situations=
+?
+>
+> I'm asking because I over time noticed that quite a few regressions are
+> in a similar situation -- and quite a few of them take quite some time
+> to get fixed even when a developer provided a fix, because reviewing and
+> mainlining the fix takes a week or two (sometimes more). And that is a
+> situation that is more and more hitting a nerve here. :-/
 
-I searched for 'possible callers', I didn't find any places
-where this would be used on the consumer side. However, downstream,
-there is a rzn1-clock-bitselect.c clock driver which states:
+I've looked into this and at this moment I can't really find a quick fix.
+See https://bugzilla.kernel.org/show_bug.cgi?id=3D217315#c3.
+It seems that reverting this might be the best solution for now.
 
-+ * This clock provider handles the case of the RZN1 where you have periphe=
-rals
-+ * that have two potential clock source and two gates, one for each of the
-+ * clock source - the used clock source (for all sub clocks) is selected b=
-y a
-+ * single bit.
-+ * That single bit affects all sub-clocks, and therefore needs to change t=
-he
-+ * active gate (and turn the others off) and force a recalculation of the =
-rates.
-
-I don't know how much of this file has been upstreamed (under a
-different form) but this might very well be related to the fact that
-reparenting in some cases would be a major issue and thus needs to be
-avoided unless done on purpose (guessing?).
-
-Maybe Ralph can comment, but for what I understand,
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-> But I do not have the hardware.
->=20
-> > --- a/drivers/clk/renesas/r9a06g032-clocks.c
-> > +++ b/drivers/clk/renesas/r9a06g032-clocks.c
-> > @@ -1121,6 +1121,7 @@ static int r9a06g032_clk_mux_set_parent(struct cl=
-k_hw *hw, u8 index)
-> >  }
-> >
-> >  static const struct clk_ops clk_bitselect_ops =3D {
-> > +       .determine_rate =3D __clk_mux_determine_rate,
-> >         .get_parent =3D r9a06g032_clk_mux_get_parent,
-> >         .set_parent =3D r9a06g032_clk_mux_set_parent,
-> >  };
-> > @@ -1145,7 +1146,7 @@ r9a06g032_register_bitsel(struct r9a06g032_priv *=
-clocks,
-> >
-> >         init.name =3D desc->name;
-> >         init.ops =3D &clk_bitselect_ops;
-> > -       init.flags =3D CLK_SET_RATE_PARENT;
-> > +       init.flags =3D CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT;
-> >         init.parent_names =3D names;
-> >         init.num_parents =3D 2;
-> > =20
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-
-Thanks,
-Miqu=C3=A8l
+Regards
+Kornel
