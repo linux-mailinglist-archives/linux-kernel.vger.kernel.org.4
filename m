@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3E56DE3D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB886DE3E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjDKS0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S230155AbjDKS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjDKS0o (ORCPT
+        with ESMTP id S230008AbjDKS1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:26:44 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C2A59C7;
-        Tue, 11 Apr 2023 11:26:35 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v29so8521008wra.13;
-        Tue, 11 Apr 2023 11:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681237593; x=1683829593;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sWPZ2soZsylidE36LH194Mjh7EQgTMc+CIMfTeM7SyM=;
-        b=HzGdZXd5D2JAChH2u2D189QRsK69oIOPAxFRiuTBlybvkXBP8qVTgaYQcM8PWc9bxv
-         e3UpIq6Zi1JCF0Aqz2Zitlv1+j+H3F1e5kx0lqdSVfJr+w4cNESxYHPJwCAU8DpaXmv9
-         kG2ZVFHTAGFUmpjlhraKKxUqmz+6kfPTp/g7h/o3xGbO3Yhs9+MWTO5P76WKYTsmKqOl
-         vkQ6gFHKgOJfIb11FGjsumfy5tT3hufsMeKs440yJyYYK6rpBY1RL2H1hdl+ppgGokQH
-         ipX67y1HSrDjQN7r1P6+Nk7D4ezab1fF2s6zqxPuAdTftbhf7GCsr3mn7or+64XpxA/k
-         E42w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237593; x=1683829593;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sWPZ2soZsylidE36LH194Mjh7EQgTMc+CIMfTeM7SyM=;
-        b=yb1qILSIg7Cwio1JcjF/mApFbgOnXCqAZDfTzLIQwE56GOaEYio3CupH24ZBdyXEBm
-         28jk15BGR9YUxcTrWP5YVgJBB6+ntoi15ZiviToiYf0qwohO8zzy40hEHAAyKCrh3spZ
-         kbBzteyJQggKr7Tudy4TcHV2oFM0wRxzeIkDUjhygYRy6uMFnWGaGCbFRkmDf8Dfa6rh
-         8snVeB2SkESwKp+WTwkkE+CHkt0y30llByBZ5D3iekgvaPDdOtXXrkI+7lD0nXmfJqu4
-         zmIC3G2SdKHXdjQ3Zf6yCzyNT8tFaGST8CNmDSto8zMxTxx4Wl4oz7jqJ5ER7N5U83P4
-         BoQw==
-X-Gm-Message-State: AAQBX9cIJwIJDutmjAqO/HQGsuq4F2ACRC4me4Hxq20AeUckc5oisIqf
-        WlFOwxukzZOxQSgHIh+dwwA=
-X-Google-Smtp-Source: AKy350bMu78SioCTAahjFrJC0ddPrV1Vn8aBaZ3/yEzVGIyW6clFaqVQNE+A0xynDpgp71LzWK8Ugw==
-X-Received: by 2002:a5d:66cd:0:b0:2d0:bba8:3901 with SMTP id k13-20020a5d66cd000000b002d0bba83901mr2636557wrw.62.1681237593638;
-        Tue, 11 Apr 2023 11:26:33 -0700 (PDT)
-Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id m15-20020adfe0cf000000b002c7163660a9sm15035965wri.105.2023.04.11.11.26.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 11:26:33 -0700 (PDT)
-Message-ID: <5f24cb94-d7f1-f8b0-71f0-2b39a89bb2dc@gmail.com>
-Date:   Tue, 11 Apr 2023 20:26:32 +0200
+        Tue, 11 Apr 2023 14:27:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053E065B3;
+        Tue, 11 Apr 2023 11:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681237658; x=1712773658;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1QioC9Kxlkpc1XJQphVkupGM3XmsH0QP9DjCNhRYggY=;
+  b=kXyZAYx2hDUxFwJIEqNx0HXArxzaQuv7xsnx9GzZJ/q4nmmj8/WaWFoF
+   GwST63x2yRU8eL/IoY85TcSnSmy9WYqa9Dp4077KxxLuAddWqGx09WUhz
+   C3JsGE2u3LzB5c6evwRyNv60huOoFRgaCr6JH5cYKsvx7zqW1TNForDC6
+   5YfgGusChybGCZ8nkFpGOtwzfSD/R5WOx0L+VRYz9fl1kiba3jl0+LMJz
+   1SIxZaj2J87jGSZumHfSV2PliIge0pzi9BQQ6j9dqECHZzm/4FVXVrwa7
+   ulgevw6jjq3ZZVjgwlNWyxFT/N0R/xAJ4/VS9+sBfd9scOdQ7FtJGcSWM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="343708303"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="343708303"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 11:27:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="691265257"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="691265257"
+Received: from gtryonx-mobl.amr.corp.intel.com (HELO [10.209.72.81]) ([10.209.72.81])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 11:27:36 -0700
+Message-ID: <7fe765e1-88b5-7bf1-133c-4587224f1e7a@intel.com>
+Date:   Tue, 11 Apr 2023 11:27:35 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix alignment of function
- call params
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230409183549.12683-1-savicaleksa83@gmail.com>
- <c24a071e-b191-4626-8edc-1658a01d80ef@roeck-us.net>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v8 17/56] x86/fault: Add support to handle the RMP
+ fault for user address
 Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <c24a071e-b191-4626-8edc-1658a01d80ef@roeck-us.net>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@profian.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-18-michael.roth@amd.com>
+ <a15fc9a5-c136-47f7-e15e-776a511f3cdb@intel.com>
+ <20230328233101.4idfki7ulpyhxrwy@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230328233101.4idfki7ulpyhxrwy@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-10 18:53:08 GMT+02:00, Guenter Roeck wrote:
+On 3/28/23 16:31, Michael Roth wrote:
+> However...
 > 
-> I am not sure I understand how this would improve readability.
-> It seems to accomplish the opposite. Sure, I know, checkpatch --strict
-> complains, but that is still better than unreadable code just to make
-> checkpatch happy.
+> The fact that any pages potentially triggering these #PFs are able to be
+> mapped as 2M in the first place means that all the PFNs covered by that
+> 2M mapping must also been allocated by via mappable/VMA memory rather
+> than via restricted memfd where userspace mappings are not possible.
 > 
-> Guenter
+> So I think we should be able to drop this patch entirely, as well as
+> allow the use of HugeTLBFS for non-restricted memfd memory (though
+> eventually the guest will switch all its memory to private/restricted
+> so not gaining much there other than reducing management complexity).
 
-Both seemed fine to me, the idea was to fix the checkpatch warning.
-If it's OK for it to complain about this, plus the changes would make it
-harder to read, please ignore this patch.
+This is sounding a bit voodoo-ish to me.
 
-Thanks,
-Aleksa
+If this whole series is predicated on having its memory supplied via one
+very specific ABI with very specific behavior.
+
+That connection and the associated contract isn't spelled out very
+clearly in this series.  I'm sure it works on your machine and is clear
+to _you_ but I'm worried that nobody else is going to be able to figure
+out the voodoo.
+
+Could we make sure that this stuff is made very clear in the
+Documentation and cover letter, please?
