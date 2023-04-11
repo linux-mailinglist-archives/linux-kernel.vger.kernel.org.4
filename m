@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBF16DD1AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0DC6DD1CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjDKFeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 01:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S230042AbjDKFgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjDKFeB (ORCPT
+        with ESMTP id S230032AbjDKFgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:34:01 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA2F2729
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:34:00 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5049a1085cbso1432770a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:34:00 -0700 (PDT)
+        Tue, 11 Apr 2023 01:36:36 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636F72721
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:36:35 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1845f865452so3270682fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681191238;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkWD79ipH+po5ISBlzkaKK3V7RlQmj+WDbDZ6NA6eNE=;
-        b=OmfNA020h/697ESQhqcF3FPp8ZOviAEurDFUlaWkoytba+zXb7KDbxxmuSw3gjELed
-         1C1hoIpU3aImiqsA9V6R3YjB5AzeanBuv8k5z5bS5aXweQsHRiqFOV1MsU2tcfjf9872
-         Ha8AN5DuKDGzgUDagPA0D+kFmxVol1LGCqwj8RF32mEhoffjYC2sYiSAnUeWm3P0S2ts
-         5ti/lVMtNEC2MOQzzIFLPAEqbPU/f7e8LVNwim1GJIsLElEPa++33TAdqkOif2NvZ3gj
-         8tNaJNIIYzO0MFsRj9D0mWm1T8icbi6FuGNKh7FLmSvY6NdgMsYNDiCalXvbalk2yY92
-         HUWw==
+        d=google.com; s=20210112; t=1681191394; x=1683783394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mdU3Bs8JQQ33splN92FBiHtIvH17DV/SWgdHpTNTSsU=;
+        b=Ai94Ld0eiIhTrLPOTcEF/nNJkZP42ALKAw4OhARQy5f8G4uVWqRxO2LbkgqZVuRXUu
+         e+8kqSxykt1A9iDU01Ot/xjQdEu/k/5HCPBdazwHC1ech/qr7V2pnvNWbxRud4NwinDu
+         5FdXNZe3mT6ndRR1YR/ksjrv+3zx3gxCZ9ABFmtdIChJB6u+nFts49mSzcq0/L4SrqAc
+         JG6KeolZmJkcdvxxZXKtPt/caFMh8KUw3DiU0D5pVL0+6W16mEg+wCiy6WoezQvU0a5Q
+         3gzpA2wF8ICNpAkHXwhkAfl+KzJQLpKPKNrHiabkAuoz+1Dlwrud5BTt7l6gl7abeWde
+         9vXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681191238;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkWD79ipH+po5ISBlzkaKK3V7RlQmj+WDbDZ6NA6eNE=;
-        b=tHETPos9wH4hiqdnbQg2tOSfWO5IdEJzKKSjy21rsVKvwQZFtLbjoHZ0GXSUeZxAI6
-         iFzYCDmww+XFIeri88IYPPQQnt4PFE2Z6IGEksHG4UsqZ0SHZEF6DCY4q0vELOtw0cDP
-         k5HDl+1VvRWWxGGge1PHKhfsBjaD8hS4Xe2FL5GQiqBPs6pLVPD+0S7RZ/KObuEb1jea
-         gSxQLDD+r0z0fS8hYKbTDfrNEtdgVbmRzkxrLiKGLNFnEczibUMa6K+T+nVwh6GPtTNz
-         RCKxHVz0rCwxHgA9rw/tSYy61M3+TFmHLPL7dAN4G3FhR6P0zrMQ5a2QwPubmKyPz0wm
-         gDNQ==
-X-Gm-Message-State: AAQBX9cD0Q14Uy/B6w3BMYDh63RDGEZQxOLU9GDvR3wAKu/JdS8bEaHn
-        +zAL4iKRt1s4wmpzF+7/WVVwhQ==
-X-Google-Smtp-Source: AKy350bQYGlaHy4QryASpqvVadU3bZ30sQLxHLHpnwjSurrdvLijghPUlqa53Q/kk+9D0EPOXdUDwg==
-X-Received: by 2002:aa7:da17:0:b0:4fa:4810:95f9 with SMTP id r23-20020aa7da17000000b004fa481095f9mr11438378eds.34.1681191238596;
-        Mon, 10 Apr 2023 22:33:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:dad2:72b7:3626:af61? ([2a02:810d:15c0:828:dad2:72b7:3626:af61])
-        by smtp.gmail.com with ESMTPSA id b15-20020a50cccf000000b004c10b4f9ebesm5509934edj.15.2023.04.10.22.33.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 22:33:58 -0700 (PDT)
-Message-ID: <eca378d3-8743-a0c3-5f54-faf4ad37e9d1@linaro.org>
-Date:   Tue, 11 Apr 2023 07:33:56 +0200
+        d=1e100.net; s=20210112; t=1681191394; x=1683783394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mdU3Bs8JQQ33splN92FBiHtIvH17DV/SWgdHpTNTSsU=;
+        b=CJFB17LUXNgsWd7MpDFRbP5PuWrtGNlbBxu3iHOcaBNsJQ2yPb+xXh+/wNCysTtIhe
+         hsU7tWT7U2xcbJTf5ScWq89Ao0v1pdpqHYAtXGzJfg2i2LkJdzqopvAw9MoAriJEK25R
+         UNtxvsmhclKe99d9snACWxSb5HVefsZzv7lqu5mP6dUW13ZyOB95cQLgtLmrjIfSP3wO
+         tUyCwMLAoLNqrnsFMUjP4rD2xWle1OlRY5tTGvRuIyx/D+VfutdJWesQQWJ9Of0J1v2/
+         S5JUShLUjBFglTtd/6WLKn09PJejrVmmbx9wBbPKX51LufS4htGpMIzvgE9HHq9KiXqz
+         A86A==
+X-Gm-Message-State: AAQBX9ftdO/7gAVMGoD7+7p/ScSwccwOlq2WG/e7ArSWPDL6wiA8E4b/
+        xevlLEZ3OTJ50HyQnPw7zBbJHg3JSpk4EIVSFjyT8A==
+X-Google-Smtp-Source: AKy350Y13pNbkk38TS7Z01b8gLcWD7y+DFYaX0cSUhPN3bBQ/MHeCwKEm8LjF8T81FeDnTkmsakQvs12U7I3j3I/h9M=
+X-Received: by 2002:a05:6870:4192:b0:17f:1723:fc82 with SMTP id
+ y18-20020a056870419200b0017f1723fc82mr728779oac.9.1681191394445; Mon, 10 Apr
+ 2023 22:36:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 1/2] dt-bindings: phy: qcom,qmp-usb: Drop legacy
- bindings and move to newer one (SM6115 & QCM2290)
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, kishon@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20230410171010.2561393-1-bhupesh.sharma@linaro.org>
- <20230410171010.2561393-2-bhupesh.sharma@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230410171010.2561393-2-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230410105056.60973-1-likexu@tencent.com> <20230410105056.60973-6-likexu@tencent.com>
+In-Reply-To: <20230410105056.60973-6-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 10 Apr 2023 22:36:23 -0700
+Message-ID: <CALMp9eTLvJ6GW1mfgjO7CL7tW-79asykyz9=Fb=FfT74VRkDVA@mail.gmail.com>
+Subject: Re: [PATCH V5 05/10] KVM: x86/pmu: Disable vPMU if the minimum num of
+ counters isn't met
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,19 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/2023 19:10, Bhupesh Sharma wrote:
-> 'qcom,msm8996-qmp-usb3-phy.yaml' defines bindings for several PHYs
-> which predate USB -> USB+DP migration. Since SM6115 and QCM2290
-> nodes for USB QMP phy are being added to dtsi files by followup patches,
-> move these bindings instead to the newer style
-> 'qcom,sc8280xp-qmp-usb3-uni-phy.yaml' file.
-> 
-> Since no device trees use these bindings presently, so we have no ABI breakages
-> with this patch.
+On Mon, Apr 10, 2023 at 3:51=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> w=
+rote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> Disable PMU support when running on AMD and perf reports fewer than four
+> general purpose counters. All AMD PMUs must define at least four counters
+> due to AMD's legacy architecture hardcoding the number of counters
+> without providing a way to enumerate the number of counters to software,
+> e.g. from AMD's APM:
+>
+>  The legacy architecture defines four performance counters (PerfCtrn)
+>  and corresponding event-select registers (PerfEvtSeln).
+>
+> Virtualizing fewer than four counters can lead to guest instability as
+> software expects four counters to be available.
 
+I'm confused. Isn't zero less than four?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.h | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index dd7c7d4ffe3b..002b527360f4 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -182,6 +182,9 @@ static inline void kvm_init_pmu_capability(const stru=
+ct kvm_pmu_ops *pmu_ops)
+>                         enable_pmu =3D false;
+>         }
+>
+> +       if (!is_intel && kvm_pmu_cap.num_counters_gp < AMD64_NUM_COUNTERS=
+)
+> +               enable_pmu =3D false;
+> +
+>         if (!enable_pmu) {
+>                 memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
+>                 return;
+> --
+> 2.40.0
+>
