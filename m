@@ -2,199 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E896DE482
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9106DE4BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDKTNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S229578AbjDKTVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDKTNm (ORCPT
+        with ESMTP id S229501AbjDKTVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:13:42 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F20B44BE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:13:38 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54ee9ad5eb3so172073127b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:13:38 -0700 (PDT)
+        Tue, 11 Apr 2023 15:21:42 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C8E469A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:21:40 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id bv15so7581692ybb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681240417; x=1683832417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1681240900; x=1683832900;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZyhAcQmoHbAJmyI6qNybDWX+d0nq9TvXS/75WN8UzuA=;
-        b=S2f+5gKCSSzDOMOS6mIOicl0bR1GjNPjs24KWw1ZqU8L7QMlPQQKweyrpx5vW1RjKJ
-         5C38HUdsLCTBSys6gc60xF1N+O6daogXQypFY+aquyajA0zIHayA7/np0IYE7V0ZR5+a
-         /o7LaS9b5UhjtAIy1W81O6uUXzYpim0EndlWb+spMWkfdCb/H3gLY6I0J64z2Rz0fxC4
-         2Y9gbJ32KP6PeX1M/X5Cm1TfxUBa4YbdGtJiZypDJyIv+sjJpbeQJhWqfdJX638mi0VU
-         ua2nLslyeNXA3wus84B/BahgSozqvbNONWUP+NQxRKQwiJFyeDl0ursSU+XFZKPSwzmq
-         T5zw==
+        bh=qVRn7naFUXAsjRb1O1mTo/7nJkom64M8Cx1cVOIuZhs=;
+        b=TEcZrNbPpsbyhp8jNcU8le+hVDgfaEohnav5TXU7903HkjiEPMreQuw5yT+M0qanNB
+         v1XWv54XYxhHHhi5ASdYs3L01NJHvf9pPF52o2ND0kloJ6CbeBuaK0fL/sflI/RfFKcy
+         ArQnilI7fwzLJ7+ReeJ3HSHpj3v1uEtBjbKuE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681240417; x=1683832417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1681240900; x=1683832900;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZyhAcQmoHbAJmyI6qNybDWX+d0nq9TvXS/75WN8UzuA=;
-        b=qxbIj8MbCrB5U1T8cUseUDxUAXgBcg9rKtxAmoBqQfd4v5eMHHa60WZ0QBtiGrIdUo
-         wHBO4KZkOCDPaR04CFMZkJz90k2ByU0kG0O66duZ/EHJwGA0Jvbk3z/v5rqPD79bxIyM
-         44CIrBf9X28WtFlDt9jmvcsGKd8c+otB21ILOnXsQMDeZrHke8OEzIxP0VctW5RsUmaE
-         qal2Eug8ll1Jz5u9z43plcAliKftvQsY/sexosMZT679XD1YZASdOsLGpFjbRwZromy4
-         +Z+WziEAYkAEK96ybMYeIu7RIOY8WTnOqEnShTNq/Wuu5YJjg4VDX3gdXlFKYcu2XHdR
-         D8Sw==
-X-Gm-Message-State: AAQBX9dlD6y8psHobRT85CbMsa91RSHAFl180DWZLKFw03WIHM+ke5w9
-        yE4w7FRAlYmZw/dKd4BNd7XDiggbuQgCaLDoyjaW9t4XYU3+SZA=
-X-Google-Smtp-Source: AKy350azG2i8uc9BAHp/wk8VSvxtJ0aqfSk9gTsrxDzJOGJbd8PZzFADbtv5hxGRkczUVNGtVCqIHdlrFObziFErZeI=
-X-Received: by 2002:a81:a904:0:b0:54f:2b65:a865 with SMTP id
- g4-20020a81a904000000b0054f2b65a865mr4260299ywh.8.1681240417154; Tue, 11 Apr
- 2023 12:13:37 -0700 (PDT)
+        bh=qVRn7naFUXAsjRb1O1mTo/7nJkom64M8Cx1cVOIuZhs=;
+        b=FK2trodyyR0YMWS8qIki3hnJhWC2Mz543GZXdDpQaNQvikcVjmMgFxQpfLBafzecjF
+         QhGGZEqn6dLedaMPdJ4Gpndt5C6apcuqFY3YrVPM5o9lavMe26k11Mjug5arw/9HOH3d
+         ZK1UU/mtbPCniQUTXxIBVkjG138z4utYxSEpCaREgUdNLELpy7KwJrFGCFfMzQDmW9QT
+         IXVVMKUlO+LaQxiIpY98dPdgO+lTbP4VTjoyP6ZffOarXtKw73n/Xwm+595pskmQNknS
+         pb9JmXQzXiFLneS3mvUbe9CQ5rv29/QYs5jzh85+HYMqSRFKKLuIdj18Rx+lwA62ZxTR
+         FOGA==
+X-Gm-Message-State: AAQBX9dVgaKShM/gbzeIiYAO7iiG2h5b/76dPrHhHRO6AikF6J4zZTUQ
+        aJVkAmthB/S6yfkP4e88IATidQ==
+X-Google-Smtp-Source: AKy350aKYkAHJtc3ynAkKkouXLTXQxYPnd+mgZjVCcq0RoDatBZYCZYMOLqcniHn3E7xoTK7VWhxLg==
+X-Received: by 2002:a25:ada1:0:b0:b67:412e:a81e with SMTP id z33-20020a25ada1000000b00b67412ea81emr13563829ybi.17.1681240900095;
+        Tue, 11 Apr 2023 12:21:40 -0700 (PDT)
+Received: from localhost ([2620:0:1035:15:2991:9b76:4e62:65bf])
+        by smtp.gmail.com with UTF8SMTPSA id b2-20020a251b02000000b00b8692cfdfa6sm3814886ybb.27.2023.04.11.12.21.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 12:21:39 -0700 (PDT)
+From:   Mark Yacoub <markyacoub@chromium.org>
+X-Google-Original-From: Mark Yacoub <markyacoub@google.com>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     seanpaul@chromium.org, suraj.kandpal@intel.com,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v9 01/10] drm/hdcp: Add drm_hdcp_atomic_check()
+Date:   Tue, 11 Apr 2023 15:21:25 -0400
+Message-Id: <20230411192134.508113-2-markyacoub@google.com>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+In-Reply-To: <20230411192134.508113-1-markyacoub@google.com>
+References: <20230411192134.508113-1-markyacoub@google.com>
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-3-git-send-email-wufan@linux.microsoft.com>
- <CAHC9VhRguGeb8=oNVFebshL_2LLZ4hf0qO97YBVm8OObLsLNTw@mail.gmail.com> <20230406200055.GB19196@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230406200055.GB19196@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 11 Apr 2023 15:13:26 -0400
-Message-ID: <CAHC9VhTkEHvoSFu8h=tuGJAjPhohj7ABPi+XXVg4j5MesCbtxw@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 02/16] ipe: add policy parser
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 4:00=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
-rote:
-> On Thu, Mar 02, 2023 at 02:02:32PM -0500, Paul Moore wrote:
-> > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com> wr=
-ote:
-> > >
-> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
-> > >
-> > > IPE's interpretation of the what the user trusts is accomplished thro=
-ugh
-> > > its policy. IPE's design is to not provide support for a single trust
-> > > provider, but to support multiple providers to enable the end-user to
-> > > choose the best one to seek their needs.
-> > >
-> > > This requires the policy to be rather flexible and modular so that
-> > > integrity providers, like fs-verity, dm-verity, dm-integrity, or
-> > > some other system, can plug into the policy with minimal code changes=
-.
-> > >
-> > > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >
-> > ...
-> >
-> > > ---
-> > >  security/ipe/Makefile        |   2 +
-> > >  security/ipe/policy.c        |  99 +++++++
-> > >  security/ipe/policy.h        |  77 ++++++
-> > >  security/ipe/policy_parser.c | 515 +++++++++++++++++++++++++++++++++=
-++
-> > >  security/ipe/policy_parser.h |  11 +
-> > >  5 files changed, 704 insertions(+)
-> > >  create mode 100644 security/ipe/policy.c
-> > >  create mode 100644 security/ipe/policy.h
-> > >  create mode 100644 security/ipe/policy_parser.c
-> > >  create mode 100644 security/ipe/policy_parser.h
+From: Sean Paul <seanpaul@chromium.org>
 
-...
+Move the hdcp atomic check from i915 to drm_hdcp so other
+drivers can use it. No functional changes, just cleaned up some of the
+code when moving it over.
 
-> > > diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parse=
-r.c
-> > > new file mode 100644
-> > > index 000000000000..c7ba0e865366
-> > > --- /dev/null
-> > > +++ b/security/ipe/policy_parser.c
-> > > @@ -0,0 +1,515 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) Microsoft Corporation. All rights reserved.
-> > > + */
-> > > +
-> > > +#include "policy.h"
-> > > +#include "policy_parser.h"
-> > > +#include "digest.h"
-> > > +
-> > > +#include <linux/parser.h>
-> > > +
-> > > +#define START_COMMENT  '#'
-> > > +
-> > > +/**
-> > > + * new_parsed_policy - Allocate and initialize a parsed policy.
-> > > + *
-> > > + * Return:
-> > > + * * !IS_ERR   - OK
-> > > + * * -ENOMEM   - Out of memory
-> > > + */
-> > > +static struct ipe_parsed_policy *new_parsed_policy(void)
-> > > +{
-> > > +       size_t i =3D 0;
-> > > +       struct ipe_parsed_policy *p =3D NULL;
-> > > +       struct ipe_op_table *t =3D NULL;
-> > > +
-> > > +       p =3D kzalloc(sizeof(*p), GFP_KERNEL);
-> > > +       if (!p)
-> > > +               return ERR_PTR(-ENOMEM);
-> > > +
-> > > +       p->global_default_action =3D ipe_action_max;
-> >
-> > I'm assuming you're using the "ipe_action_max" as an intentional bogus
-> > placeholder value here, yes?  If that is the case, have you considered
-> > creating an "invalid" enum with an explicit zero value to save you
-> > this additional assignment (you are already using kzalloc())?  For
-> > example:
-> >
-> >   enum ipe_op_type {
-> >     IPE_OP_INVALID =3D 0,
-> >     IPE_OP_EXEC,
-> >     ...
-> >     IPE_OP_MAX,
-> >   };
-> >
-> >   enum ipe_action_type {
-> >     IPE_ACTION_INVALID =3D 0,
-> >     IPE_ACTION_ALLOW,
-> >     ...
-> >     IPE_ACTION_MAX,
-> >   };
-> >
->
-> Yes, IPE_ACTION_MAX is kind of the INVALID value we are using here.
->
-> But I think we might be adding unnecessary complexity by using the
-> IPE_OP_INVLIAD enum here. Currently, we are using IPE_OP_MAX to
-> represent the number of operations we have, and we have allocated
-> an IPE_OP_MAX-sized array to store linked lists that link all rules
-> for each operation. If we were to add IPE_OP_INVLIAD to the enum
-> definition, then IPE_OP_MAX-1 would become the number of operations,
-> and we would need to change the index used to access the linked list
-> array.
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
 
-Gotcha.  Thanks for the explanation, that hadn't occurred to me while
-I was reviewing the code.
+---
+Changes in v2:
+-None
+Changes in v3:
+-None
+Changes in v4:
+-None
+Changes in v5:
+-None
+Changes in v6:
+-Rebase: move helper from drm_hdcp.c to drm_hdcp_helper.c
+Changes in v7:
+-Removed links to patch from commit msg (Dmitry Baryshkov)
 
-Another option would be to create a macro to help reinforce that the
-"max" value is being used as an "invalid" value, for example:
+ drivers/gpu/drm/display/drm_hdcp_helper.c   | 64 +++++++++++++++++++++
+ drivers/gpu/drm/i915/display/intel_atomic.c |  4 +-
+ drivers/gpu/drm/i915/display/intel_hdcp.c   | 47 ---------------
+ drivers/gpu/drm/i915/display/intel_hdcp.h   |  3 -
+ include/drm/display/drm_hdcp_helper.h       |  3 +
+ 5 files changed, 69 insertions(+), 52 deletions(-)
 
-#define IPE_OP_INVALID IPE_OP_MAX
+diff --git a/drivers/gpu/drm/display/drm_hdcp_helper.c b/drivers/gpu/drm/display/drm_hdcp_helper.c
+index e78999c72bd77..7ca390b3ea106 100644
+--- a/drivers/gpu/drm/display/drm_hdcp_helper.c
++++ b/drivers/gpu/drm/display/drm_hdcp_helper.c
+@@ -20,6 +20,7 @@
+ #include <drm/drm_property.h>
+ #include <drm/drm_mode_object.h>
+ #include <drm/drm_connector.h>
++#include <drm/drm_atomic.h>
+ 
+ static inline void drm_hdcp_print_ksv(const u8 *ksv)
+ {
+@@ -419,3 +420,66 @@ void drm_hdcp_update_content_protection(struct drm_connector *connector,
+ 				 dev->mode_config.content_protection_property);
+ }
+ EXPORT_SYMBOL(drm_hdcp_update_content_protection);
++
++/**
++ * drm_hdcp_atomic_check - Helper for drivers to call during connector->atomic_check
++ *
++ * @state: pointer to the atomic state being checked
++ * @connector: drm_connector on which content protection state needs an update
++ *
++ * This function can be used by display drivers to perform an atomic check on the
++ * hdcp state elements. If hdcp state has changed, this function will set
++ * mode_changed on the crtc driving the connector so it can update its hardware
++ * to match the hdcp state.
++ */
++void drm_hdcp_atomic_check(struct drm_connector *connector,
++			   struct drm_atomic_state *state)
++{
++	struct drm_connector_state *new_conn_state, *old_conn_state;
++	struct drm_crtc_state *new_crtc_state;
++	u64 old_hdcp, new_hdcp;
++
++	old_conn_state = drm_atomic_get_old_connector_state(state, connector);
++	old_hdcp = old_conn_state->content_protection;
++
++	new_conn_state = drm_atomic_get_new_connector_state(state, connector);
++	new_hdcp = new_conn_state->content_protection;
++
++	if (!new_conn_state->crtc) {
++		/*
++		 * If the connector is being disabled with CP enabled, mark it
++		 * desired so it's re-enabled when the connector is brought back
++		 */
++		if (old_hdcp == DRM_MODE_CONTENT_PROTECTION_ENABLED)
++			new_conn_state->content_protection =
++				DRM_MODE_CONTENT_PROTECTION_DESIRED;
++		return;
++	}
++
++	new_crtc_state =
++		drm_atomic_get_new_crtc_state(state, new_conn_state->crtc);
++	if (drm_atomic_crtc_needs_modeset(new_crtc_state) &&
++	    (old_hdcp == DRM_MODE_CONTENT_PROTECTION_ENABLED &&
++	     new_hdcp != DRM_MODE_CONTENT_PROTECTION_UNDESIRED))
++		new_conn_state->content_protection =
++			DRM_MODE_CONTENT_PROTECTION_DESIRED;
++
++	/*
++	 * Nothing to do if content type is unchanged and one of:
++	 *  - state didn't change
++	 *  - HDCP was activated since the last commit
++	 *  - attempting to set to desired while already enabled
++	 */
++	if (old_hdcp == new_hdcp ||
++	    (old_hdcp == DRM_MODE_CONTENT_PROTECTION_DESIRED &&
++	     new_hdcp == DRM_MODE_CONTENT_PROTECTION_ENABLED) ||
++	    (old_hdcp == DRM_MODE_CONTENT_PROTECTION_ENABLED &&
++	     new_hdcp == DRM_MODE_CONTENT_PROTECTION_DESIRED)) {
++		if (old_conn_state->hdcp_content_type ==
++		    new_conn_state->hdcp_content_type)
++			return;
++	}
++
++	new_crtc_state->mode_changed = true;
++}
++EXPORT_SYMBOL(drm_hdcp_atomic_check);
+diff --git a/drivers/gpu/drm/i915/display/intel_atomic.c b/drivers/gpu/drm/i915/display/intel_atomic.c
+index a9a3f3715279d..e9d00b6a63d39 100644
+--- a/drivers/gpu/drm/i915/display/intel_atomic.c
++++ b/drivers/gpu/drm/i915/display/intel_atomic.c
+@@ -32,6 +32,7 @@
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_fourcc.h>
++#include <drm/display/drm_hdcp_helper.h>
+ 
+ #include "i915_drv.h"
+ #include "i915_reg.h"
+@@ -39,7 +40,6 @@
+ #include "intel_cdclk.h"
+ #include "intel_display_types.h"
+ #include "intel_global_state.h"
+-#include "intel_hdcp.h"
+ #include "intel_psr.h"
+ #include "intel_fb.h"
+ #include "skl_universal_plane.h"
+@@ -124,7 +124,7 @@ int intel_digital_connector_atomic_check(struct drm_connector *conn,
+ 		to_intel_digital_connector_state(old_state);
+ 	struct drm_crtc_state *crtc_state;
+ 
+-	intel_hdcp_atomic_check(conn, old_state, new_state);
++	drm_hdcp_atomic_check(conn, state);
+ 
+ 	if (!new_state->crtc)
+ 		return 0;
+diff --git a/drivers/gpu/drm/i915/display/intel_hdcp.c b/drivers/gpu/drm/i915/display/intel_hdcp.c
+index 6406fd487ee52..396d2cef000aa 100644
+--- a/drivers/gpu/drm/i915/display/intel_hdcp.c
++++ b/drivers/gpu/drm/i915/display/intel_hdcp.c
+@@ -2524,53 +2524,6 @@ void intel_hdcp_cleanup(struct intel_connector *connector)
+ 	mutex_unlock(&hdcp->mutex);
+ }
+ 
+-void intel_hdcp_atomic_check(struct drm_connector *connector,
+-			     struct drm_connector_state *old_state,
+-			     struct drm_connector_state *new_state)
+-{
+-	u64 old_cp = old_state->content_protection;
+-	u64 new_cp = new_state->content_protection;
+-	struct drm_crtc_state *crtc_state;
+-
+-	if (!new_state->crtc) {
+-		/*
+-		 * If the connector is being disabled with CP enabled, mark it
+-		 * desired so it's re-enabled when the connector is brought back
+-		 */
+-		if (old_cp == DRM_MODE_CONTENT_PROTECTION_ENABLED)
+-			new_state->content_protection =
+-				DRM_MODE_CONTENT_PROTECTION_DESIRED;
+-		return;
+-	}
+-
+-	crtc_state = drm_atomic_get_new_crtc_state(new_state->state,
+-						   new_state->crtc);
+-	/*
+-	 * Fix the HDCP uapi content protection state in case of modeset.
+-	 * FIXME: As per HDCP content protection property uapi doc, an uevent()
+-	 * need to be sent if there is transition from ENABLED->DESIRED.
+-	 */
+-	if (drm_atomic_crtc_needs_modeset(crtc_state) &&
+-	    (old_cp == DRM_MODE_CONTENT_PROTECTION_ENABLED &&
+-	    new_cp != DRM_MODE_CONTENT_PROTECTION_UNDESIRED))
+-		new_state->content_protection =
+-			DRM_MODE_CONTENT_PROTECTION_DESIRED;
+-
+-	/*
+-	 * Nothing to do if the state didn't change, or HDCP was activated since
+-	 * the last commit. And also no change in hdcp content type.
+-	 */
+-	if (old_cp == new_cp ||
+-	    (old_cp == DRM_MODE_CONTENT_PROTECTION_DESIRED &&
+-	     new_cp == DRM_MODE_CONTENT_PROTECTION_ENABLED)) {
+-		if (old_state->hdcp_content_type ==
+-				new_state->hdcp_content_type)
+-			return;
+-	}
+-
+-	crtc_state->mode_changed = true;
+-}
+-
+ /* Handles the CP_IRQ raised from the DP HDCP sink */
+ void intel_hdcp_handle_cp_irq(struct intel_connector *connector)
+ {
+diff --git a/drivers/gpu/drm/i915/display/intel_hdcp.h b/drivers/gpu/drm/i915/display/intel_hdcp.h
+index 8f53b0c7fe5cf..7c5fd84a7b65a 100644
+--- a/drivers/gpu/drm/i915/display/intel_hdcp.h
++++ b/drivers/gpu/drm/i915/display/intel_hdcp.h
+@@ -22,9 +22,6 @@ struct intel_digital_port;
+ enum port;
+ enum transcoder;
+ 
+-void intel_hdcp_atomic_check(struct drm_connector *connector,
+-			     struct drm_connector_state *old_state,
+-			     struct drm_connector_state *new_state);
+ int intel_hdcp_init(struct intel_connector *connector,
+ 		    struct intel_digital_port *dig_port,
+ 		    const struct intel_hdcp_shim *hdcp_shim);
+diff --git a/include/drm/display/drm_hdcp_helper.h b/include/drm/display/drm_hdcp_helper.h
+index 8aaf87bf27351..dd02b2e72a502 100644
+--- a/include/drm/display/drm_hdcp_helper.h
++++ b/include/drm/display/drm_hdcp_helper.h
+@@ -11,6 +11,7 @@
+ 
+ #include <drm/display/drm_hdcp.h>
+ 
++struct drm_atomic_state;
+ struct drm_device;
+ struct drm_connector;
+ 
+@@ -18,5 +19,7 @@ int drm_hdcp_check_ksvs_revoked(struct drm_device *dev, u8 *ksvs, u32 ksv_count)
+ int drm_connector_attach_content_protection_property(struct drm_connector *connector,
+ 						     bool hdcp_content_type);
+ void drm_hdcp_update_content_protection(struct drm_connector *connector, u64 val);
++void drm_hdcp_atomic_check(struct drm_connector *connector,
++			   struct drm_atomic_state *state);
+ 
+ #endif
+-- 
+2.40.0.577.gac1e443424-goog
 
---=20
-paul-moore.com
