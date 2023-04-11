@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCB26DDD8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812D26DDD97
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjDKOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S230120AbjDKOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjDKOS0 (ORCPT
+        with ESMTP id S229907AbjDKOUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:18:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD4F61B0;
-        Tue, 11 Apr 2023 07:17:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7BB262784;
-        Tue, 11 Apr 2023 14:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DDFC4339B;
-        Tue, 11 Apr 2023 14:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681222673;
-        bh=8dE5O+LriZsvZ1XKFrv0ZyNZPGNuewxvxN3HObcdg4o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qcZGAwrxAJAQ0kketqtEKIrGf6OE1jojZp2ZfOdslytCd3mMTgSMF3iDSUtUoHCy8
-         zpIp7tGrslVYHoj9oX13y9eacpcAAVKJRAmNvXtCiaA9ZShQFxedrbXW+8U52dq8yo
-         pgjtToZk5tFh/h5NTvMyeLRd9CHtcvL4/WwtYw4AyMZG8gunOLVtuz0HCRSSrQ0/qD
-         f97MR9gYhV/ryU/lZLpgsJeoQq/ogFecDFnxZGnbdpm+RJhN2OdPqpky5/latfw5Px
-         hCrUrrCYAGZ5FwCToqcy+XTiiBV3MODZfYwROXR3jEqkY1N4pyxsQlUVpBydqJXcVy
-         oYD+aCqm7lPPw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-In-Reply-To: <20230406194158.963352-1-cristian.ciocaltea@collabora.com>
-References: <20230406194158.963352-1-cristian.ciocaltea@collabora.com>
-Subject: Re: [PATCH v3 0/8] Add support for Rockchip RK860X regulators
-Message-Id: <168122267057.52878.953322463659753958.b4-ty@kernel.org>
-Date:   Tue, 11 Apr 2023 15:17:50 +0100
+        Tue, 11 Apr 2023 10:20:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC3526A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681222741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
+        b=U6W05LNczdE8k6guJnFPSx5Ls1nMTa9oVA/dlHnUWaB6kTdApzMbkANLfwSQN50Jct6H/4
+        kXF0HFx4x58ViJX4awL6eAgT2E7WnL8hHLryCcCp8yiF38FThfLA2BGHiab5UWjf5l1i2n
+        YG6pVel75iSSQTwDQZ8oFktLc4+koIQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-371-nOlEbpIfNpeoZLGEFh5CNw-1; Tue, 11 Apr 2023 10:19:00 -0400
+X-MC-Unique: nOlEbpIfNpeoZLGEFh5CNw-1
+Received: by mail-wr1-f71.google.com with SMTP id h5-20020adfaa85000000b002dc1cdac53fso1585362wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:18:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681222739; x=1683814739;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
+        b=S7cojTYcmWwp9MAbB+vjfpqNIZx0c+s90G68q3IaSnhr28GOFtsBfTfJhwnKt/q30h
+         NLWM40YQngE+5hL4rtJj/9oxQ2Ouc8DAJid3DhmeA8Ysh2dUhotGh6vh8t7zD3y6rh5m
+         wV7uCBneMY00Vyi2doTgxoQMuShixDb2Qr+7S+JYdma+KKt4b/+cXjKfAveZNPLhEGRr
+         mAQUxuHi6+wSLwvK0Ofqthgldx0fW8q41CwNrDnnVHxuSP0JvL5fvKtVZff/F36ogy1H
+         wgj+1pcFYO2H+9xGgbvuXhp1OJnxCz+9XRKM8WnEeZp4u8E5GxTNrRdJVjEz/Bd9ABaf
+         5i0Q==
+X-Gm-Message-State: AAQBX9cIidaiw8MBx52gfxTydujuAcK3wopZTCW7sEGe+IDzApZJ8zGu
+        hqrkC5EiAb23xGHXkaaSnC/P7W25R1FkxCwIen/qgAB32xINFPdeFWKPvjlUPdO1+jm6mteP3T8
+        OYYuW8om1R+j8jBqresbqiPFVOuWvLcoDUWZNFiTU3XP9qjvCaz6SY6SbTyxtcml86Xep4Hhs8u
+        ctDQon
+X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621104wrq.34.1681222738984;
+        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bY0p0lov10ncoRRjudSkgQbnGcBkbDWJtshXja6yULgw6jQWdjzluLhiX0b55T0sA76SToJg==
+X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621084wrq.34.1681222738612;
+        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
+        by smtp.gmail.com with ESMTPSA id n4-20020a5d51c4000000b002efb55de21dsm10542399wrv.103.2023.04.11.07.18.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
+Message-ID: <81a2070a-f7aa-2185-8211-26b57815e968@redhat.com>
+Date:   Tue, 11 Apr 2023 16:18:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm/huge_memory: conditionally call maybe_mkwrite() and
+ drop pte_wrprotect() in __split_huge_pmd_locked()
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org
+References: <20230411141529.428991-1-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230411141529.428991-1-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 22:41:50 +0300, Cristian Ciocaltea wrote:
-> This patch series introduces support for the Rockchip RK860X regulators,
-> while also providing a few fixes and improvements to the existing fan53555
-> driver.
+On 11.04.23 16:15, David Hildenbrand wrote:
+> No need to call maybe_mkwrite() to then wrprotect if the source PMD was not
+> writable.
 > 
-> RK8600/RK8601 are quite similar to the FAN53555 regulators.
+> It's worth nothing that this now allows for PTEs to be writable even if
+> the source PMD was not writable: if vma->vm_page_prot includes write
+> permissions.
 > 
-> RK8602/RK8603 are a bit different, having a wider output voltage
-> selection range, from 0.5 V to 1.5 V in 6.25 mV steps. They are used
-> in the Rock 5B board to power the ARM Cortex-A76 cores and the NPU.
+> As documented in commit 931298e103c2 ("mm/userfaultfd: rely on
+> vma->vm_page_prot in uffd_wp_range()"), any mechanism that intends to
+> have pages wrprotected (COW, writenotify, mprotect, uffd-wp, softdirty,
+> ...) has to properly adjust vma->vm_page_prot upfront, to not include
+> write permissions. If vma->vm_page_prot includes write permissions, the
+> PTE/PMD can be writable as default.
 > 
-> [...]
+> This now mimics the handling in mm/migrate.c:remove_migration_pte() and in
+> mm/huge_memory.c:remove_migration_pmd(), which has been in place for a
+> long time (except that 96a9c287e25d ("mm/migrate: fix wrongly apply write
+> bit after mkdirty on sparc64") temporarily changed it).
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
 
-Applied to
+Ignore this one, it's a duplicate of 6/6 and I forgot to delete that 
+patch before triggering git send-email ...
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/8] regulator: dt-bindings: fcs,fan53555: Add support for RK860X
-      (no commit info)
-[2/8] regulator: fan53555: Explicitly include bits header
-      commit: 4fb9a5060f73627303bc531ceaab1b19d0a24aef
-[3/8] regulator: fan53555: Fix wrong TCS_SLEW_MASK
-      commit: c5d5b55b3c1a314137a251efc1001dfd435c6242
-[4/8] regulator: fan53555: Remove unused *_SLEW_SHIFT definitions
-      (no commit info)
-[5/8] regulator: fan53555: Make use of the bit macros
-      (no commit info)
-[6/8] regulator: fan53555: Improve vsel_mask computation
-      (no commit info)
-[7/8] regulator: fan53555: Use dev_err_probe
-      (no commit info)
-[8/8] regulator: fan53555: Add support for RK860X
-      (no commit info)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
+-- 
 Thanks,
-Mark
+
+David / dhildenb
 
