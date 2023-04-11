@@ -2,109 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E476DDB97
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4246DDBB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjDKNET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S230344AbjDKNF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjDKNEM (ORCPT
+        with ESMTP id S230425AbjDKNFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:04:12 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F625273;
-        Tue, 11 Apr 2023 06:03:50 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso6316050pjt.4;
-        Tue, 11 Apr 2023 06:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681218229;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DGPsZgWveJxj8Dn+JY/R3MDE1ywwia78QYoiL5Lim/Y=;
-        b=dnHqZC/0oeXGXGbNKCR7IbA/S6vUmwRZaRKhzBcG1vfikiAjudQRVgFqtxioPYu1LL
-         WGeLVQQPYB7XI410D0VdxKEUvJcokUk6KuphqI7LS/AeTPcgFAapd1wh2Q1njd+AYev0
-         CY6Bk+csVKlHGKjPDjUD/5C8Nbj5Viu47keO9ZP5lJs68c1QBbVdGglhHGZF0YkGm8tr
-         T2+JSgOUzM/8lo+He0SfgLmKdd9lgqMObh0fIyEhuI8Sk2F1DPB7vzt9Svf4OHzPvC+X
-         gAhWNgL1ibAumkfqrHR1nEKD7/AgiZgJpurznrCVQ5ctKxIXUj1hHr5FRhWraGFS6EHy
-         frkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681218229;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DGPsZgWveJxj8Dn+JY/R3MDE1ywwia78QYoiL5Lim/Y=;
-        b=QjwVZmzti056NgNZNYtZjCF1qSw0ZP1FTeSdEIVOVSGTOkW8davqjXMMruozJoi9R4
-         buf3ylZIhQ70ii5/OqAUtj+Klo9tYzS0n68q6jthGNrBac2LbGzxxhk7WA4oOK1TdeqS
-         a8SknJ1kK6ZmDVdfLqSHJeTKm+HxNat99aQhY+VnE3Ugd+/RapGX5szS34n+CDpBom+N
-         mOpc8fSP55uztGuv9WxExi+VGxhZ5L9yxq4argUu9z4bTvP+H+lR7pIsK0iBeZSDV0xL
-         /0/5fxlp4paAHzdj28OMLSETFCVslsdMJWNxxXj90w6RJLcSenHxqpqwkTX2GLW1PdcN
-         75yQ==
-X-Gm-Message-State: AAQBX9dhHZS10ggi57rTjT9HrFMC0qdyrV4UWXEVp2i9gmgPk2ZFQAk+
-        cu4bjbY7dfkJWh/ZvSzo7C8=
-X-Google-Smtp-Source: AKy350aKCsAD2r5D8fmvW4B6NhiTUAp74QYcGu/SmHvcLWzuncyduCGC2UAXTfkU4oNJbZ1KI8Q6UQ==
-X-Received: by 2002:a17:902:d40d:b0:1a6:4b2f:9a2f with SMTP id b13-20020a170902d40d00b001a64b2f9a2fmr4470258ple.59.1681218229492;
-        Tue, 11 Apr 2023 06:03:49 -0700 (PDT)
-Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170902724900b001a060007fcbsm9598506pll.213.2023.04.11.06.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:03:49 -0700 (PDT)
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Remove redundant check for MSR_IA32_DS_AREA set handler
-Date:   Tue, 11 Apr 2023 21:03:38 +0800
-Message-Id: <20230411130338.8592-1-cloudliang@tencent.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 11 Apr 2023 09:05:37 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7327525B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681218316; x=1712754316;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m9JsYrlzg84sZs3bK8BwTp7dMHboxBPXjAv59sYAChE=;
+  b=YGD81YeBCLOA5GTjS8W+MZ0tYkDy5JHZxna3sjPIuUUkcPdMbp9+2/8I
+   62GVnse3a8BfoYwxTSoJ3m/MFTq6XTql43Zq3fPk4pa0ZYZ8Yi/2ZC8Gp
+   2vW9GlviZco2vKtbE9/SaUth6qi8aW6GOAWHHyGF8hWw7s3REKauGkeVJ
+   P50lXK9AxtCbTxBzXjSX4U5TpfiL/LQbr09Kt9J6MhgC4PVFVI3kegyFU
+   p+KnDXLHF4oiNdrNYTUKSVv3dJnL1Mh33q4/hoSMd9ZSQ6ySUr3Kr6IiA
+   Pm2D8CODI82cVouHp7s6VpOFgICDZo8oBJOWm0Oupm3OVTZVuaNFA5BFO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="371459614"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="371459614"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:05:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="1018362174"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="1018362174"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Apr 2023 06:05:11 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmDgM-000WJj-13;
+        Tue, 11 Apr 2023 13:05:10 +0000
+Date:   Tue, 11 Apr 2023 21:04:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.04.06a] BUILD SUCCESS
+ 9cabf358d0426d07cc6216fc2df7aafe4e5c27be
+Message-ID: <64355acf./pHX9psIhBLHpbIk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinrong Liang <cloudliang@tencent.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.04.06a
+branch HEAD: 9cabf358d0426d07cc6216fc2df7aafe4e5c27be  rcu: Mark rcu_cpu_kthread() accesses to ->rcu_cpu_has_work
 
-After commit 2de154f541fc ("KVM: x86/pmu: Provide "error" semantics
-for unsupported-but-known PMU MSRs"), the guest_cpuid_has(DS) check
-is not necessary any more since if the guest supports X86_FEATURE_DS,
-it never returns 1. And if the guest does not support this feature,
-the set_msr handler will get false from kvm_pmu_is_valid_msr() before
-reaching this point. Therefore, the check will not be true in all cases
-and can be safely removed, which also simplifies the code and improves
-its readability.
+elapsed time: 722m
 
-Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
----
- arch/x86/kvm/vmx/pmu_intel.c | 2 --
- 1 file changed, 2 deletions(-)
+configs tested: 89
+configs skipped: 3
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index e8a3be0b9df9..b0d70a8b7613 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -443,8 +443,6 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		}
- 		break;
- 	case MSR_IA32_DS_AREA:
--		if (msr_info->host_initiated && data && !guest_cpuid_has(vcpu, X86_FEATURE_DS))
--			return 1;
- 		if (is_noncanonical_address(data, vcpu))
- 			return 1;
- 		pmu->ds_area = data;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r031-20230410   gcc  
+alpha                randconfig-r034-20230409   gcc  
+alpha                randconfig-r035-20230410   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230409   gcc  
+arc                  randconfig-r043-20230410   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r032-20230410   gcc  
+arm                  randconfig-r033-20230410   gcc  
+arm                  randconfig-r046-20230409   clang
+arm                  randconfig-r046-20230410   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r031-20230409   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r034-20230410   gcc  
+hexagon              randconfig-r041-20230409   clang
+hexagon              randconfig-r041-20230410   clang
+hexagon              randconfig-r045-20230409   clang
+hexagon              randconfig-r045-20230410   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a011-20230410   gcc  
+i386                 randconfig-a012-20230410   gcc  
+i386                 randconfig-a013-20230410   gcc  
+i386                 randconfig-a014-20230410   gcc  
+i386                 randconfig-a015-20230410   gcc  
+i386                 randconfig-a016-20230410   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r035-20230409   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r032-20230409   gcc  
+microblaze           randconfig-r035-20230409   gcc  
+microblaze           randconfig-r036-20230409   gcc  
+microblaze           randconfig-r036-20230410   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r031-20230410   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r036-20230410   clang
+riscv                randconfig-r042-20230409   gcc  
+riscv                randconfig-r042-20230410   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230409   gcc  
+s390                 randconfig-r044-20230410   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r032-20230409   gcc  
+sparc                randconfig-r033-20230409   gcc  
+sparc                randconfig-r033-20230410   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64               randconfig-a011-20230410   gcc  
+x86_64               randconfig-a012-20230410   gcc  
+x86_64               randconfig-a013-20230410   gcc  
+x86_64               randconfig-a014-20230410   gcc  
+x86_64               randconfig-a015-20230410   gcc  
+x86_64               randconfig-a016-20230410   gcc  
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r034-20230410   gcc  
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
