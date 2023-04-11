@@ -2,297 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472136DD938
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC106DD93B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjDKLTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S229676AbjDKLUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjDKLTt (ORCPT
+        with ESMTP id S229703AbjDKLUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:19:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360A81A1;
-        Tue, 11 Apr 2023 04:19:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4ACC6247D;
-        Tue, 11 Apr 2023 11:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4031C433EF;
-        Tue, 11 Apr 2023 11:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681211987;
-        bh=E1zhjZsDqXu7ZcjyxWAVSvVSVDz46CeGhHGsz7thqLI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=bUkXZTTSyVNyiCNC1PCBi9SiGnfJCT931/SrdtyhqA82BOfIoXqD40ED59EPSzPq4
-         +o55Z+GLnRh72CfIsszYAyXTcl18mB3cZjNRmX0Nq2jPEnCRfaRvYMJuRVHwiPKMHX
-         M6o+y7h2uwXzim+gFUTQomcyH5G1kIcTEqkT8hZSxpbEYxsBixSd/YBwemhCKuUnel
-         AvflII/9dpAlfEHsskXaRMgAk2xoe3XUMAISSUXeHGMXmlJItAp7IpbmKjlZHw4uSg
-         LwuNdtxPPlV+yNDL+xZfm8iP39udLWr8zVCUSxwdGsTlBxjflUdVE5AL/Hu7phRDSH
-         G2idG+dGux87Q==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 11 Apr 2023 12:19:30 +0100
-Subject: [PATCH RESEND] selftests/ftrace: Improve integration with
- kselftest runner
+        Tue, 11 Apr 2023 07:20:01 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A0235B5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w11so7497255plp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681211999;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wBQKs0yhrvEAfRkMdCXLMJEOrscAPx9qxfkvCvvtvfA=;
+        b=De8rEAx354hB6hCSAFG7oboildxqBheGwOenVHFkWMblMsEkD/+0eXo3/mG3rs50An
+         kWw6C+C1M0ZQYjSdptI7/XL7b7De17BuGhpwihSva0I7dBeuWkopYTYE5YknBky9lh6V
+         ZYPYPdkcmyCoZ2cpaG00j0m4uJVD7j/GBY62PsI0WbCEOLfOGRAd5wlMGbodFnIsUBB6
+         LZgDClnNxNxLNRQD5aZTK9Y7wFJte8LGWQ3fFk5wg0M4DXT+7IBWF7Vz0HQKcQ1qaMjc
+         ghgexkw/J/rpGBBEFFmi3kOC02bR2+0PlHaur/1EpYHt5InoQ74/wSO1TDtSZarYDx40
+         qrtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681211999;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wBQKs0yhrvEAfRkMdCXLMJEOrscAPx9qxfkvCvvtvfA=;
+        b=AQFIh2MgEoClBbUHU9jy1EOwJD3QyzUDnPmnihRN0K+ElwfVb8jukrAUIYOkdDWMyH
+         PTbAaOQfPEDA+1VO7nJ42yU1pIoxtkUS2YfXG+8G4z4g8VSJ6jnPBlun8dAEx1VV6jtE
+         FserQSO5VUp1bEzmbMw4TU4CGiaZewlwZybiYp5KFPEDW+Mk643iVzg/4j3IIWk0kB8W
+         A4RxxYAwyuahT6VTx3em1vS+Cy0IhBYOcALKNbGZ33Nl23izb7kI5HkacHHKfTZFbJA8
+         6wqe6ODMt5HL9aX5B0/Iuc7NWDv46UeqFpyxRbWALGuyl3uRfNNo85zeuSg7o7iZ7ofh
+         dHkw==
+X-Gm-Message-State: AAQBX9f0/LRkWRyZd4GvxxX11P8gj/ZZU0M+X8zx6eEQmdi5plRzgQTC
+        N9sgtwqKCYDWP4DZlzlDZAKs
+X-Google-Smtp-Source: AKy350ZLs5F0geBGQzE6rxmOTmSs4MmcKy9zI+Tw9XY3R2ci0J/2ubUrzPs0XDNuJTJil32p2+2knQ==
+X-Received: by 2002:a17:902:cec1:b0:19e:ad18:da5c with SMTP id d1-20020a170902cec100b0019ead18da5cmr3463701plg.37.1681211999280;
+        Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
+Received: from thinkpad ([117.216.120.128])
+        by smtp.gmail.com with ESMTPSA id jw23-20020a170903279700b0019e60c645b1sm3539765plb.305.2023.04.11.04.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 04:19:58 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:49:47 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>, g@thinkpad
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RESEND v3 07/10] PCI: visconti: Convert to using generic
+ resources getter
+Message-ID: <20230411111947.GI5333@thinkpad>
+References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+ <20230411033928.30397-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7335; i=broonie@kernel.org;
- h=from:subject:message-id; bh=E1zhjZsDqXu7ZcjyxWAVSvVSVDz46CeGhHGsz7thqLI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkNUJPqyyc3WK2jryAAiP954rt0XvIjf+f1HvjBU5a
- YYZQWm2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZDVCTwAKCRAk1otyXVSH0KClB/
- sHzPndXSQjVbk0ZMWg3jvt3DFdQEvKawebKuxOfqFaFXPaqhMJ4aqcHnhnnexkLtQsv47Px4Q5VpMa
- +AFrYxzT/mw9tRqdq0s2DUNmK392Co+YqV3yLm8CVausUMXQiBIklmxQse2HR0/NkRCTnBJRNLQ5HH
- FfmMn57K2i7Me/qIrl4K1QdQKPGrnsp8RRpSnxz0qLMllwXYaq7bXzvX8xpWpmJq2xJdGBSRgAk5Uy
- yfbop7K3lsn8bnPcvoK0CjRMgq+CFavMHsSSuThhJRwlVJ9VHkC3tgy6ZxV4f/jZ8GtP/1PneBOwSQ
- xkx6CUefg+i8iGO7Miryadp79Hx328
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230411033928.30397-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+On Tue, Apr 11, 2023 at 06:39:25AM +0300, Serge Semin wrote:
+> The generic resources request infrastructure has been recently added to
+> the DW PCIe core driver. Since the DT-bindings of the Toshibo Visconti
+> PCIe Host controller is fully compatible with the generic names set let's
+> convert the driver to using that infrastructure. It won't take much effort
+> since the low-level device driver implies the resources request only with
+> no additional manipulations involving them. So just drop the locally
+> defined clocks request procedures, activate the generic resources request
+> capability and make sure the mandatory resources have been requested by
+> the DW PCIe core driver.
+> 
+> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  drivers/pci/controller/dwc/pcie-visconti.c | 37 ++++++++++------------
+>  1 file changed, 17 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-visconti.c b/drivers/pci/controller/dwc/pcie-visconti.c
+> index 71026fefa366..ae1517b52c58 100644
+> --- a/drivers/pci/controller/dwc/pcie-visconti.c
+> +++ b/drivers/pci/controller/dwc/pcie-visconti.c
+> @@ -29,9 +29,6 @@ struct visconti_pcie {
+>  	void __iomem *ulreg_base;
+>  	void __iomem *smu_base;
+>  	void __iomem *mpu_base;
+> -	struct clk *refclk;
+> -	struct clk *coreclk;
+> -	struct clk *auxclk;
+>  };
+>  
+>  #define PCIE_UL_REG_S_PCIE_MODE		0x00F4
+> @@ -198,6 +195,21 @@ static int visconti_pcie_host_init(struct dw_pcie_rp *pp)
+>  	int err;
+>  	u32 val;
+>  
+> +	if (!pcie->pci.core_clks[DW_PCIE_REF_CLK].clk) {
+> +		dev_err(pci->dev, "Missing ref clock source\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	if (!pcie->pci.core_clks[DW_PCIE_CORE_CLK].clk) {
+> +		dev_err(pci->dev, "Missing core clock source\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	if (!pcie->pci.core_clks[DW_PCIE_AUX_CLK].clk) {
+> +		dev_err(pci->dev, "Missing aux clock source\n");
+> +		return -ENOENT;
+> +	}
+> +
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+Looking at the driver, I could see no call to clk_prepare_enable() for these
+clocks. So from kernel's PoV these are not used at all. So either these clocks
+are not required (unlikely) or enabled by the bootloader so kernel just uses it.
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
+In that case, the driver should handle these clocks properly.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/ftrace/Makefile        |  3 +-
- tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
- tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
- 3 files changed, 70 insertions(+), 4 deletions(-)
+@Nobuhiro-San, can you please comment?
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11..a1e955d2de4c 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index c3311c8c4089..539c8d6d5d71 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--KTAP  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 000000000000..b3284679ef3a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
+- Mani
 
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+>  	visconti_smu_writel(pcie,
+>  			    PISMU_CKON_PCIE_AUX_CLK | PISMU_CKON_PCIE_MSTR_ACLK,
+>  			    PISMU_CKON_PCIE);
+> @@ -242,8 +254,6 @@ static const struct dw_pcie_host_ops visconti_pcie_host_ops = {
+>  static int visconti_get_resources(struct platform_device *pdev,
+>  				  struct visconti_pcie *pcie)
+>  {
+> -	struct device *dev = &pdev->dev;
+> -
+>  	pcie->ulreg_base = devm_platform_ioremap_resource_byname(pdev, "ulreg");
+>  	if (IS_ERR(pcie->ulreg_base))
+>  		return PTR_ERR(pcie->ulreg_base);
+> @@ -256,21 +266,6 @@ static int visconti_get_resources(struct platform_device *pdev,
+>  	if (IS_ERR(pcie->mpu_base))
+>  		return PTR_ERR(pcie->mpu_base);
+>  
+> -	pcie->refclk = devm_clk_get(dev, "ref");
+> -	if (IS_ERR(pcie->refclk))
+> -		return dev_err_probe(dev, PTR_ERR(pcie->refclk),
+> -				     "Failed to get ref clock\n");
+> -
+> -	pcie->coreclk = devm_clk_get(dev, "core");
+> -	if (IS_ERR(pcie->coreclk))
+> -		return dev_err_probe(dev, PTR_ERR(pcie->coreclk),
+> -				     "Failed to get core clock\n");
+> -
+> -	pcie->auxclk = devm_clk_get(dev, "aux");
+> -	if (IS_ERR(pcie->auxclk))
+> -		return dev_err_probe(dev, PTR_ERR(pcie->auxclk),
+> -				     "Failed to get aux clock\n");
+> -
+>  	return 0;
+>  }
+>  
+> @@ -304,6 +299,8 @@ static int visconti_pcie_probe(struct platform_device *pdev)
+>  	pci->dev = dev;
+>  	pci->ops = &dw_pcie_ops;
+>  
+> +	dw_pcie_cap_set(pci, REQ_RES);
+> +
+>  	ret = visconti_get_resources(pdev, pcie);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.40.0
+> 
+> 
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
-
+மணிவண்ணன் சதாசிவம்
