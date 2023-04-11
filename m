@@ -2,120 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3756B6DDDC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BA16DDDD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjDKO0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S230395AbjDKO1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjDKO0V (ORCPT
+        with ESMTP id S229992AbjDKO1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:26:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F69D55BD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:26:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 11 Apr 2023 10:27:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3E76185
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:26:35 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F24A561C03
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:26:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C303C4339B;
-        Tue, 11 Apr 2023 14:26:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681223166;
-        bh=YuM2O01SoB7qsK2kdvinWtyQVTT9oJLIx/qQD2GkO1M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EIwfJvtoPlvUVU0TLboD/60OZsbhgjSA5OeUZdIWdJ7W64LvJvsOE6rDk/ZDmG24y
-         YaR3j8h+CS/5VK4UhNZhXx9TXWS1MC14Auh5DdVb6LYSHNKiwxVjLNkjPNfgbdwYk8
-         6eo5/1zoPhTf6R8fpXNEzI4PaP0HCG7iVsT489khzUZ7U6oafTo73Ns3XSECpqngtu
-         wFlyEO5q7WPGT01Qk19UNmVgoPoj80fvTDQKuCtVE4YHciql/O3TsHSJcHNy8sMF1Q
-         XmhafdxeXQlzX+u5lRa9nXMU1yBeySYbFc/2uojBkUkZS387jzDoSI1WDBdveNDh8j
-         /RWz3kolNlcJw==
-Date:   Tue, 11 Apr 2023 15:26:01 +0100
-From:   Will Deacon <will@kernel.org>
-To:     joro@8bytes.org
-Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        kernel-team@android.com
-Subject: [GIT PULL] iommu/arm-smmu: Updates for 6.4
-Message-ID: <20230411142600.GA22971@willie-the-truck>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 779361EC0683;
+        Tue, 11 Apr 2023 16:26:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681223193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vD783CY818jNVcfjeYDBZSYOGkg35bmnXsk+jWP4W10=;
+        b=Tc30nmS4cxXKukqUyCHBhBowDaKbd4JmCZob36VJ198pte45nW67eeexxij8qIFxPHNieR
+        BjJY7IcGCh+Sk+ZjL6XDUlJL8SxHqkEGR5B4dJ6kZfeSFbhGpJ2Vf73n8i9AGetVCpi9db
+        PY5EtvKJcUy4Bmuf/cf4FF2VF1KA04U=
+Date:   Tue, 11 Apr 2023 16:26:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
+ software defined MTRRs
+Message-ID: <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-5-jgross@suse.com>
+ <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
+ <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg,
+On Tue, Apr 11, 2023 at 04:04:00PM +0200, Juergen Gross wrote:
+> Yeah, the condition needs to be:
+> 
+> 	if (!(hv_is_isolation_supported() ||
+> 	      cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) &&
+	      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Please pull these Arm SMMU updates for 6.4. It's mostly the usual minor
-DT binding updates, but there are also a couple of functional changes
-relating to quirk detection and queue overflow.
+Why is that needed at all?
 
-Summary in the tag.
+-- 
+Regards/Gruss,
+    Boris.
 
-Cheers,
-
-Will
-
---->8
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
-
-for you to fetch changes up to ca08b2a65b5cf2814e4db40bfa5a240600e88cee:
-
-  Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates (2023-04-11 14:05:06 +0100)
-
-----------------------------------------------------------------
-Arm SMMU updates for 6.4
-
-- Device-tree binding updates:
-  * Allow Qualcomm GPU SMMUs to accept relevant clock properties
-  * Document Qualcomm 8550 SoC as implementing an MMU-500
-  * Favour new "qcom,smmu-500" binding for Adreno SMMUs
-
-- Fix S2CR quirk detection on non-architectural Qualcomm SMMU
-  implementations
-
-- Acknowledge SMMUv3 PRI queue overflow when consuming events
-
-- Document (in a comment) why ATS is disabled for bypass streams
-
-----------------------------------------------------------------
-Abel Vesa (1):
-      dt-bindings: arm-smmu: Add compatible for SM8550 SoC
-
-Jean-Philippe Brucker (1):
-      iommu/arm-smmu-v3: Explain why ATS stays disabled with bypass
-
-Konrad Dybcio (3):
-      dt-bindings: arm-smmu: Use qcom,smmu compatible for MMU500 adreno SMMUs
-      dt-bindings: arm-smmu: Add SM8350 Adreno SMMU
-      dt-bindings: arm-smmu: Document SM61[12]5 GPU SMMU
-
-Manivannan Sadhasivam (1):
-      iommu/arm-smmu-qcom: Limit the SMR groups to 128
-
-Tomas Krcka (1):
-      iommu/arm-smmu-v3: Acknowledge pri/event queue overflow if any
-
-Will Deacon (1):
-      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
-
- .../devicetree/bindings/iommu/arm,smmu.yaml        | 45 ++++++++++++++++++++--
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        | 26 ++++++++++---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         | 16 +++++++-
- 3 files changed, 77 insertions(+), 10 deletions(-)
+https://people.kernel.org/tglx/notes-about-netiquette
