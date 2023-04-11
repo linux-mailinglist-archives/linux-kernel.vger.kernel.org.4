@@ -2,175 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6986DD4DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7668C6DD4DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjDKIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S230081AbjDKINa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjDKINY (ORCPT
+        with ESMTP id S229881AbjDKINY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 04:13:24 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628F63C21
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7083C2A
         for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:13:23 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54ee17a659bso145443067b3.4
+Received: by mail-io1-f72.google.com with SMTP id bk27-20020a056602401b00b0074c9dc19e16so5018420iob.15
         for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681200802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XO5OxXBtUApZnETMKg6BUEkuw3XDkJBM9olbC/KpGls=;
-        b=iImShgytOWqwmjI1QZaM3g+IV1VXgt3UqZEXhNj7v1tH5Q5MxFJ3c5RCS/50eI1sF4
-         ItmorCxYYdkYy0RMEOaHJEm2zcB/X822TjQNvEhy0MoLKS5IFZBpbO9mFdHDKH/B6S1w
-         lnhsGgIC+JKq0hBSImQxHH0LO4b+8I0Wq6meXpb7tws31hL33Eb7R8NQDs2OpqUlwoTN
-         tyWudDJ2SnR6uPRV9sbFyJd76mH3R+SLOYUL18jcZxTU2eQOyAKIKTPtIVy8Tl/Ake//
-         yUgSAfqWD3mP61ce99sC/Y6tJbKujno5rj8U44FG9bbnVT5sh1K8cQIFGJ5RZRbT/XP+
-         r2mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681200802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XO5OxXBtUApZnETMKg6BUEkuw3XDkJBM9olbC/KpGls=;
-        b=kqWrWnh43GZde/RjUFQVsyLoBk7zX7IGveYoTmF0npZd9ymgHh40Q8NiFxyQc+mBcT
-         EgJmE+RcKVo1RY3Pmo574TNmuKhqrtNvlgheq0ogqwdzmshIJSdDFVjyjoYLRB3PCNPN
-         E2qQNl6h+ewOOFP7zdIbD4qxYnWG1RTqNO5THlY5kuFyHS9mnXKwhAWeVfYkAFroQveF
-         UXFYAqb0CJGs8A0dKPFcpPlZcFDGEhNLkpUhvZPeDpG00zR/Y4l+4towg7nFxI5AGtLf
-         Ord7bT/jxQonS6EBI9eCgwN7T5Lsoq9wi486vWk0e6GQpFmjp0LmWtYZbXoRu3VeTIKM
-         hBmg==
-X-Gm-Message-State: AAQBX9d8DTb31DVoArHO1wSUft0PzQkTz4J1Hgtwal7jgWLLXujKRgNQ
-        aPcqql7WJS1JJj5WD2urMKN2MqW5s+kWq4jIaObAFw==
-X-Google-Smtp-Source: AKy350ZVjBTLigEso16gdVh01k35GsUyP2CHpwzOQC/h4+1X3MScbNdDNWvhqdUXLKYQ69UuOWc0iUdWHhwWWlgFd4g=
-X-Received: by 2002:a81:bd10:0:b0:546:5b84:b558 with SMTP id
- b16-20020a81bd10000000b005465b84b558mr1209113ywi.10.1681200802307; Tue, 11
- Apr 2023 01:13:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681200803; x=1683792803;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=djjgIgk1VBqK4RbpYBgfm+h8QwgOT9VRNFK+aNQOl2Y=;
+        b=JAYfU9q7Ru6S+8nhbxRllYGnk6NMEvX0ir51Xx/G53k7imxrRDH/1l7BcgvZlkmN9o
+         PyJJ+UE2DsMHV38bm/L0Kchu4YcirflPxFkJf9M1hltL70rJkVcfQxPjfP8OVqkpXO6g
+         MFQG457nPKYAAbkshDRylhT8rOqCSw3XxgMeHBcNj4phPlPFrChGeKXoZd/X3R8RjMHA
+         /DXpu2VVlMtQnNJH1NsBJ0V/WW+GvmE6DL9lZ2Oc7kF7fmuKADMUXApYXPYCKgXqLJy/
+         CtuovwbLJkO6SkLxy6eQxCJVPJUpNQFnTDzZ8PXx2vSJcomyAmjypkXQBKvQB1myBSox
+         zLgw==
+X-Gm-Message-State: AAQBX9e1HfAh7WB6qRmHurXw4laG1P5FgP9l9r3UxQaNBQiKbAlpT1Y3
+        eDbwBLh1v5SLJLORckwwhoDXUJiVDV+fpF400UQxoiRcbZvf
+X-Google-Smtp-Source: AKy350Z7gtlhP31HcuwhBvlRatMCqL3+8ybejEWbkaZEGdhua9vgHG48v6hnsbZbEqnnqS4G024NkH7T7BA/QMsE1YZqkoCBLMFI
 MIME-Version: 1.0
-References: <20230410022152.4049060-1-luwei32@huawei.com> <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
- <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch> <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
-In-Reply-To: <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 11 Apr 2023 10:13:11 +0200
-Message-ID: <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
-Subject: Re: [PATCH net] net: Add check for csum_start in skb_partial_csum_set()
-To:     "luwei (O)" <luwei32@huawei.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com, brouer@redhat.com,
-        keescook@chromium.org, jbenc@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:152f:b0:326:21b:6e66 with SMTP id
+ i15-20020a056e02152f00b00326021b6e66mr1357815ilu.1.1681200803193; Tue, 11 Apr
+ 2023 01:13:23 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 01:13:23 -0700
+In-Reply-To: <9be0b507-4c02-86cb-20d8-052e9c7b97be@linux.alibaba.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000abaf4f05f90b1083@google.com>
+Subject: Re: [syzbot] [erofs?] WARNING in rmqueue
+From:   syzbot <syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com>
+To:     hsiangkao@linux.alibaba.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 4:33=E2=80=AFAM luwei (O) <luwei32@huawei.com> wrot=
-e:
->
->
-> =E5=9C=A8 2023/4/11 1:30 AM, Willem de Bruijn =E5=86=99=E9=81=93:
->
-> Eric Dumazet wrote:
->
-> On Mon, Apr 10, 2023 at 4:22=E2=80=AFAM Lu Wei <luwei32@huawei.com> wrote=
-:
->
-> If an AF_PACKET socket is used to send packets through a L3 mode ipvlan
-> and a vnet header is set via setsockopt() with the option name of
-> PACKET_VNET_HDR, the value of offset will be nagetive in function
-> skb_checksum_help() and trigger the following warning:
->
-> WARNING: CPU: 3 PID: 2023 at net/core/dev.c:3262
-> skb_checksum_help+0x2dc/0x390
-> ......
-> Call Trace:
->  <TASK>
->  ip_do_fragment+0x63d/0xd00
->  ip_fragment.constprop.0+0xd2/0x150
->  __ip_finish_output+0x154/0x1e0
->  ip_finish_output+0x36/0x1b0
->  ip_output+0x134/0x240
->  ip_local_out+0xba/0xe0
->  ipvlan_process_v4_outbound+0x26d/0x2b0
->  ipvlan_xmit_mode_l3+0x44b/0x480
->  ipvlan_queue_xmit+0xd6/0x1d0
->  ipvlan_start_xmit+0x32/0xa0
->  dev_hard_start_xmit+0xdf/0x3f0
->  packet_snd+0xa7d/0x1130
->  packet_sendmsg+0x7b/0xa0
->  sock_sendmsg+0x14f/0x160
->  __sys_sendto+0x209/0x2e0
->  __x64_sys_sendto+0x7d/0x90
->
-> The root cause is:
-> 1. skb->csum_start is set in packet_snd() according vnet_hdr:
->    skb->csum_start =3D skb_headroom(skb) + (u32)start;
->
->    'start' is the offset from skb->data, and mac header has been
->    set at this moment.
->
-> 2. when this skb arrives ipvlan_process_outbound(), the mac header
->    is unset and skb_pull is called to expand the skb headroom.
->
-> 3. In function skb_checksum_help(), the variable offset is calculated
->    as:
->       offset =3D skb->csum_start - skb_headroom(skb);
->
->    since skb headroom is expanded in step2, offset is nagetive, and it
->    is converted to an unsigned integer when compared with skb_headlen
->    and trigger the warning.
->
-> Not sure why it is negative ? This seems like the real problem...
->
-> csum_start is relative to skb->head, regardless of pull operations.
->
-> whatever set csum_start to a too small value should be tracked and fixed.
->
-> Right. The only way I could see it go negative is if something does
-> the equivalent of pskb_expand_head with positive nhead, and without
-> calling skb_headers_offset_update.
->
-> Perhaps the cause can be found by instrumenting all the above
-> functions in the trace to report skb_headroom and csum_start.
-> And also virtio_net_hdr_to_skb.
-> .
->
-> Hi, Eric  and Willem,  sorry for not describing this issue clearly enough=
-. Here is the detailed data path:
->
-> 1.  Users call sendmsg() to send message with a AF_PACKET domain and SOCK=
-_RAW type socket. Since vnet_hdr
->
-> is set,  csum_start is calculated as:
->
->                       skb->csum_start =3D skb_headroom(skb) + (u32)start;=
-     // see the following code.
->
-> the varible "start" it passed from user data, in my case it is 5 and skb_=
-headroom is 2, so skb->csum_start is 7.
->
+Hello,
 
-I think you are rephrasing, but you did not address my feedback.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Namely, "csum_start < skb->network_header" does not look sensical to me.
+Reported-and-tested-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
 
-csum_start should be related to the transport header, not network header.
+Tested on:
 
-If you fix a bug, please fix it completely, instead of leaving room
-for future syzbot reports.
+commit:         349ea8a3 erofs: enable long extended attribute name pr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git/ dev-test
+console output: https://syzkaller.appspot.com/x/log.txt?x=113f800fc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a7094f4ecb462be3
+dashboard link: https://syzkaller.appspot.com/bug?extid=aafb3f37cfeb6534c4ac
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Also, your reference to ipvlan pulling a mac header is irrelevant to
-this bug, and adds confusion.
-
-That is  because csum_start is relative to skb->head, not skb->data.
-So ipvlan business does not change csum_start or skb->head.
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
