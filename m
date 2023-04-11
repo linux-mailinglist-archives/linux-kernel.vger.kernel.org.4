@@ -2,84 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693006DD7A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8E56DD7A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjDKKN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S229685AbjDKKOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjDKKNX (ORCPT
+        with ESMTP id S229514AbjDKKOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:13:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB944100;
-        Tue, 11 Apr 2023 03:13:21 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7BCCC66031AD;
-        Tue, 11 Apr 2023 11:13:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681208000;
-        bh=H0bLhwmxJ3hfxq2cNw35YIq7xvlSowfBxBWvLLl7KxY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MQRpBPV4eSPWPJDxxo4hOC8lJfK7U2Gva6HAK8zfzSIzpyNgsiTuwAxLiNr6ZHrZa
-         tfNlGyd5PbPnKje6sfMwqZd1XQTnjcrgb+1AoK8szw1gpTZkpSTay+iT3dNC05mtpg
-         OdFJuQmxRYK7tBPAWs6hgyBNcsJ4rWruFYSLrxn9/XN2VH0Ttp88LbGht9ts0lAYVa
-         ZMwPwjChFGRc3ABfoqZlzDA89+1LNVQHXEyWcv5QjDoSBXHavL356lBytEVd3jcNxO
-         8q0VQJLIsYEfFeyjBFMZ0Uyj1KWaC9FZsygkBxsqMAO+E2Ry1ZBGIxRyOr+V3DHtir
-         dtppndF9pmLPQ==
-Message-ID: <5697b1ba-262d-34d9-b853-a6c959fc29fd@collabora.com>
-Date:   Tue, 11 Apr 2023 12:13:17 +0200
+        Tue, 11 Apr 2023 06:14:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54B6ED;
+        Tue, 11 Apr 2023 03:14:11 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B91On2014681;
+        Tue, 11 Apr 2023 10:14:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=zmM+mYhrvWRLh6MWYkg1j/dwztT9aNR74UUScN57emg=;
+ b=l960ltP37R2jOMoMW1y1SlX/LzJqmvrZ6Sskjin9TSlgewNPFQtMG/r1haCfcPwc2V1H
+ 26Fa+PkUKhRNmwfDakvvRf3Sj2daJ/m1zrr4RpF08Bpl6edqgvViXVYOekFZIxY6KSyY
+ vMtNtkwojlbS+7Cpgs4VGTpVy0mhM/FvJS9KwHdyhFEGLVyhn4X8jMimhSQlOTWENDdi
+ jbziwVXBegEi2BujwwxgNH4ooG78QXi6Ld9COJUtDo1uiA7EygbLkqRcFWaP3II0KIkx
+ 2UnYEddxJ7NtRb/zI++D/Yn8EZGEbc9BxSaa8gcseQcZThEixJBa4QLI1GPQoEXBjyKY hA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvrr8u5wf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:14:04 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33B9RKBY028755;
+        Tue, 11 Apr 2023 10:14:04 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pvrr8u5v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:14:04 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4DSwZ022538;
+        Tue, 11 Apr 2023 10:14:01 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3pu0hq1cjp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 10:14:01 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33BADvOP23003648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Apr 2023 10:13:57 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D4282006A;
+        Tue, 11 Apr 2023 10:13:57 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EDC220040;
+        Tue, 11 Apr 2023 10:13:56 +0000 (GMT)
+Received: from [9.171.53.122] (unknown [9.171.53.122])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Apr 2023 10:13:56 +0000 (GMT)
+Message-ID: <f2bc454b117e7bf5f7cb5882b86b13b6d3da140a.camel@linux.ibm.com>
+Subject: Re: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Alexander Schmidt <alexs@linux.ibm.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 11 Apr 2023 12:13:55 +0200
+In-Reply-To: <20230409085516.GD14869@unreal>
+References: <20230403075657.168294-1-schnelle@linux.ibm.com>
+         <20230409085516.GD14869@unreal>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 09/14] iommu/mediatek: Set dma_mask for the master
- devices
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com
-References: <20230411093144.2690-1-yong.wu@mediatek.com>
- <20230411093144.2690-10-yong.wu@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230411093144.2690-10-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: t_TO8cyWHg7oX6yXJ1wT94H1gryD17nQ
+X-Proofpoint-ORIG-GUID: ShXS9HNa2yB8BJuEb751WEMPGFYstnMr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 impostorscore=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110094
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/04/23 11:31, Yong Wu ha scritto:
-> MediaTek iommu arranges dma ranges for all the masters, this patch is to
-> help them set dma mask. This is to avoid each master setting their own
-> mask, but also to avoid a real issue, such as JPEG uses
-> "mediatek,mtk-jpgenc" for 2701/8183/8186/8188, then JPEG could ignore its
-> different dma_mask in different SoC to achieve common code.
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+On Sun, 2023-04-09 at 11:55 +0300, Leon Romanovsky wrote:
+> On Mon, Apr 03, 2023 at 09:56:56AM +0200, Niklas Schnelle wrote:
+> > after an error on the PCI link, the driver does not need to wait
+> > for the link to become functional again as a reset is required. Stop
+> > the wait loop in this case to accelerate the recovery flow.
+> >=20
+> > Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
+> > Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >=20
+>=20
+> The subject line should include target for netdev patches: [PATCH net-nex=
+t] ....
+>=20
+> Thanks,
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+Thanks, I'll sent a v2 with your R-b, the correct net-next prefix and a
+Link to this discussion.
