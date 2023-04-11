@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5446DDC87
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902066DDC98
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjDKNpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S230371AbjDKNrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjDKNpw (ORCPT
+        with ESMTP id S230311AbjDKNrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:45:52 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A124730DC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:45:47 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id y6so6793483plp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:45:47 -0700 (PDT)
+        Tue, 11 Apr 2023 09:47:22 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60F11BCE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:47:20 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id b33so4208004ljf.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681220747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qZX6YeaID3c9+hbjD4dUk+FdkX7cttToQ9GXc0PnhLA=;
-        b=jfK1PfIHWSTtmaeGN8AuiadBEVxrrwgMKykaBvz1P42IvsNcoSAoBwwD5A1VQ5YVv6
-         sBxeCJ2QdUzFTz2W+fe8GWtxUePVjcsou3w0GKVLGJ40XSjhwMEbJIFGTDncib47HfqB
-         H+hjaSJDzFb24HyF6+VJlx9VSft5PY7C0Taqf0bemWiiHgIgm/6Blr8f5+Abua7+giCH
-         wwrkv8EKd2TW3LHz1vMPKVJaMkFcmdk/mWcwciBSE8r3cfWvc/R5ZNObeCUVUF9i/Qgw
-         yMzjxKlG2RR/YZ+H8hBWUIq9BVshqi7oA0wv0wdEZ+U4Np4Gp5fc+KcakjusXRIywwIf
-         ecwg==
+        d=linaro.org; s=google; t=1681220839;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VpV7MNh7YkHay8Lg/z9KE+NPODSRKpQNoxPyzTQboHE=;
+        b=MuQb5oZbdvkg838emv9dnOO3i+1b0FPsyL0hRrv38uc0L1sLq7hb0jy5V/2QhsJDGR
+         TFmI9896NnFPgKOEiLAS9erdp/SdizrdrD+nsLJhM2fo6q9nOmnUHHahTXrbIYvrQhPO
+         AiGl3mMt+B1Zrzj/8t7sKhPsAlMR8zYp8QHlKF76ngQKtkrM88aLVRQ4qtrLRaszwHiN
+         isnNX52vhoJFGl4qZY64SCAelPlZceO+bSgPcQN2iUoL+PxxRFYwtfpCoJkW/QddGftq
+         oZhPYWiKFbE3sQ0lUInUbhSHSH+pQVMu2duZzqDKT9Z8Kn4vBrr/5+aasQjngaluMOoH
+         ruNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681220747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1681220839;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qZX6YeaID3c9+hbjD4dUk+FdkX7cttToQ9GXc0PnhLA=;
-        b=Wr0AmWnw7G4YMRIKNFj7J7zBD/4ABA+wQ6U4wp8XjM0dF46njKbOZTfLut1QVhy2z7
-         htj2u+fdvBZ/zkyEGkOsffLza4y+GXls8qDtIxw92wrR1QbFg/Idq84ALMacMehwnuRl
-         a2N5n72NqsPlYloVsAk1aQIxfckVD2JorkGRPBNiAQ6o1794Myivzwc70is2V4dDFHBW
-         Tu+1EPm66AAAp3p2PJ5yg6ez6S/4fJF+U7nIiwoobSvp8MhVJt2m0VEm3E5RA37xT3gb
-         QhGwfhVqN/8II/eq07rQzXR9cCb7Ap8eghEW+J1QAN3Mc64+etEOVtTjAlYjpgaTaS88
-         Ptmw==
-X-Gm-Message-State: AAQBX9cUqFmc1+XWiY8TFf8QWzMSERwewXhPGjNLP5mloqIVdcy0/kdf
-        RFeh1t3me0pDxGzgWpoYHAfmqJUiVLHfMNZpoOFYqg==
-X-Google-Smtp-Source: AKy350byq01H5QC3Rko1z3BRFn8kAzbNwtspEBqlTUMi8xkEhrEMoZL7JgBlJ0hxCykMWQvXBtJASg==
-X-Received: by 2002:a17:90b:4b06:b0:246:bb61:4a56 with SMTP id lx6-20020a17090b4b0600b00246bb614a56mr4361207pjb.27.1681220746944;
-        Tue, 11 Apr 2023 06:45:46 -0700 (PDT)
-Received: from C02FT5A6MD6R.bytedance.net ([61.213.176.13])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902820400b001a633a9322dsm4757460pln.212.2023.04.11.06.45.43
+        bh=VpV7MNh7YkHay8Lg/z9KE+NPODSRKpQNoxPyzTQboHE=;
+        b=G/8Y3sGdX06g4sEUUS5RmZMtz3b6DL5vJ2rd0tuYMkbXFho9DIyE6ezMvOnvuXREFC
+         FCDe/zYoQLJLaM9vKQn9C9IfxowdL4hywbXBV3lot7n3qeuX1wkeR6XespeGj7cfGiMG
+         mA7/phPfGzK2nxh3qZkns2cZaum2gpP8aEeiLjdIgel8MAbMevrH8Zvi5elKiB0eD0Qs
+         fm1I5+5rj3WHjqvaJeBUb9LJ3JUTDBrMoPGyXc+RjQBuf7eDa22//89Le2QiFKlEu4So
+         Bw6n0m3YhHb6nPdvZoem1S6mnNNV/vRDTIJHiF9cu51v6hVDG/lPzQTvdTsZFfIy8AQG
+         usqg==
+X-Gm-Message-State: AAQBX9dHdshkVLRh3OkYA8OIiOH4i3th1tRlAAd6j0Tq+JxKcqFRMN0G
+        KUzDuFZJU/5Oiqn83YZ4pktdVw==
+X-Google-Smtp-Source: AKy350YNW8XcTKSvr4Rp9OJGc+ZZ1XltXvstXhuRLfyLnl7JkYbbtzmjcgYytCY30KLjSzaPZN1fuQ==
+X-Received: by 2002:a2e:90ca:0:b0:2a7:6807:2ced with SMTP id o10-20020a2e90ca000000b002a768072cedmr3056891ljg.42.1681220838906;
+        Tue, 11 Apr 2023 06:47:18 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id c10-20020a2e680a000000b002a77583b718sm1245887lja.12.2023.04.11.06.47.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:45:46 -0700 (PDT)
-From:   Gang Li <ligang.bdlg@bytedance.com>
-To:     Waiman Long <longman@redhat.com>, Michal Hocko <mhocko@suse.com>
-Cc:     Gang Li <ligang.bdlg@bytedance.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5] mm: oom: introduce cpuset oom
-Date:   Tue, 11 Apr 2023 21:45:38 +0800
-Message-Id: <20230411134539.45046-1-ligang.bdlg@bytedance.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 11 Apr 2023 06:47:18 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/3] Fix SA8155P RPMPDs
+Date:   Tue, 11 Apr 2023 15:47:14 +0200
+Message-Id: <20230411-topic-hanaau-v2-0-fd3d70844b31@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOJkNWQC/x2NQQqEMAxFryJZG9BqB2auIi7SGMeAVGlVBPHuB
+ pfvfR7/gixJJcOvuCDJoVmXaODKAnii+BfUwRhc5ZqqrWvcllUZbSLasfVf/nAIo/cMlgTKgiF
+ R5MmiuM+zyTXJqOf70fX3/QDNxi/ZcwAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681220837; l=1322;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=qVng4pJR4fg7JVVEXtiVeltZoqePuiwtmcjJiT2J9yI=;
+ b=PV9gcUzWj8EQ6ZCeInWRMxwaBmHBrO3aQeKaIs/QfoTj9dUArp4BTSp4YH84kFI3X84SLjt6uga1
+ 6yB9F4AtBA1DOhYv2L8zUJgekKGzCoIixyXCfL8Mw5pTM9Ilc9j2
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -70,230 +86,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cpusets constrain the CPU and Memory placement of tasks.
-`CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
-has never been utilized.
+SA8155P has some kind of a faulty firmware that advertises power
+domains that are actually absent (and trying to access them results
+in a lockup and reboot).. This series tries to amend that.
 
-When a process in cpuset which constrain memory placement triggers
-oom, it may kill a completely irrelevant process on other numa nodes,
-which will not release any memory for this cpuset.
+v1 -> v2:
+- Reuse 8150 indices for 8155
+- As a consequence of /\, only update domains that differ in the DT
 
-We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
-selecting victim from cpuset the allocating process belongs to.
+I did not pick up any tags, as things changed rather significantly.
 
-Example:
+Compile-tested only.
 
-Create two processes named mem_on_node0 and mem_on_node1 constrained
-by cpusets respectively. These two processes alloc memory on their
-own node. Now node0 has run out of memory, OOM will be invokled by
-mem_on_node0.
+v1: https://lore.kernel.org/linux-arm-msm/20230214095435.2192153-1-konrad.dybcio@linaro.org/
 
-Before this patch:
-
-Since `CONSTRAINT_CPUSET` do nothing, the victim will be selected from
-the entire system. Therefore, the OOM is highly likely to kill
-mem_on_node1, which will not free any memory for mem_on_node0. This
-is a useless kill.
-
-```
-[ 2786.519080] mem_on_node0 invoked oom-killer
-[ 2786.885738] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
-[ 2787.181724] [  13432]     0 13432   787016   786745  6344704        0             0 mem_on_node1
-[ 2787.189115] [  13457]     0 13457   787002   785504  6340608        0             0 mem_on_node0
-[ 2787.216534] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
-[ 2787.229991] Out of memory: Killed process 13432 (mem_on_node1)
-```
-
-After this patch:
-
-The victim will be selected only in mem_on_node0's own cpuset. This will
-prevent useless kill and protect innocent victims.
-
-```
-[  395.922444] mem_on_node0 invoked oom-killer
-[  396.239777] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
-[  396.246128] [   2614]     0  2614  1311294  1144192  9224192        0             0 mem_on_node0
-[  396.252655] oom-kill:constraint=CONSTRAINT_CPUSET,nodemask=(null),cpuset=test,mems_allowed=0
-[  396.264068] Out of memory: Killed process 2614 (mem_on_node0)
-```
-
-Suggested-by: Michal Hocko <mhocko@suse.com>
-Cc: <cgroups@vger.kernel.org>
-Cc: <linux-mm@kvack.org>
-Cc: <rientjes@google.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Zefan Li <lizefan.x@bytedance.com>
-Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Changes in v5:
-- Select victim in the cpuset the allocating process belongs to.
+Konrad Dybcio (3):
+      dt-bindings: power: qcom,rpmpd: Add SA8155P
+      soc: qcom: rpmhpd: Add SA8155P power domains
+      arm64: dts: qcom: Split out SA8155P and use correct RPMh power domains
 
-Changes in v4:
-- https://lore.kernel.org/all/20230411065816.9798-1-ligang.bdlg@bytedance.com/
-- Modify comments and documentation.
-
-Changes in v3:
-- https://lore.kernel.org/all/20230410025056.22103-1-ligang.bdlg@bytedance.com/
-- Provide more details about the use case, testing, implementation.
-- Document the userspace visible change in Documentation.
-- Rename cpuset_cgroup_scan_tasks() to cpuset_scan_tasks() and add
-  a doctext comment about its purpose and how it should be used.
-- Take cpuset_rwsem to ensure that cpusets are stable.
-
-Changes in v2:
-- https://lore.kernel.org/all/20230404115509.14299-1-ligang.bdlg@bytedance.com/
-- Select victim from all cpusets with the same mems_allowed as the current cpuset.
-
-v1:
-- https://lore.kernel.org/all/20220921064710.89663-1-ligang.bdlg@bytedance.com/
-- Introduce cpuset oom.
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           |  2 +-
+ arch/arm64/boot/dts/qcom/sa8155p.dtsi              | 40 ++++++++++++++++++++++
+ drivers/soc/qcom/rpmhpd.c                          | 16 +++++++++
+ include/dt-bindings/power/qcom-rpmpd.h             |  9 +++++
+ 5 files changed, 67 insertions(+), 1 deletion(-)
 ---
- .../admin-guide/cgroup-v1/cpusets.rst         | 15 ++++++--
- Documentation/admin-guide/cgroup-v2.rst       |  4 +++
- include/linux/cpuset.h                        |  6 ++++
- kernel/cgroup/cpuset.c                        | 34 +++++++++++++++++++
- mm/oom_kill.c                                 |  4 +++
- 5 files changed, 61 insertions(+), 2 deletions(-)
+base-commit: 009795d283d1f9f043e5a4ff97d4140cde17e2d3
+change-id: 20230411-topic-hanaau-459c6cbbf55c
 
-diff --git a/Documentation/admin-guide/cgroup-v1/cpusets.rst b/Documentation/admin-guide/cgroup-v1/cpusets.rst
-index 5d844ed4df69..57bc15782d56 100644
---- a/Documentation/admin-guide/cgroup-v1/cpusets.rst
-+++ b/Documentation/admin-guide/cgroup-v1/cpusets.rst
-@@ -25,7 +25,8 @@ Written by Simon.Derr@bull.net
-      1.6 What is memory spread ?
-      1.7 What is sched_load_balance ?
-      1.8 What is sched_relax_domain_level ?
--     1.9 How do I use cpusets ?
-+     1.9 What is cpuset oom ?
-+     1.10 How do I use cpusets ?
-    2. Usage Examples and Syntax
-      2.1 Basic Usage
-      2.2 Adding/removing cpus
-@@ -607,8 +608,18 @@ If your situation is:
-  - The latency is required even it sacrifices cache hit rate etc.
-    then increasing 'sched_relax_domain_level' would benefit you.
- 
-+1.9 What is cpuset oom ?
-+--------------------------
-+If there is no available memory to allocate on the nodes specified by
-+cpuset.mems, then an OOM (Out-Of-Memory) will be invoked.
-+
-+Since the victim selection is a heuristic algorithm, we cannot select
-+the "perfect" victim. So just select a process from the cpuset the
-+allocating process belongs to.
-+
-+Cpuset oom works in both cgroup v1 and v2.
- 
--1.9 How do I use cpusets ?
-+1.10 How do I use cpusets ?
- --------------------------
- 
- In order to minimize the impact of cpusets on critical kernel
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index f67c0829350b..5db84fb4f1cc 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2199,6 +2199,10 @@ Cpuset Interface Files
- 	a need to change "cpuset.mems" with active tasks, it shouldn't
- 	be done frequently.
- 
-+	When a process invokes oom due to the constraint of cpuset.mems,
-+	the victim will be selected from cpuset the allocating process
-+	belongs to.
-+
-   cpuset.mems.effective
- 	A read-only multiple values file which exists on all
- 	cpuset-enabled cgroups.
-diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-index 980b76a1237e..75465bf58f74 100644
---- a/include/linux/cpuset.h
-+++ b/include/linux/cpuset.h
-@@ -171,6 +171,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
- 	task_unlock(current);
- }
- 
-+int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
-+
- #else /* !CONFIG_CPUSETS */
- 
- static inline bool cpusets_enabled(void) { return false; }
-@@ -287,6 +289,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
- 	return false;
- }
- 
-+static inline int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
-+{
-+	return 0;
-+}
- #endif /* !CONFIG_CPUSETS */
- 
- #endif /* _LINUX_CPUSET_H */
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index bc4dcfd7bee5..624454368605 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -4013,6 +4013,40 @@ void cpuset_print_current_mems_allowed(void)
- 	rcu_read_unlock();
- }
- 
-+/**
-+ * cpuset_scan_tasks - specify the oom scan range
-+ * @fn: callback function to select oom victim
-+ * @arg: argument for callback function, usually a pointer to struct oom_control
-+ *
-+ * Description: This function is used to specify the oom scan range. Return 0 if
-+ * no task is selected, otherwise return 1. The selected task will be stored in
-+ * arg->chosen. This function can only be called in cpuset oom context.
-+ *
-+ * The selection algorithm is heuristic, therefore requires constant iteration
-+ * based on user feedback. Currently, we just scan the current cpuset.
-+ */
-+int cpuset_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
-+{
-+	int ret = 0;
-+	struct css_task_iter it;
-+	struct task_struct *task;
-+
-+	/*
-+	 * Situation gets complex with overlapping nodemasks in different cpusets.
-+	 * TODO: Maybe we should calculate the "distance" between different mems_allowed.
-+	 *
-+	 * But for now, let's make it simple. Just scan current cpuset.
-+	 */
-+	rcu_read_lock();
-+	css_task_iter_start(&(task_cs(current)->css), CSS_TASK_ITER_PROCS, &it);
-+	while (!ret && (task = css_task_iter_next(&it)))
-+		ret = fn(task, arg);
-+	css_task_iter_end(&it);
-+	rcu_read_unlock();
-+
-+	return ret;
-+}
-+
- /*
-  * Collection of memory_pressure is suppressed unless
-  * this flag is enabled by writing "1" to the special
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 044e1eed720e..228257788d9e 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -367,6 +367,8 @@ static void select_bad_process(struct oom_control *oc)
- 
- 	if (is_memcg_oom(oc))
- 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
-+	else if (oc->constraint == CONSTRAINT_CPUSET)
-+		cpuset_scan_tasks(oom_evaluate_task, oc);
- 	else {
- 		struct task_struct *p;
- 
-@@ -427,6 +429,8 @@ static void dump_tasks(struct oom_control *oc)
- 
- 	if (is_memcg_oom(oc))
- 		mem_cgroup_scan_tasks(oc->memcg, dump_task, oc);
-+	else if (oc->constraint == CONSTRAINT_CPUSET)
-+		cpuset_scan_tasks(dump_task, oc);
- 	else {
- 		struct task_struct *p;
- 
+Best regards,
 -- 
-2.20.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
