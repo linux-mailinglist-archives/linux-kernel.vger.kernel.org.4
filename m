@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98046DDE0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899B46DDE14
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjDKOfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S229917AbjDKOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjDKOc7 (ORCPT
+        with ESMTP id S229869AbjDKOgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:32:59 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BC040E4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:32:53 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso11140773wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681223571;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rl1AL+4/9PrAyu2t6M5fCbtCFLSTLudMZGWKn5iwi08=;
-        b=cOg1BxwlZou2nKMNK8+W+eLzUaASk6OLwOCEKyVd0ojR/I/27tfxjn0yXKVwj/GCGe
-         Z9mWSdCns0pRmm5gmbJ6aEZ112/jqtVU8I+hDb7gotuwnwV53msqpsI1/0OC6wWxuvlE
-         RTXjrjUSmCkfOTiAgB5i2Ie6mdF19aCTs8PKOnHL0Qkyvvg/5T8FN6jechzg7gS84cAD
-         9HEm1BlyaPZ9HO7JryOP4eSKQnqUqc0ZbWNRy5gvTK8kIuzV6Sb5Bv/f9OrkuAqzOsM5
-         UcQ9FFHjJX0dKFR23JHkmOCf5WwO2T8azPkg3xnr9BAgnEbrU+chWFWa5/6+KQHdBR2K
-         1YRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681223571;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rl1AL+4/9PrAyu2t6M5fCbtCFLSTLudMZGWKn5iwi08=;
-        b=bFtFPsUipZrmYFmxkV7t7+/B7FRzdBWm718wVOYzTGtvTYuJAFyyTDgf9Gk7jd/vIn
-         oGMTqFaUu+D7JDZIqXCrbCKltMn9G0ye0WKLC2YggnleK5Ccbphbp+DMSAHlh+vCl5Wg
-         zzFLjQKvsYx3kIS+Kj4ybzB9n3XuICZjransCv2+qpzqJHhJDPmXicc1xutJZl7LgWiX
-         CQT9QuaJFGTKJL9CfFkX0aXiYznEPKyY2zP5SCwkAbxpDJYmrXWUm9UBeJHq0IuD138I
-         d6nL3GDsEFj87+K8raDP3sFGgvEj7kn4K57iRDI5yqw7CZ09Tt7+B8cfG+WgP09tScQ8
-         5VjQ==
-X-Gm-Message-State: AAQBX9dm6fy4PUqmKOPRs+GNOlgyPdHgyWux+2r9vUiepAYcexPiIp/n
-        cCUE5w+WUhbOwELk/lGzkeTOtESWqX+wt9Iim5tA6g==
-X-Google-Smtp-Source: AKy350aG/I0fGJlNxt2sYUNaG5F2QtH8OK/Q3bto6+AxGBsyCa8HZtGFbagxpPLKph5aiDE4cqQkN+taHaxQvEGUDUM=
-X-Received: by 2002:a1c:770c:0:b0:3ed:526c:25cb with SMTP id
- t12-20020a1c770c000000b003ed526c25cbmr2414127wmi.8.1681223571525; Tue, 11 Apr
- 2023 07:32:51 -0700 (PDT)
+        Tue, 11 Apr 2023 10:36:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923811FF3;
+        Tue, 11 Apr 2023 07:36:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 473641FD88;
+        Tue, 11 Apr 2023 14:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681223787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U29cCnOHbPWuYYBzDboY6Km3Yy5eqaduHl0Wu231j74=;
+        b=edjpGMrZ7N5YaS+Bhq84eaTAsFUJQfQ5qUZDGHxznT+HT1UWjhwdo+L4abwkywXdptySD5
+        5qp7+MeH72opCbELqEE75FiRgE2ZoDDMZrxDENYrm6SyMRarDUSbtF48i7Jo82DPD+J4MW
+        CncLnF+JzdMoTJt+laveADpsUJQZfok=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2928A13638;
+        Tue, 11 Apr 2023 14:36:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ltGoB2twNWSeXgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 11 Apr 2023 14:36:27 +0000
+Date:   Tue, 11 Apr 2023 16:36:26 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, rientjes@google.com,
+        Zefan Li <lizefan.x@bytedance.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] mm: oom: introduce cpuset oom
+Message-ID: <ZDVwaqzOBNTpuR1w@dhcp22.suse.cz>
+References: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
- <20230411072840.2751813-4-bhupesh.sharma@linaro.org> <ff5691b4-df1a-57a8-6e96-f997bbe340f4@linaro.org>
- <CAH=2Ntytn2GnBJkiZ4+xBf1X-fUUTD4iHWv-Sv66Jp1ePUDV3A@mail.gmail.com> <20230411124254.r4sk7fn4wdrdt6qy@ripper>
-In-Reply-To: <20230411124254.r4sk7fn4wdrdt6qy@ripper>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 11 Apr 2023 20:02:40 +0530
-Message-ID: <CAH=2Ntz24Tn_Vj=7Z6x_Br+CLVyXQ=DSPeZ5WOAMhhd6JD+Biw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: qrb4210-rb2: Increase load on
- l22 and l24 for uSD and eMMC
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 at 18:09, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Tue, Apr 11, 2023 at 05:43:51PM +0530, Bhupesh Sharma wrote:
-> > On Tue, 11 Apr 2023 at 17:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> > >
-> > >
-> > >
-> > > On 11.04.2023 09:28, Bhupesh Sharma wrote:
-> > > > Increase the l22 and l24 load used for uSD and eMMC VMMC.
-> > > > These need to be increased in order to prevent any voltage drop
-> > > > issues due to limited current happening during specific operations
-> > > > (e.g. write).
-> > > >
-> > > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > > ---
-> > > You could have simply squashed this into the patch where
-> > > you enabled the controllers, so that that commit works
-> > > reliably for e.g. bisect
-> >
-> > Yes, but Bjorn asked me to send this separately (via irc).
-> > I am fine with squashing this with the previous patch [PATCH 2/3] as
-> > well, if Bjorn is OK with it.
-> >
->
-> I was trying to say that I was fine with you just fixing the small thing
-> I had asked for and then you could send a separate patch for this when
-> you found the time.
->
-> I can squash the two while applying, unless anyone else have any
-> concerns with the patches.
+On Tue 11-04-23 14:58:15, Gang Li wrote:
+> Cpusets constrain the CPU and Memory placement of tasks.
+> `CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
+> has never been utilized.
+> 
+> When a process in cpuset which constrain memory placement triggers
+> oom, it may kill a completely irrelevant process on other numa nodes,
+> which will not release any memory for this cpuset.
+> 
+> We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
+> selecting victim from cpusets with the same mems_allowed as the
+> current one.
 
-Sounds good to me. Thanks for your help Bjorn with squashing the patches.
+I believe it still wouldn't hurt to be more specific here.
+CONSTRAINT_CPUSET is rather obscure. Looking at this just makes my head
+spin.
+        /* Check this allocation failure is caused by cpuset's wall function */
+        for_each_zone_zonelist_nodemask(zone, z, oc->zonelist, 
+                        highest_zoneidx, oc->nodemask)
+                if (!cpuset_zone_allowed(zone, oc->gfp_mask))
+                        cpuset_limited = true;
 
-Thanks,
-Bhupesh
+Does this even work properly and why? prepare_alloc_pages sets
+oc->nodemask to current->mems_allowed but the above gives us
+cpuset_limited only if there is at least one zone/node that is not
+oc->nodemask compatible. So it seems like this wouldn't ever get set
+unless oc->nodemask got reset somewhere. This is a maze indeed. Is there
+any reason why we cannot rely on __GFP_HARWALL here? Or should we
+instead rely on the fact the nodemask should be same as
+current->mems_allowed?
+
+I do realize that this is not directly related to your patch but
+considering this has been mostly doing nothing maybe we want to document
+it better or even rework it at this occasion.
+
+> Example:
+> 
+> Create two processes named mem_on_node0 and mem_on_node1 constrained
+> by cpusets respectively. These two processes alloc memory on their
+> own node. Now node0 has run out of memory, OOM will be invokled by
+> mem_on_node0.
+
+Don't you have an actual real life example with a properly partitioned
+system which clearly misbehaves and this patch addresses that?
+-- 
+Michal Hocko
+SUSE Labs
