@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094C26DDD4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DFC6DDD52
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjDKOJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S229907AbjDKOKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjDKOIx (ORCPT
+        with ESMTP id S230176AbjDKOJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:08:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8450D359D;
+        Tue, 11 Apr 2023 10:09:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B91D1FEA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681222142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FoWYY1/c70BQuziZUZwE68OnqBVL6gacC0azpYIo4ao=;
+        b=aSs6nkt44L1Az5IZbS9attn0yF5/qh9VTL+OlwHMrFN4mg/gEOAJC2ZMHpT/TOgyCx3Sp1
+        T+OPd2YKJNejsM6FCjzsg7XzcBNA1ZeI+nqpo7EErcsFQb13YG0OAqqorVoTWu/K5rs4Ix
+        ZEWEa1D06J4e81FhTNaVL1ltAUCrjBc=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-213-TnINk9ZNN3q4kEDmP-ebhQ-1; Tue, 11 Apr 2023 10:08:54 -0400
+X-MC-Unique: TnINk9ZNN3q4kEDmP-ebhQ-1
+Received: by mail-qt1-f199.google.com with SMTP id o4-20020ac87c44000000b003e38726ec8bso6379475qtv.23
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:08:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681222133;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FoWYY1/c70BQuziZUZwE68OnqBVL6gacC0azpYIo4ao=;
+        b=RxTdnBRuMlfrSvrfUCUwsWti56S6CHgDj/pTAufGje/FoJwBD7okrHb/LtVGX+Nal5
+         ZbQNo7IGsSoEGUVKm68S+aCEnwEkd/C2UPyGzTWgqLBt67U+yCrmeNpJITIJJ2XMWN6M
+         9vX2pa7KyJm05RzV6sIgoYHRHTMYszZQC2xWaIkhpOmBagvoM+0o5tIoSXg45zFQ+ANv
+         L/JlIX5lZnMxIb2Hga+9J17uuPeBp+k8nyDinymgk5sw/Ipkjb/PCms0ICe5NEr8NGvp
+         7zYghe5AWEXeRA7KGBeA6bnO2HDs9H8uQM+HA3eQXVG1VM7b+ipV4an2P7bS26TbGDou
+         bZfg==
+X-Gm-Message-State: AAQBX9ftDgdOUw0GjSfC8RdPLfu6rrhoC5/a6n/rXcJ3EffVTuE+muii
+        YmthxQAlpopv6GIvEoXeIk9ZJzfPhlvXJZNdQ/3DQtDb+C5HZj+KWplWdLSBU290iIv1jgqTqJo
+        6Iii71txmgY2pZ6U4ZaPhLVx5bXUYbWvn
+X-Received: by 2002:ac8:5907:0:b0:3e3:7e53:9a8f with SMTP id 7-20020ac85907000000b003e37e539a8fmr23833395qty.50.1681222133444;
+        Tue, 11 Apr 2023 07:08:53 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Ydzw7KBrtGDwEv60Ql5TM3aG88TVjfKTHmQBAGbNhhzKJpSvnJavXOUu8cMXR2+sUzUX42jg==
+X-Received: by 2002:ac8:5907:0:b0:3e3:7e53:9a8f with SMTP id 7-20020ac85907000000b003e37e539a8fmr23833352qty.50.1681222133095;
+        Tue, 11 Apr 2023 07:08:53 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id h7-20020ac846c7000000b003e3921077d9sm3596208qto.38.2023.04.11.07.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 11 Apr 2023 07:08:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20ABB624C2;
-        Tue, 11 Apr 2023 14:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB463C433EF;
-        Tue, 11 Apr 2023 14:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681222131;
-        bh=1wTmbDFMmZMHkjXWXCkKRvh7H1u8fZyis15UjyxfO04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jvr7LGbPu0Hjg/6fhItPXnVsmIPdZ4C0Zl7PSo4Y8DfX7Ue+CGX1k24T7+l1dBbK/
-         hqsGYn+bDNthjyxTyv1vfJHsQff2DALRhPpY11G5gcYPelbwdBGVCy/NSL5I9E8vh3
-         eurt5MGGZfTARqEjkQ5owsv5rzYQky1d5g80gSzM04Smp+apH0Q2GKvMGOmP/CI70/
-         9DzW9LwWWSKtJsBrGbOr6U8xhm+v8alYhNgmrg5Pw2pap4CQ6aNQuYJ6E1H0DnZ2T7
-         aowEs5t2cuszJgaI2Z9A5CHEstRcA+EgcGuppzTEHknB2PwoQllEPaR2oWZ5efFuCE
-         IP+a7u6XGOQ8w==
-Date:   Tue, 11 Apr 2023 16:08:45 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Message-ID: <20230411-abartig-relikt-9785cfe2b604@brauner>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
- <20230409-genick-pelikan-a1c534c2a3c1@brauner>
- <b2591695afc11a8924a56865c5cd2d59e125413c.camel@kernel.org>
- <20230411-umgewandelt-gastgewerbe-870e4170781c@brauner>
- <8f5cc243398d5bae731a26e674bdeff465da3968.camel@kernel.org>
- <20230411-holzbalken-stuben-6cea8b722a1b@brauner>
- <b137033f3cd971b0cfc71045cab63440dfe9c7f8.camel@kernel.org>
+From:   Tom Rix <trix@redhat.com>
+To:     ogabbay@kernel.org, gregkh@linuxfoundation.org, osharabi@habana.ai,
+        talcohen@habana.ai, dhirschfeld@habana.ai, obitton@habana.ai
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] accel/habanalabs: remove variable gaudi_irq_name
+Date:   Tue, 11 Apr 2023 10:08:50 -0400
+Message-Id: <20230411140850.3129374-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b137033f3cd971b0cfc71045cab63440dfe9c7f8.camel@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:13:15AM -0400, Jeff Layton wrote:
-> On Tue, 2023-04-11 at 11:49 +0200, Christian Brauner wrote:
-> > 
-> > > 
-> > > > Afaict, filesystems that persist i_version to disk automatically raise
-> > > > SB_I_VERSION. I would guess that it be considered a bug if a filesystem
-> > > > would persist i_version to disk and not raise SB_I_VERSION. If so IMA
-> > > > should probably be made to check for IS_I_VERSION() and it will probably
-> > > > get that by switching to vfs_getattr_nosec().
-> > > 
-> > > Not quite. SB_I_VERSION tells the vfs that the filesystem wants the
-> > > kernel to manage the increment of the i_version for it. The filesystem
-> > > is still responsible for persisting that value to disk (if appropriate).
-> > 
-> > Yes, sure it's the filesystems responsibility to persist it to disk or
-> > not. What I tried to ask was that when a filesystem does persist
-> > i_version to disk then would it be legal to mount it without
-> > SB_I_VERSION (because ext2/ext3 did use to have that mount option)? If
-> > it would then the filesystem would probably need to take care to leave
-> > the i_version field in struct inode uninitialized to avoid confusion or
-> > would that just work? (Mere curiosity, don't feel obligated to go into
-> > detail here. I don't want to hog your time.)
-> > 
-> 
-> In modern kernels, not setting SB_I_VERSION would mainly have the effect
-> of stopping increments of i_version field on write. It would also mean
-> that the STATX_CHANGE_COOKIE is not automatically reported via getattr.
+gcc with W=1 reports
+drivers/accel/habanalabs/gaudi/gaudi.c:117:19: error:
+  ‘gaudi_irq_name’ defined but not used [-Werror=unused-const-variable=]
+  117 | static const char gaudi_irq_name[GAUDI_MSI_ENTRIES][GAUDI_MAX_STRING_LEN] = {
+      |                   ^~~~~~~~~~~~~~
 
-Ah, good.
+This variable is not used so remove it.
 
-> 
-> You probably wouldn't want to mount the fs without SB_I_VERSION set. The
-> missing increments could trick an observer into believing that nothing
-> had changed in the file across mounts when it actually had.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/accel/habanalabs/gaudi/gaudi.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Yeah, that's what I thought and that would potentially be an attack on
-IMA which is why I asked.
+diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
+index a29aa8f7b6f3..a1697581c218 100644
+--- a/drivers/accel/habanalabs/gaudi/gaudi.c
++++ b/drivers/accel/habanalabs/gaudi/gaudi.c
+@@ -114,13 +114,6 @@ static u32 gaudi_stream_master[GAUDI_STREAM_MASTER_ARR_SIZE] = {
+ 	GAUDI_QUEUE_ID_DMA_1_3
+ };
+ 
+-static const char gaudi_irq_name[GAUDI_MSI_ENTRIES][GAUDI_MAX_STRING_LEN] = {
+-		"gaudi cq 0_0", "gaudi cq 0_1", "gaudi cq 0_2", "gaudi cq 0_3",
+-		"gaudi cq 1_0", "gaudi cq 1_1", "gaudi cq 1_2", "gaudi cq 1_3",
+-		"gaudi cq 5_0", "gaudi cq 5_1", "gaudi cq 5_2", "gaudi cq 5_3",
+-		"gaudi cpu eq"
+-};
+-
+ static const u8 gaudi_dma_assignment[GAUDI_DMA_MAX] = {
+ 	[GAUDI_PCI_DMA_1] = GAUDI_ENGINE_ID_DMA_0,
+ 	[GAUDI_PCI_DMA_2] = GAUDI_ENGINE_ID_DMA_1,
+-- 
+2.27.0
 
-Thanks!
-Christian
