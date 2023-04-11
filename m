@@ -2,146 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07A16DE342
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE576DE347
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjDKR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S229753AbjDKR5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDKR4W (ORCPT
+        with ESMTP id S229738AbjDKR5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:56:22 -0400
-Received: from CO1PR02CU001.outbound.protection.outlook.com (mail-westus2azon11011001.outbound.protection.outlook.com [52.101.47.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60035241
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:56:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AHG17LykxlwAN9aW4BA0pc0UfCHuwbx1rv1ayDq1mlIA2GReCCDuYCFgFTKEPa7jQpvkiJA4fIkTt/48rNUb+M4ABuqcOiOuU6PgE0We3h85bQI1jHS9ituqkBAAj6TQCGi5sF/TcGekxp6Z49buHpH2iPUbw8toUtQ6fmVrYErXnwPnDjGj21nwx0qnaS5PNm3v7h/+BswN1e9mIquToS9gYQ6MuzPGe914IZ45VOB1FcBE0gTVArm6C8MVR4294vYk5ZTfpdqIeIs1q8v1jAX/TYYJvwxRH5TY8sfikwPmf/RiFEzfy5Arp2fpEO5vRO8csRObXORMTGRvD9/wlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dJU3HEXEbOgEiVdY5t0IXwXnI13n+K1+q6eFTbq13RI=;
- b=L2EMfPxZrij1AedNL2sK6IP1EZta8CiRRyfu1cjqrjSpm9P9vK5BnpRMATAOu8Q0mdnzFhJ0NHHqmrupFzgmWVgoY6ekiYZlNVmnPFlSnkHGEh4TbJJkbEjoMzzNDu8j8FtgWZ/KXZsuDppI8+6Z818hmlzb1RbXOutIKfqRkF3uY3QNrUczFbJchxU01MzCGQ9HpOxJHJ7HfM/yrmteFmySgVyxXWdsj5bAXg5cdCQ9JLSSAJd2S4tT6UXZ8ou6q0Fp0z3MNWzi3N94aCVj9AIqXooEHIoJa6bEPknx2VYOygRFish9HQL4i9qBDui7RKyW1zNrssLC04e01NLKEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dJU3HEXEbOgEiVdY5t0IXwXnI13n+K1+q6eFTbq13RI=;
- b=vpaT11QjMPgu1VOQEhScq3iPEUTsFAKZ3+Fniwg4lIH8u4U9A/0+7dQMP7RUkCBcTL+eRok1CMnahlzsXVK1ni4hna9i+J8UIcVdd57y2q5zLO5pZojq06918+5DEdF2BZYbhe3WWfI/UWLI6c9l9TwNjgoRUzeOwBjNeA74Hog=
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- (2603:10b6:610:155::10) by SN6PR05MB4093.namprd05.prod.outlook.com
- (2603:10b6:805:23::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 11 Apr
- 2023 17:56:15 +0000
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::b4c3:9441:f0:efb8]) by CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::b4c3:9441:f0:efb8%6]) with mapi id 15.20.6298.028; Tue, 11 Apr 2023
- 17:56:15 +0000
-From:   Zack Rusin <zackr@vmware.com>
-To:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "airlied@gmail.com" <airlied@gmail.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
-Thread-Topic: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
-Thread-Index: AQHZXoppq+SckREidEuckuwMrXDKD68mgLsA
-Date:   Tue, 11 Apr 2023 17:56:15 +0000
-Message-ID: <7409df3e0e77a73494c56aed8010ada57b41b18c.camel@vmware.com>
-References: <20230324195403.2655148-1-trix@redhat.com>
-In-Reply-To: <20230324195403.2655148-1-trix@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.0-1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|SN6PR05MB4093:EE_
-x-ms-office365-filtering-correlation-id: 23067797-37bd-445e-d1f4-08db3ab60b51
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: p6/GFsL7SzPGIgtAS09wzwJ58PHI+vKJ+yVlJlojXlDZrUOHhAEQtXL1Xh/QleHRf3U4nzGtMGG5+iATFQX/FZGdd4rv1ehYy+9vNvJcNa6UJfG15Rg8rP2V+KPvhHSx9SWsCm/P3TQA81/nhoXGPFJBItRr+nfhyaLB++AIm68hGvSgLk0VhDRofAYwSIvZVUXLKRl17BqOApwck5oGejZkOkm5HRGFrLMdZnIL1o8tbJg2zhmvT09g0hwOy9aEB1f7D5Gsi8iCQ80u15cvEci0U7sURnUVlr/8Y54ldY6R5c+M8k1ie5xn0JHoW56sVdGIO/bq5t5jxhntxblQH2W0v/dkP6IOJL80iq08utcD1IxL9dtGCTL0Q9gypF2WdvBKmVt09SZAQ+4hSfvPBlGTfJr7eUyDfBCTPQd7DRuCWkuFa5tkvxmx6wbfCpXjpPBd6gbAEf+Wpzm8WGgcEOZDpqfF5CnFJ5YV8Boud7NqbMHJCVRr6vOdBk428jeTftzkp2/wMX8xsawn56lt6Jk6T/TV1DtpWTrBdbL5IU84pM9i05DPiSpetTWlIHqdSIA5EXoPxH7YbSUoe032HBS/yJ4KTaMzJeYI5OlToxVwi6bQNQ0FALi++vchmPzz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(451199021)(8936002)(71200400001)(6486002)(38070700005)(2616005)(86362001)(36756003)(122000001)(6506007)(26005)(6512007)(186003)(66556008)(91956017)(4326008)(66446008)(38100700002)(66476007)(66946007)(4744005)(8676002)(2906002)(41300700001)(110136005)(316002)(54906003)(64756008)(5660300002)(76116006)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MWRoY08zd2Y2UVNIeFMrcUJiYURxVUlrdGZqNXpvUWUyQUZSdk5xRkRucEE5?=
- =?utf-8?B?aEZEUGdRbEUrTkJPVVd3ek1xby9iRnMrUjRVVHVUbXErTTJIZkpUaDE0RmFZ?=
- =?utf-8?B?SDZLdHoyUFNFRUZFTG5EZ2VHdkRjT2I2RG9IbG4za1NZVUZTeEk2Z0IreU9S?=
- =?utf-8?B?K3FoN1NVYXFnR1QvOEZmV0xxTUZLZ2syeFYzZ0hpWjRiRy9UZjB1bjUrRkRs?=
- =?utf-8?B?ckErUzYrcE1UYUZrZjVsSUxCcm5XUHBNOGtkWC8xNDY5UzhnVXBWS21FUXlu?=
- =?utf-8?B?eVc4VDQvY0xyZHZ6WCtxMEEyaDBGdlVmbFArN250NU9Zb093Ri9NN1plNlNn?=
- =?utf-8?B?ZDEwRE5GbzZLaysyMmZWY0xLZ0h0c1pGZS9zWVhTdWJDNGk1d1JvN0JOTkFn?=
- =?utf-8?B?R3lLdDNJeEdHTXZhNDNFNzY0UmwvSWw4SGxhTzZNRVRpbW02VDhSTjV1WENW?=
- =?utf-8?B?QmlsbHBDK1VTeXVDLzhvTVlsTlpYb2pTcHhLb3Btd283V2VIVlZmLzdadCty?=
- =?utf-8?B?cW16ZUtBbGx2MG1JWTRaRWRJbTlVZzljTnJDS1FZVkxKNkZjMWlVZEg5MklM?=
- =?utf-8?B?MDYwQzhlM2YwdHNCR0czLythaDdwMGJnQnRFcUllVStLYlMxRW5oblFQMkVE?=
- =?utf-8?B?bzZhSmJPSjNvcXBXbG94UlBPNUlycHBtdzkzQnNVQWNOcEtEYloxREo5M3R6?=
- =?utf-8?B?OWtWTHZFWGc5SHN0TXJyRDY1UVRZTFFkU1lUUVVtNWxZTndMbzJtN2FUd1lh?=
- =?utf-8?B?dm9QRWpGbHUwVmd2QWhUMzFpaXdIbDE4aXhHdktNWkR2RCtGQ20raWlZM1d3?=
- =?utf-8?B?SGFiazEzUVgvNlFLcUNZRFI3Q1RXYXNBLzYvNUNEZ1Q2WmxYOUN5TVZEOFBW?=
- =?utf-8?B?cmg4Vm5JZnFpWHhscDJWcnUxLzBwVE1nYUpldDhQL3F1Q2VJMHNhcDdnRzhC?=
- =?utf-8?B?eDdWbjJNUnROVGVwT3NpRXNCTk9QMHdJR2FiaWdxMGUzRm1rcVFUZHUrbHdO?=
- =?utf-8?B?YnpZSStTaEk2eUVJSXg0emV0bkt3c1JKSVJUWTUzbHE4eS95SUJqa1h4L05I?=
- =?utf-8?B?MkpHMC9ycWFnRXRiM09ZaTBmL01FSVdGNjRhejJTVHlXNmxYSzlzY29zRW5W?=
- =?utf-8?B?dnJGZklXeTVBQU5sSzJZOE4rbXlYKzlQc1NpUVJVcjFtZERMcnMxR01BVkMr?=
- =?utf-8?B?eGVTclQwaW5uci9tTS9sOEl4b0xTcnFqeEQvQVVPYzRBUFNHL0phU2lXQmpF?=
- =?utf-8?B?L1VsWjhJUElqbDVNT1NmZmlUb1REM1NndXJFSVBVUURCRDRtS3VUamFqSGk1?=
- =?utf-8?B?RFJ3V3VmSlpuTlJJQlVFcTBuOVBRYVUvQkdQNjhqSTFZdlhabkZjeS9JOXhR?=
- =?utf-8?B?UTFOZE5xNHJ3blF4Um9BK1hLTWtsblk2Vk5teWFOcFc5a0xsanl3clRmUkZO?=
- =?utf-8?B?aWlpbXlSYk5kUnhVaGFkaW02MWR5eEU4dHhQTFp1U1ZtUFZHR1prdkhwa28z?=
- =?utf-8?B?a08zVUlrTTJtOHZ1QnZzSUZBLzdtUWxRNFpHODJmQlRqTmhvTWhNaUFHLzgy?=
- =?utf-8?B?NU5UaStmaUp4OTBvWFNva0FoU0drbmNhVnB1KyswUHNBWURYZGhmMm42Skc3?=
- =?utf-8?B?OVhZZFRONDdMN3c1TTNZanNaREpnM1lkVlZzSHgzSFhhVjBlQ2cwTHArU2dx?=
- =?utf-8?B?VER2QW5vamlrdmx6K2NOVlJpQXNlcG56dkJoY25Jb0NJMDhiajBTTjdwZ3hv?=
- =?utf-8?B?a213TDB6ZVowRklaODYxbjZUakNvK2lIYmc4Ty9KdTJrODdTMmpneGxvUXJW?=
- =?utf-8?B?SXlzVzM1VThVWkovMTI0Wk9jWGdaWWg4TWN2MG5odFRmblN3aTdCQnBid0pL?=
- =?utf-8?B?ZWFXTEIyS0ovcG9xMEdtclpmMzdvaE9Fa1BWL0ZnVFRiRWd6ZExBMmxQbEsy?=
- =?utf-8?B?T2l6eDdpSGVFRzVTWS9rdCtRdjljQnRWUERtSjM2NmpGUGgwd3o0Wlkrd0RL?=
- =?utf-8?B?T2xWU0QxQUVwWnZLc3VJeFBWdXlqTytUS2JWb251eGd3MXhRaklNd3hPZGw4?=
- =?utf-8?B?R2FVUGRSR3NPWTU3NVBhVjV6bTM5SFJ5clBUVHZwWHNIbmU3a0kycEttRmVL?=
- =?utf-8?Q?5LQWlCoCKUBZdneqB159gQh9w?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C5AD87214882AA48B2E0B677F4032259@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 11 Apr 2023 13:57:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CEB524D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:57:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so8868823pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681235830;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXbDM1ImhdsbAlX5z/W3cgh/RDeLJTPqUHcpprXXqrI=;
+        b=Pe50bdhimru+N/2HOljtZmyOoxclKuA8dwD8vHMj/wTGm2q+w6oqit4YahOasjbSha
+         AMbONG0/q2aUcdmelgB9qgZ1iwUAmwsiiXC1x7I3jdHtRlYE6cz+vvfq2yB/6ZUVp8Gl
+         MEysICPLawzNdU6WcAZ2PpjMCi7/uwmAdt8PZHuW6NgeGBpRfeqBnQ/swpi+zcnx0iC+
+         24wHa5d31Kn6QfGldVxQrQQ20PZsRNVJj4yfBGLeNwmK3NOaSxs1NnlD0lYVKhJC1s+h
+         hNYmqVJU0gg01GaWFc1JaNe+gOleUte9vINUNhzY6WhovauG7H+/+BoF3wWE6NVBZxM9
+         AhnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681235830;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZXbDM1ImhdsbAlX5z/W3cgh/RDeLJTPqUHcpprXXqrI=;
+        b=LXYC/TmYlbjZqYHiPY7LjamdpfeGBX/Sgph8dE62inRe8fyx72AAbCWsGV7BG17hnG
+         FxWkl8Mna8jIvA0SoEwhKI+6Zh+DVEAmnWSk1wZTLDMB4FFyK3ca9W8+1UlJ6u4XQHcI
+         3Vv0bGjkC9facsvs/KAzEus1JgZEFPJCzd+N9cgeFnToDi6ysIZr/HH3P/zeqHR9Jg19
+         iFm4i5ZuUNX8MQ3TvQMT9M8hv5t5WiRF/n+vhZ+a/UXbi93tV8el46uVmZvid0eetDe1
+         yDSFIUubFd6SFLkRd18vLw6JE+4fYIXY8Fxh+OfYPkK/s0ddWsqTtTntcFly+JvV19mA
+         QMGw==
+X-Gm-Message-State: AAQBX9caUmCEx93NAm7I4OJJQhFnRW4IFr6hVd3Bg+mj/KvZqUb31lCQ
+        ttdYKEUnfgC6wyrWr7FcBh8DHg==
+X-Google-Smtp-Source: AKy350ZN9Il+nr1BgDR94DewMoio2CPd0j/HHP3oUqhd0/9J/DasM1Br0S+P8KV0fQblKMu/Th/CVw==
+X-Received: by 2002:a17:902:788f:b0:1a6:6afc:2d67 with SMTP id q15-20020a170902788f00b001a66afc2d67mr37276pll.61.1681235830196;
+        Tue, 11 Apr 2023 10:57:10 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:f795:eecb:467b:d183])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170902854300b001a1a9a639c2sm5501289plo.134.2023.04.11.10.57.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 10:57:09 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:57:07 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v7 4/4] soc: ti: pruss: Add helper functions to set GPI
+ mode, MII_RT_event and XFR
+Message-ID: <20230411175707.GE38361@p14s>
+References: <20230404115336.599430-1-danishanwar@ti.com>
+ <20230404115336.599430-5-danishanwar@ti.com>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23067797-37bd-445e-d1f4-08db3ab60b51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 17:56:15.0988
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Lg/XjokrCZGHCZnOkEWXkU4fqF7qXwPZDTszWAqkGYFtZ9HMw8MTOYRaSoLL/1lNwG0OsPOdWVDOGPulocx3yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB4093
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404115336.599430-5-danishanwar@ti.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTAzLTI0IGF0IDE1OjU0IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBjbGFu
-ZyB3aXRoIFc9MSByZXBvcnRzDQo+IGRyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4X21zZy5j
-OjcxNjoyMTogZXJyb3I6IHVudXNlZCBmdW5jdGlvbg0KPiDCoCAnbWtzc3RhdF9pbml0X3JlY29y
-ZCcgWy1XZXJyb3IsLVd1bnVzZWQtZnVuY3Rpb25dDQo+IHN0YXRpYyBpbmxpbmUgY2hhciAqbWtz
-c3RhdF9pbml0X3JlY29yZChta3NzdGF0X2tlcm5fc3RhdHNfdCBzdGF0X2lkeCwNCj4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXg0KPiBUaGlzIGZ1bmN0aW9uIGlzIG5v
-dCB1c2VkIHNvIHJlbW92ZSBpdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRvbSBSaXggPHRyaXhA
-cmVkaGF0LmNvbT4NCg0KVGhhbmtzLCBNYXJ0aW4gS3Jhc3RldiBhbHJlYWR5IHNlbnQgdGhlIHNh
-bWUgcGF0Y2ggdG8gdGhlIGRyaS1kZXZlbCB0d28gd2Vla3MNCmJlZm9yZS4gSXQncyBpbiB0aGUg
-ZHJtLW1pc2MtbmV4dCBicmFuY2ggaW4gdGhlIGRybS1taXNjIHRyZWUgYW5kIHNob3VsZCBtaWdy
-YXRlIHRvDQprZXJuZWwgZm9yIDYuNC4NCg0Keg0KDQo=
+On Tue, Apr 04, 2023 at 05:23:36PM +0530, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> The PRUSS CFG module is represented as a syscon node and is currently
+> managed by the PRUSS platform driver. Add easy accessor functions to set
+> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+> pruss_cfg_update() API function.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  drivers/remoteproc/pru_rproc.c   | 15 -------
+>  drivers/soc/ti/pruss.c           | 74 ++++++++++++++++++++++++++++++++
+>  include/linux/remoteproc/pruss.h | 51 ++++++++++++++++++++++
+>  3 files changed, 125 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+> index 4ddd5854d56e..a88861737dec 100644
+> --- a/drivers/remoteproc/pru_rproc.c
+> +++ b/drivers/remoteproc/pru_rproc.c
+> @@ -81,21 +81,6 @@ enum pru_iomem {
+>  	PRU_IOMEM_MAX,
+>  };
+>  
+> -/**
+> - * enum pru_type - PRU core type identifier
+> - *
+> - * @PRU_TYPE_PRU: Programmable Real-time Unit
+> - * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
+> - * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
+> - * @PRU_TYPE_MAX: just keep this one at the end
+> - */
+> -enum pru_type {
+> -	PRU_TYPE_PRU = 0,
+> -	PRU_TYPE_RTU,
+> -	PRU_TYPE_TX_PRU,
+> -	PRU_TYPE_MAX,
+> -};
+> -
+>  /**
+>   * struct pru_private_data - device data for a PRU core
+>   * @type: type of the PRU core (PRU, RTU, Tx_PRU)
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 0e37fe142615..64a1880ba4ee 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -213,6 +213,80 @@ int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
+>  }
+>  EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
+>  
+> +/**
+> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+> + * @pruss: the pruss instance handle
+> + * @pru_id: id of the PRU core within the PRUSS
+> + * @mode: GPI mode to set
+> + *
+> + * Sets the GPI mode for a given PRU by programming the
+> + * corresponding PRUSS_CFG_GPCFGx register
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+> +		      enum pruss_gpi_mode mode)
+> +{
+> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+> +		return -EINVAL;
+> +
+> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
+> +		return -EINVAL;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
+> +
+> +/**
+> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+> + * @pruss: the pruss instance
+> + * @enable: enable/disable
+> + *
+> + * Enable/disable the MII RT Events for the PRUSS.
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+> +{
+> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+> +				PRUSS_MII_RT_EVENT_EN, set);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
+> +
+> +/**
+> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+> + * @pruss: the pruss instance
+> + * @pru_type: PRU core type identifier
+> + * @enable: enable/disable
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+> +			 bool enable)
+> +{
+> +	u32 mask, set;
+> +
+> +	switch (pru_type) {
+> +	case PRU_TYPE_PRU:
+> +		mask = PRUSS_SPP_XFER_SHIFT_EN;
+> +		break;
+> +	case PRU_TYPE_RTU:
+> +		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	set = enable ? mask : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
+> +
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index 5641153459a7..b68ab8735247 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -34,6 +34,33 @@ enum pruss_gp_mux_sel {
+>  	PRUSS_GP_MUX_SEL_MAX,
+>  };
+>  
+> +/*
+> + * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
+> + *			 to program the PRUSS_GPCFG0/1 registers
+> + */
+> +enum pruss_gpi_mode {
+> +	PRUSS_GPI_MODE_DIRECT = 0,
+> +	PRUSS_GPI_MODE_PARALLEL,
+> +	PRUSS_GPI_MODE_28BIT_SHIFT,
+> +	PRUSS_GPI_MODE_MII,
+> +	PRUSS_GPI_MODE_MAX,
+> +};
+> +
+> +/**
+> + * enum pru_type - PRU core type identifier
+> + *
+> + * @PRU_TYPE_PRU: Programmable Real-time Unit
+> + * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
+> + * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
+> + * @PRU_TYPE_MAX: just keep this one at the end
+> + */
+> +enum pru_type {
+> +	PRU_TYPE_PRU = 0,
+> +	PRU_TYPE_RTU,
+> +	PRU_TYPE_TX_PRU,
+> +	PRU_TYPE_MAX,
+> +};
+> +
+
+These go in pruss_driver.h
+
+>  /**
+>   * enum pruss_pru_id - PRU core identifiers
+>   * @PRUSS_PRU0: PRU Core 0.
+> @@ -98,6 +125,11 @@ int pruss_release_mem_region(struct pruss *pruss,
+>  			     struct pruss_mem_region *region);
+>  int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
+>  int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
+> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+> +		      enum pruss_gpi_mode mode);
+> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
+> +int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
+> +			 bool enable);
+>  
+>  #else
+>  
+> @@ -133,6 +165,25 @@ static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
+>  	return ERR_PTR(-EOPNOTSUPP);
+>  }
+>  
+> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
+> +				    enum pruss_pru_id pru_id,
+> +				    enum pruss_gpi_mode mode)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
+> +				       enum pru_type pru_type,
+> +				       bool enable);
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+
+So do these.
+
+Thanks,
+Mathieu
+
+>  #endif /* CONFIG_TI_PRUSS */
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+> -- 
+> 2.25.1
+> 
