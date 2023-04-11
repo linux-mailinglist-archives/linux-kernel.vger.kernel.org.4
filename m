@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1D16DD925
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1DA6DD928
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDKLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S229834AbjDKLPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDKLOx (ORCPT
+        with ESMTP id S229904AbjDKLPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:14:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936BF1724;
-        Tue, 11 Apr 2023 04:14:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 874F761F95;
-        Tue, 11 Apr 2023 11:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA66BC433D2;
-        Tue, 11 Apr 2023 11:13:58 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 12:13:55 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified
- bound 6 equals destination size
-Message-ID: <ZDVA8ykiKaXSzJdM@arm.com>
-References: <202304071552.CeeIBr5P-lkp@intel.com>
+        Tue, 11 Apr 2023 07:15:04 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60004448E;
+        Tue, 11 Apr 2023 04:14:47 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 752CE5C01E7;
+        Tue, 11 Apr 2023 07:14:31 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 11 Apr 2023 07:14:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1681211671; x=1681298071; bh=U6Fxzg96jC
+        MbXos8W2IcNTwOEcFKqCEbDJjjFmLV69Y=; b=cX7LghG5CZ3L4u3+Ecxxfl3AGJ
+        FYuHKu3H+sVf1bujXNhIfOoiBeotyCypvK9lpOa9LyJw2S4KFRyDN9Nn1Zbj8EkQ
+        rPfSPdJ3R6TgaZcNBpnDqhwkdCqPP4W1Zl8RPnifNtGzq0UZoZLJ+FkmaEf41qmy
+        YKU7qsIGM5Al+1T/1tnZBcUQwkJH8wDhMT0Nmy2od+vR/A9eiB2q8uDmRETh95KO
+        HObAzkD/rFHIlkJutzcIzjsYGL8qlLyZ1lnUsh4ApX6DS05Wz0alz5al5qNQ76SL
+        qdOCSIaj+2uzVvCoUdtfsaWDmdbHKQKj2Ds/YochBOi5AoxcxVK3yIW4rpQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681211671; x=1681298071; bh=U6Fxzg96jCMbX
+        os8W2IcNTwOEcFKqCEbDJjjFmLV69Y=; b=dPcZIN4sjLfCF6Xt5a4CXQKR7WHEX
+        1pGS8iXTTKhNbNvHvaz5enOjG+JbA1Wvv5qNhgNJp7XMwMh2T2d1bYiuiBFgOTfe
+        5yM1gjBDgov+mQugcnUaERLIgebfIqpXn1YQoeEnTglaj/+PIYkoUWoPhcWIJjsS
+        FJeT4sQZQeqh2WLtw2Z1suGSjepk2f/e9LnLWElGUUwlSiFSmZH1OKn0RA4QHXsB
+        7SSPm5hu4DPo+Xtpnv2kwPnMGE8bOsYfMyHp+4mAq+vgcIlVNcObkXfvDet3K9ue
+        Q9Kr+kSxI/FjYT22tB1AGmhEkZN/TK+2AyjQN+0xAudLLcyXkvcmW6lkg==
+X-ME-Sender: <xms:F0E1ZGH1rYcXjTDZmZi6Nc-PwKCmEdi38MauClB_sKEyvptuFDHm6Q>
+    <xme:F0E1ZHW86Kplr3WOle_94loV57IXtXdj23YCc8yqxS7yjbCqMwahvh9cQ33n392ID
+    zX46jwqnDgGHsCmk7U>
+X-ME-Received: <xmr:F0E1ZAK0pQeqPFSH549wghRmx2VI5idTjLupMn7XqsVRVJ5c7NGhIBmCjy7G>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgfdtheehiedvgeduudduvd
+    duleegleffgeekjedttdfhhfefleetheevvefftefgnecuffhomhgrihhnpehgihhthhhu
+    sgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:F0E1ZAHdAhSufrLtdviMj18Oo2T1bFBbVgfMVhX3NDBlwxGSz2EMgw>
+    <xmx:F0E1ZMXD9u7Bv76HMYD09NoaJQexq4uFieK6--ePEHXi9qNVwqOrBA>
+    <xmx:F0E1ZDP1dkNAIxl8tMuLimX0IIJYr2W-HjgM57WwRdrsWl9FKnCdSQ>
+    <xmx:F0E1ZKyDa8EYrneCSRNBAHZZKgR3lIMM7_nn1XOw3eEMj6pDb27Tjw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Apr 2023 07:14:30 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        and@gmx.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] MIPS: fw: Allow firmware to pass a empty env
+Date:   Tue, 11 Apr 2023 12:14:26 +0100
+Message-Id: <20230411111426.55889-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304071552.CeeIBr5P-lkp@intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:02:15PM +0800, kernel test robot wrote:
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f2afccfefe7be1f7346564fe619277110d341f9b
-> commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
-> date:   2 months ago
-> config: x86_64-sof-customedconfig-fuzz-defconfig (https://download.01.org/0day-ci/archive/20230407/202304071552.CeeIBr5P-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 olddefconfig
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304071552.CeeIBr5P-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
-> >> drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound 6 equals destination size [-Werror=stringop-truncation]
->       60 |         strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/acpi/acpica/tbfind.c:61:9: error: 'strncpy' specified bound 8 equals destination size [-Werror=stringop-truncation]
->       61 |         strncpy(header.oem_table_id, oem_table_id, ACPI_OEM_TABLE_ID_SIZE);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    cc1: all warnings being treated as errors
+fw_getenv will use env entry to determine style of env,
+however it is legal for firmware to just pass a empty list.
 
-I think the kernel test robot should filter out any reports related to
-this commit. The warning has nothing to do with the -O2 vs -Os change.
-It's simply that the compiler now warns if strncpy() has the destination
-size equal to the bound parameter (for some reason it doesn't do this
-with -Os). I mentioned it on a different report here:
+Check if first entry exist before running strchr to avoid
+null pointer dereference.
 
-https://lore.kernel.org/all/Y%2FdM77YdzDKRDdj1@arm.com/
+Cc: stable@vger.kernel.org
+Link: https://github.com/clbr/n64bootloader/issues/5
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Note: Fixes tag is intentionally omitted for this patch, although
+the booting issue only comes in 6.1, the logic issue is been since very start.
+---
+ arch/mips/fw/lib/cmdline.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-A potential solution to silence the compiler is to go through the ACPI
-code and change those strncpy() instances to memcpy(). I don't think
-those strings are even null-terminated in the APCI spec, so using
-strncpy() doesn't make sense.
-
+diff --git a/arch/mips/fw/lib/cmdline.c b/arch/mips/fw/lib/cmdline.c
+index f24cbb4a39b5..892765b742bb 100644
+--- a/arch/mips/fw/lib/cmdline.c
++++ b/arch/mips/fw/lib/cmdline.c
+@@ -53,7 +53,7 @@ char *fw_getenv(char *envname)
+ {
+ 	char *result = NULL;
+ 
+-	if (_fw_envp != NULL) {
++	if (_fw_envp != NULL && fw_envp(0) != NULL) {
+ 		/*
+ 		 * Return a pointer to the given environment variable.
+ 		 * YAMON uses "name", "value" pairs, while U-Boot uses
 -- 
-Catalin
+2.39.2 (Apple Git-143)
+
