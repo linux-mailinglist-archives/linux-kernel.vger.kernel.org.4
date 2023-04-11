@@ -2,336 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385266DE33F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07A16DE342
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjDKRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+        id S229660AbjDKR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjDKRzi (ORCPT
+        with ESMTP id S229491AbjDKR4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:55:38 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EF0619F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:55:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 60-20020a17090a09c200b0023fcc8ce113so11704260pjo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681235723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z+wspxn3j8gJu++FUxqZxSsWrkX6WZYur+w31HVIo5E=;
-        b=jG8rRP3d4bbGoXxIrEK0OYEnK+b1IjcF+Cs+d6eaZYAX94ri9Pum9fa/+Jx/A8HxCF
-         8yweRQp7oBFt+OYlXPYoxiHC0myTQjUhpLTLBRSfX1kjxW4TzvPfm6R+Abvncimgydpi
-         8YVDIFQcJmYCOyu+hpFjn2i56NA8kajSGOLy100OrURts2D0nrWuQ35uox5L9Ui5Z8LC
-         ClxFJKHQiV1SGHSKHUPJiHIO5HCZCvF/5PfhWRU0WHFeW6tNfTdtpPOrbHRdoeOq26mU
-         Kfd758hRYmRMtOMzXvjfmG38HbHI2dWTnWiagWfNiLa73Ngxqqoln8Wg4TUWWzLNMs6Z
-         ptVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681235723;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z+wspxn3j8gJu++FUxqZxSsWrkX6WZYur+w31HVIo5E=;
-        b=c+J+hjF8i7l8HejLsswD3gDnwyHXgwf5Y+22vBDYglfHfUvsNq+Rb4bN9XgR5OGhRz
-         XaPv7M8s5/qYI/qFGNy8JSh0/3xeynKcEAtNwg7yUA6zqeGT8hOXuxWKIwPGDvzxJnJT
-         Ogq1WOvArZK33kszLXzjOo7ujYxedOJUEsuV/rDVEtkNVpY2Ylck6GbV+LELj2hAGT24
-         W2IgyuwI3XsCqIpNZ6CFLrzS3CBiIW9MqlIMtsr1xK6ClPxCxyYO4RY4m4sIUuuQ/xes
-         KuD0T//kv+hee6Op9Ue6biJWVx3EcBAFuzRLqCJvnPMH4vMtCZMQOnZl8zgV7dGwfHHU
-         wzSQ==
-X-Gm-Message-State: AAQBX9emzUUkjfth8vyYAl6GYOQUE/NRrJGz+ypeCwmsl3eVQlJjMoP4
-        jBJ+h1d7B1jhCD6gFEsb7yuYpw==
-X-Google-Smtp-Source: AKy350ZjzcTensJICOA4UuuuSXUEOa1haZjIESZWRdZ7Rh5k0GVM8LtE8IMxyCZ59c/F/5oquUzaxQ==
-X-Received: by 2002:a17:902:e892:b0:199:4be8:be48 with SMTP id w18-20020a170902e89200b001994be8be48mr17406540plg.19.1681235722790;
-        Tue, 11 Apr 2023 10:55:22 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:f795:eecb:467b:d183])
-        by smtp.gmail.com with ESMTPSA id bg12-20020a1709028e8c00b001a50dcd10c8sm8601290plb.277.2023.04.11.10.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 10:55:22 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 11:55:19 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v7 3/4] soc: ti: pruss: Add pruss_cfg_read()/update(),
- pruss_cfg_get_gpmux()/set_gpmux() APIs
-Message-ID: <20230411175519.GD38361@p14s>
-References: <20230404115336.599430-1-danishanwar@ti.com>
- <20230404115336.599430-4-danishanwar@ti.com>
+        Tue, 11 Apr 2023 13:56:22 -0400
+Received: from CO1PR02CU001.outbound.protection.outlook.com (mail-westus2azon11011001.outbound.protection.outlook.com [52.101.47.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60035241
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:56:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AHG17LykxlwAN9aW4BA0pc0UfCHuwbx1rv1ayDq1mlIA2GReCCDuYCFgFTKEPa7jQpvkiJA4fIkTt/48rNUb+M4ABuqcOiOuU6PgE0We3h85bQI1jHS9ituqkBAAj6TQCGi5sF/TcGekxp6Z49buHpH2iPUbw8toUtQ6fmVrYErXnwPnDjGj21nwx0qnaS5PNm3v7h/+BswN1e9mIquToS9gYQ6MuzPGe914IZ45VOB1FcBE0gTVArm6C8MVR4294vYk5ZTfpdqIeIs1q8v1jAX/TYYJvwxRH5TY8sfikwPmf/RiFEzfy5Arp2fpEO5vRO8csRObXORMTGRvD9/wlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dJU3HEXEbOgEiVdY5t0IXwXnI13n+K1+q6eFTbq13RI=;
+ b=L2EMfPxZrij1AedNL2sK6IP1EZta8CiRRyfu1cjqrjSpm9P9vK5BnpRMATAOu8Q0mdnzFhJ0NHHqmrupFzgmWVgoY6ekiYZlNVmnPFlSnkHGEh4TbJJkbEjoMzzNDu8j8FtgWZ/KXZsuDppI8+6Z818hmlzb1RbXOutIKfqRkF3uY3QNrUczFbJchxU01MzCGQ9HpOxJHJ7HfM/yrmteFmySgVyxXWdsj5bAXg5cdCQ9JLSSAJd2S4tT6UXZ8ou6q0Fp0z3MNWzi3N94aCVj9AIqXooEHIoJa6bEPknx2VYOygRFish9HQL4i9qBDui7RKyW1zNrssLC04e01NLKEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dJU3HEXEbOgEiVdY5t0IXwXnI13n+K1+q6eFTbq13RI=;
+ b=vpaT11QjMPgu1VOQEhScq3iPEUTsFAKZ3+Fniwg4lIH8u4U9A/0+7dQMP7RUkCBcTL+eRok1CMnahlzsXVK1ni4hna9i+J8UIcVdd57y2q5zLO5pZojq06918+5DEdF2BZYbhe3WWfI/UWLI6c9l9TwNjgoRUzeOwBjNeA74Hog=
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ (2603:10b6:610:155::10) by SN6PR05MB4093.namprd05.prod.outlook.com
+ (2603:10b6:805:23::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 11 Apr
+ 2023 17:56:15 +0000
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8]) by CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8%6]) with mapi id 15.20.6298.028; Tue, 11 Apr 2023
+ 17:56:15 +0000
+From:   Zack Rusin <zackr@vmware.com>
+To:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "airlied@gmail.com" <airlied@gmail.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
+Thread-Topic: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
+Thread-Index: AQHZXoppq+SckREidEuckuwMrXDKD68mgLsA
+Date:   Tue, 11 Apr 2023 17:56:15 +0000
+Message-ID: <7409df3e0e77a73494c56aed8010ada57b41b18c.camel@vmware.com>
+References: <20230324195403.2655148-1-trix@redhat.com>
+In-Reply-To: <20230324195403.2655148-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.0-1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|SN6PR05MB4093:EE_
+x-ms-office365-filtering-correlation-id: 23067797-37bd-445e-d1f4-08db3ab60b51
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p6/GFsL7SzPGIgtAS09wzwJ58PHI+vKJ+yVlJlojXlDZrUOHhAEQtXL1Xh/QleHRf3U4nzGtMGG5+iATFQX/FZGdd4rv1ehYy+9vNvJcNa6UJfG15Rg8rP2V+KPvhHSx9SWsCm/P3TQA81/nhoXGPFJBItRr+nfhyaLB++AIm68hGvSgLk0VhDRofAYwSIvZVUXLKRl17BqOApwck5oGejZkOkm5HRGFrLMdZnIL1o8tbJg2zhmvT09g0hwOy9aEB1f7D5Gsi8iCQ80u15cvEci0U7sURnUVlr/8Y54ldY6R5c+M8k1ie5xn0JHoW56sVdGIO/bq5t5jxhntxblQH2W0v/dkP6IOJL80iq08utcD1IxL9dtGCTL0Q9gypF2WdvBKmVt09SZAQ+4hSfvPBlGTfJr7eUyDfBCTPQd7DRuCWkuFa5tkvxmx6wbfCpXjpPBd6gbAEf+Wpzm8WGgcEOZDpqfF5CnFJ5YV8Boud7NqbMHJCVRr6vOdBk428jeTftzkp2/wMX8xsawn56lt6Jk6T/TV1DtpWTrBdbL5IU84pM9i05DPiSpetTWlIHqdSIA5EXoPxH7YbSUoe032HBS/yJ4KTaMzJeYI5OlToxVwi6bQNQ0FALi++vchmPzz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(451199021)(8936002)(71200400001)(6486002)(38070700005)(2616005)(86362001)(36756003)(122000001)(6506007)(26005)(6512007)(186003)(66556008)(91956017)(4326008)(66446008)(38100700002)(66476007)(66946007)(4744005)(8676002)(2906002)(41300700001)(110136005)(316002)(54906003)(64756008)(5660300002)(76116006)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MWRoY08zd2Y2UVNIeFMrcUJiYURxVUlrdGZqNXpvUWUyQUZSdk5xRkRucEE5?=
+ =?utf-8?B?aEZEUGdRbEUrTkJPVVd3ek1xby9iRnMrUjRVVHVUbXErTTJIZkpUaDE0RmFZ?=
+ =?utf-8?B?SDZLdHoyUFNFRUZFTG5EZ2VHdkRjT2I2RG9IbG4za1NZVUZTeEk2Z0IreU9S?=
+ =?utf-8?B?K3FoN1NVYXFnR1QvOEZmV0xxTUZLZ2syeFYzZ0hpWjRiRy9UZjB1bjUrRkRs?=
+ =?utf-8?B?ckErUzYrcE1UYUZrZjVsSUxCcm5XUHBNOGtkWC8xNDY5UzhnVXBWS21FUXlu?=
+ =?utf-8?B?eVc4VDQvY0xyZHZ6WCtxMEEyaDBGdlVmbFArN250NU9Zb093Ri9NN1plNlNn?=
+ =?utf-8?B?ZDEwRE5GbzZLaysyMmZWY0xLZ0h0c1pGZS9zWVhTdWJDNGk1d1JvN0JOTkFn?=
+ =?utf-8?B?R3lLdDNJeEdHTXZhNDNFNzY0UmwvSWw4SGxhTzZNRVRpbW02VDhSTjV1WENW?=
+ =?utf-8?B?QmlsbHBDK1VTeXVDLzhvTVlsTlpYb2pTcHhLb3Btd283V2VIVlZmLzdadCty?=
+ =?utf-8?B?cW16ZUtBbGx2MG1JWTRaRWRJbTlVZzljTnJDS1FZVkxKNkZjMWlVZEg5MklM?=
+ =?utf-8?B?MDYwQzhlM2YwdHNCR0czLythaDdwMGJnQnRFcUllVStLYlMxRW5oblFQMkVE?=
+ =?utf-8?B?bzZhSmJPSjNvcXBXbG94UlBPNUlycHBtdzkzQnNVQWNOcEtEYloxREo5M3R6?=
+ =?utf-8?B?OWtWTHZFWGc5SHN0TXJyRDY1UVRZTFFkU1lUUVVtNWxZTndMbzJtN2FUd1lh?=
+ =?utf-8?B?dm9QRWpGbHUwVmd2QWhUMzFpaXdIbDE4aXhHdktNWkR2RCtGQ20raWlZM1d3?=
+ =?utf-8?B?SGFiazEzUVgvNlFLcUNZRFI3Q1RXYXNBLzYvNUNEZ1Q2WmxYOUN5TVZEOFBW?=
+ =?utf-8?B?cmg4Vm5JZnFpWHhscDJWcnUxLzBwVE1nYUpldDhQL3F1Q2VJMHNhcDdnRzhC?=
+ =?utf-8?B?eDdWbjJNUnROVGVwT3NpRXNCTk9QMHdJR2FiaWdxMGUzRm1rcVFUZHUrbHdO?=
+ =?utf-8?B?YnpZSStTaEk2eUVJSXg0emV0bkt3c1JKSVJUWTUzbHE4eS95SUJqa1h4L05I?=
+ =?utf-8?B?MkpHMC9ycWFnRXRiM09ZaTBmL01FSVdGNjRhejJTVHlXNmxYSzlzY29zRW5W?=
+ =?utf-8?B?dnJGZklXeTVBQU5sSzJZOE4rbXlYKzlQc1NpUVJVcjFtZERMcnMxR01BVkMr?=
+ =?utf-8?B?eGVTclQwaW5uci9tTS9sOEl4b0xTcnFqeEQvQVVPYzRBUFNHL0phU2lXQmpF?=
+ =?utf-8?B?L1VsWjhJUElqbDVNT1NmZmlUb1REM1NndXJFSVBVUURCRDRtS3VUamFqSGk1?=
+ =?utf-8?B?RFJ3V3VmSlpuTlJJQlVFcTBuOVBRYVUvQkdQNjhqSTFZdlhabkZjeS9JOXhR?=
+ =?utf-8?B?UTFOZE5xNHJ3blF4Um9BK1hLTWtsblk2Vk5teWFOcFc5a0xsanl3clRmUkZO?=
+ =?utf-8?B?aWlpbXlSYk5kUnhVaGFkaW02MWR5eEU4dHhQTFp1U1ZtUFZHR1prdkhwa28z?=
+ =?utf-8?B?a08zVUlrTTJtOHZ1QnZzSUZBLzdtUWxRNFpHODJmQlRqTmhvTWhNaUFHLzgy?=
+ =?utf-8?B?NU5UaStmaUp4OTBvWFNva0FoU0drbmNhVnB1KyswUHNBWURYZGhmMm42Skc3?=
+ =?utf-8?B?OVhZZFRONDdMN3c1TTNZanNaREpnM1lkVlZzSHgzSFhhVjBlQ2cwTHArU2dx?=
+ =?utf-8?B?VER2QW5vamlrdmx6K2NOVlJpQXNlcG56dkJoY25Jb0NJMDhiajBTTjdwZ3hv?=
+ =?utf-8?B?a213TDB6ZVowRklaODYxbjZUakNvK2lIYmc4Ty9KdTJrODdTMmpneGxvUXJW?=
+ =?utf-8?B?SXlzVzM1VThVWkovMTI0Wk9jWGdaWWg4TWN2MG5odFRmblN3aTdCQnBid0pL?=
+ =?utf-8?B?ZWFXTEIyS0ovcG9xMEdtclpmMzdvaE9Fa1BWL0ZnVFRiRWd6ZExBMmxQbEsy?=
+ =?utf-8?B?T2l6eDdpSGVFRzVTWS9rdCtRdjljQnRWUERtSjM2NmpGUGgwd3o0Wlkrd0RL?=
+ =?utf-8?B?T2xWU0QxQUVwWnZLc3VJeFBWdXlqTytUS2JWb251eGd3MXhRaklNd3hPZGw4?=
+ =?utf-8?B?R2FVUGRSR3NPWTU3NVBhVjV6bTM5SFJ5clBUVHZwWHNIbmU3a0kycEttRmVL?=
+ =?utf-8?Q?5LQWlCoCKUBZdneqB159gQh9w?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C5AD87214882AA48B2E0B677F4032259@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404115336.599430-4-danishanwar@ti.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23067797-37bd-445e-d1f4-08db3ab60b51
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 17:56:15.0988
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Lg/XjokrCZGHCZnOkEWXkU4fqF7qXwPZDTszWAqkGYFtZ9HMw8MTOYRaSoLL/1lNwG0OsPOdWVDOGPulocx3yg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB4093
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 05:23:35PM +0530, MD Danish Anwar wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
-> the PRUSS platform driver to read and program respectively a register
-> within the PRUSS CFG sub-module represented by a syscon driver. These
-> APIs are internal to PRUSS driver.
-> 
-> Add two new helper functions pruss_cfg_get_gpmux() & pruss_cfg_set_gpmux()
-> to get and set the GP MUX mode for programming the PRUSS internal wrapper
-> mux functionality as needed by usecases.
-> 
-> Various useful registers and macros for certain register bit-fields and
-> their values have also been added.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/soc/ti/pruss.c           | 45 ++++++++++++++++
->  drivers/soc/ti/pruss.h           | 88 ++++++++++++++++++++++++++++++++
->  include/linux/remoteproc/pruss.h | 32 ++++++++++++
->  3 files changed, 165 insertions(+)
->  create mode 100644 drivers/soc/ti/pruss.h
-> 
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index 7aa0f7171af1..0e37fe142615 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -21,6 +21,7 @@
->  #include <linux/regmap.h>
->  #include <linux/remoteproc.h>
->  #include <linux/slab.h>
-> +#include "pruss.h"
->  
->  /**
->   * struct pruss_private_data - PRUSS driver private data
-> @@ -168,6 +169,50 @@ int pruss_release_mem_region(struct pruss *pruss,
->  }
->  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->  
-> +/**
-> + * pruss_cfg_get_gpmux() - get the current GPMUX value for a PRU device
-> + * @pruss: pruss instance
-> + * @pru_id: PRU identifier (0-1)
-> + * @mux: pointer to store the current mux value into
-> + w
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux)
-> +{
-> +	int ret = 0;
-> +	u32 val;
-> +
-> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS || !mux)
-> +		return -EINVAL;
-> +
-> +	ret = pruss_cfg_read(pruss, PRUSS_CFG_GPCFG(pru_id), &val);
-> +	if (!ret)
-> +		*mux = (u8)((val & PRUSS_GPCFG_PRU_MUX_SEL_MASK) >>
-> +			    PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_cfg_get_gpmux);
-> +
-> +/**
-> + * pruss_cfg_set_gpmux() - set the GPMUX value for a PRU device
-> + * @pruss: pruss instance
-> + * @pru_id: PRU identifier (0-1)
-> + * @mux: new mux value for PRU
-> + *
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
-> +{
-> +	if (mux >= PRUSS_GP_MUX_SEL_MAX ||
-> +	    pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
-> +		return -EINVAL;
-> +
-> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
-> +				PRUSS_GPCFG_PRU_MUX_SEL_MASK,
-> +				(u32)mux << PRUSS_GPCFG_PRU_MUX_SEL_SHIFT);
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
-> +
-
-These stay here.
-
->  static void pruss_of_free_clk_provider(void *data)
->  {
->  	struct device_node *clk_mux_np = data;
-> diff --git a/drivers/soc/ti/pruss.h b/drivers/soc/ti/pruss.h
-> new file mode 100644
-> index 000000000000..6c55987e0e55
-> --- /dev/null
-> +++ b/drivers/soc/ti/pruss.h
-> @@ -0,0 +1,88 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * PRU-ICSS Subsystem user interfaces
-> + *
-> + * Copyright (C) 2015-2023 Texas Instruments Incorporated - http://www.ti.com
-> + *	MD Danish Anwar <danishanwar@ti.com>
-> + */
-> +
-> +#ifndef _SOC_TI_PRUSS_H_
-> +#define _SOC_TI_PRUSS_H_
-> +
-> +#include <linux/bits.h>
-> +#include <linux/regmap.h>
-> +
-> +/*
-> + * PRU_ICSS_CFG registers
-> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
-> + */
-> +#define PRUSS_CFG_REVID         0x00
-> +#define PRUSS_CFG_SYSCFG        0x04
-> +#define PRUSS_CFG_GPCFG(x)      (0x08 + (x) * 4)
-> +#define PRUSS_CFG_CGR           0x10
-> +#define PRUSS_CFG_ISRP          0x14
-> +#define PRUSS_CFG_ISP           0x18
-> +#define PRUSS_CFG_IESP          0x1C
-> +#define PRUSS_CFG_IECP          0x20
-> +#define PRUSS_CFG_SCRP          0x24
-> +#define PRUSS_CFG_PMAO          0x28
-> +#define PRUSS_CFG_MII_RT        0x2C
-> +#define PRUSS_CFG_IEPCLK        0x30
-> +#define PRUSS_CFG_SPP           0x34
-> +#define PRUSS_CFG_PIN_MX        0x40
-> +
-> +/* PRUSS_GPCFG register bits */
-> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK           GENMASK(1, 0)
-> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT          0
-> +
-> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT           26
-> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK            GENMASK(29, 26)
-> +
-> +/* PRUSS_MII_RT register bits */
-> +#define PRUSS_MII_RT_EVENT_EN                   BIT(0)
-> +
-> +/* PRUSS_SPP register bits */
-> +#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
-> +#define PRUSS_SPP_PRU1_PAD_HP_EN                BIT(0)
-> +#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
-> +
-> +/**
-> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
-> + * @pruss: the pruss instance handle
-> + * @reg: register offset within the CFG sub-module
-> + * @val: pointer to return the value in
-> + *
-> + * Reads a given register within the PRUSS CFG sub-module and
-> + * returns it through the passed-in @val pointer
-> + *
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return -EINVAL;
-> +
-> +	return regmap_read(pruss->cfg_regmap, reg, val);
-> +}
-> +
-> +/**
-> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
-> + * @pruss: the pruss instance handle
-> + * @reg: register offset within the CFG sub-module
-> + * @mask: bit mask to use for programming the @val
-> + * @val: value to write
-> + *
-> + * Programs a given register within the PRUSS CFG sub-module
-> + *
-> + * Return: 0 on success, or an error code otherwise
-> + */
-> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
-> +			    unsigned int mask, unsigned int val)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return -EINVAL;
-> +
-> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
-> +}
-> +
-
-Everything in pruss.h is ok.
-
-> +#endif  /* _SOC_TI_PRUSS_H_ */
-> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-> index 33f930e0a0ce..5641153459a7 100644
-> --- a/include/linux/remoteproc/pruss.h
-> +++ b/include/linux/remoteproc/pruss.h
-> @@ -16,6 +16,24 @@
->  
->  #define PRU_RPROC_DRVNAME "pru-rproc"
->  
-> +/*
-> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
-> + * PRUSS_GPCFG0/1 registers
-> + *
-> + * NOTE: The below defines are the most common values, but there
-> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
-> + * values are interchanged. Also, this bit-field does not exist on
-> + * AM335x SoCs
-> + */
-> +enum pruss_gp_mux_sel {
-> +	PRUSS_GP_MUX_SEL_GP = 0,
-> +	PRUSS_GP_MUX_SEL_ENDAT,
-> +	PRUSS_GP_MUX_SEL_RESERVED,
-> +	PRUSS_GP_MUX_SEL_SD,
-> +	PRUSS_GP_MUX_SEL_MII2,
-> +	PRUSS_GP_MUX_SEL_MAX,
-> +};
-> +
->  /**
->   * enum pruss_pru_id - PRU core identifiers
->   * @PRUSS_PRU0: PRU Core 0.
-> @@ -78,6 +96,8 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->  			     struct pruss_mem_region *region);
->  int pruss_release_mem_region(struct pruss *pruss,
->  			     struct pruss_mem_region *region);
-> +int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
-> +int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
->  
->  #else
->  
-> @@ -101,6 +121,18 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
->  	return -EOPNOTSUPP;
->  }
->  
-> +static inline int pruss_cfg_get_gpmux(struct pruss *pruss,
-> +				      enum pruss_pru_id pru_id, u8 *mux)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
-> +				      enum pruss_pru_id pru_id, u8 mux)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-
-All of this goes in pruss_driver.h
-
->  #endif /* CONFIG_TI_PRUSS */
->  
->  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
-> -- 
-> 2.25.1
-> 
+T24gRnJpLCAyMDIzLTAzLTI0IGF0IDE1OjU0IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBjbGFu
+ZyB3aXRoIFc9MSByZXBvcnRzDQo+IGRyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4X21zZy5j
+OjcxNjoyMTogZXJyb3I6IHVudXNlZCBmdW5jdGlvbg0KPiDCoCAnbWtzc3RhdF9pbml0X3JlY29y
+ZCcgWy1XZXJyb3IsLVd1bnVzZWQtZnVuY3Rpb25dDQo+IHN0YXRpYyBpbmxpbmUgY2hhciAqbWtz
+c3RhdF9pbml0X3JlY29yZChta3NzdGF0X2tlcm5fc3RhdHNfdCBzdGF0X2lkeCwNCj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXg0KPiBUaGlzIGZ1bmN0aW9uIGlzIG5v
+dCB1c2VkIHNvIHJlbW92ZSBpdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRvbSBSaXggPHRyaXhA
+cmVkaGF0LmNvbT4NCg0KVGhhbmtzLCBNYXJ0aW4gS3Jhc3RldiBhbHJlYWR5IHNlbnQgdGhlIHNh
+bWUgcGF0Y2ggdG8gdGhlIGRyaS1kZXZlbCB0d28gd2Vla3MNCmJlZm9yZS4gSXQncyBpbiB0aGUg
+ZHJtLW1pc2MtbmV4dCBicmFuY2ggaW4gdGhlIGRybS1taXNjIHRyZWUgYW5kIHNob3VsZCBtaWdy
+YXRlIHRvDQprZXJuZWwgZm9yIDYuNC4NCg0Keg0KDQo=
