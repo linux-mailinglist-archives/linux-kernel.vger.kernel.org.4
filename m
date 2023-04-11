@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9D06DE4FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A206DE505
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjDKTaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S229741AbjDKTbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDKTac (ORCPT
+        with ESMTP id S229762AbjDKTbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:30:32 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408F91B4;
-        Tue, 11 Apr 2023 12:30:31 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ud9so22938129ejc.7;
-        Tue, 11 Apr 2023 12:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1681241430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/djvqI9JsJGvDn3SeW6vm5P6m42AvZNBj0jcHhZnRM4=;
-        b=AqRqt8mlFu1EZUsVr+zspOkJ4uOQ+yIr1IjZ1zhhq31AVvWsJDwCtAt3Zht1izog4M
-         JkAS3c3Dz882M05M0FLebvBd8mkPB2iX7vvxpWFUGyO03ytitNYxL8S1iEQoY2bj0ZDa
-         +T4YaBqXthOb6pr4NxBHo+qgGvGOWorR03SZYGEyN1T/qoHK/W5BJ4hY0OTAuGJ/HmSN
-         HqFG1yhc3jSWKxjZoVRVdB32QjkSHh7FhEbk042cb+w3iJEkjA938iglZ9DU3e0jrlRd
-         YPvE8VzoQZ0c0wj+7houxZYFRbJfVP/4b3uZ+8JbwAk6hWkGdhSrglTw1ggb6WmcG8LY
-         iqEQ==
+        Tue, 11 Apr 2023 15:31:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4D4135
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681241423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XSiYd4vLNxCRpyGc8Q8nbzOyNKeYH8lsn9NGk8/RzXo=;
+        b=T1MsIAF1Cz7fTIhH4Gty0x/GYYQtl6HPkrUH8B1YrIIgTVVvyyjBrmp32qOKcnQes5NZ0n
+        /P/qVvJc5vvn9itVI7t41Jpzr9f8MgVgfBY26YDH/biDzLLj6eaFCaq8ttZ50OGg4dYGDI
+        V0YfHwXmVvClsW5yftdv0CAFc5xNf9w=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-338-G94lIh3wN0OFpgZLffLjqw-1; Tue, 11 Apr 2023 15:30:22 -0400
+X-MC-Unique: G94lIh3wN0OFpgZLffLjqw-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-54c23fab905so138465197b3.14
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:30:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681241430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1681241422;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/djvqI9JsJGvDn3SeW6vm5P6m42AvZNBj0jcHhZnRM4=;
-        b=2YN5k/AKl1YLE+cRcbIPPBdhG2uY0jWOe53inFYmhZC5EW+6PfUxMRfh66m5Ad6wk6
-         jVyt8rbCB5WexRdN57+OasPzNpIwAC7tDIWWzK8Trt7yM/WBv9MYWXud1moBp2vs9dBa
-         jeCXD4bIdacc4puL1aTHc9zVluzMuLvaX7S6CJB4ChznACQHTGhr/IHweOywC0LLTadc
-         5TTOutUN1VTXLR+XB4FveIbKZUOsttqEII9itDXAwFWI03i5wmbnQ/L1JJtk+chw/5Hq
-         ZLrVjbM86Y4FcJQ/ChYcbJpYKdQT4YXAYatQxqhEDFsViJYCNsraoPcWDTZchpjmAH3L
-         K35w==
-X-Gm-Message-State: AAQBX9dg+b56x1D+LNA/pMAQqEIgXdkpMe+WA4AlUKMdiP8Cqzun6qyr
-        YatgSqKqjJpUnVxinCCwtWar1BJXDr7x2c9nC3c=
-X-Google-Smtp-Source: AKy350Z8La4docT1vMFuoXxvI/XsDKC+Hy4e6yD7JK7aCMklvTxvE8XQXPb50PEcBK/AIQfgVHJcGowSXtJlkVPio84=
-X-Received: by 2002:a17:907:ea5:b0:94a:972c:c28d with SMTP id
- ho37-20020a1709070ea500b0094a972cc28dmr3782765ejc.6.1681241429546; Tue, 11
- Apr 2023 12:30:29 -0700 (PDT)
+        bh=XSiYd4vLNxCRpyGc8Q8nbzOyNKeYH8lsn9NGk8/RzXo=;
+        b=Z1YTkiqjZbD9cYNGBHjuy4UfHFLtyH8wxMeSFXEWUXYjtfcaUspjs7HPv5vas2k+s9
+         ttnrKyJ5tN4PsZo+ioSmW5tKn4an74z/GHPGdqMCB8vy2r9+YbVFAmC/HQ55Yec2/6LO
+         5l/gq34V1AQsLIRyYfdwX8M+MZYYccHA+TBleNkLKIZIiI7Qpw7cBQX5s529h8OqvEYV
+         p9Lhc2Igo8dmLFE1hJzXCm5aZ8AXr0m7CMGntX/QhIpPoEEBLBDH7o81jZu2SfH3C0xC
+         MGnemxesZM567sWhkuN0D3ly3Ca8DIyt92dVnMcpdq9THssymDcUYYnM/n3i6ltj6IOZ
+         GjAA==
+X-Gm-Message-State: AAQBX9fkOyL2+ZSadedfa82tRHow8CttiyLZ6kg8ayAX4DqvZQEedrRg
+        kkyTKFFuxC30TZOvBFVfdaV4V8DPOEVpG+Aqd3j8yFvbSsoZsYaRuoQzJrH9gPTPtE1IW/GuwsB
+        grHGNLHdplTrDrUZbYSAEVO7t
+X-Received: by 2002:a0d:e214:0:b0:54f:32a:a26 with SMTP id l20-20020a0de214000000b0054f032a0a26mr3140016ywe.5.1681241421953;
+        Tue, 11 Apr 2023 12:30:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZsC9iBX9a7B2k91coESrz+mo0Z//dKyhd31vgb3jSIzRwJ96yVRUdmYIaoWCJH5Q3fS8sEXA==
+X-Received: by 2002:a0d:e214:0:b0:54f:32a:a26 with SMTP id l20-20020a0de214000000b0054f032a0a26mr3139998ywe.5.1681241421597;
+        Tue, 11 Apr 2023 12:30:21 -0700 (PDT)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id 23-20020a810717000000b0054f6f2d291dsm693839ywh.34.2023.04.11.12.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 12:30:20 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 15:30:19 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: add debug message showing which unused clocks are
+ disabled on boot
+Message-ID: <ZDW1S7OLRjHzNCB0@x1>
+References: <20221117105829.256717-1-bmasney@redhat.com>
+ <27ded6a4ebd67cef0d4b472a2aea442e.sboyd@kernel.org>
+ <ZCWXMXdaLdBb9KzL@x1>
 MIME-Version: 1.0
-References: <20230410193048.31084-1-exkcmailist@inbox.lv> <20230410193048.31084-3-exkcmailist@inbox.lv>
-In-Reply-To: <20230410193048.31084-3-exkcmailist@inbox.lv>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 11 Apr 2023 21:30:18 +0200
-Message-ID: <CAFBinCCXYnChN8MfOxGEDSTm4HftpzuwwHwtqm7b1dPH6EdUsQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] arm64: dts: meson-gxl: add support for Xiaomi
- Mibox 3
-To:     Karl Chan <exkcmailist@inbox.lv>
-Cc:     linux-amlogic@lists.infradead.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Karl Chan <exxxxkc@getgoogleoff.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCWXMXdaLdBb9KzL@x1>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,49 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Karl,
+On Thu, Mar 30, 2023 at 10:05:37AM -0400, Brian Masney wrote:
+> On Wed, Mar 29, 2023 at 02:49:50PM -0700, Stephen Boyd wrote:
+> > Quoting Brian Masney (2022-11-17 02:58:29)
+> > > The clk framework on bootup will automatically disable all unused clocks
+> > > on bootup unless the clk_ignore_unused kernel parameter is present.
+> > > Let's add a basic debugging log statement here that shows which clocks
+> > > are disabled. There is already tracepoint present here as well, but
+> > > there's nothing like a simple, good ol' fashioned printk for simplicity.
+> > > 
+> > > Signed-off-by: Brian Masney <bmasney@redhat.com>
+> > > ---
+> > 
+> > I'd like to see a documentation update instead that covers how to enable
+> > the tracepoint on the kernel commandline and have it print to the serial
+> > console.
+> 
+> Sure, I can do that. I see there's a section 'Disabling clock gating of
+> unused clocks' in Documentation/driver-api/clk.rst where I think this
+> would be appropriate.
 
-On Mon, Apr 10, 2023 at 9:31=E2=80=AFPM Karl Chan <exkcmailist@inbox.lv> wr=
-ote:
->
-> From: "Karl Chan"  <exkcmailist@inbox.lv>
->
-> The Xiaomi Mibox 3 is a TV box based on the Amlogic S905X chipset.
-I found various websites referring to this device as "Mi Box 3" (so
-space between Mi and Box).
-Do you know the official name that Xiaomi used?
+Just to close out this thread, I submitted a patch to the docs tree.
 
-> There are two variants:
-> - 2 GiB/8GIB
-> - 1 GiB/4GIB
->
-> Both variants come with:
-> - 802.11a/b/g/n/ac wifi (BCM4345)
-> - HDMI , AV (CVBS) and S/PDIF optical output
-nit-pick: no space before the comma
+https://lore.kernel.org/lkml/20230411192153.289688-1-bmasney@redhat.com/T/#u
 
-> - 1x USB (utilizing both USB ports provided by the SoC)
-Can you please explain this in a bit more detail?
-My understanding is that this board has one USB 2.0 type A port. What
-do you mean by "utilizing both USB ports"?
+Brian
 
-Also I'm curious: does the board come with eMMC or (raw/parallel) NAND
-flash? P212 typically means eMMC.
-
-[...]
-> +/* This UART is brought out to the uart pad on the pcb*/
-nit-pick: missing space after "pcb"
-Are the UART pads obvious on the board (for example since they are
-labelled)? If not: maybe add a hint where to find it
-
-[...]
-> +&usb {
-> +       status =3D "okay";
-> +       dr_mode =3D "host";
-> +};
-This is already inherited from meson-gxl-s905x-p212.dtsi so removing
-it should result in the same .dtb
-
-
-Best regards,
-Martin
