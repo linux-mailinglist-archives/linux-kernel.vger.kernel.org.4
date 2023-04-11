@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AD96DDCC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894356DDCCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjDKNtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S230493AbjDKNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjDKNt0 (ORCPT
+        with ESMTP id S230468AbjDKNuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:49:26 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1368A1FEB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:24 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t14so10361248lft.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:23 -0700 (PDT)
+        Tue, 11 Apr 2023 09:50:00 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B0E525E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:41 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso9626569wmo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681220963;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uHtWgJFHIhaJVA6LiMJBMJU0hICshc5Lm8ByCpWkf/w=;
-        b=KTJSSGL0yuAsLkW0Ws8NUpXCYKloY0mQEaB9RREuwahxQ72lqe2vz2ZgsA4rN2PDCi
-         U3EdyCjvIApkBpmw/N6jiPlbQN3vlPbj+cOHBWRLwDfVTlaMIgCQzT02Ou23ulJ/E2s6
-         WCEhVNbO/4n6xEE5D+PtHlCaVwkiErKQ/HfTs6F0ze/tpwzQG6jXG4cW40WDxQmKgMWK
-         4g+kt8TpB45+HnkbMBLolAp3n3GNlVI5tvYdx8XIpMG3tCu2pcUP/87UTnZK7EEun+Ck
-         UUvcofYFie8GlkisWxghfczBwgxtSK4xr+55NCftBZ/vPt33SQ3Jh/0FqqVcA42J5wxB
-         mV6w==
+        d=chromium.org; s=google; t=1681220980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRMC5iFofoKktGidEDO+nRAZWqOxvRlQKeJzDZZ9bBc=;
+        b=gXQ3ca40eFlGA4Hoz/INT+Ar9rGM4EfT+6AD5PotZ487coDbSqFCPFYB7c+D8uz18l
+         M0PLaBkzncs9DBCJr997F7Fw7gbyx4FhZ+P6sJfFiu3ISD73QswGhBIKZ8igcqrzwpPI
+         krKuiQ1wrAkf9+Lg8RhLYmGI0T8Prssaa/NDc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681220963;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uHtWgJFHIhaJVA6LiMJBMJU0hICshc5Lm8ByCpWkf/w=;
-        b=UkcG3fCQt+FpPOgcgQQuR/YUjieKKp0SevYgEd6Mb6IFUYGBFYnaY6la6tVicGrT5W
-         +a/OrloTkbdGJcEZ2K+KlmYjceaxT3Kb+4W/oJODeQEZCLQnOu9wAXJNd9JaVljzxlpq
-         jnCVg16Xfl7LrM2TmNV4A0SzR1H5onasnbt2yBej68g4QbQ0tjaTtNItk6/MdtmqDnXV
-         gRg2yWGZ1BMwzxdy3tV5qlrldxob7G7K1Xvr1/zAowYXUiUsnuSR66bm3SE9B13G8inq
-         eqz1BXTuf79XOmO7ZT/SYSyTrbQ4YbBp8lP7DS2bUPsdCP2sfs57o0wXcqF5s5DsWq/8
-         x0vg==
-X-Gm-Message-State: AAQBX9ehVFJpR00KcR0KTNiUbo0+sMg7p6g4DTLmClpZRTeV/zVYClA9
-        SeXN4BwsgD4qjawUNYfIzoWR3g==
-X-Google-Smtp-Source: AKy350a1PFzOwUfLsdcxQQ1pdCVrf7WhWBjcq5r1wi0ojAgjZbb9DJfubVyraaH/otwwY4xiVBUUow==
-X-Received: by 2002:ac2:4c81:0:b0:4e9:6097:add3 with SMTP id d1-20020ac24c81000000b004e96097add3mr4731332lfl.61.1681220963648;
-        Tue, 11 Apr 2023 06:49:23 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id y9-20020ac255a9000000b004eb2d6160a4sm2563707lfg.32.2023.04.11.06.49.22
+        d=1e100.net; s=20210112; t=1681220980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRMC5iFofoKktGidEDO+nRAZWqOxvRlQKeJzDZZ9bBc=;
+        b=hlqsg16sY27a9OLWRo2WOoxeBAzfp1hh6hw7J4tZLFuW5hZ0qWs3P0AOt6BKNJZN5/
+         99zS8h3yp17MFq3PYA1Zl+P66PLeWo0P4v8M9FyglDPU5EDrtz6accK1wo1jOEXF0vAw
+         BltoTuZnhcOUhlZ+hQOACw1U9G/Uub/kuctHsl0DZCmcBaXLYICzGcpGvuewsgFCl0Do
+         COJobw0Rrwrq+/DeH1wKDtS83BjDcvSGlK/INQuk4P2aiV9zwpjhSZjRc2LcpdGsCcal
+         NCg4NAR/3N4AtWve2OAqJd+UKbIqNTFr5UGpcxC6SjzpvZ+8dvJ1upKFhAlBrCiQudrg
+         Rkzg==
+X-Gm-Message-State: AAQBX9dekwV1eTorMxzU/+8ngTtkJEVK8gTrOCYcIb08NUBSmDQrzOvi
+        NITUMI5S+1KylK2vlOphu+e1pQ==
+X-Google-Smtp-Source: AKy350Zr1fK8+7gCRz5xWYNdcIUOGijel6dNT+C0SWtjTZxVN1plQHjMDuzT220lCqxmsLndIV5pFA==
+X-Received: by 2002:a7b:c842:0:b0:3ed:88f5:160a with SMTP id c2-20020a7bc842000000b003ed88f5160amr2125195wml.11.1681220980405;
+        Tue, 11 Apr 2023 06:49:40 -0700 (PDT)
+Received: from orzel1.c.googlers.com.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id l13-20020a1c790d000000b003f071466229sm16665401wme.17.2023.04.11.06.49.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:49:23 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 11 Apr 2023 15:49:18 +0200
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8150-kumano: Enable SDHCI2
+        Tue, 11 Apr 2023 06:49:39 -0700 (PDT)
+From:   =?UTF-8?q?Kornel=20Dul=C4=99ba?= <korneld@chromium.org>
+To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        Gong Richard <richard.gong@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?q?Kornel=20Dul=C4=99ba?= <korneld@chromium.org>
+Subject: [PATCH] Revert "pinctrl: amd: Disable and mask interrupts on resume"
+Date:   Tue, 11 Apr 2023 13:49:32 +0000
+Message-Id: <20230411134932.292287-1-korneld@chromium.org>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230315-topic-kumano_dts0-v1-4-f1852c2a2378@linaro.org>
-References: <20230315-topic-kumano_dts0-v1-0-f1852c2a2378@linaro.org>
-In-Reply-To: <20230315-topic-kumano_dts0-v1-0-f1852c2a2378@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681220957; l=921;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=gxjJ6YGpLan1OIOLNTh/xyzJg8bMee6dGyJiV+tpg98=;
- b=rqX9idewh+MKrObT4whA4e2QmK0L5hgfn542WlrlHCE88WamDPMQBItmcIGikS3F7gpmkSdLyX50
- oVjpPCV7A6mwC5Lc5Ol9Mj6CSzoRXfRHakxaTIelrmZ2GCNGbOuo
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+This reverts commit b26cd9325be4c1fcd331b77f10acb627c560d4d7.
 
-Set up and enable SDHCI2 to enable the microSD slot on Kumano
-devices.
+This patch introduces a regression on Lenovo Z13, which can't wake
+from the lid with it applied; and some unspecified AMD based Dell
+platforms are unable to wake from hitting the power button
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Kornel Dulęba <korneld@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/pinctrl/pinctrl-amd.c | 36 ++++++++++++++++-------------------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-index 5fa0a83a4b2c..9dca22cf3eb6 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
-@@ -618,6 +618,17 @@ &qupv3_id_1 {
- 	status = "okay";
+diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+index 609821b756c2..9236a132c7ba 100644
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -872,34 +872,32 @@ static const struct pinconf_ops amd_pinconf_ops = {
+ 	.pin_config_group_set = amd_pinconf_group_set,
  };
  
-+&sdhc_2 {
-+	vmmc-supply = <&vreg_l9c_2p9>;
-+	vqmmc-supply = <&vreg_l6c_2p9>;
-+	cd-gpios = <&tlmm 96 GPIO_ACTIVE_HIGH>;
-+	bus-width = <4>;
-+	no-sdio;
-+	no-emmc;
+-static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
++static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+ {
+-	const struct pin_desc *pd;
++	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+ 	unsigned long flags;
+ 	u32 pin_reg, mask;
++	int i;
+ 
+ 	mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+ 		BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+ 		BIT(WAKE_CNTRL_OFF_S4);
+ 
+-	pd = pin_desc_get(gpio_dev->pctrl, pin);
+-	if (!pd)
+-		return;
++	for (i = 0; i < desc->npins; i++) {
++		int pin = desc->pins[i].number;
++		const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
+ 
+-	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+-	pin_reg = readl(gpio_dev->base + pin * 4);
+-	pin_reg &= ~mask;
+-	writel(pin_reg, gpio_dev->base + pin * 4);
+-	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+-}
++		if (!pd)
++			continue;
+ 
+-static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+-{
+-	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+-	int i;
++		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+ 
+-	for (i = 0; i < desc->npins; i++)
+-		amd_gpio_irq_init_pin(gpio_dev, i);
++		pin_reg = readl(gpio_dev->base + i * 4);
++		pin_reg &= ~mask;
++		writel(pin_reg, gpio_dev->base + i * 4);
 +
-+	status = "okay";
-+};
-+
- &tlmm {
- 	gpio-reserved-ranges = <126 4>;
- 	gpio-line-names = "NFC_ESE_SPI_MISO", /* GPIO_0 */
-
++		raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
++	}
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -952,10 +950,8 @@ static int amd_gpio_resume(struct device *dev)
+ 	for (i = 0; i < desc->npins; i++) {
+ 		int pin = desc->pins[i].number;
+ 
+-		if (!amd_gpio_should_save(gpio_dev, pin)) {
+-			amd_gpio_irq_init_pin(gpio_dev, pin);
++		if (!amd_gpio_should_save(gpio_dev, pin))
+ 			continue;
+-		}
+ 
+ 		raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+ 		gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4) & PIN_IRQ_PENDING;
 -- 
-2.40.0
+2.40.0.577.gac1e443424-goog
 
