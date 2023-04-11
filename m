@@ -2,110 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CEA6DE3C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E4C6DE3C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDKSUB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 14:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S229744AbjDKSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDKSTx (ORCPT
+        with ESMTP id S229786AbjDKSU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:19:53 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8B4C37;
-        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so656770a12.1;
-        Tue, 11 Apr 2023 11:19:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RRFhel4vItei7jcN1xlLMvb+yM33VbvdduIMfttiDjw=;
-        b=h/gdDBrHU9yMtb38KXgn1j8HC5UUu9X8lArfue2KefL6dDhTFtMFNc/T4XnDf/ILhE
-         nfcLCGhTxysHXSklwLZQAgyknvwBmIJ26bHKhtDqWqxXu28PHNg1Qnxo8/LKbkIjhZi1
-         BQkDc+kJnx99v7E1ItfNvu6t5FZvby1vZsFw3KGv5IFnzHtapHhjKTajOCdfHQiRiNMi
-         Ama/WHuXW+VF9zhh1nWEJtxPmgIZofD+UrBjubWA9Fvok5ozs3O7xG1Y93O1QXB3qT4J
-         q21yTKue0EKapjZ6sDK6bFqAhpzIe7Pu2MOKwymbKL/+vR3Q0elK+rF5n2b1s1HbJLll
-         qW5w==
-X-Gm-Message-State: AAQBX9dBDCXll4TY9a1Yu9ZAEm1zIXwt4jPJu2SPcd7EAJZ0ZiK5/00u
-        LShVTbNPkCBo6V8KBbXM6kQU/QCG9MlmFnmalM4=
-X-Google-Smtp-Source: AKy350ajKXXZ83vvFNPQgzdQ1A+7MWTUTMxNwAASKo1/EsmCjDpqcwjCVOxmtof6xZsZugY6FUKkyZ1BNljgFOtMMgc=
-X-Received: by 2002:a05:6402:550b:b0:4fb:e069:77ac with SMTP id
- fi11-20020a056402550b00b004fbe06977acmr104613edb.0.1681237189537; Tue, 11 Apr
- 2023 11:19:49 -0700 (PDT)
+        Tue, 11 Apr 2023 14:20:57 -0400
+Received: from out-2.mta0.migadu.com (out-2.mta0.migadu.com [91.218.175.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537F75B86
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:20:55 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:20:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681237251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BviVJo8d5Bs8LCKJmkTvRdhI0+Q4kdUJaObznFPhyXA=;
+        b=FVVVZNnLVbmJlqlkSx0T6/NtT+r4Af2Yw6u5egGY161n0pQCozGAYw5ITSHeKzduWrb6jh
+        ao5kHKcukv7gQfqlud1wJIN4nAJFqQbY0dTW+FTQHXKvcwnL99JC2O0geHkdxIbnMARGRD
+        8CPqFCIXgUBN0BWjdT5Dci+IVfq+7Mw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended
+ buffer descriptor mode
+Message-ID: <ZDWk8vjvk7HO4I7o@P9FQF9L96D.corp.robot.car>
+References: <20230407172402.103168-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20230410205305.1649678-3-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:19:38 +0200
-Message-ID: <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407172402.103168-1-roman.gushchin@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> There are still some drivers needing to play with the thermal zone
-> device internals. That is not the best but until we can figure out if
-> the information is really needed, let's encapsulate the field used in
-> the thermal zone device structure, so we can move forward relocating
-> the thermal zone device structure definition in the thermal framework
-> private headers.
+Friendly ping.
 
-I'm not really sure why this is needed, so please explain.
+Also cc'ing Dave.
 
+Thanks!
 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Fri, Apr 07, 2023 at 10:24:02AM -0700, Roman Gushchin wrote:
+> For quite some time we were chasing a bug which looked like a sudden
+> permanent failure of networking and mmc on some of our devices.
+> The bug was very sensitive to any software changes and even more to
+> any kernel debug options.
+> 
+> Finally we got a setup where the problem was reproducible with
+> CONFIG_DMA_API_DEBUG=y and it revealed the issue with the rx dma:
+> 
+> [   16.992082] ------------[ cut here ]------------
+> [   16.996779] DMA-API: macb ff0b0000.ethernet: device driver tries to free DMA memory it has not allocated [device address=0x0000000875e3e244] [size=1536 bytes]
+> [   17.011049] WARNING: CPU: 0 PID: 85 at kernel/dma/debug.c:1011 check_unmap+0x6a0/0x900
+> [   17.018977] Modules linked in: xxxxx
+> [   17.038823] CPU: 0 PID: 85 Comm: irq/55-8000f000 Not tainted 5.4.0 #28
+> [   17.045345] Hardware name: xxxxx
+> [   17.049528] pstate: 60000005 (nZCv daif -PAN -UAO)
+> [   17.054322] pc : check_unmap+0x6a0/0x900
+> [   17.058243] lr : check_unmap+0x6a0/0x900
+> [   17.062163] sp : ffffffc010003c40
+> [   17.065470] x29: ffffffc010003c40 x28: 000000004000c03c
+> [   17.070783] x27: ffffffc010da7048 x26: ffffff8878e38800
+> [   17.076095] x25: ffffff8879d22810 x24: ffffffc010003cc8
+> [   17.081407] x23: 0000000000000000 x22: ffffffc010a08750
+> [   17.086719] x21: ffffff8878e3c7c0 x20: ffffffc010acb000
+> [   17.092032] x19: 0000000875e3e244 x18: 0000000000000010
+> [   17.097343] x17: 0000000000000000 x16: 0000000000000000
+> [   17.102647] x15: ffffff8879e4a988 x14: 0720072007200720
+> [   17.107959] x13: 0720072007200720 x12: 0720072007200720
+> [   17.113261] x11: 0720072007200720 x10: 0720072007200720
+> [   17.118565] x9 : 0720072007200720 x8 : 000000000000022d
+> [   17.123869] x7 : 0000000000000015 x6 : 0000000000000098
+> [   17.129173] x5 : 0000000000000000 x4 : 0000000000000000
+> [   17.134475] x3 : 00000000ffffffff x2 : ffffffc010a1d370
+> [   17.139778] x1 : b420c9d75d27bb00 x0 : 0000000000000000
+> [   17.145082] Call trace:
+> [   17.147524]  check_unmap+0x6a0/0x900
+> [   17.151091]  debug_dma_unmap_page+0x88/0x90
+> [   17.155266]  gem_rx+0x114/0x2f0
+> [   17.158396]  macb_poll+0x58/0x100
+> [   17.161705]  net_rx_action+0x118/0x400
+> [   17.165445]  __do_softirq+0x138/0x36c
+> [   17.169100]  irq_exit+0x98/0xc0
+> [   17.172234]  __handle_domain_irq+0x64/0xc0
+> [   17.176320]  gic_handle_irq+0x5c/0xc0
+> [   17.179974]  el1_irq+0xb8/0x140
+> [   17.183109]  xiic_process+0x5c/0xe30
+> [   17.186677]  irq_thread_fn+0x28/0x90
+> [   17.190244]  irq_thread+0x208/0x2a0
+> [   17.193724]  kthread+0x130/0x140
+> [   17.196945]  ret_from_fork+0x10/0x20
+> [   17.200510] ---[ end trace 7240980785f81d6f ]---
+> 
+> [  237.021490] ------------[ cut here ]------------
+> [  237.026129] DMA-API: exceeded 7 overlapping mappings of cacheline 0x0000000021d79e7b
+> [  237.033886] WARNING: CPU: 0 PID: 0 at kernel/dma/debug.c:499 add_dma_entry+0x214/0x240
+> [  237.041802] Modules linked in: xxxxx
+> [  237.061637] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         5.4.0 #28
+> [  237.068941] Hardware name: xxxxx
+> [  237.073116] pstate: 80000085 (Nzcv daIf -PAN -UAO)
+> [  237.077900] pc : add_dma_entry+0x214/0x240
+> [  237.081986] lr : add_dma_entry+0x214/0x240
+> [  237.086072] sp : ffffffc010003c30
+> [  237.089379] x29: ffffffc010003c30 x28: ffffff8878a0be00
+> [  237.094683] x27: 0000000000000180 x26: ffffff8878e387c0
+> [  237.099987] x25: 0000000000000002 x24: 0000000000000000
+> [  237.105290] x23: 000000000000003b x22: ffffffc010a0fa00
+> [  237.110594] x21: 0000000021d79e7b x20: ffffffc010abe600
+> [  237.115897] x19: 00000000ffffffef x18: 0000000000000010
+> [  237.121201] x17: 0000000000000000 x16: 0000000000000000
+> [  237.126504] x15: ffffffc010a0fdc8 x14: 0720072007200720
+> [  237.131807] x13: 0720072007200720 x12: 0720072007200720
+> [  237.137111] x11: 0720072007200720 x10: 0720072007200720
+> [  237.142415] x9 : 0720072007200720 x8 : 0000000000000259
+> [  237.147718] x7 : 0000000000000001 x6 : 0000000000000000
+> [  237.153022] x5 : ffffffc010003a20 x4 : 0000000000000001
+> [  237.158325] x3 : 0000000000000006 x2 : 0000000000000007
+> [  237.163628] x1 : 8ac721b3a7dc1c00 x0 : 0000000000000000
+> [  237.168932] Call trace:
+> [  237.171373]  add_dma_entry+0x214/0x240
+> [  237.175115]  debug_dma_map_page+0xf8/0x120
+> [  237.179203]  gem_rx_refill+0x190/0x280
+> [  237.182942]  gem_rx+0x224/0x2f0
+> [  237.186075]  macb_poll+0x58/0x100
+> [  237.189384]  net_rx_action+0x118/0x400
+> [  237.193125]  __do_softirq+0x138/0x36c
+> [  237.196780]  irq_exit+0x98/0xc0
+> [  237.199914]  __handle_domain_irq+0x64/0xc0
+> [  237.204000]  gic_handle_irq+0x5c/0xc0
+> [  237.207654]  el1_irq+0xb8/0x140
+> [  237.210789]  arch_cpu_idle+0x40/0x200
+> [  237.214444]  default_idle_call+0x18/0x30
+> [  237.218359]  do_idle+0x200/0x280
+> [  237.221578]  cpu_startup_entry+0x20/0x30
+> [  237.225493]  rest_init+0xe4/0xf0
+> [  237.228713]  arch_call_rest_init+0xc/0x14
+> [  237.232714]  start_kernel+0x47c/0x4a8
+> [  237.236367] ---[ end trace 7240980785f81d70 ]---
+> 
+> Lars was fast to find an explanation: according to the datasheet
+> bit 2 of the rx buffer descriptor entry has a different meaning in the
+> extended mode:
+>   Address [2] of beginning of buffer, or
+>   in extended buffer descriptor mode (DMA configuration register [28] = 1),
+>   indicates a valid timestamp in the buffer descriptor entry.
+> 
+> The macb driver didn't mask this bit while getting an address and it
+> eventually caused a memory corruption and a dma failure.
+> 
+> The problem is resolved by extending the MACB_RX_WADDR_SIZE
+> in the extended mode.
+> 
+> Fixes: 7b4296148066 ("net: macb: Add support for PTP timestamps in DMA descriptors")
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 > ---
->  drivers/thermal/thermal_core.c | 6 ++++++
->  include/linux/thermal.h        | 1 +
->  2 files changed, 7 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index c5025aca22ee..842f678c1c3e 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_device_id);
->
-> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
-> +{
-> +       return &tzd->device;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device);
-> +
->  /**
->   * thermal_zone_device_unregister - removes the registered thermal zone device
->   * @tz: the thermal zone device to remove
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 82ddb32f9876..87837094d549 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
->  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
->  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
->  int thermal_zone_device_id(struct thermal_zone_device *tzd);
-> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
->
->  int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->                                      struct thermal_cooling_device *,
-> --
-> 2.34.1
->
+>  drivers/net/ethernet/cadence/macb.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
+> index c1fc91c97cee..1b330f7cfc09 100644
+> --- a/drivers/net/ethernet/cadence/macb.h
+> +++ b/drivers/net/ethernet/cadence/macb.h
+> @@ -826,8 +826,13 @@ struct macb_dma_desc_ptp {
+>  #define MACB_RX_USED_SIZE			1
+>  #define MACB_RX_WRAP_OFFSET			1
+>  #define MACB_RX_WRAP_SIZE			1
+> +#ifdef MACB_EXT_DESC
+> +#define MACB_RX_WADDR_OFFSET			3
+> +#define MACB_RX_WADDR_SIZE			29
+> +#else
+>  #define MACB_RX_WADDR_OFFSET			2
+>  #define MACB_RX_WADDR_SIZE			30
+> +#endif
+>  
+>  #define MACB_RX_FRMLEN_OFFSET			0
+>  #define MACB_RX_FRMLEN_SIZE			12
+> -- 
+> 2.40.0
+> 
