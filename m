@@ -2,83 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E946DDF6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394F76DDF73
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjDKPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
+        id S230446AbjDKPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjDKPTO (ORCPT
+        with ESMTP id S231393AbjDKPTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:19:14 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1265FCA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:18:51 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7603c5af4a9so7076639f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681226275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EKa9vfhk8fWfVEyyFRSYlQGodtOxRM3cBgC7nPc2RUw=;
-        b=0wa2bOqaU+MMRmMY52v0O1jnHzxBGA60OdAJeGWlzzPGGR9oN4Acfx8NJMjzQe8F/M
-         ou21tMDCsa1i1pEt481881+H/O6S5KsnhIUfSXPH6kxnk3lPjg6XrwzbMehzS4eAUtai
-         csP+DrgYpgTrntay5AE+YW0PSAw50GKLATwO7PluUS0rxGZs2npLjcPPNoPilYiZe3XF
-         enziKtkF4hOa8DMd6wPtlV4Wf8WF+69kU/ebhkUn4P5rVBxafFztysDJKDVWTEhOeCEC
-         7mumjYFYaaG2+g3MMmTE/Bi3w/nb3p6pK2AVj0gY6iDvUbaFonWfjgDbIQVJVlB90BGn
-         XjtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681226275;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EKa9vfhk8fWfVEyyFRSYlQGodtOxRM3cBgC7nPc2RUw=;
-        b=IC5cfcIV+I+EhtwDVDpUAqSPD4oj8swmBkKxsI/RUjs8qM0/z0ULzVw4EyhnYWiMO4
-         mg68JmFhb4ntW7sRIFWMureqkdA1SP+bLrYKMypmSvTqXMtzihJcQpaY8AYIaEJnCrrI
-         80ME9txHlI6ZVuBZApsjLNDPKR5DMMPUyAJkmbNQ3M2PwAHvUcEG37oGgMoGzzE6DowO
-         HOz7n/F2OxQ9KkZNa4po2J15lexoMsIR3bQZ6m/vpoDwNNdlaEKQMCL9rizIxIwcPOLl
-         HaL4ahD2oWLwjdiO/kzqeO40HN0MJh6FpFob/K/lJiAMrIppDD0qca/TwKO2CGCwpEGA
-         5PeA==
-X-Gm-Message-State: AAQBX9fZSIMIrGSJcrcnConb2opr4llbIf9AFStzWBP0sbNBdtRQKuJ4
-        dNydhKFAJ6aUmcRaqpiCR0wiDg==
-X-Google-Smtp-Source: AKy350awgP7upH1oGzwb0nt0C364ALZg4lHY8iZS5MvbkBnmbmAvrYl10aLtZIQ+uIzLTrIEeDbKWQ==
-X-Received: by 2002:a05:6602:2b91:b0:75c:f48c:2075 with SMTP id r17-20020a0566022b9100b0075cf48c2075mr7019947iov.2.1681226275104;
-        Tue, 11 Apr 2023 08:17:55 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id z27-20020a056638215b00b003acde48bdc3sm3940376jaj.111.2023.04.11.08.17.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 08:17:54 -0700 (PDT)
-Message-ID: <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
-Date:   Tue, 11 Apr 2023 09:17:52 -0600
+        Tue, 11 Apr 2023 11:19:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73B440F4;
+        Tue, 11 Apr 2023 08:19:21 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C51166600013;
+        Tue, 11 Apr 2023 16:18:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681226291;
+        bh=uSEIdqJwrjL6FsghPa1kxazqXZSgOOA61ffxUhqt0tQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=IfSDlqN/xej46NlSkXWQIgOwpFNaWEQIAU/dFM4kZCdl42YDj/r+3wprgaqCGagA2
+         H59ByuQD4LcOyAVC6RFzdQm8xbBlha3xh3i4wwzm/AQc6ifkePupwvE6OQBB1bSFhD
+         5wtZpLOAR8YuaT+9+8Z/L+bEKzaeXauxV3kC5GqPmkTX2w0zpmIwC6/a0OiFgRkOMr
+         YAiXyVQwYRux0a4gM3Ey/uyu+dgPDvapSGLiu9on1CNFcQXdNfbn+MLxZeNQJ3b/s5
+         QbZSx2JsAJtNogX39cQynGPLCXA6w5Ux+M4tIqq1aixfd6ZzAkAVJqb+sHU1VQUhSF
+         lxry23EAVaN5Q==
+Message-ID: <1ff0453cded9afe7a742596713c23102a7cfcfcc.camel@collabora.com>
+Subject: Re: [PATCH v5 11/13] media: verisilicon: Enable AV1 decoder on
+ rk3588
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Tue, 11 Apr 2023 11:18:01 -0400
+In-Reply-To: <20230330154043.1250736-12-benjamin.gaignard@collabora.com>
+References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
+         <20230330154043.1250736-12-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Content-Language: en-US
-To:     David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>
-Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
-        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
-        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
- <ZC7seVq7St6UnKjl@gmail.com>
- <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
- <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
- <ZDVLyi1PahE0sfci@gmail.com>
- <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
- <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
- <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,65 +61,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 9:10?AM, David Ahern wrote:
-> On 4/11/23 8:41 AM, Jens Axboe wrote:
->> On 4/11/23 8:36?AM, David Ahern wrote:
->>> On 4/11/23 6:00 AM, Breno Leitao wrote:
->>>> I am not sure if avoiding io_uring details in network code is possible.
->>>>
->>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
->>>> in the TCP case) could be somewhere else, such as in the io_uring/
->>>> directory, but, I think it might be cleaner if these implementations are
->>>> closer to function assignment (in the network subsystem).
->>>>
->>>> And this function (tcp_uring_cmd() for instance) is the one that I am
->>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
->>>> -> SIOCINQ.
->>>>
->>>> Please let me know if you have any other idea in mind.
->>>
->>> I am not convinced that this io_uring_cmd is needed. This is one
->>> in-kernel subsystem calling into another, and there are APIs for that.
->>> All of this set is ioctl based and as Willem noted a little refactoring
->>> separates the get_user/put_user out so that in-kernel can call can be
->>> made with existing ops.
->>
->> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
->> obviously, and we already have ->uring_cmd() for this purpose.
->>
->> I do think the right thing to do is have a common helper that returns
->> whatever value you want (or sets it), and split the ioctl parts into a
->> wrapper around that that simply copies in/out as needed. Then
->> ->uring_cmd() could call that, or you could some exported function that
->> does supports that.
->>
->> This works for the basic cases, though I do suspect we'll want to go
->> down the ->uring_cmd() at some point for more advanced cases or cases
->> that cannot sanely be done in an ioctl fashion.
->>
-> 
-> My meta point is that there are uapis today to return this information
-> to applications (and I suspect this is just the start of more networking
-> changes - both data retrieval and adjusting settings). io_uring is
-> wanting to do this on behalf of the application without a syscall. That
-> makes io_uring yet another subsystem / component managing a socket. Any
-> change to the networking stack required by io_uring should be usable by
-> all other in-kernel socket owners or managers. ie., there is no reason
-> for io_uring specific code here.
+Le jeudi 30 mars 2023 =C3=A0 17:40 +0200, Benjamin Gaignard a =C3=A9crit=C2=
+=A0:
+> Add rk3588 AV1 decoder to Hantro variant.
+> The hardware support image from 64x64 up to 7680x4320
+> by steps of 16 pixels.
+>=20
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-I think we are in violent agreement here, what I'm describing is exactly
-that - it'd make ioctl/{set,get}sockopt call into the same helpers that
-->uring_cmd() would, with the only difference being that the former
-would need copy in/out and the latter would not.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-But let me just stress that for direct descriptors, we cannot currently
-call ioctl or set/getsockopt. This means we have to instantiate a
-regular descriptor first, do those things, then register it to never use
-the regular file descriptor again. That's wasteful, and this is what we
-want to enable (direct use of ioctl set/getsockopt WITHOUT a normal file
-descriptor). It's not just for "oh it'd be handy to also do this from
-io_uring" even if that would be a worthwhile goal in itself.
-
--- 
-Jens Axboe
+> ---
+>  .../media/platform/verisilicon/hantro_drv.c   |   1 +
+>  .../media/platform/verisilicon/hantro_hw.h    |   6 +
+>  .../platform/verisilicon/rockchip_vpu_hw.c    | 134 ++++++++++++++++++
+>  3 files changed, 141 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/me=
+dia/platform/verisilicon/hantro_drv.c
+> index 71bd68e63859..aef1de20fc5e 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -713,6 +713,7 @@ static const struct of_device_id of_hantro_match[] =
+=3D {
+>  	{ .compatible =3D "rockchip,rk3399-vpu", .data =3D &rk3399_vpu_variant,=
+ },
+>  	{ .compatible =3D "rockchip,rk3568-vepu", .data =3D &rk3568_vepu_varian=
+t, },
+>  	{ .compatible =3D "rockchip,rk3568-vpu", .data =3D &rk3568_vpu_variant,=
+ },
+> +	{ .compatible =3D "rockchip,rk3588-av1-vpu", .data =3D &rk3588_vpu981_v=
+ariant, },
+>  #endif
+>  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+>  	{ .compatible =3D "nxp,imx8mm-vpu-g1", .data =3D &imx8mm_vpu_g1_variant=
+, },
+> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/med=
+ia/platform/verisilicon/hantro_hw.h
+> index e3d303cea7f6..7f33f7b07ce4 100644
+> --- a/drivers/media/platform/verisilicon/hantro_hw.h
+> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
+> @@ -403,11 +403,13 @@ extern const struct hantro_variant rk3328_vpu_varia=
+nt;
+>  extern const struct hantro_variant rk3399_vpu_variant;
+>  extern const struct hantro_variant rk3568_vepu_variant;
+>  extern const struct hantro_variant rk3568_vpu_variant;
+> +extern const struct hantro_variant rk3588_vpu981_variant;
+>  extern const struct hantro_variant sama5d4_vdec_variant;
+>  extern const struct hantro_variant sunxi_vpu_variant;
+> =20
+>  extern const struct hantro_postproc_ops hantro_g1_postproc_ops;
+>  extern const struct hantro_postproc_ops hantro_g2_postproc_ops;
+> +extern const struct hantro_postproc_ops rockchip_vpu981_postproc_ops;
+> =20
+>  extern const u32 hantro_vp8_dec_mc_filter[8][6];
+> =20
+> @@ -444,6 +446,10 @@ void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+>  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+>  int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t =
+addr);
+> =20
+> +int rockchip_vpu981_av1_dec_init(struct hantro_ctx *ctx);
+> +void rockchip_vpu981_av1_dec_exit(struct hantro_ctx *ctx);
+> +int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx);
+> +void rockchip_vpu981_av1_dec_done(struct hantro_ctx *ctx);
+> =20
+>  static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension=
+)
+>  {
+> diff --git a/drivers/media/platform/verisilicon/rockchip_vpu_hw.c b/drive=
+rs/media/platform/verisilicon/rockchip_vpu_hw.c
+> index 8de6fd2e8eef..fd05e3e2080e 100644
+> --- a/drivers/media/platform/verisilicon/rockchip_vpu_hw.c
+> +++ b/drivers/media/platform/verisilicon/rockchip_vpu_hw.c
+> @@ -13,9 +13,13 @@
+>  #include "hantro_g1_regs.h"
+>  #include "hantro_h1_regs.h"
+>  #include "rockchip_vpu2_regs.h"
+> +#include "rockchip_vpu981_regs.h"
+> =20
+>  #define RK3066_ACLK_MAX_FREQ (300 * 1000 * 1000)
+>  #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
+> +#define RK3588_ACLK_MAX_FREQ (300 * 1000 * 1000)
+> +
+> +#define ROCKCHIP_VPU981_MIN_SIZE 64
+> =20
+>  /*
+>   * Supported formats.
+> @@ -74,6 +78,37 @@ static const struct hantro_fmt rockchip_vpu1_postproc_=
+fmts[] =3D {
+>  	},
+>  };
+> =20
+> +static const struct hantro_fmt rockchip_vpu981_postproc_fmts[] =3D {
+> +	{
+> +		.fourcc =3D V4L2_PIX_FMT_NV12,
+> +		.codec_mode =3D HANTRO_MODE_NONE,
+> +		.match_depth =3D true,
+> +		.postprocessed =3D true,
+> +		.frmsize =3D {
+> +			.min_width =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_width =3D FMT_UHD_WIDTH,
+> +			.step_width =3D MB_DIM,
+> +			.min_height =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_height =3D FMT_UHD_HEIGHT,
+> +			.step_height =3D MB_DIM,
+> +		},
+> +	},
+> +	{
+> +		.fourcc =3D V4L2_PIX_FMT_P010,
+> +		.codec_mode =3D HANTRO_MODE_NONE,
+> +		.match_depth =3D true,
+> +		.postprocessed =3D true,
+> +		.frmsize =3D {
+> +			.min_width =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_width =3D FMT_UHD_WIDTH,
+> +			.step_width =3D MB_DIM,
+> +			.min_height =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_height =3D FMT_UHD_HEIGHT,
+> +			.step_height =3D MB_DIM,
+> +		},
+> +	},
+> +};
+> +
+>  static const struct hantro_fmt rk3066_vpu_dec_fmts[] =3D {
+>  	{
+>  		.fourcc =3D V4L2_PIX_FMT_NV12,
+> @@ -277,6 +312,48 @@ static const struct hantro_fmt rk3399_vpu_dec_fmts[]=
+ =3D {
+>  	},
+>  };
+> =20
+> +static const struct hantro_fmt rockchip_vpu981_dec_fmts[] =3D {
+> +	{
+> +		.fourcc =3D V4L2_PIX_FMT_NV12_4L4,
+> +		.codec_mode =3D HANTRO_MODE_NONE,
+> +		.match_depth =3D true,
+> +		.frmsize =3D {
+> +			.min_width =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_width =3D FMT_UHD_WIDTH,
+> +			.step_width =3D MB_DIM,
+> +			.min_height =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_height =3D FMT_UHD_HEIGHT,
+> +			.step_height =3D MB_DIM,
+> +		},
+> +	},
+> +	{
+> +		.fourcc =3D V4L2_PIX_FMT_NV12_10LE40_4L4,
+> +		.codec_mode =3D HANTRO_MODE_NONE,
+> +		.match_depth =3D true,
+> +		.frmsize =3D {
+> +			.min_width =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_width =3D FMT_UHD_WIDTH,
+> +			.step_width =3D MB_DIM,
+> +			.min_height =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_height =3D FMT_UHD_HEIGHT,
+> +			.step_height =3D MB_DIM,
+> +		},
+> +	},
+> +	{
+> +		.fourcc =3D V4L2_PIX_FMT_AV1_FRAME,
+> +		.codec_mode =3D HANTRO_MODE_AV1_DEC,
+> +		.max_depth =3D 2,
+> +		.frmsize =3D {
+> +			.min_width =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_width =3D FMT_UHD_WIDTH,
+> +			.step_width =3D MB_DIM,
+> +			.min_height =3D ROCKCHIP_VPU981_MIN_SIZE,
+> +			.max_height =3D FMT_UHD_HEIGHT,
+> +			.step_height =3D MB_DIM,
+> +		},
+> +	},
+> +};
+> +
+>  static irqreturn_t rockchip_vpu1_vepu_irq(int irq, void *dev_id)
+>  {
+>  	struct hantro_dev *vpu =3D dev_id;
+> @@ -331,6 +408,24 @@ static irqreturn_t rockchip_vpu2_vepu_irq(int irq, v=
+oid *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+> =20
+> +static irqreturn_t rk3588_vpu981_irq(int irq, void *dev_id)
+> +{
+> +	struct hantro_dev *vpu =3D dev_id;
+> +	enum vb2_buffer_state state;
+> +	u32 status;
+> +
+> +	status =3D vdpu_read(vpu, AV1_REG_INTERRUPT);
+> +	state =3D (status & AV1_REG_INTERRUPT_DEC_RDY_INT) ?
+> +		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
+> +
+> +	vdpu_write(vpu, 0, AV1_REG_INTERRUPT);
+> +	vdpu_write(vpu, AV1_REG_CONFIG_DEC_CLK_GATE_E, AV1_REG_CONFIG);
+> +
+> +	hantro_irq_done(vpu, state);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static int rk3036_vpu_hw_init(struct hantro_dev *vpu)
+>  {
+>  	/* Bump ACLK to max. possible freq. to improve performance. */
+> @@ -346,6 +441,13 @@ static int rk3066_vpu_hw_init(struct hantro_dev *vpu=
+)
+>  	return 0;
+>  }
+> =20
+> +static int rk3588_vpu981_hw_init(struct hantro_dev *vpu)
+> +{
+> +	/* Bump ACLKs to max. possible freq. to improve performance. */
+> +	clk_set_rate(vpu->clocks[0].clk, RK3588_ACLK_MAX_FREQ);
+> +	return 0;
+> +}
+> +
+>  static int rockchip_vpu_hw_init(struct hantro_dev *vpu)
+>  {
+>  	/* Bump ACLK to max. possible freq. to improve performance. */
+> @@ -498,6 +600,14 @@ static const struct hantro_codec_ops rk3568_vepu_cod=
+ec_ops[] =3D {
+>  	},
+>  };
+> =20
+> +static const struct hantro_codec_ops rk3588_vpu981_codec_ops[] =3D {
+> +	[HANTRO_MODE_AV1_DEC] =3D {
+> +		.run =3D rockchip_vpu981_av1_dec_run,
+> +		.init =3D rockchip_vpu981_av1_dec_init,
+> +		.exit =3D rockchip_vpu981_av1_dec_exit,
+> +		.done =3D rockchip_vpu981_av1_dec_done,
+> +	},
+> +};
+>  /*
+>   * VPU variant.
+>   */
+> @@ -529,10 +639,18 @@ static const char * const rk3066_vpu_clk_names[] =
+=3D {
+>  	"aclk_vepu", "hclk_vepu"
+>  };
+> =20
+> +static const struct hantro_irq rk3588_vpu981_irqs[] =3D {
+> +	{ "vdpu", rk3588_vpu981_irq },
+> +};
+> +
+>  static const char * const rockchip_vpu_clk_names[] =3D {
+>  	"aclk", "hclk"
+>  };
+> =20
+> +static const char * const rk3588_vpu981_vpu_clk_names[] =3D {
+> +	"aclk", "hclk", "aclk_vdpu_root", "hclk_vdpu_root"
+> +};
+> +
+>  /* VDPU1/VEPU1 */
+> =20
+>  const struct hantro_variant rk3036_vpu_variant =3D {
+> @@ -678,3 +796,19 @@ const struct hantro_variant px30_vpu_variant =3D {
+>  	.clk_names =3D rockchip_vpu_clk_names,
+>  	.num_clocks =3D ARRAY_SIZE(rockchip_vpu_clk_names)
+>  };
+> +
+> +const struct hantro_variant rk3588_vpu981_variant =3D {
+> +	.dec_offset =3D 0x0,
+> +	.dec_fmts =3D rockchip_vpu981_dec_fmts,
+> +	.num_dec_fmts =3D ARRAY_SIZE(rockchip_vpu981_dec_fmts),
+> +	.postproc_fmts =3D rockchip_vpu981_postproc_fmts,
+> +	.num_postproc_fmts =3D ARRAY_SIZE(rockchip_vpu981_postproc_fmts),
+> +	.postproc_ops =3D &rockchip_vpu981_postproc_ops,
+> +	.codec =3D HANTRO_AV1_DECODER,
+> +	.codec_ops =3D rk3588_vpu981_codec_ops,
+> +	.irqs =3D rk3588_vpu981_irqs,
+> +	.num_irqs =3D ARRAY_SIZE(rk3588_vpu981_irqs),
+> +	.init =3D rk3588_vpu981_hw_init,
+> +	.clk_names =3D rk3588_vpu981_vpu_clk_names,
+> +	.num_clocks =3D ARRAY_SIZE(rk3588_vpu981_vpu_clk_names)
+> +};
 
