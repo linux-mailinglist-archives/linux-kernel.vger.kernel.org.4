@@ -2,128 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B306DD65B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC556DD65F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjDKJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S229559AbjDKJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDKJMf (ORCPT
+        with ESMTP id S229481AbjDKJNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:12:35 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA26A9;
-        Tue, 11 Apr 2023 02:12:33 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t20so9474310lfd.5;
-        Tue, 11 Apr 2023 02:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681204352;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtfQiofTa512tuCMPWCEjaBEGijC53jXghVYHeriOMs=;
-        b=C7Paf3ccTcR5wiekvM7kwf1t5P/j47OKMmIIwjrgnDglYVrGyCcTebk85bE4dSZoU9
-         FlO+k2zlX3gPnBZlgw9SXWRIYqFbkthwQ0+hPBFkMm5fanT+I1QaozJDbRdrr6MwqTBo
-         w3j18UQkkUyXhN/8aEg99rSlo3SWo7CKpXMXUX7C10snBSG9mJS5Xz2tsGd+1u8hXjC0
-         SdsnxfOF/LpxCkZECPGliV+MQhE1fGRvKv3JG5FOliIK11traUhp9z+9lJ+EL3zi5r/p
-         yLACuCWUVsZq/BxknvPDH0/2Cs1+fzymCuNs+JimrtkvuYHpYCk16tPymO5ewSVxSK7L
-         3MUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681204352;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KtfQiofTa512tuCMPWCEjaBEGijC53jXghVYHeriOMs=;
-        b=GgvhaQumFYfmbpBDHYGGdgYFU7ThvjqnTffTEVoYPI33epJrmCO8FTRIsEXpCgEIjo
-         7T7zACNpyA5BjnlKruFEVPkkRGqDgHaybF+gqVUe4A1Xo/ha7Y+h+P0fZUNAkKBpHnyJ
-         azKV245PVKhW3+/srhIxDw7K/77EEOXT1FpSHjKweBSmuU0GyB6xAmc6ZJUWp5V7WgXL
-         8PZWsEaGumqLGbq+lFRUV/iM252Ad+L3xyrEThyDdOnBU3UgBtqZUISLmcaeoht4ti3E
-         LQe8l84sJIL0KmxWugw4PjxiDnl9a8HViWekLWIetEy11lHujj3f1PeSuTBqCTpHFqSA
-         vNjg==
-X-Gm-Message-State: AAQBX9dcYRKsugYN4B821gMD8pquOOIogzVYHcvL4qBY+Pf+KZhbIOgj
-        ajB2WSDB6J5FXn1usrP9gtU=
-X-Google-Smtp-Source: AKy350Y2v2swTzHbkzcGh5onxpOf6MXoUWfmNQCnIQAOOkLae40oXau2rRexCymAJxSEzLMW8GdwEA==
-X-Received: by 2002:a05:6512:517:b0:4eb:18d:91de with SMTP id o23-20020a056512051700b004eb018d91demr3979091lfb.43.1681204351698;
-        Tue, 11 Apr 2023 02:12:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id w26-20020a19c51a000000b004dc4c5149dasm2477601lfe.301.2023.04.11.02.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 02:12:31 -0700 (PDT)
-Message-ID: <80b09e1b-f00e-4c78-6627-111959779376@gmail.com>
-Date:   Tue, 11 Apr 2023 12:12:30 +0300
+        Tue, 11 Apr 2023 05:13:45 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2027.outbound.protection.outlook.com [40.92.18.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35957194
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:13:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BlhBdoc2ghhdJSD76OfmDL+xGUMtS70RI1+Bg9mGEDA+jnx69OvYAsniw5g/gEVVJDyr30pUXK+vWEMZYDPxzG3/LO96wv5qunzomNCaq/q/mu2Yw0H63N+PtdAWUfT78Ea1zNnbi88g0iHdXohubbtivGWe83wiQa/6mY/dnRHMCmoPVd5cV/XTuZR8tgSumbecFG5Z9QhSEKeEN2iPo53hrzWbtvYgG6p78s8VPQ2ozS7E6zwNTJh7C4Y7EmWifrrf4O+Ike05vFHxs4keBxYZutZVNFx27tP47pDnxsjNe1nlxR9azKIdZ0YveRdkqDRFIWEJOzcX1ytqO4jn0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ysWDO1E1Qguu9cbVBb9TCcMU5YCWzLbPnhRc9UX5iwk=;
+ b=PXBMpJyYXbBJC2TClni4KgGTBP5oXT2F1QXK0/pQ2SB0f+4qBvWprYmjvC83HxQkgbiLU645hORp7ApFKtnFqQDBvv5S3yJD+a/EBUGJfY7UD2kg5Tf5StsThOvEp4qZfvvg77DOLyp42QxEtBDyJtdOsY0Yd8543TAWYVJVB20Fg2188FFQp0ptol21vAGboR7qZ2mmVN3sw46gx615DmNLBuUIxILkOiuKEjN06fJjgSY/MJDVtr+obePP2k9/XqN3CnOOOLgqYt3CiSbxeLzZpGhXfW9FqsIoYFBEbemXtpKSrqzMvgrWx8+9gLvdmurc1RDNxpHdZ6IUH9OlQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ysWDO1E1Qguu9cbVBb9TCcMU5YCWzLbPnhRc9UX5iwk=;
+ b=AVPxnYn4nLHMfAUFRIpNSW64L5maOexcybcyCVUUzDq3q33TDtL+bka7PiQt6DDSdFQLNY+bm7YhXNXYClUIDs5qWOPsZY/AYAUwWcVDXfQPA0CFWmVMDPsYD2bpnb7HsvaW7M2YCgq2to4d0+INqzEdH/VKaYwZ2IhOoPK7cWCUZ0yXR7H+mJQ9BdGlnXH560fnCTVjVbhX7t23ZNxOBBTnXFZCk/sZipWaZwUplFQz+IE0wZwU70XAmdjsc/9Mp9c8nAfBBr5g+nIFNTVy+psjV6qlOTcIB9v5D7H9/xSHgAcbPtLYweqxPmfeMnMHDRzxGcBCwhfWyw2Ly24GpQ==
+Received: from DM6PR22MB1836.namprd22.prod.outlook.com (2603:10b6:5:25e::21)
+ by SJ2PR22MB4283.namprd22.prod.outlook.com (2603:10b6:a03:538::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Tue, 11 Apr
+ 2023 09:13:42 +0000
+Received: from DM6PR22MB1836.namprd22.prod.outlook.com
+ ([fe80::4b7e:925f:eeca:488c]) by DM6PR22MB1836.namprd22.prod.outlook.com
+ ([fe80::4b7e:925f:eeca:488c%4]) with mapi id 15.20.6277.035; Tue, 11 Apr 2023
+ 09:13:42 +0000
+From:   zhaoxinchao <ChrisXinchao@outlook.com>
+To:     bagasdotme@gmail.com
+Cc:     ChrisXinchao@outlook.com, akpm@linux-foundation.org, cl@linux.com,
+        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, penberg@kernel.org, rientjes@google.com,
+        vbabka@suse.cz, zhaoxinchao <chrisxinchao@outlook.com>
+Subject: [PATCH v2] mm: Fixed incorrect comment for _kmem_cache_create function
+Date:   Tue, 11 Apr 2023 17:13:22 +0800
+Message-ID: <DM6PR22MB183653311FF3549B7D473020C59A9@DM6PR22MB1836.namprd22.prod.outlook.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <ZDQXl2wMk271w3xy@debian.me>
+References: <ZDQXl2wMk271w3xy@debian.me>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [N0Oww7afXAT05yCJA3nlqQzV+FjJ764q]
+X-ClientProxiedBy: BY3PR10CA0024.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::29) To DM6PR22MB1836.namprd22.prod.outlook.com
+ (2603:10b6:5:25e::21)
+X-Microsoft-Original-Message-ID: <20230411091322.13232-1-ChrisXinchao@outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, en-GB
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        jerome Neanne <jneanne@baylibre.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
- <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
- <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
- <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
- <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
- <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
- <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
- <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-In-Reply-To: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR22MB1836:EE_|SJ2PR22MB4283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6009e71c-beca-4861-1030-08db3a6d0b3d
+X-MS-Exchange-SLBlob-MailProps: WaIXnCbdHrMtPHFZlEBY4ikO6W38docLDNgQsW6hSQfTRDBcmM+Yyc6tGqeHTNpDzXlQ9muiIDrTQuvrm28iO+8weQ3kGqbsnXrym5JjEMubcsfwIDkPpsfOtV2ISWK/2DtPbSeKhc+qFdtlsQu4RSk7b0E+5Jnx5bc0giGdZgTtvR3zsx+4okRQtitC1A05woVVFiw5w89SiCAV+qTgqnR9m5bG4PeRI3b3jWLv+nSAuiA8qX1MBBSvg49AO76nZI/SXktt0DiXMosyCrjuc9zXC+wZLfAzd7DsY0UAqzrISnniyDcimMZxRme+sgYWcjzHKA/g5E6YDzTVoJ4qqsdR8x/xffmCx78EZQyQjztnFHkUfFtLz6I05dCejeXYEmk7w4NFgXKvumfT3looDpYhrnQ3PY4TGnewJnrme5Mi8RDsxQfntTNSsA9atE3YmOS7+J3YE4kRQQOLQZI70MbLhzoARdjNz8gyFBp85KyjMfzgZo/DHKc68ua+TfXx50maK4KtFQ3FpEdGKmg+AlxD0GNjSP/fMwCNbxvg8/c4K7rmOLPnE6Nkalj5yZgkEvhAGaouTsegyMlOyLDlwY4wTLoUy8tTunhO9CRrDYLjg2H/6XQaAHmy10vUoFWTLfDrg3y+2XZLUYRznyYHIus58PW58C80UlZ6KPI8Paz+5v96uRLmS+NIgzCjcgzFOSg1heYJZba0gxRg+cUcF8biZY4vtQvP6slqyovbKEQ7n3s3YMjBFXBb2ulY6Rb8AHEX7vdPpYk=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1ftmT4OdBPdY3p2CejwwFha9/LlPPrRhVf4vUW8AhWYIVO5Ek/73f3CQZSvnnWyLGKNAz17HGpcZckx8NnRoHA6cyKQoZ9VL/N3R/o6Hg4AvC0qUlyjiKA5jgTB29cDnTLxJeuWM5OgIN1JR3gGRPI3vzgp81NihIO8Y/QSuMiIhhoQ/Y0900YX2xiB80mbSemJng0BpiWMFyvF9kYdkim4gdUWT58H/G8yKzWNwpJhVbUx81zCqlkHyAdD+8jQwy5hr2c7wISLu7WH1CKoNbityuJ7qkz7kpYmvhzT0ptcz4ym4rBciDjWRtZedRE4f9ZrUWHUyHkdfb6G6wxXrVu0WDVsAAVK80/MmrnIBUYPzNsqLAKePsn3zw0HRuvfiaYFXVpHxz6nTqIEXpW1DXLcQP5sTbdL2xzBqXj0cg8Qf5YEfRfQbytvTXaNO1r1CIx25yauTuVitVB0dt1LHTfxsJL5gXshTWtBAlBLzLyGEw17lvSFtbIWj2stmb9UvN/wpBiSnTB7KfKYeYEBE2TGJE+dKiimceYp6bk9N+bA7ila473mwAB4v4ysou5jur5FAXrWP0/ZL9YR3n2VyRIK4RvkDT6LaJVvvz8cbRCgnE++iB92bCkwISnS4wgQX
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LfRA4gXymRXaroXhE2LsbmH8M/J9H7zYLLrn/uElBW1goeLzM53TlMpopPYv?=
+ =?us-ascii?Q?geDQYikjtu6M9iM/vbl65VFat4YWWH1OsGAI7Te24f+RvxUlS/bBris2Kt1n?=
+ =?us-ascii?Q?agY0nK3KTd7wm+mbigNBbWpWs4A8buuPNock/mPRaNZEGKJJb/D0FKmAzevR?=
+ =?us-ascii?Q?mkLzlJ/qwIaEST/l3LGWr41v/q8nag7+DuF8oN4WoM+U8aO39u6dKhnWpTzu?=
+ =?us-ascii?Q?mrpiGhpAtWurxKm0SS2/5ZyIc2MIMhdzAerqYYVzAhZf2Dn30252KS08SSfH?=
+ =?us-ascii?Q?aIY+PdEAFU4U9jb/U6U45/lcWRU1W49C0S48aWwd2Dnz05jhquNWD9FNVbhW?=
+ =?us-ascii?Q?XfIJcBGXSx6pYmu+GTWUBOwk+Uh0zpcirOXybsyN+LrX+Mnc8xALiCobmRFf?=
+ =?us-ascii?Q?+XTfGGX1ex8IuZ64xm5zIQ60Iv4Wu1iPGz0+bvPFKh2PWyVnDTLdTuPCm63Q?=
+ =?us-ascii?Q?dSiS1VnwAvPO5wAY596wVjm2WOeOSqsYeSOH4mWyNwv7Qic25imfvJV9b4TF?=
+ =?us-ascii?Q?NKA73cDp7IN559BRQlsSQxmjH8hXQK3D5O9oSpYjdOSjuJ3DBktQEVNqrL6o?=
+ =?us-ascii?Q?r7l8UCgIgi9zRzxuA//dY17F0xOXueD8i7eEEYsleGD4JObJGHLpNwxlu7Dv?=
+ =?us-ascii?Q?J7SNgyLFva+XfMVWDculQbxM9LQGpFX9IOeo5cDIBi4CMqrzriI1KIPc/X44?=
+ =?us-ascii?Q?wRrbGfvtdla8XtDlrXUS+mB89a8C7Jleg9OgTOys7LROV9+f6RbOdTpj8Qu2?=
+ =?us-ascii?Q?ErMTgdWRlaYnoTF+u0wvG25eq5t1nAg5AtKGn0O3pOVAhBvfLn4P91RkRAvB?=
+ =?us-ascii?Q?ENFvDLRegOGczSPChI/vWL0rN/pXbEDqrcUNoln0ew1AptlB2KLDlEYP6QGI?=
+ =?us-ascii?Q?FH/s/UJq2PkstdtZz8EFRtqocS3yFCuY6F+D4yCsX+4NshuA/Qd9lTA4Y5Lq?=
+ =?us-ascii?Q?VHlK/XF6aqghYWKy98yRFn6cYpd2F6adkn1ZzHZOui9etSrS6xgpVZmxTAKL?=
+ =?us-ascii?Q?+ofAdhzVwKewHsfgQww67oRCNtn/0CW/GV0SId8HpSg8bB9hTAgl7hHt/003?=
+ =?us-ascii?Q?w3IuiYrJhkcLiolAP7e/1a/XFudbjZjaTiIzkBJHIXo5XhYJIbY/WTbQMTwb?=
+ =?us-ascii?Q?GSSf8VViVBU/8F7crTjIppjs+MdoflF3UsFHjW7SVItFY+pWvKIyzj0JbePr?=
+ =?us-ascii?Q?sNwr6s2bJRmV8s/Y7hULkOLjFupB7Z95Mc6RAeWBSFwYqQHUQtRJ/xkOeVA?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6009e71c-beca-4861-1030-08db3a6d0b3d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR22MB1836.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 09:13:42.2303
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR22MB4283
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 16:43, Mark Brown wrote:
-> On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
->> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
->>> On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
+From: zhaoxinchao <chrisxinchao@outlook.com>
 
->> Or, is it so that no "generic handling" of these errors is to be
->> expected? Eg, consumers who implement any handling must always be
->> targeted to a very specific system? My thinking has been that the
->> device sending the notification knows the severity of the problem and
->> - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
->> such severe problems that consumers can try disabling the regulator,
->> whereas the _WARN level notifications may not warrant such action. But
->> again, I don't think we have a specification for this - so this is
->> just my thinking - which may be off.
-> 
-> Do we actually have practical examples of systems sending warnings that
-> aren't followed in very short order by more severe errors, notified or
-> otherwise?
+Actually __kmem_cache_create() returns a status :
+0 is success
+nonezero are failed.
 
-I asked about this from the hardware colleague(s) in Japan. This far 
-they were not able to provide me a concrete information.
+This function has three return positions. In addition to successfully
+return 0, the first failed position will return - E2BIG, and the second
+position will return nonzero value for setup_cpu_cache function failure.
 
-One potential example use-case they mentioned was "rejecting and 
-re-doing a measurement if regulator warnings are flagged". This sounds 
-(to me) like using a voltage from a regulator as some measurement 
-reference or supply, with very strict warning limits. Still, as said, I 
-did not have a concrete example if/where this is actually implemented - 
-which means the answer to your question remains still "no".
+Signed-off-by: zhaoxinchao <chrisxinchao@outlook.com>
+---
+ mm/slab.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Yours,
-	-- Matti
-
+diff --git a/mm/slab.c b/mm/slab.c
+index edbe722fb..399daa4d0 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1893,7 +1893,12 @@ static bool set_on_slab_cache(struct kmem_cache *cachep,
+  * @cachep: cache management descriptor
+  * @flags: SLAB flags
+  *
+- * Returns a ptr to the cache on success, NULL on failure.
++ * Returns zero on success, nonzero on failure.
++ * This function has three return positions.
++ * In addition to successfully return 0, the
++ * first failed position will return - E2BIG,
++ * and the second position will return nonzero
++ * value for setup_cpu_cache function failure.
+  * Cannot be called within an int, but can be interrupted.
+  * The @ctor is run when new pages are allocated by the cache.
+  *
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.39.2
 
