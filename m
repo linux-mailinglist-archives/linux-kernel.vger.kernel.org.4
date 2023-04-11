@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD8C6DD25A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA3E6DD25C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjDKGCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S229884AbjDKGGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjDKGCm (ORCPT
+        with ESMTP id S229640AbjDKGGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:02:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C505310D4;
-        Mon, 10 Apr 2023 23:02:39 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwZxn6Dnyz4x91;
-        Tue, 11 Apr 2023 16:02:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681192958;
-        bh=qHTvp22dsZACvYo/CD+HHw0iRh9ENx0zdMyTPABzpMo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KHevkZ2J3QcaNH6kaSDxZ3d555vWbqoUOmzzwyPfIDNYbC3qzM762PH9QBT2t3Fyv
-         SNxBsPKRT0heJEf4xHU8fZWYK6qiy3NcmWyTYB6xRp3O8JiHYbV+2w/QI2RP6b4XM5
-         9fBCegXRr5ua7U0GbzpM/KbGHm6Y6zAQtXNdsnpxRh5vcB9lvIJj6UgE2swTnSRmCn
-         82dLWjvPVjfjPFGHbQt13q8mS1L2pvXu9jmOVuoVSAtGG+2627FL9HznykKlR+g2Mm
-         usTpMlot8z0fq+ygCjQn08GFmLRIYYr6HwCLLvArDkFxRcAJfw1UpxJ2H3SWl5soFh
-         i7joQ/Kj3I/JA==
-Date:   Tue, 11 Apr 2023 16:02:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm tree
-Message-ID: <20230411160236.28845f80@canb.auug.org.au>
+        Tue, 11 Apr 2023 02:06:45 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582BDE65
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:06:44 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id sh8so17473139ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:06:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681193203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7RuGSEWbtWr4eU2VNJtutFDl4BvimrBoTwWCP7bAhk0=;
+        b=LKFCpFiVWPt1C2PyKHhOkH7cOWiD688f1yUkghusUy5JIgo952wJp2u6v0Dy1KNj6F
+         DyMahs4tzWfc02e3FBUKs+EQ9z0rD9ihCWBIiITUF5s954cQ+hjndy3F9Wo/D87sYtvk
+         IYgxmj/rncEgx2Cg2zsLtkFzP+dsqqRj6YJYJIr+H39wybcaAsmwpJ2Hacdcwgup6NgP
+         eu4GeHj8t8/cA+pr024H1r4By/bmdHfoHDGHL+DkPTTRtYyz7YLdfISkswf1AUEmwSGs
+         kLucvjWI+fyBCdcrPv5aJRvvlqdv4VqioJUSE1nT0sHLu6vekvENhZjaoB+QCHULSSlH
+         vZLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681193203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7RuGSEWbtWr4eU2VNJtutFDl4BvimrBoTwWCP7bAhk0=;
+        b=ORBdx2WEbLlxT2K0xsUqbhXnAbfoaidMNOXdh6LNvJowgh0pz/UZhAESIQBg8l0Y7T
+         YiRkqHL+IkJJhD5Cvt+vw3LGZWe4MDjfq70zszVkhcl/OLw95cCcDL1ig+gBGGDTc446
+         7CxgA/MF0+OKCgHJaE4YNuqKt+v3PJKU501E5E4agpbXe0Sq+EZrnI9EqeBqXLTKO/su
+         eCbWN4lSGvmo04BM79dbeQzpv2YgfzYAMkFQrm/N8VaPraAWX2bHyIsKoo/J4SNk3o7S
+         jeey9EzagEcMRFmTDELFA8x3P99UGddLepVJB/gOMcziGIhmEW4XLPKuSGnejKr4wwv5
+         3Z+w==
+X-Gm-Message-State: AAQBX9e5w33FIM1CeBaLc4VBh4u0kaOJ1RdPOui/7iTMIbkV0lqBlSbO
+        DMIdHX+qlhgNi8jw/W4w/gwRKg==
+X-Google-Smtp-Source: AKy350aeV2/Y/zgxEs+xA/fMLd5DYGuG+h/tpM4592P5SpvtiXVajRdKLOY/98oVgqi14AxHuKtM2g==
+X-Received: by 2002:a17:907:31cd:b0:94a:5d7e:d455 with SMTP id xf13-20020a17090731cd00b0094a5d7ed455mr7143926ejb.34.1681193202820;
+        Mon, 10 Apr 2023 23:06:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:dad2:72b7:3626:af61? ([2a02:810d:15c0:828:dad2:72b7:3626:af61])
+        by smtp.gmail.com with ESMTPSA id r14-20020a170906364e00b0094a82a236cbsm1860935ejb.129.2023.04.10.23.06.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 23:06:42 -0700 (PDT)
+Message-ID: <6ba8bbcf-0d72-4bb9-a014-85e9f3e22cdb@linaro.org>
+Date:   Tue, 11 Apr 2023 08:06:41 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hnmEc=/ddEtBNSnjGm9IyHN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: drm/bridge: Add no-hpd property
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sam@ravnborg.org,
+        jani.nikula@intel.com, tzimmermann@suse.de, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, r-ravikumar@ti.com,
+        lyude@redhat.com, alexander.deucher@amd.com, sjakhade@cadence.com,
+        yamonkar@cadence.com, a-bhatia1@ti.com,
+        tomi.valkeinen@ideasonboard.com
+References: <20230405142440.191939-1-j-choudhary@ti.com>
+ <20230405142440.191939-2-j-choudhary@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405142440.191939-2-j-choudhary@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hnmEc=/ddEtBNSnjGm9IyHN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 05/04/2023 16:24, Jayesh Choudhary wrote:
+> From: Rahul T R <r-ravikumar@ti.com>
+> 
+> The mhdp bridge can work without its HPD pin hooked up to the connector,
+> but the current bridge driver throws an error when hpd line is not
+> connected to the connector. For such cases, we need an indication for
+> no-hpd, using which we can bypass the hpd detection and instead use the
+> auxiliary channels connected to the DP connector to confirm the
+> connection.
+> So add no-hpd property to the bindings, to disable hpd when not
+> connected or unusable.
 
-Hi all,
+Your subject prefixes miss device specific part. You do not add no-hpd
+to all bridges.
 
-After merging the drm tree, today's linux-next build (htmldocs)
-produced this warning:
+It's also not drm. It is a display directory.
 
-drivers/gpu/drm/i915/gt/uc/intel_guc.h:274: warning: Function parameter or =
-member 'dbgfs_node' not described in 'intel_guc'
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> index c2b369456e4e..3a6c6d837593 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> @@ -57,6 +57,12 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  cdns,no-hpd:
 
-Introduced by commit
+No improvements - use existing no-hpd name.
 
-  70b5ffb393f3 ("drm/i915/gt: Create per-gt debugfs files")
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/hnmEc=/ddEtBNSnjGm9IyHN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Best regards,
+Krzysztof
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ09/wACgkQAVBC80lX
-0GxwHAf7BJ9yFOizwO9kgbhusUSzGC1NnaJdYnTgcvi985+FkQ1Eo04QrI8gqddz
-/0vlNX00lvP4PkR+0S0qZfwzm5D5uY4RwmsSqkVv1IvJxFE9KsuBw7u7Dqi50Bg6
-PQ56cVuZ3hviZoJUGyeuFA5ih3rCFARdYa9caP4jjMY4hasbK/GMe6JYh7aiA643
-QzRkzWQzFwzKhgnui1YpS5GURxPDnXE9SiZXU4UFLuLEjMeBWd1NqSiTM89lKSSE
-ZkDd5MHXQA/9dyF4xdIC/Ba3cK4EKnh2ZQA3CksOfoCNCbJE5+PcaOuPMP9cPNUX
-Z+IJWLZIKjmhHFssnBUAZmsLw1AQsQ==
-=Ae9Y
------END PGP SIGNATURE-----
-
---Sig_/hnmEc=/ddEtBNSnjGm9IyHN--
