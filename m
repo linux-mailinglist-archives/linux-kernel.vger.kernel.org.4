@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5036DD344
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910806DD349
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjDKGrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S230111AbjDKGrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDKGrU (ORCPT
+        with ESMTP id S230104AbjDKGrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:47:20 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8C5E5F;
-        Mon, 10 Apr 2023 23:47:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwbxJ0dkbz4x1f;
-        Tue, 11 Apr 2023 16:47:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681195637;
-        bh=SVz5mmEnhm+60AEIU5V/bYGddcaKFGnrBQ+b9Dx8mms=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ThG52KUrcJP87T9TycOJS3fU2Lo+MmXXO0FnMdPPlstT2usV+ueTnevOEgFk4Zbgc
-         ERW++riqsUxZsYfSAXKeyS/0ndK4XLyiVjbjMAfBfnxT1GHbZ96c805I6zvKqTWlSl
-         vOp4uAZds0FXBTzYj3vye3gJueQrzib2g/zRlVRC/7M5JLpXBn6DZPqDLRy3K5LG/G
-         Lqe94NVocpi+nUdd9deIumwuP38BD9hsaFuvrEMh4VuyuDMzdMpPSQO5Jc+kNNz2yC
-         6g6Dwcf9UenoTv8iJvGOe/kO75ow/fZya4IKKs6gjfFeSKqbPC6jgpCchvc2ZG9GXW
-         S/9+uwCudiwOg==
-Date:   Tue, 11 Apr 2023 16:47:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm tree
-Message-ID: <20230411164714.2ce79bcb@canb.auug.org.au>
+        Tue, 11 Apr 2023 02:47:39 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C7C1BD5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:47:36 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id i25-20020a056e021d1900b00316f1737173so5559310ila.16
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:47:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681195656; x=1683787656;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t0+L91n2dh8XpNcdDIiasQ/kBtXvv2t09DbzRtTFuLE=;
+        b=Jjh16nqjoBuUeBkVH9c/BJgvSRhQBSn/Be/my8SSnxjEsyfyA7lAl80PCHBHgtxj+v
+         AOTMtFzhtLjlseuRHnfeJI7hwpdxGVailkL+MqcRR2dh706hkDJ/X8EqFJpa1MR7lGud
+         LG06czAB/BlNwlHJwE8tPhKE38s+1R9IcokfvhlyiFHC9AzSoX0a7asHMinXvPtUaqaO
+         4PJEEpcALQHw3Cr3njWxi6I9D8gZmPNy4Ue6antgq2JH/32O6toFOC3/CYZn9jX2GgEt
+         pT3eEnuoqwjvriVU0Xi5WZwWYIJ+vL4iX5NtdtMrJqBM5AgjMHD/fknyYIBiONB01qNH
+         xdYw==
+X-Gm-Message-State: AAQBX9fex3RmcqC4ZqpVncupLSJ0pHfjd7ZzJP4eQlNozr1wGzbsTHws
+        skvs7eqg9OasjhzKUsp1ftxp3/7xUFvB+mdvGQ7SEBH/doD4
+X-Google-Smtp-Source: AKy350bfWJntDqNIVyx7xzI7nakcpj5Hti4YhlMS+6memh1XKTrz5B0CfRrgjBdiYM4ljjJ46PI4MMakabgyOZFvi4w00eTZUGqi
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M+1ebx7X3vKsgRZMb+5pd3Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:96c:b0:326:4af5:28b5 with SMTP id
+ q12-20020a056e02096c00b003264af528b5mr12103738ilt.3.1681195655888; Mon, 10
+ Apr 2023 23:47:35 -0700 (PDT)
+Date:   Mon, 10 Apr 2023 23:47:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000de083b05f909dd53@google.com>
+Subject: [syzbot] [btrfs?] WARNING: refcount bug in btrfs_evict_inode
+From:   syzbot <syzbot+1d4df08e85265d1ee63d@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/M+1ebx7X3vKsgRZMb+5pd3Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-After merging the drm tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+HEAD commit:    99ddf2254feb Merge tag 'trace-v6.3-rc5' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ed5eddc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d4df08e85265d1ee63d
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-drivers/gpu/drm/ttm/ttm_pool.c:73:29: error: variably modified 'global_writ=
-e_combined' at file scope
-   73 | static struct ttm_pool_type global_write_combined[TTM_DIM_ORDER];
-      |                             ^~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/ttm/ttm_pool.c:74:29: error: variably modified 'global_unca=
-ched' at file scope
-   74 | static struct ttm_pool_type global_uncached[TTM_DIM_ORDER];
-      |                             ^~~~~~~~~~~~~~~
-drivers/gpu/drm/ttm/ttm_pool.c:76:29: error: variably modified 'global_dma3=
-2_write_combined' at file scope
-   76 | static struct ttm_pool_type global_dma32_write_combined[TTM_DIM_ORD=
-ER];
-      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/ttm/ttm_pool.c:77:29: error: variably modified 'global_dma3=
-2_uncached' at file scope
-   77 | static struct ttm_pool_type global_dma32_uncached[TTM_DIM_ORDER];
-      |                             ^~~~~~~~~~~~~~~~~~~~~
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Caused by commit
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/907a43450c5c/disk-99ddf225.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a142637e5396/vmlinux-99ddf225.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/447736ad6200/bzImage-99ddf225.xz
 
-  322458c2bb1a ("drm/ttm: Reduce the number of used allocation orders for T=
-TM pages")
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1d4df08e85265d1ee63d@syzkaller.appspotmail.com
 
-PMD_SHIFT is not necessarily a constant on ppc (see
-arch/powerpc/include/asm/book3s/64/pgtable.h).
+------------[ cut here ]------------
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 0 PID: 5092 at lib/refcount.c:28 refcount_warn_saturate+0x144/0x1b0 lib/refcount.c:28
+Modules linked in:
+CPU: 0 PID: 5092 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00032-g99ddf2254feb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:refcount_warn_saturate+0x144/0x1b0 lib/refcount.c:28
+Code: 0a 01 48 c7 c7 e0 be 37 8b e8 08 72 22 fd 0f 0b eb a9 e8 8f 5a 5a fd c6 05 7a 19 0f 0a 01 48 c7 c7 40 bf 37 8b e8 ec 71 22 fd <0f> 0b eb 8d e8 73 5a 5a fd c6 05 5b 19 0f 0a 01 48 c7 c7 80 be 37
+RSP: 0018:ffffc900041ff9c8 EFLAGS: 00010246
+RAX: 5ddc86e7f0714d00 RBX: ffff88802aa43ab8 RCX: ffff88807c5457c0
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000003 R08: ffffffff81527c82 R09: fffff5200083feb1
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: 1ffff9200083ff50 R14: ffff888037c1dd70 R15: 1ffff11006f83c40
+FS:  00005555556a6400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fecb9181690 CR3: 000000002d624000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_evict_inode+0x6f4/0x1090 fs/btrfs/inode.c:5398
+ evict+0x2a4/0x620 fs/inode.c:665
+ dispose_list fs/inode.c:698 [inline]
+ evict_inodes+0x5f8/0x690 fs/inode.c:748
+ generic_shutdown_super+0x98/0x340 fs/super.c:479
+ kill_anon_super+0x3b/0x60 fs/super.c:1107
+ btrfs_kill_super+0x41/0x50 fs/btrfs/super.c:2133
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fdd1e48d5d7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffda94ec348 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fdd1e48d5d7
+RDX: 00007ffda94ec41a RSI: 000000000000000a RDI: 00007ffda94ec410
+RBP: 00007ffda94ec410 R08: 00000000ffffffff R09: 00007ffda94ec1e0
+R10: 00005555556a78b3 R11: 0000000000000246 R12: 00007fdd1e4e6cdc
+R13: 00007ffda94ed4d0 R14: 00005555556a7810 R15: 00007ffda94ed510
+ </TASK>
 
-I have reverted that commit for today.
 
---=20
-Cheers,
-Stephen Rothwell
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---Sig_/M+1ebx7X3vKsgRZMb+5pd3Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ1AnIACgkQAVBC80lX
-0GxolAgAjBZbaFJav9W9RpRcWLmU8P2Pe5CzLIBDlEF72z3C1dzbyk9gk9iDS87Q
-bjR0gl4Kagjfrl8YR85C2vstZWX3btxMwkCmGbh/3FtRgvuRN+1kOaWHjTU41yi2
-lHk8+PAla/vFytHXnCROu9QVDdUIKS4MmhDrESpbCFydsOSCl5RVDRw1bKpW6Xll
-a6wZYavzCfgnPop9p9Wdx0rboRaE0H2syuElhmS0/yEaDSYmOICR+C5+ZpeJRpvu
-7jWEQ6/i6WwiU3uNXY+oHwrmhiY6NEW/IhB8g/he+9ZeywJWFJlL4XLd94yOSdoq
-OrJxUsZrncA97z2lAPPjchkFOuO0NQ==
-=Jeaq
------END PGP SIGNATURE-----
-
---Sig_/M+1ebx7X3vKsgRZMb+5pd3Q--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
