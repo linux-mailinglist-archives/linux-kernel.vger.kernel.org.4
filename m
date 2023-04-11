@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6109D6DE318
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AF06DE31E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjDKRtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S229603AbjDKRts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDKRtD (ORCPT
+        with ESMTP id S229614AbjDKRtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:49:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC15FE9;
-        Tue, 11 Apr 2023 10:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681235326; x=1712771326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iQhxwfRHGfIqnpTM08p5PQZGf+6VrwuYGXLl5AIo4mo=;
-  b=CKIwzvTMa3R214spSU7k+D6T4aoLEA9cKlx8zb1VhuvbCu05rgjZxuep
-   5chi7ORIwbj1C142M6vAbErKWQza7qI4ODsXhn01Tb9Xxdr+kOCKT6VKN
-   sgQOoFROsrqzT7QIPLBArOpctNIlpGA0TBrrChf2riVquWq7ZGpuuOGFG
-   HriPfR95dduBY6Azz3YX3wSWQga8XVL0NOIDGjD27jjdSnxv0mvFBkdlT
-   +pocxB4NV1jxlyyAF9ufzxoVEPzzR7tW3qUWcg/aBTU0zhv42F1mMC5wc
-   iJoNsL83wRyDNQPeVC2mkGdQ61pd0lZaGkr8bu3X+UwF4B2QqY1zu15Sb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="323319087"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="323319087"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:48:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="638914128"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="638914128"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2023 10:48:43 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pmI6k-00FTV4-0g;
-        Tue, 11 Apr 2023 20:48:42 +0300
-Date:   Tue, 11 Apr 2023 20:48:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bamvor Jian Zhang <bamv2005@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 2/2] selftests: gpio: gpio-sim: Use same variable name
- for sysfs pathname
-Message-ID: <ZDWdeeuz713ZXI79@smile.fi.intel.com>
-References: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
- <20230411171521.29678-2-andriy.shevchenko@linux.intel.com>
+        Tue, 11 Apr 2023 13:49:45 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A821559A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:49:42 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id la3so8439463plb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681235381;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jaebHLqve3sr3PjhNWP7eX3jN2UJi3CqLa3+FrX8x6s=;
+        b=kA4FhnB8aG0ab2N8mylFWLmJfZnYWVGEzKp0pZXAocXC/y+0BsxCOp+cbv5mj68I4b
+         mS/362UmBdA+MtafvCOJW8hiQsr9o1F5Sg55B58ZwTWoLUe/DACmSEG+Pg5G5G8h6iuV
+         PsBgLSPzVrAQ1LAYXxko8L1iiU//KBkCDRrklc2rlqF9Ob4iEVT3yiKBVXgJ2CaVYI8V
+         LCb/QgvQBRb910+kWXq3rk9bhfBBLbIHtao27XdO9tSeLNUlWPjGy/AVEHoSGnof56dw
+         pXb5GGgtkZW34Vv+hOOXxcDQ8VHOquDAjN8hinsQl9q6qfkbWQoq2O71I3uZ3mCWyUAO
+         6qJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681235381;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jaebHLqve3sr3PjhNWP7eX3jN2UJi3CqLa3+FrX8x6s=;
+        b=ZfF0BrKuWLGwZ14FaWagb8+Ztlr/NAT1Q2uuhI5XXnXVuQ5F//bv6BZAqdCkzRPsj8
+         CGtiKfm6Buxx1KtdYUJ5k0tx5cChRmROdLq/birWkypVafvWzjkatNvdIPMJDYSPlosk
+         q2ARbZ5Av1xePkWmYY1a54WAk+RSyQIA0cgUTzsLrKgx5NJlAR8dbgnRG5md4QLJaXOC
+         1mDEAU0EEqP6YpiBvh+SUshX2HXYlMkKzQgGhcqvhCKnallPBIiPrhFl1F5zvDnJkPkY
+         qJp2quOIBd+0VKBM0xhmbkUR/CqM/GkdhkwEVyCaLHLoQET2XLrWaB7B9mll0YidcK9v
+         3RxA==
+X-Gm-Message-State: AAQBX9eO3uzNMlUgFh189RX5evZ0lGzBtHd4C7u1RN+evpOYuq4D2nTq
+        qwYdFUDypzIYLKTsf8Zs1fYV5w==
+X-Google-Smtp-Source: AKy350ZR3zysgzggrix4Kf++ZHjpsKtVeF09whw+wPV8LPhDGW9uk/3nyPygD/2zY7/UjM+B9SM8tw==
+X-Received: by 2002:a05:6a20:49b0:b0:d8:bd6d:e122 with SMTP id fs48-20020a056a2049b000b000d8bd6de122mr3712989pzb.29.1681235381478;
+        Tue, 11 Apr 2023 10:49:41 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:f795:eecb:467b:d183])
+        by smtp.gmail.com with ESMTPSA id s21-20020aa78295000000b0062dc14ee2a7sm10099273pfm.211.2023.04.11.10.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 10:49:41 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:49:38 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v7 1/4] soc: ti: pruss: Add pruss_get()/put() API
+Message-ID: <20230411174938.GB38361@p14s>
+References: <20230404115336.599430-1-danishanwar@ti.com>
+ <20230404115336.599430-2-danishanwar@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411171521.29678-2-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
+In-Reply-To: <20230404115336.599430-2-danishanwar@ti.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,15 +79,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 08:15:21PM +0300, Andy Shevchenko wrote:
-> SYSFS_PATH can be used locally and globally, especially that has
-> the same content.
+On Tue, Apr 04, 2023 at 05:23:33PM +0530, MD Danish Anwar wrote:
+> From: Tero Kristo <t-kristo@ti.com>
+> 
+> Add two new get and put API, pruss_get() and pruss_put() to the
+> PRUSS platform driver to allow client drivers to request a handle
+> to a PRUSS device. This handle will be used by client drivers to
+> request various operations of the PRUSS platform driver through
+> additional API that will be added in the following patches.
+> 
+> The pruss_get() function returns the pruss handle corresponding
+> to a PRUSS device referenced by a PRU remoteproc instance. The
+> pruss_put() is the complimentary function to pruss_get().
+> 
+> Co-developed-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  drivers/remoteproc/pru_rproc.c                |  2 +-
+>  drivers/soc/ti/pruss.c                        | 64 ++++++++++++++++++-
+>  .../{pruss_driver.h => pruss_internal.h}      |  7 +-
+>  include/linux/remoteproc/pruss.h              | 19 ++++++
+>  4 files changed, 87 insertions(+), 5 deletions(-)
+>  rename include/linux/{pruss_driver.h => pruss_internal.h} (90%)
+> 
+> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+> index b76db7fa693d..4ddd5854d56e 100644
+> --- a/drivers/remoteproc/pru_rproc.c
+> +++ b/drivers/remoteproc/pru_rproc.c
+> @@ -19,7 +19,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/remoteproc/pruss.h>
+> -#include <linux/pruss_driver.h>
+> +#include <linux/pruss_internal.h>
 
-This may behave differently from shell to shell, the minimum of bash, zsh,
-and ash would be good to test.
+Don't rename pruss_driver.h.  There is no point in having a file in the include
+directory that contains a single struct declaration.
 
--- 
-With Best Regards,
-Andy Shevchenko
+>  #include <linux/remoteproc.h>
+>  
+>  #include "remoteproc_internal.h"
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 6882c86b3ce5..28b77d715903 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -6,6 +6,7 @@
+>   * Author(s):
+>   *	Suman Anna <s-anna@ti.com>
+>   *	Andrew F. Davis <afd@ti.com>
+> + *	Tero Kristo <t-kristo@ti.com>
+>   */
+>  
+>  #include <linux/clk-provider.h>
+> @@ -16,8 +17,9 @@
+>  #include <linux/of_address.h>
+>  #include <linux/of_device.h>
+>  #include <linux/pm_runtime.h>
+> -#include <linux/pruss_driver.h>
+> +#include <linux/pruss_internal.h>
+>  #include <linux/regmap.h>
+> +#include <linux/remoteproc.h>
+>  #include <linux/slab.h>
+>  
+>  /**
+> @@ -30,6 +32,66 @@ struct pruss_private_data {
+>  	bool has_core_mux_clock;
+>  };
+>  
+> +/**
+> + * pruss_get() - get the pruss for a given PRU remoteproc
+> + * @rproc: remoteproc handle of a PRU instance
+> + *
+> + * Finds the parent pruss device for a PRU given the @rproc handle of the
+> + * PRU remote processor. This function increments the pruss device's refcount,
+> + * so always use pruss_put() to decrement it back once pruss isn't needed
+> + * anymore.
+> + *
+> + * This API doesn't check if @rproc is valid or not. It is expected the caller
+> + * will have done a pru_rproc_get() on @rproc, before calling this API to make
+> + * sure that @rproc is valid.
+> + *
+> + * Return: pruss handle on success, and an ERR_PTR on failure using one
+> + * of the following error values
+> + *    -EINVAL if invalid parameter
+> + *    -ENODEV if PRU device or PRUSS device is not found
+> + */
+> +struct pruss *pruss_get(struct rproc *rproc)
+> +{
+> +	struct pruss *pruss;
+> +	struct device *dev;
+> +	struct platform_device *ppdev;
+> +
+> +	if (IS_ERR_OR_NULL(rproc))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	dev = &rproc->dev;
+> +
+> +	/* make sure it is PRU rproc */
+> +	if (!dev->parent || !is_pru_rproc(dev->parent))
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	ppdev = to_platform_device(dev->parent->parent);
+> +	pruss = platform_get_drvdata(ppdev);
+> +	if (!pruss)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	get_device(pruss->dev);
+> +
+> +	return pruss;
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_get);
+> +
+> +/**
+> + * pruss_put() - decrement pruss device's usecount
+> + * @pruss: pruss handle
+> + *
+> + * Complimentary function for pruss_get(). Needs to be called
+> + * after the PRUSS is used, and only if the pruss_get() succeeds.
+> + */
+> +void pruss_put(struct pruss *pruss)
+> +{
+> +	if (IS_ERR_OR_NULL(pruss))
+> +		return;
+> +
+> +	put_device(pruss->dev);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_put);
 
+pruss_get() and pruss_put() stay here.
 
+> +
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_internal.h
+> similarity index 90%
+> rename from include/linux/pruss_driver.h
+> rename to include/linux/pruss_internal.h
+> index ecfded30ed05..8f91cb164054 100644
+> --- a/include/linux/pruss_driver.h
+> +++ b/include/linux/pruss_internal.h
+> @@ -6,9 +6,10 @@
+>   *	Suman Anna <s-anna@ti.com>
+>   */
+>  
+> -#ifndef _PRUSS_DRIVER_H_
+> -#define _PRUSS_DRIVER_H_
+> +#ifndef _PRUSS_INTERNAL_H_
+> +#define _PRUSS_INTERNAL_H_
+>  
+> +#include <linux/remoteproc/pruss.h>
+>  #include <linux/types.h>
+>  
+>  /*
+> @@ -51,4 +52,4 @@ struct pruss {
+>  	struct clk *iep_clk_mux;
+>  };
+>  
+> -#endif	/* _PRUSS_DRIVER_H_ */
+> +#endif	/* _PRUSS_INTERNAL_H_ */
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index 039b50d58df2..93a98cac7829 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -4,12 +4,14 @@
+>   *
+>   * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
+>   *	Suman Anna <s-anna@ti.com>
+> + *	Tero Kristo <t-kristo@ti.com>
+>   */
+>  
+>  #ifndef __LINUX_PRUSS_H
+>  #define __LINUX_PRUSS_H
+>  
+>  #include <linux/device.h>
+> +#include <linux/err.h>
+>  #include <linux/types.h>
+>  
+>  #define PRU_RPROC_DRVNAME "pru-rproc"
+> @@ -44,6 +46,23 @@ enum pru_ctable_idx {
+>  
+>  struct device_node;
+>  struct rproc;
+> +struct pruss;
+> +
+> +#if IS_ENABLED(CONFIG_TI_PRUSS)
+> +
+> +struct pruss *pruss_get(struct rproc *rproc);
+> +void pruss_put(struct pruss *pruss);
+> +
+> +#else
+> +
+> +static inline struct pruss *pruss_get(struct rproc *rproc)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline void pruss_put(struct pruss *pruss) { }
+> +
+> +#endif /* CONFIG_TI_PRUSS */
+
+These go in pruss_driver.h
+
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>  
+> -- 
+> 2.25.1
+> 
