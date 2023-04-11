@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC106DD93B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF166DD940
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDKLUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S229813AbjDKLUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjDKLUB (ORCPT
+        with ESMTP id S229726AbjDKLUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:20:01 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A0235B5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w11so7497255plp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
+        Tue, 11 Apr 2023 07:20:48 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95CB30C4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:20:47 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-633a6bf6acaso657021b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681211999;
+        d=linaro.org; s=google; t=1681212047;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=wBQKs0yhrvEAfRkMdCXLMJEOrscAPx9qxfkvCvvtvfA=;
-        b=De8rEAx354hB6hCSAFG7oboildxqBheGwOenVHFkWMblMsEkD/+0eXo3/mG3rs50An
-         kWw6C+C1M0ZQYjSdptI7/XL7b7De17BuGhpwihSva0I7dBeuWkopYTYE5YknBky9lh6V
-         ZYPYPdkcmyCoZ2cpaG00j0m4uJVD7j/GBY62PsI0WbCEOLfOGRAd5wlMGbodFnIsUBB6
-         LZgDClnNxNxLNRQD5aZTK9Y7wFJte8LGWQ3fFk5wg0M4DXT+7IBWF7Vz0HQKcQ1qaMjc
-         ghgexkw/J/rpGBBEFFmi3kOC02bR2+0PlHaur/1EpYHt5InoQ74/wSO1TDtSZarYDx40
-         qrtA==
+        bh=7zNLCqP6owqpDv0VpdmDaSbaHG9NuBOnzsd1ItJEgtY=;
+        b=o4oJ3kgpmE9NEeZDt4aUZrw22E6mGLCbNeQlxlauE198mAELSstKgXs57cjw1j0y8u
+         aGkyTAaIfR+v1GydHCxrqHBxqVInT0BGSvLWqUndkxAT40DU7f/tKrE0qgmF+5R9fFHY
+         NFrr5UwcKYjZqjZjl/fXMpAUcZaboNJenbaotfbW5doDunTTukiElrbLGx6xSU/GxVft
+         SZIJS6QpsH4Ywxr46WUL6uHiQFHbjczMUYe/0WFo+bYApuirtgC8OiwJGWux3u4OjtlE
+         Te4ivWbbNBqOizXwvE4rV2DkIv9sOV4GFxHQmj8LTC3d+0frcB6FiuZPyKydvfUjNcwG
+         9c1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681211999;
+        d=1e100.net; s=20210112; t=1681212047;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wBQKs0yhrvEAfRkMdCXLMJEOrscAPx9qxfkvCvvtvfA=;
-        b=AQFIh2MgEoClBbUHU9jy1EOwJD3QyzUDnPmnihRN0K+ElwfVb8jukrAUIYOkdDWMyH
-         PTbAaOQfPEDA+1VO7nJ42yU1pIoxtkUS2YfXG+8G4z4g8VSJ6jnPBlun8dAEx1VV6jtE
-         FserQSO5VUp1bEzmbMw4TU4CGiaZewlwZybiYp5KFPEDW+Mk643iVzg/4j3IIWk0kB8W
-         A4RxxYAwyuahT6VTx3em1vS+Cy0IhBYOcALKNbGZ33Nl23izb7kI5HkacHHKfTZFbJA8
-         6wqe6ODMt5HL9aX5B0/Iuc7NWDv46UeqFpyxRbWALGuyl3uRfNNo85zeuSg7o7iZ7ofh
-         dHkw==
-X-Gm-Message-State: AAQBX9f0/LRkWRyZd4GvxxX11P8gj/ZZU0M+X8zx6eEQmdi5plRzgQTC
-        N9sgtwqKCYDWP4DZlzlDZAKs
-X-Google-Smtp-Source: AKy350ZLs5F0geBGQzE6rxmOTmSs4MmcKy9zI+Tw9XY3R2ci0J/2ubUrzPs0XDNuJTJil32p2+2knQ==
-X-Received: by 2002:a17:902:cec1:b0:19e:ad18:da5c with SMTP id d1-20020a170902cec100b0019ead18da5cmr3463701plg.37.1681211999280;
-        Tue, 11 Apr 2023 04:19:59 -0700 (PDT)
+        bh=7zNLCqP6owqpDv0VpdmDaSbaHG9NuBOnzsd1ItJEgtY=;
+        b=6Ll28s8lGrA7/3Rz+DKOqvNg5hdRg0KC3wKouX3TtHJUxq+QM7zlJx1rDWtZASIiZX
+         uroquF+aYzVEwtE05xFtYn5TWSAuHGiigC9WfOHhiwDSTXE/IvEvosjlO8Wze8KqPe/6
+         jF/ryD0ZgxEABakQRUH6NSxyY2D+NUr+gGSv/Yqz5kicSqZFCr87H1nKsxnNm9btjIK2
+         huzNlepE7sugqDZG2Jt/h1h4xOYw8kGoeHGz2g5xl+xeFRLT57PPUC0sw1eaF8/8ElHg
+         OvA5u5fE9IldeX7tOH4R4sbn1t4bQrTHacZ/9BA8fZks4RtJsSA1dA4fivjv7BzFjwrI
+         rKTg==
+X-Gm-Message-State: AAQBX9cNGV1ZdMN/2L6aU7KTNdQUQaTv528ZgItJ0hFLBbNKI7dKmOYA
+        64l2KRh0KR2gmw9U35JmsdWO
+X-Google-Smtp-Source: AKy350a4MY/M7jgh+qM0pXF0i1DkZaqvdVyS7EZ/EXV48+5Vt6iuBjTSTSKfmGqvd8WejDpT7/8IJw==
+X-Received: by 2002:aa7:9ec8:0:b0:626:6a3:6b81 with SMTP id r8-20020aa79ec8000000b0062606a36b81mr15960993pfq.15.1681212047192;
+        Tue, 11 Apr 2023 04:20:47 -0700 (PDT)
 Received: from thinkpad ([117.216.120.128])
-        by smtp.gmail.com with ESMTPSA id jw23-20020a170903279700b0019e60c645b1sm3539765plb.305.2023.04.11.04.19.51
+        by smtp.gmail.com with ESMTPSA id n3-20020a62e503000000b0062db34242aesm9565964pff.167.2023.04.11.04.20.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 04:19:58 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:49:47 +0530
+        Tue, 11 Apr 2023 04:20:46 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:50:37 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>, g@thinkpad
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Cai Huoqing <cai.huoqing@linux.dev>,
@@ -61,25 +61,21 @@ Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Vinod Koul <vkoul@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RESEND v3 07/10] PCI: visconti: Convert to using generic
- resources getter
-Message-ID: <20230411111947.GI5333@thinkpad>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 08/10] MAINTAINERS: Add all generic DW PCIe
+ RP/EP DT-schemas
+Message-ID: <20230411112037.GJ5333@thinkpad>
 References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
- <20230411033928.30397-8-Sergey.Semin@baikalelectronics.ru>
+ <20230411033928.30397-9-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411033928.30397-8-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20230411033928.30397-9-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -89,110 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:39:25AM +0300, Serge Semin wrote:
-> The generic resources request infrastructure has been recently added to
-> the DW PCIe core driver. Since the DT-bindings of the Toshibo Visconti
-> PCIe Host controller is fully compatible with the generic names set let's
-> convert the driver to using that infrastructure. It won't take much effort
-> since the low-level device driver implies the resources request only with
-> no additional manipulations involving them. So just drop the locally
-> defined clocks request procedures, activate the generic resources request
-> capability and make sure the mandatory resources have been requested by
-> the DW PCIe core driver.
+On Tue, Apr 11, 2023 at 06:39:26AM +0300, Serge Semin wrote:
+> Recently the DT-schema of the DW PCIe Root Port and End-point controllers
+> has been refactored by detaching the common bindings into a separate
+> schema. The provided modification must be reflected in the MAINTAINERS
+> list so the patch submitters would be aware of the new files maintainers.
+> Let's do that by adding the maintained files wildcard pattern like
+> snps,dw-pcie*.yaml, which is applicable for all the old DW PCIe DT-schema
+> files and the new one.
 > 
-> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/pci/controller/dwc/pcie-visconti.c | 37 ++++++++++------------
->  1 file changed, 17 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-visconti.c b/drivers/pci/controller/dwc/pcie-visconti.c
-> index 71026fefa366..ae1517b52c58 100644
-> --- a/drivers/pci/controller/dwc/pcie-visconti.c
-> +++ b/drivers/pci/controller/dwc/pcie-visconti.c
-> @@ -29,9 +29,6 @@ struct visconti_pcie {
->  	void __iomem *ulreg_base;
->  	void __iomem *smu_base;
->  	void __iomem *mpu_base;
-> -	struct clk *refclk;
-> -	struct clk *coreclk;
-> -	struct clk *auxclk;
->  };
->  
->  #define PCIE_UL_REG_S_PCIE_MODE		0x00F4
-> @@ -198,6 +195,21 @@ static int visconti_pcie_host_init(struct dw_pcie_rp *pp)
->  	int err;
->  	u32 val;
->  
-> +	if (!pcie->pci.core_clks[DW_PCIE_REF_CLK].clk) {
-> +		dev_err(pci->dev, "Missing ref clock source\n");
-> +		return -ENOENT;
-> +	}
-> +
-> +	if (!pcie->pci.core_clks[DW_PCIE_CORE_CLK].clk) {
-> +		dev_err(pci->dev, "Missing core clock source\n");
-> +		return -ENOENT;
-> +	}
-> +
-> +	if (!pcie->pci.core_clks[DW_PCIE_AUX_CLK].clk) {
-> +		dev_err(pci->dev, "Missing aux clock source\n");
-> +		return -ENOENT;
-> +	}
-> +
 
-Looking at the driver, I could see no call to clk_prepare_enable() for these
-clocks. So from kernel's PoV these are not used at all. So either these clocks
-are not required (unlikely) or enabled by the bootloader so kernel just uses it.
-
-In that case, the driver should handle these clocks properly.
-
-@Nobuhiro-San, can you please comment?
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 - Mani
 
->  	visconti_smu_writel(pcie,
->  			    PISMU_CKON_PCIE_AUX_CLK | PISMU_CKON_PCIE_MSTR_ACLK,
->  			    PISMU_CKON_PCIE);
-> @@ -242,8 +254,6 @@ static const struct dw_pcie_host_ops visconti_pcie_host_ops = {
->  static int visconti_get_resources(struct platform_device *pdev,
->  				  struct visconti_pcie *pcie)
->  {
-> -	struct device *dev = &pdev->dev;
-> -
->  	pcie->ulreg_base = devm_platform_ioremap_resource_byname(pdev, "ulreg");
->  	if (IS_ERR(pcie->ulreg_base))
->  		return PTR_ERR(pcie->ulreg_base);
-> @@ -256,21 +266,6 @@ static int visconti_get_resources(struct platform_device *pdev,
->  	if (IS_ERR(pcie->mpu_base))
->  		return PTR_ERR(pcie->mpu_base);
+> ---
+>  MAINTAINERS | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ec57c42ed544..489fd4b4c7ae 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16063,8 +16063,7 @@ M:	Jingoo Han <jingoohan1@gmail.com>
+>  M:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+>  L:	linux-pci@vger.kernel.org
+>  S:	Maintained
+> -F:	Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> -F:	Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+> +F:	Documentation/devicetree/bindings/pci/snps,dw-pcie*.yaml
+>  F:	drivers/pci/controller/dwc/*designware*
 >  
-> -	pcie->refclk = devm_clk_get(dev, "ref");
-> -	if (IS_ERR(pcie->refclk))
-> -		return dev_err_probe(dev, PTR_ERR(pcie->refclk),
-> -				     "Failed to get ref clock\n");
-> -
-> -	pcie->coreclk = devm_clk_get(dev, "core");
-> -	if (IS_ERR(pcie->coreclk))
-> -		return dev_err_probe(dev, PTR_ERR(pcie->coreclk),
-> -				     "Failed to get core clock\n");
-> -
-> -	pcie->auxclk = devm_clk_get(dev, "aux");
-> -	if (IS_ERR(pcie->auxclk))
-> -		return dev_err_probe(dev, PTR_ERR(pcie->auxclk),
-> -				     "Failed to get aux clock\n");
-> -
->  	return 0;
->  }
->  
-> @@ -304,6 +299,8 @@ static int visconti_pcie_probe(struct platform_device *pdev)
->  	pci->dev = dev;
->  	pci->ops = &dw_pcie_ops;
->  
-> +	dw_pcie_cap_set(pci, REQ_RES);
-> +
->  	ret = visconti_get_resources(pdev, pcie);
->  	if (ret)
->  		return ret;
+>  PCI DRIVER FOR TI DRA7XX/J721E
 > -- 
 > 2.40.0
 > 
