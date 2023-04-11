@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A146DE5BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2EC6DE5C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjDKU36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S229490AbjDKUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDKU34 (ORCPT
+        with ESMTP id S229488AbjDKUcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:29:56 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F703584;
-        Tue, 11 Apr 2023 13:29:55 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id y11-20020a17090a600b00b0024693e96b58so8193463pji.1;
-        Tue, 11 Apr 2023 13:29:55 -0700 (PDT)
+        Tue, 11 Apr 2023 16:32:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C33A9B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681245112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8rS/z80Lu47QxYWJ46HnzDoO2h7E/RInGcHyWg9vKTQ=;
+        b=ecHDjXm/xm2BFwVtrnfIT21K4ryWKt1/GVW4+FoLFBqpjwyK0eTfPgUr8tSs2NZCPZY+e/
+        GSikiAXYNDqSjlJnFkU4FruH+pmWIadX3eN3ELUc33/MwfXjpir2wGsikLhfQt0GUaIaSb
+        m4HhTmPVQMTMLWF6xC8Df6l5lhx/6zs=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-489-WKHA0WehM1m4Q-81GSfHIA-1; Tue, 11 Apr 2023 16:31:51 -0400
+X-MC-Unique: WKHA0WehM1m4Q-81GSfHIA-1
+Received: by mail-oi1-f200.google.com with SMTP id e18-20020a056808149200b00386f33cd11dso2712660oiw.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:31:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681244995; x=1683836995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X5UCA+tE3Fq8HXbLn+U+wd27dVODbtTngBjwQ/9PBX0=;
-        b=5OoppjsE8o5YGTz5s4twBQSF0GehzVLLUVynqrJj/xzjP8Crws6gI9fEVbZgBg27z2
-         rptjMxhn52iQWcafD2ojxWezSKYR5bgug/yK39IqRRzhbrLO56SPPsU38oxppo4BF+mF
-         GF7jwZlZTWIdTu7CwF5sHhlAog7KirSItpxwo3GBfuwlAukWAMqdRW0S2LGfp+Ogw+/Z
-         it4Ax2h2dniuXm7bMvDpJT2V2LzATVt95WK6DvnXJd04rpd6nsWZMdeqCVk7LIFKfdfT
-         TtIBevwik4yWsDqefonx7FFzeANsu0HnCQ+dfpghlPm7II/vG54gWrXzAtDlNVJL0Ht2
-         HXFQ==
-X-Gm-Message-State: AAQBX9d7QxoRWHiCcq8xOfQ1xBU7kQIPfFtZw7uxcWlNdWc4Skl5Nrbx
-        JGLYm+7eIhyw+ALq9vDzxix076JWE5B2rg==
-X-Google-Smtp-Source: AKy350ZI+I0EfD8cuUXNEOSBQ+pnMgX7tS3cLWevur0lEL9UKgU+NGS7ChmKBKPSlWOhtqgqK9m52A==
-X-Received: by 2002:a17:90b:3b44:b0:237:62f7:3106 with SMTP id ot4-20020a17090b3b4400b0023762f73106mr19020143pjb.17.1681244994537;
-        Tue, 11 Apr 2023 13:29:54 -0700 (PDT)
-Received: from snowbird ([199.73.127.3])
-        by smtp.gmail.com with ESMTPSA id k60-20020a17090a4cc200b0023f5c867f82sm11386453pjh.41.2023.04.11.13.29.53
+        d=1e100.net; s=20210112; t=1681245110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8rS/z80Lu47QxYWJ46HnzDoO2h7E/RInGcHyWg9vKTQ=;
+        b=a/vg96fRvHCzTDJVe5+iavhU/9xNdiJlNyJW+BALjIXsnCo0e+Y5r6xqWkrWlGznBg
+         mgWfLsA9osRm+PkAxhtL50F96XpFR8jXOitNqEdQpBtjRPZmXpid8rIY1fSfGwQSCIwE
+         Gy7YBOPYtygMkb5M/9j+pPhyXUNkK3U8fVnBn94O36TWsIg1Is1OsoFQE+SbfRFxRzrk
+         gQcdFC0TE6+6J7Gr6/4+6+NMFX3Y5MMMKK3hpTiKy1maJmta0EsIldz+CjXitYSG5swg
+         8tyPdDLkLTBy5Bn3mQqhmyQODGNrWmE/ugVlJd0mLNZeMflMw+/x0bfQFu1dn7cMmiUc
+         wTxw==
+X-Gm-Message-State: AAQBX9dt2xqkHQ8oU9hDKoT280PGDqmX/LSim1FzU+pCgdQG7bxVVJQC
+        GU4Md1r/ftgqH+d0fkamt62zaYNg0aJres5oXVC5K31vKsZjNcsr5wVZNCMJQZE60bP/0iJkXXP
+        93U8K2CAPBDLUkcOChxM9219pkjO0mItlG3LVH7A45LLrBmpD8Q+IdTSztXwctyNvQCYIY2hp6T
+        gr3xAukPAK
+X-Received: by 2002:a05:6870:ec8d:b0:17f:fa32:4509 with SMTP id eo13-20020a056870ec8d00b0017ffa324509mr2573844oab.0.1681245110375;
+        Tue, 11 Apr 2023 13:31:50 -0700 (PDT)
+X-Google-Smtp-Source: AKy350akI6FU8Ez5RoH8LUxzPI+e98pIg0YRV69XXPwsSFk4CCyUry4KMCIeRP3G70jbhzjIfRgOhg==
+X-Received: by 2002:a05:6870:ec8d:b0:17f:fa32:4509 with SMTP id eo13-20020a056870ec8d00b0017ffa324509mr2573827oab.0.1681245110100;
+        Tue, 11 Apr 2023 13:31:50 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id zj18-20020a0568716c9200b00183f77dcdadsm5078029oab.33.2023.04.11.13.31.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:29:54 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 13:29:50 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <ZDXDPuSOSV1EYvPr@snowbird>
-References: <20230329202148.71107-1-dennis@kernel.org>
- <ZCTOMVjW+pnZVGsQ@snowbird>
- <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
- <ZCclEE6Qw3on7/eO@snowbird>
- <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
- <ZC/TL2/gLre0B4xH@snowbird>
+        Tue, 11 Apr 2023 13:31:49 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH] arm64: dts: qcom: sa8155p-adp: Make compatible the first property
+Date:   Tue, 11 Apr 2023 15:31:44 -0500
+Message-Id: <20230411203144.471192-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC/TL2/gLre0B4xH@snowbird>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 01:24:15AM -0700, Dennis Zhou wrote:
-> On Mon, Apr 03, 2023 at 11:50:41AM +0200, Ulf Hansson wrote:
-> > On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
-> > >
-> > > Hi Ulf,
-> > >
-> > > On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
-> > > > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
-> > > > >
-> > > > > When using dm-verity with a data partition on an emmc device, dm-verity
-> > > > > races with the discovery of attached emmc devices. This is because mmc's
-> > > > > probing code sets up the host data structure then a work item is
-> > > > > scheduled to do discovery afterwards. To prevent this race on init,
-> > > > > let's inline the first call to detection, __mm_scan(), and let
-> > > > > subsequent detect calls be handled via the workqueue.
-> > > >
-> > > > In principle, I don't mind the changes in $subject patch, as long as
-> > > > it doesn't hurt the overall initialization/boot time. Especially, we
-> > > > may have more than one mmc-slot being used, so this needs to be well
-> > > > tested.
-> > > >
-> > >
-> > > I unfortunately don't have a device with multiple mmcs available. Is
-> > > this something you could help me with?
-> > 
-> > Yes, I can help to test. Allow me a few days to see what I can do.
-> > 
-> > Note that, just having one eMMC and one SD card should work too. It
-> > doesn't have to be multiple eMMCs.
-> > 
-> > >
-> > > > Although, more importantly, I fail to understand how this is going to
-> > > > solve the race condition. Any I/O request to an eMMC or SD requires
-> > > > the mmc block device driver to be up and running too, which is getting
-> > > > probed from a separate module/driver that's not part of mmc_rescan().
-> > >
-> > > I believe the call chain is something like this:
-> > >
-> > > __mmc_rescan()
-> > >     mmc_rescan_try_freq()
-> > >         mmc_attach_mmc()
-> > >             mmc_add_card()
-> > >                 device_add()
-> > >                     bus_probe_device()
-> > >                         mmc_blk_probe()
-> > >
-> > > The initial calling of this is the host probe. So effectively if there
-> > > is a card attached, we're inlining the device_add() call for the card
-> > > attached rather than waiting for the workqueue item to kick off.
-> > >
-> > > dm is a part of late_initcall() while mmc is a module_init(), when built
-> > > in becoming a device_initcall(). So this solves a race via the initcall
-> > > chain. In the current state, device_initcall() finishes and we move onto
-> > > the late_initcall() phase. But now, dm is racing with the workqueue to
-> > > init the attached emmc device.
-> > 
-> > You certainly have a point!
-> > 
-> > This should work when the mmc blk module is built-in. Even if that
-> > doesn't solve the entire problem, it should be a step in the right
-> > direction.
-> > 
-> > I will give it some more thinking and run some tests at my side, then
-> > I will get back to you again.
-> > 
-> 
-> Hi Ulf, is there an update on testing with this patch?
-> 
+As stated at the below link in another review, compatible is always the
+first property.
 
-Ping.
+Follow suit here to avoid copying incorrectly in the future.
 
-Thanks,
-Dennis
+Link: https://lore.kernel.org/netdev/20230331215804.783439-1-ahalaney@redhat.com/T/#ma76b4116bbb9e49ee4bcf699e40935d80965b3f3
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+index 459384ec8f23..8c773b856eb1 100644
+--- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
++++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+@@ -351,19 +351,18 @@ &ethernet {
+ 	max-speed = <1000>;
+ 
+ 	mdio {
++		compatible = "snps,dwmac-mdio";
+ 		#address-cells = <0x1>;
+ 		#size-cells = <0x0>;
+ 
+-		compatible = "snps,dwmac-mdio";
+-
+ 		/* Micrel KSZ9031RNZ PHY */
+ 		rgmii_phy: phy@7 {
++			compatible = "ethernet-phy-ieee802.3-c22";
+ 			reg = <0x7>;
+ 
+ 			interrupt-parent = <&tlmm>;
+ 			interrupts-extended = <&tlmm 124 IRQ_TYPE_EDGE_FALLING>; /* phy intr */
+ 			device_type = "ethernet-phy";
+-			compatible = "ethernet-phy-ieee802.3-c22";
+ 		};
+ 	};
+ };
+-- 
+2.39.2
+
