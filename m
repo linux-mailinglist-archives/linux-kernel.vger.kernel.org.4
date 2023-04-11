@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934226DDFA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CE06DDFAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjDKP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S229709AbjDKP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjDKP1h (ORCPT
+        with ESMTP id S230215AbjDKP2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:27:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4835FCA;
-        Tue, 11 Apr 2023 08:27:10 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 11 Apr 2023 11:28:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE24449C;
+        Tue, 11 Apr 2023 08:27:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3D3066003B8;
-        Tue, 11 Apr 2023 16:26:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681226820;
-        bh=DuGkoAGiYs0V4ZuV34Ydk4VOg6z3ZZ5l0Q7CdUd2bKI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XBoAHczzPa75ed6PpuM3+BMpOoazAOVCW8vLIYv73ETeE/5LY5xci6Squ07wwLnO8
-         VgqDJJJ1PTAKoNJl4/iXFzP0wwieYJQYxVvqhvm5TXKGVL3w70c52hyBOKr14tj3sK
-         G4IRhu246t4jW6cI/wLfH2ou8r9lfn8HUzKecfendQb1oZCvJUzfbxjm+cVE12RZV5
-         Te2w6ISnHohnnv4N6KzqHwRPbVbw8cyT7hCIqYri37dK/oECWq4M2jQIGKBtLrJRfo
-         8IzjoQGtO0SPVtf26TF7JfvEgawOx1oqfqrveV6C8dfu1AhD9AWBziD4LkmsWbbLvY
-         yNfVb8mqjwqdA==
-Message-ID: <ef815d11d8514f1d53bcb55d4acbcbac518cd603.camel@collabora.com>
-Subject: Re: [PATCH v5 13/13] media: AV1: Make sure that bit depth in
- correctly initialize
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Date:   Tue, 11 Apr 2023 11:26:50 -0400
-In-Reply-To: <20230330154043.1250736-14-benjamin.gaignard@collabora.com>
-References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
-         <20230330154043.1250736-14-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D11661E8B;
+        Tue, 11 Apr 2023 15:27:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F66C433A0;
+        Tue, 11 Apr 2023 15:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681226863;
+        bh=VCYh/OYFvFwLSE/is2u/m/yiwKOJLzG6IucDcL2gtuU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RhwkO32v2hFRPjWSErmjfTwDzkchAxJlB8Jo1dTOECtA67MJTfV0kXsFO0OX21Dox
+         Athvs6hGQHqAyc/fdABe3axnKvc+BUHrDSv/UhvU0mQ3/BJSlfO5y2cBTikv8fPJvo
+         +ZPWqZAKQb8yzCKmprBf6JsX9X/pDnJTDgi2gtgkFfusQxwMX5+GaTdYXqwVh9aoTv
+         n9ZDaB7lyIDhAELRD3msa+Xkl5UYc0Fp9/cH77wFS1HgK9Sz/iFQadroIERT74XnpK
+         YAN/j9Otq7a9KHi2+OmD5pYmRWJWpkqECD2E+SueahnPkTbxYjvfHPmL/oKw101V4z
+         rLKB/XY2/DrbQ==
+Message-ID: <a9858183-8f69-7aff-51ac-122f627ba66f@kernel.org>
+Date:   Tue, 11 Apr 2023 09:27:41 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Breno Leitao <leitao@debian.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
+        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+ <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+ <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
+ <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 30 mars 2023 =C3=A0 17:40 +0200, Benjamin Gaignard a =C3=A9crit=C2=
-=A0:
-> Make sure that bit_depth field of V4L2_CTRL_TYPE_AV1_SEQUENCE
-> is initialized correctly before using it.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->=20
-In v6, can you move this patch earlier ? I'm having bisection in mind. With=
- that
-being said:
+On 4/11/23 9:17 AM, Jens Axboe wrote:
+> On 4/11/23 9:10?AM, David Ahern wrote:
+>> On 4/11/23 8:41 AM, Jens Axboe wrote:
+>>> On 4/11/23 8:36?AM, David Ahern wrote:
+>>>> On 4/11/23 6:00 AM, Breno Leitao wrote:
+>>>>> I am not sure if avoiding io_uring details in network code is possible.
+>>>>>
+>>>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+>>>>> in the TCP case) could be somewhere else, such as in the io_uring/
+>>>>> directory, but, I think it might be cleaner if these implementations are
+>>>>> closer to function assignment (in the network subsystem).
+>>>>>
+>>>>> And this function (tcp_uring_cmd() for instance) is the one that I am
+>>>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+>>>>> -> SIOCINQ.
+>>>>>
+>>>>> Please let me know if you have any other idea in mind.
+>>>>
+>>>> I am not convinced that this io_uring_cmd is needed. This is one
+>>>> in-kernel subsystem calling into another, and there are APIs for that.
+>>>> All of this set is ioctl based and as Willem noted a little refactoring
+>>>> separates the get_user/put_user out so that in-kernel can call can be
+>>>> made with existing ops.
+>>>
+>>> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
+>>> obviously, and we already have ->uring_cmd() for this purpose.
+>>>
+>>> I do think the right thing to do is have a common helper that returns
+>>> whatever value you want (or sets it), and split the ioctl parts into a
+>>> wrapper around that that simply copies in/out as needed. Then
+>>> ->uring_cmd() could call that, or you could some exported function that
+>>> does supports that.
+>>>
+>>> This works for the basic cases, though I do suspect we'll want to go
+>>> down the ->uring_cmd() at some point for more advanced cases or cases
+>>> that cannot sanely be done in an ioctl fashion.
+>>>
+>>
+>> My meta point is that there are uapis today to return this information
+>> to applications (and I suspect this is just the start of more networking
+>> changes - both data retrieval and adjusting settings). io_uring is
+>> wanting to do this on behalf of the application without a syscall. That
+>> makes io_uring yet another subsystem / component managing a socket. Any
+>> change to the networking stack required by io_uring should be usable by
+>> all other in-kernel socket owners or managers. ie., there is no reason
+>> for io_uring specific code here.
+> 
+> I think we are in violent agreement here, what I'm describing is exactly
+> that - it'd make ioctl/{set,get}sockopt call into the same helpers that
+> ->uring_cmd() would, with the only difference being that the former
+> would need copy in/out and the latter would not.
+> 
+> But let me just stress that for direct descriptors, we cannot currently
+> call ioctl or set/getsockopt. This means we have to instantiate a
+> regular descriptor first, do those things, then register it to never use
+> the regular file descriptor again. That's wasteful, and this is what we
+> want to enable (direct use of ioctl set/getsockopt WITHOUT a normal file
+> descriptor). It's not just for "oh it'd be handy to also do this from
+> io_uring" even if that would be a worthwhile goal in itself.
+> 
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
->=20
-> ---
->  drivers/media/v4l2-core/v4l2-ctrls-core.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4=
-l2-core/v4l2-ctrls-core.c
-> index 9fd37e94db17..a662fb60f73f 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -111,6 +111,7 @@ static void std_init_compound(const struct v4l2_ctrl =
-*ctrl, u32 idx,
->  	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
->  	struct v4l2_ctrl_fwht_params *p_fwht_params;
->  	struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
-> +	struct v4l2_ctrl_av1_sequence *p_av1_sequence;
->  	void *p =3D ptr.p + idx * ctrl->elem_size;
-> =20
->  	if (ctrl->p_def.p_const)
-> @@ -157,6 +158,10 @@ static void std_init_compound(const struct v4l2_ctrl=
- *ctrl, u32 idx,
->  		p_vp9_frame->flags |=3D V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
->  			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
->  		break;
-> +	case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-> +		p_av1_sequence =3D p;
-> +		p_av1_sequence->bit_depth =3D 8;
-> +		break;
->  	case V4L2_CTRL_TYPE_FWHT_PARAMS:
->  		p_fwht_params =3D p;
->  		p_fwht_params->version =3D V4L2_FWHT_VERSION;
-
+Christoph's patch set a few years back that removed set_fs broke the
+ability to do in-kernel ioctl and {s,g}setsockopt calls. I did not
+follow that change; was it a deliberate intent to not allow these
+in-kernel calls vs wanting to remove the set_fs? e.g., can we add a
+kioctl variant for in-kernel use of the APIs?
