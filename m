@@ -2,195 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F656DDEA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47C76DDEA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjDKO6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S229490AbjDKO7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjDKO6x (ORCPT
+        with ESMTP id S230118AbjDKO7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:58:53 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD321BF4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:58:52 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1842e278605so10067417fac.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:58:52 -0700 (PDT)
+        Tue, 11 Apr 2023 10:59:00 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8C74EFE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:58:56 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id b26so7676967vsa.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681225131; x=1683817131;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681225135;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JUzuStF55OhH4eYJH9aoC4gqNsDP4T1tXhgFLxA6Gjo=;
-        b=nPlZ7EJ4LlvNMM7msupsPQS6oXYYW6nRWe9Y9uR8NI2kQxz7q6XIRvI/j+7eVOgGyK
-         AWPjUjGgqH7W+HLqNVWo6n//cgFGnycoAFwwD12SGiY9jvAB6Eo/DbZ3kkVHPz4BTRxv
-         8qnlW/suArakriYS8Y/RTEaP30ThehXxph/k016mx2YbaEO+o31xy4iWVAirb3+Nc+oN
-         qpCO84/x9tQjDjDt0An/iROzPMy66W6TWgBsN8fK0XNNAFgPjBs4YhRSqdDxvRjAOw6Y
-         CAPtW4WQXymaYyC8+WQSHSZ76yLdQxxD3ZMYO3gauaINwjcCfyv+nJ+2xfPmmVz9tCez
-         yJDw==
+        bh=owr4GV9tlAJ2FBT7XqQdCJgyh43e4tTpXyXefTx/xxM=;
+        b=jPagDdSUYG4JF2q73N7UUd0QSlvF4nDR2TN+0FvkfV+70ZzllVDcJvYovSKG26h0Co
+         eaftT5bSsNoT7i0+9Jtr73zj7A48kdTVFhXb+3l+oLq8oaT3/Vk/RKn8+77QW9R3Pxe5
+         XOV3FwxBzrcwKos3nYPMQhKUC0k+jdjXMat8Ip/guX1pwCyaigc97A9I/028CPS0KQ+9
+         0LevcUaU+6GWMmO0QweApKerOG3qreov/nXT3gbidAk0vbxVbxmLcan+6bRmSCgi2LKQ
+         Sghh62jEKM97IqWDjdnWzwnkZ1UUA0yEOLyLwJNFPy3bodMH/rPZlWVakGgcVNG1VFm2
+         0FBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681225131; x=1683817131;
+        d=1e100.net; s=20210112; t=1681225135;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JUzuStF55OhH4eYJH9aoC4gqNsDP4T1tXhgFLxA6Gjo=;
-        b=YHPRsrLd9EDic2tkb9aRckVyS9injHm1P1s/7EiOL1Zx+HqbAbdlP0Rx9QOWsnpjyO
-         Eb07NVDcr7K8eIIdDgDfWNnt/Tq96tE1b7ibGxwNdB67rtMOmLDCYs13jw3s0RpBKkk/
-         mD5TqLsztRQYcQAe/ICYZoxNu1rX0CHN87P0c1h8R6LVjZ5hRQC34W77T5YISNLdMfHl
-         iEgcJ8EwAboEwslhcMD+oMwJDKEVxPz9TbRjebhM51CaO3gunquBFDPkM6Lt+QfLqgJc
-         +CbOVRdyknLEYjqlOXu+YyacwA+13JfmRDzo9nGlI1WWcP0SGO7fGEHWkeqWHVJEJjAg
-         OxpQ==
-X-Gm-Message-State: AAQBX9fgdfWfdJ0Jd9qVW3FTK/Z2x/jJrIltEX7nmac1ONfBM8In8z1t
-        aDnP582KJ2jXhXS3MQoBMiIaFcANXviA4T+qhvJOtA==
-X-Google-Smtp-Source: AKy350Yu+cBKD9wvjtZX8dK6tlgo9sLprQfwWnmxGLSCUDD9zYyvKMNPRvM6luF4TTHhHeslEBSgbo0XOSGOyvc7wW8=
-X-Received: by 2002:a05:6870:7012:b0:177:c2fb:8cec with SMTP id
- u18-20020a056870701200b00177c2fb8cecmr1469994oae.9.1681225131251; Tue, 11 Apr
- 2023 07:58:51 -0700 (PDT)
+        bh=owr4GV9tlAJ2FBT7XqQdCJgyh43e4tTpXyXefTx/xxM=;
+        b=6RV/jv05tg8zk7pQprlG7e9TP0dfGfpnJZcxkeph8CBF5jGy6PWGdlWyCyByYjLqAt
+         P2eCsMjlpUunUyQ/qocI2fJ8+NGS0peWde9Uuts9mHa5l4STrMjE6+/auUnzJTAOc1cD
+         3sy8JQimpd6kgvFvrmW56SpV+NEFVSrCNODH27tPtQch7kJFQZi55BWBKFj2p87F2mqr
+         nxXTB/omlb2GXt/e9lTyabGo6yfSJWtXSx1ZUzUO6tyrssHqzfEWyd4+ODnmAV3vBFwY
+         cZ60tXrJThZXiUuPNFbpDxgQn7NuGReySmLHlnigOdpfUMfeZe/ZU1hQ6ll6nGC1rbNB
+         tXhw==
+X-Gm-Message-State: AAQBX9fuBUrnMagk9Ca3JiQnmF8nbQUgdn/SUTJVPcpa59LBWuqHjQHX
+        2btSf77ys9YQ9wp1aR3LU2SUG5JyKlegYrqVJtfVMmD2Un2buGep
+X-Google-Smtp-Source: AKy350bokdYzxO8lxD8Xii69nUvcMBhVLi7GSXJQ0rAyuxeCsjNvgBtSUEXmOgKWDIQmjY6tamxKF27ShJtw4yF2LpQ=
+X-Received: by 2002:a67:d719:0:b0:426:b051:1c4 with SMTP id
+ p25-20020a67d719000000b00426b05101c4mr7978391vsj.0.1681225135577; Tue, 11 Apr
+ 2023 07:58:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230410105056.60973-1-likexu@tencent.com> <20230410105056.60973-6-likexu@tencent.com>
- <CALMp9eTLvJ6GW1mfgjO7CL7tW-79asykyz9=Fb=FfT74VRkDVA@mail.gmail.com>
- <9a7d5814-9eb1-d7af-7968-a6e3ebb90248@gmail.com> <CALMp9eR6DwY0EjAb1hcV9XGWQizN6R0dXtLaC4NXDgtCqv5cTA@mail.gmail.com>
- <81bbb700-9346-3d0d-ab86-6e684b185772@gmail.com>
-In-Reply-To: <81bbb700-9346-3d0d-ab86-6e684b185772@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 11 Apr 2023 07:58:40 -0700
-Message-ID: <CALMp9eSKnE8+jMpp0KzBRC7NDjT+S2cRz9CcBNDKB7JCU8dmTg@mail.gmail.com>
-Subject: Re: [PATCH V5 05/10] KVM: x86/pmu: Disable vPMU if the minimum num of
- counters isn't met
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230411-topic-hanaau-v2-0-fd3d70844b31@linaro.org>
+In-Reply-To: <20230411-topic-hanaau-v2-0-fd3d70844b31@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 11 Apr 2023 16:58:44 +0200
+Message-ID: <CAMRc=MfE=Dezbhx8dPcZGqoui--FrPgm9q2Zi1HoUUkof4A34w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Fix SA8155P RPMPDs
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 6:18=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> w=
-rote:
+On Tue, Apr 11, 2023 at 3:47=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
 >
-> On 11/4/2023 8:58 pm, Jim Mattson wrote:
-> > On Mon, Apr 10, 2023 at 11:17=E2=80=AFPM Like Xu <like.xu.linux@gmail.c=
-om> wrote:
-> >>
-> >> On 11/4/2023 1:36 pm, Jim Mattson wrote:
-> >>> On Mon, Apr 10, 2023 at 3:51=E2=80=AFAM Like Xu <like.xu.linux@gmail.=
-com> wrote:
-> >>>>
-> >>>> From: Like Xu <likexu@tencent.com>
-> >>>>
-> >>>> Disable PMU support when running on AMD and perf reports fewer than =
-four
-> >>>> general purpose counters. All AMD PMUs must define at least four cou=
-nters
-> >>>> due to AMD's legacy architecture hardcoding the number of counters
-> >>>> without providing a way to enumerate the number of counters to softw=
-are,
-> >>>> e.g. from AMD's APM:
-> >>>>
-> >>>>    The legacy architecture defines four performance counters (PerfCt=
-rn)
-> >>>>    and corresponding event-select registers (PerfEvtSeln).
-> >>>>
-> >>>> Virtualizing fewer than four counters can lead to guest instability =
-as
-> >>>> software expects four counters to be available.
-> >>>
-> >>> I'm confused. Isn't zero less than four?
-> >>
-> >> As I understand it, you are saying that virtualization of zero counter=
- is also
-> >> reasonable.
-> >> If so, the above statement could be refined as:
-> >>
-> >>          Virtualizing fewer than four counters when vPMU is enabled ma=
-y lead to guest
-> >> instability
-> >>          as software expects at least four counters to be available, t=
-hus the vPMU is
-> >> disabled if the
-> >>          minimum number of KVM supported counters is not reached durin=
-g initialization.
-> >>
-> >> Jim, does this help you or could you explain more about your confusion=
- ?
-> >
-> > You say that "fewer than four counters can lead to guest instability
-> > as software expects four counters to be available." Your solution is
-> > to disable the PMU, which leaves zero counters available. Zero is less
-> > than four. Hence, by your claim, disabling the PMU can lead to guest
-> > instability. I don't see how this is an improvement over one, two, or
-> > three counters.
+> SA8155P has some kind of a faulty firmware that advertises power
+> domains that are actually absent (and trying to access them results
+> in a lockup and reboot).. This series tries to amend that.
 >
-> As you know, AMD pmu lacks an architected method (such as CPUID) to
-> indicate that the VM does not have any pmu counters available for the
-> current platform. Guests like Linux tend to check if their first counters
-> exist and work properly to infer that other pmu counters exist.
-
-"Guests like Linux," or just Linux? What do you mean by "tend"? When
-do they perform this check, and when do they not?
-
-> If KVM chooses to emulate greater than 1 less than 4 counters, then the
-> AMD guest PMU agent may assume that there are legacy 4 counters all
-> present (it's what the APM specifies), which requires the legacy code
-> to add #GP error handling for counters that should exist but actually not=
-.
-
-I would argue that regardless of the number of counters emulated, a
-guest PMU agent may assume that the 4 legacy counters are present,
-since that's what the APM specifies.
-
-> So at Sean's suggestion, we took a conservative approach. If KVM detects
-> less than 4 counters, we think KVM (under the current configuration and
-> platform) is not capable of emulating the most basic AMD pmu capability.
-> A large number of legacy instances are ready for 0 or 4+ ctrs, not 2 or 3
-
-Which specific guest operating systems is this change intended for?
-
-> Does this help you ? I wouldn't mind a better move.
-
-Which AMD platforms have less than 4 counters available?
-
+> v1 -> v2:
+> - Reuse 8150 indices for 8155
+> - As a consequence of /\, only update domains that differ in the DT
 >
-> >
-> >>>
-> >>>> Suggested-by: Sean Christopherson <seanjc@google.com>
-> >>>> Signed-off-by: Like Xu <likexu@tencent.com>
-> >>>> ---
-> >>>>    arch/x86/kvm/pmu.h | 3 +++
-> >>>>    1 file changed, 3 insertions(+)
-> >>>>
-> >>>> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> >>>> index dd7c7d4ffe3b..002b527360f4 100644
-> >>>> --- a/arch/x86/kvm/pmu.h
-> >>>> +++ b/arch/x86/kvm/pmu.h
-> >>>> @@ -182,6 +182,9 @@ static inline void kvm_init_pmu_capability(const=
- struct kvm_pmu_ops *pmu_ops)
-> >>>>                           enable_pmu =3D false;
-> >>>>           }
-> >>>>
-> >>>> +       if (!is_intel && kvm_pmu_cap.num_counters_gp < AMD64_NUM_COU=
-NTERS)
+> I did not pick up any tags, as things changed rather significantly.
+>
+> Compile-tested only.
+>
+> v1: https://lore.kernel.org/linux-arm-msm/20230214095435.2192153-1-konrad=
+.dybcio@linaro.org/
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (3):
+>       dt-bindings: power: qcom,rpmpd: Add SA8155P
+>       soc: qcom: rpmhpd: Add SA8155P power domains
+>       arm64: dts: qcom: Split out SA8155P and use correct RPMh power doma=
+ins
+>
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+>  arch/arm64/boot/dts/qcom/sa8155p-adp.dts           |  2 +-
+>  arch/arm64/boot/dts/qcom/sa8155p.dtsi              | 40 ++++++++++++++++=
+++++++
+>  drivers/soc/qcom/rpmhpd.c                          | 16 +++++++++
+>  include/dt-bindings/power/qcom-rpmpd.h             |  9 +++++
+>  5 files changed, 67 insertions(+), 1 deletion(-)
+> ---
+> base-commit: 009795d283d1f9f043e5a4ff97d4140cde17e2d3
+> change-id: 20230411-topic-hanaau-459c6cbbf55c
+>
+> Best regards,
+> --
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+>
 
-Does this actually guarantee that the requisite number of counters are
-available and will always be available while the guest is running?
-What happens if some other client of the host perf subsystem requests
-a CPU-pinned counter after this checck?
+sa8155p-adp now works fine, thanks
 
-> >>>> +               enable_pmu =3D false;
-> >>>> +
-> >>>>           if (!enable_pmu) {
-> >>>>                   memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
-> >>>>                   return;
-> >>>> --
-> >>>> 2.40.0
-> >>>>
+Tested-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
