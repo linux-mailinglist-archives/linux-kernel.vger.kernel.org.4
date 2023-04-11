@@ -2,87 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5888B6DDFBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E7F6DDFC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDKPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S230402AbjDKPbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDKPaP (ORCPT
+        with ESMTP id S230257AbjDKPbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:30:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899EC26BE;
-        Tue, 11 Apr 2023 08:29:56 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFCPr7003942;
-        Tue, 11 Apr 2023 15:29:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=NXavlX3EV8sFIR/LzYDmEJH/U5nEoxc0lBizQkprCwE=;
- b=kSCAagRsHx2ajmaK/9UQpiSqm5sllOEyXW/Btur3QH3aUAaEaebPNFSZUirMzP8VVqKp
- EmQdmxdE8yxElStzh9PvclR1dPzws83A7ECwJPAk9M4JGh6H4Dcyk0SXuLFpU4Aju2lx
- 5lH7D7n5xQEA1jz/tqcOEfon9YOJKYc3GhTqm4gMvMnTNzoDH1prhoPv7aycpunBerAX
- xdcnDnKl4LdRPlpgnNyBDJTOMfzzDvUeOz350jZD2xDWA/s3IvEKQR47kWCjemtCoiP2
- dXCGGsepYiF87AxgK5aeF5kTwLDng5ZN0boaeczs+a0r2kGFdGAxv+7l56FnV6N8o3It qg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw3cv8xtw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 15:29:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BFTT7t030331
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 15:29:29 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
- 2023 08:29:28 -0700
-Message-ID: <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
-Date:   Tue, 11 Apr 2023 09:29:27 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: linux-next: build failure after merge of the driver-core tree
+        Tue, 11 Apr 2023 11:31:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F89246B4;
+        Tue, 11 Apr 2023 08:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681227061; x=1712763061;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=bAaYQaQ7dwZjMlSC68BdO6Q1/kZtqsZyzuUQvoXst4s=;
+  b=QaqvZZCxSR8tImo3mbrGY0tmmNf6fwAoSqCoYMfI3ezMnEkGT6AcsvAr
+   w8xqfzA/pIbkWfIaSZBq395UiygfOs94UIsqW4iYfE2O1JZTjiwA4RfZZ
+   K/pAEkXpeB3MngUtHJzqO8tgC3f3bwpyqGJs6CA69uRBNvN6hgigcNcft
+   5RM/C4vePHdM4rSi+oDXLVCisISdj3fSTrK/83VpXRVYj0yp8a3vISpRk
+   9cye8MSGl7JwfLPy5tWVVuVfT/x/z3QeDcvh4LubAOnNErU7zzImI67ev
+   iOx6OX3ylqSXHBYUOiZFJqnwjtogS2HTbGh3AsXvBM8nykCLuMZNOU9ne
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="324013036"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="324013036"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 08:31:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="757885322"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="757885322"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Apr 2023 08:30:59 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 11 Apr 2023 08:30:58 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 11 Apr 2023 08:30:58 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 11 Apr 2023 08:30:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnyu/d5EYVVfv2qr2VzPEE06+giIQyoBLSqwDmQLKLKci6+MGcwAt6OhR1j70E3es10uxJhv1yy5vWJXOw8iZl6fa97SmuxeCh7jQn4Bq/w5twO/be3WhbXZnfBTpr8cYpIrJi6i5SnOFoDnJNcev+qyQ4QXmbIdQ4nEvVR30476haHBIujAVzHj2SfPKqQzlzKtLLTvlN79yQ3xF7DqbW/fiRhZCe222XuKZB7pSZmjx9/fKRCoZD+o6G2n/iz6hW0HDsdekwfbNVCyL54hXn6QSB34v+85wB3Pmu7U3jAh6poYillMX0Sk4JAedD2hXOzqjLVPTn9ckc102J3Z4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fhP2WOFegMnuX+rvRulv97Vx7dKCul+rRcTaMCBWyxE=;
+ b=FrOpe/VjVAb+pnagHkX62h/rk3Ir7hmXVFdHWJzpkSDdoqwEZywlKVJES8lCRPeYTLZr9HMNceDg1AXHaXa53DzqNrnXuyI3dh4CFIV57vzcZ+0u0hoDahIhE6PgowkbO7JEV4RTL5po/dLMOMaGB0jZRJrf8wL9F2iy4XC1fK4w7Zjym4TPwQ6mN6inAzoKU3FkG6frHxIoSWKhunR9P4FQo62rA0fw9VFft36akxeupamOr0uJ6DEN23kHe1YqvkW57YDTBAgBFSia58D3lXSTjIyYAUDBgt8USj5zYxPbyACK2Fcg28Q/9HyP8cpMfFr2fXzYOuWp+FfXH0DboQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by SJ1PR11MB6204.namprd11.prod.outlook.com (2603:10b6:a03:459::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
+ 2023 15:30:55 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c7d6:3545:6927:8493]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c7d6:3545:6927:8493%7]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 15:30:54 +0000
+Message-ID: <260c2921-44e1-466b-0bfb-05006e6ad4c1@intel.com>
+Date:   Tue, 11 Apr 2023 08:30:51 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH net] net: bridge: switchdev: don't notify FDB entries with
+ "master dynamic"
 Content-Language: en-US
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     Greg KH <greg@kroah.com>
-CC:     Oded Gabbay <ogabbay@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-References: <20230411143812.11a4b00d@canb.auug.org.au>
- <ZDUuiB+E1tIJ95LY@phenom.ffwll.local> <2023041123-tractor-quake-c44d@gregkh>
- <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
- <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
- <2023041131-boxy-excavator-1183@gregkh>
- <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
-In-Reply-To: <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JJtxyihkfiO8aAl-4pOEOVGV12uRvcQV
-X-Proofpoint-ORIG-GUID: JJtxyihkfiO8aAl-4pOEOVGV12uRvcQV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_10,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 phishscore=0 adultscore=0 clxscore=1015 bulkscore=0
- mlxlogscore=999 impostorscore=0 lowpriorityscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110142
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, <netdev@vger.kernel.org>
+CC:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Ido Schimmel" <idosch@nvidia.com>,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        "Nikolay Aleksandrov" <razor@blackwall.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        "Jiri Pirko" <jiri@resnulli.us>,
+        Arkadi Sharshevsky <arkadis@mellanox.com>,
+        "Ido Schimmel" <idosch@mellanox.com>,
+        <bridge@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
+References: <20230410204951.1359485-1-vladimir.oltean@nxp.com>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20230410204951.1359485-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR03CA0003.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::8) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|SJ1PR11MB6204:EE_
+X-MS-Office365-Filtering-Correlation-Id: c32f94b4-3bb3-4c7e-215c-08db3aa1bd79
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4KMGnVLzy3tchQ/BEXbYCIHKp2V8j8fse9OzsfGHsLCGjGtqwZTn9Va/6dCQ1ZAI/IrVUhBIuLZrIi03GekI/6pfxbAx67wdM0pJ40yJsJU7DvvchmoSb8lF1QBYbwMpvhmMVg1l+Ao7TaFU6aUb3W7xy5vDdodqC8CowsRkH1j8a09Faae57PJ4RUCtEHY056I7YUBStRhzF49OA4BcDWvKu09NRxr+Pxo1HU/Xoe9JeEePi2p6Q/RwJdwp25iccw1i8Td1iPhjcD3FnkJNbDVlujsfm41HarCN4qYOFND7NJAeDPHTp2sLciMJQgNktQ/eD9zTKeyhopFyU7TNMWB93OluDNz8I8X9Kkevh1uR9hwGQ4eZV2/vcP0UhzO09t59pKGeq06+B0Vp3dUzDuEAcf+RgFAaxDtELwxu68AbjpdPnu3tgEn/uorDQtQg9QBM0hp8+G3+lK4SAEuifAAukh5wMKupwq8kTUxV3sCzcKzE8mze26iQvbghGu88R1dSNlZludJxZ/35Lyk/xspL8ff+C1tx+bu2U7Dy6SxdOwdQER/JXqnuYt5nlXM6V9LXKR+wbzJDtM9MeaV/St/luPqqcvJZjrQozuZqA8t4VegG5OlRcL1+G4EFnrkc97Ght87xLc7s2FoUw6Bfeg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(346002)(136003)(376002)(39860400002)(451199021)(478600001)(6512007)(26005)(316002)(53546011)(6506007)(44832011)(186003)(54906003)(2906002)(966005)(5660300002)(4326008)(66946007)(7416002)(41300700001)(8676002)(6666004)(66476007)(6486002)(8936002)(66556008)(31696002)(86362001)(83380400001)(36756003)(82960400001)(2616005)(38100700002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjdCUTBobzRyTDV6WDl3L2Nrekc0Zlh0NE9ZblYyaEJENStpOXVTOG9lci8x?=
+ =?utf-8?B?OVNGRUNFbGcwcTVmY0tzc1R2VWJka093bVhJazl6TFR5cnY2QnM5TTFnWlhI?=
+ =?utf-8?B?UGE5YXhJTmEwUm92akFrcmlTc0ZFVmpPNXhRNkpIYkU1ZzdHenlTdnMxQU1i?=
+ =?utf-8?B?bVFuMGk4cG1TVFUrUDkxMEV6aURVc2lGOHUyVUtvc2J5bkhYMUJNeDhNdnE0?=
+ =?utf-8?B?NDZLeUY5cldjd0xtODhybklPMDdmQ2dJNHp5Y25ScW9EZWJTaHEwN1V3K2lW?=
+ =?utf-8?B?VFJmcXJRTCtkOFdVVEdjL0VBN2c1QUNLWGIwWHhoME5VMG1ORzNxSEkvVXUw?=
+ =?utf-8?B?b0JOM3FCWlpmd1FFbDJnY2s2SEx3ZHpJd0IzclRWTGU5TkRIcjI1ZzVOV25O?=
+ =?utf-8?B?bHI0K2pCRzZjd0txN1U3bGVXMmtrbUpoWUNyMHZiRkkwZ2Q4UzlCZ3ExbEZw?=
+ =?utf-8?B?YkY2TzhTUTh0bUxXNDR2K0ZTUy9nQVNlMk9STm1lbEFhY0R6ZVhwWTRSN3Ew?=
+ =?utf-8?B?dW1ETnUxejNLK2Fka043R3RSRlNQOTZ1NU5oT3Rldm9pQS9ZbGNrVGhvYzJC?=
+ =?utf-8?B?UjBKenBvUFJ5RjRxQ0lLKzVBSkJSeFY1a2ZnVCt0SUVRY3B3NjBlUnJpMHdH?=
+ =?utf-8?B?RGRFM2tJSWtFTVM0UStFeitPd00wRFNQV3ZyYXM5andCWGpOK2tOZDdqZkR3?=
+ =?utf-8?B?ejFwUjVMWStIQ3dqNXFqMnVRNVVEZDAvTUx5MHRFcEl3Ukg3QXhzK1UvTTd2?=
+ =?utf-8?B?NHMyK2pWREFjaUdrZDZrTHl4VU44T2FLRHREZTFINGFTYVNMTGxkTERzcGJV?=
+ =?utf-8?B?NzhyZC9GeVBOOVhYQUNiTmIycE1OVzFHMis2dWZwZ0MrcHZBMGVTV2w0ZWND?=
+ =?utf-8?B?NUxxM3lrV1IvanZISVE4R3FMTldXaFFvK0VMQ0J3TEg4UUVndXY2OEdUQ3hJ?=
+ =?utf-8?B?aEFieldJNVZ0eTBSQlJOT21SRXdYbmVvdHQvVUwzWjJHdXFXUll4ZERBSFZF?=
+ =?utf-8?B?MW9qaWZ6YjZPRFhrRHVLdjdJQnZlR2hiZy9DNzdLcVdrRGJucFBjcmhvbko1?=
+ =?utf-8?B?b3VPbE9jcHIxZ0VCbnh0NmRVNHpheUxmODZCNE5sazhNVjB0UjdTM3lpSlJr?=
+ =?utf-8?B?ZXFXVjd6ME5CK0xWL25NU0dqOXU5ZE0xcUxLYTFhblFjc2Q0L2J1NFJEUjVW?=
+ =?utf-8?B?K1JsYXpUbE93UlRPdTZrK2tGcHU5ajdOeVhGQUNCMVJtNXlPUHlQU2svME81?=
+ =?utf-8?B?VEluN1IzMWk1MTlTaEZ0bWMwdHk5bWFKckF0UWtYUm1nWUdRMS9NRTBoNnNM?=
+ =?utf-8?B?V0w2dmhvYks2dVlDOFNHOW9KWklPYUVyT2N4eU9QQkJXZ2g1ZE5pQmxHK1R5?=
+ =?utf-8?B?eXRJWUJXYTIxU1ZWcTgyN3E2Y3ZTZFgzL1Iya0JMdjZvUXhGeS81YXpPNzZL?=
+ =?utf-8?B?VEpPSlpucVl0ZlJ3OTZQWHdyL21waVVGYlZzQ3hnbkR0UHgxNHBtb0x0Z1FP?=
+ =?utf-8?B?NlBnVmVCQ0NFUUp1TFdkbHRrb203N0RtektDY1lHYWQvQXB6bWtjbFdTRWxo?=
+ =?utf-8?B?T0l0cFFFM0tDMlI2S2dHQmYyZjFBT1hncG1nblIrMHNjV0hicEtlbHJLSUlL?=
+ =?utf-8?B?Y0N5cmYzdzFsMkhqNjZtVjhwMlkrM3AvRUZ3SzhIZ3d2NlFLeUtkS0xZNDZB?=
+ =?utf-8?B?WEtZZVFVaVNrdnFueVpXdzN0SkhmQzlxUTBacGkrc095VjVibTc4bGR0SlFT?=
+ =?utf-8?B?NjJIemhSMUoxakR1SHpLaCtGVCtZbFgrSDk0QmZWMVhXNjFqZWJuajc0Wm1F?=
+ =?utf-8?B?N3pJZm82UHVjRWxMVS9XSEpXb0RMNHFVUWZtbkNpNWd4aTVYbGVCdytzdUpo?=
+ =?utf-8?B?SHhuNmlrSGdYdTNXZkMyRFMvV2Rjc2JrcGtQQmtnZlVQaVFIVXlPd3pGd2ZR?=
+ =?utf-8?B?TC8rUTVtOTlRMkRUaGU3OXlJWGdZNUVCY293UWh0VGRpSGVsbk9aOHJuUjd0?=
+ =?utf-8?B?SVlwZmZHOSsyT01WRFN1Q1NvUklIWkJGYmRZR3RsWWMwYWZJcGZEVE5GOUJa?=
+ =?utf-8?B?d0tJUVV6RnhpbzlFd1RSZ2JGd3NoOFF3MGtDR2xMYkt4YmN5SWFUY1ZqbU1G?=
+ =?utf-8?B?dlpEeVNvSyt1dW9hLzVTbDRlNkxudW1ZYytXSjJoWlJjbUphOXM1ampsR2Fk?=
+ =?utf-8?B?c2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c32f94b4-3bb3-4c7e-215c-08db3aa1bd79
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 15:30:54.8254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EF/Sh2jRQgaAjL2yH//yO08KlDtKi8iaPbsJKeV8d1WCGNhIdPqXVoZFilE9AKLuzapcG0tOS9BdenrHuxyfY63uKfQjrm4lpAMSn6hwGI8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6204
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,143 +170,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
-> On 4/11/2023 9:13 AM, Greg KH wrote:
->> On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
->>> On 4/11/2023 9:01 AM, Daniel Vetter wrote:
->>>> On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
->>>>> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
->>>>>> On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
->>>>>>> Hi all,
->>>>>>>
->>>>>>> After merging the driver-core tree, today's linux-next build (x86_64
->>>>>>> allmodconfig) failed like this:
->>>>>>>
->>>>>>> In file included from include/linux/linkage.h:7,
->>>>>>>                    from include/linux/kernel.h:17,
->>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
->>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 
->>>>>>> 'mhi_qaic_ctrl_init':
->>>>>>> include/linux/export.h:27:22: error: passing argument 1 of 
->>>>>>> 'class_create' from incompatible pointer type 
->>>>>>> [-Werror=incompatible-pointer-types]
->>>>>>>      27 | #define THIS_MODULE (&__this_module)
->>>>>>>         |                     ~^~~~~~~~~~~~~~~
->>>>>>>         |                      |
->>>>>>>         |                      struct module *
->>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of 
->>>>>>> macro 'THIS_MODULE'
->>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, 
->>>>>>> MHI_QAIC_CTRL_DRIVER_NAME);
->>>>>>>         |                                      ^~~~~~~~~~~
->>>>>>> In file included from include/linux/device.h:31,
->>>>>>>                    from include/linux/mhi.h:9,
->>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
->>>>>>> include/linux/device/class.h:229:54: note: expected 'const char 
->>>>>>> *' but argument is of type 'struct module *'
->>>>>>>     229 | struct class * __must_check class_create(const char 
->>>>>>> *name);
->>>>>>>         |                                          ~~~~~~~~~~~~^~~~
->>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many 
->>>>>>> arguments to function 'class_create'
->>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, 
->>>>>>> MHI_QAIC_CTRL_DRIVER_NAME);
->>>>>>>         |                         ^~~~~~~~~~~~
->>>>>>> include/linux/device/class.h:229:29: note: declared here
->>>>>>>     229 | struct class * __must_check class_create(const char 
->>>>>>> *name);
->>>>>>>         |                             ^~~~~~~~~~~~
->>>>>>>
->>>>>>> Caused by commit
->>>>>>>
->>>>>>>     1aaba11da9aa ("driver core: class: remove module * from 
->>>>>>> class_create()")
->>>>>>>
->>>>>>> interacting with commit
->>>>>>>
->>>>>>>     566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
->>>>>>>
->>>>>>> from the drm tree.
->>>>>>>
->>>>>>> I have applied the following merge fix patch for today.
->>>>>>>
->>>>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
->>>>>>> Date: Tue, 11 Apr 2023 14:16:57 +1000
->>>>>>> Subject: [PATCH] fixup for "driver core: class: remove module * 
->>>>>>> from class_create()"
->>>>>>>
->>>>>>> interacting with "accel/qaic: Add mhi_qaic_cntl"
->>>>>>>
->>>>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->>>>>>
->>>>>> Thanks for the fixup. Since Dave is out I've made a note about 
->>>>>> this in my
->>>>>> handover mail so it won't get lost in the drm-next merge window 
->>>>>> pull. I
->>>>>> don't think we need any other coordination than mention it in each 
->>>>>> pull to
->>>>>> Linus, topic tree seems overkill for this. Plus there's no way I can
->>>>>> untangle the drm tree anyway :-).
->>>>>
->>>>> Want me to submit a patch for the drm tree that moves this to use
->>>>> class_register() instead, which will make the merge/build issue go 
->>>>> away
->>>>> for you?  That's my long-term goal here anyway, so converting this new
->>>>> code to this api today would be something I have to do eventually :)
->>>>
->>>> We kinda closed drm-next for feature work mostly already (just pulling
->>>> stuff in from subtrees), so won't really help for this merge window.
->>>>
->>>> For everything else I think this is up to Oded, I had no idea qaic 
->>>> needed
->>>> it's entire own dev class and I don't want to dig into this for the 
->>>> risk I
->>>> might freak out :-)
->>>>
->>>> Adding Oded.
->>>>
->>>> Cheers, Daniel
->>>
->>> Sorry for the mess.
->>>
->>> I made a note to update to class_register() once my drm-misc access is
->>> sorted out.  Looks like we'll address the conflict in the merge 
->>> window, and
->>> catch the update to the new API in the following release.
->>
->> Wait, I think the large question is, "why does this need a separate
->> class"?  Why are you not using the accel char device and class?  That is
->> what everything under accel/ should be using, otherwise why put it in
->> there?
->>
->> And what exactly are you using that class for?  Just device nodes?  If
->> so, how many?
->>
->> thanks,
->>
->> greg k-h
+On 4/10/2023 1:49 PM, Vladimir Oltean wrote:
+> There is a structural problem in switchdev, where the flag bits in
+> struct switchdev_notifier_fdb_info (added_by_user, is_local etc) only
+> represent a simplified / denatured view of what's in struct
+> net_bridge_fdb_entry :: flags (BR_FDB_ADDED_BY_USER, BR_FDB_LOCAL etc).
+> Each time we want to pass more information about struct
+> net_bridge_fdb_entry :: flags to struct switchdev_notifier_fdb_info
+> (here, BR_FDB_STATIC), we find that FDB entries were already notified to
+> switchdev with no regard to this flag, and thus, switchdev drivers had
+> no indication whether the notified entries were static or not.
 > 
+> For example, this command:
 > 
-> Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed 
-> out at the time that AIC100/QAIC would need the same functionality. 
-> You/Jakub told myself/Mani/Loic that a combined implementation is not 
-> acceptable, and every area needs to implement their own version of MHI_UCI.
+> ip link add br0 type bridge && ip link set swp0 master br0
+> bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
 > 
-> We took the WWAN subsystem and simplified it to meet our needs.
+> causes a struct net_bridge_fdb_entry to be passed to
+> br_switchdev_fdb_notify() which has a single flag set:
+> BR_FDB_ADDED_BY_USER.
 > 
-> The functionality is QAIC specific, so wedging it into the Accel node 
-> seems to be a poor fit as it would subject Habana and iVPU to the same.
+> This is further passed to the switchdev notifier chain, where interested
+> drivers have no choice but to assume this is a static FDB entry.
+> So currently, all drivers offload it to hardware as such.
+> 
+> bridge fdb get 00:01:02:03:04:05 dev swp0 master
+> 00:01:02:03:04:05 dev swp0 offload master br0
+> 
+> The software FDB entry expires after the $ageing_time and the bridge
+> notifies its deletion as well, so it eventually disappears from hardware
+> too.
+> 
+> This is a problem, because it is actually desirable to start offloading
+> "master dynamic" FDB entries correctly, and this is how the current
+> incorrect behavior was discovered.
+> 
+> To see why the current behavior of "here's a static FDB entry when you
+> asked for a dynamic one" is incorrect, it is possible to imagine a
+> scenario like below, where this decision could lead to packet loss:
+> 
+> Step 1: management prepares FDB entries like this:
+> 
+> bridge fdb add dev swp0 ${MAC_A} master dynamic
+> bridge fdb add dev swp2 ${MAC_B} master dynamic
+> 
+>         br0
+>       /  |  \
+>      /   |   \
+>   swp0  swp1  swp2
+>    |           |
+>    A           B
+> 
+> Step 2: station A migrates to swp1 (assume that swp0's link doesn't flap
+> during that time so that the port isn't flushed, for example station A
+> was behind an intermediary switch):
+> 
+>         br0
+>       /  |  \
+>      /   |   \
+>   swp0  swp1  swp2
+>    |     |     |
+>          A     B
+> 
+> Whenever A wants to ping B, its packets will be autonomously forwarded
+> by the switch (because ${MAC_B} is known). So the software will never
+> see packets from ${MAC_A} as source address, and will never know it
+> needs to invalidate the dynamic FDB entry towards swp0. As for the
+> hardware FDB entry, that's static, it doesn't move when the station
+> roams.
+> 
+> So when B wants to reply to A's pings, the switch will forward those
+> replies to swp0 until the software bridge ages out its dynamic entry,
+> and that can cause connectivity loss for up to 5 minutes after roaming.
+> 
+> With a correctly offloaded dynamic FDB entry, the switch would update
+> its entry for ${MAC_A} to be towards swp1 as soon as it sees packets
+> from it (no need for CPU intervention).
+> 
+> Looking at tools/testing/selftests/net/forwarding/, there is no valid
+> use of the "bridge fdb add ... master dynamic" command there, so I am
+> fairly confident that no one used to rely on this behavior.
+> 
+> With the change in place, these FDB entries are no longer offloaded:
+> 
+> bridge fdb get 00:01:02:03:04:05 dev swp0 master
+> 00:01:02:03:04:05 dev swp0 master br0
+> 
+> and this also constitutes a better way (assuming a backport to stable
+> kernels) for user space to determine whether the switchdev driver did
+> actually act upon the dynamic FDB entry or not.
+> 
+> Fixes: 6b26b51b1d13 ("net: bridge: Add support for notifying devices about FDB add/del")
+> Link: https://lore.kernel.org/netdev/20230327115206.jk5q5l753aoelwus@skbuf/
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Also, I forgot to mention.  QAIC is sharing userspace components with 
-WWAN, so we really cannot diverge from what WWAN has done and define a 
-new API through the Accel node.
+Looks fine to me, but I'd like to see other switchdev experts reply.
 
-> 
-> We need (eventually) 128 device nodes.  We have systems with 32 QAIC 
-> devices, and each QAIC device uses 4 device nodes (32 * 4 = 128).  WWAN 
-> subsystem would be similar.  Looks like each 5G modem is 6 nodes per 
-> device, so if you had 22 5G modems on a system, you'd have 132 device 
-> nodes.  I'm not aware of any such system, but it could exist.
-> 
-> -Jeff
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+
 
