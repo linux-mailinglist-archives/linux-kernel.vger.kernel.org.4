@@ -2,87 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607556DDE1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4B06DDE20
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjDKOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S230006AbjDKOhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjDKOgx (ORCPT
+        with ESMTP id S230163AbjDKOhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:36:53 -0400
+        Tue, 11 Apr 2023 10:37:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544A212F;
-        Tue, 11 Apr 2023 07:36:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69246AF;
+        Tue, 11 Apr 2023 07:37:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D870F6275F;
-        Tue, 11 Apr 2023 14:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91048C433D2;
-        Tue, 11 Apr 2023 14:36:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02937627A7;
+        Tue, 11 Apr 2023 14:37:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41813C433D2;
+        Tue, 11 Apr 2023 14:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681223812;
-        bh=1ZaELguZrMUDSqBDbQ/nvMKkVutqjjhoMJMSmLlmpsA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aDIrm0PeTzZNwH3+9XkPMGnN+vFyIBQ749a4wLpDyrbSohvM13uVlyYBuQCYKnZ8I
-         LwefzyfXPov/RWnBEn42BIsbVf84vw7NzHXmgOze6aPFwuTm8PiMmBwnBGl9009o93
-         IWqAyya49c34lkaD8vEkpd7MXndFMPoawLE+w/vO5DRgnSuLJ3aEyOkl5bgIlIev9J
-         egD6kT3fs1v2YFbNX+AfIsAHgwuF5PnluxB2c7dsgXT+kTnItwqWVVzDnJjKuXhgwe
-         4M2fwDBRYBjh+6ZE5N+/7B8+V9zisEiSx3+9dnarB50RECC2/tMuC1TEnvmnffJOPk
-         v7eW/jMo6AMXg==
-Message-ID: <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
-Date:   Tue, 11 Apr 2023 08:36:50 -0600
+        s=k20201202; t=1681223825;
+        bh=IRCClithvgPTE04hKaJiM2EAL0BbX3ippre0W+x0FD4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=t4qT7x6t2LTb4FTbywjpwvf4EZgxgoZDbquly4oCmuXuqeQHVn8s3QnZNlI8SwIt+
+         pjjvDJdWxP73tNqCgdJkKkph2o3QfeFww7QhfVDKoKt92Cgbu3ROm7x5RtpjebsiJT
+         TTVr2x9eaw3xhwKJuT4FJbUWsqcNUK3AVcl7oSJoyNRESlqJvFls5gMWhdOXNdU1aa
+         y/xNNgsCceoYVMtskUS+ytTRKik/3kWiXiYxZDIjWZLGkVgvXnr6g6zhIXyb2LkX3p
+         dPVQMmiI2WSWyRm6wI+wARvMxps10ptSmgDmffgC65ZOuOJqIqsxQmI5ED1yYIPJA/
+         wYw7FCMju4k6Q==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org
+Subject: [RFC PATCH 0/3][RESEND] fs: opportunistic high-res file timestamps
+Date:   Tue, 11 Apr 2023 10:36:59 -0400
+Message-Id: <20230411143702.64495-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
-        axboe@kernel.dk, leit@fb.com, edumazet@google.com,
-        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
- <ZC7seVq7St6UnKjl@gmail.com>
- <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
- <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
- <ZDVLyi1PahE0sfci@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <ZDVLyi1PahE0sfci@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 6:00 AM, Breno Leitao wrote:
-> I am not sure if avoiding io_uring details in network code is possible.
-> 
-> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
-> in the TCP case) could be somewhere else, such as in the io_uring/
-> directory, but, I think it might be cleaner if these implementations are
-> closer to function assignment (in the network subsystem).
-> 
-> And this function (tcp_uring_cmd() for instance) is the one that I am
-> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
-> -> SIOCINQ.
-> 
-> Please let me know if you have any other idea in mind.
+(Apologies for the resend, but I didn't send this with a wide enough
+distribution list originally).
 
-I am not convinced that this io_uring_cmd is needed. This is one
-in-kernel subsystem calling into another, and there are APIs for that.
-All of this set is ioctl based and as Willem noted a little refactoring
-separates the get_user/put_user out so that in-kernel can call can be
-made with existing ops.
+A few weeks ago, during one of the discussions around i_version, Dave
+Chinner wrote this:
+
+"You've missed the part where I suggested lifting the "nfsd sampled
+i_version" state into an inode state flag rather than hiding it in
+the i_version field. At that point, we could optimise away the
+secondary ctime updates just like you are proposing we do with the
+i_version updates.  Further, we could also use that state it to
+decide whether we need to use high resolution timestamps when
+recording ctime updates - if the nfsd has not sampled the
+ctime/i_version, we don't need high res timestamps to be recorded
+for ctime...."
+
+While I don't think we can practically optimize away ctime updates
+like we do with i_version, I do like the idea of using this scheme to
+indicate when we need to use a high-res timestamp.
+
+This patchset is a first stab at a scheme to do this. It declares a new
+i_state flag for this purpose and adds two new vfs-layer functions to
+implement conditional high-res timestamp fetching. It then converts both
+tmpfs and xfs to use it.
+
+This seems to behave fine under xfstests, but I haven't yet done
+any performance testing with it. I wouldn't expect it to create huge
+regressions though since we're only grabbing high res timestamps after
+each query.
+
+I like this scheme because we can potentially convert any filesystem to
+use it. No special storage requirements like with i_version field.  I
+think it'd potentially improve NFS cache coherency with a whole swath of
+exportable filesystems, and helps out NFSv3 too.
+
+This is really just a proof-of-concept. There are a number of things we
+could change:
+
+1/ We could use the top bit in the tv_sec field as the flag. That'd give
+   us different flags for ctime and mtime. We also wouldn't need to use
+   a spinlock.
+
+2/ We could probably optimize away the high-res timestamp fetch in more
+   cases. Basically, always do a coarse-grained ts fetch and only fetch
+   the high-res ts when the QUERIED flag is set and the existing time
+   hasn't changed.
+
+If this approach looks reasonable, I'll plan to start working on
+converting more filesystems.
+
+One thing I'm not clear on is how widely available high res timestamps
+are. Is this something we need to gate on particular CONFIG_* options?
+
+Thoughts?
+
+Jeff Layton (3):
+  fs: add infrastructure for opportunistic high-res ctime/mtime updates
+  shmem: mark for high-res timestamps on next update after getattr
+  xfs: mark the inode for high-res timestamp update in getattr
+
+ fs/inode.c                      | 40 +++++++++++++++++++++++++++++++--
+ fs/stat.c                       | 10 +++++++++
+ fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
+ fs/xfs/xfs_acl.c                |  2 +-
+ fs/xfs/xfs_inode.c              |  2 +-
+ fs/xfs/xfs_iops.c               | 15 ++++++++++---
+ include/linux/fs.h              |  5 ++++-
+ mm/shmem.c                      | 23 ++++++++++---------
+ 8 files changed, 80 insertions(+), 19 deletions(-)
+
+-- 
+2.39.2
+
