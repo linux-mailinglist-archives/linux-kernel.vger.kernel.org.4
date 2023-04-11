@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7556DE605
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392EA6DE609
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjDKUwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S229590AbjDKUxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjDKUwk (ORCPT
+        with ESMTP id S229477AbjDKUxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:52:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51267469E;
-        Tue, 11 Apr 2023 13:52:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 304AC60FA0;
-        Tue, 11 Apr 2023 20:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C453C433D2;
-        Tue, 11 Apr 2023 20:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681246358;
-        bh=Uw2/Byf4kuU8+07mE//heEnMrZgOuJnGJy2pZr8fhEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kr7O+0tZrPjEw0m/XXSwGiAmEd0MbZYqCzhbwtcx7NCA01FSSC9pitekLgnICQxbi
-         syANdkMkdw1wXFuiLU96iyGAW7TceQUdlVMG+sd7JcKbBTNlzFL6qMHoFB7n57Htw4
-         wo6n0LaAmGEh5FlbS8RBYEvlsa2iSUFr7THTM1mlNZdKnJKHStKO5tfowCNPf7Y4ug
-         vl7TQstNxxUicCr9x2A7brZKNb+yKoIsxG4G/j+pVNvDnEQAJXLF7S2eKthRjnDNxV
-         BicfhtBoLVOViQnorBBk7E5ByCJGD3PqOLQId1Ti6sSAHfvPEo1gg8xhllRLM0SpuH
-         Py55B92WHjoNg==
-Date:   Tue, 11 Apr 2023 21:52:33 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 4/7] soc: starfive: Add pmu type operation
-Message-ID: <20230411-flavoring-sternness-a3b6cdee9fcb@spud>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
- <20230411064743.273388-5-changhuang.liang@starfivetech.com>
+        Tue, 11 Apr 2023 16:53:06 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8D4198A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:53:05 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id 3-20020a6b1403000000b007588213c81aso6181185iou.18
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:53:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681246384; x=1683838384;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5FraGnenFeAHzE7pcyamjrVHwZFel3GRzsifdZZaBZA=;
+        b=wVC6CzGsVP4uUaTaBFRHISRW7DT5wWrZSfRqd+qJ7a47Oq4sdog/bOh6nUR4lWPrkx
+         L0t+3JEGnUdyyLtkRzq0/FuOoL3HiWi6Y3Xck3NkrwlyK/dnuCur3jiiJ3E7g0dpXhCm
+         bRYr734uY9SfD89rP6u0ERwVX+CZeM5Fv8ifUxwPMJsdzcMUWQXmzmLdl2mDP6tpoAmr
+         Yt/oZmmq2kdWwo288h2IPXqbzBQT2EGNkyf81ztsyJMTq+J0P7qR8OTEQJb5QGrS3H6l
+         IF6o7DgLNihVlqVnskEJAr6YMt440lYIes+GIV4H+cW/mh06qPg3OYvrFvjocSWIl4GD
+         0P+g==
+X-Gm-Message-State: AAQBX9cFy7CGT7m9f9AEflnVpFn7VwH1nH75AQqMV5gONifNXofC3kU/
+        55aaQv+gJQW5aKQn+l/AIk5zKyC+VlZxgtJd9lQMElCGavhR
+X-Google-Smtp-Source: AKy350a7rCOrUZbqRJzVQnelk1N+sOACB0HgSXGmodSV8jnGfJWPcTRqKf8bo2bKBsq849HWHQgGG7N2UXYD9lO76wpbblzK6C26
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9jTLzkgimlFJEOUu"
-Content-Disposition: inline
-In-Reply-To: <20230411064743.273388-5-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:8563:0:b0:3c5:1971:1b7b with SMTP id
+ g90-20020a028563000000b003c519711b7bmr1537580jai.1.1681246384070; Tue, 11 Apr
+ 2023 13:53:04 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 13:53:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000080c6c805f915ade0@google.com>
+Subject: [syzbot] [rds?] WARNING in rds_conn_connect_if_down
+From:   syzbot <syzbot+d4faee732755bba9838e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        rds-devel@oss.oracle.com, santosh.shilimkar@oracle.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---9jTLzkgimlFJEOUu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hey Changhuang Liang,
+HEAD commit:    b9881d9a761a Merge branch 'bonding-ns-validation-fixes'
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=123c531dc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d3500b143c204867
+dashboard link: https://syzkaller.appspot.com/bug?extid=d4faee732755bba9838e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On Mon, Apr 10, 2023 at 11:47:40PM -0700, Changhuang Liang wrote:
-> Add pmu type, make a distinction between different PMU.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Please write more detailed commit messages, thanks.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b4a5a4a2f01/disk-b9881d9a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f3d2bf6e2e9e/vmlinux-b9881d9a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/26469aa699ef/bzImage-b9881d9a.xz
 
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  drivers/soc/starfive/jh71xx_pmu.c | 55 ++++++++++++++++++++++---------
->  1 file changed, 39 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh7=
-1xx_pmu.c
-> index 306218c83691..98f6849d61de 100644
-> --- a/drivers/soc/starfive/jh71xx_pmu.c
-> +++ b/drivers/soc/starfive/jh71xx_pmu.c
-> @@ -45,6 +45,12 @@
->   */
->  #define JH71XX_PMU_TIMEOUT_US		100
-> =20
-> +/* pmu type */
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d4faee732755bba9838e@syzkaller.appspotmail.com
 
-Delete this comment, it's obvious.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 21117 at net/rds/connection.c:933 rds_conn_connect_if_down+0x97/0xb0 net/rds/connection.c:933
+Modules linked in:
+CPU: 1 PID: 21117 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00143-gb9881d9a761a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:rds_conn_connect_if_down+0x97/0xb0 net/rds/connection.c:933
+Code: 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 25 48 8b bb 90 00 00 00 5b 5d e9 be fa ff ff e8 49 f9 2c f8 <0f> 0b eb c6 e8 f0 05 7e f8 eb aa e8 49 06 7e f8 eb 80 e8 42 06 7e
+RSP: 0018:ffffc900055d7910 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8880526ba5f0 RCX: 0000000000000000
+RDX: ffff888027cb9d40 RSI: ffffffff8955de77 RDI: 0000000000000001
+RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000000 R12: 00000000fffffff5
+R13: 0000000000000008 R14: ffff88806fd2db00 R15: ffff88807644e4c0
+FS:  00007f9b3b641700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002001e000 CR3: 0000000027523000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ rds_sendmsg+0x2366/0x31a0 net/rds/send.c:1319
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9b3a88c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9b3b641168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f9b3a9abf80 RCX: 00007f9b3a88c169
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 00007f9b3a8e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe6c474d8f R14: 00007f9b3b641300 R15: 0000000000022000
+ </TASK>
 
-> +enum pmu_type {
-> +	JH71XX_PMU_GENERAL,
 
-I'm really not sold on GENERAL as a name.
-Why not name these after the compatibles?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +	JH71XX_PMU_DPHY,
-> +};
-> +
->  struct jh71xx_domain_info {
->  	const char * const name;
->  	unsigned int flags;
-> @@ -54,6 +60,7 @@ struct jh71xx_domain_info {
->  struct jh71xx_pmu_match_data {
->  	const struct jh71xx_domain_info *domain_info;
->  	int num_domains;
-> +	u8 pmu_type;
-
-This is an enum, not a u8?
-
-Thanks,
-Conor.
-
-
---9jTLzkgimlFJEOUu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDXIkQAKCRB4tDGHoIJi
-0kByAP97IOiAFgI8nObj/x4ZMdTZk7xSaKs/qUUM2jPffnTMYQD+KVvBSO9lhyL7
-NFR2FZ7jNsQX8DC9ZEqOFcs91Gip5A4=
-=lb9a
------END PGP SIGNATURE-----
-
---9jTLzkgimlFJEOUu--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
