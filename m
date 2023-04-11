@@ -2,160 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C906DCFF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BC56DCFF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjDKDD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S229914AbjDKDIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjDKDDI (ORCPT
+        with ESMTP id S229794AbjDKDI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:03:08 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2062.outbound.protection.outlook.com [40.107.21.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F972D54;
-        Mon, 10 Apr 2023 20:03:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IMlCfJaS35IKwfSOpT0rVYPBX/rpI1IxOhDb5zqoJvvaCS48OB/ri93lBw1rhHWSfQZv/H2XAE+zvMizNNzUEvRCC747FGpR8AqHVLi8hWZAZD9BsM/qwEQnswcV6O1+3TWj2xh8IO2G2nUTr95bl5IsE58hXbWfCt8nqZDiBfcdEcnjRDfgq+KcYdSeKaYVoj9ZTgsYN4K271RvBn1C7X42No4UOjIqerY07a+ULE5zcQxiOfo+BUgnr8jPVkRszTAPqvzR4WlsBblx0ZV7GMrAn+QDulxA8QS6tOEreWK3hcW7tE8zxD0PWfHQoelbRlquylRiQmblYentD2yknw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LE72B9UHoMBjPBX8mbA63s8mwwWuc25N21KsFWPNBLU=;
- b=RWL1WmP6wunG5uJ1MfTxpVuWr37oEq9tou4LulNzPfbnEL6S4k9HZaQMQgqMEUHbwwB3a6E8EgEBqqM5na3eZj/GCpAj4SIdPyQxYLYEl9vqnwyMNeLngnFVjnFv3ONScwcElvDyHE/q947Q9LMljlaC77w8Ml8n4yeaaI2MXAJGMpqafD8C0WSKaPjagSWrudTYBTf2rfVX47AvxZ78bro4XWIbp/mITd8d0WK2japZyBrVjKS00/jv0kzoMUSAd+UNUdr1MNLY9C7rJ1Tf76in3RZTiH1y1smgBlzdbLmHbnAo9sG+LJwxl2lpEjdonsChl3qZq7Obd7jlQbiUuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LE72B9UHoMBjPBX8mbA63s8mwwWuc25N21KsFWPNBLU=;
- b=XjwSmLxjEKWv1Pg9N4CD0pyhUIt63Yk9a6kLWewrLuq8XUwxNx5rf0atX1QpaemM2Ms2ioeG4hCp2YdD4Ul2aTsvnEENnsRboFGnKAzGKYJfsyb4gAZ5iuXLPwH2uViTliCiKVkpOwgz+ieADpg7sMofphhHd/O79CuZt9OCscU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB9278.eurprd04.prod.outlook.com (2603:10a6:102:2b8::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
- 2023 03:03:00 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::b999:f2c6:a8cc:7b4%5]) with mapi id 15.20.6277.036; Tue, 11 Apr 2023
- 03:03:00 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V3] clk: imx: imx6sx: spdif clock rate is too high for asrc
-Date:   Tue, 11 Apr 2023 11:08:01 +0800
-Message-Id: <20230411030801.2964482-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::14) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Mon, 10 Apr 2023 23:08:29 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310F10E6;
+        Mon, 10 Apr 2023 20:08:26 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f6a796bd0so20219447b3.12;
+        Mon, 10 Apr 2023 20:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681182506;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fhqgnTCQ3K0uKW+ZKOK5N1hOM3ec71CIwP5bhwZCUTk=;
+        b=bBSUw5no5LNAt7pZNqTWKD6yKYNYHZBok3BESmZt1aIwP0LDCsHOR+e5qAMLtxeaq4
+         Qo3aRHZT5FIwtOJsN1LMThss3lXxBWz7MNCOZTd2KBr6+l9RloKjtLvLSLrQ+qp+etKA
+         EbbE0DPRlrG/GO88dVO0YU01KiaNjCrW4B6myaokUK28r5rY/Zp9qM9TUSGLKFRYTXCa
+         xbu/ep8YNdIJcaL/ByoZzvhzJ7r/E0N49wl2SlV9zxwDW9tpRAyapDpUmDN3IoJoGuFk
+         LNyvv1rHo9yPZwohDHU9BeUV6otUHy+lf/J/oyhECupA4Dcmx9o0e+J9/I0gDhVtsrKG
+         SRaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681182506;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fhqgnTCQ3K0uKW+ZKOK5N1hOM3ec71CIwP5bhwZCUTk=;
+        b=lDRfc8TxXpZ5ujWzaieL6Jr4tioqUK8YOVnh0ioAKDOZ+WhvZGPtX9K3gQZKRbXX6j
+         4yY/oCk7E+TqUY6tHYIpX8OMOac4x8MCNI325Ar9Qqc7X4GGYClvWcRoXfSwezNQLDS6
+         zuVKpxTEtsT/EF10jZNKFPxjdqGdOHS6XAny/CNrquwD59JWXCKQ6j4NgF3ukR8PCT2q
+         gn1AB9CZ7hvOQ7f80icp+gR74kvFTpahsEnFPshgWyzEUF4FVG/yf6OdPKlQtc5KG5ig
+         ztffok52GMD0ZHVK7PIQKfTdxE+23jwDyd1ZtATuSByelenx4qB+ZCngqx5UbPSjOzrt
+         YtZg==
+X-Gm-Message-State: AAQBX9eaIOuHjNR9FYtr9eohfgUFURTb2q8ReajGMnY2KzZasL/yz8Lb
+        YSHjH/+TUcF7gG3MXraLw7fmaebkrJh5BBGQ3SE=
+X-Google-Smtp-Source: AKy350aFfvuI/vAHLq/CuDYYXjKE78yn42JGVxpK2AHGKoeyp3e3AM+3o9nxPRF00mluo6A7327ykmmSvrboV7lc3XA=
+X-Received: by 2002:a05:690c:a84:b0:545:f3ed:d251 with SMTP id
+ ci4-20020a05690c0a8400b00545f3edd251mr8177594ywb.1.1681182505976; Mon, 10 Apr
+ 2023 20:08:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB9278:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39fb5c0f-c415-40e8-158c-08db3a3941fe
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cx3GHFdXCiSztwneoBPoWctTinIeb1Rk/pqv5FFlN0MjFROBUr7ChbOiwMfWcdxZ3ZU/LZRpWAQPQCJuHnfplf2GY1mp0W45CCkbfkiGoMgi/fg/pVYCHM8jXYCxa2ngeW5lG9k+JGYmMQ3Fzy0JLwW9J43pMbVbynb6rhqI7jKgV8Eqkj1oTP1KWIG6Fl/h8uwgi0kgtUzuJ4amRETkPNGEU7CjXzr0dH251/8dS6LYYe8VpOciYR0BJ/Fw/Tv9ILWyiPebf6hPdXiPGHBZqoWGoS/e8Gk919rG0y8uNnNXnjqQw/Q3+6mDUVUJw9yIibXt4xjXSCCjmQGXRcG9x3D17CcOPpevv41Hif4zLTBFGqaVkEbckYADOindjq1yKhazZrnHRpc0DnCMNh1rH/vTyzMT5y2V+bq+z6rrSolAxHAsiay4oVgLT0xqHw/432jbpUI+irjCUHsaePg2pCjca891cT7/VYsYPrGIPbqvbhvDatpe9v6G6RVtgMay02u71KDn2WQF3HsZjVpeL63EKXaBPfNBfpZd0qkmpE9oe4Z7eqi76v9bWV9xaP3DHdsnykwUNLj8D1bTg+GfmdKXqpwKvWh2ThP+WvtoE7pBgVK+GxEzNO9DiqJMTc02lEx7hLZgSbuxXCoW30yUgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199021)(52116002)(8936002)(66899021)(7416002)(6486002)(5660300002)(86362001)(4326008)(8676002)(66556008)(66476007)(66946007)(478600001)(38350700002)(38100700002)(316002)(54906003)(83380400001)(2906002)(1076003)(6506007)(6512007)(186003)(2616005)(41300700001)(26005)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SlImfBVrrtxGQaFL2NDpmcjdDS1AW0rX80kUzBHHBm81PTvSNoHckRh2Eot/?=
- =?us-ascii?Q?FlaPyZnl+BLEyv6jFoNkDKy2o2DQMYg3bfNMHvuEVsK33J6ddli4nsFIEsyW?=
- =?us-ascii?Q?UKLB69HElaAjNDaCEulmsljsxNrvotb+3WDU5Mqj/fEDkE5feUgEpjZaLvID?=
- =?us-ascii?Q?BJS/YZJf/KKwip+vnuAbdqbwd0Zpobim7ToVv4noDJt/GB1DU7zpBWe8fVtZ?=
- =?us-ascii?Q?rS1Oy4OxclyyDW7oKb9RqsONQs7jODTc0SmUJ+W5zxuT8E4EYSodHtnC10km?=
- =?us-ascii?Q?pFUnOEiEeJAux8CuiyPD26DTbXgKhiOi1UKNOWJ8Ykun5xMWIc/aLpkFY5Sh?=
- =?us-ascii?Q?S5+7pvyTB/5luN/Y/afhidhF2eqtPes+4X6HLZun6W5sKArovkrlctMmnz50?=
- =?us-ascii?Q?05XBe5VL1naASHO09P0nPv4d08DLbfMCzo299DGFcGuP6lfaUhVAOdsSOLbP?=
- =?us-ascii?Q?lI3hWCAtMJwRVv8Kj83GNU3HEEijinZnsrtdykImT9Dx/VgkCYwPb1+xGinG?=
- =?us-ascii?Q?v1xmxQpGHn3F7vTR38FisUzVCesF8XZQEFslDbpMvryLR5Ehk4hCGQVHUPs5?=
- =?us-ascii?Q?/a5HbYm8Zr/81cFd39yUtEmjKR+rpCQ14Z0JpKRtScuowvNRmjx792ycSbWi?=
- =?us-ascii?Q?nN1i9EwCEYJvQ3QMsDzQCN+ztVH2Aj4yRmv3C2IkyQQEiWbFeKkSlxAlZjxW?=
- =?us-ascii?Q?4Por7+tMRVzl29gjU4XShDHK9MQ8Q76mgarNE1AuQHKksrJghFtkvkZKDTeC?=
- =?us-ascii?Q?YbQn24vnN109p89PjqEoCxNm3FQheGW0j1IBikC7i8u9VVrcesFQ69DreVTL?=
- =?us-ascii?Q?09VifZG8Xr9wGXuVZsyPIH8riCmZXAARiJEmPYKYm7GYIssmu35gBq734ZhL?=
- =?us-ascii?Q?SU5zuVZk+X5XjzKNo+pWnAXfcMQlTvcOpE6eG66oFg+KfPS+dtx1MGGsjWIr?=
- =?us-ascii?Q?5LYVsRdNXglXoEPcCa3cSNL222Ro+McUOyDu/NbehGjgQYRNsKhb5/GEEvm/?=
- =?us-ascii?Q?jp0HpIzKOl13f9qPe+QD+Lo07JiWV2njCUbftvqvIm3yR1kBO6E/kVQUOcrs?=
- =?us-ascii?Q?+yQnSdhTi7mwmNGW8HD3n34mw67DpCZfY3ssxrJRud1QbH5uDHr1dIQQduYe?=
- =?us-ascii?Q?P1bGWnzdgvegP+TVDxVXReefQrt0mghv7T0H3NQCp0P5DPHTYkjg4mDlzT3n?=
- =?us-ascii?Q?eHmXfYFwStEiytBHmQyB6jgmJvec09fjkYREDVF0pEopwfQimXkZDY9oXsMU?=
- =?us-ascii?Q?YH982ckuItCCni5HWLCcZBV1n1sdsnwqK4mdsLhmqdRZ4oiAdpJ/REo99+FW?=
- =?us-ascii?Q?QgtYSTPlrQGs2wuOD+Tr86s/2yQVGJ8HH7GLi4LHeRiOFTw8ylMJVYZQYqbQ?=
- =?us-ascii?Q?Nm5qtpfkLQaaD1dQ9PEhMYi8tPGdCZ8HgQePoHcYva8HktYjBK/OzqLITXBx?=
- =?us-ascii?Q?W+UriHZm+y/j/U4GW3k1gj1ow71x2S6q/wG8e07Cca3sCKE9CRhQglXv17na?=
- =?us-ascii?Q?J3rJsyA6MWFzA703+pm7ruok5637nm7PmrU2/KJyj+hY9vOU+HGgeQjMDGd4?=
- =?us-ascii?Q?B4W9sx4T39usK6BbPEZfijpzjmrI9b826ph60P3b?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39fb5c0f-c415-40e8-158c-08db3a3941fe
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 03:03:00.0424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Gnhqb3pXjMhIXT8AMxR+1erPqGAtkyNloIgtbyRl3qVFJMmQTk525Fp2oUxZxC0XELdChy/N+3wEejj8z4IEeg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9278
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230408075340.25237-1-wedsonaf@gmail.com> <20230408075340.25237-10-wedsonaf@gmail.com>
+ <08df022b-c0e9-bac6-a57f-296217dc81ed@protonmail.com>
+In-Reply-To: <08df022b-c0e9-bac6-a57f-296217dc81ed@protonmail.com>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Tue, 11 Apr 2023 00:08:15 -0300
+Message-ID: <CANeycqqPf3LJYVBJFbrkPd0nyYZgwmLOKq25h3_bPt60jP3POw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/13] rust: introduce `current`
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+On Mon, 10 Apr 2023 at 15:05, Benno Lossin <y86-dev@protonmail.com> wrote:
+>
+> On 08.04.23 09:53, Wedson Almeida Filho wrote:
+> > From: Wedson Almeida Filho <walmeida@microsoft.com>
+> >
+> > This allows Rust code to get a reference to the current task without
+> > having to increment the refcount, but still guaranteeing memory safety.
+> >
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> > ---
+> > v1 -> v2: Make `current` a macro to prevent it from escaping the caller
+> > v2 -> v3:
+> > - Mention `current` macro in `Task::current`
+> > - Hide implementation of `TaskRef` inside `Task::current`
+> >
+> >   rust/helpers.c         |  6 +++
+> >   rust/kernel/prelude.rs |  2 +
+> >   rust/kernel/task.rs    | 88 +++++++++++++++++++++++++++++++++++++++++-
+> >   3 files changed, 95 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/rust/helpers.c b/rust/helpers.c
+> > index 58a194042c86..96441744030e 100644
+> > --- a/rust/helpers.c
+> > +++ b/rust/helpers.c
+> > @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+> >   }
+> >   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+> >
+> > +struct task_struct *rust_helper_get_current(void)
+> > +{
+> > +     return current;
+> > +}
+> > +EXPORT_SYMBOL_GPL(rust_helper_get_current);
+> > +
+> >   void rust_helper_get_task_struct(struct task_struct *t)
+> >   {
+> >       get_task_struct(t);
+> > diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> > index fcdc511d2ce8..c28587d68ebc 100644
+> > --- a/rust/kernel/prelude.rs
+> > +++ b/rust/kernel/prelude.rs
+> > @@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
+> >   pub use super::{str::CStr, ThisModule};
+> >
+> >   pub use super::init::{InPlaceInit, Init, PinInit};
+> > +
+> > +pub use super::current;
+> > diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+> > index d70cad131956..5269a562cb1b 100644
+> > --- a/rust/kernel/task.rs
+> > +++ b/rust/kernel/task.rs
+> > @@ -5,7 +5,17 @@
+> >   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
+> >
+> >   use crate::{bindings, types::Opaque};
+> > -use core::ptr;
+> > +use core::{marker::PhantomData, ops::Deref, ptr};
+> > +
+> > +/// Returns the currently running task.
+> > +#[macro_export]
+> > +macro_rules! current {
+> > +    () => {
+> > +        // SAFETY: Deref + addr-of below create a temporary `TaskRef` that cannot outlive the
+> > +        // caller.
+> > +        unsafe { &*$crate::task::Task::current() }
+> > +    };
+> > +}
+> >
+> >   /// Wraps the kernel's `struct task_struct`.
+> >   ///
+> > @@ -15,6 +25,42 @@ use core::ptr;
+> >   ///
+> >   /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
+> >   /// that the allocation remains valid at least until the matching call to `put_task_struct`.
+> > +///
+> > +/// # Examples
+> > +///
+> > +/// The following is an example of getting the PID of the current thread with zero additional cost
+> > +/// when compared to the C version:
+> > +///
+> > +/// ```
+> > +/// let pid = current!().pid();
+> > +/// ```
+> > +///
+> > +/// Getting the PID of the current process, also zero additional cost:
+> > +///
+> > +/// ```
+> > +/// let pid = current!().group_leader().pid();
+> > +/// ```
+> > +///
+> > +/// Getting the current task and storing it in some struct. The reference count is automatically
+> > +/// incremented when creating `State` and decremented when it is dropped:
+> > +///
+> > +/// ```
+> > +/// use kernel::{task::Task, types::ARef};
+> > +///
+> > +/// struct State {
+> > +///     creator: ARef<Task>,
+> > +///     index: u32,
+> > +/// }
+> > +///
+> > +/// impl State {
+> > +///     fn new() -> Self {
+> > +///         Self {
+> > +///             creator: current!().into(),
+> > +///             index: 0,
+> > +///         }
+> > +///     }
+> > +/// }
+> > +/// ```
+> >   #[repr(transparent)]
+> >   pub struct Task(pub(crate) Opaque<bindings::task_struct>);
+> >
+> > @@ -27,6 +73,46 @@ unsafe impl Sync for Task {}
+> >   type Pid = bindings::pid_t;
+> >
+> >   impl Task {
+> > +    /// Returns a task reference for the currently executing task/thread.
+> > +    ///
+> > +    /// The recommended way to get the current task/thread is to use the
+> > +    /// [`current`](crate::current) macro because it is safe.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// Callers must ensure that the returned object doesn't outlive the current task/thread.
+> > +    pub unsafe fn current() -> impl Deref<Target = Task> {
+> > +        pub struct TaskRef<'a> {
+> > +            task: &'a Task,
+> > +            _not_send: PhantomData<*mut ()>,
+> > +        }
+> > +
+> > +        impl Deref for TaskRef<'_> {
+> > +            type Target = Task;
+> > +
+> > +            fn deref(&self) -> &Self::Target {
+> > +                self.task
+> > +            }
+> > +        }
+> > +
+> > +        impl From<TaskRef<'_>> for crate::types::ARef<Task> {
+> > +            fn from(t: TaskRef<'_>) -> Self {
+> > +                t.deref().into()
+> > +            }
+> > +        }
+>
+> I think we can remove this `From` impl, since the type is never exposed
+> to the outside (there still is the `From<&T> for ARef<T>` impl, so users
+> can still do `current!().into()` to get an `ARef<Task>`).
 
-spdif clock is one of the asrc clock source, which is used
-for ideal ratio mode. when set to 98.304MHz, it cause the
-divider of asrc input clock and output clock exceed the
-maximum value, and asrc driver saturate the value to maximum
-value, which will cause the ASRC's performance very bad.
-So we need to set spdif clock to a proper rate. which make asrc
-divider not exceed maximum value, at least one of divider not
-exceed maximum value.
-The target is spdif clock rate / output(or input) sample rate
-less than 1024(which is maximum divider).
+Hmm, this also allows me to remove the `pub` visibility from
+`TaskRef`. I will make this change for v4.
 
-Fixes: d55135689019 ("ARM: imx: add clock driver for imx6sx")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
-
-V3:
- Update Fixes tag
-V2:
- Add Fixes tag
-
- drivers/clk/imx/clk-imx6sx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-index 7cf86707bc39..3face052527d 100644
---- a/drivers/clk/imx/clk-imx6sx.c
-+++ b/drivers/clk/imx/clk-imx6sx.c
-@@ -520,7 +520,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
- 	clk_set_rate(hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk, 393216000);
- 
- 	clk_set_parent(hws[IMX6SX_CLK_SPDIF_SEL]->clk, hws[IMX6SX_CLK_PLL4_AUDIO_DIV]->clk);
--	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 98304000);
-+	clk_set_rate(hws[IMX6SX_CLK_SPDIF_PODF]->clk, 24576000);
- 
- 	clk_set_parent(hws[IMX6SX_CLK_AUDIO_SEL]->clk, hws[IMX6SX_CLK_PLL3_USB_OTG]->clk);
- 	clk_set_rate(hws[IMX6SX_CLK_AUDIO_PODF]->clk, 24000000);
--- 
-2.37.1
-
+> --
+> Cheers,
+> Benno
+>
+> > +
+> > +        // SAFETY: Just an FFI call with no additional safety requirements.
+> > +        let ptr = unsafe { bindings::get_current() };
+> > +
+> > +        TaskRef {
+> > +            // SAFETY: If the current thread is still running, the current task is valid. Given
+> > +            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
+> > +            // (where it could potentially outlive the caller).
+> > +            task: unsafe { &*ptr.cast() },
+> > +            _not_send: PhantomData,
+> > +        }
+> > +    }
+> > +
+> >       /// Returns the group leader of the given task.
+> >       pub fn group_leader(&self) -> &Task {
+> >           // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
+> > --
+> > 2.34.1
+> >
+>
