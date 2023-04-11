@@ -2,253 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BC56DCFF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787646DCFFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjDKDIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S230019AbjDKDLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDKDI3 (ORCPT
+        with ESMTP id S230004AbjDKDKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:08:29 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310F10E6;
-        Mon, 10 Apr 2023 20:08:26 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f6a796bd0so20219447b3.12;
-        Mon, 10 Apr 2023 20:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681182506;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhqgnTCQ3K0uKW+ZKOK5N1hOM3ec71CIwP5bhwZCUTk=;
-        b=bBSUw5no5LNAt7pZNqTWKD6yKYNYHZBok3BESmZt1aIwP0LDCsHOR+e5qAMLtxeaq4
-         Qo3aRHZT5FIwtOJsN1LMThss3lXxBWz7MNCOZTd2KBr6+l9RloKjtLvLSLrQ+qp+etKA
-         EbbE0DPRlrG/GO88dVO0YU01KiaNjCrW4B6myaokUK28r5rY/Zp9qM9TUSGLKFRYTXCa
-         xbu/ep8YNdIJcaL/ByoZzvhzJ7r/E0N49wl2SlV9zxwDW9tpRAyapDpUmDN3IoJoGuFk
-         LNyvv1rHo9yPZwohDHU9BeUV6otUHy+lf/J/oyhECupA4Dcmx9o0e+J9/I0gDhVtsrKG
-         SRaA==
+        Mon, 10 Apr 2023 23:10:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D51A1BC1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681182607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PIRYPPRzMr0WDaISNXv8JTRc994C6mm8nrgRnA2e2II=;
+        b=fNmYq7YNFmzcVcmC9xHFrmxNMWODFvtLoP2qWQ2IzwmuSkP+6aqjf0epNaCWgp056ysSFX
+        +QgNng7BYRKFEijfOWka8OJc3NOEfjqIBruqEHgK+Lz8dogMrEXIRXtRcQpRrUiFyKqUv9
+        hKCve9IksJ+mVO/wLiSktirk7hDeohQ=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-218-APUkmq5XOx6cedAKNAWvCQ-1; Mon, 10 Apr 2023 23:09:58 -0400
+X-MC-Unique: APUkmq5XOx6cedAKNAWvCQ-1
+Received: by mail-oo1-f69.google.com with SMTP id t1-20020a4a96c1000000b0053e37b1fb91so953911ooi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 20:09:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681182506;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fhqgnTCQ3K0uKW+ZKOK5N1hOM3ec71CIwP5bhwZCUTk=;
-        b=lDRfc8TxXpZ5ujWzaieL6Jr4tioqUK8YOVnh0ioAKDOZ+WhvZGPtX9K3gQZKRbXX6j
-         4yY/oCk7E+TqUY6tHYIpX8OMOac4x8MCNI325Ar9Qqc7X4GGYClvWcRoXfSwezNQLDS6
-         zuVKpxTEtsT/EF10jZNKFPxjdqGdOHS6XAny/CNrquwD59JWXCKQ6j4NgF3ukR8PCT2q
-         gn1AB9CZ7hvOQ7f80icp+gR74kvFTpahsEnFPshgWyzEUF4FVG/yf6OdPKlQtc5KG5ig
-         ztffok52GMD0ZHVK7PIQKfTdxE+23jwDyd1ZtATuSByelenx4qB+ZCngqx5UbPSjOzrt
-         YtZg==
-X-Gm-Message-State: AAQBX9eaIOuHjNR9FYtr9eohfgUFURTb2q8ReajGMnY2KzZasL/yz8Lb
-        YSHjH/+TUcF7gG3MXraLw7fmaebkrJh5BBGQ3SE=
-X-Google-Smtp-Source: AKy350aFfvuI/vAHLq/CuDYYXjKE78yn42JGVxpK2AHGKoeyp3e3AM+3o9nxPRF00mluo6A7327ykmmSvrboV7lc3XA=
-X-Received: by 2002:a05:690c:a84:b0:545:f3ed:d251 with SMTP id
- ci4-20020a05690c0a8400b00545f3edd251mr8177594ywb.1.1681182505976; Mon, 10 Apr
- 2023 20:08:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681182597; x=1683774597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PIRYPPRzMr0WDaISNXv8JTRc994C6mm8nrgRnA2e2II=;
+        b=MNA+evPSh3wvrrOJQ3rbWf5a3qeYix6ppl0/fKbwxbAVB3G+S7eMhJCePNpR740clI
+         dvZ18GPH9XdynHUXDLit3ZvWN/GF6Au54AhN9Zhsdi9apyF2LNQc7r8et8McwXeeJeuP
+         hNC5Cc0ceQJ/NMDkiOAvOGlvV4/DxZmy/Umjw0uNvnxh/aGbelFTW6Vq0aTVXjJB4XDU
+         tCK6rqUe3kyfwsmEhZhi9vWi3RqAGCRiJoiJmsGuhsOqCQL8Q0iwx6i4TGCiSZQSqc04
+         KTHqgZ2gwM26wHXN7Shc9nRcOM7+TigjFpzM3cMD9SixSKo51BB9nIzFtl6WiZn0N23a
+         vBWA==
+X-Gm-Message-State: AAQBX9cM5C0mgmuxtOE4WIeRHBDrA3N9qHfUVcIjJ86ivDUfXdNeB5ET
+        Jvu46mgMEwKICInIGnJsiqvZK9teOg04492OtF2JI+gB4sOFQC0+ohulysFHteo01elk+w6Fuzr
+        LeHfua2vLDqc6Hyab4bicfGE+gsSjOhIJpo+xLN+MT0yuOdJolIm+Qw==
+X-Received: by 2002:a54:4108:0:b0:389:86c3:b1fb with SMTP id l8-20020a544108000000b0038986c3b1fbmr1767291oic.9.1681182597579;
+        Mon, 10 Apr 2023 20:09:57 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZeucJf+EbWtNuhPzUoVMqvWrsCF6D+3DIu6eOe4RcryYcADiNhudEFaSmmkr0WQmH0aZjfEc0FYx82LleldDo=
+X-Received: by 2002:a54:4108:0:b0:389:86c3:b1fb with SMTP id
+ l8-20020a544108000000b0038986c3b1fbmr1767284oic.9.1681182597366; Mon, 10 Apr
+ 2023 20:09:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230408075340.25237-1-wedsonaf@gmail.com> <20230408075340.25237-10-wedsonaf@gmail.com>
- <08df022b-c0e9-bac6-a57f-296217dc81ed@protonmail.com>
-In-Reply-To: <08df022b-c0e9-bac6-a57f-296217dc81ed@protonmail.com>
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Tue, 11 Apr 2023 00:08:15 -0300
-Message-ID: <CANeycqqPf3LJYVBJFbrkPd0nyYZgwmLOKq25h3_bPt60jP3POw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/13] rust: introduce `current`
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
+References: <20230410150130.837691-1-lulu@redhat.com>
+In-Reply-To: <20230410150130.837691-1-lulu@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 11 Apr 2023 11:09:46 +0800
+Message-ID: <CACGkMEvTdgvqacFmMJZD4u++YJwESgSmLF6CMdAJBBqkxpZKgg@mail.gmail.com>
+Subject: Re: [PATCH] vhost_vdpa: fix unmap process in no-batch mode
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Apr 2023 at 15:05, Benno Lossin <y86-dev@protonmail.com> wrote:
+On Mon, Apr 10, 2023 at 11:01=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote:
 >
-> On 08.04.23 09:53, Wedson Almeida Filho wrote:
-> > From: Wedson Almeida Filho <walmeida@microsoft.com>
-> >
-> > This allows Rust code to get a reference to the current task without
-> > having to increment the refcount, but still guaranteeing memory safety.
-> >
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> > ---
-> > v1 -> v2: Make `current` a macro to prevent it from escaping the caller
-> > v2 -> v3:
-> > - Mention `current` macro in `Task::current`
-> > - Hide implementation of `TaskRef` inside `Task::current`
-> >
-> >   rust/helpers.c         |  6 +++
-> >   rust/kernel/prelude.rs |  2 +
-> >   rust/kernel/task.rs    | 88 +++++++++++++++++++++++++++++++++++++++++-
-> >   3 files changed, 95 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/rust/helpers.c b/rust/helpers.c
-> > index 58a194042c86..96441744030e 100644
-> > --- a/rust/helpers.c
-> > +++ b/rust/helpers.c
-> > @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
-> >   }
-> >   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
-> >
-> > +struct task_struct *rust_helper_get_current(void)
-> > +{
-> > +     return current;
-> > +}
-> > +EXPORT_SYMBOL_GPL(rust_helper_get_current);
-> > +
-> >   void rust_helper_get_task_struct(struct task_struct *t)
-> >   {
-> >       get_task_struct(t);
-> > diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> > index fcdc511d2ce8..c28587d68ebc 100644
-> > --- a/rust/kernel/prelude.rs
-> > +++ b/rust/kernel/prelude.rs
-> > @@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
-> >   pub use super::{str::CStr, ThisModule};
-> >
-> >   pub use super::init::{InPlaceInit, Init, PinInit};
-> > +
-> > +pub use super::current;
-> > diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-> > index d70cad131956..5269a562cb1b 100644
-> > --- a/rust/kernel/task.rs
-> > +++ b/rust/kernel/task.rs
-> > @@ -5,7 +5,17 @@
-> >   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
-> >
-> >   use crate::{bindings, types::Opaque};
-> > -use core::ptr;
-> > +use core::{marker::PhantomData, ops::Deref, ptr};
-> > +
-> > +/// Returns the currently running task.
-> > +#[macro_export]
-> > +macro_rules! current {
-> > +    () => {
-> > +        // SAFETY: Deref + addr-of below create a temporary `TaskRef` that cannot outlive the
-> > +        // caller.
-> > +        unsafe { &*$crate::task::Task::current() }
-> > +    };
-> > +}
-> >
-> >   /// Wraps the kernel's `struct task_struct`.
-> >   ///
-> > @@ -15,6 +25,42 @@ use core::ptr;
-> >   ///
-> >   /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
-> >   /// that the allocation remains valid at least until the matching call to `put_task_struct`.
-> > +///
-> > +/// # Examples
-> > +///
-> > +/// The following is an example of getting the PID of the current thread with zero additional cost
-> > +/// when compared to the C version:
-> > +///
-> > +/// ```
-> > +/// let pid = current!().pid();
-> > +/// ```
-> > +///
-> > +/// Getting the PID of the current process, also zero additional cost:
-> > +///
-> > +/// ```
-> > +/// let pid = current!().group_leader().pid();
-> > +/// ```
-> > +///
-> > +/// Getting the current task and storing it in some struct. The reference count is automatically
-> > +/// incremented when creating `State` and decremented when it is dropped:
-> > +///
-> > +/// ```
-> > +/// use kernel::{task::Task, types::ARef};
-> > +///
-> > +/// struct State {
-> > +///     creator: ARef<Task>,
-> > +///     index: u32,
-> > +/// }
-> > +///
-> > +/// impl State {
-> > +///     fn new() -> Self {
-> > +///         Self {
-> > +///             creator: current!().into(),
-> > +///             index: 0,
-> > +///         }
-> > +///     }
-> > +/// }
-> > +/// ```
-> >   #[repr(transparent)]
-> >   pub struct Task(pub(crate) Opaque<bindings::task_struct>);
-> >
-> > @@ -27,6 +73,46 @@ unsafe impl Sync for Task {}
-> >   type Pid = bindings::pid_t;
-> >
-> >   impl Task {
-> > +    /// Returns a task reference for the currently executing task/thread.
-> > +    ///
-> > +    /// The recommended way to get the current task/thread is to use the
-> > +    /// [`current`](crate::current) macro because it is safe.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// Callers must ensure that the returned object doesn't outlive the current task/thread.
-> > +    pub unsafe fn current() -> impl Deref<Target = Task> {
-> > +        pub struct TaskRef<'a> {
-> > +            task: &'a Task,
-> > +            _not_send: PhantomData<*mut ()>,
-> > +        }
-> > +
-> > +        impl Deref for TaskRef<'_> {
-> > +            type Target = Task;
-> > +
-> > +            fn deref(&self) -> &Self::Target {
-> > +                self.task
-> > +            }
-> > +        }
-> > +
-> > +        impl From<TaskRef<'_>> for crate::types::ARef<Task> {
-> > +            fn from(t: TaskRef<'_>) -> Self {
-> > +                t.deref().into()
-> > +            }
-> > +        }
+> While using the no-batch mode, the process will not begin with
+> VHOST_IOTLB_BATCH_BEGIN, so we need to add the
+> VHOST_IOTLB_INVALIDATE to get vhost_vdpa_as, the process is the
+> same as VHOST_IOTLB_UPDATE
 >
-> I think we can remove this `From` impl, since the type is never exposed
-> to the outside (there still is the `From<&T> for ARef<T>` impl, so users
-> can still do `current!().into()` to get an `ARef<Task>`).
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> ---
+>  drivers/vhost/vdpa.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 7be9d9d8f01c..32636a02a0ab 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -1074,6 +1074,7 @@ static int vhost_vdpa_process_iotlb_msg(struct vhos=
+t_dev *dev, u32 asid,
+>                 goto unlock;
+>
+>         if (msg->type =3D=3D VHOST_IOTLB_UPDATE ||
+> +           msg->type =3D=3D VHOST_IOTLB_INVALIDATE ||
 
-Hmm, this also allows me to remove the `pub` visibility from
-`TaskRef`. I will make this change for v4.
+I'm not sure I get here, invalidation doesn't need to create a new AS.
 
+Or maybe you can post the userspace code that can trigger this issue?
+
+Thanks
+
+>             msg->type =3D=3D VHOST_IOTLB_BATCH_BEGIN) {
+>                 as =3D vhost_vdpa_find_alloc_as(v, asid);
+>                 if (!as) {
 > --
-> Cheers,
-> Benno
+> 2.34.3
 >
-> > +
-> > +        // SAFETY: Just an FFI call with no additional safety requirements.
-> > +        let ptr = unsafe { bindings::get_current() };
-> > +
-> > +        TaskRef {
-> > +            // SAFETY: If the current thread is still running, the current task is valid. Given
-> > +            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
-> > +            // (where it could potentially outlive the caller).
-> > +            task: unsafe { &*ptr.cast() },
-> > +            _not_send: PhantomData,
-> > +        }
-> > +    }
-> > +
-> >       /// Returns the group leader of the given task.
-> >       pub fn group_leader(&self) -> &Task {
-> >           // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
-> > --
-> > 2.34.1
-> >
->
+
