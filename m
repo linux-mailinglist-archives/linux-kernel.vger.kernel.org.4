@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB276DD1DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347046DD1E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjDKFjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 01:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S230015AbjDKFjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDKFjP (ORCPT
+        with ESMTP id S229981AbjDKFjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:39:15 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5AE02D41;
-        Mon, 10 Apr 2023 22:39:12 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:59606.589911955
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 6BC8C1002F6;
-        Tue, 11 Apr 2023 13:39:08 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id f7efde40c6bc459b9f649b6547f1e147 for emil.l.velikov@gmail.com;
-        Tue, 11 Apr 2023 13:39:11 CST
-X-Transaction-ID: f7efde40c6bc459b9f649b6547f1e147
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <c29da6cf-98be-42fc-c415-28732f6b6b1f@189.cn>
-Date:   Tue, 11 Apr 2023 13:39:07 +0800
+        Tue, 11 Apr 2023 01:39:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332062D4E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:39:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qa44so17112325ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 22:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681191585;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CoUp8773GFsWX8uWiArPvI14C/ql8uh0ic9aHuPd7Zk=;
+        b=SQ0HcQxaYhVaPHJU7/Fddz5xSruENq8SIZdWF2hDnv6HCXdQGfcgCsgrZJa2z0hZEc
+         wfKaOclUEBMXsWyQY7M+C73Olwkv/Vqn6sr+Hp6bMEZMwl0S5ipnPHtKdp11/iUAmol9
+         JXubvATbAYG5toZNgHNu7fUYa3bllf+T3tIu9K486PiVzxAdhy/wo2IulinkybjPPrXd
+         wtB9laoY8xPAlIL4vtcYc9WLnGj0gsvTXPZq0IbF66AxDbj2Df9Hbrkk7r5l1Ex7wYPe
+         foGOcjvqwCLXUbkzNDLeogyIPOaN76VuAKp++SP7+nppcX1fz3RM3D2qMlk/WP8c0IpV
+         2WFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681191585;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CoUp8773GFsWX8uWiArPvI14C/ql8uh0ic9aHuPd7Zk=;
+        b=6AJAbC2P8nfsPrT774cJS77Vs6n3t2OegVYwVy+Ybq/7TkNMy0skcUYSg+tK84dzPC
+         JNPFeuoXHheBMjJt/vtYWujlIKDzbffXoqx/4GxvfvqbvEDA3AxsRmyLfvCAFJc0oGVk
+         kk4qSMtOAliHup4ncDXA7V9r7f5ZsMHsq5q9nWkdhUUPHk5YTIFJl+KFVrFHpXFWI6XZ
+         T+8/PJukNbjoxHLZ39utOytarYQiBQ9kbjNzmVumIR/+2qV6go6oX05Zco1PRu7I4CtM
+         TctrTp+ZwUH3SrQrGkG06FiGXeogSDpQCAN6yjn3OCwYTDC5aNJCCjmFi4jw3o4yLX7v
+         H1WA==
+X-Gm-Message-State: AAQBX9c34qm8asBSjgAOlKy2/LeGinPv0s4E+4+/nM2ErxSRdqvTAFW+
+        BgQ7tsvZgxBd/lIFoFa0LVpJWQ==
+X-Google-Smtp-Source: AKy350blMDeEpPqsWV8AahVbXa/XkySm179RRsqGLVKVGNELXAp3iuvjbp3/OoHwZHpcCTy2iLaaJw==
+X-Received: by 2002:a17:907:2ced:b0:8ee:babc:d40b with SMTP id hz13-20020a1709072ced00b008eebabcd40bmr8342951ejc.58.1681191585694;
+        Mon, 10 Apr 2023 22:39:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:dad2:72b7:3626:af61? ([2a02:810d:15c0:828:dad2:72b7:3626:af61])
+        by smtp.gmail.com with ESMTPSA id tg12-20020a1709078dcc00b0094a473988b9sm2943049ejc.27.2023.04.10.22.39.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 22:39:45 -0700 (PDT)
+Message-ID: <a6f78d8a-829a-a40e-0fc4-83eb9887b406@linaro.org>
+Date:   Tue, 11 Apr 2023 07:39:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
- controller
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: sound: ep93xx: Add I2S description
 Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
- <20230403171304.2157326-3-suijingfeng@loongson.cn>
- <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Nikita Shubin <nikita.shubin@maquefel.me>
+References: <20230410222958.2321398-1-alexander.sverdlin@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230410222958.2321398-1-alexander.sverdlin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,98 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 11/04/2023 00:29, Alexander Sverdlin wrote:
+> Add device tree bindings for Cirrus Logic EP93xx internal SoCs' I2S
+> controller.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+> Changelog:
 
-On 2023/4/4 22:10, Emil Velikov wrote:
->> +static void lsdc_crtc_reset(struct drm_crtc *crtc)
->> +{
->> +       struct lsdc_display_pipe *dispipe = crtc_to_display_pipe(crtc);
->> +       struct drm_device *ddev = crtc->dev;
->> +       struct lsdc_device *ldev = to_lsdc(ddev);
->> +       struct lsdc_crtc_state *priv_crtc_state;
->> +       unsigned int index = dispipe->index;
->> +       u32 val;
->> +
->> +       val = LSDC_PF_XRGB8888 | CFG_RESET_N;
->> +       if (ldev->descp->chip == CHIP_LS7A2000)
->> +               val |= LSDC_DMA_STEP_64_BYTES;
->> +
->> +       lsdc_crtc_wreg32(ldev, LSDC_CRTC0_CFG_REG, index, val);
->> +
->> +       if (ldev->descp->chip == CHIP_LS7A2000) {
->> +               val = PHY_CLOCK_EN | PHY_DATA_EN;
->> +               lsdc_crtc_wreg32(ldev, LSDC_CRTC0_PANEL_CONF_REG, index, val);
->> +       }
->> +
-> AFAICT no other driver touches the HW in their reset callback. Should
-> the above be moved to another callback?
->
-You may correct in the 95% of all cases.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-After reading the comments of the reset callback of struct 
-drm_crtc_funcs in drm_crtc.h,
-
-It seems that it does not prohibit us to touches the hardware.
-
-I copy that comments and paste into here for easier to read,as below:
-
-
-     /*
-      * @reset:
-      *
-      * Reset CRTC hardware and software state to off. This function isn't
-      * called by the core directly, only through drm_mode_config_reset().
-      * It's not a helper hook only for historical reasons.
-      *
-      * Atomic drivers can use drm_atomic_helper_crtc_reset() to reset
-      * atomic state using this hook.
-      */
-
-
-It seem allowable to reset CRTC hardware in this callback, did it cue us?
-
-What we know is that this reset callback (and others, such as encoder's 
-reset)
-
-is called by drm_mode_config_reset(). It is the first set of functions 
-get called
-
-before other hardware related callbacks.
-
-
-I don't not see how other drivers implement this callback, after you 
-mention this
-
-I skim over a few, I found tilcdc also writing the hardware in their 
-tilcdc_crtc_reset()
-
-function. See it in drm/tildc/tilclc_crtc.c
-
-
-In addition, Loongson platform support efifb,  in order to light up the 
-monitor in
-
-firmware stage and the booting stage, the firmware touch the display 
-hardware
-
-register directly. After efifb get kick out, when drm/loongson driver 
-taken over the
-
-hardware, the register setting state still remain in the hardware 
-register. Those
-
-register setting may no longer correct for the subsequent operationd. 
-What we
-
-doing here is to giving the hardware a basic healthy state prepare to be 
-update
-
-further. As the reset callback is call very early, we found that it's 
-the best fit.
-
-The reset will also get called when resume(S3).
-
-
-The problem is that we don't find a good to place to move those setting 
-currently.
+Best regards,
+Krzysztof
 
