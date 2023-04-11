@@ -2,212 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAB16DE2C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06EE6DE2C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjDKRjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S230201AbjDKRjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjDKRi6 (ORCPT
+        with ESMTP id S230120AbjDKRjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:38:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557565BBA;
-        Tue, 11 Apr 2023 10:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681234737; x=1712770737;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=D8E9ccJywHMwXWNHgCXbCN5O7kiM9px87r66fGOiF2o=;
-  b=f3BbaePp0Tal0MOp1rhG1oG8vR0OSFK/wgZXk2P51rYujKmbGFPL0T8v
-   3bcAyWBW7dvgt+scYp90A9/1LYoLi2u59qHnjQ48Vf2iV9EB9FdALdY5r
-   vaHYYj1ZVKjdwSlpt/F+/6cjuqcLYNuA3fH5I2kGqNxkslObhtvA4rc+Y
-   vFM4Pg5loHBw0bWK6YT7yon3xvgIfsbDT9Y2YCVxG+rki935S2yxkjlMS
-   eiEyojtNfH4vB4kOViLydKD3CsKYtraEjBRXzsQ76oKhdJzHkbXTadJKg
-   bMFtB7MoZ7Pge44zAcJg29iKeMWPstbTHjxrfcU0YxPqrmtBJFEi5MCPw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346359978"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="346359978"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:38:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="638911771"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="638911771"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:38:55 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v5 5/5] x86/mce: Handle AMD threshold interrupt storms
-Date:   Tue, 11 Apr 2023 10:38:41 -0700
-Message-Id: <20230411173841.70491-6-tony.luck@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230411173841.70491-1-tony.luck@intel.com>
-References: <20230403210716.347773-1-tony.luck@intel.com>
- <20230411173841.70491-1-tony.luck@intel.com>
+        Tue, 11 Apr 2023 13:39:19 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43E65B9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:39:05 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q5so5026389wmo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681234744;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zYhbwOdBd3vMxKKBbYYrqI16ZcFTfZ8NDiAcQOEPvvg=;
+        b=V5kjk/z8OjMoh8qlAAJbfNt/7r5VaoXEnhLYPoeAV7ijJHAcUNaA85q6iKLYfw7IHr
+         u08GVN2wvrKwA9sy9iw+cb0HFnuAOTGp+qkHtfjkyXyfEKzUAMCBk7lPQ/x4633FK7P/
+         xZCg4A+lWaNh2RZM0JlNUgS0Lr3tjCkZxKPNhdWLhGLh2DbOGDuqIoUIKr4y5w+jHBje
+         LbmH5kgISlg1AGHC5UTsdLy+8fKEcPqiR7+p1TZQRKZxxyuwNeGkWwG64vVfTmdtE0V0
+         eoDu0JS70rT5BbrPzIVxGF8sQzFhXHkd1Wgk+o0hUA/IPpenHiA50dK2wTon6bC9pjmp
+         MiDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681234744;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zYhbwOdBd3vMxKKBbYYrqI16ZcFTfZ8NDiAcQOEPvvg=;
+        b=aH148eJn+Z6l/nKsyoN81TBVRprUwTr9w5mHYsPTId8bMUiiZObJ7So5k1YvJtOqww
+         kD8tPbYP/AdLKoVdf99PMEf8UuTsVGve5KNtDB3UdKehISOlB9gkgsBHCmmFblgfuUhK
+         S0wNxqRjq546TuMYye0fY8vvSFh0h30yw6bKxs87MLmNQ006faKi6GYDvjlEIJ7bI3fs
+         bXIotoe0TPj2+JiedTs81aYhd0SYPZGlb1hmroldKSNJxqRmYs1MhIx53YK5NCTh/nXO
+         p6ISN194LpLr/a905cxxNrqCMVktvLyBhCJQC12hOv++EO1CcYzEe/HWpm43D7FAlc99
+         bZPQ==
+X-Gm-Message-State: AAQBX9dly6YPa/3ET36gAG2jWH7r5XFsGJ6aJZY4UTwFcHmjswFWdK0t
+        c1HGpRfCkgmYhTEdz5PqzLzFOgkVhDYILm5wX2Q8nA==
+X-Google-Smtp-Source: AKy350Znyu1IvWROumlxai26nS+blIGNiWtQgPioqndo5D6ZQhJxK6Q/bngg+L8knrXBrCXblcPDGOtlhttj5QaVPv8=
+X-Received: by 2002:a7b:c7d0:0:b0:3ed:7664:6d7b with SMTP id
+ z16-20020a7bc7d0000000b003ed76646d7bmr889640wmk.8.1681234743849; Tue, 11 Apr
+ 2023 10:39:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
+ <20230411072840.2751813-3-bhupesh.sharma@linaro.org> <9130c1cb-4081-b21c-7c1b-2e0c9879e66a@linaro.org>
+In-Reply-To: <9130c1cb-4081-b21c-7c1b-2e0c9879e66a@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Tue, 11 Apr 2023 23:08:52 +0530
+Message-ID: <CAH=2NtzuN-0qgm7Hn6aJN+ZSRROFna09SHThVFbfKGVdsLzNWg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: Add base qrb4210-rb2 board dts
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+On Tue, 11 Apr 2023 at 18:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> On 11.04.2023 09:28, Bhupesh Sharma wrote:
+> > Add DTS for Qualcomm qrb4210-rb2 board which uses SM4250 SoC.
+> >
+> > This adds debug uart, emmc, uSD and tlmm support along with
+> > regulators found on this board.
+> >
+> > Also defines the 'xo_board' and 'sleep_clk' frequencies for
+> > this board.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/Makefile        |   1 +
+> >  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 223 +++++++++++++++++++++++
+> >  2 files changed, 224 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> > index e0e2def48470..d42c59572ace 100644
+> > --- a/arch/arm64/boot/dts/qcom/Makefile
+> > +++ b/arch/arm64/boot/dts/qcom/Makefile
+> > @@ -74,6 +74,7 @@ dtb-$(CONFIG_ARCH_QCOM)     += qcs404-evb-1000.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qcs404-evb-4000.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qdu1000-idp.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qrb2210-rb1.dtb
+> > +dtb-$(CONFIG_ARCH_QCOM)      += qrb4210-rb2.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qrb5165-rb5.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qrb5165-rb5-vision-mezzanine.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)      += qru1000-idp.dtb
+> > diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> > new file mode 100644
+> > index 000000000000..c9c6e3787462
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> > @@ -0,0 +1,223 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2023, Linaro Limited
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "sm4250.dtsi"
+> > +
+> > +/ {
+> > +     model = "Qualcomm Technologies, Inc. QRB4210 RB2";
+> > +     compatible = "qcom,qrb4210-rb2", "qcom,qrb4210", "qcom,sm4250";
+> > +
+> > +     aliases {
+> > +             serial0 = &uart4;
+> > +     };
+> > +
+> > +     chosen {
+> > +             stdout-path = "serial0:115200n8";
+> > +     };
+> > +
+> > +     vph_pwr: vph-pwr-regulator {
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vph_pwr";
+> > +             regulator-min-microvolt = <3700000>;
+> > +             regulator-max-microvolt = <3700000>;
+> > +
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +     };
+> > +};
+> > +
+> > +&qupv3_id_0 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&rpm_requests {
+> > +     regulators {
+> > +             compatible = "qcom,rpm-pm6125-regulators";
+> > +
+> > +             vdd-s1-supply = <&vph_pwr>;
+> > +             vdd-s2-supply = <&vph_pwr>;
+> > +             vdd-s3-supply = <&vph_pwr>;
+> > +             vdd-s4-supply = <&vph_pwr>;
+> > +             vdd-s5-supply = <&vph_pwr>;
+> > +             vdd-s6-supply = <&vph_pwr>;
+> > +             vdd-s7-supply = <&vph_pwr>;
+> > +             vdd-s8-supply = <&vph_pwr>;
+> > +             vdd-s9-supply = <&vph_pwr>;
+> > +             vdd-s10-supply = <&vph_pwr>;
+> > +
+> > +             vdd-l1-l7-l17-l18-supply = <&vreg_s6a_1p352>;
+> > +             vdd-l2-l3-l4-supply = <&vreg_s6a_1p352>;
+> > +             vdd-l5-l15-l19-l20-l21-l22-supply = <&vph_pwr>;
+> > +             vdd-l6-l8-supply = <&vreg_s5a_0p848>;
+> > +             vdd-l9-l11-supply = <&vreg_s7a_2p04>;
+> > +             vdd-l10-l13-l14-supply = <&vreg_s7a_2p04>;
+> > +             vdd-l12-l16-supply = <&vreg_s7a_2p04>;
+> > +             vdd-l23-l24-supply = <&vph_pwr>;
+> > +
+> > +             vreg_s5a_0p848: s5 {
+> I think going with pmicname_regulatorname (e.g. pm6125_s5) here
+> and adding:
+>
+> regulator-name = "vreg_s5a_0p848"
+>
+> would make this more maintainable.
 
-Extend the logic of handling CMCI storms to AMD threshold interrupts.
+Ok.
 
-Rely on the similar approach as of Intel's CMCI to mitigate storms per
-CPU and per bank. But, unlike CMCI, do not set thresholds and reduce
-interrupt rate on a storm. Rather, disable the interrupt on the
-corresponding CPU and bank. Re-enable back the interrupts if enough
-consecutive polls of the bank show no corrected errors (30, as
-programmed by Intel).
+> > +&sdhc_1 {
+> > +     vmmc-supply = <&vreg_l24a_2p96>;
+> > +     vqmmc-supply = <&vreg_l11a_1p8>;
+> > +     no-sdio;
+> > +     non-removable;
+> > +
+> > +     status = "okay";
+> > +};
+> > +
+> > +&sdhc_2 {
+> > +     cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
+> This comment is still pretty much spam.
 
-Turning off the threshold interrupts would be a better solution on AMD
-systems as other error severities will still be handled even if the
-threshold interrupts are disabled.
+Ok.
 
-[Tony: Small tweak because mce_handle_storm() isn't a pointer now]
+> > +     vmmc-supply = <&vreg_l22a_2p96>;
+> > +     vqmmc-supply = <&vreg_l5a_2p96>;
+> > +     no-sdio;
+> > +
+> > +     status = "okay";
+> > +};
+> > +
+> > +&sleep_clk {
+> > +     clock-frequency = <32000>;
+> > +};
+> > +
+> > +&tlmm {
+> > +     gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
+> > +                            <49 1>, <52 1>, <54 1>,
+> > +                            <56 3>, <61 2>, <64 1>,
+> > +                            <68 1>, <72 8>, <96 1>;
+> > +};
+> > +
+> > +&uart4 {
+> > +     status = "okay";
+> > +};
+> This is not the correct SE for the production board. People
+> booting this will get a tz bite.
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Tested-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/kernel/cpu/mce/internal.h |  4 +++
- arch/x86/kernel/cpu/mce/amd.c      | 49 ++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/mce/core.c     |  3 ++
- 3 files changed, 56 insertions(+)
+Hmm.. I can swap it, but the problem is that it's as the SE for my RB2
+board, so I would rather provide instructions in the cover letter as to how
+to swap it (say for a production board) and recompile the dts.
 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 9a2d6e289b8d..f1a48bc2e904 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -40,6 +40,8 @@ struct dentry *mce_get_debugfs_dir(void);
- 
- extern mce_banks_t mce_banks_ce_disabled;
- 
-+void track_cmci_storm(int bank, u64 status);
-+
- #ifdef CONFIG_X86_MCE_INTEL
- void mce_intel_handle_storm(int bank, bool on);
- void cmci_disable_bank(int bank);
-@@ -222,6 +224,7 @@ extern bool filter_mce(struct mce *m);
- 
- #ifdef CONFIG_X86_MCE_AMD
- extern bool amd_filter_mce(struct mce *m);
-+void mce_amd_handle_storm(int bank, bool on);
- 
- /*
-  * If MCA_CONFIG[McaLsbInStatusSupported] is set, extract ErrAddr in bits
-@@ -249,6 +252,7 @@ static __always_inline void smca_extract_err_addr(struct mce *m)
- 
- #else
- static inline bool amd_filter_mce(struct mce *m) { return false; }
-+static inline void mce_amd_handle_storm(int bank, bool on) {}
- static inline void smca_extract_err_addr(struct mce *m) { }
- #endif
- 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 23c5072fbbb7..cd79295e2a0a 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -468,6 +468,47 @@ static void threshold_restart_bank(void *_tr)
- 	wrmsr(tr->b->address, lo, hi);
- }
- 
-+static void _reset_block(struct threshold_block *block)
-+{
-+	struct thresh_restart tr;
-+
-+	memset(&tr, 0, sizeof(tr));
-+	tr.b = block;
-+	threshold_restart_bank(&tr);
-+}
-+
-+static void toggle_interrupt_reset_block(struct threshold_block *block, bool on)
-+{
-+	if (!block)
-+		return;
-+
-+	block->interrupt_enable = !!on;
-+	_reset_block(block);
-+}
-+
-+void mce_amd_handle_storm(int bank, bool on)
-+{
-+	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
-+	struct threshold_bank **bp = this_cpu_read(threshold_banks);
-+	unsigned long flags;
-+
-+	if (!bp)
-+		return;
-+
-+	local_irq_save(flags);
-+
-+	first_block = bp[bank]->blocks;
-+	if (!first_block)
-+		goto end;
-+
-+	toggle_interrupt_reset_block(first_block, on);
-+
-+	list_for_each_entry_safe(block, tmp, &first_block->miscj, miscj)
-+		toggle_interrupt_reset_block(block, on);
-+end:
-+	local_irq_restore(flags);
-+}
-+
- static void mce_threshold_block_init(struct threshold_block *b, int offset)
- {
- 	struct thresh_restart tr = {
-@@ -868,6 +909,7 @@ static void amd_threshold_interrupt(void)
- 	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
- 	unsigned int bank, cpu = smp_processor_id();
-+	u64 status;
- 
- 	/*
- 	 * Validate that the threshold bank has been initialized already. The
-@@ -881,6 +923,13 @@ static void amd_threshold_interrupt(void)
- 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
- 			continue;
- 
-+		rdmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+		track_cmci_storm(bank, status);
-+
-+		/* Return early on an interrupt storm */
-+		if (this_cpu_read(bank_storm[bank]))
-+			return;
-+
- 		first_block = bp[bank]->blocks;
- 		if (!first_block)
- 			continue;
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 820b317b1b85..fac90625d8cb 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2062,6 +2062,9 @@ void mce_handle_storm(int bank, bool on)
- 	case X86_VENDOR_INTEL:
- 		mce_intel_handle_storm(bank, on);
- 		break;
-+	case X86_VENDOR_AMD:
-+		mce_amd_handle_storm(bank, on);
-+		break;
- 	}
- }
- 
--- 
-2.39.2
+Otherwise, it might break the debug uart console for even the test
+folks @ Qualcomm.
+I will send a v4 accordingly.
 
+Thanks,
+Bhupesh
