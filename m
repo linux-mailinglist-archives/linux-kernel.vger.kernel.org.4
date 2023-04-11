@@ -2,190 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A126DDBDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFEF6DDBE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjDKNQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S230413AbjDKNRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDKNQC (ORCPT
+        with ESMTP id S230408AbjDKNQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:16:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37349D0;
-        Tue, 11 Apr 2023 06:15:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82DE5624D3;
-        Tue, 11 Apr 2023 13:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7042DC433D2;
-        Tue, 11 Apr 2023 13:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681218958;
-        bh=afNMh7BIYI3IqJ0FgsqnAcOdv02VFHBvISX2BAeYZB4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cr0HDXNRrWKf/TiDT2qYymJQHMdkLwMLU/JSGeoKPtBpR+Bqp9X2dXWzQmqzeaK1M
-         IFORDp/C9CmVMnF6/i/VDWTw/NW3iCEZixlUcG12VENVjWAC4QTOYUTHPlHfVYqYSd
-         X4FpPxyFIGSUeTd3FdAdN+fpt7wAQPeEna+jaets=
-Date:   Tue, 11 Apr 2023 15:15:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
-        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        "Gong, Richard" <richard.gong@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kornel =?utf-8?Q?Dul=C4=99ba?= <korneld@chromium.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
-Message-ID: <2023041152-desktop-breeze-0a89@gregkh>
-References: <20230320093259.845178-1-korneld@chromium.org>
- <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
- <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
- <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
+        Tue, 11 Apr 2023 09:16:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5110E4EEB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681218968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=65PIpy4Fo017P9Ewq+jSXe0ekV1mHG3Go0w7yGOYFXo=;
+        b=NMzbmPSGv5lsZDETucUSz8HPCfvJ9qwKWu9YMyeiMGDKzt0eh/62vg90BLkox80b0HT33N
+        1J4eIJW9m0DLM8N1fQ8nyHV9IASlCbae5q8U+Ji0pKLNZrv+LF5EfI5vZQUCtHv88+GKi/
+        mZ8OAYXLl8PpkxRHLH951JZdAukVuTM=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-371-sW5IC5ryPhiikhDp8p3h5A-1; Tue, 11 Apr 2023 09:16:07 -0400
+X-MC-Unique: sW5IC5ryPhiikhDp8p3h5A-1
+Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-b8ee07f380aso187376276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:16:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218967;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=65PIpy4Fo017P9Ewq+jSXe0ekV1mHG3Go0w7yGOYFXo=;
+        b=UhLqc0qpawLlwj3elYEJbIiYV2Po8PWukOUDSCM0RXnRNa/xqpeBkEr1puna648YhN
+         2dFdA5YH8k0dxw8SLhxtkX08xqgF5tRwxJC/bDi8FtsnV7ZyXdhXX+jHiNzj+BztrDVH
+         wo0f6O9i2TDGIaQOTq/uqqD6fckQlRPSR0D6y6IATiHX2dUa3OlKu4YZ4YnHS+BkH4Ft
+         BkPZtrc7EWapPyDM7fbsvnSadckkeR7MUNKb7SlQDFXKQYSHm7zvUTmrVawI9WXISBBA
+         nW6K3v6Y1EWsXajczm+qb4dtPDRKBMu1eXTuWIUoP6/ziBLqfknBp+RH0Qu8a6JJaMmj
+         kkyQ==
+X-Gm-Message-State: AAQBX9eXkQ9Xmh8iksvDHgoihnY7LD8uPdzWRHCOksim3V7nW3ynyc84
+        beitGU/dQM33W8kXMSY0nKl93sTXZ2V5mXIjN7enWhb8KsshbJPgAYQaRpVak/SA4lK/LhAfnSL
+        ftwtkIgeblRXV2FHITGuh5Y9p
+X-Received: by 2002:a25:ad65:0:b0:b8f:2258:a4d9 with SMTP id l37-20020a25ad65000000b00b8f2258a4d9mr1572207ybe.0.1681218966701;
+        Tue, 11 Apr 2023 06:16:06 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bcJp1EL0kh9WfurAeUa23/WA0DCHGOQMqC4gQUclro08FTcMd90O7JjKKUuxS7+Zr9P6vPkA==
+X-Received: by 2002:a25:ad65:0:b0:b8f:2258:a4d9 with SMTP id l37-20020a25ad65000000b00b8f2258a4d9mr1572169ybe.0.1681218966324;
+        Tue, 11 Apr 2023 06:16:06 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-239-96.dyn.eolo.it. [146.241.239.96])
+        by smtp.gmail.com with ESMTPSA id q17-20020a37f711000000b007468765b411sm3940487qkj.45.2023.04.11.06.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 06:16:05 -0700 (PDT)
+Message-ID: <cda1f9a630516ab8d02454cd052cb03b35d1b279.camel@redhat.com>
+Subject: Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive
+ JH7110 SoC
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Guo Samin <samin.guo@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Arun.Ramadoss@microchip.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Pedro Moreira <pmmoreir@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+Date:   Tue, 11 Apr 2023 15:16:00 +0200
+In-Reply-To: <62fc36bc-7e43-0214-85d7-be66748a901b@starfivetech.com>
+References: <20230407110356.8449-1-samin.guo@starfivetech.com>
+         <20230407110356.8449-6-samin.guo@starfivetech.com>
+         <CAJM55Z9jCdPASsk+fw_j+9QH3+Kj28tpCA4PgW_nB_ce7qWL8w@mail.gmail.com>
+         <b8764e20-f983-177c-63c5-36bb3b57ba9e@starfivetech.com>
+         <CAJM55Z8jSPz70ri_sFnKMjZDoNvoA=K-o7VCeAMmXztzOKRxaA@mail.gmail.com>
+         <62fc36bc-7e43-0214-85d7-be66748a901b@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 02:50:40PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> 
-> 
-> On 10.04.23 17:29, Gong, Richard wrote:
-> > On 4/10/2023 12:03 AM, Mario Limonciello wrote:
-> >> On 3/20/23 04:32, Kornel Dulęba wrote:
-> >>
-> >>> This fixes a similar problem to the one observed in:
-> >>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
-> >>> probe").
-> >>>
-> >>> On some systems, during suspend/resume cycle firmware leaves
-> >>> an interrupt enabled on a pin that is not used by the kernel.
-> >>> This confuses the AMD pinctrl driver and causes spurious interrupts.
-> >>>
-> >>> The driver already has logic to detect if a pin is used by the kernel.
-> >>> Leverage it to re-initialize interrupt fields of a pin only if it's not
-> >>> used by us.
-> >>>
-> >>> Signed-off-by: Kornel Dulęba <korneld@chromium.org>
-> >>> ---
-> >>>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++----------------
-> >>>   1 file changed, 20 insertions(+), 16 deletions(-)
-> >>>
-> >>> diff --git a/drivers/pinctrl/pinctrl-amd.c
-> >>> b/drivers/pinctrl/pinctrl-amd.c
-> >>> index 9236a132c7ba..609821b756c2 100644
-> >>> --- a/drivers/pinctrl/pinctrl-amd.c
-> >>> +++ b/drivers/pinctrl/pinctrl-amd.c
-> >>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
-> >>> = {
-> >>>       .pin_config_group_set = amd_pinconf_group_set,
-> >>>   };
-> >>>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
-> >>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
-> >>>   {
-> >>> -    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
-> >>> +    const struct pin_desc *pd;
-> >>>       unsigned long flags;
-> >>>       u32 pin_reg, mask;
-> >>> -    int i;
-> >>>         mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
-> >>>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
-> >>>           BIT(WAKE_CNTRL_OFF_S4);
-> >>>   -    for (i = 0; i < desc->npins; i++) {
-> >>> -        int pin = desc->pins[i].number;
-> >>> -        const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
-> >>> -
-> >>> -        if (!pd)
-> >>> -            continue;
-> >>> +    pd = pin_desc_get(gpio_dev->pctrl, pin);
-> >>> +    if (!pd)
-> >>> +        return;
-> >>>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>> +    pin_reg = readl(gpio_dev->base + pin * 4);
-> >>> +    pin_reg &= ~mask;
-> >>> +    writel(pin_reg, gpio_dev->base + pin * 4);
-> >>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-> >>> +}
-> >>>   -        pin_reg = readl(gpio_dev->base + i * 4);
-> >>> -        pin_reg &= ~mask;
-> >>> -        writel(pin_reg, gpio_dev->base + i * 4);
-> >>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
-> >>> +{
-> >>> +    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
-> >>> +    int i;
-> >>>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-> >>> -    }
-> >>> +    for (i = 0; i < desc->npins; i++)
-> >>> +        amd_gpio_irq_init_pin(gpio_dev, i);
-> >>>   }
-> >>>     #ifdef CONFIG_PM_SLEEP
-> >>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
-> >>>       for (i = 0; i < desc->npins; i++) {
-> >>>           int pin = desc->pins[i].number;
-> >>>   -        if (!amd_gpio_should_save(gpio_dev, pin))
-> >>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
-> >>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
-> >>>               continue;
-> >>> +        }
-> >>>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>>           gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4)
-> >>> & PIN_IRQ_PENDING;
-> >>
-> >> Hello Kornel,
-> >>
-> >> I've found that this commit which was included in 6.3-rc5 is causing a
-> >> regression waking up from lid on a Lenovo Z13.
-> > observed "unable to wake from power button" on AMD based Dell platform.
-> 
-> This sounds like something that we want to fix quickly.
-> 
-> > Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
-> > top of 6.3-rc6 does fix the issue.
-> >>
-> >> Reverting it on top of 6.3-rc6 resolves the problem.
-> >>
-> >> I've collected what I can into this bug report:
-> >>
-> >> https://bugzilla.kernel.org/show_bug.cgi?id=217315
-> >>
-> >> Linus Walleij,
-> >>
-> >> It looks like this was CC to stable.  If we can't get a quick solution
-> >> we might want to pull this from stable.
-> > 
-> > this commit landed into 6.1.23 as well
-> > 
-> >         d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resume
-> 
-> It made it back up to 5.10.y afaics.
-> 
-> The culprit has no fixes tag, which makes me wonder: should we quickly
-> (e.g. today) revert this in mainline to get back to the previous state,
-> so that Greg can pick up the revert for the next stable releases he
-> apparently currently prepares?
-> 
-> Greg, is there another way to make you quickly fix this in the stable
-> trees? One option obviously would be "revert this now in stable, reapply
-> it later together with a fix ". But I'm under the impression that this
-> is too much of a hassle and thus something you only do in dire situations?
+On Mon, 2023-04-10 at 16:29 +0800, Guo Samin wrote:
+> Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive JH7110 S=
+oC
+> From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> to: Guo Samin <samin.guo@starfivetech.com>
+> data: 2023/4/9
+>=20
+> > On Sat, 8 Apr 2023 at 03:16, Guo Samin <samin.guo@starfivetech.com> wro=
+te:
+> > >=20
+> > >  Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive JH7=
+110 SoC
+> > > From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> > > to: Samin Guo <samin.guo@starfivetech.com>
+> > > data: 2023/4/8
+> > >=20
+> > > > On Fri, 7 Apr 2023 at 13:05, Samin Guo <samin.guo@starfivetech.com>=
+ wrote:
+> > > > >=20
+> > > > > This adds StarFive dwmac driver support on the StarFive JH7110 So=
+C.
+> > > > >=20
+> > > > > Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > > Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> > > > > ---
+> > > > >  MAINTAINERS                                   |   1 +
+> > > > >  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+> > > > >  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+> > > > >  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 123 ++++++++++++=
+++++++
+> > > > >  4 files changed, 137 insertions(+)
+> > > > >  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-sta=
+rfive.c
+> > > > >=20
+> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > index 6b6b67468b8f..46b366456cee 100644
+> > > > > --- a/MAINTAINERS
+> > > > > +++ b/MAINTAINERS
+> > > > > @@ -19910,6 +19910,7 @@ M:      Emil Renner Berthing <kernel@esmi=
+l.dk>
+> > > > >  M:     Samin Guo <samin.guo@starfivetech.com>
+> > > > >  S:     Maintained
+> > > > >  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwm=
+ac.yaml
+> > > > > +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> > > > >=20
+> > > > >  STARFIVE JH7100 CLOCK DRIVERS
+> > > > >  M:     Emil Renner Berthing <kernel@esmil.dk>
+> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/driver=
+s/net/ethernet/stmicro/stmmac/Kconfig
+> > > > > index f77511fe4e87..5f5a997f21f3 100644
+> > > > > --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> > > > > @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
+> > > > >           for the stmmac device driver. This driver is used for
+> > > > >           arria5 and cyclone5 FPGA SoCs.
+> > > > >=20
+> > > > > +config DWMAC_STARFIVE
+> > > > > +       tristate "StarFive dwmac support"
+> > > > > +       depends on OF && (ARCH_STARFIVE || COMPILE_TEST)
+> > > > > +       select MFD_SYSCON
+> > > > > +       default m if ARCH_STARFIVE
+> > > > > +       help
+> > > > > +         Support for ethernet controllers on StarFive RISC-V SoC=
+s
+> > > > > +
+> > > > > +         This selects the StarFive platform specific glue layer =
+support for
+> > > > > +         the stmmac device driver. This driver is used for StarF=
+ive JH7110
+> > > > > +         ethernet controller.
+> > > > > +
+> > > > >  config DWMAC_STI
+> > > > >         tristate "STi GMAC support"
+> > > > >         default ARCH_STI
+> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drive=
+rs/net/ethernet/stmicro/stmmac/Makefile
+> > > > > index 057e4bab5c08..8738fdbb4b2d 100644
+> > > > > --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> > > > > @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     +=3D dwmac-oxnas.=
+o
+> > > > >  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        +=3D dwmac-qcom-ethqos.o
+> > > > >  obj-$(CONFIG_DWMAC_ROCKCHIP)   +=3D dwmac-rk.o
+> > > > >  obj-$(CONFIG_DWMAC_SOCFPGA)    +=3D dwmac-altr-socfpga.o
+> > > > > +obj-$(CONFIG_DWMAC_STARFIVE)   +=3D dwmac-starfive.o
+> > > > >  obj-$(CONFIG_DWMAC_STI)                +=3D dwmac-sti.o
+> > > > >  obj-$(CONFIG_DWMAC_STM32)      +=3D dwmac-stm32.o
+> > > > >  obj-$(CONFIG_DWMAC_SUNXI)      +=3D dwmac-sunxi.o
+> > > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c=
+ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..4963d4008485
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> > > > > @@ -0,0 +1,123 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > > > +/*
+> > > > > + * StarFive DWMAC platform driver
+> > > > > + *
+> > > > > + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
+> > > > > + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> > > > > + *
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/mfd/syscon.h>
+> > > > > +#include <linux/of_device.h>
+> > > > > +#include <linux/regmap.h>
+> > > > > +
+> > > > > +#include "stmmac_platform.h"
+> > > > > +
+> > > > > +struct starfive_dwmac {
+> > > > > +       struct device *dev;
+> > > > > +       struct clk *clk_tx;
+> > > > > +};
+> > > > > +
+> > > > > +static void starfive_dwmac_fix_mac_speed(void *priv, unsigned in=
+t speed)
+> > > > > +{
+> > > > > +       struct starfive_dwmac *dwmac =3D priv;
+> > > > > +       unsigned long rate;
+> > > > > +       int err;
+> > > > > +
+> > > > > +       rate =3D clk_get_rate(dwmac->clk_tx);
+> > > >=20
+> > > > Hi Samin,
+> > > >=20
+> > > > I'm not sure why you added this line in this revision. If it's just=
+ to
+> > > > not call clk_set_rate on the uninitialized rate, I'd much rather yo=
+u
+> > > > just returned early and don't call clk_set_rate at all in case of
+> > > > errors.
+> > > >=20
+> > > > > +
+> > > > > +       switch (speed) {
+> > > > > +       case SPEED_1000:
+> > > > > +               rate =3D 125000000;
+> > > > > +               break;
+> > > > > +       case SPEED_100:
+> > > > > +               rate =3D 25000000;
+> > > > > +               break;
+> > > > > +       case SPEED_10:
+> > > > > +               rate =3D 2500000;
+> > > > > +               break;
+> > > > > +       default:
+> > > > > +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> > > > > +               break;
+> > > >=20
+> > > > That is skip the clk_get_rate above and just change this break to a=
+ return.
+> > > >=20
+> > >=20
+> > > Hi Emil,
+> > >=20
+> > > We used the solution you mentioned before V3, but Arun Ramadoss doesn=
+'t think that's great.
+> > > (https://patchwork.kernel.org/project/linux-riscv/patch/2023010603000=
+1.1952-6-yanhong.wang@starfivetech.com)
+> > >=20
+> > >=20
+> > > > +static void starfive_eth_plat_fix_mac_speed(void *priv, unsigned i=
+nt
+> > > > speed)
+> > > > +{
+> > > > +     struct starfive_dwmac *dwmac =3D priv;
+> > > > +     unsigned long rate;
+> > > > +     int err;
+> > > > +
+> > > > +     switch (speed) {
+> > > > +     case SPEED_1000:
+> > > > +             rate =3D 125000000;
+> > > > +             break;
+> > > > +     case SPEED_100:
+> > > > +             rate =3D 25000000;
+> > > > +             break;
+> > > > +     case SPEED_10:
+> > > > +             rate =3D 2500000;
+> > > > +             break;
+> > > > +     default:
+> > > > +             dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> > > > +             return;
+> > >=20
+> > > Do we need to return value, since it is invalid speed. But the return
+> > > value of function is void.(Arun Ramadoss)
+> > >=20
+> > >=20
+> > > So in v9, after discussing with Jakub Kicinski, the clk_set_rate was =
+used to initialize the rate.
+> > > (It is a reference to Intel's scheme:    dwmac-intel-plat.c: kmb_eth_=
+fix_mac_speed)
+> > > (https://patchwork.kernel.org/project/linux-riscv/patch/2023032806200=
+9.25454-6-samin.guo@starfivetech.com)
+> > >=20
+> >=20
+> > Yeah, I think this is a misunderstanding and Arun is considering if we
+> > ought to return the error which we can't without changing generic
+> > dwmac code, and Jakub is rightly concerned about using a local
+> > variable uninitialized. I don't think anyone is suggesting that
+> > getting the rate just to set it to the exact same value is better than
+> > just leaving the clock alone.
+> >=20
+> HI Emil,
+>=20
+> Yeah, return early saves time and code complexity, and seems like a good =
+solution so Yanhong did the same before v3. (Jakub has suggested it before)=
+,
+> I wonder if Arun or other maintainers accept this solution or if there ar=
+e other solutions?
 
-I would like to see this reverted in Linus's tree first please.
+I think is not a big deal either way.
 
-thanks,
+To avoid too much back and forth I'll stick to the current code.
 
-greg k-h
+Please address Emil comment on patch 6/6
+
+Thanks!
+
+Paolo
+
