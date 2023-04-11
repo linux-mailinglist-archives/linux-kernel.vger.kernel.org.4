@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899B46DDE14
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607556DDE1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDKOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S230050AbjDKOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjDKOgb (ORCPT
+        with ESMTP id S229903AbjDKOgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:36:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923811FF3;
-        Tue, 11 Apr 2023 07:36:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 11 Apr 2023 10:36:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544A212F;
+        Tue, 11 Apr 2023 07:36:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 473641FD88;
-        Tue, 11 Apr 2023 14:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681223787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U29cCnOHbPWuYYBzDboY6Km3Yy5eqaduHl0Wu231j74=;
-        b=edjpGMrZ7N5YaS+Bhq84eaTAsFUJQfQ5qUZDGHxznT+HT1UWjhwdo+L4abwkywXdptySD5
-        5qp7+MeH72opCbELqEE75FiRgE2ZoDDMZrxDENYrm6SyMRarDUSbtF48i7Jo82DPD+J4MW
-        CncLnF+JzdMoTJt+laveADpsUJQZfok=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2928A13638;
-        Tue, 11 Apr 2023 14:36:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ltGoB2twNWSeXgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 11 Apr 2023 14:36:27 +0000
-Date:   Tue, 11 Apr 2023 16:36:26 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] mm: oom: introduce cpuset oom
-Message-ID: <ZDVwaqzOBNTpuR1w@dhcp22.suse.cz>
-References: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D870F6275F;
+        Tue, 11 Apr 2023 14:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91048C433D2;
+        Tue, 11 Apr 2023 14:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681223812;
+        bh=1ZaELguZrMUDSqBDbQ/nvMKkVutqjjhoMJMSmLlmpsA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aDIrm0PeTzZNwH3+9XkPMGnN+vFyIBQ749a4wLpDyrbSohvM13uVlyYBuQCYKnZ8I
+         LwefzyfXPov/RWnBEn42BIsbVf84vw7NzHXmgOze6aPFwuTm8PiMmBwnBGl9009o93
+         IWqAyya49c34lkaD8vEkpd7MXndFMPoawLE+w/vO5DRgnSuLJ3aEyOkl5bgIlIev9J
+         egD6kT3fs1v2YFbNX+AfIsAHgwuF5PnluxB2c7dsgXT+kTnItwqWVVzDnJjKuXhgwe
+         4M2fwDBRYBjh+6ZE5N+/7B8+V9zisEiSx3+9dnarB50RECC2/tMuC1TEnvmnffJOPk
+         v7eW/jMo6AMXg==
+Message-ID: <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+Date:   Tue, 11 Apr 2023 08:36:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+        axboe@kernel.dk, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <ZDVLyi1PahE0sfci@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-04-23 14:58:15, Gang Li wrote:
-> Cpusets constrain the CPU and Memory placement of tasks.
-> `CONSTRAINT_CPUSET` type in oom  has existed for a long time, but
-> has never been utilized.
+On 4/11/23 6:00 AM, Breno Leitao wrote:
+> I am not sure if avoiding io_uring details in network code is possible.
 > 
-> When a process in cpuset which constrain memory placement triggers
-> oom, it may kill a completely irrelevant process on other numa nodes,
-> which will not release any memory for this cpuset.
+> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
+> in the TCP case) could be somewhere else, such as in the io_uring/
+> directory, but, I think it might be cleaner if these implementations are
+> closer to function assignment (in the network subsystem).
 > 
-> We can easily achieve node aware oom by using `CONSTRAINT_CPUSET` and
-> selecting victim from cpusets with the same mems_allowed as the
-> current one.
-
-I believe it still wouldn't hurt to be more specific here.
-CONSTRAINT_CPUSET is rather obscure. Looking at this just makes my head
-spin.
-        /* Check this allocation failure is caused by cpuset's wall function */
-        for_each_zone_zonelist_nodemask(zone, z, oc->zonelist, 
-                        highest_zoneidx, oc->nodemask)
-                if (!cpuset_zone_allowed(zone, oc->gfp_mask))
-                        cpuset_limited = true;
-
-Does this even work properly and why? prepare_alloc_pages sets
-oc->nodemask to current->mems_allowed but the above gives us
-cpuset_limited only if there is at least one zone/node that is not
-oc->nodemask compatible. So it seems like this wouldn't ever get set
-unless oc->nodemask got reset somewhere. This is a maze indeed. Is there
-any reason why we cannot rely on __GFP_HARWALL here? Or should we
-instead rely on the fact the nodemask should be same as
-current->mems_allowed?
-
-I do realize that this is not directly related to your patch but
-considering this has been mostly doing nothing maybe we want to document
-it better or even rework it at this occasion.
-
-> Example:
+> And this function (tcp_uring_cmd() for instance) is the one that I am
+> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
+> -> SIOCINQ.
 > 
-> Create two processes named mem_on_node0 and mem_on_node1 constrained
-> by cpusets respectively. These two processes alloc memory on their
-> own node. Now node0 has run out of memory, OOM will be invokled by
-> mem_on_node0.
+> Please let me know if you have any other idea in mind.
 
-Don't you have an actual real life example with a properly partitioned
-system which clearly misbehaves and this patch addresses that?
--- 
-Michal Hocko
-SUSE Labs
+I am not convinced that this io_uring_cmd is needed. This is one
+in-kernel subsystem calling into another, and there are APIs for that.
+All of this set is ioctl based and as Willem noted a little refactoring
+separates the get_user/put_user out so that in-kernel can call can be
+made with existing ops.
