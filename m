@@ -2,75 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BA16DDDD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46EA6DDDDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjDKO1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S230417AbjDKO1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDKO1B (ORCPT
+        with ESMTP id S230229AbjDKO1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:27:01 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3E76185
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:26:35 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        Tue, 11 Apr 2023 10:27:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5D855BC;
+        Tue, 11 Apr 2023 07:27:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 779361EC0683;
-        Tue, 11 Apr 2023 16:26:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681223193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vD783CY818jNVcfjeYDBZSYOGkg35bmnXsk+jWP4W10=;
-        b=Tc30nmS4cxXKukqUyCHBhBowDaKbd4JmCZob36VJ198pte45nW67eeexxij8qIFxPHNieR
-        BjJY7IcGCh+Sk+ZjL6XDUlJL8SxHqkEGR5B4dJ6kZfeSFbhGpJ2Vf73n8i9AGetVCpi9db
-        PY5EtvKJcUy4Bmuf/cf4FF2VF1KA04U=
-Date:   Tue, 11 Apr 2023 16:26:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
- software defined MTRRs
-Message-ID: <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-5-jgross@suse.com>
- <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
- <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 508B862036;
+        Tue, 11 Apr 2023 14:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F35C433D2;
+        Tue, 11 Apr 2023 14:27:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681223230;
+        bh=zWD5OEjyLd2QTqKFMvAPrX2Tq24Vay8bPpirE1DcBnA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RSsigzCxO4uwigld6Th+McqIO8PLB6/6CvXf3HZDlQHmyJAYUtiyrAqYB3bmyVBZm
+         Yr09wsZCpSY2l2twPoiWBpEIXcKkTZblQu2bd8CQ6HSMMzE+x0EJByQizYdcM+w56r
+         Ka8h5x4IoZI41P4hUj57Heggj1NsnMYFy3GKY99TpawCxWCSvlVS2RZdWKBwVMOaqd
+         r4IGVCLSdlwKb+E0uS2Zg+TFQnUegcj7NcWYaxr/MgOtWM7a+yrw3RcdtkpErmRGAc
+         rPatFN6hxbtlB3YvnKAeRabYnusnqeTO6WbAZER+0RhwL0G/5SeGLMx0aIULT/2ZAB
+         5vvQtfrMG4O6Q==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: [RFC PATCH 0/3] fs: opportunistic high-res file timestamps
+Date:   Tue, 11 Apr 2023 10:27:05 -0400
+Message-Id: <20230411142708.62475-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:04:00PM +0200, Juergen Gross wrote:
-> Yeah, the condition needs to be:
-> 
-> 	if (!(hv_is_isolation_supported() ||
-> 	      cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) &&
-	      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A few weeks ago, during one of the discussions around i_version, Dave
+Chinner wrote this:
 
-Why is that needed at all?
+"You've missed the part where I suggested lifting the "nfsd sampled
+i_version" state into an inode state flag rather than hiding it in
+the i_version field. At that point, we could optimise away the
+secondary ctime updates just like you are proposing we do with the
+i_version updates.  Further, we could also use that state it to
+decide whether we need to use high resolution timestamps when
+recording ctime updates - if the nfsd has not sampled the
+ctime/i_version, we don't need high res timestamps to be recorded
+for ctime...."
+
+While I don't think we can practically optimize away ctime updates
+like we do with i_version, I do like the idea of using this scheme to
+indicate when we need to use a high-res timestamp.
+
+This patchset is a first stab at a scheme to do this. It declares a new
+i_state flag for this purpose and adds two new vfs-layer functions to
+implement conditional high-res timestamp fetching. It then converts both
+tmpfs and xfs to use it.
+
+This seems to behave fine under xfstests, but I haven't yet done
+any performance testing with it. I wouldn't expect it to create huge
+regressions though since we're only grabbing high res timestamps after
+each query.
+
+I like this scheme because we can potentially convert any filesystem to
+use it. No special storage requirements like with i_version field.  I
+think it'd potentially improve NFS cache coherency with a whole swath of
+exportable filesystems, and helps out NFSv3 too.
+
+This is really just a proof-of-concept. There are a number of things we
+could change:
+
+1/ We could use the top bit in the tv_sec field as the flag. That'd give
+   us different flags for ctime and mtime. We also wouldn't need to use
+   a spinlock.
+
+2/ We could probably optimize away the high-res timestamp fetch in more
+   cases. Basically, always do a coarse-grained ts fetch and only fetch
+   the high-res ts when the QUERIED flag is set and the existing time
+   hasn't changed.
+
+If this approach looks reasonable, I'll plan to start working on
+converting more filesystems.
+
+One thing I'm not clear on is how widely available high res timestamps
+are. Is this something we need to gate on particular CONFIG_* options?
+
+Thoughts?
+
+Jeff Layton (3):
+  fs: add infrastructure for opportunistic high-res ctime/mtime updates
+  shmem: mark for high-res timestamps on next update after getattr
+  xfs: mark the inode for high-res timestamp update in getattr
+
+ fs/inode.c                      | 40 +++++++++++++++++++++++++++++++--
+ fs/stat.c                       | 10 +++++++++
+ fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
+ fs/xfs/xfs_acl.c                |  2 +-
+ fs/xfs/xfs_inode.c              |  2 +-
+ fs/xfs/xfs_iops.c               | 15 ++++++++++---
+ include/linux/fs.h              |  5 ++++-
+ mm/shmem.c                      | 23 ++++++++++---------
+ 8 files changed, 80 insertions(+), 19 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
