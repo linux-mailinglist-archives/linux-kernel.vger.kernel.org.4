@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB886DE3E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4876DE3E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjDKS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S229744AbjDKS3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjDKS1u (ORCPT
+        with ESMTP id S229508AbjDKS3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:27:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053E065B3;
-        Tue, 11 Apr 2023 11:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681237658; x=1712773658;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1QioC9Kxlkpc1XJQphVkupGM3XmsH0QP9DjCNhRYggY=;
-  b=kXyZAYx2hDUxFwJIEqNx0HXArxzaQuv7xsnx9GzZJ/q4nmmj8/WaWFoF
-   GwST63x2yRU8eL/IoY85TcSnSmy9WYqa9Dp4077KxxLuAddWqGx09WUhz
-   C3JsGE2u3LzB5c6evwRyNv60huOoFRgaCr6JH5cYKsvx7zqW1TNForDC6
-   5YfgGusChybGCZ8nkFpGOtwzfSD/R5WOx0L+VRYz9fl1kiba3jl0+LMJz
-   1SIxZaj2J87jGSZumHfSV2PliIge0pzi9BQQ6j9dqECHZzm/4FVXVrwa7
-   ulgevw6jjq3ZZVjgwlNWyxFT/N0R/xAJ4/VS9+sBfd9scOdQ7FtJGcSWM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="343708303"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="343708303"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 11:27:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="691265257"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="691265257"
-Received: from gtryonx-mobl.amr.corp.intel.com (HELO [10.209.72.81]) ([10.209.72.81])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 11:27:36 -0700
-Message-ID: <7fe765e1-88b5-7bf1-133c-4587224f1e7a@intel.com>
-Date:   Tue, 11 Apr 2023 11:27:35 -0700
+        Tue, 11 Apr 2023 14:29:06 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74CEA;
+        Tue, 11 Apr 2023 11:29:05 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1842e8a8825so10804954fac.13;
+        Tue, 11 Apr 2023 11:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681237745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=04BQWUwBxDZ2Ggq7BQgfuwgR7cIa0rI/ETFyOfLGigY=;
+        b=adR1pap581Si5eUy20kOKPZF+9sdl0vkghbMvZWluaR2MaugneQRN0zU6SAi61kDzv
+         ohsvMWx6DU8krs4e8Dw4ch9e8pRuumtRyYCsKqJlA06lAH/aPab1WpvVhY1U49ZL+oRu
+         9LUBqPrlgzx5AdGz/Q9Yo6f4UCetoXT/KbTydaEjGgWeF5w2JnYXC1Wq3XhPN3aeNfuW
+         yBR5C6+erhkLFaNIU1IELQQ9xcyrjuk1g/OqGArd0vezAII6GLja7T+jBA3oXTRjSpiE
+         I9gnuKtw3R3ImHTkbN1ygQumqawu50x7d6BsG2aTr9fdhTAzfo8R5pqNv6qkQY2bnqet
+         j/vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681237745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=04BQWUwBxDZ2Ggq7BQgfuwgR7cIa0rI/ETFyOfLGigY=;
+        b=43WL2AbqAu7iv3SkPZ58L/QNGBzUHZHDJbMbQ62MNk8+IG0ZfM2HYUXCeWr6iuLtVi
+         WZcTZmLiXlZUTJyH4BnKaL9ZTkTOXO2KxB39M9KcHx3/AxixmCtYzLRlI7ZbD40t33IZ
+         jb2jQEYaDp/p9rATOs6Ej6zBe27s+lEaun0E8BzW/pSoWkcNs5ZCrOEOAJiqv9DMRuza
+         weIcQcl9IjsP3zCXXqdSBLaJ12ZFtkraTMxLNeqgSo8su8ljt7RR0ZAPhVBJ8TT/qwg5
+         hV5x7T+krdLANW+F7J0JyVV4xWo8LOx7gNAqGYQnlpp0ARUg2qY7tlbQzswuTlSL9ZAD
+         SqQw==
+X-Gm-Message-State: AAQBX9fkXXU5cifb5ctZ80KxIzu9O2ERcQr1vW3UdCYyzF+AyTwSv7ON
+        NVtJxvCFsRtOly45X89bIbCE+RPfXi31uZnBROw=
+X-Google-Smtp-Source: AKy350ZnxwLNoHMLAsnDrCIdVf4NqYNyx45hAU4P8O3GSVtWQDN1PG+sS9eukL4lgWdlEXuom0she3fyNoi/MMwTQXw=
+X-Received: by 2002:a05:6870:5625:b0:180:b4c1:dfce with SMTP id
+ m37-20020a056870562500b00180b4c1dfcemr5580747oao.5.1681237744881; Tue, 11 Apr
+ 2023 11:29:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC v8 17/56] x86/fault: Add support to handle the RMP
- fault for user address
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, Brijesh Singh <brijesh.singh@amd.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@profian.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-18-michael.roth@amd.com>
- <a15fc9a5-c136-47f7-e15e-776a511f3cdb@intel.com>
- <20230328233101.4idfki7ulpyhxrwy@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230328233101.4idfki7ulpyhxrwy@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230410210608.1873968-1-robdclark@gmail.com> <CAF6AEGvs4XMggPMthiJ89SiaUj3k+nY95OhxLZ5cD-01XPco4Q@mail.gmail.com>
+ <ZDWQfbUBhyJf1Ezx@phenom.ffwll.local> <CAF6AEGtYw4Dn80OtrnJESkkDXxhUdAr6Nuva+Jo3ExW8MXH++Q@mail.gmail.com>
+ <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
+In-Reply-To: <CAA8EJppnEwcHM++YUYZGrNXEha=-ZVAexBdkMVsU52PTOs4VnA@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 11 Apr 2023 11:28:53 -0700
+Message-ID: <CAF6AEGsE3NOe9TkEzrk5rr-D2PoKaxF5Yn3W8wWew8um6r2EXw@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v2 0/2] drm: fdinfo memory stats
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,28 +80,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/23 16:31, Michael Roth wrote:
-> However...
-> 
-> The fact that any pages potentially triggering these #PFs are able to be
-> mapped as 2M in the first place means that all the PFNs covered by that
-> 2M mapping must also been allocated by via mappable/VMA memory rather
-> than via restricted memfd where userspace mappings are not possible.
-> 
-> So I think we should be able to drop this patch entirely, as well as
-> allow the use of HugeTLBFS for non-restricted memfd memory (though
-> eventually the guest will switch all its memory to private/restricted
-> so not gaining much there other than reducing management complexity).
+On Tue, Apr 11, 2023 at 10:36=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Tue, 11 Apr 2023 at 20:13, Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > On Tue, Apr 11, 2023 at 9:53=E2=80=AFAM Daniel Vetter <daniel@ffwll.ch>=
+ wrote:
+> > >
+> > > On Tue, Apr 11, 2023 at 09:47:32AM -0700, Rob Clark wrote:
+> > > > On Mon, Apr 10, 2023 at 2:06=E2=80=AFPM Rob Clark <robdclark@gmail.=
+com> wrote:
+> > > > >
+> > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > >
+> > > > > Similar motivation to other similar recent attempt[1].  But with =
+an
+> > > > > attempt to have some shared code for this.  As well as documentat=
+ion.
+> > > > >
+> > > > > It is probably a bit UMA-centric, I guess devices with VRAM might=
+ want
+> > > > > some placement stats as well.  But this seems like a reasonable s=
+tart.
+> > > > >
+> > > > > Basic gputop support: https://patchwork.freedesktop.org/series/11=
+6236/
+> > > > > And already nvtop support: https://github.com/Syllo/nvtop/pull/20=
+4
+> > > >
+> > > > On a related topic, I'm wondering if it would make sense to report
+> > > > some more global things (temp, freq, etc) via fdinfo?  Some of this=
+,
+> > > > tools like nvtop could get by trawling sysfs or other driver specif=
+ic
+> > > > ways.  But maybe it makes sense to have these sort of things report=
+ed
+> > > > in a standardized way (even though they aren't really per-drm_file)
+> > >
+> > > I think that's a bit much layering violation, we'd essentially have t=
+o
+> > > reinvent the hwmon sysfs uapi in fdinfo. Not really a business I want=
+ to
+> > > be in :-)
+> >
+> > I guess this is true for temp (where there are thermal zones with
+> > potentially multiple temp sensors.. but I'm still digging my way thru
+> > the thermal_cooling_device stuff)
+>
+> It is slightly ugly. All thermal zones and cooling devices are virtual
+> devices (so, even no connection to the particular tsens device). One
+> can either enumerate them by checking
+> /sys/class/thermal/thermal_zoneN/type or enumerate them through
+> /sys/class/hwmon. For cooling devices again the only enumeration is
+> through /sys/class/thermal/cooling_deviceN/type.
+>
+> Probably it should be possible to push cooling devices and thermal
+> zones under corresponding providers. However I do not know if there is
+> a good way to correlate cooling device (ideally a part of GPU) to the
+> thermal_zone (which in our case is provided by tsens / temp_alarm
+> rather than GPU itself).
+>
+> >
+> > But what about freq?  I think, esp for cases where some "fw thing" is
+> > controlling the freq we end up needing to use gpu counters to measure
+> > the freq.
+>
+> For the freq it is slightly easier: /sys/class/devfreq/*, devices are
+> registered under proper parent (IOW, GPU). So one can read
+> /sys/class/devfreq/3d00000.gpu/cur_freq or
+> /sys/bus/platform/devices/3d00000.gpu/devfreq/3d00000.gpu/cur_freq.
+>
+> However because of the components usage, there is no link from
+> /sys/class/drm/card0
+> (/sys/devices/platform/soc@0/ae00000.display-subsystem/ae01000.display-co=
+ntroller/drm/card0)
+> to /sys/devices/platform/soc@0/3d00000.gpu, the GPU unit.
+>
+> Getting all these items together in a platform-independent way would
+> be definitely an important but complex topic.
 
-This is sounding a bit voodoo-ish to me.
+But I don't believe any of the pci gpu's use devfreq ;-)
 
-If this whole series is predicated on having its memory supplied via one
-very specific ABI with very specific behavior.
+And also, you can't expect the CPU to actually know the freq when fw
+is the one controlling freq.  We can, currently, have a reasonable
+approximation from devfreq but that stops if IFPC is implemented.  And
+other GPUs have even less direct control.  So freq is a thing that I
+don't think we should try to get from "common frameworks"
 
-That connection and the associated contract isn't spelled out very
-clearly in this series.  I'm sure it works on your machine and is clear
-to _you_ but I'm worried that nobody else is going to be able to figure
-out the voodoo.
+BR,
+-R
 
-Could we make sure that this stuff is made very clear in the
-Documentation and cover letter, please?
+> >
+> > > What might be needed is better glue to go from the fd or fdinfo to th=
+e
+> > > right hw device and then crawl around the hwmon in sysfs automaticall=
+y. I
+> > > would not be surprised at all if we really suck on this, probably mor=
+e
+> > > likely on SoC than pci gpus where at least everything should be under=
+ the
+> > > main pci sysfs device.
+> >
+> > yeah, I *think* userspace would have to look at /proc/device-tree to
+> > find the cooling device(s) associated with the gpu.. at least I don't
+> > see a straightforward way to figure it out just for sysfs
+> >
+> > BR,
+> > -R
+> >
+> > > -Daniel
+> > >
+> > > >
+> > > > BR,
+> > > > -R
+> > > >
+> > > >
+> > > > > [1] https://patchwork.freedesktop.org/series/112397/
+> > > > >
+> > > > > Rob Clark (2):
+> > > > >   drm: Add fdinfo memory stats
+> > > > >   drm/msm: Add memory stats to fdinfo
+> > > > >
+> > > > >  Documentation/gpu/drm-usage-stats.rst | 21 +++++++
+> > > > >  drivers/gpu/drm/drm_file.c            | 79 +++++++++++++++++++++=
+++++++
+> > > > >  drivers/gpu/drm/msm/msm_drv.c         | 25 ++++++++-
+> > > > >  drivers/gpu/drm/msm/msm_gpu.c         |  2 -
+> > > > >  include/drm/drm_file.h                | 10 ++++
+> > > > >  5 files changed, 134 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > --
+> > > > > 2.39.2
+> > > > >
+> > >
+> > > --
+> > > Daniel Vetter
+> > > Software Engineer, Intel Corporation
+> > > http://blog.ffwll.ch
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
