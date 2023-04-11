@@ -2,114 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08856DDE57
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2329A6DDE5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjDKOn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S229749AbjDKOql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjDKOn4 (ORCPT
+        with ESMTP id S229484AbjDKOqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:43:56 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF14E1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:43:55 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2ef70620b9dso636880f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:43:55 -0700 (PDT)
+        Tue, 11 Apr 2023 10:46:39 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA16B172A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:46:38 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id z16so5237816oib.9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681224234;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bFrLw6zphVlz4pdr5/y9hU7mKuJn6EFgXAarb/1MgNg=;
-        b=ZvwZhETovVk3TNd1NTc1Ua8qAcJSs/foIRtPU+hMn5Q7FURVX3wJ4Fd+t7q3IFFrba
-         H1xdsCS1OSNc5YLTm3tftfl++EViYGf6qVGUDhKKuwZ7Y8T1iHzERzuLGwlkbXxAXUPE
-         7oY0oKhiwLnCPPLnol2/uQ4Q6L0mQ80dsmFmY=
+        d=gmail.com; s=20210112; t=1681224398; x=1683816398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JrfRR7HhAFqhczXMVPJxrWKzrc2/IOvOKRMrdzOfWlc=;
+        b=ZIqJisXFCpVkcd+4us40BxlfABS295EDrQYsXBfH8r4HjPC2tHL+jM+r3jxpVjTMH+
+         BLB46FAMemCm0yTNM8sfvFJ6j7iiPUBqNmkb8WxokxUdIZ0TwkpVNr7yfE4clCFKQuNj
+         sVVVioaG0fsIqo1v4kSqk9NwIl+McUrRV+rPYbgJAftiv3fXLtS23yZOdt7vUhG4FpzJ
+         3Z7ZNC7mefUVMOHtAnHXGPDqEF8RNSUsF2vdnUoey87pwkGDDMW9O1Mvdg4FxyohP8pL
+         HHcXFcH2/5udxRoPmBE9zWm5wfbMcwEP6S0Rz7zRp0ecSzNc7xMsIXcxtJyPKeayibK4
+         US2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681224234;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bFrLw6zphVlz4pdr5/y9hU7mKuJn6EFgXAarb/1MgNg=;
-        b=rRUaFsppxXhAuoXB5glaFlLI6a3S7a3zDV6/hhjxG05wW4H04YLjbUXRxPS7jXpnI4
-         RWuUl88jAQ8QkyT2umn1IK5kdXLIKBzT0wyFAvdMLRI56bPA7FEBDPtfE3+2G2kLO1Yc
-         /RHEtyiSiR8ws5cIwBGiZ3nf13c3bhAXqxht5kz9Usqq6j/hEpnAQKBRFUngFxIyeLN9
-         TF5OEjNrS0/gBB0vnUI83pUcRvWDiMyINJDJNMVFzX1JHg/G4J2UnfBq5A/sKA8NRMuh
-         F2Uk9QUt6S/XYusj/8jhsrC3xNtwJDMobu8EwnNO3KAABnXhY5XnXXyz6lVlQw8ZjnkU
-         Lr6Q==
-X-Gm-Message-State: AAQBX9fTyenqFDl0y7tULc3V7yLaT34bvkm0G1sCb293WoxI6g19B2W8
-        Uyy3rAod/JhVb8URh/q97LpfXg==
-X-Google-Smtp-Source: AKy350YfCjAzBtozcHyDcYRR5tTo5Fu2xDGWfVpf+b9HpvPB8lFaCOrEdiiGsq5gGvLyZ2MSv4KFhQ==
-X-Received: by 2002:a05:600c:4408:b0:3ed:793d:9dd6 with SMTP id u8-20020a05600c440800b003ed793d9dd6mr8083422wmn.1.1681224233907;
-        Tue, 11 Apr 2023 07:43:53 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003eb966d39desm17370123wml.2.2023.04.11.07.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 07:43:53 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:43:51 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm/drm_plane.h: fix grammar of the comment
-Message-ID: <ZDVyJ4AQLW7deNhH@phenom.ffwll.local>
-Mail-Followup-To: Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Sui Jingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230409131547.494128-1-15330273260@189.cn>
+        d=1e100.net; s=20210112; t=1681224398; x=1683816398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JrfRR7HhAFqhczXMVPJxrWKzrc2/IOvOKRMrdzOfWlc=;
+        b=4LIHlUgqWrw2IV7gBPEoN1MN2A9YabLw+WTLMb68w/UzWHl/F1f+D+3xeOiifemwhB
+         npH47HpD2P1wonoVl5zNuwaEkGu9twGPTD4+MgM+POHdfYBOAbLH2z7Nq1NtWZ3rwBei
+         ONnwsfKjG83iu/sqMLc2smSaqOQmwg9jGqmn4E6koFjYSW+RR/GWpGt0djcu2GRd3GJT
+         oi6vmLNBST/lTMoeSG/vbrbxtoltDFmg34oMwchDdwM9QZrzyXvdRmLENOuX+Jywda5l
+         fsqNvz5eNY6wDVIX8VzTaAHNTwu6OoRQEhjlvrN3d2e1bAKsktW6jskIyfapVEVmY8JI
+         uR4Q==
+X-Gm-Message-State: AAQBX9cBgUUyUEwFCNIa9jQyuhIUj8mavOtoipa8UqZXWaUkhNxQ2KYH
+        y/QfO2MdTbTbEzHx8Mt7csMPpg/+vxyIGOcyt8o=
+X-Google-Smtp-Source: AKy350YyAmf8dRnzbklcOFFfkDftOQv7P7qLqfumZ97TrhAv8Bn0J8jkhexehkE0CLfJ8OA0q6X/5den4E6MbNfC9EM=
+X-Received: by 2002:aca:1b19:0:b0:387:e26:4b6f with SMTP id
+ b25-20020aca1b19000000b003870e264b6fmr2155450oib.3.1681224397797; Tue, 11 Apr
+ 2023 07:46:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230409131547.494128-1-15330273260@189.cn>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
+References: <20230331164041.1859088-1-trix@redhat.com> <DM6PR12MB26199298CA3AFC2736E8E9CDE4959@DM6PR12MB2619.namprd12.prod.outlook.com>
+In-Reply-To: <DM6PR12MB26199298CA3AFC2736E8E9CDE4959@DM6PR12MB2619.namprd12.prod.outlook.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 11 Apr 2023 10:46:26 -0400
+Message-ID: <CADnq5_MK=2WeQ0MpM9g36B1z8mSRMV24Au0+sHdd__=mQDodfQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: remove unused num_of_active_display variable
+To:     "Quan, Evan" <Evan.Quan@amd.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
+        "Feng, Kenneth" <Kenneth.Feng@amd.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "Wang, Yang(Kevin)" <KevinYang.Wang@amd.com>,
+        "Huang, Tim" <Tim.Huang@amd.com>,
+        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
+        "Liu, Kun" <Kun.Liu2@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 09, 2023 at 09:15:47PM +0800, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
-> 
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Applied.  Thanks!
 
-Applied to drm-misc-next, thanks
-
-> ---
->  include/drm/drm_plane.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
-> index 51291983ea44..79d62856defb 100644
-> --- a/include/drm/drm_plane.h
-> +++ b/include/drm/drm_plane.h
-> @@ -56,7 +56,7 @@ struct drm_plane_state {
->  	/**
->  	 * @crtc:
->  	 *
-> -	 * Currently bound CRTC, NULL if disabled. Do not this write directly,
-> +	 * Currently bound CRTC, NULL if disabled. Do not write this directly,
->  	 * use drm_atomic_set_crtc_for_plane()
->  	 */
->  	struct drm_crtc *crtc;
-> -- 
-> 2.25.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+On Sun, Apr 9, 2023 at 8:48=E2=80=AFPM Quan, Evan <Evan.Quan@amd.com> wrote=
+:
+>
+> [AMD Official Use Only - General]
+>
+> Reviewed-by: Evan Quan <evan.quan@amd.com>
+>
+> > -----Original Message-----
+> > From: Tom Rix <trix@redhat.com>
+> > Sent: Saturday, April 1, 2023 12:41 AM
+> > To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> > airlied@gmail.com; daniel@ffwll.ch; nathan@kernel.org;
+> > ndesaulniers@google.com; Zhang, Hawking <Hawking.Zhang@amd.com>;
+> > Feng, Kenneth <Kenneth.Feng@amd.com>; Lazar, Lijo
+> > <Lijo.Lazar@amd.com>; Wang, Yang(Kevin) <KevinYang.Wang@amd.com>;
+> > Huang, Tim <Tim.Huang@amd.com>; andrealmeid@igalia.com; Liu, Kun
+> > <Kun.Liu2@amd.com>; Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; lin=
+ux-
+> > kernel@vger.kernel.org; llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
+> > Subject: [PATCH] drm/amd/pm: remove unused num_of_active_display
+> > variable
+> >
+> > clang with W=3D1 reports
+> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:1700:6: error:
+> > variable
+> >   'num_of_active_display' set but not used [-Werror,-Wunused-but-set-
+> > variable]
+> >         int num_of_active_display =3D 0;
+> >             ^
+> > This variable is not used so remove it.
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 7 -------
+> >  1 file changed, 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > index b5d64749990e..f93f7a9ed631 100644
+> > --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> > @@ -1696,8 +1696,6 @@ static int smu_display_configuration_change(void
+> > *handle,
+> >                                           const struct
+> > amd_pp_display_configuration *display_config)  {
+> >       struct smu_context *smu =3D handle;
+> > -     int index =3D 0;
+> > -     int num_of_active_display =3D 0;
+> >
+> >       if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
+> >               return -EOPNOTSUPP;
+> > @@ -1708,11 +1706,6 @@ static int smu_display_configuration_change(void
+> > *handle,
+> >       smu_set_min_dcef_deep_sleep(smu,
+> >                                   display_config-
+> > >min_dcef_deep_sleep_set_clk / 100);
+> >
+> > -     for (index =3D 0; index < display_config-
+> > >num_path_including_non_display; index++) {
+> > -             if (display_config->displays[index].controller_id !=3D 0)
+> > -                     num_of_active_display++;
+> > -     }
+> > -
+> >       return 0;
+> >  }
+> >
+> > --
+> > 2.27.0
