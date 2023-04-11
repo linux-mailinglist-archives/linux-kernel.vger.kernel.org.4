@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1712D6DE462
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50806DE464
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDKSz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229687AbjDKSz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDKSzY (ORCPT
+        with ESMTP id S229437AbjDKSz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:55:24 -0400
+        Tue, 11 Apr 2023 14:55:56 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066D110EA;
-        Tue, 11 Apr 2023 11:55:24 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pww0Q3B1Sz67Rl1;
-        Wed, 12 Apr 2023 02:51:02 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07B4E5F;
+        Tue, 11 Apr 2023 11:55:54 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pww112mHPz67L71;
+        Wed, 12 Apr 2023 02:51:33 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 19:55:21 +0100
+ 15.1.2507.23; Tue, 11 Apr 2023 19:55:52 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
         <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>
@@ -30,9 +30,9 @@ CC:     <mingo@redhat.com>, <acme@kernel.org>, <dan.j.williams@intel.com>,
         <linux-kernel@vger.kernel.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v5 1/5] perf: Allow a PMU to have a parent
-Date:   Tue, 11 Apr 2023 19:54:48 +0100
-Message-ID: <20230411185452.23387-2-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v5 2/5] cxl: Add functions to get an instance of / count regblocks of a given type
+Date:   Tue, 11 Apr 2023 19:54:49 +0100
+Message-ID: <20230411185452.23387-3-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230411185452.23387-1-Jonathan.Cameron@huawei.com>
 References: <20230411185452.23387-1-Jonathan.Cameron@huawei.com>
@@ -52,50 +52,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some PMUs have well defined parents such as PCI devices.
-As the device_initialize() and device_add() are all within
-pmu_dev_alloc() which is called from perf_pmu_register()
-there is no opportunity to set the parent from within a driver.
+Until the recently release CXL 3.0 specification, there
+was only ever one instance of any given register block pointed
+to by the Register Block Locator DVSEC. Now, the specification allows
+for multiple CXL PMU instances, each with their own register block.
 
-Add a struct device *parent field to struct pmu and use that
-to set the parent.
+To enable this add cxl_find_regblock_instance() that takes an index
+parameter and use that to implement cxl_count_regblock() and
+cxl_find_regblock().
 
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
-v5: Move to head of series as may merge as part of:
-https://lore.kernel.org/all/20230404134225.13408-1-Jonathan.Cameron@huawei.com/
----
- include/linux/perf_event.h | 1 +
- kernel/events/core.c       | 1 +
- 2 files changed, 2 insertions(+)
+Dropped RBs as significant refactor for v5.
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..b99db1eda72c 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -303,6 +303,7 @@ struct pmu {
+v5: Thanks to Dan Williams,
+ - As there is only one case of repeated regblocks so far keep
+   cxl_find_regblock() as finding the first instance but implement
+   it using a new cxl_find_regblock_instance() function, also used
+   to implement the counting function.
+---
+ drivers/cxl/core/regs.c | 59 ++++++++++++++++++++++++++++++++++++-----
+ drivers/cxl/cxl.h       |  3 +++
+ 2 files changed, 56 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index 1476a0299c9b..4b9672db867d 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -286,20 +286,23 @@ static bool cxl_decode_regblock(struct pci_dev *pdev, u32 reg_lo, u32 reg_hi,
+ }
  
- 	struct module			*module;
- 	struct device			*dev;
-+	struct device			*parent;
- 	const struct attribute_group	**attr_groups;
- 	const struct attribute_group	**attr_update;
- 	const char			*name;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index fb3e436bcd4a..a84c282221f2 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -11367,6 +11367,7 @@ static int pmu_dev_alloc(struct pmu *pmu)
+ /**
+- * cxl_find_regblock() - Locate register blocks by type
++ * cxl_find_regblock_instance() - Locate a register block by type / index
+  * @pdev: The CXL PCI device to enumerate.
+  * @type: Register Block Indicator id
+  * @map: Enumeration output, clobbered on error
++ * @index: Index into which particular instance of a regblock wanted in the
++ *	   order found in register locator DVSEC.
+  *
+  * Return: 0 if register block enumerated, negative error code otherwise
+  *
+  * A CXL DVSEC may point to one or more register blocks, search for them
+- * by @type.
++ * by @type and @index.
+  */
+-int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+-		      struct cxl_register_map *map)
++int cxl_find_regblock_instance(struct pci_dev *pdev, enum cxl_regloc_type type,
++			       struct cxl_register_map *map, int index)
+ {
+ 	u32 regloc_size, regblocks;
++	int instance = 0;
+ 	int regloc, i;
  
- 	dev_set_drvdata(pmu->dev, pmu);
- 	pmu->dev->bus = &pmu_bus;
-+	pmu->dev->parent = pmu->parent;
- 	pmu->dev->release = pmu_dev_release;
+ 	map->resource = CXL_RESOURCE_NONE;
+@@ -323,15 +326,59 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ 		if (!cxl_decode_regblock(pdev, reg_lo, reg_hi, map))
+ 			continue;
  
- 	ret = dev_set_name(pmu->dev, "%s", pmu->name);
+-		if (map->reg_type == type)
+-			return 0;
++		if (map->reg_type == type) {
++			if (index == instance)
++				return 0;
++			instance++;
++		}
+ 	}
+ 
+ 	map->resource = CXL_RESOURCE_NONE;
+ 	return -ENODEV;
+ }
++EXPORT_SYMBOL_NS_GPL(cxl_find_regblock_instance, CXL);
++
++/**
++ * cxl_find_regblock() - Locate register blocks by type
++ * @pdev: The CXL PCI device to enumerate.
++ * @type: Register Block Indicator id
++ * @map: Enumeration output, clobbered on error
++ *
++ * Return: 0 if register block enumerated, negative error code otherwise
++ *
++ * A CXL DVSEC may point to one or more register blocks, search for them
++ * by @type.
++ */
++int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
++		      struct cxl_register_map *map)
++{
++	return cxl_find_regblock_instance(pdev, type, map, 0);
++}
+ EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
+ 
++/**
++ * cxl_count_regblock() - Count instances of a given regblock type.
++ * @pdev: The CXL PCI device to enumerate.
++ * @type: Register Block Indicator id
++ *
++ * Some regblocks may be repeated. Count how many instances.
++ *
++ * Return: count of matching regblocks.
++ */
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type)
++{
++	struct cxl_register_map map;
++	int rc, count = 0;
++
++	while (1) {
++		rc = cxl_find_regblock_instance(pdev, type, &map, count);
++		if (rc)
++			return count;
++		count++;
++	}
++}
++EXPORT_SYMBOL_NS_GPL(cxl_count_regblock, CXL);
++
+ resource_size_t cxl_rcrb_to_component(struct device *dev,
+ 				      resource_size_t rcrb,
+ 				      enum cxl_rcrb which)
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 044a92d9813e..f6e2a9ea5f41 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -260,6 +260,9 @@ int cxl_map_device_regs(struct device *dev, struct cxl_device_regs *regs,
+ 			struct cxl_register_map *map);
+ 
+ enum cxl_regloc_type;
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type);
++int cxl_find_regblock_instance(struct pci_dev *pdev, enum cxl_regloc_type type,
++			       struct cxl_register_map *map, int index);
+ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ 		      struct cxl_register_map *map);
+ 
 -- 
 2.37.2
 
