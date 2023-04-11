@@ -2,134 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68916DE15C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AEC6DE164
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjDKQqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S230134AbjDKQqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjDKQqI (ORCPT
+        with ESMTP id S229989AbjDKQqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:46:08 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EB659C9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:45:50 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id v1so8024069vsg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:45:50 -0700 (PDT)
+        Tue, 11 Apr 2023 12:46:35 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD2558E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:15 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id xi5so22001490ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681231548;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mIEqJhThfqATO21A0l51GhFD/DStlepMrZco0lBVm3U=;
-        b=yEtKIw265e9dv4kG8hejwXCrbyznibtKsKao/0UNThOgZuUUnt6NhuCa/uW+RGqEje
-         aJG7rMVy13g9viI7SxgQfYBLge2Z+E92wji+Vc3/YxDz9/qrvipKSSSf+1VfTaSBKwOF
-         Yc/zNxWbXKZafzdRUoplPgwXMkXYBytalT8tWG/wd3J61Bc+nJFeXbbexQWHeHatg1g6
-         a5GEeg6GZ3/wFdP/8BXJQwfgGsfPFXRMCzMTwDwzbBak/573a7iVbneqC9JaiNW+1Pay
-         0L1PvCVZoELluw1y4otr+Md7DDTpG+dZknXPjg42EhKfAnOGw/2zDZovbG6Fgkz6QV5a
-         cniQ==
+        d=linux-foundation.org; s=google; t=1681231573; x=1683823573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nWck0qnNaoiFiCtCGNjSsTsFcMjQqGSwfdGnBkruvQE=;
+        b=MbVv3M5wjyeWsSWIRL4r5ZirT7K5n9QJ5g/k24GIIt1qkwdAek7yEMtNBg3EoO6d0I
+         F2AjeCQZWficlvHmS5wc4oe850OJRh6/7ccdaeoXIHdllOzLIEFksCCrG3d018hBKMN0
+         c8jpBDr9uoHQ8gTXgv193cG+89LSFZRveSDfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681231548;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mIEqJhThfqATO21A0l51GhFD/DStlepMrZco0lBVm3U=;
-        b=O3V0wOpbDSbY1cXqeo76bccnpoGxKdznwMkC4dNuxOg2xF1b4opHbpaOXWvi4ZQQAN
-         PkIi9byoi8zh+02Hen0IEf2YSXzFrgUIj6xxFxP9EJaVJL5jY3iEX7I6xU5TjGS/iPtJ
-         A/yBImOMjqvRn4bO9/RkCSduCGHbhnN6Zg8dmxl5Fj55R3myrRT7VKT7rPzuFwpF2IHE
-         ZbnMIEhCWv434ZyxTTy1S2wsA4DOnHxWI5HsKQp0WxnwscCm2k/31K4dvmVcQUkLMHay
-         TXLfr6NIQcdeSvfklZEJqyz1UkkrXrnuLnX8/7FQclKHr8TTinqSwez7G6yKnV0t0iVT
-         VIVA==
-X-Gm-Message-State: AAQBX9fWCXsrFLWXO7OpAtI6tJpeZ41gUI4UWiEDFTe078x/eh7AO/8z
-        oeoE+Oj+LJmmwqzL4mCSvvj6ix5CykKBp6w1Lph6UQ==
-X-Google-Smtp-Source: AKy350aLiSIIUedc5/zLhlcykg263K0pGsG2J/2ArbvRP2ytHgzyUKMhyd6G8oT/XuNuItumcNW/oWkCNdWpfB6sNwE=
-X-Received: by 2002:a67:d492:0:b0:42c:6fe9:bcee with SMTP id
- g18-20020a67d492000000b0042c6fe9bceemr4138329vsj.1.1681231548148; Tue, 11 Apr
- 2023 09:45:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681231573; x=1683823573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nWck0qnNaoiFiCtCGNjSsTsFcMjQqGSwfdGnBkruvQE=;
+        b=Jwnu8SEe/ueJxOqAAaN1N2sx2jyXW2Eg5VOdoKHF49W2ZdEHn74H8xTbsTRoTuRRMA
+         bO42V/vOGSl+f85o9PQwWdKDhDuoSTb/PFvnOpPvLYMGrDGCNhUIwVvTbF8rb7Cfg3xK
+         AUCDV+n30koDSUQTG6x0D/wNNM3Fb36SS1FE1vb1ZQaFtspIMrGTT+yTwh9Y4HwnBozg
+         5bY/I0611mnPL3VMTZJW1+a+ZHFKX+OABmadPvWF7AzoUFjPDerUjRRd9coa66WbtgVh
+         T+hFl5EYijP4jEhMRiP5U5ewj7DXXbt3/lxPCkJ6TD69AJC5Gt1SajbAv7Hqx0LWJtT0
+         5txA==
+X-Gm-Message-State: AAQBX9e7l1Z4WwI1QgtN6xP/7vFkM//qR1GtzDsh2xiuT7IOg5YpkQRC
+        yr9uT2cOlvGcIfkzou1jKFJYxU+PsMOA5pqTM6XW2A==
+X-Google-Smtp-Source: AKy350Z3ge2rAJKkXh1IQ4Mk59RaFDbL3Bz+8zCwpchHb+2gpODeKFQrHKi1OJ31MiDqtgwsIWqEGw==
+X-Received: by 2002:a17:906:c08a:b0:932:c1e2:9983 with SMTP id f10-20020a170906c08a00b00932c1e29983mr12872666ejz.15.1681231573205;
+        Tue, 11 Apr 2023 09:46:13 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id t6-20020a50ab46000000b0050499afe96bsm2866276edc.10.2023.04.11.09.46.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 09:46:12 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50489a2bc4dso2028766a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:46:12 -0700 (PDT)
+X-Received: by 2002:a50:baec:0:b0:504:9390:180f with SMTP id
+ x99-20020a50baec000000b005049390180fmr4434766ede.2.1681231571945; Tue, 11 Apr
+ 2023 09:46:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
- <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com> <20230406105646.GB1545779@pevik>
-In-Reply-To: <20230406105646.GB1545779@pevik>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Apr 2023 22:15:36 +0530
-Message-ID: <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
-Subject: Re: LTP: list of failures on 32bit and compat mode
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        open list <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
-        chrubis <chrubis@suse.cz>, Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        Tudor Cretu <tudor.cretu@arm.com>
+References: <20230410153917.1313858-1-pbonzini@redhat.com> <CAHk-=wiYktfscvihY0k6M=Rs=Xykx9G7=oT5uCy1A80zpmu1Jg@mail.gmail.com>
+ <2560f4b4-8620-6160-eee5-4086630bb5cc@redhat.com>
+In-Reply-To: <2560f4b4-8620-6160-eee5-4086630bb5cc@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Apr 2023 09:45:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whSZViPSuwTv02P34ncDJNFdZS4RoDxN4C2EEoff-W7Ew@mail.gmail.com>
+Message-ID: <CAHk-=whSZViPSuwTv02P34ncDJNFdZS4RoDxN4C2EEoff-W7Ew@mail.gmail.com>
+Subject: Re: [GIT PULL] KVM changes for Linux 6.3-rc7
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 16:26, Petr Vorel <pvorel@suse.cz> wrote:
+On Mon, Apr 10, 2023 at 11:34=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com=
+> wrote:
 >
-> > On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
-> > > Following LTP syscalls failed on the i386 and arm environments with
-> > > Linux next / mainline kernels. The userspace is coming from Open
-> > > Embedded kirkstone.
->
-> > Thanks for the report and summary! I went through the list and found
-> > that most if not all of the bugs looks like incompatibilities
-> > with musl, not with 32-bit. It's probably not well tested with
-> > musl.
->
-> > Can you try again with glibc and see if there are any remaining
-> > issues then? LTP should probably be fixed to work with both, but
-> > if nobody has done that so far, it's likely that this has come
-> > up in the past but ran into problems upstreaming the fixes.
->
-> > > Anyone seeing this problem on 32-bit i386 or arm ?
-> > > You get to see "segfault" in the following logs that have been noticed
-> > > on i386 only.
->
-> > > This is not a new problem. We have been noticing these failures for a
-> > > really long time.
-> > > Would it be worth investigating the reason for failures on 32bit architectures ?
->
-> > > Test logs,
-> > > -----
-> > > [    0.000000] Linux version 6.3.0-rc5-next-20230406 (tuxmake@tuxmake)
-> > > (i686-linux-gnu-gcc (Debian 11.3.0-11) 11.3.0, GNU ld (GNU Binutils
-> > > for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1680759389
->
->
-> > > Test environment: i386
-> > > Suite: ltp-syscalls
-> > > Toolchain: gcc-11
->
->
-> > > fstatfs02
-> > > fstatfs02    1  TPASS  :  expected failure - errno = 9 : Bad file descriptor
-> > > fstatfs02    2  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
-> > > received (pid = 17841).
-> > > fstatfs02    3  TBROK  :  tst_sig.c:232: Remaining cases broken
-> This is IMHO using the old LTP API.
-> testcases/kernel/syscalls/fstatfs/fstatfs02.c was converted to new LTP API in
-> 5a8f89d35 ("syscalls/statfs02, fstatfs02: Convert to new API"), which was
-> released in 20220930. There is already newer release 20230127.
-> Generally it's safer to test mainline kernel with LTP master,
-> but this fix has already been in the latest LTP release 20230127.
-> And this error has been later fixed with
-> 492542072 ("syscalls/statfs02, fstatfs02: Accept segfault instead of EFAULT")
+> Out of curiosity, do you have some kind of script that parses the "git
+> request-pull" messages and does these checks?  Or was it just the
+> mismatch between diffstat and tag message?
 
-Thanks for insite about the failed test investigations.
+For me, it's manual - I check that the diffstat matches, but also
+check that the description matches the shortlog I get.
 
->
-> @Naresh which LTP do you use for testing? It must be some older LTP :(.
+And if anything looks weird, I dig deeper (the diffstat often doesn't
+match - some people use "--patience" for the diff which can generate
+small differences, or there are other changes nearby so that the
+merged end result diffs differently from the pre-merge state etc etc).
 
-Our build system started running LTP version 20230127.
-I will keep you posted with the latest findings.
+But "git request-pull" should actually have warned you about the SHA's
+not matching. When it generates that
 
-- Naresh
+  "are available in the Git repository at:
+
+     https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+   for you to fetch changes up to 0bf9601f8ef0703523018e975d6c1f3fdfcff4b9:=
+"
+
+verbiage, it should actually have verified that the tag matches
+locally, and it generates that commit ID and the shortlog from the
+local tag.
+
+And the fact that the shortlog (and commit ID) you had was the
+expected one, but the tag pointed to something else makes me suspect
+that you are mis-using "git request-pull".
+
+I strongly suspect that you did the request-pull *without* pointing at
+the tag (in fact, you cannot possibly have pointed at the correct tag,
+since the request-pull contents did *not* match the tag contents), and
+then fixed things up manually later when you created the tag.
+
+So you must have explicitly avoided all the automation that "git
+request-pull" does.
+
+              Linus
