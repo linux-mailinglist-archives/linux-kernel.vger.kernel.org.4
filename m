@@ -2,173 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDDC6DE7CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4D26DE7CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjDKXIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        id S229567AbjDKXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDKXIN (ORCPT
+        with ESMTP id S229507AbjDKXKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:08:13 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9885F199D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:08:09 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id q5so12777348ybk.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681254489; x=1683846489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eIyxfCRdtVW6DZEqESNyM82Zcjpw6q1yxE2SLi7Q/10=;
-        b=XXnbf3ZXHmVyyAWosjbgtLtVe0obVxWMHT6ER5WKVjE2//n1kQT1vqGfH+itDlXM2k
-         2fneTH+5x2uocctQ6SccdU559tW16dOAzYZt4SUNr3SQZoWWsatyRHmcKNDLHGZiFZX1
-         ngNGr73HAG/JBY+0W9DmkWkoC+3V3vgClv7PS81c7UdnCx+3aMFz1Ishp4aKe2GcG+9q
-         +3SRRyJSTGsRHSMejxxYLambtKEVZffeY9ZCgEkqByHxjKnrI4D7N/WlEOpBuqUt0lI4
-         YOvKnY4/lPDxTBJnhmllQ0VSpmZ1AJLwV7aGqPZH7Infu2EyjgWnt0Qsp4/uyydvAv+I
-         TYrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681254489; x=1683846489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eIyxfCRdtVW6DZEqESNyM82Zcjpw6q1yxE2SLi7Q/10=;
-        b=m27I7t8S8BRrq+GU28JH99Y4V0HWq1jf2w4EWg9Zvo6M08hzXJeSFtnYvybzg55EBS
-         +cXI38lu1Ffai5J6s4Ro7WkZkq4hvQUjsYu13QhykOjZJKp8uDsn4CB39Sr4xAMhIRYC
-         PK8bzmgozDLRIQtj+aMBpo6OIrwQ4bAjfT/eCFcHYMAczonsasVrxPHB1AWm+oOCIJt3
-         itZwAKbVQfCKmnv3bCQ7c6FLNZdlwwkCyMOQjsJt+Qb9EeY7XvowpoiZy5ckuV9uWIR1
-         /+fqxU3HZukH/fHF+5ph6ZExIuZ8JHCcIBhI4U3/UfSgaqSa8oU3xC+6gmEukNIA4IR1
-         XS1w==
-X-Gm-Message-State: AAQBX9fCY9jmsRt6E/EFZV8GTzLnz6vTkQaUth1xk/3CICdVzhPuDfOe
-        k5lCh2AS/8Pg8ks2qtJcTGd992gUagbMCzaW6zIu
-X-Google-Smtp-Source: AKy350YGpKFShus1wXg4P7JDpOEQwCA2ZUIAFxOOzluNG03DhrMlLa19ZC7t5ZHiN0J6rZ9Xc6wbx1W+NEq2mwRq1zY=
-X-Received: by 2002:a25:d702:0:b0:b68:7a4a:5258 with SMTP id
- o2-20020a25d702000000b00b687a4a5258mr377571ybg.3.1681254488697; Tue, 11 Apr
- 2023 16:08:08 -0700 (PDT)
+        Tue, 11 Apr 2023 19:10:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2BF26A6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C999F62C59
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AF9C433EF;
+        Tue, 11 Apr 2023 23:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681254615;
+        bh=iRSaQxMso9NMr7Mmouuhi8hqfQsK/M9/LJ/+YH83b4A=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=RR4i3nfvV2Gl/ByE//CQODdIMIw0z53H8jYiiaWodkASz+had1Cwwh/jqoOz/IUR7
+         FIWL5kB/AmLxpVMWt/JV2uW6IVo8npeS7qIaxMsBgfk6CSTQDE5tkiuIQBbgHsvZlz
+         4tZOgrhtTU/0Jm8RBHeJEzY2PvalUpgzWMrnmPYHP25ZRbUPhOE4L55eViS2mH8zZM
+         5y+VSpGECdAHtlZoYKRYivIy6lnUbq+MK0LfwnKLS/aOUa+HtTdvdtKGBHOyUWHECy
+         EaetVB3n6R+iQ85QiFHmug6C08Mmta7HSxHQaNOH4iJ2eEmDeJXFzZ/B7gvwIP5mci
+         H2LB9rYRqhirQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id B73981540478; Tue, 11 Apr 2023 16:10:14 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:10:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        stern@rowland.harvard.edu, jonas.oberhauser@huaweicloud.com,
+        joel@joelfernandes.org, rdunlap@infradead.org
+Subject: [GIT PULL] LKMM changes for v6.4
+Message-ID: <628d04f3-8bd3-4950-bcbe-49ff52ec408b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-8-git-send-email-wufan@linux.microsoft.com>
- <3723852.kQq0lBPeGt@x2> <CAHC9VhRqMrTuvVtwzJoK2U=6O1QuaQ8ceA6+qm=6ib0TOUEeSw@mail.gmail.com>
- <20230316225340.GB22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230316225340.GB22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 11 Apr 2023 19:07:57 -0400
-Message-ID: <CAHC9VhQxxrDnzJmUitMid3fk-VwNRU3NWoqjpj1=rhrtpoE=7w@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 07/16] uapi|audit|ipe: add ipe auditing support
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     Steve Grubb <sgrubb@redhat.com>, corbet@lwn.net,
-        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
-        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
-        linux-audit@redhat.com, dm-devel@redhat.com,
-        linux-doc@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 6:53=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
-> On Thu, Mar 02, 2023 at 02:05:33PM -0500, Paul Moore wrote:
-> > On Tue, Jan 31, 2023 at 12:11???PM Steve Grubb <sgrubb@redhat.com> wrot=
-e:
-> > >
-> > > Hello,
-> > >
-> > > On Monday, January 30, 2023 5:57:22 PM EST Fan Wu wrote:
-> > > > From: Deven Bowers <deven.desai@linux.microsoft.com>
-> > > >
-> > > > Users of IPE require a way to identify when and why an operation fa=
-ils,
-> > > > allowing them to both respond to violations of policy and be notifi=
-ed
-> > > > of potentially malicious actions on their systens with respect to I=
-PE
-> > > > itself.
-> > > >
-> > > > The new 1420 audit, AUDIT_IPE_ACCESS indicates the result of a poli=
-cy
-> > > > evaulation of a resource. The other two events, AUDIT_MAC_POLICY_LO=
-AD,
-> > > > and AUDIT_MAC_CONFIG_CHANGE represent a new policy was loaded into =
-the
-> > > > kernel and the currently active policy changed, respectively.
-> > >
-> > > Typically when you reuse an existing record type, it is expected to m=
-aintain
-> > > the same fields in the same order. Also, it is expect that fields tha=
-t are
-> > > common across diferent records have the same meaning. To aid in this,=
- we have
-> > > a field dictionary here:
-> > >
-> > > https://github.com/linux-audit/audit-documentation/blob/main/specs/fi=
-elds/
-> > > field-dictionary.csv
-> > >
-> > > For example, dev is expected to be 2 hex numbers separated by a colon=
- which
-> > > are the device major and minor numbers. But down a couple lines from =
-here, we
-> > > find dev=3D"tmpfs". But isn't that a filesystem type?
-> >
-> > What Steve said.
-> >
-> > I'll also add an administrative note, we just moved upstream Linux
-> > audit development to a new mailing list, audit@vger.kernel.org, please
-> > use that in future patch submissions.  As a positive, it's a fully
-> > open list so you won't run into moderation delays/notifications/etc.
-> >
-> Thanks for the info, I will update the address.
->
-> > > > This patch also adds support for success auditing, allowing users t=
-o
-> > > > identify how a resource passed policy. It is recommended to use thi=
-s
-> > > > option with caution, as it is quite noisy.
-> > > >
-> > > > This patch adds the following audit records:
-> > > >
-> > > >   audit: AUDIT1420 path=3D"/tmp/tmpwxmam366/deny/bin/hello" dev=3D"=
-tmpfs"
-> > > >     ino=3D72 rule=3D"DEFAULT op=3DEXECUTE action=3DDENY"
-> > >
-> > > Do we really need to log the whole rule?
-> >
-> > Fan, would it be reasonable to list the properties which caused the
-> > access denial?  That seems like it might be more helpful than the
-> > specific rule, or am I missing something?
->
-> Audit the whole rule can let the user find the reason of a policy decisio=
-n.
-> We need the whole rule because an allow/block is not caused by a specific
-> property, but the combination of all property conditions in a rule.
+Hello, Linus,
 
-Okay, that's a reasonable argument for logging the rule along with the
-decision.  I think it helps that the IPE policy rules are not
-particularly long.
+Once the v6.4 merge window opens, please pull these LKMM updates from:
 
-> We could also add a verbose switch such that we only audit
-> the whole rule when a user turned the verbose switch on.
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2023.04.07a
+  # HEAD: 57373671d5f5a92ee02d32e0b8506351ae30d33f: Documentation: litmus-tests: Correct spelling (2023-03-22 12:02:21 -0700)
 
-I'm not sure that's necessary, and honestly it might be annoying as we
-would still need to output a 'rule=3D"?"' field in the audit record as
-it is considered good practice to not have fields magically appear and
-disappear from the record format.  However, if there are concerns
-about record sizes, that could be a potential mitigation.
+----------------------------------------------------------------
+LKMM updates for v6.4
 
---=20
-paul-moore.com
+This update improves LKMM diagnostic messages, unifies handling
+of the ordering produced by unlock/lock pairs, adds support for the
+smp_mb__after_srcu_read_unlock() macro, removes redundant members from
+the to-r relation, brings SRCU read-side semantics into alignment
+with Linux-kernel SRCU, makes ppo a subrelation of po, and improves
+documentation.
+
+----------------------------------------------------------------
+Alan Stern (3):
+      tools/memory-model: Update some warning labels
+      tools/memory-model: Provide exact SRCU semantics
+      tools/memory-model: Add documentation about SRCU read-side critical sections
+
+Joel Fernandes (Google) (1):
+      tools/memory-model: Restrict to-r to read-read address dependency
+
+Jonas Oberhauser (2):
+      tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-po
+      tools/memory-model: Make ppo a subrelation of po
+
+Paul E. McKenney (1):
+      tools/memory-model: Add smp_mb__after_srcu_read_unlock()
+
+Randy Dunlap (1):
+      Documentation: litmus-tests: Correct spelling
+
+ Documentation/litmus-tests/README                |   2 +-
+ tools/memory-model/Documentation/explanation.txt | 178 +++++++++++++++++++++--
+ tools/memory-model/linux-kernel.bell             |  30 ++--
+ tools/memory-model/linux-kernel.cat              |  20 ++-
+ tools/memory-model/linux-kernel.def              |   7 +-
+ tools/memory-model/lock.cat                      |   6 +-
+ 6 files changed, 204 insertions(+), 39 deletions(-)
