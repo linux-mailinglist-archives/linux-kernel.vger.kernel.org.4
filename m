@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B636DD68D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F2F6DD689
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjDKJ1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S229588AbjDKJ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDKJ1p (ORCPT
+        with ESMTP id S229452AbjDKJ1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:27:45 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A451736;
-        Tue, 11 Apr 2023 02:27:44 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4pNUi026389;
-        Tue, 11 Apr 2023 04:27:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=tbVjMlrmInbvJ7aczvEH3xSHbYoDsBqY+xs8DjEREbo=;
- b=fry3zmp8rtSd424svKSkVlV9XPH/+OsPxxxWzpgHfXls0gLPKBKHu2p6gXEjUjFXnmXb
- VtRj6wWjqRrUeEQHiWuMp6BKZys6BKXfDmm+n+TTXDNXfS/JU6rHcONz551AiCIwSb9M
- YTe099nnLQ9135sinAH5H4MP5/GLNKvw7i+my416gYDwlpp5QI6d1Q7PSjwv3Cb3pZCp
- FofkWhSUeGk9JuTnsjbF1vrQtZPcBz6jWy6xkSHlyoDxqL8MF8z7qq2fTJ4YVJl0pR0W
- Y03Eg1t+a05gXr7eGMcPnQpL8ANHDFgMwn+Jg07eCvBvCj9+tdp5nUQQOalYxHXxh3+l jQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pu4pq4gnf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:27:10 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 11 Apr
- 2023 04:27:09 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 11 Apr 2023 04:27:09 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E486915A4;
-        Tue, 11 Apr 2023 09:27:08 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 09:27:08 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Jeff LaBundy <jeff@labundy.com>
-CC:     Fred Treven <fred.treven@cirrus.com>, <dmitry.torokhov@gmail.com>,
-        <ben.bright@cirrus.com>, <james.ogletree@cirrus.com>,
-        <lee@kernel.org>, <jdelvare@suse.de>, <joel@jms.id.au>,
-        <cy_huang@richtek.com>, <rdunlap@infradead.org>,
-        <eajames@linux.ibm.com>, <ping.bai@nxp.com>, <msp@baylibre.com>,
-        <arnd@arndb.de>, <bartosz.golaszewski@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH 1/2] Input: cs40l26: Support for CS40L26 Boosted Haptic
- Amplifier
-Message-ID: <20230411092708.GX68926@ediswmail.ad.cirrus.com>
-References: <SupportforCS40L26BoostedHapticAmplifier>
- <1680819415-28806-1-git-send-email-fred.treven@cirrus.com>
- <ZDI0p5Rkp74SzJCv@nixie71>
- <20230410085634.GV68926@ediswmail.ad.cirrus.com>
- <ZDSqfHemG8pKj1k7@nixie71>
+        Tue, 11 Apr 2023 05:27:25 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F303E1736;
+        Tue, 11 Apr 2023 02:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681205244; x=1712741244;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=iI2t87/uhLKu3MKVrrkEskkv3w9ib+0I3zw/GUEjajw=;
+  b=fA2ZYkmtZyAj46GgMkTyiTjPTIuCuEE9fAXfU0eqkdrBK5yrSfvChHDF
+   7kGfk6QekFmJKI8wnJqiv6ctceYwL6rr9V9tiY8Wi/M1+Z7Mdm07CiHxB
+   V21+kaComAvW0dZJNWWEQI+lEPgTiGPQMbt+/2MPAAdycORi3SslG3//a
+   4poAt7YCizW1pIqB8+1xOSqIjwuWYnzlV+chsF6NCi2IAeFEhomwE5NaZ
+   a3JMP8L2ajSAZrThyw9kyqcSe1qQiCVx3/MRmA9XrqAwwbhYd88Vwp7uU
+   vlm7ykAwEW9xAhsWv9amvBCIiFALgJWp2ip1MtpksKlSH7BKWB9kzMzf2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="429855761"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="429855761"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="718902535"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="718902535"
+Received: from tunterlu-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.56.34])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:27:13 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/i915: constify pointers to hwmon_channel_info
+In-Reply-To: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+Date:   Tue, 11 Apr 2023 12:27:10 +0300
+Message-ID: <873556epld.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZDSqfHemG8pKj1k7@nixie71>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: UOXRTSioca8bC0ylK2hAIDGKJ6guRXkM
-X-Proofpoint-ORIG-GUID: UOXRTSioca8bC0ylK2hAIDGKJ6guRXkM
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,52 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 07:31:56PM -0500, Jeff LaBundy wrote:
-> On Mon, Apr 10, 2023 at 08:56:34AM +0000, Charles Keepax wrote:
-> > On Sat, Apr 08, 2023 at 10:44:39PM -0500, Jeff LaBundy wrote:
-> > I would far rather not have every single attempt to communicate
-> > with the device wrapped in a retry if the communication failed
-> > incase the device is hibernating. It seems much cleaner, and less
-> > likely to risk odd behaviour, to know we have brought the device
-> > out of hibernation.
+On Fri, 07 Apr 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>
+> Therefore I propose this should also go via hwmon tree.
 
-> A common way to deal with this is that of [1], where the bus calls
-> are simply wrapped with all retry logic limited to two places (read
-> and write). These functions could also print the register address
-> in case of failure, solving the problem of having dozens of custom
-> error messages thorughout the driver.
+Thanks for doing this, I couldn't be bothered to follow through with it
+[1].
 
-I suspect this really comes down to a matter of taste, but my
-thoughts would be that the code is shorter that way, but not
-necessarily simpler. This feels far more error prone and likely
-to encounter issues where the device hibernates at a time someone
-hadn't properly thought through. I am far more comfortable with
-the device is blocked from hibernating whilst the driver is
-actively engaged with it and it keeps any special handling for
-exiting hibernate in one place.
+Acked-by: Jani Nikula <jani.nikula@intel.com>
 
-> Does the current implementation at least allow the device to hibernate
-> while the system is otherwise active, as opposed to _only_ during
-> runtime suspend? If so, that's still a marked improvement from L25
-> era where customers rightfully pointed out that the downstream driver
-> was not making efficient use of hibernation. ;)
 
-I am not entirely sure I follow this one, yes the device can only
-hibernate whilst it is runtime suspended. But I don't understand
-why that is a problem being runtime resumed implies this device
-is active, not the system is otherwise active. I am not sure if
-I am missing your point or there is some confusion here between
-runtime and system suspend. The device can only hibernate during
-runtime suspend, but the only thing that determines being runtime
-resumed is activity on this device so in general it shouldn't be
-hibernating at that point anyway.
 
-> I don't feel particularly strongly about it, so if the current
-> implementation will stay, perhaps consider a few comments in this
-> area to describe how the device's state is managed.
-> 
+[1] https://lore.kernel.org/r/20230309082841.400118-1-jani.nikula@intel.com
 
-I certainly never object to adding some comments.
 
-Thanks,
-Charles
+>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>  drivers/gpu/drm/i915/i915_hwmon.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> index 596dd2c07010..87b527a54272 100644
+> --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> @@ -267,7 +267,7 @@ static const struct attribute_group *hwm_groups[] = {
+>  	NULL
+>  };
+>  
+> -static const struct hwmon_channel_info *hwm_info[] = {
+> +static const struct hwmon_channel_info * const hwm_info[] = {
+>  	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+>  	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+>  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+> @@ -275,7 +275,7 @@ static const struct hwmon_channel_info *hwm_info[] = {
+>  	NULL
+>  };
+>  
+> -static const struct hwmon_channel_info *hwm_gt_info[] = {
+> +static const struct hwmon_channel_info * const hwm_gt_info[] = {
+>  	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+>  	NULL
+>  };
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
