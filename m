@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8376DD5B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBF86DD5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjDKIef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S230490AbjDKIe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjDKIe2 (ORCPT
+        with ESMTP id S230471AbjDKIeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:34:28 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C082D5A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:34:25 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50489c6171dso2005129a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:34:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681202064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FIQy0z8jTVH7zpmG87sxcsYghwyL6FkUSdX2CbnH7m8=;
-        b=DuHQvrn/8Nf7AGWkzoPpopKmBeR2a55nT6ZfggsT2qQtV48yy/cy9SxnYQzW2ib8bO
-         l+Zo5ErASoESd8miPWGvAGnHoU9bryee0XJBjbAK7z4QKQkYO4jLjeEBOnmBrLbK8kJ+
-         vv2dQHMgucuaT+mXJWANkANvPStSVGQeKml4jhSTHXFfTitCk5Z3kGsAsMkvpXn8mo5S
-         ErPoKIUDsRKUucMhsTkfFrH5CWzeWicgIXwaGrofpQoi80gKqO8rNc18QNmUgOSMgQE3
-         kZ+dIGQMjCuI44Vj8mqxq4PK1IQsKN3F74PFsuJBqtnEyQ+pZIWBTgXlPFEXYJzAqJyZ
-         BEWQ==
-X-Gm-Message-State: AAQBX9d5QemXmzOLGIIew7aAiH7tfqXEAIpmWJBfg/5JJEjNxCWCJOJb
-        GH+IX8KGipFO+ZMZDFI+cp4=
-X-Google-Smtp-Source: AKy350abpQBdo14BHKyD1DlIP4kfKIBceIoChFJi8UO9MpvMFnw1yvMf7PbQU/JZNN6j9mYiJ9SMeA==
-X-Received: by 2002:aa7:de13:0:b0:502:a700:dc8b with SMTP id h19-20020aa7de13000000b00502a700dc8bmr8410709edv.9.1681202064337;
-        Tue, 11 Apr 2023 01:34:24 -0700 (PDT)
-Received: from localhost.localdomain (aftr-82-135-86-174.dynamic.mnet-online.de. [82.135.86.174])
-        by smtp.googlemail.com with ESMTPSA id v13-20020a50954d000000b004fc649481basm5683178eda.58.2023.04.11.01.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 01:34:23 -0700 (PDT)
-From:   Johannes Thumshirn <jth@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     JoseJavier.Rodriguez@duagon.com, Jorge.SanjuanGarcia@duagon.com,
-        linux-kernel@vger.kernel.org,
-        Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>,
-        Javier Rodriguez <josejavier.rodriguez@duagon.com>,
-        Johannes Thumshirn <jth@kernel.org>
-Subject: [PATCH 3/3] mcb-lpc: Reallocate memory region to avoid memory overlapping
-Date:   Tue, 11 Apr 2023 10:33:29 +0200
-Message-Id: <20230411083329.4506-4-jth@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230411083329.4506-1-jth@kernel.org>
-References: <20230411083329.4506-1-jth@kernel.org>
+        Tue, 11 Apr 2023 04:34:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976D40DD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:34:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5754C61E67
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86D2C433EF;
+        Tue, 11 Apr 2023 08:34:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681202048;
+        bh=vWRd0M+XDT89DUaEUaER2lgBgrSKrR9GWjWJ1XatS1w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=igmrbDkV7dy8imzW3rW9lvMJZtVqvlk/y2DUky4jxHWm1mbDe+Ddt/1OnbHeFEmbQ
+         Eu1t4Do/9FznM383edvHbCxoRfcha8jKCVJitNm2ohnWBfwid0v2KbBDQwb7UQ2kJb
+         x2PH9F8hSurDKwSdVvEBRc6fNJIshKUz+4MahxCZf6KqAL3uoyivcW306YXuw79V5K
+         qu3KfhgqjldXU4+PvMxa5/i3sdM+kWUzoTnXYmsJA3l62zxN/va34plc9VImY+fCAM
+         cz0csbXi0FXsra5Ku3vvmHRFY64L8lHYZ8vYieRWwIKmGh8t9J8O+MBNam81o9i4VX
+         VoDZW0AlMC1fw==
+Message-ID: <b05d7ce8-ef98-a7ef-9873-4403ec0858c1@kernel.org>
+Date:   Tue, 11 Apr 2023 16:34:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] f2fs: remove folio_detach_private() in
+ .invalidate_folio and .release_folio
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230410022418.1843178-1-chao@kernel.org>
+ <ZDRWdJxP6QzcIU7G@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZDRWdJxP6QzcIU7G@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rodríguez Barbarin, José Javier <JoseJavier.Rodriguez@duagon.com>
+On 2023/4/11 2:33, Jaegeuk Kim wrote:
+> On 04/10, Chao Yu wrote:
+>> We have maintain PagePrivate and page_private and page reference
+>> w/ {set,clear}_page_private_*, it doesn't need to call
+>> folio_detach_private() in the end of .invalidate_folio and
+>> .release_folio, remove it and use f2fs_bug_on instead.
+>>
+>> Signed-off-by: Chao Yu <chao@kernel.org>
+>> ---
+>>   fs/f2fs/data.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>> index 4946df6dd253..8b179b4bdc03 100644
+>> --- a/fs/f2fs/data.c
+>> +++ b/fs/f2fs/data.c
+>> @@ -3737,7 +3737,8 @@ void f2fs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
+>>   			inode->i_ino == F2FS_COMPRESS_INO(sbi))
+>>   		clear_page_private_data(&folio->page);
+>>   
+>> -	folio_detach_private(folio);
+>> +	f2fs_bug_on(sbi, PagePrivate(&folio->page));
+>> +	f2fs_bug_on(sbi, page_private(&folio->page));
+> 
+> I think we can just check page_private() only.
 
-mcb-lpc requests a fixed-size memory region to parse the chameleon
-table, however, if the chameleon table is smaller that the allocated
-region, it could overlap with the IP Cores' memory regions.
+Why? how about the case PagePrivate was set, but page_private was't? It must
+be a bug as well?
 
-After parsing the chameleon table, drop/reallocate the memory region
-with the actual chameleon table size.
+Thanks,
 
-Co-developed-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-Signed-off-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-Signed-off-by: Javier Rodriguez <josejavier.rodriguez@duagon.com>
-Signed-off-by: Johannes Thumshirn <jth@kernel.org>
----
- drivers/mcb/mcb-lpc.c | 35 +++++++++++++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/mcb/mcb-lpc.c b/drivers/mcb/mcb-lpc.c
-index 53decd89876e..a851e0236464 100644
---- a/drivers/mcb/mcb-lpc.c
-+++ b/drivers/mcb/mcb-lpc.c
-@@ -23,7 +23,7 @@ static int mcb_lpc_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
- 	struct priv *priv;
--	int ret = 0;
-+	int ret = 0, table_size;
- 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -58,16 +58,43 @@ static int mcb_lpc_probe(struct platform_device *pdev)
- 
- 	ret = chameleon_parse_cells(priv->bus, priv->mem->start, priv->base);
- 	if (ret < 0) {
--		mcb_release_bus(priv->bus);
--		return ret;
-+		goto out_mcb_bus;
- 	}
- 
--	dev_dbg(&pdev->dev, "Found %d cells\n", ret);
-+	table_size = ret;
-+
-+	if (table_size < CHAM_HEADER_SIZE) {
-+		/* Release the previous resources */
-+		devm_iounmap(&pdev->dev, priv->base);
-+		devm_release_mem_region(&pdev->dev, priv->mem->start, resource_size(priv->mem));
-+
-+		/* Then, allocate it again with the actual chameleon table size */
-+		res = devm_request_mem_region(&pdev->dev, priv->mem->start,
-+					      table_size,
-+					      KBUILD_MODNAME);
-+		if (!res) {
-+			dev_err(&pdev->dev, "Failed to request PCI memory\n");
-+			ret = -EBUSY;
-+			goto out_mcb_bus;
-+		}
-+
-+		priv->base = devm_ioremap(&pdev->dev, priv->mem->start, table_size);
-+		if (!priv->base) {
-+			dev_err(&pdev->dev, "Cannot ioremap\n");
-+			ret = -ENOMEM;
-+			goto out_mcb_bus;
-+		}
-+
-+		platform_set_drvdata(pdev, priv);
-+	}
- 
- 	mcb_bus_add_devices(priv->bus);
- 
- 	return 0;
- 
-+out_mcb_bus:
-+	mcb_release_bus(priv->bus);
-+	return ret;
- }
- 
- static int mcb_lpc_remove(struct platform_device *pdev)
--- 
-2.39.2
-
+> 
+>>   }
+>>   
+>>   bool f2fs_release_folio(struct folio *folio, gfp_t wait)
+>> @@ -3759,7 +3760,9 @@ bool f2fs_release_folio(struct folio *folio, gfp_t wait)
+>>   	clear_page_private_reference(&folio->page);
+>>   	clear_page_private_gcing(&folio->page);
+>>   
+>> -	folio_detach_private(folio);
+>> +	f2fs_bug_on(sbi, PagePrivate(&folio->page));
+>> +	f2fs_bug_on(sbi, page_private(&folio->page));
+>> +
+>>   	return true;
+>>   }
+>>   
+>> -- 
+>> 2.25.1
