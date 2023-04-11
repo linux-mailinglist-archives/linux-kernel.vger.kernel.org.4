@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB566DCFDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9688D6DCFDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDKCsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 22:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S229777AbjDKCuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 22:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDKCsa (ORCPT
+        with ESMTP id S229485AbjDKCuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 22:48:30 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309D51A4;
-        Mon, 10 Apr 2023 19:48:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AW0wf7JKPr1DXvKfvLacR1YhOYOnDUNfxO9WfOHkS8sFrErp+Kjv4ZimtY67SQRJ5HQVKJoj8wWQzYMl4ifZud1ZwoBMXCQ60ammQKu5tb+UHh378jGRuAhCJXDRmP1WEbZBFmB0NagGw7ihTckAbd5EwqlM6f4V2CmSm9H85lPcsEjV1QnoeKaiOUwtciq3aQ7ECdiM9oxKBqTxUU9HWKmXskkicIeHjZDX3LRQ7K2eoawZZ1tuWJpbmFbVp4wE/WitryhBGAOkQFh3s/IirFe1StpMiXGaDq96D4uvUvyMdFa3fc1VY8B3idA44n7wr9Q5sCmcpEYIz+yaN5VzxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m0pbRMVYvrReUroTrHh6N1+xeIuJO8v1kAsqLakfzPI=;
- b=cVB0NB98nRli4dHYFQ+PCKIZP/JF+92TsJP9pflDDINLcoT5PiVHNSwgY16u9ylb72HcpU21tIiSefdU7VOSv8NV1qw9EaX8+0h9DDy+QR3kYlilK3iHmXRfcI5Jv9ngaeuOMwLq3PcJg4Y1+Qc6uRVOh74ixq1WJIUNd6WAuLkhQk8jL3N8lRgwXxJPzTs1LV94zyWcr5u8kB/258hdyZjf5G1ujIik+n+SngWZnIgKtnE/qxgu3tqARxmIJM/47+8sNTcBbbfIulUipKUCGt3CZaJC7eFE+8HNSslI+QB60hXHcefD9+JFo9pt+94cRjHKEu/SfCCEFbTTSQhvPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m0pbRMVYvrReUroTrHh6N1+xeIuJO8v1kAsqLakfzPI=;
- b=qnTyfVZyctLVKlkJfJwJRMBwEkf6eSB9mSSBXnpcZJCXART1g59VJB0eQJAv9uCVmgDjrjxGVDl5pravHPOhBZeuFHjr9Lj1rtvwMvVNfY66YvHcVRSnzqyz2lMjJqbCnLie4ixcAlgcyiciCG0ozeSL82Q5AGhW/jLCdA2j9I/K5d8yORk9Rb+0JpGWh2MwRmOhPONDp4dLHCK7hDsHBP2LkQ5vo/i+J/Vtq4GKuJ+QihP6HSQ4OsOfclsZyrwWrLDdDYTbTOCiwT/iCqjIU+HKbbYWFmJljb/Qe7pxzXt0jhHz31/s5tCORc1naPeomd3CHILJkfsJpTaep5FoYQ==
-Received: from DS7PR03CA0151.namprd03.prod.outlook.com (2603:10b6:5:3b2::6) by
- DM4PR12MB6399.namprd12.prod.outlook.com (2603:10b6:8:b7::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.35; Tue, 11 Apr 2023 02:48:27 +0000
-Received: from DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b2:cafe::1c) by DS7PR03CA0151.outlook.office365.com
- (2603:10b6:5:3b2::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34 via Frontend
- Transport; Tue, 11 Apr 2023 02:48:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT078.mail.protection.outlook.com (10.13.173.183) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.28 via Frontend Transport; Tue, 11 Apr 2023 02:48:26 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Apr 2023
- 19:48:17 -0700
-Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Apr
- 2023 19:48:16 -0700
-Message-ID: <90505ef2-9250-d791-e05d-dbcb7672e4c4@nvidia.com>
-Date:   Mon, 10 Apr 2023 19:48:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64/mm: don't WARN when alloc/free-ing device private
- pages
-Content-Language: en-US
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <stable@vger.kernel.org>
-References: <20230406040515.383238-1-jhubbard@nvidia.com>
- <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
- <a421b96a-ed4b-ae7d-2fe9-ed5f5f8deacf@nvidia.com>
- <CAMj1kXGtFyugzi9MZW=4_oVTy==eAF6283fwvX9fdZhO98ZA3g@mail.gmail.com>
- <8dd0e252-8d8b-a62d-8836-f9f26bc12bc7@nvidia.com>
-In-Reply-To: <8dd0e252-8d8b-a62d-8836-f9f26bc12bc7@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Mon, 10 Apr 2023 22:50:16 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0BAE55
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:50:13 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230411025008epoutp0348d39b12e258e9986e2ec22601dd5b6f~UwZWGyggn2358623586epoutp03U
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:50:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230411025008epoutp0348d39b12e258e9986e2ec22601dd5b6f~UwZWGyggn2358623586epoutp03U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1681181408;
+        bh=bKN2lCoddiXVm6pUI8D2ej5iHDRTVAidYa5VCvdXMqQ=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=bYnFbVodglaL7wa1oQ90ZPafPbq8oFgofb+xotcqgvJ5oCoBHjGMx9W9lo+DGPIhR
+         kQGfFyRc9tXwwN5aaxLn2VMmp4ZRJ/GCMj4xiv2bJ359+WRSobaeqoMaOBdNX3mC94
+         wfWjDZKJffXlP6/C9m0VU6qmqBe6qC/Wg5HfI4fg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230411025008epcas2p427ce51ee81e997761eac4c0af6a0f996~UwZVrCA8y0570805708epcas2p46;
+        Tue, 11 Apr 2023 02:50:08 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PwVgh0ZJwz4x9Pv; Tue, 11 Apr
+        2023 02:50:08 +0000 (GMT)
+X-AuditID: b6c32a48-dc7ff700000025b2-7c-6434cadf780f
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FF.9B.09650.FDAC4346; Tue, 11 Apr 2023 11:50:07 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: core: Use proper power management API
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "dlunev@chromium.org" <dlunev@chromium.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac@epcms2p1>
+Date:   Tue, 11 Apr 2023 11:50:07 +0900
+X-CMS-MailID: 20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT078:EE_|DM4PR12MB6399:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3b929f4-4eb0-431c-08ee-08db3a3739c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rJhYZzG2/JddxwAhmbf3R2iD4zWYBJj7NEnjjMpI5HpniMVRFEGrakOoMjsbmrm8bnxBRNFT2SpHumTk+jwhzJj/3fr0XRITH44rNCY60Lr33n3ubltInvcumecG1ipz7gqhUx2bhpGw8qFSukK7K1pPoe5neITR408kLRuphffUsKFbUFIPesTY4afZek5uSG8hCGG4duzg1jEhLcb2mWUPZTy0LdeGIAjNV7Qim2UGC2Ka5OvcCzD9i0Bq5h691roryrkBepuVSYFX+YjoHqWLqPrCaUfS2C/f5cFgCrQcTfoFixVNSLlkMV8AyCKH2uyAuVjVGyekG8pzyb6i0TlYZeqFsOAxQVsNm78bxk70C79iuHaI6t2oO5WQ3m5MFmM2rRlinYU34kmXSX6g+5UzSNHZpHOFBTwVTMKcond4YKqqGW9GWNZLHbtJWeBEP5HGuXhSl9u0g5PK7bhMT5c0OuxslAd8ZBWdBtTKJXgypTaDJupQPMQHLfqF65nCtiR3aWqy46hHlPmBxoDD0RDb02otTiRM6Qtq5Vp9K6j32RcnoY5Ln9GlQ3MLMSnwV3xwa8BivZvwrHABp10gRqMmh603og5Sz1GenMuoyweMCQDG7e3ljgoBUEHoIYWIHnHAieoKTo2K08fBjtLsBz8osWH6juO/B1nIAlzYifz9WRVrs3HdlBo38cwG06A0XFHs33TgBnus3rt6Aw1AfiKZaReSu2WdbpISIsLa+mG8m5NIbfs0biOr9VURNzAMkYhY9MEJiKZ5ZnUxhj0WSh4LIWDRis8Hbsfh7TEk7Co=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199021)(36840700001)(40470700004)(46966006)(8936002)(40460700003)(40480700001)(7416002)(5660300002)(6916009)(86362001)(31696002)(4326008)(8676002)(70586007)(70206006)(478600001)(16576012)(316002)(31686004)(82310400005)(36860700001)(82740400003)(7636003)(356005)(54906003)(53546011)(2906002)(186003)(2616005)(336012)(426003)(47076005)(41300700001)(36756003)(16526019)(26005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 02:48:26.8346
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3b929f4-4eb0-431c-08ee-08db3a3739c3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6399
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmme79UyYpBmfWWlg8mLeNzeLlz6ts
+        FgcfdrJYTPvwk9ni5SFNi0e3nzFaHD/0lcWit38rm8WiG9uYLC7vmsNm0X19B5vF8uP/mCy2
+        fvrN6sDrcfmKt8fshossHhMWHWD0aDm5n8Xj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAM6o
+        bJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoLOVFMoS
+        c0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ
+        M/t/MBesZ6841/mdrYFxPlsXIyeHhICJxN9125i6GLk4hAR2MEqsPXaMvYuRg4NXQFDi7w5h
+        kBphAUeJty0rWUBsIQElia6FW5kh4gYS66bvAbPZBPQkpvy+wwgyR0RgGYvEm/NvmCEW8ErM
+        aH/KAmFLS2xfvpURwtaQ+LGsF6pGVOLm6rfsMPb7Y/OhakQkWu+dhaoRlHjwczdUXFKi9cxW
+        qAfqJVrfn2IHWSwhMIFRovHYH6hB+hLXOjaCLeYV8JV4fLuZFcRmEVCVWLt1M9QgF4l9iw+B
+        1TMLyEtsfzuHGeR5ZgFNifW79EFMCQFliSO3WCAq+CQ6Dv9lh3mrYeNvrOwd854wQdhqEo8W
+        bGGFsGUkLs45B/WKh8Tck69YJjAqzkKE9CwkN8xCuGEBI/MqRrHUguLc9NRiowITeOQm5+du
+        YgSnYC2PHYyz337QO8TIxMF4iFGCg1lJhPfrf+MUId6UxMqq1KL8+KLSnNTiQ4ymQN9PZJYS
+        Tc4HZoG8knhDE0sDEzMzQ3MjUwNzJXHejx3KKUIC6YklqdmpqQWpRTB9TBycUg1MU178EXg/
+        bVpewzp75i/T7md8qEreZWypIsgwc/WFqdO6ll0vTQ1dXuTUZt1utz3yfNKU2cfPbDEyOlTI
+        UWJjynb51qbkixbyp+bM917jH/VO+egBfdUPdVFTFipvvbEnven/p12qF1NvPHiyrXKasOTv
+        t21O1ws2883Kb5SXnn7O74DoDpakefGLXkUem+f+tCurfPYpxes1ym2n00tf7Sn9aC21VDDE
+        ZbvyhkNsHsEPHPU71WY8sbt6a2dkgLlSQur8279SOHy3H/PptLWVvCbcte3w53/8i1LZ7Dcf
+        ly598P/aG7M15ypb+69qJtgEnT9dUfxaJ+l9/eW1W37/zDqs+tloq/LWCYkxJRqNdUosxRmJ
+        hlrMRcWJACdJrStKBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac
+References: <CGME20230411025007epcms2p17ffdb87332484608daf446c7fde6ceac@epcms2p1>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,35 +102,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/23 00:39, John Hubbard wrote:
->> pfn_to_page(x) for values 0xc00_0000 < x < 0x1000_0000 will produce a
->> kernel VA that points outside the region set aside for the vmemmap.
->> This region is currently unused, but that will likely change soon.
->>
-> 
-> I tentatively think I'm in this case right now. Because there is no wrap
-> around happening in my particular config, which is CONFIG_ARM64_VA_BITS
-> == 48, and PAGE_SIZE == 4KB and sizeof(struct page) == 64 (details
-> below).
-> 
+Commit b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
+modified the driver core to use ufshcd_rpm_{get,put}_sync() APIs.
 
-Correction, actually it *is* wrapping around, and ending up as a bogus
-user space address, as you said it would when being above the range:
+Switch to these APIs in sysfs as well.
 
-page_to_pfn(0xffffffffaee00000):  0x0000000ffec38000
+Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+---
+ drivers/ufs/core/ufs-sysfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-> It occurs to me that ZONE_DEVICE and (within that category) device
-> private page support need only support rather large setups. On x86, it
-> requires 64-bit. And on arm64, from what I'm learning after a day or so
-> of looking around and comparing, I think we must require at least 48 bit
-> VA support. Otherwise there's just no room for things.
-
-I'm still not sure of how to make room, but working on it.
-
-
-thanks,
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 883f0e44b54e..b683a43ea089 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -167,11 +167,11 @@ static ssize_t auto_hibern8_show(struct device *dev,
+ 		goto out;
+ 	}
+ 
+-	pm_runtime_get_sync(hba->dev);
++	ufshcd_rpm_get_sync(hba);
+ 	ufshcd_hold(hba, false);
+ 	ahit = ufshcd_readl(hba, REG_AUTO_HIBERNATE_IDLE_TIMER);
+ 	ufshcd_release(hba);
+-	pm_runtime_put_sync(hba->dev);
++	ufshcd_rpm_put_sync(hba);
+ 
+ 	ret = sysfs_emit(buf, "%d\n", ufshcd_ahit_to_us(ahit));
+ 
 -- 
-John Hubbard
-NVIDIA
+2.17.1
 
