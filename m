@@ -2,195 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE06DE86C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2916DE836
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjDLANK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 20:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S229492AbjDKXnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjDLANI (ORCPT
+        with ESMTP id S229506AbjDKXnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 20:13:08 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6B0E4D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:13:05 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C1E655C1DED;
-        Wed, 12 Apr 2023 00:13:01 +0000 (UTC)
-Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 34F535C1E80;
-        Wed, 12 Apr 2023 00:13:01 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1681258381; a=rsa-sha256;
-        cv=none;
-        b=wRW9YsHvTLeWvHcO0Eejf7xV4A6Y671oLikrIBXdrtEYPdlihIceEEpvkyNEpN5koCuzKH
-        g26H4P1xyumW3YT96SzsGYWJHPlFXISAW25PpOjfJsEsM9DWoUQzipSB7INFfQwDCXX4Yj
-        spPBFsYAW4nE/Gr3l4hIlb+InMr84z/iWUshWiZ8GgObXCY0UvwfuYeSp3TzUUCB8uxFW1
-        Xc/WH05yGmtzniewQQz3PbBJtqwI7AGIHrf9DdzBDyXe8eKH/BCGESm1Mrn2V8B1xMJZCX
-        1Z0dN7Dyo6Rv70XU3vWdP7o2Z0XH7WC3vhcaEPRjxmjHHZY1AEXQFeAX5i43BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1681258381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=oEGhhJyU8k257jjtDFsLKg5eyDoIenlRxC9XjI+O/6M=;
-        b=MfHrjgEhpM3dNp/fIOWZoSNmPk2bh8ElHa0qGEYfoDDsjE0TKV0lppNC8HrCgfOFQgLzTZ
-        NM8GVN8vtbuRAGEneDMdONUsES8NVWnp15OAjfJTp9RPu/0q0UQvNIqBgxaLZu94RORpk7
-        a81mn8OnrwO9H9R1W/aWRTtEHJAtU0jHIMWgzbtyzVxaO2jw78ZI5HcNdItXtHd0uqFPpG
-        HuoceliQ4oBtYq4UY/YQ2nr8+4dgLIxHkDCNwVlAPqldMRmT7q3zTsdsY5lg6Q3Meo2xi7
-        pKcYWYpDde6yipFquH97nDQtcKOGoIPaxFQcQs4p5gQ+48lMX4arMEsUK72s1w==
-ARC-Authentication-Results: i=1;
-        rspamd-786cb55f77-4xxjj;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Ski-Wiry: 300061116147a400_1681258381570_1219081380
-X-MC-Loop-Signature: 1681258381570:839633618
-X-MC-Ingress-Time: 1681258381570
-Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.109.138.43 (trex/6.7.2);
-        Wed, 12 Apr 2023 00:13:01 +0000
-Received: from localhost.localdomain (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4Px37w3TVZz55;
-        Tue, 11 Apr 2023 17:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1681258380;
-        bh=oEGhhJyU8k257jjtDFsLKg5eyDoIenlRxC9XjI+O/6M=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=l15cCpjmykIO06M8Hf4SdUNfBWQntRiRQiZk/MDx5vRmV6NfohpcDAzSXYGJnOAPX
-         fY3a9BNLtBYE46m4+zReaeqYjLUlsYIYCU5dT695BAXBEVziGXz47j+77iyABMAvuw
-         rPt4LDeNz+GXgq+EanVYY0m5Y3yr8OmvXvqLtCgSDvhMADdPeW6HH6GiRlAQcAQMa6
-         lH+DU/4o8+SU3MF3Vu8Pjx/Gu379S9zRsZNDJANunv7UryUwpXoLa3I5nzNxTfNP83
-         UY3w35kTdrpXkKROeCzyllxv+PWeuB4xIbSO8+PHwLw7fFjfrn7ufju1U6+7BiCsJL
-         rIzsEomBYk6bw==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     akpm@linux-foundation.org
-Cc:     pabeni@redhat.com, dave@stgolabs.net, linux-kernel@vger.kernel.org
-Subject: [PATCH] epoll: Rename global epmutex
-Date:   Tue, 11 Apr 2023 16:41:59 -0700
-Message-Id: <20230411234159.20421-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.40.0
+        Tue, 11 Apr 2023 19:43:20 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0948246BE;
+        Tue, 11 Apr 2023 16:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681256569; x=1712792569;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7Vk9EzIv30HkPnigih7IlZ6Iq+GfdqLTKjIkrPa1UEg=;
+  b=eBIcvShLiyoSO3HXYrYr4ODkIqx3laBXfloMutol+R3SYn3k/a7e9cSD
+   /j4DyJ0Ba5hi7eJKkW9qCft9wYClCmp/+IiVOQxeLHEFhomYvTPNBTDAv
+   fPgK4rnsQ3OH8enP9nqRgIOf9V13hrwI3OIdR5cw2u9rLaq1sbe73w8fj
+   JD6OIdJHl6y8HZ4XrwnMJ51d0rOhrq1hhQ+td4UPZ0OXdDp25EDvkAqcc
+   TEHNzmwD7I61S8AcIJi1g7d3L2i1v6weW2qoIye2WeEMTevRBE2YBwLjT
+   Dwni7fnstsJgtdalbZd5E3qdUXg/9fXFcIcwNANbtrHVhN9c5E73Jgqu+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="406586619"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="406586619"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 16:42:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="812770877"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="812770877"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2023 16:42:47 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 11 Apr 2023 16:42:47 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 11 Apr 2023 16:42:46 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 11 Apr 2023 16:42:46 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 11 Apr 2023 16:42:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mqb4oARC/JMLPNM2JehOmiMUizvy6127s2iK+L8yL7kuzLiN96xLHTMH9n1MWjbXpZC5502YSKQdNFV35w+KRW6ovxsAXpLODu88ZPkVCinEL21RPEccsjQy4W3jKKW6VNw6YzucOMfV9DyVHXmPN8UFnqvQwzKQZxMbc21bgG4eCkCKjww99WgBXPTRo6IJkdmTYr9NqZc3ibt2L+6ssYlYJM9Qeqn6d6tsUcvOTLVmSvRhq+CZk2M+kKevGsxHYGm6u07IGklfskTmpXlnPNehKFVtXsGi9XRPrP51zb8QygXf9nNBZTbIl/8haaMfWS+9nwihPzEGz2Q5osi95g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S4R+f1LPI3hQ+0Ybnj5yBLaw6C/OINJaGEO/AokY1Zg=;
+ b=nrKjVym1C2imm4WB3QKDuRUvmoVSMRjq7EVlYhQgJuMYtw0CcHTj++QZ35F+ItNM/xGKu+r4p2tc5L/bOc5WrK8Ro4/ig6iyvjuBN3PBfNnp+VxvEayhTNCD5j7gyB2Eb+w2d21tPplU2Xy330VTaYsE+EhtnjyUTTSBX13u6O2jRoUtQOPAdr4AJCxvFUOD/+PxgYhF8IMBO9Uz/EkiCkUxSWKlyunAr0bsMh6PKuHWWIbShEAtBrX1L66oM1tM9JmEDi8+0YmF5to/+cQdGxQtBhospu21/U3ueKVh0tEmAH2NXsM75aMCpOzrU+PMMVmy1Y38nMn2TDz3nt6lHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by SN7PR11MB7044.namprd11.prod.outlook.com (2603:10b6:806:29b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Tue, 11 Apr
+ 2023 23:42:39 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c7d6:3545:6927:8493]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c7d6:3545:6927:8493%7]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 23:42:39 +0000
+Message-ID: <f2acb0ea-90ea-dfbf-6367-c3d44f0e8436@intel.com>
+Date:   Tue, 11 Apr 2023 16:42:35 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH net-next v4 10/12] net: stmmac: dwmac-qcom-ethqos: Respect
+ phy-mode and TX delay
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <vkoul@kernel.org>, <bhupesh.sharma@linaro.org>, <wens@csie.org>,
+        <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <mturquette@baylibre.com>, <peppe.cavallaro@st.com>,
+        <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
+        <mcoquelin.stm32@gmail.com>, <richardcochran@gmail.com>,
+        <linux@armlinux.org.uk>, <veekhee@apple.com>,
+        <tee.min.tan@linux.intel.com>, <mohammad.athari.ismail@intel.com>,
+        <jonathanh@nvidia.com>, <ruppala@nvidia.com>, <bmasney@redhat.com>,
+        <andrey.konovalov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <ncai@quicinc.com>,
+        <jsuraj@qti.qualcomm.com>, <hisunil@quicinc.com>,
+        <echanude@redhat.com>
+References: <20230411200409.455355-1-ahalaney@redhat.com>
+ <20230411200409.455355-11-ahalaney@redhat.com>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20230411200409.455355-11-ahalaney@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0P220CA0008.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:41b::17) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|SN7PR11MB7044:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6179e9b3-b3fd-4570-ca40-08db3ae66f49
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2ns/3IwpvQQdc3UZ57OKkkinnBu7kAdMvecpwdfc0In7SIwOC36+DVJ+Sv0E3wdQsGuvZgQXu1i9TtYueDhEVyulWlhSzJAyURXNvd8Qub7yTA04sbkLl9kf7Ht8pFE2TWHOeS9l9YZmXE2ApqkJ/HM9k8t+83jsMceh3GutUl5QZ9m1cbgF8EL5Ru16ZnLV0xtWypHxIerX8agqJiSlctlNCTkwhOclavt09NBKP0M4eCjTH00J/7+zxg6gcpmW6+mlAvkeglU3QJV24WjL9JNz9k4k/yHY1Cbaln8L8jU/eXJhZEygfJJX2vKKUVE8c5PYGG5X/yijJzU2mc+Tv2/Q9e0yYMKtOSJoovHTKzNewJfbvEglvMmu+mHPMjLTaqXUb1IX+QMVbJtQwy/VBvm80ZbeshPOxSeIaZZQNbHDpYoUNdnV5tN2gi4wssReLAxujo0KvFKlcLot3cR1rJ8chJ+feikRX2GwLRzDXsTcU8iCVZqG9JPWSJTYOiXPuDs3aK8z1mA267qasHrQ5xbXzojYX8m6krvyaskADI6Q/W9gC0G7AK3JDeTs2leRttB5NjrEO8LLkbNaR9+HudxlrSUvqQS+5koVRa5ulKtrh51YfRRXHuOJ062ofNGVtWiRkcMikWYnMsRqXULKNQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199021)(4326008)(86362001)(2906002)(7416002)(7406005)(5660300002)(31696002)(31686004)(66556008)(2616005)(4744005)(66476007)(66946007)(186003)(44832011)(82960400001)(53546011)(26005)(6506007)(6512007)(6666004)(6486002)(36756003)(38100700002)(316002)(8936002)(8676002)(41300700001)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RWREWGNBek9XV0hraEd0RjlKWmt4aDhuRXBxK2lxRXp5aGIzRmFBZWZkVlla?=
+ =?utf-8?B?ZFYxK0VSNWNKMkp3WkI5L3JBTkppSzUvR1lLNkg1QjdDVEhsY1NGd1ErY2xB?=
+ =?utf-8?B?R1NRNW5WWngydkZrbHVQMXF2U2xEaVZLMmZQM0p3S3BtajgrQy9tVmU4cnox?=
+ =?utf-8?B?OUV0Sjk0cGpXVVhTQmcySVRyV21POFJHWjEzOXJLZHA5dUhnSXorL2kwRVpX?=
+ =?utf-8?B?dkZlRlRra2tOVUhzM2RxeFJCK0E0NTRzSVYvUnVSbElrMXQzL0svb3NOWlg2?=
+ =?utf-8?B?aHFFS2ZYWjBHMG8vTTFkcmpJU3RkOGhRZXc0bnAyQ2tXcUl5Tm04QWdRR0lw?=
+ =?utf-8?B?eit3UlQ2azh3aGtyNDN1OVFIWGt5REVVcTVtWUxKdGYrUldzOGw4dGcxU0ky?=
+ =?utf-8?B?VG8rK2V0WUZGdXBIOWxwS1lvOWFFdWdPbzRSaVVEWGJlSHo2MGQ5UW1tOExt?=
+ =?utf-8?B?ZUh6NDZhZVJzTXFsa05wd2dkei9tVlczSkw0RXREVDFMVjVlRDBmYkRzWkli?=
+ =?utf-8?B?aFByVHlyTWdwOFV2cGFtbGhEOWhVWGRGeHVOOWEveldlNWd3MjVPZ0x4STAw?=
+ =?utf-8?B?NU1GWTA0aVNMWWIvMjlZUVJEZkM0ZG1lV052NmxpZXdXZ29Cc1BzMWV0cEhp?=
+ =?utf-8?B?SXRwWDFNcHp5KzBSME9LVjFUaGF6eXdjOXVPWnl5Y1BWdmYrQXZoMzRnbGpE?=
+ =?utf-8?B?WjZ2d1dkOEhPd1EzYy9OTmMraU5WQ1pTNElPbWE0WjRGKzlic05yK2RvbklL?=
+ =?utf-8?B?YmFzS0lzQ2YrR0pPSFNpbWdITFpuSzY5WktsUlZnb3JqVHhoVkpZdmUxYTVl?=
+ =?utf-8?B?cFZCK1NudmNLaHVWcXZoejRydy9ncWxBOFNMMmxSQmFiWk1oeHBBSjcxekRs?=
+ =?utf-8?B?MDZWdHBRRjFqVHUwd0NEd2REZXlZWHJ1TnRhVHJOcUoxSzVZV1R0dnh4QzBQ?=
+ =?utf-8?B?eDRXbEVOMWJyTnc2eEdrQmhUSDVidTBlU2l2WG4yNVUwMHRQTHlTV2VURzVE?=
+ =?utf-8?B?YU1sOVZuRHhyRlVTZ2V5dzZVcUtWQ1dMczVsWlJSalhUOHMxYzZYRHUraU1q?=
+ =?utf-8?B?TUE4TVZsaDRCS3RYYVYwcWdsMHFCdlBzemJvSHFMTzhXb1M4Mkw1RVNCT1Jx?=
+ =?utf-8?B?cDNEUDd2WlJqT1QrczNvcUsycmRHbWNxYU0rMEJQbHo0N1g4SFFFM1JIS083?=
+ =?utf-8?B?dGp2UWNEK3JKNTBNU1o3Z3pVVmZFa003UVppN1IrLzk5NWxuTno3SmhRYmtI?=
+ =?utf-8?B?S055bEZ5NWZjWExLVFZTeWNTK3laNGhPL2RuWExidWw0WU5zSFgxelY0c0k1?=
+ =?utf-8?B?UnZ0VE1MQlFDaGtMSk9qZ2FHT1ZzZnMwb2dpdFBwLzM5Yi9ubWRpVk1veWpG?=
+ =?utf-8?B?aTlCQXdoN1Z6TDEyRlNLaDNsVUpLYlRqK3hJWXBxK1lyek03cDB3QmZBZVkv?=
+ =?utf-8?B?Z1FKYTNKOERVUzdVdHM3ZXhTUXppbk9lUTlNNFdUNmh6M1V0SUZqUTRYWDdj?=
+ =?utf-8?B?RmozZ0FGY3ZZMWNVbVFzcW52S1dWOGRJL2VkUnFZQS9ZejNrSHQ2Q01pWWZh?=
+ =?utf-8?B?T2RzMEorS2Zxclp6MkRhUWZJR1dBRHVhOUk0S0FlWGJnT0g5WHJHSGR4VVo2?=
+ =?utf-8?B?c0RDNlJlNjB2MzlIOXFiZVVabUFVM2poSGRCajM3Y3JMb1lMSWxaT011N1lH?=
+ =?utf-8?B?djJQZ0dFWTY3bUZ5YThJWE1TRHk1VWVNU1hPOXZyR1puYTVSRE5vcDRIWlRo?=
+ =?utf-8?B?Tk5mRFFNdXVjU3RUQTlCUW1mR1R6S0QyN0VZUEM5NjdJVmd0djA3UmtGbm1S?=
+ =?utf-8?B?bC9YL0lrQWdIWDF5amtBczExbmplOEV3NDc0cWJKcVNFd3UxNGtrNnYyblVn?=
+ =?utf-8?B?MlNTbWZvbDduSzVJcWcvcVJhQzhETktLWkRPeFBBY1Z0ZjlWWENHaWFDTlhx?=
+ =?utf-8?B?R21XR2dzcGF4S242U21iUWsrU2YwMWNGSFFTWHd5NitybDlkZWxnbWNqK1Ew?=
+ =?utf-8?B?dGtyRVpLS2pKek9KbWVjcEYyWDFaRnR2QTZqdWJLMlk1ZUxod1BVb0JRN3py?=
+ =?utf-8?B?anZhbmljNGFLd09jWGdNZXBKWEkxZzlaaHBhYnVaM2NWVmdWcXVSc2hBSWhS?=
+ =?utf-8?B?OEV6OXBUSXp5ZXJYaGFwdmNlQzNZKzBlR1V5T3lvUmdqN0QvOE56UWV0MTlj?=
+ =?utf-8?B?VUE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6179e9b3-b3fd-4570-ca40-08db3ae66f49
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 23:42:38.9858
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eCDnL9mN9JJO8PTx94wwYQY7ccijzT9+mCLYsUPN66IsFbbfirpgJEHNFnZ1HTxwDe+XGkFIIc4e76AiiurlSfJOy9XGmVuf4SXHKok6/5s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7044
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of 4f04cbaf128 (epoll: use refcount to reduce ep_mutex contention),
-this lock is now specific to nesting cases - inserting an epoll fd onto
-another epoll fd. Rename the lock to be less generic.
+On 4/11/2023 1:04 PM, Andrew Halaney wrote:
+> The driver currently sets a MAC TX delay of 2 ns no matter what the
+> phy-mode is. If the phy-mode indicates the phy is in charge of the
+> TX delay (rgmii-txid, rgmii-id), don't do it in the MAC.
+> 
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
- fs/eventpoll.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index a8e1d09f039d..980483455cc0 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -43,7 +43,7 @@
-  * LOCKING:
-  * There are three level of locking required by epoll :
-  *
-- * 1) epmutex (mutex)
-+ * 1) epnested_mutex (mutex)
-  * 2) ep->mtx (mutex)
-  * 3) ep->lock (rwlock)
-  *
-@@ -57,8 +57,8 @@
-  * we need a lock that will allow us to sleep. This lock is a
-  * mutex (ep->mtx). It is acquired during the event transfer loop,
-  * during epoll_ctl(EPOLL_CTL_DEL) and during eventpoll_release_file().
-- * The epmutex is acquired when inserting an epoll fd onto another epoll
-- * fd. We do this so that we walk the epoll tree and ensure that this
-+ * The epnested_mutex is acquired when inserting an epoll fd onto another
-+ * epoll fd. We do this so that we walk the epoll tree and ensure that this
-  * insertion does not create a cycle of epoll file descriptors, which
-  * could lead to deadlock. We need a global mutex to prevent two
-  * simultaneous inserts (A into B and B into A) from racing and
-@@ -74,9 +74,9 @@
-  * of epoll file descriptors, we use the current recursion depth as
-  * the lockdep subkey.
-  * It is possible to drop the "ep->mtx" and to use the global
-- * mutex "epmutex" (together with "ep->lock") to have it working,
-+ * mutex "epnested_mutex" (together with "ep->lock") to have it working,
-  * but having "ep->mtx" will make the interface more scalable.
-- * Events that require holding "epmutex" are very rare, while for
-+ * Events that require holding "epnested_mutex" are very rare, while for
-  * normal operations the epoll private "ep->mtx" will guarantee
-  * a better scalability.
-  */
-@@ -248,7 +248,7 @@ struct ep_pqueue {
- static long max_user_watches __read_mostly;
- 
- /* Used for cycles detection */
--static DEFINE_MUTEX(epmutex);
-+static DEFINE_MUTEX(epnested_mutex);
- 
- static u64 loop_check_gen = 0;
- 
-@@ -263,7 +263,7 @@ static struct kmem_cache *pwq_cache __read_mostly;
- 
- /*
-  * List of files with newly added links, where we may need to limit the number
-- * of emanating paths. Protected by the epmutex.
-+ * of emanating paths. Protected by the epnested_mutex.
-  */
- struct epitems_head {
- 	struct hlist_head epitems;
-@@ -1337,7 +1337,7 @@ static void ep_rbtree_insert(struct eventpoll *ep, struct epitem *epi)
-  * is connected to n file sources. In this case each file source has 1 path
-  * of length 1. Thus, the numbers below should be more than sufficient. These
-  * path limits are enforced during an EPOLL_CTL_ADD operation, since a modify
-- * and delete can't add additional paths. Protected by the epmutex.
-+ * and delete can't add additional paths. Protected by the epnested_mutex.
-  */
- static const int path_limits[PATH_ARR_SIZE] = { 1000, 500, 100, 50, 10 };
- static int path_count[PATH_ARR_SIZE];
-@@ -2180,7 +2180,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 	 * We do not need to take the global 'epumutex' on EPOLL_CTL_ADD when
- 	 * the epoll file descriptor is attaching directly to a wakeup source,
- 	 * unless the epoll file descriptor is nested. The purpose of taking the
--	 * 'epmutex' on add is to prevent complex toplogies such as loops and
-+	 * 'epnested_mutex' on add is to prevent complex toplogies such as loops and
- 	 * deep wakeup paths from forming in parallel through multiple
- 	 * EPOLL_CTL_ADD operations.
- 	 */
-@@ -2191,7 +2191,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 		if (READ_ONCE(f.file->f_ep) || ep->gen == loop_check_gen ||
- 		    is_file_epoll(tf.file)) {
- 			mutex_unlock(&ep->mtx);
--			error = epoll_mutex_lock(&epmutex, 0, nonblock);
-+			error = epoll_mutex_lock(&epnested_mutex, 0, nonblock);
- 			if (error)
- 				goto error_tgt_fput;
- 			loop_check_gen++;
-@@ -2252,7 +2252,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 	if (full_check) {
- 		clear_tfile_check_list();
- 		loop_check_gen++;
--		mutex_unlock(&epmutex);
-+		mutex_unlock(&epnested_mutex);
- 	}
- 
- 	fdput(tf);
--- 
-2.40.0
+
 
