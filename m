@@ -2,48 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2116DD9FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37286DD9B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDKLpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S229962AbjDKLnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjDKLp2 (ORCPT
+        with ESMTP id S229928AbjDKLnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:45:28 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D14546B1;
-        Tue, 11 Apr 2023 04:45:04 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.98,336,1673881200"; 
-   d="scan'208";a="155597457"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 11 Apr 2023 20:44:08 +0900
-Received: from localhost.localdomain (unknown [10.226.93.123])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id D27234008C6C;
-        Tue, 11 Apr 2023 20:44:03 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 17/17] drm: rcar-du: Add rcar_du_lib_vsps_init()
-Date:   Tue, 11 Apr 2023 12:42:35 +0100
-Message-Id: <20230411114235.366042-18-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230411114235.366042-1-biju.das.jz@bp.renesas.com>
-References: <20230411114235.366042-1-biju.das.jz@bp.renesas.com>
+        Tue, 11 Apr 2023 07:43:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0964234
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681213376; x=1712749376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MmgttL6Z2ite1qRkYYnR8yRMQm4E4KBl2+ANiydF4NE=;
+  b=hYdUuSSYYzJtZwIPbcB6StX6XTvxxB9FKbZOj/5SIkr23EQSJnn+RkrD
+   SKbOddUah1oGGuPYXj1Ej34VbK+eeVlAGOgD4OzmqSqMfMOuLB/UH+nzc
+   KG4kkNVSOTXhsjJKmPQ5NpROpc6A4iiVdGG7Yy8ixRL38qHxqDIXUsTHu
+   7Rw5XpfgC8OTwg61wpNseqnXFPValzSdDuGwGNH42VJCfY+RkvffE5TLp
+   ZHiqArblvkVv73kNofTCRmGt+qxs7w0ichOA2WdXhshKJ82rx1oz1iWyS
+   ckD0HFqQejjO1LFBu6kxRc+iEhi9bU8yGWh9OFnrj/3U8dFihvVqel+Lm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341085905"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="341085905"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:42:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="721175700"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="721175700"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 04:42:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pmCOZ-00FFDR-2f;
+        Tue, 11 Apr 2023 14:42:43 +0300
+Date:   Tue, 11 Apr 2023 14:42:43 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH v2 2/5] extcon: Get rid of not really used name field in
+ struct extcon_dev
+Message-ID: <ZDVHs7JB4Na4g+De@smile.fi.intel.com>
+References: <20230405152745.24959-1-andriy.shevchenko@linux.intel.com>
+ <20230405152745.24959-3-andriy.shevchenko@linux.intel.com>
+ <4632ce69-2a94-0c33-9a76-b97596436e24@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4632ce69-2a94-0c33-9a76-b97596436e24@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,242 +68,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add rcar_du_lib_vsps_init() to RCar DU kms lib to handle both
-rcar_du_vsp_init() and rzg2l_du_vsp_init().
+On Fri, Apr 07, 2023 at 04:26:35AM +0900, Chanwoo Choi wrote:
+> On 23. 4. 6. 00:27, Andy Shevchenko wrote:
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v6->v7:
- * Rebased to drm-tip.
-v1->v6:
- * Rebased on drm-misc-next and DU-next.
-v1:
- * Created the lib suggested by Laurent.
-Ref:
- https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220316131100.30685-6-biju.das.jz@bp.renesas.com/
----
- drivers/gpu/drm/rcar-du/rcar_du_kms.c     | 88 +---------------------
- drivers/gpu/drm/rcar-du/rcar_du_kms_lib.c | 89 +++++++++++++++++++++++
- drivers/gpu/drm/rcar-du/rcar_du_kms_lib.h |  5 ++
- 3 files changed, 95 insertions(+), 87 deletions(-)
+...
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 01ffe36f9d44..6f3352a6a264 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -69,92 +69,6 @@ static const struct drm_mode_config_funcs rcar_du_mode_config_funcs = {
- 	.atomic_commit = drm_atomic_helper_commit,
- };
- 
--static int rcar_du_vsps_init(struct rcar_du_device *rcdu)
--{
--	const struct device_node *np = rcdu->dev->of_node;
--	const char *vsps_prop_name = "renesas,vsps";
--	struct of_phandle_args args;
--	struct {
--		struct device_node *np;
--		unsigned int crtcs_mask;
--	} vsps[RCAR_DU_MAX_VSPS] = { { NULL, }, };
--	unsigned int vsps_count = 0;
--	unsigned int cells;
--	unsigned int i;
--	int ret;
--
--	/*
--	 * First parse the DT vsps property to populate the list of VSPs. Each
--	 * entry contains a pointer to the VSP DT node and a bitmask of the
--	 * connected DU CRTCs.
--	 */
--	ret = of_property_count_u32_elems(np, vsps_prop_name);
--	if (ret < 0) {
--		/* Backward compatibility with old DTBs. */
--		vsps_prop_name = "vsps";
--		ret = of_property_count_u32_elems(np, vsps_prop_name);
--	}
--	cells = ret / rcdu->num_crtcs - 1;
--	if (cells > 1)
--		return -EINVAL;
--
--	for (i = 0; i < rcdu->num_crtcs; ++i) {
--		unsigned int j;
--
--		ret = of_parse_phandle_with_fixed_args(np, vsps_prop_name,
--						       cells, i, &args);
--		if (ret < 0)
--			goto error;
--
--		/*
--		 * Add the VSP to the list or update the corresponding existing
--		 * entry if the VSP has already been added.
--		 */
--		for (j = 0; j < vsps_count; ++j) {
--			if (vsps[j].np == args.np)
--				break;
--		}
--
--		if (j < vsps_count)
--			of_node_put(args.np);
--		else
--			vsps[vsps_count++].np = args.np;
--
--		vsps[j].crtcs_mask |= BIT(i);
--
--		/*
--		 * Store the VSP pointer and pipe index in the CRTC. If the
--		 * second cell of the 'renesas,vsps' specifier isn't present,
--		 * default to 0 to remain compatible with older DT bindings.
--		 */
--		rcdu->crtcs[i].vsp = &rcdu->vsps[j];
--		rcdu->crtcs[i].vsp_pipe = cells >= 1 ? args.args[0] : 0;
--	}
--
--	/*
--	 * Then initialize all the VSPs from the node pointers and CRTCs bitmask
--	 * computed previously.
--	 */
--	for (i = 0; i < vsps_count; ++i) {
--		struct rcar_du_vsp *vsp = &rcdu->vsps[i];
--
--		vsp->index = i;
--		vsp->dev = rcdu;
--
--		ret = rcar_du_vsp_init(vsp, vsps[i].np, vsps[i].crtcs_mask);
--		if (ret < 0)
--			goto error;
--	}
--
--	return 0;
--
--error:
--	for (i = 0; i < ARRAY_SIZE(vsps); ++i)
--		of_node_put(vsps[i].np);
--
--	return ret;
--}
--
- static int rcar_du_cmm_init(struct rcar_du_device *rcdu)
- {
- 	const struct device_node *np = rcdu->dev->of_node;
-@@ -326,7 +240,7 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
- 
- 	/* Initialize the compositors. */
- 	if (rcar_du_has(rcdu, RCAR_DU_FEATURE_VSP1_SOURCE)) {
--		ret = rcar_du_vsps_init(rcdu);
-+		ret = rcar_du_lib_vsps_init(rcdu, rcar_du_vsp_init);
- 		if (ret < 0)
- 			return ret;
- 	}
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.c b/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.c
-index 438a56c550f2..b9949dbd3c33 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.c
-@@ -653,3 +653,92 @@ int rcar_du_properties_init(struct rcar_du_device *rcdu)
- 
- 	return 0;
- }
-+
-+int rcar_du_lib_vsps_init(struct rcar_du_device *rcdu,
-+			  int (*rcar_du_vsp_init_fn)(struct rcar_du_vsp *vsp,
-+						     struct device_node *np,
-+						     unsigned int crtcs))
-+{
-+	const struct device_node *np = rcdu->dev->of_node;
-+	const char *vsps_prop_name = "renesas,vsps";
-+	struct of_phandle_args args;
-+	struct {
-+		struct device_node *np;
-+		unsigned int crtcs_mask;
-+	} vsps[RCAR_DU_MAX_VSPS] = { { NULL, }, };
-+	unsigned int vsps_count = 0;
-+	unsigned int cells;
-+	unsigned int i;
-+	int ret;
-+
-+	/*
-+	 * First parse the DT vsps property to populate the list of VSPs. Each
-+	 * entry contains a pointer to the VSP DT node and a bitmask of the
-+	 * connected DU CRTCs.
-+	 */
-+	ret = of_property_count_u32_elems(np, vsps_prop_name);
-+	if (ret < 0) {
-+		/* Backward compatibility with old DTBs. */
-+		vsps_prop_name = "vsps";
-+		ret = of_property_count_u32_elems(np, vsps_prop_name);
-+	}
-+	cells = ret / rcdu->num_crtcs - 1;
-+	if (cells > 1)
-+		return -EINVAL;
-+
-+	for (i = 0; i < rcdu->num_crtcs; ++i) {
-+		unsigned int j;
-+
-+		ret = of_parse_phandle_with_fixed_args(np, vsps_prop_name,
-+						       cells, i, &args);
-+		if (ret < 0)
-+			goto error;
-+
-+		/*
-+		 * Add the VSP to the list or update the corresponding existing
-+		 * entry if the VSP has already been added.
-+		 */
-+		for (j = 0; j < vsps_count; ++j) {
-+			if (vsps[j].np == args.np)
-+				break;
-+		}
-+
-+		if (j < vsps_count)
-+			of_node_put(args.np);
-+		else
-+			vsps[vsps_count++].np = args.np;
-+
-+		vsps[j].crtcs_mask |= BIT(i);
-+
-+		/*
-+		 * Store the VSP pointer and pipe index in the CRTC. If the
-+		 * second cell of the 'renesas,vsps' specifier isn't present,
-+		 * default to 0 to remain compatible with older DT bindings.
-+		 */
-+		rcdu->crtcs[i].vsp = &rcdu->vsps[j];
-+		rcdu->crtcs[i].vsp_pipe = cells >= 1 ? args.args[0] : 0;
-+	}
-+
-+	/*
-+	 * Then initialize all the VSPs from the node pointers and CRTCs bitmask
-+	 * computed previously.
-+	 */
-+	for (i = 0; i < vsps_count; ++i) {
-+		struct rcar_du_vsp *vsp = &rcdu->vsps[i];
-+
-+		vsp->index = i;
-+		vsp->dev = rcdu;
-+
-+		ret = rcar_du_vsp_init_fn(vsp, vsps[i].np, vsps[i].crtcs_mask);
-+		if (ret < 0)
-+			goto error;
-+	}
-+
-+	return 0;
-+
-+error:
-+	for (i = 0; i < ARRAY_SIZE(vsps); ++i)
-+		of_node_put(vsps[i].np);
-+
-+	return ret;
-+}
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.h b/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.h
-index 50e92a19d98c..81bb38eadbe0 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms_lib.h
-@@ -53,4 +53,9 @@ int rcar_du_encoders_init(struct rcar_du_device *rcdu,
- 
- int rcar_du_properties_init(struct rcar_du_device *rcdu);
- 
-+int rcar_du_lib_vsps_init(struct rcar_du_device *rcdu,
-+			  int (*rcar_du_vsp_init_fn)(struct rcar_du_vsp *vsp,
-+						     struct device_node *np,
-+						     unsigned int crtcs));
-+
- #endif /* __RCAR_DU_KMS_LIB_H__ */
+> > -	if (IS_ERR_OR_NULL(edev->name)) {
+> > -		dev_err(&edev->dev,
+> > -			"extcon device name is null\n");
+> > -		return -EINVAL;
+> > -	}
+
+JFYI: this is a dead code in case you want to clean it up.
+Since the patch is NAKed, I'm not going to split it. Hence
+just for your information.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
