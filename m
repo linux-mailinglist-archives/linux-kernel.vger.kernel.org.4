@@ -2,169 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1932A6DD5C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79376DD5CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjDKIkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        id S230390AbjDKInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjDKIkG (ORCPT
+        with ESMTP id S230204AbjDKInP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:40:06 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DEC97
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:40:04 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso10530209wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681202402; x=1683794402;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9/wYNat7TPM3zWz4GDYzbktloA3LkLTC7q3uSG76aLY=;
-        b=QO/KWej9A19X+y12P04FrRCY+Paf9jgWd9OI1Nen2I8bgVAMWeGPb9O2kDxPVSSYJY
-         U7wTC/1C7KpD3KR9v5KvyQU8hQzOecI4eew03cAa6n3l14+G+M9F24FMEDIJpBimQuDB
-         M34F2FMqj7sPfkx2I6jxhKLjgRz9Ae2TJxgUmhvPq+LMTazxLMeT81tWHrbnkkeYPeUJ
-         XWgEsvxdlVsEpoVFqk1XInjX+6Ol/YJCueoOLuDnifNL5aI7glCbgCtgqNk3FE+5FBbr
-         csZ98Zk/UDMdXpA1q/sgtbc/XbHm5/kYKsvA46e+hEMU41TikMIBaqDccgkBC6bHzsNC
-         mpDw==
+        Tue, 11 Apr 2023 04:43:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73774121
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681202547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
+        b=ObBOH/fGlAUO6NQSk42MpU7rJiZ5bRMHscB7sYHunkJl6MvvD1M+OQOg2Z4CkqiHcN3k1S
+        adxi4DoGJqISJUJjvg5EOPk4cw2bRxU0Z77UzwEy4Q/ZPj1BFl7xonOswB0WA6pRifi6LG
+        AecxrsLzm5oL9VkQG0JN0KVz/miPNQE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-588-rb7ZVuphMTq6c_brDin0xg-1; Tue, 11 Apr 2023 04:42:26 -0400
+X-MC-Unique: rb7ZVuphMTq6c_brDin0xg-1
+Received: by mail-wr1-f72.google.com with SMTP id s30-20020adf979e000000b002eeddf27e71so1735487wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:42:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681202402; x=1683794402;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/wYNat7TPM3zWz4GDYzbktloA3LkLTC7q3uSG76aLY=;
-        b=uY7z/4n9sUC1vGXSwoe/LTeT1NN4th+0asrE2VMCvNPQYvRGr3M4btQQZbnkfbK3Ph
-         YzEvoNVDOtKoNwvJUMr5E5KomuMQ8Cu/b0vxcvOmKfVOIWO5Edph1O33KTA+EV1k1F4j
-         /RYKD1LMgXIQVYU5CIbKxan1dI+Oyd7tKlMzsgwG/DdfZyVP7jv/iw/3zu0sbbQvfkY5
-         bU/wnF4FsJ0Jjff2HfsHxtEp2UeWS0DAD+OgQGFoZ8xt1OY+AH31x5Oz3uujjLrFDE68
-         tLow9QFxUdi5FPq94jHqX3jJAtaJPIzqzdTEMemDSPSPWPbkazuUDaWB6D/Exv0NO3R1
-         5QFg==
-X-Gm-Message-State: AAQBX9eA+LgoBSns14h0/HYi1HTM4YdmLkyN804/z0rW91inl0ALOz5z
-        dPM91ulz8XHUKD+M2SZI4PGIIA==
-X-Google-Smtp-Source: AKy350ZTF43P835vc5NPh7vSRk88CSUb3apDwgby7DBU+yDKQR+urh8M5ltZc3mi903belBfjDFwDw==
-X-Received: by 2002:a05:600c:299:b0:3ed:5d41:f998 with SMTP id 25-20020a05600c029900b003ed5d41f998mr9763322wmk.15.1681202402518;
-        Tue, 11 Apr 2023 01:40:02 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:2611:592:3b9e:d2ae? ([2a05:6e02:1041:c10:2611:592:3b9e:d2ae])
-        by smtp.googlemail.com with ESMTPSA id x10-20020a05600c21ca00b003edf2dc7ca3sm16242062wmj.34.2023.04.11.01.40.01
+        d=1e100.net; s=20210112; t=1681202545; x=1683794545;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
+        b=pc11tgmFJFkI6WZRWtQZzlNMIENQr6WgfvWOpD2fod6Es6m1kBpZ5r+NGnKglaLipv
+         B6Y9pnRzfEvVTnl+CtWKfD0fN6fGkWIPlOXfVoo3WduJp1QwfhGqrdp6Cux9s9Ow75x9
+         0mK/nE500UTcls64LNLd9FgdpGcQnHG5x/XlzW5i04L15Luwt8gOygNGeScgKOOIP/Jg
+         sCJJbN0cbZCwoGGXDDINRvvv/bkr1+SItdoqB94bfrUzuM3QLqmWyIzwh01nn2rdbR0O
+         9EhXu9yOhseAJGjh4XM+2GZu0YQ/ZM6fDKAsHhX0vU2BrXHxu4Rk4XYJBveEmJF7p4Rf
+         0pSw==
+X-Gm-Message-State: AAQBX9dY6k1ebG9idFovOIw2JeLX8lgnXiodJp0EtdtTiTIXQNq1rSqV
+        ncppgFZyTgUhG+fOtNVG/jdUqdtagQ8v1k80puvkQ6kHB8hnhGVAI1g/6m0IRngco1bxBt4DPpY
+        +9TxAxdJ+xT85rZu2ENH2cp5D
+X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362634wmi.34.1681202545156;
+        Tue, 11 Apr 2023 01:42:25 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y0ozkUapL4MwnXUftzJoDwFRIUNHeFl1HSv1T0LtFvCqpcIZ1xQSSekp/uyzdWD3ViMfmTvg==
+X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362604wmi.34.1681202544706;
+        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05600c021600b003dc522dd25esm16326602wmi.30.2023.04.11.01.42.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 01:40:02 -0700 (PDT)
-Message-ID: <23636c0c-957c-cab8-6ded-c1f22481f6a6@linaro.org>
-Date:   Tue, 11 Apr 2023 10:40:01 +0200
+        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
+Message-ID: <3132a8ca-49a3-3d6a-09fe-984293116d76@redhat.com>
+Date:   Tue, 11 Apr 2023 10:42:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drivers: clocksource: fix memory leak in
- davinci_timer_register
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
+ sempahore
 Content-Language: en-US
-To:     =?UTF-8?B?5oi06ZKm5ram?= <u201911649@hust.edu.cn>,
-        thomas gleixner <tglx@linutronix.de>,
-        bartosz golaszewski <bgolaszewski@baylibre.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <20230322151945.102353-1-flno@hust.edu.cn>
- <192d4b12.39f86.1876b0d8808.Coremail.u201911649@hust.edu.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <192d4b12.39f86.1876b0d8808.Coremail.u201911649@hust.edu.cn>
+To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
+ <20230405203505.1343562-3-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi,
-
-thanks for the fix.
-
-However, the changes are incomplete, you should create the rollback 
-labels to undo all the allocated resources.
-
-On 10/04/2023 14:04, 戴钦润 wrote:
+On 05.04.23 22:35, Luis Chamberlain wrote:
+> Simplfy the concurrency delimiter we user for kmod with the semaphore.
+> I had used the kmod strategy to try to implement a similar concurrency
+> delimiter for the kernel_read*() calls from the finit_module() path
+> so to reduce vmalloc() memory pressure. That effort didn't provid yet
+> conclusive results, but one thing that did became clear is we can use
+> the suggested alternative solution with semaphores which Linus hinted
+> at instead of using the atomic / wait strategy.
 > 
-> ping?
+> I've stress tested this with kmod test 0008:
+> 
+> time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
+> 
+> And I get only a *slight* delay. That delay however is small, a few
+> seconds for a full test loop run that runs 150 times, for about ~30-40
+> seconds. The small delay is worth the simplfication IMHO.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   kernel/module/kmod.c | 26 +++++++-------------------
+>   1 file changed, 7 insertions(+), 19 deletions(-)
+> 
+> diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
+> index b717134ebe17..925eb85b8346 100644
+> --- a/kernel/module/kmod.c
+> +++ b/kernel/module/kmod.c
+> @@ -40,8 +40,7 @@
+>    * effect. Systems like these are very unlikely if modules are enabled.
+>    */
+>   #define MAX_KMOD_CONCURRENT 50
+> -static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
+> -static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
+> +static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+>   
+>   /*
+>    * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
+> @@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+> -		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+> -				    atomic_read(&kmod_concurrent_max),
+> -				    MAX_KMOD_CONCURRENT, module_name);
+> -		ret = wait_event_killable_timeout(kmod_wq,
+> -						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
+> -						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
+> -		if (!ret) {
+> -			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+> -					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> -			return -ETIME;
+> -		} else if (ret == -ERESTARTSYS) {
+> -			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
+> -			return ret;
+> -		}
+> +	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> +	if (ret) {
+> +		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+> +				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> +		return ret;
+>   	}
+>   
+>   	trace_module_request(module_name, wait, _RET_IP_);
+>   
+>   	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
+>   
+> -	atomic_inc(&kmod_concurrent_max);
+> -	wake_up(&kmod_wq);
+> +	up(&kmod_concurrent_max);
+>   
+>   	return ret;
+>   }
 
+Much cleaner
 
-
->> -----Original Messages-----
->> From: "Qinrun Dai" <flno@hust.edu.cn>
->> Sent Time: 2023-03-22 23:19:45 (Wednesday)
->> To: "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Bartosz Golaszewski" <bgolaszewski@baylibre.com>
->> Cc: hust-os-kernel-patches@googlegroups.com, "Qinrun Dai" <flno@hust.edu.cn>, linux-kernel@vger.kernel.org
->> Subject: [PATCH] drivers: clocksource: fix memory leak in davinci_timer_register
->>
->> Smatch reports:
->> drivers/clocksource/timer-davinci.c:332 davinci_timer_register()
->> warn: 'base' from ioremap() not released on lines: 274.
->>
->> Fix this by defining a unified function exit
->> to iounmap 'base' and return corresponding value.
->>
->> Fixes: 721154f972aa ("clocksource/drivers/davinci: Add support for clockevents")
->> Signed-off-by: Qinrun Dai <flno@hust.edu.cn>
->> ---
->>   drivers/clocksource/timer-davinci.c | 14 ++++++++++----
->>   1 file changed, 10 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/clocksource/timer-davinci.c b/drivers/clocksource/timer-davinci.c
->> index 9996c0542520..a6dd1da9e6d1 100644
->> --- a/drivers/clocksource/timer-davinci.c
->> +++ b/drivers/clocksource/timer-davinci.c
->> @@ -270,8 +270,10 @@ int __init davinci_timer_register(struct clk *clk,
->>   	tick_rate = clk_get_rate(clk);
->>   
->>   	clockevent = kzalloc(sizeof(*clockevent), GFP_KERNEL);
->> -	if (!clockevent)
->> -		return -ENOMEM;
->> +	if (!clockevent) {
->> +		rv = -ENOMEM;
->> +		goto iounmap_base;
->> +	}
->>   
->>   	clockevent->dev.name = "tim12";
->>   	clockevent->dev.features = CLOCK_EVT_FEAT_ONESHOT;
->> @@ -296,7 +298,7 @@ int __init davinci_timer_register(struct clk *clk,
->>   			 "clockevent/tim12", clockevent);
->>   	if (rv) {
->>   		pr_err("Unable to request the clockevent interrupt\n");
->> -		return rv;
->> +		goto iounmap_base;
->>   	}
->>   
->>   	davinci_clocksource.dev.rating = 300;
->> @@ -323,13 +325,17 @@ int __init davinci_timer_register(struct clk *clk,
->>   	rv = clocksource_register_hz(&davinci_clocksource.dev, tick_rate);
->>   	if (rv) {
->>   		pr_err("Unable to register clocksource\n");
->> -		return rv;
->> +		goto iounmap_base;
->>   	}
->>   
->>   	sched_clock_register(davinci_timer_read_sched_clock,
->>   			     DAVINCI_TIMER_CLKSRC_BITS, tick_rate);
->>   
->>   	return 0;
->> +
->> +iounmap_base:
->> +	iounmap(base);
->> +	return rv;
->>   }
->>   
->>   static int __init of_davinci_timer_register(struct device_node *np)
->> -- 
->> 2.37.2
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Thanks,
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+David / dhildenb
 
