@@ -2,147 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5828E6DDE6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CED6DDE64
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjDKOrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S229567AbjDKOq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDKOrQ (ORCPT
+        with ESMTP id S229960AbjDKOq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:47:16 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393F46A4;
-        Tue, 11 Apr 2023 07:47:11 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BE2Iik009257;
-        Tue, 11 Apr 2023 14:47:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DjAxUSREyJj7mk7FGGKTrCPCCgnd97HR7lLcbjUckpo=;
- b=LZzc4wiapBQQdCZoe/ZBtQsP177sFaRWOuLe6Kj1rYt9U+CMUF/mMA6+TJJJe7s78/VH
- njYsVops/ImRtLklpSUrWcxYez2GEKB/IIavuWbu6k83M3RddqT266/eAfmyDmMqIYPD
- 03suRouFHewtUJCUdDeJGVH1Mofc7jzFcmAXPHVja+WNE81SWgzLqDdzlHmXAI8k/Uzz
- Gwsf4WFvc6mBLCyLshK4Aj8WlMU2qLZXexhwh5WHbKELrw5Annk1r0+7k/okhAo4a3Vs
- YPY5CI2EDdgJC3Wq/vB9KB6dTYIT6a67MaFeUWQxQcZZiRUDhetgaJEisXaHyClaapKN fA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw6kegc96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 14:46:28 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BEkRU4003342
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 14:46:27 GMT
-Received: from [10.110.88.83] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
- 2023 07:46:26 -0700
-Message-ID: <c5eb5f78-00a7-58d5-4b09-7b6aaf929b56@quicinc.com>
-Date:   Tue, 11 Apr 2023 07:46:26 -0700
+        Tue, 11 Apr 2023 10:46:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89750172A;
+        Tue, 11 Apr 2023 07:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681224416; x=1712760416;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9YtPmGxmv4CA69+troKASVTIGrjtBdtTHpFIWMGP7kE=;
+  b=X/a4SkGgOpz2KdNhcVuP26OLHFZeXrzbhdQCmf/N3/VH6y6TcxLvI6Xo
+   G7NhZekGJEg46Q9bhfSpvto8pfdvi4yWaOpQ06yOz+yvSc5YCTPEDSKZG
+   GgI6U90U/Hz9ns3YM1gYTCUebC0FbbTFwcTXhqEI4dWmzhude1XorHlbT
+   Lcs4X1xECzsTM7YRlRdas7xuzL2nRjc0q/dAjZnZevTcFzcqnkgHp0RuT
+   A56oLSGFncKOb+dmNtgOpEZwlXfJTG3t5eKV0FU+6a3nN7sHZCbcZ7/1Z
+   ezk5mihRcKqqP50cG7KeT+cmvoCoDaoyR7Bh7iL2mhCI76zZNebR9imau
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="327736711"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="327736711"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 07:46:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="799945211"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="799945211"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2023 07:46:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pmFGU-00FKMS-2q;
+        Tue, 11 Apr 2023 17:46:34 +0300
+Date:   Tue, 11 Apr 2023 17:46:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Joy Chakraborty <joychakr@google.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Subject: Re: [PATCH v5 1/2] spi: dw: Add 32 bpw support to DW DMA Controller
+Message-ID: <ZDVyyoN71cB7dvWW@smile.fi.intel.com>
+References: <20230330063450.2289058-1-joychakr@google.com>
+ <20230330063450.2289058-2-joychakr@google.com>
+ <ZDVO/fpOZm+lGVZE@smile.fi.intel.com>
+ <20230411141115.vrfd6sud66u6xeog@mobilestation>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: firmware: arm,scmi: support parameter
- passing in smc/hvc
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <cristian.marussi@arm.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lkp@intel.com>
-References: <20230409181918.29270-1-quic_nkela@quicinc.com>
- <20230410182058.8949-1-quic_nkela@quicinc.com>
- <20230410182058.8949-2-quic_nkela@quicinc.com>
- <20230411125420.lymhjf5chxdr7if7@bogus>
-From:   Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <20230411125420.lymhjf5chxdr7if7@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aVZyz1pkZwFVnEggZncuKbx4cTUhOMWt
-X-Proofpoint-ORIG-GUID: aVZyz1pkZwFVnEggZncuKbx4cTUhOMWt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_10,2023-04-11_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110135
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411141115.vrfd6sud66u6xeog@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 05:11:15PM +0300, Serge Semin wrote:
+> On Tue, Apr 11, 2023 at 03:13:49PM +0300, Andy Shevchenko wrote:
+> > On Thu, Mar 30, 2023 at 06:34:49AM +0000, Joy Chakraborty wrote:
 
-On 4/11/2023 5:54 AM, Sudeep Holla wrote:
-> On Mon, Apr 10, 2023 at 11:20:57AM -0700, Nikunj Kela wrote:
->> Currently, smc/hvc calls are made with smc-id only. The parameters are
->> all set to zeros. This patch defines two optional device tree bindings,
->> that can be used to pass parameters in smc/hvc calls.
->>
-> Why 2 values ?
+...
 
-I can do with one property if you prefer that. Its just I wanted to 
-ensure that whosoever is setting
+> > > -	if (n_bytes == 1)
+> > > +	switch (n_bytes) {
+> > > +	case 1:
+> > >  		return DMA_SLAVE_BUSWIDTH_1_BYTE;
+> > > -	else if (n_bytes == 2)
+> > > +	case 2:
+> > >  		return DMA_SLAVE_BUSWIDTH_2_BYTES;
+> > > -
+> > > -	return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > 
+> > > +	case 3:
+> > 
+> > I'm not sure about this.
+> 
+> This actually makes sense seeing the function argument can have values
+> 1, 2, _3_ and 4:
+> dws->n_bytes = DIV_ROUND_UP(transfer->bits_per_word, BITS_PER_BYTE);
+> transfer->bits_per_word = __F__(master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32));
+> ...
+> dw_spi_dma_convert_width(dws->n_bytes)
+> 
+> The spi_transfer.bits_per_word field value depends on the
+> SPI peripheral device communication protocol requirements which may
+> imply the 3-bytes word xfers (even though it's indeed unluckily).
+> 
+> This semantic will also match to what we currently have in the
+> IRQ-based SPI-transfer implementation (see dw_writer() and
+> dw_reader()).
 
-the parameter list, is mindful of 32bit vs 64bit convention. If we use 
-one property, do you propose to add a new property like width to specify 
-if the  parameter list is for 32bit vs 64bit?
+Nice, but we have DMA_SLAVE_BUSWIDTH_3_BYTES definition for that. Why we don't
+use it?
 
->> This is useful when multiple scmi instances are used with common smc-id.
->>
-> I really would like to avoid this binding. Because of lack of standard
-> SMC/HVC FID for SCMI we had to add this binding. Extending for newer use
-> case like this in a vendor specific way is something I would like to avoid.
-If you have a solution to get rid of FID from DTB node, I will follow 
-the same however until that happens, my view is that we put the 
-parameters in dtb.
->
->> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->> ---
->>   .../devicetree/bindings/firmware/arm,scmi.yaml | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
->> index 5824c43e9893..ecf76b763c8c 100644
->> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
->> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
->> @@ -115,6 +115,23 @@ properties:
->>       description:
->>         SMC id required when using smc or hvc transports
->>   
->> +  arm,smc32-params:
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description:
->> +      An optional parameter list passed in smc32 or hvc32 calls
->> +    default: 0
->> +    minItems: 1
->> +    maxItems: 6
->> +
->> +  arm,smc64-params:
->> +    $ref: /schemas/types.yaml#/definitions/uint64-array
->> +    description:
->> +      An optional parameter list passed in smc64 or hvc64 calls.
->> +      This is valid only on ARM64 machines.
->> +    default: 0
->> +    minItems: 1
->> +    maxItems: 6
->> +
-> Even if we end up adding(which I would very much like to avoid), I don't see
-> the need for 32 and 64 bit params like this. There must be ways to avoid that
-> used by some property in some other binding(I will look for one if we choose
-> this path)
->
+> > > +	case 4:
+> > > +		return DMA_SLAVE_BUSWIDTH_4_BYTES;
+> > > +	default:
+> > > +		return DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> > > +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
