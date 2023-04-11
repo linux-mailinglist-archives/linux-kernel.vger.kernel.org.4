@@ -2,120 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2EC6DE5C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C496DE5C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjDKUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S229814AbjDKUdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjDKUcg (ORCPT
+        with ESMTP id S229504AbjDKUc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:32:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C33A9B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681245112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8rS/z80Lu47QxYWJ46HnzDoO2h7E/RInGcHyWg9vKTQ=;
-        b=ecHDjXm/xm2BFwVtrnfIT21K4ryWKt1/GVW4+FoLFBqpjwyK0eTfPgUr8tSs2NZCPZY+e/
-        GSikiAXYNDqSjlJnFkU4FruH+pmWIadX3eN3ELUc33/MwfXjpir2wGsikLhfQt0GUaIaSb
-        m4HhTmPVQMTMLWF6xC8Df6l5lhx/6zs=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-489-WKHA0WehM1m4Q-81GSfHIA-1; Tue, 11 Apr 2023 16:31:51 -0400
-X-MC-Unique: WKHA0WehM1m4Q-81GSfHIA-1
-Received: by mail-oi1-f200.google.com with SMTP id e18-20020a056808149200b00386f33cd11dso2712660oiw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:31:51 -0700 (PDT)
+        Tue, 11 Apr 2023 16:32:58 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79EE4690
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:32:53 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id bv15so7803262ybb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1681245173; x=1683837173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ikdi+6xxj2kvpls/7KRBOAg0lIkRgRoVXw8KwuRi4Nc=;
+        b=IQ9zZGCNRzZwfZFuGDrY6qwE9SFscSfIixOwnA4rFQL16vvokxAcya+cMNiEJWF/lB
+         jfUjEDfBjxQmhe/m3jewm7jJLjeF+tKcqSL03+AbqWymsVlf8EEP00s1SU0cxksL0zEq
+         aELwAeeUCgGgh9NbZTSKlmYtsFMknlxQ5vc+LAgXie28umXXh7hhlP0K8oGds+yB5mEO
+         vnwwKYtfeLTL9Ggt6AoI0LCSpTdf8MtVDWfJHa7h5gd+mCjLpYJP73Z+fFhKTpm6ehpS
+         eULjph7vC73UZBatpFNnwz8A7xfnzCLiAhRTkuk93Tn1z4Nwff5SzQw+maLC17p1NBra
+         luBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681245110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8rS/z80Lu47QxYWJ46HnzDoO2h7E/RInGcHyWg9vKTQ=;
-        b=a/vg96fRvHCzTDJVe5+iavhU/9xNdiJlNyJW+BALjIXsnCo0e+Y5r6xqWkrWlGznBg
-         mgWfLsA9osRm+PkAxhtL50F96XpFR8jXOitNqEdQpBtjRPZmXpid8rIY1fSfGwQSCIwE
-         Gy7YBOPYtygMkb5M/9j+pPhyXUNkK3U8fVnBn94O36TWsIg1Is1OsoFQE+SbfRFxRzrk
-         gQcdFC0TE6+6J7Gr6/4+6+NMFX3Y5MMMKK3hpTiKy1maJmta0EsIldz+CjXitYSG5swg
-         8tyPdDLkLTBy5Bn3mQqhmyQODGNrWmE/ugVlJd0mLNZeMflMw+/x0bfQFu1dn7cMmiUc
-         wTxw==
-X-Gm-Message-State: AAQBX9dt2xqkHQ8oU9hDKoT280PGDqmX/LSim1FzU+pCgdQG7bxVVJQC
-        GU4Md1r/ftgqH+d0fkamt62zaYNg0aJres5oXVC5K31vKsZjNcsr5wVZNCMJQZE60bP/0iJkXXP
-        93U8K2CAPBDLUkcOChxM9219pkjO0mItlG3LVH7A45LLrBmpD8Q+IdTSztXwctyNvQCYIY2hp6T
-        gr3xAukPAK
-X-Received: by 2002:a05:6870:ec8d:b0:17f:fa32:4509 with SMTP id eo13-20020a056870ec8d00b0017ffa324509mr2573844oab.0.1681245110375;
-        Tue, 11 Apr 2023 13:31:50 -0700 (PDT)
-X-Google-Smtp-Source: AKy350akI6FU8Ez5RoH8LUxzPI+e98pIg0YRV69XXPwsSFk4CCyUry4KMCIeRP3G70jbhzjIfRgOhg==
-X-Received: by 2002:a05:6870:ec8d:b0:17f:fa32:4509 with SMTP id eo13-20020a056870ec8d00b0017ffa324509mr2573827oab.0.1681245110100;
-        Tue, 11 Apr 2023 13:31:50 -0700 (PDT)
-Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id zj18-20020a0568716c9200b00183f77dcdadsm5078029oab.33.2023.04.11.13.31.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:31:49 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH] arm64: dts: qcom: sa8155p-adp: Make compatible the first property
-Date:   Tue, 11 Apr 2023 15:31:44 -0500
-Message-Id: <20230411203144.471192-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1681245173; x=1683837173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ikdi+6xxj2kvpls/7KRBOAg0lIkRgRoVXw8KwuRi4Nc=;
+        b=GgPNi2cNuUUvieCzly1UWQETw4eHsWOT3OCXkslsM65xe5RM+SD+wc62EUU12zJU1j
+         Ve6Bm9LdHaFSNnc9w+hz7OqBFZfwoEAiJ5jFSxMdwMwM9FA/YOhnJqzF7DuTA4tNpGPK
+         6oXDPsYaunymJPp6C9ZbjDBPZEfj1pgZIdpOBUBjDTazkkeod52/C8JvnugwMqYaftkD
+         B7k5zQXAZip7EKskG5nHKxD412ZbtZdixrwW+SmAYmq3bfPgawdZ4p0AtjN2r/FXqrGl
+         GUvxhAHLqlS7ZFQIy09TYHx3QsQSiBlW1xvRoKiqzALnk1iBV95EClzs4TV513O2248T
+         b1Ow==
+X-Gm-Message-State: AAQBX9ev65JpASu3lJAcbM7EM3/BNONGsj3vj0DSBYcBNaOZgJN/UsiF
+        /ZN15WzliVs1OnzR1ElKOqCqBuBpAJji0ZfEyi+R
+X-Google-Smtp-Source: AKy350a8DI+fttqPGYGrYWlw3sZUgpf5kan6JSrYFZNA0OIQFLQ5A+goWX5p08tzzrk48yMapO6qwBhOBzk9Q/ypItw=
+X-Received: by 2002:a25:d702:0:b0:b68:7a4a:5258 with SMTP id
+ o2-20020a25d702000000b00b687a4a5258mr101812ybg.3.1681245172701; Tue, 11 Apr
+ 2023 13:32:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-4-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhS_EbT7ze4oSHwHfus91VWQfdgGagf=5O7_h+XJ2o79PA@mail.gmail.com> <20230410185334.GA18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230410185334.GA18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 11 Apr 2023 16:32:41 -0400
+Message-ID: <CAHC9VhTRpDK74iL6A6wt2=--5LmrC7pHZY_BLnHDdfqboA2i1A@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 03/16] ipe: add evaluation loop and introduce
+ 'boot_verified' as a trust provider
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated at the below link in another review, compatible is always the
-first property.
+On Mon, Apr 10, 2023 at 2:53=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On Thu, Mar 02, 2023 at 02:03:11PM -0500, Paul Moore wrote:
+> > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com> wr=
+ote:
+> > >
+> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > >
+> > > IPE must have a centralized function to evaluate incoming callers
+> > > against IPE's policy. This iteration of the policy against the rules
+> > > for that specific caller is known as the evaluation loop.
+> > >
+> > > In addition, IPE is designed to provide system level trust guarantees=
+,
+> > > this usually implies that trust starts from bootup with a hardware ro=
+ot
+> > > of trust, which validates the bootloader. After this, the bootloader
+> > > verifies the kernel and the initramfs.
+> > >
+> > > As there's no currently supported integrity method for initramfs, and
+> > > it's typically already verified by the bootloader, introduce a proper=
+ty
+> > > that causes the first superblock to have an execution to be "pinned",
+> > > which is typically initramfs.
+> > >
+> > > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> >
+> > ...
+> >
+> > > ---
+> > >  security/ipe/Makefile        |   1 +
+> > >  security/ipe/eval.c          | 180 +++++++++++++++++++++++++++++++++=
+++
+> > >  security/ipe/eval.h          |  28 ++++++
+> > >  security/ipe/hooks.c         |  25 +++++
+> > >  security/ipe/hooks.h         |  14 +++
+> > >  security/ipe/ipe.c           |   1 +
+> > >  security/ipe/policy.c        |  20 ++++
+> > >  security/ipe/policy.h        |   3 +
+> > >  security/ipe/policy_parser.c |   8 +-
+> > >  9 files changed, 279 insertions(+), 1 deletion(-)
+> > >  create mode 100644 security/ipe/eval.c
+> > >  create mode 100644 security/ipe/eval.h
+> > >  create mode 100644 security/ipe/hooks.c
+> > >  create mode 100644 security/ipe/hooks.h
 
-Follow suit here to avoid copying incorrectly in the future.
+...
 
-Link: https://lore.kernel.org/netdev/20230331215804.783439-1-ahalaney@redhat.com/T/#ma76b4116bbb9e49ee4bcf699e40935d80965b3f3
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> > > diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> > > new file mode 100644
+> > > index 000000000000..48b5104a3463
+> > > --- /dev/null
+> > > +++ b/security/ipe/eval.c
+> > > @@ -0,0 +1,180 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright (C) Microsoft Corporation. All rights reserved.
+> > > + */
+> > > +
+> > > +#include "ipe.h"
+> > > +#include "eval.h"
+> > > +#include "hooks.h"
+> > > +#include "policy.h"
+> > > +
+> > > +#include <linux/fs.h>
+> > > +#include <linux/types.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/file.h>
+> > > +#include <linux/sched.h>
+> > > +#include <linux/rcupdate.h>
+> > > +#include <linux/spinlock.h>
+> > > +
+> > > +struct ipe_policy __rcu *ipe_active_policy;
+> > > +
+> > > +static struct super_block *pinned_sb;
+> > > +static DEFINE_SPINLOCK(pin_lock);
+> > > +#define FILE_SUPERBLOCK(f) ((f)->f_path.mnt->mnt_sb)
+> > > +
+> > > +/**
+> > > + * pin_sb - Pin the underlying superblock of @f, marking it as trust=
+ed.
+> > > + * @f: Supplies a file structure to source the super_block from.
+> > > + */
+> > > +static void pin_sb(const struct file *f)
+> > > +{
+> > > +       if (!f)
+> > > +               return;
+> > > +       spin_lock(&pin_lock);
+> > > +       if (pinned_sb)
+> > > +               goto out;
+> > > +       pinned_sb =3D FILE_SUPERBLOCK(f);
+> > > +out:
+> > > +       spin_unlock(&pin_lock);
+> > > +}
+> >
+> > Since you don't actually use @f, just the super_block, you might
+> > consider passing the super_block as the parameter and not the
+> > associated file.
+> >
+> > I'd probably also flip the if-then to avoid the 'goto', for example:
+> >
+> >   static void pin_sb(const struct super_block *sb)
+> >   {
+> >     if (!sb)
+> >       return;
+> >     spin_lock(&pin_lock);
+> >     if (!pinned_sb)
+> >       pinned_sb =3D sb;
+> >     spin_unlock(&pin_lock);
+> >   }
+> >
+>
+> Sure, I can change the code accordingly.
+>
+> > Also, do we need to worry about the initramfs' being unmounted and the
+> > super_block going away?
+>
+> If initramfs is being unmounted, the boot_verified property will never be=
+ TRUE,
+> which is an expected behavior. In an actual use case, we can leverage thi=
+s
+> property to only enable files in initramfs during the booting stage, and =
+later switch
+> to another policy without the boot_verified property after unmounting the=
+ initramfs.
+> This approach helps keep the allowed set of files minimum at each stage.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-index 459384ec8f23..8c773b856eb1 100644
---- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-@@ -351,19 +351,18 @@ &ethernet {
- 	max-speed = <1000>;
- 
- 	mdio {
-+		compatible = "snps,dwmac-mdio";
- 		#address-cells = <0x1>;
- 		#size-cells = <0x0>;
- 
--		compatible = "snps,dwmac-mdio";
--
- 		/* Micrel KSZ9031RNZ PHY */
- 		rgmii_phy: phy@7 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
- 			reg = <0x7>;
- 
- 			interrupt-parent = <&tlmm>;
- 			interrupts-extended = <&tlmm 124 IRQ_TYPE_EDGE_FALLING>; /* phy intr */
- 			device_type = "ethernet-phy";
--			compatible = "ethernet-phy-ieee802.3-c22";
- 		};
- 	};
- };
--- 
-2.39.2
+I think I was worried about not catching when the fs was unmounted and
+the superblock disappeared, but you've got a hook defined for that so
+it should be okay.  I'm not sure what I was thinking here, sorry for
+the noise ...
 
+Regardless of the source of my confusion, your policy/boot_verified
+description all sounds good to me.
+
+--=20
+paul-moore.com
