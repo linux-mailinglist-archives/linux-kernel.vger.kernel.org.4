@@ -2,92 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2F86DD84E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9AF6DD853
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjDKKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S229915AbjDKKwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjDKKvR (ORCPT
+        with ESMTP id S229898AbjDKKwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:51:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BE2D57;
-        Tue, 11 Apr 2023 03:51:16 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B91e07015923;
-        Tue, 11 Apr 2023 10:51:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=1vDpu+wru2g4wIURf7mPGl6X74I9e7k9f4mx8Rddcg8=;
- b=EbGxvC+Y4jtoVHFKidG3C+ohNs9dj2TfNYWPPeFxRMzEuRq5BpBG/0pb+NcFGre4Ni5/
- pu3PlsmKsvZuwGxJBMwo409oV/CU1YmkKwSyOuTwlhLgo2JKRA1gu2MNCjgNNGFQjyy7
- c42fCfRdCyO1R+PttWYRO1LySEvEkZa8pCZZJSS2/IweORfEPL7Hdh88ryLSs+1ekqLr
- FiYOCSg+42HGFLwROveaATLjvtksro1HU6iBxXx6WhOfbvGyWF67ZDqzyIraKWkCzjHU
- yW/fQ1BF3CouGb5KehHO6YIn9ZU5LyhAEhfViRZ92Yz9YAsLwyztb9yRDKyQZYRjlT42 kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pw25xxm9p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 10:51:10 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33BAB0OR024860;
-        Tue, 11 Apr 2023 10:51:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pw25xxm8s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 10:51:09 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33B1IViA017748;
-        Tue, 11 Apr 2023 10:51:07 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pu0hdhncc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 10:51:07 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33BAp38C8258122
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Apr 2023 10:51:03 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1F4420043;
-        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4273D20040;
-        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Apr 2023 10:51:03 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Alexander Schmidt <alexs@linux.ibm.com>,
-        Leon Romanovsky <leonro@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] net/mlx5: stop waiting for PCI link if reset is required
-Date:   Tue, 11 Apr 2023 12:51:02 +0200
-Message-Id: <20230411105103.2835394-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zvaAoXJmYZ0EcDA_tjiNVGo7fLB4cdSy
-X-Proofpoint-ORIG-GUID: 4Ld37dH-Ms6gvarzQdFtx5vARxAfiCBs
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 11 Apr 2023 06:52:25 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7BE2D67
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 03:52:23 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by michel.telenet-ops.be with bizsmtp
+        id jNsH290071C8whw06NsHK4; Tue, 11 Apr 2023 12:52:22 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pmBaw-00GalB-5x;
+        Tue, 11 Apr 2023 12:52:17 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pmBbl-00EILy-6G;
+        Tue, 11 Apr 2023 12:52:17 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan@rox.of.borg, Xinhui <Xinhui.Pan@amd.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 1/2] drm: Spelling s/sempahore/semaphore/
+Date:   Tue, 11 Apr 2023 12:52:13 +0200
+Message-Id: <50439958420f91cc97ad929437334bfb19ca4d90.1681210312.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_06,2023-04-11_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 clxscore=1011
- mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304110094
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,53 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After an error on the PCI link, the driver does not need to wait
-for the link to become functional again as a reset is required. Stop
-the wait loop in this case to accelerate the recovery flow.
+Fix misspellings of "semaphore".
 
-Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
-Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20230403075657.168294-1-schnelle@linux.ibm.com
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/i915_request.c | 2 +-
+ drivers/gpu/drm/radeon/cik.c        | 2 +-
+ drivers/gpu/drm/radeon/r600.c       | 2 +-
+ include/drm/task_barrier.h          | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-index f9438d4e43ca..81ca44e0705a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-@@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
- 	while (sensor_pci_not_working(dev)) {
- 		if (time_after(jiffies, end))
- 			return -ETIMEDOUT;
-+		if (pci_channel_offline(dev->pdev))
-+			return -EIO;
- 		msleep(100);
- 	}
- 	return 0;
-@@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
+diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+index 630a732aaecca8fb..0bb368a5dd0bb107 100644
+--- a/drivers/gpu/drm/i915/i915_request.c
++++ b/drivers/gpu/drm/i915/i915_request.c
+@@ -1220,7 +1220,7 @@ emit_semaphore_wait(struct i915_request *to,
+ 	/*
+ 	 * If this or its dependents are waiting on an external fence
+ 	 * that may fail catastrophically, then we want to avoid using
+-	 * sempahores as they bypass the fence signaling metadata, and we
++	 * semaphores as they bypass the fence signaling metadata, and we
+ 	 * lose the fence->error propagation.
+ 	 */
+ 	if (from->sched.flags & I915_SCHED_HAS_EXTERNAL_CHAIN)
+diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
+index 5819737c21c678d3..5d6b81a6578ef2ba 100644
+--- a/drivers/gpu/drm/radeon/cik.c
++++ b/drivers/gpu/drm/radeon/cik.c
+@@ -3603,7 +3603,7 @@ void cik_fence_compute_ring_emit(struct radeon_device *rdev,
+  * @rdev: radeon_device pointer
+  * @ring: radeon ring buffer object
+  * @semaphore: radeon semaphore object
+- * @emit_wait: Is this a sempahore wait?
++ * @emit_wait: Is this a semaphore wait?
+  *
+  * Emits a semaphore signal/wait packet to the CP ring and prevents the PFP
+  * from running ahead of semaphore waits.
+diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
+index dd78fc4994024815..34457e51035278fb 100644
+--- a/drivers/gpu/drm/radeon/r600.c
++++ b/drivers/gpu/drm/radeon/r600.c
+@@ -2918,7 +2918,7 @@ void r600_fence_ring_emit(struct radeon_device *rdev,
+  * @rdev: radeon_device pointer
+  * @ring: radeon ring buffer object
+  * @semaphore: radeon semaphore object
+- * @emit_wait: Is this a sempahore wait?
++ * @emit_wait: Is this a semaphore wait?
+  *
+  * Emits a semaphore signal/wait packet to the CP ring and prevents the PFP
+  * from running ahead of semaphore waits.
+diff --git a/include/drm/task_barrier.h b/include/drm/task_barrier.h
+index 087e3f649c52f02d..217c1cf21c1ab7d5 100644
+--- a/include/drm/task_barrier.h
++++ b/include/drm/task_barrier.h
+@@ -25,7 +25,7 @@
  
- static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
- {
-+	int rc;
-+
- 	mlx5_core_warn(dev, "handling bad device here\n");
- 	mlx5_handle_bad_state(dev);
--	if (mlx5_health_wait_pci_up(dev)) {
--		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
-+	rc = mlx5_health_wait_pci_up(dev);
-+	if (rc) {
-+		if (rc == -ETIMEDOUT)
-+			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
-+		else
-+			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offline\n");
- 		return -EIO;
- 	}
- 	mlx5_core_err(dev, "starting health recovery flow\n");
-
-base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+ /*
+  * Reusable 2 PHASE task barrier (randevouz point) implementation for N tasks.
+- * Based on the Little book of sempahores - https://greenteapress.com/wp/semaphores/
++ * Based on the Little book of semaphores - https://greenteapress.com/wp/semaphores/
+  */
+ 
+ 
 -- 
-2.37.2
+2.34.1
 
