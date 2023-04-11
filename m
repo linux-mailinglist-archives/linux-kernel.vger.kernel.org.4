@@ -2,226 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D10B6DD2DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739226DD2DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjDKGc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S230111AbjDKGeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjDKGcy (ORCPT
+        with ESMTP id S229836AbjDKGeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:32:54 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103391FC1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:32:53 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id s9-20020a056602240900b007589413aea0so4933658ioa.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:32:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681194772; x=1683786772;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3RhvbgZ92JfQcyj0UmcgVBWP+vSEC8CElQHX/vbzW3g=;
-        b=WU1MWmmhNLb1g4TtUg5bsF6sRtZMvoJFswyNk7lFxKn1ch/JCo/zpHxNVakg6fasj/
-         nEsZugN7L+9FbarC+jJ7O+Cf0T/MBVTscIyzO09DejIC2zX4pyG52PqEolvCS6JQ6v1R
-         TtQtsQ7RxSIwdttXW+2ICe7dCU1Oc0RmHH3pAD3GG93a5ttPxrlXUR8ruKjN4wxu/7X6
-         RcXzaerwhqvZAi2FH17zds/lO0IF7aCV3LnniPngWOVa76Bj8sFm3CUs+bMExAEhNWVO
-         rT0tLknw4/Oukb5jqrc2ZdOyDHzqxdn4Yi36ybMa+7akmId5R77oWwRu+pGf1CjOpaOl
-         Eh5A==
-X-Gm-Message-State: AAQBX9cpC+Y+R03IbFdJjxHOoByZOEDVG396gIgtF4ePXBwDOlVciVIS
-        AOHoZMeJlVkLOQwucpmXUBg4kljSBikYgsHUhYxRIg+aJ1gx
-X-Google-Smtp-Source: AKy350Yo2m9CJ9QwQwEFZI5S32kpnONQWgKVkxHhuRg97sRrqqz9oX6LUf8/CcMrkvuo/3xiXQ8pozh1YwO4yl4FdzPpgzvMH2vc
+        Tue, 11 Apr 2023 02:34:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414259D;
+        Mon, 10 Apr 2023 23:34:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0877621DE;
+        Tue, 11 Apr 2023 06:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4ADFC433D2;
+        Tue, 11 Apr 2023 06:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681194851;
+        bh=x+oH/HMKu73BCpFd8IM0DhA30uUo8CLngL7hAosyFdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MlONgH5GrXXlf5h6VLeHlLslNecKJZXb24RI+5PjWyd8gctDAHUuci4CEziLuXGtq
+         ewaqggQL3HcYvIxtsGPMLFguVDX4T6QoYzWaySXUAFwW6oGUV4NpGCU5wDooAyoTpZ
+         V6UB4TZttKhqX7K1BUZ8K+mivIMIoQO9yaYvO4Rk=
+Date:   Tue, 11 Apr 2023 08:34:08 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+Message-ID: <2023041136-donator-faceplate-5f91@gregkh>
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+ <20230407203456.27141-2-quic_johmoo@quicinc.com>
+ <CAK7LNAQQmoyUx+0Jk3c7iqY20KokrHEOPwHNb2doZOOA8RWBDA@mail.gmail.com>
+ <2023041015-lunar-dandelion-1b4e@gregkh>
+ <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a43:b0:324:5b4c:7087 with SMTP id
- u3-20020a056e021a4300b003245b4c7087mr4715909ilv.0.1681194772406; Mon, 10 Apr
- 2023 23:32:52 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 23:32:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003528ee05f909a903@google.com>
-Subject: [syzbot] [i2c?] KASAN: stack-out-of-bounds Write in i801_isr (2)
-From:   syzbot <syzbot+33b0400029edbd2b4377@syzkaller.appspotmail.com>
-To:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae44540f-8947-8efb-fb8d-45a84bd3fef3@quicinc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Apr 10, 2023 at 04:32:49PM -0700, John Moon wrote:
+> > > According to this tool, it looks like we broke a lot of UAPI
+> > > headers in the previous MW (between v6.2 and v6.3-rc1).
+> > 
+> > That's not ok, and needs to be fixed, otherwise this is useless as no
+> > one can rely on it at all.
+> > 
+> 
+> Right, there are several classes of false positives that we've documented
+> and when examining thousands of commits at time, it'll flag many things.
+> 
+> For some comparison, if you run checkpatch on the same changeset
+> (v6.2..v6.3-rc1), you get 995 errors and 7,313 warnings. Still, checkpatch
+> is helpful for spot-checks.
 
-syzbot found the following issue on:
+checkpatch.pl does not matter, it is a "hint", and many patches
+explicitly ignore it (think about patches in the staging tree, you could
+fix up one checkpatch issue for a line, but ignore another one as you
+are not supposed to mix them up.)
 
-HEAD commit:    99ddf2254feb Merge tag 'trace-v6.3-rc5' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=129f2409c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=adfc55aec6afccdd
-dashboard link: https://syzkaller.appspot.com/bug?extid=33b0400029edbd2b4377
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Also for some subsystems, checkpatch does not matter because their
+codebase is old and follows different rules.  And in some places,
+checkpatch is just wrong, because it's a perl script and can not really
+parse code.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+So NEVER use that as a comparison to the user/kernel abi please.  It's a
+false comparison.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33b0400029edbd2b4377@syzkaller.appspotmail.com
+> "./scripts/check-uapi.sh -b v6.3-rc1 -p v6.2" flags 36 out of the 911 files
+> checked. Of those 36, 19 fell into the currently documented false positive
+> categories:
+> 
+> Enum expansion: 17
+> Expanding into padded/reserved fields: 2
+> 
+> Beyond those, the tool appears to be flagging legitimate breakages.
+> 
+> Some fit into the definition of "intentional breakages" where support is
+> being dropped or something is being refactored:
+> 
+>  File removals:
+>    - include/uapi/drm/i810_drm.h
+>    - include/uapi/drm/mga_drm.h
+>    - include/uapi/drm/r128_drm.h
+>    - include/uapi/drm/savage_drm.h
+>    - include/uapi/drm/sis_drm.h
+>    - include/uapi/drm/via_drm.h
+>    - include/uapi/linux/meye.h
+> 
+>  File moves:
+>    - include/uapi/misc/habanalabs.h
+> 
+>  Removal of struct:
+>    - include/uapi/linux/uuid.h (5e6a51787fef)
+>      - include/uapi/linux/mei.h (failed due to uuid.h)
+>      - include/uapi/linux/ublk_cmd.h (failed due to uuid.h)
+> 
+> Others do not seem to be intentional:
+> 
+>  Addition/use of flex arrays:
+>    - include/uapi/linux/rseq.h (f7b01bb0b57f)
+>    - include/uapi/scsi/scsi_bsg_mpi3mr.h (c6f2e6b6eaaf)
 
-==================================================================
-BUG: KASAN: stack-out-of-bounds in i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:546 [inline]
-BUG: KASAN: stack-out-of-bounds in i801_isr drivers/i2c/busses/i2c-i801.c:613 [inline]
-BUG: KASAN: stack-out-of-bounds in i801_isr+0xcd8/0xe20 drivers/i2c/busses/i2c-i801.c:594
-Write of size 1 at addr ffffc900028e7db0 by tasmbus: error: Unexpected send start condition in state 2
+That is not a breakage, that's a tool problem.
 
-CPU: 0 PID: 53 Comm: kworker/u8:3 Not tainted 6.3.0-rc5-syzkaller-00032-g99ddf2254feb #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: bat_events batadv_nc_worker
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
- print_report mm/kasan/report.c:430 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:536
- i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:546 [inline]
- i801_isr drivers/i2c/busses/i2c-i801.c:613 [inline]
- i801_isr+0xcd8/0xe20 drivers/i2c/busses/i2c-i801.c:594
- __handle_irq_event_percpu+0x22b/0x730 kernel/irq/handle.c:158
- handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
- handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
- handle_fasteoi_irq+0x233/0x9f0 kernel/irq/chip.c:714
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq arch/x86/kernel/irq.c:231 [inline]
- __common_interrupt+0xa1/0x220 arch/x86/kernel/irq.c:250
- common_interrupt+0x51/0xd0 arch/x86/kernel/irq.c:240
- asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:636
-RIP: 0010:__do_softirq+0x19a/0x905 kernel/softirq.c:557
-Code: 00 48 01 f0 48 89 44 24 18 48 c7 c7 40 01 4b 8a e8 1b 80 fc ff 65 66 c7 05 41 a2 01 76 00 00 e8 ec 69 86 f7 fb bb ff ff ff ff <48> c7 c5 c0 a0 40 8c 41 0f bc de 83 c3 01 0f 85 aa 00 00 00 e9 85
-RSP: 0000:ffffc90000007f70 EFLAGS: 00000206
-RAX: 00000000018f5cd8 RBX: 00000000ffffffff RCX: 1ffffffff22a3f4e
-RDX: 0000000000000000 RSI: 0000000000000100 RDI: 0000000000000000
-RBP: ffff888013eb40c0 R08: 0000000000000001 R09: ffffffff914c7c6f
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000200 R15: 0000000000000000
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
- irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1107
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:lock_acquire+0x1f3/0x520 kernel/locking/lockdep.c:5637
-Code: bb 9e 7e 83 f8 01 0f 85 b9 02 00 00 9c 58 f6 c4 02 0f 85 a4 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
-RSP: 0000:ffffc900007e7b28 EFLAGS: 00000206
-RAX: dffffc0000000000 RBX: 1ffff920000fcf67 RCX: bbc06d1d311ad187
-RDX: 1ffff11002aa1d4e RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff914c7b87
-R10: fffffbfff2298f70 R11: 0000000000000000 R12: 0000000000000002
-R13: 0000000000000000 R14: ffffffff8c7925c0 R15: 0000000000000000
- rcu_lock_acquire include/linux/rcupdate.h:327 [inline]
- rcu_read_lock include/linux/rcupdate.h:773 [inline]
- batadv_nc_process_nc_paths.part.0+0xec/0x3f0 net/batman-adv/network-coding.c:687
- batadv_nc_process_nc_paths net/batman-adv/network-coding.c:679 [inline]
- batadv_nc_worker+0xc82/0xfe0 net/batman-adv/network-coding.c:728
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+>  Type change:
+>    - include/uapi/scsi/scsi_bsg_ufs.h (3f5145a615238)
 
-The buggy address belongs to the virtual mapping at
- [ffffc900028e0000, ffffc900028e9000) created by:
- kernel_clone+0xeb/0x890 kernel/fork.c:2679
+Again, not a real breakage, size is still the same.
 
-The buggy address belongs to the physical page:
-page:ffffea0001bfe780 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6ff9e
-flags: 0x4fff00000000000(node=1|zone=1|lastcpupid=0x7ff)
-raw: 04fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 5172, tgid 5172 (syz-executor.2), ts 889522562513, free_ts 889116806536
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x1190/0x2e20 mm/page_alloc.c:4326
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
- vm_area_alloc_pages mm/vmalloc.c:2953 [inline]
- __vmalloc_area_node mm/vmalloc.c:3029 [inline]
- __vmalloc_node_range+0xafe/0x1390 mm/vmalloc.c:3199
- alloc_thread_stack_node kernel/fork.c:311 [inline]
- dup_task_struct kernel/fork.c:979 [inline]
- copy_process+0x1320/0x7590 kernel/fork.c:2095
- kernel_clone+0xeb/0x890 kernel/fork.c:2679
- __do_sys_clone+0xba/0x100 kernel/fork.c:2820
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare+0x5d5/0xa50 mm/page_alloc.c:1504
- free_unref_page_prepare mm/page_alloc.c:3388 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3483
- slab_destroy mm/slab.c:1613 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1633
- __cache_free_alien mm/slab.c:773 [inline]
- cache_free_alien mm/slab.c:789 [inline]
- ___cache_free+0x204/0x3d0 mm/slab.c:3417
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slab.c:3257 [inline]
- slab_alloc mm/slab.c:3266 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3443 [inline]
- kmem_cache_alloc+0x1bd/0x3f0 mm/slab.c:3452
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:140
- getname_flags include/linux/audit.h:321 [inline]
- getname+0x92/0xd0 fs/namei.c:219
- do_sys_openat2+0xf5/0x4c0 fs/open.c:1342
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1375
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  Additions into existing struct:
+>    - include/uapi/drm/amdgpu_drm.h (b299221faf9b)
+>    - include/uapi/linux/perf_event.h (09519ec3b19e)
+>    - include/uapi/linux/virtio_blk.h (95bfec41bd3d)
 
-Memory state around the buggy address:
- ffffc900028e7c80: f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc900028e7d00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc900028e7d80: f1 f1 f1 f1 04 f3 f3 f3 00 00 00 00 00 00 00 00
-                                     ^
- ffffc900028e7e00: 00 00 00 f1 f1 f1 f1 00 00 00 00 00 00 00 00 00
- ffffc900028e7e80: 00 00 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00 00
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	00 48 01             	add    %cl,0x1(%rax)
-   3:	f0 48 89 44 24 18    	lock mov %rax,0x18(%rsp)
-   9:	48 c7 c7 40 01 4b 8a 	mov    $0xffffffff8a4b0140,%rdi
-  10:	e8 1b 80 fc ff       	callq  0xfffc8030
-  15:	65 66 c7 05 41 a2 01 	movw   $0x0,%gs:0x7601a241(%rip)        # 0x7601a260
-  1c:	76 00 00
-  1f:	e8 ec 69 86 f7       	callq  0xf7866a10
-  24:	fb                   	sti
-  25:	bb ff ff ff ff       	mov    $0xffffffff,%ebx
-* 2a:	48 c7 c5 c0 a0 40 8c 	mov    $0xffffffff8c40a0c0,%rbp <-- trapping instruction
-  31:	41 0f bc de          	bsf    %r14d,%ebx
-  35:	83 c3 01             	add    $0x1,%ebx
-  38:	0f 85 aa 00 00 00    	jne    0xe8
-  3e:	e9                   	.byte 0xe9
-  3f:	85                   	.byte 0x85
+Adding data to the end of a structure is a well-known way to extend the
+api, in SOME instances if it is used properly.
 
+So again, not a break.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> Is there something I'm missing that makes these changes false positives? If
+> so, I'd be happy to add on to the documentation and work towards a way to
+> filter them out.
+> 
+> In the mean time, we will start a thread on the libabigail mailing list to
+> see if there's a way to add flags such as --ignore-enum-expansion,
+> --ignore-expansion-into-reserved-fields, etc. Enum expansion seems to be
+> making up the largest portion of false positives, so would be the best thing
+> to filter out.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Increasing enums is in no way an abi break unless the size of the
+structure changes.
+
+Using reserved fields too is not a breakage.
+
+So yes, it looks like the tooling needs some work in order for us to be
+able to use this properly, digging through false positives like this is
+going to make it not used at all.
+
+thanks,
+
+greg k-h
