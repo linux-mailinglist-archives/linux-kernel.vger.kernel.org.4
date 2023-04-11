@@ -2,59 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450DC6DE57F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E797F6DE588
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjDKUIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S229818AbjDKUN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjDKUHm (ORCPT
+        with ESMTP id S229751AbjDKUNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:07:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A429A4EE8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681243611; x=1712779611;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UfOUvuJHeut6EmXf3sCGrtWFR0/2VDiA1r8P3zkV+VE=;
-  b=YR/69MA4D2wM16tdObyt6fwLMAEmtSKlpQqjZlga+pakFdhaTOQWtZ7C
-   FVV2/3hWHLVw6BRntT0TjoexVqTBavLulw7OzZYsun58sHC+PeyuHVgh5
-   fjHwzRS8Fai4F2XN7/zETAxW39P59JNHJdilRrae4TF5eO2YVPjIJXOg2
-   PWQaOLsgvkSgvaiCB4t/cSN/2kMWNm5Qcycm61JPxJV1faJp2H/jN8FW7
-   7oVRaSs580YCME/aJoUFYAx3bVdIo03cnSMpC8dq2vQW8dh3kyyEaCPPy
-   txoZI7BwvIeUXJoAH1pF3kUwZd0IagNgcfj4F0sE0eahXwMvScjbZrnAL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="345515129"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="345515129"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 13:06:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="934848010"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="934848010"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Apr 2023 13:06:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmKG2-000WfZ-0i;
-        Tue, 11 Apr 2023 20:06:26 +0000
-Date:   Wed, 12 Apr 2023 04:05:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-versatile/versatile.c:56:14: warning: no previous
- prototype for 'mmc_status'
-Message-ID: <202304120307.rabOWgH9-lkp@intel.com>
+        Tue, 11 Apr 2023 16:13:25 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7ACC3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:13:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tg4kqcPMvoklDFSZGr9/Q0WeMvTfPwqKRcb3Zv6icWrnX4ueJ8IJMra6HVlB1Hd5Kq/+hGV3k60urc9pUubziwPxAcZzYY+HUwDYkXzakBO83kPHFN5N1CM/G2WFtgIcqTUe/e9pY18AM438sUYrrt6CnuuuXPpzKbTWxU2V4+SEMZGqelY6jWr1poTqPuW+UDbzTsuAIuBsotNEiD7s/mSamteqVpiDj0AeU0C9p54MXR6MCJvOZWzXS/CzpLL5/R9A1HDluLVrTZ9ONBoKxVMl5K/ucEggTMtNetma4HlWd4nXfTXxrQgWIXNCE8GIXZ10n4Xdx6Mx1HGmOmxTmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wtHQNznrsuJWnMTXs/PTwzxUbUi2vuntq2HXIG5tzQo=;
+ b=KP6jk6jDR0AtQS/4gG3BKRGUuRQlp0zFF/yQXtIcqUNvFbXwzemfcrndrmDDmidL2IgocMR3J4DtPtSulxMBkrAR2wSq0pmnYR3ziRGOBtTy4JzHEuhYy0cVYrWDbp9k+i7+bkZzjGvz8sHruZveu/3tEPSQsg+KCmJjRRB4+DxQPKwTvB1XNGovA4OwOWOWCF1TG5/dqtoqT4mx5nXHBtnmLGL7Z04dlofm04NnqITq7hdCrUzaVHV9QqPd0T9uoqU3S/AoVwyXHSCJixYBk+hQj62KPdODnYBEvYsb8RCrf3D33sH9v+8pXYtjzIR/DQtUZPkfzJNvdp1WhuIhwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wtHQNznrsuJWnMTXs/PTwzxUbUi2vuntq2HXIG5tzQo=;
+ b=wQEhazQPB7nvzwu0FgyjGwF0s+kDC7RYJed9e8Ac1x64YJ6ZhpVZBqSBBNvVaorCMvpExIlEoYp4ED8lKZUsiqyoCF9Q9H/gktcupOgClhxwTx/QjULXbmQ5hlSMAssrbp/L1GBmoh7SkDQsLzWPEbac/MVw5w8Th8bzjANTcHs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ IA1PR12MB6305.namprd12.prod.outlook.com (2603:10b6:208:3e7::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Tue, 11 Apr
+ 2023 20:06:34 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
+ 20:06:33 +0000
+Message-ID: <21c789de-e381-cccd-9093-741dcd7a2dc5@amd.com>
+Date:   Tue, 11 Apr 2023 16:06:30 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-CA
+To:     Danilo Krummrich <dakr@redhat.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        airlied@gmail.com, daniel@ffwll.ch, l.stach@pengutronix.de,
+        "Prosyak, Vitaly" <Vitaly.Prosyak@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230331000622.4156-1-dakr@redhat.com>
+ <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
+ <ecef210b-dc7d-e385-f9b2-927d55a6777e@amd.com>
+ <32c28b47-2a3b-db1d-e927-ae44d52cae0b@redhat.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [PATCH] drm/scheduler: set entity to NULL in
+ drm_sched_entity_pop_job()
+In-Reply-To: <32c28b47-2a3b-db1d-e927-ae44d52cae0b@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT4PR01CA0228.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:eb::17) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|IA1PR12MB6305:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6cb6f583-604f-432b-7221-08db3ac83f48
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: seXpWW/bWyhf7r2/2hZ7Iyt+idGqkkSuyBwtq0lgLUh72y1cEaakxQ4CETg5pNM3BXibAuZ+S/NGqaEnxtmg4dRt2EfoLPTMMdwAw7AoLv9J+FILBlZKpnda/I1yuLjhuYt2tDDSX3evYPebFQXMwFIiWTFNLCFzv579+Z2kxzlnztC1JT4rhkJeACd/gVRGg84YY1ei1g5SNFRgP78yMXz4VyRuxWpUVAPPLJ2ndszOwVoGwDXtUqsonnzuj0mOkI/vgJU3/jG65a+XfJSfe/H82AfnS1RJ/RFe/WjEsBYKMMYNMbRZu5RBY6X9ynkwbvRaS3gp6e9WVmswGyWN76Wd+w2RSw/LnOGvyh2JFABBHJZn8qzpyPajcB1Otql+86DI7MChXMWLdlZYsVKTbWtaZKJIgPVPh4GjmxEpCU9dJr/IPynS8HNYZXdpIB5dc+SZrvjreIowMYiIobERRmcJHA+XPYlQf2EUPahlTtP2Kpl6QcUtaWkZfnBWq7A2nZuKthnheQO2KbwLdPrNd9blhv48CSnYFASqDkFn0IKcZ1zZlcavxtfZgjHEyBX8GFxO2a7VzIslW9n8+lngrxn0v2GgicpEdDpAYB72ru1ebQ2IrhaIU8lLeUZksd9xrqQdtKip3fV6AO0h1xXUrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199021)(316002)(31686004)(110136005)(6636002)(38100700002)(66556008)(66476007)(8676002)(66946007)(4326008)(31696002)(86362001)(478600001)(66574015)(2616005)(186003)(83380400001)(36756003)(41300700001)(53546011)(2906002)(6506007)(6512007)(26005)(44832011)(8936002)(5660300002)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTdDeXRLWG1ZQUxKNytkdnhyQ2R5NjlxbmVKdHpXUzBWMHI5YTZOdGs1S1ZL?=
+ =?utf-8?B?bDJIL2U4WnYrQkZlNklrblJGOVFDbzJaTFc3U1NCVUlHc3lHZktGcmxlT2RT?=
+ =?utf-8?B?TEhqdjNJNElFY3ZGd0RieFU0SGt1bVZINit6SmlaOXBtVFMzV3Aybk9PRnpS?=
+ =?utf-8?B?NVVVQzgxNnUvUitteXBDYksza2dXRFpmblhzWFdBZWFtRGw4ZUJDbEUrVi9u?=
+ =?utf-8?B?MDc2b3MrZCtMbEo3eGovN2FxOVU4VHM5eFlYSUl2d1lyNkdXYnBVdWgvbElS?=
+ =?utf-8?B?bmJFeVVUVlVEZ3l2allkMktwQW40eHAyb2l6aXNVaUVndEVFTzEzTndXanQ3?=
+ =?utf-8?B?WXh1QmR3VGo1aEU1QWxmZktkKy9KV2RZUzZIeTV4QnRiZHhMUjEvbGRPR0RN?=
+ =?utf-8?B?aE1BT3RBQW1ZdTdWb3IwYXBYWkh6dTRUbWpoRVYwbUVURDVLS3hYZnZLTzlh?=
+ =?utf-8?B?ZmZEZm9qSWV1Rjc5NzViREZCeGVkZWpRMmk3OXBnbjZVd3pzYkhieVdqSUdN?=
+ =?utf-8?B?WnRGVFZVSTBwVVBhaGx0bzNSYmFJSi9SM21nSVVYVVNMa0lZSE5iS210SkFI?=
+ =?utf-8?B?TkFJZ3R1TTRtR00wU3cxdm94V3V5M1FvREM4Uk1GRWc1a0xRa2EzR1FFSjJv?=
+ =?utf-8?B?VmpCVWFmTDUvYUFBbCtITmZ4TWxNK01VK0hranNmR1B5QkNndWs2UHc0dlcr?=
+ =?utf-8?B?dXppMlVpRHV2SHhGN2NvWVhsVlZJZDZwSmZrNUZWanhZRWRwUUdTdFdYZmxS?=
+ =?utf-8?B?cFcxQm5lWTU4RWFUSFZaM0FBbmZoMkxUc0o0QU45cnVNMmcwLzdGZlErbzlQ?=
+ =?utf-8?B?M2JpbWlIQTRwL2VWQ2lvMkt0MEFLK1RNUWY1R0UrTzJ4QmpRQ0w3Tk5XUHA3?=
+ =?utf-8?B?bE5JZjdPemxnbTN5MWJ2ZTVQQjFYUmlLNDJaN24zM0ZhQXZ0VzFwVytLMUhw?=
+ =?utf-8?B?S0FzUE1hOUZmUWF1K3Q1QXZXWFBtc3pmd09CMk5FdnVXS2lJZXoyRllsMXo4?=
+ =?utf-8?B?a09JNmtUaWFVdmtDcWQwVHRWMzB5d3pLQTdzUjBVYmtKVldOa3BBL3FFQ0li?=
+ =?utf-8?B?VWpPVVhhVWduWVBUckY0aG5uQkNwbTk4ZlYxcUJSSjhDakZLRE92dGRTcDFH?=
+ =?utf-8?B?Tk5rNXFmUVhPdi92VGJncXkveC9oMUFkSjRvUmxNQmcxQm1XMVpRY3h2Vmp0?=
+ =?utf-8?B?WElVaE1qQ2NpV2Z5S3o5MW1waEZQQllXYjRQbnNYUnMzSCtaUDVrRWdKdDJS?=
+ =?utf-8?B?L2MrVEVoeHhycUxmN1VYVWdwTE1UZllCSEVISjN0aU5SZGMzTFM0M1BzZXVV?=
+ =?utf-8?B?Z1ZEUmZtWWdhUGROUThFMW50YjRtS3hvcUV5b3NkSTNCdkNoOWJkQU1QYlFJ?=
+ =?utf-8?B?QzdzR2dJc1ErSlRNNXY4L3lCQVdWeWhOdzNwbk9lYkg4V0F6SUI2VVVqRG1E?=
+ =?utf-8?B?di9mL0tpWnFXbVB2VHdoVTlXQXpYeEllQWlQUEpPeWh1QlM2YUoxcHhvaHlD?=
+ =?utf-8?B?cCtqZE50UXk4OFgrNTg1cFJ6K1p2cllzQ0lBblR5bWNFUGg4UHFUOGlEU0Jx?=
+ =?utf-8?B?aTFxOFhialExRW1kWFo5WFFvTUhSbzBFZTYwWWZQeXdmdWhENFpsQzFpSHhu?=
+ =?utf-8?B?bjc0TU1TSDVSTFFSd3RTYzRYbmJETDlQV2FBQWxLWThLV1k5OTl2ME9yMnNY?=
+ =?utf-8?B?MXV1RzUzU2hDZUFKQTA2RW1pU0xYcjNOSmt6SjVCcTlKSUVkOVZpeFgrRlNp?=
+ =?utf-8?B?L3dsMTE1dWsxcUVXU1FoV0UxaXYwdk8vQ1F2Q0NReVVxTnhaalJFbEFWTWhL?=
+ =?utf-8?B?aW8rc29sQWI3T1pmQnhrczdwZndEc0I4TWRrQjJOT2tIV0I3SUNLR2wySEZK?=
+ =?utf-8?B?RDZHM0pEY1VzdjJjSis4eGp4aVpNRTYxUGtGeTQ2WlNuTlE1UUdwZzNuQTZz?=
+ =?utf-8?B?NWl0TEozQnlmZ1dpUGdGaVpqZy9UNzIyUWVjNVhMdHpOK3R0WmZ5aHh4ajkv?=
+ =?utf-8?B?OGVjbDJTVWNVQ0g1cXp5NDdEWStuMmJMdStWNkp6bVJrV2NqVnJWdUtlTmNR?=
+ =?utf-8?B?R2NHSUsxL2pvSjV0YjJXTEVVb2thVmRwbHRlSnFRUXAzczFlajFMMC8wdDJu?=
+ =?utf-8?Q?tv9+ksukbjlOgU3C82cfUJUFk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6cb6f583-604f-432b-7221-08db3ac83f48
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 20:06:33.5004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /vb+MWhGFkJDv3SAbdXnv+UOM60ejVOlH+TmYAGuanD4vJi3SdIu5/9Dq1p2gLcK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6305
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,69 +130,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 2023-04-11 14:13, Danilo Krummrich wrote:
+> On 4/5/23 19:39, Luben Tuikov wrote:
+>> On 2023-03-31 01:59, Christian König wrote:
+>>> Am 31.03.23 um 02:06 schrieb Danilo Krummrich:
+>>>> It already happend a few times that patches slipped through which
+>>>> implemented access to an entity through a job that was already removed
+>>>> from the entities queue. Since jobs and entities might have different
+>>>> lifecycles, this can potentially cause UAF bugs.
+>>>>
+>>>> In order to make it obvious that a jobs entity pointer shouldn't be
+>>>> accessed after drm_sched_entity_pop_job() was called successfully, set
+>>>> the jobs entity pointer to NULL once the job is removed from the entity
+>>>> queue.
+>>>>
+>>>> Moreover, debugging a potential NULL pointer dereference is way easier
+>>>> than potentially corrupted memory through a UAF.
+>>>>
+>>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>>>
+>>> In general "YES PLEASE!", but I fear that this will break amdgpus reset
+>>> sequence.
+>>>
+>>> On the other hand when amdgpu still relies on that pointer it's clearly
+>>> a bug (which I pointed out tons of times before).
+>>>
+>>> Luben any opinion on that? Could you drive cleaning that up as well?
+>>
+>> I didn't find any references to scheduling entity after the job
+>> is submitted to the hardware. (I commented the same in the other
+>> thread, we just need to decide which way to go.)
+> 
+> AFAICS from the other mail thread it seems to be consensus to not 
+> ref-count entities and handle job statistics differently.
+> 
+> Should we go ahead and take this patch then? Maybe it also makes sense 
+> to send a V2 additionally adding a comment to the drm_sched_job 
+> structure mentioning that .entity must not be used after the job was 
+> taken from the entities queue.
 
-First bad commit (maybe != root cause):
+Yes, please send a v2, but instead of mentioning (or in addition to)
+that the job was taken from the "entities queue", mention that
+once the job is pushed to the hardware, i.e. the pending queue,
+from then on, the "entity" should not be referenced anymore. IOW, we
+want to mention that it is going from X to Y, as opposed to just
+that it's taken from X, because the latter begs the question "Where
+is it going to then?".
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0d3eb744aed40ffce820cded61d7eac515199165
-commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
-date:   10 months ago
-config: arm-randconfig-r023-20230411 (https://download.01.org/0day-ci/archive/20230412/202304120307.rabOWgH9-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7036440eab3e2d47a775d4616909f8235488d714
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+For the record, I think that using kref would give us the most
+stability, even if we skipped "entity" and let the scheduler, or
+even the controller keep a kref on submitted commands down to
+the GPU. On reset, we block command submission to the GPU from
+the outermost boundary, and then start peeling the layers from
+the innermost boundary.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304120307.rabOWgH9-lkp@intel.com/
+Using kref also forces us to think objectively and set explicit
+(clear) dependencies from the outset--i.e. who gets freed and when
+and under what circumstances.
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for 'mmc_status' [-Wmissing-prototypes]
-      56 | unsigned int mmc_status(struct device *dev)
-         |              ^~~~~~~~~~
---
->> arch/arm/mach-spear/pl080.c:30:5: warning: no previous prototype for 'pl080_get_signal' [-Wmissing-prototypes]
-      30 | int pl080_get_signal(const struct pl08x_channel_data *cd)
-         |     ^~~~~~~~~~~~~~~~
->> arch/arm/mach-spear/pl080.c:65:6: warning: no previous prototype for 'pl080_put_signal' [-Wmissing-prototypes]
-      65 | void pl080_put_signal(const struct pl08x_channel_data *cd, int signal)
-         |      ^~~~~~~~~~~~~~~~
-
-
-vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
-
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
-
-:::::: The code at line 56 was first introduced by commit
-:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
-
-:::::: TO: Rob Herring <robh@kernel.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
+And using kref might even expose the wrong dependencies, thus
+prompting a redesign and thus a fix.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Luben
+
