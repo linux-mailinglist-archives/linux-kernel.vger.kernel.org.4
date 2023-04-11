@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEC26DDF01
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C67A6DDF05
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjDKPJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S230339AbjDKPJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjDKPJK (ORCPT
+        with ESMTP id S230330AbjDKPJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:09:10 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D168F5256
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:08:47 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id gb34so21409138ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1681225724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+CKtT5Jvf3f0JgKYZh7PXFqhEMkaUpMPr+pEhO6IQ30=;
-        b=L4f4rl0cnkxJoP0/ReN7wsAGlmTTMsW0Yid+qhHquTtauzUtz9uoaqBMWJOSc1s6f+
-         k9y/UrAki3869xJUZXC2DJHg7qCUcnxDBU6FzuY8k5QzlVSjISZMCnfEt0vIwvoaAj0k
-         rUn5E6g57n/D1EcfV7g26SZbv43MRsWsr6MCXOKcet5UXADhqqVQe2SU7ArZWXtd1koQ
-         wa76Fs/5DvIne1g0uZ5VJRMPWqusM0iKuIbLJZKC5gxtmbDgn6E7HiuEjQYQ5EU3q6sk
-         xN+7HHAJUAEni/wVLSoTduKPHJzfuMF/BfEFHerR0bBZ24LmcT/nEXm9LekkvjZJKSoO
-         5vjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681225724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+CKtT5Jvf3f0JgKYZh7PXFqhEMkaUpMPr+pEhO6IQ30=;
-        b=HRb74iBlIvL1ibHNB46VfjYhTxDvi2UTZeH9fJN8lELvUWJFhhdvprzVdGw8W/1vRr
-         NmwtWmnvP1ZLny83/flSwT1sdaXTSfP06gsreEHzEEollI/fIG4iy76VCRG7QN4O0YnO
-         Q+DxzXCfpIhk7EIkYHepLIfX49/Geca830LQLBaWjUo9oOvRMMXmOsYK0LPnYUqAryjm
-         GdRrybg7zAdyYmmAB+hBfr5okFKNIZ5rFs/3nFtHm5BP2C3DcEDVCR4bqr7hxi8QkKhK
-         SJHoQa2vtQ0Lb+nByKeRT3ze921HykjJ4FLp1UKXZKan1GqfSqR0ECx863qmkVAg8iZt
-         B6nA==
-X-Gm-Message-State: AAQBX9esDsm14nRRr9t+V02GV3b0c69LO0uENnQIrteWLF1NDTW5ko48
-        B0RPD1VocxWY7iC5N9ZYCDMq3Z3B9CeBENyyCBaL8A==
-X-Google-Smtp-Source: AKy350arniCGBsMeQ/B/9V1F5ZCcTIUWRYoaxrt/sLV/Wbp04zqFjFkuKph/IMSp06UofYm5hMkq/SUhexA3pnq2IHw=
-X-Received: by 2002:a17:907:7f23:b0:94a:8300:7246 with SMTP id
- qf35-20020a1709077f2300b0094a83007246mr3468304ejc.14.1681225723956; Tue, 11
- Apr 2023 08:08:43 -0700 (PDT)
+        Tue, 11 Apr 2023 11:09:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB80527A;
+        Tue, 11 Apr 2023 08:09:04 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BE2BKY013011;
+        Tue, 11 Apr 2023 15:08:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GlKyS851mvhNRkygM2H2YDVF7owvw/buclM8jjXT8ls=;
+ b=pgeelPmp2VHNYlzLOzIgw6U6/3r+9IUoFrjNRNnTWUCBo5RPhhOYkEuvIHNaJ0QCEQKl
+ I73tmLg49ChySqH1EnKpwqr7Z2li31eFkUiT5wwdmcM/Rdzli3iy4qtM0XWW8/ftPClB
+ l6QyTjxr8Gos3KolTSDwax3RwMtX84hw0uxGQ6UYbNZp8UkPiMuNEQlMMGprAG/k+dDl
+ YQOW+/NDPAb6KRQPrlpknJkbZ3aA1vLxnzjFeiNeQKj4/sElCK+T/rDXyqBA+lkLRWuo
+ WvwjBNZNfTnqt9p+GqPh3R58immzXE+NcMzjBfXzIVEp5UagDypgNCl3WbqdO9GgHh4n eQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvq4djaqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:08:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BF8fQ8006048
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:08:41 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 08:08:40 -0700
+Message-ID: <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
+Date:   Tue, 11 Apr 2023 09:08:39 -0600
 MIME-Version: 1.0
-References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
- <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
- <ZBiAPngOtzSwDhFz@kroah.com> <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
-In-Reply-To: <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 11 Apr 2023 16:08:32 +0100
-Message-ID: <CAN+4W8j5qe6p3YV90g-E0VhV7AmYyAvt0z50dfDSombbGghkww@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
- resolves after pointer
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
-        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>, Oded Gabbay <ogabbay@kernel.org>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local> <2023041123-tractor-quake-c44d@gregkh>
+ <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wZhqxzZyL9cRef5WOovGBZ8cAVfjYBnt
+X-Proofpoint-GUID: wZhqxzZyL9cRef5WOovGBZ8cAVfjYBnt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_10,2023-04-11_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 adultscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110136
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +85,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 11:18=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> w=
-rote:
->
-> On Mon, Mar 20, 2023 at 3:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.o=
-rg> wrote:
-> >
-> > Why would it break?  Is that because the test is buggy, or the kernel i=
-s
-> > buggy?
->
-> This test will be fine, but there have been several times when
-> selftests/bpf for stable kernel releases didn't actually compile due
-> to backported tests. This is because macros we're redefined, etc.
-> Unless those also get picked (seems like a sisyphean task) we'll keep
-> seeing broken selftests/bpf on stable.
+On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+> On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+>> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+>>> On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> After merging the driver-core tree, today's linux-next build (x86_64
+>>>> allmodconfig) failed like this:
+>>>>
+>>>> In file included from include/linux/linkage.h:7,
+>>>>                   from include/linux/kernel.h:17,
+>>>>                   from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+>>>> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
+>>>> include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>>>     27 | #define THIS_MODULE (&__this_module)
+>>>>        |                     ~^~~~~~~~~~~~~~~
+>>>>        |                      |
+>>>>        |                      struct module *
+>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
+>>>>    544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>        |                                      ^~~~~~~~~~~
+>>>> In file included from include/linux/device.h:31,
+>>>>                   from include/linux/mhi.h:9,
+>>>>                   from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+>>>> include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
+>>>>    229 | struct class * __must_check class_create(const char *name);
+>>>>        |                                          ~~~~~~~~~~~~^~~~
+>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
+>>>>    544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>        |                         ^~~~~~~~~~~~
+>>>> include/linux/device/class.h:229:29: note: declared here
+>>>>    229 | struct class * __must_check class_create(const char *name);
+>>>>        |                             ^~~~~~~~~~~~
+>>>>
+>>>> Caused by commit
+>>>>
+>>>>    1aaba11da9aa ("driver core: class: remove module * from class_create()")
+>>>>
+>>>> interacting with commit
+>>>>
+>>>>    566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+>>>>
+>>>> from the drm tree.
+>>>>
+>>>> I have applied the following merge fix patch for today.
+>>>>
+>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>> Date: Tue, 11 Apr 2023 14:16:57 +1000
+>>>> Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
+>>>>
+>>>> interacting with "accel/qaic: Add mhi_qaic_cntl"
+>>>>
+>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>
+>>> Thanks for the fixup. Since Dave is out I've made a note about this in my
+>>> handover mail so it won't get lost in the drm-next merge window pull. I
+>>> don't think we need any other coordination than mention it in each pull to
+>>> Linus, topic tree seems overkill for this. Plus there's no way I can
+>>> untangle the drm tree anyway :-).
+>>
+>> Want me to submit a patch for the drm tree that moves this to use
+>> class_register() instead, which will make the merge/build issue go away
+>> for you?  That's my long-term goal here anyway, so converting this new
+>> code to this api today would be something I have to do eventually :)
+> 
+> We kinda closed drm-next for feature work mostly already (just pulling
+> stuff in from subtrees), so won't really help for this merge window.
+> 
+> For everything else I think this is up to Oded, I had no idea qaic needed
+> it's entire own dev class and I don't want to dig into this for the risk I
+> might freak out :-)
+> 
+> Adding Oded.
+> 
+> Cheers, Daniel
 
-Hi Greg, Sasha,
+Sorry for the mess.
 
-Following up on this since it seems to have fallen through the cracks.
+I made a note to update to class_register() once my drm-misc access is 
+sorted out.  Looks like we'll address the conflict in the merge window, 
+and catch the update to the new API in the following release.
 
-Lorenz
+-Jeff
