@@ -2,151 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F378D6DE83B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00D6DE844
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjDKXpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S229755AbjDKXqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDKXpJ (ORCPT
+        with ESMTP id S229687AbjDKXqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:45:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D03E59
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=BXUO1wgjEjTKJJJ0W0k6Aejv/+QwkUlBVT276pYvRHE=; b=Os7VThiw3qPJgX1B/yMfaABecu
-        g9dhF67m7oU5DFfCS6InT4untnYdY5FTAPG+UyX2H/te/1Ffzj/PUKDo5LPmDrddQ2W9hS62DlScp
-        Or5MA7eAzrifxSU6CqqglgyHYY9L27zKe53oqFEguxVji9k3nsip2e1iBcaIAVo9J45pkPg9Vbmb0
-        zNvmlWT+WatkWty06+jLKaWduQYGH+kCyDPi2g9/JCe6ciFzyXkglUrcfCwskE4mZUX0GTUr5EuK6
-        9RYeuUVEPEv6ZnTsD5SJA3roSF3BN+Zva45DPvg/DnuNe06vSN6eNX9w6jNigzghgoLeIe4X581tw
-        V3WMUjaA==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmNfd-001NeS-2B;
-        Tue, 11 Apr 2023 23:45:05 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: [PATCH] x86: msr: clean up kernel-doc notation
-Date:   Tue, 11 Apr 2023 16:45:03 -0700
-Message-Id: <20230411234503.18614-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.0
+        Tue, 11 Apr 2023 19:46:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950B04495;
+        Tue, 11 Apr 2023 16:45:47 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BM2Be4009779;
+        Tue, 11 Apr 2023 23:45:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=07bFnPs943GQwbh26BGKbdpX5jJUg/2U3OFzzWEtF+4=;
+ b=me2cIBbnnhFXiKsap8LLOf32gEWIspeBh4CxAR7hgVHC3HOC5GqkR2mKcYyhXOinVe0T
+ AMY8iwxHHmNzOHruso57iBUMMQoAP0DrhjdLZSVC4219V9JFlzx/VNItRoLMYbJT2+7F
+ aAVtwYOO9MEBF8w1vQygNe519i09QwSLUJoSLUt5IdRji1w6l/c1QwwQf7OqfHFvWVup
+ 9ku/LbFu2VM6Vz6EaVoSGzX4hwGLqEMc1jFzIuhHAp4e+BTUu7/z+b9/YaQMLGaBtJks
+ h3RFxSvZgocqiadPIe3nO/djC6g54YalqfWl4Ptd748hBhWGMA+iW8lc91hRef3QkifY Pg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw3cv9udm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 23:45:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BNjapN029021
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 23:45:36 GMT
+Received: from [10.110.115.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 16:45:35 -0700
+Message-ID: <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
+Date:   Tue, 11 Apr 2023 16:45:34 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: always program dsc active bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1681247095-1201-1-git-send-email-quic_khsieh@quicinc.com>
+ <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1dW3mIXmy47Q7zTUPNGtvnaKZ0rPTckB
+X-Proofpoint-ORIG-GUID: 1dW3mIXmy47Q7zTUPNGtvnaKZ0rPTckB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ suspectscore=0 phishscore=0 adultscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110214
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert x86/lib/msr.c comments to kernel-doc notation to
-eliminate kernel-doc warnings:
 
-msr.c:30: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Read an MSR with error handling
-msr.c:52: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Write an MSR with error handling
-msr.c:91: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Set @bit in a MSR @msr.
-msr.c:104: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Clear @bit in a MSR @msr.
 
-Fixes: 22085a66c2fa ("x86: Add another set of MSR accessor functions")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304120048.v4uqUq9Q-lkp@intel.com/
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
----
- arch/x86/lib/msr.c |   32 +++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 13 deletions(-)
+On 4/11/2023 3:14 PM, Marijn Suijten wrote:
+> Full-caps DSC in the title, as discussed previously.
+> 
+> On that note, don't forget to CC those who have reviewed your patches
+> previously, as also brought up in earlier review.
+> 
+> On 2023-04-11 14:04:55, Kuogee Hsieh wrote:
+>> In current code, the dsc active bits are set only if the cfg->dsc is set.
+> 
+> Some typo nits:
+> 
+> DSC* active bits.
+> 
+> s/are set/are written/ (the variable is set, registers are written).
+> 
+> Drop `the` before `cfg->dsc` (and you could replace `s/is set/is
+> non-zero/).
+> 
+>> However, for displays which are hot-pluggable, there can be a use-case
+>> of disconnecting a DSC supported sink and connecting a non-DSC sink.
+>>
+>> For those cases we need to clear DSC active bits during teardown.
+>>
+>> Fixes: ede3c6bb00c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> 
+> If you have validated that it is fine to write these registers on
+> _every_ platform supported by DPU1, and after fixing the above nits and
+> the Fixes: commit hash as pointed out by Abhinav:
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> And see one question below.
+> 
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 7 +++----
+>>   1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> index bbdc95c..88e4efe 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> @@ -541,10 +541,9 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>>   	if (cfg->merge_3d)
+>>   		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>>   			      BIT(cfg->merge_3d - MERGE_3D_0));
+>> -	if (cfg->dsc) {
+>> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+>> -		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+>> -	}
+>> +
+>> +	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+> 
+> Does this flush all DSCs programmed in CTL_DSC_FLUSH as set above?  That
+> is currently still in `if (cfg->dsc)` and never overwritten if all DSCs
+> are disabled, should it be taken out of the `if` to make sure no DSCs
+> are inadvertently flushed, or otherwise cache the "previous mask" to
+> make sure we flush exactly the right DSC blocks?
+> 
 
-diff -- a/arch/x86/lib/msr.c b/arch/x86/lib/msr.c
---- a/arch/x86/lib/msr.c
-+++ b/arch/x86/lib/msr.c
-@@ -27,14 +27,14 @@ void msrs_free(struct msr *msrs)
- EXPORT_SYMBOL(msrs_free);
- 
- /**
-- * Read an MSR with error handling
-- *
-+ * msr_read - Read an MSR with error handling
-  * @msr: MSR to read
-  * @m: value to read into
-  *
-  * It returns read data only on success, otherwise it doesn't change the output
-  * argument @m.
-  *
-+ * Return: %0 for success, otherwise an error code
-  */
- static int msr_read(u32 msr, struct msr *m)
- {
-@@ -49,10 +49,12 @@ static int msr_read(u32 msr, struct msr
- }
- 
- /**
-- * Write an MSR with error handling
-+ * msr_write - Write an MSR with error handling
-  *
-  * @msr: MSR to write
-  * @m: value to write
-+ *
-+ * Return: %0 for success, otherwise an error code
-  */
- static int msr_write(u32 msr, struct msr *m)
- {
-@@ -88,12 +90,14 @@ static inline int __flip_bit(u32 msr, u8
- }
- 
- /**
-- * Set @bit in a MSR @msr.
-+ * msr_set_bit - Set @bit in a MSR @msr.
-+ * @msr: MSR to write
-+ * @bit: bit number to set
-  *
-- * Retval:
-- * < 0: An error was encountered.
-- * = 0: Bit was already set.
-- * > 0: Hardware accepted the MSR write.
-+ * Return:
-+ * * < 0: An error was encountered.
-+ * * = 0: Bit was already set.
-+ * * > 0: Hardware accepted the MSR write.
-  */
- int msr_set_bit(u32 msr, u8 bit)
- {
-@@ -101,12 +105,14 @@ int msr_set_bit(u32 msr, u8 bit)
- }
- 
- /**
-- * Clear @bit in a MSR @msr.
-+ * msr_clear_bit - Clear @bit in a MSR @msr.
-+ * @msr: MSR to write
-+ * @bit: bit number to clear
-  *
-- * Retval:
-- * < 0: An error was encountered.
-- * = 0: Bit was already cleared.
-- * > 0: Hardware accepted the MSR write.
-+ * Return:
-+ * * < 0: An error was encountered.
-+ * * = 0: Bit was already cleared.
-+ * * > 0: Hardware accepted the MSR write.
-  */
- int msr_clear_bit(u32 msr, u8 bit)
- {
+Yes, DSC flush is hierarchical. This is the main DSC flush which will 
+enforce the flush of the DSC's we are trying to flush in the 
+CTL_DSC_FLUSH register.
+
+So if DSC was active, the CTL_FLUSH will only enforce the flush of the 
+DSC's programmed in CTL_DSC_FLUSH
+
+If DSC is not active, we still need to flush that as well (that was the 
+missing bit).
+
+No need to cache previous mask. That programming should be accurate in 
+cfg->dsc already.
+
+> Thanks!
+> 
+> - Marijn
+> 
+>> +	DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+>>   }
+>>   
+>>   static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
