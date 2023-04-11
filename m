@@ -2,200 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0920C6DE051
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4246DE057
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjDKQB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S229949AbjDKQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjDKQBY (ORCPT
+        with ESMTP id S230009AbjDKQCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:01:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418E34ED6;
-        Tue, 11 Apr 2023 09:01:23 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 83BCC66031E9;
-        Tue, 11 Apr 2023 17:01:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681228881;
-        bh=GPuBBOSRA5wCVbPAYkSCzya+oa0Nysghig9jCyrZUq8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=S/KVvhWY0ks44waMOfNV/tWEuJVdN3t7YcSuShWxyNfusu12/f2f582HNLQ2/oCbA
-         uODIWFSuxRoyamrp5g/EgqRQbipyHLw7S1YdQjceLW++k4jGrLVx8rn2LVcYI5AwGQ
-         YztDpOZLVsZr3r8tGMt+wfjdv831T4ZVvdOYWXT+YkgtyKv4jBUH0mWtpAuC1YPCkH
-         +9pkn4gtKZls0e1DUBX+ec0smJGh8Clii4eOpVmwlSGQq5PCpGboOLALiiFar4AfU0
-         uWSSqaJkR+XvHsikHGrf2tn5+jcQDxAJrlv93duoOwSvSJn+F5Hl/Tq7KFYFLkV9Vc
-         P2cEKXt8QtbgQ==
-Message-ID: <d65a8a350a967e4a67636f0be8249e96d5be0d36.camel@collabora.com>
-Subject: Re: [PATCH v5 03/13] media: Add NV12_10LE40_4L4 pixel format
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Date:   Tue, 11 Apr 2023 12:01:11 -0400
-In-Reply-To: <2a39fb8f9fb658a12bda3779015e8cb2b976a965.camel@collabora.com>
-References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
-         <20230330154043.1250736-4-benjamin.gaignard@collabora.com>
-         <2a39fb8f9fb658a12bda3779015e8cb2b976a965.camel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
+        Tue, 11 Apr 2023 12:02:49 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D2A55BA;
+        Tue, 11 Apr 2023 09:02:40 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id ke16so8226466plb.6;
+        Tue, 11 Apr 2023 09:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681228959; x=1683820959;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IdG1ON11+I6NN3yy4WwLOjLuCBAnsssuQue/NCh4cmA=;
+        b=inNtc+JithQ/UKJ9S7MCR3NBNSh1fXp9AepZUx8pdr3vZBSYDL/HGdfvN7VcD/Xkpg
+         ygfOmwjmLcZSixJ7Ltpsq049pkCcD74GiFSJ5dbxkoXp9vBwnsCehcG6Rec2r1VKbJ98
+         4XAZGxfEMIa90auoeh3xWejIGt9PLRBFwWHeJ5kHF4E0+GECZoR/xDmSFqgilRsMmEc4
+         WJAY5fCL/IY23HKyu2neLpBBVQp9XpvnqvrtCrKMIbCvWgH0e4TaXdqfP9rgHK9zQGXk
+         veq6lI0PiAjyDoT0dd5aXcMhKYJ58NJ2exVjqNRRmXJAaOJXSFvV2wKi05z+O9sZRoKk
+         fY9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681228959; x=1683820959;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IdG1ON11+I6NN3yy4WwLOjLuCBAnsssuQue/NCh4cmA=;
+        b=NiO52lSmtMhLBQVgvz2FqqNUVxSbywy7kYZL9ewB+O0B9Q85wCMlpj5G5ZVFack7d9
+         Pisy/f0U+qXX0A0mQfY7df+hbs+6fpQSRU6jBRCjJqKYPG/Rg0rJ7+fUtEmGGWfcz5tz
+         EGEi4jkHNOR8FWd8AP4VGVKVaq9xpYZRqvfEP98ZUz+apVCrQ0/4LQ/aRBD7cYAbKU8m
+         7dR0p1DKb+7GsWiHHsAeslW7EbXrMUUvzJCfMLva1UJ/E3pGChurNztkDFzjbqL7D87i
+         mag7DCbLSrmw6WilVnx2jK9/v6DmDSdWl2XE3HnN35uQt1yZ3E5z9Ol/0/q+duZfYoQq
+         W3JA==
+X-Gm-Message-State: AAQBX9fLoYDhFDPN/1DPK6QCWJRNm4q5CZ5LSRY7uj/9pbIeT6Nh+gnR
+        gL6hKmdriGJL4X20lXecjT8=
+X-Google-Smtp-Source: AKy350aY2bmptSWiFDPCPtUM7VPs1/gP6REclJXctKvwuThoVn92T/xn6wcb3+KK+oCYKKs4sMKqEA==
+X-Received: by 2002:a17:902:dac8:b0:19f:1c79:8b21 with SMTP id q8-20020a170902dac800b0019f1c798b21mr17714422plx.42.1681228959173;
+        Tue, 11 Apr 2023 09:02:39 -0700 (PDT)
+Received: from ronlee-MOBL1.hitronhub.home ([119.77.166.223])
+        by smtp.gmail.com with ESMTPSA id q10-20020a65494a000000b004fb10399da2sm8766454pgs.56.2023.04.11.09.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 09:02:38 -0700 (PDT)
+From:   Ron Lee <ron.lee.intel@gmail.com>
+X-Google-Original-From: Ron Lee <ron.lee@intel.com>
+To:     bhelgaas@google.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lmajczak@google.com, rajatja@google.com,
+        Ron Lee <ron.lee@intel.com>
+Subject: [PATCH v4] PCI: Fix up L1SS capability for Intel Apollo Lake Root Port
+Date:   Wed, 12 Apr 2023 00:02:13 +0800
+Message-Id: <20230411160213.4453-1-ron.lee@intel.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we discussed in person:
+On Google Coral and Reef family Chromebooks with Intel Apollo Lake
+SoC, firmware clobbers the header of the L1 PM Substates capability and
+the previous capability when returning D3cold to D0.
 
-Le mardi 11 avril 2023 =C3=A0 11:07 -0400, Nicolas Dufresne a =C3=A9crit=C2=
-=A0:
-> Le jeudi 30 mars 2023 =C3=A0 17:40 +0200, Benjamin Gaignard a =C3=A9crit=
-=C2=A0:
-> > NV12_10LE40_4L4 is the 10-bits per component version of
-> > NV12_4L4 pixel format.
+Save those header at enumeration-time and restore them at resume.
 
-NV12_10LE40 is a name I made up for GStreamer, but this is originally named=
- NV15
-by Rockchip, and was accepted under this name as DRM_FORMAT_NV15 in the gra=
-phic
-subsystem. So we agreed that for Linux, it will be more consistant to use t=
-he
-NV15 naming, renaming this one to NV15_4L4, with the plus side that its sho=
-rter.
-The linear form of this format was already proposed a while back along with=
- the
-pending RK HEVC driver. We will include the base format doc in here, and re=
--
-factor it in later branches.
+Link: https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
+Signed-off-by: Ron Lee <ron.lee@intel.com>
+---
+Changes from v3: 
+- Move to arch/x86/pci/fixup.c
+- Save prev cap offset & header, L1SS offset & header at enumeration-time
+  and restore them at resume
+- Remove CONFIG_PCIEASPM directive
+- Stop traversal if L1SS capability was found
 
-> >=20
-> >=20
-> >=20
-> >=20
-> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > ---
-> >  Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst | 4 ++++
-> >  drivers/media/v4l2-core/v4l2-common.c                       | 1 +
-> >  drivers/media/v4l2-core/v4l2-ioctl.c                        | 1 +
-> >  include/uapi/linux/videodev2.h                              | 1 +
-> >  4 files changed, 7 insertions(+)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rs=
-t b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > index f1d5bb7b806d..8805213a75f8 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > @@ -270,6 +270,7 @@ of the luma plane.
-> >  .. _V4L2-PIX-FMT-NV12MT:
-> >  .. _V4L2-PIX-FMT-NV12MT-16X16:
-> >  .. _V4L2-PIX-FMT-NV12-4L4:
-> > +.. _V4L2-PIX-FMT-NV12-10LE40-4L4:
-> >  .. _V4L2-PIX-FMT-NV12-16L16:
-> >  .. _V4L2-PIX-FMT-NV12-32L32:
-> >  .. _V4L2-PIX-FMT-NV12M-8L128:
-> > @@ -306,6 +307,9 @@ tiles linearly in memory. The line stride and image=
- height must be
-> >  aligned to a multiple of 4. The layouts of the luma and chroma planes =
-are
-> >  identical.
-> > =20
-> > +``V4L2_PIX_FMT_NV12_10LE40_4L4`` is similar to ``V4L2_PIX_FMT_NV12_4L4=
-``
-> > +and stores 10 bits pixels in 4x4 tiles.
->=20
-> I think this is not enough, as it does not describe the NV12_10E40 pixel
-> packing. We don't have that as a linear format yet in V4L2 (unlike
-> DRM_FORMAT_NV15 on DRM side). So I'd suggest to drop the usual bit packin=
-g table
-> here for now. Please ping Sebastien Fricke, as he got that for (along wit=
-h
-> NV12_10LE40 base format) documented in his RKVDEC HEVC decoder work.
->=20
-> >=20
-> > +
-> >  ``V4L2_PIX_FMT_NV12_16L16`` stores pixels in 16x16 tiles, and stores
-> >  tiles linearly in memory. The line stride and image height must be
-> >  aligned to a multiple of 16. The layouts of the luma and chroma planes=
- are
-> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2=
--core/v4l2-common.c
-> > index 9cb0895dea1c..7f46c45982d6 100644
-> > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > @@ -278,6 +278,7 @@ const struct v4l2_format_info *v4l2_format_info(u32=
- format)
-> > =20
-> >  		/* Tiled YUV formats */
-> >  		{ .format =3D V4L2_PIX_FMT_NV12_4L4, .pixel_enc =3D V4L2_PIXEL_ENC_Y=
-UV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .bpp_di=
-v =3D { 1, 1, 1, 1 }, .hdiv =3D 2, .vdiv =3D 2 },
-> > +		{ .format =3D V4L2_PIX_FMT_NV12_10LE40_4L4, .pixel_enc =3D V4L2_PIXE=
-L_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 5, 10, 0, 0 },=
- .bpp_div =3D { 4, 4, 1, 1 }, .hdiv =3D 2, .vdiv =3D 2 },
->=20
-> As you will be doing v6, can you initiallized the forgotten "block" param=
-eters ?
->=20
->=20
-> >  		{ .format =3D V4L2_PIX_FMT_P010_4L4, .pixel_enc =3D V4L2_PIXEL_ENC_Y=
-UV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 2, 4, 0, 0 }, .bpp_di=
-v =3D { 1, 1, 1, 1 }, .hdiv =3D 2, .vdiv =3D 2 },
-> > =20
-> >  		/* YUV planar formats, non contiguous variant */
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-=
-core/v4l2-ioctl.c
-> > index d2b905ba5240..5a0c5b3a6b0f 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1351,6 +1351,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc =
-*fmt)
-> >  	case V4L2_PIX_FMT_NV12_4L4:	descr =3D "Y/UV 4:2:0 (4x4 Linear)"; brea=
-k;
-> >  	case V4L2_PIX_FMT_NV12_16L16:	descr =3D "Y/UV 4:2:0 (16x16 Linear)"; =
-break;
-> >  	case V4L2_PIX_FMT_NV12_32L32:   descr =3D "Y/UV 4:2:0 (32x32 Linear)"=
-; break;
-> > +	case V4L2_PIX_FMT_NV12_10LE40_4L4: descr =3D "10-bit YUV 4:2:0 (4x4 L=
-inear)"; break;
-> >  	case V4L2_PIX_FMT_P010_4L4:	descr =3D "10-bit Y/UV 4:2:0 (4x4 Linear)=
-"; break;
-> >  	case V4L2_PIX_FMT_NV12M:	descr =3D "Y/UV 4:2:0 (N-C)"; break;
-> >  	case V4L2_PIX_FMT_NV21M:	descr =3D "Y/VU 4:2:0 (N-C)"; break;
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
-ev2.h
-> > index 8cdc7967cdea..93e300111ca1 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -664,6 +664,7 @@ struct v4l2_pix_format {
-> >  #define V4L2_PIX_FMT_NV12_4L4 v4l2_fourcc('V', 'T', '1', '2')   /* 12 =
- Y/CbCr 4:2:0  4x4 tiles */
-> >  #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12 =
- Y/CbCr 4:2:0 16x16 tiles */
-> >  #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12 =
- Y/CbCr 4:2:0 32x32 tiles */
-> > +#define V4L2_PIX_FMT_NV12_10LE40_4L4 v4l2_fourcc('V', 'T', '1', '5')
-> >  #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y=
-/CbCr 4:2:0 10-bit 4x4 macroblocks */
-> >  #define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') =
-/* Y/CbCr 4:2:0 8x128 tiles */
-> >  #define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2=
-') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
->=20
+ arch/x86/pci/fixup.c | 59 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
+index 615a76d70019..28335aaa6c33 100644
+--- a/arch/x86/pci/fixup.c
++++ b/arch/x86/pci/fixup.c
+@@ -824,3 +824,62 @@ static void rs690_fix_64bit_dma(struct pci_dev *pdev)
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x7910, rs690_fix_64bit_dma);
+ 
+ #endif
++
++/*
++ * When returning from D3cold to D0, firmware on some Google Coral and Reef
++ * family Chromebooks with Intel Apollo Lake SoC clobbers the headers of
++ * both the L1 PM Substates capability and the previous capability for the
++ * "Celeron N3350/Pentium N4200/Atom E3900 Series PCI Express Port B #1".
++ *
++ * Save those values at enumeration-time and restore them at resume.
++ */
++
++static u16 prev_cap, l1ss_cap;
++static u32 prev_header, l1ss_header;
++
++static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *dev)
++{
++	int pos = PCI_CFG_SPACE_SIZE, prev = 0;
++	u32 header, pheader = 0;
++
++	while (pos) {
++		pci_read_config_dword(dev, pos, &header);
++		if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS) {
++			prev_cap = prev;
++			prev_header = pheader;
++			l1ss_cap = pos;
++			l1ss_header = header;
++			return;
++		}
++
++		prev = pos;
++		pheader = header;
++		pos = PCI_EXT_CAP_NEXT(header);
++	}
++}
++
++static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *dev)
++{
++	u32 header;
++
++	if (!prev_cap || !prev_header || !l1ss_cap || !l1ss_header)
++		return;
++
++	/* Fixup the header of L1SS Capability if missing */
++	pci_read_config_dword(dev, l1ss_cap, &header);
++	if (header != l1ss_header) {
++		pci_write_config_dword(dev, l1ss_cap, l1ss_header);
++		pci_info(dev, "restore L1SS Capability header (was %#010x now %#010x)\n",
++			 header, l1ss_header);
++	}
++
++	/* Fixup the link to L1SS Capability if missing */
++	pci_read_config_dword(dev, prev_cap, &header);
++	if (header != prev_header) {
++		pci_write_config_dword(dev, prev_cap, prev_header);
++		pci_info(dev, "restore previous Capability header (was %#010x now %#010x)\n",
++			 header, prev_header);
++	}
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
++DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
+-- 
+2.17.1
 
