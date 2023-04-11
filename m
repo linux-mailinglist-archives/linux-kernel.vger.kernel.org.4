@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F77C6DD224
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8386DD22D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 07:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjDKFyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 01:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S230060AbjDKFzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 01:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjDKFyb (ORCPT
+        with ESMTP id S229771AbjDKFzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 01:54:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2CE7A;
-        Mon, 10 Apr 2023 22:54:25 -0700 (PDT)
-X-UUID: 4c4b8098d82d11edb6b9f13eb10bd0fe-20230411
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rATucrsos2tqGiaE1yHomrRoPA5q3yHw7OeBD65YDf0=;
-        b=ALlxPA9/Bzk/lPL2MP9TvN1qLCAdFlgH2pbirvxabfgqk8z+OifZv7M6fHMqvdz3tsVssdL5Z20sOMKtFIMR6+s9Uc81hjH7QoZ/Uf7VFes41XiP3ebhJ9wnZA/ek+BPh+8Y8d+4/w22baVDUEAD7Glk2J8B+dsCj29GyrfdxXY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:741078a6-2142-42fc-9e64-223f0579dd93,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.22,REQID:741078a6-2142-42fc-9e64-223f0579dd93,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:120426c,CLOUDID:fd30a683-cd9c-45f5-8134-710979e3df0e,B
-        ulkID:230411135419CKY1X5AP,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 4c4b8098d82d11edb6b9f13eb10bd0fe-20230411
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 721086298; Tue, 11 Apr 2023 13:54:18 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 11 Apr 2023 13:54:17 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 11 Apr 2023 13:54:16 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <maoguang.meng@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        "Irui Wang" <irui.wang@mediatek.com>
-Subject: [PATCH v2, 2/2] media: mediatek: vcodec: make sure pointer isn't NULL before used
-Date:   Tue, 11 Apr 2023 13:54:13 +0800
-Message-ID: <20230411055413.539-3-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230411055413.539-1-irui.wang@mediatek.com>
-References: <20230411055413.539-1-irui.wang@mediatek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 11 Apr 2023 01:55:38 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E415910CA;
+        Mon, 10 Apr 2023 22:55:37 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EBD822174E48;
+        Mon, 10 Apr 2023 22:55:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBD822174E48
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681192536;
+        bh=BUwSLsXfYVsGNrHJTEz77cf8Go462e5WitqMNoWYPGg=;
+        h=From:To:Subject:Date:From;
+        b=Rzze8DqgI69GfOLVOwx8ULBAFUUblB3YT6tCaqRndRRa5MzcTKCr6/MAIXIplBQYi
+         wOoho4UOLibP8Q96Jjjfk/Qy2CaMysxh0URsmLt2KDm4wtM4AY8BnmTQ1bgu/Xo0Pn
+         hqazn2eaTetSlZozkqtUnZL8eopNe3PFeTy8lw0w=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: [PATCH v5 0/5] Hyper-V VTL support
+Date:   Mon, 10 Apr 2023 22:55:27 -0700
+Message-Id: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-15.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URI_TRY_3LD,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CERT-C Expression check:
-Dereferencing buf, which is known to be NULL, check buf is not NULL
-before used.
+This patch series introduces support for Virtual Trust Level (VTL)
+in Hyper-V systems. It provide a foundation for the implementation
+of Hyper-V VSM support in the Linux kernel, providing a secure
+platform for the development and deployment of applications.
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Virtual Secure Mode (VSM) is a critical aspect of the security
+infrastructure in Hyper-V systems. It provides a set of hypervisor
+capabilities and enlightenments that enable the creation and
+management of new security boundaries within operating system
+software. The VSM achieves and maintains isolation through Virtual
+Trust Levels, which are hierarchical, with higher levels being more
+privileged than lower levels. Please refer to this link for further
+information: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index d65800a3b89d..db65e77bd373 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -943,7 +943,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		 * FIXME: This check is not needed as only active buffers
- 		 * can be marked as done.
- 		 */
--		if (buf->state == VB2_BUF_STATE_ACTIVE) {
-+		if (buf && buf->state == VB2_BUF_STATE_ACTIVE) {
- 			mtk_v4l2_debug(0, "[%d] id=%d, type=%d, %d -> VB2_BUF_STATE_QUEUED",
- 					ctx->id, i, q->type,
- 					(int)buf->state);
+This patch series adds the initialization of the x86 platform for VTL
+systems. This also adds the VTL early bootup code for initializing
+and bringing up secondary cpus to targeted VTL context. In VTL, AP
+has to start directly in the 64-bit mode, bypassing the usual
+16-bit -> 32-bit -> 64-bit mode transition sequence that occurs after
+waking up an AP with SIPI whose vector points to the 16-bit AP
+startup trampoline code.
+
+Currently only VTL level supprted is '2'. This patch series is tested
+extensively on VTL2 systems.
+
+[V5]
+- __u64/__u16 -> u64/u16
+
+[V4]
+- Move HYPERV_VTL_MODE definition from arch/x86/Kconfig to drivers/hv/Kconfig
+- Move Kconfig changes before its getting used
+- Replace initial_stack with current->thread.sp as per recent upstream changes
+
+[V3]
+ - Break in to 5 patches
+ - hv_init_vp_context_t -> hv_init_vp_context
+ - HYPERV_VTL -> HYPERV_VTL_MODE
+ - Modify description of HYPERV_VTL_MODE
+ - VTL 0 and VTL 2 -> VTL0 and VTL2
+ - Remove casting for this_cpu_ptr pointer
+
+[V2]
+ - Remove the code for reserve 1 IRQ.
+ - boot_cpu_has -> cpu_feature_enabled.
+ - Improved commit message for 0002 patch.
+ - Improved Kconfig flag description for HYPERV_VTL.
+ - Removed hv_result as a wrapper around hv_do_hypercall().
+ - The value of output[0] copied to a local variable before returning.
+
+Saurabh Sengar (5):
+  x86/init: Make get/set_rtc_noop() public
+  x86/hyperv: Add VTL specific structs and hypercalls
+  x86/hyperv: Make hv_get_nmi_reason public
+  Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
+  x86/hyperv: VTL support for Hyper-V
+
+ arch/x86/hyperv/Makefile           |   1 +
+ arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+ arch/x86/include/asm/mshyperv.h    |  15 ++
+ arch/x86/include/asm/x86_init.h    |   2 +
+ arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+ arch/x86/kernel/x86_init.c         |   4 +-
+ drivers/hv/Kconfig                 |  24 +++
+ include/asm-generic/hyperv-tlfs.h  |   4 +
+ 9 files changed, 351 insertions(+), 7 deletions(-)
+ create mode 100644 arch/x86/hyperv/hv_vtl.c
+
 -- 
-2.18.0
+2.34.1
 
