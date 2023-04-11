@@ -2,199 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40AF6DDD8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCB26DDD8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjDKORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S230234AbjDKOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjDKOR2 (ORCPT
+        with ESMTP id S230037AbjDKOS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:17:28 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F6FE4C;
-        Tue, 11 Apr 2023 07:17:19 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PwnrR0L0Qz16NWS;
-        Tue, 11 Apr 2023 22:13:43 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 22:17:15 +0800
-Message-ID: <eb7f13ad-6e7b-65c5-72c8-d5a4be88e943@huawei.com>
-Date:   Tue, 11 Apr 2023 22:17:14 +0800
+        Tue, 11 Apr 2023 10:18:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD4F61B0;
+        Tue, 11 Apr 2023 07:17:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7BB262784;
+        Tue, 11 Apr 2023 14:17:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DDFC4339B;
+        Tue, 11 Apr 2023 14:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681222673;
+        bh=8dE5O+LriZsvZ1XKFrv0ZyNZPGNuewxvxN3HObcdg4o=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=qcZGAwrxAJAQ0kketqtEKIrGf6OE1jojZp2ZfOdslytCd3mMTgSMF3iDSUtUoHCy8
+         zpIp7tGrslVYHoj9oX13y9eacpcAAVKJRAmNvXtCiaA9ZShQFxedrbXW+8U52dq8yo
+         pgjtToZk5tFh/h5NTvMyeLRd9CHtcvL4/WwtYw4AyMZG8gunOLVtuz0HCRSSrQ0/qD
+         f97MR9gYhV/ryU/lZLpgsJeoQq/ogFecDFnxZGnbdpm+RJhN2OdPqpky5/latfw5Px
+         hCrUrrCYAGZ5FwCToqcy+XTiiBV3MODZfYwROXR3jEqkY1N4pyxsQlUVpBydqJXcVy
+         oYD+aCqm7lPPw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Joseph Chen <chenjh@rock-chips.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+In-Reply-To: <20230406194158.963352-1-cristian.ciocaltea@collabora.com>
+References: <20230406194158.963352-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH v3 0/8] Add support for Rockchip RK860X regulators
+Message-Id: <168122267057.52878.953322463659753958.b4-ty@kernel.org>
+Date:   Tue, 11 Apr 2023 15:17:50 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v5 1/2] ACPI: APEI: set memory failure flags as
- MF_ACTION_REQUIRED on synchronous events
-Content-Language: en-US
-To:     Shuai Xue <xueshuai@linux.alibaba.com>, <tanxiaofei@huawei.com>,
-        <mawupeng1@huawei.com>, <tony.luck@intel.com>,
-        <naoya.horiguchi@nec.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <justin.he@arm.com>,
-        <akpm@linux-foundation.org>, <ardb@kernel.org>,
-        <ashish.kalra@amd.com>, <baolin.wang@linux.alibaba.com>,
-        <bp@alien8.de>, <cuibixuan@linux.alibaba.com>,
-        <dave.hansen@linux.intel.com>, <james.morse@arm.com>,
-        <jarkko@kernel.org>, <lenb@kernel.org>, <linmiaohe@huawei.com>,
-        <lvying6@huawei.com>, <rafael@kernel.org>, <xiexiuqi@huawei.com>,
-        <zhuo.song@linux.alibaba.com>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20230411104842.37079-2-xueshuai@linux.alibaba.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230411104842.37079-2-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuai Xue，
+On Thu, 06 Apr 2023 22:41:50 +0300, Cristian Ciocaltea wrote:
+> This patch series introduces support for the Rockchip RK860X regulators,
+> while also providing a few fixes and improvements to the existing fan53555
+> driver.
+> 
+> RK8600/RK8601 are quite similar to the FAN53555 regulators.
+> 
+> RK8602/RK8603 are a bit different, having a wider output voltage
+> selection range, from 0.5 V to 1.5 V in 6.25 mV steps. They are used
+> in the Rock 5B board to power the ARM Cortex-A76 cores and the NPU.
+> 
+> [...]
 
-On 2023/4/11 18:48, Shuai Xue wrote:
-> There are two major types of uncorrected recoverable (UCR) errors :
-> 
-> - Action Required (AR): The error is detected and the processor already
->    consumes the memory. OS requires to take action (for example, offline
->    failure page/kill failure thread) to recover this uncorrectable error.
-> 
-> - Action Optional (AO): The error is detected out of processor execution
->    context. Some data in the memory are corrupted. But the data have not
->    been consumed. OS is optional to take action to recover this
->    uncorrectable error.
-> 
-> The essential difference between AR and AO errors is that AR is a
-> synchronous event, while AO is an asynchronous event. The hardware will
-> signal a synchronous exception (Machine Check Exception on X86 and
-> Synchronous External Abort on Arm64) when an error is detected and the
-> memory access has been architecturally executed.
-> 
-> When APEI firmware first is enabled, a platform may describe one error
-> source for the handling of synchronous errors (e.g. MCE or SEA notification
-> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
-> notification). In other words, we can distinguish synchronous errors by
-> APEI notification. For AR errors, kernel will kill current process
-> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
-> addition, for AO errors, kernel will notify the process who owns the
-> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
-> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
-> are handled as AO errors in memory failure.
-> 
-> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronous
-> events.
+Applied to
 
-As your mentioned in cover-letter, we met same issue, and hope it could 
-be fixed ASAP, this patch looks good to me,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Thanks!
 
+[1/8] regulator: dt-bindings: fcs,fan53555: Add support for RK860X
+      (no commit info)
+[2/8] regulator: fan53555: Explicitly include bits header
+      commit: 4fb9a5060f73627303bc531ceaab1b19d0a24aef
+[3/8] regulator: fan53555: Fix wrong TCS_SLEW_MASK
+      commit: c5d5b55b3c1a314137a251efc1001dfd435c6242
+[4/8] regulator: fan53555: Remove unused *_SLEW_SHIFT definitions
+      (no commit info)
+[5/8] regulator: fan53555: Make use of the bit macros
+      (no commit info)
+[6/8] regulator: fan53555: Improve vsel_mask computation
+      (no commit info)
+[7/8] regulator: fan53555: Use dev_err_probe
+      (no commit info)
+[8/8] regulator: fan53555: Add support for RK860X
+      (no commit info)
 
-> 
-> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recovery support")'
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-> ---
->   drivers/acpi/apei/ghes.c | 29 +++++++++++++++++++++++------
->   1 file changed, 23 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 34ad071a64e9..c479b85899f5 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
->   	return ghes->generic->header.type == ACPI_HEST_TYPE_GENERIC_ERROR_V2;
->   }
->   
-> +/*
-> + * A platform may describe one error source for the handling of synchronous
-> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
-> + * or External Interrupt). On x86, the HEST notifications are always
-> + * asynchronous, so only SEA on ARM is delivered as a synchronous
-> + * notification.
-> + */
-> +static inline bool is_hest_sync_notify(struct ghes *ghes)
-> +{
-> +	u8 notify_type = ghes->generic->notify.type;
-> +
-> +	return notify_type == ACPI_HEST_NOTIFY_SEA;
-> +}
-> +
->   /*
->    * This driver isn't really modular, however for the time being,
->    * continuing to use module_param is the easiest way to remain
-> @@ -477,7 +491,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->   }
->   
->   static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
-> -				       int sev)
-> +				       int sev, bool sync)
->   {
->   	int flags = -1;
->   	int sec_sev = ghes_severity(gdata->error_severity);
-> @@ -491,7 +505,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->   	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->   		flags = MF_SOFT_OFFLINE;
->   	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
-> -		flags = 0;
-> +		flags = sync ? MF_ACTION_REQUIRED : 0;
->   
->   	if (flags != -1)
->   		return ghes_do_memory_failure(mem_err->physical_addr, flags);
-> @@ -499,9 +513,11 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->   	return false;
->   }
->   
-> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
-> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
-> +				       int sev, bool sync)
->   {
->   	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
-> +	int flags = sync ? MF_ACTION_REQUIRED : 0;
->   	bool queued = false;
->   	int sec_sev, i;
->   	char *p;
-> @@ -526,7 +542,7 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->   		 * and don't filter out 'corrected' error here.
->   		 */
->   		if (is_cache && has_pa) {
-> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
-> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
->   			p += err_info->length;
->   			continue;
->   		}
-> @@ -647,6 +663,7 @@ static bool ghes_do_proc(struct ghes *ghes,
->   	const guid_t *fru_id = &guid_null;
->   	char *fru_text = "";
->   	bool queued = false;
-> +	bool sync = is_hest_sync_notify(ghes);
->   
->   	sev = ghes_severity(estatus->error_severity);
->   	apei_estatus_for_each_section(estatus, gdata) {
-> @@ -664,13 +681,13 @@ static bool ghes_do_proc(struct ghes *ghes,
->   			atomic_notifier_call_chain(&ghes_report_chain, sev, mem_err);
->   
->   			arch_apei_report_mem_error(sev, mem_err);
-> -			queued = ghes_handle_memory_failure(gdata, sev);
-> +			queued = ghes_handle_memory_failure(gdata, sev, sync);
->   		}
->   		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
->   			ghes_handle_aer(gdata);
->   		}
->   		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
-> -			queued = ghes_handle_arm_hw_error(gdata, sev);
-> +			queued = ghes_handle_arm_hw_error(gdata, sev, sync);
->   		} else {
->   			void *err = acpi_hest_get_payload(gdata);
->   
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
