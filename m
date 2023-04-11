@@ -2,163 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B0C6DDDA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672526DDDA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjDKOXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S230147AbjDKOXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDKOXB (ORCPT
+        with ESMTP id S230083AbjDKOXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:23:01 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8ED10FC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:23:00 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54c17fa9ae8so260025447b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:23:00 -0700 (PDT)
+        Tue, 11 Apr 2023 10:23:11 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D15257;
+        Tue, 11 Apr 2023 07:23:07 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id ch3so9391967ybb.4;
+        Tue, 11 Apr 2023 07:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681222979;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfaEeNuJ+Hdp1nHSVtR8YcRxyh5te0e8PseTVlzu67k=;
-        b=ovm4+NgZ+Ec4ZjIgJf/sOKoaRV3p0V8E1syXJvvmN7tSDnoHRfDV7X+TM/TuJJb98k
-         V/zWcS1oqVkkB/Ccede5GHn7AATYAMDz5q/j3HxM/7/rUH3P4zamX2P+ZO6xwIlmPYFl
-         vf2NJBm9RLfBZ84LmTcitMTQgIdhBxMUZx/7/GQMfUxAT1l+cQ18O0zzWRW+i6YQD+xJ
-         vWqSACuOk5Mq4HwpVsg89Zq5ScenA1NUtQgmNBwbg0qHO8J1jrXplwxR1lKuo7qhch9O
-         zCVkvUg2NWx+OYuPsDxmbTc52BqlEOtfwM8INvs570K/ZJjaAOR6QYWVdH90JBhpPbZF
-         rgrA==
+        d=gmail.com; s=20210112; t=1681222987; x=1683814987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rGIJwNZALprFDU80qb7cLcULxCnkP798jciFwdeaCog=;
+        b=joFbieJB4dNxX8sxkqhUhjHbar19aTEVvpvIdMu6Xk00cqzGFSxcpVPcE0ZhmcN/Ss
+         MNZKksNaoIdjUEVIoXEBiGYAuvh8ElzpUzQLyRbp99EkzmRbw0YYJbrvk3emVQdj/QGN
+         aUDE998eKd1Sr5OgmpsvH8WOjBqIXgEZ3Vn82t0SLZkvEtz8P5y/XaQuq7yGaaenIMMd
+         HAoW6ijwOLjqEl/OsugTHXGO3vm06p5Btci7eF+TRiCablDjcM2amAwZwK2He9VBOXq+
+         nXqXUWI6WZYJtL1mqDAuIJ2iwNla//Z8ShZVM3zMS1hAkOqUDcoiAASgXB/kRTVySd7o
+         25yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681222979;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YfaEeNuJ+Hdp1nHSVtR8YcRxyh5te0e8PseTVlzu67k=;
-        b=ulZIFG8MBAy/G62ms4QZMDrVYNeTXHI0cc+CGE41wDzqtgCVKcXNeFWHN/E3Beru/R
-         XHpeIMhxxgte9qw8Rsj19J8VZyLWqbHKs4nILC44OuxDIqFtNBVNpgs01PMOdBy4HrFx
-         nS+oGadut1uR9VqoAo2pzeq2vH8aUgQWIM3sCT2q76YyyLSw+/GaFtBWsSbDAnzwGVLC
-         A5F/mptMoxkIJpvPrULgd70mKoP9i6mtQKj0OAh0s0BqDS8HCfNUMe6UQ0aqH6mhP0hQ
-         XckiNUHqIEioElptUjjXoRPtEs4dO5aQFNTQL1Ej78retJwc5b8DR7YlOuOVDNswxtXe
-         XzyQ==
-X-Gm-Message-State: AAQBX9ejGUOmp3Kke+LhIJwlz4enmQsYVkBnHYrya+qdNqwoaSMSqARg
-        FgvZ6PW+HaRIF7A7qQAw6EBZqaoathxeMU0pg3rJzQ==
-X-Google-Smtp-Source: AKy350b19zupv5UWGi6PzMtlcoyVqeyNRUYz0VDgkCWSi6ZkEx0abL/8b9KOQQdtuLoLndmVPQJJ0YjEaKzB5J3gCXc=
-X-Received: by 2002:a81:b149:0:b0:549:18b4:e94d with SMTP id
- p70-20020a81b149000000b0054918b4e94dmr7819496ywh.7.1681222979591; Tue, 11 Apr
- 2023 07:22:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681222987; x=1683814987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rGIJwNZALprFDU80qb7cLcULxCnkP798jciFwdeaCog=;
+        b=FGg0Op61vy4a9O/sLlfB0FPDcpphT1o0MZg5k+EnwHYOEc5lN2LErlq0bs7cNWXikf
+         qkkiV0V5rUL2ZikYNtUNKHW7sUwEnRfCInlx37k9O/5aVLL8RK7gjcKd21ichvEClgB4
+         qN0f34QUvSnTG3d4c6pyg6x9Nx1jFP8K/iTOnWi6gDY3l5+288u+abNwbUTg28lcNSEF
+         SSUZsPd0IHb1Qxt4U8M3xf1oopIfJeImZNqZQ7GEodeYyf5FM+JyN5JrTU9QYgmeDFGX
+         +QVwuTDcwMdF0G8WF87tV962XS0VGW+qf/iiFUPnZlgDp4N5yaBf0LqEmq8IAt4SGatf
+         ilEw==
+X-Gm-Message-State: AAQBX9drukF1HAhtUO9wGhCv7umG7dW4GWxKwTI8dKmFDjK9J4R+jfjH
+        u3jMsZAoQf+BmJMTk4wdADYpe9xqwpJWN5h0SLc=
+X-Google-Smtp-Source: AKy350ZOx+VBe3+xkPnUYMJSj5Pt4g+xiGsIEOaxHOPkp2VcWmohs42AsVbpcpUA8/gYAOQHoB97haJtY8ngSMfB2iA=
+X-Received: by 2002:a25:d650:0:b0:b8e:efd8:f2c with SMTP id
+ n77-20020a25d650000000b00b8eefd80f2cmr4525679ybg.1.1681222987084; Tue, 11 Apr
+ 2023 07:23:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406194703.495836-1-brgl@bgdev.pl> <20230406194703.495836-3-brgl@bgdev.pl>
- <20230411131740.GA2913234-robh@kernel.org>
-In-Reply-To: <20230411131740.GA2913234-robh@kernel.org>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Tue, 11 Apr 2023 16:22:48 +0200
-Message-ID: <CACMJSevSygrwzKdYNGKCgtdjuAQcVyqL3LvKonyat=EHCaNPzg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] dt-bindings: phy: qmp-ufs: describe the UFS PHY
- for sa8775p
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
+References: <20230406215615.122099-1-daniel.almeida@collabora.com> <ZDSRSWhWsN34MghQ@xps>
+In-Reply-To: <ZDSRSWhWsN34MghQ@xps>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 16:22:56 +0200
+Message-ID: <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Deborah Brouwer <deborah.brouwer@collabora.com>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 at 15:17, Rob Herring <robh@kernel.org> wrote:
+On Tue, Apr 11, 2023 at 12:46=E2=80=AFAM Deborah Brouwer
+<deborah.brouwer@collabora.com> wrote:
 >
-> On Thu, Apr 06, 2023 at 09:47:00PM +0200, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add a new compatible for the QMP UFS PHY found on sa8775p platforms and
-> > update the clocks property to accommodate three clocks.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 26 ++++++++++++++++++-
-> >  1 file changed, 25 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> > index cd0fbbd3593d..5bc93acccbad 100644
-> > --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> > @@ -16,6 +16,7 @@ description:
-> >  properties:
-> >    compatible:
-> >      enum:
-> > +      - qcom,sa8775p-qmp-ufs-phy
-> >        - qcom,sc8280xp-qmp-ufs-phy
-> >        - qcom,sm6125-qmp-ufs-phy
-> >        - qcom,sm7150-qmp-ufs-phy
-> > @@ -25,12 +26,15 @@ properties:
-> >      maxItems: 1
-> >
-> >    clocks:
-> > -    maxItems: 2
-> > +    minItems: 2
-> > +    maxItems: 3
-> >
-> >    clock-names:
-> > +    minItems: 2
-> >      items:
-> >        - const: ref
-> >        - const: ref_aux
-> > +      - const: qref
-> >
-> >    power-domains:
-> >      maxItems: 1
-> > @@ -52,6 +56,26 @@ properties:
-> >    "#phy-cells":
-> >      const: 0
-> >
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,sa8775p-qmp-ufs-phy
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          maxItems: 3
-> > +        clock-names:
-> > +          maxItems: 3
+> Hi Daniel - I don't know if the 'rust branch' is common knowledge but
+> it helped me to know it was this:
+> https://github.com/Rust-for-Linux/linux
 >
-> The max is already 3. Did you mean 'minItems: 3' or 2 or 3 clocks are
-> valid?
->
+> For what it's worth, I was able to get the V4L2 Rust sample probed
+> pretty easily following the quick start instructions
+> https://docs.kernel.org/rust/quick-start.html
 
-For this compatible only 3 clocks are valid so it should have been
-minItems indeed.
+Thanks, it is great to hear that the guide helped! :)
 
-Bartosz
+On resources: nowadays we have a webpage, too. Still to be completed,
+but you may find it useful already: https://rust-for-linux.com
 
-> > +    else:
-> > +      properties:
-> > +        clocks:
-> > +          maxItems: 2
-> > +        clock-names:
-> > +          maxItems: 2
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > --
-> > 2.37.2
-> >
+Cheers,
+Miguel
