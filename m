@@ -2,145 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA436DE334
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2DE6DE339
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjDKRyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S229919AbjDKRyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjDKRye (ORCPT
+        with ESMTP id S229583AbjDKRyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:54:34 -0400
-Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013012.outbound.protection.outlook.com [52.101.49.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C76A5270
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:54:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UNr0yLV0CCoKTjQfCoJqME2SgA3yYtoXiVauvymMaiR+aueXPCpHTwN1sN+mORq30m/PLb5z3YAA71EbqO3D/VVGA+UqPP9dfeC5ZaIGmIdB4rIHiV6xT1XNnX0zhf3ccj8BM2NveLgCgFF35S6XzGCUPhzkXlbROGNfjNTSNyCl4jYvK7Hc7Hly3EBamODVaYuvufZxpi6lps3vaHg8ufYPwXqdsrDaksnry13QICY9m9ItE2T82zqhnPigfDMDLAOmiPZEbGWPIRJw8EZC2tjbpgVm/HQnDIRjeVCmzFtPSV/tN6g9svpqrSf9Ez5sTyPU9nI0lMATzApg+DdVrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
- b=ZMqfdMY3J/p9REJZP6zk7flwTGcmgNXz8Nbm9kBBEs8eI+/snRBE6S3E6vOrKcyXSVVkoKlO9GE1Ko2eQ/XnqBlAysloKQ1tuIclghU7437AtNb+HO76B0i7elr1F9CCEJfEjIcLpgkVXOPMEw7/zBI+mJyyoBwJzOeOKzknNpbOgyXDCqUL5b0Fo70uG79qMeNTLmW5qDb4cwHvCfJocMWTnY2sOVa2r9ZER6oGqjNlX9gOBoNvQWpIzJmi4I/d7LvptCvwcbN6CUt5T3DMlAgHQRlk9hsD4YLxbHE1Yxd82v9Jk3wQF7uOSRpEWZECygyH9UhrZpsIYcAQoAOGoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
- b=EvoLoI/EUghGnqu2vNNZlQKHvFmKqUEWUyBSPR5bSgSCfnQ641AHfjY/gWqVlAb6IvCn2gbYS1H3V0jlZCBTPWp4l4fvkkuHRMS0WFlh8gAIKQI2xntzCOqBlzSgGDh3uIrs5X9OiI28UrtDyFX0hZRwYVHKmDGa4dpTPw1PsyE=
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- (2603:10b6:610:155::10) by MN2PR05MB6048.namprd05.prod.outlook.com
- (2603:10b6:208:d0::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
- 2023 17:54:26 +0000
-Received: from CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::b4c3:9441:f0:efb8]) by CH3PR05MB10206.namprd05.prod.outlook.com
- ([fe80::b4c3:9441:f0:efb8%6]) with mapi id 15.20.6298.028; Tue, 11 Apr 2023
- 17:54:26 +0000
-From:   Zack Rusin <zackr@vmware.com>
-To:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "airlied@gmail.com" <airlied@gmail.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
-Thread-Topic: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
-Thread-Index: AQHZXCJfQ+s7JMgTuEarwKwV+53z968mhQmA
-Date:   Tue, 11 Apr 2023 17:54:26 +0000
-Message-ID: <466f4517100964537142f698e82cffb87acd39fb.camel@vmware.com>
-References: <20230321182414.1826372-1-trix@redhat.com>
-In-Reply-To: <20230321182414.1826372-1-trix@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.0-1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|MN2PR05MB6048:EE_
-x-ms-office365-filtering-correlation-id: b21a6cca-89a6-47df-2466-08db3ab5caa8
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: puq21ZqvtA/7MGmyx2xXaRiFzwcS+IaPSlMH+dpdWPq40MX7kMaPwkjPfS0c/cgR+MINy+5yWsqz2LQMSm+QDSs4Ant48Cg+l1Tw9+od+GwNL6DJO2ArxPaMIuMo1iFpMtFplTuMhUihK7Z6lQUPxqRp0K982kboJOQvsDqD2e0DnzDIfFy4sJXtf7aVNW3l1bD8SAx79TN7185e0/XnmdRRxlxECfKa2jCq1vrc5b9Ow9tURNl9OuKm8SHKVnfwK7yVswUX5ahoSlmflA012CJD0zhwby+mbCCpirSAOiWXbMHgXeFrML55ku2sDgELE5hRO498BGzGSWFzTPL7shsoLZ9mGdOmSPhs29SPBVjWpA3JujtIGckFpiuHRcoiAHz2X3zSDgvYXyHu0D7zPN9pcjncJOv18oQo45eE2LKJv2sCzalEtNxZoq5GYRXVEq1SLaI8SRgcbtHsHoi9kiJWq32ivyg1CTSr8n/ytLH7rtdXWuqYwEKjyucCZSwPt+HQWDWXP2uHYRVG1kfueYhahq/Xlm6w8D+aLAELzDL+9RQiSAK27bJrF7QpftazLHvVJyAQgPe+GdB7LsbLh+syQaGZ1TLhJ7Uro6xDiwn9iKww3wNPo10LS5bXL0B2
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(478600001)(71200400001)(6506007)(316002)(6512007)(110136005)(26005)(54906003)(186003)(5660300002)(6486002)(91956017)(4744005)(2906002)(66556008)(76116006)(66946007)(4326008)(64756008)(41300700001)(66446008)(8676002)(8936002)(66476007)(38100700002)(122000001)(36756003)(2616005)(38070700005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M3FZSE5naVpNVHk5aFR2Sk85ZHgrdldQSmk4NVJCaTZ0REpnM3JaOWxlLzNl?=
- =?utf-8?B?Q3Q1MlpFZDJRMEFHK1VJcnFyUlY3bXZ5M0xSUVU2RkEvOXc4ZE1YWmd2aERV?=
- =?utf-8?B?STYya3prelVrQ2RGR2pTeklWbHpseGdTNU1RcitPMWQ5eVg1RHFzQkM0MFZx?=
- =?utf-8?B?NFR2N3g1MTJuYUMxT1U4SmxQdENpNlBqTUZXK3ExMlEzT29XbGUyOFErUkti?=
- =?utf-8?B?UWJTV015enlyWlh3YnVOb0Q4c2s4RitVRXR6K21JZ1BiVWVhaW8ya1BWK3Mv?=
- =?utf-8?B?ejJLRUdXR3VlcDIxMGw5OGY3TG9EQlgxbklvMXpRbHZSL2VKcXpaTGREamJG?=
- =?utf-8?B?bUpESkpKZWFydGFPTkRNaUtRbU9mSVVWWVVncXN3a2RpOWhncXBQaUxFYVJB?=
- =?utf-8?B?UFhaVEpnVWFvVVZTQ2tWWFZhUjJXb0g2OUgxejVNRG5DOUQrZWFiN3pmYjRV?=
- =?utf-8?B?bmIraW9hU2d0UHV4VEpzWlJSdTRRc1AwSjNGTjh0cncxbFNKaHZZY1BpcmVo?=
- =?utf-8?B?QkFKS1Nkc05hOERsU05WeXljeDlwYW1YS0FVMDlEVE05dkx5T21XK3hiNkdt?=
- =?utf-8?B?L1cyVUpjK1JWQktsRndSMlJyUDZ4Z1lHUnZUNXlHZEVCeFhXNFVCVXdsVnZP?=
- =?utf-8?B?bEF1TE5XenBoSzR4bTFLQ2YzQVlaeWw3U1VUY0JhcXdxcXE0RWZPUUxvckEr?=
- =?utf-8?B?cnJqdXJBLzJDNW52bjFWS2tNZkFwdk9aMzRWY1RZQyswWmVDcU9QUTY1SjAy?=
- =?utf-8?B?bXRGYzVCRHg1MkZoL2ZZR0VjVDJNVW5oYU5OeWJES1E3Q2FndlFpWTFjSVhT?=
- =?utf-8?B?NEhJOGFsYnIrQ0ZPeUVhRHpOY29Mc2R0ZGtXWWlMK29TRm1GOTdKRkpJbnpl?=
- =?utf-8?B?V3UyZXNqd05YY2dheHVJZE9YbEtIT0FwWEdlTjdhbzBkWUxiY0ZzYUY3MldR?=
- =?utf-8?B?K01FZ010TnJMQmVhSndhRXFsczBncnQ3dU9SUTJmdHUzNUc1T2tRdUg2NHlY?=
- =?utf-8?B?MDdVbzNDSnlLUWl2Mmoxd3NoOE1rU3NyUWtaQWdQSEVTL2ErT1M1NzY5ZGZ5?=
- =?utf-8?B?c0dvNFdHd21rUnV3ZXdYdTc1bWlSZGUrS0pIeGpJOFo3U3dzYUtPaDg5WUdS?=
- =?utf-8?B?ZXRnRVA4bEx0em91YURFUk1sck1DUUJUd0VBU0xmWThsMGh2VjhyZ1NUVm1M?=
- =?utf-8?B?Y1BMaGF4UkR6Ri9CZHFaZHN0bzF0QzVIaWtqdzV5UE1EWTlFU2x4NGZobkVL?=
- =?utf-8?B?VWpUSWlWdGpyOTBHOS82QWd2eFNiNHRoS0R1bEZUZm8wbER1alZDK3U1cGZG?=
- =?utf-8?B?RVlnYVd4QWplWTB5UkNaVU1KV3dIbWR4U2I1T2t5T1FlTTNqOExFQjJiTlVO?=
- =?utf-8?B?dS95aUx1MGdwZVFhRXh3MUNHcmZrNFcyM0RDMmU3UHQwWkEwZ3NOV05qVnlN?=
- =?utf-8?B?VWxDVVhTTkxTZjNJejdmSmdUUzZ5V1ZSTHVFR01PSFQ1VWFXUnN6dE1oQkNE?=
- =?utf-8?B?RkdGcHZBbWFRL1dsM0ViS0pyTXM2bGwyTysxb3lyS1UxclNvM3lYekVlL2NW?=
- =?utf-8?B?Q09YMVRHMUE5VEEyOWN5aU1lYWI3bkh5ZWZWYlhpQ1BGempYR3Fyakp4STlZ?=
- =?utf-8?B?SWVFUm5hREx2NUZiQjhMQWtndVllN3lGV2J4enJBYXhFcFZkbVd6SmFZQ3Bp?=
- =?utf-8?B?OFp2dDZacjlpMXNEM2JKSWN3R2NKWU9rVVZsQno5c0JjSmRXVk8xOEJkcUFl?=
- =?utf-8?B?amV4QkJJNk84cTZLcHNDMGticlkra1Z0QTVoZ3lHY0VWZld5eTgrUXVFMGVD?=
- =?utf-8?B?MEM3elhCeHlPK3FmbnZwR1IxNFRaVDlJUS9UWUFTQXluai9WV3FDT3BTVmdR?=
- =?utf-8?B?Q20yNDVJY09RQU5qWmdwWFl4ZktGTjdEc1dkKzgrMEIwNWd0VWJMS09GY3No?=
- =?utf-8?B?TFIwdWVYc1pLREpGakFNekVtVFhqb1NPNGdlaUQ1RVRYem92ak4yWXNmMTNu?=
- =?utf-8?B?TkdjZFcwcUtWQy91WXJHaWNXNEF4NjQ0M0plQ3VNY2JoWVBkMTErcjJ6cmJw?=
- =?utf-8?B?dVRkdnlXblVhYVNwdW1udmdYbVpGVEptbTRFYUhRZzhDOStETm9YTE5CREpt?=
- =?utf-8?Q?ziVy3XOXqA8XATEcxykYnWTF/?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A30070B6451B3E4C9233F0734BD70154@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 11 Apr 2023 13:54:41 -0400
+Received: from sonic305-27.consmr.mail.ne1.yahoo.com (sonic305-27.consmr.mail.ne1.yahoo.com [66.163.185.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F855BC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681235674; bh=fGQ/Q7TktUdbrwtcs4d+zlOk6EJlzv1LPbuaeOzMpN0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=RZa3olJISDTIAcn27+5P2WNEtQLN24G+D4etMjfeXY0CVW+6EyIgH5CauYVYJsvziedUobL5W/LX0TQnBWKUhrNjlpbC/zln5jul0jUKlbvd6PV+ARPqr0yAZyUHbzNNcjghHUN0U7a4+gA16cJklFwC3YLFn8V6sI2gK9Yl5GJwB10cFrg2sUKOo2nZ929NXFNowJ5ClBGyAU2LYyHlYD6ZqOpBmTlT0C7bB/nam/IvqrFHb0BZIfFL8eMjrWbCqYTD+op9z6rQ2xbmItj0s2Qm2/vVoz8p9N2Wn8lbJ2QMQgGc0VnxbGjK1EImhreA3qWp1WRHVFImZrHvMvUZ8A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681235674; bh=VcM0X6briIK3L2IQ2g0juE33a63sDXI7Nt5D2tthqkw=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PIikRrFgXhJeWcbAiYI4oWSlE/gJKAHvUlUh9pHHx1RfbMAHBZlUS988bXfJEBzen71/Lc4Cw9GP4c1q159txHjllReUsVURqPlOUtyrvuec6FD9Hfkb8O5joqFhBHe5TnrrVElbhpRRy6Qb4b0n4hV+pvVhsqylQv8YuzvdYRJ9mKJhAqbORBIljQXNo9SmCfYdv00VeHXydvxkgqIlMLlExwi/0dirak/oKfSYvZ+RfO5LPN4jiAVkixfX8a6/ZL6lMGTvS/8sF7sqxlzKUt5WICXPVoaJ1cwKELtA61IgvRq1mpH7yX8RXteWLyebyraBHlSabDqpq0hOi/dJhg==
+X-YMail-OSG: ex4xgrIVM1mq_GFAgmdkgns_DXkZUMCYSJARXKpMe0nJZcLBAjwOapPg1Tk6Q6s
+ c3GC8GsN977ZKnlJLEVpaZDIrRuthATLHdJUsBtU0eRIEeW8kQv0Iqn.4nTiKHCNv4bJ98_Ru.E5
+ s_1q3TGYmyCb2NstdjI3TeddkBNYIErWV1eh27CETeryV2i25gGhYCIaH7Gjh0eB5q4PHlTUE7OL
+ 6ZjHqKWpoRCTU091eRPbhkkWB8c5HmKeVtcyISf8tIviZ5cftHFpwEZFqldYqh9vRMrSqxXP8X3v
+ Oikl2Ut2adVZH66Tn9v3B_DUD_LCuTd6J3HldYymMFCIexxQCjAn21XlgvJdxxQrieMj.iI8n71X
+ hsc7svA9t1iUD9rpXFuGKgnv.9lCsTB4RkPs0TdSe.wbW0dcNhVBJ_qgplhFiarzdWK5_VqeKlIv
+ yJ5mgF9POtwliMALpHVfiol_KuIVbzHFSqrOQuCt.6DRW5Wqmh6v3b67AcYMOXYk6DsaQ.G8OP8h
+ PBLfUyxm8xtw2QB8WWAwS3V7pZzJPZxqZCkJYEP1g_061tRIPrDb7JrasSZSbI_6pI813UKH0IrC
+ zkNzDLvcb9m4ogbwjtVs_9Lf8wVRpxUZ4mdplJheovcATXrV41tln3j2cW576inegQ8zK3VSlSh7
+ LDlzE3oiaqesSoZGk_NSrda1eCBk.GkvdpLrPGhHxSgSdJ0fJXezf.bkqPV82yJld6hMULDenj9a
+ uoevL1_ZMSIquUWcUztvc3HzDfLzUayBwmyIzD4YAHt8wain6hIss6DyHSmQ4YTa72KoFLiN0VZV
+ IuiLkzwWgyvgFJQrtUo2wKGpE2BDj.B18CIi7gHSSVC4o2nS5lzAUTdYVYCmioZqsVpiMxSfHv9I
+ C7YWagQRI33VNvYnPkQPT0KFj5Thg1RHDxeufEVz9f0AVazrEUXccbz8776guAbHAfqhI9ok_thf
+ uw4FbL6QIT7ZwYziVka_K71DBpZjHAyZwLxBM9qiThF3nAKuEh3FAh5erl0DFyHumqm9ZhGJKQOl
+ NRpki1e0WDd3z56m8Xdl2P.wwakxy52cAH8cxXVANXAub3GRZew75R8eu4hG_KxLUQk5lHf9qZX8
+ QC6oECgWZ4_Q5sfLrM63wJs9dh8USVmP_TcuQfkzN38VwaDi1sfOrowYBwCr6INntMIWY54jsOMc
+ 2siRhaQFN6fe1eKuzx50Wdp7_nB53Kyjv8jDfGIsXrayxtb.u07N9B4SjAtWrEkGA6C3Pw5bdJYi
+ 8anqhGoOxlcO8MF31J5azLQ8jc3DIawpk3MWC.rB1CgGtY94UQPtROLwvMi0Sey65zLNIOXYkakq
+ Ty4sKexVI48.JykFo9LJb6fntZfGNJzEKjZ9pL.wow2aPqU61SNypURvgNVa.eXZL_.2DXfmEuUs
+ SsiuP.jfyu41s_aUhRaAFGSVUSBMtloXGU9y2plMlMa.33pwMsVDstR5eV7vcUfFnFvT.zaRiqb3
+ qMCFvTTKkXxqNCOW8eBlD.t7CB9BX2LDmZNVHVkC2BHWbER_2dYpHOhJ93EQ28nsDCk6S1v3c11x
+ 2PP5c.ZGVN7gGtcWzb2AKHLH0lGimm5cBawx9NLl6BccNf1HZFC55FG88PVuSepPyNpMNWa6iWVF
+ 7LRmhtI8QadEQXyQsvBJjGVfIizM7WLVbRAEYqUjxzsCsdVX79Vbgxu3tkETufEY867KjL7qktTL
+ fCuvaDVVg5WnYfSAXJ7vYy8FEKB6UmU8Eu20D8KMOt5DHp5GFuV4EKfnGKCkOFQ4uxfyIzFuMbvV
+ bqbEKa2OQMlbp7GiKY8EXUTUddXttUeVZ2r9UIcicOgNOlGZUUJKTOqpWBwBUPh56aoS.NXmAgIp
+ y6U760J9xfZkrSBVlaYjuAdHwVdioqt65dzRdblS63m6ggxHhflPyAyY7d_DBxkABroW8KAcMhyv
+ 1wQRXQKXhq3egvNf08kRdfjXAom3SC9wXHf0lUegrkzmxVfBcv6xo9Y9qCOAdUv8Lrm1H.3TRY9z
+ NgEOM0_jx.LtOtJQC6q4Y.SYJgt0CDSRfNCMCkZ0HrmzDYfliox3RCWPfYCYocpqyTwwFoA1_JEO
+ ewX9PZMXYqP.5TnAR9ZxwcxYDNcqKq_sx2TJVtfRpElAKK209SJSKqLJ_Gj2dXwm5TlJeGhCCYAt
+ F3o1tY05LRYUrRyQmUgzrMu58PaH52c9AJh3v9yKQa13_TvoV9vlLLbc3YyXiE78EQUtK3EgQhx6
+ D7ABlvnOTKnRhvRnE1b8XXSmU15MaGow27I9nyEapm6bKSmBkrm4kdxe3zUw6ousf2Uqa6hJEMIT
+ XqpkI01Dae_p7XeG0_hx1FVMLdg--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: bb284cfe-0ef5-4431-9d01-cc72aa119f74
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Tue, 11 Apr 2023 17:54:34 +0000
+Received: by hermes--production-ne1-7dbd98dd99-tcjjg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3f38cbf819fe34d180ae475167ff757d;
+          Tue, 11 Apr 2023 17:54:32 +0000 (UTC)
+Message-ID: <2dc6486f-ce9b-f171-14fe-48a90386e1b7@schaufler-ca.com>
+Date:   Tue, 11 Apr 2023 10:54:30 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b21a6cca-89a6-47df-2466-08db3ab5caa8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 17:54:26.6202
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aJOECwb//QAFF13BxPX4fQeidI3xmLVOCAI7uB7clGS7WQRq9KFkASWgv3+x2jN7LrDPwgEocX4hX2VRCmAXZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6048
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
+ provide xattrs for inode_init_security hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
+ <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTAzLTIxIGF0IDE0OjI0IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBjbGFu
-ZyB3aXRoIFc9MSByZXBvcnRzDQo+IGRyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4X292ZXJs
-YXkuYzo1NjozNTogZXJyb3I6DQo+IMKgIHVudXNlZCBmdW5jdGlvbiAndm13X292ZXJsYXknIFst
-V2Vycm9yLC1XdW51c2VkLWZ1bmN0aW9uXQ0KPiBzdGF0aWMgaW5saW5lIHN0cnVjdCB2bXdfb3Zl
-cmxheSAqdm13X292ZXJsYXkoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF4N
-Cj4gVGhpcyBmdW5jdGlvbiBpcyBub3QgdXNlZCwgc28gcmVtb3ZlIGl0Lg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQuY29tPg0KDQpUaGFuayB5b3UgZm9yIHRoZSBw
-YXRjaC4gSSB3ZW50IGFoZWFkIGFuZCBwdXNoZWQgaXQgdG8gdGhlIGRybS1taXNjLW5leHQgYnJh
-bmNoIGluDQpkcm0tbWlzYyB0cmVlLg0KDQp6DQo=
+On 4/11/2023 10:23 AM, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Very very quick modification. Not tested.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/smack/smack.h     |  2 +-
+>  security/smack/smack_lsm.c | 42 ++++++++++++++++++++------------------
+>  2 files changed, 23 insertions(+), 21 deletions(-)
+>
+> diff --git a/security/smack/smack.h b/security/smack/smack.h
+> index e2239be7bd6..f00c8498c60 100644
+> --- a/security/smack/smack.h
+> +++ b/security/smack/smack.h
+> @@ -127,7 +127,7 @@ struct task_smack {
+>  
+>  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
+>  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
+> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
+> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
+
+See below ...
+
+>  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
+>  
+>  /*
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 8392983334b..b43820bdbd0 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -54,12 +54,12 @@
+>  
+>  /*
+>   * Smack uses multiple xattrs.
+> - * SMACK64 - for access control, SMACK64EXEC - label for the program,
+> - * SMACK64MMAP - controls library loading,
+> + * SMACK64 - for access control,
+>   * SMACK64TRANSMUTE - label initialization,
+> - * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
+> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
+>   */
+> -#define SMACK_INODE_INIT_XATTRS 4
+> +#define SMACK_INODE_INIT_XATTRS 2
+>  
+>  #ifdef SMACK_IPV6_PORT_LABELING
+>  static DEFINE_MUTEX(smack_ipv6_lock);
+> @@ -957,11 +957,11 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  				     const struct qstr *qstr,
+>  				     struct xattr *xattrs, int *xattr_count)
+>  {
+> -	struct inode_smack *issp = smack_inode(inode);
+>  	struct smack_known *skp = smk_of_current();
+>  	struct smack_known *isp = smk_of_inode(inode);
+>  	struct smack_known *dsp = smk_of_inode(dir);
+>  	struct xattr *xattr = lsm_get_xattr_slot(xattrs, xattr_count);
+> +	struct xattr *xattr2;
+
+I'm going to channel Paul and suggest this be xattr_transmute instead of xattr2.
+It also looks like it could move to be declared in the if clause.
+
+>  	int may;
+>  
+>  	if (xattr) {
+> @@ -979,7 +979,17 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+>  		    smk_inode_transmutable(dir)) {
+>  			isp = dsp;
+> -			issp->smk_flags |= SMK_INODE_CHANGED;
+
+I think you need to keep this. More below.
+
+> +			xattr2 = lsm_get_xattr_slot(xattrs, xattr_count);
+> +			if (xattr2) {
+> +				xattr2->value = kmemdup(TRANS_TRUE,
+> +							TRANS_TRUE_SIZE,
+> +							GFP_NOFS);
+> +				if (xattr2->value == NULL)
+> +					return -ENOMEM;
+> +
+> +				xattr2->value_len = TRANS_TRUE_SIZE;
+> +				xattr2->name = XATTR_NAME_SMACKTRANSMUTE;
+> +			}
+>  		}
+>  
+>  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> @@ -3512,20 +3522,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+>  			 * If there is a transmute attribute on the
+>  			 * directory mark the inode.
+>  			 */
+> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
+> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
+> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE,
+> -					TRANS_TRUE, TRANS_TRUE_SIZE,
+> -					0);
+> -			} else {
+> -				rc = __vfs_getxattr(dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
+> -					TRANS_TRUE_SIZE);
+> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> -						       TRANS_TRUE_SIZE) != 0)
+> -					rc = -EINVAL;
+> -			}
+> +			rc = __vfs_getxattr(dp, inode,
+> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
+> +					    TRANS_TRUE_SIZE);
+> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> +					       TRANS_TRUE_SIZE) != 0)
+> +				rc = -EINVAL;
+
+Where is the SMACK64_TRANSMUTE attribute going to get set on the file?
+It's not going to get set in smack_init_inode_security(). The inode will
+know it's transmuting, but it won't get to disk without the __vfs_setxattr()
+here in smack_d_instantiate(). Now, it's been a long time since that code
+was written, so I could be wrong, but I'm pretty sure about that.
+
+I think that you should be fine with the changes in smack_init_inode_security(),
+and leaving smack_d_instantiate() untouched. 
+
+>  			if (rc >= 0)
+>  				transflag = SMK_INODE_TRANSMUTE;
+>  		}
