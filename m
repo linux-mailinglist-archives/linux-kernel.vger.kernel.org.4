@@ -2,80 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6F16DE7C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983046DE7CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjDKXES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S229548AbjDKXJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKXER (ORCPT
+        with ESMTP id S229491AbjDKXJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:04:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8149199D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:04:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F75762AA9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7979C433D2;
-        Tue, 11 Apr 2023 23:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681254255;
-        bh=CcQzzv/cLNqrvnmKPDrfU/4VZ9/4YNiP/gDgXxLe94A=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=AlKHLzQ8MZj9FA0JpXzDNQCqlnLtdOT4LZHOgFsjxCBbBck8rsD76rE/LuxJAUyMc
-         fiFGaODr4o/onzwe38w5XDEhZjdSaDryU4gxm9c5HtMoJo1FTJmcBGEPb0BUP6f6Nc
-         Dmxw+xwuYANZJKhCjMa0Q0s0pMtdUHl4ICK0OmvY5Cw+QTB5NMcmHnbNq/iEx+yiUy
-         TqApKvvCDZhnrvMB/j3nio2lQX1Ld9ErlqxvhynxjhjnNmE2p1Ouhc+kR5EmSdGCCk
-         PZaDEA39zolWH+RzhFL2cymMSOBz3qR6fJHwHBcBBzlU1O4kjb2qbXSFwYDkchci+P
-         aSw4EVAvYpkBQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 385431540478; Tue, 11 Apr 2023 16:04:15 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 16:04:15 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        kasan-dev@googlegroups.com, elver@google.com, rdunlap@infradead.org
-Subject: [GIT PULL] KCSAN changes for v6.4
-Message-ID: <147f3556-8e34-4bc3-a6d9-b9528c4eb429@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 19:09:31 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C91FE0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:09:30 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee397553eso101612847b3.19
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681254569; x=1683846569;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vOZGDB1tEns0ICitKu53mE4nvsxHCRDQzBuBh0aiQXo=;
+        b=lgZi8uglWKHWhlXre4/ek2jQLOH6P1XWQav0/oTO33kn6oS/pGGIErN4evvKuwF0Vd
+         Hr1TwkJDwSytn+K0vjw44D9QWqzU1QsWosxJXsWRy06T3WWUhm90RUJL0Fdn6D07Z8hQ
+         1F5FTm7ycHRinDKxnMKO6SaaXE2OrXtRgSZKTQV4gxphwvJoHMqqf8+nAKv0IJQ3UaIG
+         FLPoCUSCT4Y03iYtS237wvRS1kv3Z9w2BG8jiiPFop/H3VSr73ElY+MNbVIDflvxweby
+         JKt7hpqChemH9QHLcVFo8EV5hEufC+Z2cUVQ4bMAezsoomraxAm++s22xFy9mZfZ8v7+
+         XF5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681254569; x=1683846569;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vOZGDB1tEns0ICitKu53mE4nvsxHCRDQzBuBh0aiQXo=;
+        b=nwXV9CJqyVYywRrlOiWl0OBsaEp2QVt1eUKnivheSpdqlrSszF7onD4EH82rN+ZFws
+         4QInJTfKA0O5TipkZBuE5bPCKqW2bMZ1BTDSAFDiH9UuhpdABrlBqTzdHKDjxHPI80fD
+         9sk4fZanGUxLV2ZxXARqv4nl/Bcg8zTRbzYEilNZcvX3PEApcy5uk7jh9chsOikNRzyB
+         apdj2wW5pTVqRsoTTsBivJJesPj7vRB34yOO6f6FhhjK7okx9QrzsAYs+sB5Awf0ouiF
+         R5TIyiYIM7N/Xip8EBCztV7yNU/Mh7meZ6p61JCwoc5HxfQFs+4iqBY1wH3TwKbOeem2
+         Jouw==
+X-Gm-Message-State: AAQBX9cH5APeUD8C0mRVhtm4xr/dnPu1+hzPwipH/kYfjrcX00ZJPxIf
+        UMFqFLTOKJtk25QrgZIPtddySRNg2yRFHw==
+X-Google-Smtp-Source: AKy350YIK1EZL1Y0TVSqyu3cdqYhqXtb6pb5aYRyZU8d6A+nXo20/b2ezoiZVi5EQq4vABuq7+bkN6hQ3uUEvw==
+X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
+ (user=pranavpp job=sendgmr) by 2002:a25:6c41:0:b0:b75:3fd4:1b31 with SMTP id
+ h62-20020a256c41000000b00b753fd41b31mr384659ybc.1.1681254569324; Tue, 11 Apr
+ 2023 16:09:29 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 23:06:50 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230411230650.1760757-1-pranavpp@google.com>
+Subject: [PATCH] scsi: pm80xx: Log device registration
+From:   Pranav Prasad <pranavpp@google.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akshat Jain <akshatzen@google.com>,
+        Pranav Prasad <pranavpp@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
+From: Akshat Jain <akshatzen@google.com>
 
-Once the v6.4 merge window opens, please pull the latest KCSAN git
-tree from:
+Log combination of phy_id and device_id in device registration
+response.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/kcsan.2023.04.04a
-  # HEAD: 8dec88070d964bfeb4198f34cb5956d89dd1f557: kcsan: Avoid READ_ONCE() in read_instrumented_memory() (2023-03-11 12:28:07 -0800)
+Signed-off-by: Akshat Jain <akshatzen@google.com>
+Signed-off-by: Pranav Prasad <pranavpp@google.com>
+---
+ drivers/scsi/pm8001/pm8001_hwi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-----------------------------------------------------------------
-Kernel concurrency sanitizer (KCSAN) updates for v6.4
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index ec1a9ab61814..73cd25f30ca5 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -3362,8 +3362,9 @@ int pm8001_mpi_reg_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 	pm8001_dev = ccb->device;
+ 	status = le32_to_cpu(registerRespPayload->status);
+ 	device_id = le32_to_cpu(registerRespPayload->device_id);
+-	pm8001_dbg(pm8001_ha, MSG, " register device is status = %d\n",
+-		   status);
++	pm8001_dbg(pm8001_ha, INIT,
++		   "register device status %d phy_id 0x%x device_id %d\n",
++		   status, pm8001_dev->attached_phy, device_id);
+ 	switch (status) {
+ 	case DEVREG_SUCCESS:
+ 		pm8001_dbg(pm8001_ha, MSG, "DEVREG_SUCCESS\n");
+@@ -4278,7 +4279,7 @@ int pm8001_chip_dereg_dev_req(struct pm8001_hba_info *pm8001_ha,
+ 	memset(&payload, 0, sizeof(payload));
+ 	payload.tag = cpu_to_le32(1);
+ 	payload.device_id = cpu_to_le32(device_id);
+-	pm8001_dbg(pm8001_ha, MSG, "unregister device device_id = %d\n",
++	pm8001_dbg(pm8001_ha, INIT, "unregister device device_id %d\n",
+ 		   device_id);
+ 
+ 	return pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &payload,
+-- 
+2.40.0.577.gac1e443424-goog
 
-This update fixes kernel-doc warnings and also updates instrumentation
-from READ_ONCE() to volatile in order to avoid unaligned load-acquire
-instructions on arm64 in kernels built with LTO.
-
-----------------------------------------------------------------
-Marco Elver (1):
-      kcsan: Avoid READ_ONCE() in read_instrumented_memory()
-
-Randy Dunlap (1):
-      instrumented.h: Fix all kernel-doc format warnings
-
- include/linux/instrumented.h | 63 ++++++++++++++++++--------------------------
- kernel/kcsan/core.c          | 17 +++++++++---
- 2 files changed, 39 insertions(+), 41 deletions(-)
