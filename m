@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBD46DD140
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 06:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7924C6DD143
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 06:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjDKE4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 00:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S229992AbjDKE63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 00:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDKE4m (ORCPT
+        with ESMTP id S229773AbjDKE61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 00:56:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A85173E;
-        Mon, 10 Apr 2023 21:56:40 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33B4M6Il026832;
-        Tue, 11 Apr 2023 04:56:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CPnsQXa10tpoYv4jCyjrL4WFQ2AlyQmNvURMMyN3zqM=;
- b=aWLQ3+kY3lktc3angB+yKKmuiQMcXiBwq1m4PwcCzaMASh7cfSsNAthOhQ+RO6Z+1Jka
- usetRinXfV30iHgLAJPMafygaLB9UtYHLZG5U4O7fo/gAZM44TD736V4JD+b65Z/WKg2
- MZ/eD2SkJmsMZNibaaZvLDNpNdPudOKp9Mn2KYvFZg//ZB8M6Pu2AHChrNrCj4U5rMKl
- VGGMdY8YvIX+tTGbks4x9RAv1AbzFqb0hW8FcCX3qGxwY2mslAU7XZW/BWV9Ya88Gp7z
- gK9zZtnxwaskbFgCOg8Fr06zMfYBMaRAflkUu+xd9BMth5/DQqPV/I1v0j6zFL/w32vv IQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvvux0fst-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:56:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33B4uAuH014550
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Apr 2023 04:56:10 GMT
-Received: from [10.50.52.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 10 Apr
- 2023 21:56:06 -0700
-Message-ID: <d4a8054c-443e-d9ba-9641-ff721254d254@quicinc.com>
-Date:   Tue, 11 Apr 2023 10:26:03 +0530
+        Tue, 11 Apr 2023 00:58:27 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A78173E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:58:25 -0700 (PDT)
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 685153F236
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681189103;
+        bh=KZfBLpN/gahf4Na+DiCMXXdGEJe19xHkIm66KVYL3RU=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=wXVAx+NvdegvvpUD6OOFsuukq4xI5TADWG8uJEnaKwDNs8FqEyDKLD4sMrDLWboGM
+         RZajAd7tAOpmtmqoWM4q3mCbPAg2jME5IuvVTQZhyYuw3/5rfV+Y1mpFLURZQ4XU85
+         xye/sTagXn+seHcTsHXoLMly3xPUbKf+ZvfFeDnBCLGF8xHhNC6ffl5rQRdyEx3c3i
+         UfPgNC08rHsdA54gbnqAWMxMjSPjunjXiuxIEpCcdhV/CPJYJtd8LlRFgzzti2ac7w
+         AFkAvmT6OPAMvJoYMvt43h6CCfb4mOksRgC9lAgkLyX1AAmkzDtHB1Tqx4/Zs1lN+Y
+         mCwEix4Ubka5g==
+Received: by mail-pl1-f197.google.com with SMTP id c8-20020a170902d48800b001a1e0fd4085so4427179plg.20
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 21:58:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681189101; x=1683781101;
+        h=message-id:date:content-id:mime-version:comments:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KZfBLpN/gahf4Na+DiCMXXdGEJe19xHkIm66KVYL3RU=;
+        b=ybEyLfA79s2lpdd6hhBjPkEcWfTIEks0HXCcK0HJKzxuHL8Vv+CY765ooMTApB4rPs
+         ex2GCkDyx8Vfa/u7BPwzZNJmS0Tn48FvOfnywtvRVf0VHTIcEqYaBhltuYmIjU7kLCwi
+         TiZmob/Q/qXut60ifugcAoierk1WGOzZX5jlJYyI1n3HKuPqC+PeKeJ8HejIVwPg3+J6
+         W2+3jTceMJ0LxEgiz5GupTWfuONUfVLxIiTbrBxCjsnKXsJjp9tPDi6THLhXyw5o9kND
+         7lkcwgRhJ/vk1tcVUxy0HF+kHdm5i2tYhiTxVKWIzal8vmZOEV41cBaXntzGvw6YPnhm
+         ePKg==
+X-Gm-Message-State: AAQBX9dJwXG+Hm3kee3el93/A8dX8Am2YUe1uxtryM2/sjNdQBB2hwLN
+        Mbgw5mGtwN3BI7Oym55LJ1QItKKCgrZrBqpL4cogMZeFAaSDWN2QFCFXqj+tWLX3JqOK+/RMx0p
+        nCoS64vwKoOL6s6hEmsDz4RWfga3mOiabgNVvBkwM/Q==
+X-Received: by 2002:a05:6a20:33a8:b0:e3:8710:6848 with SMTP id f40-20020a056a2033a800b000e387106848mr8659164pzd.41.1681189101491;
+        Mon, 10 Apr 2023 21:58:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bEqfmn5biyh+6G1LBlXJucwKMd0MRFFYszdQXPYNvTuuWT+6lnsJYqDYeWyAEkzCrOoXsqvQ==
+X-Received: by 2002:a05:6a20:33a8:b0:e3:8710:6848 with SMTP id f40-20020a056a2033a800b000e387106848mr8659142pzd.41.1681189101180;
+        Mon, 10 Apr 2023 21:58:21 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.253])
+        by smtp.gmail.com with ESMTPSA id p25-20020a62ab19000000b00638c9a2ba5csm2351342pff.62.2023.04.10.21.58.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 1772F61E6E; Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 103909FB79;
+        Mon, 10 Apr 2023 21:58:20 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Liang Li <liali@redhat.com>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangbin Liu <haliu@redhat.com>,
+        "Toppins, Jonathan" <jtoppins@redhat.com>
+Subject: Re: [Question] About bonding offload
+In-reply-to: <CAKVySpzU_23Z6Gu1N=z0DRm+sUQDjyiyUc18r4rJ_YQ+YELuFg@mail.gmail.com>
+References: <CAKVySpzU_23Z6Gu1N=z0DRm+sUQDjyiyUc18r4rJ_YQ+YELuFg@mail.gmail.com>
+Comments: In-reply-to Liang Li <liali@redhat.com>
+   message dated "Tue, 11 Apr 2023 09:47:14 +0800."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,gcc-sc7180: document CX
- power domain
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
- <20230408134820.76050-2-krzysztof.kozlowski@linaro.org>
- <4757c33c-7e71-262d-a51a-c5f9fb53ff41@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <4757c33c-7e71-262d-a51a-c5f9fb53ff41@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: i6c5O3ZhfELru_es5pv8z-TwzCwHevvA
-X-Proofpoint-ORIG-GUID: i6c5O3ZhfELru_es5pv8z-TwzCwHevvA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_02,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
- impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304110045
-X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <27296.1681189100.1@famine>
+Date:   Mon, 10 Apr 2023 21:58:20 -0700
+Message-ID: <27297.1681189100@famine>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Liang Li <liali@redhat.com> wrote:
 
+>Hi Everyone,
+>
+>I'm a redhat network-qe and am testing bonding offload. e.g. gso,tso,gro,lro.
+>I got two questions during my testing.
+>
+>1. The tcp performance has no difference when bonding GRO is on versus off.
+>When testing with bonding, I always get ~890 Mbits/sec bandwidth no
+>matter whether GRO is on.
+>When testing with a physical NIC instead of bonding on the same
+>machine, with GRO off, I get 464 Mbits/sec bandwidth, with GRO on, I
+>get  897 Mbits/sec bandwidth.
+>So looks like the GRO can't be turned off on bonding?
 
-On 4/8/2023 7:33 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 8.04.2023 15:48, Krzysztof Kozlowski wrote:
->> The GCC clock controller needs CX power domain, at least according to
->> DTS:
->>
->>    sc7180-trogdor-pompom-r3.dtb: clock-controller@100000: Unevaluated properties are not allowed ('power-domains' was unexpected)
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> +CC Rajendra (author of 5d6fc6321db1 ("arm64: dts: qcom:
-> sc7180: Add required-opps for USB"))
-> 
-> Rajendra, shouldn't SC7180 GCC have PM ops to make sure a vote
-> is only there when AP is active?
+	Well, it's probably more correct to say that GRO is
+unimplemented for "stacked on top" interfaces like bonding (or bridge,
+vlan, team, etc).  GRO operates early in the receive processing, when
+the device driver is receiving packets, typically by calling
+napi_gro_receive() from its NAPI poll function.  This is well before
+bonding, bridge, et al, are involved, as these drivers don't do NAPI at
+all.
 
-hmm, I am not quite sure why we would want the performance votes
-from peripherals dropped when CPUs go down in idle?
+>I used iperf3 to test performance.
+>And I limited iperf3 process cpu usage during my testing to simulate a
+>cpu bottleneck.
+>Otherwise it's difficult to see bandwidth differences when offload is
+>on versus off.
+>
+>I reported a bz for this: https://bugzilla.redhat.com/show_bug.cgi?id=2183434
+>
+>2.  Should bonding propagate offload configuration to slaves?
+>For now, only "ethtool -K bond0 lro off" can be propagated to slaves,
+>others can't be propagated to slaves, e.g.
+>  ethtool -K bond0 tso on/off
+>  ethtool -K bond0 gso on/off
+>  ethtool -K bond0 gro on/off
+>  ethtool -K bond0 lro on
+>All above configurations can't be propagated to bonding slaves.
 
-> Are all GDSCs powered by CX?
-> If not, wouldn't this also need power-domain-names to
-> facilitate e.g. potential MX-powered ones?
+	The LRO case is because it's set in NETIF_F_UPPER_DISABLES, as
+checked in netdev_sync_upper_features() and netdev_sync_lower_features().
 
-For sc7180 GCC, yes.
+	A subset of features is handled in bond_compute_features().
+Some feature changes, e.g., scatter-gather, do propagate upwards (but
+not downwards), as bonding handles NETDEV_FEAT_CHANGE events for its
+members (but not vice versa).
 
-> 
-> Konrad
->>   .../devicetree/bindings/clock/qcom,gcc-sc7180.yaml         | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
->> index 06dce0c6b7d0..8bf9b6f49550 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
->> @@ -32,6 +32,10 @@ properties:
->>         - const: bi_tcxo_ao
->>         - const: sleep_clk
->>   
->> +  power-domains:
->> +    items:
->> +      - description: CX domain
->> +
->>   required:
->>     - compatible
->>     - clocks
->> @@ -45,6 +49,8 @@ unevaluatedProperties: false
->>   examples:
->>     - |
->>       #include <dt-bindings/clock/qcom,rpmh.h>
->> +    #include <dt-bindings/power/qcom-rpmpd.h>
->> +
->>       clock-controller@100000 {
->>         compatible = "qcom,gcc-sc7180";
->>         reg = <0x00100000 0x1f0000>;
->> @@ -52,6 +58,7 @@ examples:
->>                  <&rpmhcc RPMH_CXO_CLK_A>,
->>                  <&sleep_clk>;
->>         clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
->> +      power-domains = <&rpmhpd SC7180_CX>;
->>         #clock-cells = <1>;
->>         #reset-cells = <1>;
->>         #power-domain-cells = <1>;
+	TSO, GSO, and GRO aren't handled in either of these situations,
+and so changes don't propagate at all.  Whether they should or not is a
+separate, complicated, question.  E.g., should features propagate
+upwards, or downwards?  How many levels of nesting?
+
+	-J
+
+>I reports a bz for this: https://bugzilla.redhat.com/show_bug.cgi?id=2183777
+>
+>I am using the RHEL with kernel 4.18.0-481.el8.x86_64.
+>
+>BR,
+>Liang Li
+>
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com
