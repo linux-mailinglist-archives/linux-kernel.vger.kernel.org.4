@@ -2,119 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C306DDC08
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C2F6DDC12
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDKNZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S229733AbjDKN3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjDKNZV (ORCPT
+        with ESMTP id S229469AbjDKN3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:25:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F56A55A4;
-        Tue, 11 Apr 2023 06:25:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 265DAFEC;
-        Tue, 11 Apr 2023 06:26:02 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6F203F6C4;
-        Tue, 11 Apr 2023 06:25:16 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 14:25:14 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: Re: [RFC v1 0/2] Introducing generic SCMI pinctrl driver
- implementation
-Message-ID: <20230411132514.hdyyxug77t5gyzkj@bogus>
-References: <cover.1680793130.git.oleksii_moisieiev@epam.com>
- <CACRpkdaY1KjkJ_it0okrixrbCbe5Yy8PZiFAYacr_C03adP_hQ@mail.gmail.com>
+        Tue, 11 Apr 2023 09:29:49 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91976135;
+        Tue, 11 Apr 2023 06:29:48 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pmE4A-00054w-5q; Tue, 11 Apr 2023 15:29:46 +0200
+Message-ID: <36c7638f-964b-bee6-b44b-c8406e71dfec@leemhuis.info>
+Date:   Tue, 11 Apr 2023 15:29:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+Content-Language: en-US, de-DE
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     gregkh@linuxfoundation.org,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        "Gong, Richard" <richard.gong@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Kornel_Dul=c4=99ba?= <korneld@chromium.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230320093259.845178-1-korneld@chromium.org>
+ <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
+ <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
+ <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
+ <CAD=NsqzFiQBxtVDmCiJ24HD0YZiwZ4PQkojHHic775EKfeuiaQ@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAD=NsqzFiQBxtVDmCiJ24HD0YZiwZ4PQkojHHic775EKfeuiaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdaY1KjkJ_it0okrixrbCbe5Yy8PZiFAYacr_C03adP_hQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681219788;793f09b4;
+X-HE-SMSGID: 1pmE4A-00054w-5q
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 02:27:53PM +0200, Linus Walleij wrote:
-> Hi Oleksii,
+On 11.04.23 15:09, Kornel Dulęba wrote:
+> On Tue, Apr 11, 2023 at 2:50 PM Linux regression tracking (Thorsten
+> Leemhuis) <regressions@leemhuis.info> wrote:
+>> On 10.04.23 17:29, Gong, Richard wrote:
+>>> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
+>>>> On 3/20/23 04:32, Kornel Dulęba wrote:
+>>>>
+>>>>> This fixes a similar problem to the one observed in:
+>>>>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
+>>>>> probe").
+>>>>>
+>>>>> On some systems, during suspend/resume cycle firmware leaves
+>>>>> an interrupt enabled on a pin that is not used by the kernel.
+>>>>> This confuses the AMD pinctrl driver and causes spurious interrupts.
+>>>>>
+>>>>> The driver already has logic to detect if a pin is used by the kernel.
+>>>>> Leverage it to re-initialize interrupt fields of a pin only if it's not
+>>>>> used by us.
+>>>>>
+>>>>> Signed-off-by: Kornel Dulęba <korneld@chromium.org>
+>>>>> ---
+>>>>>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++----------------
+>>>>>   1 file changed, 20 insertions(+), 16 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/pinctrl/pinctrl-amd.c
+>>>>> b/drivers/pinctrl/pinctrl-amd.c
+>>>>> index 9236a132c7ba..609821b756c2 100644
+>>>>> --- a/drivers/pinctrl/pinctrl-amd.c
+>>>>> +++ b/drivers/pinctrl/pinctrl-amd.c
+>>>>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
+>>>>> = {
+>>>>>       .pin_config_group_set = amd_pinconf_group_set,
+>>>>>   };
+>>>>>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+>>>>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
+>>>>>   {
+>>>>> -    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+>>>>> +    const struct pin_desc *pd;
+>>>>>       unsigned long flags;
+>>>>>       u32 pin_reg, mask;
+>>>>> -    int i;
+>>>>>         mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+>>>>>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+>>>>>           BIT(WAKE_CNTRL_OFF_S4);
+>>>>>   -    for (i = 0; i < desc->npins; i++) {
+>>>>> -        int pin = desc->pins[i].number;
+>>>>> -        const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
+>>>>> -
+>>>>> -        if (!pd)
+>>>>> -            continue;
+>>>>> +    pd = pin_desc_get(gpio_dev->pctrl, pin);
+>>>>> +    if (!pd)
+>>>>> +        return;
+>>>>>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>> +    pin_reg = readl(gpio_dev->base + pin * 4);
+>>>>> +    pin_reg &= ~mask;
+>>>>> +    writel(pin_reg, gpio_dev->base + pin * 4);
+>>>>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+>>>>> +}
+>>>>>   -        pin_reg = readl(gpio_dev->base + i * 4);
+>>>>> -        pin_reg &= ~mask;
+>>>>> -        writel(pin_reg, gpio_dev->base + i * 4);
+>>>>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+>>>>> +{
+>>>>> +    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+>>>>> +    int i;
+>>>>>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+>>>>> -    }
+>>>>> +    for (i = 0; i < desc->npins; i++)
+>>>>> +        amd_gpio_irq_init_pin(gpio_dev, i);
+>>>>>   }
+>>>>>     #ifdef CONFIG_PM_SLEEP
+>>>>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
+>>>>>       for (i = 0; i < desc->npins; i++) {
+>>>>>           int pin = desc->pins[i].number;
+>>>>>   -        if (!amd_gpio_should_save(gpio_dev, pin))
+>>>>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
+>>>>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
+>>>>>               continue;
+>>>>> +        }
+>>>>>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>>           gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4)
+>>>>> & PIN_IRQ_PENDING;
+>>>>
+>>>> Hello Kornel,
+>>>>
+>>>> I've found that this commit which was included in 6.3-rc5 is causing a
+>>>> regression waking up from lid on a Lenovo Z13.
+>>> observed "unable to wake from power button" on AMD based Dell platform.
+>>
+>> This sounds like something that we want to fix quickly.
+>>
+>>> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
+>>> top of 6.3-rc6 does fix the issue.
+>>>>
+>>>> Reverting it on top of 6.3-rc6 resolves the problem.
+>>>>
+>>>> I've collected what I can into this bug report:
+>>>>
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=217315
+>>>>
+>>>> Linus Walleij,
+>>>>
+>>>> It looks like this was CC to stable.  If we can't get a quick solution
+>>>> we might want to pull this from stable.
+>>>
+>>> this commit landed into 6.1.23 as well
+>>>
+>>>         d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resume
+>>
+>> It made it back up to 5.10.y afaics.
+>>
+>> The culprit has no fixes tag, which makes me wonder: should we quickly
+>> (e.g. today) revert this in mainline to get back to the previous state,
+>> so that Greg can pick up the revert for the next stable releases he
+>> apparently currently prepares?
+>>
+>> Greg, is there another way to make you quickly fix this in the stable
+>> trees? One option obviously would be "revert this now in stable, reapply
+>> it later together with a fix ". But I'm under the impression that this
+>> is too much of a hassle and thus something you only do in dire situations?
+>>
+>> I'm asking because I over time noticed that quite a few regressions are
+>> in a similar situation -- and quite a few of them take quite some time
+>> to get fixed even when a developer provided a fix, because reviewing and
+>> mainlining the fix takes a week or two (sometimes more). And that is a
+>> situation that is more and more hitting a nerve here. :-/
 > 
-> thanks for your patches!
-> 
-> On Fri, Apr 7, 2023 at 12:18 PM Oleksii Moisieiev
-> <Oleksii_Moisieiev@epam.com> wrote:
-> 
-> > This RFC patch series is intended to introduce the potential generic driver for
-> > pin controls over SCMI protocol, provided in the latest beta version of DEN0056 [0].
-> >
-> > On ARM-based systems, a separate Cortex-M based System Control Processor (SCP)
-> > provides control on pins, as well as with power, clocks, reset controllers. In this case,
-> > kernel should use one of the possible transports, described in [0] to access SCP and
-> > control clocks/power-domains etc. This driver is using SMC transport to communicate with SCP via
-> > SCMI protocol and access to the Pin Control Subsystem.
-> >
-> > The provided driver consists of 2 parts:
-> >  - firmware/arm_scmi/pinctrl.c - the SCMI pinctrl protocol inmplementation
-> >    responsible for the communication with SCP firmware.
-> >
-> >  - drivers/pinctrl/pinctrl-scmi.c - pinctrl driver, which is using pinctrl
-> >   protocol implementation to access all necessary data.
-> 
-> TBH this looks so good that I am happy to merge it once you send a non-RFC
-> version.
-> 
-> My main concern would have been the protocol itself, but that was very
-> carefully tailored to match what the pin control subsystem needs and
-> I am quite happy with it the way it came out: using strings for groups and
-> functions.
-> 
-> The scmi code in patch 1 adds an extra layer of abstraction and a vtable
-> that would not have been necessary if all of the code was confined in
-> one file in drivers/pinctrl but it is not up to me how the SCMI people
-> want to abstract their stuff and there seems to be precedents to do things
-> this way.
->
+> I've looked into this and at this moment I can't really find a quick fix.
+> See https://bugzilla.kernel.org/show_bug.cgi?id=217315#c3.
+> It seems that reverting this might be the best solution for now.
 
-I haven't looked at the code to comment on the details, but in general the
-SCMI abstraction was created and used in other kernel subsystems for couple
-of reasons:
+Great, thx for the update (and BTW: Greg, thx for your answer, too).
 
-1. Leave all the protocol specific details like the version and other in
-   the abstraction so that the driver remains simple and doesn't have to deal
-   with those details.
+To speed things up a quick question:
 
-2. Similar to the version and other details(generic or vendor specific), since
-   there is a firmware involved, there might be need for quirks and again
-   dealing with those in these SCMI layer is better as we will not have any
-   specific compatible say just for pinctrl or dvfs ..etc.
+Linusw, what's your preferred course to realize this revert quickly?
 
-3. Other reason was to allow testing of features that are in the spec and
-   firmware but not used by any framework. But I think the way we introduced
-   raw scmi interface nullifies it as it allows to bypass any framework and do
-   raw SCMI transfers now. But originally the abstraction considered that
-   possibility as well.
+ * someone (Kornel?) sends a revert with a commit msg for review, which
+you then apply and pass on to the other Linus?
 
-> I heard that someone wanted to also implement GPIO over SCMI, but
-> it is not part of this driver so I guess that will be a future addition.
-> It's a good starting point to add GPIO later.
->
+ * someone (Kornel?) sends a revert with a commit msg for review that
+immediately asks the other Linus to pick this up directly?
 
-Yes, Xilinx people want GPIO for moving away from their custom but similar to
-SCMI like interface. There are yet to start exploring details.
+ * we ask the other Linus directly to revert this (who then has to come
+up with a commit msg on his own)?
 
---
-Regards,
-Sudeep
+Ciao, Thorsten
