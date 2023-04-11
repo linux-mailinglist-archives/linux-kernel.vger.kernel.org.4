@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B436DDA05
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA926DDA04
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjDKLtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S229721AbjDKLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDKLsy (ORCPT
+        with ESMTP id S229897AbjDKLsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:48:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682BB49D9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:48:34 -0700 (PDT)
+        Tue, 11 Apr 2023 07:48:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1772135B5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681213714; x=1712749714;
+  t=1681213720; x=1712749720;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=IQmuM7vKMWhAKUjAzRnsD5sMpdUzY1CJtq2zna0j1Rk=;
-  b=GiUqo90n6BK9bJA4zl6aqYo++xBUWpLb0n0bkjO6PFFFxCBOG17kess/
-   zFuVPOR3eFrGFRHxuUoeHmVilHk1sP6EXUXM1TvBmf1sdACqVPsaEiwkT
-   HsACAuWbJ7dIgnwIkLj+OmW41YyYR6/1XGFFir2UlfhMsfCuOP/gtIzyL
-   iwU+MagVEWaEwrYMCs9b8xDUa1zlq5bY1kOgDyUeuFmio+P3e19jRYTKK
-   CCuvlig1GGXlqOndquuTJ3Bw8SjMOUlafxideRiEDOorZz/7/gfyDCLUy
-   MfBv4wxyOLxOWbyOTkQnkA1kvI1Wd/1JDS9GM87kSpBmGT5oJEIvX+EkH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="332281209"
+  bh=7VrN3slwc1LQogRpZmTA8V/KyyDIUcLvvghnWCubjmI=;
+  b=PkeYAusFpIqhkYH7lfkYZvzuD5i/0vD0ZLQU2XB0aRKu5i7iDMZ/HzbB
+   Oby/72x1npTHlsZW4Gpu7cLNKPINmU6uLA9Z4usUtoDITskTvOh+Yi6aV
+   a0Fl7Fy8vO1X/GZisDdKcm/z0LUQ9fEVsL52DAJ9TOklxIxknbVo5q2MT
+   jhSKe/1fx3y55D4S4qcHeXM3/xh1OqX4fZWaz7V6l76oolzeBE2T3K333
+   39KnHKgW+asSdADCGvRUTDyR6YUjgUT7SBFOQYJkjFriXQ5iNPTqs49Yp
+   +VltqbdS51s7hydh0uMQq+dz2qIhjt6xNfJSI+gC/3truN4UNDILX0SGy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="343600835"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="332281209"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:48:24 -0700
+   d="scan'208";a="343600835"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:48:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="691123837"
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="777888100"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="691123837"
+   d="scan'208";a="777888100"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Apr 2023 04:48:23 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Apr 2023 04:48:22 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3BAB314B; Tue, 11 Apr 2023 14:48:26 +0300 (EEST)
+        id 40F5869A; Tue, 11 Apr 2023 14:48:26 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Bumwoo Lee <bw365.lee@samsung.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: [PATCH v3 1/3] extcon: Use unique number for the extcon device ID
-Date:   Tue, 11 Apr 2023 14:48:22 +0300
-Message-Id: <20230411114824.82960-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 2/3] extcon: Use sizeof(*pointer) instead of sizeof(type)
+Date:   Tue, 11 Apr 2023 14:48:23 +0300
+Message-Id: <20230411114824.82960-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
 References: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of atomic variable is still racy when we do not control which
-device has been unregistered and there is a (theoretical) possibility
-of the overflow that may cause a duplicate extcon device ID number
-to be allocated next time a device is registered.
-
-Replace above mentioned approach by using IDA framework.
+It is preferred to use sizeof(*pointer) instead of sizeof(type).
+The type of the variable can change and one needs not change
+the former (unlike the latter). No functional change intended.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/extcon/extcon.c | 16 +++++++++++++---
- drivers/extcon/extcon.h |  2 ++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ drivers/extcon/extcon.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index 47819c5144d5..5da1cc60582a 100644
+index 5da1cc60582a..76dc41e8f250 100644
 --- a/drivers/extcon/extcon.c
 +++ b/drivers/extcon/extcon.c
-@@ -16,6 +16,7 @@
+@@ -1098,8 +1098,7 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
+ 	if (!edev->max_supported)
+ 		return 0;
  
- #include <linux/module.h>
- #include <linux/types.h>
-+#include <linux/idr.h>
- #include <linux/init.h>
- #include <linux/device.h>
- #include <linux/fs.h>
-@@ -238,6 +239,7 @@ struct extcon_cable {
+-	edev->cables = kcalloc(edev->max_supported,
+-			       sizeof(struct extcon_cable),
++	edev->cables = kcalloc(edev->max_supported, sizeof(*edev->cables),
+ 			       GFP_KERNEL);
+ 	if (!edev->cables)
+ 		return -ENOMEM;
+@@ -1161,14 +1160,12 @@ static int extcon_alloc_muex(struct extcon_dev *edev)
+ 	for (index = 0; edev->mutually_exclusive[index]; index++)
+ 		;
  
- static struct class *extcon_class;
+-	edev->attrs_muex = kcalloc(index + 1,
+-				   sizeof(struct attribute *),
++	edev->attrs_muex = kcalloc(index + 1, sizeof(*edev->attrs_muex),
+ 				   GFP_KERNEL);
+ 	if (!edev->attrs_muex)
+ 		return -ENOMEM;
  
-+static DEFINE_IDA(extcon_dev_ids);
- static LIST_HEAD(extcon_dev_list);
- static DEFINE_MUTEX(extcon_dev_list_lock);
+-	edev->d_attrs_muex = kcalloc(index,
+-				     sizeof(struct device_attribute),
++	edev->d_attrs_muex = kcalloc(index, sizeof(*edev->d_attrs_muex),
+ 				     GFP_KERNEL);
+ 	if (!edev->d_attrs_muex) {
+ 		kfree(edev->attrs_muex);
+@@ -1214,8 +1211,8 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+ 		return 0;
  
-@@ -1248,7 +1250,6 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
- int extcon_dev_register(struct extcon_dev *edev)
- {
- 	int ret, index = 0;
--	static atomic_t edev_no = ATOMIC_INIT(-1);
+ 	edev->extcon_dev_type.groups = kcalloc(edev->max_supported + 2,
+-			sizeof(struct attribute_group *),
+-			GFP_KERNEL);
++					  sizeof(*edev->extcon_dev_type.groups),
++					  GFP_KERNEL);
+ 	if (!edev->extcon_dev_type.groups)
+ 		return -ENOMEM;
  
- 	ret = create_extcon_class();
- 	if (ret < 0)
-@@ -1275,8 +1276,14 @@ int extcon_dev_register(struct extcon_dev *edev)
- 			"extcon device name is null\n");
- 		return -EINVAL;
- 	}
--	dev_set_name(&edev->dev, "extcon%lu",
--			(unsigned long)atomic_inc_return(&edev_no));
-+
-+	ret = ida_alloc(&extcon_dev_ids, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+
-+	edev->id = ret;
-+
-+	dev_set_name(&edev->dev, "extcon%d", edev->id);
- 
- 	ret = extcon_alloc_cables(edev);
- 	if (ret < 0)
-@@ -1339,6 +1346,7 @@ int extcon_dev_register(struct extcon_dev *edev)
- 	if (edev->max_supported)
- 		kfree(edev->cables);
- err_alloc_cables:
-+	ida_free(&extcon_dev_ids, edev->id);
- 
- 	return ret;
- }
-@@ -1367,6 +1375,8 @@ void extcon_dev_unregister(struct extcon_dev *edev)
- 		return;
- 	}
- 
-+	ida_free(&extcon_dev_ids, edev->id);
-+
- 	device_unregister(&edev->dev);
- 
- 	if (edev->mutually_exclusive && edev->max_supported) {
-diff --git a/drivers/extcon/extcon.h b/drivers/extcon/extcon.h
-index 15616446140d..946182687786 100644
---- a/drivers/extcon/extcon.h
-+++ b/drivers/extcon/extcon.h
-@@ -20,6 +20,7 @@
-  *			{0x3, 0x6, 0x5, 0}. If it is {0xFFFFFFFF, 0}, there
-  *			can be no simultaneous connections.
-  * @dev:		Device of this extcon.
-+ * @id:			Unique device ID of this extcon.
-  * @state:		Attach/detach state of this extcon. Do not provide at
-  *			register-time.
-  * @nh_all:		Notifier for the state change events for all supported
-@@ -46,6 +47,7 @@ struct extcon_dev {
- 
- 	/* Internal data. Please do not set. */
- 	struct device dev;
-+	unsigned int id;
- 	struct raw_notifier_head nh_all;
- 	struct raw_notifier_head *nh;
- 	struct list_head entry;
 -- 
 2.40.0.1.gaa8946217a0b
 
