@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF446DD70D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA5B6DD70F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjDKJkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S229693AbjDKJks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjDKJkK (ORCPT
+        with ESMTP id S229452AbjDKJkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:40:10 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B20272B;
-        Tue, 11 Apr 2023 02:39:40 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 9287AEBCCB;
-        Tue, 11 Apr 2023 02:39:38 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id szR5xkP6yVdK; Tue, 11 Apr 2023 02:39:37 -0700 (PDT)
-Message-ID: <9ad81a9b2806272c715784985a3e0f52cda159c7.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1681205977; bh=78H+kq1MA3qAPgJDeC2Mvq4z8qNyX9HDvr7Gs/K953g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WaHYjMkof9EQQ97Wv2wBLHqnSkIyel2UYJzIm86a5VR+SzDZYyRNQXtOkV7rAI1Yq
-         01mQvKsIpmFPVUYiVQER6KXU85556WQ7x0rNzwHapP41K7fYi40DkKsl8LoeyZPi2U
-         hlxDVVXaXG5cFMtMrz+D60PwM5RrK58ufMTZ5gc9u/3sG6ldEWnGH3Kj/rrxT8NxQF
-         MKb/7mA7BvRqJiKDq0Kqxax2aGzm/Bd/y9G20DIbeeVtLsSPh4bqwIaTYEHWUSEyeW
-         8pkWRuh8oTclUKBHRnu+9JJI+5ZGFINhfZJg1nFz3/IUjh3QYPUKt+Y9JGLaL2TnBl
-         GNXWB3nLsLgbQ==
-Subject: Re: [PATCH v1 2/2] media: hi846: preserve the streaming state
- during system suspend
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     mchehab@kernel.org, kernel@puri.sm, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 11 Apr 2023 11:39:32 +0200
-In-Reply-To: <20230406013551.GL9915@pendragon.ideasonboard.com>
-References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
-         <20230405092904.1129395-3-martin.kepplinger@puri.sm>
-         <20230406013551.GL9915@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Tue, 11 Apr 2023 05:40:25 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9507C30EB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:40:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VfrtLsv_1681206015;
+Received: from 30.97.49.18(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfrtLsv_1681206015)
+          by smtp.aliyun-inc.com;
+          Tue, 11 Apr 2023 17:40:16 +0800
+Message-ID: <b47b01fd-feb8-5715-ce9b-dfe1d2a019b6@linux.alibaba.com>
+Date:   Tue, 11 Apr 2023 17:40:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 6/7] erofs: handle long xattr name prefixes properly
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230410063918.47215-1-jefflexu@linux.alibaba.com>
+ <20230411093537.127286-1-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230411093537.127286-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 06.04.2023 um 04:35 +0300 schrieb Laurent Pinchart:
-> Hi Martin,
+
+
+On 2023/4/11 17:35, Jingbo Xu wrote:
+> Make .{list,get}xattr routines adapted to long xattr name prefixes.
+> When the bit 7 of erofs_xattr_entry.e_name_index is set, it indicates
+> that it refers to a long xattr name prefix.
 > 
-> Thank you for the patch.
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> ---
+> v3: introduce infix_len to struct getxattr_iter, and refactor the
+> implementation of xattr_entrymatch(), erofs_xattr_long_entrymatch(), and
+> xattr_namematch() accordingly.
 > 
-> On Wed, Apr 05, 2023 at 11:29:04AM +0200, Martin Kepplinger wrote:
-> > The hi846 driver changed the "streaming" state inside of
-> > "start/stop_streaming".
-> > The problem is that inside of the (system) suspend callback, it
-> > calls
-> > "stop_streaming" unconditionally. So streaming would always be
-> > stopped
-> > when suspending.
-> > 
-> > That makes sense with runtime pm for example, after s_stream(...,
-> > 0) but
-> > does not preserve the "streaming" state during system suspend when
-> > currently streaming.
+> The erofs_xattr_long_entrymatch() of v2 version will advance
+> it->name.name pointer by pf->infix_len prematurely, as the following
+> xattr_namematch() may fail (-ENOATTR) since mismatching.  And then
+> it->name.name will be compared with the next xattr entry, while
+> it->name.name has been mistakenly modified in the previous round.  This
+> will cause -ENOATTR error on the existing xattr.
+
+Yes, please also help add a new erofs-utils testcase for this.
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
 > 
-> The driver shouldn't need to stop streaming at system suspend time.
-> It
-> should have had its .s_stream(0) operation called and shouldn't be
-> streaming anymore. If that's not the case, there's an issue somewhere
-> else, which should be fixed. The code that stops streaming at system
-> suspend and restarts it at system resume should then be dropped from
-> this driver.
+> ---
+>   fs/erofs/xattr.c | 68 +++++++++++++++++++++++++++++++++++++++---------
+>   1 file changed, 56 insertions(+), 12 deletions(-)
 > 
-> > Fix this by simply setting the streaming state outside of
-> > "start/stop_streaming"
-> > which is s_stream().
-> > 
-> > While at it, improve things a bit by not assigning "1", but the
-> > "enable"
-> > value we later compare against, and fix one error handling path in
-> > resume().
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/media/i2c/hi846.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-> > index 0b0eda2e223cd..1ca6e9407d618 100644
-> > --- a/drivers/media/i2c/hi846.c
-> > +++ b/drivers/media/i2c/hi846.c
-> > @@ -1780,8 +1780,6 @@ static int hi846_start_streaming(struct hi846
-> > *hi846)
-> >                 return ret;
-> >         }
-> >  
-> > -       hi846->streaming = 1;
-> > -
-> >         dev_dbg(&client->dev, "%s: started streaming
-> > successfully\n", __func__);
-> >  
-> >         return ret;
-> > @@ -1793,8 +1791,6 @@ static void hi846_stop_streaming(struct hi846
-> > *hi846)
-> >  
-> >         if (hi846_write_reg(hi846, HI846_REG_MODE_SELECT,
-> > HI846_MODE_STANDBY))
-> >                 dev_err(&client->dev, "failed to stop stream");
-> > -
-> > -       hi846->streaming = 0;
-> >  }
-> >  
-> >  static int hi846_set_stream(struct v4l2_subdev *sd, int enable)
-> > @@ -1816,10 +1812,12 @@ static int hi846_set_stream(struct
-> > v4l2_subdev *sd, int enable)
-> >                 }
-> >  
-> >                 ret = hi846_start_streaming(hi846);
-> > +               hi846->streaming = enable;
-> >         }
-> >  
-> >         if (!enable || ret) {
-> >                 hi846_stop_streaming(hi846);
-> > +               hi846->streaming = 0;
-> >                 pm_runtime_put(&client->dev);
-> >         }
-> >  
-> > @@ -1898,6 +1896,8 @@ static int __maybe_unused hi846_resume(struct
-> > device *dev)
-> >                 if (ret) {
-> >                         dev_err(dev, "%s: start streaming failed:
-> > %d\n",
-> >                                 __func__, ret);
-> > +                       hi846_stop_streaming(hi846);
-> > +                       hi846->streaming = 0;
-> >                         goto error;
-> >                 }
-> >         }
-> 
-
-hi Laurent,
-
-ok I see. My first test without any streaming-state handling in
-suspend/resume doesn't succeed. But now I know that's the goal and I'll
-put this on my list to do.
-
-Since this driver *already* tracks "streaming", would you be ok with
-this fix in the meantime?
-
-thanks,
-                               martin
-
-
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index 684571e83a2c..a04724c816e5 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -297,17 +297,45 @@ struct getxattr_iter {
+>   	struct xattr_iter it;
+>   
+>   	char *buffer;
+> -	int buffer_size, index;
+> +	int buffer_size, index, infix_len;
+>   	struct qstr name;
+>   };
+>   
+> +static int erofs_xattr_long_entrymatch(struct getxattr_iter *it,
+> +				       struct erofs_xattr_entry *entry)
+> +{
+> +	struct erofs_sb_info *sbi = EROFS_SB(it->it.sb);
+> +	struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
+> +		(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
+> +
+> +	if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
+> +		return -ENOATTR;
+> +
+> +	if (it->index != pf->prefix->base_index ||
+> +	    it->name.len != entry->e_name_len + pf->infix_len)
+> +		return -ENOATTR;
+> +
+> +	if (memcmp(it->name.name, pf->prefix->infix, pf->infix_len))
+> +		return -ENOATTR;
+> +
+> +	it->infix_len = pf->infix_len;
+> +	return 0;
+> +}
+> +
+>   static int xattr_entrymatch(struct xattr_iter *_it,
+>   			    struct erofs_xattr_entry *entry)
+>   {
+>   	struct getxattr_iter *it = container_of(_it, struct getxattr_iter, it);
+>   
+> -	return (it->index != entry->e_name_index ||
+> -		it->name.len != entry->e_name_len) ? -ENOATTR : 0;
+> +	/* should also match the infix for long name prefixes */
+> +	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX)
+> +		return erofs_xattr_long_entrymatch(it, entry);
+> +
+> +	if (it->index != entry->e_name_index ||
+> +	    it->name.len != entry->e_name_len)
+> +		return -ENOATTR;
+> +	it->infix_len = 0;
+> +	return 0;
+>   }
+>   
+>   static int xattr_namematch(struct xattr_iter *_it,
+> @@ -315,7 +343,9 @@ static int xattr_namematch(struct xattr_iter *_it,
+>   {
+>   	struct getxattr_iter *it = container_of(_it, struct getxattr_iter, it);
+>   
+> -	return memcmp(buf, it->name.name + processed, len) ? -ENOATTR : 0;
+> +	if (memcmp(buf, it->name.name + it->infix_len + processed, len))
+> +		return -ENOATTR;
+> +	return 0;
+>   }
+>   
+>   static int xattr_checkbuffer(struct xattr_iter *_it,
+> @@ -487,12 +517,24 @@ static int xattr_entrylist(struct xattr_iter *_it,
+>   {
+>   	struct listxattr_iter *it =
+>   		container_of(_it, struct listxattr_iter, it);
+> -	unsigned int prefix_len;
+> -	const char *prefix;
+> -
+> -	const struct xattr_handler *h =
+> -		erofs_xattr_handler(entry->e_name_index);
+> +	unsigned int base_index = entry->e_name_index;
+> +	unsigned int prefix_len, infix_len = 0;
+> +	const char *prefix, *infix = NULL;
+> +	const struct xattr_handler *h;
+> +
+> +	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
+> +		struct erofs_sb_info *sbi = EROFS_SB(_it->sb);
+> +		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
+> +			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
+> +
+> +		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
+> +			return 1;
+> +		infix = pf->prefix->infix;
+> +		infix_len = pf->infix_len;
+> +		base_index = pf->prefix->base_index;
+> +	}
+>   
+> +	h = erofs_xattr_handler(base_index);
+>   	if (!h || (h->list && !h->list(it->dentry)))
+>   		return 1;
+>   
+> @@ -500,16 +542,18 @@ static int xattr_entrylist(struct xattr_iter *_it,
+>   	prefix_len = strlen(prefix);
+>   
+>   	if (!it->buffer) {
+> -		it->buffer_ofs += prefix_len + entry->e_name_len + 1;
+> +		it->buffer_ofs += prefix_len + infix_len +
+> +					entry->e_name_len + 1;
+>   		return 1;
+>   	}
+>   
+> -	if (it->buffer_ofs + prefix_len
+> +	if (it->buffer_ofs + prefix_len + infix_len +
+>   		+ entry->e_name_len + 1 > it->buffer_size)
+>   		return -ERANGE;
+>   
+>   	memcpy(it->buffer + it->buffer_ofs, prefix, prefix_len);
+> -	it->buffer_ofs += prefix_len;
+> +	memcpy(it->buffer + it->buffer_ofs + prefix_len, infix, infix_len);
+> +	it->buffer_ofs += prefix_len + infix_len;
+>   	return 0;
+>   }
+>   
