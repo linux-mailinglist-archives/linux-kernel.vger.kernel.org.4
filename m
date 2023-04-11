@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDDE6DDB51
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53B96DDB4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjDKM5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S229749AbjDKMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjDKM5W (ORCPT
+        with ESMTP id S229741AbjDKMyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:57:22 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4812D6B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681217840;
-        bh=R71Ny685Hr5M27HLajWR2rPefiJ5qNShyDh+8hV4kK4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=paEQMBoAbiBqIQyZd2N9rq21cS8YS+VbznxaUyIjYzsMeGMmdvCV/olwPvZ8/244e
-         DGZ26BsHqODCF2H3v7nFgprxHij47z81o/QeT5iqXHI6dcocugQhZNx9S1bSpqzmOs
-         8oQlyrbb2pidLy33/56DYFXeZhrPfY4+HIMzBxW6BPYg8gVkJIPe78AQ0XzkaQ0c49
-         atF2TMr76/KBFMa0LVy0e/bPMIZkSQ8v9K5/F7kMHTdUMQ8m40AAaVSvCmHbMcNxCz
-         iGy+rzmWF5S/z5CMdUhNIxoHi5Jr9O2jdCueZkRdTgniC/CwPJLl98RX+jE16PBpI+
-         HuWH8U763MX7w==
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Pwm8J3ZKGzvcq;
-        Tue, 11 Apr 2023 08:57:20 -0400 (EDT)
-Message-ID: <f96978d0-ae96-0b4e-042f-531d17cb217e@efficios.com>
-Date:   Tue, 11 Apr 2023 08:57:20 -0400
+        Tue, 11 Apr 2023 08:54:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21EC469D;
+        Tue, 11 Apr 2023 05:54:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E5F6625B8;
+        Tue, 11 Apr 2023 12:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1150C433D2;
+        Tue, 11 Apr 2023 12:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681217680;
+        bh=j3Xg1BPP6tzN+QZty+6uCsWQ2SQQSx793sj3WwtoGBw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HWBvN+AEsD2BbfIRb74Rlr7n72p9iO7Haj61x2ORn3ANXtRGZiGpV+a7gMqeLE0Y/
+         YOq7Hp/a4I62YbkXMAbviuxVXlnAzvWoyNMfeIzYuTOtTtFmnlKOGxbON0tWFRq3vl
+         YYRuJJSI4dTxfeSJOIQo7SXVjPbqlsKmnomKNHmjIDXpFKA6NT5z6PjWZUIcaQtzhX
+         KhRd0um8FND0bpMK6QPeQ3Vt0OjzMAMOEROG8nYv025Drmh9jJD9vC1eHfHShBwu5Q
+         Sl6pAxy3ED5UqfoZW0KetqWVkaGZziVL74SYFT11+/9wRbYWOXynrQUtghTFvGwXx9
+         2Z8qAVmcN5Ilg==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        konrad.dybcio@linaro.org, agross@kernel.org
+Subject: Re: (subset) [PATCH v3 0/3] arm64: dts: qcom: Add Qualcomm RB2 board dts
+Date:   Tue, 11 Apr 2023 05:58:23 -0700
+Message-Id: <168121789594.648775.16707170576274664021.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
+References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
- <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
- <20230411093705.GB578657@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230411093705.GB578657@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +56,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-11 05:37, Peter Zijlstra wrote:
-> On Fri, Apr 07, 2023 at 09:14:36PM -0400, Mathieu Desnoyers wrote:
+On Tue, 11 Apr 2023 12:58:37 +0530, Bhupesh Sharma wrote:
+> Changes since v2:
+> -----------------
+> - v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230315210145.2221116-1-bhupesh.sharma@linaro.org/
+> - Addressed review comments from Bjorn about load conditions for vmmc
+>   ldos and added [PATCH 3/3] accordingly in v3.
+> - Collected Krzysztof's Ack for [PATCH 1/3].
 > 
->> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
->> index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
->> --- a/kernel/sched/sched.h
->> +++ b/kernel/sched/sched.h
->> @@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
->>   static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
->>   {
->> +	/*
->> +	 * Provide a memory barrier between rq->curr store and load of
->> +	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
->> +	 *
->> +	 * Should be adapted if context_switch() is modified.
->> +	 */
->> +	if (!next->mm) {                                // to kernel
->> +		/*
->> +		 * user -> kernel transition does not guarantee a barrier, but
->> +		 * we can use the fact that it performs an atomic operation in
->> +		 * mmgrab().
->> +		 */
->> +		if (prev->mm)                           // from user
->> +			smp_mb__after_mmgrab();
->> +		/*
->> +		 * kernel -> kernel transition does not change rq->curr->mm
->> +		 * state. It stays NULL.
->> +		 */
->> +	} else {                                        // to user
->> +		/*
->> +		 * kernel -> user transition does not provide a barrier
->> +		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
->> +		 * Provide it here.
->> +		 */
->> +		if (!prev->mm)                          // from kernel
->> +			smp_mb();
->> +		/*
->> +		 * user -> user transition guarantees a memory barrier through
->> +		 * switch_mm().
->> +		 */
-> 
-> What about the user->user case where next->mm == prev->mm ? There
-> sys_membarrier() relies on finish_task_switch()'s mmdrop(), but we
-> can't.
+> [...]
 
-AFAIU the finish_task_switch()'s mmdrop() is for the case where:
+Applied, thanks!
 
-                  * [...] or in
-                  * case 'prev->active_mm == next->mm' through
-                  * finish_task_switch()'s mmdrop().
+[2/3] arm64: dts: qcom: Add base qrb4210-rb2 board dts
+      commit: 8d58a8c0d930c52dd30bd50af24b786d55509cbf
+[3/3] arm64: dts: qcom: qrb4210-rb2: Increase load on l22 and l24 for uSD and eMMC
+      (no commit info)
 
-which applies for the case where we schedule from a kernel thread (which
-kept the prior user task's mm as active mm) to a user task with the same
-mm.
-
-But this is really a transition from kernel -> user, not user -> user ?
-
-Why should either membarrier or mm_cid care about a transition from
-prev->mm to next->mm where mm is unchanged ? It does not register
-as a transition from the comparison perspective.
-
-I'll update my comment in switch_mm_cid to:
-
-      /*
-       * user -> user transition guarantees a memory barrier through
-       * switch_mm() when current->mm changes. If current->mm is
-       * unchanged, no barrier is needed.
-       */
-
-Thanks,
-
-Mathieu
-
-
-> 
->> +	}
->>   	if (prev->mm_cid_active) {
->>   		mm_cid_put_lazy(prev);
->>   		prev->mm_cid = -1;
->>
-
+Best regards,
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Bjorn Andersson <andersson@kernel.org>
