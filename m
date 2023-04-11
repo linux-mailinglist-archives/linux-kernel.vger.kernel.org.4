@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F95A6DE376
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0FC6DE37D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjDKSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S230330AbjDKSIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjDKSF5 (ORCPT
+        with ESMTP id S230300AbjDKSH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:05:57 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3459C76B1;
-        Tue, 11 Apr 2023 11:05:22 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id y69so16014054ybe.2;
-        Tue, 11 Apr 2023 11:05:22 -0700 (PDT)
+        Tue, 11 Apr 2023 14:07:59 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D27665B8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:07:35 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d7so22600411lfj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681236313;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+na8MfW+GAHqXa6WOo9dywQDhpNy1/XvjZ3S9OfmjGo=;
-        b=Hj5pHh3SjaTuu4FZhTIl3ygx9Ofc7zHkrot2wCNVZBVWZg2d0yjGc5lmN9M3H0kZab
-         Tuy0Q+XUeZXLN2XizhoXqPpnyDqdpvgWtn6SuTUZv6m4IuDjcfRbxsMFFljsA8wK2OhZ
-         Vnl+QU0NcvoGWcbivjPnPk5O8prHrrRoewne8uhr5wp+bF6HjilDJ9kPXjtz9YhYLOYj
-         ZTL1kyJUusAV0iP7850/sI67ZE2JMhs4khQrU5jNiVI3JBF/t45dOqHgP+4LE8i1l08e
-         FJFDE/kj4W+ZiM9YUuLSNC/4NL83LfBOIOEwO8r0QyDlJkyGJGHGsONOpORczFWFZ9sA
-         5NDA==
+        d=linaro.org; s=google; t=1681236440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tCaVKyIYDr7B6+tV0gmv84EwP6qqzNHVIpXQWRiUw+o=;
+        b=kIUjoXd00ilCumUGhKx9HY/79kXl5KZQP8g5mkEoU1/fUtPfHjAtMyFch6oZW9Dcvu
+         V4rOHiAFKymSSLWIKeaW5yQPjmkTxJpHGb7E1bVyAmGBmSSL9PL4ufqDUfzP2n6OPAIo
+         W9zWx4kVVwTTEZpfL5DQ+x1+i77sUXwrB/1Lv4PODs0VOLH6pHVcQ6Zp0dJ6rR5uD8iR
+         OISdyBb9U/n11uCG0DhfqgKBCXijl5MCicK62MJu33QTfxkxfQD0UdyHOSSUm+rMXLRY
+         ec0KCNFErsn11OGET/ugdXXcOCPyQ5BhOvbXz63dc4rV84CF0dQeTEQSjwOaSb9gU8rj
+         a+fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681236313;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+na8MfW+GAHqXa6WOo9dywQDhpNy1/XvjZ3S9OfmjGo=;
-        b=RLhDj70svHxPACR+sCdFRolGe3Vjal0pf9ozKrUHq8w6MBoGXwD0kXaipJiJw7WAyb
-         u1UOxKWfS3S36bHzOr7EaiRt7Jr2ay0Dg6CiD+mhGkGzYgOYqMGEisYJClPe1oqOWq19
-         pxOujWSXv0Vb6cdGvpu7xYKZ08Mvayf8cj9qhl3VoohvZfboKU9lpE3d+CTz0zAWb2WB
-         DQfOHdEtfXTD3PLFhck6g67+w3hJvvqImvAVS+PcLa5+SVmkbr3l37KStu5WXX/s6/Hu
-         CztuqzJxGqoLPyYJCVaY7zMx5qCe/ywnm1Mgie8FIzlkmn8Mji1/ccsMicKauRCceXhk
-         hOew==
-X-Gm-Message-State: AAQBX9ezJaY90tiwELDCQsgmw2nvvSBtve6JSaGZeW0HfSwtbkAGPpWm
-        Kurs4npjmQtD/pSVaWrK7FXqxgPF6n+8RzzvL6M=
-X-Google-Smtp-Source: AKy350a/lhAd+WCwEd8SwsYEyEyDohgcXZkNuv5mS7JvnoJ0T8e/XLEy9453AcEGb9z0NnCrFNNwnnXdRgsTQaTfoKg=
-X-Received: by 2002:a25:d210:0:b0:b8f:1d90:e62a with SMTP id
- j16-20020a25d210000000b00b8f1d90e62amr2158490ybg.6.1681236312987; Tue, 11 Apr
- 2023 11:05:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681236440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tCaVKyIYDr7B6+tV0gmv84EwP6qqzNHVIpXQWRiUw+o=;
+        b=wUJDI7q0wZRNK+DGa22jX8cQusBylPmgv0JIg4O9z5n82XI51zGtqFQtiZlfXCfHtZ
+         tqQfiE9Q4U+K4CCYYotxuYtNJCiFYXg9u+4eOF+mmqpos6ixwZpRmyI6EQjF5g9dvgSw
+         Y/gy4P9MOvKd59fgBuCQdBv6gqZdg0tC2/g2HCP6d8wU+NOHVSnOQLesDazQh2P6SNBi
+         qHmdggGPjEi7wLBo+7f8+CwrFkY1zmd/m3v5U27K/Pl+zr6Tf/MzP7aC9iDbA0m79vo0
+         1prx9wBGV3J4fTwnGySiPv0JZ5E47jKW+xZVrF/SD12Wb88GDStTqNKFbDwW9lX/Lf61
+         vUGQ==
+X-Gm-Message-State: AAQBX9dRozNkH2MQpnH6e560RrmMmL+lDjyt6rcsudw8ZdgZe4ik0lgQ
+        N5wRgqnkkDpjpZ/pQCN7jymdqQ==
+X-Google-Smtp-Source: AKy350bHXgGnTpcZC5nbOtZdmB2vuCdADf2jte23B7ssrnMoWnNsq0XSTG/ROB4fWjATEpGxsN9zjw==
+X-Received: by 2002:a05:6512:218e:b0:4ec:63e6:526e with SMTP id b14-20020a056512218e00b004ec63e6526emr3551608lft.65.1681236439615;
+        Tue, 11 Apr 2023 11:07:19 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id r1-20020a2eb601000000b0029c36ebf89asm2884142ljn.112.2023.04.11.11.07.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 11:07:19 -0700 (PDT)
+Message-ID: <240fe5c1-9df7-80eb-ce99-b0e1d381c57e@linaro.org>
+Date:   Tue, 11 Apr 2023 20:07:17 +0200
 MIME-Version: 1.0
-References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-4-wedsonaf@gmail.com>
-In-Reply-To: <20230411054543.21278-4-wedsonaf@gmail.com>
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Tue, 11 Apr 2023 15:05:07 -0300
-Message-ID: <CANeycqqM5o_4gj2rT=8yV0NGTRWY=jTA6HT4F2Esho-WAJCPOQ@mail.gmail.com>
-Subject: Re: [PATCH v4 04/13] locking/spinlock: introduce spin_lock_init_with_key
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: Add base qrb4210-rb2 board dts
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
+References: <20230411072840.2751813-1-bhupesh.sharma@linaro.org>
+ <20230411072840.2751813-3-bhupesh.sharma@linaro.org>
+ <9130c1cb-4081-b21c-7c1b-2e0c9879e66a@linaro.org>
+ <CAH=2NtzuN-0qgm7Hn6aJN+ZSRROFna09SHThVFbfKGVdsLzNWg@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAH=2NtzuN-0qgm7Hn6aJN+ZSRROFna09SHThVFbfKGVdsLzNWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,64 +80,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 at 02:46, Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
->
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
->
-> Rust cannot call C macros, so it has its own macro to create a new lock
-> class when a spin lock is initialised. This new function allows Rust
-> code to pass the lock class it generates to the C implementation.
->
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Waiman Long <longman@redhat.com>
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> ---
-> v1 -> v2: No changes
-> v2 -> v3: No changes
-> v3 -> v4: No changes
->
->  include/linux/spinlock.h | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-> index be48f1cb1878..cdc92d095133 100644
-> --- a/include/linux/spinlock.h
-> +++ b/include/linux/spinlock.h
-> @@ -327,12 +327,17 @@ static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
->
->  #ifdef CONFIG_DEBUG_SPINLOCK
->
-> +static inline void spin_lock_init_with_key(spinlock_t *lock, const char *name,
-> +                                          struct lock_class_key *key)
-> +{
-> +       __raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
-> +}
-> +
->  # define spin_lock_init(lock)                                  \
->  do {                                                           \
->         static struct lock_class_key __key;                     \
->                                                                 \
-> -       __raw_spin_lock_init(spinlock_check(lock),              \
-> -                            #lock, &__key, LD_WAIT_CONFIG);    \
-> +       spin_lock_init_with_key(lock, #lock, &__key);           \
->  } while (0)
 
-Peter, the code above is just factoring out spin lock init when
-lockdep is enabled to take a lock class key.
 
-Would you be able to review it?
+On 11.04.2023 19:38, Bhupesh Sharma wrote:
+> On Tue, 11 Apr 2023 at 18:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>> On 11.04.2023 09:28, Bhupesh Sharma wrote:
+>>> Add DTS for Qualcomm qrb4210-rb2 board which uses SM4250 SoC.
+>>>
+>>> This adds debug uart, emmc, uSD and tlmm support along with
+>>> regulators found on this board.
+>>>
+>>> Also defines the 'xo_board' and 'sleep_clk' frequencies for
+>>> this board.
+>>>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/Makefile        |   1 +
+>>>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 223 +++++++++++++++++++++++
+>>>  2 files changed, 224 insertions(+)
+>>>  create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>> index e0e2def48470..d42c59572ace 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -74,6 +74,7 @@ dtb-$(CONFIG_ARCH_QCOM)     += qcs404-evb-1000.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qcs404-evb-4000.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qdu1000-idp.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qrb2210-rb1.dtb
+>>> +dtb-$(CONFIG_ARCH_QCOM)      += qrb4210-rb2.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qrb5165-rb5.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qrb5165-rb5-vision-mezzanine.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += qru1000-idp.dtb
+>>> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+>>> new file mode 100644
+>>> index 000000000000..c9c6e3787462
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+>>> @@ -0,0 +1,223 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>> +/*
+>>> + * Copyright (c) 2023, Linaro Limited
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "sm4250.dtsi"
+>>> +
+>>> +/ {
+>>> +     model = "Qualcomm Technologies, Inc. QRB4210 RB2";
+>>> +     compatible = "qcom,qrb4210-rb2", "qcom,qrb4210", "qcom,sm4250";
+>>> +
+>>> +     aliases {
+>>> +             serial0 = &uart4;
+>>> +     };
+>>> +
+>>> +     chosen {
+>>> +             stdout-path = "serial0:115200n8";
+>>> +     };
+>>> +
+>>> +     vph_pwr: vph-pwr-regulator {
+>>> +             compatible = "regulator-fixed";
+>>> +             regulator-name = "vph_pwr";
+>>> +             regulator-min-microvolt = <3700000>;
+>>> +             regulator-max-microvolt = <3700000>;
+>>> +
+>>> +             regulator-always-on;
+>>> +             regulator-boot-on;
+>>> +     };
+>>> +};
+>>> +
+>>> +&qupv3_id_0 {
+>>> +     status = "okay";
+>>> +};
+>>> +
+>>> +&rpm_requests {
+>>> +     regulators {
+>>> +             compatible = "qcom,rpm-pm6125-regulators";
+>>> +
+>>> +             vdd-s1-supply = <&vph_pwr>;
+>>> +             vdd-s2-supply = <&vph_pwr>;
+>>> +             vdd-s3-supply = <&vph_pwr>;
+>>> +             vdd-s4-supply = <&vph_pwr>;
+>>> +             vdd-s5-supply = <&vph_pwr>;
+>>> +             vdd-s6-supply = <&vph_pwr>;
+>>> +             vdd-s7-supply = <&vph_pwr>;
+>>> +             vdd-s8-supply = <&vph_pwr>;
+>>> +             vdd-s9-supply = <&vph_pwr>;
+>>> +             vdd-s10-supply = <&vph_pwr>;
+>>> +
+>>> +             vdd-l1-l7-l17-l18-supply = <&vreg_s6a_1p352>;
+>>> +             vdd-l2-l3-l4-supply = <&vreg_s6a_1p352>;
+>>> +             vdd-l5-l15-l19-l20-l21-l22-supply = <&vph_pwr>;
+>>> +             vdd-l6-l8-supply = <&vreg_s5a_0p848>;
+>>> +             vdd-l9-l11-supply = <&vreg_s7a_2p04>;
+>>> +             vdd-l10-l13-l14-supply = <&vreg_s7a_2p04>;
+>>> +             vdd-l12-l16-supply = <&vreg_s7a_2p04>;
+>>> +             vdd-l23-l24-supply = <&vph_pwr>;
+>>> +
+>>> +             vreg_s5a_0p848: s5 {
+>> I think going with pmicname_regulatorname (e.g. pm6125_s5) here
+>> and adding:
+>>
+>> regulator-name = "vreg_s5a_0p848"
+>>
+>> would make this more maintainable.
+> 
+> Ok.
+> 
+>>> +&sdhc_1 {
+>>> +     vmmc-supply = <&vreg_l24a_2p96>;
+>>> +     vqmmc-supply = <&vreg_l11a_1p8>;
+>>> +     no-sdio;
+>>> +     non-removable;
+>>> +
+>>> +     status = "okay";
+>>> +};
+>>> +
+>>> +&sdhc_2 {
+>>> +     cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
+>> This comment is still pretty much spam.
+> 
+> Ok.
+> 
+>>> +     vmmc-supply = <&vreg_l22a_2p96>;
+>>> +     vqmmc-supply = <&vreg_l5a_2p96>;
+>>> +     no-sdio;
+>>> +
+>>> +     status = "okay";
+>>> +};
+>>> +
+>>> +&sleep_clk {
+>>> +     clock-frequency = <32000>;
+>>> +};
+>>> +
+>>> +&tlmm {
+>>> +     gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
+>>> +                            <49 1>, <52 1>, <54 1>,
+>>> +                            <56 3>, <61 2>, <64 1>,
+>>> +                            <68 1>, <72 8>, <96 1>;
+>>> +};
+>>> +
+>>> +&uart4 {
+>>> +     status = "okay";
+>>> +};
+>> This is not the correct SE for the production board. People
+>> booting this will get a tz bite.
+> 
+> Hmm.. I can swap it, but the problem is that it's as the SE for my RB2
+> board, so I would rather provide instructions in the cover letter as to how
+> to swap it (say for a production board) and recompile the dts.
+That's what I did for RB1 and what I believe is the correct approach.
 
-If it's ok with you, we'd like to carry it through the rust tree
-because we have code that depends on it.
+> 
+> Otherwise, it might break the debug uart console for even the test
+> folks @ Qualcomm.
+Perhaps that'll teach them a lesson about making major design
+changes and sharing the details on release day..
 
-Thanks,
--Wedson
+We can take care of preproduction boards after we set up U-Boot
+with hw rev recognition, but that's a story for another day.
 
->
->  #else
-> --
-> 2.34.1
->
+
+> I will send a v4 accordinglyBjorn sent a "thank you" email already but I don't see the patches
+on his branch, not sure how he wants to proceed here.
+
+Konrad
+> 
+> Thanks,
+> Bhupesh
