@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AF86DCFCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDB86DCFCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 04:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDKCmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 22:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S229767AbjDKCmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 22:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDKCmJ (ORCPT
+        with ESMTP id S229656AbjDKCmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 22:42:09 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A338226AE
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:42:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vfq6ma2_1681180924;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vfq6ma2_1681180924)
-          by smtp.aliyun-inc.com;
-          Tue, 11 Apr 2023 10:42:05 +0800
-Message-ID: <1681180912.9817035-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
-Date:   Tue, 11 Apr 2023 10:41:52 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Angus Chen <angus.chen@jaguarmicro.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Angus Chen <angus.chen@jaguarmicro.com>, mst@redhat.com,
-        jasowang@redhat.com
-References: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
-In-Reply-To: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 10 Apr 2023 22:42:38 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8662F271E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:42:37 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id la3so6307234plb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 19:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681180957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/RQqy4nziZQ9TzxFYe6fW2+oSrf9NkaryzYcLUrT7bc=;
+        b=qBjHuRwQIPL9ezEgmI6+TrMizavv6U+wrGvwoAkqSv5794xkWOxTdrXKuwdRCPJfFZ
+         Oemt1S8gIjZTNdAXgErFuwd4LU8I4kvh+GqwWS8FzXgasHUapBLNpU9YBbLjlCjSrNlf
+         gAXj7JG2T7anWv1QXPw7WO7XEADEh4ienDv+kxzj0y652zj/UrHhqJafvaJAlabhjA4v
+         tFzpz+0F+Zw3zeZpnGvJGUCXnvcFm5RTcVcq5kvfjn0xLAhp7/aSY/dqcFgnmPh4QoxK
+         AfLgN4lcufRCU7iwspVtavEt4RPButw/kyq+XnVWP6cl4a2Xk7I5ti09l+gMZXG9tY/X
+         8Hkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681180957;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/RQqy4nziZQ9TzxFYe6fW2+oSrf9NkaryzYcLUrT7bc=;
+        b=xwWVOHsNkJdhriiUeCdfYQ96xLUmkp/nrXBs/wlgGlZh3lR1dN4qIJJECCRzzNX26w
+         zx8/NnO5pI9jm2CLJa73iCtw3PpiiXIDCVOe/xZxhmTx0oHhTxORec5vPFQJHB3QDquI
+         UalQRmnAmDYbed7cIXXlwNHxicVUqQ7BCKeBOfnZ/oSazyVet7sRDSbuDQnQNbfURZIo
+         X8xqo9exsxnvBrol8JPiRrd7IXmAK7cK4LEK2hotRlvlZqNOvx/cqnC6ZUE1lBKfvQT4
+         35KcOGVgLuxjUZ1C+PgZNfu19iIafoeqiQlR+WQEzLHgpLyW7ngrNwWH22xTc+Vm8KAL
+         BnTQ==
+X-Gm-Message-State: AAQBX9frJU1r2fbGeQIYeHu/QPRvLKZJ4tywOQifKf+Okcj+G/AWmc+d
+        xXkdSSCPRjwzRCtXeFNKOAH+h+tq4Niehw==
+X-Google-Smtp-Source: AKy350bM9O6hqu8223e+V+vbYeVjcQ2G3GG3J42o4cNPl3kfIvnRkOjNmuPfk6WalIqssrcw9Y5zWw==
+X-Received: by 2002:a17:902:d40a:b0:19b:107b:698e with SMTP id b10-20020a170902d40a00b0019b107b698emr1062261ple.14.1681180956937;
+        Mon, 10 Apr 2023 19:42:36 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id az4-20020a170902a58400b001a1deff606fsm8417833plb.125.2023.04.10.19.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 19:42:36 -0700 (PDT)
+Message-ID: <945b644a-04c4-b29f-c720-d6ac43b3bed5@gmail.com>
+Date:   Tue, 11 Apr 2023 09:42:30 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: =?UTF-8?B?UmU6IOWbnuWkjTogW1BBVENIXSBtbTogRml4ZWQgaW5jb3JyZWN0IGNv?=
+ =?UTF-8?Q?mment_for_=5fkmem=5fcache=5fcreate_function?=
+To:     zhao xinchao <ChrisXinchao@outlook.com>
+Cc:     "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <DM6PR22MB1836791E3AA65BB61B3FE933C5959@DM6PR22MB1836.namprd22.prod.outlook.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <DM6PR22MB1836791E3AA65BB61B3FE933C5959@DM6PR22MB1836.namprd22.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 09:38:32 +0800, Angus Chen <angus.chen@jaguarmicro.com> wrote:
-> We read the status of device after reset,
-> It is not guaranteed that the device be reseted successfully.
-> We can use a while loop to make sure that,like the modern device did.
-> The spec is not request it ,but it work.
->
-> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+On 4/10/23 21:45, zhao xinchao wrote:
+> The meaning of 'others' is non zero.
+> 
+> This function has three return positions. In addition to successfully return 0, the first failed position will return - E2BIG, and the second position will return Non zero value for setup_cpu_cache function failure.
+> 
+> 
 
-LGTM
+OK. Please send v2 with all error return values described.
 
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Also, don't send HTML email (like one I'm replying to - mailing lists
+reject it) and don't top-post; reply inline with appropriate context
+instead.
 
+-- 
+An old man doll... just what I always wanted! - Clara
 
-> ---
->  drivers/virtio/virtio_pci_legacy.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> index 2257f1b3d8ae..f2d241563e4f 100644
-> --- a/drivers/virtio/virtio_pci_legacy.c
-> +++ b/drivers/virtio/virtio_pci_legacy.c
-> @@ -14,6 +14,7 @@
->   *  Michael S. Tsirkin <mst@redhat.com>
->   */
->
-> +#include <linux/delay.h>
->  #include "linux/virtio_pci_legacy.h"
->  #include "virtio_pci_common.h"
->
-> @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
->  	vp_legacy_set_status(&vp_dev->ldev, 0);
->  	/* Flush out the status write, and flush in device writes,
->  	 * including MSi-X interrupts, if any. */
-> -	vp_legacy_get_status(&vp_dev->ldev);
-> +	while (vp_legacy_get_status(&vp_dev->ldev))
-> +		msleep(1);
->  	/* Flush pending VQ/configuration callbacks. */
->  	vp_synchronize_vectors(vdev);
->  }
-> --
-> 2.25.1
->
