@@ -2,129 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024AD6DDE81
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049356DDE87
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjDKOvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S229619AbjDKOxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjDKOvO (ORCPT
+        with ESMTP id S229679AbjDKOxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:51:14 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7C0DE;
-        Tue, 11 Apr 2023 07:51:13 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id fc12so4666894qtb.5;
-        Tue, 11 Apr 2023 07:51:13 -0700 (PDT)
+        Tue, 11 Apr 2023 10:53:06 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABF71FF3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:53:05 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-2efbab42639so249112f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:53:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681224672; x=1683816672;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XHMCzwM6PDLhVkTQMZnMhtpmr/ubBhgQvLDgMQf1SOU=;
-        b=eWJTQS0/ZEm7ZmaPAMa9oqA9wx0EPBV6l2uuwG6yIKqt1a06KRUxVLwWRWyMxAuE5Y
-         dGcp39rEcvsbQdIl6zuG+tA8hzve7Ip/lS2I/SPm3my4GXlkmuOrFBcFyHhw5MiQaxI5
-         ouNwprfsZ/zrSN54YLKJFfk0CfVceIVDumgsojvLaG+W30EONVwx6HzUF5/sC5/1vhG9
-         /NIY/8e4qUCdGbPorHVAUl5qktHHwVotkdewfS3QvtKFir37S/emsfdxD7RmN0MzvvvS
-         i02eMSq3lD27ogjCSxQiDOKcpOM0Mknt8DHlSnC17kAe2yTB80OX0gfiwymIMnLr7J1w
-         +FMg==
+        d=ffwll.ch; s=google; t=1681224784;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8wYfQRjYQR6KiiVsiMP38j6p1H2avcNgJgbhRyR77o0=;
+        b=Xrye9L6+egunrS8ZViLvX9DoIvxBqXggrm776aN7Ob4wJVwBFrhEKLj4opV8fDjSBz
+         mOMPeojKmV34tE4YLN/oXHAoXqd9bgqOi85L5Nk6eWgQ8brYD5hLYdpNXHoWjBGIi4nI
+         NVtFnxcPtBnYlgYJVn1ID3/1mQkNEPTeVKZQw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681224672; x=1683816672;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XHMCzwM6PDLhVkTQMZnMhtpmr/ubBhgQvLDgMQf1SOU=;
-        b=X6N1IPq9i6AsDZg5rh3v7D0420YGM1846OfPhZ3EEsa8Z3TYiduWsLxmifcx4TdFDJ
-         vurvuA+IuoB1sMW1COfe8iBtZOFNUGD3+Kwem0j7FrW/UXemxFY8Kl/Fo1e+I5WpiA05
-         D+QTOj8S4yHQbE6ZYX6JA8D1jzJFgOLbdu46QLOo3B+EnUwhX1sqmDfdDFvkwdpt6odh
-         0GT5g/SzG4LrIgdED/zM+wZHRG8TxuqGWHdTFvSU0Wa9Bech4pAGa4hPqGv65O1n3I0H
-         CWASbcMpiYf2KuhzyBpFzoJIsr480tpE5X5e/6btkUycYH/mqHE/EdbDKOZlp3deoE/W
-         YeUw==
-X-Gm-Message-State: AAQBX9eGx4LGOTV+b0Rbqi4fVn31NE1/VfWMHGntQQM1qTCKlg0dfntN
-        ksE1QcKpdFh+bMgEEtxVV18=
-X-Google-Smtp-Source: AKy350Y70yOUSwGBZYXj/TXH4vYBKCrUiGGiU0kdtk3VRctAr80kkFd917fwKzl/B7V6SYpgOgS7lw==
-X-Received: by 2002:ac8:5fd1:0:b0:3e6:4fab:478f with SMTP id k17-20020ac85fd1000000b003e64fab478fmr22841516qta.43.1681224672436;
-        Tue, 11 Apr 2023 07:51:12 -0700 (PDT)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id h2-20020ac87442000000b003e3914c6839sm3646662qtr.43.2023.04.11.07.51.11
+        d=1e100.net; s=20210112; t=1681224784;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wYfQRjYQR6KiiVsiMP38j6p1H2avcNgJgbhRyR77o0=;
+        b=a1IvOL3yLtuL+AD7D3Yxn77jMZGMU6ZRsPJBUTsPNMBk9DbBVVHVZrA95apon20ojA
+         EizaodRpYeIm+d8WozLUkcGPc6/DFhocbIVeZWxpATS4+nxuAYDBbEitEzXXhW2rv/4I
+         mB8xsC5/YiqjfeRt0uUxf6rS7wumFOtKx9rE2/YIx3+Zx4H7hV/10vOsTycMpOjLZ5rq
+         haFXnKiaB6l8B6xbTyOtSgqZYLGdE93qbZ5Vb8yrtUVZdfwljGo4APeoG9huQklxXZPf
+         Z0nLgBk5fCQNocysVsNFkQlSZMm0eOof/8/S4EYtCd4ANl+EKLse/3A9f3A3IBT/89sX
+         gyJQ==
+X-Gm-Message-State: AAQBX9ffVwInv1Lz02na1cw2Lb+KhOfiooxycGxlgNctxmQT//I7dwhi
+        qKFwezCuXZO9+LuyM9ouluS2EneV0gWAysf5sRc=
+X-Google-Smtp-Source: AKy350Z0+iYl0S2VFbfg+ISrGECyQpMtKqiE6vrnqkgiYcvblOEzIXfyXFOcNul0uFsvGltqNUYovw==
+X-Received: by 2002:a05:600c:3b06:b0:3f0:7652:dbb8 with SMTP id m6-20020a05600c3b0600b003f07652dbb8mr7978122wms.2.1681224783935;
+        Tue, 11 Apr 2023 07:53:03 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05600c471200b003ef71d7d64asm21446444wmo.6.2023.04.11.07.53.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 07:51:11 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 10:51:11 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
-        Breno Leitao <leitao@debian.org>
-Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
-        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
-        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
-Message-ID: <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
-In-Reply-To: <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
-References: <20230406144330.1932798-1-leitao@debian.org>
- <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
- <ZC7seVq7St6UnKjl@gmail.com>
- <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
- <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
- <ZDVLyi1PahE0sfci@gmail.com>
- <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
- <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Tue, 11 Apr 2023 07:53:03 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:53:01 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
+Message-ID: <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+Mail-Followup-To: Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Sui Jingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230409132110.494630-1-15330273260@189.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230409132110.494630-1-15330273260@189.cn>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe wrote:
-> On 4/11/23 8:36?AM, David Ahern wrote:
-> > On 4/11/23 6:00 AM, Breno Leitao wrote:
-> >> I am not sure if avoiding io_uring details in network code is possible.
-> >>
-> >> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
-> >> in the TCP case) could be somewhere else, such as in the io_uring/
-> >> directory, but, I think it might be cleaner if these implementations are
-> >> closer to function assignment (in the network subsystem).
-> >>
-> >> And this function (tcp_uring_cmd() for instance) is the one that I am
-> >> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
-> >> -> SIOCINQ.
-> >>
-> >> Please let me know if you have any other idea in mind.
-> > 
-> > I am not convinced that this io_uring_cmd is needed. This is one
-> > in-kernel subsystem calling into another, and there are APIs for that.
-> > All of this set is ioctl based and as Willem noted a little refactoring
-> > separates the get_user/put_user out so that in-kernel can call can be
-> > made with existing ops.
+On Sun, Apr 09, 2023 at 09:21:10PM +0800, Sui Jingfeng wrote:
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
 > 
-> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
-> obviously, and we already have ->uring_cmd() for this purpose.
-
-Does this suggestion not work?
-
-> > I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
-> > sock_do_ioctl.
- 
-> I do think the right thing to do is have a common helper that returns
-> whatever value you want (or sets it), and split the ioctl parts into a
-> wrapper around that that simply copies in/out as needed. Then
-> ->uring_cmd() could call that, or you could some exported function that
-> does supports that.
+> We should setting the screen buffer size according to the screen's actual
+> size, rather than the size of the GEM object backing the front framebuffer.
+> The size of GEM buffer is page size aligned, while the size of active area
+> of a specific screen is *NOT* necessarily page size aliged. For example,
+> 1680x1050, 1600x900, 1440x900, 800x6000 etc. In those case, the damage rect
+> computed by drm_fb_helper_memory_range_to_clip() goes out of bottom bounds
+> of the display.
 > 
-> This works for the basic cases, though I do suspect we'll want to go
-> down the ->uring_cmd() at some point for more advanced cases or cases
-> that cannot sanely be done in an ioctl fashion.
+> Run fbdev test of IGT on a x86+ast2400 platform with 1680x1050 resolution
+> will cause the system hang with the following call trace:
+> 
+>   Oops: 0000 [#1] PREEMPT SMP PTI
+>   [IGT] fbdev: starting subtest eof
+>   Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>   [IGT] fbdev: starting subtest nullptr
+> 
+>   RIP: 0010:memcpy_erms+0xa/0x20
+>   RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>   RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>   RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>   RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>   R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>   R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>   FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>   Call Trace:
+>    <TASK>
+>    ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>    drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>    process_one_work+0x21f/0x430
+>    worker_thread+0x4e/0x3c0
+>    ? __pfx_worker_thread+0x10/0x10
+>    kthread+0xf4/0x120
+>    ? __pfx_kthread+0x10/0x10
+>    ret_from_fork+0x2c/0x50
+>    </TASK>
+>   CR2: ffffa17d40e0b000
+>   ---[ end trace 0000000000000000 ]---
+> 
+> We also add trival code in this patch to restrict the damage rect beyond
+> the last line of the framebuffer.
 
-Right now the two examples are ioctls that return an integer. Do you 
-already have other calls in mind? That would help estimate whether
-->uring_cmd() indeed will be needed and we might as well do it now.
+Nice catch!
+
+> 
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/drm_fb_helper.c     | 2 +-
+>  drivers/gpu/drm/drm_fbdev_generic.c | 2 ++
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+> index 64458982be40..a2b749372759 100644
+> --- a/drivers/gpu/drm/drm_fb_helper.c
+> +++ b/drivers/gpu/drm/drm_fb_helper.c
+> @@ -645,7 +645,7 @@ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off,
+>  	u32 x1 = 0;
+>  	u32 y1 = off / info->fix.line_length;
+>  	u32 x2 = info->var.xres;
+> -	u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+> +	u32 y2 = min_t(u32, DIV_ROUND_UP(end, info->fix.line_length), info->var.yres);
+
+So for additional robustness I think it'd be good if we change the entire
+computation here to use drm_framebuffer data and not fb_info data, because
+fundamentally that's what the drm kms code consumes. It should all match
+anyway, but I think it makes the code more obviously correct.
+
+So in the entire function instead of looking at fb_info->fix we should
+probably look at
+
+	struct drm_fb_helper *helper = info->par;
+
+And then helper->fb->pitches[0] and helper->fb->height.
+
+If you agree would be great if you can please respin with that (and the
+commit message augmented to explain why we do the change)?
+>  
+>  	if ((y2 - y1) == 1) {
+>  		/*
+> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
+> index 8e5148bf40bb..a6daecb5f640 100644
+> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+> @@ -95,6 +95,8 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>  	fb_helper->fb = buffer->fb;
+>  
+>  	screen_size = buffer->gem->size;
+
+I guess you forgot to remove this line here? Also I'm not understanding
+why this matters, I think you're fix only needs the above chunk, not this
+one? If I got this right then please drop this part, there's drivers which
+only use drm_fb_helper.c but not drm_fbdev_generic.c, and from what I can
+tell they all still set the gem buffer size here.
+
+If otoh we need this too, then there's a few more places that need to be
+fixed.
+
+> +	screen_size = sizes->surface_height * buffer->fb->pitches[0];
+> +
+>  	screen_buffer = vzalloc(screen_size);
+>  	if (!screen_buffer) {
+>  		ret = -ENOMEM;
+
+Cheers, Daniel
+
+> -- 
+> 2.25.1
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
