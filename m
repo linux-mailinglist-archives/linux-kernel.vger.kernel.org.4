@@ -2,210 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB476DD779
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642996DD77D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 12:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjDKKHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 06:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S229575AbjDKKIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 06:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjDKKGv (ORCPT
+        with ESMTP id S229450AbjDKKIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:06:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB4E30EB;
-        Tue, 11 Apr 2023 03:06:46 -0700 (PDT)
+        Tue, 11 Apr 2023 06:08:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3504B172C;
+        Tue, 11 Apr 2023 03:08:36 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B40D721A0D;
-        Tue, 11 Apr 2023 10:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681207604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DE20C1FE09;
+        Tue, 11 Apr 2023 10:08:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681207714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8n7ywmQ+awe973K1RiYMXZS6nrgeQ28SDo2b1f0miws=;
-        b=iQjAp5Plo1DxL4G3EAf2Uv9qUVPzx3RAeN44LQkAv7smbByu3MTFhOjI4+gHxLKJImd/eW
-        S+q3SjnKpG86/TkXPkfJJQON2FHhUmUzluJK5BeO6G8JIaB/UNyO9XZWIVe6hS3biBYtqJ
-        A15ah9wSpiteBOBddDbZl9Eqa0cncWI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681207604;
+        bh=lR71N1mYm36JOq5VF9CaSZ6QT7xQUnDPq3n8X/2hNUA=;
+        b=OHtmcVW/1PLrds+bk1wJbaT0/VSElwTMtqL3RObpXG0Y3czGe55zl2TYdJboVgbebhSu//
+        DRrWo/PFctezzue0a4fnn3wdAJTKlR6YysJy+7IjwkVgaxNunCDs1swxBKGysUO+KZQHbM
+        wXyivsTEydWZQgHuRaerWWS8V5MXayE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681207714;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8n7ywmQ+awe973K1RiYMXZS6nrgeQ28SDo2b1f0miws=;
-        b=ZbKtL1u5soy8hRk0Kk3VLkq9oiIES7TTj0sDzvYEh/IS+4YlcKjBfPtemhYJw7VUkaPzg+
-        gsCuIFjGO5iLO5Ag==
+        bh=lR71N1mYm36JOq5VF9CaSZ6QT7xQUnDPq3n8X/2hNUA=;
+        b=JaXpYwHfOL7K2A339hNzEy/0W47aGoheDtgbI9Vb9SVPLhHuMyr4jRLJ++t37r0Rdu1y/b
+        uaoJfCypNgIkl3DQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C57D13638;
-        Tue, 11 Apr 2023 10:06:44 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEFBE13638;
+        Tue, 11 Apr 2023 10:08:34 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id fSZ3GDQxNWR0PwAAMHmgww
-        (envelope-from <nstange@suse.de>); Tue, 11 Apr 2023 10:06:44 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.de>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        Lukas Hruska <lhruska@suse.cz>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
-        <20230314202356.kal22jracaw5442y@daedalus>
-        <ZBTNvEPrCcRj3F1C@redhat.com> <20230317232010.7uq6tt4ty35eo5hm@treble>
-Date:   Tue, 11 Apr 2023 12:06:43 +0200
-In-Reply-To: <20230317232010.7uq6tt4ty35eo5hm@treble> (Josh Poimboeuf's
-        message of "Fri, 17 Mar 2023 16:20:10 -0700")
-Message-ID: <873556ag24.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        id OXZuLqIxNWRDQAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 11 Apr 2023 10:08:34 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9B03CA0732; Tue, 11 Apr 2023 12:08:33 +0200 (CEST)
+Date:   Tue, 11 Apr 2023 12:08:33 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, jack@suse.cz, tj@kernel.org, dennis@kernel.org,
+        adilger.kernel@dilger.ca, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, houtao1@huawei.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2] writeback, cgroup: fix null-ptr-deref write in
+ bdi_split_work_to_wbs
+Message-ID: <20230411100833.jlqyprce6qbphr6q@quack3>
+References: <20230410130826.1492525-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230410130826.1492525-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Josh Poimboeuf <jpoimboe@kernel.org> writes:
+On Mon 10-04-23 21:08:26, Baokun Li wrote:
+> KASAN report null-ptr-deref:
+> ==================================================================
+> BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x5c5/0x7b0
+> Write of size 8 at addr 0000000000000000 by task sync/943
+> CPU: 5 PID: 943 Comm: sync Tainted: 6.3.0-rc5-next-20230406-dirty #461
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x7f/0xc0
+>  print_report+0x2ba/0x340
+>  kasan_report+0xc4/0x120
+>  kasan_check_range+0x1b7/0x2e0
+>  __kasan_check_write+0x24/0x40
+>  bdi_split_work_to_wbs+0x5c5/0x7b0
+>  sync_inodes_sb+0x195/0x630
+>  sync_inodes_one_sb+0x3a/0x50
+>  iterate_supers+0x106/0x1b0
+>  ksys_sync+0x98/0x160
+> [...]
+> ==================================================================
+> 
+> The race that causes the above issue is as follows:
+> 
+>            cpu1                     cpu2
+> -------------------------|-------------------------
+> inode_switch_wbs
+>  INIT_WORK(&isw->work, inode_switch_wbs_work_fn)
+>  queue_rcu_work(isw_wq, &isw->work)
+>  // queue_work async
+>   inode_switch_wbs_work_fn
+>    wb_put_many(old_wb, nr_switched)
+>     percpu_ref_put_many
+>      ref->data->release(ref)
+>      cgwb_release
+>       queue_work(cgwb_release_wq, &wb->release_work)
+>       // queue_work async
+>        &wb->release_work
+>        cgwb_release_workfn
+>                             ksys_sync
+>                              iterate_supers
+>                               sync_inodes_one_sb
+>                                sync_inodes_sb
+>                                 bdi_split_work_to_wbs
+>                                  kmalloc(sizeof(*work), GFP_ATOMIC)
+>                                  // alloc memory failed
+>         percpu_ref_exit
+>          ref->data = NULL
+>          kfree(data)
+>                                  wb_get(wb)
+>                                   percpu_ref_get(&wb->refcnt)
+>                                    percpu_ref_get_many(ref, 1)
+>                                     atomic_long_add(nr, &ref->data->count)
+>                                      atomic64_add(i, v)
+>                                      // trigger null-ptr-deref
+> 
+> bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
+> If the allocation of new work fails, the on-stack fallback will be used and
+> the reference count of the current wb is increased afterwards. If cgroup
+> writeback membership switches occur before getting the reference count and
+> the current wb is released as old_wd, then calling wb_get() or wb_put()
+> will trigger the null pointer dereference above.
+> 
+> This issue was introduced in v4.3-rc7 (see fix tag1). Both sync_inodes_sb()
+> and __writeback_inodes_sb_nr() calls to bdi_split_work_to_wbs() can trigger
+> this issue. For scenarios called via sync_inodes_sb(), originally commit
+> 7fc5854f8c6e ("writeback: synchronize sync(2) against cgroup writeback
+> membership switches") reduced the possibility of the issue by adding
+> wb_switch_rwsem, but in v5.14-rc1 (see fix tag2) removed the
+> "inode_io_list_del_locked(inode, old_wb)" from inode_switch_wbs_work_fn()
+> so that wb->state contains WB_has_dirty_io, thus old_wb is not skipped
+> when traversing wbs in bdi_split_work_to_wbs(), and the issue becomes
+> easily reproducible again.
+> 
+> To solve this problem, percpu_ref_exit() is called under RCU protection
+> to avoid race between cgwb_release_workfn() and bdi_split_work_to_wbs().
+> Moreover, replace wb_get() with wb_tryget() in bdi_split_work_to_wbs(),
+> and skip the current wb if wb_tryget() fails because the wb has already
+> been shutdown.
+> 
+> Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
+> Fixes: f3b6a6df38aa ("writeback, cgroup: keep list of inodes attached to bdi_writeback")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+> V1->V2:
+> 	Use RCU instead of wb_switch_rwsem to avoid race.
 
-> On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
->> Have you tried retrofitting klp-convert into any real-world livepatch?
->> I'm curious as to your observations on the overall experience, or
->> thoughts on the sympos annotation style noted above.
->
-> On a related note, the patch creation process (of which klp-convert
-> would be part of) needs to be documented.
->
-> If I remember correctly, the proper safe usage of klp-convert requires a
-> kernel built with -flive-patching, plus some scripting and/or manual
-> processes.
+The cgwb shutdown code is really messy. But your change looks good to me
+and I don't see an easier way around this race. Feel free to add:
 
-Not always, I think: -flive-patching or IPA optimizations in general
-aren't a concern in the context of data symbols. From a quick glance, it
-seems like the selftests introduced as part of this patchset are
-all restricted to this usecase.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
+								Honza
 
-> If nobody knows how to safely use it then there wouldn't be much value
-> in merging it.
-
-I tend to agree, but would put it a bit differently: the current
-implementation of klp-convert features quite some convenience logic,
-which, until the question of a documented livepatch preparation process
-has been settled, is not known yet to ever be of any use.
-
-For example, from [3/10]:
-
-  "For automatic resolution of livepatch relocations, a file called
-   symbols.klp is used. This file maps symbols within every compiled kernel
-   object allowing the identification of symbols whose name is unique, thus
-   relocation can be automatically inferred, or providing information that
-   helps developers when code annotation is required for solving the
-   matter."
-
-For the source based approach to livepatch preparation we're using
-internally, this is not really needed: the entity generating the source
--- be it klp-ccp or the author doing it manually -- needs to examine the
-target objects long before link resp. klp-convert time for which symbols
-can be referenced from the livepatch and how (i.e. determine a potential
-sympos). I would expect it works similar for kpatch-build conceptually,
-albeit kpatch-build probably doesn't rely on any external utility like
-klp-convert for the .klp.* relas generation at all.
-
-So with that, I agree that merging the klp-convert patchset in its
-current form with those potentially unused convenience features,
-presumably born out of certain assumptions about a manual livepatch
-preparation process, indeed can be argued about, probably.
-
-
-However, OTOH, there's currently no means whatsoever to create those
-.klp.* relas (*) (**) and I would like to propose resorting to a more
-minimal utility doing only that single thing: to stubbornly create
-.klp.* relas out of certain "regular" ones using a very simple
-transformation rule and nothing else beyond that. The "stripped"
-klp-convert would have no knowledge of the symbols available in the
-livepatched target objects at all, i.e. there would be no symbols.klp
-file or alike anymore. Instead, it would simply walk through all of a
-livepatch object's SHN_UNDEF symbols of format
-".klp.sym.<loading-obj-name>.<foo-providing-mod>.some_foo,0" somewhen at
-modpost time and
-- rename the symbol to ".klp.sym.<foo-providing-mod>.some_foo,0" --
-  shortening the name should always be feasible as far as strtab is
-  concerned.
-- turn the symbol's SHN_UNDEF into SHN_LIVEPATCH
-- move any relocation (initially created by the compiler with source
-  based lp preparation approaches) against this symbol into a separate,
-  newly created rela section with flag SHF_RELA_LIVEPATCH set and whose
-  name is of format
-  .klp.rela.<loading-obj-name>.<livepatch-obj-dst-section-name>.
-  Furthermore, the new .klp.rela section's ->sh_info needs to be made to
-  refer to the destination section.
-
-So, the only thing which would depend on the yet unspecified details of
-the livepatch preparation process would be the creation of those
-intermediate
-".klp.sym.<loading-obj-name>.<foo-providing-mod>.some_foo,0" SHN_UNDEF
-symbols to be processed by klp-convert. For source based livepatch
-preparation approaches, counting in the selftests, this can be easily
-controlled by means of asm("...") alias specifications at the respective
-declarations like in e.g.  extern int foo
-asm("\".klp.sym.<loading-obj-name>.<foo-providing-mod>.some_foo,0\"");
-
-
-I imagine the first ones to benefit from having such a "stripped"
-klp-convert available in the kernel tree would be new upstream selftests
-for .klp.* rela coverage (like introduced with this here patchset
-already) and for those some means of creating .klp.* relas would be
-needed anyway. We (SUSE), and perhaps others as well, could integrate
-this "stripped" klp-convert into our source based, production livepatch
-preparation workflows right away, of course, and so we're obviously keen
-on having it. Such a tool providing only the bare minimum would be
-pretty much self-contained -- it would only need to hook into the
-modpost Kbuild stage one way or the other -- and we could certainly
-maintain it downstream out-of-tree, but that would potentially only
-contribute to the current fragmentation around the livepatch creation
-processes even more and there still wouldn't have a solution for the
-upstream selftests.
-
-What do you think, does it make sense to eventually have such a bare
-minimum klp-convert merged in-tree, independently of the ongoing
-discussion around the livepatch preparation processes, respectively (the
-lack of) documentation around it? If yes, Lukas, now on CC, is
-interested in this topic and would be willing to help out in any form
-desired: either by contributing to Joe's work here or, if deemed more
-feasible, to start out completely new from scratch -- dependent on your
-opinion on the proposed, more minimal approach as well as on Joe's plans
-around klp-convert.
-
-Looking forward to hearing your feedback!
-
-Thanks,
-
-Nicolai
-
-(*) We've been experimenting with building the relocation records
-    manually by various means, e.g. with GNU as' .reloc directive as an
-    example, but this all turned out impractical for various
-    reasons. Most noteworthy, because the records' offsets wouldn't get
-    adjusted properly when linking AFAIR.
-
-(**) by some other means than directly with kpatch-build
-
---=20
-SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
-rnberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-(HRB 36809, AG N=C3=BCrnberg)
+> 
+>  fs/fs-writeback.c | 17 ++++++++++-------
+>  mm/backing-dev.c  | 12 ++++++++++--
+>  2 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 195dc23e0d83..1db3e3c24b43 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -978,6 +978,16 @@ static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
+>  			continue;
+>  		}
+>  
+> +		/*
+> +		 * If wb_tryget fails, the wb has been shutdown, skip it.
+> +		 *
+> +		 * Pin @wb so that it stays on @bdi->wb_list.  This allows
+> +		 * continuing iteration from @wb after dropping and
+> +		 * regrabbing rcu read lock.
+> +		 */
+> +		if (!wb_tryget(wb))
+> +			continue;
+> +
+>  		/* alloc failed, execute synchronously using on-stack fallback */
+>  		work = &fallback_work;
+>  		*work = *base_work;
+> @@ -986,13 +996,6 @@ static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
+>  		work->done = &fallback_work_done;
+>  
+>  		wb_queue_work(wb, work);
+> -
+> -		/*
+> -		 * Pin @wb so that it stays on @bdi->wb_list.  This allows
+> -		 * continuing iteration from @wb after dropping and
+> -		 * regrabbing rcu read lock.
+> -		 */
+> -		wb_get(wb);
+>  		last_wb = wb;
+>  
+>  		rcu_read_unlock();
+> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+> index ad011308cebe..43b48750b491 100644
+> --- a/mm/backing-dev.c
+> +++ b/mm/backing-dev.c
+> @@ -507,6 +507,15 @@ static LIST_HEAD(offline_cgwbs);
+>  static void cleanup_offline_cgwbs_workfn(struct work_struct *work);
+>  static DECLARE_WORK(cleanup_offline_cgwbs_work, cleanup_offline_cgwbs_workfn);
+>  
+> +static void cgwb_free_rcu(struct rcu_head *rcu_head)
+> +{
+> +	struct bdi_writeback *wb = container_of(rcu_head,
+> +			struct bdi_writeback, rcu);
+> +
+> +	percpu_ref_exit(&wb->refcnt);
+> +	kfree(wb);
+> +}
+> +
+>  static void cgwb_release_workfn(struct work_struct *work)
+>  {
+>  	struct bdi_writeback *wb = container_of(work, struct bdi_writeback,
+> @@ -529,11 +538,10 @@ static void cgwb_release_workfn(struct work_struct *work)
+>  	list_del(&wb->offline_node);
+>  	spin_unlock_irq(&cgwb_lock);
+>  
+> -	percpu_ref_exit(&wb->refcnt);
+>  	wb_exit(wb);
+>  	bdi_put(bdi);
+>  	WARN_ON_ONCE(!list_empty(&wb->b_attached));
+> -	kfree_rcu(wb, rcu);
+> +	call_rcu(&wb->rcu, cgwb_free_rcu);
+>  }
+>  
+>  static void cgwb_release(struct percpu_ref *refcnt)
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
