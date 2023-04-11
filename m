@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A166DD971
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB75C6DD975
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDKLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S229588AbjDKLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjDKLdK (ORCPT
+        with ESMTP id S229451AbjDKLef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:33:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24A135A6;
-        Tue, 11 Apr 2023 04:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681212789; x=1712748789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z8s5H2R2JPvyJImDdoa6/+E68sq74qjYjSO+8uO7l7Y=;
-  b=YHUe8TwtEhgAOqJn0U62TEfHWQVnjNmbtybwc5i6CWmfOzdPqfLaropK
-   ZRD1TpZkGACOQXv3H3P+pcEYxZr4k04Y2ZAPFjqc9VrnvQ/znZYrJ6ZDs
-   EBSbmKCi2fXu+EDrJFFw07FfuYRT6Q/TwjFCZhd6TmZ6FTPnG0R5uGezW
-   WmYunKE3XxckWArF6XZvsFKJXdq4JTy/NWhsBHYBunQJ1wcayzj4bcHOw
-   GBiW79M1bMRXzbHxbYNxkv/WW0TlDZt393DqU8NN2oqub3oV5blFm2w3T
-   37OHZBfEYZ//WtoY428ounOmlCS2Q8gGus0lMBO8hG0mQpzLrggwGsXwQ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="scan'208";a="209823278"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 04:33:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 04:33:07 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 04:33:06 -0700
-Date:   Tue, 11 Apr 2023 13:33:06 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Simon Horman <horms@kernel.org>
-CC:     Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <lvs-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
-        <coreteam@netfilter.org>
-Subject: Re: [PATCH nf-next v2 4/4] ipvs: Correct spelling in comments
-Message-ID: <20230411113306.ydzhynl243o6mncz@soft-dev3-1>
-References: <20230409-ipvs-cleanup-v2-0-204cd17da708@kernel.org>
- <20230409-ipvs-cleanup-v2-4-204cd17da708@kernel.org>
+        Tue, 11 Apr 2023 07:34:35 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C45AE6E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:34:34 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so7674170pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681212873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JFRxSw9GeugoPYgmgMFweC9gPDBVJGBlRNHmGv0SMrU=;
+        b=BorMPk/Ttj6K4aCWnKR2l1ESJzaSE6yu0sztIjN2B+Be3+yl8t+Cx3Qqq9q6pZJEUH
+         dLAAJ2wmTBpVgu2ZFISuZ2LS5VGbwgI6L8iGcj88fll2Ja8tD1W1JvYD4pNM6HRYRIa6
+         KNM9zTyUH0XN2BsgOqjN5xuAAbbkyAIlnco2A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681212873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JFRxSw9GeugoPYgmgMFweC9gPDBVJGBlRNHmGv0SMrU=;
+        b=aMTejhznBk+OVIXrgklf+i3TZDmCgcXb+q///Rw4URHXOHAfdAXV9/aIDnahzav/ht
+         N2FIDdsjgp++U1rDS5L5ysyxQGKlO8bU3Lw3++TQKkY0uoerzwGfQ4ensPTYWrzDUozh
+         ABTpsrz7Y0qcgqGhbjy6sBgfwAwIVrtKIegD/WVDQTktzOsVLtBr/KTU/n2HwkwXJFnm
+         ziQL1yRcgUtTufn6fFRCvJhW+APLNFjJzMb8l5mqVvwWUSh/y0xIRazJG3uhETwmal2g
+         kLf/fpHB19Wj0BFcaPF0rar2EggV1hO6N8LmzNe+HS95PPUacQPyWVAnUEX/h16hC2st
+         l8qw==
+X-Gm-Message-State: AAQBX9dU8xR7h5K42QReZ3XRJ6syNTIf8rb3NsfZFZkaviFJ++UwG1oh
+        WljhTmcM7492dMiNw1/7frTFCw==
+X-Google-Smtp-Source: AKy350YRHfT7dgJFe4ii+u0kDT7yLZE4Jh7HFrmkVjNFP/nzrurZe8GOm5Vy+ihBm7agrdBarB72UA==
+X-Received: by 2002:a17:902:e892:b0:199:4be8:be48 with SMTP id w18-20020a170902e89200b001994be8be48mr16066526plg.19.1681212873496;
+        Tue, 11 Apr 2023 04:34:33 -0700 (PDT)
+Received: from ?IPV6:2401:fa00:8f:203:44a9:ac98:7606:2cd0? ([2401:fa00:8f:203:44a9:ac98:7606:2cd0])
+        by smtp.gmail.com with ESMTPSA id h4-20020a170902748400b001a52eadb3e1sm5350540pll.152.2023.04.11.04.34.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 04:34:33 -0700 (PDT)
+Message-ID: <8abf9651-5ce1-7b73-6d14-04f42081a743@chromium.org>
+Date:   Tue, 11 Apr 2023 20:34:29 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230409-ipvs-cleanup-v2-4-204cd17da708@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] media: vivid: Add webcam parameter for (un)limited
+ bandwidth
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20230410063356.3894767-1-mstaudt@chromium.org>
+ <20230410102350.382f7d02@sal.lan>
+ <6aafad18-13a2-ef45-48a1-1f094554af31@chromium.org>
+ <6ee01cf1-5a8b-081f-e218-8c7da39343bc@xs4all.nl>
+ <c6d5be4c-42c9-b8fa-fbd7-108c5da694bc@chromium.org>
+ <5649adcd-3afe-e413-2eac-a92c78427dc9@xs4all.nl>
+From:   Max Staudt <mstaudt@chromium.org>
+In-Reply-To: <5649adcd-3afe-e413-2eac-a92c78427dc9@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/11/2023 09:10, Simon Horman wrote:
+On 4/11/23 16:45, Hans Verkuil wrote:
+>> Do I understand you correctly, are you suggesting to simply update the FPS limits to a new fixed schema, and not have an option at all?
 > 
-> Correct some spelling errors flagged by codespell and found by inspection.
+> Correct.
+> 
+> The ideal solution is indeed proper bandwidth calculations, since this would
+> be a proper emulation of actual webcam hardware. If you have time and are
+> interested in doing the work, then that would be great, of course.
 
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+My patch suggestion is motivated by a test which expects higher FPS 
+rates at large frame sizes than vivid currently provides.
 
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->  include/net/ip_vs.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> index a3adc246ee31..ff406ef4fd4a 100644
-> --- a/include/net/ip_vs.h
-> +++ b/include/net/ip_vs.h
-> @@ -584,7 +584,7 @@ struct ip_vs_conn {
->         spinlock_t              lock;           /* lock for state transition */
->         volatile __u16          state;          /* state info */
->         volatile __u16          old_state;      /* old state, to be used for
-> -                                                * state transition triggerd
-> +                                                * state transition triggered
->                                                  * synchronization
->                                                  */
->         __u32                   fwmark;         /* Fire wall mark from skb */
-> @@ -635,7 +635,7 @@ struct ip_vs_service_user_kern {
->         u16                     protocol;
->         union nf_inet_addr      addr;           /* virtual ip address */
->         __be16                  port;
-> -       u32                     fwmark;         /* firwall mark of service */
-> +       u32                     fwmark;         /* firewall mark of service */
-> 
->         /* virtual service options */
->         char                    *sched_name;
-> @@ -1036,7 +1036,7 @@ struct netns_ipvs {
->         struct ipvs_sync_daemon_cfg     bcfg;   /* Backup Configuration */
->         /* net name space ptr */
->         struct net              *net;            /* Needed by timer routines */
-> -       /* Number of heterogeneous destinations, needed becaus heterogeneous
-> +       /* Number of heterogeneous destinations, needed because heterogeneous
->          * are not supported when synchronization is enabled.
->          */
->         unsigned int            mixed_address_family_dests;
-> 
-> --
-> 2.30.2
-> 
+If I have a choice, then let's keep this patch simple ;)
 
--- 
-/Horatiu
+
+> But if you just want to increase the fps limits to be more in line with
+> modern webcams, then that's much quicker and should be fine.
+> 
+> It might also be interesting to perhaps allow for 120 fps for the low
+> resolutions (below 720p).
+
+Coincidentally, this would solve the problem we have at hand, but only 
+until someone wants to see even higher frame rates, and then we'd 
+revisit today's thread. Hence the idea for a parameter to simply unlock 
+all rates, depending on whether a test needs a vivid webcam with low or 
+high "performance".
+
+
+My rationale behind the module parameter is twofold:
+
+1. To allow for higher FPS without touching the kernel code again.
+2. To stay backward compatible to previous behaviour of vivid. Changing 
+the FPS formula would break this.
+
+
+Actually I have a new idea: How about renaming my suggestion to 
+"webcam_limit_enable" - this way, we can keep the current design with 
+the boolean value: Not setting this value would default to "enabled" - 
+i.e. vivid behaves as before. Disabling the limit unlocks all FPS at all 
+sizes.
+
+And later, should the need for a more precise simulation arise, we can 
+add a second parameter "webcam_limit_value".
+
+I've removed the "bandwidth" word from the new suggestions, so if a 
+numeric limit is introduced, it can be anything, even an arbitrary 
+number like the current "remove 2 FPS rates per size".
+
+
+Please let me know what you think.
+
+Max
+
