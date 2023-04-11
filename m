@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204E26DDA07
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2A16DDA0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjDKLtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S230142AbjDKLuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjDKLtD (ORCPT
+        with ESMTP id S230296AbjDKLuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:49:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D6DA3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681213735; x=1712749735;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Gdags1M6Medyo7CL5SRzy4P8BpRShQdkhod4NJbc6wU=;
-  b=WWZZhQFkwZw+vohf/mLTxvkNt9+eK3UTMCL+1yeUq60bP6pOf31dQqad
-   TRrUn3NgEbXghbLmA4e0V6+eX9RMl4V4KyeEDh6rq7PeUujBI+lGigMve
-   4AhaWl+1irPpXTl9vei6MARwpZJx8kF5Bte5uZbdQ/uyf2BAz/FuZ4gU8
-   HM59YBLERCdEzoV6ZmXcBCqMoLXOvu6LMM1BAW6skZBMZOrmR9AlzzM7P
-   D46noATzZuHcT/RmJnINoJ0itTSe3J/f/M7+wKcXJPXB/XDp9qtNK92Oj
-   1H3uiMeRAZ5ZPiCeLhOk3KnJrt/Xihzb9A379amIJG60PGUr17xYuLYG3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="343600836"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="343600836"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:48:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="777888102"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="777888102"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Apr 2023 04:48:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4F7306FC; Tue, 11 Apr 2023 14:48:26 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bumwoo Lee <bw365.lee@samsung.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: [PATCH v3 3/3] extcon: Drop unneeded assignments
-Date:   Tue, 11 Apr 2023 14:48:24 +0300
-Message-Id: <20230411114824.82960-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
-References: <20230411114824.82960-1-andriy.shevchenko@linux.intel.com>
+        Tue, 11 Apr 2023 07:50:01 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3A2E64;
+        Tue, 11 Apr 2023 04:49:58 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BB6D4K018215;
+        Tue, 11 Apr 2023 11:49:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=jh1p3JHCpb499GjreX3jvhIfnuIXVhOcaLS5n4cneeg=;
+ b=j254lQVb4d1b1n40nne3qb+NC4t62R/bN/eGm/jBuqnH8DUf/WjhP7p+KvEOWG7PAnwN
+ vuIX0y4B04LtP8Y6moBZecz30NY0rodTanjSptBdciAicqOIXwArFBZcM1jyaOYl7U/6
+ f5nysQneUENOV+SPKL5qDQz7WvfK4dEry1l+WH8lRfTvLZbEsgWKeI/LKgFUlbIL528t
+ qb/k9+52OGAxUGPQZae7GjfA5GrHb0P/sibxyWT/Wy+SQdZg9Gte9v+4ItYO+Aoi/6TC
+ H4LWPP7EZ8pVn20w+AhWHZlW3TX1ZZ5wWnWWOPDjoQbYZxKF2hoYyGQxJKFmVbmPN58W kA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvu4ssdjk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 11:49:47 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BBnkDw024839
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 11:49:46 GMT
+Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 11 Apr 2023 04:49:43 -0700
+From:   Zijun Hu <quic_zijuhu@quicinc.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-bluetooth@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <quic_zijuhu@quicinc.com>, <abhishekpandit@chromium.org>
+Subject: [PATCH v1] Bluetooth: Optimize devcoredump API hci_devcd_init()
+Date:   Tue, 11 Apr 2023 19:49:38 +0800
+Message-ID: <1681213778-31754-1-git-send-email-quic_zijuhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fdjCsiOQIc8tdVFmh3wynhFQBuildIL2
+X-Proofpoint-ORIG-GUID: fdjCsiOQIc8tdVFmh3wynhFQBuildIL2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_07,2023-04-11_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ mlxlogscore=934 spamscore=0 bulkscore=0 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110111
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,46 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In one case the assignment is duplicative, in the other,
-it's better to move it into the loop — the user of it.
+API hci_devcd_init() stores u32 type to memory without specific byte
+order, let us store with little endian in order to be loaded and
+parsed by devcoredump core rightly.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 ---
- drivers/extcon/extcon.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/bluetooth/coredump.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index 76dc41e8f250..6f7a60d2ed91 100644
---- a/drivers/extcon/extcon.c
-+++ b/drivers/extcon/extcon.c
-@@ -245,7 +245,7 @@ static DEFINE_MUTEX(extcon_dev_list_lock);
+diff --git a/net/bluetooth/coredump.c b/net/bluetooth/coredump.c
+index 08fa98505454..d2d2624ec708 100644
+--- a/net/bluetooth/coredump.c
++++ b/net/bluetooth/coredump.c
+@@ -5,6 +5,7 @@
  
- static int check_mutually_exclusive(struct extcon_dev *edev, u32 new_state)
+ #include <linux/devcoredump.h>
+ 
++#include <asm/unaligned.h>
+ #include <net/bluetooth/bluetooth.h>
+ #include <net/bluetooth/hci_core.h>
+ 
+@@ -180,25 +181,25 @@ static int hci_devcd_prepare(struct hci_dev *hdev, u32 dump_size)
+ 
+ static void hci_devcd_handle_pkt_init(struct hci_dev *hdev, struct sk_buff *skb)
  {
--	int i = 0;
-+	int i;
+-	u32 *dump_size;
++	u32 dump_size;
  
- 	if (!edev->mutually_exclusive)
- 		return 0;
-@@ -1246,7 +1246,7 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
-  */
- int extcon_dev_register(struct extcon_dev *edev)
- {
--	int ret, index = 0;
-+	int ret, index;
+ 	if (hdev->dump.state != HCI_DEVCOREDUMP_IDLE) {
+ 		DBG_UNEXPECTED_STATE();
+ 		return;
+ 	}
  
- 	ret = create_extcon_class();
- 	if (ret < 0)
-@@ -1255,7 +1255,7 @@ int extcon_dev_register(struct extcon_dev *edev)
- 	if (!edev || !edev->supported_cable)
- 		return -EINVAL;
+-	if (skb->len != sizeof(*dump_size)) {
++	if (skb->len != sizeof(dump_size)) {
+ 		bt_dev_dbg(hdev, "Invalid dump init pkt");
+ 		return;
+ 	}
  
--	for (; edev->supported_cable[index] != EXTCON_NONE; index++);
-+	for (index = 0; edev->supported_cable[index] != EXTCON_NONE; index++);
+-	dump_size = skb_pull_data(skb, sizeof(*dump_size));
+-	if (!*dump_size) {
++	dump_size = get_unaligned_le32(skb_pull_data(skb, 4));
++	if (!dump_size) {
+ 		bt_dev_err(hdev, "Zero size dump init pkt");
+ 		return;
+ 	}
  
- 	edev->max_supported = index;
- 	if (index > SUPPORTED_CABLE_MAX) {
+-	if (hci_devcd_prepare(hdev, *dump_size)) {
++	if (hci_devcd_prepare(hdev, dump_size)) {
+ 		bt_dev_err(hdev, "Failed to prepare for dump");
+ 		return;
+ 	}
+@@ -441,7 +442,7 @@ int hci_devcd_init(struct hci_dev *hdev, u32 dump_size)
+ 		return -ENOMEM;
+ 
+ 	hci_dmp_cb(skb)->pkt_type = HCI_DEVCOREDUMP_PKT_INIT;
+-	skb_put_data(skb, &dump_size, sizeof(dump_size));
++	put_unaligned_le32(dump_size, skb_put(skb, 4));
+ 
+ 	skb_queue_tail(&hdev->dump.dump_q, skb);
+ 	queue_work(hdev->workqueue, &hdev->dump.dump_rx);
 -- 
-2.40.0.1.gaa8946217a0b
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
 
