@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B355C6DDBCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800466DDBD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjDKNMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S230269AbjDKNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjDKNMn (ORCPT
+        with ESMTP id S230321AbjDKNMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:12:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B7B10FF;
+        Tue, 11 Apr 2023 09:12:45 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10040C5;
+        Tue, 11 Apr 2023 06:12:39 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id c2-20020a056830348200b006a3ab0ba8a2so8187651otu.1;
+        Tue, 11 Apr 2023 06:12:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681218758; x=1683810758;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2GW02L6nIApJNIdMW8NqTVwVWjewpMvs4/3n/QOH2X4=;
+        b=ZB+gNtTGLti9h/NJNIbitXOwbvqJS00FAQET94oPNO1eNlSS5KZyG/wrqB7N0LtHwn
+         tU//O4EDIennlVyYQULRsiOjcJ9OF2rw1CEOZhn/aUcL/JfhSK2rUQ7JSpx1bw7R+kdx
+         R/MeiZD7QvM6akxTk6kmhQMwiYDOe6zVIW5fakwUJQwqWgMOWNrLttEz2T0b7/jOIfxs
+         M6HE7gElx1IZZrTFa7xh6pnTJws7gwFe5H0osfxlUP4dHjIj4tyvJmsTLura7DzdVFhw
+         YoXZSuif3eaEbOf9mv2xFPnMxg2mgtRX+bXsKStkfemdnprhmq22FUt6dt1jDDlfSll6
+         bc6A==
+X-Gm-Message-State: AAQBX9ebOZyOIyzB3t20Crs9hOiz9NcSLtFFHibbz1EARCEnqkoOuhDt
+        c6o+LWrT9KZzWv617v+j4A==
+X-Google-Smtp-Source: AKy350YaRPQKn8t2rWkmO5BUPXazyXS/ThqJAn+M4vfd2ePh48L8+Fz+BWDh+3gbBbfgfTZluNGWlw==
+X-Received: by 2002:a05:6830:2016:b0:69b:cdd9:5216 with SMTP id e22-20020a056830201600b0069bcdd95216mr1267515otp.21.1681218758432;
+        Tue, 11 Apr 2023 06:12:38 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056830104e00b0069457b86060sm5479564otp.47.2023.04.11.06.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 11 Apr 2023 06:12:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CDE151FD6A;
-        Tue, 11 Apr 2023 13:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681218755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNlFRQuYhtU71A5sBtEqauVXSAM4+ELeuv9fRTR/B+8=;
-        b=N3D9s54Cj7iVAGl3df2xdmODccoQe5g3gpxR/8FgOto6W6miPDufLxBAI1dKerUC33V0e3
-        ZmdpqwbnwZywWA363KMPUG+hVUJK90Uivdmur+G67+EBIcBRhGlxkSg+zch2ZVqdDRD49O
-        qdirTKxhGLmkRu86zzmZkrGX169YhMc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AAB8113519;
-        Tue, 11 Apr 2023 13:12:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DFM+J8NcNWQMLQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 11 Apr 2023 13:12:35 +0000
-Date:   Tue, 11 Apr 2023 15:12:34 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, rientjes@google.com,
-        Zefan Li <lizefan.x@bytedance.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v4] mm: oom: introduce cpuset oom
-Message-ID: <ZDVcwuiu3rWEFiTE@dhcp22.suse.cz>
-References: <20230411065816.9798-1-ligang.bdlg@bytedance.com>
- <3myr57cw3qepul7igpifypxx4xd2buo2y453xlqhdw4xgjokc4@vi3odjfo3ahc>
- <aa3382b4-4046-988f-42ea-8812dba7882b@bytedance.com>
+Received: (nullmailer pid 2908359 invoked by uid 1000);
+        Tue, 11 Apr 2023 13:12:37 -0000
+Date:   Tue, 11 Apr 2023 08:12:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
+Message-ID: <20230411131237.GA2837061-robh@kernel.org>
+References: <20230406135552.23980-1-sebastian.reichel@collabora.com>
+ <20230406135552.23980-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aa3382b4-4046-988f-42ea-8812dba7882b@bytedance.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230406135552.23980-2-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-04-23 21:04:18, Gang Li wrote:
+On Thu, Apr 06, 2023 at 03:55:50PM +0200, Sebastian Reichel wrote:
+> Add compatible for RK3588 OHCI. As far as I know it's fully
+> compatible with generic-ohci.
 > 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../devicetree/bindings/usb/generic-ohci.yaml  | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 > 
-> On 2023/4/11 20:23, Michal Koutný wrote:
-> > Hello.
-> > 
-> > On Tue, Apr 11, 2023 at 02:58:15PM +0800, Gang Li <ligang.bdlg@bytedance.com> wrote:
-> > > +	cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
-> > > +		if (nodes_equal(cs->mems_allowed, task_cs(current)->mems_allowed)) {
-> > > +			css_task_iter_start(&(cs->css), CSS_TASK_ITER_PROCS, &it);
-> > > +			while (!ret && (task = css_task_iter_next(&it)))
-> > > +				ret = fn(task, arg);
-> > > +			css_task_iter_end(&it);
-> > > +		}
-> > > +	}
-> > > +	rcu_read_unlock();
-> > > +	cpuset_read_unlock();
-> > > +	return ret;
-> > > +}
-> > 
-> > I see this traverses all cpusets without the hierarchy actually
-> > mattering that much. Wouldn't the CONSTRAINT_CPUSET better achieved by
-> > globally (or per-memcg) scanning all processes and filtering with:
-> 
-> Oh I see, you mean scanning all processes in all cpusets and scanning
-> all processes globally are equivalent.
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> index a9ba7257b884..e116ed90471e 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> @@ -44,6 +44,7 @@ properties:
+>                - hpe,gxp-ohci
+>                - ibm,476gtr-ohci
+>                - ingenic,jz4740-ohci
+> +              - rockchip,rk3588-ohci
+>                - snps,hsdk-v1.0-ohci
+>            - const: generic-ohci
+>        - enum:
+> @@ -69,7 +70,7 @@ properties:
+>  
+>    clocks:
+>      minItems: 1
+> -    maxItems: 3
+> +    maxItems: 4
+>      description: |
+>        In case the Renesas R-Car Gen3 SoCs:
+>          - if a host only channel: first clock should be host.
+> @@ -147,6 +148,21 @@ allOf:
+>      then:
+>        properties:
+>          transceiver: false
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3588-ohci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +          maxItems: 4
 
-Why cannot you simple select a process from the cpuset the allocating
-process belongs to? I thought the whole idea was to handle well
-partitioned workloads.
+Only need minItems here.
 
-> > 	nodes_intersect(current->mems_allowed, p->mems_allowed
-> 
-> Perhaps it would be better to use nodes_equal first, and if no suitable
-> victim is found, then downgrade to nodes_intersect?
+> +    else:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
+> +          maxItems: 3
 
-How can this happen?
+Only need maxItems here.
 
-> NUMA balancing mechanism tends to keep memory on the same NUMA node, and
-> if the selected victim's memory happens to be on a node that does not
-> intersect with the current process's node, we still won't be able to
-> free up any memory.
+With that,
 
-AFAIR NUMA balancing doesn't touch processes with memory policies.
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: Rob Herring <robh@kernel.org>
