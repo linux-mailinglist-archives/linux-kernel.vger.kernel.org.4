@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E22C6DD69B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07A16DD6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjDKJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S229796AbjDKJ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDKJ2A (ORCPT
+        with ESMTP id S229814AbjDKJ2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:28:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A71C4C3;
-        Tue, 11 Apr 2023 02:27:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0E0BD75;
-        Tue, 11 Apr 2023 02:28:41 -0700 (PDT)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 578DC3F73F;
-        Tue, 11 Apr 2023 02:27:56 -0700 (PDT)
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Tue, 11 Apr 2023 05:28:55 -0400
+Received: from out-12.mta1.migadu.com (out-12.mta1.migadu.com [IPv6:2001:41d0:203:375::c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BFF272D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:28:53 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:28:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681205332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=herqdWTSpQzIg4qxrA3Oi6bo3dutKqr8QPmPpf/XCig=;
+        b=XrEy6Y82J+f6A5SrwL6EnMQ1YyNXk9Irj2fGdVsvyJYveUSX3YYzS6HiVSkYCaOvlqZZh4
+        wQ1KG/AKUbmtPvGIm0YVTIpyfkTDynWwxr5mVPf2AjT5HzTy9mcs7PJrG8lLRWqNHP06Jt
+        mYB0rFw1kJJD5kZBvsbg7ArSPx89Qfs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Richard Leitner <richard.leitner@linux.dev>
+To:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-Subject: [PATCH RESEND] uapi/linux/const.h: Prefer ISO-friendly __typeof__
-Date:   Tue, 11 Apr 2023 10:27:47 +0100
-Message-Id: <20230411092747.3759032-1-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.38.1
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH RESEND v2 0/2] panel-simple: Add InnoLux G070ACE-L01
+ support
+Message-ID: <20230411092849.GB4993@g0hl1n.net>
+References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-typeof is (still) a GNU extension, which means that it cannot be
-used when building ISO C (e.g. -std=c99). It should therefore be
-avoided in uapi headers in favour of the ISO-friendly __typeof__.
+On Mon, Mar 13, 2023 at 08:50:15AM +0100, richard.leitner@linux.dev wrote:
+> This series adds support for the InnoLux G070ACE-L01 7" 800x480 TFT LCD
+> panel with WLED backlight.
 
-Unfortunately this issue could not be detected by
-CONFIG_UAPI_HEADER_TEST=y as the __ALIGN_KERNEL() macro is not
-expanded in any uapi header.
+Friendly reminder for this small series 😉
 
-Reported-by: Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-Tested-by: Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- include/uapi/linux/const.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
-index af2a44c08683..a429381e7ca5 100644
---- a/include/uapi/linux/const.h
-+++ b/include/uapi/linux/const.h
-@@ -28,7 +28,7 @@
- #define _BITUL(x)	(_UL(1) << (x))
- #define _BITULL(x)	(_ULL(1) << (x))
- 
--#define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (typeof(x))(a) - 1)
-+#define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
- #define __ALIGN_KERNEL_MASK(x, mask)	(((x) + (mask)) & ~(mask))
- 
- #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
--- 
-2.38.1
-
+> 
+> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> ---
+> Richard Leitner (2):
+>       dt-bindings: display: simple: add support for InnoLux G070ACE-L01
+>       drm/panel: simple: Add InnoLux G070ACE-L01
+> 
+>  .../bindings/display/panel/panel-simple.yaml       |  2 ++
+>  drivers/gpu/drm/panel/panel-simple.c               | 35 ++++++++++++++++++++++
+>  2 files changed, 37 insertions(+)
+> ---
+> base-commit: c0b67534c95c537f7a506a06b98e5e85d72e2b7d
+> change-id: 20230201-innolux-g070ace-fda21c89efe2
+> 
+> Best regards,
+> -- 
+> Richard Leitner <richard.leitner@skidata.com>
+> 
