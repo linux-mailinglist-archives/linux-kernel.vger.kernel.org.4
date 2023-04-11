@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B546DD310
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF00F6DD33C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjDKGmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S229981AbjDKGpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDKGme (ORCPT
+        with ESMTP id S229536AbjDKGpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:42:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42919100
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:41:48 -0700 (PDT)
+        Tue, 11 Apr 2023 02:45:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDD6E60
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681195307;
+        s=mimecast20190719; t=1681195469;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cir0Gnf4lO73dXx+ll4SEClofyoM/9KDMaw0DZ/d7mE=;
-        b=QofxRbIKtfkK0IvPhnN8SbaabNav8SvxLeJPyKtvwN+ZIKHbPQDdDsN1BJ44d4GcsA61lV
-        bQIKET7pvCJjUAxcl5Ma4ISuQ93rjN0PR/svvFi5gbkF9yUnNJKiRymG63MfNLUucCS38N
-        Aql/UGYHCAwI/JZS9gheQD1DBDQs68w=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ce3o9m8QJKudhAZFM4SLAGCXqk/LwfHWpmmOCipSLBY=;
+        b=BfC9p2BCcEfE1KW0/JKNBsBT4APXxed9f/6lXLh1C3mmHp9UnVo3JwPjOHHmKbtYnKXRKc
+        44zbGabTtp/+SjhC/7vsyzcsPAfRHqSHx2wRxBNcJSVwzE+BsC8ToSq+EML4NRJ0m1ftgN
+        nqRS6cf1cg/t00YevDFBLGeWGnxux08=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-dpZ8XSXjO7OC5ATSzkD0ow-1; Tue, 11 Apr 2023 02:41:46 -0400
-X-MC-Unique: dpZ8XSXjO7OC5ATSzkD0ow-1
-Received: by mail-wm1-f69.google.com with SMTP id t8-20020a05600c450800b003ee6dbceb81so1336114wmo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:41:46 -0700 (PDT)
+ us-mta-117-PqGzCGM7NaK0roKJ1sBw6w-1; Tue, 11 Apr 2023 02:44:27 -0400
+X-MC-Unique: PqGzCGM7NaK0roKJ1sBw6w-1
+Received: by mail-wm1-f71.google.com with SMTP id l36-20020a05600c1d2400b003edd119ec9eso2140699wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:44:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681195305;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cir0Gnf4lO73dXx+ll4SEClofyoM/9KDMaw0DZ/d7mE=;
-        b=yliPnemgQUO5T/xEk91uj9CSqz7X+hZZUoKV8JisTVMCN7by0nfHqe5XqTb8xYWt7f
-         f3cpphN87oV+UUDQlf3FPc+HH8ee2ZHbegUhbIOicxTILQN+wQh5eGRmvWwxRAKV8Kde
-         PqglO6i42+wadltCFcxRTr0Q6dsvci0dDKtO2roOG5d6nQCTuVij/d+s9AWjLAM4dDb/
-         vbU6LtEiQuDTdqqqb1vQRsbd2rAuxx8jCoSnBrgvVRtyNeYYOulo5aWJggYsJU3LqMxo
-         H9jtKy4LU8FTIMnDoujMTD9ZE4Ix9ObYNWxaAD8lMPzVmc01KGVK1L2khfnXqTjntLtP
-         SpaA==
-X-Gm-Message-State: AAQBX9fLwe99ou1iDZGk5IZt9fNP6xLqcZXV9OrIQJZXHTYUXCuDgOap
-        Is5xnUR2FaoqgPKojlj0vbD6BJWVJB8OC1CCam/imweDZAojkG/PT5+fcxThizTyenSrpLt2ydS
-        HZ1PBrm3A+7oshiEPUZi1eT+p
-X-Received: by 2002:a5d:4b43:0:b0:2ef:b051:95c5 with SMTP id w3-20020a5d4b43000000b002efb05195c5mr6596130wrs.60.1681195305250;
-        Mon, 10 Apr 2023 23:41:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aDk+askyEP9RLvZG0DjWMCmGyHnqPWpVQgma3u2M6tHEB57yytv6JeU13SIHx3VDd2TjQTtg==
-X-Received: by 2002:a5d:4b43:0:b0:2ef:b051:95c5 with SMTP id w3-20020a5d4b43000000b002efb05195c5mr6596114wrs.60.1681195304960;
-        Mon, 10 Apr 2023 23:41:44 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681195466;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ce3o9m8QJKudhAZFM4SLAGCXqk/LwfHWpmmOCipSLBY=;
+        b=rGufKh5tcC1aPlF8j8m84ay8/E6Sto47I5gW4pbhRuj1b5YMtOakR290GuL4xZ0Xd1
+         qG8auBJTWyo5fHR3lcPdhyFMN/cQ7CA/VcPK0dr+1BHFICywDGs48AzJefeJfo841mWa
+         LE//53n0QmoZAgOSFmuKNhSFlJAdEUQrbycOCy4cU675UhHfBL7/A4w4o6iz9moXrRwz
+         fv5Sky1ZI116+xxOJMhfBNzRTEMEtynnj5XDzSCViZz4aHp4JIyrpWptObpRt9X8ptq3
+         sWcScBaJg14z6QJztYPGRzvU3wbokscIO6xUHspFpGiKM8aJoUc/oiknnOF23MQqLpcf
+         gQwQ==
+X-Gm-Message-State: AAQBX9fBRW7SU2t/pYjHvinA6MsU5G3xPKsvd6o9xbuRoMGi2GtC4Nzm
+        bCWzg8vX2ZugX9gy4FBPyjngHXKxGSrW+PsPf40FUy/+EWx/z6/2OOxI8T9/+M6JHMCH3HOBZiI
+        42p7+J0SkMZbU/q5KXUsfyTQW
+X-Received: by 2002:a5d:544b:0:b0:2ef:5d73:f6b7 with SMTP id w11-20020a5d544b000000b002ef5d73f6b7mr5727289wrv.13.1681195466637;
+        Mon, 10 Apr 2023 23:44:26 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZRDGqjLP0vISyJctE2RVlecshmpp3ic4ZGNdzUIANxMkFafXjwaw0b2tY98SsLDju/2XSNiw==
+X-Received: by 2002:a5d:544b:0:b0:2ef:5d73:f6b7 with SMTP id w11-20020a5d544b000000b002ef5d73f6b7mr5727281wrv.13.1681195466347;
+        Mon, 10 Apr 2023 23:44:26 -0700 (PDT)
 Received: from redhat.com ([2.52.10.80])
-        by smtp.gmail.com with ESMTPSA id w9-20020adfec49000000b002cde25fba30sm13785542wrn.1.2023.04.10.23.41.43
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600011c200b002d7a75a2c20sm13712803wrx.80.2023.04.10.23.44.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 23:41:44 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 02:41:40 -0400
+        Mon, 10 Apr 2023 23:44:25 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 02:44:22 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Angus Chen <angus.chen@jaguarmicro.com>
-Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
         "virtualization@lists.linux-foundation.org" 
         <virtualization@lists.linux-foundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
-Message-ID: <20230411024109-mutt-send-email-mst@kernel.org>
+Message-ID: <20230411024155-mutt-send-email-mst@kernel.org>
 References: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
- <20230411022329-mutt-send-email-mst@kernel.org>
- <TY2PR06MB34242144FB4F944DD866567B859A9@TY2PR06MB3424.apcprd06.prod.outlook.com>
+ <CACGkMEscqtaTpCed_f2cfknO4--mXCyp33u1CmZwNEZxyf=ifQ@mail.gmail.com>
+ <TY2PR06MB3424BACFA8B6CB463C12E31E859A9@TY2PR06MB3424.apcprd06.prod.outlook.com>
+ <CACGkMEuOK+XqSa93a7+ki25yjVWSzfSzd5nsqMUo8sH1=B9hRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <TY2PR06MB34242144FB4F944DD866567B859A9@TY2PR06MB3424.apcprd06.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEuOK+XqSa93a7+ki25yjVWSzfSzd5nsqMUo8sH1=B9hRg@mail.gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -81,72 +84,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 06:39:16AM +0000, Angus Chen wrote:
-> Hi mst.
+On Tue, Apr 11, 2023 at 02:39:34PM +0800, Jason Wang wrote:
+> On Tue, Apr 11, 2023 at 2:36 PM Angus Chen <angus.chen@jaguarmicro.com> wrote:
+> >
+> > Hi.
+> >
+> > > -----Original Message-----
+> > > From: Jason Wang <jasowang@redhat.com>
+> > > Sent: Tuesday, April 11, 2023 1:24 PM
+> > > To: Angus Chen <angus.chen@jaguarmicro.com>
+> > > Cc: mst@redhat.com; virtualization@lists.linux-foundation.org;
+> > > linux-kernel@vger.kernel.org
+> > > Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
+> > >
+> > > On Tue, Apr 11, 2023 at 9:39 AM Angus Chen <angus.chen@jaguarmicro.com>
+> > > wrote:
+> > > >
+> > > > We read the status of device after reset,
+> > > > It is not guaranteed that the device be reseted successfully.
+> > > > We can use a while loop to make sure that,like the modern device did.
+> > > > The spec is not request it ,but it work.
+> > >
+> > > The only concern is if it's too late to do this.
+> > >
+> > > Btw, any reason you want to have a legacy hardware implementation. It
+> > > will be very tricky to work correctly.
+> >   En,I found this in the real production environment some times about one year ago.
+> > and I fix this out of tree.our virtio card had been sold about thousands .
+> >
+> >   Now,we created a new card, it support virtio 0.95,1.0,1.1 etc.
+> >   And we use this host vdpa+ legacy virtio in vm to hot migration,we found that the
+> >   Legacy model often get the middle state value after reset and probe again.
+> >   The Soc is Simulated by fpga which is run slower than the host,so the same bug
+> >   Is found more frequently when the host use the other kernel like ubuntu or centos8.
+> >
+> >   So we hope we can fix this by upstream .
 > 
-> > -----Original Message-----
-> > From: Michael S. Tsirkin <mst@redhat.com>
-> > Sent: Tuesday, April 11, 2023 2:30 PM
-> > To: Angus Chen <angus.chen@jaguarmicro.com>
-> > Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
-> > 
-> > On Tue, Apr 11, 2023 at 09:38:32AM +0800, Angus Chen wrote:
-> > > We read the status of device after reset,
-> > > It is not guaranteed that the device be reseted successfully.
-> > 
-> > Sorry not guaranteed by what? I am guessing you have a legacy device
-> > that does not reset fully on write, and you need to wait?
->  When the card not finished reset, the read only return the middle state of card.
-> > 
-> > > We can use a while loop to make sure that,like the modern device did.
-> > > The spec is not request it ,but it work.
-> > >
-> > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-> > 
-> > Generally I don't much like touching legacy, no telling what
-> > that will do. Case in point, is your device a pure
-> > legacy device or a transitional device?
->  Yes.,we have a real card which is use vitio spec.
-
-So is it a transitional device?
-
-
->  Thank you.
-> > 
-> > > ---
-> > >  drivers/virtio/virtio_pci_legacy.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> > > index 2257f1b3d8ae..f2d241563e4f 100644
-> > > --- a/drivers/virtio/virtio_pci_legacy.c
-> > > +++ b/drivers/virtio/virtio_pci_legacy.c
-> > > @@ -14,6 +14,7 @@
-> > >   *  Michael S. Tsirkin <mst@redhat.com>
-> > >   */
-> > >
-> > > +#include <linux/delay.h>
-> > >  #include "linux/virtio_pci_legacy.h"
-> > >  #include "virtio_pci_common.h"
-> > >
-> > > @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
-> > >  	vp_legacy_set_status(&vp_dev->ldev, 0);
-> > >  	/* Flush out the status write, and flush in device writes,
-> > >  	 * including MSi-X interrupts, if any. */
-> > > -	vp_legacy_get_status(&vp_dev->ldev);
-> > > +	while (vp_legacy_get_status(&vp_dev->ldev))
-> > > +		msleep(1);
-> > 
-> > The problem with this is that it will break surprise
-> > removal even worse than it's already broken.
-> > 
-> > 
-> > >  	/* Flush pending VQ/configuration callbacks. */
-> > >  	vp_synchronize_vectors(vdev);
-> > >  }
-> > > --
-> > > 2.25.1
+> I think you can do mediation in your hypervisor.
 > 
+> When trapping set_status(), the hypervisor will not return until it
+> reads 0 from the hardware?
+> 
+> Thanks
+
+Note that for legacy guests, 0 status write is not the only way
+to reset the device, writing 0 into pa is another.
+
+
+
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> > > > ---
+> > > >  drivers/virtio/virtio_pci_legacy.c | 4 +++-
+> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+> > > > index 2257f1b3d8ae..f2d241563e4f 100644
+> > > > --- a/drivers/virtio/virtio_pci_legacy.c
+> > > > +++ b/drivers/virtio/virtio_pci_legacy.c
+> > > > @@ -14,6 +14,7 @@
+> > > >   *  Michael S. Tsirkin <mst@redhat.com>
+> > > >   */
+> > > >
+> > > > +#include <linux/delay.h>
+> > > >  #include "linux/virtio_pci_legacy.h"
+> > > >  #include "virtio_pci_common.h"
+> > > >
+> > > > @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
+> > > >         vp_legacy_set_status(&vp_dev->ldev, 0);
+> > > >         /* Flush out the status write, and flush in device writes,
+> > > >          * including MSi-X interrupts, if any. */
+> > > > -       vp_legacy_get_status(&vp_dev->ldev);
+> > > > +       while (vp_legacy_get_status(&vp_dev->ldev))
+> > > > +               msleep(1);
+> > > >         /* Flush pending VQ/configuration callbacks. */
+> > > >         vp_synchronize_vectors(vdev);
+> > > >  }
+> > > > --
+> > > > 2.25.1
+> > > >
+> >
 
