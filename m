@@ -2,75 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC146DE223
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056206DE234
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjDKROp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S229829AbjDKRPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjDKROm (ORCPT
+        with ESMTP id S229549AbjDKRPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:14:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E944228
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:14:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4735621E4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB5BC433EF;
-        Tue, 11 Apr 2023 17:14:39 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 13:14:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3] tracepoint: Fix CFI failures with tp_sub_func
-Message-ID: <20230411131423.37b001f7@gandalf.local.home>
-In-Reply-To: <20230408230344.06f9c6c95d4659b2f5363ba0@kernel.org>
-References: <20230324123142.7463-1-mathieu.desnoyers@efficios.com>
-        <75dbeff6-fd0c-aec1-5821-919088eda6c4@efficios.com>
-        <ZCwDAnRHjNr9ZftR@FVFF77S0Q05N>
-        <20230404162232.1b2f4c2f@gandalf.local.home>
-        <20230408230344.06f9c6c95d4659b2f5363ba0@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 11 Apr 2023 13:15:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4B5BA0;
+        Tue, 11 Apr 2023 10:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681233330; x=1712769330;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l77rwRkmmaeKf8oCWhGD/yj1q+/ZZYlFQ+ZgKZ60owc=;
+  b=YiTihbpZc/YfJWIudoEx6Ib8fCRULyyjKJ4Rt8bIUhEcu/IpB4gPij6a
+   mSNnIUC6MV+LkfMOXKqBOJaRW8MU6pcxDX8gIXXeu4xHFeKpYepJC3Tg4
+   gpAiG3B9wSBUcvf2sVCK0G1f3Kle2uUVJg1FI0sRoWYHY2gG56oyFOpVH
+   1708YHElLb2x8WJkB/R5eR92Q9mS59gq18mj4/h5cTotcHVA1Gqun6ywZ
+   KArNoOcq4oeSAXu38w+tdyc03m1hdcbVDGk4mMJ9hzpQD+FxPsCGp2yZR
+   hlQgfsXi9oEV2/vw34zStgYIwDw88q8m2EIOseWowRVluKNU4t4LhXIr7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346354122"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="346354122"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 10:15:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="638904505"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="638904505"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2023 10:15:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B7195438; Tue, 11 Apr 2023 20:15:29 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Bamvor Jian Zhang <bamv2005@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] selftests: gpio: gpio-sim: Fix BUG: test FAILED due to recent change
+Date:   Tue, 11 Apr 2023 20:15:20 +0300
+Message-Id: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Apr 2023 23:03:44 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-> I think we need another stub function similar to the original patch, because
-> the __tracestub_* functions are usually not called back. Even if I enabled
-> the static key to enable the stub callback, if user sets another callback
-> handler to the tracepoint (e.g. enable trace event on it), the __tracestub_*
-> function is not called anymore.
-> 
-> Thus I think we just pick this version and add another patch to introduce
-> __probestub_* functions in macro, and fprobe on it. This new stub function is
-> something like the original one so that it doesn't break CFI. And it will be
-> registered to tracepoint when the new fprobe based dynamic event is enabled.
-> 
+According to Mirsad the gpio-sim.sh test appears to FAIL in a wrong way
+due to missing initialisation of shell variables:
 
-If we are going to add *another* stub, then no, I don't want to use it. But
-I don't see why we can't use one stub for both?
+ 4.2. Bias settings work correctly
+ cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
+ ./gpio-sim.sh: line 393: test: =: unary operator expected
+ bias setting does not work
+ GPIO gpio-sim test FAIL
 
-What's the issue you are having?
+After this change the test passed:
 
--- Steve
+ 4.2. Bias settings work correctly
+ GPIO gpio-sim test PASS
+
+His testing environment is AlmaLinux 8.7 on Lenovo desktop box with
+the latest Linux kernel based on v6.2:
+
+  Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
+
+Suggested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ tools/testing/selftests/gpio/gpio-sim.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
+index 9f539d454ee4..fa2ce2b9dd5f 100755
+--- a/tools/testing/selftests/gpio/gpio-sim.sh
++++ b/tools/testing/selftests/gpio/gpio-sim.sh
+@@ -389,6 +389,9 @@ create_chip chip
+ create_bank chip bank
+ set_num_lines chip bank 8
+ enable_chip chip
++DEVNAME=`configfs_dev_name chip`
++CHIPNAME=`configfs_chip_name chip bank`
++SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
+ $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
+ test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
+ remove_chip chip
+-- 
+2.40.0.1.gaa8946217a0b
+
