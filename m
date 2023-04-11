@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719BF6DE567
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785D56DE562
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjDKUHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S229888AbjDKUG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjDKUGt (ORCPT
+        with ESMTP id S229832AbjDKUGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:06:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A592558B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:04 -0700 (PDT)
+        Tue, 11 Apr 2023 16:06:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F65599
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681243503;
+        s=mimecast20190719; t=1681243509;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZWIvLHTbsZUrfZPZ+ixSWYku7exrmBkFXk3jbX419Vo=;
-        b=IJgFgjs0IQ+hDKluqPisLKYLzbxO29r8wYgb0O64DUtifJv4iYZZl9rtivHvoVXi/Zf6++
-        Whc6IGeEDTyuuYs8Nayzp5TA/DFLMULTHrxm4j3Paeu9N6Jhcwxve8/0YVX67szjrg7ykY
-        XLrsgOmQC9zjdqshdzidnOVllPAUybc=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=r1PPzTAJ/jJJJDdzEYgsG/ydCd/6AJF167jFf5Gh9p8=;
+        b=ibPveJx6RVRMg2sZi8m6uM4HNP16aUrs9g8nLAyNVhOo33s70dBX684TezHICX2Y4UWYZU
+        ABBsjlQxhejjLXMZeQHrpT/9nCnZxXwmdv+C2vogKezJD0YH1VrZ2kFFkGmWhhM1b7BJUX
+        2+ZWa0QN1HHNhUZ00mE/3sXGwS5HCjs=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-400-oKNT1hrWNA26yPgO8JD8_A-1; Tue, 11 Apr 2023 16:05:02 -0400
-X-MC-Unique: oKNT1hrWNA26yPgO8JD8_A-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-184258b8a2eso5800096fac.21
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:02 -0700 (PDT)
+ us-mta-17-iFdqAjabPxm49-qKVTNwVA-1; Tue, 11 Apr 2023 16:05:08 -0400
+X-MC-Unique: iFdqAjabPxm49-qKVTNwVA-1
+Received: by mail-oo1-f70.google.com with SMTP id s64-20020a4a5143000000b00541befd168bso2930987ooa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:05:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681243501;
+        d=1e100.net; s=20210112; t=1681243507;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZWIvLHTbsZUrfZPZ+ixSWYku7exrmBkFXk3jbX419Vo=;
-        b=m7/mTzWdb+dGPR/c+XxZWw+rLjvWfor/VwUlTtll8WuX6meHF0WMG+c3m7VjS6mwEJ
-         w1COFX1/YqrAenDXC9h9cQO6VwvUxXanthHikyEqyegXuhkkzwOLCh3pFFpGDqvm9HIT
-         FHCreOJ7iLFaCdf77cVD3k1aLNqNGs5pjEKhQDVx7IGlh0dvbQmmPSODOuoDa+62mkf1
-         6h0JnBHCmbwUUDbUOR8LrBtmREBAja2Pzdo5GJ0PwF03NdPM0/7oIFyKwo/amqUqk3/y
-         3DQ6CirwvZiephtDTNnDgE/NWQ2xFNNd1IzlaT/6bUK+xa0K7WTF7qpsHzh1ZrnTdCYQ
-         wjbg==
-X-Gm-Message-State: AAQBX9cy/61ny3u6gqx0olXeBdyflhl1EGGgqDl6359TUChSWGrh539Y
-        8hBpcV04QpodgJxmk+0icVc0/Qd0s7EzBNzx/V7jkrTeEOhmUNL33ipz5nF03U1ZL9BmUzB0TZy
-        Sm/609PL6FYS1GBo9tiCpx9lZTYgn/pyryloVi2nvjinTT4WzrfYsvPDOn0D+xdR3k3cbquL2Tb
-        zUlXt8hqYUxlw=
-X-Received: by 2002:a05:6808:1823:b0:38b:973a:fe71 with SMTP id bh35-20020a056808182300b0038b973afe71mr6409952oib.40.1681243501289;
-        Tue, 11 Apr 2023 13:05:01 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b0cAvz42Qlls8WIYBkHt9iLwhpGWw1ZoYTxtNtior36S9BhWlnFImaPqwchjhbT2TqrxZ8rg==
-X-Received: by 2002:a05:6808:1823:b0:38b:973a:fe71 with SMTP id bh35-20020a056808182300b0038b973afe71mr6409904oib.40.1681243500915;
-        Tue, 11 Apr 2023 13:05:00 -0700 (PDT)
+        bh=r1PPzTAJ/jJJJDdzEYgsG/ydCd/6AJF167jFf5Gh9p8=;
+        b=lOJgsOYNOit56O9nyQsNBIl5G9NbHsqVLsTcGXpounZ7Z1JmlkruZ9lLr3MtCp7ux3
+         GCH/1hD0FjipB5YpIJ+FDWxbNXiFRNrCSkDz52JVEDuUhF9YnLwAw8DJxQHYplqpopDX
+         5r2z4mHDLJQZzoEc5eQkXLv+fq3ttdF7CMqrbgWEG4Go6YRkL1DmyAsXfgodGJphp847
+         3yrKF7OHAvO8LkiaGxtUhTidFZVN1HQ56gzN/bn2ARSdLwbRCxSYr4qc1aXdEzDSTjh+
+         UlF/Kaha99dqjLgvmagmSe0F4O6ZFBtcrZFmC4YTjKG1OqnQOcW/AD+ldWffPVaUbybe
+         mggw==
+X-Gm-Message-State: AAQBX9dcKGevNrPXENrsDX0REnQWfOrbhkz5rYdH+aK2NADrI7K2poTC
+        0WbDIqjMDncHKXRA5cYTRKauyyq6L4RPTyQ7u1fJhbpDLB3hBOyBPA+bGt7s0NtDiaDAna35Pb5
+        2yHToOW/DDCahDlz42b9EAdpeyfAc7GZRDW/rt6kRLEE08YTz0FSTJIRMT14+MoEUhPy0B8LpEP
+        aGR5h+kA93F4I=
+X-Received: by 2002:a05:6808:438b:b0:389:464f:aa69 with SMTP id dz11-20020a056808438b00b00389464faa69mr6034565oib.0.1681243507430;
+        Tue, 11 Apr 2023 13:05:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YrWXns1gsSqBUz9ow7QwM9KmBz8PReqobSU7nh7DMiBtUb+y+EA0cnZdJdoLRYgDEVnOwv/g==
+X-Received: by 2002:a05:6808:438b:b0:389:464f:aa69 with SMTP id dz11-20020a056808438b00b00389464faa69mr6034515oib.0.1681243506929;
+        Tue, 11 Apr 2023 13:05:06 -0700 (PDT)
 Received: from halaney-x13s.attlocal.net (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id e20-20020a056808149400b00387764759a3sm5868545oiw.24.2023.04.11.13.04.58
+        by smtp.gmail.com with ESMTPSA id e20-20020a056808149400b00387764759a3sm5868545oiw.24.2023.04.11.13.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:05:00 -0700 (PDT)
+        Tue, 11 Apr 2023 13:05:06 -0700 (PDT)
 From:   Andrew Halaney <ahalaney@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -75,10 +75,11 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
         jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next v4 06/12] net: stmmac: Fix DMA typo
-Date:   Tue, 11 Apr 2023 15:04:03 -0500
-Message-Id: <20230411200409.455355-7-ahalaney@redhat.com>
+        Andrew Halaney <ahalaney@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v4 07/12] net: stmmac: Remove some unnecessary void pointers
+Date:   Tue, 11 Apr 2023 15:04:04 -0500
+Message-Id: <20230411200409.455355-8-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230411200409.455355-1-ahalaney@redhat.com>
 References: <20230411200409.455355-1-ahalaney@redhat.com>
@@ -95,33 +96,323 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAM is supposed to be DMA. Fix it to improve readability.
+There's a few spots in the hardware interface where a void pointer is
+used, but what's passed in and later cast out is always the same type.
 
+Just use the proper type directly.
+
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
 
 Changes since v3:
-    * None
+    * Add Reviewed-by (Simon)
 
 Changes since v2:
-    * New patch, stumbled into this typo when refactoring
+    * New patch. In later patches refactoring hwif.h I touched these in
+      their first form (which was later dropped) and changed this as
+      part of that. But I thought the change was still good overall,
+      so I left this improvement in the series.
 
- drivers/net/ethernet/stmicro/stmmac/common.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../net/ethernet/stmicro/stmmac/chain_mode.c  | 10 +++----
+ .../ethernet/stmicro/stmmac/dwmac100_dma.c    |  4 +--
+ .../ethernet/stmicro/stmmac/dwmac4_descs.c    |  8 ++---
+ .../ethernet/stmicro/stmmac/dwxgmac2_descs.c  |  6 ++--
+ .../net/ethernet/stmicro/stmmac/enh_desc.c    | 11 +++----
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    | 30 ++++++++++++-------
+ .../net/ethernet/stmicro/stmmac/norm_desc.c   |  8 ++---
+ .../net/ethernet/stmicro/stmmac/ring_mode.c   | 10 +++----
+ 8 files changed, 47 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
-index 54bb072aeb2d..4ad692c4116c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/common.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/common.h
-@@ -242,7 +242,7 @@ struct stmmac_safety_stats {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c b/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
+index 2e8744ac6b91..fb55efd52240 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
++++ b/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
+@@ -14,9 +14,9 @@
  
- #define SF_DMA_MODE 1		/* DMA STORE-AND-FORWARD Operation Mode */
+ #include "stmmac.h"
  
--/* DAM HW feature register fields */
-+/* DMA HW feature register fields */
- #define DMA_HW_FEAT_MIISEL	0x00000001	/* 10/100 Mbps Support */
- #define DMA_HW_FEAT_GMIISEL	0x00000002	/* 1000 Mbps Support */
- #define DMA_HW_FEAT_HDSEL	0x00000004	/* Half-Duplex Support */
+-static int jumbo_frm(void *p, struct sk_buff *skb, int csum)
++static int jumbo_frm(struct stmmac_tx_queue *tx_q, struct sk_buff *skb,
++		     int csum)
+ {
+-	struct stmmac_tx_queue *tx_q = (struct stmmac_tx_queue *)p;
+ 	unsigned int nopaged_len = skb_headlen(skb);
+ 	struct stmmac_priv *priv = tx_q->priv_data;
+ 	unsigned int entry = tx_q->cur_tx;
+@@ -125,9 +125,8 @@ static void init_dma_chain(void *des, dma_addr_t phy_addr,
+ 	}
+ }
+ 
+-static void refill_desc3(void *priv_ptr, struct dma_desc *p)
++static void refill_desc3(struct stmmac_rx_queue *rx_q, struct dma_desc *p)
+ {
+-	struct stmmac_rx_queue *rx_q = (struct stmmac_rx_queue *)priv_ptr;
+ 	struct stmmac_priv *priv = rx_q->priv_data;
+ 
+ 	if (priv->hwts_rx_en && !priv->extend_desc)
+@@ -141,9 +140,8 @@ static void refill_desc3(void *priv_ptr, struct dma_desc *p)
+ 				      sizeof(struct dma_desc)));
+ }
+ 
+-static void clean_desc3(void *priv_ptr, struct dma_desc *p)
++static void clean_desc3(struct stmmac_tx_queue *tx_q, struct dma_desc *p)
+ {
+-	struct stmmac_tx_queue *tx_q = (struct stmmac_tx_queue *)priv_ptr;
+ 	struct stmmac_priv *priv = tx_q->priv_data;
+ 	unsigned int entry = tx_q->dirty_tx;
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c b/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
+index 8f0d9bc7cab5..f6abc7bfd29d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac100_dma.c
+@@ -80,10 +80,10 @@ static void dwmac100_dump_dma_regs(void __iomem *ioaddr, u32 *reg_space)
+ }
+ 
+ /* DMA controller has two counters to track the number of the missed frames. */
+-static void dwmac100_dma_diagnostic_fr(void *data, struct stmmac_extra_stats *x,
++static void dwmac100_dma_diagnostic_fr(struct net_device_stats *stats,
++				       struct stmmac_extra_stats *x,
+ 				       void __iomem *ioaddr)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	u32 csr8 = readl(ioaddr + DMA_MISSED_FRAME_CTR);
+ 
+ 	if (unlikely(csr8)) {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+index 8cc80b1db4cb..6a011d8633e8 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+@@ -13,11 +13,11 @@
+ #include "dwmac4.h"
+ #include "dwmac4_descs.h"
+ 
+-static int dwmac4_wrback_get_tx_status(void *data, struct stmmac_extra_stats *x,
++static int dwmac4_wrback_get_tx_status(struct net_device_stats *stats,
++				       struct stmmac_extra_stats *x,
+ 				       struct dma_desc *p,
+ 				       void __iomem *ioaddr)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	unsigned int tdes3;
+ 	int ret = tx_done;
+ 
+@@ -73,10 +73,10 @@ static int dwmac4_wrback_get_tx_status(void *data, struct stmmac_extra_stats *x,
+ 	return ret;
+ }
+ 
+-static int dwmac4_wrback_get_rx_status(void *data, struct stmmac_extra_stats *x,
++static int dwmac4_wrback_get_rx_status(struct net_device_stats *stats,
++				       struct stmmac_extra_stats *x,
+ 				       struct dma_desc *p)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	unsigned int rdes1 = le32_to_cpu(p->des1);
+ 	unsigned int rdes2 = le32_to_cpu(p->des2);
+ 	unsigned int rdes3 = le32_to_cpu(p->des3);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+index b1f0c3984a09..13c347ee8be9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+@@ -8,7 +8,8 @@
+ #include "common.h"
+ #include "dwxgmac2.h"
+ 
+-static int dwxgmac2_get_tx_status(void *data, struct stmmac_extra_stats *x,
++static int dwxgmac2_get_tx_status(struct net_device_stats *stats,
++				  struct stmmac_extra_stats *x,
+ 				  struct dma_desc *p, void __iomem *ioaddr)
+ {
+ 	unsigned int tdes3 = le32_to_cpu(p->des3);
+@@ -22,7 +23,8 @@ static int dwxgmac2_get_tx_status(void *data, struct stmmac_extra_stats *x,
+ 	return ret;
+ }
+ 
+-static int dwxgmac2_get_rx_status(void *data, struct stmmac_extra_stats *x,
++static int dwxgmac2_get_rx_status(struct net_device_stats *stats,
++				  struct stmmac_extra_stats *x,
+ 				  struct dma_desc *p)
+ {
+ 	unsigned int rdes3 = le32_to_cpu(p->des3);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
+index 1bcbbd724fb5..a91d8f13a931 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
++++ b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
+@@ -12,10 +12,10 @@
+ #include "common.h"
+ #include "descs_com.h"
+ 
+-static int enh_desc_get_tx_status(void *data, struct stmmac_extra_stats *x,
++static int enh_desc_get_tx_status(struct net_device_stats *stats,
++				  struct stmmac_extra_stats *x,
+ 				  struct dma_desc *p, void __iomem *ioaddr)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	unsigned int tdes0 = le32_to_cpu(p->des0);
+ 	int ret = tx_done;
+ 
+@@ -117,7 +117,8 @@ static int enh_desc_coe_rdes0(int ipc_err, int type, int payload_err)
+ 	return ret;
+ }
+ 
+-static void enh_desc_get_ext_status(void *data, struct stmmac_extra_stats *x,
++static void enh_desc_get_ext_status(struct net_device_stats *stats,
++				    struct stmmac_extra_stats *x,
+ 				    struct dma_extended_desc *p)
+ {
+ 	unsigned int rdes0 = le32_to_cpu(p->basic.des0);
+@@ -181,10 +182,10 @@ static void enh_desc_get_ext_status(void *data, struct stmmac_extra_stats *x,
+ 	}
+ }
+ 
+-static int enh_desc_get_rx_status(void *data, struct stmmac_extra_stats *x,
++static int enh_desc_get_rx_status(struct net_device_stats *stats,
++				  struct stmmac_extra_stats *x,
+ 				  struct dma_desc *p)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	unsigned int rdes0 = le32_to_cpu(p->des0);
+ 	int ret = good_frame;
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+index 1cc286b000b6..7f906ef3ea4f 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+@@ -56,8 +56,9 @@ struct stmmac_desc_ops {
+ 	/* Last tx segment reports the transmit status */
+ 	int (*get_tx_ls)(struct dma_desc *p);
+ 	/* Return the transmit status looking at the TDES1 */
+-	int (*tx_status)(void *data, struct stmmac_extra_stats *x,
+-			struct dma_desc *p, void __iomem *ioaddr);
++	int (*tx_status)(struct net_device_stats *stats,
++			 struct stmmac_extra_stats *x,
++			 struct dma_desc *p, void __iomem *ioaddr);
+ 	/* Get the buffer size from the descriptor */
+ 	int (*get_tx_len)(struct dma_desc *p);
+ 	/* Handle extra events on specific interrupts hw dependent */
+@@ -65,10 +66,12 @@ struct stmmac_desc_ops {
+ 	/* Get the receive frame size */
+ 	int (*get_rx_frame_len)(struct dma_desc *p, int rx_coe_type);
+ 	/* Return the reception status looking at the RDES1 */
+-	int (*rx_status)(void *data, struct stmmac_extra_stats *x,
+-			struct dma_desc *p);
+-	void (*rx_extended_status)(void *data, struct stmmac_extra_stats *x,
+-			struct dma_extended_desc *p);
++	int (*rx_status)(struct net_device_stats *stats,
++			 struct stmmac_extra_stats *x,
++			 struct dma_desc *p);
++	void (*rx_extended_status)(struct net_device_stats *stats,
++				   struct stmmac_extra_stats *x,
++				   struct dma_extended_desc *p);
+ 	/* Set tx timestamp enable bit */
+ 	void (*enable_tx_timestamp) (struct dma_desc *p);
+ 	/* get tx timestamp status */
+@@ -185,8 +188,9 @@ struct stmmac_dma_ops {
+ 	void (*dma_tx_mode)(void __iomem *ioaddr, int mode, u32 channel,
+ 			    int fifosz, u8 qmode);
+ 	/* To track extra statistic (if supported) */
+-	void (*dma_diagnostic_fr) (void *data, struct stmmac_extra_stats *x,
+-				   void __iomem *ioaddr);
++	void (*dma_diagnostic_fr)(struct net_device_stats *stats,
++				  struct stmmac_extra_stats *x,
++				  void __iomem *ioaddr);
+ 	void (*enable_dma_transmission) (void __iomem *ioaddr);
+ 	void (*enable_dma_irq)(void __iomem *ioaddr, u32 chan,
+ 			       bool rx, bool tx);
+@@ -533,16 +537,20 @@ struct stmmac_hwtimestamp {
+ #define stmmac_timestamp_interrupt(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, ptp, timestamp_interrupt, __args)
+ 
++struct stmmac_tx_queue;
++struct stmmac_rx_queue;
++
+ /* Helpers to manage the descriptors for chain and ring modes */
+ struct stmmac_mode_ops {
+ 	void (*init) (void *des, dma_addr_t phy_addr, unsigned int size,
+ 		      unsigned int extend_desc);
+ 	unsigned int (*is_jumbo_frm) (int len, int ehn_desc);
+-	int (*jumbo_frm)(void *priv, struct sk_buff *skb, int csum);
++	int (*jumbo_frm)(struct stmmac_tx_queue *tx_q, struct sk_buff *skb,
++			 int csum);
+ 	int (*set_16kib_bfsize)(int mtu);
+ 	void (*init_desc3)(struct dma_desc *p);
+-	void (*refill_desc3) (void *priv, struct dma_desc *p);
+-	void (*clean_desc3) (void *priv, struct dma_desc *p);
++	void (*refill_desc3)(struct stmmac_rx_queue *rx_q, struct dma_desc *p);
++	void (*clean_desc3)(struct stmmac_tx_queue *tx_q, struct dma_desc *p);
+ };
+ 
+ #define stmmac_mode_init(__priv, __args...) \
+diff --git a/drivers/net/ethernet/stmicro/stmmac/norm_desc.c b/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
+index e3da4da242ee..350e6670a576 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
++++ b/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
+@@ -12,10 +12,10 @@
+ #include "common.h"
+ #include "descs_com.h"
+ 
+-static int ndesc_get_tx_status(void *data, struct stmmac_extra_stats *x,
++static int ndesc_get_tx_status(struct net_device_stats *stats,
++			       struct stmmac_extra_stats *x,
+ 			       struct dma_desc *p, void __iomem *ioaddr)
+ {
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 	unsigned int tdes0 = le32_to_cpu(p->des0);
+ 	unsigned int tdes1 = le32_to_cpu(p->des1);
+ 	int ret = tx_done;
+@@ -70,12 +70,12 @@ static int ndesc_get_tx_len(struct dma_desc *p)
+  * and, if required, updates the multicast statistics.
+  * In case of success, it returns good_frame because the GMAC device
+  * is supposed to be able to compute the csum in HW. */
+-static int ndesc_get_rx_status(void *data, struct stmmac_extra_stats *x,
++static int ndesc_get_rx_status(struct net_device_stats *stats,
++			       struct stmmac_extra_stats *x,
+ 			       struct dma_desc *p)
+ {
+ 	int ret = good_frame;
+ 	unsigned int rdes0 = le32_to_cpu(p->des0);
+-	struct net_device_stats *stats = (struct net_device_stats *)data;
+ 
+ 	if (unlikely(rdes0 & RDES0_OWN))
+ 		return dma_own;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/ring_mode.c b/drivers/net/ethernet/stmicro/stmmac/ring_mode.c
+index 2b5b17d8b8a0..d218412ca832 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/ring_mode.c
++++ b/drivers/net/ethernet/stmicro/stmmac/ring_mode.c
+@@ -14,9 +14,9 @@
+ 
+ #include "stmmac.h"
+ 
+-static int jumbo_frm(void *p, struct sk_buff *skb, int csum)
++static int jumbo_frm(struct stmmac_tx_queue *tx_q, struct sk_buff *skb,
++		     int csum)
+ {
+-	struct stmmac_tx_queue *tx_q = (struct stmmac_tx_queue *)p;
+ 	unsigned int nopaged_len = skb_headlen(skb);
+ 	struct stmmac_priv *priv = tx_q->priv_data;
+ 	unsigned int entry = tx_q->cur_tx;
+@@ -101,9 +101,8 @@ static unsigned int is_jumbo_frm(int len, int enh_desc)
+ 	return ret;
+ }
+ 
+-static void refill_desc3(void *priv_ptr, struct dma_desc *p)
++static void refill_desc3(struct stmmac_rx_queue *rx_q, struct dma_desc *p)
+ {
+-	struct stmmac_rx_queue *rx_q = priv_ptr;
+ 	struct stmmac_priv *priv = rx_q->priv_data;
+ 
+ 	/* Fill DES3 in case of RING mode */
+@@ -117,9 +116,8 @@ static void init_desc3(struct dma_desc *p)
+ 	p->des3 = cpu_to_le32(le32_to_cpu(p->des2) + BUF_SIZE_8KiB);
+ }
+ 
+-static void clean_desc3(void *priv_ptr, struct dma_desc *p)
++static void clean_desc3(struct stmmac_tx_queue *tx_q, struct dma_desc *p)
+ {
+-	struct stmmac_tx_queue *tx_q = (struct stmmac_tx_queue *)priv_ptr;
+ 	struct stmmac_priv *priv = tx_q->priv_data;
+ 	unsigned int entry = tx_q->dirty_tx;
+ 
 -- 
 2.39.2
 
