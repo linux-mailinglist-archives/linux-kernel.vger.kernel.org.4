@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755BF6DE582
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610E36DE584
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 22:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjDKULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 16:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S229699AbjDKULL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 16:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDKULH (ORCPT
+        with ESMTP id S229573AbjDKULJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:11:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1EB559E;
-        Tue, 11 Apr 2023 13:10:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B60E960FA2;
-        Tue, 11 Apr 2023 20:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E62F8C433EF;
-        Tue, 11 Apr 2023 20:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681243782;
-        bh=PL0YCjrpk8wMnvPj0o2kokiqLnGSaS7cu9sqJvxA2r8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WLvo2IUWiVWwN+k7aEhcC8og0gthh8g1MjyBRUk8SSIE3PZr7W3GWIMdDtFvZXzgz
-         ZPVAN1JCvxH8AHLHLlBjLSWvcH9BqzAYEQxnrWuRuLUJk1w5H4kQu9mVW3drDkr0dj
-         yd5a1VG5/TlrqdsA8cJBBKDdmjgCbzobE23LPZTFw5HZvb78SvWHaVJFU5OWJSfWCY
-         aMm7J5doHsjkVEkEzNqNOfQuCUIfh8BbJkDZg/BSn5FzC5sLeOjIjQINu8XxBa4k4g
-         HjqPWBtjGzTvEGfvC/GTmH/ZfAuBB+aW5nYK5u3Z2Ki3Vo290SsnmP8jrMwE+fR6Uk
-         qDzLL4K4bqoTg==
-Date:   Tue, 11 Apr 2023 21:09:37 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 0/7] Add JH7110 DPHY PMU support
-Message-ID: <20230411-senator-clarity-7577b85884ad@spud>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YamoAzPVhVpZIOuh"
-Content-Disposition: inline
-In-Reply-To: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 16:11:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1E55AD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:10:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54c060d7cdfso174198687b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 13:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681243792; x=1683835792;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kAz690gVxE8TfKjgFFdLa3/V7T3THIGi813h83xR35g=;
+        b=eX9hSaKuZddrGiRb81kOHRHUQ8d+cRaNseEvFFxq+rbJMpuRDbassOCn41qnbg97xM
+         HRT6Ec7dww6nMhII92UEzKUn+ke7SZ3cgJ+jQSThSNXEiSbJv2Ds5CZ8MqTYpuK2/Glp
+         QpYIafPTmjGwEBZFO+1eL5EHxM/DpuEPBtyoSOxI1bDk69SoBMLBRxbpx7afZ8m2/Ndc
+         Q87xsW8YKx6N56SETlZaYX9fiIoirH4ZBG9E6qy/e/yDX7epe/92zYaBT6akUbIpaAxI
+         ZN1c1CWfFwxhW8OovXCrd9DaQXbXh/0285fKanj8OrLo8SfI0mOKiE7iKIu3viH2C8U5
+         Aj9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681243792; x=1683835792;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kAz690gVxE8TfKjgFFdLa3/V7T3THIGi813h83xR35g=;
+        b=Gxrs3nA7TNw4lq1Vsb+sYWWC8jSyk19uwhuJFj3eIrdx2YPQcTQtu3tvKuxE1+oD2m
+         y4mnHRQLzYxrVBs0AnMGPMLoAKwD9YIsLzpQi19iU8sHhPBsyAmnnMQ0pqjFRLh0wqUx
+         QdJmPbqlwOCqys+m2DGnwbsZl93SVRpn8Ux5dx728iLJWcFXjQp9PNqi/7IUsGaZQfDi
+         gzAwUEOHipIwoTP4P3LNCQenQVAZHR6U1g2GfMDft5KRt0Kd9YsUMKaqTZQjHam3yBP8
+         RcYT2xRufuw52KDI+P+QaLHMtF4Vpi1KwxRzE8ROlphy3EazqM/xJrEKJIv1ctmyy3yB
+         bzkA==
+X-Gm-Message-State: AAQBX9f/4SAe+Vxa0ZiPSWGzY0VgE+5nWRBkXRjNhxzDNXQ3bREPLGLQ
+        LLCRBKQccmCm9//Fr/D//hQXLmeCBwE1
+X-Google-Smtp-Source: AKy350ZUYQ9eRpLHHcBQUCJlIYZXit4cqkSYLGUe1f+VBzTmSuoJJzSriclFdSsI0oQI0TNGzvqUovPjLfnD
+X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
+ (user=maskray job=sendgmr) by 2002:a05:690c:d0f:b0:545:f3ed:d251 with SMTP id
+ cn15-20020a05690c0d0f00b00545f3edd251mr380659ywb.1.1681243792318; Tue, 11 Apr
+ 2023 13:09:52 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 20:09:44 +0000
+Mime-Version: 1.0
+Message-ID: <20230411200944.2591330-1-maskray@google.com>
+Subject: [PATCH v3] Makefile: use -z pack-relative-relocs
+From:   Fangrui Song <maskray@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 27f2a4db76e8 ("Makefile: fix GDB warning with CONFIG_RELR")
+added --use-android-relr-tags to fix a GDB warning
 
---YamoAzPVhVpZIOuh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+BFD: /android0/linux-next/vmlinux: unknown type [0x13] section `.relr.dyn'
 
-Hey Walker,
+The GDB warning has been fixed in version 11.2.
 
-On Mon, Apr 10, 2023 at 11:47:36PM -0700, Changhuang Liang wrote:
-> This patchset adds mipi dphy power domain driver for the StarFive JH7110
-> SoC. It is used to turn on dphy power switch. The series has been tested
-> on the VisionFive 2 board.
+The DT_ANDROID_RELR tag was deprecated since DT_RELR was standardized.
+Thus, --use-android-relr-tags should be removed. While making the
+change, try -z pack-relative-relocs, which is supported since LLD 15.
+Keep supporting --pack-dyn-relocs=relr as well for older LLD versions.
+There is no indication of obsolescence for --pack-dyn-relocs=relr.
 
-Could you review the driver changes here please.
+As of today, GNU ld supports the latter option for x86 and powerpc64
+ports and has no intention to support --pack-dyn-relocs=relr. In the
+absence of the glibc symbol version GLIBC_ABI_DT_RELR,
+--pack-dyn-relocs=relr and -z pack-relative-relocs are identical in
+ld.lld.
 
-Thanks,
-Conor.
+GNU ld and newer versions of LLD report warnings (instead of errors) for
+unknown -z options. Only errors lead to non-zero exit codes. Therefore,
+we should test --pack-dyn-relocs=relr before testing
+-z pack-relative-relocs.
 
->=20
-> This patchset should be applied after the patchset [1]:
-> [1] https://lore.kernel.org/all/20230406103308.1280860-1-william.qiu@star=
-fivetech.com/
->=20
-> Changhuang Liang (7):
->   dt-bindings: power: Constrain properties for JH7110 PMU
->   soc: starfive: Replace SOC_STARFIVE with ARCH_SATRFIVE
->   soc: starfive: Modify ioremap to regmap
->   soc: starfive: Add pmu type operation
->   soc: starfive: Use call back to parse device tree resources
->   soc: starfive: Add dphy pmu support
->   riscv: dts: starfive: Add dphy rx pmu node
->=20
->  .../bindings/power/starfive,jh7110-pmu.yaml   |  14 +-
->  MAINTAINERS                                   |   1 +
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      |   5 +
->  drivers/soc/starfive/Kconfig                  |   4 +-
->  drivers/soc/starfive/jh71xx_pmu.c             | 213 ++++++++++++++----
->  .../dt-bindings/power/starfive,jh7110-pmu.h   |   3 +
->  6 files changed, 187 insertions(+), 53 deletions(-)
->=20
->=20
-> base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
-> prerequisite-patch-id: 388b8adbb0fe2daf4d07a21eafd4f1bd50ce2403
-> prerequisite-patch-id: 1117ecaa40a353c667b71802ab34ecf9568d8bb2
-> prerequisite-patch-id: b00c6b21fbd0353d88b7c9b09093ba30b765f45b
-> prerequisite-patch-id: 08ec9027e8a5c6fdf201726833168c7464a9b94d
-> prerequisite-patch-id: fb5120248e48fe1faf053ae0b490c92507ec2b44
-> prerequisite-patch-id: 4b93d8d590b0a2abe7b4be5287232c494c35be4a
-> prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
-> prerequisite-patch-id: c09c4c68af017b8e5c97b515cb50b70c18a2e705
-> prerequisite-patch-id: 0df8ccb0e848c2df4c2da95026494bebecede92d
-> prerequisite-patch-id: 315303931e4b6499de7127a88113763f86e97e16
-> prerequisite-patch-id: 40cb8212ddb024c20593f73d8b87d9894877e172
-> prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
-> prerequisite-patch-id: d57cc467fb036241b9276320ff076c4a30d376d6
-> prerequisite-patch-id: 6e563d68bc5dbf951d4ced17897f9cc4d56169fe
-> prerequisite-patch-id: 61ec2caa21fd0fc60e57977f7d16d3f72b135745
-> prerequisite-patch-id: 1387a7e87b446329dfc21f3e575ceae7ebcf954c
-> prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
-> prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
-> prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
-> prerequisite-patch-id: 9007c8610fdcd387592475949864edde874c20a2
-> prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
-> prerequisite-patch-id: 0a0ac5a8a90655b415f6b62e324f3db083cdaaee
-> prerequisite-patch-id: 7ff6864ac74df5392c8646fe756cadd584fcc813
-> prerequisite-patch-id: 284b5d1b95c6d68bca08db1e82ed14930c98b777
-> --
-> 2.25.1
+Link: https://github.com/ClangBuiltLinux/linux/issues/1057
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=a619b58721f0a03fd91c27670d3e4c2fb0d88f1e
+Signed-off-by: Fangrui Song <maskray@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ Makefile                      | 3 ++-
+ scripts/tools-support-relr.sh | 8 ++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
---YamoAzPVhVpZIOuh
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/Makefile b/Makefile
+index 5aeea3d98fc0..d9c6d1839cf0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1113,7 +1113,8 @@ LDFLAGS_vmlinux	+= -X
+ endif
+ 
+ ifeq ($(CONFIG_RELR),y)
+-LDFLAGS_vmlinux	+= --pack-dyn-relocs=relr --use-android-relr-tags
++# ld.lld before 15 did not support -z pack-relative-relocs.
++LDFLAGS_vmlinux	+= $(call ld-option,--pack-dyn-relocs=relr,-z pack-relative-relocs)
+ endif
+ 
+ # We never want expected sections to be placed heuristically by the
+diff --git a/scripts/tools-support-relr.sh b/scripts/tools-support-relr.sh
+index cb55878bd5b8..4c121946e517 100755
+--- a/scripts/tools-support-relr.sh
++++ b/scripts/tools-support-relr.sh
+@@ -7,8 +7,12 @@ trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXIT
+ cat << "END" | $CC -c -x c - -o $tmp_file.o >/dev/null 2>&1
+ void *p = &p;
+ END
+-$LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=relr \
+-  --use-android-relr-tags -o $tmp_file
++
++# ld.lld before 15 did not support -z pack-relative-relocs.
++if ! $LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=relr -o $tmp_file 2>/dev/null; then
++	$LD $tmp_file.o -shared -Bsymbolic -z pack-relative-relocs -o $tmp_file 2>&1 |
++		grep -q pack-relative-relocs && exit 1
++fi
+ 
+ # Despite printing an error message, GNU nm still exits with exit code 0 if it
+ # sees a relr section. So we need to check that nothing is printed to stderr.
+-- 
+2.40.0.577.gac1e443424-goog
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDW+gQAKCRB4tDGHoIJi
-0hNnAQC1KGXvowdmm9YQEJTQeXKxPfXriyg+RJhOctyiR1stjAEA3Cni1XQ7tv+c
-y6rF+267+XfMV52+KOBvM/ImGhaxtws=
-=KRno
------END PGP SIGNATURE-----
-
---YamoAzPVhVpZIOuh--
