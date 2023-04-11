@@ -2,170 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1D96DE39E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677E16DE3A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjDKSOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S230177AbjDKSOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjDKSOo (ORCPT
+        with ESMTP id S230370AbjDKSOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:14:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E1AE5A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681236835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RerCY0HGkQYWMAGOybHYjUb4SPrEcjg1XoaZcfXg++g=;
-        b=WByFDvgkYjWHCMfYelL4q0fZIeRInpoJaCPPXRPrsjUAocNh0ZoxQsqbXOoGdnVEowZT9q
-        UG2Clg9D1IeXoQrf0+ZhQeELgF75GE6FZiDOYTA4CKuU4V34tCQ5EiD6ET7fz+8Fd85v72
-        AQuNAA+NAqaKQYaHHl+HWXsEfamHj6g=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-iJPy-Em1MKy9c7x0_q0u8Q-1; Tue, 11 Apr 2023 14:13:54 -0400
-X-MC-Unique: iJPy-Em1MKy9c7x0_q0u8Q-1
-Received: by mail-ej1-f69.google.com with SMTP id ja8-20020a170907988800b0094aa0655f0eso2402046ejc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:13:53 -0700 (PDT)
+        Tue, 11 Apr 2023 14:14:48 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604E2E4E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:14:47 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a23so12059564lfk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681236885; x=1683828885;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=haHDBJYeen17j/Bq6goKahiOKwrx+coG/GAwlvtLVe0=;
+        b=sOL4tw1Yw5xOC/4BQ5YVkcjtyJadeVPB6DbU6JbQtDmnYZ8pbLJsBrd8CdimjkeFh0
+         JA1z1eZD7p+6T57OCyXJ5gHBAuRa2QtCzt9kYg4h3I30VvMohfRGOhi5L1EwWEwYqCmz
+         jcze6icyktJgPTrFlrPZZlN1A2YiEGUT1Fp1mNR4kQNxUak2SXwsh79KZdATWchhuWbt
+         1TfRFiVCIQLhBAkxUnMsWoEi4JCR2SQzYird5CVVjDuLFpDwC9+cAlBUduzbiwMMRm2v
+         UIRhQehxgHBbE9k9VA6/vNR6GjOT7ANajy9VchGjw/CaRDXc8QXHmS/l5GPuPeCXvhru
+         91vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681236833;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RerCY0HGkQYWMAGOybHYjUb4SPrEcjg1XoaZcfXg++g=;
-        b=ihBaremOxmbUreGsk3DXiX/9Ffydvlhr0ezERgLL5WaxCllN7uY7Oytt88rQKYkxjA
-         PMye/XY9jL46FdDrCb63fHIbKu/WorgqgUmyJjpk9GNzGvDiddG+USZdcQnlmIURccZc
-         PvT764qY3HRRRIjaXjJWDinyAPVmVbzNjid61m300mi15ZtElCsu2SI+upUeECQZ4OD8
-         X8GvMTPgMwOAv6V1t6ZH8cJm3D1APhLiMb2bNahLPKaZ6zx+gFf5mH1o60RLiga7J5ND
-         1TaMc5x9hT+DRXIo9u4gYn59k5oEQjzn2+o0TdHRhMEUHaROXG+jPaHuXP/VWHBUtr1c
-         neDA==
-X-Gm-Message-State: AAQBX9cUi/l8/P0K/ov9EdYjPUsCoY44pEut83uNoh0PUdRYHj9AsUfM
-        N/aHo29RhiIccytLW6jWT/jvb/DNV3JWJv6F0KO/nQZQcMvSHvqewxhKYTOdvU36NM8NYOn2LL4
-        CcJymLaqYygJMcgOzVsbUM7M1
-X-Received: by 2002:a17:906:b2c8:b0:92f:f655:cc78 with SMTP id cf8-20020a170906b2c800b0092ff655cc78mr3605086ejb.53.1681236833081;
-        Tue, 11 Apr 2023 11:13:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bdO2gyZ3joFZbc+2ky2KNki/3ikt5tL+a0aCOQ5MzjlIgiZGpN0xDyLgfYz1JG/c8F5CKPcA==
-X-Received: by 2002:a17:906:b2c8:b0:92f:f655:cc78 with SMTP id cf8-20020a170906b2c800b0092ff655cc78mr3605065ejb.53.1681236832744;
-        Tue, 11 Apr 2023 11:13:52 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id m11-20020a17090677cb00b0094e44445f30sm291729ejn.215.2023.04.11.11.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 11:13:52 -0700 (PDT)
-Message-ID: <32c28b47-2a3b-db1d-e927-ae44d52cae0b@redhat.com>
-Date:   Tue, 11 Apr 2023 20:13:50 +0200
+        d=1e100.net; s=20210112; t=1681236885; x=1683828885;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=haHDBJYeen17j/Bq6goKahiOKwrx+coG/GAwlvtLVe0=;
+        b=OUl+UdRpRkZqNlIfjtdPifEqujliCTHCvWTaVqfbV/1kIdxOqCnP7NgQg0sPSYvfdu
+         J42SHie+EUvQGTSaFypuO8qLUsxuK8HesBLI4B49PoLrFICdaXUwDZ91TTvF58jTXbJr
+         mK0r/+mX7yy8WQC9xr1FaFnaVb/hNRhYevQCeGIv3dchxyKVEQLjNqrnytdxhXZqE/lq
+         9l2Z3o4+HuYsYz4Cw6iCnKmvpk6Ez03BxTFvpIg/+JgH8oKmOJJjD1s40szmYI1myOlJ
+         rRJW/WBlEzRxdw8fg6GK9dhvSDl3WzNoMj8gLQtEM5t839Eyvlue+tJrzWmB3w3DKhCR
+         5Z+A==
+X-Gm-Message-State: AAQBX9eVUs6JNXayI+TxCBcl5mrGBuW3xUp7fLQ9g45Z8wcuyXKKvBc2
+        vl8bgPYBBT/alK8d4119CODj/w==
+X-Google-Smtp-Source: AKy350ZQzPKxuKGLQpIcA9a9HqcsrQZ/SI+4riXrgp6kYJX3QHuQfF1Pt2LykxCCNn7tHjzWpkEybA==
+X-Received: by 2002:ac2:44b5:0:b0:4e8:3fc7:9483 with SMTP id c21-20020ac244b5000000b004e83fc79483mr872270lfm.23.1681236885634;
+        Tue, 11 Apr 2023 11:14:45 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id u25-20020ac243d9000000b004da8168eba2sm2593868lfl.237.2023.04.11.11.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 11:14:45 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/4] SM8150 Kumano updates
+Date:   Tue, 11 Apr 2023 20:14:40 +0200
+Message-Id: <20230315-topic-kumano_dts0-v2-0-0ca7fa521b86@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/scheduler: set entity to NULL in
- drm_sched_entity_pop_job()
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        airlied@gmail.com, daniel@ffwll.ch, l.stach@pengutronix.de,
-        "Prosyak, Vitaly" <Vitaly.Prosyak@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230331000622.4156-1-dakr@redhat.com>
- <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
- <ecef210b-dc7d-e385-f9b2-927d55a6777e@amd.com>
-Content-Language: en-US
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <ecef210b-dc7d-e385-f9b2-927d55a6777e@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJCjNWQC/4WN0Q6CIBRAf8XxHA2uodZT/9FcAwS9y8CBuprz3
+ 0OfeqrHc7azs5BoAppILtlCgpkxoncJ4JAR3UnXGopNYgIMcpZzQUc/oKaP6SmdvzdjZNQUmpc
+ gtAWhSOqUjIaqIJ3uUummvk9yCMbiax/d6sQdxtGH9/6d+WZ/LWZOGS1Pha1AnSW36tqjk8Eff
+ Wi35b/U8kqABgl5WX2n9bquH6YVXH0DAQAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681236884; l=905;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=v5tfXJotop1vZ13L1OHEWWgybeV36LIK+/49LO+00s8=;
+ b=dfVQDnRMzYsqqzsGb3x70DK5vT4jAyAtwWl9+p7PSj4tK0qTXCB3F69bVAmRoyDjY5yO3hULy19y
+ tsEOJ/N3BxkvGEg+xEpnCPJfixrKYo/SQPU8TU41Dalwg52O6kv1
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 19:39, Luben Tuikov wrote:
-> On 2023-03-31 01:59, Christian König wrote:
->> Am 31.03.23 um 02:06 schrieb Danilo Krummrich:
->>> It already happend a few times that patches slipped through which
->>> implemented access to an entity through a job that was already removed
->>> from the entities queue. Since jobs and entities might have different
->>> lifecycles, this can potentially cause UAF bugs.
->>>
->>> In order to make it obvious that a jobs entity pointer shouldn't be
->>> accessed after drm_sched_entity_pop_job() was called successfully, set
->>> the jobs entity pointer to NULL once the job is removed from the entity
->>> queue.
->>>
->>> Moreover, debugging a potential NULL pointer dereference is way easier
->>> than potentially corrupted memory through a UAF.
->>>
->>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
->>
->> In general "YES PLEASE!", but I fear that this will break amdgpus reset
->> sequence.
->>
->> On the other hand when amdgpu still relies on that pointer it's clearly
->> a bug (which I pointed out tons of times before).
->>
->> Luben any opinion on that? Could you drive cleaning that up as well?
-> 
-> I didn't find any references to scheduling entity after the job
-> is submitted to the hardware. (I commented the same in the other
-> thread, we just need to decide which way to go.)
+v1 -> v2:
+- no-emmc -> no-mmc [4/4]
+- drop superfluous input-enable [3/4]
 
-AFAICS from the other mail thread it seems to be consensus to not 
-ref-count entities and handle job statistics differently.
+v1: https://lore.kernel.org/r/20230315-topic-kumano_dts0-v1-0-f1852c2a2378@linaro.org
 
-Should we go ahead and take this patch then? Maybe it also makes sense 
-to send a V2 additionally adding a comment to the drm_sched_job 
-structure mentioning that .entity must not be used after the job was 
-taken from the entities queue.
+Add gpio-line-names, set up fixed camera regulators and enable SDHCI2
+on Xperia 1 / 5.
 
-- Danilo
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (4):
+      arm64: dts: qcom: sm8150-kumano: Add GPIO line names for PMIC GPIOs
+      arm64: dts: qcom: sm8150-kumano: Add GPIO line names for TLMM
+      arm64: dts: qcom: sm8150-kumano: Set up camera fixed regulators
+      arm64: dts: qcom: sm8150-kumano: Enable SDHCI2
 
-> 
-> Regards,
-> Luben
-> 
->>
->> Thanks,
->> Christian.
->>
->>> ---
->>> I'm aware that drivers could already use job->entity in arbitrary places, since
->>> they in control of when the entity is actually freed. A quick grep didn't give
->>> me any results where this would actually be the case, however maybe I also just
->>> didn't catch it.
->>>
->>> If, therefore, we don't want to set job->entity to NULL I think we should at
->>> least add a comment somewhere.
->>> ---
->>>
->>>    drivers/gpu/drm/scheduler/sched_entity.c | 6 ++++++
->>>    1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
->>> index 15d04a0ec623..a9c6118e534b 100644
->>> --- a/drivers/gpu/drm/scheduler/sched_entity.c
->>> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
->>> @@ -448,6 +448,12 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
->>>    			drm_sched_rq_update_fifo(entity, next->submit_ts);
->>>    	}
->>>    
->>> +	/* Jobs and entities might have different lifecycles. Since we're
->>> +	 * removing the job from the entities queue, set the jobs entity pointer
->>> +	 * to NULL to prevent any future access of the entity through this job.
->>> +	 */
->>> +	sched_job->entity = NULL;
->>> +
->>>    	return sched_job;
->>>    }
->>>    
->>
-> 
+ .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   | 335 +++++++++++++++++++++
+ 1 file changed, 335 insertions(+)
+---
+base-commit: 009795d283d1f9f043e5a4ff97d4140cde17e2d3
+change-id: 20230315-topic-kumano_dts0-e6c1725cf25b
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
