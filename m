@@ -2,77 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F826DD5F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8B06DD5FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjDKIvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S231153AbjDKIwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjDKIvt (ORCPT
+        with ESMTP id S231148AbjDKIwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:51:49 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B3E130
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:51:48 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-633a6bf6af9so642840b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1681203108;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vp0eq9dOyQ9LiZivIOEX8Snc/Vjl4AGDIHEdpoo1Be8=;
-        b=ceIR9II3v+3BnB4Ihj+HgwYOHoI8+5mu4QRYxIdgztNjPtegtY9Y75Ta9ZZTRSS7pu
-         EO+pJY6xoZUWWjmeUf4kxW9M46nbPhjCVs7fDqbRb6+a2F2KFYWFEjPKenV5o0/tDbzZ
-         2hjut1opqvsxh08oA2Xt3H0kaJb3rlZRF25e6F+kYg5yMuaUq5T+mXNvl4fjhSoKYthN
-         qoufN0GkwduYauCqzl6ZsBu93Vgc2QcLYaKY4IglahJ8SzWCV1NDHg/aJgyUTq3UjC1U
-         5vYY9MsQ9X9fE6S5apJv8YZyP7NziMpKbjXJRVUv3Lz6tPU121KyXV7TjtlGBKNz6cUb
-         58aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681203108;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vp0eq9dOyQ9LiZivIOEX8Snc/Vjl4AGDIHEdpoo1Be8=;
-        b=BA9OuTHa7ndlvJEh3JFka7z2llloZpJfM7v9sbHQZX92DGhRftehVclCkKJLzPgV5m
-         /kF50imidkrjHgqux2MXX+cZ5h1lcwxV4fFfhgUem+lB7MNu79vOZCApWYcIPWiIKhkR
-         Zpf8Oe7qJ5EUzWMbE8YRaaRgCdRfzPEP8QYn74SCu2+Wi2esbMMKeJJo4LTI2GPC6/2G
-         qVyhzlghkSWUL4M9Lj9vEYTk5Wnt0dPJZqzPe5xglh93sKMUq3ILCjJTA3XRSEfWUaPI
-         u3vjCgYjqn9OP/mtgVR/pM8lqzxy8zp+S4MRQR9Bfv1IvQr0q1lqvPx4hmc3Ps35OCX7
-         SdmQ==
-X-Gm-Message-State: AAQBX9djcrEsieci4YDyRN8KXz3Lf/XhUa3o329B/qSDxxkUKD2BNMrV
-        IgWaI8LJ/UQQLniz4J4g6nL1gw==
-X-Google-Smtp-Source: AKy350bAfcx+pzEv0yDiZQWws7mo/brJGMxwoFip7atePKowBKAgBD/zeU+NkAFS3nD9N+aayYdqDg==
-X-Received: by 2002:a62:483:0:b0:637:920c:25fd with SMTP id 125-20020a620483000000b00637920c25fdmr5495471pfe.17.1681203108285;
-        Tue, 11 Apr 2023 01:51:48 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id e20-20020aa78c54000000b0059085684b54sm9573579pfd.140.2023.04.11.01.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 01:51:48 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v3 2/2] tools/virtio: fix build caused by virtio_ring changes
-Date:   Tue, 11 Apr 2023 17:51:39 +0900
-Message-Id: <20230411085139.375393-2-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230411085139.375393-1-mie@igel.co.jp>
-References: <20230411085139.375393-1-mie@igel.co.jp>
+        Tue, 11 Apr 2023 04:52:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9C51724;
+        Tue, 11 Apr 2023 01:51:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F3E24B3;
+        Tue, 11 Apr 2023 01:52:40 -0700 (PDT)
+Received: from [192.168.1.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C31A63F73F;
+        Tue, 11 Apr 2023 01:51:54 -0700 (PDT)
+Message-ID: <d287eff6-77bd-693c-96d3-87d8981b7f96@arm.com>
+Date:   Tue, 11 Apr 2023 10:51:44 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] cpufreq: CPPC: use 10ms delay instead of 2us to avoid
+ high error
+Content-Language: en-US
+To:     Yang Shi <yang@os.amperecomputing.com>
+Cc:     viresh.kumar@linaro.org, scott@os.amperecomputing.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20230328193846.8757-1-yang@os.amperecomputing.com>
+ <CAJZ5v0gQ7vak9DaEmLKe6un60Gcpj7VtmxdjPwuXTi=P=KJjbA@mail.gmail.com>
+ <d08222bf-fa05-3e3b-18dd-d24ced6c1536@os.amperecomputing.com>
+ <4bda6b02-cc50-fa47-c9b6-acda4cf201a8@arm.com>
+ <cd79df5b-68c4-4825-6c29-e560989a1130@os.amperecomputing.com>
+ <195c95b2-f47c-f3d0-5663-97dd4c929ea4@arm.com>
+ <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <3e239024-91d8-ea06-25a4-631496576319@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,122 +53,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the build dependency for virtio_test. The virtio_ring that is used from
-the test requires container_of_const(). Change to use container_of.h kernel
-header directly and adapt related codes.
+Hello Yang,
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
-Changes from v2:
-- Remove an unnecessary change
-- Correct indentations
-- Retrieve the __user definition to prevent any unintended side effects
+>>>>
+>>>> -
+>>>> According to the same ACPI 6.5 s8.4.6.1.2.5 "Time Window Register"
+>>>> paragraph,
+>>>> and assuming we are in the 'Autonomous Selection is not enabled' case,
+>>>> the OS is supposed to write (not read) the delta between successive
+>>>> reads of the
+>>>> counter, so using this field as is would be bending the definition I
+>>>> think.
+>>>>
+>>>> -
+>>>> It is correct that the "Time Window Register" field specifies a value
+>>>> in ms,
+>>>> but it seems a long time to wait for with irqs off.
+>>>
+>>> AFAIK, our platforms don't support "Time Window Register".
+>>>
+>>>>
+>>>> -
+>>>> Theoretically, the perf/ref counters should accumulate to allow
+>>>> computing
+>>>> a correct frequency. Is it possible to know how these counters are
+>>>> accessed ?
+>>>> Is it through PCC channels and there is some undesired delay between
+>>>> the
+>>>> reads of the perf/ref counters ?
+>>>
+>>> The counters are implemented via mmio instead of PCC channels. So the
+>>> cpc_read() calls should go to ACPI_ADR_SPACE_SYSTEM_MEMORY IIRC.
+>>>
+>>>>
+>>>> -
+>>>> About making the delay:
+>>>>       max(cppc_cpufreq_get_transition_delay_us(), Time Winder Register)
+>>>> I think it would be good to know why the values of the counters
+>>>> don't accumulate correctly, ideally by getting a trace where a
+>>>> frequency
+>>>> above the maximum frequency is computed, and with the timestamps at
+>>>> which
+>>>> the counters are read.
+>>>> If the values are coming from PCC channels / the firmware, it might be
+>>>> difficult
+>>>> to get.
+>>>
+>>> I wrote a bpftrace script to trace the below data:
+>>>        - The CPU number
+>>>        - The frequency
+>>>        - The start and end timestamp of the first cppc_get_perf_ctrs()
+>>> call
+>>>        - The duration/latency of the first cppc_get_perf_ctrs() call
+>>>        - The start and end timestamp of the second
+>>> cppc_get_perf_ctrs() call
+>>>        - The duration/latency of the second cppc_get_perf_ctrs() call
+>>>
+>>> The typical logs look like below.
+>>> Good
+>>> CPU: 1
+>>> Freq: 2801485KHz
+>>> First:  2489382384  2489387084 4700ns
+>>> Second: 2489390824  2489394024  3200ns
+>>> --------------------------------------------------
+>>> CPU:    2
+>>> Freq:   2797956KHz
+>>> First:  2490406524  2490411204  4680ns
+>>> Second: 2490414764  2490417684  2920ns
+>>>
+>>> Bad:
+>>> CPU:    55
+>>> Freq:   3969372KHz
+>>> First:  875659868  875721568  61700ns
+>>> Second: 875725148  875727708  2560ns
+>>> --------------------------------------------------
+>>> CPU: 65
+>>> Freq: 3829744KHz
+>>> First:  3854951136  3854995896 44760ns
+>>> Second: 3854999416  3855002696 3280ns
+>>> --------------------------------------------------
+>>> CPU: 21
+>>> Freq: 4279242KHz
+>>> First:  240834204  240910484 76280ns
+>>> Second: 240914264  240916944  2680ns
+>>>
+>>>
+>>> The first line is cpu number, the second line is frequency returned by
+>>> cppc_cpufreq_get_rate(), the third line is the start and end timestamps
+>>> and duration of the first cppc_get_perf_ctrs(), the fourth line is the
+>>> start and end timestamps and duration of the second
+>>> cppc_get_perf_ctrs().
+>>>
+>>> So per the log I think we can tell basically the longer the duration the
+>>> higher the error. The 2us delay is not long enough to offset the impact
+>>> from unexpected latency of reading the counters.
+>>>
+>>> In the worst case the frequency is 4279242KHz, comparing 2800000KHz the
+>>> error is over 50%. So the delay should be 4ms ~ 5ms in order to offset
+>>> the impact from reading the counters if I do the math correctly.
+>>>
+>>> Hope the trace data is helpful to diagnose the problem.
+>>
+>>
+>> Thanks for the data. I was thinking the following was happening:
+>>
+>>   cppc_get_perf_ctrs()[0] cppc_get_perf_ctrs()[1]
+>> /                    \ /                         \
+>> ref[0]    delivered[0]                    ref[1] delivered[1]
+>>    |            |                              |                  |
+>>    v            v                              v                  v
+>> ---------------------------------------------------------------------->
+>> time
+>>     <-delta[0]-> <-------------2us------------> <----delta[1]---->
+>>
+>> If delta[0] is really different from delta[1] like above, then the
+>> reference and delivered counters would have accumulated during different
+>> intervals, resulting in a wrong frequency.
+> 
+> Yeah, it looks like so.
+> 
+>> If more/less than 2us elapse between the two cppc_get_perf_ctrs() calls,
+>> then it shouldn't have any impact. So waiting ~10ms should theoretically
+>> not solve the issue.
+> 
+> I'm not sure whether the 10ms delay really resolved the issue, but it
+> did reduce the magnitude of the error.
+> 
+> BTW, I don't see irq is disabled when reading cpuinfo_cur_freq, so it
+> looks like interrupts could easily result in the difference between
+> delta[0] and delta[1]. And it seems like the difference matters.
 
- tools/include/linux/types.h   |  5 +++++
- tools/virtio/linux/compiler.h |  2 ++
- tools/virtio/linux/kernel.h   |  5 +----
- tools/virtio/linux/uaccess.h  | 11 ++---------
- 4 files changed, 10 insertions(+), 13 deletions(-)
+Ok, maybe disabling irqs would have an impact ?
 
-diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
-index 051fdeaf2670..8519386acd23 100644
---- a/tools/include/linux/types.h
-+++ b/tools/include/linux/types.h
-@@ -49,7 +49,12 @@ typedef __s8  s8;
- #endif
- 
- #define __force
-+/* This is defined in linux/compiler_types.h and is left for backward
-+ * compatibility.
-+ */
-+#ifndef __user
- #define __user
-+#endif
- #define __must_check
- #define __cold
- 
-diff --git a/tools/virtio/linux/compiler.h b/tools/virtio/linux/compiler.h
-index 2c51bccb97bb..1f3a15b954b9 100644
---- a/tools/virtio/linux/compiler.h
-+++ b/tools/virtio/linux/compiler.h
-@@ -2,6 +2,8 @@
- #ifndef LINUX_COMPILER_H
- #define LINUX_COMPILER_H
- 
-+#include "../../../include/linux/compiler_types.h"
-+
- #define WRITE_ONCE(var, val) \
- 	(*((volatile typeof(val) *)(&(var))) = (val))
- 
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 8b877167933d..6702008f7f5c 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
- 
- #include <linux/compiler.h>
-+#include "../../../include/linux/container_of.h"
- #include <linux/log2.h>
- #include <linux/types.h>
- #include <linux/overflow.h>
-@@ -107,10 +108,6 @@ static inline void free_page(unsigned long addr)
- 	free((void *)addr);
- }
- 
--#define container_of(ptr, type, member) ({			\
--	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
--	(type *)( (char *)__mptr - offsetof(type,member) );})
--
- # ifndef likely
- #  define likely(x)	(__builtin_expect(!!(x), 1))
- # endif
-diff --git a/tools/virtio/linux/uaccess.h b/tools/virtio/linux/uaccess.h
-index 991dfb263998..f13828e0c409 100644
---- a/tools/virtio/linux/uaccess.h
-+++ b/tools/virtio/linux/uaccess.h
-@@ -6,15 +6,10 @@
- 
- extern void *__user_addr_min, *__user_addr_max;
- 
--static inline void __chk_user_ptr(const volatile void *p, size_t size)
--{
--	assert(p >= __user_addr_min && p + size <= __user_addr_max);
--}
--
- #define put_user(x, ptr)					\
- ({								\
- 	typeof(ptr) __pu_ptr = (ptr);				\
--	__chk_user_ptr(__pu_ptr, sizeof(*__pu_ptr));		\
-+	__chk_user_ptr(__pu_ptr);				\
- 	WRITE_ONCE(*(__pu_ptr), x);				\
- 	0;							\
- })
-@@ -22,7 +17,7 @@ static inline void __chk_user_ptr(const volatile void *p, size_t size)
- #define get_user(x, ptr)					\
- ({								\
- 	typeof(ptr) __pu_ptr = (ptr);				\
--	__chk_user_ptr(__pu_ptr, sizeof(*__pu_ptr));		\
-+	__chk_user_ptr(__pu_ptr);				\
- 	x = READ_ONCE(*(__pu_ptr));				\
- 	0;							\
- })
-@@ -37,7 +32,6 @@ static void volatile_memcpy(volatile char *to, const volatile char *from,
- static inline int copy_from_user(void *to, const void __user volatile *from,
- 				 unsigned long n)
- {
--	__chk_user_ptr(from, n);
- 	volatile_memcpy(to, from, n);
- 	return 0;
- }
-@@ -45,7 +39,6 @@ static inline int copy_from_user(void *to, const void __user volatile *from,
- static inline int copy_to_user(void __user volatile *to, const void *from,
- 			       unsigned long n)
- {
--	__chk_user_ptr(to, n);
- 	volatile_memcpy(to, from, n);
- 	return 0;
- }
--- 
-2.25.1
+> 
+> And the counters are accessed through an interconnect on our platform,
+> so the interconnect congestion may result in the difference as well.
+> 
+>>
+>> freq = ref_freq * (delivered[1] - delivered[0]) / (ref[1] - ref[0])
+>>
+>> If the counters are accessed through mmio, I don't see anything that
+>> would
+>> make delta[x] vary when calling cppc_get_perf_ctrs(), cf. cpc_read().
+>> Do you know if the address represents real counters or a place in memory
+>> representing something else ?
+> 
+> The address does represent real counters.
 
+Oh ok, is it possible to know what is there ?
+
+> 
+>>
+>> Would it be possible to try setting the CPU frequency to one unique value
+>> and get a serie of values like:
+>> [timestamp, ref_counter_value, deliverd_counter_value]
+> 
+> Could you please elaborate regarding "setting the CPU frequency to one
+> unique value"? What value is unique?
+
+I meant having the CPUs using only on frequency. The following should work:
+cat /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_min_freq > /sys/devices/system/cpu/cpu[X]/cpufreq/scaling_max_freq
+
+> 
+>>
+>> This would allow to check that the counters are accumulating at a valid
+>> pace. Also you said there were frequencies above the maximum value, but
+>> are there also frequencies below the minimum value ?
+> 
+> I've never seen the frequency below the minimum value.
+
+Maybe this is because the CPUs are running at their maximum frequency,
+so when the computed frequency is below the actual running frequency,
+it still doesn't go below the minimum frequency.
+Meaning that if the CPUs were limited to their lowest frequency (with
+the command above), maybe the get_rate() function would return values
+in a range [[1]:[2]]:
+- [1]: frequency below the lowest frequency
+- [2]: frequency above the lowest frequency, but below the maximum
+   frequency of 2.8GHz
+
+Would it be possible to do the following:
+
+# Shut down all the CPUs except the last one just to have less logs
+for i in /sys/devices/system/cpu/cpu[0-9]* ; do echo 0 > $i/online ; done
+
+cd /sys/kernel/debug/tracing
+
+# Add a kprobe to cppc_cpufreq_get_rate to get the computed freq
+echo 'r:myretprobe cppc_cpufreq_get_rate $retval:u32' >> /sys/kernel/debug/tracing/kprobe_events
+echo 1 > events/kprobes/enable
+
+# Setup ftrace to trace cppc_cpufreq_get_rate() calls
+# (and maybe see if something undesired happens in the call)
+echo function_graph > current_tracer
+echo funcgraph-abstime > trace_options
+echo cppc_cpufreq_get_rate > set_graph_function
+
+# Do the tracing
+echo 1 > tracing_on
+# Wait a bit for a call to cppc_cpufreq_get_rate() to happen
+echo 0 > tracing_on
+
+Also adding the following in cppc_perf_from_fbctrs() should allow
+tracking the counter values:
+trace_printk("get_cntrs: ref0=%lx ref1=%lx del0=%lx del1=%lx",
+     fb_ctrs_t0->reference, fb_ctrs_t1->reference,
+     fb_ctrs_t0->delivered, fb_ctrs_t1->delivered);
+
+Regards,
+Pierre
