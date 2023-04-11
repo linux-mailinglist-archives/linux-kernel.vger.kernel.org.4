@@ -2,159 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EF56DCE63
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEDF6DCE66
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 02:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjDKAL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 20:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S229894AbjDKANz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 20:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjDKALY (ORCPT
+        with ESMTP id S229591AbjDKANx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 20:11:24 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8224226AB;
-        Mon, 10 Apr 2023 17:11:22 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pm1bP-0007rm-1O;
-        Tue, 11 Apr 2023 02:11:15 +0200
-Date:   Tue, 11 Apr 2023 01:11:07 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Russell King <linux@armlinux.org.uk>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH net-next] net: dsa: mt7530: fix support for MT7531BE
-Message-ID: <ZDSlm-0gyyDZXy_k@makrotopia.org>
+        Mon, 10 Apr 2023 20:13:53 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437971FF3;
+        Mon, 10 Apr 2023 17:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=GY9ABpgWynxNjhU1lLhJVk+AzfLMtcrMxKPhxZiWpFg=; b=bSpSMsIQQrUOiqQrUhzq7wcT9D
+        pOhKxkKQJmfvdNEYpzFSTq0p1aizrJEavDyRhmEigqI26Vrci0m6EOtJzWUmQcp4aVP4WXPzcQYMz
+        dU184bwZW1hnyKXc249ZOjH1jkHclnUUs+1WDBSO4dXApfBQHYW2W2Bze7Dmkyog9qXKWvoeE2rfv
+        x0kj0GiyoXkcbzwgFR71sBtECFmY1BkygEf5mXyi1zSbd6l0CWuWleVPKa2P5Nbh4rQEK0IeU2Du5
+        yfk9rj4QbHOTqohtpdNruf4e3gXV5S9f/LOtSdsAOoYdnWO2yJE+pPS88pYM0YoH1UHmx7SZ3QQ9m
+        MAllYgHg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pm1dn-00G8e4-2D;
+        Tue, 11 Apr 2023 00:13:43 +0000
+Message-ID: <bc86a2c3-7562-9d98-5ab0-f875ca9dbfff@infradead.org>
+Date:   Mon, 10 Apr 2023 17:13:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] sparc: allow sparc32 alias for archhelp
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230410011316.26564-1-rdunlap@infradead.org>
+ <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAK7LNAQGqF-9Tw1ZQQUTcn23P8AKy8YQwVy1BJtc5eX-WEZkUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two variants of the MT7531 switch IC which got different
-features (and pins) regarding port 5:
- * MT7531AE: SGMII/1000Base-X/2500Base-X SerDes
- * MT7531BE: RGMII
 
-Moving the creation of the SerDes PCS from mt753x_setup to mt7530_probe
-with commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to
-mt7530_probe function") works fine for MT7531AE which got two instances
-of mtk-pcs-lynxi, however, MT7531BE requires mt7531_pll_setup to setup
-clocks before the single PCS on port 6 (usually used as CPU port)
-starts to work and hence the PCS creation failed on MT7531BE.
 
-Fix this by introducing a pointer to mt7531_create_sgmii function in
-struct mt7530_priv and call it again at the end of mt753x_setup like it
-was before commit 6de285229773 ("net: dsa: mt7530: move SGMII PCS
-creation to mt7530_probe function").
+On 4/10/23 16:45, Masahiro Yamada wrote:
+> On Mon, Apr 10, 2023 at 10:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> Currently, entering
+>> $ make ARCH=sparc32 help
+>> prints the archhelp text for sparc64.
+>>
+>> Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
+>> to be a recognized alias for 32-bit sparc, also support that
+>> string in sparc's archhelp by allowing either ARCH=sparc or
+>> ARCH=sparc32 for sparc32 archhelp.
+>>
+>> Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Sam Ravnborg <sam@ravnborg.org>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: sparclinux@vger.kernel.org
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>> ---
+>> v2: rebase/resend; add Masahiro to Cc: list
+>>
+>>  arch/sparc/Makefile |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
+>> --- a/arch/sparc/Makefile
+>> +++ b/arch/sparc/Makefile
+>> @@ -83,7 +83,7 @@ vdso_install:
+>>  KBUILD_IMAGE := $(boot)/zImage
+>>
+>>  # Don't use tabs in echo arguments.
+>> -ifeq ($(ARCH),sparc)
+>> +ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
+>>  define archhelp
+>>    echo  '* image        - kernel image ($(boot)/image)'
+> 
+> 
+> BTW, this is strange.
+> 
+> 
+> The asterisk means it is built by 'all'.
+> 
+> 
+> But, I only see the following in this Makefile.
+> 
+> 
+> # Default target
+> all: zImage
+> 
+> 
+> 
+> 
+> 
+> Seeing arch/sparc/boot/Makefile,
+> it is true $(boot)/image is generated
+> as a side-effect of zImage, but it it true for
+> both 32-bit and 64-bit.
+> 
+> I think it is even better to rewrite archhelp
+> to unify the 32/64 bits.
+> 
 
-Fixes: 6de285229773 ("net: dsa: mt7530: move SGMII PCS creation to mt7530_probe function")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/dsa/mt7530-mdio.c | 14 +++++++-------
- drivers/net/dsa/mt7530.c      |  6 ++++++
- drivers/net/dsa/mt7530.h      |  4 ++++
- 3 files changed, 17 insertions(+), 7 deletions(-)
+Yeah, I had thought of that also. I'll do that and resend it.
 
-diff --git a/drivers/net/dsa/mt7530-mdio.c b/drivers/net/dsa/mt7530-mdio.c
-index 34a547b88e497..f17eab67d15fa 100644
---- a/drivers/net/dsa/mt7530-mdio.c
-+++ b/drivers/net/dsa/mt7530-mdio.c
-@@ -81,14 +81,17 @@ static const struct regmap_bus mt7530_regmap_bus = {
- };
- 
- static int
--mt7531_create_sgmii(struct mt7530_priv *priv)
-+mt7531_create_sgmii(struct mt7530_priv *priv, bool dual_sgmii)
- {
- 	struct regmap_config *mt7531_pcs_config[2];
- 	struct phylink_pcs *pcs;
- 	struct regmap *regmap;
- 	int i, ret = 0;
- 
--	for (i = 0; i < 2; i++) {
-+	/* MT7531AE has two SGMII units for port 5 and port 6
-+	 * MT7531BE has only one SGMII unit for port 6
-+	 */
-+	for (i = dual_sgmii ? 0 : 1; i < 2; i++) {
- 		mt7531_pcs_config[i] = devm_kzalloc(priv->dev,
- 						    sizeof(struct regmap_config),
- 						    GFP_KERNEL);
-@@ -208,11 +211,8 @@ mt7530_probe(struct mdio_device *mdiodev)
- 	if (IS_ERR(priv->regmap))
- 		return PTR_ERR(priv->regmap);
- 
--	if (priv->id == ID_MT7531) {
--		ret = mt7531_create_sgmii(priv);
--		if (ret)
--			return ret;
--	}
-+	if (priv->id == ID_MT7531)
-+		priv->create_sgmii = mt7531_create_sgmii;
- 
- 	return dsa_register_switch(priv->ds);
- }
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index e4bb5037d3525..c680873819b01 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -3018,6 +3018,12 @@ mt753x_setup(struct dsa_switch *ds)
- 	if (ret && priv->irq)
- 		mt7530_free_irq_common(priv);
- 
-+	if (priv->create_sgmii) {
-+		ret = priv->create_sgmii(priv, mt7531_dual_sgmii_supported(priv));
-+		if (ret && priv->irq)
-+			mt7530_free_irq(priv);
-+	}
-+
- 	return ret;
- }
- 
-diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-index 01db5c9724fa8..6e89578b4de02 100644
---- a/drivers/net/dsa/mt7530.h
-+++ b/drivers/net/dsa/mt7530.h
-@@ -752,6 +752,8 @@ struct mt753x_info {
-  * @irq:		IRQ number of the switch
-  * @irq_domain:		IRQ domain of the switch irq_chip
-  * @irq_enable:		IRQ enable bits, synced to SYS_INT_EN
-+ *
-+ * @create_sgmii:	Pointer to function creating SGMII PCS instance(s)
-  */
- struct mt7530_priv {
- 	struct device		*dev;
-@@ -778,6 +780,8 @@ struct mt7530_priv {
- 	int irq;
- 	struct irq_domain *irq_domain;
- 	u32 irq_enable;
-+
-+	int (*create_sgmii)(struct mt7530_priv *priv, bool dual_sgmii);
- };
- 
- struct mt7530_hw_vlan_entry {
+Thanks.
+
+> 
+> 
+> 
+> 
+>>    echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
+> 
+> 
+> 
+
 -- 
-2.40.0
-
+~Randy
