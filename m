@@ -2,108 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5B26DE17B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759D76DE17D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjDKQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S229961AbjDKQw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDKQwq (ORCPT
+        with ESMTP id S229932AbjDKQw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:52:46 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D10F1B0;
-        Tue, 11 Apr 2023 09:52:45 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id g5so11636510wrb.5;
-        Tue, 11 Apr 2023 09:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681231964;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yno0rJMndR+enK3b81d20RG38u8liw59TjI488nehac=;
-        b=i/3lQnnZ17L+DsEQhfaH4b4jjLyrWRFShN0LLb+du2S60/TprcKYD5XPqaHJI/mgMO
-         lbXZNVDt3Uf1Gt6C7NhB18qcPjAgLAL3SMh4Ga2tZwfoRoHij76TJlAy5KvR1cK3rrbl
-         iUdzwzRQLU9J826+eXTbquEkZUONP1+9FkB48Mhx3KC35O0RT56D/g539KZs2BxrHzZc
-         +OSrq8tbN1NEBxHfN9AEOvU7IiTFU2AmEg/h8HMPag7apEJJiwXjpo/VeDVQ95Wsp8tu
-         rayYhMyFjDtxuhMitmpgl4Czbo+Qho/MRTgurCdIJ85mD5BzTy1iLJ9hi16Po9ck2nQl
-         6dNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681231964;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yno0rJMndR+enK3b81d20RG38u8liw59TjI488nehac=;
-        b=wtn4YtzO7iPcVT2gR0XyjQyPUuyPaPhAWErbwZaVFgAdf4Cu5FRo1tzzKZv9inFZrW
-         sXQUZUTyld5EUIypneuouS2uejEXupOIcpARGgDxLy2UJtiKldgH5monMCGkBHysctcU
-         E/BeQ3eHCo9+0UnrirNTz3mskwLXfVtTIFMVdnr7BW2UIMb77w20DbB53Twz/nzg1WD4
-         StU7Siip7JTpkUjoyGKxuGCwnT8nLrYtoJTY8RaRtZYZc+H6yki1MiWi6/OOimn4nz8d
-         A3I26yTT0+2JorMpBaf/AhxEqbIKH9HtHWNVUwGaoZFkN8MFuK6kwowTaUVzL+EmiD/l
-         QLeQ==
-X-Gm-Message-State: AAQBX9dxBRLOCqF61pQ3Qgm1JlmshX11VIFKftO5LZeQDqLxSMu2Kswy
-        kcZFTM6zyp0tDLehA5wy5Ko=
-X-Google-Smtp-Source: AKy350Y83in06DHv9Kz3jykTffzwn7ytZ6Pf0mQqj59zypBgAwJTy9x3DX+WfppTYrEImeN7Cb2lFg==
-X-Received: by 2002:a05:6000:104c:b0:2ef:930a:cb27 with SMTP id c12-20020a056000104c00b002ef930acb27mr9803947wrx.2.1681231963885;
-        Tue, 11 Apr 2023 09:52:43 -0700 (PDT)
-Received: from [192.168.0.32] ([37.222.243.26])
-        by smtp.gmail.com with ESMTPSA id l13-20020adff48d000000b002d45575643esm14888239wro.43.2023.04.11.09.52.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 09:52:42 -0700 (PDT)
-Message-ID: <731aadc6-eed1-411b-cf4b-f97ffebae83c@gmail.com>
-Date:   Tue, 11 Apr 2023 18:52:42 +0200
+        Tue, 11 Apr 2023 12:52:56 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 678781991;
+        Tue, 11 Apr 2023 09:52:54 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 33BGqie2009276;
+        Tue, 11 Apr 2023 18:52:44 +0200
+Date:   Tue, 11 Apr 2023 18:52:44 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Message-ID: <ZDWQXDRknzFhngyk@1wt.eu>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+ <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <ZDVXbw/097jvjKvK@1wt.eu>
+ <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: linux-next: build failure after merge of the mediatek tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230403175220.5b946b60@canb.auug.org.au>
- <20230411092412.5a9e20e5@canb.auug.org.au>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230411092412.5a9e20e5@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/04/2023 01:24, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Apr 11, 2023 at 04:13:36PM +0200, Miguel Ojeda wrote:
+> On Tue, Apr 11, 2023 at 2:49 PM Willy Tarreau <w@1wt.eu> wrote:
+> >
+> > This might sound strange, but I suspect that having a TAINT_RUST flag
+> > could possibly help maintainers that are already lacking time, because
+> > it may quickly allow some of them to ask "please try again without the
+> > Rust code to see if the problem is still there", just like happens with
+> > out-of-tree code for which the knowledge is limited to null. This could
+> > allow to route issue reports to one maintainer when an issue is confirmed
+> > in both cases or to another one when it only happens in a single case.
+> >
+> > Of course it will not help with code reviews but we know that a great
+> > part of maintainers' time it spent trying to analyse problem reports
+> > that happen under vague conditions. All the time not spent debugging
+> > something not well understood is more time available for reviews.
 > 
-> On Mon, 3 Apr 2023 17:52:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the mediatek tree, today's linux-next build (arm64
->> defconfig) failed like this:
->>
->> Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
->> FATAL ERROR: Unable to parse input tree
->>
->> Maybe caused by commit
->>
->>    a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
->>
->> but I don't know how.
->>
->> I have reverted that commit (and the following 2) for today.
+> You can already ask to disable `CONFIG_RUST`.
 > 
-> Ping?
+> In fact, we asked that a few times, when people reported a problem
+> that looked unrelated to Rust, to confirm that was the case and thus
+> redirect the report.
 > 
+> So it is definitely a good idea to ask for that when you get a report
+> with `RUST=y` and you suspect it may be related to that, especially in
+> the beginning where `RUST=y` should not be common.
 
-I dropped the corresponding commits and resubmitted. Sorry for the delay, I was 
-on holidays and without a computer...
+But if that code is only under a module, there's no need to turn all
+that code off if it's sufficient to be certain the module was no loaded.
+Plus it's more friendly to the user who doesn't have to rebuild a kernel,
+just blacklist a module and check that the kernel doesn't get tainted
+again.
 
-Regards,
-Matthias
+> However, I think Rust in-tree code is different to out-of-tree code,
+> since you do have the code, and thus (in general) you should be able
+> to reproduce the build, and you can ask for help to the given
+> maintainers to understand it.
+
+It could depend on the layer where it plugs and the level of intimacy
+with the core. Sometimes you need a deep understanding of all interactions
+between elements to imagine possible scenarios.
+
+Cheers,
+Willy
