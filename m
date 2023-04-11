@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5773F6DD2C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C480F6DD2CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDKG3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S230166AbjDKGah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDKG32 (ORCPT
+        with ESMTP id S229910AbjDKGaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:29:28 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255C51BCA;
-        Mon, 10 Apr 2023 23:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681194566; x=1712730566;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rDPwvbZddsMQqHiFbjq6MhSDUHWhKCccQrR4GgDJL9A=;
-  b=IUVav+FTYt6yTcJpHvNgwxz3U7hYwZ0Ivj24jdplZAKL2IM6+9QNOKD9
-   lPfCAv8nRnNxNGTlx/P3yEInNI0iVZq2iFp8pepmeBeZh/bkQpYK3a6d9
-   izOVR57tMmveANufq+L6B1wcexS4KQTNg/ZH92nCNfNNuuYV5vXauBzmg
-   qfWEwx23Y0H0nd9djByScpNFvyTiL2ix+APxtDtDKBxTfyQGNFdiYyG2F
-   z5xE5aaUT4kICFuNrxL5zT6lqWTbXXsvFlKeVcZb4afuyjrWpVqOeyUOf
-   YymlqDg7qY1WUpyrJtyAA1fy7fwDiIyZpmFBSp7WyCc+nNstCOOPEFx0E
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673910000"; 
-   d="scan'208";a="30235337"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 11 Apr 2023 08:29:21 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 11 Apr 2023 08:29:21 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 11 Apr 2023 08:29:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681194561; x=1712730561;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rDPwvbZddsMQqHiFbjq6MhSDUHWhKCccQrR4GgDJL9A=;
-  b=MKP7mP9j3lvPDbEFgdh3ydxjFdgmfegYPcmjZQueYvCuqTNMbPz2vpMr
-   dWzyz2U43nti1Sx75NqJnWuBVtoTI8Xbx0/u1WunXx48vDkFPLQAiW5MN
-   Ax0bqJNhTITfdb9ibTdrT3EiZWqTLiogPgXJalvc1jt6/MWpEV+7KwN/i
-   ZYwUMUSnLYNEs97VdoWc7LtpxJ88cUYxdzZbiFaB2yyc7+g4qXyoYFZAI
-   jcTYKOw2/a3RllA0clzkW4hi7rSLkTxS7f68f+UsoT9L2toxL+4dsUr0T
-   tIIqhuJ0jP67/lTCFuU7+OAmMwmMKCK2SlcYIotXnOj3jNBdnj426CsJP
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673910000"; 
-   d="scan'208";a="30235336"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 11 Apr 2023 08:29:21 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3F737280056;
-        Tue, 11 Apr 2023 08:29:21 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     "You-Sheng Yang (vicamo)" <vicamo.yang@canonical.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <kbusch@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Korneliusz Osmenda <korneliuszo@gmail.com>
-Subject: Re: [PATCH] PCI: vmd: guard device addition and removal
-Date:   Tue, 11 Apr 2023 08:29:20 +0200
-Message-ID: <5930238.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230407235829.GA3834716@bhelgaas>
-References: <20230407235829.GA3834716@bhelgaas>
+        Tue, 11 Apr 2023 02:30:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685001FEA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681194586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSR/BoPrTP4dM6eEMbqNicTKlgGAh6IQScE+JTRaUCI=;
+        b=Hra8B2eCWiJ6BdeclaIvYpWFdv1Yuk6cRegWMdaj6GhlrolKkaEfbYcFT10240nA2mnu6k
+        5xaXtIZ5NpGUs/QxUDJ4tWuCxS/sef6kbGllsxWD1obVoyRpB4+K/bW68s9w8zpa0YWyZb
+        T/57KP+tOdmd7EZKPkiohNP2TcN5+9E=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-328-V1ixWlo2Pfi3FArAWyFxtg-1; Tue, 11 Apr 2023 02:29:42 -0400
+X-MC-Unique: V1ixWlo2Pfi3FArAWyFxtg-1
+Received: by mail-wr1-f70.google.com with SMTP id c28-20020adfa31c000000b002d5737d3835so923431wrb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:29:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681194582;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oSR/BoPrTP4dM6eEMbqNicTKlgGAh6IQScE+JTRaUCI=;
+        b=hy8oY6yO1SxwduWUsjKhR1eQg7Tcnab01i4FqG+QWsV7z3SzUbWWy7laoHs4Av5IyE
+         RyTSkQhZP5EuM8dj81yF18/lmWeuU0o7ILHoJXwJo/OeyHY4ef3g0Uexk4up1a3trImz
+         Y+So66kRd1ybYOze9QA9UPgaXfhG42/FC7BB4Ah4b0fXOkOz7fwb8RqcbXdIPnmwYSTB
+         lTJA6c02P8MB4uI36PBFwvHFpDNAsxjyAr8FnaXiQPtZrA3kLGdvDpeV+zXYwtegKm6Z
+         7658/5LnaZYIbmQKPapaJq47+euan/zjtdUJMUIsWNpj/qOh5XYg+4ZFVXO0s2r639xe
+         foBQ==
+X-Gm-Message-State: AAQBX9enmL7nCuYZBCHct7MjvvddqoAgDTKSnldIUMNLQ/W6TDI1oG2f
+        Wr+pd2/EN3i9ZMK+uK3Ssrn8mNiBKnR/iAFotji+L6oSkYdPfhYvJA1BctUg0I31nAP8UXS8cn4
+        +5Ti7Uzv21zSjfhzV2YVg8Mis
+X-Received: by 2002:a05:600c:3786:b0:3eb:3104:efec with SMTP id o6-20020a05600c378600b003eb3104efecmr6103020wmr.16.1681194581882;
+        Mon, 10 Apr 2023 23:29:41 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZMnDmXJKwVPTFLe5E+xPCjkP07zR84RGkXb1tNKi76IBa8wNnsmfGG09/OTcO4lFwDkKN4+Q==
+X-Received: by 2002:a05:600c:3786:b0:3eb:3104:efec with SMTP id o6-20020a05600c378600b003eb3104efecmr6103012wmr.16.1681194581491;
+        Mon, 10 Apr 2023 23:29:41 -0700 (PDT)
+Received: from redhat.com ([2.52.10.80])
+        by smtp.gmail.com with ESMTPSA id m30-20020a05600c3b1e00b003ef5deb4188sm19722538wms.17.2023.04.10.23.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Apr 2023 23:29:40 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 02:29:37 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_pci: Wait for legacy device to be reset
+Message-ID: <20230411022329-mutt-send-email-mst@kernel.org>
+References: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411013833.1305-1-angus.chen@jaguarmicro.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,123 +77,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Samstag, 8. April 2023, 01:58:29 CEST schrieb Bjorn Helgaas:
-> [+cc Korneliusz, Alexander]
->=20
-> On Tue, Mar 14, 2023 at 01:37:33AM +0800, You-Sheng Yang (vicamo) wrote:
-> > VMD may fail to create sysfs entries while `pci_rescan_bus()` called in
-> >=20
-> > some other drivers like t7xx wwan driver:
-> >   sysfs: cannot create duplicate filename '/devices/.../resource0'
-> >  =20
-> >   Call Trace:
-> >    <TASK>
-> >    sysfs_warn_dup.cold+0x17/0x34
-> >    sysfs_add_bin_file_mode_ns+0xc0/0xf0
-> >    sysfs_create_bin_file+0x6d/0xb0
-> >    pci_create_attr+0x117/0x260
-> >    pci_create_resource_files+0x6b/0x150
-> >    pci_create_sysfs_dev_files+0x18/0x30
-> >    pci_bus_add_device+0x30/0x80
-> >    pci_bus_add_devices+0x31/0x80
-> >    pci_bus_add_devices+0x5b/0x80
-> >    vmd_enable_domain.constprop.0+0x6b7/0x880 [vmd]
-> >    vmd_probe+0x16d/0x193 [vmd]
->=20
-> This is a long-standing issue, and I would *love* to nail it, but this
-> doesn't feel like the right solution to me.  What's unique about vmd
-> here?
->=20
-> I guess maybe it's similar to the situation Korneliusz and Alexander
-> ran into at [1]?
+On Tue, Apr 11, 2023 at 09:38:32AM +0800, Angus Chen wrote:
+> We read the status of device after reset,
+> It is not guaranteed that the device be reseted successfully.
 
-What's the other path creating those sysfs files? Also vmd seems to be buil=
-t=20
-as a module in this case. So that's a different issue. pci-imx6 is racing=20
-against an initcall when being built into the kernel. The probe_type=20
-PROBE_PREFER_ASYNCHRONOUS is also important.
-Being built as a module this race is essentially impossible.
+Sorry not guaranteed by what? I am guessing you have a legacy device
+that does not reset fully on write, and you need to wait?
 
-Best regards,
-Alexander
+> We can use a while loop to make sure that,like the modern device did.
+> The spec is not request it ,but it work.
+> 
+> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
 
-> And why is t7xx called out specifically here?  This is a pretty
-> generic sysfs attribute issue and it doesn't *seem* like t7xx should
-> be special in that respect.  Oooh, maybe it's the fact that there's a
-> t7xx patch [2] coming that adds pci_rescan_bus() there?
->=20
-> Krzysztof has converted a lot of the sysfs files to static attributes,
-> e.g.,
->=20
->   506140f9c06b ("PCI/sysfs: Convert "index", "acpi_index", "label" to sta=
-tic
-> attributes") d93f8399053d ("PCI/sysfs: Convert "vpd" to static attribute")
->   f42c35ea3b13 ("PCI/sysfs: Convert "reset" to static attribute")
->   527139d738d7 ("PCI/sysfs: Convert "rom" to static attribute")
->   e1d3f3268b0e ("PCI/sysfs: Convert "config" to static attribute")
->=20
-> I think that's the *best* approach since the sysfs infrastructure
-> already prevents races here.  But these last few files are more
-> difficult to convert, so we've been kind of stalled on them.
->=20
-> Bjorn
->=20
-> [1]
-> https://lore.kernel.org/r/20230316091540.494366-1-alexander.stein@ew.tq-g=
-ro
-> up.com [2]
-> https://lore.kernel.org/linux-pci/20230124204543.550d88e3@kernel.org/
-> > Fixes: 185a383ada2e ("x86/PCI: Add driver for Intel Volume Management
-> > Device (VMD)") Signed-off-by: You-Sheng Yang (vicamo)
-> > <vicamo.yang@canonical.com> ---
-> >=20
-> >  drivers/pci/controller/vmd.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >=20
-> > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> > index 769eedeb8802..f050991bd1e9 100644
-> > --- a/drivers/pci/controller/vmd.c
-> > +++ b/drivers/pci/controller/vmd.c
-> > @@ -838,9 +838,13 @@ static int vmd_enable_domain(struct vmd_dev *vmd,
-> > unsigned long features)>=20
-> >  	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
-> >  	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
-> >=20
-> > +	pci_lock_rescan_remove();
-> > +
-> >=20
-> >  	vmd->bus =3D pci_create_root_bus(&vmd->dev->dev, vmd->busn_start,
-> >  =09
-> >  				       &vmd_ops, sd, &resources);
-> >  =09
-> >  	if (!vmd->bus) {
-> >=20
-> > +		pci_unlock_rescan_remove();
-> > +
-> >=20
-> >  		pci_free_resource_list(&resources);
-> >  		vmd_remove_irq_domain(vmd);
-> >  		return -ENODEV;
-> >=20
-> > @@ -893,6 +897,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd,
-> > unsigned long features)>=20
-> >  	vmd_acpi_end();
-> >=20
-> > +	pci_unlock_rescan_remove();
-> > +
-> >=20
-> >  	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
-> >  =09
-> >  			       "domain"), "Can't create symlink to=20
-domain\n");
-> >  =09
-> >  	return 0;
+Generally I don't much like touching legacy, no telling what
+that will do. Case in point, is your device a pure
+legacy device or a transitional device?
+
+> ---
+>  drivers/virtio/virtio_pci_legacy.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+> index 2257f1b3d8ae..f2d241563e4f 100644
+> --- a/drivers/virtio/virtio_pci_legacy.c
+> +++ b/drivers/virtio/virtio_pci_legacy.c
+> @@ -14,6 +14,7 @@
+>   *  Michael S. Tsirkin <mst@redhat.com>
+>   */
+>  
+> +#include <linux/delay.h>
+>  #include "linux/virtio_pci_legacy.h"
+>  #include "virtio_pci_common.h"
+>  
+> @@ -97,7 +98,8 @@ static void vp_reset(struct virtio_device *vdev)
+>  	vp_legacy_set_status(&vp_dev->ldev, 0);
+>  	/* Flush out the status write, and flush in device writes,
+>  	 * including MSi-X interrupts, if any. */
+> -	vp_legacy_get_status(&vp_dev->ldev);
+> +	while (vp_legacy_get_status(&vp_dev->ldev))
+> +		msleep(1);
+
+The problem with this is that it will break surprise
+removal even worse than it's already broken.
 
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+>  	/* Flush pending VQ/configuration callbacks. */
+>  	vp_synchronize_vectors(vdev);
+>  }
+> -- 
+> 2.25.1
 
