@@ -2,136 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784546DE7F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC676DE7F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjDKXTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S229643AbjDKXUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 19:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDKXTl (ORCPT
+        with ESMTP id S229451AbjDKXUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:19:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9345C30FD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681255176; x=1712791176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5lWfbaukBY0AMGMSMLq4CSRNcNltmmEQeJtpDY+cJQU=;
-  b=SChxuwzg4YvF56UFXA9tpi+CN4290QMEY6VJ4ZqKQFVcioEWqr3vIHac
-   iC7IkZ3EanEPgZSod8LCqBOZZWhhZhYwAR2H3J2l0pvYnRPBa0B4SSj7X
-   Mft9EI3wFsVIYW7pjdYK/adNUO9H8h/r+DGgNuY7LTWLjN2zKO8xNllk6
-   l2liv58X899IhM/rrEHH6er+7shuYTakvAJGmvAubsv+c98Y/uH8h7osZ
-   ecwQjuHuvoB29XdIq0bdH+3NwLUsKQRaQ1I8kVqDWESVf2r1nH4U/RoxF
-   EJ567R1lmN2ZNrRQbQg7huw7VMf8ugWw/kG6F4RsrbI1J6fMTRRUBC6g8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="343761861"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="343761861"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 16:19:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="721362136"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="721362136"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2023 16:19:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmNGt-000Wo1-2Y;
-        Tue, 11 Apr 2023 23:19:31 +0000
-Date:   Wed, 12 Apr 2023 07:19:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Yacoub <markyacoub@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, seanpaul@chromium.org,
-        suraj.kandpal@intel.com, dianders@chromium.org,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@intel.com>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for
- enable/disable/check
-Message-ID: <202304120709.oF7BKZuf-lkp@intel.com>
-References: <20230411192134.508113-5-markyacoub@google.com>
+        Tue, 11 Apr 2023 19:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B1A30C7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 16:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5280862CA1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC223C433D2;
+        Tue, 11 Apr 2023 23:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681255219;
+        bh=+YzaIRLUWzkFWzM4AaTJ91w/6s7cuW/xzuFrwR0u9fk=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=QA2SIEySBnNUmSqZthotkjyQ7pfTFBedYhKdqWU7J1Yrwz+40YjTQ2AOvXQmuTQWE
+         cM4JKoMTNayzR+M0YDcSGX56Rk0cmxxJt4QgNkSMq/kgVHkTUIjpsmjnd9KeO38O8d
+         K+sXVR7os/DJJDFHGjsn8nl0hdZN89Hjogngz95V+m/D6ZwSG9bLbJmrwuHOqC1XEZ
+         y1jCtv/9qHgWMwAmDoGQHTPKdrlYmTOpeXbqD7x0KsWac9rhJ1fSmE2MaPFJT0+0nM
+         EszFPZUEBDJ7U7DH6xVIRS4Urx1BXXBlMjHYurd11Yft1sALVTpL+9q+CB5q+gqdhh
+         Bg+ALAf8H7GGA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 327BB1540478; Tue, 11 Apr 2023 16:20:19 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 16:20:19 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com, w@1wt.eu,
+        linux@weissschuh.net, v@vda.io, chenfeiyang@loongson.cn
+Subject: [GIT PULL] nolibc changes for v6.4
+Message-ID: <455d6aeb-f2cc-4967-835e-92a10edc616b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230411192134.508113-5-markyacoub@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+Hello, Linus,
 
-kernel test robot noticed the following build warnings:
+Once the v6.4 merge window opens, please pull these nolibc changes from:
 
-[auto build test WARNING on drm-intel/for-linux-next-fixes]
-[also build test WARNING on drm/drm-next linus/master v6.3-rc6 next-20230411]
-[cannot apply to drm-tip/drm-tip drm-misc/drm-misc-next drm-intel/for-linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/nolibc.2023.04.04a
+  # HEAD: 0d8c461adbc4a43736927f93db69ae376efbc2f1: tools/nolibc: x86_64: add stackprotector support (2023-03-27 16:26:10 -0700)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
-patch link:    https://lore.kernel.org/r/20230411192134.508113-5-markyacoub%40google.com
-patch subject: [PATCH v9 04/10] drm/hdcp: Expand HDCP helper library for enable/disable/check
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230412/202304120709.oF7BKZuf-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/972a98f65fb56b3be4370593c2b81f1283750db7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-        git checkout 972a98f65fb56b3be4370593c2b81f1283750db7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/display/
+----------------------------------------------------------------
+nolibc updates for v6.4
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304120709.oF7BKZuf-lkp@intel.com/
+o     Add support for loongarch.
 
-All warnings (new ones prefixed by >>):
+o     Fix stack-protector issues.
 
->> drivers/gpu/drm/display/drm_hdcp_helper.c:675:5: warning: no previous prototype for 'drm_hdcp_helper_hdcp1_capable_dp' [-Wmissing-prototypes]
-     675 | int drm_hdcp_helper_hdcp1_capable_dp(struct drm_hdcp_helper_data *data,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/display/drm_hdcp_helper.c:1325:5: warning: no previous prototype for 'drm_hdcp_hdcp1_check_link_registers_dp' [-Wmissing-prototypes]
-    1325 | int drm_hdcp_hdcp1_check_link_registers_dp(struct drm_device *dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+o     Support additional integral types and signal-related macros.
 
+o     Add support for stdin, stdout, and stderr.
 
-vim +/drm_hdcp_helper_hdcp1_capable_dp +675 drivers/gpu/drm/display/drm_hdcp_helper.c
+o     Add getuid() and geteuid().
 
-   674	
- > 675	int drm_hdcp_helper_hdcp1_capable_dp(struct drm_hdcp_helper_data *data,
-   676					     bool *capable)
-   677	{
-   678		int ret;
-   679		u8 bcaps;
-   680	
-   681		ret = data->display_type_funcs->remote_read(
-   682			data, data->hdcp1_lut->bcaps, &bcaps, 1);
-   683		*capable = !ret && (bcaps & DP_BCAPS_HDCP_CAPABLE);
-   684	
-   685		return 0;
-   686	}
-   687	
+o     Allow S_I* macros to be overridden by program.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+o     Defer to linux/fcntl.h and linux/stat.h to avoid duplicate
+	definitions.
+
+o     Many improvements to the self tests.
+
+----------------------------------------------------------------
+Feiyang Chen (5):
+      tools/nolibc: Include linux/fcntl.h and remove duplicate code
+      tools/nolibc: Add statx() and make stat() rely on statx() if necessary
+      tools/nolibc: Add support for LoongArch
+      selftests/nolibc: Add support for LoongArch
+      selftests/nolibc: Adjust indentation for Makefile
+
+Paul E. McKenney (1):
+      tools/nolibc: Add gitignore to avoid git complaints about sysroot
+
+Thomas Weiﬂschuh (9):
+      tools/nolibc: always disable stack protector for tests
+      tools/nolibc: add definitions for standard fds
+      tools/nolibc: add helpers for wait() signal exits
+      tools/nolibc: tests: constify test_names
+      tools/nolibc: add support for stack protector
+      tools/nolibc: tests: fold in no-stack-protector cflags
+      tools/nolibc: tests: add test for -fstack-protector
+      tools/nolibc: i386: add stackprotector support
+      tools/nolibc: x86_64: add stackprotector support
+
+Vincent Dagonneau (4):
+      tools/nolibc: add stdint.h
+      tools/nolibc: add integer types and integer limit macros
+      tools/nolibc: enlarge column width of tests
+      tools/nolibc: add tests for the integer limits in stdint.h
+
+Willy Tarreau (3):
+      tools/nolibc: add getuid() and geteuid()
+      selftests/nolibc: skip the chroot_root and link_dir tests when not privileged
+      tools/nolibc: check for S_I* macros before defining them
+
+ tools/include/nolibc/.gitignore              |   1 +
+ tools/include/nolibc/Makefile                |   4 +-
+ tools/include/nolibc/arch-i386.h             |   7 +-
+ tools/include/nolibc/arch-loongarch.h        | 200 ++++++++++++++++++++++++
+ tools/include/nolibc/arch-x86_64.h           |   5 +
+ tools/include/nolibc/arch.h                  |   2 +
+ tools/include/nolibc/nolibc.h                |   1 +
+ tools/include/nolibc/stackprotector.h        |  53 +++++++
+ tools/include/nolibc/std.h                   |  15 +-
+ tools/include/nolibc/stdint.h                |  99 ++++++++++++
+ tools/include/nolibc/sys.h                   | 100 +++++++++++-
+ tools/include/nolibc/types.h                 |  30 +++-
+ tools/include/nolibc/unistd.h                |   5 +
+ tools/testing/selftests/nolibc/Makefile      |  90 ++++++-----
+ tools/testing/selftests/nolibc/nolibc-test.c | 221 ++++++++++++++++++++-------
+ 15 files changed, 718 insertions(+), 115 deletions(-)
+ create mode 100644 tools/include/nolibc/.gitignore
+ create mode 100644 tools/include/nolibc/arch-loongarch.h
+ create mode 100644 tools/include/nolibc/stackprotector.h
+ create mode 100644 tools/include/nolibc/stdint.h
