@@ -2,145 +2,416 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADD46DE36A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B486DE374
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjDKSEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S229699AbjDKSFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDKSEI (ORCPT
+        with ESMTP id S230215AbjDKSFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:04:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8B7AB1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:03:12 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id m4so11317537lfj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:03:12 -0700 (PDT)
+        Tue, 11 Apr 2023 14:05:04 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADC261BD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:04:23 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id y15-20020a17090a784f00b0023d35ae431eso2617133pjl.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:04:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681236188;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ocCmwSJrhpHhqyMZr30is+INmJpIsNsGHvDvoi6QJ54=;
-        b=OC4wt2PSKCifkvgOhmmEnaoMUGUgXR62hPv8ZjCI7+B78Sbhbbi/ojSdKNJyiVwKdw
-         CnPdH1mo8NsIfQXx6NX0dkbguw+BiXtwtuDrR3UvqL+lJdQIXbMPNXNM1ISeWf/ah4b9
-         b+a4WeFnZVNcslgBXkAH0z/XvKMA2cngssYJFA5ox8OHnV+AOQ8tbvpDvdmlm9KtmZMj
-         ccwSd+c2vRfaIbRKOvzMgAlVG6s77n4WmYEzfvyESoGOCEpHApfcwsHqN3tBOUktfIZL
-         FGhQTNL6PgpOsgh5Xwf5+uHG9GDLgaTHCHCMv45X+7Z12ADI3VWmPXpqTwuIt717+1OV
-         KcbA==
+        d=google.com; s=20221208; t=1681236252; x=1683828252;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EjIVL6mmCivSCS5ANyA7IVNTB8W1dGHTK4d2Nb546I8=;
+        b=C7swYJZ/06p6bW7lQXORgjhqj1TzxbtXYJoLgFI85/CetkU58PAslkTQVye9cJN+Ku
+         OTkPTe4ney5TkxV3JSab6pNnK3tT9q6+QgFExji4cHhaRdzp0tGgnI/QuaCNNyoGlZzC
+         n7iKqpfJ845atPf6SvFE9RfOU8Kr8WPba24O+XU/Gn+R5lz6/zSRhPXTwi1+G8S2axGC
+         iUedJ5uN2wP0KnhAAUycovst44FYfpJ0KMaw+Lwgi9CE+CD6IXQgjX7Uat+F83VywyAg
+         jX0WDuNt4fiwBJKw8gdBaOxii4pA+r1ZofSaWiQH+6WViB17ponaM5tiC8CWT9XEyJ+Y
+         ho7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681236188;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ocCmwSJrhpHhqyMZr30is+INmJpIsNsGHvDvoi6QJ54=;
-        b=azgTsoRDSGk91SPRBaxFWT31ahRXslQB7SSWQhmmXN2K3dXVACRszZFUioQtmeryQ3
-         mLBuuEtCTYPzs2IhAxmzXBFKX97nN19fQjCUZwizXMpTxASB+extu27DUgn1SYa0w1e+
-         KqrseJkudZ9itF0X7vAX9teqGSwtG9lbimB5AVnNnHEuXEhIRm+ZqzWamxYVN58FnxNU
-         hqzAGREi9GbISoHQzbwMTDS+kyYFlzGhP60AuMYZylKkXOVccF3AlF2xY7SnwXleAM86
-         i6/RQLAFnkp7wJmvbjGWzsK252IOPhCAtZuV/dfXvBUf7oBwiOHlxyJc70SqZn2TGo0s
-         I2pQ==
-X-Gm-Message-State: AAQBX9ee3zyS5BVDDdzbqU5Mzd7OOQahwKMiP1HsbTqOeNUYa9nfZ7Vk
-        DMAJMEwrrD5gX/MPrbLv04M7Mw==
-X-Google-Smtp-Source: AKy350b+ZZPTZYJMLqpF9v0rSN6Hsvc2pRdKRoaf8Atw/Lp9m6Ox+TUudD2DkjIuodpkdArg63IoBQ==
-X-Received: by 2002:ac2:456f:0:b0:4eb:3149:cbd0 with SMTP id k15-20020ac2456f000000b004eb3149cbd0mr2830807lfm.9.1681236187755;
-        Tue, 11 Apr 2023 11:03:07 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05651238cc00b004ec4f3810ddsm2628102lft.219.2023.04.11.11.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 11:03:07 -0700 (PDT)
-Message-ID: <2ce26f3f-f746-ce15-c490-288628c7645c@linaro.org>
-Date:   Tue, 11 Apr 2023 20:03:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: qcom,rpmpd: Add SA8155P
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-References: <20230411-topic-hanaau-v2-0-fd3d70844b31@linaro.org>
- <20230411-topic-hanaau-v2-1-fd3d70844b31@linaro.org>
- <f12d50a2-a9b0-5659-4224-2b7039ba058e@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <f12d50a2-a9b0-5659-4224-2b7039ba058e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1681236252; x=1683828252;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EjIVL6mmCivSCS5ANyA7IVNTB8W1dGHTK4d2Nb546I8=;
+        b=dcgdcBQHeENbvv0iL/NwB5/3HgJbVdaQPPmwJ9VH7qDayBk8cGR3GFePWrMxJhmf3k
+         gJeF1Yj2+eLv5gTas+aGo81bFh7jX07e7UV+9dNI9xBkXdvC1D/j513Bj7zOWiw10aUD
+         +u5cGOV2M5zJUdsSmt0Huun+3gecVXiNalB+hr2uccp1St9RcJRCIDBlLS5eUekoF6xI
+         H4CnMZpBYtQAOLWsvJUGJQf7nzs5sx/BHtGmAxJEJER6y6c4X3tOAVUlPHfGHNur2Zoz
+         8AoM7M98Ori8kStG7iH7Ptqbz32n3WHug93LdXFT4ZChrlqSoq94XT4DZ02JSKpqJHzj
+         SFPw==
+X-Gm-Message-State: AAQBX9cwSkaUjr+x7lcyXlWBXBYIcrUVpfmHj3XGCYehMuY5GzZj3hsp
+        02phd1u2gUSBkpMtR7SP84nbb6M3rq4ZMvc1CCFs2hqsaYLcYsfjgWdDLFkqP79nIcIiokjaKRU
+        smmLTQnn/wIlm7q/a6WPosTxEmR5/3ozM/+YPtarbuc9Xi0CY2sec80O5AYxSWzftDi1Mibo=
+X-Google-Smtp-Source: AKy350bxofpiLEMknsLpSQJa31v4mZOhmQVMYcwYTW3ovDxnijCBD3TmCdh4eEJt2x3PY35BII5JS/8qtfMq
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a63:5859:0:b0:513:9235:55e3 with SMTP id
+ i25-20020a635859000000b00513923555e3mr3113342pgm.5.1681236252239; Tue, 11 Apr
+ 2023 11:04:12 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 18:04:09 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230411180409.1706067-1-jstultz@google.com>
+Subject: [RFC][PATCH] kernel/configs: Drop Android config fragments
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>, Rob Herring <robh@kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the old days where each device had a custom kernel, the
+android config fragments were useful to provide the required
+and reccomended options expected by userland.
 
+However, these days devices are expected to use the GKI kernel,
+so these config fragments no longer needed, and out of date, so
+they seem to only cause confusion.
 
-On 11.04.2023 19:37, Krzysztof Kozlowski wrote:
-> On 11/04/2023 15:47, Konrad Dybcio wrote:
->> Add a compatible for SA8155P platforms and relevant defines to the
->> include file.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
->>  include/dt-bindings/power/qcom-rpmpd.h                  | 9 +++++++++
->>  2 files changed, 10 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->> index afad3135ed67..f9c211a9a938 100644
->> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->> @@ -29,6 +29,7 @@ properties:
->>        - qcom,qcm2290-rpmpd
->>        - qcom,qcs404-rpmpd
->>        - qcom,qdu1000-rpmhpd
->> +      - qcom,sa8155p-rpmhpd
->>        - qcom,sa8540p-rpmhpd
->>        - qcom,sa8775p-rpmhpd
->>        - qcom,sdm660-rpmpd
->> diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
->> index 1bf8e87ecd7e..867b18e041ea 100644
->> --- a/include/dt-bindings/power/qcom-rpmpd.h
->> +++ b/include/dt-bindings/power/qcom-rpmpd.h
->> @@ -90,6 +90,15 @@
->>  #define SM8150_MMCX	9
->>  #define SM8150_MMCX_AO	10
->>  
->> +/* SA8155P is a special case, kept for backwards compatibility */
-> 
-> This is a new binding, thus I don't understand what is here backwards
-> compatible?
-Check the DT structure, 8155-adp (so, de facto 8155) included
-8150 before, but that was not exactly the correct approach..
-It bit us after we accidentally discovered 8155 advertises MMCX,
-LCX and LMX PDs in cmd-db but triggers a bite on access attempts..
+So lets drop them. If folks are curious what configs are
+expected by the Android environment, check out the gki_defconfig
+file in the latest android common kernel tree.
 
-By mimicking the indices to match the ones of 8150, we only have
-to fix up the domains that were axed from 8155 (in comparison to
-8150 which has the full fat setup).
+Cc: Rob Herring <robh@kernel.org>
+Cc: Amit Pundir <amit.pundir@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel-team@android.com
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ MAINTAINERS                               |   5 -
+ kernel/configs/android-base.config        | 159 ----------------------
+ kernel/configs/android-recommended.config | 127 -----------------
+ 3 files changed, 291 deletions(-)
+ delete mode 100644 kernel/configs/android-base.config
+ delete mode 100644 kernel/configs/android-recommended.config
 
-Konrad
-> 
->> +#define SA8155P_CX	SM8150_CX
->> +#define SA8155P_CX_AO	SM8150_CX_AO
->> +#define SA8155P_EBI	SM8150_EBI
->> +#define SA8155P_GFX	SM8150_GFX
->> +#define SA8155P_MSS	SM8150_MSS
->> +#define SA8155P_MX	SM8150_MX
->> +#define SA8155P_MX_AO	SM8150_MX_AO
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 90abe83c02f3..541296ecc879 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1428,11 +1428,6 @@ S:	Supported
+ F:	drivers/clk/analogbits/*
+ F:	include/linux/clk/analogbits*
+=20
+-ANDROID CONFIG FRAGMENTS
+-M:	Rob Herring <robh@kernel.org>
+-S:	Supported
+-F:	kernel/configs/android*
+-
+ ANDROID DRIVERS
+ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ M:	Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
+diff --git a/kernel/configs/android-base.config b/kernel/configs/android-ba=
+se.config
+deleted file mode 100644
+index 44b0f0146a3f..000000000000
+--- a/kernel/configs/android-base.config
++++ /dev/null
+@@ -1,159 +0,0 @@
+-#  KEEP ALPHABETICALLY SORTED
+-# CONFIG_DEVMEM is not set
+-# CONFIG_FHANDLE is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_NFSD is not set
+-# CONFIG_NFS_FS is not set
+-# CONFIG_OABI_COMPAT is not set
+-# CONFIG_SYSVIPC is not set
+-# CONFIG_USELIB is not set
+-CONFIG_ANDROID_BINDER_IPC=3Dy
+-CONFIG_ANDROID_BINDER_DEVICES=3Dbinder,hwbinder,vndbinder
+-CONFIG_ANDROID_LOW_MEMORY_KILLER=3Dy
+-CONFIG_ARMV8_DEPRECATED=3Dy
+-CONFIG_ASHMEM=3Dy
+-CONFIG_AUDIT=3Dy
+-CONFIG_BLK_DEV_INITRD=3Dy
+-CONFIG_CGROUPS=3Dy
+-CONFIG_CGROUP_BPF=3Dy
+-CONFIG_CGROUP_CPUACCT=3Dy
+-CONFIG_CGROUP_DEBUG=3Dy
+-CONFIG_CGROUP_FREEZER=3Dy
+-CONFIG_CGROUP_SCHED=3Dy
+-CONFIG_CP15_BARRIER_EMULATION=3Dy
+-CONFIG_DEFAULT_SECURITY_SELINUX=3Dy
+-CONFIG_EMBEDDED=3Dy
+-CONFIG_FB=3Dy
+-CONFIG_HARDENED_USERCOPY=3Dy
+-CONFIG_HIGH_RES_TIMERS=3Dy
+-CONFIG_IKCONFIG=3Dy
+-CONFIG_IKCONFIG_PROC=3Dy
+-CONFIG_INET6_AH=3Dy
+-CONFIG_INET6_ESP=3Dy
+-CONFIG_INET6_IPCOMP=3Dy
+-CONFIG_INET=3Dy
+-CONFIG_INET_DIAG_DESTROY=3Dy
+-CONFIG_INET_ESP=3Dy
+-CONFIG_INET_XFRM_MODE_TUNNEL=3Dy
+-CONFIG_IP6_NF_FILTER=3Dy
+-CONFIG_IP6_NF_IPTABLES=3Dy
+-CONFIG_IP6_NF_MANGLE=3Dy
+-CONFIG_IP6_NF_RAW=3Dy
+-CONFIG_IP6_NF_TARGET_REJECT=3Dy
+-CONFIG_IPV6=3Dy
+-CONFIG_IPV6_MIP6=3Dy
+-CONFIG_IPV6_MULTIPLE_TABLES=3Dy
+-CONFIG_IPV6_OPTIMISTIC_DAD=3Dy
+-CONFIG_IPV6_ROUTER_PREF=3Dy
+-CONFIG_IPV6_ROUTE_INFO=3Dy
+-CONFIG_IP_ADVANCED_ROUTER=3Dy
+-CONFIG_IP_MULTICAST=3Dy
+-CONFIG_IP_MULTIPLE_TABLES=3Dy
+-CONFIG_IP_NF_ARPFILTER=3Dy
+-CONFIG_IP_NF_ARPTABLES=3Dy
+-CONFIG_IP_NF_ARP_MANGLE=3Dy
+-CONFIG_IP_NF_FILTER=3Dy
+-CONFIG_IP_NF_IPTABLES=3Dy
+-CONFIG_IP_NF_MANGLE=3Dy
+-CONFIG_IP_NF_MATCH_AH=3Dy
+-CONFIG_IP_NF_MATCH_ECN=3Dy
+-CONFIG_IP_NF_MATCH_TTL=3Dy
+-CONFIG_IP_NF_NAT=3Dy
+-CONFIG_IP_NF_RAW=3Dy
+-CONFIG_IP_NF_SECURITY=3Dy
+-CONFIG_IP_NF_TARGET_MASQUERADE=3Dy
+-CONFIG_IP_NF_TARGET_NETMAP=3Dy
+-CONFIG_IP_NF_TARGET_REDIRECT=3Dy
+-CONFIG_IP_NF_TARGET_REJECT=3Dy
+-CONFIG_MODULES=3Dy
+-CONFIG_MODULE_UNLOAD=3Dy
+-CONFIG_MODVERSIONS=3Dy
+-CONFIG_NET=3Dy
+-CONFIG_NETDEVICES=3Dy
+-CONFIG_NETFILTER=3Dy
+-CONFIG_NETFILTER_TPROXY=3Dy
+-CONFIG_NETFILTER_XT_MATCH_COMMENT=3Dy
+-CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=3Dy
+-CONFIG_NETFILTER_XT_MATCH_CONNMARK=3Dy
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=3Dy
+-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=3Dy
+-CONFIG_NETFILTER_XT_MATCH_HELPER=3Dy
+-CONFIG_NETFILTER_XT_MATCH_IPRANGE=3Dy
+-CONFIG_NETFILTER_XT_MATCH_LENGTH=3Dy
+-CONFIG_NETFILTER_XT_MATCH_LIMIT=3Dy
+-CONFIG_NETFILTER_XT_MATCH_MAC=3Dy
+-CONFIG_NETFILTER_XT_MATCH_MARK=3Dy
+-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=3Dy
+-CONFIG_NETFILTER_XT_MATCH_POLICY=3Dy
+-CONFIG_NETFILTER_XT_MATCH_QUOTA=3Dy
+-CONFIG_NETFILTER_XT_MATCH_SOCKET=3Dy
+-CONFIG_NETFILTER_XT_MATCH_STATE=3Dy
+-CONFIG_NETFILTER_XT_MATCH_STATISTIC=3Dy
+-CONFIG_NETFILTER_XT_MATCH_STRING=3Dy
+-CONFIG_NETFILTER_XT_MATCH_TIME=3Dy
+-CONFIG_NETFILTER_XT_MATCH_U32=3Dy
+-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=3Dy
+-CONFIG_NETFILTER_XT_TARGET_CONNMARK=3Dy
+-CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=3Dy
+-CONFIG_NETFILTER_XT_TARGET_IDLETIMER=3Dy
+-CONFIG_NETFILTER_XT_TARGET_MARK=3Dy
+-CONFIG_NETFILTER_XT_TARGET_NFLOG=3Dy
+-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=3Dy
+-CONFIG_NETFILTER_XT_TARGET_SECMARK=3Dy
+-CONFIG_NETFILTER_XT_TARGET_TCPMSS=3Dy
+-CONFIG_NETFILTER_XT_TARGET_TPROXY=3Dy
+-CONFIG_NETFILTER_XT_TARGET_TRACE=3Dy
+-CONFIG_NET_CLS_ACT=3Dy
+-CONFIG_NET_CLS_U32=3Dy
+-CONFIG_NET_EMATCH=3Dy
+-CONFIG_NET_EMATCH_U32=3Dy
+-CONFIG_NET_KEY=3Dy
+-CONFIG_NET_SCHED=3Dy
+-CONFIG_NET_SCH_HTB=3Dy
+-CONFIG_NF_CONNTRACK=3Dy
+-CONFIG_NF_CONNTRACK_AMANDA=3Dy
+-CONFIG_NF_CONNTRACK_EVENTS=3Dy
+-CONFIG_NF_CONNTRACK_FTP=3Dy
+-CONFIG_NF_CONNTRACK_H323=3Dy
+-CONFIG_NF_CONNTRACK_IPV4=3Dy
+-CONFIG_NF_CONNTRACK_IPV6=3Dy
+-CONFIG_NF_CONNTRACK_IRC=3Dy
+-CONFIG_NF_CONNTRACK_NETBIOS_NS=3Dy
+-CONFIG_NF_CONNTRACK_PPTP=3Dy
+-CONFIG_NF_CONNTRACK_SANE=3Dy
+-CONFIG_NF_CONNTRACK_SECMARK=3Dy
+-CONFIG_NF_CONNTRACK_TFTP=3Dy
+-CONFIG_NF_CT_NETLINK=3Dy
+-CONFIG_NF_CT_PROTO_DCCP=3Dy
+-CONFIG_NF_CT_PROTO_SCTP=3Dy
+-CONFIG_NF_CT_PROTO_UDPLITE=3Dy
+-CONFIG_NF_NAT=3Dy
+-CONFIG_NO_HZ=3Dy
+-CONFIG_PACKET=3Dy
+-CONFIG_PM_AUTOSLEEP=3Dy
+-CONFIG_PM_WAKELOCKS=3Dy
+-CONFIG_PPP=3Dy
+-CONFIG_PPP_BSDCOMP=3Dy
+-CONFIG_PPP_DEFLATE=3Dy
+-CONFIG_PPP_MPPE=3Dy
+-CONFIG_PREEMPT=3Dy
+-CONFIG_QUOTA=3Dy
+-CONFIG_RANDOMIZE_BASE=3Dy
+-CONFIG_RTC_CLASS=3Dy
+-CONFIG_RT_GROUP_SCHED=3Dy
+-CONFIG_SECCOMP=3Dy
+-CONFIG_SECURITY=3Dy
+-CONFIG_SECURITY_NETWORK=3Dy
+-CONFIG_SECURITY_SELINUX=3Dy
+-CONFIG_SETEND_EMULATION=3Dy
+-CONFIG_STAGING=3Dy
+-CONFIG_SWP_EMULATION=3Dy
+-CONFIG_SYNC=3Dy
+-CONFIG_TUN=3Dy
+-CONFIG_UNIX=3Dy
+-CONFIG_USB_GADGET=3Dy
+-CONFIG_USB_CONFIGFS=3Dy
+-CONFIG_USB_CONFIGFS_F_FS=3Dy
+-CONFIG_USB_CONFIGFS_F_MIDI=3Dy
+-CONFIG_USB_OTG_WAKELOCK=3Dy
+-CONFIG_XFRM_USER=3Dy
+diff --git a/kernel/configs/android-recommended.config b/kernel/configs/and=
+roid-recommended.config
+deleted file mode 100644
+index e400fbbc8aba..000000000000
+--- a/kernel/configs/android-recommended.config
++++ /dev/null
+@@ -1,127 +0,0 @@
+-#  KEEP ALPHABETICALLY SORTED
+-# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+-# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_NF_CONNTRACK_SIP is not set
+-# CONFIG_PM_WAKELOCKS_GC is not set
+-# CONFIG_VT is not set
+-CONFIG_ARM64_SW_TTBR0_PAN=3Dy
+-CONFIG_BACKLIGHT_LCD_SUPPORT=3Dy
+-CONFIG_BLK_DEV_DM=3Dy
+-CONFIG_BLK_DEV_LOOP=3Dy
+-CONFIG_BLK_DEV_RAM=3Dy
+-CONFIG_BLK_DEV_RAM_SIZE=3D8192
+-CONFIG_STACKPROTECTOR_STRONG=3Dy
+-CONFIG_COMPACTION=3Dy
+-CONFIG_CPU_SW_DOMAIN_PAN=3Dy
+-CONFIG_DM_CRYPT=3Dy
+-CONFIG_DM_UEVENT=3Dy
+-CONFIG_DM_VERITY=3Dy
+-CONFIG_DM_VERITY_FEC=3Dy
+-CONFIG_DRAGONRISE_FF=3Dy
+-CONFIG_ENABLE_DEFAULT_TRACERS=3Dy
+-CONFIG_EXT4_FS=3Dy
+-CONFIG_EXT4_FS_SECURITY=3Dy
+-CONFIG_FUSE_FS=3Dy
+-CONFIG_GREENASIA_FF=3Dy
+-CONFIG_HIDRAW=3Dy
+-CONFIG_HID_A4TECH=3Dy
+-CONFIG_HID_ACRUX=3Dy
+-CONFIG_HID_ACRUX_FF=3Dy
+-CONFIG_HID_APPLE=3Dy
+-CONFIG_HID_BELKIN=3Dy
+-CONFIG_HID_CHERRY=3Dy
+-CONFIG_HID_CHICONY=3Dy
+-CONFIG_HID_CYPRESS=3Dy
+-CONFIG_HID_DRAGONRISE=3Dy
+-CONFIG_HID_ELECOM=3Dy
+-CONFIG_HID_EMS_FF=3Dy
+-CONFIG_HID_EZKEY=3Dy
+-CONFIG_HID_GREENASIA=3Dy
+-CONFIG_HID_GYRATION=3Dy
+-CONFIG_HID_HOLTEK=3Dy
+-CONFIG_HID_KENSINGTON=3Dy
+-CONFIG_HID_KEYTOUCH=3Dy
+-CONFIG_HID_KYE=3Dy
+-CONFIG_HID_LCPOWER=3Dy
+-CONFIG_HID_LOGITECH=3Dy
+-CONFIG_HID_LOGITECH_DJ=3Dy
+-CONFIG_HID_MAGICMOUSE=3Dy
+-CONFIG_HID_MICROSOFT=3Dy
+-CONFIG_HID_MONTEREY=3Dy
+-CONFIG_HID_MULTITOUCH=3Dy
+-CONFIG_HID_NTRIG=3Dy
+-CONFIG_HID_ORTEK=3Dy
+-CONFIG_HID_PANTHERLORD=3Dy
+-CONFIG_HID_PETALYNX=3Dy
+-CONFIG_HID_PICOLCD=3Dy
+-CONFIG_HID_PRIMAX=3Dy
+-CONFIG_HID_PRODIKEYS=3Dy
+-CONFIG_HID_ROCCAT=3Dy
+-CONFIG_HID_SAITEK=3Dy
+-CONFIG_HID_SAMSUNG=3Dy
+-CONFIG_HID_SMARTJOYPLUS=3Dy
+-CONFIG_HID_SONY=3Dy
+-CONFIG_HID_SPEEDLINK=3Dy
+-CONFIG_HID_SUNPLUS=3Dy
+-CONFIG_HID_THRUSTMASTER=3Dy
+-CONFIG_HID_TIVO=3Dy
+-CONFIG_HID_TOPSEED=3Dy
+-CONFIG_HID_TWINHAN=3Dy
+-CONFIG_HID_UCLOGIC=3Dy
+-CONFIG_HID_WACOM=3Dy
+-CONFIG_HID_WALTOP=3Dy
+-CONFIG_HID_WIIMOTE=3Dy
+-CONFIG_HID_ZEROPLUS=3Dy
+-CONFIG_HID_ZYDACRON=3Dy
+-CONFIG_INPUT_EVDEV=3Dy
+-CONFIG_INPUT_GPIO=3Dy
+-CONFIG_INPUT_JOYSTICK=3Dy
+-CONFIG_INPUT_MISC=3Dy
+-CONFIG_INPUT_TABLET=3Dy
+-CONFIG_INPUT_UINPUT=3Dy
+-CONFIG_JOYSTICK_XPAD=3Dy
+-CONFIG_JOYSTICK_XPAD_FF=3Dy
+-CONFIG_JOYSTICK_XPAD_LEDS=3Dy
+-CONFIG_KALLSYMS_ALL=3Dy
+-CONFIG_KSM=3Dy
+-CONFIG_LOGIG940_FF=3Dy
+-CONFIG_LOGIRUMBLEPAD2_FF=3Dy
+-CONFIG_LOGITECH_FF=3Dy
+-CONFIG_MD=3Dy
+-CONFIG_MEDIA_SUPPORT=3Dy
+-CONFIG_MSDOS_FS=3Dy
+-CONFIG_PANIC_TIMEOUT=3D5
+-CONFIG_PANTHERLORD_FF=3Dy
+-CONFIG_PERF_EVENTS=3Dy
+-CONFIG_PM_DEBUG=3Dy
+-CONFIG_PM_RUNTIME=3Dy
+-CONFIG_PM_WAKELOCKS_LIMIT=3D0
+-CONFIG_POWER_SUPPLY=3Dy
+-CONFIG_PSTORE=3Dy
+-CONFIG_PSTORE_CONSOLE=3Dy
+-CONFIG_PSTORE_RAM=3Dy
+-CONFIG_SCHEDSTATS=3Dy
+-CONFIG_SMARTJOYPLUS_FF=3Dy
+-CONFIG_SND=3Dy
+-CONFIG_SOUND=3Dy
+-CONFIG_STRICT_KERNEL_RWX=3Dy
+-CONFIG_SUSPEND_TIME=3Dy
+-CONFIG_TABLET_USB_ACECAD=3Dy
+-CONFIG_TABLET_USB_AIPTEK=3Dy
+-CONFIG_TABLET_USB_HANWANG=3Dy
+-CONFIG_TABLET_USB_KBTAB=3Dy
+-CONFIG_TASKSTATS=3Dy
+-CONFIG_TASK_DELAY_ACCT=3Dy
+-CONFIG_TASK_IO_ACCOUNTING=3Dy
+-CONFIG_TASK_XACCT=3Dy
+-CONFIG_TIMER_STATS=3Dy
+-CONFIG_TMPFS=3Dy
+-CONFIG_TMPFS_POSIX_ACL=3Dy
+-CONFIG_UHID=3Dy
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=3Dy
+-CONFIG_USB_EHCI_HCD=3Dy
+-CONFIG_USB_HIDDEV=3Dy
+-CONFIG_USB_USBNET=3Dy
+-CONFIG_VFAT_FS=3Dy
+--=20
+2.40.0.577.gac1e443424-goog
+
