@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EA96DE3CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B601A6DE3F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjDKSX3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 14:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S229783AbjDKScZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDKSX2 (ORCPT
+        with ESMTP id S229490AbjDKScX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:23:28 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D40746BB;
-        Tue, 11 Apr 2023 11:23:27 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-947abd74b10so460874066b.2;
-        Tue, 11 Apr 2023 11:23:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681237406;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9I88KzYwTfgVOVqx5a6cLuDweAMKwPiePasaGOIA6lM=;
-        b=6JRDkrkvkk9ccBd/OcR5ogEZRgHoU5ZRGAmUsBbUGry/PdxnDbbnoA4jzDTstdOU+N
-         pMUf4KhjaQ0gG+kKlmBaynFGokKy4AskBvUINQtTfiKihY8ygrD/ZFTNsxrqcg0jZumI
-         Lc+fa1rkKolKfNMqJsgLPU7ePNe3e74kOx+EHDjhP6rrSCqfcvmMK4x835FnmqQKCssK
-         PYAVfKXI8BQBW6nj5C7aCPa0h1V4R/AEDo+7rKem1l9Saa4HYARKx+GW1YqrCf0tPCXH
-         aaxsMIQ+qyVMhYbVRmilmejbGSCqbRe6bFhLWCzS8bMySw25tn+L7DZyNnWy6qJCgfCO
-         9WBw==
-X-Gm-Message-State: AAQBX9epto7ir9XYqFnpCSx+Uff2+tEwvO0Pk91z1sgKH86K3iBfvlQG
-        B5CHpodUsjzZ+6FjaScNQ9lHnV6asepSO1bGGYc=
-X-Google-Smtp-Source: AKy350bFx8QHLSD/DS4PKiAulmtCxS/55SK4IcirOWqY0s0FsUjPWKuZEaRzMiJ9Bl0ymLA2tMOt1hwxsRXWMYbW6HA=
-X-Received: by 2002:a50:9ee9:0:b0:504:efc0:9f97 with SMTP id
- a96-20020a509ee9000000b00504efc09f97mr35595edf.3.1681237405932; Tue, 11 Apr
- 2023 11:23:25 -0700 (PDT)
+        Tue, 11 Apr 2023 14:32:23 -0400
+X-Greylist: delayed 243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Apr 2023 11:32:22 PDT
+Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F55ABD
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681237940;
+        bh=mp0sQiFFTDUpNh6NxMv9OYuqBQq73chrKv/EDkfDVeA=;
+        h=From:To:Cc:Subject:Date;
+        b=GxaOKy/LD0w8FIvheQXjXS8Ey3/T7x6UysU7mHTCC1qVwDqaEychtuch6oNI6KK6/
+         pY3umw3qyvpBKll8/A2vfOoCcubMYymoVuGmYm8wHcxwbzrre4LG2X6P5RtLvNZz/l
+         9n/Iu2Bxo8uLH1o64O8lS+Z8o4EgXfU5zB3xgDnc=
+Received: from wen-VirtualBox.lan ([106.92.97.36])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 632ACC6E; Wed, 12 Apr 2023 02:24:50 +0800
+X-QQ-mid: xmsmtpt1681237490tazep2bw9
+Message-ID: <tencent_FD958236269FD3A7996FFCF29E9BAA4EA809@qq.com>
+X-QQ-XMAILINFO: Nwte6vbuj0EqxKzjqFSWD9W9/wTGARFQ0IhiU5/jHK3ELV/l0jLhaDQ2FiELSd
+         HOj/VAjLbJKgEb6Zq08bZ6Swkwkwre0YpLj01kZwffRan0IHjtuK8fhX28vCS6ztIRcxtJX6fSzU
+         C6J7+U9fMQxdswrnF8Dxkf+0oSoCbyxFpxQJL929Rm9a7kT3wnFx6JXoOdiJ3oaYNNhWDIldNx62
+         kUHRBUP1RkUL+YtJOqxALEVS4qr3qHyDlYzN4c9xhE/VdPyKH5iNbuhGEPZwqdef0OYyCkEJ80pf
+         RCgATxRbKy5BW9bNNoAySXeAZESjSkqhAVCFCvw5o/Kzg6MJlnNKirwNmGuY7th/McCFVa2z5FgZ
+         7G9ZPL3r5GmeMpuCmkjyLklM1wbSrqfXzn1jy9SXtzhmSYUsh9XrxhrWWBYgPmZGZqaLnU0JIO47
+         HwR8+it3o8J/35kgXJ58gwBSEA8CLVyJuIkyHew2KapJ3bprH8PHjoiV13cKPrYLuhQM9Yijr/gw
+         9Gq9Fotoyt5c4uwjjBGTRsKWFe7A/69gWRD0/bf2L8wnwGQCHS16Lq7nyfhL+COc7urPbUygAiEq
+         r6RKUf7kvarIK9V41XID2B7Ncl/DW4lCAIFjFo2u9rKU7UW8nxcUZ/JYz8JIRT3m9zcVVNj3joAX
+         FbXVAS2JK4hzIMZYoasVq2ZCVMAV4gX3PVQHFwkfNKBa2zRRrKY+f20OHup8ZdTevclsbLEBKAvJ
+         RJ5lCUucufl5/FSwtjYNVuAj7/D6H3Qi1FKndNlHAsy1iYgn9AtCHFF/JJnfTIKdYpgnjWiGACdG
+         8FVloaLV8sD8FcOv9im1cpKiIcA+VvlJL0W7i8aMyi3NdzM9GzIXyp1nUuJ6HduL5FE6YzJih5aL
+         vTd4yZm58C3oByZxNCwwN63U1TvlUOEPaD74GewakHMm1jjkcFQmPXbxOL3S+J9F1L8BeYbCteXH
+         Pos2U9TQUHljwhdKI59UD2u/95Z170MNdLKm8cO0pV/Wb49lIvh5nwWag0zhYeA/adaDAcfeEfF8
+         ZiNilm5iqgr2mjnBCrxhrgZrlUtbSDqdMNeH8C6A==
+From:   wenyang.linux@foxmail.com
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        William Lam <william.lam@bytedance.com>,
+        Fu Wei <wefu@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: compaction: optimize compact_memory to comply with the admin-guide
+Date:   Wed, 12 Apr 2023 02:24:26 +0800
+X-OQ-MSGID: <20230411182426.972-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230410205305.1649678-1-daniel.lezcano@linaro.org> <20230410205305.1649678-6-daniel.lezcano@linaro.org>
-In-Reply-To: <20230410205305.1649678-6-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Apr 2023 20:23:14 +0200
-Message-ID: <CAJZ5v0iOPsQKrnK3UsR+9vLhTf2jysTAEJD+71aeyfT8Gy1R1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] thermal/core: Prepare sanitizing thermal class
- sysfs content
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,
+        RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Some drivers are accessing the thermal zone device structure to create
-> specific entries in /sys/class/thermal regardless the documentation.
->
-> It is questionable as the specific information should be in the
-> driver's sysfs directory, not the framework it is dealing with.
->
-> It has been long time these specific attributes were added in the
-> thermal sysfs directory and are limited to the ACPI thermal driver and
-> the Menlon driver.
->
-> It is probable those are not really needed, so in order to figure out
-> if that is the case, let's create a default option disabling the
-> attribute in order to prepare a definitive removal.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/Kconfig | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 4cd7ab707315..cca4e5cf6f30 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -33,6 +33,18 @@ config THERMAL_STATISTICS
->
->           If in doubt, say N.
->
-> +config THERMAL_SYSFS_OBSOLETE_SINGULARITY
-> +       bool "Enable obsolete and undocumented sysfs extra information"
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-I was talking about making an extra Kconfig option in the Menlow
-driver to make the extra sysfs stuff depend on.
+For the /proc/sys/vm/compact_memory file, the admin-guide states:
+When 1 is written to the file, all zones are compacted such that free
+memory is available in contiguous blocks where possible. This can be
+important for example in the allocation of huge pages although processes
+will also directly compact memory as required
 
-Throwing ACPI in the same bucket is a non-starter.
+But it was not strictly followed, writing any value would cause all
+zones to be compacted. In some critical scenarios, some applications
+operating it, such as echo 0, have caused serious problems.
 
-> +       def_bool n
-> +       help
-> +         Enable sysfs extra information added in the thermal zone and
-> +         the driver specific sysfs directories. That could be a link
-> +         to the associated thermal zone as well as a link pointing to
-> +         the device from the thermal zone. By default those are
-> +         disabled and are candidate for removal, if you need these
-> +         information anyway, enable the option or upgrade the
-> +         userspace program using them.
-> +
->  config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
->         int "Emergency poweroff delay in milli-seconds"
->         default 0
-> --
-> 2.34.1
->
+It has been slightly optimized to comply with the admin-guide.
+
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: William Lam <william.lam@bytedance.com>
+Cc: Fu Wei <wefu@redhat.com>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+---
+ mm/compaction.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/mm/compaction.c b/mm/compaction.c
+index c8bcdea15f5f..3c4aa533d61c 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -2780,6 +2780,17 @@ static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int
+ static int sysctl_compaction_handler(struct ctl_table *table, int write,
+ 			void *buffer, size_t *length, loff_t *ppos)
+ {
++	struct ctl_table t;
++	int compact;
++	int ret;
++
++	t = *table;
++	t.data = &compact;
++
++	ret = proc_dointvec_minmax(&t, write, buffer, length, ppos);
++	if (ret)
++		return ret;
++
+ 	if (write)
+ 		compact_nodes();
+ 
+@@ -3099,6 +3110,8 @@ static struct ctl_table vm_compaction[] = {
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0200,
+ 		.proc_handler	= sysctl_compaction_handler,
++		.extra1		= SYSCTL_ONE,
++		.extra2		= SYSCTL_ONE,
+ 	},
+ 	{
+ 		.procname	= "compaction_proactiveness",
+-- 
+2.37.2
+
