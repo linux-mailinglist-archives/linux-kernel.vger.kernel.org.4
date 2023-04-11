@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA046DDD39
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128826DDD3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjDKOF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S229533AbjDKOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjDKOFY (ORCPT
+        with ESMTP id S229807AbjDKOF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:05:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287EE5B;
-        Tue, 11 Apr 2023 07:05:21 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PwnYq54W2zSrTf;
-        Tue, 11 Apr 2023 22:01:03 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 22:04:58 +0800
-Message-ID: <6df9fd42-1b1b-746a-10aa-7bd64ec2ce76@huawei.com>
-Date:   Tue, 11 Apr 2023 22:04:58 +0800
+        Tue, 11 Apr 2023 10:05:29 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1223C35
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:05:28 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id q5so11060145ybk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681221928; x=1683813928;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I0vFaskCpZmNJeRc0/nVEC/5T8uA71WB290yTzRzGdo=;
+        b=VgDdIvVTkOiDV708jd0URUaPP2R0GhLmuy84YnDfCC8l4QK5WRMAeEGfxc6SsvIrNn
+         5KhIU4DBXIjusjgqkTJBZ+ptq8kOVofQdOOSnefC7QTRODqCF3TEoNCvvRsuVfHAPeiM
+         YLTavuwZYARDQ4V8CppMkXuKfIgmc6nIDOK7sYR/+A6QAlZQh9caB2tPMwMMfphCRQmp
+         +vpw4zeLIl1aa35veoPcSrBttTYsserRG0rE0Yu9Run6BV65hvWipgi/+CpA51xJxnZo
+         5h327lq7WGbhGGgDnK3rnO7XRAJf5+gMbdbl0e4fJ1lhoXGSiHP0YxgQWhEaMRLOZeKg
+         EyLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681221928; x=1683813928;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I0vFaskCpZmNJeRc0/nVEC/5T8uA71WB290yTzRzGdo=;
+        b=TV8et86s3qhqTLo15QIUJntqvthlv1FKlMJUEpIyeAkY2+AfLo4fu0fcVNdfWcci6K
+         kwFfmxkgdUJCD25U76qiY7/aYTEze0z65M7f1tRuFWIKNTOlQVuAV03PL0O6eAKcENLE
+         8yIM04/xMdRca2nxY3QIev9YYoCRRVYWIBcgghd7afFLBRB8ith/IApRrH4F3zoyCOtD
+         QwYFR9ZoEaFQo5wyoHDy5NRWICH4+KJjReE4v2AiEi/sTPcVZqo1sJ3Y2jXc3GorH2eb
+         scRQXdbT219KoiJOjZXM6jctzJ/0HjxnD3bmRVB/mlRIfgxL9u5t1FI4ygKOGIus9tE2
+         7fbg==
+X-Gm-Message-State: AAQBX9efqM307eSq1qG3oZ5Cu+S5HKNCXmLx3DN0ziQ2qGvaVateexM2
+        88nBCi2AppUaHUI388rU9Ue6xQ==
+X-Google-Smtp-Source: AKy350b5bYtpIsKCWn3lVRtZx+gH/IQvKDmS8WixA4HXanBaMMo4Bcx0pmk8k7zhvETs8fIN4J6k/w==
+X-Received: by 2002:a25:dc90:0:b0:b8b:f8c5:27d1 with SMTP id y138-20020a25dc90000000b00b8bf8c527d1mr1798866ybe.24.1681221927887;
+        Tue, 11 Apr 2023 07:05:27 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id 187-20020a8103c4000000b00545a081847fsm3511942ywd.15.2023.04.11.07.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 07:05:27 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 10:05:25 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v3 3/3] counter: 104-quad-8: Utilize helper functions to
+ handle PR, FLAG and PSC
+Message-ID: <ZDVpJb9DyIU+5eJf@fedora>
+References: <cover.1681134558.git.william.gray@linaro.org>
+ <669c8f782f11fe27c4568e4fc3ba459c4f954874.1681134558.git.william.gray@linaro.org>
+ <ZDVli05x7u/bg7Zc@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 2/2] ext4: use __GFP_NOFAIL if allocating
- extents_status cannot fail
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20230406132834.1669710-1-libaokun1@huawei.com>
- <20230406132834.1669710-3-libaokun1@huawei.com>
- <20230411091957.wuwa7wii7pj35ua7@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230411091957.wuwa7wii7pj35ua7@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OjifHeE5SWJCA/bY"
+Content-Disposition: inline
+In-Reply-To: <ZDVli05x7u/bg7Zc@smile.fi.intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/11 17:19, Jan Kara wrote:
-> On Thu 06-04-23 21:28:34, Baokun Li wrote:
->> If extent status tree update fails, we have inconsistency between what is
->> stored in the extent status tree and what is stored on disk. And that can
->> cause even data corruption issues in some cases.
->>
->> In the extent status tree, we have extents which we can just drop without
->> issues and extents we must not drop - this depends on the extent's status
->> - currently ext4_es_is_delayed() extents must stay, others may be dropped.
->>
->> For extents that cannot be dropped we use __GFP_NOFAIL to allocate memory.
->> A helper function is also added to help determine if the current extent can
->> be dropped, although only ext4_es_is_delayed() extents cannot be dropped
->> currently. In addition, with the above logic, the undo operation in
->> __es_remove_extent that may cause inconsistency if the split extent fails
->> is unnecessary, so we remove it as well.
->>
->> Suggested-by: Jan Kara <jack@suse.cz>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->> ---
->> V1->V2:
->> 	Add the patch 2 as suggested by Jan Kara.
->>
->>   fs/ext4/extents_status.c | 36 +++++++++++++++++++++++++++++-------
->>   1 file changed, 29 insertions(+), 7 deletions(-)
->>
->> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
->> index 7bc221038c6c..8eed17f35b11 100644
->> --- a/fs/ext4/extents_status.c
->> +++ b/fs/ext4/extents_status.c
->> @@ -448,12 +448,29 @@ static void ext4_es_list_del(struct inode *inode)
->>   	spin_unlock(&sbi->s_es_lock);
->>   }
->>   
->> +/*
->> + * Helper function to help determine if memory allocation for this
->> + * extent_status is allowed to fail.
->> + */
->> +static inline bool ext4_es_alloc_should_nofail(struct extent_status *es)
-> I'd call this function ext4_es_must_keep() and also use it in
-> es_do_reclaim_extents() instead of ext4_es_is_delayed(). Do this as a
-> preparatory patch please.
 
-Totally agree! ext4_es_must_keep() is short and clear. It does make more 
-sense to
-replace ext4_es_is_delayed() in es_do_reclaim_extents() with the new 
-helper, I'll try
-to find out if there are any ext4_es_is_delayed() that need to be 
-replaced as well.
+--OjifHeE5SWJCA/bY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> @@ -792,9 +809,16 @@ static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
->>   	}
->>   
->>   	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
->> -				  newes->es_pblk);
->> -	if (!es)
->> -		return -ENOMEM;
->> +				  newes->es_pblk, 0);
-> I would just call this like:
->
-> 	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
-> 				newes->es_pblk, ext4_es_must_keep(newes));
->
-> to save the ifs below.
+On Tue, Apr 11, 2023 at 04:50:03PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 10, 2023 at 10:03:13AM -0400, William Breathitt Gray wrote:
+> > The Preset Register (PR), Flag Register (FLAG), and Filter Clock
+> > Prescaler (PSC) have common usage patterns. Wrap up such usage into
+> > dedicated functions to improve code clarity.
+>=20
+> ...
+>=20
+> >  	*val =3D 0;
+>=20
+> Is not needed now as always being initialized by below call.
 
-Yes! It does get a little long-winded here.
+The regmap_noinc_read() call only reads the number of bytes requested.
+Since we request 3 bytes, the upper bytes of the u64 val remain
+uninitialized, so that is why we need to set *val =3D 0. This isn't
+immediately clear in the code, so I can add a comment to make it
+explicit.
 
->
->> +	if (!es) {
->> +		/* Use GFP_NOFAIL if the allocation cannot fail. */
->> +		if (ext4_es_alloc_should_nofail(newes))
->> +			es = ext4_es_alloc_extent(inode, newes->es_lblk,
->> +					newes->es_len, newes->es_pblk, 1);
->> +		else
->> +			return -ENOMEM;
->> +	}
->> +
->>   	rb_link_node(&es->rb_node, parent, p);
->>   	rb_insert_color(&es->rb_node, &tree->root);
->>   
->> @@ -1349,8 +1373,6 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->>   						    ext4_es_status(&orig_es));
->>   			err = __es_insert_extent(inode, &newes);
->>   			if (err) {
->> -				es->es_lblk = orig_es.es_lblk;
->> -				es->es_len = orig_es.es_len;
->>   				if ((err == -ENOMEM) &&
->>   				    __es_shrink(EXT4_SB(inode->i_sb),
->>   							128, EXT4_I(inode)))
-> Also now __es_remove_extent() cannot fail (it will always remove what it
-> should, maybe more) so please just make it void function (as a separate
-> cleanup patch afterwards). Thanks!
->
-> 								Honza
-Yes! Thank you very much for the review!
-I will send a patch V3 with the changes suggested by you.
+>=20
+> >  	spin_lock_irqsave(&priv->lock, irqflags);
+> > =20
+> >  	iowrite8(SELECT_RLD | RESET_BP | TRANSFER_CNTR_TO_OL, &chan->control);
+> > -
+> > -	for (i =3D 0; i < 3; i++)
+> > -		*val |=3D (unsigned long)ioread8(&chan->data) << (8 * i);
+> > +	ioread8_rep(&chan->data, val, 3);
+> > =20
+> >  	spin_unlock_irqrestore(&priv->lock, irqflags);
+>=20
+> ...
+>=20
+> > +	struct channel_reg __iomem *const chan =3D priv->reg->channel + id;
+>=20
+> Not sure if array representation will look better here and elsewhere.
+>=20
+> 	struct channel_reg __iomem *const chan =3D &priv->reg->channel[id];
 
--- 
-With Best Regards,
-Baokun Li
-.
+Perhaps so, but all these struct channel_reg lines will go away in the
+next patch [0] migrating to the regmap API, so for the sake of stability
+of this patch I hesitate to change these lines.
+
+William Breathitt Gray
+
+[0] https://lore.kernel.org/all/20230410141252.143998-1-william.gray@linaro=
+=2Eorg/
+
+--OjifHeE5SWJCA/bY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZDVpJQAKCRC1SFbKvhIj
+K1QNAP9X/VRSYKcIROBO8Z/a3tPqYka7FBDZ4yVZcuyEYLY5NwD9HijhOiOYe4/S
+3MLRTNY1lrcDilW1/R1pPt6uDjf9dAM=
+=WFt0
+-----END PGP SIGNATURE-----
+
+--OjifHeE5SWJCA/bY--
