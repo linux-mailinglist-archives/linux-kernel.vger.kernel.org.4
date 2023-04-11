@@ -2,223 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3196DE12C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E416DE12F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 18:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDKQnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 12:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S229506AbjDKQnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 12:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjDKQnJ (ORCPT
+        with ESMTP id S229661AbjDKQnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 12:43:09 -0400
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C05AD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681231386; bh=kbuXP04/d4J/zBFq0sBCEVloCxLuyRQ6S4W2lvhk08Q=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XUC+Tw12UuxdrOm5IZzAsF0iK4GJtUGCj39gBNERGOG85X5/mA2XtSaazKxlD1NPtfXzsj8ATMQhryEPH5hvRzptf92BUWoPbwFx1W3ujZ98Q/lQ1EhtlB9glOWUD7sY18YkncFCG9KpUz88bRb8u+LKS4EohL29coKA1rCXmLU+WHrKB/JFKWxChxlyScweQkmwV1LLEkcfWRARTMyC/3iTfxjukaYP4dBuvhhDVFxwb7VOcxKnwwKIaB7eT5BcCH+05aXJXejJJ0SJo5gy03q151BN4sot415xO6BCb4uCHPIJDiiLIeMpUpcGqHfhprWQ6WjUGI/xFcVOZ2vyVA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681231386; bh=pxmLraZoweNJqwnhja7+1CJL1iL0dqvd27PaPEyV2FE=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=O1xgW+kymxFGs1Jdol2N1TSy8bOYsU71i3HX5OEHEM0CqwFka5tRff8pYgJOLH/aMt7sb8h7KMGY+KlYRjQ8k6FVmaVPthJXI6oyODtOCzvALxXhfEQ+xofqhlDnPHlqIz0U6VffMEFm8yHvutwP24Hvi/06cKdLkulwpp79eOZUoAFh417CxFWHbjqq8cWNsOMN1C5kJ2OoyNIKHbbJT6XIvuThc0PbaAaulLGGXI4dL1ZCgPEupFU/fqE3H60c8oU4x0H1+zpsJRkpdQucOPPYDiwujs3sZGmH++pYVJheMvdR/JJfzyGHrplWhpKowdlPzL31OeS36zpgO0f9Lg==
-X-YMail-OSG: MQ885NoVM1mxebdkX9ARxQfN_PRBiYbQY7GKOz8bdf9fejqh.xBhuX6JVzs7Amf
- ZTZ8lwcxqSPIX2Nagi6Kq630_TAImvS2h9LZsONcg8ZlqSrjIg9RLvz_C533rpNUL5IQqc1ygVU8
- unUXWdsRpfcKxlSGQFBfaRXR1u5XXVcY9DTyC1cDVsP1fPChp7XKlZotVym0ehkNWVW1lqjA.8yS
- FbFBv9LSG9igJn29Y3p8OMjNZOv97cZxDWJymWhiJEoJL5YE3pPwPM84TRfgF3GqWzmpLNEEBQh9
- _l4RtqhOSYqWhD5_QjSYsMhxoAPf9HnLJTYU6_H4sjS861JCmKYz1BVe5Ia4lzRSiStzymJ5on4K
- sVOhEEPlKzOh_kIVuA8rEX.UiOnF2vdO1QdmJOamIUmESWhGuBEbwCOrR.CMPZDA301Ss.Xx9FOx
- _rmYXwcdPnxCveTwUeBw78dMu7HABfBvIJzJICDh4GD7PhDauc4IcX5cVQmofj9EUYr4MgzQNFK7
- Q1TxYDWbuf_ygNxg9oAZj3_yE9rFCBdAHfJ7gQP7WyBwNNF.VAffFa76P0.RYsW8HXqRsGcxdLxz
- 3M_EQAiU.nL2RSwP7Z8bbU8JDUecQPQNxYYi6jBpNEeY1QwYsdBtSDxPHAmZl5H1ByNVN7gj0kQL
- f4nrIOfKEyG1raDfOb2Kd021Gmi_H3hVQWrgxNmzNTO90DlrME.ou0.8CJLJPav_GtxXkIV4BRYD
- gDipSU6OK5th9nFx_TyzosXhMBrtYNTJS4B1NXkqpknwhobhLl_Hvy8GRhOqjU_Udw2.5.s.uXDc
- SmTr8aokXIbp1LZVVA4EcmeeQIYXjI5VW2QyMGNoGMRhL0ADu.Q2Y5O9SD6DWC7uW_tecIKRFEvk
- YBKaMpr4QPrZFQcyzxrPhZfHBdn.TYCSnxoNcOqI5Zl6zrnCM4lG9dRl7V.KeBVbWUDDCUrj84mj
- x8hrCCiMOUjxU9FVEc8yrHPTrS1uQo1pryyDm4HF3eHwG_TwAV20zENMGrins6rl2LDKHyAghZtL
- 3sEL7rzc9FCmpzsU9xt8dwoNPCLoc5EC_.F6wV_VCctnDfmNih67ci4F3f65xivR_LWmO24Neu31
- og.6u7iVevtjviuvnDfXXlEyLRiTKPmfv5SDH5.ZKXRd2EEbk8350Xf2lMGrdUw3Ql4hk2rs4vyb
- aSph67ESHrxRROWtNd85c7ql7JvQ4Zn8_jssD4HqE_E0LDYBgVNonLa.EQui3t6cJm9eJK2pyeGj
- f3rSC8BqBicUVjvOqUSmTt2U0XlNJ.jqhKhFDmoYsXGixKJoxTXjX_rh4X3cjeW1bHVLQQjGadGS
- Hmo2bEs4.F0XEFr7JaYktx0wznIB6RVzmygvzxqGtea94SHpKzslbDmHn.4esrThUHhN6oe2aTT8
- tBgSm0ZmU5pjF7PMH2knR5AYpHTYXC_QXPHiGn2mnGBrRehQ.KDYHfH0tWYhxIw95PlLSUMc6sFV
- HHq2OXni8OBUFeywlZvb8evZ60Zj0wgVoMKIRrpx_MPD7z2A70nR4L20lh_mbqQRakH0.vM6KFQL
- 15TrxlZ17bNfJbpic4ESEug74WD9vrfsXn9AEEo7ZnxZMRcjbvPTpyJ435ZccaW.7vSyBbFDmijj
- EX6NiSmaLmdmpbDwO7Qonqf_6W5OlL3L6QQ49EGlCvWvxGfCyai5BbuUy_c.RBzG2hAzH.7Z_4tb
- ZVhica_wKjpVLopMAIzaNShrbBhEo6FH410u5h9movye0IE6kDHUZpSRMH4alCTCZjNR4hA1YaAr
- xqLdiwBaxM3NTFiYVaCMHEw5DvOVAUAA3rq17Dwqhvj2H6p3.tzCa7YBXvCMgsF0gP84QVk0cPib
- La4WPOV4Skpzrs6Ex5KcU2.7xPPJ2YihgDzpNVJQZOjMBSl9clzy6pxMr_dXRBFzA.q7r0_oswcY
- E8H60FtP5CU61lrLSMaGQ1nQmzPOIq8JreBCRgIhcTrISYwOqCyjaZzPtZUL1Pz1AsNS49BeLSRZ
- g1tT9Fgp4SqLjADtqwqg9EvFab3DyPuVoP0zk1F49Op.dRoVXSmIERkRHC.Itn9ColKerh86ddfG
- kgvTirRpSktuhsjURt0G72jvWi2S9jUQofM3dPNNMO72XCdbjUiywZtCUjv5sRHyHwY9k94JdrIB
- DE3RMDLdVORBVi1V6MlgxHyZXgSUi8YIvGt4L5JA.R6nQ7XI29gbeYhc2BRdrofdMVK8m35mCyF2
- 8Y49ne7MtRMZxbvPc1qtFxC7WyNuRQsOwZ7CLLZ1dL9dwfMxFEQUJLhB3QdOtqXkvcgfA8c28XLn
- SgkJkUAgz8a34deYqXSySRwKoxm11623A
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 3f153f18-f280-4344-9673-aa6e14977376
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Tue, 11 Apr 2023 16:43:06 +0000
-Received: by hermes--production-ne1-7dbd98dd99-7dkf6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID caefbefbe2cac6bdb238356981a38ca4;
-          Tue, 11 Apr 2023 16:43:02 +0000 (UTC)
-Message-ID: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
-Date:   Tue, 11 Apr 2023 09:42:59 -0700
+        Tue, 11 Apr 2023 12:43:10 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3358749F6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:43:09 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q15so5538836ljp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 09:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681231387;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f+Yn3w4i6ERhJRbEalDkX81nXU5W6d0rrV0jXP7xE40=;
+        b=QFgUdLSiBrEwNbHQ04X1boTAoorIGTiF6sCjmJuNEhDh5YRYplW2HFsR/8qPj/zRH6
+         bFS+gA3Kcbkf5sO/PY5yrQ2o2ENpG6g4z5qxUGFRBvtZSFGdmi6K/UO+W6AEXlEjWD31
+         Pr50qHaLDkwLcPVUVVGO/FK9xlZ+qAwk6dBMFFp5pmfikoC8gr1g29K6Didkx5KkdYsJ
+         OEgBDmqZ1qAXNZ9EcusjJDJ1R9zA76y0Nngb0ZJtx7apwCfRD8zhizpFLAj5q31eZXl2
+         qWAXXNYtMDXsNjdtbojR9WBVyRNxyw2y2pbxV3Sb2WrvPyD17LGjevDRBLeTLq0tDcp9
+         c1Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681231387;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+Yn3w4i6ERhJRbEalDkX81nXU5W6d0rrV0jXP7xE40=;
+        b=VGR4h5PwSf6oZ0npQe049qau7ii5UVnQjqUp6d4MbubpPsZyR1Byb6a/qC3gOmmN1b
+         7BIu9ksw8ieKTnM7Vj7RPZSScGwaW6OHTAkJUX7YkcY04FGLqIm1O7XCEDfGNwYd/Byj
+         mSatqwMdRZq1WrUsg/lJQAiBPIHI4duvuAh6KmYyRuJduPHRHmAQXkM9qQNDWxonbxYP
+         oFuGKoBG62/m6AQcBXtUeTBz1+4WQbymw87KidtcjQ9dH8SLW3MJ9cOCCg267iCNbMYg
+         QnAR6Z/qQTtTEvn79gaZ2YM3ts1nCbcgaszfdoxUTa02MUZI5BMH8dTJdE8XBxNDfuJY
+         bUfg==
+X-Gm-Message-State: AAQBX9cyi43gVsoB7w4oW78eaADpjyfWMTfos/VnUOvb4IJg2O6ZhHLs
+        hAlaAuB+VfQVT2zetmVEEWWfdg==
+X-Google-Smtp-Source: AKy350bMk4SkskVqv2ia31J+GxA0ArmyEzCNBnop1DJ9H7MWNk8XMD336eB/RYppFHgASDqtT8IemQ==
+X-Received: by 2002:a2e:82ce:0:b0:2a2:ca91:a99e with SMTP id n14-20020a2e82ce000000b002a2ca91a99emr4943313ljh.39.1681231387322;
+        Tue, 11 Apr 2023 09:43:07 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x28-20020ac25ddc000000b004e8017a2510sm2606561lfq.183.2023.04.11.09.43.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 09:43:06 -0700 (PDT)
+Message-ID: <90f32378-fa1c-a23e-2db2-2e83a42fd45e@linaro.org>
+Date:   Tue, 11 Apr 2023 19:43:06 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
- <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
- <e65b6ea91d66b78c382acdec14003d3665fcfd3e.camel@linux.ibm.com>
- <64d8dcae509beca4cd763acb148d2665b805ee6e.camel@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <64d8dcae509beca4cd763acb148d2665b805ee6e.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/msm/dpu: Delete a variable initialisation before a
+ null pointer check in two functions
+Content-Language: en-GB
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Archit Taneja <architt@codeaurora.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
+ <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
+ <13566308-9a80-e4aa-f64e-978c02b1406d@web.de>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <13566308-9a80-e4aa-f64e-978c02b1406d@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/2023 12:53 AM, Roberto Sassu wrote:
-> On Tue, 2023-04-11 at 03:22 -0400, Mimi Zohar wrote:
->> Hi Roberto,
->>
->> Sorry for the delay in responding...
-> Hi Mimi
->
-> no worries!
->
->> The patch description reads as though support for per LSM multiple
->> xattrs is being added in this patch, though lsm_get_xattr_slot() only
->> ever is incremented once for each LSM.  To simplify review, it would be
->> nice to mention that lsm_get_xattr_slot() would be called multiple
->> times per LSM xattr.
-> Ok, I will mention it.
->
->> On Fri, 2023-03-31 at 14:32 +0200, Roberto Sassu wrote:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> Currently, security_inode_init_security() supports only one LSM providing
->>> an xattr and EVM calculating the HMAC on that xattr, plus other inode
->>> metadata.
->>>
->>> Allow all LSMs to provide one or multiple xattrs, by extending the security
->>> blob reservation mechanism. Introduce the new lbs_xattr_count field of the
->>> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
->>> needs, and the LSM infrastructure knows how many xattr slots it should
->>> allocate.
->>>
->>> Dynamically allocate the new_xattrs array to be populated by LSMs with the
->>> inode_init_security hook, and pass it to the latter instead of the
->>> name/value/len triple. Unify the !initxattrs and initxattrs case, simply
->>> don't allocate the new_xattrs array in the former.
->>>
->>> Also, pass to the hook the number of xattrs filled by each LSM, so that
->>> there are no gaps when the next LSM fills the array. Gaps might occur
->>> because an LSM can legitimately request xattrs to the LSM infrastructure,
->>> but not fill the reserved slots, if it was not initialized.
->> The number of security xattrs permitted per LSM was discussed in the
->> second paragraph.  The first line of this paragraph needs to be updated
->> to reflect the current number of security xattrs used, though that is
->> more related to the new lsm_get_xattr_slot().  Or perhaps the entire
->> paragraph is unnecessary, a remnant from
->> security_check_compact_filled_xattrs(), and should be removed.  
-> I would probably say in that paragraph that the number specified for
-> the lbs_xattr_count field determines how many times an LSM can call
-> lsm_get_xattr_slot().
->
->>> Update the documentation of security_inode_init_security() to reflect the
->>> changes, and fix the description of the xattr name, as it is not allocated
->>> anymore.
->>>
->>> Finally, adapt both SELinux and Smack to use the new definition of the
->>> inode_init_security hook, and to fill the reserved slots in the xattr
->>> array. Introduce the lsm_get_xattr_slot() helper to retrieve an available
->>> slot to fill, and to increment the number of filled slots.
->>>
->>> Move the xattr->name assignment after the xattr->value one, so that it is
->>> done only in case of successful memory allocation. For Smack, also reserve
->>> space for the other defined xattrs although they are not set yet in
->>> smack_inode_init_security().
->> This Smack comment should be moved to the previous paragraph and even
->> expanded explaining that lsm_get_xattr_slot() will be called for each
->> additional security xattr.
-> >From previous Paul's and Casey's comments, Smack will have just two
-> xattrs, assuming that security.SMACK_TRASMUTE64 can be set in
-> smack_inode_init_security(). I will change this part accordingly once
-> Casey can have a look at the function.
+On 11/04/2023 19:38, Markus Elfring wrote:
+> Date: Tue, 11 Apr 2023 18:24:24 +0200
+> 
+> The address of a data structure member was determined before
+> a corresponding null pointer check in the implementation of
+> the functions “dpu_hw_pp_enable_te” and “dpu_hw_pp_get_vsync_info”.
+> 
+> Thus avoid the risk for undefined behaviour by removing extra
+> initialisations for the variable “c” (also because it was already
+> reassigned with the same value behind this pointer check).
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: 25fdd5933e4c0f5fe2ea5cd59994f8ac5fbe90ef ("drm/msm: Add SDM845 DPU support")
 
-To be clear, Smack may use two xattrs from smack_inode_init_security(),
-SMACK64 and SMACK64_TRANSMUTE. SMACK64_TRANSMUTE is only set on directories.
-SMACK64_MMAP and SMACK64_EXEC can be set on files, but they have to be
-set explicitly. A file may have three xattrs, but only one from
-smack_inode_init_security().
+Plese follow the format for the Fixes tags and limit the hash to 12 
+chars. Proper tag:
 
-I'm looking at the existing Smack function, and it includes checking for
-the transmute attribute. Your patch seems to have dropped this important
-behavior. That needs to be restored in any case. You can tell that you need
-to include the SMACK64_TRANSMUTE xattr if setting it is detected.
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
 
->
->>> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM crash)
->>> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
->>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>> ---
->>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->>> index c2be66c669a..9eb9b686493 100644
->>> --- a/include/linux/lsm_hooks.h
->>> +++ b/include/linux/lsm_hooks.h
->>> @@ -28,6 +28,7 @@
->>>  #include <linux/security.h>
->>>  #include <linux/init.h>
->>>  #include <linux/rculist.h>
->>> +#include <linux/xattr.h>
->>>  
->>>  union security_list_options {
->>>  	#define LSM_HOOK(RET, DEFAULT, NAME, ...) RET (*NAME)(__VA_ARGS__);
->>> @@ -63,8 +64,27 @@ struct lsm_blob_sizes {
->>>  	int	lbs_ipc;
->>>  	int	lbs_msg_msg;
->>>  	int	lbs_task;
->>> +	int	lbs_xattr_count; /* number of xattr slots in new_xattrs array */
->>>  };
->>>  
->>> +/**
->>> + * lsm_get_xattr_slot - Return the next available slot and increment the index
->>> + * @xattrs: array storing LSM-provided xattrs
->>> + * @xattr_count: number of already stored xattrs (updated)
->>> + *
->>> + * Retrieve the first available slot in the @xattrs array to fill with an xattr,
->>> + * and increment @xattr_count.
->>> + *
->>> + * Return: The slot to fill in @xattrs if non-NULL, NULL otherwise.
->>> + */
->>> +static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
->>> +					       int *xattr_count)
->>> +{
->>> +	if (unlikely(!xattrs))
->>> +		return NULL;
->>> +	return xattrs + (*xattr_count)++;
->> At some point, since lsm_get_xattr_slot() could be called multiple
->> times from the same LSM, shouldn't there be some sort of bounds
->> checking?
-> >From previous Paul's comments, I understood that he prefers to avoid
-> extra checks. It will be up to LSM developers to ensure that the API is
-> used correctly.
->
-> Thanks
->
-> Roberto
->
+Other than that LGTM.
+
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> index 0fcad9760b6f..870ab3ebbc94 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> @@ -176,7 +176,7 @@ static int dpu_hw_pp_enable_te(struct dpu_hw_pingpong *pp, bool enable)
+>   static int dpu_hw_pp_connect_external_te(struct dpu_hw_pingpong *pp,
+>   		bool enable_external_te)
+>   {
+> -	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> +	struct dpu_hw_blk_reg_map *c;
+>   	u32 cfg;
+>   	int orig;
+> 
+> @@ -221,7 +221,7 @@ static int dpu_hw_pp_get_vsync_info(struct dpu_hw_pingpong *pp,
+> 
+>   static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
+>   {
+> -	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> +	struct dpu_hw_blk_reg_map *c;
+>   	u32 height, init;
+>   	u32 line = 0xFFFF;
+> 
+> --
+> 2.40.0
+> 
+
+-- 
+With best wishes
+Dmitry
+
