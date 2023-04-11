@@ -2,160 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3436C6DDAEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081A26DDAF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjDKMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S229767AbjDKMgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDKMdz (ORCPT
+        with ESMTP id S229649AbjDKMgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:33:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5675226BE;
-        Tue, 11 Apr 2023 05:33:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E388861E22;
-        Tue, 11 Apr 2023 12:33:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF141C433D2;
-        Tue, 11 Apr 2023 12:33:50 +0000 (UTC)
-Message-ID: <42eefb17-6121-9cd0-4616-4af3045ec087@xs4all.nl>
-Date:   Tue, 11 Apr 2023 14:33:48 +0200
+        Tue, 11 Apr 2023 08:36:15 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AB23C25;
+        Tue, 11 Apr 2023 05:36:14 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54ee108142eso157253517b3.2;
+        Tue, 11 Apr 2023 05:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681216573; x=1683808573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TTZiJkh4SNH3a//CZAcPFpSvwQ67wtqUj8XGzW7S/K8=;
+        b=eyccItTKNLzhYwm3jQk6tUWBMpT5vsMYte+J2ELWoCHBj07FIvuorS1VTxF9bX4tQR
+         86gZzfJNolGUVBEswXnTV4uZrxwFp7bMW9G7QlAhY6zIEvnDI9xKgoCKInektOEbUaq+
+         tlEauRCj+gHpC5ZgQPAZsM1Hnm3QngYUtejU5VphH78F3Ca1bAbf1qIN1vfH7bLpn5K0
+         /lrBNArw8dNc4OE3a9fVntFOgqnPmaPFQnTKrBJXzHvQ7FaGVHbWxZMUiNXBN9jlFKWA
+         vaMlw2p91Nx1iGAr4QyjgCCwawW6wQ92R5+rnujTbzrX01QBWpnv+8ohuS+gne7qjDjb
+         VSuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681216573; x=1683808573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TTZiJkh4SNH3a//CZAcPFpSvwQ67wtqUj8XGzW7S/K8=;
+        b=plHjIKlNyMdtC68HtB/Losjfc5vm4VrNvTOLw5B/DgZH7KYUvqKXLyNIJLFVWdvL9y
+         s4Gk3R51W3Vjt9+RnmmH15ZYLfDMRbSbQz4/jIDJFQX/UQw0d51fHXbnPfqLKgFY1czu
+         XAnFFp7Q2xNZ5RK2QKndIe9mkVG26oattXJC+uVJg1kWf3e2gx0J9/K0ItOI/4hVF0sc
+         07FMdm8seyyckKLrhWlrlyPa5lUgCeBswX28DS4OfuRRMiwPVhVJ3bJ0Ijkxw78Te00Z
+         Pl/UqgJlt47jYXqQrblJ8jovsmaLrSrvMyvoCAsg/kqxICuq8LrKGWP6KXWZ2GUwuJ7t
+         FuJg==
+X-Gm-Message-State: AAQBX9eitAhiPIAU1qpbgLPGTsapntWShVA7oljYfUkJlasX2AqXF1Bd
+        MuU4Lg/4tx4a707v2bUQJB6kyXPPI5Fwv8yFlEE=
+X-Google-Smtp-Source: AKy350aAEQGFc9EUTMDsEXy8PB3OPt5BRQ9kMKxLjxaNUQyo4xwTVFMYo17obfrHQQl+dhbfX4AUeT5SKFa4D9EmoEo=
+X-Received: by 2002:a81:ae5d:0:b0:549:143f:3d3 with SMTP id
+ g29-20020a81ae5d000000b00549143f03d3mr7623571ywk.0.1681216573072; Tue, 11 Apr
+ 2023 05:36:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 09/13] media: verisilicon: Add Rockchip AV1 decoder
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230330154043.1250736-1-benjamin.gaignard@collabora.com>
- <20230330154043.1250736-10-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230330154043.1250736-10-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org> <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
+ <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org> <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
+ <9f896097-8410-4d09-b614-6e792b2160f4@selasky.org>
+In-Reply-To: <9f896097-8410-4d09-b614-6e792b2160f4@selasky.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 11 Apr 2023 14:36:01 +0200
+Message-ID: <CANiq72mv2uYe1x6cy4zUq8XHhAZcYYpt6hVXMG4yQZeqw1kY7Q@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Tue, Apr 11, 2023 at 11:52=E2=80=AFAM Hans Petter Selasky <hps@selasky.o=
+rg> wrote:
+>
+> Assume you need to update both the kernel and the rust compiler at the
+> same time. How do you do that? In the binary download case you have two
+> machines. One to build rust and one to build the kernel, so it is
+> technically not possible?
 
-On 30/03/2023 17:40, Benjamin Gaignard wrote:
-> Implement AV1 stateless decoder for rockchip VPU981.
-> It decode 8 and 10 bits AV1 bitstreams.
-> AV1 scaling feature is done by the postprocessor.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  drivers/media/platform/verisilicon/Makefile   |    1 +
->  .../media/platform/verisilicon/hantro_hw.h    |   64 +-
->  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2024 +++++++++++++++++
->  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++++
->  4 files changed, 2564 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
->  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_regs.h
-> 
+I don't understand the problem -- you can build (or download) new
+toolchains without changing the kernel, and you can keep several
+kernels and several toolchains installed, too.
 
-<snip>
+> I'll give you a real-life example to emphasis this. Apple and Microsoft
+> has done something very bad in the file system area. They mistreat what
+> happens to be the Norwegian character "=C3=A5" (0xE5). Norway is where I
+> live. Their solution is to split the "=C3=A5" character into the "a"
+> character (0x61) and the combining ring-over character (0x30A).
 
-> +static void rockchip_vpu981_av1_dec_set_tile_info(struct hantro_ctx *ctx)
-> +{
-> +	struct hantro_av1_dec_hw_ctx *av1_dec = &ctx->av1_dec;
-> +	struct hantro_av1_dec_ctrls *ctrls = &av1_dec->ctrls;
-> +	struct v4l2_av1_tile_info tile_info = ctrls->frame->tile_info;
+Sorry, but I don't see how all that relates to the current discussion (kern=
+el).
 
-I get this warning:
+> Daniel and Miguel: By saying it is not a good thing to build systems
+> completely from source,
 
-drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c: In function 'rockchip_vpu981_av1_dec_set_tile_info':
-drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:635:1: warning: the frame size of 1080 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-  635 | }
-      | ^
+I haven't said that at all. I regularly build from source myself, in fact.
 
-The cause is this tile_info struct that is on the stack.
+> For people that build stuff on their laptops it still matters. If you
+> have a beefy machine, it is a different case.
 
-Does this have to be a copy? Or can it be a pointer to ctrls->frame->tile_info?
+I don't follow. You said you are downloading 100s of GiB for XCode,
+but you are not OK with 100s of MiBs for Rust?
 
-> +	const struct v4l2_ctrl_av1_tile_group_entry *group_entry =
-> +	    ctrls->tile_group_entry;
-> +	int context_update_y =
-> +	    tile_info.context_update_tile_id / tile_info.tile_cols;
-> +	int context_update_x =
-> +	    tile_info.context_update_tile_id % tile_info.tile_cols;
-> +	int context_update_tile_id =
-> +	    context_update_x * tile_info.tile_rows + context_update_y;
-> +	u8 *dst = av1_dec->tile_info.cpu;
-> +	struct hantro_dev *vpu = ctx->dev;
-> +	int tile0, tile1;
-> +
-> +	memset(dst, 0, av1_dec->tile_info.size);
-> +
-> +	for (tile0 = 0; tile0 < tile_info.tile_cols; tile0++) {
-> +		for (tile1 = 0; tile1 < tile_info.tile_rows; tile1++) {
-> +			int tile_id = tile1 * tile_info.tile_cols + tile0;
-> +			u32 start, end;
-> +			u32 y0 =
-> +			    tile_info.height_in_sbs_minus_1[tile1] + 1;
-> +			u32 x0 = tile_info.width_in_sbs_minus_1[tile0] + 1;
-> +
-> +			// tile size in SB units (width,height)
-> +			*dst++ = x0;
-> +			*dst++ = 0;
-> +			*dst++ = 0;
-> +			*dst++ = 0;
-> +			*dst++ = y0;
-> +			*dst++ = 0;
-> +			*dst++ = 0;
-> +			*dst++ = 0;
-> +
-> +			// tile start position
-> +			start = group_entry[tile_id].tile_offset - group_entry[0].tile_offset;
-> +			*dst++ = start & 255;
-> +			*dst++ = (start >> 8) & 255;
-> +			*dst++ = (start >> 16) & 255;
-> +			*dst++ = (start >> 24) & 255;
-> +
-> +			// # of bytes in tile data
-> +			end = start + group_entry[tile_id].tile_size;
-> +			*dst++ = end & 255;
-> +			*dst++ = (end >> 8) & 255;
-> +			*dst++ = (end >> 16) & 255;
-> +			*dst++ = (end >> 24) & 255;
-> +		}
-> +	}
-> +
-> +	hantro_reg_write(vpu, &av1_multicore_expect_context_update,
-> +			 !!(context_update_x == 0));
-> +	hantro_reg_write(vpu, &av1_tile_enable,
-> +			 !!((tile_info.tile_cols > 1) || (tile_info.tile_rows > 1)));
-> +	hantro_reg_write(vpu, &av1_num_tile_cols_8k, tile_info.tile_cols);
-> +	hantro_reg_write(vpu, &av1_num_tile_rows_8k, tile_info.tile_rows);
-> +	hantro_reg_write(vpu, &av1_context_update_tile_id,
-> +			 context_update_tile_id);
-> +	hantro_reg_write(vpu, &av1_tile_transpose, 1);
-> +	if (rockchip_vpu981_av1_tile_log2(tile_info.tile_cols) ||
-> +	    rockchip_vpu981_av1_tile_log2(tile_info.tile_rows))
-> +		hantro_reg_write(vpu, &av1_dec_tile_size_mag, tile_info.tile_size_bytes - 1);
-> +	else
-> +		hantro_reg_write(vpu, &av1_dec_tile_size_mag, 3);
-> +
-> +	hantro_write_addr(vpu, AV1_TILE_BASE, av1_dec->tile_info.dma);
-> +}
+Anyway, both the Rust toolchain and the kernel can be built on laptops
+(I do so), and they don't need to be the highest end ones at all.
 
-Regards,
+> I thought that Rust didn't allow you to write outside the bounds of
+> arrays, similarly to the old Turbo Pascal language?
 
-	Hans
+It avoids all UB, including data races, not just out-of-bounds
+accesses, as long as the unsafe parts are sound (and there are no
+compiler bugs etc.). Which is one of the main reasons we want it in
+the kernel.
 
+> If there could be one base compiler and toolchain, I would be happy.
+
+If you mean a single vendor, then it may be interesting for you that
+GCC will include Rust support in future releases. It remains to be
+seen when their compiler is ready for building the kernel parts, but
+it is one of their goals as far as I understand.
+
+> Right, so think about where that slowness may end up one day, if you
+> suddenly need to re-build everything from sources so to say :-)
+
+If you want to build everything from source, then you will need some
+CPU time to do so. That is just how things work. Most people will just
+use the toolchain from their distribution.
+
+> Thanks for your input!
+
+Not at all, thanks for your input too :)
+
+Cheers,
+Miguel
