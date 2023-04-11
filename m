@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474CF6DE408
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1296DE40D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjDKShi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S229478AbjDKShv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 14:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDKShf (ORCPT
+        with ESMTP id S229890AbjDKShp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:37:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A219C4C31
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 11:37:34 -0700 (PDT)
+        Tue, 11 Apr 2023 14:37:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4145B8D;
+        Tue, 11 Apr 2023 11:37:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D22C62AE3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:37:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C93CC4339B;
-        Tue, 11 Apr 2023 18:37:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92B1362AE1;
+        Tue, 11 Apr 2023 18:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05B5C433D2;
+        Tue, 11 Apr 2023 18:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681238253;
-        bh=cuJkj0gXqgGwRRDX0gNvDxHkCZkNFXT4t3hB/stfPCo=;
+        s=k20201202; t=1681238261;
+        bh=bVNFNE0AyvC9VYJ6To61TadIe2WW1fg0uKBdoz+410I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1G6irrGVfNL90UxP1t0WrtEGZbgdV+tWzqng1wAWqO0r59xZNWHtnkgg539fvGJO
-         AEmKO/XJozgjgp2q+A1QEl2Fogn3TIDKbG4tXz2isL3QUqAmJ9ToB8WgVQj4bjAHMG
-         3u1tRSXi1eJ1rIKkWJPte0lE3qR6UYdqLA3Mg93nP2L7MKuya9F65woEpAgUroQad0
-         4FbSH/5mNEUjtB0t2+MiEz8/rrD/MoHzOeJESDEjIIX1H6CX5oroADhwBdRgs5cBsO
-         o5nJYMoaRX4qLVzr7WpX+cZNvQTuzbxZmulZvuy/1Ay6tInt8IDA8rMmMFy636Lcrf
-         nq9wDX5YH3Sdw==
+        b=m0SYWHwoxs7cZ0gkfU2np4bNg78D348+38aigs5n6bgtBQUhGwI65OobImNSGr8NY
+         /i8YbgdqjOgxbNYhNZU7RNoKXwbB9EmXRnhCnRsP9HA1KZuVsGi5jRgfSRfl1twCUm
+         XHUVdNHRS6YghAI08tqMyV0IbDW7LyuvVuJaGqyJ2azl5T3AYf7JyyX9n2x54PXM45
+         u04jSSffIG7RquB8gDxQmOHoq7ioCZdoPA7soF0JqXt+fashjm4/ivcphIE3UmzgOi
+         pRQ/XCaEiujXQhg/zOku3PIHiuqvxNIvz9wwrYhmNfFVdfTtmVtsS20zn5WONWKUlG
+         y8W+qpd+Ig+bw==
 From:   Will Deacon <will@kernel.org>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-trace-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>, bpf@vger.kernel.org
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, thunder.leizhen@huawei.com,
-        horms@kernel.org, John.p.donnelly@oracle.com,
-        linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
-        rppt@kernel.org, kexec@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] arm64: kdump : take off the protection on crashkernel memory region
-Date:   Tue, 11 Apr 2023 19:37:24 +0100
-Message-Id: <168123748697.3041682.15156562269597498270.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
+        daniel@iogearbox.net, andrii@kernel.org, xukuohai@huaweicloud.com,
+        jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        ast@kernel.org, lihuafei1@huawei.com, kpsingh@kernel.org
+Subject: Re: [PATCH v6 0/5] Add ftrace direct call for arm64
+Date:   Tue, 11 Apr 2023 19:37:27 +0100
+Message-Id: <168123280013.1317107.14827742829060906340.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230407011507.17572-1-bhe@redhat.com>
-References: <20230407011507.17572-1-bhe@redhat.com>
+In-Reply-To: <20230405180250.2046566-1-revest@chromium.org>
+References: <20230405180250.2046566-1-revest@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,26 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Apr 2023 09:15:04 +0800, Baoquan He wrote:
-> Problem:
-> =======
-> On arm64, block and section mapping is supported to build page tables.
-> However, currently it enforces to take base page mapping for the whole
-> linear mapping if CONFIG_ZONE_DMA or CONFIG_ZONE_DMA32 is enabled and
-> crashkernel kernel parameter is set. This will cause longer time of the
-> linear mapping process during bootup and severe performance degradation
-> during running time.
+On Wed, 5 Apr 2023 20:02:45 +0200, Florent Revest wrote:
+> This series adds ftrace direct call support to arm64.
+> This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
+> 
+> It is meant to be taken by the arm64 tree but it depends on the
+> trace-direct-v6.3-rc3 tag of the linux-trace tree:
+>   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+> That tag was created by Steven Rostedt so the arm64 tree can pull the prior work
+> this depends on. [1]
 > 
 > [...]
 
-Applied to arm64 (for-next/kdump), thanks!
+Applied first two to arm64 (for-next/ftrace), thanks!
 
-[1/3] arm64: kdump : take off the protection on crashkernel memory region
-      https://git.kernel.org/arm64/c/0d124e96051b
-[2/3] arm64: kdump: do not map crashkernel region specifically
-      https://git.kernel.org/arm64/c/04a2a7af3d97
-[3/3] arm64: kdump: defer the crashkernel reservation for platforms with no DMA memory zones
-      https://git.kernel.org/arm64/c/504cae453f82
+[1/5] arm64: ftrace: Add direct call support
+      https://git.kernel.org/arm64/c/2aa6ac03516d
+[2/5] arm64: ftrace: Simplify get_ftrace_plt
+      https://git.kernel.org/arm64/c/0f59dca63bf2
 
 Cheers,
 -- 
