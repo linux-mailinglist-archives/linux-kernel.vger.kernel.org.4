@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DE26DDA1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9855A6DDA21
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 13:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjDKLxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 07:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S230099AbjDKLy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 07:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDKLxq (ORCPT
+        with ESMTP id S229721AbjDKLy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 07:53:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C33E68
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 04:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lUBqCEIfOxRVsu3MN5Mz6wJEIZM5gTn52LRqs/6YO5M=; b=AhTtQzD3DdPrtkV9sK0x3VKmU/
-        8ea0YLvNDqWLrVIZmBURDUYUIBJz7Gj6Puc252kNsZhx8ML1a6zR9EQ+vKJn8VDU1XcaYnFimB9mC
-        lRZiIKDyAOSD68Zps+vOK1wEEVGJuIIvnYQGo9C2A2WvCKxA5hEciAQiLVeY7tgxDQhfxFxWDSpxb
-        8xlmRYh6BUsb4QkF+GpfEK9qhUO/KhkmcjZlagA7ZRQOy2/nm1mYzgRlC2NYaJMeTZbjxzFjTXy3Q
-        zg+AyLJDZHOiaLDymY9RzYlf7GB5CW1dK3CsnAbwvhLCYtnTFfvtzGfU6o4GRn2TvA4ETAG4WF3P+
-        raIa1Avw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pmCZ2-005sBY-GV; Tue, 11 Apr 2023 11:53:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CECDA300102;
-        Tue, 11 Apr 2023 13:53:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B1F6720593938; Tue, 11 Apr 2023 13:53:30 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 13:53:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
-        npiggin@gmail.com
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230411115330.GB580235@hirez.programming.kicks-ass.net>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
- <20230406095122.GF386572@hirez.programming.kicks-ass.net>
- <fdaa7242-4ddd-fbe2-bc0e-6c62054dbde8@efficios.com>
- <3b4684ea-5c0d-376b-19cf-195684ec4e0e@efficios.com>
- <20230411110344.GC576825@hirez.programming.kicks-ass.net>
+        Tue, 11 Apr 2023 07:54:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDEE67;
+        Tue, 11 Apr 2023 04:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681214096; x=1712750096;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=C8TGZFhmbYFm4VBWTD8elks6yBJ/GjsydWyFRQRkG+k=;
+  b=ko+3sF1vlYNwuLeWcd2oSYbURWxLIMSaZ81N61TulHIZVVWsURamrqgY
+   7V81iSBHPJsv5iCjPvIFk/aUm0GeAtqPFQFU+2LwSEZWWB0yYjkOB8yBd
+   Y3kpXN2lf3U7txp6lKVS6L5d3J5CJ0B7PDvCmo6PZcvg/oBlAUWrxIORi
+   0VgC6ddHqfb/C47gotW0xHug4PwSk4RhWGPiqo8c3V34q+Rz17cqH+Kkx
+   wrCo4Z+m+L/8ZPPUqxhULsmnwRwgLYLGCDZmpyJUYX2rGfi1ZG3yUkZ7v
+   gj3RZdH1i7vz0pye+3OrgCvt96ZjrDFW6gkK4Arr/QueeYASv4gi8+sG/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="341087922"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="341087922"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="832314039"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="832314039"
+Received: from rwambsga-mobl.ger.corp.intel.com ([10.251.212.142])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 04:54:53 -0700
+Date:   Tue, 11 Apr 2023 14:54:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+In-Reply-To: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+Message-ID: <fb95c8da-c828-12b8-aae-56bd867cff41@linux.intel.com>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com> <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com> <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411110344.GC576825@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/mixed; boundary="8323329-1451428716-1681214103=:2109"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,54 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 01:03:45PM +0200, Peter Zijlstra wrote:
-> On Fri, Apr 07, 2023 at 09:14:36PM -0400, Mathieu Desnoyers wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1451428716-1681214103=:2109
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+
+On Fri, 7 Apr 2023, Xu Yilun wrote:
+
+> On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
+> > On some MAX 10 cards, the BMC firmware is not available to service
+> > handshake registers during secure update erase and write phases at
+> > normal speeds. This problem affects at least hwmon driver. When the MAX
+> > 10 hwmon driver tries to read the sensor values during a secure update,
+> > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> > which is magnitudes worse than the normal <0.02s).
+> > 
+> > Manage access to the handshake registers using a rw semaphore and a FW
+> > state variable to prevent accesses during those secure update phases
+> > and return -EBUSY instead.
+> > 
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+> >  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
+> >  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
+> >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+> >  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
+> >  5 files changed, 120 insertions(+), 5 deletions(-)
+> >
+> 
+> [...]
+>  
+> >  
+> > +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
+> > +{
+> > +	down_write(&m10bmc->bmcfw_lock);
+> > +	m10bmc->bmcfw_state = new_state;
+> > +	up_write(&m10bmc->bmcfw_lock);
+> 
+> Could we also skip this if no handshake is possible like for PMCI?
+
+Did you mean guarding it with !m10bmc->info->handshake_sys_reg_nranges ?
+If yes, it's doable (+ I'd add comment mentioning it since it's slightly 
+trappy to not always have that state updated).
 
 
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index bc0e1cd0d6ac..f3e7dc2cd1cc 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -3354,6 +3354,37 @@ static inline int mm_cid_get(struct mm_struct *mm)
-> >  static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next)
-> >  {
-> > +	/*
-> > +	 * Provide a memory barrier between rq->curr store and load of
-> > +	 * {prev,next}->mm->pcpu_cid[cpu] on rq->curr->mm transition.
-> > +	 *
-> > +	 * Should be adapted if context_switch() is modified.
-> > +	 */
-> > +	if (!next->mm) {                                // to kernel
-> > +		/*
-> > +		 * user -> kernel transition does not guarantee a barrier, but
-> > +		 * we can use the fact that it performs an atomic operation in
-> > +		 * mmgrab().
-> > +		 */
-> > +		if (prev->mm)                           // from user
-> > +			smp_mb__after_mmgrab();
-> > +		/*
-> > +		 * kernel -> kernel transition does not change rq->curr->mm
-> > +		 * state. It stays NULL.
-> > +		 */
-> > +	} else {                                        // to user
-> > +		/*
-> > +		 * kernel -> user transition does not provide a barrier
-> > +		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
-> > +		 * Provide it here.
-> > +		 */
-> > +		if (!prev->mm)                          // from kernel
-> > +			smp_mb();
-> > +		/*
-> > +		 * user -> user transition guarantees a memory barrier through
-> > +		 * switch_mm().
-> > +		 */
-> > +	}
+-- 
+ i.
 
-The possibly nicer way to write all this is:
-
-	if (!prev->mm != !next->mm)
-		smp_mb();
-
-And then clean up the mm{grab,drop)_lazy_tlb() helpers. But we can
-always do that later if we indeed end up with all this ...
-
+--8323329-1451428716-1681214103=:2109--
