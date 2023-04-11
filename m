@@ -2,160 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F227F6DE512
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CD46DE515
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 21:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjDKTnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 15:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S229753AbjDKTn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 15:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDKTnX (ORCPT
+        with ESMTP id S229714AbjDKTnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:43:23 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C611BCE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 12:43:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NdFopS78qykQt7R4EhZhzAog446JNRVe00aTRV2I/YZsteM39E7pk4unktwQXVoM054G+F3MUK/KnA74JS/V90FuHVIx7F45gSuCHwYBLOz+6NFQP1zV9jVr3tgrRV1w+YmOW7SpnYJITAEeRR7woEJ3qEkIaeykHUVaDN5h8COmR0frT2A3Sw6Esm8rr+G3sRxU5Ts90Q4j+P/P7GhhaSPrdvMPjS9nXsIsfFc+2Nsb7qFImDWlTZtsqKXolTAnDPxVFPs+SBRIwvxG0io5V1bg5BY7Zt2SmgVdQ2LwHrC+MsotQzCps2WQZ4jeoHAf5VXqaIJpibdL2zN+cCsrIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ehUYmwMvgF5PtnCzYBvN8IVuC7qMM1p/VQtrjbmYCgg=;
- b=YwHdFaA60kaUHdwJSwTAeTNXRUntJJWADmRlZjXGOHz0Bip4W0ZQlmQF4P3EvjZ1PNRLGZOeajsqBnfocoTIZIkw/0HrVYc2hWl/S8UpNY/cZjHQPn936XsuSJRTqoj1dU63M8MDOzXyk99LwUJ4MMD6o5Ui1woOIPN5P+YQ1fBoPBz+/uPXOhQil2NQHAlBow/CRXZwYOqTP2U2l+DJ019C7ARoLr6sDZ04SotUpCIibpR5K1dQY4iiAtLpP/3KDryu3g4wOt5aN6QCQo8yd9aARARvvGn5YhcSqtoZnPp3Hes9Zl0etdNLxBEEY4CBZNXPe9q1p4piPuZMiz92EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ehUYmwMvgF5PtnCzYBvN8IVuC7qMM1p/VQtrjbmYCgg=;
- b=4gT/NJvmyt07mI56wf1InphyUT9Z1yjQImurxvOlhvCvJkH8OZ60+MlnGjFJLrQIH2AVyzHeOTT8kLJj64UqHroEz9wfY7obE+q9FnPn85mFlUSLNlBXczKTimL8W805f7DAfQ4h8kFOn4AEGh/nNJBDyLFpMWZznCaNZu3GPHQ=
-Received: from PH0PR12MB5606.namprd12.prod.outlook.com (2603:10b6:510:141::16)
- by MW6PR12MB8664.namprd12.prod.outlook.com (2603:10b6:303:23c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
- 2023 19:43:17 +0000
-Received: from PH0PR12MB5606.namprd12.prod.outlook.com
- ([fe80::2aa9:44d8:ff48:164a]) by PH0PR12MB5606.namprd12.prod.outlook.com
- ([fe80::2aa9:44d8:ff48:164a%4]) with mapi id 15.20.6277.038; Tue, 11 Apr 2023
- 19:43:16 +0000
-From:   "Teterevkov, Ivan" <Ivan.Teterevkov@amd.com>
-To:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "jglisse@redhat.com" <jglisse@redhat.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: find_get_page() VS pin_user_pages()
-Thread-Topic: find_get_page() VS pin_user_pages()
-Thread-Index: AdlsqyEC2Ib370amRP6esQRt2dSqSw==
-Date:   Tue, 11 Apr 2023 19:43:16 +0000
-Message-ID: <PH0PR12MB5606D4611050BC8B1CC430FEF09A9@PH0PR12MB5606.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5606:EE_|MW6PR12MB8664:EE_
-x-ms-office365-filtering-correlation-id: fcfd9e41-946f-49cd-adb8-08db3ac4fefc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tT+92W31jHXD57BLUehzfktZLHDaY4oNVfqzyZdb44Z8eAi+EpkOOCR7z0zDwzBhHcDNNn5uFYg7T64AKNfL6JjswDdw554iyVJ01Kdfn2mkX1djk7eOyY6qq0H5T5QXZZc5a75u/UaJhkQ76yr6iXUr8oBkA51Y/2VXnPTwUpMNL4uK2YjwQ2xm5k8Z1we1/n1ROC6Vs/7TMUeIVVH04YsTs7hxd7Eu2eMngZaHPCEa1wvxI1yH1g4tVtrOT49+3xiZIBbaQsrcAuKhxkhsOMAJqZ/NGUHRqgz8x47YXEtCnTcSYGKCqO8afzNu1DxuJ7RnBAk7rbAw7bfkRl56aN/sFKKnIN1qxMY7Q39qArG4HYnfACnLCAcfuSWhOX9dEaFEIbX/9u+MVTMJrm9fC8D4gTFvZFdXQ7XgsjBOibQau5uZlnNI6iKdAJUVEHT1b6yU04bMWEYgodAVrXiw3LvBT8yBVJKj5Em6x5sQWksSA0+WS6Sqn8cOxhkw+Rc4TJjyH64I3rOeJzUWb1TmtskOQFfVKPPTd0qxCUFe3ULL8bn6jDWxtT0HyyDIdSn5GGLwCL0j4tCWh0jStyOQj1KKvi3RFarW+XMww1eXOjU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5606.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(478600001)(7696005)(71200400001)(6506007)(316002)(110136005)(26005)(9686003)(186003)(5660300002)(966005)(2906002)(66556008)(76116006)(66946007)(52536014)(64756008)(41300700001)(66446008)(8676002)(8936002)(66476007)(38100700002)(122000001)(55016003)(33656002)(38070700005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?J2i+Jkgzbq0ITEcE+XxFSzeUwcEFewJl4Ieh67ys6vwlqw1GQH0Ck0fmOikk?=
- =?us-ascii?Q?OYstwTheix7bgG5koMn2ss3MuP5bSL3YESQRO6Zh5eU3GVy3Hpop4/glwrvw?=
- =?us-ascii?Q?eOQ3J82Ii0eO7sPJLMKpnFRBWq+0rgbgP6WgJlsaZDKtUFLgs8rExi5Zzf5R?=
- =?us-ascii?Q?mxGwxl6Q1wR3Jn/Kd2nFMxBlaIM1SMBTeeoDLjQohnv0ssQmHwPmHf267eJG?=
- =?us-ascii?Q?1FMoa8etFtNnmobETDcSptjWrzrXgf7gx3HYSYlzNjYleRC5eJ979p55weWo?=
- =?us-ascii?Q?V4NsE+67ES+qLVEdGf5ITZQT/HrwVxDp7gVGVRx2oAQDB3AYvZMY7UcsYBSw?=
- =?us-ascii?Q?VeiVUtHDRoFoYR5hFKadSF7+vUN9zE2c6NSoQiYQ5EgH/tatTIAKJvgJodwv?=
- =?us-ascii?Q?/ZiN1FYHVzg8rUbDJrhlvbdX392dFzEMTGTdX81TtcY6nvSgfDyWTDR0RTZi?=
- =?us-ascii?Q?x2otKAMV800E/8/ItGNN6gTldZXCLMkz3cmeXYaekYxMGSAePT0f8GslK6Xc?=
- =?us-ascii?Q?QGeaw2j+j71oZHWwSccriWwl/r005577PKNjwqNvkdYqEPIPIXSILuAEDkfI?=
- =?us-ascii?Q?gMpD5aTQisU8WIUURH9QRl+gB0Hdy7y9prFB7eEhBFbPKlhOQAGWGFdCW6ef?=
- =?us-ascii?Q?WEHurPEo6Uaab43alN6yqjYzWEi5BAEurSu1QYqrMgrvvtYibnI4QTJvkLuy?=
- =?us-ascii?Q?LiqB6zDM0gawlj0i7raR2p3pMWkn2iv2kRN33jytAOx0WvXLaWKoilQfkpZC?=
- =?us-ascii?Q?zv+B3XqliSInyKankWVyHvDsoEutj3UE4WlogTKwVrzZCK9Hsj4KUkQXVR8X?=
- =?us-ascii?Q?EQZZ0Dh4zBKM+m85n0VgJxxp8cbBzYPnE10Sdg43cDnafdDrTjqkpmJys6ok?=
- =?us-ascii?Q?r4kZkdu2EHuuHXrPQdwrbuPj7ZAOQhmPEROoYhrGzhtgMMFag7gYf6MfYVmD?=
- =?us-ascii?Q?gvaKG7zlBBbERWm9ejmTi+kevNwAWpLz3CM91PF5uDwfCIzgFLnLsBCPdKD4?=
- =?us-ascii?Q?ZJ91gjawiWSlZY/dYaAxKdOUGtvQKeKSlFev+AAb2aDB5mZNPXbKh6tPfu8+?=
- =?us-ascii?Q?/z6tRoRzNKu8/uXTdKitin6DWoz/PmAGtbLHVwp2U10oXNLYcAQJ7E15imNN?=
- =?us-ascii?Q?/C/8drRXKQDPYLxuU2yYqjlmKG8LxP8TiJ5XAIf5Rx8ONjcB6fC3NRt2nj+O?=
- =?us-ascii?Q?KTOPGXpryBmygUOCbnWU0/Tq70frAfNDSq/uM8ZofkJ5WPLkaQqC9bYcKZOj?=
- =?us-ascii?Q?yjus6WUiSVTvIL3+YThJPcBE9k0hR046fdHzAbFRAxyN6ly/22ac2VYJNJUY?=
- =?us-ascii?Q?IDsg1W2rV7Sp5l82fJAL2am7E1y4KHa6Vm2Am3TR7XR15qzemrNsUTJSnWxk?=
- =?us-ascii?Q?Jn6pjjQMKDWNhUKY1jrh3uEqd+p/HxvTwgjL6pg0l+V3DyNZ2E73wq87imXg?=
- =?us-ascii?Q?tdf77Vw72BTapLbQpGcUCREPaItT0AePzpf/7iNvX7xwuu8cknYP+JwmaKZx?=
- =?us-ascii?Q?O59+bHcyi3tqTLwobhfRfvm0/H4nG4MsfSkZi1qpHVCNJjGT5zTebp9rpkaS?=
- =?us-ascii?Q?xvqMBBEiKIN/aYUFs7U=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Apr 2023 15:43:42 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4896819AB;
+        Tue, 11 Apr 2023 12:43:41 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec83ae6138so125441e87.0;
+        Tue, 11 Apr 2023 12:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1681242219; x=1683834219;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p1TnsQ9wjUJl0G46e4cb8CsfvxjviIIz6J6pY4yX954=;
+        b=qG4NMge0Vy33i1Z9O4LV/mcYQvPi83dyiun8LPgjIJz+6SfA65xJyj3ad47biJyUlm
+         9Od87fDBQ0dAC51rDv11EngokB7iIa+VLqXp8SHGb0GmKEfWtXgeqDon8dYyiEC1UQGG
+         Xxb+SuXiDOogsqbECNVgsBkM7d/wEfa/aanKV/7UB8r9g/DD5XgiAJy8quUUdGAWPyi+
+         sm0tg4wZOW/EZLb48xCj/x4CUCH64uWvMcM8XzUK/30cT01+bHaI2mJ2sLgyMEwZV64+
+         /s4lXqrEgQAaGGk6OOrNbBw4zeN3s3KjQsMHkvp0Ps+d5QX2fDJ8p4/ACH0kkGpzhW2L
+         920w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681242219; x=1683834219;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p1TnsQ9wjUJl0G46e4cb8CsfvxjviIIz6J6pY4yX954=;
+        b=moCkw3c8WnXseVxn9a+t+rV+itEqAcep7XaNPgfeP/YzlBwdHpVv4m7fKWgE1ALAHZ
+         q/gxsqCRKLfcUzgFWSMbhaOntUMbuShoOg13t/qd5PjkYi92yzJCAOt6VZ4w+2ke4RIf
+         8qy4I1hmj8os5F0r9/AXN8rIr+UEv9d+AI1YvjcgB/3o/0oUzPT852cEeRerMg3vd0QP
+         U/yvEgrjYeyRjWvdgG4me8NN7P9zVOKOu5geZ4sNgk0Fd3K7EVtRK+g0ymS+e4ksGFU8
+         /Cox+5f+PpQ/n9y9YLCL0YxIddDLURTD/vCMIAUVAXyQKYX6/VeXXUd3K2cFdXhok4Kv
+         yojg==
+X-Gm-Message-State: AAQBX9eGP/JBXZbuKxBAkgIZGu9ntVWHPd/LayjfX7ic87W4AB5swByl
+        MN9K4bVO4YviWKdNk43EE7c=
+X-Google-Smtp-Source: AKy350YbMcr621QQlpdxzGafvMmNEwL92ZsmsUyPGg3PVqUZUpqKdom+drTz7UwEFbdrKH+f35IIsQ==
+X-Received: by 2002:a05:651c:1613:b0:2a7:805e:b0e6 with SMTP id f19-20020a05651c161300b002a7805eb0e6mr1718959ljq.2.1681242219161;
+        Tue, 11 Apr 2023 12:43:39 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id q12-20020ac24a6c000000b004eaf55936eesm2638471lfp.233.2023.04.11.12.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 12:43:39 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 22:43:37 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     pbonzini@redhat.com, Sean Christopherson <seanjc@google.com>,
+        =?ISO-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: SVM: add some info prints to SEV init
+Message-ID: <20230411224337.000015ce.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com>
+References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5606.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcfd9e41-946f-49cd-adb8-08db3ac4fefc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 19:43:16.8807
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /kaWX3TK3QKBkKmBotMDHo679IsG6hg3sJ6/J6ebBqT2wkZwacJqoYaQhX4VwwGRk+Eyk2LhulUN7OYlBfeprw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8664
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello folks,
+On Tue,  4 Apr 2023 14:26:52 +0200
+Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com> wrote:
 
-I work with an application which aims to share memory in the userspace and
-interact with the NIC DMA. The memory allocation workflow begins in the
-userspace, which creates a new file backed by 2MiB hugepages with
-memfd_create(MFD_HUGETLB, MFD_HUGE_2MB) and fallocate(). Then the userspace
-makes an IOCTL to the kernel module with the file descriptor and size so th=
-at
-the kernel module can get the struct page with find_get_page(). Then the ke=
-rnel
-module calls dma_map_single(page_address(page)) for NIC, which concludes th=
-e
-datapath. The allocated memory may (significantly) outlive the originating
-userspace application. The hugepages stay mapped with NIC, and the kernel
-module wants to continue using them and map to other applications that come=
- and
-go with vm_mmap().
+> Let's add a few pr_info's to sev_hardware_setup to make SEV/SEV-ES
+> enabling a little bit handier for users. Right now it's too hard
+> to guess why SEV/SEV-ES are failing to enable.
+>=20
+> There are a few reasons.
+> SEV:
+> - npt is disabled (module parameter)
+     ^NPT
+> - CPU lacks some features (sev, decodeassists)
+> - Maximum SEV ASID is 0
+>=20
+> SEV-ES:
+> - mmio_caching is disabled (module parameter)
+> - CPU lacks sev_es feature
+> - Minimum SEV ASID value is 1 (can be adjusted in BIOS/UEFI)
+>=20
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: St=E9phane Graber <stgraber@ubuntu.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index a42536a0681a..14cbb8f14c6b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2168,17 +2168,24 @@ void __init sev_hardware_setup(void)
+>  	bool sev_es_supported =3D false;
+>  	bool sev_supported =3D false;
+> =20
+> -	if (!sev_enabled || !npt_enabled)
+> +	if (!sev_enabled)
+>  		goto out;
+> =20
+> +	if (!npt_enabled) {
+> +		pr_info("Failed to enable AMD SEV as it requires Nested Paging to be e=
+nabled\n");
+> +		goto out;
 
-I am studying the pin_user_pages*() family of functions, and I wonder if th=
-e
-outlined workflow requires it. The hugepages do not page out, but they can =
-move
-as they may be allocated with GFP_HIGHUSER_MOVABLE. However, find_get_page(=
-)
-must increment the page reference counter without mapping and prevent it fr=
-om
-moving. In particular, https://docs.kernel.org/mm/page_migration.html:
+Shouldn't we use pr_err() for error message?
 
-> How migrate_pages() works
-> ...
-> Steps:
-> ...
-> 4. All the page table references to the page are converted to migration
->    entries. This decreases the mapcount of a page. If the resulting mapco=
-unt
->    is not zero then we do not migrate the page.
+> +	}
+> +
+>  	/*
+>  	 * SEV must obviously be supported in hardware.  Sanity check that the
+>  	 * CPU supports decode assists, which is mandatory for SEV guests to
+>  	 * support instruction emulation.
+>  	 */
+>  	if (!boot_cpu_has(X86_FEATURE_SEV) ||
+> -	    WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_DECODEASSISTS)))
+> +	    WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_DECODEASSISTS))) {
+> +		pr_info("Failed to enable AMD SEV as it requires decodeassists and sev=
+ CPU features\n");
+>  		goto out;
+> +	}
+> =20
+>  	/* Retrieve SEV CPUID information */
+>  	cpuid(0x8000001f, &eax, &ebx, &ecx, &edx);
+> @@ -2188,8 +2195,10 @@ void __init sev_hardware_setup(void)
+> =20
+>  	/* Maximum number of encrypted guests supported simultaneously */
+>  	max_sev_asid =3D ecx;
+> -	if (!max_sev_asid)
+> +	if (!max_sev_asid) {
+> +		pr_info("Failed to enable SEV as the maximum SEV ASID value is 0.\n");
+>  		goto out;
+> +	}
+> =20
+>  	/* Minimum ASID value that should be used for SEV guest */
+>  	min_sev_asid =3D edx;
+> @@ -2234,16 +2243,22 @@ void __init sev_hardware_setup(void)
+>  	 * instead relies on #NPF(RSVD) being reflected into the guest as #VC
+>  	 * (the guest can then do a #VMGEXIT to request MMIO emulation).
+>  	 */
+> -	if (!enable_mmio_caching)
+> +	if (!enable_mmio_caching) {
+> +		pr_info("Failed to enable SEV-ES as it requires MMIO caching to be ena=
+bled\n");
+>  		goto out;
+> +	}
+> =20
+>  	/* Does the CPU support SEV-ES? */
+> -	if (!boot_cpu_has(X86_FEATURE_SEV_ES))
+> +	if (!boot_cpu_has(X86_FEATURE_SEV_ES)) {
+> +		pr_info("Failed to enable SEV-ES as it requires sev_es CPU feature\n");
+>  		goto out;
+> +	}
+> =20
+>  	/* Has the system been allocated ASIDs for SEV-ES? */
+> -	if (min_sev_asid =3D=3D 1)
+> +	if (min_sev_asid =3D=3D 1) {
+> +		pr_info("Failed to enable SEV-ES as the minimum SEV ASID value is 1.\n=
+");
+>  		goto out;
+> +	}
+> =20
+>  	sev_es_asid_count =3D min_sev_asid - 1;
+>  	if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
 
-Does find_get_page() achieve that condition or does the outlined workflow
-still requires pin_user_pages*() for safe DMA?
-
-Thanks in advance,
-Ivan
+As this patch is making sev_hardware_setup()more informative, it would be
+better to print both ASID range and count (instead of only ASID count in
+the current code). I was suspecting there seems a bug of ASID range allocat=
+ion
+in the current code, but I don't have the HW to test yet...=20
