@@ -2,183 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D42D6DDD8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40AF6DDD8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjDKORz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S229490AbjDKORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjDKOR2 (ORCPT
+        with ESMTP id S230255AbjDKOR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 10:17:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B4B5263;
-        Tue, 11 Apr 2023 07:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681222641; x=1712758641;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l+JgXouqrG+N1yi4JFy3ghvDTExLHywE71wQs1yugEQ=;
-  b=CIh9J7rey7Czx1EfmdI/pIqWPGJrIN9zX7FUoqsCCTJUxAsxkLyxbbWn
-   0n3ZJBVtov25wQlJ6DbxumkqzTcIOcpa30A38eDSdcYogw6FgL5MeIb6x
-   /G/ltJnSZKb/69Th8Ua07kE+ulf6OZwVSMDPxEFxeQZT7zOKx9cftyETp
-   mo0UHTHXtnkRPtA5uDpvr9dLsfuLMO3xgyr4bVJU4jjVgVD5jIEr7XmH0
-   5MNntQ7Q6ntdZg78dJnH89dqwPsqmF4UF3qdpu/ybx1bqjEK8JGC6pRT9
-   LSNcBbCcRQ0XsdProjBtXx1XFFZShLSjSPuKUw52zZlOpKINUJvWqZngc
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
-   d="asc'?scan'208";a="205964165"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 07:17:20 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F6FE4C;
+        Tue, 11 Apr 2023 07:17:19 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PwnrR0L0Qz16NWS;
+        Tue, 11 Apr 2023 22:13:43 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 07:17:19 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 07:17:14 -0700
-Date:   Tue, 11 Apr 2023 15:16:58 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Evan Green <evan@rivosinc.com>
-CC:     Palmer Dabbelt <palmer@rivosinc.com>, <slewis@rivosinc.com>,
-        <heiko@sntech.de>, Conor Dooley <conor@kernel.org>,
-        <vineetg@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v6 0/6] RISC-V Hardware Probing User Interface
-Message-ID: <20230411-primate-rice-a5c102f90c6c@wendy>
-References: <20230407231103.2622178-1-evan@rivosinc.com>
+ 15.1.2507.23; Tue, 11 Apr 2023 22:17:15 +0800
+Message-ID: <eb7f13ad-6e7b-65c5-72c8-d5a4be88e943@huawei.com>
+Date:   Tue, 11 Apr 2023 22:17:14 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AMh/Lwu23Kj/r0q5"
-Content-Disposition: inline
-In-Reply-To: <20230407231103.2622178-1-evan@rivosinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v5 1/2] ACPI: APEI: set memory failure flags as
+ MF_ACTION_REQUIRED on synchronous events
+Content-Language: en-US
+To:     Shuai Xue <xueshuai@linux.alibaba.com>, <tanxiaofei@huawei.com>,
+        <mawupeng1@huawei.com>, <tony.luck@intel.com>,
+        <naoya.horiguchi@nec.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <justin.he@arm.com>,
+        <akpm@linux-foundation.org>, <ardb@kernel.org>,
+        <ashish.kalra@amd.com>, <baolin.wang@linux.alibaba.com>,
+        <bp@alien8.de>, <cuibixuan@linux.alibaba.com>,
+        <dave.hansen@linux.intel.com>, <james.morse@arm.com>,
+        <jarkko@kernel.org>, <lenb@kernel.org>, <linmiaohe@huawei.com>,
+        <lvying6@huawei.com>, <rafael@kernel.org>, <xiexiuqi@huawei.com>,
+        <zhuo.song@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20230411104842.37079-2-xueshuai@linux.alibaba.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230411104842.37079-2-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---AMh/Lwu23Kj/r0q5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Shuai Xue，
 
-Hey Evan,
+On 2023/4/11 18:48, Shuai Xue wrote:
+> There are two major types of uncorrected recoverable (UCR) errors :
+> 
+> - Action Required (AR): The error is detected and the processor already
+>    consumes the memory. OS requires to take action (for example, offline
+>    failure page/kill failure thread) to recover this uncorrectable error.
+> 
+> - Action Optional (AO): The error is detected out of processor execution
+>    context. Some data in the memory are corrupted. But the data have not
+>    been consumed. OS is optional to take action to recover this
+>    uncorrectable error.
+> 
+> The essential difference between AR and AO errors is that AR is a
+> synchronous event, while AO is an asynchronous event. The hardware will
+> signal a synchronous exception (Machine Check Exception on X86 and
+> Synchronous External Abort on Arm64) when an error is detected and the
+> memory access has been architecturally executed.
+> 
+> When APEI firmware first is enabled, a platform may describe one error
+> source for the handling of synchronous errors (e.g. MCE or SEA notification
+> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
+> notification). In other words, we can distinguish synchronous errors by
+> APEI notification. For AR errors, kernel will kill current process
+> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
+> addition, for AO errors, kernel will notify the process who owns the
+> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
+> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
+> are handled as AO errors in memory failure.
+> 
+> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronous
+> events.
 
-On Fri, Apr 07, 2023 at 04:10:57PM -0700, Evan Green wrote:
->=20
-> There's been a bunch of off-list discussions about this, including at
-> Plumbers.  The original plan was to do something involving providing an
-> ISA string to userspace, but ISA strings just aren't sufficient for a
-> stable ABI any more: in order to parse an ISA string users need the
-> version of the specifications that the string is written to, the version
-> of each extension (sometimes at a finer granularity than the RISC-V
-> releases/versions encode), and the expected use case for the ISA string
-> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
-> try and keep ABI compatible and it's probably going to continue to grow,
-> as even if there's no more complexity in the specifications we'll have
-> to deal with the various ISA string parsing oddities that end up all
-> over userspace.
->=20
-> Instead this patch set takes a very different approach and provides a set
-> of key/value pairs that encode various bits about the system.  The big
-> advantage here is that we can clearly define what these mean so we can
-> ensure ABI stability, but it also allows us to encode information that's
-> unlikely to ever appear in an ISA string (see the misaligned access
-> performance, for example).  The resulting interface looks a lot like
-> what arm64 and x86 do, and will hopefully fit well into something like
-> ACPI in the future.
->=20
-> The actual user interface is a syscall, with a vDSO function in front of
-> it. The vDSO function can answer some queries without a syscall at all,
-> and falls back to the syscall for cases it doesn't have answers to.
-> Currently we prepopulate it with an array of answers for all keys and
-> a CPU set of "all CPUs". This can be adjusted as necessary to provide
-> fast answers to the most common queries.
->=20
-> An example series in glibc exposing this syscall and using it in an
-> ifunc selector for memcpy can be found at [1].
->=20
-> I was asked about the performance delta between this and something like
-> sysfs. I created a small test program [2] and ran it on a Nezha D1
-> Allwinner board. Doing each operation 100000 times and dividing, these
-> operations take the following amount of time:
->  - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
->  - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
->  - riscv_hwprobe() vDSO and syscall: .0094us
->  - riscv_hwprobe() vDSO with no syscall: 0.0091us
->=20
-> These numbers get farther apart if we query multiple keys, as sysfs will
-> scale linearly with the number of keys, where the dedicated syscall
-> stays the same. To frame these numbers, I also did a tight
-> fork/exec/wait loop, which I measured as 4.8ms. So doing 4
-> open/read/close operations is a delta of about 0.3%, versus a single vDSO
-> call is a delta of essentially zero.
+As your mentioned in cover-letter, we met same issue, and hope it could 
+be fixed ASAP, this patch looks good to me,
 
-Two nits w.r.t. build bot complaints...
-
-On patch 2:
-arch/riscv/include/uapi/asm/unistd.h:54:1: warning: initializer overrides p=
-rior initialization of this subobject [-Winitializer-overrides]
-I think this one is kinda spurious, all of the syscalls complain like
-this (and do on arm64 too IIRC). There was a patch from Guo somewhere to
-disable -Winitializer-overrides in this case, I should go find out what
-happened to it.
-
-On patch 4:
-arch/riscv/kernel/cpufeature.c:29:1: warning: symbol '__pcpu_scope_misalign=
-ed_access_speed' was not declared. Should it be static?
-
-Probably because cos cpufeature.c doesn't include the header of the same
-name... Perhaps Palmer could fix that one up on application?
-
-Cheers,
-Conor.
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
 
---AMh/Lwu23Kj/r0q5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDVr2gAKCRB4tDGHoIJi
-0ohDAP4vO99mP1Aar7XOlBB+xPLraW90a9bDAoMU0IbNlORQPAD/dsc19K8yMIXX
-s/fnS3/GuvOs4S1Ty6FJFopQ+2J+HA8=
-=0uEU
------END PGP SIGNATURE-----
-
---AMh/Lwu23Kj/r0q5--
+> 
+> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recovery support")'
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>   drivers/acpi/apei/ghes.c | 29 +++++++++++++++++++++++------
+>   1 file changed, 23 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 34ad071a64e9..c479b85899f5 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
+>   	return ghes->generic->header.type == ACPI_HEST_TYPE_GENERIC_ERROR_V2;
+>   }
+>   
+> +/*
+> + * A platform may describe one error source for the handling of synchronous
+> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
+> + * or External Interrupt). On x86, the HEST notifications are always
+> + * asynchronous, so only SEA on ARM is delivered as a synchronous
+> + * notification.
+> + */
+> +static inline bool is_hest_sync_notify(struct ghes *ghes)
+> +{
+> +	u8 notify_type = ghes->generic->notify.type;
+> +
+> +	return notify_type == ACPI_HEST_NOTIFY_SEA;
+> +}
+> +
+>   /*
+>    * This driver isn't really modular, however for the time being,
+>    * continuing to use module_param is the easiest way to remain
+> @@ -477,7 +491,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
+>   }
+>   
+>   static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+> -				       int sev)
+> +				       int sev, bool sync)
+>   {
+>   	int flags = -1;
+>   	int sec_sev = ghes_severity(gdata->error_severity);
+> @@ -491,7 +505,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>   	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+>   		flags = MF_SOFT_OFFLINE;
+>   	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
+> -		flags = 0;
+> +		flags = sync ? MF_ACTION_REQUIRED : 0;
+>   
+>   	if (flags != -1)
+>   		return ghes_do_memory_failure(mem_err->physical_addr, flags);
+> @@ -499,9 +513,11 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>   	return false;
+>   }
+>   
+> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
+> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
+> +				       int sev, bool sync)
+>   {
+>   	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+> +	int flags = sync ? MF_ACTION_REQUIRED : 0;
+>   	bool queued = false;
+>   	int sec_sev, i;
+>   	char *p;
+> @@ -526,7 +542,7 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+>   		 * and don't filter out 'corrected' error here.
+>   		 */
+>   		if (is_cache && has_pa) {
+> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
+> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
+>   			p += err_info->length;
+>   			continue;
+>   		}
+> @@ -647,6 +663,7 @@ static bool ghes_do_proc(struct ghes *ghes,
+>   	const guid_t *fru_id = &guid_null;
+>   	char *fru_text = "";
+>   	bool queued = false;
+> +	bool sync = is_hest_sync_notify(ghes);
+>   
+>   	sev = ghes_severity(estatus->error_severity);
+>   	apei_estatus_for_each_section(estatus, gdata) {
+> @@ -664,13 +681,13 @@ static bool ghes_do_proc(struct ghes *ghes,
+>   			atomic_notifier_call_chain(&ghes_report_chain, sev, mem_err);
+>   
+>   			arch_apei_report_mem_error(sev, mem_err);
+> -			queued = ghes_handle_memory_failure(gdata, sev);
+> +			queued = ghes_handle_memory_failure(gdata, sev, sync);
+>   		}
+>   		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
+>   			ghes_handle_aer(gdata);
+>   		}
+>   		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
+> -			queued = ghes_handle_arm_hw_error(gdata, sev);
+> +			queued = ghes_handle_arm_hw_error(gdata, sev, sync);
+>   		} else {
+>   			void *err = acpi_hest_get_payload(gdata);
+>   
