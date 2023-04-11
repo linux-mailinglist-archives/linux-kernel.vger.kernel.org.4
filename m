@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812D26DDD97
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD966DDD8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 16:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjDKOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 10:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
+        id S230077AbjDKOT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 10:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjDKOUB (ORCPT
+        with ESMTP id S230115AbjDKOTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:20:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC3526A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681222741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
-        b=U6W05LNczdE8k6guJnFPSx5Ls1nMTa9oVA/dlHnUWaB6kTdApzMbkANLfwSQN50Jct6H/4
-        kXF0HFx4x58ViJX4awL6eAgT2E7WnL8hHLryCcCp8yiF38FThfLA2BGHiab5UWjf5l1i2n
-        YG6pVel75iSSQTwDQZ8oFktLc4+koIQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-nOlEbpIfNpeoZLGEFh5CNw-1; Tue, 11 Apr 2023 10:19:00 -0400
-X-MC-Unique: nOlEbpIfNpeoZLGEFh5CNw-1
-Received: by mail-wr1-f71.google.com with SMTP id h5-20020adfaa85000000b002dc1cdac53fso1585362wrc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:18:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681222739; x=1683814739;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
-        b=S7cojTYcmWwp9MAbB+vjfpqNIZx0c+s90G68q3IaSnhr28GOFtsBfTfJhwnKt/q30h
-         NLWM40YQngE+5hL4rtJj/9oxQ2Ouc8DAJid3DhmeA8Ysh2dUhotGh6vh8t7zD3y6rh5m
-         wV7uCBneMY00Vyi2doTgxoQMuShixDb2Qr+7S+JYdma+KKt4b/+cXjKfAveZNPLhEGRr
-         mAQUxuHi6+wSLwvK0Ofqthgldx0fW8q41CwNrDnnVHxuSP0JvL5fvKtVZff/F36ogy1H
-         wgj+1pcFYO2H+9xGgbvuXhp1OJnxCz+9XRKM8WnEeZp4u8E5GxTNrRdJVjEz/Bd9ABaf
-         5i0Q==
-X-Gm-Message-State: AAQBX9cIidaiw8MBx52gfxTydujuAcK3wopZTCW7sEGe+IDzApZJ8zGu
-        hqrkC5EiAb23xGHXkaaSnC/P7W25R1FkxCwIen/qgAB32xINFPdeFWKPvjlUPdO1+jm6mteP3T8
-        OYYuW8om1R+j8jBqresbqiPFVOuWvLcoDUWZNFiTU3XP9qjvCaz6SY6SbTyxtcml86Xep4Hhs8u
-        ctDQon
-X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621104wrq.34.1681222738984;
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bY0p0lov10ncoRRjudSkgQbnGcBkbDWJtshXja6yULgw6jQWdjzluLhiX0b55T0sA76SToJg==
-X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621084wrq.34.1681222738612;
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d51c4000000b002efb55de21dsm10542399wrv.103.2023.04.11.07.18.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-Message-ID: <81a2070a-f7aa-2185-8211-26b57815e968@redhat.com>
-Date:   Tue, 11 Apr 2023 16:18:57 +0200
+        Tue, 11 Apr 2023 10:19:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200815590
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 07:19:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0E6361DB6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 14:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76958C4339B;
+        Tue, 11 Apr 2023 14:19:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681222744;
+        bh=CRz1qKpKwD8iOnTccK2DJ8nejiS+LrBWdZansG+v2EA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ts4sT5p2+hBzUiZXcfVFsOx79tgIGcMH1lo+o6Rs1Ct7XWGHd/ynTuAWO1yazDV8h
+         m73m6+/csj4UjqarwfQ76oOBMoCF40nOdoTe3dtlgHJOH2fAiQ7n+v6hrdYs9mqlW3
+         5HIQSZRaerGGJFiwwOq+EAjY/UqVDLKoKjbPdth1fomaiHyG887M0vEtOZye6hcUrQ
+         JjMUBDv0SAnvEfUumaO+aO+Q+wtuX7u5MdbwHPdgCv8lazawaxFMSM67bBzHv9oUlH
+         8YK00fregUCzwove319mBVhj26tc8L5x0OnIEOgbsOZO0WpHV5YYpIPgj1IoKZpdyy
+         wGhtVG2+lfvzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Aashish Sharma <shraash@google.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+In-Reply-To: <20230411003431.4048700-1-shraash@google.com>
+References: <20230411003431.4048700-1-shraash@google.com>
+Subject: Re: [PATCH] ASoC: mediatek: common: Fix refcount leak in
+ parse_dai_link_info
+Message-Id: <168122274119.54453.4476599786792187877.b4-ty@kernel.org>
+Date:   Tue, 11 Apr 2023 15:19:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] mm/huge_memory: conditionally call maybe_mkwrite() and
- drop pte_wrprotect() in __split_huge_pmd_locked()
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org
-References: <20230411141529.428991-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230411141529.428991-1-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.04.23 16:15, David Hildenbrand wrote:
-> No need to call maybe_mkwrite() to then wrprotect if the source PMD was not
-> writable.
+On Tue, 11 Apr 2023 06:04:31 +0530, Aashish Sharma wrote:
+> Add missing of_node_put()s before the returns to balance
+> of_node_get()s and of_node_put()s, which may get unbalanced
+> in case the for loop 'for_each_available_child_of_node' returns
+> early.
 > 
-> It's worth nothing that this now allows for PTEs to be writable even if
-> the source PMD was not writable: if vma->vm_page_prot includes write
-> permissions.
 > 
-> As documented in commit 931298e103c2 ("mm/userfaultfd: rely on
-> vma->vm_page_prot in uffd_wp_range()"), any mechanism that intends to
-> have pages wrprotected (COW, writenotify, mprotect, uffd-wp, softdirty,
-> ...) has to properly adjust vma->vm_page_prot upfront, to not include
-> write permissions. If vma->vm_page_prot includes write permissions, the
-> PTE/PMD can be writable as default.
-> 
-> This now mimics the handling in mm/migrate.c:remove_migration_pte() and in
-> mm/huge_memory.c:remove_migration_pmd(), which has been in place for a
-> long time (except that 96a9c287e25d ("mm/migrate: fix wrongly apply write
-> bit after mkdirty on sparc64") temporarily changed it).
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
 
-Ignore this one, it's a duplicate of 6/6 and I forgot to delete that 
-patch before triggering git send-email ...
+Applied to
 
--- 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: mediatek: common: Fix refcount leak in parse_dai_link_info
+      commit: beed115c2ce78f990222a29abed042582df4e87c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
 Thanks,
-
-David / dhildenb
+Mark
 
