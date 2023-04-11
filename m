@@ -2,150 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6316DDFB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F756DDFB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 17:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDKP2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 11:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S231260AbjDKP3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 11:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjDKP2t (ORCPT
+        with ESMTP id S230414AbjDKP3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:28:49 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A6F59F0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:28:31 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-7607a12cfd3so2923039f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681226911;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=avUeuwpzPDLmh7q6KyhD3z/3GxLA2d1SOJIQRmXe534=;
-        b=g/ckIo1Xl3s3ii/SXTvKWq4+VEpFHO8ZWzGghwcXEfKKHdYCF7FryYczAS0bsZPMSz
-         PSFW1p2ZCfMF2AnGCmGKcmmoRBmZJtK1yeGh4B1ZZNHHuTpzv8vHWwA9g0Oq495904CN
-         8i4zpaw/Z1/ebEpo0/5bWly+QvIG/ioURmD3rDEz/eo4wI7GK/dlcJCWScbSP30D0JPn
-         L7kSxyZbBxTe3JctKQb3F79B5cn6awo7++d6HcqNmiUVo7Mre5jTY5xZbFmwLPnJ6kiE
-         /7HS2a69csnvOfC9D2xrJ2FoIWhlgz2vxwlKohFiSjtYft0ols5Ta+ZMhVvwDhso50eB
-         d1Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681226911;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=avUeuwpzPDLmh7q6KyhD3z/3GxLA2d1SOJIQRmXe534=;
-        b=wbOISqt8Gwwtjze8QEQwVGv8/GbM1iMWjZOaTYgdDAf3d2lzwzr1MG74/M/zKe4Gy1
-         p442394VAm5njLB7sSkHUJ4gzRgl9gAG1gWWB0CRy5R9b/5pzZgw7F5Gq6g+aoZ/vOI4
-         4oJkJvQ5ALSKCK2NpMiXRfRp6vtUF6fB66NuEPjfLIoJK6CH2lcKFI1J358q8/fU2QGb
-         LNVJjLTQjjmhME6PsAK+qkolVKer6tWCSwyY58tG2Rws3ZO8UBiphXgwhEL96OcFE31u
-         +CaE4J+vDJ4k404fKlj6jDqaF5prjZyN6aam/lkqhUdn5CbiQnb8gQjVk6hbOTKwF+XL
-         uXYw==
-X-Gm-Message-State: AAQBX9fa4SFV9JqiHi+qO2DL3NT0/OEFZE2tde8oYruZAg8reCBgZd9f
-        IXFyqX2ATapBuZftJ5D5o9OjhA==
-X-Google-Smtp-Source: AKy350biJbNAfJ5exruo7SQbqqHyqtO2T8cETYQARA3S7L66NyYCpZDI0XbxkrW4747fvTOc4xxD3w==
-X-Received: by 2002:a05:6602:2b91:b0:75c:f48c:2075 with SMTP id r17-20020a0566022b9100b0075cf48c2075mr7044533iov.2.1681226911077;
-        Tue, 11 Apr 2023 08:28:31 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id a3-20020a029403000000b0040bc0a9e711sm2136630jai.88.2023.04.11.08.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 08:28:30 -0700 (PDT)
-Message-ID: <20cb4641-c765-e5ef-41cb-252be7721ce5@kernel.dk>
-Date:   Tue, 11 Apr 2023 09:28:29 -0600
+        Tue, 11 Apr 2023 11:29:24 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8385059CF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 08:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681226958; x=1712762958;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bB6vsOiDcv3CS9vf/cuHxFzwAprNPQaMOAJGGScUbT4=;
+  b=HxvRK9KdiEP/LrzyUOkTb6/O2cp/W3kaJs0TdYtZA0D1ldrAVl2SkY/J
+   TEguOMYF/hyys0sv2HrpFiW16vg8fMbs4JCwXGbTsjww5ZDETnZDpswLB
+   3Z30MXgdy0CA32fF3QIYtTWtbIC/VDgLpTFx9wqeJXZwPkYZE9ysCWva3
+   j4NxwB96dx6+94wgsmIyvHm78f7mxJSN/Dnqsh17SAjWYPVAcnyHIxcuy
+   S6VESKPTh3mgcykzjgnOJcztPaC/Oiwg0f1QyKPpiTsdbKn8lQwbaiz1X
+   BgG45PZV2EsJqWnnrmlexAR2ZqGjOqGQhd5c8kzwwja7YO5dh8aNSgpp6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346321002"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="346321002"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 08:29:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="666024097"
+X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
+   d="scan'208";a="666024097"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 Apr 2023 08:29:16 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmFvm-000WRJ-2j;
+        Tue, 11 Apr 2023 15:29:14 +0000
+Date:   Tue, 11 Apr 2023 23:28:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fsfa3 17/22] arch/sparc/mm/init_64.c:3057:31:
+ error: array subscript -1 is outside array bounds of 'char[]'
+Message-ID: <202304112345.Pn0e4esE-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Content-Language: en-US
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Breno Leitao <leitao@debian.org>
-Cc:     Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
-        leit@fb.com, edumazet@google.com, pabeni@redhat.com,
-        davem@davemloft.net, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com
-References: <20230406144330.1932798-1-leitao@debian.org>
- <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
- <ZC7seVq7St6UnKjl@gmail.com>
- <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
- <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
- <ZDVLyi1PahE0sfci@gmail.com>
- <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
- <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
- <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
- <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
- <64357608c396d_113ebd294ba@willemb.c.googlers.com.notmuch>
- <19c69021-dce3-1a4a-00eb-920d1f404cfc@kernel.dk>
- <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 9:24?AM, Willem de Bruijn wrote:
-> Jens Axboe wrote:
->> On 4/11/23 9:00?AM, Willem de Bruijn wrote:
->>> Jens Axboe wrote:
->>>> On 4/11/23 8:51?AM, Willem de Bruijn wrote:
->>>>> Jens Axboe wrote:
->>>>>> On 4/11/23 8:36?AM, David Ahern wrote:
->>>>>>> On 4/11/23 6:00 AM, Breno Leitao wrote:
->>>>>>>> I am not sure if avoiding io_uring details in network code is possible.
->>>>>>>>
->>>>>>>> The "struct proto"->uring_cmd callback implementation (tcp_uring_cmd()
->>>>>>>> in the TCP case) could be somewhere else, such as in the io_uring/
->>>>>>>> directory, but, I think it might be cleaner if these implementations are
->>>>>>>> closer to function assignment (in the network subsystem).
->>>>>>>>
->>>>>>>> And this function (tcp_uring_cmd() for instance) is the one that I am
->>>>>>>> planning to map io_uring CMDs to ioctls. Such as SOCKET_URING_OP_SIOCINQ
->>>>>>>> -> SIOCINQ.
->>>>>>>>
->>>>>>>> Please let me know if you have any other idea in mind.
->>>>>>>
->>>>>>> I am not convinced that this io_uring_cmd is needed. This is one
->>>>>>> in-kernel subsystem calling into another, and there are APIs for that.
->>>>>>> All of this set is ioctl based and as Willem noted a little refactoring
->>>>>>> separates the get_user/put_user out so that in-kernel can call can be
->>>>>>> made with existing ops.
->>>>>>
->>>>>> How do you want to wire it up then? We can't use fops->unlocked_ioctl()
->>>>>> obviously, and we already have ->uring_cmd() for this purpose.
->>>>>
->>>>> Does this suggestion not work?
->>>>
->>>> Not sure I follow, what suggestion?
->>>>
->>>
->>> This quote from earlier in the thread:
->>>
->>> I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
->>> sock_do_ioctl.
->>
->> But that doesn't work, because sock->ops->ioctl() assumes the arg is
->> memory in userspace. Or do you mean change all of the sock->ops->ioctl()
->> to pass in on-stack memory (or similar) and have it work with a kernel
->> address?
-> 
-> That was what I suggested indeed.
-> 
-> It's about as much code change as this patch series. But it avoids
-> the code duplication.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3
+head:   f33754bc67ff9f8377288f8795bf8ee536f6f16b
+commit: 2226ddb6a576f7f89a8a06a3f89b68f5109ded53 [17/22] Makefile: Enable -Wstringop-overflow and -Warray-bounds
+config: sparc64-buildonly-randconfig-r006-20230411 (https://download.01.org/0day-ci/archive/20230411/202304112345.Pn0e4esE-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fsfa3
+        git checkout 2226ddb6a576f7f89a8a06a3f89b68f5109ded53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/mm/
 
-Breno, want to tackle that as a prep patch first? Should make the
-functional changes afterwards much more straightforward, and will allow
-support for anything really.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304112345.Pn0e4esE-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/sparc/mm/init_64.c: In function 'sun4v_linear_pte_xor_finalize':
+   arch/sparc/mm/init_64.c:2206:23: error: variable 'pagecv_flag' set but not used [-Werror=unused-but-set-variable]
+    2206 |         unsigned long pagecv_flag;
+         |                       ^~~~~~~~~~~
+   In function 'kernel_lds_init',
+       inlined from 'report_memory' at arch/sparc/mm/init_64.c:3069:2:
+>> arch/sparc/mm/init_64.c:3057:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
+    3057 |         code_resource.end   = compute_kern_paddr(_etext - 1);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/sparc/include/asm/sections.h:6,
+                    from include/linux/interrupt.h:21,
+                    from include/linux/kernel_stat.h:9,
+                    from include/linux/cgroup.h:26,
+                    from include/linux/hugetlb.h:10,
+                    from arch/sparc/mm/init_64.c:16:
+   include/asm-generic/sections.h: In function 'report_memory':
+   include/asm-generic/sections.h:35:32: note: at offset -1 into object '_etext' of size [0, 9223372036854775807]
+      35 | extern char _text[], _stext[], _etext[];
+         |                                ^~~~~~
+   In function 'kernel_lds_init',
+       inlined from 'report_memory' at arch/sparc/mm/init_64.c:3069:2:
+   arch/sparc/mm/init_64.c:3059:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
+    3059 |         data_resource.end   = compute_kern_paddr(_edata - 1);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/sections.h: In function 'report_memory':
+   include/asm-generic/sections.h:36:32: note: at offset -1 into object '_edata' of size [0, 9223372036854775807]
+      36 | extern char _data[], _sdata[], _edata[];
+         |                                ^~~~~~
+   In function 'kernel_lds_init',
+       inlined from 'report_memory' at arch/sparc/mm/init_64.c:3069:2:
+   arch/sparc/mm/init_64.c:3061:31: error: array subscript -1 is outside array bounds of 'char[]' [-Werror=array-bounds]
+    3061 |         bss_resource.end    = compute_kern_paddr(_end - 1);
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/sections.h: In function 'report_memory':
+   include/asm-generic/sections.h:41:13: note: at offset -1 into object '_end' of size [0, 9223372036854775807]
+      41 | extern char _end[];
+         |             ^~~~
+   cc1: all warnings being treated as errors
+
+
+vim +3057 arch/sparc/mm/init_64.c
+
+f6d4fb5cc0475c bob picco 2014-03-03  3053  
+f6d4fb5cc0475c bob picco 2014-03-03  3054  static void __init kernel_lds_init(void)
+f6d4fb5cc0475c bob picco 2014-03-03  3055  {
+f6d4fb5cc0475c bob picco 2014-03-03  3056  	code_resource.start = compute_kern_paddr(_text);
+f6d4fb5cc0475c bob picco 2014-03-03 @3057  	code_resource.end   = compute_kern_paddr(_etext - 1);
+f6d4fb5cc0475c bob picco 2014-03-03  3058  	data_resource.start = compute_kern_paddr(_etext);
+f6d4fb5cc0475c bob picco 2014-03-03  3059  	data_resource.end   = compute_kern_paddr(_edata - 1);
+f6d4fb5cc0475c bob picco 2014-03-03  3060  	bss_resource.start  = compute_kern_paddr(__bss_start);
+f6d4fb5cc0475c bob picco 2014-03-03  3061  	bss_resource.end    = compute_kern_paddr(_end - 1);
+f6d4fb5cc0475c bob picco 2014-03-03  3062  }
+f6d4fb5cc0475c bob picco 2014-03-03  3063  
+
+:::::: The code at line 3057 was first introduced by commit
+:::::: f6d4fb5cc0475c36437a618db31cbb7f2bf7c282 sparc64 - add mem to iomem resource
+
+:::::: TO: bob picco <bpicco@meloft.net>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
