@@ -2,176 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33786DD63A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF8D6DD641
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 11:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjDKJHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 05:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S229481AbjDKJIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 05:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjDKJGw (ORCPT
+        with ESMTP id S229490AbjDKJID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:06:52 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F2A4C27
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:05:41 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id q17-20020a056e020c3100b003245df8be9fso5626776ilg.14
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 02:05:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681203941; x=1683795941;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y7OruruCyWaSan793MP3isUIe/2SK0TYeCu2Yy1zYas=;
-        b=giHk7Yz8Cn+iAOHLf40utKFw9nSeKmpzuxjm9Uqr8817z6au/vlhAmG44OxG0oAazW
-         pHjbhn0PpH2i5MOS6uVo/zlN0COJAz1V1vWW90hcT91zYFPeziOE5dt9P8m3r84KJ3df
-         GRPpn3eosh/sehciJFRea0HF5jlzhHGnPats7hKCzNbsdafXshSRUHFqzY9oD+HgHIkG
-         tbjzi2MSWeiME2DeH+cNALa3gsPG3aYOqoXaGcJAo2ZI5BLSsfacfMfmMFjk+Y7TCUbn
-         86XmdiTvFAFyxm3B+TIHYAXUpReMYwLoHcrohgqmduDsc9p0phZ+LIonA/XvvrQnNtzZ
-         zaiA==
-X-Gm-Message-State: AAQBX9drwSHE5bjnYyLIDCISqcyV241f23s9VQlQRR51CT4oVK5C72SN
-        xn4frMvA+zeuJGUWkFU1PkGni55w5Bd0qnvcHghlMJSE/9CE
-X-Google-Smtp-Source: AKy350a3iundpBJrZ2/usBcSc4917ckQNlHlUflX+OekSLp/owPyj/xHnaeA+4ffXREVRfSpRS8TuzDyG1nQTKetvEEMFkXbfovY
+        Tue, 11 Apr 2023 05:08:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C83448B;
+        Tue, 11 Apr 2023 02:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681204022; x=1712740022;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vEZy6BehLxjne3ptGrDQ5tuFpZWO8/3pHXdX7Cm/X0w=;
+  b=P9ktXEDzgCNa6OzamQ3C7TpP2wmTaCuL8tjqG3MnpW3xsJbqPD/87wYz
+   O1EC/D0+GzCIcKLwphnEZ9zI+eObF+7oKzBDgj3f8g7xjPv7F6QbKAsnS
+   mSsXbOin4aNYaWpm1nTVnz+J53dac6mNX3xWvFpezFCzk/xjhwYypHuyl
+   vAYTuiI4YTItJqPgqv4nTU7YgF4YIpJ9HeWZlczJbp0WAsnT5haX4Scws
+   3eOOHGlnEBX1E8VUAkyztOJwm3ucIOpoYjwRqruTZwg2mQ/6Sfyi7VmIC
+   QOhCcA4hEvOiaQd7mwfQNIzCwm+Q6TruPtKeMGT/5gsLUv1erDDcuiMAS
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,336,1673938800"; 
+   d="asc'?scan'208";a="146439286"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 02:06:31 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 11 Apr 2023 02:06:24 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 11 Apr 2023 02:06:22 -0700
+Date:   Tue, 11 Apr 2023 10:06:06 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Mason Huo <mason.huo@starfivetech.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shengyu Qu <wiagn233@outlook.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: Add cpu scaling for JH7110
+ SoC
+Message-ID: <20230411-darling-chump-faaf8dec29ef@wendy>
+References: <20230411083257.16155-1-mason.huo@starfivetech.com>
+ <20230411083257.16155-4-mason.huo@starfivetech.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b1d9:0:b0:3a9:5ec2:ef41 with SMTP id
- u25-20020a02b1d9000000b003a95ec2ef41mr657115jah.3.1681203940869; Tue, 11 Apr
- 2023 02:05:40 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 02:05:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b0cabf05f90bcb15@google.com>
-Subject: [syzbot] [ntfs3?] general protection fault in ni_readpage_cmpr
-From:   syzbot <syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9RmMYoUwAG4qQ11d"
+Content-Disposition: inline
+In-Reply-To: <20230411083257.16155-4-mason.huo@starfivetech.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--9RmMYoUwAG4qQ11d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hey Mason,
 
-HEAD commit:    aa318c48808c Merge tag 'gpio-fixes-for-v6.3-rc6' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10496611c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=adfc55aec6afccdd
-dashboard link: https://syzkaller.appspot.com/bug?extid=af224b63e76b2d869bc3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Tue, Apr 11, 2023 at 04:32:57PM +0800, Mason Huo wrote:
+> Add the operating-points-v2 to support cpu scaling
+> on StarFive JH7110 SoC.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+(btw, there's no need to wrap commit messages at 52 columns, you have
+72 to work with)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3f2cda6aed35/disk-aa318c48.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b3abc5d6e123/vmlinux-aa318c48.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5e21f7b0c192/bzImage-aa318c48.xz
+> It supports up to 4 cpu frequency loads.
+>=20
+> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+> ---
+>  .../jh7110-starfive-visionfive-2.dtsi         | 25 +++++++++++++++++++
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 25 +++++++++++++++++++
+>  2 files changed, 50 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dt=
+si b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> index df582bddae4b..ae446b268e78 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> @@ -228,3 +228,28 @@ &uart0 {
+>  	pinctrl-0 =3D <&uart0_pins>;
+>  	status =3D "okay";
+>  };
+> +
+> +&U74_1 {
+> +	clocks =3D  <&syscrg JH7110_SYSCLK_CPU_CORE>;
+> +	clock-names =3D "cpu";
+> +	cpu-supply =3D <&reg_dcdc2>;
+> +};
+> +
+> +&U74_2 {
+> +	clocks =3D  <&syscrg JH7110_SYSCLK_CPU_CORE>;
+> +	clock-names =3D "cpu";
+> +	cpu-supply =3D <&reg_dcdc2>;
+> +};
+> +
+> +&U74_3 {
+> +	clocks =3D  <&syscrg JH7110_SYSCLK_CPU_CORE>;
+> +	clock-names =3D "cpu";
+> +	cpu-supply =3D <&reg_dcdc2>;
+> +};
+> +
+> +&U74_4 {
+> +	clocks =3D  <&syscrg JH7110_SYSCLK_CPU_CORE>;
+                ^^
+There's a double space in each of these.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com
+> +	clock-names =3D "cpu";
+> +	cpu-supply =3D <&reg_dcdc2>;
+> +};
 
-RBP: 00007f5102ac71d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0001000000201005 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffd8c6b1d4f R14: 00007f5102ac7300 R15: 0000000000022000
- </TASK>
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 21645 Comm: syz-executor.1 Not tainted 6.3.0-rc5-syzkaller-00153-gaa318c48808c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:_compound_head include/linux/page-flags.h:251 [inline]
-RIP: 0010:unlock_page+0x25/0x130 mm/folio-compat.c:21
-Code: 00 00 00 00 00 f3 0f 1e fa 41 54 55 48 89 fd 53 e8 c0 24 d2 ff 48 8d 7d 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e4 00 00 00 4c 8b 65 08 31 ff 4c 89 e3 83 e3 01
-RSP: 0018:ffffc900047e7520 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000008 RCX: ffffc90003b51000
-RDX: 0000000000000001 RSI: ffffffff81afd3b0 RDI: 0000000000000008
-RBP: 0000000000000000 R08: 0000000000000004 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801e052988 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f5102ac7700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5102ac8000 CR3: 000000007c8da000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ni_readpage_cmpr+0x44a/0xcd0 fs/ntfs3/frecord.c:2149
- ntfs_read_folio+0x101/0x1e0 fs/ntfs3/inode.c:703
- filemap_read_folio+0xdb/0x2c0 mm/filemap.c:2424
- filemap_create_folio mm/filemap.c:2552 [inline]
- filemap_get_pages+0x42a/0x1620 mm/filemap.c:2605
- filemap_read+0x35e/0xc70 mm/filemap.c:2693
- generic_file_read_iter+0x3ad/0x5b0 mm/filemap.c:2840
- ntfs_file_read_iter+0x1b8/0x270 fs/ntfs3/file.c:758
- call_read_iter include/linux/fs.h:1845 [inline]
- generic_file_splice_read+0x182/0x4b0 fs/splice.c:402
- do_splice_to+0x1b9/0x240 fs/splice.c:885
- splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:956
- do_splice_direct+0x1ab/0x280 fs/splice.c:1065
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5101c8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5102ac7168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f5101dabf80 RCX: 00007f5101c8c169
-RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
-RBP: 00007f5102ac71d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0001000000201005 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffd8c6b1d4f R14: 00007f5102ac7300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:_compound_head include/linux/page-flags.h:251 [inline]
-RIP: 0010:unlock_page+0x25/0x130 mm/folio-compat.c:21
-Code: 00 00 00 00 00 f3 0f 1e fa 41 54 55 48 89 fd 53 e8 c0 24 d2 ff 48 8d 7d 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e4 00 00 00 4c 8b 65 08 31 ff 4c 89 e3 83 e3 01
-RSP: 0018:ffffc900047e7520 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000008 RCX: ffffc90003b51000
-RDX: 0000000000000001 RSI: ffffffff81afd3b0 RDI: 0000000000000008
-RBP: 0000000000000000 R08: 0000000000000004 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801e052988 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f5102ac7700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5102ac8000 CR3: 000000007c8da000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 00                	add    %al,(%rax)
-   2:	00 00                	add    %al,(%rax)
-   4:	00 f3                	add    %dh,%bl
-   6:	0f 1e fa             	nop    %edx
-   9:	41 54                	push   %r12
-   b:	55                   	push   %rbp
-   c:	48 89 fd             	mov    %rdi,%rbp
-   f:	53                   	push   %rbx
-  10:	e8 c0 24 d2 ff       	callq  0xffd224d5
-  15:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 e4 00 00 00    	jne    0x118
-  34:	4c 8b 65 08          	mov    0x8(%rbp),%r12
-  38:	31 ff                	xor    %edi,%edi
-  3a:	4c 89 e3             	mov    %r12,%rbx
-  3d:	83 e3 01             	and    $0x1,%ebx
+How come these two clock properties are being added in <board>.dtsi?
+Should they not be in <soc>.dtsi?
 
+Thanks,
+Conor.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--9RmMYoUwAG4qQ11d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDUi/gAKCRB4tDGHoIJi
+0nEZAP9rj/CuBXvNfE91n2hagQY3313ZTlg0J0xHWjSonAhoBwD/cwrCXvzzmaqL
+aVdM9JA8ul3lc3HBxlANw2iL7G3eWAI=
+=Ix5Y
+-----END PGP SIGNATURE-----
+
+--9RmMYoUwAG4qQ11d--
