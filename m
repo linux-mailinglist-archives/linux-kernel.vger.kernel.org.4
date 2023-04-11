@@ -2,688 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022E66DCF4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DD06DCF53
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 03:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjDKBaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 21:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S230015AbjDKBaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 21:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjDKB3o (ORCPT
+        with ESMTP id S230093AbjDKBaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 21:29:44 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9611BFC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:29:40 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54ef5a44bd9so63389337b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 18:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681176580;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUMdFa7+PPMn99YcGlnAfohLLYbWjlEJWXPRhdQ3G0w=;
-        b=O5jPzmxvpGvZW7A15nBNKVb9+WZg0AxtgKYK/czsKaQti101N5gb12ZgJwZ79KOqCf
-         /7nLUbSt/ecPSttKIZWx6hQc09RPO2HLTAVpaRmG4dxWAxUD1XW4CPBxQwX91bGClxCM
-         n9SwpkbUTkagt1qddJ5g+Zlprvg9Qx83RwrnKQyRHDiuW/iPXyr64Ji+vFI/hXtaItGe
-         bKQE6xEnoGEp/6S1qqA8RVOleosKH8GoiYUjrxCrkffvfodFdsATKBc1Df5vA9mW7O0G
-         wEsFs+d31y4Hn8W1fVVU7JSdUXy353YUcUPYXkJGfyphlSLdBo0eGJEp/ecFM45BsrMI
-         v+pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681176580;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUMdFa7+PPMn99YcGlnAfohLLYbWjlEJWXPRhdQ3G0w=;
-        b=RgEkTkt5oeW4UhYEq7H2vOhGT17dV+0VEcvm4se4iOUougnZXCJjU6SML6X8oJt9m0
-         rJCZXL8cm1yGpol9EzDP4PgF5g1G4itVoXvYt9pc2mJUGsEuzKdEfyvuh4xCDW8f/tnE
-         8MSYXbFcizBC7VzKB1Pq1B2hY8HYv0jZLBAUdNaQmswomMMTiqUI89YvV3LIhdP6XeGt
-         WfbKNH3LdLXi8Cy2WVc7LaAR15JjRUCOWQ8vJfq1Ajn8+QICTpMQYv2peDdhfUnTcAC6
-         wulTaxN8N+vM/LMFJLljQ4QdpT/a4cAidQgHuAXSZeLt3cblhxGJSOyVtP0fbcCVGmSS
-         zi0Q==
-X-Gm-Message-State: AAQBX9eq6btoiLulQhbL9klzJHYU9gzOg+ajIY1h/5MUNDQ4xEga9RBH
-        w97E4UZXIwLJOnG0r8BBl3JsxRBYJYVfYfBoWA==
-X-Google-Smtp-Source: AKy350aWx1LEWUOf1FrnrMDEm7YGoW5Jf5E4LFqJ8ZnxfEUyPVRZ2iMsx9R9r5E7bVHQTgok7giMc8dxwwldHsZMKw==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with
- SMTP id bu9-20020a056902090900b00a273eccffe7mr10712313ybb.3.1681176579771;
- Mon, 10 Apr 2023 18:29:39 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 01:29:33 +0000
-In-Reply-To: <cover.1681176340.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1681176340.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <2a733e3ed673c3b9d6b1a5fcb6625953da042f42.1681176340.git.ackerleytng@google.com>
-Subject: [RFC PATCH v4 2/2] selftests: restrictedmem: Check
- memfd_restricted()'s handling of provided userspace mount
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
-        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
-        david@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
-        jmattson@google.com, joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com,
-        Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 10 Apr 2023 21:30:15 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::623])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D45230FC;
+        Mon, 10 Apr 2023 18:29:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n2FBJiK7OYJSlSYhPd/pZdYx2YwBjkjXCAJtDN9s1dVWPdq1M197TiFWJiHsL2lK9p1kOQa2ZlkXgHJO3cV6rUIo57Nr/C4rsfYpWg/BPCckaFNUa+sG4AbNjYpzbgdtWJ29P7xYMDcJOIQrTDfmoAE9PozybXglP1s6ONthQjUHwL73CwK0xG+P8RqWCsIU75JZk/1yvqf3Uelvqoe3oy3VVvAzm/epnKZ7dWgORLT/jnerIkI1NuCaTFLECNCu/ZmkcwGLGg+hBy64IEbe5cQgMp2oMlOe2nJm6v39vsLhdWbuWIY8lRsIUKMK8YflyB+60UYihEuoGBjy44jy5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lMpb19sYuD2Zo323h/cDpGUFPTLYCTAQbVEBG9XUHL4=;
+ b=MTK9DUJkHxL0ZA6wfrAcXdGfZ8DXOuV6kpnA3ILPq0IBN6he4JFdPOsC9sN0c+hXGMtg57w5GUt5QIH3SYssxh8mb5W4sUogow9TbzWi5ft7g/MExGTmIk3bNLXSAs9JWB15BYmCTHVminc9d55kiF+pQdgtIqxaom9hjYJxLKUTdohIlVbVCW6M6bJhv4mdXc2UAUi74zGMKWSTxsnZPKS8tnigyaeEJGE+3ZMLjQq4XNbcWOzGvajrxk/39KrnbN1EVYAr511LYj9oReczFe/4DHsz2+LmihfR9Ty0dd5DjycybXbOjuYz7LcIKVFhlm52Lo6kTzzLINmZpzfWSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lMpb19sYuD2Zo323h/cDpGUFPTLYCTAQbVEBG9XUHL4=;
+ b=U3gjgJ2svAeoDEHh7THquz0rBPk2mLIF5aNVF32tJoLSw3mXkTKOBFmD2IGzmHpiVG8CziMk0nHSy3kSDLoepdCKu3kpPtWrFMe9GMLQI3x+hsTsI5jgKvqQ02Wf9rm77IBxk+/ziFacS6SumeE4+djDIJuDgOPgAeVyQh7Frzw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MN2PR12MB4454.namprd12.prod.outlook.com (2603:10b6:208:26c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 11 Apr
+ 2023 01:29:50 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6277.036; Tue, 11 Apr 2023
+ 01:29:50 +0000
+Message-ID: <0adc0b89-768e-0f8b-3fd3-4bb7cb3ac3c8@amd.com>
+Date:   Mon, 10 Apr 2023 20:29:47 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+To:     =?UTF-8?Q?Kornel_Dul=c4=99ba?= <korneld@chromium.org>,
+        "Gong, Richard" <richard.gong@amd.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
+        gregkh@linuxfoundation.org, stable@vger.kernel.org
+References: <20230320093259.845178-1-korneld@chromium.org>
+ <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
+ <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
+ <CAD=NsqxSDUu3wpfhUCDJgP2TaKb7dudB90snROQpPJPj3fdFgQ@mail.gmail.com>
+ <CAD=NsqyAXK0z7XqVy=coSm40zOe0yS+h=oiDD8a-udDT5WKMdw@mail.gmail.com>
+Content-Language: en-US
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <CAD=NsqyAXK0z7XqVy=coSm40zOe0yS+h=oiDD8a-udDT5WKMdw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA9PR13CA0179.namprd13.prod.outlook.com
+ (2603:10b6:806:28::34) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN2PR12MB4454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6eba212c-859e-47d9-4872-08db3a2c3e26
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZgS6md4btCEGORiHt0mfLqscORYGtUEUvQD63P7oKsIYee5mA5VsIBB4mKtzW6JYdUXAOhjZHsGg1+ulCYg/ZLLGuT5W8ysy2f+ULmGsE0TV4FvpSyO7kfjvaDqdtA9BUC99NmYdoTunmYjwgZFuXZK0tLGuYlJG+0DzFv0gNtxoAVY3V3biBYGq3GBP4D9rqpIojmJHRB5b9IJ650hdGWGwV20J9nJjnQ8fsdSmZ2FvBcd6fpT5b096yvycYym8/7QXk+OJ9bx/qXxe7TH/uLuazhMEWX+AH+DWZzExTcr5jn+OX9Iao+kHRYsJhWBlLj1ed5O7wdd1wECwZncBqDueb8HQXk3I5OpP0oRpLD1h3U0V3OemF+eEeYewQGGnUmHg6Z9MUtvkTvwCiPxfdSSuWDh3zVDLk4XdCqjmFE/WTBzH2v2ZRAKAq/GqDRIkfqoNXU43q5tXfD45wM3gSGreAEX35S1ajjxAK+LCh5iVzrdCoODtSWiYXnWTPTs8AXSAYeaTUIfFTDA3mQQtAupWGJ2AZVgkd45fvc17unz0PhOsPYfoBFKwEQ1r28sJNmLXTXTJ/e8i001/cSWgoz+sb70RdJ05XGWaM7PVwyehI63HWweqVPUjnIuw1K/CTNRNlHxDPZRDi+FNQK5PJQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199021)(36756003)(31696002)(86362001)(41300700001)(316002)(110136005)(478600001)(8676002)(66946007)(66476007)(54906003)(6486002)(66556008)(4326008)(966005)(6636002)(5660300002)(7416002)(2906002)(8936002)(44832011)(66574015)(186003)(38100700002)(6666004)(6512007)(6506007)(2616005)(83380400001)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTU2SXNZR2s0T0lVbFJnUW4yQWd1ZmRzdk1XQlpyTGdRbVhhQW1iRzVXU0da?=
+ =?utf-8?B?QTBJcTF4YzN3SjlaVGNHdGdYN1RaSEhNN1dCeXZsdXN3SUFwcVJNQVJWUGpI?=
+ =?utf-8?B?ZVdZdEFkREcrRy9hTTZoVnd3Yi8yQkdQQ3NGYmRIWDVQT1hBcm1RdlRzNDhJ?=
+ =?utf-8?B?RnA3M1Mya3NJTGI4UGdtZlZITGRpakx2NHMyOUsyVnBiZHRkcmRxa0JHVDJy?=
+ =?utf-8?B?YTFDVGo4Z1E2OWphOWtRWGlUUmxSYlgvYzJ4TVg5WmdNSUtySXVKbEkrYVUx?=
+ =?utf-8?B?M1Z5RGY5VWJ5UGlaY3FpcFFIN2hjYWxYeWpuR2xwb0gvVHR5cVdyU2VyZkxr?=
+ =?utf-8?B?clBZRDdGd054YXpRL09KQUo4Z2dmOFUxK2pGMlRINlhiSGdyVFAycVhzeTUw?=
+ =?utf-8?B?T1lvRWQzTkMzN3BiUVdmOWRDRHZjYzBoZVFZakdyMUZBNVphbWNxREtYc1NB?=
+ =?utf-8?B?TERFNVZYWXBRT2lpMkVUK2ZJK3pNUERGSlgxcGtZRmVMQktGOGkwb0MrL3Jm?=
+ =?utf-8?B?dVI0ekZHRUdyYWxxUW9CU1htcSt0NVhlZXljMVBuY2NCak1yWFltYlVNb0Z0?=
+ =?utf-8?B?NWhuQVdpVEdoK0xWa3hrcFdrTmc2U1Y2bHljdDM1b1VqUlZibU12MzBpbG5s?=
+ =?utf-8?B?UkRqYjVBQXNxemhjU2NtOVJlRUtUNnFWVDIzT3Q2NnR3bTBldlRyTXhvRnJD?=
+ =?utf-8?B?S0tNZkhHbjVreklmZWt6SFdHc0YyMEdKbkpnaVowR3N6YkYyT3E0N2krUDh6?=
+ =?utf-8?B?d2dyWERjZUg5UndsZk03WG1EaXBxRFhhRVJHTWFma0NPRmxKWjltdFo2ZkZH?=
+ =?utf-8?B?bXZDUk9tMmF4d0dza2E3U3BMMWxQb2RQYUNpT1Z6WVZGMGUwTU5FSnhGaWtz?=
+ =?utf-8?B?clhOdzV3b3Z5SGpESUZjMzVxOTcyMmN4YkFXSWY1VngydlpBL0F5YVVlQjQ0?=
+ =?utf-8?B?WFZ0Z1hkZW1RMGNVRTBnRURzVXZUOUNxKzZEUXoxQkQyV1J1QTI3SlgwVzUv?=
+ =?utf-8?B?VW5TclFTN0lxeHg4OGR0d0RieDFBQkljeGM2ZmE3cktXbkVtQkhnRWRhQ1NP?=
+ =?utf-8?B?ajRkR0wzZUlmUng0b29GSzNXK0hacEZ0cjZ5NkhENkhzdkFONjVNTW1WT0ZH?=
+ =?utf-8?B?S2ZFNWE0UTlndDE2bnFJeFZqVVR2djFJV21ETUtUdVN2aEZGT0VnaXRzd3hl?=
+ =?utf-8?B?QzJHVHY0R1VDWnZBeFRWZTEwbjNYQ3dFeTZScjRoSjQrRVM2WEM2b3JBQ2Jy?=
+ =?utf-8?B?bEFydUYrSjVpMzhtTlhmVy9MMXdqbWxEOHViTFQycnluMy9EOEh4MVF0MlZy?=
+ =?utf-8?B?NlJDQmptaW9TVTB3OGxiVnNjMWFrT0JYMWd3MkE3cTgyM3EyMGhCSmxFS243?=
+ =?utf-8?B?YVZOMVprZUVMSHVydEJDS2dJYUVEaWRRY3ZQTTQwVythZ0c5ekhPSVFFZENS?=
+ =?utf-8?B?Z1V2eVE3enVJVExFWUVJaDdIajR3NWE0cmV5bmpYaHR6N3RDWVd5VHhWcW92?=
+ =?utf-8?B?WXB3UU5IMmZ2NkxDY0k1UHBQYlZqb2lOKzdLRkR2NktMa2RzQ2UvWlJVeUJQ?=
+ =?utf-8?B?T0J0N0xWZnJ4Y0RIa0xndGhLQWM4QVdEY3ZTRFBUdHVyTUQxOVFpRDIxeFRC?=
+ =?utf-8?B?Ym1HSnlHVkRob1NDRk9DSURBTldtRnFzSnQ0b25Sa3VMMXZicTRtbDN2c2tQ?=
+ =?utf-8?B?NnRadkF3K3dyTFlLQ1RTQ29iTDFHbVQ3bS8yd1BRamRxL2FmVkUvODE2d3pn?=
+ =?utf-8?B?UndKMVdkTTU4RUVleEg2ZHNkSmcxMVBuYUxkWE5ROTVTU2V5bkxOYktKclAr?=
+ =?utf-8?B?bHZUV1hUNGNYNkh3TmU1UUJkRlVaTFhvV29lWnF5RUd0ek9LeStxTUNvdHYy?=
+ =?utf-8?B?R1VVVUxrV3pHUHFUbDN3bE9XRnFZaE15Qm4zZll0VnJtZFV6US9EWFpHTmUx?=
+ =?utf-8?B?NTE1NWlFWC9iWjR3bmFLVlBVbG5jQVp0cWIvTUd6QzNzWTRVRUluc3hzQmJa?=
+ =?utf-8?B?emJIYlVPRVY2M2MyYzZ1clY5bUl3Vkkvclhkb1RETVhabzYzQWJtZjZIU29p?=
+ =?utf-8?B?YkVNY29YZGx4VHpoRnNZQVZiTXlJNWxVaW0yUk1VN21mMjNpZmdCMjdScElN?=
+ =?utf-8?B?Q0NRRzBrYkl3WUhuOGZaM29CcTRmRzNlcndiSXRySFhDMmRxdVRZQkhkY1BP?=
+ =?utf-8?Q?JV5vPeakTz71hvnDoXOH/XEyQpHzoWaVgVfj2zmUIEw9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6eba212c-859e-47d9-4872-08db3a2c3e26
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2023 01:29:50.1345
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LCYP+uoRJzmkkxDan10b2l+r79rGYWYlDcm1kGAKH6n1HgJIP1iIUIy1prUMkeNieZGFsEuEu1T4x8HItWVqOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4454
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For memfd_restricted() calls without a userspace mount, the backing
-file should be the shmem mount in the kernel, and the size of backing
-pages should be as defined by system-wide shmem configuration.
 
-If a userspace mount is provided, the size of backing pages should be
-as defined in the mount.
+On 4/10/23 11:32, Kornel Dulęba wrote:
+> On Mon, Apr 10, 2023 at 6:17 PM Kornel Dulęba <korneld@chromium.org> wrote:
+>> On Mon, Apr 10, 2023 at 5:29 PM Gong, Richard <richard.gong@amd.com> wrote:
+>>> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
+>>>> On 3/20/23 04:32, Kornel Dulęba wrote:
+>>>>
+>>>>> This fixes a similar problem to the one observed in:
+>>>>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
+>>>>> probe").
+>>>>>
+>>>>> On some systems, during suspend/resume cycle firmware leaves
+>>>>> an interrupt enabled on a pin that is not used by the kernel.
+>>>>> This confuses the AMD pinctrl driver and causes spurious interrupts.
+>>>>>
+>>>>> The driver already has logic to detect if a pin is used by the kernel.
+>>>>> Leverage it to re-initialize interrupt fields of a pin only if it's not
+>>>>> used by us.
+>>>>>
+>>>>> Signed-off-by: Kornel Dulęba <korneld@chromium.org>
+>>>>> ---
+>>>>>    drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++----------------
+>>>>>    1 file changed, 20 insertions(+), 16 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/pinctrl/pinctrl-amd.c
+>>>>> b/drivers/pinctrl/pinctrl-amd.c
+>>>>> index 9236a132c7ba..609821b756c2 100644
+>>>>> --- a/drivers/pinctrl/pinctrl-amd.c
+>>>>> +++ b/drivers/pinctrl/pinctrl-amd.c
+>>>>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
+>>>>> = {
+>>>>>        .pin_config_group_set = amd_pinconf_group_set,
+>>>>>    };
+>>>>>    -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+>>>>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
+>>>>>    {
+>>>>> -    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+>>>>> +    const struct pin_desc *pd;
+>>>>>        unsigned long flags;
+>>>>>        u32 pin_reg, mask;
+>>>>> -    int i;
+>>>>>          mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
+>>>>>            BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
+>>>>>            BIT(WAKE_CNTRL_OFF_S4);
+>>>>>    -    for (i = 0; i < desc->npins; i++) {
+>>>>> -        int pin = desc->pins[i].number;
+>>>>> -        const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
+>>>>> -
+>>>>> -        if (!pd)
+>>>>> -            continue;
+>>>>> +    pd = pin_desc_get(gpio_dev->pctrl, pin);
+>>>>> +    if (!pd)
+>>>>> +        return;
+>>>>>    -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>> +    pin_reg = readl(gpio_dev->base + pin * 4);
+>>>>> +    pin_reg &= ~mask;
+>>>>> +    writel(pin_reg, gpio_dev->base + pin * 4);
+>>>>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+>>>>> +}
+>>>>>    -        pin_reg = readl(gpio_dev->base + i * 4);
+>>>>> -        pin_reg &= ~mask;
+>>>>> -        writel(pin_reg, gpio_dev->base + i * 4);
+>>>>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+>>>>> +{
+>>>>> +    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+>>>>> +    int i;
+>>>>>    -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
+>>>>> -    }
+>>>>> +    for (i = 0; i < desc->npins; i++)
+>>>>> +        amd_gpio_irq_init_pin(gpio_dev, i);
+>>>>>    }
+>>>>>      #ifdef CONFIG_PM_SLEEP
+>>>>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
+>>>>>        for (i = 0; i < desc->npins; i++) {
+>>>>>            int pin = desc->pins[i].number;
+>>>>>    -        if (!amd_gpio_should_save(gpio_dev, pin))
+>>>>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
+>>>>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
+>>>>>                continue;
+>>>>> +        }
+>>>>>              raw_spin_lock_irqsave(&gpio_dev->lock, flags);
+>>>>>            gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4)
+>>>>> & PIN_IRQ_PENDING;
+>>>> Hello Kornel,
+>>>>
+>>>> I've found that this commit which was included in 6.3-rc5 is causing a
+>>>> regression waking up from lid on a Lenovo Z13.
+>>> observed "unable to wake from power button" on AMD based Dell platform.
+>>> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
+>>> top of 6.3-rc6 does fix the issue.
+>> Whoops, sorry for the breakage.
+>> Could you please share the output of "/sys/kernel/debug/gpio" before
+>> and after the first suspend/resume cycle.
+> Oh and also I'd need to compare the output from this with and without
+> this patch reverted.
 
-Also includes negative tests for invalid inputs, including fds
-representing read-only superblocks/mounts.
+I've attached the requested output to the bug for all 3 cases for the Z13.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/mm/.gitignore         |   1 +
- tools/testing/selftests/mm/Makefile           |   1 +
- .../selftests/mm/memfd_restricted_usermnt.c   | 529 ++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh     |   3 +
- 4 files changed, 534 insertions(+)
- create mode 100644 tools/testing/selftests/mm/memfd_restricted_usermnt.c
+6.3-rc6 (broken lid resume)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index fb6e4233374d..dba320c8151a 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -31,6 +31,7 @@ map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
- memfd_restricted
-+memfd_restricted_usermnt
- memfd_secret
- soft-dirty
- split_huge_page_test
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 5ec338ea1fed..2f5df7a12ea5 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -46,6 +46,7 @@ TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
- TEST_GEN_FILES += memfd_restricted
-+TEST_GEN_FILES += memfd_restricted_usermnt
- TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += migration
- TEST_GEN_FILES += mlock-random-test
-diff --git a/tools/testing/selftests/mm/memfd_restricted_usermnt.c b/tools/testing/selftests/mm/memfd_restricted_usermnt.c
-new file mode 100644
-index 000000000000..0be04e3d714d
---- /dev/null
-+++ b/tools/testing/selftests/mm/memfd_restricted_usermnt.c
-@@ -0,0 +1,529 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define _GNU_SOURCE /* for O_PATH */
-+#define _POSIX_C_SOURCE /* for PATH_MAX */
-+#include <limits.h>
-+#include <sys/syscall.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+
-+#include "linux/restrictedmem.h"
-+
-+#include "../kselftest_harness.h"
-+
-+static int memfd_restricted(unsigned int flags, int fd)
-+{
-+	return syscall(__NR_memfd_restricted, flags, fd);
-+}
-+
-+static int get_hpage_pmd_size(void)
-+{
-+	FILE *fp;
-+	char buf[100];
-+	char *ret;
-+	int size;
-+
-+	fp = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
-+	if (!fp)
-+		return -1;
-+
-+	ret = fgets(buf, 100, fp);
-+	if (ret != buf) {
-+		size = -1;
-+		goto out;
-+	}
-+
-+	if (sscanf(buf, "%d\n", &size) != 1)
-+		size = -1;
-+
-+out:
-+	fclose(fp);
-+
-+	return size;
-+}
-+
-+static int write_string_to_file(const char *path, const char *string)
-+{
-+	FILE *fp;
-+	size_t len = strlen(string);
-+	int ret = -1;
-+
-+	fp = fopen(path, "w");
-+	if (!fp)
-+		return ret;
-+
-+	if (fwrite(string, 1, len, fp) != len)
-+		goto out;
-+
-+	ret = 0;
-+
-+out:
-+	fclose(fp);
-+	return ret;
-+}
-+
-+/*
-+ * Expect shmem thp policy to be one of always, within_size, advise, never,
-+ * deny, force
-+ */
-+#define POLICY_BUF_SIZE 12
-+
-+static bool is_valid_shmem_thp_policy(char *policy)
-+{
-+	if (strcmp(policy, "always") == 0)
-+		return true;
-+	if (strcmp(policy, "within_size") == 0)
-+		return true;
-+	if (strcmp(policy, "advise") == 0)
-+		return true;
-+	if (strcmp(policy, "never") == 0)
-+		return true;
-+	if (strcmp(policy, "deny") == 0)
-+		return true;
-+	if (strcmp(policy, "force") == 0)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int get_shmem_thp_policy(char *policy)
-+{
-+	FILE *fp;
-+	char buf[100];
-+	char *left = NULL;
-+	char *right = NULL;
-+	int ret = -1;
-+
-+	fp = fopen("/sys/kernel/mm/transparent_hugepage/shmem_enabled", "r");
-+	if (!fp)
-+		return -1;
-+
-+	if (fgets(buf, 100, fp) != buf)
-+		goto out;
-+
-+	/*
-+	 * Expect shmem_enabled to be of format like "always within_size advise
-+	 * [never] deny force"
-+	 */
-+	left = memchr(buf, '[', 100);
-+	if (!left)
-+		goto out;
-+
-+	right = memchr(buf, ']', 100);
-+	if (!right)
-+		goto out;
-+
-+	memcpy(policy, left + 1, right - left - 1);
-+
-+	ret = !is_valid_shmem_thp_policy(policy);
-+
-+out:
-+	fclose(fp);
-+	return ret;
-+}
-+
-+static int set_shmem_thp_policy(char *policy)
-+{
-+	int ret = -1;
-+	/* +1 for newline */
-+	char to_write[POLICY_BUF_SIZE + 1] = { 0 };
-+
-+	if (!is_valid_shmem_thp_policy(policy))
-+		return ret;
-+
-+	ret = snprintf(to_write, POLICY_BUF_SIZE + 1, "%s\n", policy);
-+	if (ret != strlen(policy) + 1)
-+		return -1;
-+
-+	ret = write_string_to_file(
-+		"/sys/kernel/mm/transparent_hugepage/shmem_enabled", to_write);
-+
-+	return ret;
-+}
-+
-+FIXTURE(reset_shmem_enabled)
-+{
-+	char shmem_enabled[POLICY_BUF_SIZE];
-+};
-+
-+FIXTURE_SETUP(reset_shmem_enabled)
-+{
-+	memset(self->shmem_enabled, 0, POLICY_BUF_SIZE);
-+	ASSERT_EQ(get_shmem_thp_policy(self->shmem_enabled), 0);
-+}
-+
-+FIXTURE_TEARDOWN(reset_shmem_enabled)
-+{
-+	ASSERT_EQ(set_shmem_thp_policy(self->shmem_enabled), 0);
-+}
-+
-+TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_never)
-+{
-+	int fd = -1;
-+	struct stat stat;
-+
-+	ASSERT_EQ(set_shmem_thp_policy("never"), 0);
-+
-+	fd = memfd_restricted(0, -1);
-+	ASSERT_GT(fd, 0);
-+
-+	ASSERT_EQ(fstat(fd, &stat), 0);
-+
-+	/*
-+	 * st_blksize is set based on the superblock's s_blocksize_bits. For
-+	 * shmem, this is set to PAGE_SHIFT
-+	 */
-+	ASSERT_EQ(stat.st_blksize, getpagesize());
-+
-+	close(fd);
-+}
-+
-+TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_always)
-+{
-+	int fd = -1;
-+	struct stat stat;
-+
-+	ASSERT_EQ(set_shmem_thp_policy("always"), 0);
-+
-+	fd = memfd_restricted(0, -1);
-+	ASSERT_GT(fd, 0);
-+
-+	ASSERT_EQ(fstat(fd, &stat), 0);
-+
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	close(fd);
-+}
-+
-+TEST(restrictedmem_tmpfile_invalid_fd)
-+{
-+	int fd = memfd_restricted(MEMFD_RSTD_USERMNT, -2);
-+
-+	ASSERT_EQ(fd, -1);
-+	ASSERT_EQ(errno, EBADF);
-+}
-+
-+TEST(restrictedmem_tmpfile_fd_not_a_mount)
-+{
-+	int fd = memfd_restricted(MEMFD_RSTD_USERMNT, STDOUT_FILENO);
-+
-+	ASSERT_EQ(fd, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+}
-+
-+TEST(restrictedmem_tmpfile_not_tmpfs_mount)
-+{
-+	int fd = -1;
-+	int mfd = -1;
-+
-+	mfd = open("/proc", O_PATH);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+
-+	ASSERT_EQ(fd, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+}
-+
-+FIXTURE(tmpfs_sfd)
-+{
-+	int sfd;
-+};
-+
-+FIXTURE_SETUP(tmpfs_sfd)
-+{
-+	self->sfd = fsopen("tmpfs", 0);
-+	ASSERT_NE(self->sfd, -1);
-+}
-+
-+FIXTURE_TEARDOWN(tmpfs_sfd)
-+{
-+	EXPECT_EQ(close(self->sfd), 0);
-+}
-+
-+TEST_F(tmpfs_sfd, restrictedmem_fstat_tmpfs_huge_always)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	fsconfig(self->sfd, FSCONFIG_SET_STRING, "huge", "always", 0);
-+	fsconfig(self->sfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
-+
-+	mfd = fsmount(self->sfd, 0, 0);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_GT(fd, 0);
-+
-+	/* User can close reference to mount */
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = fstat(fd, &stat);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	close(fd);
-+}
-+
-+TEST_F(tmpfs_sfd, restrictedmem_fstat_tmpfs_huge_never)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	fsconfig(self->sfd, FSCONFIG_SET_STRING, "huge", "never", 0);
-+	fsconfig(self->sfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
-+
-+	mfd = fsmount(self->sfd, 0, 0);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_GT(fd, 0);
-+
-+	/* User can close reference to mount */
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = fstat(fd, &stat);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(stat.st_blksize, getpagesize());
-+
-+	close(fd);
-+}
-+
-+TEST_F(tmpfs_sfd, restrictedmem_check_mount_flags)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+
-+	fsconfig(self->sfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
-+
-+	mfd = fsmount(self->sfd, 0, MOUNT_ATTR_RDONLY);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_EQ(fd, -1);
-+	ASSERT_EQ(errno, EROFS);
-+
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+}
-+
-+TEST_F(tmpfs_sfd, restrictedmem_check_superblock_flags)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+
-+	fsconfig(self->sfd, FSCONFIG_SET_FLAG, "ro", NULL, 0);
-+	fsconfig(self->sfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
-+
-+	mfd = fsmount(self->sfd, 0, 0);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_EQ(fd, -1);
-+	ASSERT_EQ(errno, EROFS);
-+
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+}
-+
-+static bool directory_exists(const char *path)
-+{
-+	struct stat sb;
-+
-+	return stat(path, &sb) == 0 && S_ISDIR(sb.st_mode);
-+}
-+
-+FIXTURE(restrictedmem_test_mount_path)
-+{
-+	char *mount_path;
-+};
-+
-+FIXTURE_SETUP(restrictedmem_test_mount_path)
-+{
-+	int ret = -1;
-+
-+	/* /tmp is an FHS-mandated world-writable directory */
-+	self->mount_path = "/tmp/restrictedmem-selftest-mnt";
-+
-+	if (!directory_exists(self->mount_path)) {
-+		ret = mkdir(self->mount_path, 0777);
-+		ASSERT_EQ(ret, 0);
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(restrictedmem_test_mount_path)
-+{
-+	int ret = -1;
-+
-+	if (!directory_exists(self->mount_path))
-+		return;
-+
-+	ret = umount2(self->mount_path, MNT_FORCE);
-+	EXPECT_EQ(ret, 0);
-+	if (ret == -1 && errno == EINVAL)
-+		fprintf(stderr, "  %s was not mounted\n", self->mount_path);
-+
-+	ret = rmdir(self->mount_path);
-+	EXPECT_EQ(ret, 0);
-+	if (ret == -1)
-+		fprintf(stderr, "  rmdir(%s) failed: %m\n", self->mount_path);
-+}
-+
-+/*
-+ * memfd_restricted() syscall can only be used with the fd of the root of the
-+ * mount. When the restrictedmem's fd is open, a user should not be able to
-+ * unmount or remove the mounted directory
-+ */
-+TEST_F(restrictedmem_test_mount_path, restrictedmem_umount_rmdir_while_file_open)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(ret, 0);
-+
-+	mfd = open(self->mount_path, O_PATH);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_GT(fd, 0);
-+
-+	/* We don't need this reference to the mount anymore */
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+
-+	/* restrictedmem's fd should still be usable */
-+	ret = fstat(fd, &stat);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	/* User should not be able to unmount directory */
-+	ret = umount2(self->mount_path, MNT_FORCE);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBUSY);
-+
-+	ret = rmdir(self->mount_path);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBUSY);
-+
-+	close(fd);
-+}
-+
-+/* The fd of a file on the mount cannot be provided as mount_fd */
-+TEST_F(restrictedmem_test_mount_path, restrictedmem_provide_fd_of_file)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int ffd = -1;
-+	char tmp_file_path[PATH_MAX] = { 0 };
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(ret, 0);
-+
-+	snprintf(tmp_file_path, PATH_MAX, "%s/tmp-file", self->mount_path);
-+	ret = write_string_to_file(tmp_file_path, "filler\n");
-+	ASSERT_EQ(ret, 0);
-+
-+	ffd = open(tmp_file_path, O_RDWR);
-+	ASSERT_GT(ffd, 0);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, ffd);
-+	ASSERT_LT(fd, 0);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	ret = close(ffd);
-+	ASSERT_EQ(ret, 0);
-+
-+	close(fd);
-+	remove(tmp_file_path);
-+}
-+
-+/* The fd of files on the mount cannot be provided as mount_fd */
-+TEST_F(restrictedmem_test_mount_path, restrictedmem_provide_fd_of_file_in_subdir)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int ffd = -1;
-+	char tmp_dir_path[PATH_MAX] = { 0 };
-+	char tmp_file_path[PATH_MAX] = { 0 };
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(ret, 0);
-+
-+	snprintf(tmp_dir_path, PATH_MAX, "%s/tmp-subdir", self->mount_path);
-+	ret = mkdir(tmp_dir_path, 0777);
-+	ASSERT_EQ(ret, 0);
-+
-+	snprintf(tmp_file_path, PATH_MAX, "%s/tmp-subdir/tmp-file",
-+		 self->mount_path);
-+	ret = write_string_to_file(tmp_file_path, "filler\n");
-+	ASSERT_EQ(ret, 0);
-+
-+	ffd = open(tmp_file_path, O_RDWR);
-+	ASSERT_NE(ffd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, ffd);
-+	ASSERT_LT(fd, 0);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	ret = close(ffd);
-+	ASSERT_EQ(ret, 0);
-+
-+	remove(tmp_file_path);
-+	rmdir(tmp_dir_path);
-+}
-+
-+/*
-+ * fds representing bind mounts must represent the root of the original
-+ * filesystem
-+ */
-+TEST_F(restrictedmem_test_mount_path, restrictedmem_provide_fd_of_original_fs)
-+{
-+	int ret = -1;
-+	int fd = -1;
-+	int mfd = -1;
-+	char tmp_dir_path_0[PATH_MAX] = { 0 };
-+	char tmp_dir_path_1[PATH_MAX] = { 0 };
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(ret, 0);
-+
-+	snprintf(tmp_dir_path_0, PATH_MAX, "%s/tmp-subdir-0", self->mount_path);
-+	ret = mkdir(tmp_dir_path_0, 0777);
-+	ASSERT_EQ(ret, 0);
-+
-+	snprintf(tmp_dir_path_1, PATH_MAX, "%s/tmp-subdir-1", self->mount_path);
-+	ret = mkdir(tmp_dir_path_1, 0777);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = mount(tmp_dir_path_0, tmp_dir_path_1, "tmpfs", MS_BIND, NULL);
-+	ASSERT_EQ(ret, 0);
-+
-+	mfd = open(tmp_dir_path_1, O_PATH);
-+	ASSERT_NE(mfd, -1);
-+
-+	fd = memfd_restricted(MEMFD_RSTD_USERMNT, mfd);
-+	ASSERT_LT(fd, 0);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	ret = close(mfd);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = umount2(tmp_dir_path_1, MNT_FORCE);
-+	ASSERT_EQ(ret, 0);
-+
-+	rmdir(tmp_dir_path_0);
-+	rmdir(tmp_dir_path_1);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 53de84e3ec2c..04238f86f037 100644
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -40,6 +40,8 @@ separated by spaces:
- 	test memadvise(2) MADV_POPULATE_{READ,WRITE} options
- - memfd_restricted_
- 	test memfd_restricted(2)
-+- memfd_restricted_usermnt
-+	test memfd_restricted(2)'s handling of provided userspace mounts
- - memfd_secret
- 	test memfd_secret(2)
- - process_mrelease
-@@ -239,6 +241,7 @@ CATEGORY="hmm" run_test ./test_hmm.sh smoke
- CATEGORY="madv_populate" run_test ./madv_populate
- 
- CATEGORY="memfd_restricted" run_test ./memfd_restricted
-+CATEGORY="memfd_restricted_usermnt" run_test ./memfd_restricted_usermnt
- 
- CATEGORY="memfd_secret" run_test ./memfd_secret
- 
--- 
-2.40.0.577.gac1e443424-goog
+6.3-rc6 + patch below (broken lid resume)
 
+6.3-rc6 + revert (works from lid)
+
+https://bugzilla.kernel.org/show_bug.cgi?id=217315
+
+>> I've looked at the patch again and found a rather silly mistake.
+>> Please try the following.
+>> Note that I don't have access to hardware with this controller at the
+>> moment, so I've only compile tested it.
+>>
+>> diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+>> index 609821b756c2..7e7770152ca8 100644
+>> --- a/drivers/pinctrl/pinctrl-amd.c
+>> +++ b/drivers/pinctrl/pinctrl-amd.c
+>> @@ -899,7 +899,7 @@ static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+>>          int i;
+>>
+>>          for (i = 0; i < desc->npins; i++)
+>> -               amd_gpio_irq_init_pin(gpio_dev, i);
+>> +               amd_gpio_irq_init_pin(gpio_dev, desc->pins[i].number);
+>>   }
+>>
+This unfortunately doesn't help the behavior at all.
+>>>> Reverting it on top of 6.3-rc6 resolves the problem.
+>>>>
+>>>> I've collected what I can into this bug report:
+>>>>
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=217315
+>>>>
+>>>> Linus Walleij,
+>>>>
+>>>> It looks like this was CC to stable.  If we can't get a quick solution
+>>>> we might want to pull this from stable.
+>>> this commit landed into 6.1.23 as well
+>>>
+>>>           d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resume
+>>>
+>>>> Thanks,
+>>>>
+>>>>
+>>> Regards,
+>>>
+>>> Richard
+>>>
