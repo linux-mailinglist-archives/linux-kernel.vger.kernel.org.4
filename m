@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313096DD038
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF92B6DD057
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 05:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjDKDdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Apr 2023 23:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S229957AbjDKDjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Apr 2023 23:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjDKDdq (ORCPT
+        with ESMTP id S229764AbjDKDjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Apr 2023 23:33:46 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EFDBEB;
-        Mon, 10 Apr 2023 20:33:44 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:8615.1212641597
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 47F091002B2;
-        Tue, 11 Apr 2023 11:33:40 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id eb8c5b28e13a40fbb0aae97340f6b575 for emil.l.velikov@gmail.com;
-        Tue, 11 Apr 2023 11:33:43 CST
-X-Transaction-ID: eb8c5b28e13a40fbb0aae97340f6b575
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <2833ed06-7f8a-b8c1-404e-b481b2fedb3f@189.cn>
-Date:   Tue, 11 Apr 2023 11:33:39 +0800
+        Mon, 10 Apr 2023 23:39:51 -0400
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD5081BE8;
+        Mon, 10 Apr 2023 20:39:47 -0700 (PDT)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id CB160E0EA0;
+        Tue, 11 Apr 2023 06:39:44 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:message-id
+        :mime-version:reply-to:subject:subject:to:to; s=post; bh=zZAF0YP
+        BJJVREHJhe0odNvYpu6+XVnVCA/2Yzt0O8vg=; b=o1Oa5rjPTfyHs6BTc8Vca5/
+        rn14pl4vjmRiZfRgne56meDy51WvjpZ4M7Da4BN8aP0UpaXHdt4gNS8Ukykfm9WC
+        qnInxZMbeGmIfbCC/4Fas/R+/HBXtMDrFNfJZexIiC9ZUXYnynpiaG5zXRKQrZZx
+        DBh8bReyAwGEzQG2PRbs=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id AE9EFE0E6A;
+        Tue, 11 Apr 2023 06:39:44 +0300 (MSK)
+Received: from localhost (10.8.30.38) by mail (192.168.51.25) with Microsoft
+ SMTP Server (TLS) id 15.0.1395.4; Tue, 11 Apr 2023 06:39:44 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        <linux-pci@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v3 00/10] PCI: dwc: Relatively simple fixes and cleanups
+Date:   Tue, 11 Apr 2023 06:39:18 +0300
+Message-ID: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org
-References: <20230403171304.2157326-1-suijingfeng@loongson.cn>
- <20230403171304.2157326-3-suijingfeng@loongson.cn>
- <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CACvgo53h+X26wngVmxpn3oVb9kbJezTHx61p3rZDR7sw1AQrWQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.8.30.38]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+It turns out the recent DW PCIe-related patchset was merged in with
+several relatively trivial issues left unsettled (noted by Bjorn and
+Manivannan). All of these lefovers have been fixed in this patchset.
+Namely the series starts with two bug-fixes. The first one concerns the
+improper link-mode initialization in case if the CDM-check is enabled. The
+second unfortunate mistake I made in the IP-core version type helper. In
+particular instead of testing the IP-core version type the macro function
+referred to the just IP-core version which obviously wasn't what I
+intended.
 
-On 2023/4/4 22:10, Emil Velikov wrote:
->> --- /dev/null
->> +++ b/drivers/gpu/drm/loongson/lsdc_debugfs.c
->> +void lsdc_debugfs_init(struct drm_minor *minor)
->> +{
->> +#ifdef CONFIG_DEBUG_FS
->> +       drm_debugfs_create_files(lsdc_debugfs_list,
->> +                                ARRAY_SIZE(lsdc_debugfs_list),
->> +                                minor->debugfs_root,
->> +                                minor);
->> +#endif
->> +}
-> Should probably build the file when debugfs is enabled and provide
-> no-op stub in the header. See nouveau for an example.
->
-But doing that way introduce duplication,  you actually write two 
-implements for the same function prototype.
+Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
+message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
+Secondly the Baikal-T1 PCIe Host driver is converted to perform the
+asynchronous probe type which saved us of about 15% of bootup time if no any
+PCIe peripheral device attached to the port.
 
-One for the real, another one for the dummy.
+Then the patchset contains the Baikal-T1 PCIe driver fix. The
+corresponding patch removes the false error message printed during the
+controller probe procedure. I accidentally added the unconditional
+dev_err_probe() method invocation. It was obviously wrong.
 
-Typically skilled core framework programmer/writer like it, for multiple 
-backend and multiple arch support
+Then two trivial cleanups are introduced. The first one concerns the
+duplicated fast-link-mode flag unsetting. The second one implies
+dropping a redundant empty line from the dw_pcie_link_set_max_speed()
+function.
 
-Because the functions set need to be implemented is large for those cases.
+The series continues with a patch inspired by the last @Bjorn note
+regarding the generic resources request interface. As @Bjorn correctly
+said it would be nice to have the new interface used wider in the DW PCIe
+subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
+PCIe driver can be easily converted to using the generic clock names.
+That's what is done in the noted patch.
 
-While we are just a driver implement based the drm core and only one 
-single function here,
+The patchset is closed with a series of MAINTAINERS-list related patches.
+Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
+update the MAINTAINER-list with the new files added in the framework of
+that procedure. All the snps,dw-pcie* schemas shall be maintained by the
+DW PCIe core driver maintainers. Secondly seeing how long it took for my
+patchsets to review and not having any comments from the original driver
+maintainers I'd suggest to add myself as the reviewer to the DW PCIe and
+eDMA drivers. Thus hopefully the new updates review process will be
+performed with much less latencies. For the same reason I would also like
+to suggest to add @Manivannan as the DW PCIe/eDMA drivers maintainer if
+he isn't against that idea. What do you think about the last suggestion?
 
-DEBUG_FS is enabled by default on our Mips and Loongarch. It is not 
-suffer from high frequency changes.
+Link: https://lore.kernel.org/linux-pci/20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Rebase onto the kernel 6.3-rc2.
 
-In this case , CONFIG_DEBUG_FS just boils down to "true", a nearly 
-always enabled decoration.
+Link: https://lore.kernel.org/linux-pci/20230313200816.30105-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Drop the patch:
+  [PATCH v2 01/11] PCI: dwc: Fix port link CSR improper init if CDM check enabled
+  and rebase onto the already submitted by @Yoshihiro fix:
+  commit cdce67099117 ("PCI: dwc: Fix PORT_LINK_CONTROL update when CDM check enabled")
+- Just resend.
 
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: linux-pci@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-We do implement debugfs support that way in the before[1], but we pursue 
-compact in the afterwards.
+Serge Semin (10):
+  PCI: dwc: Fix erroneous version type test helper
+  PCI: dwc: Fix inbound iATU entries out-of-bounds warning message
+  PCI: bt1: Enable async probe type
+  PCI: bt1: Fix printing false error message
+  PCI: dwc: Drop duplicated fast-link-mode flag unsetting
+  PCI: dwc: Drop empty line from dw_pcie_link_set_max_speed()
+  PCI: visconti: Convert to using generic resources getter
+  MAINTAINERS: Add all generic DW PCIe RP/EP DT-schemas
+  MAINTAINERS: Add myself as the DW PCIe core reviewer
+  MAINTAINERS: Add myself as the DW eDMA driver reviewer
 
-We could revise our driver if that is strongly recommended.
+ MAINTAINERS                                   |  5 ++-
+ drivers/pci/controller/dwc/pcie-bt1.c         |  5 ++-
+ .../pci/controller/dwc/pcie-designware-host.c |  2 +-
+ drivers/pci/controller/dwc/pcie-designware.c  |  2 -
+ drivers/pci/controller/dwc/pcie-designware.h  |  7 +++-
+ drivers/pci/controller/dwc/pcie-visconti.c    | 37 +++++++++----------
+ 6 files changed, 30 insertions(+), 28 deletions(-)
 
+-- 
+2.40.0
 
-[1] https://patchwork.freedesktop.org/patch/480521/
 
