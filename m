@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BFC6DE45B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6AD6DE45D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 20:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjDKSyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 14:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
+        id S229817AbjDKSyY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 14:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDKSyP (ORCPT
+        with ESMTP id S229688AbjDKSyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:54:15 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928C510D;
-        Tue, 11 Apr 2023 11:54:13 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pwvz32kWxz67L71;
-        Wed, 12 Apr 2023 02:49:51 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 11 Apr 2023 19:54:10 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <will@kernel.org>, <dan.j.williams@intel.com>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v5 0/5] perf: CXL 3.0 Performance Monitoring Unit support
-Date:   Tue, 11 Apr 2023 19:54:06 +0100
-Message-ID: <20230411185411.23360-1-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 11 Apr 2023 14:54:21 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E59558B;
+        Tue, 11 Apr 2023 11:54:19 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id dm2so23000475ejc.8;
+        Tue, 11 Apr 2023 11:54:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681239258;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E4sDlaAqhvNysrKAM2xiktRjb3nWENL9FOHGuHRar+k=;
+        b=WbFSEJdKAA0kDYyzTzxkQhzhUOUTJNGxoWUFzlEx7XS1Thkncmjy+8mlHQ27e9Wetu
+         57Ei17qs7IKxRKrVWBzXcN/hPydA+tRel170GK4o7CnsKg42kAiwzrVxg+gp9hayQ/Om
+         fQ9Un5qouxqpDvSSKyXBfjIkwbAGShwTU8hpfI1afnZai2tvao4ID4WVH/rKfp9g3qtg
+         8pjgSRwIE6uT9JGOdOwlipJ7UPIftP8XowJcYPGuPYnVjHO+fX+zFmRYJ6uPI4phW6B3
+         1TfDEKD8f3jzaBr3CgrsIKXE7NI2nJBvNrxmq1VhNPZukqJMcEQugsgBr0Iqtxx8D9hl
+         10mQ==
+X-Gm-Message-State: AAQBX9dV0NibdzrLb863Lj8xjNymwGeBZzqSG1NEwQ7yLsgEDWKmfqaE
+        PtUn0nXCT1kibx/wllsCUtKIKy3dGdYrmJhXBkI9i4En
+X-Google-Smtp-Source: AKy350bQ4dy15N9Thf6G6/SVmVqW42B1BAnNkqNB9HpbL1DOl2z8zAqczCGktsApBM+OL29mEeGQa64OBmo3ymUJ4Ao=
+X-Received: by 2002:a17:907:8a0e:b0:94e:7ce:4d1f with SMTP id
+ sc14-20020a1709078a0e00b0094e07ce4d1fmr1950390ejc.2.1681239258238; Tue, 11
+ Apr 2023 11:54:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
+In-Reply-To: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Apr 2023 20:54:07 +0200
+Message-ID: <CAJZ5v0hbWerXrBG0K20xHEOajhYunqxNs+R6awA03tYpCwRKKg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: resource: Skip IRQ override on ASUS ExpertBook B1502CBA
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, lore982@yahoo.com,
+        Tamim Khan <tamim@fusetak.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Was CXL 3.0 Performance Monitoring Unit support.
-Renamed to highlight the driver has moved to drivers/perf
+On Tue, Apr 11, 2023 at 8:32 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Like the ASUS ExpertBook B2502CBA and various ASUS Vivobook laptops, the
+> ASUS ExpertBook B1502CBA has an ACPI DSDT table that describes IRQ 1 as
+> ActiveLow while the kernel overrides it to Edge_High.
+>
+>     $ sudo dmesg | grep DMI
+>     DMI: ASUSTeK COMPUTER INC. ASUS EXPERTBOOK B1502CBA_B1502CBA/B1502CBA, BIOS B1502CBA.300 01/18/2023
+>     $ grep -A 40 PS2K dsdt.dsl | grep IRQ -A 1
+>                     IRQ (Level, ActiveLow, Exclusive, )
+>                         {1}
+>
+> This prevents the keyboard from working. To fix this issue, add this laptop
+> to the skip_override_table so that the kernel does not override IRQ 1.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217323
+> Cc: lore982@yahoo.com
+> Cc: Tamim Khan <tamim@fusetak.com>
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  drivers/acpi/resource.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+> index a222bda7e15b..cade3a9e38bb 100644
+> --- a/drivers/acpi/resource.c
+> +++ b/drivers/acpi/resource.c
+> @@ -432,6 +432,13 @@ static const struct dmi_system_id asus_laptop[] = {
+>                         DMI_MATCH(DMI_BOARD_NAME, "S5602ZA"),
+>                 },
+>         },
+> +       {
+> +               .ident = "Asus ExpertBook B1502CBA",
+> +               .matches = {
+> +                       DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> +                       DMI_MATCH(DMI_BOARD_NAME, "B1502CBA"),
+> +               },
+> +       },
+>         {
+>                 .ident = "Asus ExpertBook B2402CBA",
+>                 .matches = {
+> --
 
-Dan Williams has expressed that he is happy to take this through the CXL
-tree once perf reviewers are happy with those parts.
-
-Thanks to Kan and Dan for reviews.
-
-Major changes since v4: (Smaller changes described in individual patches)
-- Move driver from drivers/cxl/cpmu.c to drivers/perf/cxl_pmu.c
-- Rename devices to associate with cxl/devices/memX etc. Scheme
-  extends to CPMU instances on Upstream and Downstream CXL ports.
-- Rename CXL core files to simply pmu.* and simplify code structure
-  naming and similar to cxl_pmu* CXL_PMU* etc
-
-Patch 1/5 is also present in the series:
-[PATCH 00/32] Add parents to struct pmu -> dev
-which may merge first.
-
-Update introduction.
-
-The CXL rev 3.0 specification introduces a CXL Performance Monitoring
-Unit definition. CXL components may have any number of these blocks. The
-definition is highly flexible, but that does bring complexity in the
-driver. All instances are self describing, though for vendor defined
-events we expect mapping from numeric values to counter names to be
-performed in userspace tooling. In common with many CXL features,
-this driver precedes any announced hardware (that I'm aware of anyway!).  
-
-Supported features are:
-- Devices that allow counters to be written when frozen (allows
-  a single register write to start / stop all counters).
-- Fixed purpose counters
-- Configurable counters
-- CXL specification defined events + HDM filters.
-
-This initial series covers a useful subset of functionality and is
-expected to be followed by patch series addressing:
-* Discoverability beyond fine grained events. This will cover both
-  vendor defined events and providing perf tool with the visibility
-  to be able construct 'summed' events.  For example if a single
-  counter can cover all host to device read traffic.
-  Perf tool patches will use this information and appropriate schema
-  to present a richer set of countable events.
-* CXL PMU instances on Upstream and Downstream CXL switch ports
-  and root ports.
-* Free running counters. Often used for vendor defined debug type
-  events and error counters.  Likely to appear on real devices.
-* Devices without interrupt support for overflow.
-* Devices that don't support freeze (counters need to be enabled
-   individually).
-
-Exact priority order for the above features will depend on early
-hardware though (a) will definitely be top of the list as any
-likely hardware will be able to take advantage of that feature.
-
-Notes.
-
-1) The QEMU model against which this was developed needs tidying up.
-   Latest tree at https://gitlab.com/jic23/qemu branch cxl-2023-02-28
-   It's backed up behind other series that I plan to upstream first.
-2) V1 led to a discussion of how to handle the self describing
-   and extensible nature of the CPMU counters.  That is likely to involve
-   a description in the "caps" sysfs directory and perf tool code that is
-   aware of the different event combinations that make sense and can
-   establish which sets are available on a given device.
-   That is likely to take a while to converge on, so as the driver is useful
-   in the current state, I'm looking to upstream this first and deal with
-   the more complex handling later.
-3) There is a lot of other functionality that can be added in future
-   include allowing for simpler hardware implementations that may not
-   support the minimum level of features currently required by the driver
-   (freeze, overflow interrupts etc).
-4) Adding support for ports will require solving msi/msix vector requests
-   from portdrv and how to pass those to the CXL port drivers. (or some
-   other way to instantiate the CXL PMU devices.) RFC on that to follow.
-
-CXL rev 3.0 specification available from https://www.computeexpresslink.org
-
-Jonathan Cameron (5):
-  perf: Allow a PMU to have a parent
-  cxl: Add functions to get an instance of / count regblocks of a given
-    type
-  cxl/pci: Find and register CXL PMU devices
-  perf: CXL Performance Monitoring Unit driver
-  docs: perf: Minimal introduction the the CXL PMU device and driver
-
- Documentation/admin-guide/perf/cxl.rst   |  68 ++
- Documentation/admin-guide/perf/index.rst |   1 +
- MAINTAINERS                              |   7 +
- drivers/cxl/Kconfig                      |  13 +
- drivers/cxl/core/Makefile                |   1 +
- drivers/cxl/core/core.h                  |   1 +
- drivers/cxl/core/pmu.c                   |  69 ++
- drivers/cxl/core/port.c                  |   2 +
- drivers/cxl/core/regs.c                  |  75 +-
- drivers/cxl/cxl.h                        |  16 +
- drivers/cxl/cxlpci.h                     |   1 +
- drivers/cxl/pci.c                        |  26 +-
- drivers/cxl/pmu.h                        |  28 +
- drivers/perf/Kconfig                     |  13 +
- drivers/perf/Makefile                    |   1 +
- drivers/perf/cxl_pmu.c                   | 984 +++++++++++++++++++++++
- include/linux/perf_event.h               |   1 +
- kernel/events/core.c                     |   1 +
- 18 files changed, 1301 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/admin-guide/perf/cxl.rst
- create mode 100644 drivers/cxl/core/pmu.c
- create mode 100644 drivers/cxl/pmu.h
- create mode 100644 drivers/perf/cxl_pmu.c
-
--- 
-2.37.2
-
+Applied as 6.3-rc material, thanks!
