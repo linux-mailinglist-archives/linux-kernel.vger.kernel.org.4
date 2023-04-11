@@ -2,185 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A936DDB34
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906166DDB35
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjDKMuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 08:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S230081AbjDKMvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 08:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjDKMuo (ORCPT
+        with ESMTP id S229661AbjDKMvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 08:50:44 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2B03598;
-        Tue, 11 Apr 2023 05:50:43 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pmDSK-0004WC-Pv; Tue, 11 Apr 2023 14:50:40 +0200
-Message-ID: <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
-Date:   Tue, 11 Apr 2023 14:50:40 +0200
+        Tue, 11 Apr 2023 08:51:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A8649F0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 05:50:58 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C8B81EC0102;
+        Tue, 11 Apr 2023 14:50:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681217457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d5rCvIR1+NXtC/U4YpBicBhbbk7m1XBj1nREQr5sMoc=;
+        b=kpslLYUk5j6taciJcyCLs9ClnjOULJdXE1QrTzZwK1TW93HPqpdyAI9EcMfixrSAPtkSL8
+        Al6OKlLX8Czv+ifaKtOa4RCmw26TUMcjM2o3HdZcdbVyQlA56lShkBFxi+OWhppzCP/gyC
+        iNKca7i9dVybm8PQgmzB3S/8BS1OFc8=
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH -v2] x86/microcode: Do not taint when late loading on AMD
+Date:   Tue, 11 Apr 2023 14:50:55 +0200
+Message-Id: <20230411125056.2333-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230411124832.GAZDVXIFR3BiExtXba@fat_crate.local>
+References: <20230411124832.GAZDVXIFR3BiExtXba@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
-Content-Language: en-US, de-DE
-To:     gregkh@linuxfoundation.org
-Cc:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
-        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        "Gong, Richard" <richard.gong@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        =?UTF-8?Q?Kornel_Dul=c4=99ba?= <korneld@chromium.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230320093259.845178-1-korneld@chromium.org>
- <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
- <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681217443;dc4aeff8;
-X-HE-SMSGID: 1pmDSK-0004WC-Pv
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
+Describe why the concurrency issues which late loading poses are not
+affecting AMD hardware, after discussing it with hw folks. Thus, do not
+taint when late loading on it.
 
-On 10.04.23 17:29, Gong, Richard wrote:
-> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
->> On 3/20/23 04:32, Kornel Dulęba wrote:
->>
->>> This fixes a similar problem to the one observed in:
->>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
->>> probe").
->>>
->>> On some systems, during suspend/resume cycle firmware leaves
->>> an interrupt enabled on a pin that is not used by the kernel.
->>> This confuses the AMD pinctrl driver and causes spurious interrupts.
->>>
->>> The driver already has logic to detect if a pin is used by the kernel.
->>> Leverage it to re-initialize interrupt fields of a pin only if it's not
->>> used by us.
->>>
->>> Signed-off-by: Kornel Dulęba <korneld@chromium.org>
->>> ---
->>>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++----------------
->>>   1 file changed, 20 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/drivers/pinctrl/pinctrl-amd.c
->>> b/drivers/pinctrl/pinctrl-amd.c
->>> index 9236a132c7ba..609821b756c2 100644
->>> --- a/drivers/pinctrl/pinctrl-amd.c
->>> +++ b/drivers/pinctrl/pinctrl-amd.c
->>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_ops
->>> = {
->>>       .pin_config_group_set = amd_pinconf_group_set,
->>>   };
->>>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
->>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int pin)
->>>   {
->>> -    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
->>> +    const struct pin_desc *pd;
->>>       unsigned long flags;
->>>       u32 pin_reg, mask;
->>> -    int i;
->>>         mask = BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) |
->>>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
->>>           BIT(WAKE_CNTRL_OFF_S4);
->>>   -    for (i = 0; i < desc->npins; i++) {
->>> -        int pin = desc->pins[i].number;
->>> -        const struct pin_desc *pd = pin_desc_get(gpio_dev->pctrl, pin);
->>> -
->>> -        if (!pd)
->>> -            continue;
->>> +    pd = pin_desc_get(gpio_dev->pctrl, pin);
->>> +    if (!pd)
->>> +        return;
->>>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>> +    pin_reg = readl(gpio_dev->base + pin * 4);
->>> +    pin_reg &= ~mask;
->>> +    writel(pin_reg, gpio_dev->base + pin * 4);
->>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
->>> +}
->>>   -        pin_reg = readl(gpio_dev->base + i * 4);
->>> -        pin_reg &= ~mask;
->>> -        writel(pin_reg, gpio_dev->base + i * 4);
->>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
->>> +{
->>> +    struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
->>> +    int i;
->>>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
->>> -    }
->>> +    for (i = 0; i < desc->npins; i++)
->>> +        amd_gpio_irq_init_pin(gpio_dev, i);
->>>   }
->>>     #ifdef CONFIG_PM_SLEEP
->>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
->>>       for (i = 0; i < desc->npins; i++) {
->>>           int pin = desc->pins[i].number;
->>>   -        if (!amd_gpio_should_save(gpio_dev, pin))
->>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
->>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
->>>               continue;
->>> +        }
->>>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
->>>           gpio_dev->saved_regs[i] |= readl(gpio_dev->base + pin * 4)
->>> & PIN_IRQ_PENDING;
->>
->> Hello Kornel,
->>
->> I've found that this commit which was included in 6.3-rc5 is causing a
->> regression waking up from lid on a Lenovo Z13.
-> observed "unable to wake from power button" on AMD based Dell platform.
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ Documentation/x86/microcode.rst      | 10 ++++++++++
+ arch/x86/kernel/cpu/microcode/core.c |  9 +++++----
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-This sounds like something that we want to fix quickly.
+diff --git a/Documentation/x86/microcode.rst b/Documentation/x86/microcode.rst
+index b627c6f36bcf..15b52e2b181d 100644
+--- a/Documentation/x86/microcode.rst
++++ b/Documentation/x86/microcode.rst
+@@ -208,6 +208,16 @@ Basically there is no way to declare a new microcode update suitable
+ for late-loading. This is another one of the problems that caused late
+ loading to be not enabled by default.
+ 
++AMD
++---
++
++Late loading on AMD does not have the concurrency issues described
++above: when loading is attempted on T0, the T1 is quiesced and does not
++execute instructions. Therefore, even if a higher priority interrupt or
++a fault happens, the whole core will see it either before the microcode
++patch has been applied or after. In either case, T0 and T1 will have the
++same microcode revision and nothing intermediate.
++
+ Builtin microcode
+ =================
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 7a329e561354..22cf57c899b6 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -440,9 +440,6 @@ static int microcode_reload_late(void)
+ 	int old = boot_cpu_data.microcode, ret;
+ 	struct cpuinfo_x86 prev_info;
+ 
+-	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
+-	pr_err("You should switch to early loading, if possible.\n");
+-
+ 	atomic_set(&late_cpus_in,  0);
+ 	atomic_set(&late_cpus_out, 0);
+ 
+@@ -498,7 +495,11 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret == 0)
+ 		ret = size;
+ 
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD) {
++		pr_err("Late microcode loading is dangerous and taints the kernel.\n");
++		pr_err("You should switch to early loading if possible.\n");
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.35.1
 
-> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on the
-> top of 6.3-rc6 does fix the issue.
->>
->> Reverting it on top of 6.3-rc6 resolves the problem.
->>
->> I've collected what I can into this bug report:
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=217315
->>
->> Linus Walleij,
->>
->> It looks like this was CC to stable.  If we can't get a quick solution
->> we might want to pull this from stable.
-> 
-> this commit landed into 6.1.23 as well
-> 
->         d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on resume
-
-It made it back up to 5.10.y afaics.
-
-The culprit has no fixes tag, which makes me wonder: should we quickly
-(e.g. today) revert this in mainline to get back to the previous state,
-so that Greg can pick up the revert for the next stable releases he
-apparently currently prepares?
-
-Greg, is there another way to make you quickly fix this in the stable
-trees? One option obviously would be "revert this now in stable, reapply
-it later together with a fix ". But I'm under the impression that this
-is too much of a hassle and thus something you only do in dire situations?
-
-I'm asking because I over time noticed that quite a few regressions are
-in a similar situation -- and quite a few of them take quite some time
-to get fixed even when a developer provided a fix, because reviewing and
-mainlining the fix takes a week or two (sometimes more). And that is a
-situation that is more and more hitting a nerve here. :-/
-
-Ciao, Thorsten
