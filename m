@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832C26DD2B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8776DD2BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 08:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjDKGVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 02:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S230214AbjDKGYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 02:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjDKGVp (ORCPT
+        with ESMTP id S229688AbjDKGYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 02:21:45 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87A4198D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Apr 2023 23:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1681194104;
-        bh=eVnY1kjH/ofehDpdMAtkqUmPwETHEUX9WhBgW4u0MOk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XgCO1SdV5+rD4cuOtwSRDHjPNGvJ8q7SFSAWArLuD5QB8OfARC82x0qe7n/DW+gZ3
-         XOqc/6D2PmJvR9aSkB59ILuD4N4euCOgjXzbimbmQqryJ8KXOAnOFMkwF2DVGTcVgF
-         yTqr9H64MIBnL468FwnxjAWSHnCo5SsikN3qZTF8=
-Received: from [IPv6:240e:358:11f1:2100:dc73:854d:832e:6] (unknown [IPv6:240e:358:11f1:2100:dc73:854d:832e:6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 0138466497;
-        Tue, 11 Apr 2023 02:21:37 -0400 (EDT)
-Message-ID: <24484e693147283d11bffe286ca1bb974df7db42.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Improve memory ops
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     WANG Rui <wangrui@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Date:   Tue, 11 Apr 2023 14:21:31 +0800
-In-Reply-To: <CAHirt9hMbQcq34Dgtc5u3=841_hzjUc4TYiEbhchZO=jkCvbVA@mail.gmail.com>
-References: <20230410115734.93365-1-wangrui@loongson.cn>
-         <b80e083baa49f0443abee66eb888fac920f66e79.camel@xry111.site>
-         <CAHirt9ib2LPXMbxb+UCJB1MsBnUuWNLb5+uyqcR5Wiw2fsJi6w@mail.gmail.com>
-         <8aeb6d8dc4cbe8c992b69d75d8953d59b71a2c38.camel@xry111.site>
-         <CAHirt9hMbQcq34Dgtc5u3=841_hzjUc4TYiEbhchZO=jkCvbVA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.0 
+        Tue, 11 Apr 2023 02:24:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05201722;
+        Mon, 10 Apr 2023 23:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vvvoVTo6uRRuAg1HUjBDI7dU65PXUKEZopfNrSUkhqg=; b=M41HlpoCT9nDSlGvPd3jf1Y3K6
+        3v4Qtki/KgoPE59M8XiUAoqAtQfmwoQI3I+7u4kt28lRteSbVrSyrXmnerX5cTOkcX2+rDEx6yHE+
+        i6B4SKBCYeWr/706bXwYwznLJYTUBRprmtiiJRyCUFGpROymaxZ2OMtD9hJl0NvLS5FfZWk+djfcV
+        N4n2b6y8GRzx1aHKn89+DlNeCz/b73dyKmkImyXJFGAZGyOApbrmsYX+r8Ov2PjV4JM1Wl0qqb3Zo
+        lNx7c/P7DyK0jzi/Yxqc8qn+bPqbTCD0GL/CdNYMM1Ahky2IC9WfO4CIeh4K0R39jwMdyxTOJznQ0
+        qQw2JGDw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pm7Pm-00GZYc-05;
+        Tue, 11 Apr 2023 06:23:38 +0000
+Date:   Mon, 10 Apr 2023 23:23:38 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Donald Buczek <buczek@molgen.mpg.de>
+Cc:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
+        kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org,
+        ming.lei@redhat.com, gregkh@linuxfoundation.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 02/11] block: Block Device Filtering Mechanism
+Message-ID: <ZDT86vCXcszoBh4e@infradead.org>
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-3-sergei.shtepa@veeam.com>
+ <be98bee0-4ddc-194f-82be-767e0bb9f60f@molgen.mpg.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be98bee0-4ddc-194f-82be-767e0bb9f60f@molgen.mpg.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,22 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-10 at 23:52 +0800, WANG Rui wrote:
-> On Mon, Apr 10, 2023 at 10:36=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> w=
-rote:
-> >=20
-> > Hmm, yep, GCC does not take the advantage of -mstrict-align expanding
-> > memcpy etc.=C2=A0 I'll add it into my TODO list for GCC 14.
+On Sat, Apr 08, 2023 at 05:16:42PM +0200, Donald Buczek wrote:
+> Hi, Sergei,
+> 
+> On 4/4/23 16:08, Sergei Shtepa wrote:
+> > The block device filtering mechanism is an API that allows to attach
+> > block device filters. Block device filters allow perform additional
+> > processing for I/O units.
+> > [...]
+> > diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> > index b7b56871029c..1848d62979a4 100644
+> > --- a/include/uapi/linux/fs.h
+> > +++ b/include/uapi/linux/fs.h
+> > @@ -185,6 +185,11 @@ struct fsxattr {
+> >   #define BLKROTATIONAL _IO(0x12,126)
+> >   #define BLKZEROOUT _IO(0x12,127)
+> >   #define BLKGETDISKSEQ _IOR(0x12,128,__u64)
+> > +/* 13* is defined in linux/blkzoned.h */
+> 
+> nit: This is already explained in the comment below your insert.
 
-Technically, it takes the advantage but not very well.  It's now
-https://gcc.gnu.org/PR109465.
-
-> Great! It looks like you already have some good ideas, and I look
-> forward to hearing your good news.
->=20
-> Rui
->=20
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+My faul.  But indeed, no need to duplicate that, instead the new
+ioctl opcodes should move below that existing comment.
