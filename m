@@ -2,131 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391AA6DD5FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260926DD5FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 10:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjDKIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 04:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S230035AbjDKIzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 04:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDKIxP (ORCPT
+        with ESMTP id S229525AbjDKIzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 04:53:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675D9E76
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DYZqFeT2TkDql7LNr9KHtQzkAfQ3U+U8rxb08iVVG8k=; b=ANfLtIK31XNIkd7xjVRtNNRwiA
-        xBY9XVTDaO7y7O1ptc7tPHUb96LAHbeoDa8j/awII5eLEQp5J65eN8mPbXEIAo7cmhPcjS+j/bSj6
-        3PaFxh4lxO1jR/9V5grKWHRIPo4NLIP8hK2y/87PESjrtUI2uVGitKjrL+D+nF86nMUYLks0AFaUD
-        C/ekRkWRvYeac3efpN7XXLTLHoOeDTn1U+x+gt7PtZtEGKiXPV+LBAlfdyUFBDADMk0tikP2Eodzp
-        e6zMB4oiS9yfLQZspZ+vFAkiw3+lv/ypx2TiWuT2+nlZFgiMgXCZ7Cm2crrUAy3khXBM5ITd5BRkS
-        wNyY2YFg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pm9kP-00DIBx-29;
-        Tue, 11 Apr 2023 08:53:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 152D830002F;
-        Tue, 11 Apr 2023 10:53:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F257E2BC3D07B; Tue, 11 Apr 2023 10:53:04 +0200 (CEST)
-Date:   Tue, 11 Apr 2023 10:53:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230411085304.GB576825@hirez.programming.kicks-ass.net>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+        Tue, 11 Apr 2023 04:55:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1492A1BD8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681203272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fXO0dCDv6zh0FlvPxvbQji5MhBlSwKK3xGEsZBZfCGU=;
+        b=SVg7uH4nzG6O49pMtf2jZ59a9o3SHSpxThUxGE51IDoVHtRmGRNR/e26SaaC8Jwom/mPvx
+        G39nYN0syn8NqddgBQ5tKb/Lxbrx1X5+/7CMrT8HqeaDJDSxyWqXG97ruoK+6ZlJWn+IH4
+        sO+Mnxs6Wa6OV5MdLtePRgDXFPg7X4o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-341-3xjTA_ItPcS6ytDxAidDYA-1; Tue, 11 Apr 2023 04:54:31 -0400
+X-MC-Unique: 3xjTA_ItPcS6ytDxAidDYA-1
+Received: by mail-wm1-f71.google.com with SMTP id bh18-20020a05600c3d1200b003f05a99b571so7052567wmb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 01:54:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681203270; x=1683795270;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXO0dCDv6zh0FlvPxvbQji5MhBlSwKK3xGEsZBZfCGU=;
+        b=1C/9bjulz4w4YGHo1OCelkcNkJS8I0/lEpnQtdqiC4w98MavZuApMnmpgSu/v5kyO7
+         L9jDC6BqQxC0eRmcXLMn/Kjr3V38zZZd1Dya7o+LwJIlxD5w3JPVhEzxDtiKeIjIo2Ad
+         JR24lBvFbl0twhEoZJGOcijmyQGuzrQD3O+BOQ1grbV51KkjQQnbKtNFFYXJssffnJmB
+         w3tmVOgv5AAOQ/w5gxKp01m/Cadt9EodhEqJ7A0iuoLozyuIkphMZArUDSkVwDsgz3Zp
+         Nmv8vHZEsFgLIAPQXTrSez6+Roe7Y7JL4Jsn6Me6sRBWqLjwfFscoHULHNpHPdCJBhIk
+         pb8w==
+X-Gm-Message-State: AAQBX9eW31HPSQzxWJBMVM7OE/u3Iyd2pRJxnxQjdikuFPYKGoWVtlN3
+        lbhow52O4GXh8MYg3FHd1MxLLpnMGfgXjWB80k0pTpxL2i6dwf8GTyp/E9scOGdUANSUmpVnGlq
+        ZujkUWElc4Exi787RZ0rPV6aH
+X-Received: by 2002:a7b:cd0b:0:b0:3ed:2b49:1571 with SMTP id f11-20020a7bcd0b000000b003ed2b491571mr1413891wmj.20.1681203268585;
+        Tue, 11 Apr 2023 01:54:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a0RVaM8f9wvDtq1CVFNtCQpX8tA3BlUIBH9g84G/r9Ow0VuvRAyeY7G0NDlPw7WF/BcbmYnA==
+X-Received: by 2002:a7b:cd0b:0:b0:3ed:2b49:1571 with SMTP id f11-20020a7bcd0b000000b003ed2b491571mr1413820wmj.20.1681203266790;
+        Tue, 11 Apr 2023 01:54:26 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
+        by smtp.gmail.com with ESMTPSA id l13-20020a1c790d000000b003f071466229sm15871490wme.17.2023.04.11.01.54.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 01:54:26 -0700 (PDT)
+Message-ID: <5e010945-3603-d0ab-52c1-12cce3c85c3d@redhat.com>
+Date:   Tue, 11 Apr 2023 10:54:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCHv2] mm: introduce defer free for cma
+Content-Language: en-US
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
+References: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <1681116395-18633-1-git-send-email-zhaoyang.huang@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 12:26:35PM -0400, Mathieu Desnoyers wrote:
-> +void sched_mm_cid_migrate_from(struct task_struct *t)
-> +{
+On 10.04.23 10:46, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> 
+> Continues page blocks are expensive for the system. Introducing defer free
+> mechanism to buffer some which make the allocation easier. The shrinker will
+> ensure the page block can be reclaimed when there is memory pressure.
 
-> +	/*
-> +	 * If the source cpu cid is set, and matches the last cid of the
-> +	 * migrated task, clear the source cpu cid to keep cid allocation
-> +	 * compact to cover the case where this task is the last task using
-> +	 * this mm on the source cpu. If there happens to be other tasks left
-> +	 * on the source cpu using this mm, the next task using this mm will
-> +	 * reallocate its cid on context switch.
-> +	 *
-> +	 * We cannot keep ownership of concurrency ID without runqueue
-> +	 * lock held when it is not used by a current task, because it
-> +	 * would lead to allocation of more concurrency ids than there
-> +	 * are possible cpus in the system. The last_mm_cid is used as
-> +	 * a hint to conditionally unset the dst cpu cid, keeping
-> +	 * allocated concurrency ids compact.
-> +	 */
-> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
-> +		return;
-> +
+This looks unnecessarily complicated without any good motivation and 
+performance numbers why we should even care.
 
-FWIW, I'm thinking that if we write this using try_cmpxchg() it'll be a
-little nicer:
+-- 
+Thanks,
 
-	lazy_cid = mm_cid_set_lazy_put(src_cid);
-	if (!try_cmpxchg(src_pcpu_cid, &src_cid, lazy_cid))
-		return;
+David / dhildenb
 
-> +	/*
-> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
-> +	 * rq->curr->mm matches the scheduler barrier in context_switch()
-> +	 * between store to rq->curr and load of prev and next task's
-> +	 * per-mm/cpu cid.
-> +	 *
-> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
-> +	 * rq->curr->mm_cid_active matches the barrier in
-> +	 * sched_mm_cid_exit_signals(), sched_mm_cid_before_execve(), and
-> +	 * sched_mm_cid_after_execve() between store to t->mm_cid_active and
-> +	 * load of per-mm/cpu cid.
-> +	 */
-> +
-> +	/*
-> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
-> +	 * flag, this task will be responsible for transitioning from lazy-put
-> +	 * flag set to MM_CID_UNSET.
-> +	 */
-> +	rcu_read_lock();
-> +	src_task = rcu_dereference(src_rq->curr);
-> +	if (src_task->mm_cid_active && src_task->mm == mm) {
-> +		rcu_read_unlock();
-> +		/*
-> +		 * We observed an active task for this mm, clearing the destination
-> +		 * cpu mm_cid is not relevant for compactness.
-> +		 */
-> +		t->last_mm_cid = -1;
-> +		return;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	/*
-> +	 * The src_cid is unused, so it can be unset.
-> +	 */
-> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
-> +		return;
-
-	if (!try_cmpxchg(src_pcpu_cid, &lazy_cid, MM_CID_UNSET))
-		return;
-
-> +	__mm_cid_put(mm, src_cid);
-> +}
