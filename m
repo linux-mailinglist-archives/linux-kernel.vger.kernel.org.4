@@ -2,254 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0C76DDC3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8576DDC42
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 15:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDKNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 09:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S229899AbjDKNhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 09:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjDKNfs (ORCPT
+        with ESMTP id S229571AbjDKNhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:35:48 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20B730FE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:35:46 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id b23so2522319qkn.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681220146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vrOYuqNiPd2bcPoAQiJstrA3DGctCaG7OtD7OxNRvsQ=;
-        b=EkOKABoD6LTFdgA4R4fLK1/4nAaUARmB6B3iZr9hPnT7REDHE9t2nnZtxkvxBTTVN2
-         s+ZFCtnp/vrOkE+EE40L/xgqUyBBErS11CCpca2Y22znSx7JTHIG+WyNjau5uOAgMCqW
-         Q8YkUyIvSSIW9F95JQ79r0tSsohuS+mulYQ2Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681220146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vrOYuqNiPd2bcPoAQiJstrA3DGctCaG7OtD7OxNRvsQ=;
-        b=pPtmb9lhmyt5BcYrn7rwQA4Dji9323Z9ZQevsIecAz6S6HiFqppwvuF5+6KbDW1H5U
-         cvP0oiP/2igNBj91ZefThdvzSB1+eQKMsjOUlemmwojS02RnDznhRgwsbNUHvVyGC+34
-         63TFHrRL/tGOgPQMITBl6muGqhPafPJECkjWjC4ZLiyA4HrVtYBAWptItVTozBKF3T02
-         yWjEDRN/FLxFZ4lgOU6H8m0vqX6PUy5VgkHgbR0e77eCaP3VPFlcZjpdfvpK24QLwkN2
-         Xq6a/xgbiBqCrk0vEkunv+3N4OGrbXPb6mCDxrNEChAdrxUeDQsBojm24vxZXQP/AnwZ
-         LrJQ==
-X-Gm-Message-State: AAQBX9eyskw36wc1/hHmO/iyXIEp0hG55bJGj68F8wfgLtZPIQgMC0HG
-        A5m/33pBacJGdKwhwOwIquG0S9JY3CDtEfvmnNgc1g==
-X-Google-Smtp-Source: AKy350b2Kt6DPBXi4qVPspnI4wE1z8Kv3LSML6rR/DGiYLRWRpZGEQGHpRDpF4/UMGBe9d1oh5cfUyFnazNcCuasXk8=
-X-Received: by 2002:a05:620a:4728:b0:745:ad92:8887 with SMTP id
- bs40-20020a05620a472800b00745ad928887mr3513462qkb.13.1681220145901; Tue, 11
- Apr 2023 06:35:45 -0700 (PDT)
+        Tue, 11 Apr 2023 09:37:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C938D30FE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 06:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681220182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0AGalK6TkETefuR8vqn2ZgXGP9Ke/hGkmxhOP0sbpu8=;
+        b=GCaV4vKC7lpUtrB+yF7L2tJ9iJ4YXq71L06EhqtFwXbJrqXMiEyYd+SOEw0s3KdpuvP8IX
+        nade9prE8hWDc/Bf/XOA5rLqtE07ieQ9kYHG8Hrl6ZCt9xP5ut6kPRQaMqyzld0/BdxHhY
+        FbgHCI0hf1GS/v2r6nXaP6NlnO8zKG4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-CV3BEFLoNY-TGqZlnAEKpA-1; Tue, 11 Apr 2023 09:36:18 -0400
+X-MC-Unique: CV3BEFLoNY-TGqZlnAEKpA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F31588018AC;
+        Tue, 11 Apr 2023 13:36:17 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E92F47CE1;
+        Tue, 11 Apr 2023 13:36:17 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/5] cgroup/cpuset: Fix CLONE_INTO_CGROUP problem & other issues
+Date:   Tue, 11 Apr 2023 09:35:56 -0400
+Message-Id: <20230411133601.2969636-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20230320093259.845178-1-korneld@chromium.org> <d1d39179-33a0-d35b-7593-e0a02aa3b10a@amd.com>
- <ed840be8-b27b-191e-4122-72f62d8f1b7b@amd.com> <37178398-497c-900b-361a-34b1b77517aa@leemhuis.info>
- <CAD=NsqzFiQBxtVDmCiJ24HD0YZiwZ4PQkojHHic775EKfeuiaQ@mail.gmail.com> <36c7638f-964b-bee6-b44b-c8406e71dfec@leemhuis.info>
-In-Reply-To: <36c7638f-964b-bee6-b44b-c8406e71dfec@leemhuis.info>
-From:   =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
-Date:   Tue, 11 Apr 2023 15:35:35 +0200
-Message-ID: <CAD=Nsqx2Gy08HHzjRoWxS7u559hUgi_GGRis0UDFxrUqLYjTfg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     gregkh@linuxfoundation.org,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com,
-        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        "Gong, Richard" <richard.gong@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 3:29=E2=80=AFPM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> On 11.04.23 15:09, Kornel Dul=C4=99ba wrote:
-> > On Tue, Apr 11, 2023 at 2:50=E2=80=AFPM Linux regression tracking (Thor=
-sten
-> > Leemhuis) <regressions@leemhuis.info> wrote:
-> >> On 10.04.23 17:29, Gong, Richard wrote:
-> >>> On 4/10/2023 12:03 AM, Mario Limonciello wrote:
-> >>>> On 3/20/23 04:32, Kornel Dul=C4=99ba wrote:
-> >>>>
-> >>>>> This fixes a similar problem to the one observed in:
-> >>>>> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on
-> >>>>> probe").
-> >>>>>
-> >>>>> On some systems, during suspend/resume cycle firmware leaves
-> >>>>> an interrupt enabled on a pin that is not used by the kernel.
-> >>>>> This confuses the AMD pinctrl driver and causes spurious interrupts=
-.
-> >>>>>
-> >>>>> The driver already has logic to detect if a pin is used by the kern=
-el.
-> >>>>> Leverage it to re-initialize interrupt fields of a pin only if it's=
- not
-> >>>>> used by us.
-> >>>>>
-> >>>>> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
-> >>>>> ---
-> >>>>>   drivers/pinctrl/pinctrl-amd.c | 36 +++++++++++++++++++-----------=
------
-> >>>>>   1 file changed, 20 insertions(+), 16 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/pinctrl/pinctrl-amd.c
-> >>>>> b/drivers/pinctrl/pinctrl-amd.c
-> >>>>> index 9236a132c7ba..609821b756c2 100644
-> >>>>> --- a/drivers/pinctrl/pinctrl-amd.c
-> >>>>> +++ b/drivers/pinctrl/pinctrl-amd.c
-> >>>>> @@ -872,32 +872,34 @@ static const struct pinconf_ops amd_pinconf_o=
-ps
-> >>>>> =3D {
-> >>>>>       .pin_config_group_set =3D amd_pinconf_group_set,
-> >>>>>   };
-> >>>>>   -static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
-> >>>>> +static void amd_gpio_irq_init_pin(struct amd_gpio *gpio_dev, int p=
-in)
-> >>>>>   {
-> >>>>> -    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
-> >>>>> +    const struct pin_desc *pd;
-> >>>>>       unsigned long flags;
-> >>>>>       u32 pin_reg, mask;
-> >>>>> -    int i;
-> >>>>>         mask =3D BIT(WAKE_CNTRL_OFF_S0I3) | BIT(WAKE_CNTRL_OFF_S3) =
-|
-> >>>>>           BIT(INTERRUPT_MASK_OFF) | BIT(INTERRUPT_ENABLE_OFF) |
-> >>>>>           BIT(WAKE_CNTRL_OFF_S4);
-> >>>>>   -    for (i =3D 0; i < desc->npins; i++) {
-> >>>>> -        int pin =3D desc->pins[i].number;
-> >>>>> -        const struct pin_desc *pd =3D pin_desc_get(gpio_dev->pctrl=
-, pin);
-> >>>>> -
-> >>>>> -        if (!pd)
-> >>>>> -            continue;
-> >>>>> +    pd =3D pin_desc_get(gpio_dev->pctrl, pin);
-> >>>>> +    if (!pd)
-> >>>>> +        return;
-> >>>>>   -        raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>>>> +    raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>>>> +    pin_reg =3D readl(gpio_dev->base + pin * 4);
-> >>>>> +    pin_reg &=3D ~mask;
-> >>>>> +    writel(pin_reg, gpio_dev->base + pin * 4);
-> >>>>> +    raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-> >>>>> +}
-> >>>>>   -        pin_reg =3D readl(gpio_dev->base + i * 4);
-> >>>>> -        pin_reg &=3D ~mask;
-> >>>>> -        writel(pin_reg, gpio_dev->base + i * 4);
-> >>>>> +static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
-> >>>>> +{
-> >>>>> +    struct pinctrl_desc *desc =3D gpio_dev->pctrl->desc;
-> >>>>> +    int i;
-> >>>>>   -        raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-> >>>>> -    }
-> >>>>> +    for (i =3D 0; i < desc->npins; i++)
-> >>>>> +        amd_gpio_irq_init_pin(gpio_dev, i);
-> >>>>>   }
-> >>>>>     #ifdef CONFIG_PM_SLEEP
-> >>>>> @@ -950,8 +952,10 @@ static int amd_gpio_resume(struct device *dev)
-> >>>>>       for (i =3D 0; i < desc->npins; i++) {
-> >>>>>           int pin =3D desc->pins[i].number;
-> >>>>>   -        if (!amd_gpio_should_save(gpio_dev, pin))
-> >>>>> +        if (!amd_gpio_should_save(gpio_dev, pin)) {
-> >>>>> +            amd_gpio_irq_init_pin(gpio_dev, pin);
-> >>>>>               continue;
-> >>>>> +        }
-> >>>>>             raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-> >>>>>           gpio_dev->saved_regs[i] |=3D readl(gpio_dev->base + pin *=
- 4)
-> >>>>> & PIN_IRQ_PENDING;
-> >>>>
-> >>>> Hello Kornel,
-> >>>>
-> >>>> I've found that this commit which was included in 6.3-rc5 is causing=
- a
-> >>>> regression waking up from lid on a Lenovo Z13.
-> >>> observed "unable to wake from power button" on AMD based Dell platfor=
-m.
-> >>
-> >> This sounds like something that we want to fix quickly.
-> >>
-> >>> Reverting "pinctrl: amd: Disable and mask interrupts on resume" on th=
-e
-> >>> top of 6.3-rc6 does fix the issue.
-> >>>>
-> >>>> Reverting it on top of 6.3-rc6 resolves the problem.
-> >>>>
-> >>>> I've collected what I can into this bug report:
-> >>>>
-> >>>> https://bugzilla.kernel.org/show_bug.cgi?id=3D217315
-> >>>>
-> >>>> Linus Walleij,
-> >>>>
-> >>>> It looks like this was CC to stable.  If we can't get a quick soluti=
-on
-> >>>> we might want to pull this from stable.
-> >>>
-> >>> this commit landed into 6.1.23 as well
-> >>>
-> >>>         d9c63daa576b2 pinctrl: amd: Disable and mask interrupts on re=
-sume
-> >>
-> >> It made it back up to 5.10.y afaics.
-> >>
-> >> The culprit has no fixes tag, which makes me wonder: should we quickly
-> >> (e.g. today) revert this in mainline to get back to the previous state=
-,
-> >> so that Greg can pick up the revert for the next stable releases he
-> >> apparently currently prepares?
-> >>
-> >> Greg, is there another way to make you quickly fix this in the stable
-> >> trees? One option obviously would be "revert this now in stable, reapp=
-ly
-> >> it later together with a fix ". But I'm under the impression that this
-> >> is too much of a hassle and thus something you only do in dire situati=
-ons?
-> >>
-> >> I'm asking because I over time noticed that quite a few regressions ar=
-e
-> >> in a similar situation -- and quite a few of them take quite some time
-> >> to get fixed even when a developer provided a fix, because reviewing a=
-nd
-> >> mainlining the fix takes a week or two (sometimes more). And that is a
-> >> situation that is more and more hitting a nerve here. :-/
-> >
-> > I've looked into this and at this moment I can't really find a quick fi=
-x.
-> > See https://bugzilla.kernel.org/show_bug.cgi?id=3D217315#c3.
-> > It seems that reverting this might be the best solution for now.
->
-> Great, thx for the update (and BTW: Greg, thx for your answer, too).
->
-> To speed things up a quick question:
->
-> Linusw, what's your preferred course to realize this revert quickly?
->
->  * someone (Kornel?) sends a revert with a commit msg for review, which
-> you then apply and pass on to the other Linus?
->
->  * someone (Kornel?) sends a revert with a commit msg for review that
-> immediately asks the other Linus to pick this up directly?
->
->  * we ask the other Linus directly to revert this (who then has to come
-> up with a commit msg on his own)?
+ v4:
+  - Add missing rcu_read_lock/unlock to cpuset_cancel_fork() in patch 3.
+  - Add patch 5 to reduce performance impact for the
+    non-CLONE_INTO_CGROUP case.
 
-Would you like me to send a reverting change?
-I can do this right away.
-The commit message would contain something like:
+ v3:
+  - Update patches 2 & 3 to put task_cs() call under rcu_read_lock().
 
-This patch introduces a regression on Lenovo Z13, which can't wake
-from the lid with it applied.
+ v2:
+  - Drop v1 patch 3
+  - Add a new patch to fix an issue in cpuset_cancel_attach() and
+    another patch to add cpuset_can_fork() and cpuset_cacnel_fork()
+    methods.
+
+The first patch in this series fixes a problem in
+cpuset_cancel_attach(). Patches 2 and 3 fixes the CLONE_INTO_CGROUP
+problem in cpuset. Patch 4 is a minor fix. The last patch is a
+performance optimization patch for the non-CLONE_INTO_CGROUP case.
+
+Waiman Long (5):
+  cgroup/cpuset: Wake up cpuset_attach_wq tasks in
+    cpuset_cancel_attach()
+  cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly
+  cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
+  cgroup/cpuset: Make cpuset_attach_task() skip subpartitions CPUs for
+    top_cpuset
+  cgroup/cpuset: Optimize out unneeded
+    cpuset_can_fork/cpuset_cancel_fork calls
+
+ include/linux/cgroup-defs.h |   6 ++
+ kernel/cgroup/cgroup.c      |  23 +++--
+ kernel/cgroup/cpuset.c      | 167 +++++++++++++++++++++++++++++-------
+ 3 files changed, 159 insertions(+), 37 deletions(-)
+
+-- 
+2.31.1
+
