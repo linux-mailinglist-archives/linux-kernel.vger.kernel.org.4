@@ -2,217 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0AF6DE1E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B92C6DE1E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Apr 2023 19:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjDKRIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 13:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S229874AbjDKRJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 13:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjDKRIq (ORCPT
+        with ESMTP id S229666AbjDKRJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 13:08:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0A84489
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:08:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A25460EAD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB011C433D2;
-        Tue, 11 Apr 2023 17:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681232923;
-        bh=KK2wcAmTXAmRl/Ls32v9Ffjf1eFKoGVvdH85RsyomL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rbDEVlmK/qzdpjete8oaogpFA8aGk48GKwmZlPNYfX4F0fm9cTIp0SsGomAEv3HlA
-         g0a8MOyx2KPODmisHm0IRP822DhZLodA4FOJ3NdHru65czj68gqhH/F5Fk1t5PzVPT
-         mDmGbFhh5nnhfGi9Epa90nSN0Og16VTprHk1WvTW5l6Vf44oh3HauFysQnlr74LRAE
-         0nhtqsxwzDgeK8Ew7tKmvI7tsA3kK+wCb8fekmGxBA1c2NVgFWuOyIhuWinhHAZoRK
-         iMexVHVLWlKlUwWpASptp+aYa2P8Ib87O0B0IMdmta+QKcIcXDbk6Kv+YzaHBeLwb+
-         RiQb/1cY3eB7Q==
-Date:   Tue, 11 Apr 2023 10:08:42 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to tag FIEMAP_EXTENT_DELALLOC in
- fiemap() for delay allocated extent
-Message-ID: <ZDWUGr2c3TT2tTgu@google.com>
-References: <20230405144359.930253-1-chao@kernel.org>
- <ZDCEK2OPkhTmRZrq@google.com>
- <224e8756-7c63-fd53-a0f3-f3e2a7b4c13f@kernel.org>
- <ZDROBJFxSUdGaqAa@google.com>
- <538fd229-28ae-0ec5-ef07-35d505fbb8a9@kernel.org>
- <2341db3b-5a40-a9f0-51f1-29a8908e3e98@kernel.org>
+        Tue, 11 Apr 2023 13:09:13 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FFA3AB3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:09:12 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id u13so9066063ybu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 10:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681232952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gm7xePjxYk7+XJPNyNCPc3m+W8vE886GdLa6QN77x1c=;
+        b=Dt/fnq5Rohg8OvlruMfiPphHzl880reg7mPfS4YNa5TmiKezMqJU7c5N642pzetXf2
+         6NbxlvK5ktk5iVQVml81CM9HQp85vFnzaieIFuuBqYSPu6WYL5u9tdlk4I6vgkBMqUvC
+         w6wRpn8CV3RHhSbKqat6mlHmMYEYrkecxwv76tB8yR+Z9cCcwUm2we4/xm2upTtQATqH
+         K4dsin1oFx+mWY14ixXb3oYb59cL4azDcD+rWQMZleC8KPvs8F+48Wq+ejwmTxLhkXPf
+         IQbCu9aPtXBDaBDRLeDoRMpbwBZMZsK7uZVTPVozcyVwBpKD7OpdbHbV6DcndD7Ixvtu
+         1lzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681232952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gm7xePjxYk7+XJPNyNCPc3m+W8vE886GdLa6QN77x1c=;
+        b=K4z28zR4akjGeW2uaZ8ie2dal5s235RGC8Ssfd6QYLsZoKvGYOT2tpRo7A1CPv3z50
+         0ZAJHm21iPrf/Sfcdyi3ME4fAzHZeI/LWgjoIf7rgLhcuZzE7b4dxFxcUT0CPbzRGVWp
+         FD9RsYIHAhVKQ43W6ETgY4iYisOQEppOP0sKcvHmRy/nnBijQwXqBWmNvG6ABXQIk3q1
+         E69MADVVNYWKt3kCkspc6nU1FeU44N0ebGN+P39rNXDvg3LCvigqw9g/yjGve8HcQEHF
+         /RqmHg82q9n60h89474cdVkVIblx04CJSDZG1vUsx2uAkOzJfuTDX2qqXJuEGwO7MoNA
+         EPKA==
+X-Gm-Message-State: AAQBX9ceV1AZrlE1d7V/0OQgZGgop7gE+lcyMveh9oEOyTr6hQS88NLA
+        8LhUmA8zU+P6GaRBN/2IVxhurhEtpZg0X06brVAG7Q==
+X-Google-Smtp-Source: AKy350b8jaqgaAHh8wLrh+Z1EDrMUNUXWA3JcWdiVtFGHsb3jqA9X9Y6psDGOt8LUL6EO2xtyY+DLjKwwfub7Ud1Mfs=
+X-Received: by 2002:a25:7347:0:b0:b8f:892:3967 with SMTP id
+ o68-20020a257347000000b00b8f08923967mr2861731ybc.4.1681232951657; Tue, 11 Apr
+ 2023 10:09:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2341db3b-5a40-a9f0-51f1-29a8908e3e98@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230411160902.4134381-1-dhowells@redhat.com> <20230411160902.4134381-8-dhowells@redhat.com>
+In-Reply-To: <20230411160902.4134381-8-dhowells@redhat.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 11 Apr 2023 19:09:00 +0200
+Message-ID: <CANn89iLW3_1SZV4EV3h2W45B_+b+R67fp40t8OaqpqLnVEhTew@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 07/18] tcp: Support MSG_SPLICE_PAGES
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11, Chao Yu wrote:
-> On 2023/4/11 16:14, Chao Yu wrote:
-> > On 2023/4/11 1:57, Jaegeuk Kim wrote:
-> > > On 04/08, Chao Yu wrote:
-> > > > On 2023/4/8 4:59, Jaegeuk Kim wrote:
-> > > > > This breaks generic/009?
-> > > > 
-> > > > I guess it is as expected?
-> > > > 
-> > > > Please check description of fiemap ioctl manual from [1]:
-> > > > 
-> > > > FIEMAP_EXTENT_UNKNOWN
-> > > > The location of this extent is currently unknown. This may
-> > > > indicate the data is stored on an inaccessible volume or that
-> > > > no storage has been allocated for the file yet.
-> > > > 
-> > > > FIEMAP_EXTENT_DELALLOC
-> > > > This will also set FIEMAP_EXTENT_UNKNOWN.
-> > > > 
-> > > > Delayed allocation - while there is data for this extent, its
-> > > > physical location has not been allocated yet.
-> > > > 
-> > > > FIEMAP_EXTENT_UNWRITTEN
-> > > > Unwritten extent - the extent is allocated but its data has not
-> > > > been initialized. This indicates the extent’s data will be all
-> > > > zero if read through the filesystem but the contents are undefined
-> > > > if read directly from the device.
-> > > > 
-> > > > [1] https://www.kernel.org/doc/html/latest/filesystems/fiemap.html
-> > > > 
-> > > > According to its description, f2fs only support
-> > > > FIEMAP_EXTENT_{UNKNOWN, DELALLOC}, but not support
-> > > > FIEMAP_EXTENT_UNWRITTEN.
-> > > 
-> > > No, I don't think so.
-> > 
-> > Jaegeuk,
-> > 
-> > Could you please check the detailed description of FIEMAP_EXTENT_UNWRITTEN?
-> > The flag indicates two conditions:
-> > 1. on-disk blkaddrs were allocated for extent, and the extent is tagged as
-> > unwritten status.
-> > 2. data readed on those blocks will be all zero.
-> 
-> Sorry, I mean:
-> 
-> 1. on-disk blkaddrs were allocated for extent;
-> 2. extent is tagged as unwritten status, data readed on those blocks will be
-> all zero.
+On Tue, Apr 11, 2023 at 6:09=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> Make TCP's sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
+> spliced or copied (if it cannot be spliced) from the source iterator.
+>
+> This allows ->sendpage() to be replaced by something that can handle
+> multiple multipage folios in a single transaction.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: David Ahern <dsahern@kernel.org>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
+> ---
+>
+> Notes:
+>     ver #6)
+>      - Use common helper.
+>
+>  net/ipv4/tcp.c | 43 ++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 36 insertions(+), 7 deletions(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index fd68d49490f2..0b2213da5aaf 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1221,7 +1221,7 @@ int tcp_sendmsg_locked(struct sock *sk, struct msgh=
+dr *msg, size_t size)
+>         int flags, err, copied =3D 0;
+>         int mss_now =3D 0, size_goal, copied_syn =3D 0;
+>         int process_backlog =3D 0;
+> -       bool zc =3D false;
+> +       int zc =3D 0;
+>         long timeo;
+>
+>         flags =3D msg->msg_flags;
+> @@ -1232,17 +1232,22 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
+ghdr *msg, size_t size)
+>                 if (msg->msg_ubuf) {
+>                         uarg =3D msg->msg_ubuf;
+>                         net_zcopy_get(uarg);
+> -                       zc =3D sk->sk_route_caps & NETIF_F_SG;
+> +                       if (sk->sk_route_caps & NETIF_F_SG)
+> +                               zc =3D 1;
 
-I was thinking fallocate/pin cases to give zero data. But, we may need to check
-the space discarded securely or disk support?
+zc is set to 0, 1, MSG_ZEROCOPY ,   MSG_SPLICE_PAGES
 
-> 
-> Thanks,
-> 
-> > 
-> > So, let's check f2fs' status:
-> > - fallocate only reserve valid block count and set NEW_ADDR in dnode, so
-> > it does not match condition 1)
-> > - pin & fallocate preallocates blkaddrs and set blkaddrs in dnode, but
-> > content on those blkaddrs may contain zero or random data, so it does not
-> > match  condition 2)
-> > 
-> > Christoph describes this issue in below patch as well, you can check it.
-> > da8c7fecc9c7 ("f2fs: rename F2FS_MAP_UNWRITTEN to F2FS_MAP_DELALLOC")
-> > 
-> > Am I missing something?
-> > 
-> > Thanks,
-> > 
-> > > 
-> > > > 
-> > > > So 009, 092, 094 .. which expects unwritten status from extent will
-> > > > fail.
-> > > > 
-> > > > How about disabling those testcase?
-> > > > 
-> > > > Thanks,
-> > > > 
-> > > > > 
-> > > > > On 04/05, Chao Yu wrote:
-> > > > > > xfstest generic/614 fails to run due below reason:
-> > > > > > 
-> > > > > > generic/614 1s ... [not run] test requires delayed allocation buffered writes
-> > > > > > 
-> > > > > > The root cause is f2fs tags wrong fiemap flag for delay allocated
-> > > > > > extent.
-> > > > > > 
-> > > > > > Quoted from fiemap.h:
-> > > > > > FIEMAP_EXTENT_UNKNOWN        0x00000002 /* Data location unknown. */
-> > > > > > FIEMAP_EXTENT_DELALLOC        0x00000004 /* Location still pending.
-> > > > > >                             * Sets EXTENT_UNKNOWN. */
-> > > > > > FIEMAP_EXTENT_UNWRITTEN        0x00000800 /* Space allocated, but
-> > > > > >                             * no data (i.e. zero). */
-> > > > > > 
-> > > > > > FIEMAP_EXTENT_UNWRITTEN means block address is preallocated, but w/o
-> > > > > > been written any data, which status f2fs is not supported now, for all
-> > > > > > NEW_ADDR block addresses, it means delay allocated blocks, so let's
-> > > > > > tag FIEMAP_EXTENT_DELALLOC instead.
-> > > > > > 
-> > > > > > Testcase:
-> > > > > > xfs_io -f -c 'pwrite 0 64k' /mnt/f2fs/file;
-> > > > > > filefrag -v /mnt/f2fs/file
-> > > > > > 
-> > > > > > Output:
-> > > > > > - Before
-> > > > > > Filesystem type is: f2f52010
-> > > > > > Fize of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
-> > > > > >    ext:     logical_offset:        physical_offset: length:   expected: flags:
-> > > > > >      0:        0..      15:          0..        15:     16:             last,unwritten,merged,eof
-> > > > > > /mnt/f2fs/file: 1 extent found
-> > > > > > 
-> > > > > > After:
-> > > > > > Filesystem type is: f2f52010
-> > > > > > File size of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
-> > > > > >    ext:     logical_offset:        physical_offset: length:   expected: flags:
-> > > > > >      0:        0..      15:          0..         0:      0:             last,unknown_loc,delalloc,eof
-> > > > > > /mnt/f2fs/file: 1 extent found
-> > > > > > 
-> > > > > > Fixes: 7f63eb77af7b ("f2fs: report unwritten area in f2fs_fiemap")
-> > > > > > Signed-off-by: Chao Yu <chao@kernel.org>
-> > > > > > ---
-> > > > > >    fs/f2fs/data.c | 7 +++++--
-> > > > > >    1 file changed, 5 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > > > > > index 359de650772e..3afc9764743e 100644
-> > > > > > --- a/fs/f2fs/data.c
-> > > > > > +++ b/fs/f2fs/data.c
-> > > > > > @@ -1995,7 +1995,10 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
-> > > > > >        }
-> > > > > >        if (size) {
-> > > > > > -        flags |= FIEMAP_EXTENT_MERGED;
-> > > > > > +        if (flags & FIEMAP_EXTENT_DELALLOC)
-> > > > > > +            phys = 0;
-> > > > > > +        else
-> > > > > > +            flags |= FIEMAP_EXTENT_MERGED;
-> > > > > >            if (IS_ENCRYPTED(inode))
-> > > > > >                flags |= FIEMAP_EXTENT_DATA_ENCRYPTED;
-> > > > > > @@ -2035,7 +2038,7 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
-> > > > > >                    size += blks_to_bytes(inode, 1);
-> > > > > >                }
-> > > > > >            } else if (map.m_flags & F2FS_MAP_DELALLOC) {
-> > > > > > -            flags = FIEMAP_EXTENT_UNWRITTEN;
-> > > > > > +            flags = FIEMAP_EXTENT_DELALLOC;
-> > > > > >            }
-> > > > > >            start_blk += bytes_to_blks(inode, size);
-> > > > > > -- 
-> > > > > > 2.36.1
-> > 
-> > 
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+I find this a bit confusing. Maybe use a private enum ?
+
+>                 } else if (sock_flag(sk, SOCK_ZEROCOPY)) {
+>                         uarg =3D msg_zerocopy_realloc(sk, size, skb_zcopy=
+(skb));
+>                         if (!uarg) {
+>                                 err =3D -ENOBUFS;
+>                                 goto out_err;
+>                         }
+> -                       zc =3D sk->sk_route_caps & NETIF_F_SG;
+> -                       if (!zc)
+> +                       if (sk->sk_route_caps & NETIF_F_SG)
+> +                               zc =3D MSG_ZEROCOPY;
+> +                       else
+>                                 uarg_to_msgzc(uarg)->zerocopy =3D 0;
+>                 }
+> +       } else if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES) && size) {
+> +               if (sk->sk_route_caps & NETIF_F_SG)
+> +                       zc =3D MSG_SPLICE_PAGES;
