@@ -2,206 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6847F6DF9C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405AD6DF9CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjDLPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S231395AbjDLPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjDLPVG (ORCPT
+        with ESMTP id S231515AbjDLPVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:21:06 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFD37EEF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:20:35 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1842df7cb53so14172501fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681312835; x=1683904835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7SkQUe1sjVjm42OHiHhks/DOrgWsxVG26S1+y3HVvJk=;
-        b=gkhlF4kzoVQ3so1r46S3MCKarEYn8iRvENC4uneOuGL3oeNRHP3y/Dfzskiy/EveNi
-         IExZmlF1+CSpGYXUR28ehshK5OODFllNsVWJjJ41+DTQWJ8l4OYmjbIqlmSzAMOZ/M+0
-         Mw8cD0yJ3tnnZ9JSJ5UZvahqZu8e3m2z3z/eAebu8svyj2QPgHswjDu9DpcpM6whN5qi
-         xb+KFASS84EpvMI/2rVqUohivtr0cujvYtNp+NbVppgfsjIsfv15X8PqDjiGrj3NsqXL
-         FAhIVEVHDXGmUhSN6ojiDFIAbb4mEkbhiLVnLgD+Qlo4Y9ZsxnXA9cb2C5ykNtsp4uej
-         slAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312835; x=1683904835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7SkQUe1sjVjm42OHiHhks/DOrgWsxVG26S1+y3HVvJk=;
-        b=s7XfrXUkxflag++VS7qbvZ+FZmlvSITwpxIwunFI1AekFcAkPWi2oHIa1rhFBLRw7k
-         3WUoDE/RsQuyi6BXPjsWRUe9SuweeNG7GQOjFPIHkNozZjlE4TMdWk3HcEJ5inPYafno
-         YWBH/PQ7Z/yrQrFw8muLOzggxdvMmOobPBPBEBKSYSicT8ca5/yZd1ZGd9f7DATfLubB
-         dnIjZ3QdF+lWIWMemMBeexshp6L60ZUwz+GYSvxXd5hMV88PxZJ7SVnB+jE91andrl7J
-         X891uHm4q31cJCyH3d2izFbtejJCZoYlhUFpcsQakuKXyrgnon+h/yInVOLtTPTxQRNf
-         DMag==
-X-Gm-Message-State: AAQBX9eR8tg8ylhbyrlpu2U2ngRsqncQBjUSQMjRQJN+IcvKL8b1TSRc
-        5mJsYwjZ83nihgeOcYFGbAUA2Mr8K/ptNl5PGgs=
-X-Google-Smtp-Source: AKy350YGghYNh91iovq41s2Uzcr2C1jcbbEj9Nd9XDec0GIcwxWjGH4t3ykPmNDskbpvwkZL9ifIyrCykZ0DRLa8HP4=
-X-Received: by 2002:a05:6870:3050:b0:184:56bd:363a with SMTP id
- u16-20020a056870305000b0018456bd363amr3697696oau.3.1681312834820; Wed, 12 Apr
- 2023 08:20:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230403182808.8699-1-n.zhandarovich@fintech.ru>
- <BL1PR12MB51446866BAE5945297315399F79A9@BL1PR12MB5144.namprd12.prod.outlook.com>
- <5d5b0b94-4dd4-2a95-a777-521b65f6f053@fintech.ru>
-In-Reply-To: <5d5b0b94-4dd4-2a95-a777-521b65f6f053@fintech.ru>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 12 Apr 2023 11:20:23 -0400
-Message-ID: <CADnq5_PECupBm9ADGs5DsfM4i7FJCORD_s6=8Ky=416eFX4CTg@mail.gmail.com>
-Subject: Re: [PATCH] radeon: avoid double free in ci_dpm_init()
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Wed, 12 Apr 2023 11:21:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6B293FD;
+        Wed, 12 Apr 2023 08:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681312877; x=1712848877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ue5FuMgskg3zbh2X+bvZ/sBZqu92kRDdqi3iT72T2HQ=;
+  b=Hl0UR8PEeugcepa//CrxxMBRFunlcMCrqzUZq46qbJoKgnivielIWSLx
+   mte5kbnsZm8yovuKIMcp0a+08hbfL7oTOKzTftnqvK18cU6bSYlKfT/Ag
+   YTRJRiF0yT7rae7+jwvkyPiQPfZZuQXMDaES3eZRM3rTbNXJ6JibGgMSy
+   1nYzmtFsHMNByzU4jsyrxtq1L0aHIH6ZdBy7E8R/1oIzkAhG7hF8+oIGM
+   Wvy5aVtlVKLUzbg2eDM+zqY9k9iIcycJNAxigQZi0oWq55WUjFj9a5tQJ
+   F/016EpRZGoi+sdeII+iwDz5XZbZi/Nng+Hn3B31FP2+xMPX0SMrcV93t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324289046"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="324289046"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 08:20:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719411724"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="719411724"
+Received: from swengsoo-mobl.gar.corp.intel.com (HELO box.shutemov.name) ([10.252.56.9])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 08:20:42 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 8552610B93C; Wed, 12 Apr 2023 18:20:37 +0300 (+03)
+Date:   Wed, 12 Apr 2023 18:20:37 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: Re: [PATCH v4 2/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Message-ID: <20230412152037.upiciyn5zhmilw3r@box>
+References: <20230408204759.14902-1-decui@microsoft.com>
+ <20230408204759.14902-3-decui@microsoft.com>
+ <BYAPR21MB16885F59B6F5594F31AE957AD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16885F59B6F5594F31AE957AD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 8:39=E2=80=AFAM Nikita Zhandarovich
-<n.zhandarovich@fintech.ru> wrote:
->
->
->
-> On 4/11/23 14:11, Deucher, Alexander wrote:
-> > [Public]
-> >
-> >> -----Original Message-----
-> >> From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> >> Sent: Monday, April 3, 2023 2:28 PM
-> >> To: Deucher, Alexander <Alexander.Deucher@amd.com>
-> >> Cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>; Koenig, Christian
-> >> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> >> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; amd-
-> >> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> >> kernel@vger.kernel.org; lvc-project@linuxtesting.org
-> >> Subject: [PATCH] radeon: avoid double free in ci_dpm_init()
-> >>
-> >> There are several calls to ci_dpm_fini() in ci_dpm_init() when there o=
-ccur
-> >> errors in functions like r600_parse_extended_power_table().
-> >> This is harmful as it can lead to double free situations: for instance=
-,
-> >> r600_parse_extended_power_table() will call for
-> >> r600_free_extended_power_table() as will ci_dpm_fini(), both of which =
-will
-> >> try to free resources.
-> >> Other drivers do not call *_dpm_fini functions from their respective
-> >> *_dpm_init calls - neither should cpm_dpm_init().
-> >>
-> >> Fix this by removing extra calls to ci_dpm_fini().
-> >
-> > You can't just drop the calls to fini().  You'll need to properly unwin=
-d to avoid leaking memory.
-> >
-> > Alex
-> >>>
-> >> Found by Linux Verification Center (linuxtesting.org) with static anal=
-ysis tool
-> >> SVACE.
-> >>
-> >> Fixes: cc8dbbb4f62a ("drm/radeon: add dpm support for CI dGPUs (v2)")
-> >> Cc: stable@vger.kernel.org
-> >> Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
-> >> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> >>
-> >> ---
-> >>  drivers/gpu/drm/radeon/ci_dpm.c | 20 +++++---------------
-> >>  1 file changed, 5 insertions(+), 15 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/radeon/ci_dpm.c
-> >> b/drivers/gpu/drm/radeon/ci_dpm.c index 8ef25ab305ae..7b77d4c93f1d
-> >> 100644
-> >> --- a/drivers/gpu/drm/radeon/ci_dpm.c
-> >> +++ b/drivers/gpu/drm/radeon/ci_dpm.c
-> >> @@ -5677,28 +5677,20 @@ int ci_dpm_init(struct radeon_device *rdev)
-> >>      pi->pcie_lane_powersaving.min =3D 16;
-> >>
-> >>      ret =3D ci_get_vbios_boot_values(rdev, &pi->vbios_boot_state);
-> >> -    if (ret) {
-> >> -            ci_dpm_fini(rdev);
-> >> +    if (ret)
-> >>              return ret;
-> >> -    }
-> >>
-> >>      ret =3D r600_get_platform_caps(rdev);
-> >> -    if (ret) {
-> >> -            ci_dpm_fini(rdev);
-> >> +    if (ret)
-> >>              return ret;
-> >> -    }
-> >>
-> >>      ret =3D r600_parse_extended_power_table(rdev);
-> >> -    if (ret) {
-> >> -            ci_dpm_fini(rdev);
-> >> +    if (ret)
-> >>              return ret;
-> >> -    }
-> >>
-> >>      ret =3D ci_parse_power_table(rdev);
-> >> -    if (ret) {
-> >> -            ci_dpm_fini(rdev);
-> >> +    if (ret)
-> >>              return ret;
-> >> -    }
-> >>
-> >>      pi->dll_default_on =3D false;
-> >>      pi->sram_end =3D SMC_RAM_END;
-> >> @@ -5749,10 +5741,8 @@ int ci_dpm_init(struct radeon_device *rdev)
-> >>              kcalloc(4,
-> >>                      sizeof(struct
-> >> radeon_clock_voltage_dependency_entry),
-> >>                      GFP_KERNEL);
-> >> -    if (!rdev-
-> >>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries) {
-> >> -            ci_dpm_fini(rdev);
-> >> +    if (!rdev-
-> >>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries)
-> >>              return -ENOMEM;
-> >> -    }
-> >>      rdev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.count =3D 4;
-> >>      rdev-
-> >>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].clk =3D 0;
-> >>      rdev-
-> >>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].v =3D 0;
->
->
-> I think you are correct when it comes to ensuring we deal with memory
-> issues in ci_dpm_init().
->
-> However, I could use some direction on how to deal with the problem of
-> freeing only previously allocated resources. For instance, once
-> ci_parse_power_table() fails, it is not clear what we should and should
-> not free.
+On Tue, Apr 11, 2023 at 04:28:20PM +0000, Michael Kelley (LINUX) wrote:
+> Does anyone know if there is a reason to use one vs. the other?
+> slow_virt_to_phys() is x86-only, but that's not a problem here.
 
-You'll want to free any memory allocated in ci_dpm_init().  Any of the
-functions called from that function should clean themselves up if they
-allocate any memory, but if not, they should be fixed.
+slow_virt_to_phys() is more generic as it works for non-vmalloc addresses,
+but generally they are equivalent for the use.
 
-Alex
-
-
->
-> I wanna point out that in this case I would like to fix both double and
-> uninitialized free issues as it can also lead to undefined behavior.
->
-> Thanks for your patience,
-> Nikita
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
