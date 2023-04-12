@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B474C6DFC47
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7F06DFC4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjDLRHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S229938AbjDLRIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjDLRHK (ORCPT
+        with ESMTP id S229764AbjDLRIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:07:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC1B2D55
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lzta4Lh8LurIXk3BdU+dNUXNGo9kwEA2Xm/xfZv+R28=; b=m0i5lhke/0QwY8hzvX70osTiMo
-        3A9QkBlX2Rb0E+pi29wiFpLSDrINtdUw8/hqY3yH0az5SXAf7HKBQuPgqC+sFSbJ7u8NUkOz+LvcC
-        vNbLaqz2OFm9hbXVMs9okkdSwNKkF73RF7KAVsPcspnvzn1wyaKxinYP3iuXshNSQIA6AaH6TLmZV
-        JtKtF3F0VHg7JwFXN7KULth+KLBjnjLf0qGhYwNLbWOuOutDZoy0PCCMOzUl3r+CZi+GNJNg7yHJ/
-        zyDNwet58LYwX/sJOut2M6PdVMf47gNakt+TtyNT+Xdy/L3BCpKjHT9o8DPiirFHdmfAONtMOucjw
-        7qgYoYpA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmdvv-003ukj-1T;
-        Wed, 12 Apr 2023 17:06:59 +0000
-Date:   Wed, 12 Apr 2023 10:06:59 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     jan.kiszka@siemens.com, kbingham@kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, song@kernel.org
-Subject: Re: [PATCH] scripts/gdb: use mem instead of core_layout to get the
- module address
-Message-ID: <ZDblM40+MVm9XTgT@bombadil.infradead.org>
-References: <CGME20230412112345eucas1p10c0ab064156268c9021abe9fc6bf1fd3@eucas1p1.samsung.com>
- <20230412111508.892296-1-p.raghav@samsung.com>
+        Wed, 12 Apr 2023 13:08:30 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFEF118
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:08:29 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id m4so15427351lfj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681319308; x=1683911308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bHz36P6n/IFFYRn+2wzmmIWjkkyGKKtV0x6DRHklJqg=;
+        b=ub4rOKQiFk3fl6RCjWMFWEwScl/mi0Mb8jEGcN8OPvBVr3WIhDPXcjKhhJ1ZczX1i5
+         tVHVOvw/fNbZJ8QccOygNweSQ9/o3jZmEqBZXHNaMkdNHQshebFGrAPput/hUzDWombz
+         +Ap9OibnxYWBtlk95HGHSFzUlPr5rdjesByXpKt2Gf9gBbP34ELi8+PzKfPV9Y0hRfsb
+         Jdhpxad+pPNjRpnqmTgq1++zLtw6MTCopw229216FM3jbytkW5wPklMF0WjC/ipL9ZQf
+         TrduHVqxWfQJis0Mq5wGYKh38TgZPkvyHsRdna9mUnlQZjVSMwrJbvopmmuYdWzG5aan
+         GQug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681319308; x=1683911308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bHz36P6n/IFFYRn+2wzmmIWjkkyGKKtV0x6DRHklJqg=;
+        b=RLdlxaa7+zh+p+4C2qgm/Nw4EfPaDmX7Z44boPEGCN5HSKyhUDZYP3ZIQSBarStwXx
+         gTo2mRhYzOSmjSO4oKohMD1EMV8uZLEp74I20vrBU46baA7RfUcBXc9rGk+bV0ACZCPF
+         BYNCUN7rCKlSV50ORZ1G4myMQCvIAMcQwnLWGdXjub19S4BgshYUGfUd4Tkra3E5C4VE
+         RQKmQO4ErWQgfTVdGmgVGMvb2eYkiA7eip090sw76GFqdX9r+Fj+Q3u0psmvG5/RluE1
+         4bwouTlBaAHWuni47aQCKF84pbmvxg37DMAwNeS0pionJg1Zyd3vk0u7Cv92orjVs89x
+         HgvA==
+X-Gm-Message-State: AAQBX9fPJoNQtFZHrg0JiIXm4dU3wFm9pmKN6qPqITSUzEUzTxUMc5st
+        zBP9bUva3GplDUEdBU+acrnSnMkTQIVk7fZL+viCeRBvB7GdFgLqQ6U=
+X-Google-Smtp-Source: AKy350aeRD2uyIx+8xPYqOwdHgXc/Hv+zLNUb4oOukQRWLRx6AvonH/xj+JYS9QZTPyjHv8+b8RlxhWgvF30nruae7E=
+X-Received: by 2002:a19:f717:0:b0:4dc:807a:d140 with SMTP id
+ z23-20020a19f717000000b004dc807ad140mr4424933lfe.10.1681319307825; Wed, 12
+ Apr 2023 10:08:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412111508.892296-1-p.raghav@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20230412163922.327282-1-peterx@redhat.com> <20230412164234.328168-1-peterx@redhat.com>
+In-Reply-To: <20230412164234.328168-1-peterx@redhat.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 12 Apr 2023 10:07:51 -0700
+Message-ID: <CAJHvVch3fv2Z509fSha5R3VCvp_unPNgy7QUA+Xbet2J6hJhOA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/31] selftests/mm: Test UFFDIO_ZEROPAGE only when !hugetlb
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,29 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:15:08PM +0200, Pankaj Raghav wrote:
-> commit ac3b43283923 ("module: replace module_layout with module_memory")
-> changed the struct module data structure from module_layout to
-> module_memory. The core_layout member which is used while loading
-> modules are not available anymore leading to the following error while
-> running gdb:
-> 
-> (gdb) lx-symbols
-> loading vmlinux
-> Python Exception <class 'gdb.error'>: There is no member named core_layout.
-> Error occurred in Python: There is no member named core_layout.
-> 
-> Replace core_layout with its new counterpart mem[MOD_TEXT].
-> 
-> Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+On Wed, Apr 12, 2023 at 9:42=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> Make the check as simple as "test_type =3D=3D TEST_HUGETLB" because that'=
+s the
+> only mem that doesn't support ZEROPAGE.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+
+The end state we get to in patch 26 is what I was hoping for - we
+check the ioctls reported by UFFDIO_REGISTER to decide if we rest this
+or not. So then this intermediate state used to get rid of
+get_expected_ioctls() is fine.
+
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+
 > ---
-
-Jan, Kieran,
-
-That commit is in my modules-next tree, so I can take that fix in
-through my tree. Let me know if that is OK, and if you ACK the patch.
-
-Pankaj, thanks!
-
-  Luis
+>  tools/testing/selftests/mm/userfaultfd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/sel=
+ftests/mm/userfaultfd.c
+> index 795fbc4d84f8..d724f1c78847 100644
+> --- a/tools/testing/selftests/mm/userfaultfd.c
+> +++ b/tools/testing/selftests/mm/userfaultfd.c
+> @@ -1118,7 +1118,7 @@ static int __uffdio_zeropage(int ufd, unsigned long=
+ offset, bool retry)
+>  {
+>         struct uffdio_zeropage uffdio_zeropage;
+>         int ret;
+> -       bool has_zeropage =3D get_expected_ioctls(0) & (1 << _UFFDIO_ZERO=
+PAGE);
+> +       bool has_zeropage =3D !(test_type =3D=3D TEST_HUGETLB);
+>         __s64 res;
+>
+>         if (offset >=3D nr_pages * page_size)
+> --
+> 2.39.1
+>
