@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED116DFBEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2166DFC14
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjDLQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S230254AbjDLRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjDLQzZ (ORCPT
+        with ESMTP id S229962AbjDLRAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:55:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668A576BB;
-        Wed, 12 Apr 2023 09:54:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F39951F45A;
-        Wed, 12 Apr 2023 16:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681318441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y3oK8+NZ9W31+D3KiPlvgxqacyEsrvj82VuSS/EYUb0=;
-        b=dL/fTtEve1/zyl/crttEQwoPdRlkoZXrnk9ASPBt9fWwXV0OIcH+rd2f/I5tm4CdkQw13X
-        NT5Bn87JEiDdAFdICNpHLDJGV2Uay/KwE6IvnXm5Sr4ZidRVOkuCOytQUih/IgeWFzCdN6
-        k0rvua2D+zmaUFm6Xx9LeYCDpjghmAA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681318441;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y3oK8+NZ9W31+D3KiPlvgxqacyEsrvj82VuSS/EYUb0=;
-        b=cE5MNVsngV6FZv3URVMmQCmc2d3GUAywKfdLspJ5Wtyw5UGVfD/grxkczEimazRLtTSuP4
-        HQrwceeuITHqaIDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9907132C7;
-        Wed, 12 Apr 2023 16:54:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8Vh7LyjiNmQwWwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 12 Apr 2023 16:54:00 +0000
-Date:   Wed, 12 Apr 2023 18:53:58 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <terry.bowman@amd.com>
-Subject: Re: [PATCH] i2c: piix4: Print FCH::PM::S5_RESET_STATUS
-Message-ID: <20230412185358.4d6427ce@endymion.delvare>
-In-Reply-To: <20230407203720.18184-1-yazen.ghannam@amd.com>
-References: <20230407203720.18184-1-yazen.ghannam@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Wed, 12 Apr 2023 13:00:21 -0400
+Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD58A4D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681318488;
+        bh=6c10UxlH4LkCp7R0rruyDMs0C8VPTPNLjrwdbwagOIo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=nnlqgtF9QxMjCbUOFVb7qpnWe0J2Qnpn07cfNc6M6xdZPIZzy/Jbi7ShrlTiidenJ
+         p9UdvVvVGZWwxOVDiVunhKoXb3Yh/jn12koyu3A9PKJfv6zxP205f+QF/SyOqmToCm
+         DLWFxNrHxQtw9CSpjSTsHT1R9nPOycuhqX3gMy0w=
+Received: from [192.168.31.3] ([106.92.97.36])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id DAD82049; Thu, 13 Apr 2023 00:54:45 +0800
+X-QQ-mid: xmsmtpt1681318485ty9emqff1
+Message-ID: <tencent_C3E900CCD37EF2CF49553BD4AC4120932B08@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iCqCvITsarzp+v+tIeagWROsQ1DJ7NJ9KtkOzodvs4qVMGYGQ696
+         eYC36mQyTeUUfUGQcK5uAsiox8fa94FlhZ9PNeg83k4lgNlOm6LqCw0FH/aWheQ1X4hhneJFkh/V
+         k77icLT4MMTKvAoOcTBheDoWtXAFoszDw+HwLqWkA/Ti52B/FCCzdrVDNHleYsTx7ckAWDJNSTKZ
+         i4WPuuo/Fbhe+oH5OVhWx4wHHYXzLnxFTl5Ez+dEjCwDSexHEufpHBU2X+WJPbgrdf2J1BuxAWB8
+         qsaveCJrCeFJ4TuIz+IYEY+cBbrZoeTCjls2zBOWNubEQEvl/iIayrjnOiwnUOf7Rv2v/RhDQZMM
+         8j7axXGMloDfWGDgI5fV45SzintR/ROyuDGizSl6Ev+F3G4MR+IkKiZpg5cZBCSTCGdGVlrV7jDj
+         /InsDex6URvSEvSNNq42XBwtXvCckEDbhGR4ApVfRQRo0JytxhWaIv1o71RcrCdyoJDKtlGGEhcr
+         edfbpDcMmSgK55AyqU7U7mblqQAqmkWL5xkz2niZ2gIivWc8bWKYmCPrTjxbwpRMZJ8HxcFoyu90
+         JWy1jtnnO/MBGvOIl25tzsPz5Z4yBbxOFEAGOlNgEXj9tAYTtT55M5VZ85tvtv+QNPfOP0T/UJiR
+         IFR42tYlpZahjOuiZz0vPRQp01ENC6dSxCpuDv0Abhukq5RpgUtE/y/6JlhLg83/1JCQw84C+GRV
+         0DzXYkZiwsP+BXIS5Njqk+WrbFh2UC5vx6AEkHr/YT0+0EECo6bsgBIYMNN+EqvbmjXEY0Ea+VtF
+         UBE3oV2zdN4wuNOchAUZUh280oq/L9beFFAr3HCL3s+GJKlDLocCAt/EopE/uIgjKFbgXP/oBKNU
+         aijRNTRbr4EwgMuIgN+5kPR5dxGPeR81Aq5ZDPqE+iCPWQddrIZ/rzSWRZR4ZSYdLUVtKrkXOYYs
+         ZfEZUc1oq4w+krN0TZg86grLr13Esl7eaZBHRDx41iQe7iPW1h8Q==
+X-OQ-MSGID: <c0e2d8ec-37f4-166b-9929-89616a883581@foxmail.com>
+Date:   Thu, 13 Apr 2023 00:54:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] mm: compaction: optimize compact_memory to comply with
+ the admin-guide
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        William Lam <william.lam@bytedance.com>,
+        Fu Wei <wefu@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <tencent_FD958236269FD3A7996FFCF29E9BAA4EA809@qq.com>
+ <20230411134801.a4aadef5aba0f51e0d44bb7a@linux-foundation.org>
+From:   Wen Yang <wenyang.linux@foxmail.com>
+In-Reply-To: <20230411134801.a4aadef5aba0f51e0d44bb7a@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yazen,
 
-On Fri, 07 Apr 2023 15:37:20 -0500, Yazen Ghannam wrote:
-> The following register contains bits that indicate the cause for the
-> previous reset.
-> 
->         PMx000000C0 (FCH::PM::S5_RESET_STATUS)
-> 
-> This is helpful for debug, etc., and it only needs to be read once from
-> a single FCH within the system. The register definition is AMD-specific.
-> 
-> Print it when the FCH MMIO space is first mapped. This register is not
-> related to I2C functionality, but read it here to leverage the existing
-> mapping.
-> 
-> Use an "info" log level so that it is printed every boot without requiring
-> the user to enable debug messages. This is beneficial when debugging
-> issues that cause spontaneous reboots and are hard to reproduce.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 809fbd014cd6..043b29f1e33c 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -100,6 +100,7 @@
->  
->  #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
->  #define SB800_PIIX4_FCH_PM_SIZE			8
-> +#define SB800_PIIX4_FCH_PM_S5_RESET_STATUS	0xC0
->  
->  /* insmod parameters */
->  
-> @@ -200,6 +201,9 @@ static int piix4_sb800_region_request(struct device *dev,
->  
->  		mmio_cfg->addr = addr;
->  
-> +		addr += SB800_PIIX4_FCH_PM_S5_RESET_STATUS;
-> +		pr_info_once("S5_RESET_STATUS = 0x%08x", ioread32(addr));
-> +
->  		return 0;
->  	}
->  
+在 2023/4/12 04:48, Andrew Morton 写道:
+> On Wed, 12 Apr 2023 02:24:26 +0800 wenyang.linux@foxmail.com wrote:
+>
+>> For the /proc/sys/vm/compact_memory file, the admin-guide states:
+>> When 1 is written to the file, all zones are compacted such that free
+>> memory is available in contiguous blocks where possible. This can be
+>> important for example in the allocation of huge pages although processes
+>> will also directly compact memory as required
+>>
+>> But it was not strictly followed, writing any value would cause all
+>> zones to be compacted. In some critical scenarios, some applications
+>> operating it, such as echo 0, have caused serious problems.
+> Really?  You mean someone actually did this and didn't observe the
+> effect during their testing?
 
-I'm skeptical. For one thing, the register you read is outside of the
-mapped MMIO area. SB800_PIIX4_FCH_PM_SIZE is 8 which is less than 0xC0.
+Thanks for your reply.
 
-For another, printing an hexadecimal value which is AMD-specific is not
-going to be really helpful in practice. Is there public documentation
-available to decode the value?
+Since /proc/sys/vm/compact_memory has been well documented for over a 
+decade:
 
-Lastly, I can't see why this should happen in
-piix4_sb800_region_request() which is going to called repeatedly at
-runtime, rather than in piix4_setup_sb800_smba() which is only called
-once when the driver is loaded. If this goes in the i2c-piix4 driver at
-all... sp5100_tco might be more suitable as that driver is at least
-somewhat related to system reset.
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/admin-guide/sysctl/vm.rst#n109
 
-Looks like a hack really, and while I understand it is cheap, it would
-seem cleaner to put that code in its own platform/x86 driver. Or
-arch/x86/kernel/quirks.c maybe.
+it is believed that only writing 1 will trigger trigger all zones to be 
+compacted.
 
--- 
-Jean Delvare
-SUSE L3 Support
+Especially for those who write applications, they may only focus on 
+documentation and generally do not read kernel code.  Moreover, such 
+problems are not easily detected through testing on low pressure machines.
+
+Writing any meaningful or meaningless values will trigger it and affect 
+the entire server:
+
+# echo 1 > /proc/sys/vm/compact_memory
+# echo 0 > /proc/sys/vm/compact_memory
+# echo dead > /proc/sys/vm/compact_memory
+# echo "hello world" > /proc/sys/vm/compact_memory
+
+The implementation of this high-risk operation may require following the 
+admin-guides.
+
+--
+
+Best wishes,
+
+Wen
+
+
+>> It has been slightly optimized to comply with the admin-guide.
+
