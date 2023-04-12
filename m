@@ -2,84 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7FB6E008A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0996E008C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjDLVMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S230032AbjDLVMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDLVMJ (ORCPT
+        with ESMTP id S229728AbjDLVMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:12:09 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A116E96
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:11:59 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        Wed, 12 Apr 2023 17:12:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C146A7F;
+        Wed, 12 Apr 2023 14:12:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 121FB1EC051E;
-        Wed, 12 Apr 2023 23:11:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681333918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HJYqs9cEBfoLiSUzgjpNDSfIiv1vg3rOU/H/BIhOsmQ=;
-        b=R8zEr/Oa4KDmK/pQH5CGUi9KpIb8XCoBhE2wYNF2Uo/R4gvbvTtcQ6FvEbvUPlK1s2G6jj
-        xCbUE2Xb08d++c+Jzhqv9vBK3/pJzPddoBwLx95hfZO3e+fV1NKruUCHKmVve4uodLNanR
-        MOvtbYC6+jkvo7S2BIbhERNudPxvecU=
-Date:   Wed, 12 Apr 2023 23:11:53 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v5 09/15] x86/mtrr: allocate mtrr_value array dynamically
-Message-ID: <20230412211153.GKZDcemdxs2mhhwuiF@fat_crate.local>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-10-jgross@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230401063652.23522-10-jgross@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3DFD632B0;
+        Wed, 12 Apr 2023 21:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BE7C433D2;
+        Wed, 12 Apr 2023 21:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681333937;
+        bh=9gB2mGFB6sk7lKqjsy7MbN72ZEJ0ICs26aBiPeN3y+Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rjkrSfP2YwvvRScBvxWN9x84liozbr35remjUYkZHRlO/Cswc2psrGCU0AdeqpNjf
+         hOz2ECYBBlmIf7gRobYBN7hw44whuZGlFeHWZIQwkZlNGnCYf8TOSySYm8PrVoDKij
+         6UfVjVrA3O7JqxPGsGDWuMBtgewVER+Cn6EyBTQw=
+Date:   Wed, 12 Apr 2023 14:12:16 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Chunguang Wu <aman2008@qq.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>
+Subject: Re: [PATCH] fs/proc: add Kthread flag to /proc/$pid/status
+Message-Id: <20230412141216.c8f2c1313f34ee0100ac9ae4@linux-foundation.org>
+In-Reply-To: <tencent_3E1CBD85D91AD4CDDCB5F429A3948EB94306@qq.com>
+References: <tencent_3E1CBD85D91AD4CDDCB5F429A3948EB94306@qq.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 08:36:46AM +0200, Juergen Gross wrote:
-> +#ifdef CONFIG_X86_32
+On Wed, 12 Apr 2023 22:34:02 +0800 Chunguang Wu <aman2008@qq.com> wrote:
 
-TBH, I'm not really crazy about adding more ifdeffery.
-
-Wondering if adding a 32-bit only build object:
-
-obj-$(CONFIG_X86_32) += amd.o cyrix.o centaur.o legacy.o
-
-to arch/x86/kernel/cpu/mtrr/Makefile and moving all that gunk over
-there, out of the way, would be even cleaner...
-
-> +	mtrr_value = kcalloc(num_var_ranges, sizeof(*mtrr_value), GFP_KERNEL);
+> user can know that a process is kernel thread or not.
+> 
+> ...
+>
+> --- a/fs/proc/array.c
+> +++ b/fs/proc/array.c
+> @@ -434,6 +434,12 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+>  
+>  	task_state(m, ns, pid, task);
+>  
+> +	if ((mm == NULL) || (task->flags & PF_KTHREAD)) {
+> +		seq_puts(m, "Kthread:\tYes\n");
+> +	} else {
+> +		seq_puts(m, "Kthread:\tNo\n");
+> +	}
 > +
->  	/*
->  	 * The CPU has no MTRR and seems to not support SMP. They have
->  	 * specific drivers, we use a tricky method to support
-> -	 * suspend/resume for them.
-> +	 * suspend/resume for them. In case above allocation failed we can't
-> +	 * support suspend/resume (handled in mtrr_save()).
+>  	if (mm) {
+>  		task_mem(m, mm);
+>  		task_core_dumping(m, task);
 
-Oh well.
+Well..   Why is this information useful?  What is the use case?
 
--- 
-Regards/Gruss,
-    Boris.
+There are many ways of working this out from the existing output - why
+is this change required?
 
-https://people.kernel.org/tglx/notes-about-netiquette
