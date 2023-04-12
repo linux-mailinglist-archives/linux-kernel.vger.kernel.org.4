@@ -2,279 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD22D6DF096
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4969B6DF09A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjDLJin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S231623AbjDLJjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjDLJig (ORCPT
+        with ESMTP id S231592AbjDLJiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:38:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721E5272B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:38:32 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2416F1F6E6;
-        Wed, 12 Apr 2023 09:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681292311; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c0SP/x+biZJXktzqzgRHJHJg1WAHbea/GKjFs2rku1M=;
-        b=QBAAvecZMfh4A6GHD47kySyWutUM6O9/qH90lLm6rDIn3AEEIT4KmhZ08vxieHjORTaxIa
-        E+fv+5hy9hDRqXus05uujOc5ldMmp1KG22erCgd5Wl9BUbIyvmAo8hkGJsZpw7aJn2UOCh
-        yml8XRzZcj9EREFBYzwVpeZ85tJWNQM=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C12AC2C143;
-        Wed, 12 Apr 2023 09:38:30 +0000 (UTC)
-Date:   Wed, 12 Apr 2023 11:38:30 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 12/18] printk: nobkl: Add printer thread wakeups
-Message-ID: <ZDZ8FoOeyYNHYnYh@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-13-john.ogness@linutronix.de>
+        Wed, 12 Apr 2023 05:38:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECCF6A6F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:38:42 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id s12so1748020wrb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1681292321; x=1683884321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LYgoJ5W1lm2h+WEkZDuXfLaD3rVO4vR6JV6PPTTeq7c=;
+        b=CLjKS7jrFc9YFmn7lkcsGSXUdAVtLh6kO2+KjKW07v8CxR34OQjJD1O3IggOoFcxW0
+         OpHP/0kjKdKeyO7B6zv2wi3vDM2rkFr+9lCtIIEwKPOQgCLVPwoHBicte4vxq8Z/qlYQ
+         jux9UTehoSVOIlbZ835Vr6KV/qkGc0C16mEJniuA0R+2QQduJofHnr74gr43j8Z3nAyy
+         Uae180F88fahqvjOW1YkyOPgdNoGO0uUyh8AxG8PekIjqnDDU423bXux7ke0GBUhqs1b
+         76a6rLG3/VyhcjjrU4usy6eZofj7hIhiW0F9lWaszyHEXadXkfW+z3sZBdzvn3p8cvYj
+         yjAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681292321; x=1683884321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LYgoJ5W1lm2h+WEkZDuXfLaD3rVO4vR6JV6PPTTeq7c=;
+        b=6QYiHQt2gubDSwyfGYfqIEbVIjerjN7gm9r601Z9a3TasPYSZulVrSjKpc29dIMaMO
+         m4xRP3/8II4A9tEFm/956O/OWXpS+PIusM8Hf2FbnN9F+JtC1fyVABnk1XpPmd61VUvo
+         D8cozFnevZDTpUh7Jwy5pIzyytMS7FUFE0VJaPNxHyPFMOIscMqjNyoBYXbabmDiqZBF
+         DaxW+bFIL+drBWLX9xnqmsstroaqyaZPfkqYArM833BBaNB/5nJuAx4G3TrZyEKds446
+         AibFRTOotTlBRjYLiuDQ1cy2n9iB2HBRb4EV/1n0OI8kptFQaaWslF7NQYB5YC82RxXN
+         s8UQ==
+X-Gm-Message-State: AAQBX9fpCfREmaFNfPsDlrkkhPdHCx6Ef1Nn4HRq7IqzsWDHcrcCmPkf
+        mxfOsp4Fo8BXgLhPX4MW69aQJ2xfRIghfZS5DRGEcA==
+X-Google-Smtp-Source: AKy350Z6Kgwh2a/YcvNcQGVBjoHjDEUOQELTs9q5jCK+CGbMZMcBDrwNxAgHcuWcKDQKeK9W/M/VW28W2tXkwzIOJ+4=
+X-Received: by 2002:adf:f7ce:0:b0:2e8:4519:ee98 with SMTP id
+ a14-20020adff7ce000000b002e84519ee98mr3077767wrq.13.1681292321429; Wed, 12
+ Apr 2023 02:38:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302195618.156940-13-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230412071809.12670-1-pierre.gondois@arm.com>
+ <20230412071809.12670-3-pierre.gondois@arm.com> <20230412-cone-mousiness-23326e149592@wendy>
+ <3eac7e96-f3b3-ff66-d3f9-afb21fe17921@arm.com>
+In-Reply-To: <3eac7e96-f3b3-ff66-d3f9-afb21fe17921@arm.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Wed, 12 Apr 2023 11:38:30 +0200
+Message-ID: <CAHVXubixJ3BZuUD3Rdc+fD1+XJx2JmvXwhvVP4cyZ-Bu0_5kng@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] cacheinfo: Check cache properties are present in DT
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-03-02 21:02:12, John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Add a function to wakeup the printer threads. Use the new function
-> when:
-> 
->   - records are added to the printk ringbuffer
->   - consoles are started
->   - consoles are resumed
-> 
-> The actual waking is performed via irq_work so that the wakeup can
-> be triggered from any context.
+Hi Pierre, Conor,
+
+On Wed, Apr 12, 2023 at 10:12=E2=80=AFAM Pierre Gondois <pierre.gondois@arm=
+.com> wrote:
 >
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -317,6 +318,7 @@ struct cons_context_data;
->   * @thread_pbufs:	Pointer to thread private buffer
->   * @kthread:		Pointer to kernel thread
->   * @rcuwait:		RCU wait for the kernel thread
-> + * @irq_work:		IRQ work for thread wakeup
+> Hello Conor,
+>
+> On 4/12/23 09:55, Conor Dooley wrote:
+> > Hey Pierre!
+> >
+> > On Wed, Apr 12, 2023 at 09:18:05AM +0200, Pierre Gondois wrote:
+> >> If a Device Tree (DT) is used, the presence of cache properties is
+> >> assumed. Not finding any is not considered. For arm64 platforms,
+> >> cache information can be fetched from the clidr_el1 register.
+> >> Checking whether cache information is available in the DT
+> >> allows to switch to using clidr_el1.
+> >>
+> >> init_of_cache_level()
+> >> \-of_count_cache_leaves()
+> >> will assume there a 2 cache leaves (L1 data/instruction caches), which
+> >> can be different from clidr_el1 information.
+> >>
+> >> cache_setup_of_node() tries to read cache properties in the DT.
+> >> If there are none, this is considered a success. Knowing no
+> >> information was available would allow to switch to using clidr_el1.
+> >
+> > Hmm, w/ this series I am still seeing a:
+> > [    0.306736] Early cacheinfo failed, ret =3D -22
+> >
+> > Not finding any cacheinfo is totally valid, right?
+> >
+> > A basic RISC-V QEMU setup is sufficient to reproduce, for instance:
+> > | $(qemu) \
+> > |     -m 2G -smp 5 \
+> > |     -M virt -nographic \
+> > |     -kernel $(vmlinux_bin)
+>
+> Sorry I forgot to remove the:
+>    pr_err("Early cacheinfo failed, ret =3D %d\n", ret);
 
-I would call this irq_wakeup_work, wakeup_work, or kthread_wakeup_work.
+I have just tested it and the messages "cacheinfo: Unable to detect
+cache hierarchy for CPU" disappear, I'll add my tested by on the next
+version. And just to make sure we agree: this fix should go into
+-fixes (for 6.3).
 
->   * @kthread_waiting:	Indicator whether the kthread is waiting to be woken
->   * @write_atomic:	Write callback for atomic context
->   * @write_thread:	Write callback for printk threaded printing
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3226,9 +3237,23 @@ EXPORT_SYMBOL(console_stop);
->  
->  void console_start(struct console *console)
->  {
-> +	short flags;
-> +
->  	console_list_lock();
->  	console_srcu_write_flags(console, console->flags | CON_ENABLED);
-> +	flags = console->flags;
->  	console_list_unlock();
-> +
-> +	/*
-> +	 * Ensure that all SRCU list walks have completed. The related
-> +	 * printing context must be able to see it is enabled so that
-> +	 * it is guaranteed to wake up and resume printing.
-> +	 */
-> +	synchronize_srcu(&console_srcu);
+Thanks again Conor and Pierre,
 
-Either this is needed only when the console is CON_NO_BKL or
-it was needed even before this patchset.
+Alex
 
-I not sure if we need it at all. It will help only for not-yet-started
-SRCU walks. But they should see the change because the modification
-was done under console_list_lock(). It should provide some
-memory barrier against srcu_read_lock(). But maybe I do not understand
-the srcu_read_lock() guarantees completely.
-
-> +
-> +	if (flags & CON_NO_BKL)
-> +		cons_kthread_wake(console);
-> +
->  	__pr_flush(console, 1000, true);
->  }
->  EXPORT_SYMBOL(console_start);
-> --- a/kernel/printk/printk_nobkl.c
-> +++ b/kernel/printk/printk_nobkl.c
-> @@ -1368,6 +1368,37 @@ static int cons_kthread_func(void *__console)
->  	return 0;
->  }
->  
-> +/**
-> + * cons_irq_work - irq work to wake printk thread
-> + * @irq_work:	The irq work to operate on
-> + */
-> +static void cons_irq_work(struct irq_work *irq_work)
-> +{
-> +	struct console *con = container_of(irq_work, struct console, irq_work);
-> +
-> +	cons_kthread_wake(con);
-> +}
-> +
-> +/**
-> + * cons_wake_threads - Wake up printing threads
-> + *
-> + * A printing thread is only woken if it is within the @kthread_waiting
-> + * block. If it is not within the block (or enters the block later), it
-> + * will see any new records and continue printing on its own.
-> + */
-> +void cons_wake_threads(void)
-> +{
-> +	struct console *con;
-> +	int cookie;
-> +
-> +	cookie = console_srcu_read_lock();
-> +	for_each_console_srcu(con) {
-> +		if (con->kthread && atomic_read(&con->kthread_waiting))
-
-I studied the code more. And I think that the custom con->kthread_waiting
-is not need with this approach. IMHO, rcuwait_active() would do
-the same job.
-
-IMHO, this is supposed to do the same optimization as
-wq_has_sleeper(&log_wait) in __wake_up_klogd().
-
-That said, we need to add smp_wmb() before rcuwait_active().
-It is already bundled in wq_has_sleeper() but not in
-rcuwait_active().
-
-
-> +			irq_work_queue(&con->irq_work);
-> +	}
-> +	console_srcu_read_unlock(cookie);
-
-Note that this solution would require blocking and canceling
-the irq_work before stopping the kthread, see
-https://lore.kernel.org/r/ZC5+Hn0bOhMrVci6@alley
-
-
-Alternative solution would be to have a global printk_kthread_waiting
-atomic counter and move the SRCU read lock into the IRQ context.
-
-I mean something like:
-
-atomic_t printk_kthread_waiting = ATOMIC_INIT(0);
-
-void cons_thread_wakeup_func(struct irq_work *irq_work)
-{
-	struct console *con;
-	int cookie;
-
-	cookie = console_srcu_read_lock();
-	for_each_console_srcu(con) {
-		/* The kthread is started later during boot. */
-		if (!con->kthread)
-			continue;
-
-		/*
-		 * Make sure that the record was written before we
-		 * wake up the kthread so that
-		 * cons_kthread_should_wakeup() will see it.
-		 *
-		 * It pairs with the implicit barrier in
-		 * rcuwait_wait_event().
-		smp_mb();
-		if (!rcuwait_active(&con->rcuwait))
-			continue;
-
-		cons_kthread_wake(con);
-	}
-}
-
-void cons_wake_threads(void)
-{
-	/*
-	 * Make sure that the record is stored before checking
-	 * printk_thread_waiting. So that the kthread will
-	 * either see it when checking cons_kthread_should_wakeup().
-	 * Or the check below will see the printk_thread_waiting
-	 * counter incremented.
-	 *
-	 * The corresponding barrier is in cons_kthread_func()
-	 */
-	smp_mb();
-	if (atomic_read(&printk_thread_waiting))
-		irq_work_queue(cons_thread_wakeup_work);
-}
-
-and finally:
-
-static int cons_kthread_func(void *__console)
-{
-[...]
-	for (;;) {
-		atomic_inc(&printk_thread_waiting);
-
-		/*
-		 * Synchronize against cons_wake_threads().
-		 *
-		 * Make sure that either cons_wake_threads() will see
-		 * that we are going to wait. Or we will see the new
-		 * record that was stored before cons_wake_threads()
-		 * was called.
-		 */
-		smp_mb();
-
-		/*
-		 * Provides a full memory barrier against rcuwait_active()
-		 * check in cons_thread_wakeup_func().
-		 */
-		ret = rcuwait_wait_event(&con->rcuwait,
-					 cons_kthread_should_wakeup(con, ctxt),
-					 TASK_INTERRUPTIBLE);
-
-		atomic_dec(&printk_kthread_waiting);
-[...]
-}
-
-Note that printk_kthread_waiting counter is need in this case because
-we do not have a global wait queue. And we could not have a global one
-because rcuwait provides supports only a single task. White the
-classic waitqueue supports more tasks via struct wait_queue_head.
-
-Difference between the two solutions:
-
-    + Original solution should not need con->kthread_waiting
-      in the end. But we will only need to make sure that the irq_work
-      can't and is not longer be scheduled when stopping
-      the kthread.
-
-    + The alternative solution is is easier against removing
-      a console because the srcu list is walked in the irq_work.
-      But it would require the global printk_kthread_waiting
-      counter because rcuwait supports only one task and we
-      need to check if any task is waiting.
-
-The advantage of the alternative solution might be
-that srcu_read_lock() would be needed only when there is
-any waiting kthread. I am not sure how important it is
-to reduce the number of srcu read locked contexts.
-
-I do not really have any preferences.
-
-Best Regards,
-Petr
+>
+> I ll wait until tomorrow to send a v3 with this fixed.
+>
+> Thanks for testing,
+> Regards,
+> Pierre
+>
+> >
+> > Cheers,
+> > Conor.
+> >
