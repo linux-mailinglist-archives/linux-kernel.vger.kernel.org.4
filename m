@@ -2,117 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A6E6E019E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 00:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5426C6E01A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 00:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDLWBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 18:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S229924AbjDLWCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 18:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjDLWBp (ORCPT
+        with ESMTP id S229719AbjDLWCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 18:01:45 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A8619B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 15:01:43 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j203-20020a2523d4000000b00b8f21897f2fso7441527ybj.22
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 15:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681336902; x=1683928902;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXF6AhQnwp1n/IhYSnfZVqcASsRtZ9yL6mJXzW8Mi9w=;
-        b=itcYyHsTjH+BWioeMOzHRsDUxYxnEou8ifBndkBXI6TNX5xq/HUkT1AyyhCCB+jlgg
-         3qhGiIFyP5GPmeAb9F/cGYLL0T6ndH4Anu3KiFTJ2zgUv7rYRpICAgBSTO4SmMWQG2dj
-         4lYV/RthfLCJMCgdpXeycR2egix1Qp8q862Y6ehJoE8Zrk7VpCCp7zEkzxGBY8nv1lJY
-         RZQCmJ4imt199cSg173cMIapT9cfLep+3yZW0B5b36RF/xqQ9iUnS4egjGE1JSQeu6db
-         gbh/vWlrrOQUF9lx8wSU9AC22JYq+cM0a/46K9zgrM+CGG4alQS9oe5dHDfglVggicdO
-         Y9Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681336902; x=1683928902;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXF6AhQnwp1n/IhYSnfZVqcASsRtZ9yL6mJXzW8Mi9w=;
-        b=AslnmTJEjUDwfMsALuhAZ3lOY8u/3YDALkdWCiKFGDBL3sJNJZcZ88WCHCvRuRbWt5
-         zN3awq2nYMFDrulh23AeyNKslZqaHhOTTabPInbMzEyerLexZ7ixTaxmGRoCYhPQK446
-         KFIzZRTPGkOqcLTtDnzzsYRgiT3QFKcAIxYTo+cvs1RAKVJFAcnYE9UfT19Qu0rSDkRL
-         8Sp2n7lZQFVJHTlUYt4gMzjZAYuLVVLlf8e4RM3TOJczhMTbqxz5Feb5N2ZXrdbpm2UH
-         x/I0dG000vE1IapyzuTfTtC54uhIDRpO36exA2nalOJxlE5fW1BHtbko4w48BS5hN/yu
-         LKow==
-X-Gm-Message-State: AAQBX9dRYOj1DsxBBZFhl1aGEfP+HksZzqwI+xUVPb97OKjbDOxFgFLg
-        LXn61ydIO8wx+URKPqtOwdSN4BLBknw=
-X-Google-Smtp-Source: AKy350artxVLouCy5UXXqGRd6vaUaGCzjJlbptUimGvT0630mPFw3RBlFaQsm42qDt42zFcnXgHxxlmRTKU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:cc07:0:b0:b8b:fe5f:2eaa with SMTP id
- l7-20020a25cc07000000b00b8bfe5f2eaamr43241ybf.2.1681336902548; Wed, 12 Apr
- 2023 15:01:42 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 15:01:41 -0700
-In-Reply-To: <20230323012737.7vn4ynsbfz7c2ch4@amd.com>
-Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com> <20230119111308.GC2976263@ls.amr.corp.intel.com>
- <Y8lg1G2lRIrI/hld@google.com> <20230119223704.GD2976263@ls.amr.corp.intel.com>
- <Y880FiYF7YCtsw/i@google.com> <20230213130102.two7q3kkcf254uof@amd.com>
- <20230221121135.GA1595130@chaop.bj.intel.com> <20230323012737.7vn4ynsbfz7c2ch4@amd.com>
-Message-ID: <ZDcqRY6UMmpyf/so@google.com>
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        mhocko@suse.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 18:02:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEFF59E1;
+        Wed, 12 Apr 2023 15:02:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B09E62CF0;
+        Wed, 12 Apr 2023 22:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9ADC433D2;
+        Wed, 12 Apr 2023 22:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681336955;
+        bh=DW7xegFaolvGBJ2256BboSBdl8fEqguZRrLmrPW4TmI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hqh8QIOjLdcYMhEeayRe/x4dSNqv0nAJhYcaNWOdwmX09SoP2D1m+KhFUKRubudy0
+         0Nx2GLxTH4kjLmMTB527zhjFDr7pyfwW5C/K6uTT+0b5EeFp64vgTjle9IDGu3Fusq
+         jpBTRS4fpo0qnni2wFEQmvGNJS1Coav6iIWgHikwKvKoFjjH7LgK8LM/TH1dtxrcL4
+         R/QsXR3gHIr2A19pIvhm0fttAKndCcX1D968Q+bxwVDencpDJd0oLv3jRyPJQ58frS
+         53scneCqXonwVY4kNiBJheysykYMzIIcqPp6qdIO7PGTmb2YIYzfDy27GnCyYLNJ8d
+         +XKssHD0RqpCQ==
+Date:   Wed, 12 Apr 2023 17:02:33 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        linux-cxl@vger.kernel.org, rrichter@amd.com,
+        linux-kernel@vger.kernel.org, bhelgaas@google.com,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] PCI/AER: Forward RCH downstream port-detected
+ errors to the CXL.mem dev handler
+Message-ID: <20230412220233.GA83215@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411180302.2678736-6-terry.bowman@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023, Michael Roth wrote:
-> On Tue, Feb 21, 2023 at 08:11:35PM +0800, Chao Peng wrote:
-> > >   *fixup (upm_base_support): KVM: use inclusive ranges for restrictedmem binding/unbinding
-> > >   *fixup (upm_base_support): mm: restrictedmem: use inclusive ranges for issuing invalidations
-> > 
-> > As many kernel APIs treat 'end' as exclusive, I would rather keep using
-> > exclusive 'end' for these APIs(restrictedmem_bind/restrictedmem_unbind
-> > and notifier callbacks) but fix it internally in the restrictedmem. E.g.
-> > all the places where xarray API needs a 'last'/'max' we use 'end - 1'.
-> > See below for the change.
+On Tue, Apr 11, 2023 at 01:03:01PM -0500, Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
 > 
-> Yes I did feel like I was fighting the kernel a bit on that; your
-> suggestion seems like it would be a better fit.
+> In Restricted CXL Device (RCD) mode a CXL device is exposed as an
+> RCiEP, but CXL downstream and upstream ports are not enumerated and
+> not visible in the PCIe hierarchy. Protocol and link errors are sent
+> to an RCEC.
+> 
+> Restricted CXL host (RCH) downstream port-detected errors are signaled
+> as internal AER errors, either Uncorrectable Internal Error (UIE) or
+> Corrected Internal Errors (CIE). The error source is the id of the
+> RCEC. A CXL handler must then inspect the error status in various CXL
+> registers residing in the dport's component register space (CXL RAS
+> cap) or the dport's RCRB (AER ext cap). [1]
+> 
+> Errors showing up in the RCEC's error handler must be handled and
+> connected to the CXL subsystem. Implement this by forwarding the error
+> to all CXL devices below the RCEC. Since the entire CXL device is
+> controlled only using PCIe Configuration Space of device 0, Function
+> 0,
 
-Comically belated +1, XArray is the odd one here.
+Capitalize "device" and "Function" the same way (also appears in
+comment below).
+
+> only pass it there [2]. These devices have the Memory Device class
+> code set (PCI_CLASS_MEMORY_CXL, 502h) and the existing cxl_pci driver
+> can implement the handler. In addition to errors directed to the CXL
+> endpoint device, the handler must also inspect the CXL downstream
+> port's CXL RAS and PCIe AER external capabilities that is connected to
+
+"AER external capabilities" --  is that referring to the "AER
+*Extended* capability"?  If so, we usually don't bother including the
+"extended" part because it's usually not relevant.  But if you intended
+"external", I don't know what it means.
+
+> the device.
+> 
+> Since CXL downstream port errors are signaled using internal errors,
+> the handler requires those errors to be unmasked. This is subject of a
+> follow-on patch.
+> 
+> The reason for choosing this implementation is that a CXL RCEC device
+> is bound to the AER port driver, but the driver does not allow it to
+> register a custom specific handler to support CXL. Connecting the RCEC
+> hard-wired with a CXL handler does not work, as the CXL subsystem
+> might not be present all the time. The alternative to add an
+> implementation to the portdrv to allow the registration of a custom
+> RCEC error handler isn't worth doing it as CXL would be its only user.
+> Instead, just check for an CXL RCEC and pass it down to the connected
+> CXL device's error handler. With this approach the code can entirely
+> be implemented in the PCIe AER driver and is independent of the CXL
+> subsystem. The CXL driver only provides the handler.
+
+Can you make this more concrete with an example topology so we can
+work through how this all works?  Correct me when I go off the rails
+here:
+
+The current code uses pcie_walk_rcec() in this path, which basically
+searches below a Root Port or RCEC for devices that have an AER error
+status bit set, add them to the e_info[] list, and call
+handle_error_source() for each one:
+
+  aer_isr_one_error
+    # get e_src from aer_fifo
+    find_source_device(e_src)
+      pcie_walk_rcec(find_device_iter)
+        find_device_iter
+          is_error_source
+            # read PCI_ERR_COR_STATUS or PCI_ERR_UNCOR_STATUS
+          if (error-source)
+            add_error_device
+              # add device to e_info[] list
+    # now call handle_error_source for everything in e_info[]
+    aer_process_err_devices
+      for (i = 0; i < e_info->err_dev_num; i++)
+        handle_error_source
+
+IIUC, this patch basically says that an RCEC should have an AER error
+status bit (UIE or CIE) set, but the devices "below" the RCEC will
+not, so they won't get added to e_info[].
+
+So we insert cxl_handle_error() in handle_error_source(), where it
+gets called for the RCEC, and then it uses pcie_walk_rcec() again to
+forcibly call handle_error_source() for *every* device "below" the
+RCEC (even though they don't have AER error status bits set).
+
+Then handle_error_source() ultimately calls the CXL driver err_handler
+entry points (.cor_error_detected(), .error_detected(), etc), which
+can look at the CXL-specific error status in the CXL RAS or RCRB or
+whatever.
+
+So this basically looks like a workaround for the fact that the AER
+code only calls handle_error_source() when it finds AER error status,
+and CXL doesn't *set* that AER error status.  There's not that much
+code here, but it seems like a quite a bit of complexity in an area
+that is already pretty complicated.
+
+Here's another idea: the ACPI GHES code (ghes_handle_aer()) basically
+receives a packet of error status from firmware and queues it for
+recovery via pcie_do_recovery().  What if you had a CXL module that
+knew how to look for the CXL error status, package it up similarly,
+and queue it via aer_recover_queue()?
+
+> [1] CXL 3.0 spec, 12.2.1.1 RCH Downstream Port-detected Errors
+> [2] CXL 3.0 spec, 8.1.3 PCIe DVSEC for CXL Devices
+> 
+> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Cc: "Oliver O'Halloran" <oohall@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-pci@vger.kernel.org
+> ---
+>  drivers/pci/pcie/Kconfig |  8 ++++++
+>  drivers/pci/pcie/aer.c   | 61 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 69 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/Kconfig b/drivers/pci/pcie/Kconfig
+> index 228652a59f27..b0dbd864d3a3 100644
+> --- a/drivers/pci/pcie/Kconfig
+> +++ b/drivers/pci/pcie/Kconfig
+> @@ -49,6 +49,14 @@ config PCIEAER_INJECT
+>  	  gotten from:
+>  	     https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
+>  
+> +config PCIEAER_CXL
+> +	bool "PCI Express CXL RAS support"
+> +	default y
+> +	depends on PCIEAER && CXL_PCI
+> +	help
+> +	  This enables CXL error handling for Restricted CXL Hosts
+> +	  (RCHs).
+> +
+>  #
+>  # PCI Express ECRC
+>  #
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 7a25b62d9e01..171a08fd8ebd 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -946,6 +946,65 @@ static bool find_source_device(struct pci_dev *parent,
+>  	return true;
+>  }
+>  
+> +#ifdef CONFIG_PCIEAER_CXL
+> +
+> +static bool is_cxl_mem_dev(struct pci_dev *dev)
+> +{
+> +	/*
+> +	 * A CXL device is controlled only using PCIe Configuration
+> +	 * Space of device 0, Function 0.
+> +	 */
+> +	if (dev->devfn != PCI_DEVFN(0, 0))
+> +		return false;
+> +
+> +	/* Right now there is only a CXL.mem driver */
+> +	if ((dev->class >> 8) != PCI_CLASS_MEMORY_CXL)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +static bool is_internal_error(struct aer_err_info *info)
+> +{
+> +	if (info->severity == AER_CORRECTABLE)
+> +		return info->status & PCI_ERR_COR_INTERNAL;
+> +
+> +	return info->status & PCI_ERR_UNC_INTN;
+> +}
+> +
+> +static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info);
+> +
+> +static int cxl_handle_error_iter(struct pci_dev *dev, void *data)
+> +{
+> +	struct aer_err_info *e_info = (struct aer_err_info *)data;
+> +
+> +	if (!is_cxl_mem_dev(dev))
+> +		return 0;
+> +
+> +	/* pci_dev_put() in handle_error_source() */
+> +	dev = pci_dev_get(dev);
+> +	if (dev)
+> +		handle_error_source(dev, e_info);
+> +
+> +	return 0;
+> +}
+> +
+> +static void cxl_handle_error(struct pci_dev *dev, struct aer_err_info *info)
+> +{
+> +	/*
+> +	 * CXL downstream port errors are signaled as RCEC internal
+> +	 * errors. Forward them to all CXL devices below the RCEC.
+> +	 */
+> +	if (pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC &&
+> +	    is_internal_error(info))
+> +		pcie_walk_rcec(dev, cxl_handle_error_iter, info);
+> +}
+> +
+> +#else
+> +static inline void cxl_handle_error(struct pci_dev *dev,
+> +				    struct aer_err_info *info) { }
+> +#endif
+> +
+>  /**
+>   * handle_error_source - handle logging error into an event log
+>   * @dev: pointer to pci_dev data structure of error source device
+> @@ -957,6 +1016,8 @@ static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info)
+>  {
+>  	int aer = dev->aer_cap;
+>  
+> +	cxl_handle_error(dev, info);
+> +
+>  	if (info->severity == AER_CORRECTABLE) {
+>  		/*
+>  		 * Correctable error does not need software intervention.
+> -- 
+> 2.34.1
+> 
