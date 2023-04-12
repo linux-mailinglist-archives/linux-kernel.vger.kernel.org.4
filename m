@@ -2,145 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFB16DF526
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2C6DF52D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjDLM0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S230098AbjDLM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjDLM0e (ORCPT
+        with ESMTP id S230141AbjDLM0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:26:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01526B8;
-        Wed, 12 Apr 2023 05:26:29 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id o1so14492521lfc.2;
-        Wed, 12 Apr 2023 05:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681302388;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6Y8SzNN5mNDbUKXbv/hNMw3cqHQa6RWiGGetlO0vZAE=;
-        b=pY14FIRGL13fp0Yzw9a0vHJbqBq/ju2gGL7K57ycDWmv7h1jnFb5pOwCSD3cB4BzsR
-         apNA5e72eDHkXwlFAjt7C8K1kiHY005ticcR1I0hk9xLg/BuCvNYxgr1j8CdtYvMUeEy
-         kczSw0q6C3DfObBhjIxlUXatdxhQVRqzaSWus8/FapfzCmcvkqfuKq3SMusZfApH9IS4
-         NnPFnuHgewo8D94Q4hCWRBe8f5gKB2fIMPO5nuWbFnPwuAkSCWJIN5v1vDEIm2itq1+n
-         /blvFkQ5AlHFMq2phtwcJDYu4Z24v9lf1l2sIjXJxvwU+Oguerq5Yt8ImWIofj0cbLmc
-         2ryw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681302388;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Y8SzNN5mNDbUKXbv/hNMw3cqHQa6RWiGGetlO0vZAE=;
-        b=M3mc5G48hhINb4YQGXZ8ecwjoez98YdaaRMAl7xQvywOdxvoWepVUNP+ziupaVc0RR
-         omBDjl80KMaXCUlYm37a+N+XhSX95Q7+4qt9C+YvSFqE/PR44JwusgebeEFX811Tr2TO
-         VPdrpDvcAwT2dMUeEScijkFULuZZksUzF48K87XwSef08atnu2tQ/0kRHVa5TfioLoGa
-         q9BsJxdNFfJtLHWFhLN5UTv+ePjC3JAs1P0eIC95PdBhOK5rDYtBPOEih+zTLtbjga/d
-         znIu2xtUpZS3QwtF8Q1hIx8LEFdpacFh79Y+p4P3H1fG845laIvIPQ7oV3VrRgsgXgfU
-         AYlw==
-X-Gm-Message-State: AAQBX9fIqrOJiAg7OVt7WFgzKEAAyRRF4P+p2efAOdostv8uFU+YDvKV
-        n1lbdVxp6ZEfwldLjIKlDJnmHN7b2IA=
-X-Google-Smtp-Source: AKy350ZTc0CEBb8ibbY1LpjpBJIAw5pqqxdbi5V14jj1NpSmg6wAjZ54W8pJ2MMnFlZ6aWFYHUiiyA==
-X-Received: by 2002:a05:6512:3905:b0:4dc:807a:d144 with SMTP id a5-20020a056512390500b004dc807ad144mr3735161lfu.39.1681302388010;
-        Wed, 12 Apr 2023 05:26:28 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id p22-20020a19f016000000b004ec834cc59fsm1945032lfc.267.2023.04.12.05.26.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 05:26:27 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 15:26:15 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] iio: Fix integration time units for iio-gts
-Message-ID: <cover.1681301472.git.mazziesaccount@gmail.com>
+        Wed, 12 Apr 2023 08:26:43 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24536188;
+        Wed, 12 Apr 2023 05:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qkNd91mc0wlb2VPKu+SyH5ISGGmmbOrNHWSQupS56iM=; b=WZCWrWYbQ4ZSJIOzFEnG7+lWwj
+        bRqu/CHjEZ+F/0Z+DoAGQMMjSa6r9/P89eQedGa59zn2475FPvmVhcShraAtW6t0DMJ3ujRkz7nbD
+        BHmb95TGPbCEJ8cDCQhzBNNB8WUs8bxlp06GtpvPAcikO4aDADD8o63uoIM1o5cMQQZI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pmZYf-00A5OU-1G; Wed, 12 Apr 2023 14:26:41 +0200
+Date:   Wed, 12 Apr 2023 14:26:41 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     INAGAKI Hiroshi <musashino.open@gmail.com>
+Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        sebastian.hesselbarth@gmail.com, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2
+ appliance
+Message-ID: <b9cb92ea-6a11-4299-a963-b9674faa4011@lunn.ch>
+References: <20230223132502.2045-1-musashino.open@gmail.com>
+ <20230223132502.2045-2-musashino.open@gmail.com>
+ <Y/d7gjqQCKKXMHqj@lunn.ch>
+ <7d4a218d-8b8a-5a1d-eff8-e154bfde69be@gmail.com>
+ <87jzyn3dv9.fsf@BL-laptop>
+ <64b5504d-c81d-f77e-da67-c6d9e76aedd6@gmail.com>
+ <b153523b-45cf-4e2e-8d62-de15b01a158d@lunn.ch>
+ <231f9093-968b-e008-f2ff-899d8b24459c@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VB6YwPETZFQ4go9u"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <231f9093-968b-e008-f2ff-899d8b24459c@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 02:21:27PM +0900, INAGAKI Hiroshi wrote:
+> Hello Andrew Lunn,
+> 
+> thank you for your guidance, I'll do it.
 
---VB6YwPETZFQ4go9u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You probably want to talk to Tony Dinh <mibodhi@gmail.com>.
 
-The newly added iio-gts-helper (gain time scale helper) errorneously
-reports available integration times as micro seconds. The same mistake
-is in newly added BU27034 light sensor driver. Fix these by adding new
-IIO_VAL type, IIO_VAL_INT_MICRO - which can be used for micro <unit>
-values where the integer part is zero.
+https://lore.kernel.org/linux-arm-kernel/20230412025737.20280-2-mibodhi@gmail.com/T/
 
-NOTE:
-I did not have the time to test the gts-helpers with integration times
-which are greater than 1 second. Currently there is no other in-tree users
-besides the bu27034, which does always use integration times smaller
-than 1 second. When greater than 1 second times are needed, this needs
-to be revised. (Or, when the devm_* interface kunit test support gets
-added). Right now this should be a quick fix to integration time
-handling before the bug manifests itself in the user-space).
-
-I am planning to test (and re-work if needed) the gts-helpers available
-integration time list for > 1Sec times - but I most probably don't have
-the time for that during this or next week. (Don't know about the
-weekend though - but probably not.)
-
---
-
-Matti Vaittinen (3):
-  iio: core: add IIO_VAL_INT_MICRO
-  iio: gts: fix units of available integration times
-  iio: bu27034: Fix integration time units
-
- drivers/iio/industrialio-core.c       | 4 ++++
- drivers/iio/industrialio-gts-helper.c | 2 +-
- drivers/iio/light/rohm-bu27034.c      | 7 +++++--
- include/linux/iio/types.h             | 1 +
- 4 files changed, 11 insertions(+), 3 deletions(-)
-
-
-base-commit: c86b0e73f0bebbb0245ef2bac4cf269d61ff828c
---=20
-2.39.2
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---VB6YwPETZFQ4go9u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQ2oy4ACgkQeFA3/03a
-ocU0OQf/VGWbJ030HpBqIOqIku7QspaMH1CCuQrqcMR5ax4aqCCRJQIx1sQC0oAd
-UKjq9JxdSRx5z51k6lx90llOPb8F43jN7RPnegO0tr9A3vCb32VPOq5g5Mi4Prr+
-IgKXfkpggoGDiDdYpeXbFGxT9S3kU+BezBxGT8dMQbJZVRneyPeF37rX266aIE0p
-ABXga939QRTRjvIkWI7VdFpCbrmP1yVIWdD53y03xMov+BgDgdb8Q8yIrzhUD3Aa
-sVqLagZIf/3ssoZwW7i6N1DV2sH9A8SDUBiiL7d/Cv2xcBQuuppZTnwzSE+UvEbj
-JbdV+OZiiRU+aUEARIqVbxs6X2+lCg==
-=sSAi
------END PGP SIGNATURE-----
-
---VB6YwPETZFQ4go9u--
+    Andrew
