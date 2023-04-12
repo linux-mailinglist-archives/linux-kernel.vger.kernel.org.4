@@ -2,134 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A286DF8E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BA76DF8E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjDLOu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S231645AbjDLOuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDLOu1 (ORCPT
+        with ESMTP id S231592AbjDLOuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:50:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09B523C39;
-        Wed, 12 Apr 2023 07:50:26 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.246.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9DAC221779BE;
-        Wed, 12 Apr 2023 07:50:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9DAC221779BE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681311025;
-        bh=a2g85I/zkHv3WQbT0/vKcSSQ7JahFwxJtyq1yZd7bgc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BNkPDiKCL7z3QB+MvMHPzZboIzRe+XN/3O+Gr4IpvKSwjDzp1T84ZfUcv/HvUfNXs
-         izKXgALT10encUMNTX2ikNoB0uJb4Jc1nPtTjEb3foAusUhcKYFgJUtYSwLWQdX1bY
-         icwwW3djsWFqQygVX3X/GL5JPiBK8EjhT4gx8qfA=
-Message-ID: <a7e45ab5-c583-9077-5747-9a3d3b7274e7@linux.microsoft.com>
-Date:   Wed, 12 Apr 2023 09:50:23 -0500
+        Wed, 12 Apr 2023 10:50:44 -0400
+Received: from mail.antaris-organics.com (mail.antaris-organics.com [91.227.220.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097C16A71;
+        Wed, 12 Apr 2023 07:50:40 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 16:50:38 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mareichelt.com;
+        s=202107; t=1681311039;
+        bh=avSKf7aMwZF7G9TDqOf0hROwIlS+0n7ngWulIW1NFBo=;
+        h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To:Cc:Cc:content-type:content-type:date:date:
+         From:from:in-reply-to:in-reply-to:message-id:mime-version:
+         references:reply-to:Sender:Subject:Subject:To:To;
+        b=L5ywQ4V2F4t05SbxxVO04uzQ5D5NysqFfQLDgydosa6h+bFN9+4aobKOMcX7lz1R7
+         ajlgW4qrFrobGW5G4gcjOlInyxRHrL4gHhacoMYZV5kn88uXm2yQAX+ktXZ56DvaWK
+         Gw3wWgxc/I3b8jMtn3KZJSkkinWYWBKjpkofrpIZw/V+aIlpeInYSw0xGsd6/uLHfx
+         OfMbBWKqzhVY/AGWUCcPTl3YjteEXceliELjMdTvcR9JwhHxkmjxQv0MPntNKU4gRx
+         rwJL+rBdm7kpsANsXGol7nkJ6Z9TnEZtq4kSg2TuXlw+UmSL8sjOJBoY3YY31THca1
+         DcMjqdF69VTgw==
+From:   Markus Reichelt <lkt+2023@mareichelt.com>
+To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
+Message-ID: <20230412145038.GA3871@pc21.mareichelt.com>
+Mail-Followup-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230412082838.125271466@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
-        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
- <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
- <ZDVft9kysWMfTiZW@FVFF77S0Q05N> <20230412041752.i4raswvrnacnjjgy@treble>
- <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
- <20230412050106.7v4s3lalg43i6ciw@treble>
-Content-Language: en-US
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <20230412050106.7v4s3lalg43i6ciw@treble>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412082838.125271466@linuxfoundation.org>
+Organization: still stuck in reorganization mode
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-
-On 4/12/23 00:01, Josh Poimboeuf wrote:
-> On Tue, Apr 11, 2023 at 11:48:21PM -0500, Madhavan T. Venkataraman wrote:
->>
->>
->> On 4/11/23 23:17, Josh Poimboeuf wrote:
->>> On Tue, Apr 11, 2023 at 02:25:11PM +0100, Mark Rutland wrote:
->>>>> By your own argument, we cannot rely on the compiler as compiler implementations,
->>>>> optimization strategies, etc can change in ways that are incompatible with any
->>>>> livepatch implementation.
->>>>
->>>> That's not quite my argument.
->>>>
->>>> My argument is that if we assume some set of properties that compiler folk
->>>> never agreed to (and were never made aware of), then compiler folk are well
->>>> within their rights to change the compiler such that it doesn't provide those
->>>> properties, and it's very likely that such expectation will be broken. We've
->>>> seen that happen before (e.g. with jump tables).
->>>>
->>>> Consequently I think we should be working with compiler folk to agree upon some
->>>> solution, where compiler folk will actually try to maintain the properties we
->>>> depend upon (and e.g. they could have tests for). That sort of co-design has
->>>> worked well so far (e.g. with things like kCFI).
->>>>
->>>> Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
->>>
->>> That was the goal of my talk at LPC last year:
->>>
->>>   https://lpc.events/event/16/contributions/1392/
->>>
->>> We discussed having the compiler annotate the tricky bits of control
->>> flow, mainly jump tables and noreturns.  It's still on my TODO list to
->>> prototype that.
->>>
->>> Another alternative which has been suggested in the past by Indu and
->>> others is for objtool to use DWARF/sframe as an input to help guide it
->>> through the tricky bits.
->>>
->>
->> I read through the SFrame spec file briefly. It looks like I can easily adapt my
->> version 1 of the livepatch patchset which was based on DWARF to SFrame. If the compiler
->> folks agree to properly support and maintain SFrame, then I could send the next version
->> of the patchset based on SFrame.
->>
->> But I kinda need a clear path forward before I implement anything. I request the arm64
->> folks to comment on the above approach. Would it be useful to initiate an email discussion
->> with the compiler folks on what they plan to do to support SFrame? Or, should this all
->> happen face to face in some forum like LPC?
+> This is the start of the stable review cycle for the 6.2.11 release.
+> There are 173 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> SFrame is basically a simplified version of DWARF unwind, using it as an
-> input to objtool is going to have the same issues I mentioned below (and
-> as was discussed with your v1).
-> 
+> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
+> Anything received after that time might be too late.
 
-Yes. It is a much simplified version of DWARF. So, I am hoping that the compiler folks
-can provide the feature with a reliability guarantee. DWARF is too complex.
+Hi Greg
 
-Madhavan
+6.2.11-rc1
 
->>> That seems more fragile -- as Madhavan mentioned, GCC-generated DWARF
->>> has some reliability issues -- and also defeats some of the benefits of
->>> reverse-engineering in the first place (we've found many compiler bugs
->>> and other surprising kernel-compiler interactions over the years).
->>>
->>> Objtool's understanding of the control flow graph has been really
->>> valuable for reasons beyond live patching (e.g., noinstr and uaccess
->>> validation), it's definitely worth finding a way to make that more
->>> sustainable.
-> 
+compiles, boots and runs here on x86_64
+(AMD Ryzen 5 PRO 4650G, Slackware64-15.0)
+
+Tested-by: Markus Reichelt <lkt+2023@mareichelt.com>
