@@ -2,136 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FF76E0285
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDE66E0289
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjDLX0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 19:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S229881AbjDLX1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDLX03 (ORCPT
+        with ESMTP id S229508AbjDLX07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 19:26:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE259E1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681341988; x=1712877988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i/6MkR1erCX2hwd55lfCdkdYXD42s+7eFWVoKltFV/0=;
-  b=RDkT8fW8Hthbupa3VAHIWdCg0hrHsFMnc948Z2sN6SAZMP/IaqVVBzVT
-   G/ex/8hDatMNTSuL6rEB6dNfuzsf7Ae7QbfKPraj185LAq0Moc2gmk70Y
-   zZ6IP39oRegZ5cCm2oy0Vq+iOe3arwUWmSHadQJ5EAc4AYpz9w/frUgR9
-   EAwS0s8nNyqpMRiUQ/LzSywCj7tkvGHNymgc69Qyc20S8ZhDTh4nJKu62
-   cvxVyntZ29Qu+WYjT96EIYfGZDlbcb6lxW0Bm3kAfDBFeCtEMMBqOFgnn
-   ykR4LkzzuCWMotY0y3mR6/ZTEq/8m69tmV0Xdkr4zidTdVdMtVktMUlql
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="344045585"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="344045585"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 16:26:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="1018918822"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="1018918822"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2023 16:26:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmjr8-000Y8V-0f;
-        Wed, 12 Apr 2023 23:26:26 +0000
-Date:   Thu, 13 Apr 2023 07:25:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: include/linux/seq_file.h:247:9: warning: 'strncpy' output may be
- truncated copying 4 bytes from a string of length 4
-Message-ID: <202304130756.tTyJM1hb-lkp@intel.com>
+        Wed, 12 Apr 2023 19:26:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738585B97;
+        Wed, 12 Apr 2023 16:26:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE6C633DE;
+        Wed, 12 Apr 2023 23:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3801C433D2;
+        Wed, 12 Apr 2023 23:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681342017;
+        bh=Xw+lNaA+g/8MJoyIynxSpoRwkCeN5fHc84TR4pi49jw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iFoYwmtFp8yRSC3VWaYKQVWW4b0dRA+RUSWAzfPPMMXVqDeH9JNAvKfJwIDvFZZYl
+         6SlcxaOT40siCjRVtw/xrEfyOslnsnVSe0uY2JGL8NJcM3R7AupSVmzOmrKS4ziOeh
+         KbuzsQYc5rcyWG58nZd3nwschZWhZroltMPeiWrfdHAZatNheV/YQL5GNGWpJdyH9L
+         MOHS9tAzFkvJSp3+YY0L4EBR7pwQRAUZQi9gS9Dgvxg+zXdRStmjNdlDQ3PTSEkk7M
+         aJ7fqmjIqhqM6/jbP/RiOL8nTst3nUULMnxYsZityB3PHRoIcKDcikYR8q6FsYd/qt
+         TRFJPRQue+zNQ==
+Date:   Wed, 12 Apr 2023 16:26:54 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 02/11] init: Mark start_kernel() __noreturn
+Message-ID: <20230412232654.vggdl3g5nds64vdd@treble>
+References: <cover.1680912057.git.jpoimboe@kernel.org>
+ <cb5dab6038dfe5156f5d68424cf372f7eed1b934.1680912057.git.jpoimboe@kernel.org>
+ <ZDcUvWuqv2VevITe@google.com>
+ <20230412215755.bz3nzldqhhc4wjds@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230412215755.bz3nzldqhhc4wjds@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilya,
+On Wed, Apr 12, 2023 at 02:57:57PM -0700, Josh Poimboeuf wrote:
+> > It looks like perhaps the link to
+> > https://lore.kernel.org/all/202302161142.K3ziREaj-lkp@intel.com/
+> > on 2/11 was 0day testing the arch-cpu-idle-dead-noreturn branch of your
+> > kernel tree
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/log/?h=arch-cpu-idle-dead-noreturn
+> > , which had 1/11 in it, IIUC?  Perhaps this link should go on 1/11
+> > rather than 2/11?
+> 
+> Good catch, patch 1 does introduce the warning.  I think I'll just
+> squash patches 1 and 2 so as not to break bisection.
+> 
+> > Looking back at 1/11, 3/11, 8/11 I noticed not all patches have links to 0day
+> > reports.  Are you able to flesh out more info how/what/when such objtool
+> > warnings are observed?  Are the warnings ever results of patches earlier
+> > in the series?
+> 
+> Hopefully not, it's best to not introduce warnings even temporarily.  I
+> was doing a lot of build testing at the time with various branches, so
+> it's possible.  I'll see if I can figure out how I triggered those
+> warnings and document that in the commit logs if possible.
 
-FYI, the error/warning still remains.
+On second thought I won't squash, keeping them separate is useful for
+both patches 1 & 2 and patches 5-7.  The patch order goes up the call
+stack, i.e. fix callees before callers.  The opposite order would
+trigger actual compiler warnings rather than measly objtool warnings :-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0bcc4025550403ae28d2984bddacafbca0a2f112
-commit: e37b3dd063a1a68e28a7cfaf77c84c472112e330 s390: enable KCSAN
-date:   1 year, 8 months ago
-config: s390-randconfig-r036-20230413 (https://download.01.org/0day-ci/archive/20230413/202304130756.tTyJM1hb-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e37b3dd063a1a68e28a7cfaf77c84c472112e330
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e37b3dd063a1a68e28a7cfaf77c84c472112e330
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/ocfs2/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130756.tTyJM1hb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/seq_file_net.h:5,
-                    from include/net/net_namespace.h:179,
-                    from include/linux/inet.h:42,
-                    from fs/ocfs2/super.c:21:
-   fs/ocfs2/super.c: In function 'ocfs2_show_options':
->> include/linux/seq_file.h:247:9: warning: 'strncpy' output may be truncated copying 4 bytes from a string of length 4 [-Wstringop-truncation]
-     247 |         strncpy(val_buf, value, length);                \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ocfs2/super.c:1539:17: note: in expansion of macro 'seq_show_option_n'
-    1539 |                 seq_show_option_n(s, "cluster_stack", osb->osb_cluster_stack,
-         |                 ^~~~~~~~~~~~~~~~~
-
-
-vim +/strncpy +247 include/linux/seq_file.h
-
-a068acf2ee7769 Kees Cook 2015-09-04  233  
-a068acf2ee7769 Kees Cook 2015-09-04  234  /**
-a068acf2ee7769 Kees Cook 2015-09-04  235   * seq_show_option_n - display mount options with appropriate escapes
-a068acf2ee7769 Kees Cook 2015-09-04  236   *		       where @value must be a specific length.
-a068acf2ee7769 Kees Cook 2015-09-04  237   * @m: the seq_file handle
-a068acf2ee7769 Kees Cook 2015-09-04  238   * @name: the mount option name
-a068acf2ee7769 Kees Cook 2015-09-04  239   * @value: the mount option name's value, cannot be NULL
-a068acf2ee7769 Kees Cook 2015-09-04  240   * @length: the length of @value to display
-a068acf2ee7769 Kees Cook 2015-09-04  241   *
-a068acf2ee7769 Kees Cook 2015-09-04  242   * This is a macro since this uses "length" to define the size of the
-a068acf2ee7769 Kees Cook 2015-09-04  243   * stack buffer.
-a068acf2ee7769 Kees Cook 2015-09-04  244   */
-a068acf2ee7769 Kees Cook 2015-09-04  245  #define seq_show_option_n(m, name, value, length) {	\
-a068acf2ee7769 Kees Cook 2015-09-04  246  	char val_buf[length + 1];			\
-a068acf2ee7769 Kees Cook 2015-09-04 @247  	strncpy(val_buf, value, length);		\
-a068acf2ee7769 Kees Cook 2015-09-04  248  	val_buf[length] = '\0';				\
-a068acf2ee7769 Kees Cook 2015-09-04  249  	seq_show_option(m, name, val_buf);		\
-a068acf2ee7769 Kees Cook 2015-09-04  250  }
-a068acf2ee7769 Kees Cook 2015-09-04  251  
-
-:::::: The code at line 247 was first introduced by commit
-:::::: a068acf2ee77693e0bf39d6e07139ba704f461c3 fs: create and use seq_show_option for escaping
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+I agree some of the commit logs are indeed confusing and sometimes even
+wrong.  I'll clarify the justifications, and remove references to build
+bot warnings if they apply to previous patches in the set.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Josh
