@@ -2,214 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0C36DFF2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CD16DFF11
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjDLTuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        id S230110AbjDLTt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjDLTuS (ORCPT
+        with ESMTP id S229819AbjDLTto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:50:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7A659B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681328945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qPcx+fVxIdrMpmOK4dtt6MA0SYsxugdtxPcrLhiVDvU=;
-        b=DbwAtRuCgU/g+pXDgQIOodQMrbgZskOOA12nq4R6T5l3ypzbcH+m5AJhz4qHjT53A6q4NR
-        jPefFVtgHhw8XZG6V20vdELpte1YqsDP+wF57EmfWTBe7HONltMFlm/1YPiGe1WmXF3U97
-        ZtqRNf80ggm5653J9I/7M9QGRJ/sbQg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-1ukrPTvZPISiDkjgGrHT0w-1; Wed, 12 Apr 2023 15:49:03 -0400
-X-MC-Unique: 1ukrPTvZPISiDkjgGrHT0w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F0299185A794;
-        Wed, 12 Apr 2023 19:49:01 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 84FD0C15BB8;
-        Wed, 12 Apr 2023 19:49:01 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id B33C9307372E8;
-        Wed, 12 Apr 2023 21:49:00 +0200 (CEST)
-Subject: [PATCH bpf V10 6/6] selftests/bpf: Adjust bpf_xdp_metadata_rx_hash
- for new arg
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
-        leon@kernel.org, linux-rdma@vger.kernel.org
-Date:   Wed, 12 Apr 2023 21:49:00 +0200
-Message-ID: <168132894068.340624.8914711185697163690.stgit@firesoul>
-In-Reply-To: <168132888942.340624.2449617439220153267.stgit@firesoul>
-References: <168132888942.340624.2449617439220153267.stgit@firesoul>
-User-Agent: StGit/1.4
+        Wed, 12 Apr 2023 15:49:44 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD07AB7;
+        Wed, 12 Apr 2023 12:49:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KdMnlXX8ap9tVJDkJGUOwjLPIl+QeD3pGAqLCKlo6taZcw23wOqed1ejGPZY1c3sDcT53Jfhnxrlq83XdmyOhGnPDKkSdrw9nq26W2qNHsBu9KNw5bZEHQeN03xtik/LyzQoLw3A583VyQSXZqtosj9DA/rPScCs5+wi5hKMbav3G3agcnEGbLaaR1bJpnx0ECcf0+SOimeYyo9rEIDpM78qlizHS84ApG9FjWZjCfKd1iikZemmvGxrIebuCUlbeAZxgfShWQuzyuWbARA7oSqrEnSyGp1qFAXXBkhqNHb8wQwRK7k8QGWemlhaV6WO/cda0jtW4112/WFTufsEdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Jze6VODEdn8Ll9pM/C4zzNUmHbotNqnPcxPU6N5o74=;
+ b=ITGpcjipiVQuWusVfj3kZYSkQjrBmCS8v7O0GJffA+bD7YqDfT0vQUEz0XjOkYROEZi7yJpdyEij3jS3TrOSnSFJeP1hJKH5j9v2ee3EZEJgz2KT7EAma10pl0dHFJYhmlHEWokRcCLFyR9kksC2HPAEk8ga07U9Rtkop7jqknW+2g15DJSyCOUGCLxBH1bPtWQNb0kqoTGiRPKdv1QNrtC1Ui8ce1uv8Iw+IMBTa9t718kltLI3UGTSxLlHfGphKL7o6MjCF8TYP28nNvITPf+b3a/wqP0V527KneYbMUa/xjWkWH6mSL67NIVxS2fXR8z17wt1xiuqYIzqoMBftA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Jze6VODEdn8Ll9pM/C4zzNUmHbotNqnPcxPU6N5o74=;
+ b=44RJfxPHjT0GlB58t+qoJcTC6NF1HvYZZ7RmTUxB4hIn6oKg8XCCL1SvqI4L6YBwGbc+Ft2aAdtrhcju0YElaGvzCCCjtjvlpN29YHGFXGtX/0qa0+7AsmtOgzIp/SnG52KWa6UK/uEzngpnUW/qgLYTW8HKniFKcQ9FeJ71/JM=
+Received: from DM6PR07CA0048.namprd07.prod.outlook.com (2603:10b6:5:74::25) by
+ MN0PR12MB6003.namprd12.prod.outlook.com (2603:10b6:208:37f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
+ 2023 19:49:33 +0000
+Received: from DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:74:cafe::3d) by DM6PR07CA0048.outlook.office365.com
+ (2603:10b6:5:74::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
+ Transport; Wed, 12 Apr 2023 19:49:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT113.mail.protection.outlook.com (10.13.173.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.31 via Frontend Transport; Wed, 12 Apr 2023 19:49:33 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 12 Apr
+ 2023 14:49:32 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Box David E <david.e.box@intel.com>, <jstultz@google.com>,
+        <pavel@ucw.cz>, <svenva@chromium.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <Shyam-sundar.S-k@amd.com>, <rrangel@chromium.org>,
+        Jain Rajat <rajatja@google.com>, <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/4] Add vendor agnostic mechanism to report hardware sleep
+Date:   Wed, 12 Apr 2023 14:49:12 -0500
+Message-ID: <20230412194917.7164-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT113:EE_|MN0PR12MB6003:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51a049b1-9fef-4098-2736-08db3b8f09cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8rQ4ST1g4quhSBCDhgG+/zVe5ttqKnJTN+y/xgdCz9PqB4GgzhwJnRk2wkX1gtD0TpqXm3tOMm6nawYwTvpB8TaVLFGJx1gvur6JROHYgw/C/GCA1sEYLXRZB7wZNatICsdnzgpH3QfzrLQXcdTexp0BhuBlNhq8nk/GG1qaKZTg1LyXtVsYH+QsleR4kbFzVfBsJ65sMCNYjh3ecGdqv+1C8qelHuaQmU17TnkXAS+X7ZoLq/VSG+oHh+QE6B940RC5y6PO5O9PQxqwAQII1t2GPAa1oyVnHlNgU4L7I2yBboF2OhlWa5V+S0UUo7/FcEJKmhpalhhpBZiaSypZnSQdk41zPCqT4j67QZ9dPYgIqDXfINScZySkj8+p7PM1gL3mhsya5gW91RGWJQlwPB5mkwczEnqh4pZ1U5htlks97DC03OISevPNKEID1deitr71OWU5yWouA00+sBHa3DrcynIVtjGJPrOaqKbnfwEIdExSIwHq3s9h59HGeG9oOEJN7M7fROfDnoE+TIJvbJCqqPa5DxuvKZNEeNlSID7ScBtG79V4W6Pg+aSGCossQwJdbWgU6kEisncZggbsF17U3+UcJ+0NMITq/AnTnM9ivXKF8OAJi7E5dWBzFzLe9FAPe5a+/6+myH6d975dc55L2yVAJWqXiiB376yr/SG3QgF1RIUwM+W+tfDIfL5+cb8FnydyWfxP/r4z5OlHPxqPsJsDHyNeowkcOq54y50=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(336012)(426003)(1076003)(26005)(40480700001)(70586007)(70206006)(36756003)(2906002)(6666004)(83380400001)(82310400005)(47076005)(7696005)(2616005)(186003)(16526019)(36860700001)(4326008)(40460700003)(44832011)(110136005)(54906003)(7416002)(86362001)(5660300002)(8676002)(8936002)(81166007)(478600001)(356005)(41300700001)(316002)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 19:49:33.3012
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51a049b1-9fef-4098-2736-08db3b8f09cc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6003
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update BPF selftests to use the new RSS type argument for kfunc
-bpf_xdp_metadata_rx_hash.
+An important part of validating that s0ix worked properly is to check how
+much of a cycle was spent in a hardware sleep state.
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
----
- .../selftests/bpf/prog_tests/xdp_metadata.c        |    2 ++
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   10 +++++-----
- tools/testing/selftests/bpf/progs/xdp_metadata.c   |    6 +++---
- tools/testing/selftests/bpf/progs/xdp_metadata2.c  |    7 ++++---
- tools/testing/selftests/bpf/xdp_hw_metadata.c      |    6 +++++-
- tools/testing/selftests/bpf/xdp_metadata.h         |    4 ++++
- 6 files changed, 23 insertions(+), 12 deletions(-)
+The reporting of hardware sleep is a mix of kernel messages and sysfs
+files that vary from vendor to vendor. Collecting this information
+requires extra information on the kernel command line or fetching from
+debugfs.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index aa4beae99f4f..8c5e98da9ae9 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -273,6 +273,8 @@ static int verify_xsk_metadata(struct xsk *xsk)
- 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
- 		return -1;
- 
-+	ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
-+
- 	xsk_ring_cons__release(&xsk->rx, 1);
- 	refill_rx(xsk, comp_addr);
- 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 0687d11162f6..e1c787815e44 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -18,8 +18,8 @@ __u64 pkts_redir = 0;
- 
- extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
- 					 __u64 *timestamp) __ksym;
--extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
--				    __u32 *hash) __ksym;
-+extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-+				    enum xdp_rss_hash_type *rss_type) __ksym;
- 
- SEC("xdp")
- int rx(struct xdp_md *ctx)
-@@ -80,9 +80,9 @@ int rx(struct xdp_md *ctx)
- 	if (err)
- 		meta->rx_timestamp = 0; /* Used by AF_XDP as not avail signal */
- 
--	err = bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash);
--	if (err)
--		meta->rx_hash = 0; /* Used by AF_XDP as not avail signal */
-+	err = bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
-+	if (err < 0)
-+		meta->rx_hash_err = err; /* Used by AF_XDP as no hash signal */
- 
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-index 77678b034389..d151d406a123 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-@@ -21,8 +21,8 @@ struct {
- 
- extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
- 					 __u64 *timestamp) __ksym;
--extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
--				    __u32 *hash) __ksym;
-+extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-+				    enum xdp_rss_hash_type *rss_type) __ksym;
- 
- SEC("xdp")
- int rx(struct xdp_md *ctx)
-@@ -56,7 +56,7 @@ int rx(struct xdp_md *ctx)
- 	if (timestamp == 0)
- 		meta->rx_timestamp = 1;
- 
--	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash);
-+	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
- 
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata2.c b/tools/testing/selftests/bpf/progs/xdp_metadata2.c
-index cf69d05451c3..85f88d9d7a78 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata2.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata2.c
-@@ -5,17 +5,18 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
--extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
--				    __u32 *hash) __ksym;
-+extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-+				    enum xdp_rss_hash_type *rss_type) __ksym;
- 
- int called;
- 
- SEC("freplace/rx")
- int freplace_rx(struct xdp_md *ctx)
- {
-+	enum xdp_rss_hash_type type = 0;
- 	u32 hash = 0;
- 	/* Call _any_ metadata function to make sure we don't crash. */
--	bpf_xdp_metadata_rx_hash(ctx, &hash);
-+	bpf_xdp_metadata_rx_hash(ctx, &hash, &type);
- 	called++;
- 	return XDP_PASS;
- }
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3b942ef7297b..987cf0db5ebc 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -141,7 +141,11 @@ static void verify_xdp_metadata(void *data)
- 	meta = data - sizeof(*meta);
- 
- 	printf("rx_timestamp: %llu\n", meta->rx_timestamp);
--	printf("rx_hash: %u\n", meta->rx_hash);
-+	if (meta->rx_hash_err < 0)
-+		printf("No rx_hash err=%d\n", meta->rx_hash_err);
-+	else
-+		printf("rx_hash: 0x%X with RSS type:0x%X\n",
-+		       meta->rx_hash, meta->rx_hash_type);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index f6780fbb0a21..0c4624dc6f2f 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -12,4 +12,8 @@
- struct xdp_meta {
- 	__u64 rx_timestamp;
- 	__u32 rx_hash;
-+	union {
-+		__u32 rx_hash_type;
-+		__s32 rx_hash_err;
-+	};
- };
+To make this information more readily accessible introduce a new file in
+suspend_stats that drivers can report into during their resume routine.
 
+Userspace can fetch this information and compare it against the duration
+of the cycle to allow determining residency percentages and flagging
+problems.
+
+Mario Limonciello (4):
+  PM: Add sysfs files to represent time spent in hardware sleep state
+  platform/x86/amd: pmc: Report duration of time in hw sleep state
+  platform/x86/intel/pmc: core: Always capture counters on suspend
+  platform/x86/intel/pmc: core: Report duration of time in HW sleep
+    state
+
+ Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
+ drivers/platform/x86/amd/pmc.c        |  6 +--
+ drivers/platform/x86/intel/pmc/core.c | 16 ++++----
+ drivers/platform/x86/intel/pmc/core.h |  2 -
+ include/linux/suspend.h               |  8 ++++
+ kernel/power/main.c                   | 59 +++++++++++++++++++++------
+ 6 files changed, 95 insertions(+), 25 deletions(-)
+
+
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+-- 
+2.34.1
 
