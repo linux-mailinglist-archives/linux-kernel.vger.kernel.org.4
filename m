@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2B06DEBC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB746DEBD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjDLG11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S229734AbjDLGby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjDLG1Z (ORCPT
+        with ESMTP id S229565AbjDLGbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:27:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F739129;
-        Tue, 11 Apr 2023 23:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681280842; x=1712816842;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0oFXd/j/ZCtmJRDoDRxJJvoLSwqd30a5/biS7X1TG58=;
-  b=gSv0gEmAOCuDh2waI2/8XWbK4KSBaOEnZGGIrgij7sh0H3dSgVH6El2q
-   ev7Iy4YOMbNsfiojj5kUL+JKgI7SPff9kojnI38HgunDJJrNC7FZfM+Q3
-   eEXuleZBUmucG/aBc0Trof8fosszldV0lgnqSKUVj5fqQ0HghLN12NSeq
-   Kp9VsWpPeGmRnhpc3+pufZC/F9bXCpnxP5mtKHPt3sZFmamcEqvXL09xB
-   zOCLDf1H3/FKhZYNFidTPpagNrfrrq0ReIWXBn548DPf5BqFj3V6OzYHe
-   bZrwZALF4+7mEfJ5JyCh0Y3zBJeo1gHdVxMvLJz+2R/tfV/KO8mFZ3JtT
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,338,1673938800"; 
-   d="asc'?scan'208";a="208721680"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 23:27:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 11 Apr 2023 23:27:20 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 11 Apr 2023 23:27:18 -0700
-Date:   Wed, 12 Apr 2023 07:27:03 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Walker Chen <walker.chen@starfivetech.com>
-CC:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v1 5/7] soc: starfive: Use call back to parse device tree
- resources
-Message-ID: <20230412-dwindling-tattoo-220650300f1f@wendy>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
- <20230411064743.273388-6-changhuang.liang@starfivetech.com>
- <eeb7dadb-1cfd-d270-158b-5dd2e5f2bd1a@starfivetech.com>
+        Wed, 12 Apr 2023 02:31:53 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376DA4C24;
+        Tue, 11 Apr 2023 23:31:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681281038; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=My2rJCFnTpnH+GL2v3ym4Pph4sOl8sHD+zJObog45cYOdAxD5Sau/XzTzcrpabz6dQtUIharubH4HHZ2Atptzkv2/cdV4aSNHQjNDznON6oz8X7ems+BcT07CCqbLgvn71/oqqpxIclfQ6iNffA2c10DRXx0MFagSfdue0Swyfc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681281038; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=o2miyoGfbCcRLimBj3L70ONV9oorgx56a71K9dJ05CE=; 
+        b=KITY1A4RVRs0t0PEQZD0UQWplgGdZPwsssWdrAnvK6b+miJYKiAph5ie0giCCpX5H4/JdeTCnZt24mVlVLhW/8kKHJDkPsg19lN5NuJLXTPVh0eY42ZbkSftqYVKaiRdGrSPrB9BUV/BidZGTJIO+7NB8fpIi9Xi1mBZm5Z9vvI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681281038;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=o2miyoGfbCcRLimBj3L70ONV9oorgx56a71K9dJ05CE=;
+        b=EdPisSJMMOUIbAUtQCFrnkidicWtGQqL8APAdPZQ5y2iEfkSSi6cyjdggiNjBI2E
+        LoL6qwYcMfqP5rP99X00KQ0e5M6wyL+XhaB5MVWJxIiJc2KfFHNCsiQQrApLVYyKBrN
+        OrIjXPWOlgcU/TiiGqFXwMhGT+AWr1TFaggrmL3Q=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681281035406493.8289945315429; Tue, 11 Apr 2023 23:30:35 -0700 (PDT)
+Message-ID: <8cdf8c13-0c6a-9e9a-871a-cb738a181b3f@arinc9.com>
+Date:   Wed, 12 Apr 2023 09:30:28 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5FwCN1gjD8flHocD"
-Content-Disposition: inline
-In-Reply-To: <eeb7dadb-1cfd-d270-158b-5dd2e5f2bd1a@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v2 net-next 02/14] net: dsa: mt7530: fix phylink for
+ port 5 and fix port 5 modes
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230407134626.47928-1-arinc.unal@arinc9.com>
+ <20230407134626.47928-3-arinc.unal@arinc9.com>
+ <20230411150056.2uhtoy6iqnt2qopr@skbuf>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230411150056.2uhtoy6iqnt2qopr@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---5FwCN1gjD8flHocD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11.04.2023 18:00, Vladimir Oltean wrote:
+> On Fri, Apr 07, 2023 at 04:46:14PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> There're two code paths for setting up port 5:
+>>
+>> mt7530_setup()
+>> -> mt7530_setup_port5()
+>>
+>> mt753x_phylink_mac_config()
+>> -> mt753x_mac_config()
+>>     -> mt7530_mac_config()
+>>        -> mt7530_setup_port5()
+>>
+>> The first code path is supposed to run when PHY muxing is being used. In
+>> this case, port 5 is somewhat of a hidden port. It won't be defined on the
+>> devicetree so phylink can't be used to manage the port.
+>>
+>> The second code path used to call mt7530_setup_port5() directly under case
+>> 5 on mt7530_phylink_mac_config() before it was moved to mt7530_mac_config()
+>> with 88bdef8be9f6 ("net: dsa: mt7530: Extend device data ready for adding a
+>> new hardware"). mt7530_setup_port5() will never run through this code path
+>> because the current code on mt7530_setup() bypasses phylink for all cases
+>> of port 5.
+>>
+>> Fix this by leaving it to phylink if port 5 is used as a CPU, DSA, or user
+>> port. For the cases of PHY muxing or the port being disabled, call
+>> mt7530_setup_port5() directly from mt7530_setup() without involving
+>> phylink.
+>>
+>> Move setting the interface and P5_DISABLED mode to a more specific
+>> location. They're supposed to be overwritten if PHY muxing is detected.
+>>
+>> Add comments which explain the process.
+>>
+>> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+> 
+> We have a natural language processing engine (AUTOSEL) which
+> automatically picks up as candidates for "stable" those patches which
+> weren't explicitly submitted through the proper process for that (and
+> they contain words like "fix", "bug", "crash", "leak" etc).
+> 
+> Your chosen wording, both in the commit title and message, would most
+> likely trigger that bot, and then you'd have to explain why you chose
+> this language and not something else more descriptive of your change.
+> It would be nice if you could rewrite the commit messages for your
+> entire series to be a bit more succint as to what is the purpose of the
+> change you are making, and don't use the word "fix" when there is no
+> problem to be observed.
 
-On Wed, Apr 12, 2023 at 02:07:52PM +0800, Walker Chen wrote:
->=20
->=20
-> On 2023/4/11 14:47, Changhuang Liang wrote:
-> > Different compatible parse device tree resources work in different ways.
-> >=20
-> > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->=20
-> I don't think it's necessary to submit multiple patches separately for th=
-e same .c file
-> unless it is very necessary. Because the disadvantage of separating multi=
-ple patches=20
-> is that some information lacks completeness and coherence.
+Will do, thanks.
 
-Other than patches 4 & 6, which could be squashed, the breakdown here is
-fine IMO. Doing one thing per patch makes it obvious to the reader
-*what* is happening.
-
-There's just some missing boilerplate in the commit messages across the
-series that the DPHY PMU does not have a reg nor interrupts, and this
-work is being done to support that.
-
-Cheers,
-Conor.
-
---5FwCN1gjD8flHocD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDZPMwAKCRB4tDGHoIJi
-0htHAP9THN3zvMQq0pjNoX3Dm0EMizqv5U1cfly39UetP3sIRQD/SWUkFbuqhbQf
-U2JRE3tzABbWkjTYzBrcssVqkS2c5gA=
-=XK0O
------END PGP SIGNATURE-----
-
---5FwCN1gjD8flHocD--
+Arınç
