@@ -2,111 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682246DEAE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E996DEAE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDLFSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 01:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S229558AbjDLFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 01:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLFSM (ORCPT
+        with ESMTP id S229450AbjDLFT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:18:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592044222;
-        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id l18so9551727wrb.9;
-        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681276690; x=1683868690;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
-        b=ZUkM5oKdb4ookaFWsqWFvBmCxeDBYZLd9D3FiN+0Qi6TRnV/WdccjioIPAL6mpJPVj
-         0qEhyYsF22F3JOqC3cVWagGijDx0dgPoETlo1DSREi1iD/6uL3Hd9waeInofJd7BnjhT
-         ONSfjWVDSDLSLJOxksqouG/urMhIUrp2Ja+UOZ5XxWEEBSd4hPSWP5EOKkc/7ucNLIJf
-         UeuIGdcocv3My7QQenqZulTkxPaybkjUPOKoi2IB0Vfto5kq09sBH2fEHfyTgzvNJAvU
-         Hc6av23QV9yv7Jl/8GcCt1/C6H46kaOsURijs0vMx45xhxJZBAiILjcso9Zyz0XTqhOS
-         LBLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681276690; x=1683868690;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
-        b=W33KBEVN8oddDjBcVOhkOwnPQib+Ce/uohR+WWvfBxtZkB945OokGTSfuHs/VBZ5DG
-         woXtdTXr+Bp5KuzYXN0TXA5opIrq8+MYtp3JFcmRY1e4gfIAGTN+h3h2aZV+FhyBRXVW
-         WtFUjcZ6yfBgzVDO2b2wCpZPxzy/TeF3iJVDzaTnQyoKuZh+sF6JFu0XTfI1Fw2d+P7h
-         UOHxpDWZOlOYS9WVh+7RaxJPz778drGb/OxLfPgb50wA05/f5Tgy40cFI3aEdc674NHa
-         ZmwFmkgDw6BMp9MFL7S5K3RjwR4ira05Tz/UfyI1yfr2ywRjVgeniT0zoJH4+OM1J2y6
-         lJdQ==
-X-Gm-Message-State: AAQBX9fyjZShJ4AME9tWLPQnF854+BE/RDsClbY71wx/xvr5h3Ujn/GS
-        hRMrxZuGBFtLIqSM25xNSTRrkvZRWJjJSQ==
-X-Google-Smtp-Source: AKy350b01aD4wQXPQCnVvryxDWQadGDFF+swBMFZwGRtWEWz7Eh1hiBU4r4t1USDzKLxOWAAvukKKQ==
-X-Received: by 2002:a5d:6804:0:b0:2c8:f78:2772 with SMTP id w4-20020a5d6804000000b002c80f782772mr10177676wru.19.1681276689567;
-        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
-Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id h16-20020a5d5490000000b002c8476dde7asm16113421wrv.114.2023.04.11.22.18.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
-Message-ID: <9d8194bc-34d0-bbe9-825b-2b7635056a10@gmail.com>
-Date:   Wed, 12 Apr 2023 07:18:07 +0200
+        Wed, 12 Apr 2023 01:19:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA334488
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 22:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681276797; x=1712812797;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pkZPUGCNQDRlawo+IsWzUX4zYFOcd2DEA2R4UWwQ2Bc=;
+  b=fr8Yk6cmIhQ93HL5xUJbBkIcSQ/0UdD29aTjoF4pCQpRHipDw1Q0H8QQ
+   b+0H956eF0xkgqR2BloMRBv3zCL6t6nhI1blexXJIeqv4bFzE3MwArEFF
+   SsP3zS6I9m7KuLyoXRbSI6wpiUyHkRHzegVUmN9d+bqZE0iPmT8sps1v6
+   eYdWSHwGJ8toHytp+XRyq7I9fcfBGXaHLqiNpmMBAEV6Gqe/mTVf63ITl
+   gBGwmPyz+q2AFsxXjAm8xmnhNbRaFwzV5jxUaMtSiXACAIFhtbt4LjF8F
+   umCtoFw+rM82WmwQQgz29jiKa+xhE6Ng7TJnBug1AUxjcrHxY+yrCJ23s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346479294"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="346479294"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 22:19:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="682360445"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="682360445"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 Apr 2023 22:19:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmSte-000XJD-37;
+        Wed, 12 Apr 2023 05:19:54 +0000
+Date:   Wed, 12 Apr 2023 13:19:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp] BUILD SUCCESS
+ 26476022a5b2aa1f25bf1a14f5f4b8d89460d3a7
+Message-ID: <64363f4e.CFfkWawHnL3ZUgVm%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix alignment of function
- call params
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230409183549.12683-1-savicaleksa83@gmail.com>
- <c24a071e-b191-4626-8edc-1658a01d80ef@roeck-us.net>
- <5f24cb94-d7f1-f8b0-71f0-2b39a89bb2dc@gmail.com>
- <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
-Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-11 22:19:21 GMT+02:00, Guenter Roeck wrote:
-> On Tue, Apr 11, 2023 at 08:26:32PM +0200, Aleksa Savic wrote:
->> On 2023-04-10 18:53:08 GMT+02:00, Guenter Roeck wrote:
->>>
->>> I am not sure I understand how this would improve readability.
->>> It seems to accomplish the opposite. Sure, I know, checkpatch --strict
->>> complains, but that is still better than unreadable code just to make
->>> checkpatch happy.
->>>
->>> Guenter
->>
->> Both seemed fine to me, the idea was to fix the checkpatch warning.
->> If it's OK for it to complain about this, plus the changes would make it
->> harder to read, please ignore this patch.
->>
-> 
-> checkpatch is useful, but not in situations where following its guidance
-> results in code which is diffficult to read. I run checkpatch --strict when
-> applying patches, so I do notice when it complains. If I want a report
-> to be addressed, I'll say that (such as, for example, when people are
-> overly generous with empty lines). If not, you can assume that I am ok with
-> the report and find it more important to have readable code than being
-> checkpatch-clean.
-> 
-> Guenter
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp
+branch HEAD: 26476022a5b2aa1f25bf1a14f5f4b8d89460d3a7  s390/fcx: Replace zero-length array with flexible-array member
 
-That clears it up, thanks!
+elapsed time: 727m
 
-Aleksa
+configs tested: 120
+configs skipped: 7
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r002-20230409   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r016-20230410   gcc  
+arc                  randconfig-r043-20230409   gcc  
+arc                  randconfig-r043-20230410   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r012-20230409   clang
+arm                  randconfig-r033-20230412   gcc  
+arm                  randconfig-r046-20230409   clang
+arm                  randconfig-r046-20230410   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r001-20230410   clang
+arm64                randconfig-r025-20230412   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r005-20230410   clang
+hexagon              randconfig-r011-20230409   clang
+hexagon              randconfig-r012-20230409   clang
+hexagon              randconfig-r013-20230410   clang
+hexagon              randconfig-r041-20230409   clang
+hexagon              randconfig-r041-20230410   clang
+hexagon              randconfig-r045-20230409   clang
+hexagon              randconfig-r045-20230410   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230410   clang
+i386                 randconfig-a002-20230410   clang
+i386                 randconfig-a003-20230410   clang
+i386                 randconfig-a004-20230410   clang
+i386                 randconfig-a005-20230410   clang
+i386                 randconfig-a006-20230410   clang
+i386                 randconfig-a011-20230410   gcc  
+i386                          randconfig-a011   clang
+i386                 randconfig-a012-20230410   gcc  
+i386                          randconfig-a012   gcc  
+i386                 randconfig-a013-20230410   gcc  
+i386                          randconfig-a013   clang
+i386                 randconfig-a014-20230410   gcc  
+i386                          randconfig-a014   gcc  
+i386                 randconfig-a015-20230410   gcc  
+i386                          randconfig-a015   clang
+i386                 randconfig-a016-20230410   gcc  
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r002-20230410   gcc  
+ia64                 randconfig-r013-20230409   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r034-20230412   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r011-20230410   clang
+mips                 randconfig-r032-20230412   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r024-20230412   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r011-20230409   gcc  
+parisc               randconfig-r011-20230410   gcc  
+parisc               randconfig-r026-20230412   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230409   clang
+powerpc              randconfig-r015-20230410   gcc  
+powerpc              randconfig-r036-20230412   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230409   clang
+riscv                randconfig-r003-20230410   clang
+riscv                randconfig-r004-20230409   clang
+riscv                randconfig-r021-20230412   gcc  
+riscv                randconfig-r031-20230412   clang
+riscv                randconfig-r035-20230412   clang
+riscv                randconfig-r042-20230409   gcc  
+riscv                randconfig-r042-20230410   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230409   gcc  
+s390                 randconfig-r044-20230410   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r004-20230410   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r023-20230412   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64               randconfig-a011-20230410   gcc  
+x86_64               randconfig-a012-20230410   gcc  
+x86_64               randconfig-a013-20230410   gcc  
+x86_64               randconfig-a014-20230410   gcc  
+x86_64               randconfig-a015-20230410   gcc  
+x86_64               randconfig-a016-20230410   gcc  
+x86_64               randconfig-r006-20230410   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r005-20230409   gcc  
+xtensa               randconfig-r014-20230410   gcc  
+xtensa               randconfig-r015-20230409   gcc  
+xtensa               randconfig-r016-20230409   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
