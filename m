@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3236DF870
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB526DF874
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjDLO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S230291AbjDLO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjDLO2R (ORCPT
+        with ESMTP id S230257AbjDLO2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:28:17 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E0B2D46;
-        Wed, 12 Apr 2023 07:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1681309685; i=rwarsow@gmx.de;
-        bh=NoDxyO+RfjMEcHznS/rod18wWdEUQrsMjf1lVtZiC7w=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=Tlo5TToICrdLP1LLyDp+Dy8pPExIHFLb1TzFk9CF0qN0M4l+Z8cObQXMWYqpIaN4U
-         hkJWJ2bs7C7FJ8itz8ssXGvY/0sHa48OD7J1bukGMCKKEt1dIHXx2RfP23DPxm0pHb
-         HtOpS4OO1SrJlUHrRnVMhg3UXeUf9gPX1aXCrgjrh+At8qfZ9XKn/e0ZSg2rdRAfjw
-         mzLLzmatdbGDBsPijGR9egq2SEOfYKLGvnWy+iSiYAL6ZiDI3LIh3ABpnpxyqhiVUv
-         zJLGmdm4iY377ITH1tEtagQHkpqZFPwlZiD0KOJPFpQSX8mGw9pscz2vO0pmetafQu
-         I8zeO6ykjkTqg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.34.104]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mz9Z5-1qYdQk29eF-00wDYv; Wed, 12
- Apr 2023 16:28:05 +0200
-Message-ID: <bff3fc44-d4b7-e1b9-4c7d-7bf478994810@gmx.de>
-Date:   Wed, 12 Apr 2023 16:28:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 12 Apr 2023 10:28:51 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45470192;
+        Wed, 12 Apr 2023 07:28:43 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id y26so9980006qtv.9;
+        Wed, 12 Apr 2023 07:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681309722; x=1683901722;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g3csUU+MZIL4psk3MHBw1EHOXxochpb77aPV46ZLfuc=;
+        b=aI6Q+2c2WaaTUQarPujC9vC4U+H06kMJ1qHxGql7eaQVoNPr4VI6/vTF20Gq0LrCOd
+         JUDyMJIC+/nGqr4gtxOQDYTlG2rqjsjPSXCJYVDyNnU7/visH6dzicAcsw917ORO/PW+
+         B+kYVJaEtQZ45dAnLsOgIl9PZq6Zz8f7E5ziG10GSCSsba7CEp8sJDNhd9m92KhZoJMd
+         +CEN2d4h/EVQRnzpA5ZyXzrN/4q9QwRHGNJXRrCpW0MUpzEmo2oEht0vdZE92tU7+cew
+         0TtCqPXhwtAvPD1w+obFG/+LpXEfiMk9/oSZ3bZaBHgysbET3Mze4e+lQ9YDtaTuv2Bo
+         Kt8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681309722; x=1683901722;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g3csUU+MZIL4psk3MHBw1EHOXxochpb77aPV46ZLfuc=;
+        b=DiKMVrzcMCsauSyS/R4BARQbmdEvArJFT5jQqMHSC1NHcz+iFb/Mu4gbCEnrRnSp4u
+         rOWRfNA3/Uv0I4sifQ5dGpaktwjRlQOqzHbcjOOTEeQh0gDxTUr3EcheVCiXlEyG0ohc
+         MCh6BYUR80A2+Ezjr5/LHAq7pekF4x5402eaFBuygsqFtOOg+muHasvtm2CObjQt46fl
+         5SUfLAp6s2r1X38m8lOwnNwCBYtzvV7kdU0gD8uWxD8FdAmfhIFfiEAqcoe5yNFw7DX1
+         8ZHU4hWQbtSu3u5wtC/QtCE5oG3d4inatbpqaAvXd0WDteLCHlldQIZFTJEA7gjbaA19
+         EVuw==
+X-Gm-Message-State: AAQBX9c9JNhkxfXV3ew46T0qtj5I3OV2EPxBHeI5z/eU/mwVifqXAWAZ
+        FArkv8cqe7ewDT+/l6KTrV0=
+X-Google-Smtp-Source: AKy350Y9tE06l148YDTVFtOEKyW0JshhF+aM8qF7BkYMcr6VkzIdVIBtB5Ltrqx2TDstNnLe4jBZWQ==
+X-Received: by 2002:a05:622a:14e:b0:3e3:3941:d167 with SMTP id v14-20020a05622a014e00b003e33941d167mr29755868qtw.34.1681309722274;
+        Wed, 12 Apr 2023 07:28:42 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id t12-20020a37aa0c000000b007468b183a65sm257126qke.30.2023.04.12.07.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:28:41 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 10:28:41 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+Message-ID: <6436c01979c9b_163b6294b4@willemb.c.googlers.com.notmuch>
+In-Reply-To: <ZDa32u9RNI4NQ7Ko@gmail.com>
+References: <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+ <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+ <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+ <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
+ <64357608c396d_113ebd294ba@willemb.c.googlers.com.notmuch>
+ <19c69021-dce3-1a4a-00eb-920d1f404cfc@kernel.dk>
+ <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
+ <20cb4641-c765-e5ef-41cb-252be7721ce5@kernel.dk>
+ <ZDa32u9RNI4NQ7Ko@gmail.com>
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:TOYcClmMigWqbzZN8z7zEl6jF4IO1plBXGWyyS87wqZIixfF2OJ
- mpKA8fJR6XMiWuHva3e5u7ApMvsP4+OtQ7p/cQe/3xSGk/1jWUHCaZjesvBwND7uJH1z6+2
- r8ZCDZ7zatQqArzj+MmC/3/Oojb5bBzuQJZShJ1bqoM6pdFyunO4NjHScakZovu+Pt5IwnD
- 1YiiRGcZOdrV1eVcpqusw==
-UI-OutboundReport: notjunk:1;M01:P0:9eCE+SpgBPc=;+xeY63a8iDZ6YPxk07xNtoRS9UW
- 1lHoM8QR5pUuP8J80XnALRo75cgk1Qr4Fb4lp0GVCxe3JAT5KRvkmNuXNdnbJBHZY5MT9h+cx
- 3ZpeQxqritv0DqJ1KjrlRA6fjya9hjWCjJZ0jmw04UjgfrkC/+GjvLV2u/qhyI9elyIMOUFch
- 7e6Y95XqGpj3gStIas97GtSgcefO1x1fJ1/nj7vUYgFAhAcid3UaKRq3ZqUmaP7fORW+oK+3Y
- JF3g8xixs5L+HwXAMaGRCf2OOQJpFG9TWa6bWH6Es0jVhInm1DlXSETpNtsFSZ2N3A9Zh0ODF
- i4qk4CtQurvl+XiGkEDuS83pq3SHyz0GItTSCniyTdHG082SYtxSXZfYyVoTjMTXt0gNg+9Oc
- EVF4Ag3B42btKd8RTROjaIIGRIVqHVoclGLYVOIu/DKWGJmnDRdc4L4WXM4FDQanMrZEdSviK
- C2SyVnMRXZy2Ify1BySvPtbV4nOy7bwapXkygcYsQKHiBKSg7n5KPvf8vcaTz0WIKWe7dVkDZ
- uWZ8RnbEA97K8UrDlHiMOk6jhPg3pevLKFh42EsDkk4ZecsuExOxH+eJM6apt3ea+IGqFRwQh
- 5GSpXlYmhYLojR5rtOxn07j0VBuiOHH/Vq5skKNRXCMpJeq80GjicoiqUfObhZKld4KUqttK+
- 5uNOACgoQwreJne9LewU6BvI9jB5h11Xmi7F+2ofWvL7ELTc3h784lpzAtyQw6hFOd5eyn0hS
- qJHFpf8ZhQlwP08Ga9blh8uIt5/KwT84fcKVG84PSVpziDSi3OlmFbn0nbMIA5cK3raF+acJk
- ZZsT24MdzZt2VBcQafa9itiqQ6sF/QZi0jZUTTl6N1KqojHi+o5nykY0tZtDLR4/L07w++inE
- VvInNWUNilAJAVSKuWiAn2+aKHfJA3dMU/vSL2zCybsjjA6kZMEiZEdOEwDNUWLchZc4wAc+d
- P8lbIA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +89,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+Breno Leitao wrote:
+> On Tue, Apr 11, 2023 at 09:28:29AM -0600, Jens Axboe wrote:
+> > On 4/11/23 9:24?AM, Willem de Bruijn wrote:
+> > > Jens Axboe wrote:
+> > >> On 4/11/23 9:00?AM, Willem de Bruijn wrote:
+> > >> But that doesn't work, because sock->ops->ioctl() assumes the arg is
+> > >> memory in userspace. Or do you mean change all of the sock->ops->ioctl()
+> > >> to pass in on-stack memory (or similar) and have it work with a kernel
+> > >> address?
+> > > 
+> > > That was what I suggested indeed.
+> > > 
+> > > It's about as much code change as this patch series. But it avoids
+> > > the code duplication.
+> > 
+> > Breno, want to tackle that as a prep patch first? Should make the
+> > functional changes afterwards much more straightforward, and will allow
+> > support for anything really.
+> 
+> Absolutely. I just want to make sure that I got the proper approach that
+> we agreed here.
+> 
+> Let me explain what I understood taking TCP as an example:
+> 
+> 1) Rename tcp_ioctl() to something as _tcp_ioctl() where the 'arg'
+> argument is now just a kernel memory (located in the stack frame from the
+> callee).
+> 
+> 2) Recreate "tcp_ioctl()" that will basically allocate a 'arg' in the
+> stack and call _tcp_ioctl() passing that 'arg' argument. At the bottom of
+> this (tcp_ioctl() function) function, call `put_user(in_kernel_arg, userspace_arg)
+> 
+> 3) Repeat it for the 20 protocols that implement ioctl:
+> 
+> 	ag  "struct proto .* = {" -A 20 net/ | grep \.ioctl
+> 	net/dccp/ipv6.c 	.ioctl	= dccp_ioctl,
+> 	net/dccp/ipv4.c		.ioctl	= dccp_ioctl,
+> 	net/ieee802154/socket.c .ioctl	= dgram_ioctl,
+> 	net/ipv4/udplite.c	.ioctl	= udp_ioctl,
+> 	net/ipv4/raw.c 		.ioctl	= raw_ioctl,
+> 	net/ipv4/udp.c		.ioctl	= udp_ioctl,
+> 	net/ipv4/tcp_ipv4.c 	.ioctl	= tcp_ioctl,
+> 	net/ipv6/raw.c		.ioctl	= rawv6_ioctl,
+> 	net/ipv6/tcp_ipv6.c	.ioctl	= tcp_ioctl,
+> 	net/ipv6/udp.c	 	.ioctl	= udp_ioctl,
+> 	net/ipv6/udplite.c	.ioctl	= udp_ioctl,
+> 	net/l2tp/l2tp_ip6.c	.ioctl	= l2tp_ioctl,
+> 	net/l2tp/l2tp_ip.c	.ioctl	= l2tp_ioctl,
+> 	net/phonet/datagram.:	.ioctl	= pn_ioctl,
+> 	net/phonet/pep.c	.ioctl	= pep_ioctl,
+> 	net/rds/af_rds.c	.ioctl	=	rds_ioctl,
+> 	net/sctp/socket.c	.ioctl  =	sctp_ioctl,
+> 	net/sctp/socket.c	.ioctl	= sctp_ioctl,
+> 	net/xdp/xsk.c		.ioctl	= sock_no_ioctl,
+> 	net/mptcp/protocol.c	.ioctl	= mptcp_ioctl,
+> 
+> Am I missing something?
 
-6.2.11-rc1
+The suggestion is to convert all to take kernel memory and do the
+put_cmsg in the caller of .ioctl. Rather than create a wrapper for
+each individual instance and add a separate .iouring_cmd for each.
 
-compiles, boots and runs here on Intel x86_64
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+"change all of the sock->ops->ioctl() to pass in on-stack memory
+(or similar) and have it work with a kernel address"
