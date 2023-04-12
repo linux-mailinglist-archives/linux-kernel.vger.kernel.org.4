@@ -2,160 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C56E00BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1786E00BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjDLVWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S229567AbjDLVV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjDLVWj (ORCPT
+        with ESMTP id S229503AbjDLVV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:22:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025921FFB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681334525; i=j.neuschaefer@gmx.net;
-        bh=O8EbCtqxtHYhZl3Wus9zpBDqTyNgSWv3QZ/g5KBbeZI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=OEA1FhescqUfkOmuDqtkrGYkKZCy/DMEnk/LaDmgvBNs6cqpozk4B5wSbdVg4eX+0
-         jA55Hn+8mgTDiLiJxRBXYzrhFkxTydPaae1mBbv9EbLrqTZdeeWYTRdDeA2ysIHdWe
-         T2au7ZXelcTcVcaqof0jmgi2RFJ3ed08v4XSOUmqSy2YPWT6FEYzFJDBE66qLlX55A
-         G8gUPrynRofubUWeiO5vh20659JGdvj+8KHG/VPf2VS6bJ027Hv9i5RSjdo/5QZ4fC
-         Jl1N5WtMV8ONYplNfVOxh77gD05BSzzrBsqyp4ZJf/e7cO1qJFFJOGGgoDoehmWX6a
-         EffFTMVy6YMBQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63RQ-1qShXR3GeW-016N3I; Wed, 12
- Apr 2023 23:22:05 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Nick Terrell <terrelln@fb.com>, Arnd Bergmann <arnd@arndb.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Wed, 12 Apr 2023 17:21:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D784527E;
+        Wed, 12 Apr 2023 14:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681334507; x=1712870507;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=GyeAFMesW4yfiP1KQJb12Kz93hKhnL79EO5fLBqMw1s=;
+  b=BKblMqXIcm454xJtQpeSkkcdAcXQngWboCmQpRtIoCqVDafp9fDPEHC7
+   yZL14n0Je6oWkFi3FkW/2gP9kydzznBbK9VND3olv1cEeAGtA6zq40OOy
+   tiCKOqy3ZIcRhnyhTec3cfBXjU0FyVs1Xbn/Irh8UDDRhaKEmwrFaS9Am
+   xBjODatk8sx/zpXK1JsCiYNJeQAi/lVnegkwfYgO+BmJYdT9fwuYKuhRl
+   YRMvqvJ70ulIYqxRZnPwi8DhPR/dny73v34XR8KK9QlQHPcRBhDRxRGli
+   YxoUMARboHV6rDRzNF5p5FdkKT2mdd/wTC7d4E0X71ZPMefpf+TgsN5Cl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="328140001"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="328140001"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 14:21:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="689059827"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="689059827"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2023 14:21:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 12 Apr 2023 14:21:35 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 12 Apr 2023 14:21:35 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 12 Apr 2023 14:21:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mQSUAY/nDYqNJ/dyNw48DKqGBuZ+6FHj1d91ATDybQeftbhT4g+E8+Zl4PkXdO2SyPTv+IYzcfxQCAbWcOwnpWGsztc3p7ryOJFfpemvRF8izxaRKRD3qJQrzYX03dsSC9Otglg1sW2oebTtYr8DCC5iuUY4jZa133AGJOx1w1GQfkQ+uKBz5CULlPjM9aSDT6XA4JLcVwPRDhgYSKMY4m5qyGy2MyotnifHRysBnBJaKgZ2rVKg2+3BoP3Goq2ORcTBPt9DX5dCOixHBGrwBv8W+O78Gy/WyQXZuxWcPq65xCARx6plaVN3kq+gJjKwasAMcnNF2ElKajV2xqpqRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nxioWff9rXnl41NcfBAqktoh4YSZDGLg13jFJtBMt3A=;
+ b=cSdyA/YJA/jZVxAhNPoMkjHiPb/sIjnLP9i+SZqbO/3wcAlXDbWJ57ZHLxLFxkzs8+ts4329cZ/v7/xF4OTy2bQBkYNH3TXcr07FMfMlCAK+2g0BteYgDfBCxo3K1KVaHRm0leEkr9tmmvxCg7HjxhYafiPpt9pCAMah8W8RyvRuQk4VZye46dzjF+ioQkLlijPh4LAf6ECt8vJ/OlirtD7BnTSwlSiH3iRtrc4ZpGy2MrvuiOOwMr3c+HjEZZPtCwcsP1oHF1gH+7J+9aEF8iLEgVTNIplJnirzN+MhqFUABQ5WN14vfYQEv+ox5iFXeBKha8Xaacl4jHvnvIu2iQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
+ by SJ2PR11MB8322.namprd11.prod.outlook.com (2603:10b6:a03:549::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
+ 2023 21:21:28 +0000
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::6222:859a:41a7:e55b]) by CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::6222:859a:41a7:e55b%2]) with mapi id 15.20.6298.030; Wed, 12 Apr 2023
+ 21:21:28 +0000
+Message-ID: <794f4bb2-ea10-1d9b-96a2-e14df75c81df@intel.com>
+Date:   Wed, 12 Apr 2023 14:21:33 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH net-next 7/8] net: mscc: ocelot: strengthen type of "int
+ i" in ocelot_stats.c
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, <netdev@vger.kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Li <xin3.li@intel.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Paul Bolle <pebolle@tiscali.nl>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 3/3] ARM: compressed: Enable ZSTD compression
-Date:   Wed, 12 Apr 2023 23:21:26 +0200
-Message-Id: <20230412212126.3966502-4-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
-References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Claudiu Manoil" <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230412124737.2243527-1-vladimir.oltean@nxp.com>
+ <20230412124737.2243527-8-vladimir.oltean@nxp.com>
+From:   Jacob Keller <jacob.e.keller@intel.com>
+In-Reply-To: <20230412124737.2243527-8-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0201.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::26) To CO1PR11MB5089.namprd11.prod.outlook.com
+ (2603:10b6:303:9b::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NLKJGLSHU/mKfwCFI6t1irU5z5u/MoO8jr3NJmsYweqgxdI5Qej
- 8HKkQD920FU6M/3UgPqB3iyyeKTUracoZXdCvl6zR9JR8iCBQopsrIkYbHNi829tR8F85qN
- gfcXNwiXoc7xB1PZcoSLxNCks6kZ4E9WWqCJxk/io62ncpopqYU+SGyVLaLVgRb6vXLg/q0
- nlxUZapXHoRUQp5KeUkCg==
-UI-OutboundReport: notjunk:1;M01:P0:7C88/EJwyYk=;EeZbn8oZQQ/XlBkmsNhLXC3DX7O
- R87+ukUz9LEx9YhSUTia1vUhBfnlR+q/60srJ9GvSFs3KRBjshvC2NEXiM+VR6mKcx5zKDJGv
- p08RzsUUX0moiNRGbI4unwoyVbI+tI93CkBjnl8PAGA7QRRK0y6SJWoDU9Z6+BXglJ/sLlvKY
- EaHPhCyVSyMPTxMDDdfcpd8SSksT5Q91jf2+YQBm/c1XYi/M5Lk4HFxw/bARvBqEYaqe8ZOgy
- Pt309QyAELbHcVzb/45JWFFsKWO5Jr8LkhAMDaULrGq+E+PBZskNxU3h4O3fxbC4xcjHHhAGu
- ihSPkV7N88zZL+B6EeNYQYn3s8ayZU8PV9AuCvIWH0pNJEVa9b7CkH66XbkJJDHmhF1Rb0aYP
- zXzk+Q6pSnSiV4mb7x0IAZcNIw6PtbLnkGQ11w0yJEW4PtthEZmL+opLCg2ddmRmZwQ8GYVch
- K1ED8gy3/+lWlpp31ahWDrq/7jZdlcdDYH0pX+IGtAVBVtY3xEqK91270ofa6CJGr9KylJ4zv
- YYTCFR+6ffFOkvpqnw9rEtN0tk65MjseXOK1Cy9CVFA+CLzm9jW1S1rVvSMvuny/W69DYM2gW
- qp/uM7ccNaBPcdpmdrYGo1EOFi+J8OVw+/qf1dJf14uliHL3T2hWP0MWIEvUl4WseV0Nui1/t
- EZ98duNQ5kZCmiLiWc5MnmLIDvIYB7RDHzV9gJHZRXww/BGdI18S0EkE3774F4BTjifZodfgy
- hGN73q3Tku/qeJsvWustKlGnEch6/OkzV54elWHrrYxj8ugoX9nZP+Iy5pE2A8/aMNr8myvCo
- 1Tofwfxw2qg5xMBP24MahPlPk/HgM7JPwsjqNTQyVfCclALIHvIdgmk2TJGxGM6EyZFS6ddXx
- nbe4+8TGXLF4Rax/CoyhO1MswNk+4dp9n2+FcBxMsZ9A/xBlSYdVKYfqy6ITGFrIlc2l2lCJp
- eyu5pQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|SJ2PR11MB8322:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e7df719-99af-4988-eaca-08db3b9be0a6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JpXdxcNyCZb8QpMvbpFC85BT2dZuAo11V4PQJf7y2iXHgWrMJqvwwOOV7Veo5hFbuhOAoYr/momF0YyZIgJEekB4VLka+PjAYniashjyFiSCUXJwFt2VaYutSgP+r8kvJqH2+WdPNGMSzFTZZ9EO6SGxgfV1jclBZNVHgLYsT6HSicOCKJVgz9vQHO8BmrvvIsflXTyHQNKML8RnzV3sK9EpwrwflhL2qDQ1kB/pFziRL4SEJb8RykdKordUcpmwDIw96SQv2L6wKK+uNSxcFh+W1t6xaUvC590GpC97WLB6v8TpC03zSbX0R4TCGjPIzotkFEnZ6j/wGXlVoKyFlBSThvdZadPccAMfxGo4yDoTXHeYuBJU2+QX9mDJTmUJluBbyI2AFtiCHHLhWhzeLFeUqjl13hT5JcoBbmqWsZXvICOd0QsK9wD7MdUUJ/sDjgsg9t6xWbN0+UpAJwkWY8W2tHr0XjnDwiu77ap0nmuOZ875GUBubiDWkteErSxzSH7nhFkSFw5kHQz7dbQClQ+9oA+EsCVbqOeadLE4Vhrf5i7BsQ3ZB+Gl1HJydp8rgZP7KMkdm2bQdRGMcxbIBZBy5SuJofFjxJdnQmKfhJZNVszXRNpeavUAxiClsaLrG/CVDPcboI9s4Q0SXeSV7Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(396003)(366004)(136003)(376002)(451199021)(7416002)(8676002)(8936002)(86362001)(31696002)(41300700001)(31686004)(4744005)(66946007)(82960400001)(38100700002)(2906002)(66556008)(66476007)(4326008)(5660300002)(478600001)(316002)(83380400001)(36756003)(54906003)(6666004)(2616005)(6486002)(186003)(53546011)(6512007)(6506007)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTFyZUZDTThmbGtSLzVuUFNMQUJWVFVFMENEdmRLcHUyTXNrUzRyeHJIMHh1?=
+ =?utf-8?B?Nm4rb1gyN2dHL2ZQMkMzTnoyYit1cWVjY2Z4V251ZTh2VUVkVkJmNFdpaGhm?=
+ =?utf-8?B?clFpYkhLVGJnMXJQZ0Z1aUE1ZENKTjgrWWJpZC9HV3hia1g1cFVYTEFFVXgw?=
+ =?utf-8?B?bWFiWU1Ubm00TlNlUnlDSkdDM29sSGdDVkNHeXl6YkQzTjVuSHVmNHUyK0cv?=
+ =?utf-8?B?NzQ3Q2JnV21tT2dNNFR0MDl1dnpaNUR2cTMyRzRpNGVaQ1pOb2N6MTRVWDd4?=
+ =?utf-8?B?S0tWSTZLUWttOXRDK2p5MXJsZm9CN09uS3VkWkd3RUtPZ0h5TlRjQThnaW1s?=
+ =?utf-8?B?RFltVDlJSmwrcW0rK3htZ050QkRLWXlkbWg3L0tpbHZUOWJBd1IyaHEzVlVX?=
+ =?utf-8?B?LzR5bUt6blEzbXdwSTJXREpmMHBsZlZudWdndytQM0poc0xwMEZkUnRDc2VX?=
+ =?utf-8?B?TWs0T010cHZxbTROemNUR1d2U3NGek1yOEdaNTlrUkhTZUdmaExJaHNNZFN4?=
+ =?utf-8?B?MWlyYk9HQUEwTGxWWCtYZHN4TDZSdk00azNPVEZtWU8xcmJwSFFZKzBNN3V2?=
+ =?utf-8?B?V2Y0emV2bTJyRzRhSCt5Qzdia2NIenJ4TkNsSGIrOWJjRnNydUpiRUYyTWE4?=
+ =?utf-8?B?ZDFTSVEvUWg3aFp5anExNGtJQ3NnUUZYdWdFRVZYNEVNQlM2VnVFVEhhMlpE?=
+ =?utf-8?B?SlpvL1MxbTZMQzUwMmh1RmxTVytuZEJHYmpSYWFQSXFkWTJsdmtkQ1crVVBv?=
+ =?utf-8?B?TEpYNjNCdGs5Mm11eGkxZzcvd2F6b2hMOUQ5NzBZMGhXNktUTmp0eWNMb1FG?=
+ =?utf-8?B?Sy9wRmxHL0pFOGM2cXRpM25FV1lYZ3Y4T3drZU4zOXJ1b25OcWxHckFmUlN1?=
+ =?utf-8?B?UTZ1K3RLNWlkSUNvVVlBUTBkVHExR3dWUHZONnNocW5xMWtlbTVhT2tQRG0z?=
+ =?utf-8?B?cUV4R2hWcldHcGpkc2hxeTdsRkRvNlRpaEpIWERqUWJWdWxZaTNCQmhtaG96?=
+ =?utf-8?B?Q1B0ZGZGRFFJcHlRWW1TaUZWTmdHenBWS3hHbjRheWdNTmt6bVBXYklKcGRu?=
+ =?utf-8?B?b0hTWHZhOUVOd01RMi8zRzUzeFFNcWplL0taaDVsdk1GSnd6V1l2RG9kWDhk?=
+ =?utf-8?B?TkZRRC9mcUJzTit6QzNaN1ErY2g2Z2xWTHFNNWRnYXZsVnZzR2EwMHhTK1FV?=
+ =?utf-8?B?Zy9sTVZaNmU3ZWp5VEdoL1BMS0YwdFhKREs5NndqblFRRmVwcXgxR1czTmdK?=
+ =?utf-8?B?VXJzWUltM1dFNUZOUWIvMmJTNkJFa2NYc3BHbHFMSlFiaXpFQmsxNFRXTXBY?=
+ =?utf-8?B?bVRSOVZUQktJMG9jOHdnVXFYc29lSVJ3T21EOGZERDFsbEFQQXhFeWQ1Z0c4?=
+ =?utf-8?B?aU9pV1NVZTNGSnBPaGhkT05WWGJwNTh3UWxBTFRuQ09RZStuNC8vUFREd0FD?=
+ =?utf-8?B?VUNqcmJRbm1Sb1dlMmk5MERmL3N6am9EUzVmWGROcFVYMWNHa3dNRW9BV0Nh?=
+ =?utf-8?B?WXV3MjRiQTk3b1FwUHJuOUFRdmdaaXczdXBweHh5QlVjMTRTWnJaR1Ivb0Na?=
+ =?utf-8?B?Z3FsTTgxUGdXMURBK29zV0p6RWxqalhGbk42dTdhejFLYjB3RTFvaHY5ZVZL?=
+ =?utf-8?B?a0dxMUhaOVZ1OUkwQlduTGY4dGtLZDA1TVRwQ2NyM0t0blpGZmpWblNEUmxN?=
+ =?utf-8?B?YUVFdUsyZUVzSnlIcjN0dmpheENWYitBVVRhWmF0ZEE1alNKcVNYNGNPMnZu?=
+ =?utf-8?B?MXAzUEhFSDVLdk1GcVpEU1ZUNStySm9DSVVBakdaUCtXblNJaWp4UWIwelBC?=
+ =?utf-8?B?TDVJN0FkZk9taG1vbFZZMm8vY2lsdXA2cGRMZHl2L003V3Jna2w4bnAvYVow?=
+ =?utf-8?B?ZW1vWUNidk90OE1VVFN5djE3Q2pHTElneHRDUUd5U0RyK3N3czc4SmxNS2xs?=
+ =?utf-8?B?MktkaEZjQmpGMW9PU0NnU2dCWXZtdkdFQm1ZalRVUHlwYm9Ya3luM1BBN0Fz?=
+ =?utf-8?B?aElXK3NScXBTaDNScC9QWm9SYWVrR0JycHdQdFV0SG1mVzBPZkRZR2Vrcnlm?=
+ =?utf-8?B?cTM3SGp1NmY0STlHMTVwY05nejVOS3Yza0Y3MFJDMmRRSjE4NkNVV0htT3Bv?=
+ =?utf-8?B?bHFyS0xTbE9Yc3VpQkpVdTJEZzk3WlRMRW5KbUVkcTE3T0huaTU0ME9MQ25G?=
+ =?utf-8?B?Z1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e7df719-99af-4988-eaca-08db3b9be0a6
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 21:21:28.0346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oFXKNR0FZFQq1uGwZ0S964oWf9fu/T6hGn25gwncatA/q/ZEawAd5iIFvnY5rr+YA8x7Rarh8hpbcA1l2RVuBm1BOrXGMC5uMHHqw7oyv+M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8322
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the previous two commits, it is possible to enable ZSTD
-in the decompressor stub for 32-bit ARM.
 
-Unfortunately, ZSTD decompression has been quite slow in my tests
-(on ARM926EJ-S, ARMv5T):
 
- - LZO:  7.2 MiB,  6 seconds
- - ZSTD: 5.6 MiB, 60 seconds
+On 4/12/2023 5:47 AM, Vladimir Oltean wrote:
+> The "int i" used to index the struct ocelot_stat_layout array actually
+> has a specific type: enum ocelot_stat. Use it, so that the WARN()
+> comment from ocelot_prepare_stats_regions() makes more sense.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  drivers/net/ethernet/mscc/ocelot_stats.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- arch/arm/Kconfig                      | 1 +
- arch/arm/boot/compressed/Makefile     | 3 ++-
- arch/arm/boot/compressed/decompress.c | 4 ++++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+For the lazy readers who didn't dig up the source outside the patch
+context, the WARN in question is:
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index e24a9820e12fa..065a1746a257a 100644
-=2D-- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -108,6 +108,7 @@ config ARM
- 	select HAVE_KERNEL_LZMA
- 	select HAVE_KERNEL_LZO
- 	select HAVE_KERNEL_XZ
-+	select HAVE_KERNEL_ZSTD
- 	select HAVE_KPROBES if !XIP_KERNEL && !CPU_ENDIAN_BE32 && !CPU_V7M
- 	select HAVE_KRETPROBES if HAVE_KPROBES
- 	select HAVE_MOD_ARCH_SPECIFIC
-diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/=
-Makefile
-index dec565a5b1f21..55bfca154b12a 100644
-=2D-- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -81,6 +81,7 @@ compress-$(CONFIG_KERNEL_LZO)  =3D lzo_with_size
- compress-$(CONFIG_KERNEL_LZMA) =3D lzma_with_size
- compress-$(CONFIG_KERNEL_XZ)   =3D xzkern_with_size
- compress-$(CONFIG_KERNEL_LZ4)  =3D lz4_with_size
-+compress-$(CONFIG_KERNEL_ZSTD) =3D zstd22_with_size
+> 
+>                         /* enum ocelot_stat must be kept sorted in the same
+>                          * order as layout[i].reg in order to have efficient
+>                          * bulking
+>                          */
+>                         WARN_ON(last >= layout[i].reg);
 
- libfdt_objs :=3D fdt_rw.o fdt_ro.o fdt_wip.o fdt.o
-
-@@ -98,7 +99,7 @@ OBJS	+=3D lib1funcs.o ashldi3.o bswapsdi2.o
- targets       :=3D vmlinux vmlinux.lds piggy_data piggy.o \
- 		 head.o $(OBJS)
-
--KBUILD_CFLAGS +=3D -DDISABLE_BRANCH_PROFILING
-+KBUILD_CFLAGS +=3D -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS
-
- ccflags-y :=3D -fpic $(call cc-option,-mno-single-pic-base,) -fno-builtin=
- \
- 	     -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
-diff --git a/arch/arm/boot/compressed/decompress.c b/arch/arm/boot/compres=
-sed/decompress.c
-index 3d098b84ee391..2c4fd33444829 100644
-=2D-- a/arch/arm/boot/compressed/decompress.c
-+++ b/arch/arm/boot/compressed/decompress.c
-@@ -59,6 +59,10 @@ extern char * strchrnul(const char *, int);
- #include "../../../../lib/decompress_unlz4.c"
- #endif
-
-+#ifdef CONFIG_KERNEL_ZSTD
-+#include "../../../../lib/decompress_unzstd.c"
-+#endif
-+
- int do_decompress(u8 *input, int len, u8 *output, int outlen, void (*erro=
-r)(char *x))
- {
- 	return __decompress(input, len, NULL, NULL, output, outlen, NULL, error)=
-;
-=2D-
-2.39.2
-
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
