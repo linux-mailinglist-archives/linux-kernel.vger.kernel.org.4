@@ -2,75 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCBB6DFC80
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E7F6DFC8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjDLRQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S231476AbjDLRS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjDLRQF (ORCPT
+        with ESMTP id S229913AbjDLRS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:16:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67C15B8E;
-        Wed, 12 Apr 2023 10:15:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B68A462F86;
-        Wed, 12 Apr 2023 17:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2207C433EF;
-        Wed, 12 Apr 2023 17:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681319746;
-        bh=oKOri/ehZiXX08bBjOLOZYRdoc7KFhaFvEnpEKAJHus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/0dHUSKvnOPjKvKuBH6Rc2HvoQLTlAOsGi4qVfXRFJn7OOxVUSilzlMmawk5deoQ
-         GrNECiSzpuIKtbclFrAJtjO6A2hiE4NKpkQcR1dmAYNnrSLpgynH6FhlcktqZp3Hbn
-         RD+1nSbNPtxy6/ZCy+Ayy94es/wsVYZc3QkpvXUE=
-Date:   Wed, 12 Apr 2023 19:15:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     daniel@ffwll.ch, sfr@canb.auug.org.au, ogabbay@kernel.org,
-        jacek.lawrynowicz@linux.intel.com, quic_pkanojiy@quicinc.com,
-        mani@kernel.org, airlied@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
-Message-ID: <2023041201-underwear-consumer-1eb8@gregkh>
-References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
+        Wed, 12 Apr 2023 13:18:26 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1542D55;
+        Wed, 12 Apr 2023 10:18:22 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id bs70so6157985pgb.5;
+        Wed, 12 Apr 2023 10:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681319902; x=1683911902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VvLbR2CvJm8LYRpIaUIoJ2NSe+iNRSULSNxhdOJFJz8=;
+        b=GaP1QCaAtO1xkrbMj6q4LNfCz2tuQ6hRx2vk3ynSAugjrfb01J5hzKs2slm+R2RKS3
+         n0vcJuSdIBI09v+exED7q0oBH4/IyHmyyKlpbwxdVE5M0TSnNjRLCvRryU8HxJdRy3Q5
+         4AUnK5a/2HSDJboUFg7beHgyInsuK8NRp6ziTFMfSJpM7W5wIMbnYpbIDEdmBHe7fhiW
+         TbcOC/GwwchQxvJFBfZsIn8ts4LPFXD9587O6T5TfzaskTscnIgRobZS3dOUY+8Wph3T
+         FbBcErIU0cJI9nbJZh2kWh5jprA+CKIpbq5LniudCRNIJr1JkIiEOR8u5R+X9Mlghxhn
+         7h6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681319902; x=1683911902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VvLbR2CvJm8LYRpIaUIoJ2NSe+iNRSULSNxhdOJFJz8=;
+        b=MoBKFFO9YKZ16CoA7q/Jww55Zfp14s4WHuzTaQC04jKHixN0tAQ+mZ24PztOvbY3RK
+         t45prYGlMxcnAAZgRWeM5MKX7LkRoo0ksIzhQkLG4vFaek0mgK1ked7e3ltMvnHyzH7U
+         f8EJSH41Payc7TAsf6NfpS6oel4QykpkF98bXGCRGHsU1hjtbN/q6NOZUV0TWyKYrfNq
+         2l1O1vCgZ4CouOWp8afqUv1Fbu8Vl0ghgYcbjvRnMHD28XjIXu/OOZP9pEKlO6BVOnP7
+         2RfGkfXRxO37uga+2Aw1T77bzRmqK8j2YQLj/VCK+O5o4utqvpW3zkBlVEzPA58gUQs4
+         TTpQ==
+X-Gm-Message-State: AAQBX9cTyy3tYn+TmeOhOK9X/7KcmjcSlnGkoMOK3PS2jqtluQK+1lS3
+        tZCyRD6WDlQcTzpTqrQ70pfZU8z17mHeAAtyYcE=
+X-Google-Smtp-Source: AKy350Yh1a+zxe+KmSWLcWshOnG5GWSu4+Rd4V7terRsd6SwFpcQH6D3ALSgdvnPKM78bk6fdUseluqP1bjoLvoJvVI=
+X-Received: by 2002:a63:f349:0:b0:503:a7:d244 with SMTP id t9-20020a63f349000000b0050300a7d244mr4284988pgj.9.1681319901789;
+ Wed, 12 Apr 2023 10:18:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230412171441.18958-1-zyytlz.wz@163.com>
+In-Reply-To: <20230412171441.18958-1-zyytlz.wz@163.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 13 Apr 2023 01:18:09 +0800
+Message-ID: <CAJedcCxqTr0s6dpRgqnUQXaLWzW4ZS3FCtRgF8bYh8U12=FtTA@mail.gmail.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: pci-ish: Fix use after free bug in
+ ish_remove due to race condition
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, rafael@kernel.org,
+        hdegoede@redhat.com, gregkh@linuxfoundation.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 07:57:44AM -0600, Jeffrey Hugo wrote:
-> This reverts commit 566fc96198b4bb07ca6806386956669881225271.
-> 
-> This exposes a userspace API that is still under debate.  Revert the
-> change before the uAPI gets exposed to avoid making a mistake.  QAIC is
-> otherwise still functional.
-> 
-> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+Hi,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I missed some detail in the patch. bh_hbm_work_fn will call
+ishtp_hbm_dispatch and access &dev->fw_clients in it.
 
-And can you cc: me when you resubmit this?  It's not really correct in a
-number of places and can be made simpler if you really want to have your
-own class and device major.
+Best regards,
+Zheng
 
-thanks,
-
-greg k-h
+Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=E6=97=A5=
+=E5=91=A8=E5=9B=9B 01:17=E5=86=99=E9=81=93=EF=BC=9A
+>
+> In ish_probe, it calls ish_dev_init to init the device. In this function,
+> ishtp_device_init is called and &dev->bh_hbm_work is bound with
+> bh_hbm_work_fn. recv_hbm may be called to start the timer work.
+>
+> If we remove the module which will call ish_remove to make cleanup,
+> there may be an unfinished work. The possible sequence is as follows:
+>
+> Fix it by canceling the work before cleanup in ishtp_bus_remove_all_clien=
+ts
+>
+> CPU0                  CPUc1
+>
+>                     |bh_hbm_work_fn
+> ish_remove      |
+> ishtp_bus_remove_all_clients  |
+> kfree(ishtp_dev->fw_clients); |
+>                     |
+>                     |&dev->fw_clients[...]
+>                     |   //use
+>
+> Fixes: 3703f53b99e4 ("HID: intel_ish-hid: ISH Transport layer")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>  drivers/hid/intel-ish-hid/ishtp/bus.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/hid/intel-ish-hid/ishtp/bus.c b/drivers/hid/intel-is=
+h-hid/ishtp/bus.c
+> index 81385ab37fa9..ada7cd08dbeb 100644
+> --- a/drivers/hid/intel-ish-hid/ishtp/bus.c
+> +++ b/drivers/hid/intel-ish-hid/ishtp/bus.c
+> @@ -744,6 +744,7 @@ void ishtp_bus_remove_all_clients(struct ishtp_device=
+ *ishtp_dev,
+>                  */
+>         }
+>         spin_unlock_irqrestore(&ishtp_dev->cl_list_lock, flags);
+> +       cancel_work_sync(&ishtp_dev->bh_hbm_work);
+>
+>         /* Release DMA buffers for client messages */
+>         ishtp_cl_free_dma_buf(ishtp_dev);
+> --
+> 2.25.1
+>
