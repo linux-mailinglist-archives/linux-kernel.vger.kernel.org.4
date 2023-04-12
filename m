@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23196DE92E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9886DE92F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjDLBzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S229713AbjDLBzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDLBzQ (ORCPT
+        with ESMTP id S229640AbjDLBzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Apr 2023 21:55:16 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F9140E3;
-        Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso8491009pjt.4;
-        Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3062D2D44
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50489d2f5e0so2278388a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681264515;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1681264513; x=1683856513;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jkvWNkk1D4zYagSfBASBmBTtHIblQqU2LylpaSD7Fu0=;
-        b=d3exat8iufnqZQMftlidwS/KzkfSzFEd4frI1pTlUJK6dmAApy5q8QnhpVCcH2NmJf
-         Lskbq5bUFr++T78H2Fq7aWrE21WkfBVV47beBDzh22JqOLGFgyNkSSB4LCoUxYPwuZo8
-         UI5YT9/ksJhXJhFvFN3FMVwr5n1VYL7PPGIAUVXQ/7lS+4n4SMxzU3/ie2BRBT9RE1CS
-         cWsUwwqszQXIZKfAjlg5o94URfnRMIk1caZ+MwpkRa5Gk6q7d6Oiq14w9doDTxhyexLm
-         gEvfE5akhJNElOJR+5UCFZ4X1yIiAfsI4EEn7MwXxVv0OWPBbaBJOSRELZ1APB5wwIHC
-         Bz0Q==
+        bh=DCRgCd8nApy7TzIvIs1yvnfBLl2jT7+YOoX4vupYous=;
+        b=dVeRnczi9X1vCcRP5rlKjAm6s3NxyK5XM0FhCqATZrFj7i015vBdufb3N+NhNbcop2
+         tTmFO92+rhWLisaBsqrOkvdsJ42RRjltikomO2YcRHg5tcP0Y7X+XEvUjqDEYXlGLCqm
+         doRRq74umLPEjgn8ismz4+x89kq0x7x1hWkk6qTaUwLFNxytYdBX4qb9drX5f+XToaea
+         2K1dZ3IPkahWJx/eWeuMDl3EA6vMw7pMnnpRbSWxa7umoZdfJPvRbEoHThAvil9Rooe2
+         74OMZr9wIalpa2/XtASWuOpbvc3K+9div3AnWfZA2eS/hI2Gno5vqc0CvN5AX/SICILQ
+         kghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681264515;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1681264513; x=1683856513;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jkvWNkk1D4zYagSfBASBmBTtHIblQqU2LylpaSD7Fu0=;
-        b=3gdm1oxD4C67rmMy00a2Cl4K9JKO89vO4NpLYOpkOEvai6cqqVptW0VaZmD8JcKVNP
-         o2d7b7lUwNE7lofTyu9tHCF3/hfhRTtu7jUPrWwq+A178WqWlNZCvh2aa4hnkWLYs6EZ
-         fmiuPEZAVw8S4cEQGGW8LSgONJcg0k9Y0ZjsEI3CnBp78h5HyXvxqSBnfAh99HyL72+t
-         BASti7/zKraeweaS3Gyx3VEWOovPBo6GsasPNCO2tpXT+oiSjO2ygUd3SmdN1+gXKgZ3
-         Sdowych3/mQL2e7vvIa9IUhRHkVtvYSDt6LH9im6ILrEHQOHfVliEqF/g+CUmCah6lrT
-         rWzQ==
-X-Gm-Message-State: AAQBX9fGWpE6T6+4vLmVtrKuPX4KIO0ywTUJFqenZWF50e9cpnD/VcRF
-        Rz8YHcd0LXvd1AzrsxhCAP4=
-X-Google-Smtp-Source: AKy350b7gD3T6X+AVV7rB26/Uk5yhOyuv+RWB2wbyKhB7INGSTKioLGeM6O4q56vb57y+EzZ3t06pg==
-X-Received: by 2002:a17:902:d48a:b0:1a5:2757:d40a with SMTP id c10-20020a170902d48a00b001a52757d40amr6243932plg.49.1681264514738;
-        Tue, 11 Apr 2023 18:55:14 -0700 (PDT)
-Received: from localhost.localdomain ([154.220.3.115])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090270c900b0019b089bc8d7sm8061293plt.78.2023.04.11.18.55.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Apr 2023 18:55:14 -0700 (PDT)
-From:   zhouzhouyi@gmail.com
-To:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lance@osuosl.org
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH] rcu/torture replace wait_event with wait_event_interruptible
-Date:   Wed, 12 Apr 2023 09:54:43 +0800
-Message-Id: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com>
-X-Mailer: git-send-email 1.7.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        bh=DCRgCd8nApy7TzIvIs1yvnfBLl2jT7+YOoX4vupYous=;
+        b=ONJ+dpYLuXMiRVwuy4NKdo66FKunGMPd7vTRIY5ofG6PuS8v0cyi6M9HdObx19lMYJ
+         HHTuQ4+Uw72A0WxmbvM50PZk549QQ9caEFLHViqtYYrc9Jsv1ilSmPVnKZPRb5BsB3A4
+         eqKVuD0shqbWAU/AZIevy7FdSMAIZyEV/P5/CwdmVnIcNxxgGlka6AR/kmr86MoZwiQ7
+         CmEjdK8UezvIQDyjNweZxuKBF1AeoBN+7UPOhKlAwuJrtOuqIbty+oL4QWdtpCVXdlix
+         Ms5OK6UGFG4NClGHyogY5zakyHADHhTT5QR2DcCRJ39ANsh6o1wPqxmqMuTUolkQX5Ve
+         AwVQ==
+X-Gm-Message-State: AAQBX9dbxcRrg2mbX1RGk7ZT2J8O+Q+6fDG04Mz8C1SqNrfqXw8FrfxO
+        mTT7oxfEDUqn6YiHTwl7kEcUf5IhrKprvX/eZpp7pQ==
+X-Google-Smtp-Source: AKy350Y+g8z3Uq9R+kjToSGpsQndXFivtJt7Bqh25e/wo6CwcBvv8j7ucbZS4t8fMZpD38C9jYGUEvuKKUDVRRcWJE0=
+X-Received: by 2002:a50:baec:0:b0:504:9390:180f with SMTP id
+ x99-20020a50baec000000b005049390180fmr5065023ede.2.1681264513494; Tue, 11 Apr
+ 2023 18:55:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411083145.2214105-1-hhhuuu@google.com> <ce727a7b-6954-4e4d-85c7-f91011b87108@rowland.harvard.edu>
+In-Reply-To: <ce727a7b-6954-4e4d-85c7-f91011b87108@rowland.harvard.edu>
+From:   Jimmy Hu <hhhuuu@google.com>
+Date:   Wed, 12 Apr 2023 09:55:02 +0800
+Message-ID: <CAJh=zj+sVjmLAnY8pXWKbuhVsYStv3Ei5C6KqyugwURd8B-0wA@mail.gmail.com>
+Subject: Re: [PATCH] usb: core: hub: Disable autosuspend for VIA VL813 USB3.0 hub
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,32 +71,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+On Tue, Apr 11, 2023 at 9:55=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Tue, Apr 11, 2023 at 08:31:45AM +0000, Jimmy Hu wrote:
+> > The VIA VL813 USB3.0 hub appears to have an issue with autosuspend and
+> > detecting USB3 devices. This can be reproduced by connecting a USB3
+> > device to the hub after the hub enters autosuspend mode.
+> >
+> > //connect the hub
+> > [  106.854204] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using =
+xhci-hcd
+> > [  107.084993] usb 2-1: New USB device found, idVendor=3D2109, idProduc=
+t=3D0813, bcdDevice=3D90.15
+> > [  107.094520] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, S=
+erialNumber=3D0
+> > [  107.111836] usb 2-1: Product: USB3.0 Hub
+> > [  107.116835] usb 2-1: Manufacturer: VIA Labs, Inc.
+> > [  107.314230] hub 2-1:1.0: USB hub found
+> > [  107.321356] hub 2-1:1.0: 4 ports detected
+> >
+> > //the hub enters autosuspend mode
+> > [  107.738873] hub 2-1:1.0: hub_suspend
+> > [  107.922097] usb 2-1: usb auto-suspend, wakeup 1
+> >
+> > //connect a USB3 device
+> > [  133.120060] usb 2-1: usb wakeup-resume
+> > [  133.160033] usb 2-1: Waited 0ms for CONNECT
+> > [  133.165423] usb 2-1: finish resume
+> > [  133.176919] hub 2-1:1.0: hub_resume
+> > [  133.188026] usb 2-1-port3: status 0263 change 0041
+> > [  133.323585] hub 2-1:1.0: state 7 ports 4 chg 0008 evt 0008
+> > [  133.342423] usb 2-1-port3: link state change
+> > [  133.358154] usb 2-1-port3: status 0263, change 0040, 5.0 Gb/s
+>
+> This status value indicates that the port is in the U3 suspend state.
+> Maybe the port needs to be put back into U0 before it can be reset.
+>
+> > [  133.875150] usb 2-1-port3: not reset yet, waiting 10ms
+> > [  133.895502] usb 2-1-port3: not reset yet, waiting 10ms
+> > [  133.918239] usb 2-1-port3: not reset yet, waiting 200ms
+> > [  134.139529] usb 2-1-port3: not reset yet, waiting 200ms
+> > [  134.365296] usb 2-1-port3: not reset yet, waiting 200ms
+> > [  134.590185] usb 2-1-port3: not reset yet, waiting 200ms
+> > [  134.641330] hub 2-1:1.0: state 7 ports 4 chg 0000 evt 0008
+> > [  134.658880] hub 2-1:1.0: hub_suspend
+> > [  134.792908] usb 2-1: usb auto-suspend, wakeup 1
+> >
+> > Disabling autosuspend for this hub resolves the issue.
+>
+> It may be possible to fix the problem.  You should try that before
+> giving up.
+>
+> Alan Stern
 
-In kfree_rcu_test, kfree_scale_shutdown will be detected as hung task
-if kfree_loops is too big. Replace wait_event with wait_event_interruptible
-to avoid false positive.
-
-Tested in the PPC VM of Open Source Lab of Oregon State University.
-
-Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>                
----
- kernel/rcu/rcuscale.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 91fb5905a008..b37eec94957c 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -771,7 +771,7 @@ kfree_scale_cleanup(void)
- static int
- kfree_scale_shutdown(void *arg)
- {
--	wait_event(shutdown_wq,
-+	wait_event_interruptible(shutdown_wq,
- 		   atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
- 
- 	smp_mb(); /* Wake before output. */
--- 
-2.34.1
-
+[  133.120060] usb 2-1: usb wakeup-resume
+[  133.160033] usb 2-1: Waited 0ms for CONNECT
+[  133.165423] usb 2-1: finish resume
+[  133.176919] hub 2-1:1.0: hub_resume
+When a USB3 device is connected to the hub,  it did finish the resume
+and should be put back into U0, but it seems to have failed.
