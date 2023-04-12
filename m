@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAC66DEA8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536836DEAA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjDLEda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S229719AbjDLEhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDLEdY (ORCPT
+        with ESMTP id S229700AbjDLEg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:33:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4524690
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:33:21 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C447kn019794;
-        Wed, 12 Apr 2023 04:33:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=5jqR/gmWFAuu1wVu6uuEschRlPfhwalbwHfoHfxxsIo=;
- b=mJJuiWZu6jN841JxTOE1F06BMFDrdxmFraveRe1JPKu8/ABdt/P8W80qICNCCD4mgdvp
- ZIg1J4TrICqZkbEgi3mKhjJc8wBg+1YQ3q8RHX6Ffc6f/DwSx/sTfGF6gwjOXWX/TGKH
- ga0qz12aqPwDVnEjobSf9rqlgAr9V+97rW/EautOuBEsslJ4TGpv4JOZg7KHQkUBi0Vj
- oYx8L9FTClGDV8s8WkDFxNFFsjkod1jgaprF6Yr/c9FbPBKa7UkXmTihroOVSa38kan3
- AjvnnG+xUKPiOntDewCuXFOzAHfBfb5trWlFzThIGS0LG292WefSod79czvxbUdnOFd1 KQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw9b9hfk6-1
+        Wed, 12 Apr 2023 00:36:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E4C2136;
+        Tue, 11 Apr 2023 21:36:57 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C2ufrU020115;
+        Wed, 12 Apr 2023 04:36:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Xk0khVy6a4qTeHDLGV91RRu5Ak5YDt5Eu2EBEvej6dM=;
+ b=EqWx1QrKuSeZyEfS0nNbHhegW3hGzvavZRLB72Eq/9hQl4U70pkdpjl7jKxzxGAlbpFc
+ KUzPvxfhDHYGwisVAjf1VvLxILMn0rpQ3Ab1W7ybMNLQfZT8wESAquVO6KCzbV0w0XR4
+ l/t7m4XFot+xP7gtcTlvZGab0KPKqQZaUfGONZAPo7B788z7D8JYVh2vO0jhYW0pRC3T
+ N/hWWJQEc3bDsZzAOOrb0LUnZfad5g2z5QQuYbxNikpKnyv7HMp6nf29/PCDjA0OczKY
+ RLskrrOhB6z2kIzeg8nMMQTOmJ4tL2sx+350iHoq3Z2fl7Ny8odiP23vhnLTf7aaKWiZ bw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwe5j8rss-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 04:33:11 +0000
+        Wed, 12 Apr 2023 04:36:45 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33C4XAF2007956
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33C4ai48001890
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 04:33:10 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
- 2023 21:33:08 -0700
-From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Subject: [PATCH] arm64: kernel: Fix kernel warning when nokaslr is passed to commandline
-Date:   Wed, 12 Apr 2023 10:02:58 +0530
-Message-ID: <20230412043258.397455-1-quic_pkondeti@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Apr 2023 04:36:44 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 11 Apr 2023 21:36:42 -0700
+Date:   Wed, 12 Apr 2023 10:06:38 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Chen Yu <yu.c.chen@intel.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] Fix test_resume failure by openning swap device
+ non-exclusively
+Message-ID: <20230412043638.GB4099424@hu-pkondeti-hyd.qualcomm.com>
+References: <cover.1681186310.git.yu.c.chen@intel.com>
+ <20230411053050.GA4099424@hu-pkondeti-hyd.qualcomm.com>
+ <ZDYF0xjpz7+b/Rmj@chenyu5-mobl1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZDYF0xjpz7+b/Rmj@chenyu5-mobl1>
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 54WOu-MfX6C5MyJb_hz-35BsfmgnFRTu
-X-Proofpoint-ORIG-GUID: 54WOu-MfX6C5MyJb_hz-35BsfmgnFRTu
+X-Proofpoint-GUID: cOlUaYsqxGM_Sxp1zkcRQeTs8K0vA5ZY
+X-Proofpoint-ORIG-GUID: cOlUaYsqxGM_Sxp1zkcRQeTs8K0vA5ZY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 adultscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0 mlxlogscore=774
+ suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120039
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ engine=8.12.0-2303200000 definitions=main-2304120040
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'Unknown kernel command line parameters "nokaslr", will be passed to
-user space' message is noticed in the dmesg when nokaslr is passed to
-the kernel commandline on ARM64 platform. This is because nokaslr param
-is handled by early cpufeature detection infrastructure and the parameter
-is never consumed by a kernel param handler. Fix this warning by
-providing a dummy kernel param handler for nokaslr.
+On Wed, Apr 12, 2023 at 09:13:55AM +0800, Chen Yu wrote:
+> On 2023-04-11 at 11:00:50 +0530, Pavan Kondeti wrote:
+> > On Tue, Apr 11, 2023 at 08:18:43PM +0800, Chen Yu wrote:
+> > > test_resume does not work in current kernel when using swapfile for hibernation.
+> > > This is because the swap device should be openned non-exclusively in test_resume mode.
+> > > 
+> > > Patch 1 is a preparation for patch 2 and it turns snapshot_test into a global variable.
+> > > Patch 2 opens swap device non-exclusively for test_resume mode, and exclusively for manual
+> > > hibernation resume.
+> > > 
+> > > Change since v1:
+> > > Turn snapshot_test into global variable and do not introduce parameters for swsusp_check()
+> > > nor load_image_and_restore().
+> > > 
+> > > 
+> > > Chen Yu (2):
+> > >   PM: hibernate: Turn snapshot_test into global variable
+> > >   PM: hibernate: Do not get block device exclusively in test_resume mode
+> > > 
+> > >  kernel/power/hibernate.c | 12 +++++++++---
+> > >  kernel/power/power.h     |  1 +
+> > >  kernel/power/swap.c      |  5 +++--
+> > >  3 files changed, 13 insertions(+), 5 deletions(-)
+> > > 
+> > Looks good to me.
+> > 
+> > I have verified test_resume on QEMU arm64 and it worked fine with
+> > these two patches included.
+> >
+> Thanks, can I add your Tested-by tag?
+> 
+Sure. Pls add 
 
-Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
----
- arch/arm64/kernel/idreg-override.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index 95133765ed29..75ceb7c07af7 100644
---- a/arch/arm64/kernel/idreg-override.c
-+++ b/arch/arm64/kernel/idreg-override.c
-@@ -177,6 +177,13 @@ static const struct {
- 	{ "nokaslr",			"kaslr.disabled=1" },
- };
- 
-+static int __init parse_nokaslr(char *unused)
-+{
-+	/* nokaslr param handling is done by early cpufeature code */
-+	return 0;
-+}
-+early_param("nokaslr", parse_nokaslr);
-+
- static int __init find_field(const char *cmdline,
- 			     const struct ftr_set_desc *reg, int f, u64 *v)
- {
--- 
-2.25.1
-
+Thanks,
+Pavan
