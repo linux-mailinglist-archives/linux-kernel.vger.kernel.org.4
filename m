@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC8A6DEC35
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFEC6DEC37
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjDLHDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S229863AbjDLHEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLHDi (ORCPT
+        with ESMTP id S229481AbjDLHEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:03:38 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F544C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:03:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id jg21so25963462ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681283013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7LzhE8XDEHN0mE13t9qLmnorPLOmISq2GFATJ1xxmIA=;
-        b=wRXFdRpdUxWsWOIZg8dikxSelGtuZLguzJn0hWsvIqkcFUtUQziNMcdzRVnTvDTqeH
-         FW97zIGDOupJLwsBG7wu+16HugtpMfJRuA63ySfBOo4QmMoOkFtLl4x0zG2pkePAmFaV
-         7MEYu/rYKgOjBgAdbqIhB6ZtzbSjMzMxwfH8rukdAsUdcD9n6oEXLe6cNtYH2batotpL
-         ZmvjAlvxfaR72zcfG8GQHB1X2DfsUFRKq97vnojoTMJBdbhSzU80rOImxi0TVMB4WPhC
-         SDDiT/qAngGcUhRjz7IrBjlGrwCwECBL+tGp1M7arv9qV/kTK09sfPeEDTeZA52Bo653
-         DTMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681283013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LzhE8XDEHN0mE13t9qLmnorPLOmISq2GFATJ1xxmIA=;
-        b=c3oa1os5A+WZuEIXy5qkLSTS4pzE5si7remXcitZArSJtBnWlyVYDxbs8Q8bSlvFvO
-         wEwi9mYq5Kmy+p3KVxjSmlCGlMcpPsDxZZUQGbiWPXwncp81NBiazfgtWU1RCB4KGCDr
-         UoKwgWqnyPZ2h3iZ7GVo/7Qvmgnv3fPt2BSKhcnTJeC98mVR2zO9jVK79i2tvAwTd9Zl
-         rkIwN/ka7G+9t+Y7yEysnw0YSsHo5vluv9KK4cYs8inm2K2XMUj26mjaq2TuCQlLY+UD
-         IaqHsFCiyMSHH0G8N7qGd23uZUV0rCbU2WC0JkTWJ/ZLWhkZb1DhuLfKCrTdIOYAuGkb
-         u6qQ==
-X-Gm-Message-State: AAQBX9ckTiKaqb00Zv+aF16TFLb7KFPvnp+JG5xO/SYcSaxoBNi63pHU
-        9qM4IP/mK4fRsdOwLUq2J+x/bg==
-X-Google-Smtp-Source: AKy350bQSyb2tXwMQt2uxDvqWUUDBrt1x3Jjs+y34xcL4WKJrFQcvNsAaagC6xcfspRReV6mU5rwUQ==
-X-Received: by 2002:a17:906:2e85:b0:94d:a2c2:9aeb with SMTP id o5-20020a1709062e8500b0094da2c29aebmr6032088eji.49.1681283013345;
-        Wed, 12 Apr 2023 00:03:33 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906319800b008e9c79ff14csm6864614ejy.96.2023.04.12.00.03.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 00:03:32 -0700 (PDT)
-Message-ID: <15e1d05f-b7e1-27bc-7363-aefd2d155eea@linaro.org>
-Date:   Wed, 12 Apr 2023 09:03:31 +0200
+        Wed, 12 Apr 2023 03:04:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C64C2C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:04:41 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C6CJWh007292;
+        Wed, 12 Apr 2023 07:04:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=pFDRnf/e5jrYtyjR0i51vsd1re2UoQ9VFsoHVZPbtGE=;
+ b=ip1K6sZ8vy1nqLDA/labILxe47/iqupWzyC1ZRuBwaAzUaZ2EOW6xqPxeZyxVofWcxTY
+ 1JNQ6gWYfuM7iIYRi1526WUPLDPNVAByq/7p+TTccIG6Ykot4euvxYXiG1ypT76OlLA2
+ uBDYD+cNIVfKoCl0W6tachcImi1FENTXu9BD2o96d88tJEAf8elgKvIhxsP96X5sLVIK
+ GD7nSX4mTmnwoDzcZkNNpK4T/6oU/b8BCoYVRZulxwB9aIwM+F5z2tTmrgpuccSPh/Za
+ T+XTD/bd/V0XhEyFNTv9KBM7lKHYK3FfFzhhHqfDGgRkcgCFNvo4hLe9zBs/Y3ctnS39 YQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwq5s1rmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 07:04:26 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33C6CO2m007540;
+        Wed, 12 Apr 2023 07:04:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwq5s1rkg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 07:04:25 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C0kmwq028714;
+        Wed, 12 Apr 2023 07:04:23 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m22645-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 07:04:23 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C74Lte21627146
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 07:04:21 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B30020043;
+        Wed, 12 Apr 2023 07:04:21 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA52720040;
+        Wed, 12 Apr 2023 07:04:16 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.27.7])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 12 Apr 2023 07:04:16 +0000 (GMT)
+Date:   Wed, 12 Apr 2023 12:34:13 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
+ prediction for k.alloc
+Message-ID: <ZDZX7cAa5uKwfJOd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
+ <ZDAeuL2fz1aEW6rz@debian.me>
+ <ZDA+WdiqB2931xHB@google.com>
+ <ZDTpGsT15s0iOrTJ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+ <873557j59d.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad: correct pin
- drive-strength
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230407180710.128815-1-krzysztof.kozlowski@linaro.org>
- <ZDVtXkCON8DFUDjh@hovoldconsulting.com>
- <887eb9f6-9882-37c6-4332-ddae7a354187@linaro.org>
- <ZDZUiW+74rhhRAfS@hovoldconsulting.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZDZUiW+74rhhRAfS@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <873557j59d.fsf@mpe.ellerman.id.au>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6xmvU3C8JGnuUY4UYr_09uIAod_5WUo5
+X-Proofpoint-GUID: GzqPgmU-w-3tSGN9hHjUIbVT3VvuioaR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_02,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 08:49, Johan Hovold wrote:
-> On Tue, Apr 11, 2023 at 06:58:33PM +0200, Krzysztof Kozlowski wrote:
->> On 11/04/2023 16:23, Johan Hovold wrote:
->>> On Fri, Apr 07, 2023 at 08:07:10PM +0200, Krzysztof Kozlowski wrote:
->>>> Fix typo in drive-strength property name.
->>>
->>> In the future, please try to use the established commit-summary prefix.
->>> In this case:
->>>
->>> 	arm64: dts: qcom: sc8280xp-x13s:
->>
->> Sure.
->>
->> commit ca1ce7207e53cfe69aee5002eb3795069668da53
->> Author: Johan Hovold <johan+linaro@kernel.org>
->> Date:   Fri Aug 5 11:23:17 2022 +0200
->>
->>     arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: add alternate touchpad
+Hi,
+
+On 2023-04-11 16:35:10, Michael Ellerman wrote:
+> Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
+> > On 2023-04-07 09:01:29, Sean Christopherson wrote:
+> >> On Fri, Apr 07, 2023, Bagas Sanjaya wrote:
+> >> > On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
+> >> > > I used the unlikely() macro on the return values of the k.alloc
+> >> > > calls and found that it changes the code generation a bit.
+> >> > > Optimize all return paths of k.alloc calls by improving
+> >> > > branch prediction on return value of k.alloc.
+> >> 
+> >> Nit, this is improving code generation, not branch prediction.
+> > Sorry my mistake.
+> >> 
+> >> > What about below?
+> >> > 
+> >> > "Improve branch prediction on kmalloc() and kzalloc() call by using
+> >> > unlikely() macro to optimize their return paths."
+> >> 
+> >> Another nit, using unlikely() doesn't necessarily provide a measurable optimization.
+> >> As above, it does often improve code generation for the happy path, but that doesn't
+> >> always equate to improved performance, e.g. if the CPU can easily predict the branch
+> >> and/or there is no impact on the cache footprint.
 > 
-> Yeah, we initially used a longer prefix (including "x13s" which was
-> missing in the Subject of this patch), but quite soon decided on using
-> the shorter
+> > I see. I will submit a v2 of the patch with a better and more accurate
+> > description. Does anyone else have any comments before I do so ?
+>  
+> In general I think unlikely should be saved for cases where either the
+> compiler is generating terrible code, or the likelyness of the condition
+> might be surprising to a human reader.
 > 
-> 	arm64: dts: qcom: sc8280xp-x13s:
+> eg. if you had some code that does a NULL check and it's *expected* that
+> the value is NULL, then wrapping that check in likely() actually adds
+> information for a human reader.
+>     
+> Also please don't use unlikely in init paths or other cold paths, it
+> clutters the code (only slightly but a little) and that's not worth the
+> possible tiny benefit for code that only runs once or infrequently.
 > 
-> instead.
-
-Thanks. Do you know if this rule applies to other long-names? I was
-usually keeping full name or shortening them by cutting end, but maybe I
-should cut the middle?
-
-sm8250-sony-xperia-edo-pdx206
-sm8250-sony-xperia-edo
-sm8250-pdx206
-
-Best regards,
-Krzysztof
-
+> I would expect the compilers to do the right thing in all
+> these cases without the unlikely. But if you can demonstrate that they
+> meaningfully improve the code generation with a before/after
+> dissassembly then I'd be interested.
+Just FYI, the last email by kautuk.consul.80@gmail.com was by me.
+That last email contains a diff file attachment which compares 2 files:
+before my changes and after my changes.
+This diff file shows a lot of changes in code generation. Im assuming
+all those changes are made by the compiler towards optimizing all return
+paths to k.alloc calls.
+Kindly review and comment.
+> cheers
