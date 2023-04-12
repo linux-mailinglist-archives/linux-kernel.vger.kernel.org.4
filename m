@@ -2,105 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2096DFD8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BF96DFD8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDLSao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S229642AbjDLScS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDLSan (ORCPT
+        with ESMTP id S229482AbjDLScQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:30:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A95C30E5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681324193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MWy6sv13whg9JBQjJjQUf4sYt60lbACx2Lp0OS4PkY8=;
-        b=gRrNwlQeI6qxbvAec29P0FT4QroeXxNPuqf3jshklLVRUPYM3W5fgzSsRUQYQ30WnopiWa
-        d9gn82He5EKlGDNdd066Sn0bd6LlJqV6h5e/IGfXUJmJwfI7oV7NurJEi/W/ziwRaaFF8o
-        JH+XsmtQtmGYVkGJ+8BYz5H5dfodqCg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-iuGBN4_CMWWqzejEkV-1eA-1; Wed, 12 Apr 2023 14:29:48 -0400
-X-MC-Unique: iuGBN4_CMWWqzejEkV-1eA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 648773C025C1;
-        Wed, 12 Apr 2023 18:29:47 +0000 (UTC)
-Received: from [10.22.32.168] (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 88A5D40C6E70;
-        Wed, 12 Apr 2023 18:29:46 +0000 (UTC)
-Message-ID: <168bb07f-844f-13f5-e4bd-77c2cec94046@redhat.com>
-Date:   Wed, 12 Apr 2023 14:29:46 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/5] cgroup/cpuset: Fix CLONE_INTO_CGROUP problem &
- other issues
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-References: <20230411133601.2969636-1-longman@redhat.com>
- <ZDb32V9xcWOi2_CL@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZDb32V9xcWOi2_CL@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 14:32:16 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C119F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:32:15 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54fba72c1adso299047b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681324334; x=1683916334;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=unsQK783ZuljLmKYpP1tTMNm96vCB2UUQkNLBUKyn0Q=;
+        b=wImcPsrNxghIbuoD7vh15iP9oZ8zp6eQWP5HdYu2jMTXgzuUo/P7CdiwHMeAz9ammv
+         afIu2ZztCm1f6JDK5OCHf6FSqx2+/6CZ9PniTQUJ9sNUxEKP8EAkiF68QAuSo3E2Wz6Y
+         j6GmfMcThWMN1tqDem48dZIiz7Jq8XGuZqZuQNfqPSH7e5dDyMfRVGK2TDa+5eSJD5uA
+         zPszVMLKZio4TTxfGwN8oAiEcD9RaBdInc4bKfB0H4bo0QKuaGBimfnuCrME7dg5IjAq
+         eZtJpDh37onYwYA8W9l9X9PPKQMq2OqcqW1Lfh9CyTT316DhPCiYbW3IrvmEjlDX2V14
+         9nww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681324334; x=1683916334;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=unsQK783ZuljLmKYpP1tTMNm96vCB2UUQkNLBUKyn0Q=;
+        b=TddjSqfkNHjr82UF4XTz+cNpFZxpy0Dv2p8sf8cjmDtCq0kqWPjJ8Fd+J01ZoANu32
+         eFcy8SLyhOcxFUwRit4GxAfItDEjx/JxRkHKUAjepkcjkWUZkWqBjAz0WE1GhX2S3gR2
+         rMdk3loKke6lPcZf50imMu7xbmwF+m4KlJBY9E9hsH6vfkXL7uUGi2nKAbW/SeQjb2Kn
+         NgHYMJoKGfiNuIwGkxPNwCpSbaZe3FoNvuth6hNYSHmPwL3TZPhJTa1rvoTj/xtE129n
+         PEm/VODZEBom79uU0nZYzehRIyfmkLHo0ELsCdWSq1ndFqMSoLmXInQ/M9B/R8MSSN5U
+         Kifg==
+X-Gm-Message-State: AAQBX9cuxBNXDxbmKUijcvJ/bBsiRMlEcTGLHKTiocwtgh+J0BUvEIFQ
+        2a3XO8RJHIDWCLJapp1lvWProT6/PPDWuq4Kbd8=
+X-Google-Smtp-Source: AKy350asfywVXW9Fy4KzqBhDU/bQX7xifl9Wja8QAMqPvcJjv4csC++8cr3ABgrfg0Put9bxHZoYkpuE4lW61gB3BIE=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:4a4a:51a1:19b:61ab])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:d141:0:b0:b75:8ac3:d5da with SMTP
+ id i62-20020a25d141000000b00b758ac3d5damr7557621ybg.4.1681324334082; Wed, 12
+ Apr 2023 11:32:14 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 11:32:11 -0700
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIACv5NmQC/w3LQQqAIBBA0avErBPUIqzLxGhDSjKFU22ku+fyw
+ f8VhEoigaWrUOhNkk5uMH0HISLvpNLWDFbbQY/GKj5XuTEcl8LZmcmh9V4jtN6jkPIFOcR28JP z9/3pKfYIYAAAAA==
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681324332; l=3360;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=O3vM+UqKG7xDqT6eRLzJnQA+CEPVjKXEAVK41sMB3WA=; b=ivxUYQ2lSDuxxyJnaW7i9pXOfQLF2GhtrPCC3EKgGw8HT6o/LAHtCIrAyC0VVPFxeosi1ulwZRPt
+ C0JCTfDkAazXDRs8Yu1BkCh4vLZdWVyJ2GTXuSMNatbp4DYLqhQZ
+X-Mailer: b4 0.12.2
+Message-ID: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
+Subject: [PATCH 0/2] start_kernel: omit stack canary
+From:   ndesaulniers@google.com
+To:     "Borislav Petkov (AMD)" <bp@alien8.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+A security research paper was recently published detailing Catch Handler
+Oriented Programming (CHOP) attacks.
+https://download.vusec.net/papers/chop_ndss23.pdf
+The TL;DR being that C++ structured exception handling runtimes are
+attractive gadgets for Jump Oriented Programming (JOP) attacks.
 
-On 4/12/23 14:26, Tejun Heo wrote:
-> On Tue, Apr 11, 2023 at 09:35:56AM -0400, Waiman Long wrote:
->>   v4:
->>    - Add missing rcu_read_lock/unlock to cpuset_cancel_fork() in patch 3.
->>    - Add patch 5 to reduce performance impact for the
->>      non-CLONE_INTO_CGROUP case.
->>
->>   v3:
->>    - Update patches 2 & 3 to put task_cs() call under rcu_read_lock().
->>
->>   v2:
->>    - Drop v1 patch 3
->>    - Add a new patch to fix an issue in cpuset_cancel_attach() and
->>      another patch to add cpuset_can_fork() and cpuset_cacnel_fork()
->>      methods.
->>
->> The first patch in this series fixes a problem in
->> cpuset_cancel_attach(). Patches 2 and 3 fixes the CLONE_INTO_CGROUP
->> problem in cpuset. Patch 4 is a minor fix. The last patch is a
->> performance optimization patch for the non-CLONE_INTO_CGROUP case.
-> Applied 1-4 to cgroup/for-6.3-fixes w/ stable cc'd. Given that the fixes are
-> a bit involved, the breakages have been there for quite a while and the
-> cpuset code has changed quite a bit, backporting might not be trivial tho.
-> Let's see how that goes.
+In response to this, a mitigation was developed under embargo in
+clang-16 to check the stack canary before calling noreturn functions.
+https://bugs.chromium.org/p/llvm/issues/detail?id=30
 
-I know stable backport won't be straight forward. I am planning to help 
-in the backporting effort. Thanks for taking these into your cgroup tree.
+This started causing boot failures in Android kernel trees downstream of
+stable linux-4.14.y that had proto-LTO support, as reported by Nathan
+Chancellor.
+https://github.com/ClangBuiltLinux/linux/issues/1815
 
-Cheers,
-Longman
+Josh Poimboeuf recently sent a series to explicitly annotate more
+functions as noreturn. Nathan noticed the series, and tested it finding
+that it now caused boot failures with clang-16+ on mainline (raising the
+visibility and urgency of the issue).
+https://lore.kernel.org/cover.1680912057.git.jpoimboe@kernel.org/
+
+Once the embargo was lifted, I asked questions such as "what does C++
+structured exception handling have to do with C code" and "surely GCC
+didn't ship the same mitigation for C code (narrator: 'They did not:
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a25982ada523689c8745d7fb4b1b93c8f5dab2e7')?"
+
+I now have a patch out for LLVM to undo this mess (or at least limit it
+to C++ functions that may throw, similar to GCC's mitigation); it hasn't
+landed yet but we're close to consensus and I expect it to land
+imminently.
+https://reviews.llvm.org/D147975
+
+Remember this thread?  (Pepperidge farms remembers...)
+https://lore.kernel.org/all/20200314164451.346497-1-slyfox@gentoo.org/
+
+That reminded me that years ago we discussed a function attribute for
+no_stack_protector.
+https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
+
+GCC didn't have one at the time, it now does. In addition to the LLVM
+fix, I'd like to introduce this in the kernel so that we might start
+using it in additional places:
+* https://lore.kernel.org/linux-pm/20200915172658.1432732-1-rkir@google.com/
+* https://lore.kernel.org/lkml/20200918201436.2932360-30-samitolvanen@google.com/
+And eventually remove the final macro expansion site of
+prevent_tail_call_optimization.
+
+With the LLVM fix, this series isn't required, but I'd like to start
+paving the way to use these function attributes since I think they are a
+sweet spot in terms of granularity (as opposed to trying to move
+start_kernel to its own TU compiled with -fno-stack-protector).
+
+(This is my first time using b4 to send a series, as per
+https://people.kernel.org/monsieuricon/sending-a-kernel-patch-with-b4-part-1.
+Here goes nothing!)
+
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Nick Desaulniers (2):
+      start_kernel: add no_stack_protector fn attr
+      start_kernel: omit prevent_tail_call_optimization for newer toolchains
+
+ arch/powerpc/kernel/smp.c           |  1 +
+ include/linux/compiler_attributes.h | 12 ++++++++++++
+ init/main.c                         |  8 +++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+---
+base-commit: 0bcc4025550403ae28d2984bddacafbca0a2f112
+change-id: 20230412-no_stackp-a98168a2bb0a
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
 
