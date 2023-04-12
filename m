@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CF06DEC9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066066DECA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjDLHb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S229798AbjDLHh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDLHb4 (ORCPT
+        with ESMTP id S229805AbjDLHh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:31:56 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC1E103;
-        Wed, 12 Apr 2023 00:31:51 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 0157A24E1BE;
-        Wed, 12 Apr 2023 15:31:43 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 15:31:43 +0800
-Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 15:31:42 +0800
-Message-ID: <1d085fe3-39f8-232a-e628-1eb138b899b7@starfivetech.com>
-Date:   Wed, 12 Apr 2023 15:31:37 +0800
+        Wed, 12 Apr 2023 03:37:27 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4792F1996
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:37:26 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id a9so9992446vsh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681285045; x=1683877045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZgV7mLYYfabq5SngD7+7YmHntm4dL0EOu2XmAvb6WeM=;
+        b=CJEPNpIG+JJu+arUHwyO6SYyeX7P+O/0pwWXrPQ7o8ILjlPO7lyUNnXHr5CqH7Oawn
+         uqMpkH1WvE2GKkAcUMx9+GcT2gHaYfy7C7EUYH/6OX8mQ9lyeawLnbumsswSr2yxfO6V
+         /HvlgWUvIq8ndOnMDc7Xe+A5FBovsPX3rCsdrauGujhPwvDdxJfHBEeAugf32rtjQkAQ
+         DVO3iRjxQPUX1/hEC+eE5Uz+5Gw/TSUze1RqKGOSC7WlaT7R/rxRO4YX1tdVUZ3BXoTm
+         jxphEVVJfmgKHsdcd/6TouDlmMJjw1LXT3gQvYuMZb2hkTSlzcEREEHILKTSY+fNoQwV
+         aCMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681285045; x=1683877045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZgV7mLYYfabq5SngD7+7YmHntm4dL0EOu2XmAvb6WeM=;
+        b=S9hi8gHvlH3w5vxD34RnWK2uoGmOEiL3KVuK3enpvQoSreVMRAppnpNvt30CL8UQgM
+         zIh8o02vD/8XLx3eD2W+htIj6uasxO4OkGcqeIA6d6f9P+L9LBajIppYs4cgYlY6O27R
+         la2XWoN5g3fatlVOgMUIJvR5deHnQ17IgRvtb8w4d3vcC4RVUBRu13rTX2G0TO9HAbEL
+         vQSJwnV91QEI26RefAAIgLIwcm3gxom9V6EWYUTytE2fGwJ5AN9DgV5kHyjMrxOa15KH
+         wKjMfDtvZKfbTusMbNjABxYnloBfQfiC35c6Ugj+Jfa+wjCJAKOJss0zhSEuKm9qGEbm
+         WdIg==
+X-Gm-Message-State: AAQBX9dg1fr8ib31tjgk7GQ540JEd01voLjhd6VKb1XBURGAFqxm9Q7Z
+        9pgbZ7ST1Kty2L5VyXkY+DW1wqhP5Lh/rsFonH64Yw==
+X-Google-Smtp-Source: AKy350Y7d95c7K1/2E5QLZTreMqU4hF07BLnaGfLZtIHDI8GzgaOc2+fcggGwRaK/v4/G1YN1JgaYiADXhDYQSWi2wQ=
+X-Received: by 2002:a67:b74c:0:b0:425:d255:dd38 with SMTP id
+ l12-20020a67b74c000000b00425d255dd38mr10252865vsh.1.1681285045193; Wed, 12
+ Apr 2023 00:37:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 6/7] soc: starfive: Add dphy pmu support
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
- <20230411064743.273388-7-changhuang.liang@starfivetech.com>
- <20230411-iron-everybody-70b78e94aee5@spud>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230411-iron-everybody-70b78e94aee5@spud>
+References: <CA+G9fYuogkamdKf9+uwsvKh67NGTjZru3feRVyHhEQPhpqipVg@mail.gmail.com>
+ <CADvbK_cZwoGEmMXZ2p18MzcAkLo3PcMw8Uym2Fa3Za6-5JiA=A@mail.gmail.com>
+In-Reply-To: <CADvbK_cZwoGEmMXZ2p18MzcAkLo3PcMw8Uym2Fa3Za6-5JiA=A@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 12 Apr 2023 13:07:13 +0530
+Message-ID: <CA+G9fYuuZQv1Ode6pCR3ZuUKADuYy+vmuoaqeT-S-L46jMwP_Q@mail.gmail.com>
+Subject: Re: selftests: net: sctp_vrf.sh: # sysctl: error: 'net.sctp/l3mdev_accept'
+ is an unknown key
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.176]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/4/12 5:15, Conor Dooley wrote:
-> On Mon, Apr 10, 2023 at 11:47:42PM -0700, Changhuang Liang wrote:
-[...]
->> +++ b/MAINTAINERS
->> @@ -19944,6 +19944,7 @@ F:	include/dt-bindings/reset/starfive?jh71*.h
->>  
->>  STARFIVE JH71XX PMU CONTROLLER DRIVER
->>  M:	Walker Chen <walker.chen@starfivetech.com>
->> +M:	Changhuang Liang <changhuang.liang@starfivetech.com>
-> 
-> Unmentioned in the commit message, plus I would like an R-b or an Ack
-> from Walker.
-> 
-
-OK, I will make a discuss with Walker.
-
->>  S:	Supported
->>  F:	Documentation/devicetree/bindings/power/starfive*
->>  F:	drivers/soc/starfive/jh71xx_pmu.c
->> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
->> index 990db6735c48..d4092ca4dccf 100644
-[...]
->> @@ -94,6 +97,8 @@ static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_o
->>  
->>  	if (pmu->match_data->pmu_type == JH71XX_PMU_GENERAL)
->>  		offset = JH71XX_PMU_CURR_POWER_MODE;
->> +	else if (pmu->match_data->pmu_type == JH71XX_PMU_DPHY)
-> 
-> There are only two options for this "enum", so why `else if`?
-> 
-
-OK, will change to else.
-
->> +		offset = JH71XX_PMU_DPHY_SWITCH;
->>  
->>  	regmap_read(pmu->base, offset, &val);
->>  
->> @@ -170,6 +175,23 @@ static int jh71xx_pmu_general_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bo
->>  	return 0;
->>  }
->>  
-[...]
->>  static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
->>  {
->>  	struct jh71xx_pmu *pmu = pmd->pmu;
->> @@ -191,6 +213,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
->>  
->>  	if (pmu->match_data->pmu_type == JH71XX_PMU_GENERAL)
->>  		ret = jh71xx_pmu_general_set_state(pmd, mask, on);
->> +	else if (pmu->match_data->pmu_type == JH71XX_PMU_DPHY)
->> +		ret = jh71xx_pmu_dphy_set_state(pmd, mask, on);
-> 
-> Perhaps I am verging on over-complication, but I dislike this carry on.
-> Is this the only time we'll see a power domain provider coming out of
-> a syscon, or are there likely to be more?
-> Either way, I think having an ops struct w/ both parse_dt() and the
-> set_state() implementations would be neater than what you have here.
-> 
-> Very much open to dissenting opinions there though. Emil? Walker?
-> 
-> Cheers,
-> Conor.
-> 
-
-"else if" will change to "else"
-As far as I know, there are only two types power domain on the JH7110 SoC.
-One is the original, another one is coming out of a syscon.
-
->>  
->>  	return ret;
->>  }
-[...]
->> 2.25.1
+On Wed, 12 Apr 2023 at 03:16, Xin Long <lucien.xin@gmail.com> wrote:
+>
+>
+>
+> On Tue, Apr 11, 2023 at 1:00=E2=80=AFPM Naresh Kamboju <naresh.kamboju@li=
+naro.org> wrote:
 >>
+>> The selftests net sctp_vrf.sh test case failed due to following errors.
+>> Do you see these errors / warnings at your end ?
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>
+>> # selftests: net: sctp_vrf.sh
+>> # modprobe: FATAL: Module sctp not found in directory /lib/modules/6.3.0=
+-rc6
+>> # modprobe: FATAL: Module sctp_diag not found in directory
+>
+> # CONFIG_IP_SCTP is not set
+> This is a test for SCTP module, you should enable it before running this =
+test.
+> I will add it in tools/testing/selftests/net/config
+
+That would be the right place to add pre required configs.
+
+>
+> Thanks for reporting.
+
+I am happy to test your next / upcoming patches.
+Please share your development repo / branch or CC me on patches .
+
+- Naresh
