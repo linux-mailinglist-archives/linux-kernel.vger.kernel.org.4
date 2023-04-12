@@ -2,101 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95D76DEFF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC22B6DEFFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjDLI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229881AbjDLI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjDLI6M (ORCPT
+        with ESMTP id S229974AbjDLI7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:58:12 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D19E40
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:57:54 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230412085727epoutp0300b6db32b6cb85f9b8db6df002db01e4~VJDVwtawZ2184521845epoutp03X
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:57:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230412085727epoutp0300b6db32b6cb85f9b8db6df002db01e4~VJDVwtawZ2184521845epoutp03X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681289847;
-        bh=QktOMJ5SidbJeG5GX8NFdAFfpLw3OPxQjf/utIO5YxU=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=f5Q0cBzaxDblTLtt3SPcefzrv3FQjGgdhYHVeqtOt9p1LMfNJoc7DrQQMafBvamXM
-         UEfIAevkeYpMTL48BmGJY/eE0gxsRWuw7JMqiT4X5GKERGbQdcGTs3d98ukHtbJAqL
-         3XKqKnBURRXeB3X/uoeYTf8ZzZATYHemW5cH3bs0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230412085727epcas1p194f55f11f3cbf930d7ab447d7ccf75c5~VJDVIzneL1847418474epcas1p12;
-        Wed, 12 Apr 2023 08:57:27 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.250]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4PxGn25ZYXz4x9Pt; Wed, 12 Apr
-        2023 08:57:26 +0000 (GMT)
-X-AuditID: b6c32a35-99fff7000001b6a3-66-643672762537
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.7C.46755.67276346; Wed, 12 Apr 2023 17:57:26 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH v3] dma-buf/heaps: system_heap: avoid too much
- allocation
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
-Date:   Wed, 12 Apr 2023 17:57:26 +0900
-X-CMS-MailID: 20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmgW5ZkVmKwdImHYs569ewWbw8pGmx
-        8OFdZovVm3wtujfPZLToff+KyeLPiY1sFpd3zWGzuLfmP6vF/T4Hi1N3P7NbvFv/hc2Bx+Pw
-        m/fMHnu/LWDx2DnrLrvHgk2lHps+TWL3uHNtD5vHiRm/WTz6tqxi9Fi/5SqLx+dNcgFcUdk2
-        GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBHKymUJeaU
-        AoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAr0ihNzi0vz0vXyUkusDA0MjEyBChOyM850
-        f2Qu2MJd0TbtD2MDYyNnFyMnh4SAicT2vVNYuhi5OIQEdjBKvN0xh7GLkYODV0BQ4u8OYZAa
-        YQF/iX0vQMKcQDVKEmd/XGGHiOtKNHWvZgGx2QS0Jd4vmMQKYosA1XRt3skGMpNZ4DKzROvV
-        fWwQy3glZrQ/ZYGwpSW2L98KNpRTQE9i6+ElTBBxUYmbq9+yw9jvj81nhLBFJFrvnWWGsAUl
-        HvzczQgz58/x51DziyWWdT6AmlMjseLcKqi4uUTD25VgNq+Ar8TEPUfAbmARUJVoe7gA7F8J
-        AReJjy+0QMLMAvIS29/OYQYJMwtoSqzfpQ8xRVFi5++5jBAlfBLvvvawwnzVsPE3Ozb2jnlP
-        oK5Rk2h59hWqXkbi779nrBMYlWYhAnoWksWzEBYvYGRexSiWWlCcm55abFhgCI/b5PzcTYzg
-        5KtluoNx4tsPeocYmTgYDzFKcDArifD+cDFNEeJNSaysSi3Kjy8qzUktPsRoCvTxRGYp0eR8
-        YPrPK4k3NLE0MDEzMrEwtjQ2UxLn/fJUO0VIID2xJDU7NbUgtQimj4mDU6qB6YluqIxuG5dZ
-        3WvruI32PS/Sc+wXfjh1XKt76mFjfYUlMdJHo/5NPrH0ispBwW3LmdKv86qURDYUdetEPSr4
-        eedjn83N+fW3nFi6UgK/hGyVrNpnyFl3QHLdSu0k/5jPv8Js+lc8SjoZx8+5MWJJSahr6ZKf
-        CXkXLxw926DJb+N/Xv7JZdEmwy0cqzZ51ltO5JmYcoJNr8F2vvFZvc26IZr5lyQ8Ox5+8DHO
-        qTaaNrnYecGx9cc6pjY8mLBK6fVOwQWXVAOP5s1W4bttelnpVdm5PQJc298sMDQtFFnUXi/f
-        1Xabybr12qS79qkTZvhvnqmX35if+iHj9ck8VatGP/NL/XmPff7zVLtIV39RYinOSDTUYi4q
-        TgQAVHfVm0cEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7
-References: <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
-        <20230410073228.23043-1-jaewon31.kim@samsung.com>
-        <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        Wed, 12 Apr 2023 04:59:37 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DD393FA;
+        Wed, 12 Apr 2023 01:59:17 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7451C616E;
+        Wed, 12 Apr 2023 10:59:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681289954;
+        bh=qV8JcF2r9ggW8P3RPvH7aMgjXjti7cuWwbusF0BQCNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XmoOx7nivKW6v+Wl0gFefaJBdo9ADbBHoXVkp7mQTmja1swWG+AoRsa9RvTvDAfrx
+         ceW1LKV83YTEavEbQV+NZFAfSs+ZMvKnb3aeYdCHEViH2XpSHAt89Cn8np/8DHbEoE
+         CofEouaVdxDeG0dZCWIgA/l171AgTKmxgmUYTRAQ=
+Date:   Wed, 12 Apr 2023 11:59:26 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Tony Lindgren <tony@atomide.com>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sebastian Reichel <sre@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/omap: dsi: Fix deferred probe warnings
+Message-ID: <20230412085926.GR11253@pendragon.ideasonboard.com>
+References: <20230412073954.20601-1-tony@atomide.com>
+ <20230412085044.GP11253@pendragon.ideasonboard.com>
+ <2bf56c04-733b-24a5-a344-166a94cd51f7@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2bf56c04-733b-24a5-a344-166a94cd51f7@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,50 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Sorry for being late. I know there was some pre-existing discussion
->around that but I didn't have time to participate.
->
->On Mon 10-04-23 16:32:28, Jaewon Kim wrote:
->> @@ -350,6 +350,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
->>  	struct page *page, *tmp_page;
->>  	int i, ret = -ENOMEM;
->>  
->> +	if (len / PAGE_SIZE > totalram_pages())
->> +		return ERR_PTR(-ENOMEM);
->> +
->
->This is an antipattern imho. Check 7661809d493b ("mm: don't allow
->oversized kvmalloc() calls") how kvmalloc has dealt with a similar
+On Wed, Apr 12, 2023 at 11:55:34AM +0300, Tomi Valkeinen wrote:
+> On 12/04/2023 11:50, Laurent Pinchart wrote:
+> > Hi Tony,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Wed, Apr 12, 2023 at 10:39:53AM +0300, Tony Lindgren wrote:
+> >> We may not have dsi->dsidev initialized during probe, and that can
+> >> lead into various dsi related warnings as omap_dsi_host_detach() gets
+> >> called with dsi->dsidev set to NULL.
+> >>
+> >> The warnings can be "Fixed dependency cycle(s)" followed by a
+> >> WARNING: CPU: 0 PID: 787 at drivers/gpu/drm/omapdrm/dss/dsi.c:4414.
+> > 
+> > How can this happen ? I assume .detach() can't be called without a
+> > priori successful call to .attach(), that that sets dsi->dsidev.
+> 
+> I had a quick look, and the driver calls mipi_dsi_host_register() in 
+> probe, and mipi_dsi_host_unregister() in remove.
+> 
+> mipi_dsi_host_unregister() always calls mipi_dsi_detach(), but I don't 
+> think mipi_dsi_host_register() always calls attach, which happens later 
+> when the peripheral probes.
 
-Hello Thank you for the information.
+Is this something that should be addressed in the DRM MIPI DSI helpers,
+to only detach after an attach ?
 
-I tried to search the macro of INT_MAX.
+> >> Let's fix the warnings by checking for a valid dsi->dsidev.
+> >>
+> >> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> >> ---
+> >>   drivers/gpu/drm/omapdrm/dss/dsi.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/omapdrm/dss/dsi.c b/drivers/gpu/drm/omapdrm/dss/dsi.c
+> >> --- a/drivers/gpu/drm/omapdrm/dss/dsi.c
+> >> +++ b/drivers/gpu/drm/omapdrm/dss/dsi.c
+> >> @@ -4411,7 +4411,7 @@ static int omap_dsi_host_detach(struct mipi_dsi_host *host,
+> >>   {
+> >>   	struct dsi_data *dsi = host_to_omap(host);
+> >>   
+> >> -	if (WARN_ON(dsi->dsidev != client))
+> >> +	if (dsi->dsidev && WARN_ON(dsi->dsidev != client))
+> >>   		return -EINVAL;
+> >>   
+> >>   	cancel_delayed_work_sync(&dsi->dsi_disable_work);
 
-include/vdso/limits.h
-#define INT_MAX         ((int)(~0U >> 1))
+-- 
+Regards,
 
-AFAIK the dma-buf system heap user can request that huge size more than 2GB. So
-I think totalram_pages() is better than INT_MAX in this case.
-
->issue. totalram_pages doesn't really tell you anything about incorrect
->users. You might be on a low memory system where the request size is
->sane normally, it just doesn't fit into memory on that particular
->machine.
-
-Sorry maybe I'm not fully understand what you meant. User may requested
-a huge size like 3GB on 2GB ram device. But I think that should be rejected
-because it is bigger than the device ram size.
-
-Jaewon Kim
-
->
->
->>  	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
->>  	if (!buffer)
->>  		return ERR_PTR(-ENOMEM);
->> -- 
->> 2.17.1
->
->-- 
->Michal Hocko
->SUSE Labs
+Laurent Pinchart
