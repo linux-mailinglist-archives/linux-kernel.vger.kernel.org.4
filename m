@@ -2,200 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969CA6E00CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2706C6E00E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDLV3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S229596AbjDLVaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDLV3G (ORCPT
+        with ESMTP id S229529AbjDLVat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:29:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C3A61B6;
-        Wed, 12 Apr 2023 14:29:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FDEC63020;
-        Wed, 12 Apr 2023 21:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BCEC4339B;
-        Wed, 12 Apr 2023 21:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681334943;
-        bh=DvI0V6AQpOpyIERg5ybpKxKwnSB0dYL0dSLsfjLHGBw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=V0z7c83x9VnYP47RmOWaUAsKe+WAbiXfLhVb5wVaKAdTMU/yImm0SlTa0RTNzIr3W
-         0Sx5Uwg2qXyVjkirbwEfRVuIfCR+CcWs11QCsVVr2w+P/3EmjE8lpDNxn4zuPxUxD6
-         9IyyBIhr2CAzk3F6Kn2vk+RyDI7sAIa4XlQEZr28Uu+MuIPS3kp/XfU6AeQWp5CIA3
-         lkwwBzwpETwuyY5RTMjtzQ2qvznBqr2VThr/9pN0Yubx7dYJ0C3M40/tK6aWYW/684
-         Ms1uWLv6O1iHOPGizhPvxacOZ8aKUzu1fNn0r3hM+V+EjwtR+cysDx/sRObkJ26TTL
-         FZknMIEp44bmw==
-Date:   Wed, 12 Apr 2023 16:29:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        linux-cxl@vger.kernel.org, rrichter@amd.com,
-        linux-kernel@vger.kernel.org, bhelgaas@google.com,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] PCI/AER: Unmask RCEC internal errors to enable
- RCH downstream port error handling
-Message-ID: <20230412212901.GA81099@bhelgaas>
+        Wed, 12 Apr 2023 17:30:49 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBA393DE;
+        Wed, 12 Apr 2023 14:30:23 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CJTWAB007793;
+        Wed, 12 Apr 2023 21:29:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=bXdrSJqSpeC4V4Q0x3boHlrCc8/cule5AASS6t5grGE=;
+ b=CpO6OHCajrI0WUVal1n9Ba/30Oyk+t6xOfwfMan1V+X/22fSPQOCFvQNtQQCMaTrqopF
+ +4bf/DmxgpFMr1Gvs6vpw1X+VS5CBVTk3KV6yS9JKvzmRe9pG/qg+UP/CG2KMOx+ZfTv
+ oFDlOcj5j3GOCnWanc+GWiQgcLIB5DRAudkPVjrIGhaBCHdF3DtyDlyLHPFfA7FL5Eg0
+ qKW6pTNj615zz3xSnPwFPTGbCYrWthTmoi8/HuatpGbKf19gWIc4UKv49PBTV34NQy7r
+ kQngQGEG2CaPW6MVBlZ0n6OMF0/WTVOtY1Q/yDTHvu3W7Pl76DCtI6XASxvaf2+cFpPh 2w== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0etscn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 21:29:56 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33CKatV3012630;
+        Wed, 12 Apr 2023 21:29:54 GMT
+Received: from brm-x62-22.us.oracle.com (brm-x62-22.us.oracle.com [10.80.150.48])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3puwe9rak4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 12 Apr 2023 21:29:54 +0000
+From:   Henry Willard <henry.willard@oracle.com>
+To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] MIPS: Don't clear _PAGE_SPECIAL in _PAGE_CHG_MASK
+Date:   Wed, 12 Apr 2023 15:29:53 -0600
+Message-Id: <20230412212953.388185-1-henry.willard@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411180302.2678736-7-terry.bowman@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_12,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ adultscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120183
+X-Proofpoint-GUID: 2_Y7AlEXgNk-dEm2slUp1j_nW3Jx5VIL
+X-Proofpoint-ORIG-GUID: 2_Y7AlEXgNk-dEm2slUp1j_nW3Jx5VIL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 01:03:02PM -0500, Terry Bowman wrote:
-> From: Robert Richter <rrichter@amd.com>
-> 
-> RCEC AER corrected and uncorrectable internal errors (CIE/UIE) are
-> disabled by default.
+In the special case where
 
-"Disabled by default" just means "the power-up state of CIE/UIC is
-that they are masked", right?  It doesn't mean that Linux normally
-masks them.
+	p = mmap(NULL, ALLOC_SIZE, PROT_READ,
+                MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
 
-> [1][2] Enable them to receive CXL downstream port
-> errors of a Restricted CXL Host (RCH).
-> 
-> [1] CXL 3.0 Spec, 12.2.1.1 - RCH Downstream Port Detected Errors
-> [2] PCIe Base Spec 6.0, 7.8.4.3 Uncorrectable Error Mask Register,
->     7.8.4.6 Correctable Error Mask Register
-> 
-> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Cc: "Oliver O'Halloran" <oohall@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-pci@vger.kernel.org
-> ---
->  drivers/pci/pcie/aer.c | 73 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 171a08fd8ebd..3973c731e11d 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -1000,7 +1000,79 @@ static void cxl_handle_error(struct pci_dev *dev, struct aer_err_info *info)
->  		pcie_walk_rcec(dev, cxl_handle_error_iter, info);
->  }
->  
-> +static bool cxl_error_is_native(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
-> +
-> +	if (pcie_ports_native)
-> +		return true;
-> +
-> +	return host->native_aer && host->native_cxl_error;
-> +}
-> +
-> +static int handles_cxl_error_iter(struct pci_dev *dev, void *data)
-> +{
-> +	int *handles_cxl = data;
-> +
-> +	*handles_cxl = is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
-> +
-> +	return *handles_cxl;
-> +}
-> +
-> +static bool handles_cxl_errors(struct pci_dev *rcec)
-> +{
-> +	int handles_cxl = 0;
-> +
-> +	if (!rcec->aer_cap)
-> +		return false;
-> +
-> +	if (pci_pcie_type(rcec) == PCI_EXP_TYPE_RC_EC)
-> +		pcie_walk_rcec(rcec, handles_cxl_error_iter, &handles_cxl);
-> +
-> +	return !!handles_cxl;
-> +}
-> +
-> +static int __cxl_unmask_internal_errors(struct pci_dev *rcec)
-> +{
-> +	int aer, rc;
-> +	u32 mask;
-> +
-> +	/*
-> +	 * Internal errors are masked by default, unmask RCEC's here
-> +	 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
-> +	 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
-> +	 */
+is followed by
 
-Unmasking internal errors doesn't have anything specific to do with
-CXL, so I don't think it should have "cxl" in the function name.
-Maybe something like "pci_aer_unmask_internal_errors()".
+	rc = mprotect(p, ALLOC_SIZE, PROT_NONE);
 
-This also has nothing special to do with RCECs, so I think we should
-refer to the device as "dev" as is typical in this file.
+the _PAGE_SPECIAL bit in the page tables will be cleared by
+mistake and the later unmapped operations will incorrectly
+modify the struct page for the the zero page. This sequence
+occurs in the madvise05 test of the Linux Test Project
+suite of tests.
 
-I think this needs to check pcie_aer_is_native() as is done by
-pci_aer_clear_nonfatal_status() and other functions that write the AER
-Capability.
+This was discovered while testing an older version of the kernel
+(5.4.17) on a MIPS device. Unfortunately, support for this device
+is not available in newer kernels, so I can't test this with the
+latest Linux kernel code. It looks like the problem exists in
+newer kernels, but I can't verify it. Except for the LTP test,
+this sequence of calls is probably not common.
 
-With the exception of this function, this patch looks like all CXL
-code that maybe could be with other CXL code.  Would require making
-pcie_walk_rcec() available outside drivers/pci, I guess.
+Passing it along in the hope it will be useful to someone.
 
-> +	aer = rcec->aer_cap;
-> +	rc = pci_read_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, &mask);
-> +	if (rc)
-> +		return rc;
-> +	mask &= ~PCI_ERR_UNC_INTN;
-> +	rc = pci_write_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, mask);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc = pci_read_config_dword(rcec, aer + PCI_ERR_COR_MASK, &mask);
-> +	if (rc)
-> +		return rc;
-> +	mask &= ~PCI_ERR_COR_INTERNAL;
-> +	rc = pci_write_config_dword(rcec, aer + PCI_ERR_COR_MASK, mask);
-> +
-> +	return rc;
-> +}
-> +
-> +static void cxl_unmask_internal_errors(struct pci_dev *rcec)
-> +{
-> +	if (!handles_cxl_errors(rcec))
-> +		return;
-> +
-> +	if (__cxl_unmask_internal_errors(rcec))
-> +		dev_err(&rcec->dev, "cxl: Failed to unmask internal errors");
-> +	else
-> +		dev_dbg(&rcec->dev, "cxl: Internal errors unmasked");
-> +}
-> +
->  #else
-> +static inline void cxl_unmask_internal_errors(struct pci_dev *dev) { }
->  static inline void cxl_handle_error(struct pci_dev *dev,
->  				    struct aer_err_info *info) { }
->  #endif
-> @@ -1397,6 +1469,7 @@ static int aer_probe(struct pcie_device *dev)
->  		return status;
->  	}
->  
-> +	cxl_unmask_internal_errors(port);
->  	aer_enable_rootport(rpc);
->  	pci_info(port, "enabled with IRQ %d\n", dev->irq);
->  	return 0;
-> -- 
-> 2.34.1
-> 
+Signed-off-by: Henry Willard <henry.willard@oracle.com>
+---
+ arch/mips/include/asm/pgtable-bits.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
+index 2362842ee2b5..1c576679aa87 100644
+--- a/arch/mips/include/asm/pgtable-bits.h
++++ b/arch/mips/include/asm/pgtable-bits.h
+@@ -280,6 +280,7 @@ static inline uint64_t pte_to_entrylo(unsigned long pte_val)
+ #define __WRITEABLE	(_PAGE_SILENT_WRITE | _PAGE_WRITE | _PAGE_MODIFIED)
+ 
+ #define _PAGE_CHG_MASK	(_PAGE_ACCESSED | _PAGE_MODIFIED |	\
+-			 _PAGE_SOFT_DIRTY | _PFN_MASK | _CACHE_MASK)
++			 _PAGE_SOFT_DIRTY | _PFN_MASK |   \
++			 _CACHE_MASK | _PAGE_SPECIAL)
+ 
+ #endif /* _ASM_PGTABLE_BITS_H */
+-- 
+2.31.1
+
