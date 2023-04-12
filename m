@@ -2,160 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E616DFC10
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD226DFC58
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjDLQ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        id S229753AbjDLRMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjDLQ7e (ORCPT
+        with ESMTP id S229732AbjDLRMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:59:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B786A8;
-        Wed, 12 Apr 2023 09:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1681318741; i=frank-w@public-files.de;
-        bh=fOcCePvOyVu5eqlb5sp+l70CGKrbBCGwfk0FK1UiB6A=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=PMxo+v/gXJCJnMg8GB4Ksdf+mxTowXgGzm4T1QjhQIF4wzcrh8hNJZbC2qiasq84x
-         Hi3ivkf2PaDzYH/S+/YlRqYsRYCL4JuKfFejRk1GFW2XKWKF0XJUdE2aajcO2ZcN2t
-         UYtcIfXX7yUXNMBAL60v7En9ZbE+eXZrATBlz8GC5rMf6ulLWKmpvXetp94OHlA07H
-         NWb+TFqqpXCrtAOpTWxAVp6Z/CObmyBWCB9kFjNvMdQlPuo+AhnEwhzz3Q5DS7vZAn
-         0aWJehF6hd6bkVcA9veb2dBDD2EUwAPj/dFqlj5Gp7IJ72exPYSlAltLtkN+XzuZ/T
-         FfUZRWThhrF4w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.157.203] ([217.61.157.203]) by web-mail.gmx.net
- (3c-app-gmx-bap50.server.lan [172.19.172.120]) (via HTTP); Wed, 12 Apr 2023
- 18:53:22 +0200
+        Wed, 12 Apr 2023 13:12:17 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF34E76
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:12:14 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230412165334euoutp022969579b75bcdfd547ae22124a9c034e~VPjCoPdBe2181021810euoutp02f
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:53:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230412165334euoutp022969579b75bcdfd547ae22124a9c034e~VPjCoPdBe2181021810euoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1681318414;
+        bh=wZO6Dqp5dPJCNRWb5bvNZmABWpcQ9lZ9Lbxzm7Lw6Mg=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=C30NP/i6B4LSCFFElxa+dbjEeCx+ulslG4eLWi9JLlJ512e9VrLvLxt/wC2IBKkvR
+         6FXdbDk1IZ9gNhnNqLWxO405Ah+PTSqAJ+QiTpWpqbnYOsUUpj42ZdtoY64am4CgTA
+         sqleo+koxJGBXWjcNcCQvC/8cIWD7KjSqS886iMQ=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230412165334eucas1p2774826fb6fff814016a2b94defb89e2a~VPjCQVe5w1111611116eucas1p2w;
+        Wed, 12 Apr 2023 16:53:34 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 60.2D.09966.E02E6346; Wed, 12
+        Apr 2023 17:53:34 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230412165333eucas1p2109ca0d5e10efd132a04bbbe1b5c3d94~VPjB7uv-B1360113601eucas1p2E;
+        Wed, 12 Apr 2023 16:53:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230412165333eusmtrp2aca1d1ee844ff8e9932214de51f21860~VPjB7DZCG0393003930eusmtrp2O;
+        Wed, 12 Apr 2023 16:53:33 +0000 (GMT)
+X-AuditID: cbfec7f4-d39ff700000026ee-23-6436e20e22f4
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 3F.0E.22108.D02E6346; Wed, 12
+        Apr 2023 17:53:33 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230412165332eusmtip20d390bf7742454c6e312aefbc76f6966~VPjBDW_Wq0161001610eusmtip2e;
+        Wed, 12 Apr 2023 16:53:32 +0000 (GMT)
+Message-ID: <69a90fd7-e76a-4257-8263-57d333b60dad@samsung.com>
+Date:   Wed, 12 Apr 2023 18:53:32 +0200
 MIME-Version: 1.0
-Message-ID: <trinity-990f3b28-d67c-49ef-9094-c3b7d2059e36-1681318402336@3c-app-gmx-bap50>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: Aw: Re:  Re: Re: Re: Re: [PATCH v3 0/5] arm: dts: mt7623: relocate
- gmacs, mt7530 switch, and add port@5
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 12 Apr 2023 18:53:22 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <0d242292-16b7-6837-7d1a-b70c41309e6b@arinc9.com>
-References: <20230210182505.24597-1-arinc.unal@arinc9.com>
- <c3ab9a9b-3eb2-8fb0-d5d7-c0b7c684d3a7@arinc9.com>
- <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
- <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
- <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
- <2dc2fc39-b0d5-c872-36bf-fde851debe4b@arinc9.com>
- <A329B2DF-04B7-40FA-BBCE-1F1012A6DBBD@public-files.de>
- <fb96d8eb-2eb7-db19-1135-1a833294dd67@arinc9.com>
- <trinity-899c01a6-0fc5-4900-aea8-2b43802c8329-1676814734826@3c-app-gmx-bs35>
- <trinity-3f46d325-bc45-4ee7-ae86-c8db4467aa94-1681303779505@3c-app-gmx-bap50>
- <703ad8a8-f84e-6404-4cce-5386bfaa2bd7@arinc9.com>
- <trinity-489cdc3b-e861-49d0-b1ec-e964f00388df-1681312277092@3c-app-gmx-bap50>
- <0d242292-16b7-6837-7d1a-b70c41309e6b@arinc9.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:2TgEVklogIPN9QUAHc+I39F76U3lLe2ea2lWUGSEcJ3RvU2i5XuSHdQJ6pvi7JcepqiJp
- i+kF1SQKfSGdpEKFDMk5JKhFry7q/xhTmS/ZbkqN3cyuS4s4+9iw1B4zxnWHYq2gUbFbIdfNs1YM
- J3kaN74CFnKi5rybX+JCfH+SMqCSekk7oXbyLyBxLj/4jEc7Lo10H0LlBl4KB2w1OApUY2Zyn1xG
- 41Fgfzzly9PIDY0Z581CNIHF2nkEJx/mTeozgGw7zpRjjtj34v2WjTHkMmdJRSEWGyizDGWy9a1g
- mo=
-UI-OutboundReport: notjunk:1;M01:P0:7SjTWPIP+q0=;W0WRwi90fBs/Qt21MFyuovCZP2n
- 5q2XvFgv8opMAzG20CGRTfZPJqT7pMHPmMhGdNEYX6EeVSzy2kKtOMjGB9+Gj3KNEwoZ+ro5W
- 0FD1jz5/HJd0hsYJ99cZU4MPAzOilR37JhqtiajUypiTZOtH/qJ86/lzHAp7I1Q5bXTgHYh33
- XcVe1nw42tZBtITlS9UVqnL8ipO+HCEdX529vh85yg/mBnH2oqtANY+Q6CtsC7O2gG9pu6LS6
- YSRWxu+i67bmO2KHPEfTIUAkCtZ0GH+G8uVMo2q3DB5jzKVciECADR9oggZlQCAKtoQ92OGUK
- bOBFDfh5/Gynx76q7yDw5LZuAk/d2v8MePFwUqW7ZeoEOCDjXhzsnT+BdnvRGJoWF+xO1jprH
- jCgAGPnanzGrcSFhp8hcFO6X8Pef651yP6qNgCGU/5vk2XNQK0CoChZwOUSJkwP4F30TocWUu
- Beg+q/BUngvOSH3XZ8IbFkh356XN/VobS7svY/f7+ZRt/mJ/fdRdMipLSsKtZ0u0MoY/zzf01
- gUH+NNJlxYFjX+FFwy3VYWIzjwO0hggVR8vcjeiUJJOrxxOb+yiU5cQql2f3gM7OmWXz1KUWT
- 7emAU2SFKYNfKh/htvBb/5iFQvAmtnRiSWIF8RXoYaSSFSg9Rw+rTD+4mRJwqiPJWMv+EphSV
- /OIzT+cv9ldRiNq7IySENjKsQEO6JH8P0OS6JxuRU20oX5cu4/8OsaU3lun9/Sn4hbxxotYYY
- ZGl1TOVuTNet193Q66cWcOc5MuB0coIvVZaSShxaU51jYeFu6RHzwL74uGEIVwtiZVT/mODPR
- JbpDXu+ZaUOoS+Gi+siGgUZw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v9 1/6] media: verisilicon: Do not set context src/dst
+ formats in reset functions
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk,
+        robert.mader@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <a0a00172-ce86-dfa2-267d-b318a9c076dc@collabora.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKKsWRmVeSWpSXmKPExsWy7djP87p8j8xSDCZeZLfYcmU2s8XGF59Z
+        LB5e9be4OPMui8Xmcz2sFqum7mSx2PT4GqtF16+VzBaXd81hs+jZsJXV4tOD/8wWyzb9YbLo
+        XDGRzeLuvRMsFt/eLGa0+Lt9E4vFiy3iDoIef59fZ/HYcXcJo8fOWXfZPTat6mTz2Lyk3mPj
+        ux1MHv1/DTy6jlxn8/i8Sc7j1NfP7AFcUVw2Kak5mWWpRfp2CVwZhxo+shb85quY+HIfWwPj
+        ep4uRk4OCQETiV8df5m7GLk4hARWMEq8ut/GApIQEvjCKLHzRA1E4jOjxOIF+xhhOr7cPArV
+        sZxRYuXWqWwQzkdGic7WbvYuRg4OXgE7iTu7IkFMFgFViXWXa0B6eQUEJU7OfAK2QFQgRWL3
+        yafsILawQLrE/kPdTCA2s4C4xK0n85lARooInGWS6Lt/kAXEYRZYyCjxvGkDM0gVm4ChRNfb
+        LjYQm1PAUeLV7KUsEN3yEs1bZ4NdJyFwiVPi/uZVUGe7SKz9+IwNwhaWeHV8CzuELSPxfyfE
+        OgmBdkaJBb/vQzkTGCUant+C6raWuHPuFxvIP8wCmhLrd+lDhB0lvn1eCxaWEOCTuPFWEOII
+        PolJ26YzQ4R5JTrahCCq1SRmHV8Ht/bghUvMExiVZiEFzCykAJiF5J1ZCHsXMLKsYhRPLS3O
+        TU8tNspLLdcrTswtLs1L10vOz93ECEyJp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nw/nAxTRHi
+        TUmsrEotyo8vKs1JLT7EKM3BoiTOq217MllIID2xJDU7NbUgtQgmy8TBKdXAtKQlPJZFv3bV
+        PLbI1u3/e9xiVy0SeqIcVD3fYvPEPOtbip/9OnM+T5+210cr8xzPnl+sykHTsor+rUxJzDrf
+        Wfp7TvJ2tnfajmXnQzYccV5irc/P98/k/+r6P+dc5PRE/r1Q/Gqy8vaMBdKuyxYWzJLmdKqK
+        +qQoZrhl0zRGXa7Dq7qu/fHev4/jgMPmi7M1QpwuHTnbFCxh+Tg4oPrUmeNVWkGz+dkWPuLq
+        eGr+VflRzpJVPNaMv5lnKxSvkV4gstBCgWPZFdHLP47uaKxUeH84g/uYcMvNOY7S2a/+vln6
+        bYrFvL/115eIpK3x9t9+Xfymhu4iK6tMfWa1rOudN6wNM/ZM27RV5Zpdvf2Dl0osxRmJhlrM
+        RcWJAAYppgf4AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOIsWRmVeSWpSXmKPExsVy+t/xe7q8j8xSDNa+0bbYcmU2s8XGF59Z
+        LB5e9be4OPMui8Xmcz2sFqum7mSx2PT4GqtF16+VzBaXd81hs+jZsJXV4tOD/8wWyzb9YbLo
+        XDGRzeLuvRMsFt/eLGa0+Lt9E4vFiy3iDoIef59fZ/HYcXcJo8fOWXfZPTat6mTz2Lyk3mPj
+        ux1MHv1/DTy6jlxn8/i8Sc7j1NfP7AFcUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG
+        5rFWRqZK+nY2Kak5mWWpRfp2CXoZhxo+shb85quY+HIfWwPjep4uRk4OCQETiS83jzKD2EIC
+        Sxkltqwqg4jLSJyc1sAKYQtL/LnWxdbFyAVU855RYu6TqyxdjBwcvAJ2End2RYKYLAKqEusu
+        14CU8woISpyc+YQFxBYVSJHYNWEpE4gtLJAusf9QN5jNLCAucevJfCaQkSICZ5kk9s8/zA7i
+        MAssZJT4ufwrK8Syg0wS/y70gF3BJmAo0fUW5ApODk4BR4lXs5eyQIwyk+ja2sUIYctLNG+d
+        zTyBUWgWkktmIdk4C0nLLCQtCxhZVjGKpJYW56bnFhvqFSfmFpfmpesl5+duYgSmgG3Hfm7e
+        wTjv1Ue9Q4xMHIyHGCU4mJVEeH+4mKYI8aYkVlalFuXHF5XmpBYfYjQFhsZEZinR5HxgEsor
+        iTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamA6fGaGIJPS2lkM36LW
+        2N6IlGjXbih/cu/BkZmzT0dnMjj/M+VfEjjx6NZbx068Cz+qJli7mc363kKH2z0HT+lzs585
+        +murco29kOjrxzW3YlpF5p7i/N9pc/7xxmL5RqPgw5kO2w7O6cnJzFsV1N9vOnf5hYnSt29+
+        O/HqxX7zp1IcBrtKHt4I0ot8fLnB+Yd6cmRF1624Ex5rDoXazCsMuNB2skta4WxS3YIb+jzs
+        zt+zRdM0NwZ+uut3STH54dNDEu1bmt/qCM+qCP8n9tizITvgHZvHm7yXhyuWbk8/LBnZmygt
+        zyvM6puy1t9h0n7z2TKLvpuyGPzqmpk4t/oc59+jstvcTQonlAlVfuRUYinOSDTUYi4qTgQA
+        dnKUTIoDAAA=
+X-CMS-MailID: 20230412165333eucas1p2109ca0d5e10efd132a04bbbe1b5c3d94
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230412161415eucas1p1536b537c3f866e9820d3bea8bb9ea2d9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230412161415eucas1p1536b537c3f866e9820d3bea8bb9ea2d9
+References: <20230220104849.398203-1-benjamin.gaignard@collabora.com>
+        <20230220104849.398203-2-benjamin.gaignard@collabora.com>
+        <CGME20230412161415eucas1p1536b537c3f866e9820d3bea8bb9ea2d9@eucas1p1.samsung.com>
+        <5fda9b2f-a339-8a23-dc7b-f1bac2c385b6@samsung.com>
+        <a0a00172-ce86-dfa2-267d-b318a9c076dc@collabora.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi,
 
-> Gesendet: Mittwoch, 12=2E April 2023 um 18:21 Uhr
-> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
-> > thanks, it changes the master when i upgrade iproute to 6=2E1 (from de=
-bian bullseye-backports), but i cannot do any traffic on it after switching=
- to gmac1=2E=2E=2E
-> >=20
-> > 5: wan@eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue =
-state UP group default qlen 1000
-> >      link/ether f2:d2:51:56:cd:3d brd ff:ff:ff:ff:ff:ff
-> >      inet 192=2E168=2E0=2E11/24 scope global wan
-> >         valid_lft forever preferred_lft forever
-> >=20
-> > see no p5-TX/gmac-rx
+On 12.04.2023 18:40, Benjamin Gaignard wrote:
+>
+> Le 12/04/2023 à 18:14, Marek Szyprowski a écrit :
+>> Hi,
+>>
+>> On 20.02.2023 11:48, Benjamin Gaignard wrote:
+>>> Setting context source and destination formats should only be done
+>>> in hantro_set_fmt_out() and hantro_set_fmt_cap() after check that
+>>> the targeted queue is not busy.
+>>> Remove these calls from hantro_reset_encoded_fmt() and
+>>> hantro_reset_raw_fmt() to clean the driver.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> This patch landed recently in linux-next as commit db6f68b51e5c ("media:
+>> verisilicon: Do not set context src/dst formats in reset functions").
+>
+> Hi,
+>
+> I do not have this board up and running with Hantro encoder but
+> I think the attached patch may solve the issue.
+> Could you tell me if it works ?
 
-> Did you apply the vlan and flooding fix patches from Richard?
+Yep, it fixes the issue.
 
-have now applied all patches i've found from richard (which are all reject=
-ed):
-
-fe4495bb3cc2 2023-02-12 Fix setting up CPU and User ports to be in the cor=
-rect mode during setup and when toggling vlan_filtering on a bridge port=2E=
-  (HEAD -> 6=2E3-rc)
-b0641f3e1a69 2023-02-12 Fix Flooding: Disable by default on User ports and=
- Enable on CPU ports=20
-cb04b3451524 2023-02-12 Do not add all User ports to the CPU by default=2E=
- This will break Multi CPU when added a seperate patch=2E It will be overwr=
-itten by =2Eport_enable and since we are forcing output to a port via the S=
-pecial Tag this is not needed=2E
-
-and now it seems working and is clear ;)
-
-root@bpi-r2:~# ip l show wan
-5: wan@eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue stat=
-e UP mode DEFAULT group default qlen 1000
-    link/ether f2:d2:51:56:cd:3d brd ff:ff:ff:ff:ff:ff
-
-iperf3
-[ ID] Interval           Transfer     Bitrate         Retr                =
-                                                                           =
-                        =20
-[  5]   0=2E00-10=2E00  sec  1=2E09 GBytes   940 Mbits/sec    0           =
-  sender                                                                   =
-                              =20
-[  5]   0=2E00-10=2E03  sec  1=2E09 GBytes   936 Mbits/sec                =
-  receiver                                                                 =
-                              =20
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
 
-iperf3 -R
-[ ID] Interval           Transfer     Bitrate         Retr                =
-                                                                           =
-                        =20
-[  5]   0=2E00-10=2E04  sec  1=2E09 GBytes   936 Mbits/sec    0           =
-  sender                                                                   =
-                              =20
-[  5]   0=2E00-10=2E00  sec  1=2E09 GBytes   938 Mbits/sec                =
-  receiver                                                                 =
-                              =20
+It looks that the code could be a bit more cleaned up, as with the 
+attached patch, there is such construction:
+
+         if (coded) {
+                 pix_mp->num_planes = 1;
+                 vpu_fmt = fmt;
+         } else if (ctx->is_encoder) {
+                 vpu_fmt = fmt;
+         } else {
+                 vpu_fmt = fmt;
+                 /*
+                  * Width/height on the CAPTURE end of a decoder are 
+ignored and
+                  * replaced by the OUTPUT ones.
+                  */
+                 pix_mp->width = ctx->src_fmt.width;
+                 pix_mp->height = ctx->src_fmt.height;
+         }
+
+Common 'vpu_fmt = fmt' can be moved out of the above if-else block.
 
 
-how do you deal with these patches? do you include them into your mt7530 f=
-ixes series? they (and vladimirs preferred cpu-port) need to be applied bef=
-ore these DTS-changes
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-regards Frank
