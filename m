@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0BE6DF14B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD996DF15C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjDLJ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S230000AbjDLKAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDLJ70 (ORCPT
+        with ESMTP id S229773AbjDLKAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:59:26 -0400
+        Wed, 12 Apr 2023 06:00:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376EC30CB;
-        Wed, 12 Apr 2023 02:59:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DE572A3;
+        Wed, 12 Apr 2023 03:00:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7E3662D5C;
-        Wed, 12 Apr 2023 09:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA01C433EF;
-        Wed, 12 Apr 2023 09:59:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 044DD62D44;
+        Wed, 12 Apr 2023 10:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00809C4339B;
+        Wed, 12 Apr 2023 09:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681293564;
-        bh=/W6rfVmAoHdfAMN8rHOiddmSq8fFQpiYDiyXyTyXY4M=;
+        s=k20201202; t=1681293606;
+        bh=OUD03e+7Iy4QMxz3xJBYzLJlFWfJDEAkzkfLMPair6A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z60c+znf1e1oR2lhp7EgZE9McFZ6FvpBnQh3Z3STDZRc4tUuPJ9Pc6vJWDeU4uoPB
-         paNllylXyfhtWzj6V3XaAXuyzY+bkpritlqDiamD/QnWUN6Fks9UH0KGnoVwMj9ZgN
-         CQjmpFpigQHYb7KCxaa6LbETv7pGE/e4amFM5cZK++raW9cLWHc4EMhuf1zT00l/9g
-         iE1B0Eq1AscAq6yQKESyMuREANzI68UClfk5BvjsOR2TFzMJrapEERN6gWhySaaxiZ
-         d8IXtMweMMEsuAtJZnsOASD82Q62P9+FR99ZWVuVvb15XVQiSfyBFcdnvj0uuMFvNB
-         zNrw3W/V0RDoA==
-Date:   Wed, 12 Apr 2023 10:59:18 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 2/5] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <20230412095918.GZ8371@google.com>
-References: <a642e653-e3e2-c3d2-68cb-1efc92be05bb@linaro.org>
- <20230331165904.4e7f46a1@bootlin.com>
- <20230403142822.GA8371@google.com>
- <20230404092036.2d1cd5d9@bootlin.com>
- <f7ab2fcc-93fc-ce87-8767-579d33907225@linaro.org>
- <20230404100759.5bc9cd20@bootlin.com>
- <143754c2-9e37-4386-af92-174c0df2eb0a@linaro.org>
- <20230405135450.GF8371@google.com>
- <20230405180023.4aebaa08@bootlin.com>
- <20230411181640.50c19d4e@bootlin.com>
+        b=crNVkqcxHCCYL80wSlDenZejktN87UpM/8LK4etPla1ppaaBuuLGirFySD+9BC8KA
+         rok+vJxk0HE5dOvhmCScfvmfwOePw1RpVNIHWcNtjR8/OdKMSLM8epGate+sVgwibT
+         5g+HJMDJAqTuD4tNXDMa0mdfzwpVYJP21+59Ok0BLQ7p83MVc5+U2FahQ/OrlB3E0c
+         3+nXL8j94+wzyND696UMlIfan6ehWljHDgvm/lA3rvxTNr5GvpkPZqTGm9cngV+VsN
+         CJD1pJXthpF+iTotF1i6mXyGtz8SKPgaEU1iVG4BxB/UHaVj28tiyTa6p0gZEsOF59
+         p48RQwfvtj8oA==
+Date:   Wed, 12 Apr 2023 11:59:52 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+Message-ID: <20230412-kurzweilig-unsummen-3c1136f7f437@brauner>
+References: <20230404-engraved-rumble-d871e0403f3b@brauner>
+ <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411181640.50c19d4e@bootlin.com>
+In-Reply-To: <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,158 +72,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023, Herve Codina wrote:
-
-> Hi Lee,
->
-> On Wed, 5 Apr 2023 18:00:23 +0200
-> Herve Codina <herve.codina@bootlin.com> wrote:
->
-> > Hi Lee,
-> > On Wed, 5 Apr 2023 14:54:50 +0100
-> > Lee Jones <lee@kernel.org> wrote:
-> >
-> > > On Tue, 04 Apr 2023, Krzysztof Kozlowski wrote:
-> > >
-> > > > On 04/04/2023 10:07, Herve Codina wrote:
+On Wed, Apr 05, 2023 at 09:58:44PM +0000, Ackerley Tng wrote:
+> 
+> Thanks again for your review!
+> 
+> Christian Brauner <brauner@kernel.org> writes:
+> > On Tue, Apr 04, 2023 at 03:53:13PM +0200, Christian Brauner wrote:
+> > > On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
 > > > >
-> > > > >>> So, the structure I have in mind:
-> > > > >>> - pef2256.c (MFD)
-> > > > >>>   implement and do the setup at probe()
-> > > > >>>   Add the children at probe():
-> > > > >>>     - pef2256-pinctrl (pinctrl) added using mfd_add_devices()
-> > > > >>>     - pef2256-codec (ASoC codec) added using devm_of_platform_populate()
-> > > > >>>
-> > > > >>> Lee, with this in mind, can the core pef2256.c be a MFD driver ?
-> > > > >>
-> > > > >> You do not use MFD here, so why do you want to keep it in MFD? If you
-> > > > >> disagree, please tell me where is the MFD code in your patch?
-> > > > >
-> > > > > I don't want to absolutely use MFD.
-> > > > > I just want to put my driver somewhere and I don't know the right location
-> > > > > between MFD and Misc.
-> > > > >
-> > > > > Basically, the driver needs to do (little simplified and error path removed):
-> > > > >
-> > > > >   static const struct mfd_cell pef2256_devs[] = {
-> > > > >   	{ .name = "lantiq-pef2256-pinctrl", },
-> > > > >   };
-> > > > >
-> > > > >   static int pef2256_probe(struct platform_device *pdev)
-> > > > >   {
-> > > > > 	struct pef2256 *pef2256;
-> > > > > 	void __iomem *iomem;
-> > > > > 	int ret;
-> > > > > 	int irq;
-> > > > >
-> > > > > 	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
-> > > > > 	if (!pef2256)
-> > > > > 		return -ENOMEM;
-> > > > >
-> > > > > 	pef2256->dev = &pdev->dev;
-> > > > >
-> > > > > 	iomem = devm_platform_ioremap_resource(pdev, 0);
-> > > > >
-> > > > > 	pef2256->regmap = devm_regmap_init_mmio(&pdev->dev, iomem,
-> > > > > 						&pef2256_regmap_config);
-> > > > >
-> > > > > 	pef2256->mclk = devm_clk_get_enabled(&pdev->dev, "mclk");
-> > > > > 	pef2256->sclkr = devm_clk_get_enabled(&pdev->dev, "sclkr");
-> > > > > 	pef2256->sclkx = devm_clk_get_enabled(&pdev->dev, "sclkx");
-> > > > >
-> > > > > 	pef2256->reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
-> > > > > 	if (pef2256->reset_gpio) {
-> > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 1);
-> > > > > 		udelay(10);
-> > > > > 		gpiod_set_value_cansleep(pef2256->reset_gpio, 0);
-> > > > > 		udelay(10);
-> > > > > 	}
-> > > > >
-> > > > > 	pef2556_of_parse(pef2256, np);
-> > > > >
-> > > > > 	irq = platform_get_irq(pdev, 0);
-> > > > > 	ret = devm_request_irq(pef2256->dev, irq, pef2256_irq_handler, 0, "pef2256", pef2256);
-> > > > >
-> > > > > 	platform_set_drvdata(pdev, pef2256);
-> > > > >
-> > > > > 	mfd_add_devices(pef2256->dev, PLATFORM_DEVID_NONE, pef2256_devs,
-> > > > > 	      		ARRAY_SIZE(pef2256_devs), NULL, 0, NULL);
+> > > > ...
 > > > >
-> > > > Wait, now you use MFD framework, so the driver is suitable for MFD.
-> > > > Before there was nothing like that in your code.
-> > >
-> > > Agree, the above is suitable for MFD, since it does all the things I
-> > > said your last one did not.  You *can* also use of_platform_populate()
-> > > here, since you are *also* requesting and initialising shared resources.
-> > > You cannot do *both* however.
-> > >
-> >
-> > Thanks for having confirmed that this driver can be a MFD driver.
-> >
-> > Related to of_platform_populate() / mfd_add_devices(), I wanted to use both
-> > because:
-> > - the pinctrl part does not have (and does not need to have) a specific node
-> >   with a specific compatible property. In order to instantiate the related
-> >   driver mfd_add_devices() is the only way I know.
-> > - the audio component nodes have a compatible string and several components
-> >   (ie several nodes) can be present. of_platform_populate() call seems the
-> >   simple way to instantiate them.
-> >
-> > Is there a way to use mfd_add_devices() in this case without the need to
-> > count the audio component nodes in order to allocate as much mfd_cell as
-> > nodes having a matching compatible property ? Is there an other API to do
-> > it ?
-> >
->
-> I looked deeper for using mfd_add_devices() only and found an issue (related
-> to my use-case).
->
-> mfd_add_devices() calls mfd_add_device() and in this function we have:
-> ---- 8< ----
-> 	if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
-> 		for_each_child_of_node(parent->of_node, np) {
-> 			if (of_device_is_compatible(np, cell->of_compatible)) {
-> 				/* Ignore 'disabled' devices error free */
-> 				if (!of_device_is_available(np)) {
-> 					of_node_put(np);
-> 					ret = 0;
-> 					goto fail_alias;
-> 				}
->
-> 				ret = mfd_match_of_node_to_dev(pdev, np, cell);
-> 				if (ret == -EAGAIN)
-> 					continue;
-> 				of_node_put(np);
-> 				if (ret)
-> 					goto fail_alias;
->
-> 				break;
-> 			}
-> 		}
->
-> 		if (!pdev->dev.of_node)
-> 			pr_warn("%s: Failed to locate of_node [id: %d]\n",
-> 				cell->name, platform_id);
-> 	}
-> ---- 8< ----
->
-> My issue is related to the loop.
-> The loop is aborted if the device is not available (typically 'Disabled' in the
-> DT node).
->
-> My full pef2256 node can have several pef2256 audio subnodes with compatible
-> set to "lantiq,pef2256-codec" and some of them can have 'status = "Disabled";'
-> As soon as one device (with my expected compatible) is found 'Disabled', there
-> is no way to look at other children.
->
-> Having 'continue' in case of device not available in the loop to look at the
-> next child will change the behavior of mfd_add_device().
-> Do you think that looking at next child if we find a 'not available' child
-> can be correct for mfd_add_device() ?
-> This probably will have impacts on other MFD drivers.
+> > > > -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> > > > +static int restrictedmem_create(struct vfsmount *mount)
+> > > >  {
+> > > >  	struct file *file, *restricted_file;
+> > > >  	int fd, err;
+> > > >
+> > > > -	if (flags)
+> > > > -		return -EINVAL;
+> > > > -
+> > > >  	fd = get_unused_fd_flags(0);
+> 
+> > > Any reasons the file descriptors aren't O_CLOEXEC by default? I don't
+> > > see any reasons why we should introduce new fdtypes that aren't
+> > > O_CLOEXEC by default. The "don't mix-and-match" train has already left
+> > > the station anyway as we do have seccomp noitifer fds and pidfds both of
+> > > which are O_CLOEXEC by default.
+> 
+> 
+> Thanks for pointing this out. I agree with using O_CLOEXEC, but didn’t
+> notice this before. Let us discuss this under the original series at
+> [1].
+> 
+> > > >  	if (fd < 0)
+> > > >  		return fd;
+> > > >
+> > > > -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> > > > +	if (mount)
+> > > > +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem",
+> > > 0, VM_NORESERVE);
+> > > > +	else
+> > > > +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> > > > +
+> > > >  	if (IS_ERR(file)) {
+> > > >  		err = PTR_ERR(file);
+> > > >  		goto err_fd;
+> > > > @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned
+> > > int, flags)
+> > > >  	return err;
+> > > >  }
+> > > >
+> > > > +static bool is_shmem_mount(struct vfsmount *mnt)
+> > > > +{
+> > > > +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+> 
+> > > This can just be if (mnt->mnt_sb->s_magic == TMPFS_MAGIC).
+> 
+> 
+> Will simplify this in the next revision.
+> 
+> > > > +}
+> > > > +
+> > > > +static bool is_mount_root(struct file *file)
+> > > > +{
+> > > > +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+> 
+> > > mount -t tmpfs tmpfs /mnt
+> > > touch /mnt/bla
+> > > touch /mnt/ble
+> > > mount --bind /mnt/bla /mnt/ble
+> > > fd = open("/mnt/ble")
+> > > fd_restricted = memfd_restricted(fd)
+> 
+> > > IOW, this doesn't restrict it to the tmpfs root. It only restricts it to
+> > > paths that refer to the root of any tmpfs mount. To exclude bind-mounts
+> > > that aren't bind-mounts of the whole filesystem you want:
+> 
+> > > path->dentry == path->mnt->mnt_root &&
+> > > path->mnt->mnt_root == path->mnt->mnt_sb->s_root
+> 
+> 
+> Will adopt this in the next revision and add a selftest to check
+> this. Thanks for pointing this out!
+> 
+> > > > +}
+> > > > +
+> > > > +static int restrictedmem_create_on_user_mount(int mount_fd)
+> > > > +{
+> > > > +	int ret;
+> > > > +	struct fd f;
+> > > > +	struct vfsmount *mnt;
+> > > > +
+> > > > +	f = fdget_raw(mount_fd);
+> > > > +	if (!f.file)
+> > > > +		return -EBADF;
+> > > > +
+> > > > +	ret = -EINVAL;
+> > > > +	if (!is_mount_root(f.file))
+> > > > +		goto out;
+> > > > +
+> > > > +	mnt = f.file->f_path.mnt;
+> > > > +	if (!is_shmem_mount(mnt))
+> > > > +		goto out;
+> > > > +
+> > > > +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+> 
+> > > With the current semantics you're asking whether you have write
+> > > permissions on the /mnt/ble file in order to get answer to the question
+> > > whether you're allowed to create an unlinked restricted memory file.
+> > > That doesn't make much sense afaict.
+> 
+> 
+> That's true. Since mnt_want_write() already checks for write permissions
+> and this syscall creates an unlinked file on the mount, we don't have to
+> check permissions on the file then. Will remove this in the next
+> revision!
+> 
+> > > > +	if (ret)
+> > > > +		goto out;
+> > > > +
+> > > > +	ret = mnt_want_write(mnt);
+> > > > +	if (unlikely(ret))
+> > > > +		goto out;
+> > > > +
+> > > > +	ret = restrictedmem_create(mnt);
+> > > > +
+> > > > +	mnt_drop_write(mnt);
+> > > > +out:
+> > > > +	fdput(f);
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +
+> > > > +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+> > > > +{
+> > > > +	if (flags & ~RMFD_USERMNT)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	if (flags == RMFD_USERMNT) {
+> 
+> > > Why do you even need this flag? It seems that @mount_fd being < 0 is
+> > > sufficient to indicate that a new restricted memory fd is supposed to be
+> > > created in the system instance.
+> 
+> 
+> I'm hoping to have this patch series merged after Chao's patch series
+> introduces the memfd_restricted() syscall [1].
 
-Looks like a bug.  Encountering one disabled cell should not prevent the
-others from registering IMHO.
-
---
-Lee Jones [李琼斯]
+I'm curious, is there an LSFMM session for this?
