@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD446DFE41
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B683B6DFE40
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjDLTAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S230372AbjDLTAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjDLTAO (ORCPT
+        with ESMTP id S230328AbjDLTAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:00:14 -0400
+        Wed, 12 Apr 2023 15:00:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B2272AA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A3D40F9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681325948;
+        s=mimecast20190719; t=1681325957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2ZuY/Ovf/uFFipzBlaz3R7sO5nsBImgJvd+bwl5YSO8=;
-        b=NM3zU5Wn9PkhOixwPq3zIocxIt81Xotc0SGMeOnuuzG5svaoWhcNhYfah+HDVgFB4Ny0h6
-        lyuk1XGD+uWgQUR0gcVwU4orBJh6Dt+p3L9zHWKkzXEtWH1KkgyA8lZHHmdwMCE/c9vBvJ
-        hHjCstvSnOfJlSziSJVpKYHbl99ilWc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=LsekIlFf4oq6puv8x/mUu67gc6GF1RbRh4gmOlexPQc=;
+        b=PgWqlA8/B2PLmptUp0OoVjPxl9mBfE4+riy55F912/OEXf1SThCCPx+/kuJbWYCxU/KyDu
+        +jMGZ4heaJjqJ1btiTijPmp4jwGZ/mxVt2PrpimC6hhv8CplGy4nazBW/4cXRk7O9ePMxf
+        pvjkHnrpR/MNdORGUH0aG3xJFr5PJLA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-3Wr482_jNmu5pWU4OxSlSw-1; Wed, 12 Apr 2023 14:59:07 -0400
-X-MC-Unique: 3Wr482_jNmu5pWU4OxSlSw-1
-Received: by mail-qt1-f197.google.com with SMTP id c21-20020a05622a025500b003e4ee70e001so3078723qtx.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:07 -0700 (PDT)
+ us-mta-543-65LbHk3IPrqmD7NF7qmB5A-1; Wed, 12 Apr 2023 14:59:15 -0400
+X-MC-Unique: 65LbHk3IPrqmD7NF7qmB5A-1
+Received: by mail-qk1-f199.google.com with SMTP id c128-20020ae9ed86000000b0074690a17414so6569452qkg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681325946; x=1683917946;
+        d=1e100.net; s=20221208; t=1681325954; x=1683917954;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2ZuY/Ovf/uFFipzBlaz3R7sO5nsBImgJvd+bwl5YSO8=;
-        b=V/TYeXG/jxxE7ZCEw5v4W1N9yDBhbewiVPOweVj1IGvU7lC1U2g38jhrxrLtSj9kDK
-         iz381CnfKS4qEo6qKAaFEsAWzFUT4WKLMOi16wrvGeep++LGUA/YVVzqG+igmPkdKNtS
-         1Q6H+SWm1/2rBIcvUxZG4Q0me/uvxD3CtCpAd1Nc26URMYgoSZqQmkmEceNAfBPy2Aug
-         7BuAKgx5eZbTXroaVbCvn2sf9QyMZiBsLa4IyxpkKRCWpG2JbZTY+PA/42F8RBXnxxaA
-         mnVutzfsEjWYRKpjXyhHetUNKls+QDlCzHhezNHw3UwgPe8IU2q5loJbuUqH+LkaA/xa
-         NDPw==
-X-Gm-Message-State: AAQBX9cohs4xaYiXkGHplYVE8T3S3669/N1VCVHHYXL33H84FWoEFn9I
-        ItPeg8tR7WBKqh0oZTS4TjTBKs1ERbf4uPRh/Ga4ZBH8uGdquS31KqbHw9zVu/cC3pbOXo2bIPM
-        f/Aotz7cuUDgpyiyT4tRwKXmabHNqO2Yxnb2uxpWqu/1HIuhlA5Oe6s2Dzb3g/kRqtqV3wo8kcV
-        LtGgyiA9k=
-X-Received: by 2002:a05:622a:164d:b0:3c0:3b08:2d80 with SMTP id y13-20020a05622a164d00b003c03b082d80mr29923044qtj.63.1681325946187;
-        Wed, 12 Apr 2023 11:59:06 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aDCy/grIrQOAg4F0cRB0KUFFgcOsjPQlMHofCh0J78aEkWstgNxNgb6dTlHJrCn3c+YElRVg==
-X-Received: by 2002:a05:622a:164d:b0:3c0:3b08:2d80 with SMTP id y13-20020a05622a164d00b003c03b082d80mr29923020qtj.63.1681325945874;
-        Wed, 12 Apr 2023 11:59:05 -0700 (PDT)
+        bh=LsekIlFf4oq6puv8x/mUu67gc6GF1RbRh4gmOlexPQc=;
+        b=VJWxMj3xp4peebFaAORVOIs3y/7g2MBddADzQ/nKbrOP1SXOHWm4roF+PmvZhOluJ7
+         TUrpFQbVsd7Ui91MOrS8ryHuiyYmeBgSlfpXht/mBCuf0pdJtLwhoMqvjEuWcn8A8IUu
+         QZDYwgjgsQXa0RXTyP6UP43tIGsQS1tQ8OlXh8muzy+kwINitJlNnxpHHtzfOlWf8gJk
+         RDAGoSzcCUPVadutiTJclVN8b176uHQSvHmkfYGNvonPVcoT5BdpL6bO1RIbF7poWkHn
+         znT2bUpqBEqup+RGegtHVyCesL2gyYFPIOJ9TcSPB83WFhDjp7CvVD9z5jNLULlgxKPA
+         OCdg==
+X-Gm-Message-State: AAQBX9fJrgXkHm83WekIwqi71nehzJkuGDp2G8k/iiNabt9OhaopFw8z
+        7KpkyiSVQZHL7se+QU1m0S3kY/ow92WFHjvJuUIxWxaTgijzohoHhE7ofhfO36PzTw+jrqUu+ZW
+        OgcRY2QDcysyRsq9AGlOJgPfNqynyubmk6beEYZCqHv9OrsR8slL3BBHYZMA8Rvl9CQpCzoj1gx
+        hj6XGhSE8=
+X-Received: by 2002:ac8:4e4d:0:b0:3db:8942:cbd2 with SMTP id e13-20020ac84e4d000000b003db8942cbd2mr4578830qtw.61.1681325954640;
+        Wed, 12 Apr 2023 11:59:14 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Ytfd6UQO/faje7ao9Zj5NDNkMuJuG88zVCdvJHUYSS4EtUT4r/Rek/sPM2QLubhJt+hrIQtQ==
+X-Received: by 2002:ac8:4e4d:0:b0:3db:8942:cbd2 with SMTP id e13-20020ac84e4d000000b003db8942cbd2mr4578811qtw.61.1681325954332;
+        Wed, 12 Apr 2023 11:59:14 -0700 (PDT)
 Received: from thinkpad-p1.kanata.rendec.net (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id k21-20020ac86055000000b003d3a34d2eb2sm4417558qtm.41.2023.04.12.11.59.05
+        by smtp.gmail.com with ESMTPSA id k21-20020ac86055000000b003d3a34d2eb2sm4417558qtm.41.2023.04.12.11.59.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 11:59:05 -0700 (PDT)
+        Wed, 12 Apr 2023 11:59:13 -0700 (PDT)
 From:   Radu Rendec <rrendec@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,9 +64,9 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Pierre Gondois <Pierre.Gondois@arm.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 2/3] cacheinfo: Add arm64 early level initializer implementation
-Date:   Wed, 12 Apr 2023 14:57:58 -0400
-Message-Id: <20230412185759.755408-3-rrendec@redhat.com>
+Subject: [PATCH v4 3/3] cacheinfo: Allow early level detection when DT/ACPI info is missing/broken
+Date:   Wed, 12 Apr 2023 14:57:59 -0400
+Message-Id: <20230412185759.755408-4-rrendec@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230412185759.755408-1-rrendec@redhat.com>
 References: <20230412185759.755408-1-rrendec@redhat.com>
@@ -82,84 +82,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds an architecture specific early cache level detection
-handler for arm64. This is basically the CLIDR_EL1 based detection that
-was previously done (only) in init_cache_level().
+Recent work enables cacheinfo memory for secondary CPUs to be allocated
+early, while still running on the primary CPU. That allows cacheinfo
+memory to be allocated safely on RT kernels. To make that work, the
+number of cache levels/leaves must be defined in the device tree or ACPI
+tables. Further work adds a path for early detection of the number of
+cache levels/leaves, which makes it possible to allocate the cacheinfo
+memory early without requiring extra DT/ACPI information.
 
-This is part of a patch series that attempts to further the work in
-commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU").
-Previously, in the absence of any DT/ACPI cache info, architecture
-specific cache detection and info allocation for secondary CPUs would
-happen in non-preemptible context during early CPU initialization and
-trigger a "BUG: sleeping function called from invalid context" splat on
-an RT kernel.
+This patch addresses a specific issue with ACPI systems with no PPTT. In
+that case, parse_acpi_topology() returns an error code, which in turn
+makes init_cpu_topology() return early, before fetch_cache_info() is
+called. In that case, the early cache level detection doesn't run.
 
-This patch does not solve the problem completely for RT kernels. It
-relies on the assumption that on most systems, the CPUs are symmetrical
-and therefore have the same number of cache leaves. The cacheinfo memory
-is allocated early (on the primary CPU), relying on the new handler. If
-later (when CLIDR_EL1 based detection runs again on the secondary CPU)
-the initial assumption proves to be wrong and the CPU has in fact more
-leaves, the cacheinfo memory is reallocated, and that still triggers a
-splat on an RT kernel.
-
-In other words, asymmetrical CPU systems *must* still provide cacheinfo
-data in DT/ACPI to avoid the splat on RT kernels (unless secondary CPUs
-happen to have less leaves than the primary CPU). But symmetrical CPU
-systems (the majority) can now get away without the additional DT/ACPI
-data and rely on CLIDR_EL1 based detection.
+The solution is to simply remove the "return" statement and let the code
+flow fall through to calling fetch_cache_info().
 
 Signed-off-by: Radu Rendec <rrendec@redhat.com>
+Reported-by: Pierre Gondois <pierre.gondois@arm.com>
+Link: https://lore.kernel.org/all/dea94484-797f-3034-7b86-6d88801c0d91@arm.com/
 Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/kernel/cacheinfo.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ drivers/base/arch_topology.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
-index c307f69e9b55..d9c9218fa1fd 100644
---- a/arch/arm64/kernel/cacheinfo.c
-+++ b/arch/arm64/kernel/cacheinfo.c
-@@ -38,11 +38,9 @@ static void ci_leaf_init(struct cacheinfo *this_leaf,
- 	this_leaf->type = type;
- }
- 
--int init_cache_level(unsigned int cpu)
-+static void detect_cache_level(unsigned int *level_p, unsigned int *leaves_p)
- {
- 	unsigned int ctype, level, leaves;
--	int fw_level, ret;
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 
- 	for (level = 1, leaves = 0; level <= MAX_CACHE_LEVEL; level++) {
- 		ctype = get_cache_type(level);
-@@ -54,6 +52,27 @@ int init_cache_level(unsigned int cpu)
- 		leaves += (ctype == CACHE_TYPE_SEPARATE) ? 2 : 1;
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index b1c1dd38ab01..147fb7d4af96 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -835,10 +835,10 @@ void __init init_cpu_topology(void)
+ 	if (ret) {
+ 		/*
+ 		 * Discard anything that was parsed if we hit an error so we
+-		 * don't use partial information.
++		 * don't use partial information. But do not return yet to give
++		 * arch-specific early cache level detection a chance to run.
+ 		 */
+ 		reset_cpu_topology();
+-		return;
  	}
  
-+	*level_p = level;
-+	*leaves_p = leaves;
-+}
-+
-+int early_cache_level(unsigned int cpu)
-+{
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+
-+	detect_cache_level(&this_cpu_ci->num_levels, &this_cpu_ci->num_leaves);
-+
-+	return 0;
-+}
-+
-+int init_cache_level(unsigned int cpu)
-+{
-+	unsigned int level, leaves;
-+	int fw_level, ret;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
-+
-+	detect_cache_level(&level, &leaves);
-+
- 	if (acpi_disabled) {
- 		fw_level = of_find_last_cache_level(cpu);
- 	} else {
+ 	for_each_possible_cpu(cpu) {
 -- 
 2.39.2
 
