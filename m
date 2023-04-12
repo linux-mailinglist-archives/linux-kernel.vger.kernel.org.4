@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EDC6DF65F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08C06DF673
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjDLNDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S229916AbjDLNFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjDLNDR (ORCPT
+        with ESMTP id S229749AbjDLNFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:03:17 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCDE4EF2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:03:15 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m8so20192954wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1681304594; x=1683896594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yjIdUq4Jsx9/GasEwdm41tjYbvcUo9h/pUwit0AG0qw=;
-        b=I+U9p2RUdQ0jma7vWiMjgOivywGBJsk9WNavQzLUEh/9XwD46/PWdCmz2jtHMZlyPh
-         IJR47kFbuS2krTR8D8TwAoya05XsgHSzcDXHIKFJzmddiFLXTOi+ZU/7tUJOrDz/yILl
-         SIXsvKy2gl0NfWrtKgHqPiamvl5ngUisfT9GXgEKfhhEJvyICrgLJbZ3lPLJT7BHpfo+
-         OSGfbwxEm0Np0ji7Ls9mAhsRxdI+nrPhkMNNSp2Nx/v3JKn9KszmNHXabkT74hCnStwN
-         NBB9zEfXfbjr1st9ZZsooom9HhGVRXK1j0XWYSO1zD6vifKgxUFKlHowMFXVEnUTh0NE
-         pq4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681304594; x=1683896594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjIdUq4Jsx9/GasEwdm41tjYbvcUo9h/pUwit0AG0qw=;
-        b=pw3V+SWhTqZGu8j3KVIEHzAPH7JFAGEz5mXdus1UYSTwA9YUkB2/cZOV5+0Q7FloG5
-         0W+S9zPi7FSuBd+yIJfy/GBfEWXtLw8rQzr6YD9Gq+ZNIetzdj5jyHVVHN0Afw4GYQ+K
-         dFwoTCE8MiFvguPMsyBrvVXPV1WJFTAlBNFMhf4TWaJpSftli5PaO8H14xNIvpQDYVvJ
-         fNtq1TgIC7Jx/2wxFcXeYW+3pfKNtoFHwd9UzMbAfbqRZDcRim62imsMAJvI7BPMR2Qi
-         XUxWBa+I2nNirSv924yu3WvMrv6piFdLpTey1nvdmBT5wyuEuur1Cgb3YdXC2LsG4MYI
-         Xwqw==
-X-Gm-Message-State: AAQBX9d6FtVjJkfFPxotrcVBaRDDXjEMdzYcc7KX0uqgGOCLpQwyvPUz
-        mYM0kGPj5XwO6qj8cEOifGpQZg==
-X-Google-Smtp-Source: AKy350bDmpM+Lm/AqJiXBxAL4RoNuLKnffa2b9rPXFmlseSpOQ7ouXWDEFlId84sgS3bp9uw+f9nsQ==
-X-Received: by 2002:a05:600c:292:b0:3f0:a137:90d9 with SMTP id 18-20020a05600c029200b003f0a13790d9mr218544wmk.3.1681304594013;
-        Wed, 12 Apr 2023 06:03:14 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05600c350f00b003ee9f396dcesm2439248wmq.30.2023.04.12.06.03.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 06:03:13 -0700 (PDT)
-Message-ID: <c2b4cc90-9dd7-60b5-66f0-56a4d19d63e3@baylibre.com>
-Date:   Wed, 12 Apr 2023 15:03:12 +0200
+        Wed, 12 Apr 2023 09:05:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9301846B1;
+        Wed, 12 Apr 2023 06:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681304743; x=1712840743;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SIIbTWQFtQiwPFHLG3XRxl427QCGbNZPIB/wgRCV9gw=;
+  b=ImipW82lxvv7OmeYSD/zm32eB6/dUxj7Gj5E/grSNNfbFKpE9Sgp9UGA
+   24qwRQLHkl4D/dLdat0YtV/OY+2GXBTAMoExdWLlKgq5y7AozVkIxGO+Y
+   tYxgwh4H5LH28+4+MLhMaXYJ3xzxTpkrWvGKHWOmda2rsZmdkRAtEUrYa
+   IZ+6jPk4QPzN4MIfMNvsdbLHHyC0YqyVXtv3C5k5fmXrPW1Rv2DLGaidP
+   oO9/hYASxYMRha8JtTG6P6b6V3w7j9v16OXHdVN7QQBclmWRQErzNc/Zv
+   RutCD9qxnSvWsGm3DxoQwJgd1VPA3b17FLt2fDfiKTXlW7pAExDeto0OI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332583354"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332583354"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639226969"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="639226969"
+Received: from chanse1-mobl2.ger.corp.intel.com ([10.251.213.80])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:47 -0700
+Date:   Wed, 12 Apr 2023 16:03:45 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Johan Hovold <johan@kernel.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] serial: fix TIOCSRS485 locking
+In-Reply-To: <20230412124811.11217-1-johan@kernel.org>
+Message-ID: <1c814de8-ea36-7a63-34c2-b957d6608cec@linux.intel.com>
+References: <20230412124811.11217-1-johan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 04/27] dt-bindings: display: mediatek: aal: Add compatible
- for MediaTek MT6795
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-5-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230412112739.160376-5-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1754916380-1681304629=:2300"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795: similarly to
-> MT8173, this SoC has the gamma LUT registers in DISP_AAL.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+--8323329-1754916380-1681304629=:2300
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Wed, 12 Apr 2023, Johan Hovold wrote:
+
+> The RS485 multipoint addressing support for some reason added a new
+> ADDRB termios cflag which is (only!) updated from one of the RS485
+> ioctls.
+> 
+> Make sure to take the termios rw semaphore for the right ioctl (i.e.
+> set, not get).
+> 
+> Fixes: ae50bb275283 ("serial: take termios_rwsem for ->rs485_config() & pass termios as param")
+> Cc: stable@vger.kernel.org	# 6.0
+> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+> 
+> I did not have time to review the multipoint addressing patches at the
+> time and only skimmed the archives now, but I can't seem to find any
+> motivation for why a precious termios bit was seemingly wasted on ADDRB
+> when it is only updated from the RS485 ioctls.
+> 
+> I hope it wasn't done just to simplify the implementation of
+> tty_get_frame_size()? Or was it a left-over from the RFC which
+> apparently actually used termios to enable this feature?
+
+No. I made it intentionally. It felt natural place for storing it because 
+ADDRB does impact the wire format and cflag is where other wire-format 
+impacting bits are also stored.
+
+> Should we consider dropping the Linux-specific ADDRB bit again?
+> 
+> Johan
+> 
+> 
+>  drivers/tty/serial/serial_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 2bd32c8ece39..728cb72be066 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -1552,7 +1552,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+>  		goto out;
+>  
+>  	/* rs485_config requires more locking than others */
+> -	if (cmd == TIOCGRS485)
+> +	if (cmd == TIOCSRS485)
+>  		down_write(&tty->termios_rwsem);
+>  
+>  	mutex_lock(&port->mutex);
+> @@ -1595,7 +1595,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+>  	}
+>  out_up:
+>  	mutex_unlock(&port->mutex);
+> -	if (cmd == TIOCGRS485)
+> +	if (cmd == TIOCSRS485)
+>  		up_write(&tty->termios_rwsem);
+>  out:
+>  	return ret;
+> 
+
+Indeed, the caps are so blinding.
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
-Regards,
-Alexandre
+ i.
 
+--8323329-1754916380-1681304629=:2300--
