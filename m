@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13F96DFBE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1DE6DFBE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjDLQxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S229794AbjDLQyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDLQxJ (ORCPT
+        with ESMTP id S229767AbjDLQy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:53:09 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2093.outbound.protection.outlook.com [40.107.255.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAC693F4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:52:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cF57v1l4pL5Xjdj7KIKaRby+sz+RZuu4382pAISh6pF20CGy4j7/vg0jO1wCBz2cXxqtyHB0+pXUl5MvNAPNq6vBqV5b+wDLEFtaUXEXJySVgy6b8MGzg7QcvQXUKUHvYs4ZBURcc9rzsSHF6UZZOdpsy7qqgm94CzQyh/zoeZ0XLs/nDNUmUqt7Iq8Cpte4zve5Gn5lBN9U6VlOKa+rafKQIDFZ7bsavL6cSa9MIrJv3w4fR2sNEmSPI9bI93xMYn/n8EzCuWa9YBWmzXCExi32wA8gix3Q+VDEJtRNaJ+aLaNP4LWcjEHMsVhTwTj8T773QjSrbYlitmiJVZPAyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FL+LbCGGjp8MMmdGe9YyZXu7AuucvY9NlfJmsFbLo0w=;
- b=QEhRkODbxOOYf4HtD481uJr3u2dtUOeAgNeNR42jFXKHVYUetDlEP3FMT7o83WhU/d8LPmnYtzrSk++gkVP8JO+TxmBWRjHorEZLLHzpT/JEvKk4g0uOlSkyYE2K5m3pRczgpU1ITrc1C0VDNP7LbwO+ZRSY5g75EYt/XhLH6F3a5eN+QXp1F7ah/tSeym1+zDwdLUkucrfUZAGy/n1MLvrn3VuFLFsEBONW0hGV2VuJSxrmdmYfJuPiHDn7rNA9nUcz53Njle6Aw1gWSgcWgbc1X7hchk4WDJ0lFJztMP1k/cTPwHCCeiHzBAo2mIe0+oc0zpz4HdH3qU7xZtE3HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FL+LbCGGjp8MMmdGe9YyZXu7AuucvY9NlfJmsFbLo0w=;
- b=AB2nUx6NHgk/fv1LuIaMYekDkjCZpMy8/fXVE2wTQsmlgHaUfbsunXPcCp063fzOWSfS9z30Nsxo3+1N3qCFLjqUP8rnGdqeGWY7Q6UxLJzZxDlaK3nTB88g13oBMxnHN+DTPZYDwB23eErJO7/paCW/pC2f2cjCTi5q9JTOLCS88tC+RvHJyCRbY9tSdjg2LiBoKGzkjtP8ovpFYOaTH++VCWk+uuls9XhCO8asoCjnXwg6C4klK7VsWBmGX9CNY6ise+kBAf30Z9OXmbZp9II4CwgJPfSd6lktn+sJ4eClXUOgCeCYGQWn4ZTMLyEZMKH0H6iLLu4PUzD7rw5nlw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PUZPR06MB5771.apcprd06.prod.outlook.com (2603:1096:301:f1::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 16:51:06 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
- 16:51:06 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] f2fs: export gc_mode in debugfs
-Date:   Thu, 13 Apr 2023 00:50:54 +0800
-Message-Id: <20230412165055.38461-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGAP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::27)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Wed, 12 Apr 2023 12:54:28 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F81729D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:53:54 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id z9so3486104ejx.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681318394;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kG5Bp9G8GHRtnaihhtMcFrai7auGDwatUysUi5rRPM4=;
+        b=t3PMe32EZJV9cCoDIkveen1Mt0ZXC8V8Nwx01NlHfKa11Vx+CgCN03HLEdyF8L8B5N
+         oxOXpHaRyvfb6AHDx289+vJStY+EJwIsxz2SoGGR9JMf7YslsfW4HNlOOoo+dKnwip6n
+         n4ama1PFbDfxjtqwO9pD3cphtlWR6ziTaHcEeMg+nZ3IlSDCV/4n3PbMXeNk4kQBLG5j
+         HyJ10opdEQ2AkrTWCC35fBqxipAajjYHeKzzyPpWbYjyiLh5Q521hbEOmgX8gzX8F7cB
+         bjzUidW9notC7XkN9Ge7pxmkLJbN2txGTjI6U5bpvpvlXMT7gUpenEbW7xSWjhcUiFps
+         FqOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681318394;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kG5Bp9G8GHRtnaihhtMcFrai7auGDwatUysUi5rRPM4=;
+        b=gXrR+AyW7fr5laHripJT7D+4/rueiCKZ36HE717S6i2zTeu+wFOslySuvEuiEI4VkV
+         mFLNQ8TFzXdD4PFNw8kxoU4MAZHaHYwlmTbAuPVf2NbQcAhmKuvaAwMXxjI1unnavFs7
+         yD0vB99nx8tM68vHkoB2gq7Bm73dYcsKWqj8qPB6PrC8TThghe7KkvrSuQnAJw7jksGx
+         176n6E/vugQKDiw+MPkiEnEJDyu/caRv8ik+YXg7UxA3rAYGQt7//390ySYcH52V6Vz6
+         aVg5BslkbnUJM37M98V/5ateAfEZPWURghlmiL8HPrW2nLlsxKc85rVY0Ljt71yh/BTz
+         tZdw==
+X-Gm-Message-State: AAQBX9dmQP+iT+vNAj3u5uM+OwkP71ajmUhD5O9mKMs/tsNi0eEVldFv
+        9Z6GASYBPEud0mpVn3ig15flaA==
+X-Google-Smtp-Source: AKy350ZUDGBcr74cMS/N8WuiTB3okSg9uQJyGCy/5y+jKVibXQJYbcWciy75St+Vcb18YTNBYHTENQ==
+X-Received: by 2002:a17:906:686:b0:931:ed:e379 with SMTP id u6-20020a170906068600b0093100ede379mr2931945ejb.67.1681318394546;
+        Wed, 12 Apr 2023 09:53:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:938a:b3db:7c59:795e? ([2a02:810d:15c0:828:938a:b3db:7c59:795e])
+        by smtp.gmail.com with ESMTPSA id ta20-20020a1709078c1400b0094770cf8b1fsm7455180ejc.5.2023.04.12.09.53.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 09:53:14 -0700 (PDT)
+Message-ID: <15f48b06-a6be-1295-5deb-d3594bce6699@linaro.org>
+Date:   Wed, 12 Apr 2023 18:53:12 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PUZPR06MB5771:EE_
-X-MS-Office365-Filtering-Correlation-Id: de13047f-3710-4151-afea-08db3b761baf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u2oRYqEYEsrKCZtc36el7IH9vHA8WXfYkad1W5H13R4Xc4XwwPr5Mt4sD3yr+ZCtBzERSVYJPP7BsRknxPl2MmFnG2RvRN2Fo4hwKHg+8LVmK+eFiVr+2l2USQWlcfVB0rXRxq7vRr0hCJJDLD7JdosRwCs765aUc8kSc7Tn0iEwVN3FlPvZ+pD7fYmv2P4gSh8jLVzhuzlczIZvB5HCSWziZskqWa1hoGp7Acwyija/tq4JEvCm5NETxIEig/9llYW5atYRZXW2MFeiP4A4lyee1oap/qKy5fiKcEofVqGN/NcyvB08/CjfzBcck0gwWXE6JATOG56HGddaRudKkPWS1rDsAHJZY1Ac8FKUw4u0d6aMLXaLr/aqMLjzeXYLrBagnEA+0dLrQWNr0FIVbujlMIFGwQtDEbwHQsVpfIjhdrDCt3WQwYCPJ6Hq8cZwtmy6wzdygJ9CSguY0/mgDwCXczFy4Iq0Pcu1sze4xjkNldRP3HmqvlFem2UHX/JyHh15b28wNUPJc/Z0IrXRaFBqM98N5g+c07g5ps3a/tQzszoP3vNjDanzrYDVlb4e0RGaPgrj4J3d031VCSPTVmcUHXj0NI6BiiKLmkNATkertb9zpwQs6Q8zafyWPkNM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(376002)(136003)(396003)(451199021)(8936002)(38100700002)(8676002)(38350700002)(19627235002)(66556008)(41300700001)(66476007)(66946007)(4326008)(83380400001)(2616005)(6666004)(52116002)(1076003)(86362001)(6512007)(26005)(36756003)(6506007)(2906002)(6486002)(110136005)(186003)(316002)(478600001)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+BEea2HrJCkHMccSgIVA2NX3Ifz8Iq+dHC8eKCBFDqN7hupRjfWHNq1/TrHp?=
- =?us-ascii?Q?Md5VvGlLSrZ1gfy8uu0ujGmyH8u6+8LQqwAhNJTApRKHTc+yJSD+YUz+Xx9y?=
- =?us-ascii?Q?9wXEjE1BPw7yYRgZi0UAZEePUM8w6daLbp2aNbV8dxjSccBoFKY2J5I3rdXI?=
- =?us-ascii?Q?O2XSKifgX5LVOZe6CbAONg1Mxar4wk/DwDBTAoFBCV5Gqd6RkjrsNFkXosJD?=
- =?us-ascii?Q?68DOPfJhaHbfKeptKteO/HjN3gl4+lfCfNzN/M1uBm3FUv5lOeUHdteaKD2v?=
- =?us-ascii?Q?NWh/MvtUE0LjdEF1yS62/tDkJCLF4tTRY7h7V1WLx+3ZarEscxCyxYgVeEth?=
- =?us-ascii?Q?lqYUfW5Qid9mIr4M0LnSEIQfIsPIRrNzrtTWPOszogL2a5VmdCvTYlnUmqZH?=
- =?us-ascii?Q?WFbmusTfS6neOK6v8+4HXFnyjGoerdkRyPF6A7u3sAdvYJ0yzuvwT9ccF5Am?=
- =?us-ascii?Q?1Q8uPGau4dUU5qK5mnU0VD1YtMpph/CMhETCxPH2WW00WdDq44kEEkJEWzR/?=
- =?us-ascii?Q?O+Pt3AAKoCgNjZd3PtfUbSYlhyP2TC8IXdr9t1yGq/8+yZ3p9W376lBTuRu3?=
- =?us-ascii?Q?iRQYF42EM+qOAmCBEj2ZqkhI6ERX6p4W9056sBTbVCacblM7vv7BVd43aowo?=
- =?us-ascii?Q?yKl5C1U8E0dccSOHtjKBplZY73e1L9ZLKo2W3eGXHAMGdU4DBB/uLLsv7mX8?=
- =?us-ascii?Q?9z9m7pVWiv8MVELrnOaL87PAB7u1X/wl6QeMsAi/VljMui+iuDcseb36zOBd?=
- =?us-ascii?Q?xtEJ9GCErXxxu/8DjO1P5WtzmQteiWcWXkvICNvZhIOM5fUQ/I4nJil0+9CK?=
- =?us-ascii?Q?o3q1vrdjiyxqeNgEV8bdvQ41zjf3ah0ep5zGV877bUEdZ6n1ef7cqedaYlZI?=
- =?us-ascii?Q?2TssuvYN/Grqs/0H4PN6CB6KNg3rY4H0/mfMtoJe6XKoAlYVTWjwk9gYfAfV?=
- =?us-ascii?Q?biu5UkJqbY/J2JXzbjgh6an2PV2SmhfwBkoSo7AmYY9BbVy4H6qtC7CvYFgm?=
- =?us-ascii?Q?VpbPOE9VerQtQ7lhF4//AsJ6uwLgfT70PXbfLnB+H/z7X2h4h9p3/QOTT+Ha?=
- =?us-ascii?Q?mz05kKL5yUSnVfhp3ecrE073usxAlzwYA4hVUoG1DK6Aem7pthNuoV6L7aIc?=
- =?us-ascii?Q?HpHdNVbOBOjL6mj5E0f4wh/ZAy6jQBc1rVr51YXb0aObpig1Gtd4IM+yDIun?=
- =?us-ascii?Q?B1FVqubcM9oYab5N66ABwuEa8FJgdficZlEneGvetIRHDpLBBGuZtxYixNrA?=
- =?us-ascii?Q?eDBah1qfRUL159X57fjadrEZeFWDC+13k+4UvZNhPVj4r8X8eOXfegdxx9LZ?=
- =?us-ascii?Q?lx7WoBVBlN2xmFoSVB/vYnkjYoRdHxW+vN3kGxcGhk+NEZuIs8jtIMYIgH21?=
- =?us-ascii?Q?c4iE81XxxVQMFAl45aelaxoMbRK8P2/IV6WRR/rUP1t1mE1bYZMm5rjh0KK3?=
- =?us-ascii?Q?gMdW/RY7+LGPMH4bK6IlZ9AvqJiz565t84je6dbg7D3AvNiWqGJoEehtxyfl?=
- =?us-ascii?Q?nCcFA600bJHT4jQOuzuV4mL0YrvuwxIq4IwJIdsP1gsW9a743uqeSvcY3OwF?=
- =?us-ascii?Q?H+69UhwWZT1OAy0cRm/X3RVOXm9eywSibiGWM+Kr?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de13047f-3710-4151-afea-08db3b761baf
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 16:51:06.1464
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GLJzbDSOYjedOE2vgLgiIWRC6W0o5j9bK9xLfg9a1vlsgG0fZk9GK8englKvnVyP1JjZ3GYX/oaxoedngzxiEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB5771
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: mpm: Pass MSG
+ RAM slice through phandle
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
+ <20230328-topic-msgram_mpm-v2-1-e24a48e57f0d@linaro.org>
+ <168069726278.2356075.14351594478003012447.robh@kernel.org>
+ <20230405134727.GA2461305-robh@kernel.org>
+ <1e6e2590-ac78-400b-35ce-321d5e52f385@linaro.org>
+ <9df12111-ec84-c4f7-fbcb-bccaef91b048@linaro.org>
+ <3ce9b5ec-8b02-537a-c663-c849e80cab66@linaro.org>
+ <ZDAAToSzNLVo6le8@gerhold.net>
+ <198523f5-d06f-15cd-af6c-f391c02bcaa9@linaro.org>
+ <1f8fc036-380b-0a42-bb29-a3e275ed6a33@linaro.org>
+ <2e648a97-083e-8ee2-1695-4af299bb222a@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2e648a97-083e-8ee2-1695-4af299bb222a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,114 +94,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch exports gc_mode to debugfs. Since gc_urgent and gc_idle
-nodes can get gc mode, so remove gc_mode node.
+On 12/04/2023 14:09, Konrad Dybcio wrote:
+> 
+> 
+> On 12.04.2023 13:55, Krzysztof Kozlowski wrote:
+>> On 12/04/2023 13:47, Konrad Dybcio wrote:
+>>>> For unrelated reasons I actually have some patches for this, that switch
+>>>> the /smd top-level node to a "remoteproc-like" node dedicated to the
+>>>> RPM, similar to how WCNSS/ADSP/Modem/etc are represented. I need this to
+>>>> add additional (optional) properties like "resets" and "iommus" for the
+>>>> RPM, but it would allow adding arbitrary subnodes as well:
+>>>>
+>>>> https://github.com/msm8916-mainline/linux/commit/35231ac28703805daa8220f1233847c7df34589e
+>>>>
+>>>> I could finish those up and post them if that would help...
+>>> Krzysztof, what do you think?
+>>
+>> I don't know what is there in MSM8916 and how it should be represented.
+> Similarly to other Qualcomm SoCs, MSM8916 has a RPM (Cortex-M3) core,
+> which communicates over the SMD protocol (or G-LINK on >=8996).
+> 
+> The Qualcomm firmware loads the RPM fw blob and sets it up early in
+> the boot process, but msm8916-mainline folks managed to get TF-A
+> going and due to it being less.. invasive.. than the Qualcomm TZ,
+> RPM needs a bit more handling to be accessible.
+> 
+> The M3 core is wired up through the CNoC bus and we communicate
+> with it through the MSG RAM and the "APCS mailbox".
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- Documentation/ABI/testing/sysfs-fs-f2fs |  6 ------
- fs/f2fs/debug.c                         | 13 ++++++++++++-
- fs/f2fs/sysfs.c                         | 18 ------------------
- 3 files changed, 12 insertions(+), 25 deletions(-)
+Thanks, that's actually good description. Yet I still do not know what
+is exactly the problem and the question. Linking some out of tree
+commits does not give me the answer, at least I cannot get that answer
+form the link.
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 8140fc98f5ae..3b78b8324263 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -643,12 +643,6 @@ Contact:	"Daeho Jeong" <daehojeong@google.com>
- Description:	Show the accumulated total revoked atomic write block count after boot.
- 		If you write "0" here, you can initialize to "0".
- 
--What:		/sys/fs/f2fs/<disk>/gc_mode
--Date:		October 2022
--Contact:	"Yangtao Li" <frank.li@vivo.com>
--Description:	Show the current gc_mode as a string.
--		This is a read-only entry.
--
- What:		/sys/fs/f2fs/<disk>/discard_urgent_util
- Date:		November 2022
- Contact:	"Yangtao Li" <frank.li@vivo.com>
-diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-index 61c35b59126e..5172b2417c08 100644
---- a/fs/f2fs/debug.c
-+++ b/fs/f2fs/debug.c
-@@ -366,6 +366,16 @@ static const char *ipu_mode_names[F2FS_IPU_MAX] = {
- 	[F2FS_IPU_HONOR_OPU_WRITE]	= "HONOR_OPU_WRITE",
- };
- 
-+static const char *gc_mode_names[MAX_GC_MODE] = {
-+	[GC_NORMAL]		= "GC_NORMAL",
-+	[GC_IDLE_CB]		= "GC_IDLE_CB",
-+	[GC_IDLE_GREEDY]	= "GC_IDLE_GREEDY",
-+	[GC_IDLE_AT]		= "GC_IDLE_AT",
-+	[GC_URGENT_HIGH]	= "GC_URGENT_HIGH",
-+	[GC_URGENT_LOW]		= "GC_URGENT_LOW",
-+	[GC_URGENT_MID]		= "GC_URGENT_MID",
-+};
-+
- static int stat_show(struct seq_file *s, void *v)
- {
- 	struct f2fs_stat_info *si;
-@@ -409,7 +419,8 @@ static int stat_show(struct seq_file *s, void *v)
- 			for_each_set_bit(j, &policy, F2FS_IPU_MAX)
- 				seq_printf(s, " %s", ipu_mode_names[j]);
- 		}
--		seq_puts(s, " ]\n\n");
-+		seq_puts(s, " ]\n");
-+		seq_printf(s, "  - GC: [ %s ]\n\n", gc_mode_names[sbi->gc_mode]);
- 
- 		if (test_opt(sbi, DISCARD))
- 			seq_printf(s, "Utilization: %u%% (%u valid blocks, %u discard blocks)\n",
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 4d6263e556fa..c2873a94f7b2 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -41,16 +41,6 @@ enum {
- 	ATGC_INFO,	/* struct atgc_management */
- };
- 
--static const char *gc_mode_names[MAX_GC_MODE] = {
--	"GC_NORMAL",
--	"GC_IDLE_CB",
--	"GC_IDLE_GREEDY",
--	"GC_IDLE_AT",
--	"GC_URGENT_HIGH",
--	"GC_URGENT_LOW",
--	"GC_URGENT_MID"
--};
--
- struct f2fs_attr {
- 	struct attribute attr;
- 	ssize_t (*show)(struct f2fs_attr *a, struct f2fs_sb_info *sbi, char *buf);
-@@ -143,12 +133,6 @@ static ssize_t pending_discard_show(struct f2fs_attr *a,
- 				&SM_I(sbi)->dcc_info->discard_cmd_cnt));
- }
- 
--static ssize_t gc_mode_show(struct f2fs_attr *a,
--		struct f2fs_sb_info *sbi, char *buf)
--{
--	return sysfs_emit(buf, "%s\n", gc_mode_names[sbi->gc_mode]);
--}
--
- static ssize_t features_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
-@@ -916,7 +900,6 @@ F2FS_GENERAL_RO_ATTR(encoding);
- F2FS_GENERAL_RO_ATTR(mounted_time_sec);
- F2FS_GENERAL_RO_ATTR(main_blkaddr);
- F2FS_GENERAL_RO_ATTR(pending_discard);
--F2FS_GENERAL_RO_ATTR(gc_mode);
- #ifdef CONFIG_F2FS_STAT_FS
- F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_foreground_calls, cp_count);
- F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_background_calls, bg_cp_count);
-@@ -1008,7 +991,6 @@ static struct attribute *f2fs_attrs[] = {
- 	ATTR_LIST(discard_granularity),
- 	ATTR_LIST(max_ordered_discard),
- 	ATTR_LIST(pending_discard),
--	ATTR_LIST(gc_mode),
- 	ATTR_LIST(ipu_policy),
- 	ATTR_LIST(min_ipu_util),
- 	ATTR_LIST(min_fsync_blocks),
--- 
-2.35.1
+For example what I don't understand is: why additional resources (like
+resets) can be provided only in new binding, but not in the old.
+
+Best regards,
+Krzysztof
 
