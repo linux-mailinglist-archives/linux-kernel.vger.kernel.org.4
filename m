@@ -2,144 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAAF6DEA42
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D0C6DEA47
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjDLERa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S229626AbjDLESA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDLER2 (ORCPT
+        with ESMTP id S229452AbjDLER5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:17:28 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851322134;
-        Tue, 11 Apr 2023 21:17:27 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id g3so11469063pja.2;
-        Tue, 11 Apr 2023 21:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681273047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hq/mTM6vqO5fl2BFqwBvgyto2iWy4lzSUp2jXy0gRvg=;
-        b=RlIwUSvX9oZQhTPSDp7e+uIzThMoEzwTnlmdzri1CU8jQEHwALdI51Ah9ME0rf11m8
-         7FBcjhBbnQsB2nj7UQ252Cm2VovvzUnIWs5NgJC82dc2QEKzbvedLwHoBiYjteANduV+
-         TncT6mBXRyL5H+gKtP2KFuRPMhbBxhVCoTAIt1QQX+T/AZW7Ds2+D659FZ2HTIDDXhBP
-         XmFiCFMCMG6N9AaAfEkio6U97Kc4LEWSW170wVV1FfqW8wgH8c3AMGdwWUnWqbandO+L
-         1IBoF+a+I0TrGwnCV20sM9chdMgodtRD9VNBAP/BH2ATfU6bnm4QwzC4ZO/WdJq3TNXb
-         CGGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681273047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hq/mTM6vqO5fl2BFqwBvgyto2iWy4lzSUp2jXy0gRvg=;
-        b=kYWJhLxVGH5y4JzPCXRgrLTPhN8Q5bTjuR44S5N+VqOWqJAEOWib89nzXJnsdL8nqi
-         FQVwJUg4H5PooVgpAAsFjHp9F9qXELGd4YukYAk4W61wvPQDY43K6Tz/ORQkw/WEoCqg
-         TLgm54YgEquWpI5UBybTQloWUaphI4uzXyC+VwSiMO22/NnxiEWXuuVII7XrOr7eCtRT
-         cKknZ1EyJlM2tqVbDKkeNH/KhzrCDaJ30HkckPbS2N7HJo/p9fYR3ZhVrYOOgVlXs866
-         zqqDjCivU4TL1Kn/EaHre43USIsSnrYBfA58x0T6/ZPtGWFK1YY9zqfA3ScF+MlSkTJ/
-         W07g==
-X-Gm-Message-State: AAQBX9e/zlhClrwuKXI15XV5uHnplqmYboWTn9kD56numbFyOTewnjsT
-        PeC1icGrHcr8JmNdi1Cn4ww=
-X-Google-Smtp-Source: AKy350a1z06v0KqJPjvsjepiCUuBZua9rRdG2dJCxmd9vvnWAItbO2F6KpdEGZApvgHF1OZx5jWKFg==
-X-Received: by 2002:a05:6a20:b705:b0:d9:a792:8e52 with SMTP id fg5-20020a056a20b70500b000d9a7928e52mr3986430pzb.57.1681273046927;
-        Tue, 11 Apr 2023 21:17:26 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id x24-20020a62fb18000000b0062de9ef6915sm10571496pfm.216.2023.04.11.21.17.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 21:17:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id C07181068E7; Wed, 12 Apr 2023 11:17:22 +0700 (WIB)
-Date:   Wed, 12 Apr 2023 11:17:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Intel GFX Mailing List <intel-gfx@lists.freedesktop.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux regression tracking <regressions@leemhuis.info>
-Subject: Re: Linux 6.2.1 hits a display driver bug (list_del corruption,
- ffff88811b4af298->next is NULL)
-Message-ID: <ZDYw0vVg7Y1oExJL@debian.me>
-References: <6feae796-db3f-1135-a607-cfefb0259788@gnuweeb.org>
- <ZAGqet3U8AMm4Uf1@debian.me>
- <ZAOTU5CRwdEC1lGH@biznet-home.integral.gnuweeb.org>
- <87v8jetaik.fsf@intel.com>
- <ZAXT1B1GTlmA78Ld@biznet-home.integral.gnuweeb.org>
+        Wed, 12 Apr 2023 00:17:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B232680;
+        Tue, 11 Apr 2023 21:17:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5CD462DBD;
+        Wed, 12 Apr 2023 04:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E62C433D2;
+        Wed, 12 Apr 2023 04:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681273075;
+        bh=yoBa4zZy5EZ5HaeskMPV+eVwYuCxAvjPTogRpMPVZiE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RHmJlxIK34PuVSk/lQxnNm8lQO72qp7KAo9lCnjS2jnonAhIkdoIEFkPCSEFS9CXv
+         ujvDjptBUNdG1FpkDL0ARd8kJoU5eb+AV4xTTRb7wJoTDabYmGm4LGvWthV+B8a9lT
+         aRjTjF1sfesD0CQVs+ZTwEqs2g1c5PO4qSyjro8K3ngAknTRcCVpRzrNQOWRptvcb9
+         ipo5ejJ4CsqV1mvKlQwhqlKmYzOH/OLdPFphuxSTPUikBkAGUAFhmawAuub9Kh6918
+         IpgPhDybcB891LVIC46G3ZYeEO+PzurSps9zv9zWEvQs884VlgDuzv+kjJJcxsIuAw
+         5uLOO6fyNG2nw==
+Date:   Tue, 11 Apr 2023 21:17:52 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+Message-ID: <20230412041752.i4raswvrnacnjjgy@treble>
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
+ <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
+ <ZDVft9kysWMfTiZW@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="riLMWEg/4LOAeueD"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZAXT1B1GTlmA78Ld@biznet-home.integral.gnuweeb.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZDVft9kysWMfTiZW@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 02:25:11PM +0100, Mark Rutland wrote:
+> > By your own argument, we cannot rely on the compiler as compiler implementations,
+> > optimization strategies, etc can change in ways that are incompatible with any
+> > livepatch implementation.
+> 
+> That's not quite my argument.
+> 
+> My argument is that if we assume some set of properties that compiler folk
+> never agreed to (and were never made aware of), then compiler folk are well
+> within their rights to change the compiler such that it doesn't provide those
+> properties, and it's very likely that such expectation will be broken. We've
+> seen that happen before (e.g. with jump tables).
+> 
+> Consequently I think we should be working with compiler folk to agree upon some
+> solution, where compiler folk will actually try to maintain the properties we
+> depend upon (and e.g. they could have tests for). That sort of co-design has
+> worked well so far (e.g. with things like kCFI).
+> 
+> Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
 
---riLMWEg/4LOAeueD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That was the goal of my talk at LPC last year:
 
-On Mon, Mar 06, 2023 at 06:51:48PM +0700, Ammar Faizi wrote:
-> On Mon, Mar 06, 2023 at 12:54:59PM +0200, Jani Nikula wrote:
-> > Please file a bug at fdo gitlab:
-> >=20
-> > https://gitlab.freedesktop.org/drm/intel/wikis/How-to-file-i915-bugs
->=20
-> OK, I posted it here https://gitlab.freedesktop.org/drm/intel/-/issues/82=
-74
->=20
+  https://lpc.events/event/16/contributions/1392/
 
-Hi,
+We discussed having the compiler annotate the tricky bits of control
+flow, mainly jump tables and noreturns.  It's still on my TODO list to
+prototype that.
 
-=46rom gitlab issue above, I don't see any progress on bisection attempt.
-Ammar, have you successfully boot Ubuntu 20.04 with v5.10 kernel and
-test there?
+Another alternative which has been suggested in the past by Indu and
+others is for objtool to use DWARF/sframe as an input to help guide it
+through the tricky bits.
 
-Anyway, I'm adding this to regzbot (with tentative commit range):
+That seems more fragile -- as Madhavan mentioned, GCC-generated DWARF
+has some reliability issues -- and also defeats some of the benefits of
+reverse-engineering in the first place (we've found many compiler bugs
+and other surprising kernel-compiler interactions over the years).
 
-#regzbot introduced: v5.10..v5.15.103
-#regzbot title: Linux 6.2.1 hits a display driver bug (list_del corruption,=
- ffff88811b4af298->next is NULL)
-#regzbot link: https://gitlab.freedesktop.org/drm/intel/-/issues/8274
+Objtool's understanding of the control flow graph has been really
+valuable for reasons beyond live patching (e.g., noinstr and uaccess
+validation), it's definitely worth finding a way to make that more
+sustainable.
 
-(Also Cc: Thorsten)
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---riLMWEg/4LOAeueD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDYwzAAKCRD2uYlJVVFO
-o5/sAQCOZEp244paV37hHVVszEf/eKSIXWtgAAMsix36DcZ4pQEAkRjyNdxRZdYv
-qEYxt6Z1lmleaN5i4eQGxbGF4VyCHw8=
-=6JIi
------END PGP SIGNATURE-----
-
---riLMWEg/4LOAeueD--
+-- 
+Josh
