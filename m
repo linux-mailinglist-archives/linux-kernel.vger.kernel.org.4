@@ -2,82 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E262A6DF748
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF8B6DF740
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjDLNeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S229620AbjDLNdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDLNeQ (ORCPT
+        with ESMTP id S229583AbjDLNdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:34:16 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B7739742;
-        Wed, 12 Apr 2023 06:33:38 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pmabN-0000FF-05; Wed, 12 Apr 2023 15:33:33 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 70732C2458; Wed, 12 Apr 2023 15:32:34 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 15:32:34 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        and@gmx.com, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: fw: Allow firmware to pass a empty env
-Message-ID: <20230412133234.GF11717@alpha.franken.de>
-References: <20230411111426.55889-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411111426.55889-1-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 09:33:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC5F8693
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAD82633A5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D530C433D2;
+        Wed, 12 Apr 2023 13:32:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681306365;
+        bh=xc8Cc8DnS1+KkCJ8QRSDprmExnvSSep7ANwMcFPMf/g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IN6Er4ewxfORgNLHYbtb30slFJXoRa4hKpHi2x1i+hCtgawWRm0CWuy5C1Bx4HU2H
+         LRIR4AIcatPTKUAlPioT9MZZwMuIM4VC4fzkLx6EvYSG3xnMwGVmlFxnx2LQPmCt/x
+         DDdpFxcHKxaeQ5cqpKQ3iDDXHVYt3hOr3OxQEdij3b/WNR/1PEzlzE6FLuuohS6HTb
+         M3KL9mKIbtZ39YAT4pmWUEjNLkE11FIOgbGG8/A4PeTEA8bsFQD/zw1E9/jsQk1keI
+         N3tjO4YishG5MgXraDwRSAEJwROurdLYo5ZRBmgeYodjbtJtFqKXQzdYzjXh9PXeP8
+         OfioWlTAY68ew==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pmaaY-007qdQ-Pc;
+        Wed, 12 Apr 2023 14:32:42 +0100
+Date:   Wed, 12 Apr 2023 14:32:42 +0100
+Message-ID: <86pm89kyyt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Gowans, James" <jgowans@amazon.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Raslan, KarimAllah" <karahmed@amazon.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "zouyipeng@huawei.com" <zouyipeng@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sironi, Filippo" <sironi@amazon.de>,
+        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
+Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
+In-Reply-To: <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
+References: <20230317095300.4076497-1-jgowans@amazon.com>
+        <87h6tp5lkt.wl-maz@kernel.org>
+        <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, karahmed@amazon.com, dwmw@amazon.co.uk, zouyipeng@huawei.com, linux-kernel@vger.kernel.org, sironi@amazon.de, chris.zjh@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:14:26PM +0100, Jiaxun Yang wrote:
-> fw_getenv will use env entry to determine style of env,
-> however it is legal for firmware to just pass a empty list.
-> 
-> Check if first entry exist before running strchr to avoid
-> null pointer dereference.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://github.com/clbr/n64bootloader/issues/5
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Note: Fixes tag is intentionally omitted for this patch, although
-> the booting issue only comes in 6.1, the logic issue is been since very start.
-> ---
->  arch/mips/fw/lib/cmdline.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/fw/lib/cmdline.c b/arch/mips/fw/lib/cmdline.c
-> index f24cbb4a39b5..892765b742bb 100644
-> --- a/arch/mips/fw/lib/cmdline.c
-> +++ b/arch/mips/fw/lib/cmdline.c
-> @@ -53,7 +53,7 @@ char *fw_getenv(char *envname)
->  {
->  	char *result = NULL;
->  
-> -	if (_fw_envp != NULL) {
-> +	if (_fw_envp != NULL && fw_envp(0) != NULL) {
->  		/*
->  		 * Return a pointer to the given environment variable.
->  		 * YAMON uses "name", "value" pairs, while U-Boot uses
-> -- 
-> 2.39.2 (Apple Git-143)
+On Tue, 11 Apr 2023 11:27:26 +0100,
+"Gowans, James" <jgowans@amazon.com> wrote:
+>=20
+> Hi Marc, thanks for taking the time to put thought into this!
+>=20
+> On Sun, 2023-04-09 at 12:41 +0100, Marc Zyngier wrote:
+> > > Generally it should not be possible for the next interrupt to arrive
+> > > while the previous handler is still running: the next interrupt should
+> > > only arrive after the EOI message has been sent and the previous hand=
+ler
+> > > has returned.
+> >=20
+> > There isn't necessarily an EOI message. On bare metal, EOI of a LPI
+> > amounts to sweet nothing (see the pseudocode to convince yourself),
+> > because the physical LPI doesn't have an active state.
+>=20
+> Okay, I saw the gic_eoi_irq() function and thought there might be somethi=
+ng
+> going on there. I guess it's not relevant to this issue.
 
-applied to mips-next.
+It is relevant in a way. If LPIs had an active state, then it wouldn't
+be able to creep back up behind your back until the first CPU had
+issued a deactivation (triggered by EOI when EOImode=3D0). But the
+architecture was broken since day one, because sine architect thought
+they knew everything there was to know about the subject...
 
-Thomas.
+>=20
+> > >=20
+> > > The issue is
+> > > that the global ITS is responsible for affinity but does not know
+> > > whether interrupts are pending/running, only the CPU-local redistribu=
+tor
+> > > handles the EOI. Hence when the affinity is changed in the ITS, the n=
+ew
+> > > CPU's redistributor does not know that the original CPU is still runn=
+ing
+> > > the handler.
+> >=20
+> > You seem to be misunderstanding the architecture.
+> >=20
+> > The local redistributor doesn't know anything either. A redistributor
+> > doesn't contain any state about what is currently serviced. At best,
+> > it knows of the pending state of interrupts, and that about it. This
+> > is even more true in a VM. Only the CPU knows about this, and there is
+> > no EOI that ever gets propagated to the redistributor.
+>=20
+> Right. This misunderstanding basically stems from my confusion above wher=
+e I
+> thought that the EOI would move it back into "pending." That obviously ma=
+kes no
+> sense because if another IRQ arrives while the handler is already running=
+, then
+> another handler run must be queued, hence it must be something really ear=
+ly in
+> the flow which ACKs the IRQ so that it gets moved back to "inactive."
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+The ACK is the read of ICC_IAR_EL1 in the GICv3 driver, which indeed
+sends the interrupt back to the inactive state, despite the
+corresponding priority being active on the CPU. With this setup, EOI
+only performs the priority drop.
+
+> > > 1. Do we need to mask the IRQ and then unmask it later? I don't think=
+ so
+> > > but it's not entirely clear why handle_edge_irq does this anyway; it's
+> > > an edge IRQ so not sure why it needs to be masked.
+> >=20
+> > Please measure that cost and weep, specially in the context of
+> > multiple concurrent interrupts serviced by a single ITS (cost of
+> > locking the command queue, of waiting for a full round trip to the ITS
+> > for a couple of commands...).
+>=20
+> Fortunately this mask/unmasking would only happen in the rare(ish) cased =
+of the
+> race condition described here being hit. Exactly the same as
+> with handle_edge_irq(), the masking and later unmasking would only be done
+> when irq_may_run() =3D=3D false due to the race being hit. Considering th=
+at this is
+> a rare occurrence, I think we could stomach the occasional overhead? I wa=
+s more
+> asking if it's actually *necessary* to do this masking/unmasking. I'm not=
+ sure
+> it's necessary anyway, hence it wasn't implemented in my patch.
+
+But does it solve anything? At the point where you mask the interrupt,
+you already have consumed it. You'd still need to make it pending
+somehow, which is what your patch somehow.
+
+>
+> > > index 49e7bc871fec..4e5fc2b7e8a9 100644
+> > > --- a/kernel/irq/chip.c
+> > > +++ b/kernel/irq/chip.c
+> > > @@ -692,8 +692,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+> > >=20
+> > >       raw_spin_lock(&desc->lock);
+> > >=20
+> > > -     if (!irq_may_run(desc))
+> > > +     if (!irq_may_run(desc)) {
+> > > +             desc->istate |=3D IRQS_PENDING;
+> > >               goto out;
+> > > +     }
+> >=20
+> > What is currently unclear to me is how we get there on another CPU if
+> > we're still handling the interrupt, which happens in the critical
+> > section delineated by desc->lock. So there is some additional state
+> > change here which you don't seem to be describing.
+>=20
+> The lock is actually released and later re-acquired in the handle_irq_eve=
+nt()
+> function which is called below. Only this flag wrangling code is done wit=
+h the
+> irq_desc lock held; all of the logic in the later IRQ-specific handler co=
+de is
+> actually run unlocked. This is why there is a window for the irq_desc to =
+get
+> into the irq_may_run() function concurrently with the handler being run o=
+n a
+> difference CPU.
+
+Huh, indeed! Interrupts are still disabled (TFFT!), but this makes
+firing on another CPU entirely possible. Thanks for the eye-opening
+comment.
+
+> >=20
+> > >       desc->istate &=3D ~(IRQS_REPLAY | IRQS_WAITING);
+> > >=20
+> > > @@ -711,7 +713,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+> > >       if (desc->istate & IRQS_ONESHOT)
+> > >               mask_irq(desc);
+> > >=20
+> > > -     handle_irq_event(desc);
+> > > +     do {
+> > > +             handle_irq_event(desc);
+> > > +     } while (unlikely((desc->istate & IRQS_PENDING) &&
+> > > +                     !irqd_irq_disabled(&desc->irq_data)));
+> > >=20
+> > >       cond_unmask_eoi_irq(desc, chip);
+> > >=20
+> >=20
+> > Why do we need to inflict any of this on all other users of this flow?
+> > The lack of active state on LPIs is the issue, as it allows a new
+> > interrupt to be presented to another CPU as soon as the previous one
+> > has been ACK'ed.
+>=20
+> Do you mean an active state in hardware? Even if we had an active state, =
+that
+> state would be CPU-local, right?
+
+No, and that's the whole point. An active state is global. See for
+example how SPIs, which are as global as it gets, have their active
+state honoured *system wide*.
+
+> The issue here is that when the CPU affinity
+> changes while the handler is running, the new CPU will early out because =
+the
+> flags in irq_desc indicate it's already running elsewhere. A CPU-local ha=
+rdware
+> active state would not help here; only if the active/pending states were =
+global,
+> then it may help.
+
+See above.
+
+>=20
+> As for inflicting this on other users, this is pretty light in general. I=
+t's
+> basically just looking at that flag again; in general it will be unset an=
+d we'll
+> exit the loop after one invoke.
+>=20
+> >=20
+> > This also has the effect of keeping the handling of the interrupt on
+> > the original CPU, negating the effects of the change of affinity.
+>=20
+> Yes. This bothered me too initially, but on reflection I'm not sure it's
+> actually a problem. One possible issue that came to mind was around CPU
+> offlining, but in the event that a CPU being offlined was running interru=
+pt
+> handlers it wouldn't be able to complete the offline anyway until the han=
+dlers
+> were finished, so I don't think this is an issue. Do you see any practica=
+l issue
+> with running the handler once more on the original CPU immediately after =
+the
+> affinity has been changed?
+
+My take on this is that we put the pressure on the CPU we want to move
+away from. I'd rather we put the it on the GIC itself, and use its
+Turing-complete powers to force it to redeliver the interrupt at a
+more convenient time.
+
+>=20
+> > It feels that we should instead resend the interrupt, either by making
+> > it pending again by generating an INT command to the ITS, or by using
+> > the SW resend mechanism (which the lack of deactivation requirement
+> > makes possible).
+>=20
+> I'm open to other suggestions here, just not sure how this re-sending wou=
+ld work
+> in practice. Do you mean that when the original CPU observes that the pen=
+ding
+> flag is set, instead of running the handler again locally the original CP=
+U would
+> instruct the ITS to mark the interrupt as pending again, hence re-trigger=
+ing it
+> on the new CPU? That could work, but may be tricky to shoe-horn into the =
+generic
+> code, unless we use the EOI callback for this?
+
+I think we have most of what we need already, see the hack below. It
+is totally untested, but you'll hopefully get the idea.
+
+Thanks,
+
+	M.
+
+=46rom c96d2ab37fe273724f1264fba5f4913259875d56 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 10 Apr 2023 10:56:32 +0100
+Subject: [PATCH] irqchip/gicv3-its: Force resend of LPIs taken while already
+ in-progress
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ drivers/irqchip/irq-gic-v3-its.c |  3 +++
+ include/linux/irq.h              | 13 +++++++++++++
+ kernel/irq/chip.c                |  5 ++++-
+ kernel/irq/debugfs.c             |  2 ++
+ 4 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-=
+its.c
+index 586271b8aa39..d04c73a2bc6b 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -3574,6 +3574,7 @@ static int its_irq_domain_alloc(struct irq_domain *do=
+main, unsigned int virq,
+ 		irqd =3D irq_get_irq_data(virq + i);
+ 		irqd_set_single_target(irqd);
+ 		irqd_set_affinity_on_activate(irqd);
++		irqd_set_resend_when_in_progress(irqd);
+ 		pr_debug("ID:%d pID:%d vID:%d\n",
+ 			 (int)(hwirq + i - its_dev->event_map.lpi_base),
+ 			 (int)(hwirq + i), virq + i);
+@@ -4512,6 +4513,8 @@ static int its_vpe_irq_domain_alloc(struct irq_domain=
+ *domain, unsigned int virq
+ 		irq_domain_set_hwirq_and_chip(domain, virq + i, i,
+ 					      irqchip, vm->vpes[i]);
+ 		set_bit(i, bitmap);
++
++		irqd_set_resend_when_in_progress(irq_get_irq_data(virq + i));
+ 	}
+=20
+ 	if (err) {
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index b1b28affb32a..4b2a7cc96eb2 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -223,6 +223,8 @@ struct irq_data {
+  *				  irq_chip::irq_set_affinity() when deactivated.
+  * IRQD_IRQ_ENABLED_ON_SUSPEND	- Interrupt is enabled on suspend by irq pm=
+ if
+  *				  irqchip have flag IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND set.
++ * IRQD_RESEND_WHEN_IN_PROGRESS - Interrupt may fire when already in progr=
+ess,
++ *				  needs resending.
+  */
+ enum {
+ 	IRQD_TRIGGER_MASK		=3D 0xf,
+@@ -249,6 +251,7 @@ enum {
+ 	IRQD_HANDLE_ENFORCE_IRQCTX	=3D (1 << 28),
+ 	IRQD_AFFINITY_ON_ACTIVATE	=3D (1 << 29),
+ 	IRQD_IRQ_ENABLED_ON_SUSPEND	=3D (1 << 30),
++	IRQD_RESEND_WHEN_IN_PROGRESS	=3D (1 << 31),
+ };
+=20
+ #define __irqd_to_state(d) ACCESS_PRIVATE((d)->common, state_use_accessors)
+@@ -448,6 +451,16 @@ static inline bool irqd_affinity_on_activate(struct ir=
+q_data *d)
+ 	return __irqd_to_state(d) & IRQD_AFFINITY_ON_ACTIVATE;
+ }
+=20
++static inline bool irqd_needs_resend_when_in_progress(struct irq_data *d)
++{
++	return __irqd_to_state(d) & IRQD_RESEND_WHEN_IN_PROGRESS;
++}
++
++static inline void irqd_set_resend_when_in_progress(struct irq_data *d)
++{
++	__irqd_to_state(d) |=3D IRQD_RESEND_WHEN_IN_PROGRESS;
++}
++
+ #undef __irqd_to_state
+=20
+ static inline irq_hw_number_t irqd_to_hwirq(struct irq_data *d)
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 49e7bc871fec..73546ba8bc43 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -692,8 +692,11 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+=20
+ 	raw_spin_lock(&desc->lock);
+=20
+-	if (!irq_may_run(desc))
++	if (!irq_may_run(desc)) {
++		if (irqd_needs_resend_when_in_progress(&desc->irq_data))
++			check_irq_resend(desc, true);
+ 		goto out;
++	}
+=20
+ 	desc->istate &=3D ~(IRQS_REPLAY | IRQS_WAITING);
+=20
+diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
+index bbcaac64038e..5971a66be034 100644
+--- a/kernel/irq/debugfs.c
++++ b/kernel/irq/debugfs.c
+@@ -133,6 +133,8 @@ static const struct irq_bit_descr irqdata_states[] =3D {
+ 	BIT_MASK_DESCR(IRQD_HANDLE_ENFORCE_IRQCTX),
+=20
+ 	BIT_MASK_DESCR(IRQD_IRQ_ENABLED_ON_SUSPEND),
++
++	BIT_MASK_DESCR(IRQD_RESEND_WHEN_IN_PROGRESS),
+ };
+=20
+ static const struct irq_bit_descr irqdesc_states[] =3D {
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.
