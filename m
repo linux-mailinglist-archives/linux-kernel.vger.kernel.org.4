@@ -2,169 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C046DFAE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD366DFAE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjDLQMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S229978AbjDLQMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDLQMP (ORCPT
+        with ESMTP id S230034AbjDLQMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:12:15 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84427A98;
-        Wed, 12 Apr 2023 09:12:11 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so12129907pjb.1;
-        Wed, 12 Apr 2023 09:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681315931; x=1683907931;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g3JlLGJe9jNa5faHy1EPzLcl/UMrCDP3TfzXac4OOno=;
-        b=r5Dv39pjzRFLTOrswhX14WN1TKtSDHvIkzKr0J6xP7GyGqT1lo0LETECLtXba1+yhv
-         YCj5VG2KQXS/HfF42nhSZMVpQMddoCS8Vyz5nKJqzqZ6K3qzccpNmZkwvRTmzItWUF/H
-         o86O88rq1eROZOiJcZKGATR5B2awQ+OydniBYAEdEx49Db7DD+ua5ry+RoCSRIdZEgLh
-         yzF+fneYf21YAslt+c5jGmuEFnmhgmEzE02VKKw/iHK2OI1YExvdnF+ttCb/2N1F86UJ
-         F8mT8OKA5n+s+sYFx8LWffSdXdUr+HZ7DV/2IRXS2TPah5l/iYitu+FDUtQCSmEgC4Hh
-         eMBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681315931; x=1683907931;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3JlLGJe9jNa5faHy1EPzLcl/UMrCDP3TfzXac4OOno=;
-        b=cSZ0k1W/Rd/D2qF947YwJAU+3KppszJPSda8VvzMOMS4OP3uCj6EKLd/ImYQND7i+t
-         48hBKxcGFs3cP5w8HOwCn9FEi5OKHKYVf4yn5gewzStnF0sOniddrRhFG+VbpBu1kwCf
-         Ze0VHcT8ZtzTHJ3tZjVwFlRy6nWAZiDvkwmKflhBOk+MrE+2McTP8RbA+nlnbPk7n1po
-         ZLafWgyOcYykcVN9Pr5RVBSCASr1m1t3oCgvPJxDtLiSGr3Tsd64yrS+0KSC58UFE+90
-         sf4BwBFsYvK3bmEvv1Wqq0RCm+Lm0AeHZE45Oqu74hfz3d87eAwvSfFJtZn2Ii/bbm/p
-         hEVA==
-X-Gm-Message-State: AAQBX9dq1FdtvBuocdpypo6A36UuoQV2/jMJi9D6ez7wIf/hJsYwxV33
-        kiIQ9iAup+aHSvBDvRF3pCo=
-X-Google-Smtp-Source: AKy350Y6kmiAwS7hEYCLDrpnIlAWZb/8PtllMixj3VFO4bphJSzuZ7ECxrqTg9LOJrjffudyj5+8Lw==
-X-Received: by 2002:a17:90b:3ec4:b0:240:3ee4:d2d1 with SMTP id rm4-20020a17090b3ec400b002403ee4d2d1mr9349740pjb.13.1681315931213;
-        Wed, 12 Apr 2023 09:12:11 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id me18-20020a17090b17d200b00244991b3f7asm4938222pjb.1.2023.04.12.09.12.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 09:12:10 -0700 (PDT)
-Message-ID: <ac2245fd-52c8-3255-3e54-bd8daab1282d@gmail.com>
-Date:   Wed, 12 Apr 2023 09:12:07 -0700
+        Wed, 12 Apr 2023 12:12:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703F283E3;
+        Wed, 12 Apr 2023 09:12:19 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:c2e:89bd:4b8e:9e98] (unknown [IPv6:2a01:e0a:120:3210:c2e:89bd:4b8e:9e98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6762D66031CF;
+        Wed, 12 Apr 2023 17:12:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681315937;
+        bh=sljFgeJSEl1a5wZlSuoj6eGYS3/XpL+Et55uwIHQTzs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HBzMikhOJS6LR1FuBZEitjqCWsIIyU6lE2tZ6kEULw5NsMAa1UvVEKoCh/nW1Kkqz
+         ASX2Ynd6mienD4GXBH22H/rMBCCbdJq1PZPobJhsD+7DQdFUfYba+YRJZo9PkTX5sl
+         MnYxAKnYIRycpkhGag/ARC0/FMpe0GJ9rhS0zYreIiL7bmyoVo9ARQKs9zhavBtAFA
+         v4G7ugyQOij25vg5NG+0roCDFhnhKqcX6Bnaw1JSZchzABZqYji/7EOr6u0fhlYp7P
+         4JkhX6N7j8/GC60n/AtkggrQurFQWocyKansJchWboeTDXBG0vlhoIyy3ARXeon6L+
+         Uj4+4KKzhlDOg==
+Message-ID: <acb095f7-5d77-d053-95f2-9800c61add34@collabora.com>
+Date:   Wed, 12 Apr 2023 18:12:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: brcmstb: Add two optional props
+Subject: Re: [PATCH v6 12/13] media: verisilicon: Enable AV1 decoder on rk3588
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
+ <20230412115652.403949-13-benjamin.gaignard@collabora.com>
+ <2f946887-6d4b-782b-d186-13b184207be3@xs4all.nl>
+ <0dbdaef5940481b52ec33dacb6a1fe9ad4d0271c.camel@collabora.com>
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Jim Quinlan <jim2101024@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230411165919.23955-1-jim2101024@gmail.com>
- <20230411165919.23955-2-jim2101024@gmail.com>
- <5a28e520-63e4-dbcf-5b3e-e5097f02dea2@linaro.org>
- <78c18cdb-5757-8d30-e2a6-414f09505cc6@gmail.com>
- <66b7d0b9-9569-ddaf-89ca-5a0133074a17@linaro.org>
- <CANCKTBtZt9QRkT4yAW5LsfHGf5TTL7tQ025H42+PPEi-=rWE8A@mail.gmail.com>
- <20230412153723.GA2473030-robh@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230412153723.GA2473030-robh@kernel.org>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <0dbdaef5940481b52ec33dacb6a1fe9ad4d0271c.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 08:37, Rob Herring wrote:
-> On Wed, Apr 12, 2023 at 10:14:46AM -0400, Jim Quinlan wrote:
->> On Wed, Apr 12, 2023 at 7:56 AM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 12/04/2023 13:49, Florian Fainelli wrote:
->>>>
->>>>
->>>> On 4/12/2023 1:09 AM, Krzysztof Kozlowski wrote:
->>>>> On 11/04/2023 18:59, Jim Quinlan wrote:
->>>>>> Regarding "brcm,enable-l1ss":
->>>>>>
->>>>>>     The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SOCs --
->>>>>>     requires the driver probe() to deliberately place the HW one of three
->>>>>>     CLKREQ# modes:
->>>>>>
->>>>>>     (a) CLKREQ# driven by the RC unconditionally
->>>>>>     (b) CLKREQ# driven by the EP for ASPM L0s, L1
->>>>>>     (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
->>>>>>
->>>>>>     The HW+driver can tell the difference between downstream devices that
->>>>>>     need (a) and (b), but does not know when to configure (c).  Further, the
->>>>>>     HW may cause a CPU abort on boot if guesses wrong regarding the need for
->>>>>>     (c).  So we introduce the boolean "brcm,enable-l1ss" property to indicate
->>>>>>     that (c) is desired.  Setting this property only makes sense when the
->>>>>>     downstream device is L1SS-capable and the OS is configured to activate
->>>>>>     this mode (e.g. policy==superpowersave).
->>>>>>
->>>>>>     This property is already present in the Raspian version of Linux, but the
->>>>>>     upstream driver implementaion that will follow adds more details and
->>>>>
->>>>> typo, implementation
->>>>>
->>>>>>     discerns between (a) and (b).
->>>>>>
->>>>>> Regarding "brcm,completion-timeout-us"
->>>>>>
->>>>>>     Our HW will cause a CPU abort if the L1SS exit time is longer than the
->>>>>>     PCIe transaction completion abort timeout.  We've been asked to make this
->>>>>>     configurable, so we are introducing "brcm,completion-timeout-us".
->>>>>>
->>>>>> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
->>>>>
->>>>> What happened here? Where is the changelog?
->>>>
->>>> It is in the cover letter:
->>>>
->>>> https://lore.kernel.org/all/20230411165919.23955-1-jim2101024@gmail.com/
->>>>
->>>> but it does not look like the cover letter was copied to you or Rob.
->>>
->>> As you said, I did not get it.
+
+Le 12/04/2023 à 17:50, Nicolas Dufresne a écrit :
+> Le mercredi 12 avril 2023 à 14:43 +0200, Hans Verkuil a écrit :
+>> Hi Benjamin,
 >>
->> Yes, sorry about that; I use a wrapper over the "cocci_cc" script and
->> I need to modify one or both scripts to send the cover to the
->> superset of recipients in the constituent commits.
-> 
-> Try out 'b4'. It's much easier.
-> 
-> In any case, I don't read cover letters. Changes to a patch belong with
-> the patch.
+>> On 12/04/2023 13:56, Benjamin Gaignard wrote:
+>>> Add rk3588 AV1 decoder to Hantro variant.
+>>> The hardware support image from 64x64 up to 7680x4320
+>>> by steps of 16 pixels.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> Nicolas reviewed this patch in v5. Is there a reason that tag was dropped,
+>> or did you just forget? If it is the latter, then I can add it back.
+>>
+>>
+> I see that NV12_10LE40_4L4 is now NV15_4L4 as agreed, and don't see any other
+> changes.
 
-This is not what most other maintainers do, and there does not appear to 
-be a general consensus amongst maintainers that the changes belong in 
-the individual patches, or in the cover letter. Some trees like the 
-networking tree do merge commits of patch sets where the cover letter is 
-used as part of the merge commit message. Other maintainers don't, and 
-some want the change log after the '---' and some do not.
--- 
-Florian
+I have forgot the previous tag from Nicolas, sorry.
+The only change in NV12_10LE40_4L4 -> NV15_4L4.
 
+Regards,
+Benjamin
+
+>
+> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>
+>> Just checking.
+>>
+>> This series now passes my tests.
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>> ---
+>>>   .../media/platform/verisilicon/hantro_drv.c   |   1 +
+>>>   .../media/platform/verisilicon/hantro_hw.h    |   6 +
+>>>   .../platform/verisilicon/rockchip_vpu_hw.c    | 134 ++++++++++++++++++
+>>>   3 files changed, 141 insertions(+)
+>>>
+>>> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+>>> index 71bd68e63859..aef1de20fc5e 100644
+>>> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+>>> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+>>> @@ -713,6 +713,7 @@ static const struct of_device_id of_hantro_match[] = {
+>>>   	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+>>>   	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
+>>>   	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
+>>> +	{ .compatible = "rockchip,rk3588-av1-vpu", .data = &rk3588_vpu981_variant, },
+>>>   #endif
+>>>   #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+>>>   	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
+>>> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
+>>> index e3d303cea7f6..7f33f7b07ce4 100644
+>>> --- a/drivers/media/platform/verisilicon/hantro_hw.h
+>>> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
+>>> @@ -403,11 +403,13 @@ extern const struct hantro_variant rk3328_vpu_variant;
+>>>   extern const struct hantro_variant rk3399_vpu_variant;
+>>>   extern const struct hantro_variant rk3568_vepu_variant;
+>>>   extern const struct hantro_variant rk3568_vpu_variant;
+>>> +extern const struct hantro_variant rk3588_vpu981_variant;
+>>>   extern const struct hantro_variant sama5d4_vdec_variant;
+>>>   extern const struct hantro_variant sunxi_vpu_variant;
+>>>   
+>>>   extern const struct hantro_postproc_ops hantro_g1_postproc_ops;
+>>>   extern const struct hantro_postproc_ops hantro_g2_postproc_ops;
+>>> +extern const struct hantro_postproc_ops rockchip_vpu981_postproc_ops;
+>>>   
+>>>   extern const u32 hantro_vp8_dec_mc_filter[8][6];
+>>>   
+>>> @@ -444,6 +446,10 @@ void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+>>>   dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+>>>   int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+>>>   
+>>> +int rockchip_vpu981_av1_dec_init(struct hantro_ctx *ctx);
+>>> +void rockchip_vpu981_av1_dec_exit(struct hantro_ctx *ctx);
+>>> +int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx);
+>>> +void rockchip_vpu981_av1_dec_done(struct hantro_ctx *ctx);
+>>>   
+>>>   static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
+>>>   {
+>>> diff --git a/drivers/media/platform/verisilicon/rockchip_vpu_hw.c b/drivers/media/platform/verisilicon/rockchip_vpu_hw.c
+>>> index 8de6fd2e8eef..816ffa905a4b 100644
+>>> --- a/drivers/media/platform/verisilicon/rockchip_vpu_hw.c
+>>> +++ b/drivers/media/platform/verisilicon/rockchip_vpu_hw.c
+>>> @@ -13,9 +13,13 @@
+>>>   #include "hantro_g1_regs.h"
+>>>   #include "hantro_h1_regs.h"
+>>>   #include "rockchip_vpu2_regs.h"
+>>> +#include "rockchip_vpu981_regs.h"
+>>>   
+>>>   #define RK3066_ACLK_MAX_FREQ (300 * 1000 * 1000)
+>>>   #define RK3288_ACLK_MAX_FREQ (400 * 1000 * 1000)
+>>> +#define RK3588_ACLK_MAX_FREQ (300 * 1000 * 1000)
+>>> +
+>>> +#define ROCKCHIP_VPU981_MIN_SIZE 64
+>>>   
+>>>   /*
+>>>    * Supported formats.
+>>> @@ -74,6 +78,37 @@ static const struct hantro_fmt rockchip_vpu1_postproc_fmts[] = {
+>>>   	},
+>>>   };
+>>>   
+>>> +static const struct hantro_fmt rockchip_vpu981_postproc_fmts[] = {
+>>> +	{
+>>> +		.fourcc = V4L2_PIX_FMT_NV12,
+>>> +		.codec_mode = HANTRO_MODE_NONE,
+>>> +		.match_depth = true,
+>>> +		.postprocessed = true,
+>>> +		.frmsize = {
+>>> +			.min_width = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_width = FMT_UHD_WIDTH,
+>>> +			.step_width = MB_DIM,
+>>> +			.min_height = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_height = FMT_UHD_HEIGHT,
+>>> +			.step_height = MB_DIM,
+>>> +		},
+>>> +	},
+>>> +	{
+>>> +		.fourcc = V4L2_PIX_FMT_P010,
+>>> +		.codec_mode = HANTRO_MODE_NONE,
+>>> +		.match_depth = true,
+>>> +		.postprocessed = true,
+>>> +		.frmsize = {
+>>> +			.min_width = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_width = FMT_UHD_WIDTH,
+>>> +			.step_width = MB_DIM,
+>>> +			.min_height = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_height = FMT_UHD_HEIGHT,
+>>> +			.step_height = MB_DIM,
+>>> +		},
+>>> +	},
+>>> +};
+>>> +
+>>>   static const struct hantro_fmt rk3066_vpu_dec_fmts[] = {
+>>>   	{
+>>>   		.fourcc = V4L2_PIX_FMT_NV12,
+>>> @@ -277,6 +312,48 @@ static const struct hantro_fmt rk3399_vpu_dec_fmts[] = {
+>>>   	},
+>>>   };
+>>>   
+>>> +static const struct hantro_fmt rockchip_vpu981_dec_fmts[] = {
+>>> +	{
+>>> +		.fourcc = V4L2_PIX_FMT_NV12_4L4,
+>>> +		.codec_mode = HANTRO_MODE_NONE,
+>>> +		.match_depth = true,
+>>> +		.frmsize = {
+>>> +			.min_width = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_width = FMT_UHD_WIDTH,
+>>> +			.step_width = MB_DIM,
+>>> +			.min_height = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_height = FMT_UHD_HEIGHT,
+>>> +			.step_height = MB_DIM,
+>>> +		},
+>>> +	},
+>>> +	{
+>>> +		.fourcc = V4L2_PIX_FMT_NV15_4L4,
+>>> +		.codec_mode = HANTRO_MODE_NONE,
+>>> +		.match_depth = true,
+>>> +		.frmsize = {
+>>> +			.min_width = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_width = FMT_UHD_WIDTH,
+>>> +			.step_width = MB_DIM,
+>>> +			.min_height = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_height = FMT_UHD_HEIGHT,
+>>> +			.step_height = MB_DIM,
+>>> +		},
+>>> +	},
+>>> +	{
+>>> +		.fourcc = V4L2_PIX_FMT_AV1_FRAME,
+>>> +		.codec_mode = HANTRO_MODE_AV1_DEC,
+>>> +		.max_depth = 2,
+>>> +		.frmsize = {
+>>> +			.min_width = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_width = FMT_UHD_WIDTH,
+>>> +			.step_width = MB_DIM,
+>>> +			.min_height = ROCKCHIP_VPU981_MIN_SIZE,
+>>> +			.max_height = FMT_UHD_HEIGHT,
+>>> +			.step_height = MB_DIM,
+>>> +		},
+>>> +	},
+>>> +};
+>>> +
+>>>   static irqreturn_t rockchip_vpu1_vepu_irq(int irq, void *dev_id)
+>>>   {
+>>>   	struct hantro_dev *vpu = dev_id;
+>>> @@ -331,6 +408,24 @@ static irqreturn_t rockchip_vpu2_vepu_irq(int irq, void *dev_id)
+>>>   	return IRQ_HANDLED;
+>>>   }
+>>>   
+>>> +static irqreturn_t rk3588_vpu981_irq(int irq, void *dev_id)
+>>> +{
+>>> +	struct hantro_dev *vpu = dev_id;
+>>> +	enum vb2_buffer_state state;
+>>> +	u32 status;
+>>> +
+>>> +	status = vdpu_read(vpu, AV1_REG_INTERRUPT);
+>>> +	state = (status & AV1_REG_INTERRUPT_DEC_RDY_INT) ?
+>>> +		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
+>>> +
+>>> +	vdpu_write(vpu, 0, AV1_REG_INTERRUPT);
+>>> +	vdpu_write(vpu, AV1_REG_CONFIG_DEC_CLK_GATE_E, AV1_REG_CONFIG);
+>>> +
+>>> +	hantro_irq_done(vpu, state);
+>>> +
+>>> +	return IRQ_HANDLED;
+>>> +}
+>>> +
+>>>   static int rk3036_vpu_hw_init(struct hantro_dev *vpu)
+>>>   {
+>>>   	/* Bump ACLK to max. possible freq. to improve performance. */
+>>> @@ -346,6 +441,13 @@ static int rk3066_vpu_hw_init(struct hantro_dev *vpu)
+>>>   	return 0;
+>>>   }
+>>>   
+>>> +static int rk3588_vpu981_hw_init(struct hantro_dev *vpu)
+>>> +{
+>>> +	/* Bump ACLKs to max. possible freq. to improve performance. */
+>>> +	clk_set_rate(vpu->clocks[0].clk, RK3588_ACLK_MAX_FREQ);
+>>> +	return 0;
+>>> +}
+>>> +
+>>>   static int rockchip_vpu_hw_init(struct hantro_dev *vpu)
+>>>   {
+>>>   	/* Bump ACLK to max. possible freq. to improve performance. */
+>>> @@ -498,6 +600,14 @@ static const struct hantro_codec_ops rk3568_vepu_codec_ops[] = {
+>>>   	},
+>>>   };
+>>>   
+>>> +static const struct hantro_codec_ops rk3588_vpu981_codec_ops[] = {
+>>> +	[HANTRO_MODE_AV1_DEC] = {
+>>> +		.run = rockchip_vpu981_av1_dec_run,
+>>> +		.init = rockchip_vpu981_av1_dec_init,
+>>> +		.exit = rockchip_vpu981_av1_dec_exit,
+>>> +		.done = rockchip_vpu981_av1_dec_done,
+>>> +	},
+>>> +};
+>>>   /*
+>>>    * VPU variant.
+>>>    */
+>>> @@ -529,10 +639,18 @@ static const char * const rk3066_vpu_clk_names[] = {
+>>>   	"aclk_vepu", "hclk_vepu"
+>>>   };
+>>>   
+>>> +static const struct hantro_irq rk3588_vpu981_irqs[] = {
+>>> +	{ "vdpu", rk3588_vpu981_irq },
+>>> +};
+>>> +
+>>>   static const char * const rockchip_vpu_clk_names[] = {
+>>>   	"aclk", "hclk"
+>>>   };
+>>>   
+>>> +static const char * const rk3588_vpu981_vpu_clk_names[] = {
+>>> +	"aclk", "hclk", "aclk_vdpu_root", "hclk_vdpu_root"
+>>> +};
+>>> +
+>>>   /* VDPU1/VEPU1 */
+>>>   
+>>>   const struct hantro_variant rk3036_vpu_variant = {
+>>> @@ -678,3 +796,19 @@ const struct hantro_variant px30_vpu_variant = {
+>>>   	.clk_names = rockchip_vpu_clk_names,
+>>>   	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
+>>>   };
+>>> +
+>>> +const struct hantro_variant rk3588_vpu981_variant = {
+>>> +	.dec_offset = 0x0,
+>>> +	.dec_fmts = rockchip_vpu981_dec_fmts,
+>>> +	.num_dec_fmts = ARRAY_SIZE(rockchip_vpu981_dec_fmts),
+>>> +	.postproc_fmts = rockchip_vpu981_postproc_fmts,
+>>> +	.num_postproc_fmts = ARRAY_SIZE(rockchip_vpu981_postproc_fmts),
+>>> +	.postproc_ops = &rockchip_vpu981_postproc_ops,
+>>> +	.codec = HANTRO_AV1_DECODER,
+>>> +	.codec_ops = rk3588_vpu981_codec_ops,
+>>> +	.irqs = rk3588_vpu981_irqs,
+>>> +	.num_irqs = ARRAY_SIZE(rk3588_vpu981_irqs),
+>>> +	.init = rk3588_vpu981_hw_init,
+>>> +	.clk_names = rk3588_vpu981_vpu_clk_names,
+>>> +	.num_clocks = ARRAY_SIZE(rk3588_vpu981_vpu_clk_names)
+>>> +};
+>>
