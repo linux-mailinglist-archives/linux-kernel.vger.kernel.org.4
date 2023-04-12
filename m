@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0F66DF13A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510BA6DF141
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjDLJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S229821AbjDLJ6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjDLJ47 (ORCPT
+        with ESMTP id S229745AbjDLJ6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:56:59 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6737295;
-        Wed, 12 Apr 2023 02:56:57 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PxJ2w0HmHz6J6wc;
-        Wed, 12 Apr 2023 17:54:32 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
- 2023 10:56:53 +0100
-Date:   Wed, 12 Apr 2023 10:56:50 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Yicong Yang <yangyicong@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <yangyicong@hisilicon.com>,
-        <linuxarm@huawei.com>, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        "Khuong Dinh" <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Message-ID: <20230412105650.000014f9@Huawei.com>
-In-Reply-To: <2023040610-morbidly-supermom-e81c@gregkh>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
-        <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
-        <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
-        <20230406111607.00007be5@Huawei.com>
-        <20230406124040.GD392176@hirez.programming.kicks-ass.net>
-        <20230406174445.0000235c@Huawei.com>
-        <2023040610-morbidly-supermom-e81c@gregkh>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 12 Apr 2023 05:58:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869A36A57
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:58:19 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C9Kxe7023544;
+        Wed, 12 Apr 2023 09:58:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=gvTiANyY+7D45YVc9m0E9ZD8jOfzBtM5sDehKWkiKRY=;
+ b=hFJyQMizwgC8h+shVllb5Wjt4vgk1bqfgtTBzbibjKhY3KC0tNPhnv7hks9h9JxxartO
+ rYMwjlBAgiferMV5O/nt9gEUawrVLymU2cP70e5PZImXcgV/rNbREht96U6HIOHDeG6J
+ hoMuR2xy6L8967ZIy/Bge1Y6YBR9NKfqRIhmlxG4Oe9egTp2xWFyEXOwGDeTKD3GUoUQ
+ FMJ75S2uQeuRmJmm2hhkXRUcfHUgDZTkzawXlaCpWETBFTinipe2GXuN7d/mfv5vEKaL
+ bI8tB+Axlo63+REGP2qh44/f8ZbAJOsmgrpi3XFcrAMNwg2UewgDuKFqyL5TOxSZ//pI Uw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwpwr152j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 09:58:14 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C9LaBX000902;
+        Wed, 12 Apr 2023 09:58:12 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m2293e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 09:58:12 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C9w9fs25428554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 09:58:09 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB76E20040;
+        Wed, 12 Apr 2023 09:58:09 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B93C20043;
+        Wed, 12 Apr 2023 09:58:09 +0000 (GMT)
+Received: from osiris (unknown [9.171.40.40])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 12 Apr 2023 09:58:09 +0000 (GMT)
+Date:   Wed, 12 Apr 2023 11:58:07 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alexander Popov <alex.popov@linux.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] stackleak: allow to specify arch specific stackleak
+ poison function
+Message-ID: <ZDaAr0Tg5DPJM9BY@osiris>
+References: <20230405130841.1350565-1-hca@linux.ibm.com>
+ <20230405130841.1350565-2-hca@linux.ibm.com>
+ <ZDZz8QvPdpGJqMd6@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDZz8QvPdpGJqMd6@FVFF77S0Q05N>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VXwsbMVW5bIn8FVN_CNrls0KPIwz2qp8
+X-Proofpoint-GUID: VXwsbMVW5bIn8FVN_CNrls0KPIwz2qp8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_02,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=278
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +86,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Apr 2023 19:08:45 +0200
-Greg KH <gregkh@linuxfoundation.org> wrote:
-
-> On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
-> > On Thu, 6 Apr 2023 14:40:40 +0200
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> >   
-> > > On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
-> > >   
-> > > > In the long run I agree it would be good.  Short term there are more instances of
-> > > > struct pmu that don't have parents than those that do (even after this series).
-> > > > We need to figure out what to do about those before adding checks on it being
-> > > > set.    
-> > > 
-> > > Right, I don't think you've touched *any* of the x86 PMUs for example,
-> > > and getting everybody that boots an x86 kernel a warning isn't going to
-> > > go over well :-)
-> > >   
+On Wed, Apr 12, 2023 at 10:03:46AM +0100, Mark Rutland wrote:
+> On Wed, Apr 05, 2023 at 03:08:40PM +0200, Heiko Carstens wrote:
+> > Factor out the code that fills the stack with the stackleak poison value
+> > in order to allow architectures to provide a faster implementation.
 > > 
-> > It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> > 
-> > I'd love some inputs on what the x86 PMU devices parents should be?
-> > CPU counters in general tend to just spin out of deep in the architecture code.
-> > 
-> > My overall favorite is an l2 cache related PMU that is spun up in
-> > arch/arm/kernel/irq.c init_IRQ()
-> > 
-> > I'm just not going to try and figure out why...  
+> > Acked-by: Vasily Gorbik <gor@linux.ibm.com>
+> > Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 > 
-> Why not change the api to force a parent to be passed in?  And if one
-> isn't, we make it a "virtual" device and throw it in the class for them?
+> As on patch 2, it might be nicer to have a noinstr-safe memset64() and use that
+> directly, but I don't have strong feelings either way, and I'll defer to Kees's
+> judgement:
 
-Longer term I'd be fine doing that, but I'd like to identify the right parents
-rather than end up sweeping it under the carpet.  Anything we either get completely
-stuck on (or decide we don't care about) could indeed fall back to a virtual
-device.
+Wouldn't that enforce that memset64() wouldn't be allowed to have an own
+stackframe, since otherwise it would write poison values to it, since we
+have
 
-Jonathan
+	if (on_task_stack)
+		erase_high = current_stack_pointer;
 
+in __stackleak_erase()?
 
-> 
-> thanks,
-> 
-> greg k-h
+That was actually my motiviation to make this s390 optimization an always
+inline asm.
 
+Besides that this wouldn't be a problem for at least s390, since memset64()
+is an asm function which comes whithout the need for a stackframe, but on
+the other hand this would add a quite subtle requirement to memset64(), if
+I'm not mistaken.
