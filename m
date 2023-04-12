@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29E36DFD13
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B728D6DFD0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjDLRxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S230083AbjDLRxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjDLRxp (ORCPT
+        with ESMTP id S229839AbjDLRw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:53:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B893A5FFC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681321969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iI47pUzxcqmCcEC2rps2dXJyXHbQhHmBAwXMcIIXiyw=;
-        b=HERI1+tmmXnO1oPb+2TQ8Kh5jl+lfGNNQfMQSLrgABLoZyz0NiGjuITrvNXqMmY8BTbvmO
-        lEh/j4eH0xPaczpkS6/yGznirG3C6fMEsgkvx8gne1/mScFrVB9kXgJ9acfQJssccIx2NF
-        nas875KyXOWdSQDslBvY8rkMziBxAs4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-117-jD7-d2iJMX2JepgkpaueHQ-1; Wed, 12 Apr 2023 13:52:48 -0400
-X-MC-Unique: jD7-d2iJMX2JepgkpaueHQ-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-505149e1a4eso1099953a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:52:48 -0700 (PDT)
+        Wed, 12 Apr 2023 13:52:58 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F976584
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:52:54 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l16so645923qtv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681321973; x=1683913973;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MGNHme4ev+oSAU07TVEQ5TqCiejkM5QtRdbf69iz9UY=;
+        b=EVRLmJLP5hAOlm2KflV2OB71ZjUSrXaxHbFQJWGwlMQvMCJe1BGoI4Dbqcoj03rFwy
+         cgvfIHfz+VIE4H0fFy9aolgLlRNOELhzB4fyMo3ssLXuYCm7QdosJVwqIHvNcUcvCiOe
+         LpVNtE2ZOS3vB6xzUi+OSQhpmUPLdR+Im/vZBYxsXS0+ziea0mFYLqWSz/aKN0qyi6T8
+         5i56tO6nbofeXlu8uGJ4s8kRvRXKTSL2KSEUD+WXiVTWNxza2v433HEMr0YhPKiU3l3q
+         92EtzJ5KGVxpwCRrmbzNrZkjrKIT6GV0HYydYzeQtjijivY+DpJoUtGZj7iEDj2Wcxj2
+         CFYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681321967; x=1683913967;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iI47pUzxcqmCcEC2rps2dXJyXHbQhHmBAwXMcIIXiyw=;
-        b=V4GunBhuWtZ/6fa04ynV+Vshs90XXmdYxomwC/05A8VGCw9LclX0IpOOP2INXJACod
-         GMWUHPYTf+mw7Wfo5Y+BQZ4PukikPGC9gNSZeyAYZk8bUKe7st/Ly0o6412m4TZQ1v0W
-         nVG6FyuDGxnE985NA+ThzKRZKdhbdDnWYFTJ3QccGhZ6Vy9+Yu59EAZPffHhs+ht6W6I
-         xcWRbxpPvTA5nG91bsCK3RgYM+XhxehoarOmxDhTSQfcNBkEfpRZp5duWYxV+zhmjZa6
-         QtbOdm/OCTlbvGBA8trESHAYXx6AeZidnh/xUGU/CMiiM6/GNoF2+SRJ6LrgML0iXmdL
-         R+xg==
-X-Gm-Message-State: AAQBX9ewgOxMiDdJZngQswiXSxYyuoYhq7BkZVkUIBLw1k2oiNx3uTL5
-        C4vb7eYDSWMXyGdcxEGQid1f3tFtd7KCNcn/mUlwcQ2RaUSH/uzbJuGHr+5mH7Mj7DaZHI0yuKY
-        ZfR6Dho+gqrHVCvwIwsah8WSX
-X-Received: by 2002:a05:6402:5186:b0:4bf:b2b1:84d8 with SMTP id q6-20020a056402518600b004bfb2b184d8mr3511171edd.19.1681321967067;
-        Wed, 12 Apr 2023 10:52:47 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y0MTpGveF2HoFghji3+UpGQyjGIi40MatPabg821fgSW3yWZotqgAFPc2Jo3Kxr8gD41BAKQ==
-X-Received: by 2002:a05:6402:5186:b0:4bf:b2b1:84d8 with SMTP id q6-20020a056402518600b004bfb2b184d8mr3511145edd.19.1681321966733;
-        Wed, 12 Apr 2023 10:52:46 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id e14-20020a50d4ce000000b00502b0b0d75csm7149567edj.46.2023.04.12.10.52.45
+        d=1e100.net; s=20221208; t=1681321973; x=1683913973;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MGNHme4ev+oSAU07TVEQ5TqCiejkM5QtRdbf69iz9UY=;
+        b=c/4rJ9rI5bfFovHX1sElIvUbLBGyb8DVKTymabojYDPJn+ADE3PkXKwmrco5w4ehhR
+         I6MMDV9Ks9ankhPjY+tKbBpdivfWWiwkwIW0nqL8KfvWqEXWp2raxirxEEiY4KjwgCDz
+         sdXonmvGBCdl99rQgNrNMPdOTY+13y4xV+Yv9AtjouBSx8lRKnzuGCp4sR2cosAvV8V6
+         0SRlnvKPH6bX0wsVFzI4byKTSWjyO1DMTGMySRBjxtzHTswW4WH/h13LDDzdy1rgNJ4u
+         lLIVgbbVMyyvIjB+OBusLSV47nusljwuzSqmK1KAIF+YViE54KA5J67n7TzBPivoWk4J
+         gLrw==
+X-Gm-Message-State: AAQBX9dlW+qNbhnlyLKoSOu267gJL8T5jOel4eTQiS/W2Aejvbb4HMcG
+        cuoN/8WbzFWOKHVwHaUAI8k=
+X-Google-Smtp-Source: AKy350ZdKWs5qUa0FFC5cFUzm4WnwkOzv5Nf7PzGnN3q90ImT4QsBXXOyfjsyBq2CqbMTTx1Jik5uQ==
+X-Received: by 2002:a05:622a:164d:b0:3c0:3b08:2d80 with SMTP id y13-20020a05622a164d00b003c03b082d80mr29626040qtj.63.1681321973362;
+        Wed, 12 Apr 2023 10:52:53 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 206-20020a370ad7000000b0074589d41342sm4854403qkk.17.2023.04.12.10.52.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 10:52:46 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <34152b76-88c8-0848-9f30-bd9755b1ee25@redhat.com>
-Date:   Wed, 12 Apr 2023 19:52:45 +0200
+        Wed, 12 Apr 2023 10:52:52 -0700 (PDT)
+Message-ID: <9954a532-871a-e747-908f-bc5a3e32a55f@gmail.com>
+Date:   Wed, 12 Apr 2023 10:52:50 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, bpf@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
-        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
-        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
-        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH bpf V8 2/7] selftests/bpf: Add counters to xdp_hw_metadata
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] scripts/gdb: use mem instead of core_layout to get the
+ module address
 Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>
-References: <168130333143.150247.11159481574477358816.stgit@firesoul>
- <168130336725.150247.12193228778654006957.stgit@firesoul>
- <ZDbiofWhQhFEfIsr@google.com>
-In-Reply-To: <ZDbiofWhQhFEfIsr@google.com>
+To:     Pankaj Raghav <p.raghav@samsung.com>, jan.kiszka@siemens.com,
+        kbingham@kernel.org
+Cc:     gost.dev@samsung.com, linux-kernel@vger.kernel.org,
+        song@kernel.org, mcgrof@kernel.org
+References: <20230412111508.892296-1-p.raghav@samsung.com>
+ <CGME20230412112608eucas1p2e8aa819cf92ccc2bacfe0ff9bfcd7a6f@eucas1p2.samsung.com>
+ <ffc82a81-c212-7990-53fb-2f95eb7af2ad@samsung.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <ffc82a81-c212-7990-53fb-2f95eb7af2ad@samsung.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/04/2023 18.56, Stanislav Fomichev wrote:
-> On 04/12, Jesper Dangaard Brouer wrote:
->> Add counters for skipped, failed and redirected packets.
->> The xdp_hw_metadata program only redirects UDP port 9091.
->> This helps users to quickly identify then packets are
->> skipped and identify failures of bpf_xdp_adjust_meta.
+On 4/12/23 04:26, Pankaj Raghav wrote:
+> On 2023-04-12 13:15, Pankaj Raghav wrote:
+>> commit ac3b43283923 ("module: replace module_layout with module_memory")
+>> changed the struct module data structure from module_layout to
+>> module_memory. The core_layout member which is used while loading
+>> modules are not available anymore leading to the following error while
+>> running gdb:
 >>
->> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>> (gdb) lx-symbols
+>> loading vmlinux
+>> Python Exception <class 'gdb.error'>: There is no member named core_layout.
+>> Error occurred in Python: There is no member named core_layout.
+>>
+>> Replace core_layout with its new counterpart mem[MOD_TEXT].
+>>
+>> Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
+>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 >> ---
->>   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   15 +++++++++++++--
->>   tools/testing/selftests/bpf/xdp_hw_metadata.c      |    4 +++-
->>   2 files changed, 16 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
->> index b0104763405a..a07ef7534013 100644
->> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
->> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
->> @@ -25,6 +25,10 @@ struct {
->>   	__type(value, __u32);
->>   } xsk SEC(".maps");
->>   
->> +volatile __u64 pkts_skip = 0;
->> +volatile __u64 pkts_fail = 0;
->> +volatile __u64 pkts_redir = 0;
->> +
->>   extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
->>   					 __u64 *timestamp) __ksym;
->>   extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
->> @@ -59,16 +63,21 @@ int rx(struct xdp_md *ctx)
->>   			udp = NULL;
->>   	}
->>   
->> -	if (!udp)
->> +	if (!udp) {
->> +		pkts_skip++;
->>   		return XDP_PASS;
->> +	}
->>   
->>   	/* Forwarding UDP:9091 to AF_XDP */
->> -	if (udp->dest != bpf_htons(9091))
->> +	if (udp->dest != bpf_htons(9091)) {
->> +		pkts_skip++;
->>   		return XDP_PASS;
->> +	}
->>   
->>   	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
->>   	if (ret != 0) {
 > 
-> [..]
-> 
->>   		bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
-> 
-> Maybe let's remove these completely? Merge patch 1 and 2, remove printk,
-> add counters. We can add more counters in the future if the existing
-> ones are not enough.. WDYT?
-> 
+> I had one question:
+> - Is there a way to import enum? I currently hard code 0 but it will better if we can
+> use the MOD_TEXT enum instead.
 
-Sure, lets just remove all of the bpf_printk, and add these counter instead.
-Rolling V9.
-
->> +		pkts_fail++;
-
-This fail counter should be enough for driver devel to realize that they
-also need to implement/setup XDP metadata pointers correctly (for
-bpf_xdp_adjust_meta to work).
-
->>   		return XDP_PASS;
->>   	}
+You should be able to with updating constants.py.in and using LX_GDBPARSED()
+-- 
+Florian
 
