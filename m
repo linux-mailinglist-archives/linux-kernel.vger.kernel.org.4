@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227776DF227
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE076DF22B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjDLKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S230053AbjDLKqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDLKqD (ORCPT
+        with ESMTP id S229965AbjDLKqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:46:03 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8476EAD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vfw8Fy8_1681296340;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vfw8Fy8_1681296340)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Apr 2023 18:45:41 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, vbabka@suse.cz, mhocko@suse.com,
-        david@redhat.com, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/page_alloc: consider pfn holes after pfn_valid() in __pageblock_pfn_to_page()
-Date:   Wed, 12 Apr 2023 18:45:31 +0800
-Message-Id: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 12 Apr 2023 06:46:17 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CF86E8A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:46:16 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id v6so10398019wrv.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681296375; x=1683888375;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/b9hSn8ZWObn0FlHkk+rwYaVaufISYusIZ7dspuZnGU=;
+        b=nE1DvpzE0K/YsSTy2SqqZca4NHdoo0RGWl4vyBh8L/Oj3zqTr3kzK++nuu/a/XxNXP
+         xlvRU/C0T6iFXi166unKDTqgUltTL71iHfD2kZxgD6upnqT8CCTUbh5EPo0mTWyxlquf
+         CkZWaLQcuORqPeYLMHHxRvOg4b51ZG0GUff0tCN6t81DXzCirM9ma4FjqIYuQMUfMI3o
+         HQq9Dp0cYF8FJp0v7gPyEjsMOzdTIDn4Dj6PI3RIjn0gXRCw/3uZA/3qgqVX+svPyOPk
+         K5lo1nyQitlsCE2MdQIWlkQ0vb+oZcmJtuMpjNi+Yp8WhCZ9jlf3HSq+Kc2wgPf9UeWJ
+         uyew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681296375; x=1683888375;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/b9hSn8ZWObn0FlHkk+rwYaVaufISYusIZ7dspuZnGU=;
+        b=rkd1o+Mp88UZzWeOV8yDLgA9Mqr70nFcbZLrW/hjc+5M1COM2XkjHQEVR9YkbK1d/j
+         6H6CGcOlc0SGJarwqWfRnOuNU5+fcIL2tdPb7+uOFI77nXhtzEAAcVk5Ng6K/fw+Xygw
+         oqJrOhigN265M3HgqrmTokVQRweZuRIcsxWt1C1/OYKh4lhLZATcQHL6Ojmzdbp8uOCv
+         QZ/9ziToCXIFTJ44kD4lY5Ifrr/vHMldrsYBWVWSENPbMLA/5n0aRanI6Zye4dBQHqJV
+         ASijEOMxFHJAsclBT7Z7pkAA4aPcrYTiVf5B3CaOLOMoVwwRCdcK3hng7aHTPcgFem+y
+         8ecA==
+X-Gm-Message-State: AAQBX9f0ylL743UleZJy/J/CjM1PbNZc1cIDnSNL/o1nh8c2dzIJtbIu
+        EJQ5zqRshTQzEMJZefA+zZcI8gaYxEVDOyGWB5g=
+X-Google-Smtp-Source: AKy350ZxMFEPKn1cMQlvz8Yr9RdKJ/Jd3QXO94zGB63koc1Kh4jUerZj3Dk9fgyHkCD9rmPrb/izqHx3A3GxYwTE1e8=
+X-Received: by 2002:a5d:4241:0:b0:2ce:a3a6:79f6 with SMTP id
+ s1-20020a5d4241000000b002cea3a679f6mr1303384wrr.4.1681296374724; Wed, 12 Apr
+ 2023 03:46:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: abdoukerims@gmail.com
+Received: by 2002:adf:e352:0:b0:2ce:9fd8:fd0a with HTTP; Wed, 12 Apr 2023
+ 03:46:14 -0700 (PDT)
+From:   Kayla Manthey <sergeantkayllamanthey@gmail.com>
+Date:   Wed, 12 Apr 2023 10:46:14 +0000
+X-Google-Sender-Auth: 2mSqUpXyv_7tHWtSBCUPvMEqoZ4
+Message-ID: <CANEDhdznNXeq7SjPeOhCbGENKEMEDy-8Faex7f=NKSTyOd0XJA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(),
-which checks whether the given zone contains holes, and uses pfn_valid()
-to check if the end pfn is valid. However pfn_valid() can not make sure
-the end pfn is not a hole if the size of a pageblock is larger than the
-size of a sub-mem_section, since the struct page getting by pfn_to_page()
-may represent a hole or an unusable page frame, which may cause incorrect
-zone contiguous is set.
-
-Though another user of pageblock_pfn_to_page() in compaction seems work
-well now, it is better to avoid scanning or touching these offline pfns.
-So like commit 2d070eab2e82 ("mm: consider zone which is not fully
-populated to have holes"), we should also use pfn_to_online_page() for
-the end pfn to make sure it is a valid pfn with usable page frame.
-Meanwhile the pfn_valid() for end pfn can be dropped now.
-
-Moreover we've already used pfn_to_online_page() for start pfn to make
-sure it is online and valid, so the pfn_valid() for the start pfn is
-unnecessary, drop it.
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- mm/page_alloc.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index d0eb280ec7e4..8076f519c572 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1512,9 +1512,6 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
- 	/* end_pfn is one past the range we are checking */
- 	end_pfn--;
- 
--	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
--		return NULL;
--
- 	start_page = pfn_to_online_page(start_pfn);
- 	if (!start_page)
- 		return NULL;
-@@ -1522,7 +1519,9 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
- 	if (page_zone(start_page) != zone)
- 		return NULL;
- 
--	end_page = pfn_to_page(end_pfn);
-+	end_page = pfn_to_online_page(end_pfn);
-+	if (!end_page)
-+		return NULL;
- 
- 	/* This gives a shorter code than deriving page_zone(end_page) */
- 	if (page_zone_id(start_page) != page_zone_id(end_page))
--- 
-2.27.0
-
+Hello!, Please did you get the previous message? thank you
