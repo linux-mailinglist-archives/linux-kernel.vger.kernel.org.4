@@ -2,149 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E0F6DECAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3740F6DECB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjDLHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S229615AbjDLHir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjDLHhk (ORCPT
+        with ESMTP id S229989AbjDLHi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:37:40 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E1F1BC0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:37:38 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id g5so13279877wrb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681285057; x=1683877057;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CiF0mgU3/wD4pOn8H8hIqODLGj9JpvM6ISvsGRm0Re8=;
-        b=RLM3qCOQYqUPqVlPl8GisAhq+i+qQ/Sf6zrRu4Pzx1bd/n3BJi/0ckvwQwk4bRa48w
-         EcGKdZaG4z1jPm+MlRHSKOBx8bpnGjDp/8N/ZAk3GSw4g6wn4Ts2ljabxfXI5QDykNIS
-         h8iGcPEcpbvavlZlNimUXGW5ELFvoglmIoWIYZRw5ZufVm4s83F18DZLfAoHwM1o6xSU
-         m2aiAQ3oV8zRIRZczC7FTx7Ea2+K+vkGcmRgSewLxkQ81SanMCH36vPICKebxCuzDP2K
-         dsiqSZ1H2GQ540pr5YimAwwEUhvgXRDzjyFWwPHAzwW2soKFcgc6yNdqXBszFobtNeAr
-         BLpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681285057; x=1683877057;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CiF0mgU3/wD4pOn8H8hIqODLGj9JpvM6ISvsGRm0Re8=;
-        b=0qQGM9LLHzrjFfvxVku9o+9TAYFLwJgZUX4FJebJsURm/+T8EMQ3iI5gUgUltrVXXN
-         pS0M1SlZHxq464W7qeXnSNxEsx7wISfWiPJnBPrXRcjrolm6i2HmhDCgOhNZCoDIrOEq
-         8HUYNhyZKdt8g/plnc7Pj63iItW9Q/9FEpYrcoZK/525+iZzVXsbdVkO2b5nCA7S/UEn
-         a19l9IZutb18Cl5srJJxqKeMHDl5Sq9z9TN+bpq9P2KmQjF81t5h6hQPkkf2C6sPNsWF
-         uax6dcsLmD0b26KRZRKxbk3+oQC/jmQ9IvYUqbYtHGKxQSUSeLRcXRYZtj4CF/hYV2mk
-         d+Tg==
-X-Gm-Message-State: AAQBX9cBTlnFHwVQUJe7Ey5Ln2AtDbikYFOKk3zJYJSLbS4qBm2wVbwv
-        sANwYoqaTaTPvqH/MmtClY/h7g==
-X-Google-Smtp-Source: AKy350Z/SLp317LxYEPlad+keulW3xjgxVXR1yy97XsOkHvy0kkKdPqlBPYhSQtIfSkn6yBlVfwwXg==
-X-Received: by 2002:a05:6000:c:b0:2f4:f2c9:171b with SMTP id h12-20020a056000000c00b002f4f2c9171bmr59898wrx.17.1681285057178;
-        Wed, 12 Apr 2023 00:37:37 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b777:4c24:cbcf:795f? ([2a01:e0a:982:cbb0:b777:4c24:cbcf:795f])
-        by smtp.gmail.com with ESMTPSA id l1-20020adfe581000000b002f22c44e974sm6598619wrm.102.2023.04.12.00.37.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 00:37:36 -0700 (PDT)
-Message-ID: <055a9886-ea3f-6df2-f4a0-a3eff47e6b69@linaro.org>
-Date:   Wed, 12 Apr 2023 09:37:35 +0200
+        Wed, 12 Apr 2023 03:38:29 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C56761AE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:38:14 -0700 (PDT)
+Received: from SoMainline.org (unknown [89.205.226.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 281932030B;
+        Wed, 12 Apr 2023 09:38:10 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 09:38:08 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        freedreno@lists.freedesktop.org, quic_sbillaka@quicinc.com,
+        airlied@gmail.com, andersson@kernel.org, robdclark@gmail.com,
+        dri-devel@lists.freedesktop.org, dianders@chromium.org,
+        vkoul@kernel.org, agross@kernel.org, daniel@ffwll.ch,
+        linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
+        sean@poorly.run, linux-kernel@vger.kernel.org
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: add DSC range checking during
+ resource reservation
+Message-ID: <tczt5alqbadkodgorqm4pljpqkn5bc4efpxiy3em7bgu7gqaka@3cdszu4k6rhk>
+References: <1681247380-1607-1-git-send-email-quic_khsieh@quicinc.com>
+ <qvgbm3wimai3jytnikbcixipvwqn2uywqpg4mn6mjh5atergfx@wa4edsrp7y22>
+ <96416911-bca3-b007-b036-1c4463e83aaa@quicinc.com>
+ <24c5aa23-9b3c-787c-10aa-e9d5ad91512b@linaro.org>
+ <49479b93-b364-d882-7a77-08223a94ed36@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 2/5] mtd: rawnand: meson: replace GENMASK() macro with
- define
-Content-Language: en-US
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-Cc:     oxffffaa@gmail.com, kernel@sberdevices.ru,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-3-AVKrasnov@sberdevices.ru>
-Organization: Linaro Developer Services
-In-Reply-To: <20230412061700.1492474-3-AVKrasnov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <49479b93-b364-d882-7a77-08223a94ed36@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/04/2023 08:16, Arseniy Krasnov wrote:
-
-Please add a commit message
-
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->   drivers/mtd/nand/raw/meson_nand.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+On 2023-04-11 18:50:24, Abhinav Kumar wrote:
 > 
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index 256c37c76526..45b53d420aed 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -110,6 +110,8 @@
->   
->   #define PER_INFO_BYTE		8
->   
-> +#define NFC_CMD_RAW_LEN		(GENMASK(13, 0))
+> 
+> On 4/11/2023 6:06 PM, Dmitry Baryshkov wrote:
+> > On 12/04/2023 01:32, Abhinav Kumar wrote:
+> >> Hi Marijn
+> >>
+> >> On 4/11/2023 3:24 PM, Marijn Suijten wrote:
+> >>> Again, don't forget to include previous reviewers in cc, please :)
+> >>>
+> >>> On 2023-04-11 14:09:40, Kuogee Hsieh wrote:
+> >>>> Perform DSC range checking to make sure correct DSC is requested before
+> >>>> reserve resource for it.
+> > 
+> > nit: reserving
+> > 
+> >>>
+> >>> This isn't performing any range checking for resource reservations /
+> >>> requests: this is only validating the constants written in our catalog
+> >>> and seems rather useless.  It isn't fixing any real bug either, so the
+> >>> Fixes: tag below seems extraneous.
+> >>>
+> >>> Given prior comments from Abhinav that "the kernel should be trusted",
+> >>> we should remove this validation for all the other blocks instead.
+> >>>
+> >>
+> >> The purpose of this check is that today all our blocks in RM use the 
+> >> DSC_* enum as the size.
+> >>
+> >> struct dpu_hw_blk *dsc_blks[DSC_MAX - DSC_0];
+> >>
+> >> If the device tree ends up with more DSC blocks than the DSC_* enum, 
+> >> how can we avoid this issue today? Not because its a bug in device 
+> >> tree but how many static number of DSCs are hard-coded in RM.
+> > 
+> > We don't have these blocks in device tree. And dpu_hw_catalog shouldn't 
+> > use indices outside of enum dpu_dsc.
+> > 
+> 
+> ah, my bad, i should have said catalog here. Okay so the expectation is 
+> that dpu_hw_catalog.c will program the indices to match the RM limits.
+> 
+> I still stand by the fact that the hardware capabilities coming from 
+> catalog should be trusted but this is just the SW index.
 
-Drop the () around GENMASK(13, 0)
+These come from the catalog.  Here's how it looks for sdm845:
 
-> +
->   struct meson_nfc_nand_chip {
->   	struct list_head node;
->   	struct nand_chip nand;
-> @@ -300,7 +302,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
->   
->   	if (raw) {
->   		len = mtd->writesize + mtd->oobsize;
-> -		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
-> +		cmd = (len & NFC_CMD_RAW_LEN) | scrambler | DMA_DIR(dir);
->   		writel(cmd, nfc->reg_base + NFC_REG_CMD);
->   		return;
->   	}
-> @@ -550,7 +552,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
->   	if (ret)
->   		goto out;
->   
-> -	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
-> +	cmd = NFC_CMD_N2M | (len & NFC_CMD_RAW_LEN);
->   	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->   
->   	meson_nfc_drain_cmd(nfc);
-> @@ -574,7 +576,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
->   	if (ret)
->   		return ret;
->   
-> -	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
-> +	cmd = NFC_CMD_M2N | (len & NFC_CMD_RAW_LEN);
->   	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->   
->   	meson_nfc_drain_cmd(nfc);
+	static struct dpu_dsc_cfg sdm845_dsc[] = {
+		DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+		DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+		DSC_BLK("dsc_2", DSC_2, 0x80800, 0),
+		DSC_BLK("dsc_3", DSC_3, 0x80c00, 0),
+	};
 
-Thanks,
-Neil
+The only way to trigger this newly introduced range check is by omitting
+the DSC_x constants and manually writing e.g. an out-of-range value 10
+here, or setting DSC_NONE.  This is only allowed for interfaces.
+
+As we trust the kernel, hence this config, the if introduced here (and
+already present for other blocks) has pretty much no effect.
+
+> > Marijn proposed to pass struct dpu_foo_cfg directly to 
+> > dpu_hw_foo_init(). This will allow us to drop these checks completely.
+> > 
+> 
+> Ah okay, sure, would like to see that then uniformly get rid of these 
+> checks.
+
+This suggested change won't make a difference to the range check
+introduced here.  The range-check validates that the catalog sets `id`
+to a sensible value (since we do not use array indices for this, we
+could even decide to do so via `[DSC_0] = (struct dpu_dsc_cfg){ ... }`
+if we so desire in the future).
+
+It'll only get rid of the `_xxx_offset` functions looping through the
+arrays in the catalog again, to find a catalog pointer with matching
+`id` while we aleady have exactly that pointer here via &cat->dsc[i].
+
+The only semantic difference incurred by the change is when the same
+`id` value is (erroneously) used multiple times in an array: the current
+implementation will always find and return the first block while the
+suggestion will make sure all blocks are used.
+But again, reusing an `id` is an error and shouldn't happen.
+
+> > For the time being, I think it might be better to add these checks for 
+> > DSC for the sake of uniformity.
+> > 
+> 
+> Yes, i think so too.
+
+I'd rather see a separate patch removing them then, as my suggestion
+won't affect the legality of the range check.
+
+- Marijn
