@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21BA6DEC74
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2808D6DEC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDLHVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S229648AbjDLHQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjDLHVm (ORCPT
+        with ESMTP id S229458AbjDLHQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:21:42 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 00:21:41 PDT
-Received: from qs51p00im-qukt01071902.me.com (qs51p00im-qukt01071902.me.com [17.57.155.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A682B30CA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1681283703;
-        bh=FuHa2VctxY8ljAUtLpIjGV5QmLAE4POaPbEVmwgcH2o=;
-        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
-        b=qY08AyFEmbBbMRmPeik5yhhAU3lwphghNn24tlEZ05vOVrFWtZSNDXmUtGuHh8n5N
-         vFBfCSUOMVpXxOSzg00fpuzPLEkUrVvbznMG5ErYZEbnDeeVkW/qbjlOxr2oX2Bomy
-         v5KC7nZMd/+z/r5cZ1ilzsAebgJn1m7/DiOQebOT8F4ZVvCSXRwH8NdCfGRPrEJ3oB
-         IW+Pc4wC30B0LWGprb9e4gJMCsOTJFQN0WuKuHYUD5U/L2E8ZltqoR4xXpdes5Ct1i
-         WjQc3/gtJcsSykcDtr8ljRgmxlFNdy87z4EydHZshcht2f70xYrxVMuOJsMe5ICQGc
-         ww/8hNCOGbCqQ==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01071902.me.com (Postfix) with ESMTPSA id 4C7375EC011E;
-        Wed, 12 Apr 2023 07:15:01 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Apr 2023 03:16:08 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001A330EB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:16:06 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id xi5so26378531ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681283765;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oYluzBqeGlhNCgYN/vs2TBjqaPrfmZeDGPID9roW1cQ=;
+        b=fvrcfx6ep1D++SFCxg6x5vVGSwG5/VmBcg5cv1f3WhstBDhlfZAbdCY4UC3VRAkNxJ
+         CN3t5AyuRSs2dr30TFruEmrY15oGiCdBhG0Oy634+piytmCO4gZWoho20Hlbk3ZhDUyK
+         VwkoPhAVjSUrJN+ho/0KxX0Uvp35SLwTiLV44b9M560wqWxFkIXTMjYEdZjPahEmL067
+         kYkbmAnbPbVC/3R7yWmCrctcqF89n+SFFVULneVvySsJQZ+biNXatJoFapZ+ElrbmN+8
+         +XOAV0NadAa1Sy8Au8yv74/KoQBlaFGvtIwQ0lxLxdpyIblb2e2UbgoHYWwZAESEhffp
+         +ybA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681283765;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oYluzBqeGlhNCgYN/vs2TBjqaPrfmZeDGPID9roW1cQ=;
+        b=gKSQejeDP5Jg/ZQlPkuVEYnwfSIV9kIUCZqGzAh/odapb64s5FiWULij7kvKQPD+sB
+         AFhM+aRVDkiHhmGmOKWizm+j4M/n2qdDXi8MHnRIxVznwJaTAVViT509FCR7BtiHB0Yn
+         Yz9R1rb5bbLBPsoSuK8xBU3X7TBiAAKkxYB8liLTySLm8kQj2rZMdquWb3wr9MdOaIN3
+         wRUp40vyjvjnhiFHPJiu5OfWhff57dB5wBhth3ZHMtSyobUmfrbqrpV1ur4RapA1/TOJ
+         lMBLq/2TGHr2GdKqBPp3kiCeLKElxsU7FSuVqFNZl2YlLdK7QxbQ4Uz9PARuviKbExKE
+         igVA==
+X-Gm-Message-State: AAQBX9cZFCvxDpkW0sLTtE1oWgPn47Ih6LnIb+BuIwH+RRBT7wztMNyH
+        WU82LOfSLB8EymMcvI++3utwjg==
+X-Google-Smtp-Source: AKy350YvNgklkhK0fZIoRDJJP7VAp46SzPBgygdA633mj6ZPtpz6ZPya476IZVB8S7WnIn6JShG1LQ==
+X-Received: by 2002:a17:906:768b:b0:94a:54ad:b36b with SMTP id o11-20020a170906768b00b0094a54adb36bmr1127452ejm.77.1681283765470;
+        Wed, 12 Apr 2023 00:16:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
+        by smtp.gmail.com with ESMTPSA id hs8-20020a1709073e8800b0094e1272bd12sm1630723ejc.159.2023.04.12.00.16.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 00:16:05 -0700 (PDT)
+Message-ID: <4b630254-2de0-979b-8d44-6b7d1dcd3d28@linaro.org>
+Date:   Wed, 12 Apr 2023 09:16:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 6/7] dt-bindings: iommu: arm,smmu: enable clocks for
+ sa8775p Adreno SMMU
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230411125910.401075-1-brgl@bgdev.pl>
+ <20230411125910.401075-7-brgl@bgdev.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230411125910.401075-7-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 12 Apr 2023 09:14:59 +0200
-Message-Id: <CRULBWW4VCWG.3KS7HX7P1G4P6@void.crly.cz>
-Cc:     "Frank Oltmanns" <frank@oltmanns.dev>,
-        "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-From:   "Roman Beranek" <romanberanek@icloud.com>
-To:     "Maxime Ripard" <maxime@cerno.tech>
-X-Mailer: aerc 0.14.0
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
- <20230329195802.veybo3367zifw77n@penduick>
- <CROTQHUM88W0.2URPO95U5ZMS5@void.crly.cz>
- <pu3vdz4gnkwgn4thg6tndbnvfroevpnq75bqbfv7yyrh4gkv63@xxl3dsjf2ih3>
-In-Reply-To: <pu3vdz4gnkwgn4thg6tndbnvfroevpnq75bqbfv7yyrh4gkv63@xxl3dsjf2ih3>
-X-Proofpoint-GUID: s-iO_fMJ2HHG6apJavxJxsPYR0SgWQJt
-X-Proofpoint-ORIG-GUID: s-iO_fMJ2HHG6apJavxJxsPYR0SgWQJt
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-11=5F01:2022-01-11=5F01,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=487 phishscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0 clxscore=1015
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304120065
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Apr 5, 2023 at 5:03 PM CEST, Maxime Ripard wrote:
-> On Wed, Apr 05, 2023 at 02:34:11PM +0200, Roman Beranek wrote:
-> > It turns out however that the new dclk rates can't be set exactly as
-> > requested without touching pll-video0*, tcon0 now therefore gets
-> > reparented from pll-mipi to pll-video0-2x which, as it further turns
-> > out, breaks DSI. While simply forbidding the video0-2x mux option seems
-> > to me as the right way to go because there's not much use for it with
-> > non-DSI interfaces either besides the opportunity to power pll-mipi
-> > down, I'd like to run by you first.
->
-> Sounds reasonable
+On 11/04/2023 14:59, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> The GPU SMMU will require the clocks property to be set so put the
+> relevant compatible into the adreno if-then block.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
 
-Okay, I'm unsure of how to denote that in the code however. Should I
-just comment the parent out of the table and put an explanation in
-a comment nearby? Or just erase it? I couldn't find an applicable
-precedent.
+This is a friendly reminder during the review process.
 
-> > * As pll-mipi doesn't have CLK_SET_RATE_PARENT flag set, pll-video0
-> >   retains its boot-time rate of 294 MHz set by sunxi-dw-hdmi driver
-> >   in u-boot. Why 294 MHz (as opposed to the default rate of 297 MHz)?
-> >   The driver actually asks for 297 MHz, clock_set_pll3 rounds it to
-> >   294 MHz though because it limits itself to 6 MHz steps.
->
-> We could also address that though
+It looks like you received a tag and forgot to add it.
 
-Should I include it in v2 of the series, or leave it for later?
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-Thanks,
-Roman
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
