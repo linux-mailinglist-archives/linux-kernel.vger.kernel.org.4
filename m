@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180256DF7EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D456DF7EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjDLODO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S230137AbjDLODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjDLODM (ORCPT
+        with ESMTP id S229555AbjDLODt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:03:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C07FF2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681308190; x=1712844190;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=n/9nWg9ADNDZxhAMoIa6mw8OZXc7bxhlG+mD8jYD9jY=;
-  b=TQI6/omJ7JdfsbOIcslMNJDCUiypnMlaOjvu547LLSunpVmsdMONHaWq
-   4nPkw781up7hZyck9JhWJDA/17DFN0mUQouDHCT6rMoWya4QiFAoZ95PR
-   GPJazL/XSzpiYsBgB/feH+Ch9ukPvQKXTibmMc5nY2SpPSkN8O9IfHjyr
-   PVs9BlWzp/UDrcv8ePQ9BTJdfJoekmMW7r/xBLsix27Mo1TfyVt+MkRGg
-   FvCYkEyNMcj3rkQOml6ZHvfdBkL1a0HviNDyeTCtzEMs360oR+vpAD6/I
-   Q4HYB7NGGRdtzeVnah0N//FdR4MB7YiPuwdWkxDwNUDa7wHNr5HR18kbP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="342660767"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="342660767"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:02:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="691540396"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="691540396"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.215.58]) ([10.254.215.58])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:02:45 -0700
-Message-ID: <b90f0222-3faa-b909-c82a-d4fbf8a1a1ae@linux.intel.com>
-Date:   Wed, 12 Apr 2023 22:02:43 +0800
+        Wed, 12 Apr 2023 10:03:49 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4584E49;
+        Wed, 12 Apr 2023 07:03:46 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id w13so28323187oik.2;
+        Wed, 12 Apr 2023 07:03:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681308226; x=1683900226;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XkKJbGcmCESOp5kGHyfKWXGMOOU/ouU4bAVhUJXQjqA=;
+        b=tl+5V09PvydyydndoVI67mjeSLhi3IhyuMMHX1eOjbKuOiKOfx4DWPvA0kmzJeOgQJ
+         LuW424x8hiu8YeTMSbZ9vhzsUsRR1jEpVHCuUSkbq0izVzrq78RDWOoGbt+Uctgx2/K5
+         GAmL4akCjBT7e2RfaXschMyXnNoizx0u1duPb0N1qpL2b0kEKSuVJZjiV1GJUJVnQrmu
+         0vz7SDptp6uG6/UMhlQQ2UdsTtXG+zWF/UW4p40vC+FoevH5Y7h0Zcp31IYYC5WjuwzK
+         LZU6nzpNP/aVue3TQAbQEvesJc9AeN7AhTf5kI0yetFR1N9F5hE2UJRyrGaD+kGPWBix
+         iJog==
+X-Gm-Message-State: AAQBX9em0ZNGAMXv2eacSULwseyAH/s04gBKXdlaJZUFq4hnFCpDctqF
+        8SBkyVvmOn+h+9ObTfaMZQ==
+X-Google-Smtp-Source: AKy350Y4tWN4Ri2Yf9zEZz08i2glwRo8Dr90/wmyCM6hmihMUWaqoNcTtQG0LOp2GloTALjDW2dmog==
+X-Received: by 2002:a05:6808:352:b0:38b:a4f9:2570 with SMTP id j18-20020a056808035200b0038ba4f92570mr3031262oie.16.1681308225748;
+        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p5-20020a4a95c5000000b0053a7aaa85a0sm7063881ooi.0.2023.04.12.07.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
+Received: (nullmailer pid 2248174 invoked by uid 1000);
+        Wed, 12 Apr 2023 14:03:44 -0000
+Date:   Wed, 12 Apr 2023 09:03:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        James Cowgill <james.cowgill@blaize.com>,
+        Matt Redfearn <matthew.redfearn@blaize.com>,
+        Neil Jones <neil.jones@blaize.com>
+Subject: Re: [PATCH 5/5] arm64: Add initial support for Blaize BLZP1600 CB2
+Message-ID: <20230412140344.GA2234522-robh@kernel.org>
+References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+ <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     baolu.lu@linux.intel.com, Vinod Koul <vkoul@kernel.org>,
-        Tina Zhang <tina.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
- <20230411064815.31456-12-baolu.lu@linux.intel.com>
- <ec1536af68e6478a9b10a0d884cc988d@AcuMS.aculab.com>
- <6d9ed10d-12ee-792f-fc34-60a8e432c5d2@linux.intel.com>
- <b6ab9a30960d41c9b42e5880b89277e3@AcuMS.aculab.com>
- <cbf041c7-119b-e23a-185d-288194629324@linux.intel.com>
- <d996281ed80647e0ae38cea00285f710@AcuMS.aculab.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <d996281ed80647e0ae38cea00285f710@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/12 21:27, David Laight wrote:
-> From: Baolu Lu
->> Sent: 12 April 2023 14:11
-> ...
->> The addresses the following issue reported by klocwork tool:
->>
->>    - operands of different size in bitwise operations
-> Then fix the stupid tool to not be that pedantic.
+On Thu, Apr 06, 2023 at 10:22:32AM +0000, Niko Pasaloukos wrote:
+> Adds support for the Blaize CB2 development board based on
+> BLZP1600 SoC. This consists of a Carrier-Board and a SoM.
+> 
+> The blaize-blzp1600.dtsi is the common part for the SoC,
+> blaize-blzp1600-som.dtsi is the common part for the SoM and
+> blaize-blzp1600-som-cb2.dts is the board specific file.
+> 
+> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
+> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
+> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Co-developed-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+> ---
+>  arch/arm64/Kconfig.platforms                  |   5 +
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  arch/arm64/boot/dts/blaize/Makefile           |   2 +
+>  .../dts/blaize/blaize-blzp1600-som-cb.dtsi    | 217 +++++
+>  .../dts/blaize/blaize-blzp1600-som-cb2.dts    | 103 ++
+>  .../boot/dts/blaize/blaize-blzp1600-som.dtsi  | 104 ++
+>  .../boot/dts/blaize/blaize-blzp1600.dtsi      | 894 ++++++++++++++++++
+>  arch/arm64/configs/defconfig                  |   1 +
+>  8 files changed, 1327 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/blaize/Makefile
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb.dtsi
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb2.dts
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
 
-Good idea. But before the users/customers stop complaining, let's have a
-cleanup like this. :-)
+New platforms should be free of warnings from 'make dtbs_check'. Please 
+run and fix if you have not, and confirm that in the commit message.
 
-Best regards,
-baolu
+Rob
