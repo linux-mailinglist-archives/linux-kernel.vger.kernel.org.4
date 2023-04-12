@@ -2,144 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3968C6DE873
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3B76DE878
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDLATy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 20:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S229638AbjDLAW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 20:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDLATx (ORCPT
+        with ESMTP id S229551AbjDLAWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 20:19:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E90171F;
-        Tue, 11 Apr 2023 17:19:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px3Hh3wjbz4x84;
-        Wed, 12 Apr 2023 10:19:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681258785;
-        bh=7DoPsnkMElumDpbjNEW92q+xjDyj1+B3uUaBrzAhsyo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rI940riiIN3UJwKKS3inbat5LIpOO4KgbtZgInBmasV7SWPSKevansh372Ho/azGO
-         VMO1wNNsuW9hy0lOgB8H6dncH08OJkuA74PBrgod0ksQTKY+dovcHVE6Z9+G0cJyQL
-         LObcMa6bDW/8aZdiPLBrvYC1sPxy9qSp0IE9ZkDG5GhK1XZKHAJeL3VO0KFCfpe7y1
-         O8KiXagIsv5JJPnvPobYICwLqi21IuucixuTBvY7+yQbWFgr3BmubEExXiyIFQLIo7
-         5uSpd4Rf5awR7rAT+4/zQiehGzFsZj3nbqOZcnur6anjjdwXMq3C3cSkiTBIx8seWp
-         imvm6MuICE32Q==
-Date:   Wed, 12 Apr 2023 10:19:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Gao Xiang <xiang@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the erofs tree with the vfs-idmapping
- tree
-Message-ID: <20230412101942.75e3efa9@canb.auug.org.au>
+        Tue, 11 Apr 2023 20:22:55 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B12D50
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:22:54 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id n10-20020a056e02100a00b00325c9240af7so6997772ilj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:22:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681258973; x=1683850973;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vDeAciAGUu2Os6CWnaMgil2ftdLPgpp4On5AN0OJS54=;
+        b=QJAXIakQV7RBEMvL35sXiujoVBH9k5jzfImKfnVXZrzikfZzBz5ZIuPSinmILeJYxp
+         5MoXjBhbzd3gKoEm8qJJJcqlVK8+rMKJz7JtBymv5NGthxEYxpihL4U9dT7hEcedaxhQ
+         XdkgaN1Yhdm41YaGtezhaqYWSiPX8DuRnlUVUlS9tUgO7oZEmZwbT/DB0JE1+HgJFD43
+         SUvaI+QAoXe2gsl3e5zw+aNKZoqI27oFI66n1q5M8dZujwaaKoecp+00ONeKR+pRgULq
+         urvPB4OihRXdY5MjaaTnabUGw3DuREKQ0KtvBnJYxnUwKTmNfyEKsCm2WH261n7np+v9
+         soog==
+X-Gm-Message-State: AAQBX9cwqs82HOU8qwiUYbI4gcA4C9qqaHLg5C3ve1l/YMAHRS7IPTML
+        R8+3WYjzD33e/ekZl7So95NUIrIM7dtJJIALXXO1K26HY4U2
+X-Google-Smtp-Source: AKy350YgxTXf6utG/kdS74PL6xy/zu7P/KDgHxM+D3LuJXG9FwV7icfcPsCi6s29J2jEglm/WwQI4j5lFw4/y/pQloQzBLonRuOi
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.xtQAdYkhqRQfAhjDYL6Ugx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1090:b0:328:49a2:216 with SMTP id
+ r16-20020a056e02109000b0032849a20216mr539989ilj.4.1681258973361; Tue, 11 Apr
+ 2023 17:22:53 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 17:22:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e1fc7905f9189b86@google.com>
+Subject: [syzbot] [net?] WARNING in xfrm_policy_fini (2)
+From:   syzbot <syzbot+b3346cca0c23c839e787@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, steffen.klassert@secunet.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.xtQAdYkhqRQfAhjDYL6Ugx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-Today's linux-next merge of the erofs tree got a conflict in:
+HEAD commit:    e28531143b25 net: ethernet: mtk_eth_soc: mtk_ppe: prefer n..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=163c0ac5c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3bc1f699d6e9cb0
+dashboard link: https://syzkaller.appspot.com/bug?extid=b3346cca0c23c839e787
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-  fs/erofs/xattr.c
+Unfortunately, I don't have any reproducer for this issue yet.
 
-between commit:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6ff439efecb6/disk-e2853114.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/280d508d228c/vmlinux-e2853114.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/af98eb5ab0e4/bzImage-e2853114.xz
 
-  a5488f29835c ("fs: simplify ->listxattr() implementation")
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b3346cca0c23c839e787@syzkaller.appspotmail.com
 
-from the vfs-idmapping tree and commit:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 41 at net/xfrm/xfrm_policy.c:4176 xfrm_policy_fini+0x2f2/0x3c0 net/xfrm/xfrm_policy.c:4176
+Modules linked in:
+CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.3.0-rc5-syzkaller-01242-ge28531143b25 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: netns cleanup_net
+RIP: 0010:xfrm_policy_fini+0x2f2/0x3c0 net/xfrm/xfrm_policy.c:4176
+Code: cd f8 0f 0b 8b 74 24 04 e9 56 fe ff ff e8 a6 a1 cd f8 0f 0b e9 e1 fd ff ff e8 9a a1 cd f8 0f 0b e9 02 ff ff ff e8 8e a1 cd f8 <0f> 0b e9 76 fd ff ff e8 d2 ea 1e f9 e9 8d fe ff ff 48 89 ef e8 e5
+RSP: 0018:ffffc90000b27bd8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88807945b980 RCX: 0000000000000000
+RDX: ffff8880177b57c0 RSI: ffffffff88b53632 RDI: 0000000000000000
+RBP: ffff88807945cd00 R08: 0000000000000001 R09: ffffffff914e0b8f
+R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff8e28cb40
+R13: ffffc90000b27ca0 R14: dffffc0000000000 R15: fffffbfff1c5196c
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f60f8cb7378 CR3: 000000000c571000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ xfrm_net_exit+0x1d/0x60 net/xfrm/xfrm_policy.c:4240
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-  3f43a25918ac ("erofs: handle long xattr name prefixes properly")
 
-from the erofs tree.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/erofs/xattr.c
-index 015462763bdd,a04724c816e5..000000000000
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@@ -483,12 -517,28 +513,25 @@@ static int xattr_entrylist(struct xattr
-  {
-  	struct listxattr_iter *it =3D
-  		container_of(_it, struct listxattr_iter, it);
-- 	unsigned int prefix_len;
-- 	const char *prefix;
-+ 	unsigned int base_index =3D entry->e_name_index;
-+ 	unsigned int prefix_len, infix_len =3D 0;
-+ 	const char *prefix, *infix =3D NULL;
- -	const struct xattr_handler *h;
-+=20
-+ 	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
-+ 		struct erofs_sb_info *sbi =3D EROFS_SB(_it->sb);
-+ 		struct erofs_xattr_prefix_item *pf =3D sbi->xattr_prefixes +
-+ 			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+=20
-+ 		if (pf >=3D sbi->xattr_prefixes + sbi->xattr_prefix_count)
-+ 			return 1;
-+ 		infix =3D pf->prefix->infix;
-+ 		infix_len =3D pf->infix_len;
-+ 		base_index =3D pf->prefix->base_index;
-+ 	}
- =20
-- 	prefix =3D erofs_xattr_prefix(entry->e_name_index, it->dentry);
- -	h =3D erofs_xattr_handler(base_index);
- -	if (!h || (h->list && !h->list(it->dentry)))
-++	prefix =3D erofs_xattr_prefix(base_index, it->dentry);
- +	if (!prefix)
-  		return 1;
- -
- -	prefix =3D xattr_prefix(h);
-  	prefix_len =3D strlen(prefix);
- =20
-  	if (!it->buffer) {
-
---Sig_/.xtQAdYkhqRQfAhjDYL6Ugx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ1+R4ACgkQAVBC80lX
-0GybjAf/X+LntMu+EtDw+XNnc7gPqGLEhfuTkSh9+1GlHt/QrYeelSixY39DRaUG
-2XcbC7TjT7lL+pj5M4UDGLID7y/gR+tnfxd86H6JOOZ3IxIFWauNi1zWWCtY1IuP
-Ckk/Ft0/jhDiPKhaKduWTqJUzyjx7Xd3yhlA0lkgMXaAjKTyy4nws/oGnrKdsolT
-qAfkYbJb35mWdoMFfUGQio5GeBQ3d10E09MSBX/4h7/JL6hV2MsB+5wHi2VGSx4y
-/k47ysnZ0QXUgSziGXT9V3JHOLqfoxKdz0gfo6bK7T6A6KSr8Dc6ouMkY1O6xgzP
-9j3UPmfgNTETk1fH4NFpYe9M3qNiqA==
-=JwzJ
------END PGP SIGNATURE-----
-
---Sig_/.xtQAdYkhqRQfAhjDYL6Ugx--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
