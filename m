@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6066DEB71
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822366DEB79
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjDLFwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 01:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S229588AbjDLGBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjDLFwN (ORCPT
+        with ESMTP id S229451AbjDLGBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:52:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0217B1FEA;
-        Tue, 11 Apr 2023 22:52:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PxBg814h6z4xDn;
-        Wed, 12 Apr 2023 15:52:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1681278724;
-        bh=jqtJJylomYzYVkCC66q6zDwuo6aVxIv4ryKs0Q31Tkw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=frI2z76QxUdVGt9vzxq4XlF8uIotArtGilXmy4Yiw8TO9qGru44k0P9sUscx6dYta
-         6bw/iiIXrmh7BO+CxEEmfkdPJFXeMQmvDVeWGzfNcuM1LNApk5hChKNhblcZ4Potc8
-         DwUdvWd0xL/zjaJhYelrU1Q2HcuCtDYwXyyn7VK2Po1+ybtVBHy58g0maVIKFYhTY9
-         IQZBAnSE9vDm4/nGjVFO+W3+sF8IEdupCmqw9SMyGlmO6PGIQmjqJrncKfqDZE/4F3
-         miVoHKYSz0H1/39qk1WWoYYJwFt6CqbTC10JJqwJXxGl7HfF8vpCvMrNbd5Vb8kxHT
-         IwP/U1veucJHQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the powerpc tree
-In-Reply-To: <20230412112213.59365041@canb.auug.org.au>
-References: <20230412112213.59365041@canb.auug.org.au>
-Date:   Wed, 12 Apr 2023 15:51:57 +1000
-Message-ID: <87ttxlir5u.fsf@mpe.ellerman.id.au>
+        Wed, 12 Apr 2023 02:01:31 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14C3A82;
+        Tue, 11 Apr 2023 23:01:29 -0700 (PDT)
+Received: from uu22.. ([10.12.190.56])
+        (user=dddddd@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33C60Yam004032-33C60Yan004032
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 12 Apr 2023 14:00:34 +0800
+From:   Yinhao Hu <dddddd@hust.edu.cn>
+To:     Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Yinhao Hu <dddddd@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@freescale.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: chipidea: fix missing goto in `ci_hdrc_probe`
+Date:   Wed, 12 Apr 2023 13:58:52 +0800
+Message-Id: <20230412055852.971991-1-dddddd@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dddddd@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi all,
->
-> Today's linux-next merge of the drm tree got a conflict in:
->
->   drivers/gpu/drm/amd/display/Kconfig
->
-> between commit:
->
->   78f0929884d4 ("powerpc/64: Always build with 128-bit long double")
->
-> from the powerpc tree and commit:
->
->   4652ae7a51b7 ("drm/amd/display: Rename DCN config to FP")
->
-> from the drm tree.
+From the comment of ci_usb_phy_init, it returns an error code if
+usb_phy_init has failed, and it should do some clean up, not just
+return directly.
 
-> I fixed it up (I used the powerpc version - with "(PPC64 && ALTIVEC)")
-> and can carry the fix as necessary.
+Fix this by goto the error handling.
 
-Thanks, that's the right resolution.
+Fixes: 74475ede784d ("usb: chipidea: move PHY operation to core")
+Signed-off-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/usb/chipidea/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not much we can do to avoid that conflict, we'll just have to tell Linus
-about it at pull request time.
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 281fc51720ce..25084ce7c297 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -1108,7 +1108,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 	ret = ci_usb_phy_init(ci);
+ 	if (ret) {
+ 		dev_err(dev, "unable to init phy: %d\n", ret);
+-		return ret;
++		goto ulpi_exit;
+ 	}
+ 
+ 	ci->hw_bank.phys = res->start;
+-- 
+2.34.1
 
-cheers
