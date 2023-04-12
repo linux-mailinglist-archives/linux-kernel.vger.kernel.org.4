@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AD16DF865
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567016DF868
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjDLOZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S229893AbjDLO0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjDLOZv (ORCPT
+        with ESMTP id S229679AbjDLO0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:25:51 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA34C49D1;
-        Wed, 12 Apr 2023 07:25:37 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CEPSq5031743;
-        Wed, 12 Apr 2023 14:25:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xYK7teVJtDzOVlvoPUiSQHsZaeZ0vlZY8VyjJoAnkBc=;
- b=YQd7R4u+YgMbRtDzS7QcsGCu9biQ6iNJeqYGq/BRQrNbC9pZQRz9wU8beHD0nbgMwucZ
- rzlds/GacfvDlDDlAx2YPaRdBABF2sA9ngsHSIMnkR9lprcE8HU4oPMzmO+1NVqdYF53
- L3G/HZDx8bAPgfM4RLajchSQrsEt70auz7k12tehy0RRdZ9UhZiMuljciascRfEVxIht
- vcKIkt2zHa9b+aJ4cAdqfK2uly2lsAv0mDj6N8CjCM+7Bd9YuSDo/Xs9Uqg9Z81xN8p/
- rR1ysTtVErlcJuwFJ0AkFW7ICeiJLxz4KagyeAZ/Kpj8eAakjT0CbSTuAN6d3ooTeMqE 1g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqnq10k1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:25:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CEPQYg015928
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:25:26 GMT
-Received: from [10.50.1.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 07:25:22 -0700
-Message-ID: <6000d205-5c1d-f342-7d2e-1399ac1cb825@quicinc.com>
-Date:   Wed, 12 Apr 2023 19:55:19 +0530
+        Wed, 12 Apr 2023 10:26:31 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0376170A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3qJvIOxoolczQy5RdZ6v4DRFskdaG0Va0CAKh9b55/o=; b=PDT7uMS3oxgyC5Wp+jDvcYXhzD
+        gHJUi3Ti9E8JrYvOSvhFdTp02iqhf5Rlcc4qafPBkkFk3d/+D3YNUtl2WB5WmPXOedVLAXuA4YjMA
+        4pSZ5JoWJrYgLE74Gure9MnC26pJaM7NU1ddPjIymgF4GxrgURfmb/og9PybSTz/8rXUink/GC3uS
+        hOsOHfVJSFSARsAD16GcLIMpq+VOaf2ywkKDMj33R9/vMcytNloxOSeXHOp4cXr3uJypVdxqBYel8
+        RDNg3IVgFgiCdONa60RrkkhPBVaErTF2QwQpb63FzXY+weH/juUcvikSeaQuuRE38J9vHw91G5I6J
+        EL5J4n3w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmbQP-00DwfQ-2j;
+        Wed, 12 Apr 2023 14:26:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B3462300274;
+        Wed, 12 Apr 2023 16:26:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9A8E921239575; Wed, 12 Apr 2023 16:26:16 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 16:26:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
+        michael.christie@oracle.com
+Subject: Re: [RFC PATCH v4] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230412142616.GI628377@hirez.programming.kicks-ass.net>
+References: <20230410150150.2179062-1-mathieu.desnoyers@efficios.com>
+ <20230411045225.GA3509@ziqianlu-desk2>
+ <20230411131221.GA7356@ziqianlu-desk2>
+ <20230412091043.GC4253@hirez.programming.kicks-ass.net>
+ <20230412114240.GA155547@ziqianlu-desk2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
- <5eeeb46e9b3f61656a37cb77c2ad6a04e383c16d.1680874520.git.quic_schowdhu@quicinc.com>
- <d05e1184-ead4-3f80-4c06-ff757a10ba3b@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <d05e1184-ead4-3f80-4c06-ff757a10ba3b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GsePT6Qxm8VTaqpA0ocWZmBlX7484fKs
-X-Proofpoint-GUID: GsePT6Qxm8VTaqpA0ocWZmBlX7484fKs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_06,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- phishscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxlogscore=894
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120126
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412114240.GA155547@ziqianlu-desk2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 12, 2023 at 07:42:40PM +0800, Aaron Lu wrote:
 
+> I *guess* you might be able to see some contention with hackbench on
+> that HSW-EX system with v4.
 
-On 4/12/2023 1:51 PM, Krzysztof Kozlowski wrote:
-> On 07/04/2023 16:04, Souradeep Chowdhury wrote:
->> All of Qualcomm's proprietary Android boot-loaders capture boot time
->> stats, like the time when the bootloader started execution and at what
->> point the bootloader handed over control to the kernel etc. in the IMEM
->> region. This information is captured in a specific format by this driver
->> by mapping a structure to the IMEM memory region and then accessing the
->> members of the structure to print the information. This information is
->> useful in verifying if the existing boot KPIs have regressed or not.
->> A sample log in SM8450(waipio) device is as follows:-
->>
-> 
-> 
->> +
->> +static int boot_stats_probe(struct platform_device *pdev)
->> +{
->> +	struct device_node *np_mpm2;
->> +	struct device *boot_stat = &pdev->dev;
->> +
->> +	boot_stats = of_iomap(boot_stat->of_node->child, 0);
->> +	if (!boot_stats)
->> +		return dev_err_probe(&pdev->dev, -ENOMEM,
->> +					"failed to map imem region\n");
->> +
->> +	np_mpm2 = of_find_compatible_node(NULL, NULL,
->> +					  "qcom,mpm2-sleep-counter");
-> 
-> This is undocumented and non-existing compatible. No, we cannot take this.
-> 
-> Also, referencing other nodes should be with phandles, not compatibles.
+Indeed! Notably it seems to be the wakeup from idle that trips it
+hardest:
 
-Ack. This will be dropped in the next version as we are not printing the
-current kernel timestamp.
+11.31%     0.03%  swapper          [kernel.vmlinux]            [k] schedule_idle
+        |
+        --11.28%--schedule_idle
+                  |
+                  --11.27%--__schedule
+                            |
+                            |--8.61%--mm_cid_get
+                            |          |
+                            |           --5.78%--_raw_spin_lock
+                            |                     |
+                            |                      --5.56%--native_queued_spin_lock_slowpath
+                            |
+                            |--0.81%--finish_task_switch.isra.0
+                            |          |
+                            |           --0.69%--asm_sysvec_call_function_single
+                            |                     |
+                            |                      --0.58%--sysvec_call_function_single
+                            |
+                            --0.57%--switch_mm_irqs_off
+                    
+                    
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
