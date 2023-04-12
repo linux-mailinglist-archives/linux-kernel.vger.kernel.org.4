@@ -2,1192 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F74C6DF7D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10ADD6DF7D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjDLN6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S230225AbjDLN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDLN62 (ORCPT
+        with ESMTP id S229707AbjDLN6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:58:28 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB630E0;
-        Wed, 12 Apr 2023 06:58:23 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PxPMB3j38z67M6y;
-        Wed, 12 Apr 2023 21:53:58 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
- 2023 14:58:19 +0100
-Date:   Wed, 12 Apr 2023 14:58:18 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <dan.j.williams@intel.com>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v5 4/5] perf: CXL Performance Monitoring Unit driver
-Message-ID: <20230412145818.0000636f@huawei.com>
-In-Reply-To: <593eb71a-e4a5-a6cc-07a2-efe7230c3555@linux.intel.com>
-References: <20230411185452.23387-1-Jonathan.Cameron@huawei.com>
-        <20230411185452.23387-5-Jonathan.Cameron@huawei.com>
-        <593eb71a-e4a5-a6cc-07a2-efe7230c3555@linux.intel.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Wed, 12 Apr 2023 09:58:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B383F0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qYl5ekyLj7iQo8GlRLOVDEB8fB577eS6HixCK1lG4No=; b=orZuSzpUOPEWh+QSjssey7Xg2/
+        p9j7M+8XFzvErQ6S1ZCL/QeuBlghz2x/b/Omg2ky4zfBLABZk69RLHLO8UUvslAHzXGD88ljeRMjR
+        mZrMyz0N3QN0J6o5XNMOHYI3puAbM9f4FhasfVMiy/1xh+m3OQ7VE67ETaMNxEpRpHRppKocpChUW
+        kuGGzlSqctuTiLjhQQrM2+PQ+NUySa93PkDMxzHyJyE8ePCzxBU/76ox5pWSZm5wpr3kbfxV29WSy
+        gdCxBi/hmC2e2PzE5IBo/+53aYn4zeGCCGhUTSvNFQRxOPS5uojmR9zu+uBl5YmFudX2yuSIRH2+4
+        uWmoldYg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmazV-00DwJs-1P;
+        Wed, 12 Apr 2023 13:58:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5FC73300274;
+        Wed, 12 Apr 2023 15:58:28 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1B67F2095F655; Wed, 12 Apr 2023 15:58:28 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 15:58:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Nitin Tekchandani <nitin.tekchandani@intel.com>,
+        Waiman Long <longman@redhat.com>,
+        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
+Message-ID: <20230412135828.GB629496@hirez.programming.kicks-ass.net>
+References: <20230327053955.GA570404@ziqianlu-desk2>
+ <20230412115936.GC628377@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412115936.GC628377@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 09:55:20 -0400
-"Liang, Kan" <kan.liang@linux.intel.com> wrote:
-
-> On 2023-04-11 2:54 p.m., Jonathan Cameron wrote:
-> > CXL rev 3.0 introduces a standard performance monitoring hardware
-> > block to CXL. Instances are discovered using CXL Register Locator DVSEC
-> > entries. Each CXL component may have multiple PMUs.
+On Wed, Apr 12, 2023 at 01:59:36PM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 27, 2023 at 01:39:55PM +0800, Aaron Lu wrote:
+> > When using sysbench to benchmark Postgres in a single docker instance
+> > with sysbench's nr_threads set to nr_cpu, it is observed there are times
+> > update_cfs_group() and update_load_avg() shows noticeable overhead on
+> > cpus of one node of a 2sockets/112core/224cpu Intel Sapphire Rapids:
 > > 
-> > This initial driver supports a subset of types of counter.
-> > It supports counters that are either fixed or configurable, but requires
-> > that they support the ability to freeze and write value whilst frozen.
+> >     10.01%     9.86%  [kernel.vmlinux]        [k] update_cfs_group
+> >      7.84%     7.43%  [kernel.vmlinux]        [k] update_load_avg
 > > 
-> > Development done with QEMU model which will be posted shortly.
+> > While cpus of the other node normally sees a lower cycle percent:
 > > 
-> > Example:
+> >      4.46%     4.36%  [kernel.vmlinux]        [k] update_cfs_group
+> >      4.02%     3.40%  [kernel.vmlinux]        [k] update_load_avg
 > > 
-> > $ perf stat -e cxl_pmu_mem0.0/h2d_req_snpcur/ -e cpmu0/h2d_req_snpdata/ -e cpmu0/clock_ticks/ sleep 1
+> > Annotate shows the cycles are mostly spent on accessing tg->load_avg
+> > with update_load_avg() being the write side and update_cfs_group() being
+> > the read side.
 > > 
-> > Performance counter stats for 'system wide':
+> > The reason why only cpus of one node has bigger overhead is: task_group
+> > is allocated on demand from a slab and whichever cpu happens to do the
+> > allocation, the allocated tg will be located on that node and accessing
+> > to tg->load_avg will have a lower cost for cpus on the same node and
+> > a higer cost for cpus of the remote node.
 > > 
-> > 96,757,023,244,321      cpmu0/h2d_req_snpcur/
-> > 96,757,023,244,365      cpmu0/h2d_req_snpdata/
-> > 193,514,046,488,653      cpmu0/clock_ticks/
-> > 
-> >        1.090539600 seconds time elapsed  
+> > Tim Chen told me that PeterZ once mentioned a way to solve a similar
+> > problem by making a counter per node so do the same for tg->load_avg.
 > 
-> I think the example has to be updated. We don't have cpmu0 anymore, right?
-Got spot.  Missed this instance :(
-
+> Yeah, I send him a very similar patch (except horrible) some 5 years ago
+> for testing.
 > 
-> Except that, the rest of the patch looks good to me.
-> 
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks again for looking at this - it's been a great help!
-
-Jonathan
-
-> 
-> Thanks,
-> Kan
-> 
+> > After this change, the worst number I saw during a 5 minutes run from
+> > both nodes are:
 > > 
-> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > ---
-> > v5: Thanks to Kan Liang and Dan Williams for review.
-> > - Move driver to drivers/perf and rename patch to reflect that.
-> > - Add a MAINTAINERS entry now driver doesn't fall under drivers/cxl.
-> > - Fix mask
-> > - Drop duplication of counter reset and config writing (which also
-> >   gets rid of a write to an entirely read only register)
-> > - Lots of cpmu->pmu and similar renames.
-> > - Rename the cxl_pmu_event and related to cxl_pmu_ev_cap so as to avoid
-> >   impression that there is one of these for every event.  They reflect the
-> >   event capability registers hence the new naming.  Rename the two lists
-> >   to reflect this as well.
-> > - Comments on WARN_ON cases.
-> > - Fixed a bug in cpuhp offline callback where we could move to the cpu
-> >   that is going away.
-> > - Use devm_add_action_or_reset () for remaining few bits of remove()
-> > - Richer PMU naming as cxl_pmu_memX.Y to associate with
-> >   /sys/bus/cxl/device/memX instance of PMU Y.  Scheme extents for
-> >   USP cxl_pmu_uspX.Y and DSP cxl_pmu_dspX.Y.Z for DSP Y of USP X,
-> >   PMU instance Z.
-> > ---
-> >  MAINTAINERS            |   6 +
-> >  drivers/cxl/Kconfig    |  13 +
-> >  drivers/perf/Kconfig   |  13 +
-> >  drivers/perf/Makefile  |   1 +
-> >  drivers/perf/cxl_pmu.c | 984 +++++++++++++++++++++++++++++++++++++++++
-> >  5 files changed, 1017 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 90abe83c02f3..51234eb7858e 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5174,6 +5174,12 @@ S:	Maintained
-> >  F:	drivers/cxl/
-> >  F:	include/uapi/linux/cxl_mem.h
-> >  
-> > +COMPUTE EXPRESS LINK PMU (CPMU)
-> > +M:	Jonathan Cameron <jonathan.cameron@huawei.com>
-> > +L:	linux-cxl@vger.kernel.org
-> > +S:	Maintained
-> > +F:	drivers/perf/cxl_pmu.c
-> > +
-> >  CONEXANT ACCESSRUNNER USB DRIVER
-> >  L:	accessrunner-general@lists.sourceforge.net
-> >  S:	Orphan
-> > diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> > index ff4e78117b31..d0a4b4cfa50c 100644
-> > --- a/drivers/cxl/Kconfig
-> > +++ b/drivers/cxl/Kconfig
-> > @@ -139,4 +139,17 @@ config CXL_REGION_INVALIDATION_TEST
-> >  	  If unsure, or if this kernel is meant for production environments,
-> >  	  say N.
-> >  
-> > +config CXL_PMU
-> > +	tristate "CXL Performance Monitoring Unit"
-> > +	default CXL_BUS
-> > +	depends on PERF_EVENTS
-> > +	help
-> > +	  Support performance monitoring as defined in CXL rev 3.0
-> > +	  section 13.2: Performance Monitoring. CXL components may have
-> > +	  one or more CXL Performance Monitoring Units (CPMUs).
-> > +
-> > +	  Say 'y/m' to enable a driver that will attach to performance
-> > +	  monitoring units and provide standard perf based interfaces.
-> > +
-> > +	  If unsure say 'm'.
-> >  endif
-> > diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-> > index 66c259000a44..ffeabb14df9e 100644
-> > --- a/drivers/perf/Kconfig
-> > +++ b/drivers/perf/Kconfig
-> > @@ -203,4 +203,17 @@ source "drivers/perf/arm_cspmu/Kconfig"
-> >  
-> >  source "drivers/perf/amlogic/Kconfig"
-> >  
-> > +config CXL_PMU
-> > +	tristate "CXL Performance Monitoring Unit"
-> > +	depends on CXL_BUS
-> > +	help
-> > +	  Support performance monitoring as defined in CXL rev 3.0
-> > +	  section 13.2: Performance Monitoring. CXL components may have
-> > +	  one or more CXL Performance Monitoring Units (CPMUs).
-> > +
-> > +	  Say 'y/m' to enable a driver that will attach to performance
-> > +	  monitoring units and provide standard perf based interfaces.
-> > +
-> > +	  If unsure say 'm'.
-> > +
-> >  endmenu
-> > diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
-> > index 13e45da61100..900af2c6c4f0 100644
-> > --- a/drivers/perf/Makefile
-> > +++ b/drivers/perf/Makefile
-> > @@ -23,3 +23,4 @@ obj-$(CONFIG_APPLE_M1_CPU_PMU) += apple_m1_cpu_pmu.o
-> >  obj-$(CONFIG_ALIBABA_UNCORE_DRW_PMU) += alibaba_uncore_drw_pmu.o
-> >  obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu/
-> >  obj-$(CONFIG_MESON_DDR_PMU) += amlogic/
-> > +obj-$(CONFIG_CXL_PMU) += cxl_pmu.o
-> > diff --git a/drivers/perf/cxl_pmu.c b/drivers/perf/cxl_pmu.c
-> > new file mode 100644
-> > index 000000000000..29d8b64a11b6
-> > --- /dev/null
-> > +++ b/drivers/perf/cxl_pmu.c
-> > @@ -0,0 +1,984 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +/*
-> > + * Copyright(c) 2023 Huawei
-> > + *
-> > + * The CXL 3.0 specification includes a standard Performance Monitoring Unit,
-> > + * called the CXL PMU, or CPMU. In order to allow a high degree of
-> > + * implementation flexibility the specification provides a wide range of
-> > + * options all of which are self describing.
-> > + *
-> > + * Details in CXL rev 3.0 section 8.2.7 CPMU Register Interface
-> > + */
-> > +
-> > +#include <linux/io-64-nonatomic-lo-hi.h>
-> > +#include <linux/perf_event.h>
-> > +#include <linux/bitops.h>
-> > +#include <linux/device.h>
-> > +#include <linux/bits.h>
-> > +#include <linux/list.h>
-> > +#include <linux/bug.h>
-> > +#include <linux/pci.h>
-> > +
-> > +#include "../cxl/cxlpci.h"
-> > +#include "../cxl/cxl.h"
-> > +#include "../cxl/pmu.h"
-> > +
-> > +#define CXL_PMU_CAP_REG			0x0
-> > +#define   CXL_PMU_CAP_NUM_COUNTERS_MSK			GENMASK_ULL(4, 0)
-> > +#define   CXL_PMU_CAP_COUNTER_WIDTH_MSK			GENMASK_ULL(15, 8)
-> > +#define   CXL_PMU_CAP_NUM_EVN_CAP_REG_SUP_MSK		GENMASK_ULL(24, 20)
-> > +#define   CXL_PMU_CAP_FILTERS_SUP_MSK			GENMASK_ULL(39, 32)
-> > +#define     CXL_PMU_FILTER_HDM				BIT(0)
-> > +#define     CXL_PMU_FILTER_CHAN_RANK_BANK		BIT(1)
-> > +#define   CXL_PMU_CAP_MSI_N_MSK				GENMASK_ULL(47, 44)
-> > +#define   CXL_PMU_CAP_WRITEABLE_WHEN_FROZEN		BIT_ULL(48)
-> > +#define   CXL_PMU_CAP_FREEZE				BIT_ULL(49)
-> > +#define   CXL_PMU_CAP_INT				BIT_ULL(50)
-> > +#define   CXL_PMU_CAP_VERSION_MSK			GENMASK_ULL(63, 60)
-> > +
-> > +#define CXL_PMU_OVERFLOW_REG		0x10
-> > +#define CXL_PMU_FREEZE_REG		0x18
-> > +#define CXL_PMU_EVENT_CAP_REG(n)	(0x100 + 8 * (n))
-> > +#define   CXL_PMU_EVENT_CAP_SUPPORTED_EVENTS_MSK	GENMASK_ULL(31, 0)
-> > +#define   CXL_PMU_EVENT_CAP_GROUP_ID_MSK		GENMASK_ULL(47, 32)
-> > +#define   CXL_PMU_EVENT_CAP_VENDOR_ID_MSK		GENMASK_ULL(63, 48)
-> > +
-> > +#define CXL_PMU_COUNTER_CFG_REG(n)	(0x200 + 8 * (n))
-> > +#define   CXL_PMU_COUNTER_CFG_TYPE_MSK			GENMASK_ULL(1, 0)
-> > +#define     CXL_PMU_COUNTER_CFG_TYPE_FREE_RUN		0
-> > +#define     CXL_PMU_COUNTER_CFG_TYPE_FIXED_FUN		1
-> > +#define     CXL_PMU_COUNTER_CFG_TYPE_CONFIGURABLE	2
-> > +#define   CXL_PMU_COUNTER_CFG_ENABLE			BIT_ULL(8)
-> > +#define   CXL_PMU_COUNTER_CFG_INT_ON_OVRFLW		BIT_ULL(9)
-> > +#define   CXL_PMU_COUNTER_CFG_FREEZE_ON_OVRFLW		BIT_ULL(10)
-> > +#define   CXL_PMU_COUNTER_CFG_EDGE			BIT_ULL(11)
-> > +#define   CXL_PMU_COUNTER_CFG_INVERT			BIT_ULL(12)
-> > +#define   CXL_PMU_COUNTER_CFG_THRESHOLD_MSK		GENMASK_ULL(23, 16)
-> > +#define   CXL_PMU_COUNTER_CFG_EVENTS_MSK		GENMASK_ULL(55, 24)
-> > +#define   CXL_PMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK	GENMASK_ULL(63, 59)
-> > +
-> > +#define CXL_PMU_FILTER_CFG_REG(n, f)	(0x400 + 4 * ((f) + (n) * 8))
-> > +#define   CXL_PMU_FILTER_CFG_VALUE_MSK			GENMASK(15, 0)
-> > +
-> > +#define CXL_PMU_COUNTER_REG(n)		(0xc00 + 8 * (n))
-> > +
-> > +/* CXL rev 3.0 Table 13-5 Events under CXL Vendor ID */
-> > +#define CXL_PMU_GID_CLOCK_TICKS		0x00
-> > +#define CXL_PMU_GID_D2H_REQ		0x0010
-> > +#define CXL_PMU_GID_D2H_RSP		0x0011
-> > +#define CXL_PMU_GID_H2D_REQ		0x0012
-> > +#define CXL_PMU_GID_H2D_RSP		0x0013
-> > +#define CXL_PMU_GID_CACHE_DATA		0x0014
-> > +#define CXL_PMU_GID_M2S_REQ		0x0020
-> > +#define CXL_PMU_GID_M2S_RWD		0x0021
-> > +#define CXL_PMU_GID_M2S_BIRSP		0x0022
-> > +#define CXL_PMU_GID_S2M_BISNP		0x0023
-> > +#define CXL_PMU_GID_S2M_NDR		0x0024
-> > +#define CXL_PMU_GID_S2M_DRS		0x0025
-> > +#define CXL_PMU_GID_DDR			0x8000
-> > +
-> > +static int cxl_pmu_cpuhp_state_num;
-> > +
-> > +struct cxl_pmu_ev_cap {
-> > +	u16 vid;
-> > +	u16 gid;
-> > +	u32 msk;
-> > +	union {
-> > +		int counter_idx; /* fixed counters */
-> > +		int event_idx; /* configurable counters */
-> > +	};
-> > +	struct list_head node;
-> > +};
-> > +
-> > +#define CXL_PMU_MAX_COUNTERS 64
-> > +struct cxl_pmu_info {
-> > +	struct pmu pmu;
-> > +	void __iomem *base;
-> > +	struct perf_event **hw_events;
-> > +	struct list_head event_caps_configurable;
-> > +	struct list_head event_caps_fixed;
-> > +	DECLARE_BITMAP(used_counter_bm, CXL_PMU_MAX_COUNTERS);
-> > +	DECLARE_BITMAP(conf_counter_bm, CXL_PMU_MAX_COUNTERS);
-> > +	u16 counter_width;
-> > +	u8 num_counters;
-> > +	u8 num_event_capabilities;
-> > +	int on_cpu;
-> > +	struct hlist_node node;
-> > +	bool filter_hdm;
-> > +	int irq;
-> > +};
-> > +
-> > +#define pmu_to_cxl_pmu_info(_pmu) container_of(_pmu, struct cxl_pmu_info, pmu)
-> > +
-> > +/*
-> > + * All CPMU counters are discoverable via the Event Capabilities Registers.
-> > + * Each Event Capability register contains a a VID / GroupID.
-> > + * A counter may then count any combination (by summing) of events in
-> > + * that group which are in the Supported Events Bitmask.
-> > + * However, there are some complexities to the scheme.
-> > + *  - Fixed function counters refer to an Event Capabilities register.
-> > + *    That event capability register is not then used for Configurable
-> > + *    counters.
-> > + */
-> > +static int cxl_pmu_parse_caps(struct device *dev, struct cxl_pmu_info *info)
-> > +{
-> > +	unsigned long fixed_counter_event_cap_bm = 0;
-> > +	void __iomem *base = info->base;
-> > +	bool freeze_for_enable;
-> > +	u64 val, eval;
-> > +	int i;
-> > +
-> > +	val = readq(base + CXL_PMU_CAP_REG);
-> > +	freeze_for_enable = FIELD_GET(CXL_PMU_CAP_WRITEABLE_WHEN_FROZEN, val) &&
-> > +		FIELD_GET(CXL_PMU_CAP_FREEZE, val);
-> > +	if (!freeze_for_enable) {
-> > +		dev_err(dev, "Counters not writable while frozen\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	info->num_counters = FIELD_GET(CXL_PMU_CAP_NUM_COUNTERS_MSK, val) + 1;
-> > +	info->counter_width = FIELD_GET(CXL_PMU_CAP_COUNTER_WIDTH_MSK, val);
-> > +	info->num_event_capabilities = FIELD_GET(CXL_PMU_CAP_NUM_EVN_CAP_REG_SUP_MSK, val) + 1;
-> > +
-> > +	info->filter_hdm = FIELD_GET(CXL_PMU_CAP_FILTERS_SUP_MSK, val) & CXL_PMU_FILTER_HDM;
-> > +	if (FIELD_GET(CXL_PMU_CAP_INT, val))
-> > +		info->irq = FIELD_GET(CXL_PMU_CAP_MSI_N_MSK, val);
-> > +	else
-> > +		info->irq = -1;
-> > +
-> > +	/* First handle fixed function counters; note if configurable counters found */
-> > +	for (i = 0; i < info->num_counters; i++) {
-> > +		struct cxl_pmu_ev_cap *pmu_ev;
-> > +		u32 events_msk;
-> > +		u8 group_idx;
-> > +
-> > +		val = readq(base + CXL_PMU_COUNTER_CFG_REG(i));
-> > +
-> > +		if (FIELD_GET(CXL_PMU_COUNTER_CFG_TYPE_MSK, val) ==
-> > +			CXL_PMU_COUNTER_CFG_TYPE_CONFIGURABLE) {
-> > +			set_bit(i, info->conf_counter_bm);
-> > +		}
-> > +
-> > +		if (FIELD_GET(CXL_PMU_COUNTER_CFG_TYPE_MSK, val) !=
-> > +		    CXL_PMU_COUNTER_CFG_TYPE_FIXED_FUN)
-> > +			continue;
-> > +
-> > +		/* In this case we know which fields are const */
-> > +		group_idx = FIELD_GET(CXL_PMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK, val);
-> > +		events_msk = FIELD_GET(CXL_PMU_COUNTER_CFG_EVENTS_MSK, val);
-> > +		eval = readq(base + CXL_PMU_EVENT_CAP_REG(group_idx));
-> > +		pmu_ev = devm_kzalloc(dev, sizeof(*pmu_ev), GFP_KERNEL);
-> > +		if (!pmu_ev)
-> > +			return -ENOMEM;
-> > +
-> > +		pmu_ev->vid = FIELD_GET(CXL_PMU_EVENT_CAP_VENDOR_ID_MSK, eval);
-> > +		pmu_ev->gid = FIELD_GET(CXL_PMU_EVENT_CAP_GROUP_ID_MSK, eval);
-> > +		/* For a fixed purpose counter use the events mask from the counter CFG */
-> > +		pmu_ev->msk = events_msk;
-> > +		pmu_ev->counter_idx = i;
-> > +		/* This list add is never unwound as all entries deleted on remove */
-> > +		list_add(&pmu_ev->node, &info->event_caps_fixed);
-> > +		/*
-> > +		 * Configurable counters must not use an Event Capability registers that
-> > +		 * is in use for a Fixed counter
-> > +		 */
-> > +		set_bit(group_idx, &fixed_counter_event_cap_bm);
-> > +	}
-> > +
-> > +	if (!bitmap_empty(info->conf_counter_bm, CXL_PMU_MAX_COUNTERS)) {
-> > +		struct cxl_pmu_ev_cap *pmu_ev;
-> > +		int j;
-> > +		/* Walk event capabilities unused by fixed counters */
-> > +		for_each_clear_bit(j, &fixed_counter_event_cap_bm,
-> > +				   info->num_event_capabilities) {
-> > +			pmu_ev = devm_kzalloc(dev, sizeof(*pmu_ev), GFP_KERNEL);
-> > +			if (!pmu_ev)
-> > +				return -ENOMEM;
-> > +
-> > +			eval = readq(base + CXL_PMU_EVENT_CAP_REG(j));
-> > +			pmu_ev->vid = FIELD_GET(CXL_PMU_EVENT_CAP_VENDOR_ID_MSK, eval);
-> > +			pmu_ev->gid = FIELD_GET(CXL_PMU_EVENT_CAP_GROUP_ID_MSK, eval);
-> > +			pmu_ev->msk = FIELD_GET(CXL_PMU_EVENT_CAP_SUPPORTED_EVENTS_MSK, eval);
-> > +			pmu_ev->event_idx = j;
-> > +			list_add(&pmu_ev->node, &info->event_caps_configurable);
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static ssize_t cxl_pmu_format_sysfs_show(struct device *dev,
-> > +					 struct device_attribute *attr, char *buf)
-> > +{
-> > +	struct dev_ext_attribute *eattr;
-> > +
-> > +	eattr = container_of(attr, struct dev_ext_attribute, attr);
-> > +
-> > +	return sysfs_emit(buf, "%s\n", (char *)eattr->var);
-> > +}
-> > +
-> > +#define CXL_PMU_FORMAT_ATTR(_name, _format)\
-> > +	(&((struct dev_ext_attribute[]) {					\
-> > +		{								\
-> > +			.attr = __ATTR(_name, 0444,				\
-> > +				       cxl_pmu_format_sysfs_show, NULL),	\
-> > +			.var = (void *)_format					\
-> > +		}								\
-> > +		})[0].attr.attr)
-> > +
-> > +enum {
-> > +	cxl_pmu_mask_attr,
-> > +	cxl_pmu_gid_attr,
-> > +	cxl_pmu_vid_attr,
-> > +	cxl_pmu_threshold_attr,
-> > +	cxl_pmu_invert_attr,
-> > +	cxl_pmu_edge_attr,
-> > +	cxl_pmu_hdm_filter_en_attr,
-> > +	cxl_pmu_hdm_attr,
-> > +};
-> > +
-> > +static struct attribute *cxl_pmu_format_attr[] = {
-> > +	[cxl_pmu_mask_attr] = CXL_PMU_FORMAT_ATTR(mask, "config:0-31"),
-> > +	[cxl_pmu_gid_attr] = CXL_PMU_FORMAT_ATTR(gid, "config:32-47"),
-> > +	[cxl_pmu_vid_attr] = CXL_PMU_FORMAT_ATTR(vid, "config:48-63"),
-> > +	[cxl_pmu_threshold_attr] = CXL_PMU_FORMAT_ATTR(threshold, "config1:0-15"),
-> > +	[cxl_pmu_invert_attr] = CXL_PMU_FORMAT_ATTR(invert, "config1:16"),
-> > +	[cxl_pmu_edge_attr] = CXL_PMU_FORMAT_ATTR(edge, "config1:17"),
-> > +	[cxl_pmu_hdm_filter_en_attr] = CXL_PMU_FORMAT_ATTR(hdm_filter_en, "config1:18"),
-> > +	[cxl_pmu_hdm_attr] = CXL_PMU_FORMAT_ATTR(hdm, "config2:0-15"),
-> > +	NULL
-> > +};
-> > +
-> > +#define CXL_PMU_ATTR_CONFIG_MASK_MSK		GENMASK_ULL(31, 0)
-> > +#define CXL_PMU_ATTR_CONFIG_GID_MSK		GENMASK_ULL(47, 32)
-> > +#define CXL_PMU_ATTR_CONFIG_VID_MSK		GENMASK_ULL(63, 48)
-> > +#define CXL_PMU_ATTR_CONFIG1_THRESHOLD_MSK	GENMASK_ULL(15, 0)
-> > +#define CXL_PMU_ATTR_CONFIG1_INVERT_MSK		BIT(16)
-> > +#define CXL_PMU_ATTR_CONFIG1_EDGE_MSK		BIT(17)
-> > +#define CXL_PMU_ATTR_CONFIG1_FILTER_EN_MSK	BIT(18)
-> > +#define CXL_PMU_ATTR_CONFIG2_HDM_MSK		GENMASK(15, 0)
-> > +
-> > +static umode_t cxl_pmu_format_is_visible(struct kobject *kobj,
-> > +					 struct attribute *attr, int a)
-> > +{
-> > +	struct device *dev = kobj_to_dev(kobj);
-> > +	struct cxl_pmu_info *info = dev_get_drvdata(dev);
-> > +
-> > +	/*
-> > +	 * Filter capability at the CPMU level, so hide the attributes if the particular
-> > +	 * filter is not supported.
-> > +	 */
-> > +	if (!info->filter_hdm &&
-> > +	    (attr == cxl_pmu_format_attr[cxl_pmu_hdm_filter_en_attr] ||
-> > +	     attr == cxl_pmu_format_attr[cxl_pmu_hdm_attr]))
-> > +		return 0;
-> > +
-> > +	return attr->mode;
-> > +}
-> > +
-> > +static const struct attribute_group cxl_pmu_format_group = {
-> > +	.name = "format",
-> > +	.attrs = cxl_pmu_format_attr,
-> > +	.is_visible = cxl_pmu_format_is_visible,
-> > +};
-> > +
-> > +static u32 cxl_pmu_config_get_mask(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG_MASK_MSK, event->attr.config);
-> > +}
-> > +
-> > +static u16 cxl_pmu_config_get_gid(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG_GID_MSK, event->attr.config);
-> > +}
-> > +
-> > +static u16 cxl_pmu_config_get_vid(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG_VID_MSK, event->attr.config);
-> > +}
-> > +
-> > +static u8 cxl_pmu_config1_get_threshold(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG1_THRESHOLD_MSK, event->attr.config1);
-> > +}
-> > +
-> > +static bool cxl_pmu_config1_get_invert(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG1_INVERT_MSK, event->attr.config1);
-> > +}
-> > +
-> > +static bool cxl_pmu_config1_get_edge(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG1_EDGE_MSK, event->attr.config1);
-> > +}
-> > +
-> > +/*
-> > + * CPMU specification allows for 8 filters, each with a 16 bit value...
-> > + * So we need to find 8x16bits to store it in.
-> > + * As the value used for disable is 0xffff, a separate enable switch
-> > + * is needed.
-> > + */
-> > +
-> > +static bool cxl_pmu_config1_hdm_filter_en(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG1_FILTER_EN_MSK, event->attr.config1);
-> > +}
-> > +
-> > +static u16 cxl_pmu_config2_get_hdm_decoder(struct perf_event *event)
-> > +{
-> > +	return FIELD_GET(CXL_PMU_ATTR_CONFIG2_HDM_MSK, event->attr.config2);
-> > +}
-> > +
-> > +static ssize_t cxl_pmu_event_sysfs_show(struct device *dev,
-> > +					struct device_attribute *attr, char *buf)
-> > +{
-> > +	struct perf_pmu_events_attr *pmu_attr =
-> > +		container_of(attr, struct perf_pmu_events_attr, attr);
-> > +
-> > +	return sysfs_emit(buf, "config=%#llx\n", pmu_attr->id);
-> > +}
-> > +
-> > +#define CXL_PMU_EVENT_ATTR(_name, _vid, _gid, _msk)			\
-> > +	PMU_EVENT_ATTR_ID(_name, cxl_pmu_event_sysfs_show,		\
-> > +			  ((u64)(_vid) << 48) | ((u64)(_gid) << 32) | (u64)(_msk))
-> > +
-> > +/* For CXL spec defined events */
-> > +#define CXL_PMU_EVENT_CXL_ATTR(_name, _gid, _msk)			\
-> > +	CXL_PMU_EVENT_ATTR(_name, PCI_DVSEC_VENDOR_ID_CXL, _gid, _msk)
-> > +
-> > +static struct attribute *cxl_pmu_event_attrs[] = {
-> > +	CXL_PMU_EVENT_CXL_ATTR(clock_ticks,			CXL_PMU_GID_CLOCK_TICKS, BIT(0)),
-> > +	/* CXL rev 3.0 Table 3-17 - Device to Host Requests */
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_rdcurr,			CXL_PMU_GID_D2H_REQ, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_rdown,			CXL_PMU_GID_D2H_REQ, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_rdshared,		CXL_PMU_GID_D2H_REQ, BIT(3)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_rdany,			CXL_PMU_GID_D2H_REQ, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_rdownnodata,		CXL_PMU_GID_D2H_REQ, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_itomwr,			CXL_PMU_GID_D2H_REQ, BIT(6)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_wrcurr,			CXL_PMU_GID_D2H_REQ, BIT(7)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_clflush,			CXL_PMU_GID_D2H_REQ, BIT(8)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_cleanevict,		CXL_PMU_GID_D2H_REQ, BIT(9)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_dirtyevict,		CXL_PMU_GID_D2H_REQ, BIT(10)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_cleanevictnodata,	CXL_PMU_GID_D2H_REQ, BIT(11)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_wowrinv,			CXL_PMU_GID_D2H_REQ, BIT(12)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_wowrinvf,		CXL_PMU_GID_D2H_REQ, BIT(13)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_wrinv,			CXL_PMU_GID_D2H_REQ, BIT(14)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_req_cacheflushed,		CXL_PMU_GID_D2H_REQ, BIT(16)),
-> > +	/* CXL rev 3.0 Table 3-20 - D2H Repsonse Encodings */
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspihiti,		CXL_PMU_GID_D2H_RSP, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspvhitv,		CXL_PMU_GID_D2H_RSP, BIT(6)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspihitse,		CXL_PMU_GID_D2H_RSP, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspshitse,		CXL_PMU_GID_D2H_RSP, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspsfwdm,		CXL_PMU_GID_D2H_RSP, BIT(7)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspifwdm,		CXL_PMU_GID_D2H_RSP, BIT(15)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(d2h_rsp_rspvfwdv,		CXL_PMU_GID_D2H_RSP, BIT(22)),
-> > +	/* CXL rev 3.0 Table 3-21 - CXL.cache - Mapping of H2D Requests to D2H Responses */
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_req_snpdata,			CXL_PMU_GID_H2D_REQ, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_req_snpinv,			CXL_PMU_GID_H2D_REQ, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_req_snpcur,			CXL_PMU_GID_H2D_REQ, BIT(3)),
-> > +	/* CXL rev 3.0 Table 3-22 - H2D Response Opcode Encodings */
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_writepull,		CXL_PMU_GID_H2D_RSP, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_go,			CXL_PMU_GID_H2D_RSP, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_gowritepull,		CXL_PMU_GID_H2D_RSP, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_extcmp,			CXL_PMU_GID_H2D_RSP, BIT(6)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_gowritepulldrop,		CXL_PMU_GID_H2D_RSP, BIT(8)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_fastgowritepull,		CXL_PMU_GID_H2D_RSP, BIT(13)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(h2d_rsp_goerrwritepull,		CXL_PMU_GID_H2D_RSP, BIT(15)),
-> > +	/* CXL rev 3.0 Table 13-5 directly lists these */
-> > +	CXL_PMU_EVENT_CXL_ATTR(cachedata_d2h_data,		CXL_PMU_GID_CACHE_DATA, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(cachedata_h2d_data,		CXL_PMU_GID_CACHE_DATA, BIT(1)),
-> > +	/* CXL rev 3.0 Table 3-29 M2S Req Memory Opcodes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_meminv,			CXL_PMU_GID_M2S_REQ, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memrd,			CXL_PMU_GID_M2S_REQ, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memrddata,		CXL_PMU_GID_M2S_REQ, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memrdfwd,		CXL_PMU_GID_M2S_REQ, BIT(3)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memwrfwd,		CXL_PMU_GID_M2S_REQ, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memspecrd,		CXL_PMU_GID_M2S_REQ, BIT(8)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_meminvnt,		CXL_PMU_GID_M2S_REQ, BIT(9)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_req_memcleanevict,		CXL_PMU_GID_M2S_REQ, BIT(10)),
-> > +	/* CXL rev 3.0 Table 3-35 M2S RwD Memory Opcodes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_rwd_memwr,			CXL_PMU_GID_M2S_RWD, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_rwd_memwrptl,		CXL_PMU_GID_M2S_RWD, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_rwd_biconflict,		CXL_PMU_GID_M2S_RWD, BIT(4)),
-> > +	/* CXL rev 3.0 Table 3-38 M2S BIRsp Memory Opcodes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_i,			CXL_PMU_GID_M2S_BIRSP, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_s,			CXL_PMU_GID_M2S_BIRSP, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_e,			CXL_PMU_GID_M2S_BIRSP, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_iblk,			CXL_PMU_GID_M2S_BIRSP, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_sblk,			CXL_PMU_GID_M2S_BIRSP, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(m2s_birsp_eblk,			CXL_PMU_GID_M2S_BIRSP, BIT(6)),
-> > +	/* CXL rev 3.0 Table 3-40 S2M BISnp Opcodes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_cur,			CXL_PMU_GID_S2M_BISNP, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_data,			CXL_PMU_GID_S2M_BISNP, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_inv,			CXL_PMU_GID_S2M_BISNP, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_curblk,		CXL_PMU_GID_S2M_BISNP, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_datblk,		CXL_PMU_GID_S2M_BISNP, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_bisnp_invblk,		CXL_PMU_GID_S2M_BISNP, BIT(6)),
-> > +	/* CXL rev 3.0 Table 3-43 S2M NDR Opcopdes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_ndr_cmp,			CXL_PMU_GID_S2M_NDR, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_ndr_cmps,			CXL_PMU_GID_S2M_NDR, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_ndr_cmpe,			CXL_PMU_GID_S2M_NDR, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_ndr_biconflictack,		CXL_PMU_GID_S2M_NDR, BIT(3)),
-> > +	/* CXL rev 3.0 Table 3-46 S2M DRS opcodes */
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_drs_memdata,			CXL_PMU_GID_S2M_DRS, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(s2m_drs_memdatanxm,		CXL_PMU_GID_S2M_DRS, BIT(1)),
-> > +	/* CXL rev 3.0 Table 13-5 directly lists these */
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_act,				CXL_PMU_GID_DDR, BIT(0)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_pre,				CXL_PMU_GID_DDR, BIT(1)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_casrd,			CXL_PMU_GID_DDR, BIT(2)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_caswr,			CXL_PMU_GID_DDR, BIT(3)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_refresh,			CXL_PMU_GID_DDR, BIT(4)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_selfrefreshent,		CXL_PMU_GID_DDR, BIT(5)),
-> > +	CXL_PMU_EVENT_CXL_ATTR(ddr_rfm,				CXL_PMU_GID_DDR, BIT(6)),
-> > +	NULL
-> > +};
-> > +
-> > +static struct cxl_pmu_ev_cap *cxl_pmu_find_fixed_counter_ev_cap(struct cxl_pmu_info *info,
-> > +								int vid, int gid, int msk)
-> > +{
-> > +	struct cxl_pmu_ev_cap *pmu_ev;
-> > +
-> > +	list_for_each_entry(pmu_ev, &info->event_caps_fixed, node) {
-> > +		if (vid != pmu_ev->vid || gid != pmu_ev->gid)
-> > +			continue;
-> > +
-> > +		/* Precise match for fixed counter */
-> > +		if (msk == pmu_ev->msk)
-> > +			return pmu_ev;
-> > +	}
-> > +
-> > +	return ERR_PTR(-EINVAL);
-> > +}
-> > +
-> > +static struct cxl_pmu_ev_cap *cxl_pmu_find_config_counter_ev_cap(struct cxl_pmu_info *info,
-> > +								 int vid, int gid, int msk)
-> > +{
-> > +	struct cxl_pmu_ev_cap *pmu_ev;
-> > +
-> > +	list_for_each_entry(pmu_ev, &info->event_caps_configurable, node) {
-> > +		if (vid != pmu_ev->vid || gid != pmu_ev->gid)
-> > +			continue;
-> > +
-> > +		/* Request mask must be subset of supported */
-> > +		if (msk & ~pmu_ev->msk)
-> > +			continue;
-> > +
-> > +		return pmu_ev;
-> > +	}
-> > +
-> > +	return ERR_PTR(-EINVAL);
-> > +}
-> > +
-> > +static umode_t cxl_pmu_event_is_visible(struct kobject *kobj, struct attribute *attr, int a)
-> > +{
-> > +	struct device_attribute *dev_attr = container_of(attr, struct device_attribute, attr);
-> > +	struct perf_pmu_events_attr *pmu_attr =
-> > +		container_of(dev_attr, struct perf_pmu_events_attr, attr);
-> > +	struct device *dev = kobj_to_dev(kobj);
-> > +	struct cxl_pmu_info *info = dev_get_drvdata(dev);
-> > +	int vid = FIELD_GET(CXL_PMU_ATTR_CONFIG_VID_MSK, pmu_attr->id);
-> > +	int gid = FIELD_GET(CXL_PMU_ATTR_CONFIG_GID_MSK, pmu_attr->id);
-> > +	int msk = FIELD_GET(CXL_PMU_ATTR_CONFIG_MASK_MSK, pmu_attr->id);
-> > +
-> > +	if (!IS_ERR(cxl_pmu_find_fixed_counter_ev_cap(info, vid, gid, msk)))
-> > +		return attr->mode;
-> > +
-> > +	if (!IS_ERR(cxl_pmu_find_config_counter_ev_cap(info, vid, gid, msk)))
-> > +		return attr->mode;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct attribute_group cxl_pmu_events = {
-> > +	.name = "events",
-> > +	.attrs = cxl_pmu_event_attrs,
-> > +	.is_visible = cxl_pmu_event_is_visible,
-> > +};
-> > +
-> > +static ssize_t cpumask_show(struct device *dev, struct device_attribute *attr,
-> > +			    char *buf)
-> > +{
-> > +	struct cxl_pmu_info *info = dev_get_drvdata(dev);
-> > +
-> > +	return cpumap_print_to_pagebuf(true, buf, cpumask_of(info->on_cpu));
-> > +}
-> > +static DEVICE_ATTR_RO(cpumask);
-> > +
-> > +static struct attribute *cxl_pmu_cpumask_attrs[] = {
-> > +	&dev_attr_cpumask.attr,
-> > +	NULL
-> > +};
-> > +
-> > +static const struct attribute_group cxl_pmu_cpumask_group = {
-> > +	.attrs = cxl_pmu_cpumask_attrs,
-> > +};
-> > +
-> > +static const struct attribute_group *cxl_pmu_attr_groups[] = {
-> > +	&cxl_pmu_events,
-> > +	&cxl_pmu_format_group,
-> > +	&cxl_pmu_cpumask_group,
-> > +	NULL
-> > +};
-> > +
-> > +/* If counter_idx == NULL, don't try to allocate a counter. */
-> > +static int cxl_pmu_get_event_idx(struct perf_event *event, int *counter_idx,
-> > +				 int *event_idx)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	DECLARE_BITMAP(configurable_and_free, CXL_PMU_MAX_COUNTERS);
-> > +	struct cxl_pmu_ev_cap *pmu_ev;
-> > +	u32 mask;
-> > +	u16 gid, vid;
-> > +	int i;
-> > +
-> > +	vid = cxl_pmu_config_get_vid(event);
-> > +	gid = cxl_pmu_config_get_gid(event);
-> > +	mask = cxl_pmu_config_get_mask(event);
-> > +
-> > +	pmu_ev = cxl_pmu_find_fixed_counter_ev_cap(info, vid, gid, mask);
-> > +	if (!IS_ERR(pmu_ev)) {
-> > +		if (!counter_idx)
-> > +			return 0;
-> > +		if (!test_bit(pmu_ev->counter_idx, info->used_counter_bm)) {
-> > +			*counter_idx = pmu_ev->counter_idx;
-> > +			return 0;
-> > +		}
-> > +		/* Fixed counter is in use, but maybe a configurable one? */
-> > +	}
-> > +
-> > +	pmu_ev = cxl_pmu_find_config_counter_ev_cap(info, vid, gid, mask);
-> > +	if (!IS_ERR(pmu_ev)) {
-> > +		if (!counter_idx)
-> > +			return 0;
-> > +
-> > +		bitmap_andnot(configurable_and_free, info->conf_counter_bm,
-> > +			info->used_counter_bm, CXL_PMU_MAX_COUNTERS);
-> > +
-> > +		i = find_first_bit(configurable_and_free, CXL_PMU_MAX_COUNTERS);
-> > +		if (i == CXL_PMU_MAX_COUNTERS)
-> > +			return -EINVAL;
-> > +
-> > +		*counter_idx = i;
-> > +		return 0;
-> > +	}
-> > +
-> > +	return -EINVAL;
-> > +}
-> > +
-> > +static int cxl_pmu_event_init(struct perf_event *event)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +
-> > +	event->cpu = info->on_cpu;
-> > +	/* Top level type sanity check - is this a Hardware Event being requested */
-> > +	if (event->attr.type != event->pmu->type)
-> > +		return -ENOENT;
-> > +
-> > +	if (is_sampling_event(event) || event->attach_state & PERF_ATTACH_TASK)
-> > +		return -EOPNOTSUPP;
-> > +	/* TODO: Validation of any filter */
-> > +
-> > +	/*
-> > +	 * Verify that it is possible to count what was requested. Either must
-> > +	 * be a fixed counter that is a precise match or a configurable counter
-> > +	 * where this is a subset.
-> > +	 */
-> > +	return cxl_pmu_get_event_idx(event, NULL, NULL);
-> > +}
-> > +
-> > +static void cxl_pmu_enable(struct pmu *pmu)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(pmu);
-> > +	void __iomem *base = info->base;
-> > +
-> > +	/* Can assume frozen at this stage */
-> > +	writeq(0, base + CXL_PMU_FREEZE_REG);
-> > +}
-> > +
-> > +static void cxl_pmu_disable(struct pmu *pmu)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(pmu);
-> > +	void __iomem *base = info->base;
-> > +
-> > +	/*
-> > +	 * Whilst bits above number of counters are RsvdZ
-> > +	 * they are unlikely to be repurposed given
-> > +	 * number of counters is allowed to be 64 leaving
-> > +	 * no reserved bits.  Hence this is only slightly
-> > +	 * naughty.
-> > +	 */
-> > +	writeq(GENMASK_ULL(63, 0), base + CXL_PMU_FREEZE_REG);
-> > +}
-> > +
-> > +static void cxl_pmu_event_start(struct perf_event *event, int flags)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	struct hw_perf_event *hwc = &event->hw;
-> > +	void __iomem *base = info->base;
-> > +	u64 cfg;
-> > +
-> > +	/*
-> > +	 * All paths to here should either set these flags directly or
-> > +	 * call cxl_pmu_event_stop() which will ensure the correct state.
-> > +	 */
-> > +	if (WARN_ON_ONCE(!(hwc->state & PERF_HES_STOPPED)))
-> > +		return;
-> > +
-> > +	WARN_ON_ONCE(!(hwc->state & PERF_HES_UPTODATE));
-> > +	hwc->state = 0;
-> > +
-> > +	/*
-> > +	 * Currently only hdm filter control is implemnted, this code will
-> > +	 * want generalizing when more filters are added.
-> > +	 */
-> > +	if (info->filter_hdm) {
-> > +		if (cxl_pmu_config1_hdm_filter_en(event))
-> > +			cfg = cxl_pmu_config2_get_hdm_decoder(event);
-> > +		else
-> > +			cfg = GENMASK(15, 0); /* No filtering if 0xFFFF_FFFF */
-> > +		writeq(cfg, base + CXL_PMU_FILTER_CFG_REG(hwc->idx, 0));
-> > +	}
-> > +
-> > +	cfg = readq(base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_INT_ON_OVRFLW, 1);
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_FREEZE_ON_OVRFLW, 1);
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_ENABLE, 1);
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EDGE,
-> > +			  cxl_pmu_config1_get_edge(event) ? 1 : 0);
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_INVERT,
-> > +			  cxl_pmu_config1_get_invert(event) ? 1 : 0);
-> > +
-> > +	/* Fixed purpose counters have next two fields RO */
-> > +	if (test_bit(hwc->idx, info->conf_counter_bm)) {
-> > +		cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK,
-> > +				  hwc->event_base);
-> > +		cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EVENTS_MSK,
-> > +				  cxl_pmu_config_get_mask(event));
-> > +	}
-> > +	cfg &= ~CXL_PMU_COUNTER_CFG_THRESHOLD_MSK;
-> > +	/*
-> > +	 * For events that generate only 1 count per clock the CXL 3.0 spec
-> > +	 * states the threshold shall be set to 1 but if set to 0 it will
-> > +	 * count the raw value anwyay?
-> > +	 * There is no definition of what events will count multiple per cycle
-> > +	 * and hence to which non 1 values of threshold can apply.
-> > +	 * (CXL 3.0 8.2.7.2.1 Counter Configuration - threshold field definition)
-> > +	 */
-> > +	cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_THRESHOLD_MSK,
-> > +			  cxl_pmu_config1_get_threshold(event));
-> > +	writeq(cfg, base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
-> > +
-> > +	local64_set(&hwc->prev_count, 0);
-> > +	writeq(0, base + CXL_PMU_COUNTER_REG(hwc->idx));
-> > +
-> > +	perf_event_update_userpage(event);
-> > +}
-> > +
-> > +static u64 cxl_pmu_read_counter(struct perf_event *event)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	void __iomem *base = info->base;
-> > +
-> > +	return readq(base + CXL_PMU_COUNTER_REG(event->hw.idx));
-> > +}
-> > +
-> > +static void __cxl_pmu_read(struct perf_event *event, bool overflow)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	struct hw_perf_event *hwc = &event->hw;
-> > +	u64 new_cnt, prev_cnt, delta;
-> > +
-> > +	do {
-> > +		prev_cnt = local64_read(&hwc->prev_count);
-> > +		new_cnt = cxl_pmu_read_counter(event);
-> > +	} while (local64_cmpxchg(&hwc->prev_count, prev_cnt, new_cnt) != prev_cnt);
-> > +
-> > +	/*
-> > +	 * If we know an overflow occur then take that into account.
-> > +	 * Note counter is not reset as that would lose events
-> > +	 */
-> > +	delta = (new_cnt - prev_cnt) & GENMASK_ULL(info->counter_width - 1, 0);
-> > +	if (overflow && delta < GENMASK_ULL(info->counter_width - 1, 0))
-> > +		delta += (1UL << info->counter_width);
-> > +
-> > +	local64_add(delta, &event->count);
-> > +}
-> > +
-> > +static void cxl_pmu_read(struct perf_event *event)
-> > +{
-> > +	__cxl_pmu_read(event, false);
-> > +}
-> > +
-> > +static void cxl_pmu_event_stop(struct perf_event *event, int flags)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	void __iomem *base = info->base;
-> > +	struct hw_perf_event *hwc = &event->hw;
-> > +	u64 cfg;
-> > +
-> > +	cxl_pmu_read(event);
-> > +	WARN_ON_ONCE(hwc->state & PERF_HES_STOPPED);
-> > +	hwc->state |= PERF_HES_STOPPED;
-> > +
-> > +	cfg = readq(base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
-> > +	cfg &= ~(FIELD_PREP(CXL_PMU_COUNTER_CFG_INT_ON_OVRFLW, 1) |
-> > +		 FIELD_PREP(CXL_PMU_COUNTER_CFG_ENABLE, 1));
-> > +	writeq(cfg, base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
-> > +
-> > +	hwc->state |= PERF_HES_UPTODATE;
-> > +}
-> > +
-> > +static int cxl_pmu_event_add(struct perf_event *event, int flags)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	struct hw_perf_event *hwc = &event->hw;
-> > +	int idx, rc;
-> > +	int event_idx = 0;
-> > +
-> > +	hwc->state = PERF_HES_STOPPED | PERF_HES_UPTODATE;
-> > +
-> > +	rc = cxl_pmu_get_event_idx(event, &idx, &event_idx);
-> > +	if (rc < 0)
-> > +		return rc;
-> > +
-> > +	hwc->idx = idx;
-> > +
-> > +	/* Only set for configurable counters */
-> > +	hwc->event_base = event_idx;
-> > +	info->hw_events[idx] = event;
-> > +	set_bit(idx, info->used_counter_bm);
-> > +
-> > +	if (flags & PERF_EF_START)
-> > +		cxl_pmu_event_start(event, PERF_EF_RELOAD);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void cxl_pmu_event_del(struct perf_event *event, int flags)
-> > +{
-> > +	struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
-> > +	struct hw_perf_event *hwc = &event->hw;
-> > +
-> > +	cxl_pmu_event_stop(event, PERF_EF_UPDATE);
-> > +	clear_bit(hwc->idx, info->used_counter_bm);
-> > +	info->hw_events[hwc->idx] = NULL;
-> > +	perf_event_update_userpage(event);
-> > +}
-> > +
-> > +static irqreturn_t cxl_pmu_irq(int irq, void *data)
-> > +{
-> > +	struct cxl_pmu_info *info = data;
-> > +	void __iomem *base = info->base;
-> > +	u64 overflowed;
-> > +	DECLARE_BITMAP(overflowedbm, 64);
-> > +	int i;
-> > +
-> > +	overflowed = readq(base + CXL_PMU_OVERFLOW_REG);
-> > +
-> > +	/* Interrupt may be shared, so maybe it isn't ours */
-> > +	if (!overflowed)
-> > +		return IRQ_NONE;
-> > +
-> > +	bitmap_from_arr64(overflowedbm, &overflowed, 64);
-> > +	for_each_set_bit(i, overflowedbm, info->num_counters) {
-> > +		struct perf_event *event = info->hw_events[i];
-> > +
-> > +		if (!event) {
-> > +			dev_dbg(info->pmu.dev,
-> > +				"overflow but on non enabled counter %d\n", i);
-> > +			continue;
-> > +		}
-> > +
-> > +		__cxl_pmu_read(event, true);
-> > +	}
-> > +
-> > +	writeq(overflowed, base + CXL_PMU_OVERFLOW_REG);
-> > +
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static void cxl_pmu_perf_unregister(void *_info)
-> > +{
-> > +	struct cxl_pmu_info *info = _info;
-> > +
-> > +	perf_pmu_unregister(&info->pmu);
-> > +}
-> > +
-> > +static void cxl_pmu_cpuhp_remove(void *_info)
-> > +{
-> > +	struct cxl_pmu_info *info = _info;
-> > +
-> > +	cpuhp_state_remove_instance_nocalls(cxl_pmu_cpuhp_state_num, &info->node);
-> > +}
-> > +
-> > +static int cxl_pmu_probe(struct device *dev)
-> > +{
-> > +	struct cxl_pmu *pmu = to_cxl_pmu(dev);
-> > +	struct pci_dev *pdev = to_pci_dev(dev->parent);
-> > +	struct cxl_pmu_info *info;
-> > +	char *irq_name;
-> > +	char *dev_name;
-> > +	int rc, irq;
-> > +
-> > +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> > +	if (!info)
-> > +		return -ENOMEM;
-> > +
-> > +	dev_set_drvdata(dev, info);
-> > +	INIT_LIST_HEAD(&info->event_caps_fixed);
-> > +	INIT_LIST_HEAD(&info->event_caps_configurable);
-> > +
-> > +	info->base = pmu->base;
-> > +
-> > +	info->on_cpu = -1;
-> > +	rc = cxl_pmu_parse_caps(dev, info);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	info->hw_events = devm_kcalloc(dev, sizeof(*info->hw_events),
-> > +				       info->num_counters, GFP_KERNEL);
-> > +	if (!info->hw_events)
-> > +		return -ENOMEM;
-> > +
-> > +	switch (pmu->type) {
-> > +	case CXL_PMU_MEMDEV:
-> > +		dev_name = devm_kasprintf(dev, GFP_KERNEL, "cxl_pmu_mem%d.%d",
-> > +					  pmu->assoc_id, pmu->index);
-> > +		break;
-> > +	}
-> > +	if (!dev_name)
-> > +		return -ENOMEM;
-> > +
-> > +	info->pmu = (struct pmu) {
-> > +		.name = dev_name,
-> > +		.parent = dev,
-> > +		.module = THIS_MODULE,
-> > +		.event_init = cxl_pmu_event_init,
-> > +		.pmu_enable = cxl_pmu_enable,
-> > +		.pmu_disable = cxl_pmu_disable,
-> > +		.add = cxl_pmu_event_add,
-> > +		.del = cxl_pmu_event_del,
-> > +		.start = cxl_pmu_event_start,
-> > +		.stop = cxl_pmu_event_stop,
-> > +		.read = cxl_pmu_read,
-> > +		.task_ctx_nr = perf_invalid_context,
-> > +		.attr_groups = cxl_pmu_attr_groups,
-> > +		.capabilities = PERF_PMU_CAP_NO_EXCLUDE,
-> > +	};
-> > +
-> > +	if (info->irq <= 0)
-> > +		return -EINVAL;
-> > +
-> > +	rc = pci_irq_vector(pdev, info->irq);
-> > +	if (rc < 0)
-> > +		return rc;
-> > +	irq = rc;
-> > +
-> > +	irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_overflow\n", dev_name);
-> > +	if (!irq_name)
-> > +		return -ENOMEM;
-> > +
-> > +	rc = devm_request_irq(dev, irq, cxl_pmu_irq, IRQF_SHARED | IRQF_ONESHOT,
-> > +			      irq_name, info);
-> > +	if (rc)
-> > +		return rc;
-> > +	info->irq = irq;
-> > +
-> > +	rc = cpuhp_state_add_instance(cxl_pmu_cpuhp_state_num, &info->node);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	rc = devm_add_action_or_reset(dev, cxl_pmu_cpuhp_remove, info);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	rc = perf_pmu_register(&info->pmu, info->pmu.name, -1);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	rc = devm_add_action_or_reset(dev, cxl_pmu_perf_unregister, info);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static struct cxl_driver cxl_pmu_driver = {
-> > +	.name = "cxl_pmu",
-> > +	.probe = cxl_pmu_probe,
-> > +	.id = CXL_DEVICE_PMU,
-> > +};
-> > +
-> > +static int cxl_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
-> > +{
-> > +	struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
-> > +
-> > +	if (info->on_cpu != -1)
-> > +		return 0;
-> > +
-> > +	info->on_cpu = cpu;
-> > +	/*
-> > +	 * CPU HP lock is held so we should be guaranteed that the CPU hasn't yet
-> > +	 * gone away again.
-> > +	 */
-> > +	WARN_ON(irq_set_affinity(info->irq, cpumask_of(cpu)));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int cxl_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> > +{
-> > +	struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
-> > +	unsigned int target;
-> > +
-> > +	if (info->on_cpu != cpu)
-> > +		return 0;
-> > +
-> > +	info->on_cpu = -1;
-> > +	target = cpumask_any_but(cpu_online_mask, cpu);
-> > +	if (target >= nr_cpu_ids) {
-> > +		dev_err(info->pmu.dev, "Unable to find a suitable CPU\n");
-> > +		return 0;
-> > +	}
-> > +
-> > +	perf_pmu_migrate_context(&info->pmu, cpu, target);
-> > +	info->on_cpu = target;
-> > +	/*
-> > +	 * CPU HP lock is held so we should be guaranteed that this CPU hasn't yet
-> > +	 * gone away.
-> > +	 */
-> > +	WARN_ON(irq_set_affinity(info->irq, cpumask_of(target)));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static __init int cxl_pmu_init(void)
-> > +{
-> > +	int rc;
-> > +
-> > +	rc = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-> > +				     "AP_PERF_CXL_PMU_ONLINE",
-> > +				     cxl_pmu_online_cpu, cxl_pmu_offline_cpu);
-> > +	if (rc < 0)
-> > +		return rc;
-> > +	cxl_pmu_cpuhp_state_num = rc;
-> > +
-> > +	rc = cxl_driver_register(&cxl_pmu_driver);
-> > +	if (rc)
-> > +		cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
-> > +
-> > +	return rc;
-> > +}
-> > +
-> > +static __exit void cxl_pmu_exit(void)
-> > +{
-> > +	cxl_driver_unregister(&cxl_pmu_driver);
-> > +	cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
-> > +}
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS(CXL);
-> > +module_init(cxl_pmu_init);
-> > +module_exit(cxl_pmu_exit);
-> > +MODULE_ALIAS_CXL(CXL_DEVICE_PMU);  
+> >      2.77%     2.11%  [kernel.vmlinux]        [k] update_load_avg
+> >      2.72%     2.59%  [kernel.vmlinux]        [k] update_cfs_group
+> 
+> Nice!
+> 
+> > Another observation of this workload is: it has a lot of wakeup time
+> > task migrations and that is the reason why update_load_avg() and
+> > update_cfs_group() shows noticeable cost. Running this workload in N
+> > instances setup where N >= 2 with sysbench's nr_threads set to 1/N nr_cpu,
+> > task migrations on wake up time are greatly reduced and the overhead from
+> > the two above mentioned functions also dropped a lot. It's not clear to
+> > me why running in multiple instances can reduce task migrations on
+> > wakeup path yet.
+> 
+> If there is *any* idle time, we're rather agressive at moving tasks to
+> idle CPUs in an attempt to avoid said idle time. If you're running at
+> about the number of CPUs there will be a fair amount of idle time and
+> hence significant migrations.
+> 
+> When you overload, there will no longer be idle time and hence no more
+> migrations.
+> 
+> > Reported-by: Nitin Tekchandani <nitin.tekchandani@intel.com>
+> > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
+> 
+> If you want to make things more complicated you can check
+> num_possible_nodes()==1 on boot and then avoid the indirection, but
+
+... finishing emails is hard :-)
+
+I think I meant to say we should check if there's measurable overhead on
+single-node systems before we go overboard or somesuch.
+
 
