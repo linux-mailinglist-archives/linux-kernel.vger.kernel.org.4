@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254B56DE9D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26B86DE9D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjDLDOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 23:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        id S229596AbjDLDPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 23:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDLDN5 (ORCPT
+        with ESMTP id S229452AbjDLDPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 23:13:57 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865D410F1;
-        Tue, 11 Apr 2023 20:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=zod9V2xsFQscz6pBYpVMwNkVtwPutEMxzbmVvqs5Dow=; b=jRbzgwB42uTEo/ukPU/+4I3Lyf
-        xh0Ty85hNaPmdtO4RiR42+uyJEL/3Mgdqin41DBC2W+0vOW7I29tMqRapJfbkvkjv9G+EZGXR5EHC
-        dR0tOJhSP8/03XKOXePlKbR0/LMQeySgVgmn8cwht9ajTLKxzmCf1CLbG8hmKmnzEqsI9jE82kMKA
-        mWIDEtVNgtKhd1RN7ImYuepQEoG/YYqKlM0P/cymPOcXesrgVtZx32UNu+Gc6xGKgOhYYAJ1uVrNj
-        5wb71JcXfyX7VVvYM+So/VFdhiQ93e3ouKoXTq+doqPespdzOMPI88CkJoi4ot0HNr6pwZh9f5pj5
-        E75q+VMA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pmQvh-00021o-Mi; Wed, 12 Apr 2023 05:13:53 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pmQvh-000TbH-CH; Wed, 12 Apr 2023 05:13:53 +0200
-Message-ID: <6c025530-e2f1-955f-fa5f-8779db23edde@metafoo.de>
-Date:   Tue, 11 Apr 2023 20:13:51 -0700
+        Tue, 11 Apr 2023 23:15:07 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D55A10F1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 20:15:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id q23so15886366ejz.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 20:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681269305; x=1683861305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i2aLD25Ot081xFob7JhFohIXGHn7ePe7bEvSfkHbEzo=;
+        b=IpcH9Q5RdjkcrWgoK6dPL+vOgohLeK5Sl9VH74j3++/zDYM0fYW2mAWg/iFZ35ETvp
+         pkEph8dHH2vuakarqoTWXf1ykKmpgbK7rDnbG/3tz1+E0OX4iITnr+0c3DMxQ4ZLoV2U
+         JLY1j+hOdY1R3c98/cFfBKL9fRiJ5EAClNHJp73IJsfFl3ga5KVYAoSqSD+YT6lbSMiv
+         3rtI3DFqX5jGjPGHf2kXt+c2+OpoWI51QuvYt82GfUbHgOhkejZ/zrKFbrc32pdnFhnJ
+         lUyN0JtbnKNM0OP2Ows7iP3Hna65oOX7Jy2vtFJ8H18yBAl9utThM77lPkelDYJuCThF
+         hpYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681269305; x=1683861305;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i2aLD25Ot081xFob7JhFohIXGHn7ePe7bEvSfkHbEzo=;
+        b=hcCJaAJSt6VX9YzDagnNBqqkLLXkz4ksCgC4i0BI+RGbJ+WiBz3gbGl5zcTvRqEnA0
+         Gexph9dP0Ls88q/5nNjxBGsSqVMS+aCqkE9FBknK13OcXvgooN/sd4LpUhEPs44wJrj1
+         uqOVy+AhKnQLDxSmRQLSgZzCTAxe0MuV2Kla53D5Yc36j9o5xeAXFUfGz8Jqawdfm1+G
+         /W991DPWcH5z2RDCCt6tuSDireLn7hal0RANKlHVThZ25433LtsVFbeeuM46RqkuQxsr
+         mCbl0NLqNUGleOskygvkzlDtLTTUmDDf+iyrjY3xBDmnQOhyMw8yeJtgznr43ekMRvrd
+         xjaA==
+X-Gm-Message-State: AAQBX9cmXRIFRLLcCQKmFJmlkWpanM43b94BYCfUWMfNW6IuFdsvgIML
+        s1B6qJPFzM9Qu5SkeW//EPZwwb7P3fISAQVZ86+bcA==
+X-Google-Smtp-Source: AKy350bXMQ/JFvjKN6x09Spo/NNwaCuecL9LjgLWZ0jv6Ne0hw1NstU+xOIJmCnF4MdPyJlkwm89MScbQO6GmyoFPD0=
+X-Received: by 2002:a17:906:dac9:b0:933:1967:a984 with SMTP id
+ xi9-20020a170906dac900b009331967a984mr5493106ejb.15.1681269304798; Tue, 11
+ Apr 2023 20:15:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net] net: macb: fix a memory corruption in extended buffer
- descriptor mode
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rafal Ozieblo <rafalo@cadence.com>
-References: <20230407172402.103168-1-roman.gushchin@linux.dev>
- <20230411184814.5be340a8@kernel.org>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20230411184814.5be340a8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26872/Tue Apr 11 09:26:30 2023)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230411143852.868524-1-senozhatsky@chromium.org>
+ <20230411224652.576dd18c@gandalf.local.home> <20230412030759.GD25053@google.com>
+In-Reply-To: <20230412030759.GD25053@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 11 Apr 2023 20:14:28 -0700
+Message-ID: <CAJD7tkZjAPZjxoAdGjZmEmDhd7S78bVrtVa6XuK0aPRZPoyzkw@mail.gmail.com>
+Subject: Re: [PATCHv2] seq_buf: add seq_buf_do_printk() helper
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 18:48, Jakub Kicinski wrote:
-> On Fri,  7 Apr 2023 10:24:02 -0700 Roman Gushchin wrote:
->> The problem is resolved by extending the MACB_RX_WADDR_SIZE
->> in the extended mode.
->>
->> Fixes: 7b4296148066 ("net: macb: Add support for PTP timestamps in DMA descriptors")
->> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
->> Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
->> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
->> ---
->>   drivers/net/ethernet/cadence/macb.h | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
->> index c1fc91c97cee..1b330f7cfc09 100644
->> --- a/drivers/net/ethernet/cadence/macb.h
->> +++ b/drivers/net/ethernet/cadence/macb.h
->> @@ -826,8 +826,13 @@ struct macb_dma_desc_ptp {
->>   #define MACB_RX_USED_SIZE			1
->>   #define MACB_RX_WRAP_OFFSET			1
->>   #define MACB_RX_WRAP_SIZE			1
->> +#ifdef MACB_EXT_DESC
->> +#define MACB_RX_WADDR_OFFSET			3
->> +#define MACB_RX_WADDR_SIZE			29
->> +#else
->>   #define MACB_RX_WADDR_OFFSET			2
->>   #define MACB_RX_WADDR_SIZE			30
->> +#endif
-> Changing register definition based on Kconfig seems a bit old school.
+On Tue, Apr 11, 2023 at 8:08=E2=80=AFPM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
 >
-> Where is the extended descriptor mode enabled? Is it always on if
-> Kconfig is set or can it be off for some platforms based on other
-> capabilities? Judging by macb_dma_desc_get_size() small descriptors
-> can still be used even with EXT_DESC?
+> On (23/04/11 22:46), Steven Rostedt wrote:
+> > > Sometimes we use seq_buf to format a string buffer, which
+> > > we then pass to printk(). However, in certain situations
+> > > the seq_buf string buffer can get too big, exceeding the
+> > > PRINTKRB_RECORD_MAX bytes limit, and causing printk() to
+> > > truncate the string.
+> > >
+> > > Add a new seq_buf helper. This helper prints the seq_buf
+> > > string buffer line by line, using \n as a delimiter,
+> > > rather than passing the whole string buffer to printk()
+> > > at once.
+> > >
+> > > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> >
+> > Looks good to me. Want me to pull this in my tree, or do you have
+> > patches dependent on this?
 >
-> If I'm grepping correctly thru the painful macro magic this register
-> is only used in macb_get_addr(). It'd seem a bit more robust to me
-> to open code the extraction of the address based on bp->hw_dma_cap
-> in that one function.
->
-> In addition to maintainers please also CC Harini Katakam
-> <harini.katakam@xilinx.com> on v2.
+> Thanks, would be great if you can pull this in your tree. The MM
+> patches that Yosry is working on will be posted after the merge
+> window.
 
-We had an alternative patch which fixes this based on runtime settings. 
-But it didn't seem to be worth it considering the runtime overhead, even 
-though it is small. The skb buffer address is guaranteed to be cacheline 
-aligned, otherwise the DMA wouldn't work at all. So we know that the 
-LSBs must always be 0. We could even unconditionally define 
-MACB_RX_WADDR_OFFSET as 3.
+Yes, thanks Sergey and Steven.
 
-Alternative runtime base patch:
+The sooner this patch ends up in Linus's tree the better for me so I
+can send my MM patches based off of it. I am guessing through your
+tree is the easiest way for that.
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c 
-b/drivers/net/ethernet/cadence/macb_main.c
-index d13fb1d31821..1a40d5a26f36 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1042,6 +1042,10 @@ static dma_addr_t macb_get_addr(struct macb *bp, 
-struct macb_dma_desc *desc)
-         }
-  #endif
-         addr |= MACB_BF(RX_WADDR, MACB_BFEXT(RX_WADDR, desc->addr));
-+#ifdef CONFIG_MACB_USE_HWSTAMP
-+       if (bp->hw_dma_cap & HW_DMA_CAP_PTP)
-+               addr &= ~GEM_BIT(DMA_RXVALID_OFFSET);
-+#endif
-         return addr;
-  }
-
+Thanks again.
