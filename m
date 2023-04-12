@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5796DED34
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA56DED36
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDLIFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S229877AbjDLIGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjDLIFJ (ORCPT
+        with ESMTP id S229492AbjDLIGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:05:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796EA2D7F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:05:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id q23so17175307ejz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681286706; x=1683878706;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HJLlk5da4L8Ltn8jDx/W/MCW09bm52RtkanOa7KHQUw=;
-        b=DfTgWotzSDN79aPLF0yJwQxlU6YpisvmmkU8dxUWBBD9+wbXgTUbZ8tNuPqV2l1yDK
-         JjLXvegVVsmqyeJ3ThZp1XsJM6RxIEWAq6uo7WcLO4Vq3ixvt5Avy41FFaLYxRKPs4oD
-         jG8cfa8Yys/9IzZqoa9VpN5N+MEoRhA6y3uC4hv88qtFGObL6dikA6dXC6bgDxBlBK/q
-         T8LCzF1Ujmosxl+MBImt4uGL2V13csyyuOpRJWFVTZuzCQcleB3vzSn2rWQ6ivU6XtK2
-         zfDTyVcDDF6AVXRbIeXR/qLVQmhimsGRjEMOQxQtngCeLJAJQTuKvVVBYghUJa/2oa1e
-         70xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681286706; x=1683878706;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJLlk5da4L8Ltn8jDx/W/MCW09bm52RtkanOa7KHQUw=;
-        b=NWQgQHZLip2G4Z9F97e/hCnHnOJ7Qy4qJsEvIwvEcxj/J6tvhm+qOaD8am1AdriVUh
-         x38UDisuFKmjQRCQ1S52SsUgcvz3VHEQU/z7ZuSTiFUa2FXcvxBWNoCu2UNolUDOR0Dd
-         gdqQJohrPds68GK5+fOid7ulpjBGQEUGUDaR8JFQ0+pk5C0D+vMDU6ztl77D7wv0rBeA
-         RsX7N7usWWxznzXh9r6L4IcT9J4XQHXXP++fI/fbfIHXzhR4kEOLiA3BWlWoDlcYGgtL
-         Y3EU8ONk3BkNQb6NFiO/7HHkGdb2oioQ+1qu2o5tY+l9o9WMffwSEBnBqUK1XR/gitgf
-         TM9g==
-X-Gm-Message-State: AAQBX9c9xxX44KJP4IN/1eQldadWhcAmGUQlpTnuM+d5mHcp5sEiO+qx
-        4qiaaCdV1j+SBo+0KJB+CUuO6fwgVSiqTYB6HbM=
-X-Google-Smtp-Source: AKy350ZsMEeYXqWc3YO6suPENHKbLe0ksL4tyDBKIRCTaRurMQH2nROSOZ7A0PPIxWB0GmYSRTevN07zGbCVWFUtB9s=
-X-Received: by 2002:a17:907:d603:b0:8f1:4cc5:f14c with SMTP id
- wd3-20020a170907d60300b008f14cc5f14cmr2714921ejc.0.1681286705360; Wed, 12 Apr
- 2023 01:05:05 -0700 (PDT)
+        Wed, 12 Apr 2023 04:06:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7E32100
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:06:31 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A856F66031FF;
+        Wed, 12 Apr 2023 09:06:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681286789;
+        bh=jwulId4nLUPcaw4BGk1KKXtBppWVtodS0kpW0W1yZiQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WYZWNGIRibERfGpNAaJvjB9EBu3kf8VWvlTd2PwEopynZ+waRY/xEs/bV3+iScqdm
+         rmPFvNRz6mPUPZd8jQqKKYvAMRve/jPY/FhVD1szcA9abbC8/y81yn/y5gzi//NAQm
+         k9rg0bQLDv6yJ1fIl15EqJx1xdq+kAq1mqtMHxeyEh5NYx14GNFz09+uF1cNr+snjl
+         +VQXyLLHwM9MBAR3XBAbOXdsu7oLsafPb57FPkkC4KUW+p4fFeMYWY1f9iFnq4f6s6
+         JuxMEIoMTjFaY6lU22+Ug331DW3S0XOrnZv2cjyMgghWqoOLxeUQ6zshtuIcOYztYT
+         JRg+8T6BiAxTg==
+Message-ID: <783c03af-fc88-96c8-c6fc-6f02051dc6b1@collabora.com>
+Date:   Wed, 12 Apr 2023 10:06:25 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:7208:708a:b0:65:ee9e:4d5f with HTTP; Wed, 12 Apr 2023
- 01:05:04 -0700 (PDT)
-Reply-To: avamedicinemed1@gmail.com
-From:   Dr Ava Smith <avamedicinemed10@gmail.com>
-Date:   Wed, 12 Apr 2023 01:05:04 -0700
-Message-ID: <CAARwTG+23BFXGvtPE-vRebTNFOdM3BdvAfTg=1JC6pC+0kYT8g@mail.gmail.com>
-Subject: HI DEAR
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:634 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [avamedicinemed1[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [avamedicinemed10[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [avamedicinemed10[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/9] drm/mediatek: dp: Cache EDID for eDP panel
+To:     Matthias Brugger <matthias.bgg@gmail.com>, chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+ <20230404104800.301150-2-angelogioacchino.delregno@collabora.com>
+ <09c61b94-1ed1-eb72-9682-1f1f203f6f63@gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <09c61b94-1ed1-eb72-9682-1f1f203f6f63@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
-how are you today?hope you are fine.
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Reply me through my official email (avamedicinemed1@gmail.com)
-Thanks
-Ava
+Il 12/04/23 09:08, Matthias Brugger ha scritto:
+> 
+> 
+> On 04/04/2023 12:47, AngeloGioacchino Del Regno wrote:
+>> Since eDP panels are not removable it is safe to cache the EDID:
+>> this will avoid a relatively long read transaction at every PM
+>> resume that is unnecessary only in the "special" case of eDP,
+>> hence speeding it up a little, as from now on, as resume operation,
+>> we will perform only link training.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/gpu/drm/mediatek/mtk_dp.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
+>> index 1f94fcc144d3..84f82cc68672 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+>> @@ -118,6 +118,7 @@ struct mtk_dp {
+>>       const struct mtk_dp_data *data;
+>>       struct mtk_dp_info info;
+>>       struct mtk_dp_train_info train_info;
+>> +    struct edid *edid;
+>>       struct platform_device *phy_dev;
+>>       struct phy *phy;
+>> @@ -1993,7 +1994,11 @@ static struct edid *mtk_dp_get_edid(struct drm_bridge 
+>> *bridge,
+>>           usleep_range(2000, 5000);
+>>       }
+>> -    new_edid = drm_get_edid(connector, &mtk_dp->aux.ddc);
+>> +    /* eDP panels aren't removable, so we can return a cached EDID. */
+>> +    if (mtk_dp->edid && mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP)
+>> +        new_edid = drm_edid_duplicate(mtk_dp->edid);
+>> +    else
+>> +        new_edid = drm_get_edid(connector, &mtk_dp->aux.ddc);
+> 
+> Maybe it would make sense to add a macro for the check of mtk_dp->bridge.type == 
+> DRM_MODE_CONNECTOR_eDP
+> it would make the code more readable.
+> 
+
+I had the same idea... but then avoided that because in most (if not all?) of the
+DRM drivers (at least, the one I've read) this check is always open coded, so I
+wrote it like that for consistency and nothing else.
+
+I have no strong opinions on that though!
+
+>>       /*
+>>        * Parse capability here to let atomic_get_input_bus_fmts and
+>> @@ -2022,6 +2027,10 @@ static struct edid *mtk_dp_get_edid(struct drm_bridge 
+>> *bridge,
+>>           drm_atomic_bridge_chain_post_disable(bridge, connector->state->state);
+>>       }
+>> +    /* If this is an eDP panel and the read EDID is good, cache it for later */
+>> +    if (mtk_dp->bridge.type == DRM_MODE_CONNECTOR_eDP && !mtk_dp->edid && new_edid)
+>> +        mtk_dp->edid = drm_edid_duplicate(new_edid);
+>> +
+> 
+> How about putting this in an else if branch of mtk_dp_parse_capabilities. At least 
+> we could get rid of the check regarding if new_edid != NULL.
+> 
+> I was thinking on how to put both if statements in one block, but I think the 
+> problem is, that we would leak memory if the capability parsing failes due to the 
+> call to drm_edid_duplicate(). Correct?
+> 
+
+Correct. The only other "good" place would be in the `if (new_edid)` conditional,
+but that wouldn't be as readable as it is right now...
+
+Cheers,
+Angelo
+
