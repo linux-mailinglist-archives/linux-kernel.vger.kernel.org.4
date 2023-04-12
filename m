@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9530E6DFFEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82126DFFE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDLUeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S230222AbjDLUdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjDLUeP (ORCPT
+        with ESMTP id S229747AbjDLUde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:34:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A738030EB
+        Wed, 12 Apr 2023 16:33:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27733C07
         for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681331612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KF6ZGxBbkIfjD9DhMutgQoIKoNocc290sfEndcP1qNU=;
-        b=JKotMA0carq9nAyhIvHRVarJiYktUV2YG+bumf6+C1iEv8GZbbbeWcSPyssioD9XUAwdjw
-        zrOQ8U4bF6ebjRhoINyrg9QrTBsRL7GL816WVB14EfGajq8M498JM14emuUIP6apOSTNIe
-        y4+6zH0plZvMLho4R4fdPyzUK7pY+fs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-9GjZ4rz5PjKDlNsYwPvDyQ-1; Wed, 12 Apr 2023 16:33:31 -0400
-X-MC-Unique: 9GjZ4rz5PjKDlNsYwPvDyQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7DA23813F31;
-        Wed, 12 Apr 2023 20:33:30 +0000 (UTC)
-Received: from [10.22.32.168] (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A10FC15BB8;
-        Wed, 12 Apr 2023 20:33:29 +0000 (UTC)
-Message-ID: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
-Date:   Wed, 12 Apr 2023 16:33:29 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7653162D67
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E27C433EF;
+        Wed, 12 Apr 2023 20:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681331612;
+        bh=hM0bwcDvgkAIjvvxpcJVRLkstfxzoDyPt2D7iUnvNG4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fv32pv5Dou8qrSImdDNerwO5oykE51gQE6kk7ssw+dRnxB/fixTTy1oEQfGBMBcoI
+         Pn9zy+xWWwvifEgqyoZdHHSZcILSKaEP9D/7qfcV+NdBU56EErN5+96HxSehklD/DM
+         N17tP9ng9rOp2F5TF7dZuBSAYEY+n/qa6Ef4RL6k=
+Date:   Wed, 12 Apr 2023 13:33:31 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, elver@google.com, dvyukov@google.com,
+        kasan-dev@googlegroups.com,
+        Dipanjan Das <mail.dipanjan.das@gmail.com>
+Subject: Re: [PATCH 2/2] mm: kmsan: handle alloc failures in
+ kmsan_ioremap_page_range()
+Message-Id: <20230412133331.e26920856ccf94edd057c1e0@linux-foundation.org>
+In-Reply-To: <20230412145300.3651840-2-glider@google.com>
+References: <20230412145300.3651840-1-glider@google.com>
+        <20230412145300.3651840-2-glider@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 16:22, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Wed, Apr 12, 2023 at 03:52:36PM -0400, Waiman Long wrote:
->> There is still a distribution hierarchy as the list of isolation CPUs have
->> to be distributed down to the target cgroup through the hierarchy. For
->> example,
->>
->> cgroup root
->>    +- isolcpus  (cpus 8,9; isolcpus)
->>    +- user.slice (cpus 1-9; ecpus 1-7; member)
->>       +- user-x.slice (cpus 8,9; ecpus 8,9; isolated)
->>       +- user-y.slice (cpus 1,2; ecpus 1,2; member)
->>
->> OTOH, I do agree that this can be somewhat hacky. That is why I post it as a
->> RFC to solicit feedback.
-> Wouldn't it be possible to make it hierarchical by adding another cpumask to
-> cpuset which lists the cpus which are allowed in the hierarchy but not used
-> unless claimed by an isolated domain?
+On Wed, 12 Apr 2023 16:53:00 +0200 Alexander Potapenko <glider@google.com> wrote:
 
-I think we can. You mean having a new "cpuset.cpus.isolated" cgroupfs 
-file. So there will be one in the root cgroup that defines all the 
-isolated CPUs one can have. It is then distributed down the hierarchy 
-and can be claimed only if a cgroup becomes an "isolated" partition. 
-There will be a slight change in the semantics of an "isolated" 
-partition, but I doubt there will be much users out there.
+> Similarly to kmsan_vmap_pages_range_noflush(),
+> kmsan_ioremap_page_range() must also properly handle allocation/mapping
+> failures. In the case of such, it must clean up the already created
+> metadata mappings and return an error code, so that the failure can be
+> propagated to ioremap_page_range().
 
-If you are OK with this approach, I can modify my patch series to do that.
+Unlike [1/2], this changelog doesn't describe the user-visible effects.
+A bit of clicking takes me to
 
-Cheers,
-Longman
+: kmsan's allocation of shadow or origin memory in
+: kmsan_vmap_pages_range_noflush() fails silently due to fault injection
+: (FI).  KMSAN sort of "swallows" the allocation failure, and moves on. 
+: When either of them is later accessed while updating the metadata,
+: there are no checks to test the validity of the respective pointers,
+: which results in a page fault.
+
+So I'll add that to the changelog and shall add cc:stable to both patches.
 
