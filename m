@@ -2,152 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B784F6DF32A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5D16DF336
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjDLLZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S230258AbjDLL1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjDLLYw (ORCPT
+        with ESMTP id S230063AbjDLL1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:24:52 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596740F2;
-        Wed, 12 Apr 2023 04:24:27 -0700 (PDT)
-X-UUID: 8c6c1186d92411edb6b9f13eb10bd0fe-20230412
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=QP7sQjwZzKXI0b464YWLSZqML8grLgd1UX3dg7K3rSA=;
-        b=QgezrJLGrXlXX/1TvSBmalnHr1z23JCPcE6nXNPDzDumPGVvmBymdwaX/VY3FHSV1XDXcQ58DfyjfdqVQFBzKaV5jYdkdPfK/vNTEasXbZaxTNvUndgxiRjVVJNq0n2xZG/Iv1BVqCGRLc0xEvw44nE09OIZmDVcrl1wMpBlK98=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:228adf8c-7605-4685-83d6-6ad6e972d08f,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.22,REQID:228adf8c-7605-4685-83d6-6ad6e972d08f,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:120426c,CLOUDID:84f2b9ea-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:2304121924148FJCQDB8,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 8c6c1186d92411edb6b9f13eb10bd0fe-20230412
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <tze-nan.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1256624878; Wed, 12 Apr 2023 19:24:11 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 12 Apr 2023 19:24:10 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 12 Apr 2023 19:24:10 +0800
-From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <bobule.chang@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <Tze-nan.Wu@mediatek.com>, <cheng-jui.wang@mediatek.com>,
-        <npiggin@gmail.com>, <stable@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v4] ring-buffer: Ensure proper resetting of atomic variables in ring_buffer_reset_online_cpus
-Date:   Wed, 12 Apr 2023 19:23:56 +0800
-Message-ID: <20230412112401.25081-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 12 Apr 2023 07:27:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D611FE0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681298736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nCSXTF4XVSA+wnYR5OnBmbwxnANHNL0gZw+wB32qq0c=;
+        b=S7fbPiHQzOPDEHXWqwqnYS3LMq2tGx1Jq7wHfkHqTBytNA6nRU7oX/Kaus/xuxDsul9b6y
+        Isxd3KO9x4z7Px/8m2TjQY6Q3d78ef9Qg3FbJ4tyxA+q1SYpAMpG/ut5/aU2WWz4IQGKGK
+        dbplVZgvWWDZtZE0pMn5RLpY0b3DdvM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-108-GZq_LYYEN2WuCDxkzim48w-1; Wed, 12 Apr 2023 07:25:35 -0400
+X-MC-Unique: GZq_LYYEN2WuCDxkzim48w-1
+Received: by mail-wr1-f71.google.com with SMTP id w3-20020adf8bc3000000b002efb4354084so1369888wra.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:25:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681298734; x=1683890734;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nCSXTF4XVSA+wnYR5OnBmbwxnANHNL0gZw+wB32qq0c=;
+        b=FHKgAac9+LCGH5zkmgqNz1YE5gk23j3X+bjxxzd8K+HmwqZH6WFk26TT6e/UmGDJwR
+         ttajDL1Zn9HeegC5Mrbi89Urq4Gzi8w8BW6O0Hp/ri7zTDqQd0Pa4g79lcW0YYHxgrbw
+         kPe0SfcK6KX+NE4M+WUtZ//DYLJmdUDUQibJCa37t4pDBdcpaUhiFYCoUGzyQn0xn9wR
+         2K8vt5BwzjQbrGo8MOUmDle0p5oQK/0EndsI6kkOy/njxJAS9BLTn6EtzmFOFuoH3GTp
+         P5qDxtDo62VblIkQf6k4grTZAUZehqg2PIQGi9FrFPqX+l1QOyniGcLGM1LNRYdgZ3Li
+         3NfA==
+X-Gm-Message-State: AAQBX9fyY0/Cn10/iV2c+w5IKQ1Uku/Hd+DIWpO1DG4PyuFOGhy4aQ3o
+        q6E2tOKpFo2U4xcoyz/35tDaYpmB4ZON51U7/l6iez1nhhXgFvqvvmHJf+A23PG4SaqTuw77oVr
+        JZAll3W6QSbdnaebUKLwYO3Z/pzvVKGHp
+X-Received: by 2002:a7b:c4c7:0:b0:3e2:589:2512 with SMTP id g7-20020a7bc4c7000000b003e205892512mr1658470wmk.21.1681298734150;
+        Wed, 12 Apr 2023 04:25:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b/SiLavUkrvwZgIj2TJWW+TQt7NrOH6hxC/XCMk5hAWGy3BRFgYcoxYNV6pNUr8efUGpf8Kw==
+X-Received: by 2002:a7b:c4c7:0:b0:3e2:589:2512 with SMTP id g7-20020a7bc4c7000000b003e205892512mr1658451wmk.21.1681298733719;
+        Wed, 12 Apr 2023 04:25:33 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4b00:c6fa:b613:dbdc:ab? (p200300cbc7024b00c6fab613dbdc00ab.dip0.t-ipconnect.de. [2003:cb:c702:4b00:c6fa:b613:dbdc:ab])
+        by smtp.gmail.com with ESMTPSA id n11-20020a5d420b000000b002ceacff44c7sm16944160wrq.83.2023.04.12.04.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 04:25:33 -0700 (PDT)
+Message-ID: <94bfa3cc-674e-25b0-e7e2-d74c970acef7@redhat.com>
+Date:   Wed, 12 Apr 2023 13:25:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, vbabka@suse.cz, mhocko@suse.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm/page_alloc: consider pfn holes after pfn_valid() in
+ __pageblock_pfn_to_page()
+In-Reply-To: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ring_buffer_reset_online_cpus, the buffer_size_kb write operation
-may permanently fail if the cpu_online_mask changes between two
-for_each_online_buffer_cpu loops. The number of increases and decreases
-on both cpu_buffer->resize_disabled and cpu_buffer->record_disabled may be
-inconsistent, causing some CPUs to have non-zero values for these atomic
-variables after the function returns.
+On 12.04.23 12:45, Baolin Wang wrote:
+> Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(),
+> which checks whether the given zone contains holes, and uses pfn_valid()
+> to check if the end pfn is valid. However pfn_valid() can not make sure
+> the end pfn is not a hole if the size of a pageblock is larger than the
+> size of a sub-mem_section, since the struct page getting by pfn_to_page()
+> may represent a hole or an unusable page frame, which may cause incorrect
+> zone contiguous is set.
+> 
+> Though another user of pageblock_pfn_to_page() in compaction seems work
+> well now, it is better to avoid scanning or touching these offline pfns.
+> So like commit 2d070eab2e82 ("mm: consider zone which is not fully
+> populated to have holes"), we should also use pfn_to_online_page() for
+> the end pfn to make sure it is a valid pfn with usable page frame.
+> Meanwhile the pfn_valid() for end pfn can be dropped now.
+> 
+> Moreover we've already used pfn_to_online_page() for start pfn to make
+> sure it is online and valid, so the pfn_valid() for the start pfn is
+> unnecessary, drop it.
 
-This issue can be reproduced by "echo 0 > trace" while hotplugging cpu.
-After reproducing success, we can find out buffer_size_kb will not be
-functional anymore.
+pageblocks are supposed to fall into a single memory section, so in most 
+cases, if the start is online, so is the end.
 
-To prevent leaving 'resize_disabled' and 'record_disabled' non-zero after
-ring_buffer_reset_online_cpus returns, we ensure that each atomic variable
-has been set up before atomic_sub() to it.
+The exception to this rule is when we have a mixture of ZONE_DEVICE and 
+ZONE_* within the same section.
 
-Cc: stable@vger.kernel.org
-Cc: npiggin@gmail.com
-Fixes: b23d7a5f4a07 ("ring-buffer: speed up buffer resets by avoiding synchronize_rcu for each CPU")
-Reviewed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
----
-Changes from v1 to v3: https://lore.kernel.org/all/20230408052226.25268-1-Tze-nan.Wu@mediatek.com/
-  - Declare the cpumask variable statically rather than dynamically.
+Then, indeed the end might not be online.
 
-Changes from v2 to v3: https://lore.kernel.org/all/20230409024616.31099-1-Tze-nan.Wu@mediatek.com/
-  - Considering holding cpu_hotplug_lock too long because of the
-    synchronize_rcu(), maybe it's better to prevent the issue by copying
-    cpu_online_mask at the entry of the function as V1 does, instead of
-    using cpus_read_lock().
+BUT, if the end is valid (-> ZONE_DEVICE), then the zone_id will differ. 
+[let's ignore any races for now, up to this point they are mostly of 
+theoretical nature]
 
-Changes from v3 to v4: https://lore.kernel.org/all/20230410073512.13362-1-Tze-nan.Wu@mediatek.com/
-  - Considering that the size of cpumask may not be too big on some machines
-    We no longer adopt the approach of copying cpumask at the beginning of
-    the function. Instead, we ensure that atomic variables have been set up
-    before atomic_sub() is called.
-  - Change the title of the patch.
----
- kernel/trace/ring_buffer.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+So I don't think this change actually fixes something.
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 76a2d91eecad..8c647d8b5bb4 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5361,20 +5361,28 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- 	for_each_online_buffer_cpu(buffer, cpu) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
--		atomic_inc(&cpu_buffer->resize_disabled);
-+#define RESET_BIT	(1 << 30)
-+		atomic_add(RESET_BIT, &cpu_buffer->resize_disabled);
- 		atomic_inc(&cpu_buffer->record_disabled);
- 	}
- 
- 	/* Make sure all commits have finished */
- 	synchronize_rcu();
- 
--	for_each_online_buffer_cpu(buffer, cpu) {
-+	for_each_buffer_cpu(buffer, cpu) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
-+		/*
-+		 * If a CPU came online during the synchronize_rcu(), then
-+		 * ignore it.
-+		 */
-+		if (!(atomic_read(&cpu_buffer->resize_disabled) & RESET_BIT))
-+			continue;
-+
- 		reset_disabled_cpu_buffer(cpu_buffer);
- 
- 		atomic_dec(&cpu_buffer->record_disabled);
--		atomic_dec(&cpu_buffer->resize_disabled);
-+		atomic_sub(RESET_BIT, &cpu_buffer->resize_disabled);
- 	}
- 
- 	mutex_unlock(&buffer->mutex);
+
+Getting rid of the pfn_valid(start_pfn)  makes sense. Replacing the 
+pfn_valid(end_pfn) by a pfn_to_online_page(end_pfn) could make that 
+function less efficient.
+
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>   mm/page_alloc.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index d0eb280ec7e4..8076f519c572 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1512,9 +1512,6 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>   	/* end_pfn is one past the range we are checking */
+>   	end_pfn--;
+>   
+> -	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
+> -		return NULL;
+> -
+>   	start_page = pfn_to_online_page(start_pfn);
+>   	if (!start_page)
+>   		return NULL;
+> @@ -1522,7 +1519,9 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>   	if (page_zone(start_page) != zone)
+>   		return NULL;
+>   
+> -	end_page = pfn_to_page(end_pfn);
+> +	end_page = pfn_to_online_page(end_pfn);
+> +	if (!end_page)
+> +		return NULL;
+>   
+>   	/* This gives a shorter code than deriving page_zone(end_page) */
+>   	if (page_zone_id(start_page) != page_zone_id(end_page))
+
 -- 
-2.18.0
+Thanks,
+
+David / dhildenb
 
