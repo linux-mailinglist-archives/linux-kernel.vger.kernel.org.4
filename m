@@ -2,126 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2966DF761
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FB76DF762
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDLNiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S230132AbjDLNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDLNiE (ORCPT
+        with ESMTP id S229523AbjDLNiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 09:38:04 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2340F2;
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719491709;
         Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id bj35so4378019qkb.7;
-        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681306682; x=1683898682;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
-        b=B/jjBNSTypcC+joaCW6KBpHZMJp0zGfpqOXg+zBPIJ4NWlwYrPSMxjdSJy75T7U+3W
-         U3p3HotHjbkZlaRKmFC8qc1Afx6oeTJ5uQpH2hG5w6sceSXtWvhwqD0ty4GTJOrTqqUL
-         idO/30jacGJYN69+SVScPsn3OHD9k8oRdDeFIGHLcMZu3eu8rF9Xwdo+4T1+slcDtYsU
-         YH0NOP8VGLe82rREMYx2QH+7wkX8dWpsJjPbWWLufPzhXmFeBT9DiKG3mgcWZ9nD2lka
-         J4Q7aWlsb6BWQEoFbqY6WJkyrIjqnRCGYJf4CUJlNWaYPJ0je3GRhXlmjShv2pC79kPd
-         uijw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681306682; x=1683898682;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
-        b=b6gBQOYwn0iv6j28deCPgMLLksHtVWvph94bSzJdnLF+eBjV2wF3XjmJ1prFZrdHYU
-         Ac9Fa6HZR3LHWVeJhKeiBG6V1DZ8iBpipYwJVQkgDQPfWcYmKdmIe63FQ28dq99VOFgW
-         a3oxs0sgKdKVhxjubS5iuqkBkJmhLG4hgBwNQ38zte8uuroy1kajWTCk+pFqOtgQzm+y
-         Yw7sTMLu0XTVzVrjTzav8PlihjuCCwGHu9SWNQs0oL4+UjvJelfxqBwMYlhJBn9uZ74+
-         XKFGLGy7nlmcGZHZFvfYZtbWrlVlDifU/zvJaorRO5FrfPeXPMl19toEN4Ut4qiIpZQU
-         R7bA==
-X-Gm-Message-State: AAQBX9dmLvbkbOCHa4I7kp452wdamYNpIBB1ZuEgl0I08sBI5+YjTpIL
-        UuYqCkyVnuicMXHfpa4M+Y11A4uSHw/Pvk9zUYM=
-X-Google-Smtp-Source: AKy350bQZX93U7KKOQF4PJTiOvTycKd+ntmsVru9e/foHUOInkoawqILTSPuq4LXHeg8osg4IFMokyT1/kYfdkvFekQ=
-X-Received: by 2002:a05:620a:4482:b0:746:83cd:8d1d with SMTP id
- x2-20020a05620a448200b0074683cd8d1dmr2165203qkp.6.1681306681702; Wed, 12 Apr
- 2023 06:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681306682; x=1712842682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pnUjDJ/xUCsHQjHZB7cPemWJJbBm5AuX1hvD8ONxtnY=;
+  b=BdkbXRm6HE3LEU7IkzTiyAOuUWq64mFlkicXZOFDUDqfw2AbzjIRlldq
+   R5OcaMj/05R1c0mCwLLMl9AoGdXq8oa/6+hL5+cxQfkKpQouGlg6gk/bg
+   icttqWGOlAo0UKLFb655agU+YiIldiURQ3Uyamou0IbQB701iRAndcTco
+   kEaY7Qqe2Fzwh7Jk66AW3DI+1SQ/sz87gUpdZlIWBsuq42B01K8YOQCgt
+   2RHiKBc5m5DCdCej3lvR8m9cMY5Ig4NyDO78CrTCZ9D2xvmv92wDbpvdJ
+   7LBWi/P8bZJIIV8dLlXnDVPUcxeiiTv2vRJr9oGrO2ENQQyUlqPTaV+bI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323520851"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="323520851"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:38:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="1018745687"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="1018745687"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2023 06:37:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pmafc-00FxVI-2F;
+        Wed, 12 Apr 2023 16:37:56 +0300
+Date:   Wed, 12 Apr 2023 16:37:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: [RFC PATCH 2/2] iio: light: Add support for APDS9306 Light Sensor
+Message-ID: <ZDa0NIot/4aRJ0pI@smile.fi.intel.com>
+References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
+ <20230411011203.5013-3-subhajit.ghosh@tweaklogic.com>
+ <ZDVWB9xV9Cdbwyqd@smile.fi.intel.com>
+ <ab1d9746-4d23-efcc-0ee1-d2b8c634becd@tweaklogic.com>
 MIME-Version: 1.0
-References: <20230405141710.3551-1-ubizjak@gmail.com> <20230405141710.3551-4-ubizjak@gmail.com>
- <20230412113231.GA628377@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230412113231.GA628377@hirez.programming.kicks-ass.net>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Wed, 12 Apr 2023 15:37:50 +0200
-Message-ID: <CAFULd4aCNNcyQm3Av+KkWVXuU9Cb0G5H5cFmqVR_T5LwCW=YJA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] locking/arch: Wire up local_try_cmpxchg
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ab1d9746-4d23-efcc-0ee1-d2b8c634becd@tweaklogic.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 1:33=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Wed, Apr 05, 2023 at 04:17:08PM +0200, Uros Bizjak wrote:
-> > diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/as=
-m/local.h
-> > index bc4bd19b7fc2..45492fb5bf22 100644
-> > --- a/arch/powerpc/include/asm/local.h
-> > +++ b/arch/powerpc/include/asm/local.h
-> > @@ -90,6 +90,17 @@ static __inline__ long local_cmpxchg(local_t *l, lon=
-g o, long n)
-> >       return t;
-> >  }
-> >
-> > +static __inline__ bool local_try_cmpxchg(local_t *l, long *po, long n)
-> > +{
-> > +     long o =3D *po, r;
-> > +
-> > +     r =3D local_cmpxchg(l, o, n);
-> > +     if (unlikely(r !=3D o))
-> > +             *po =3D r;
-> > +
-> > +     return likely(r =3D=3D o);
-> > +}
-> > +
->
-> Why is the ppc one different from the rest? Why can't it use the
-> try_cmpxchg_local() fallback and needs to have it open-coded?
+On Wed, Apr 12, 2023 at 12:29:15PM +0800, Subhajit Ghosh wrote:
 
-Please note that ppc directly defines local_cmpxchg that bypasses
-cmpxchg_local/arch_cmpxchg_local machinery. The patch takes the same
-approach for local_try_cmpxchg, because fallbacks are using
-arch_cmpxchg_local definitions.
+...
 
-PPC should be converted to use arch_cmpxchg_local (to also enable
-instrumentation), but this is not the scope of the proposed patchset.
+> > > +static const struct regmap_config apds9306_regmap = {
+> > > +	.name = "apds9306_regmap",
+> > > +	.reg_bits = 8,
+> > > +	.val_bits = 8,
+> > > +	.rd_table = &apds9306_readable_table,
+> > > +	.wr_table = &apds9306_writable_table,
+> > > +	.volatile_table = &apds9306_volatile_table,
+> > > +	.precious_table = &apds9306_precious_table,
+> > > +	.max_register = APDS9306_ALS_THRES_VAR,
+> > > +	.cache_type = REGCACHE_RBTREE,
+> > 
+> > Do you need an internal regmap lock? If so, why?
+> For event interface - interrupt enable, adaptive interrupt enable,
+> upper and lower threshold values, selection of clear or als
+> channels for interrupt, the mutex in the driver's private data structure
+> is not used.
+> I thought to use the regmap's internal locking mechanism for
+> mutual exclusion as the values are directly written to or read from
+> the device registers form the write_event(), read_event(),
+> write_event_config() and read_event_config().
+> What do you think?
 
-Uros.
+I didn't get. If you have a sequence of registers to be read/write/modified/etc
+in IRQ handler and/or elsewhere and at the same time in IRQ or elsewhere you
+have even a single IO access to the hardware you have to be sure that the IO
+ordering has no side effects. regmap API does not guarantee that. It only works
+on a simple read/write/modify of a _single_ register, or a coupled group of
+registers (like bulk ops), if your case is sparse, you on your own and probably
+lucky enough not to have an issue during the testing. So, take your time and
+think more about what you are doing in the driver and what locking schema
+should take place.
+
+...
+
+> > > +static int apds9306_power_state(struct apds9306_data *data,
+> > > +		enum apds9306_power_states state)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	/* Reset not included as it causes ugly I2C bus error */
+> > > +	switch (state) {
+> > > +	case standby:
+> > > +		return regmap_field_write(data->regfield_en, 0);
+> > > +	case active:
+> > > +		ret = regmap_field_write(data->regfield_en, 1);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +		/* 5ms wake up time */
+> > > +		usleep_range(5000, 10000);
+> > > +		break;
+> > > +	default:
+> > > +		return -EINVAL;
+> > > +	}
+> > 
+> > > +	return 0;
+> > 
+> > Move that to a single user of this line inside the switch-case.
+> Sorry, I did not get you. Can you please elaborate?
+
+The user of this return is only one case in the switch. Instead of breaking
+the switch-case, just move this return statement to there.
+
+...
+
+> > > +	struct device *dev = &data->client->dev;
+> > 
+> > Why data contains I²C client pointer, what for?
+> I copied the implementation. It will be re-implemented.
+
+I mean, how client pointer is used in comparison to the plain pointer to the
+generic device object.
+
+...
+
+> > > +		while (retries--) {
+> > > +			ret = regmap_read(data->regmap, APDS9306_MAIN_STATUS,
+> > > +					&status);
+> > > +			if (ret) {
+> > > +				dev_err(dev, "read status failed: %d\n", ret);
+> > > +				return ret;
+> > > +			}
+> > > +			if (status & APDS9306_ALS_DATA_STAT_MASK)
+> > > +				break;
+> > > +			/*
+> > > +			 * In case of continuous one-shot read from userspace,
+> > > +			 * new data is available after sampling period.
+> > > +			 * Delays are in the range of 25ms to 2secs.
+> > > +			 */
+> > > +			fsleep(delay);
+> > > +		}
+> > 
+> > regmap_read_poll_timeout().
+> According to the regmap_read_poll_timeout() documentation, the maximum time
+> to sleep between reads should be less than ~20ms as it uses usleep_range().
+> 
+> If userspace is doing continuous reads, then data is available after sampling
+> period (25ms to 2sec) or integration time (3.125ms to 400ms) whichever is
+> greater.
+> 
+> The runtime_suspend() function is called after 5 seconds, so the device is
+> still active and running.
+> 
+> If the ALS data bit is not set in status reg, it is efficient to sleep for
+> one sampling period rather than continuously checking the status reg
+> within ~20ms if we use regmap_read_poll_timeout().
+> 
+> Do you have any suggestions?
+
+Yes, Use proposed API. It takes _two_ timeout parameters, one of which is the
+same as your delay. You may actually resplit it by multiplying retries and
+decreasing delay to satisfy the regmap_read_poll_timeout() recommendation.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
