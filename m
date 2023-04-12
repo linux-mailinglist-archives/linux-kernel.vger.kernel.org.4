@@ -2,163 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5400E6DFCE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FB16DFCDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjDLRp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S230044AbjDLRpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDLRpy (ORCPT
+        with ESMTP id S229982AbjDLRpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:45:54 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DED4EEA;
-        Wed, 12 Apr 2023 10:45:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1681321506; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=cNGVRv7eKsGOjCKvg2uYtWqlSufHiEoKNQywk8rTaf96M5CzDeCJxf/NUylHApDJLKNuL/TqixqBPpEMTFY6fFSU1sFOtq/mmtbna4viPksXbsKW8nH7le+RU1e0582J7RCmTpXp72lUFoL4h8e9MCVl7g+SoeLqIQLXOlOjMwQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1681321506; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=gBNrHe9ZW+eOs2pOSkknYiLXYHRJR067BuOYoakffbY=; 
-        b=jw4hdoKKoSHw75qQr8HDIkHBf8gOxDHvkLSVr1yHA3cD6EOSkSEEqfYZ1GOxUeY9QouVWNyGkf9rLqiBuntpdUzqJ++PBxZK7oISiiesNGJnI88lFrwy0lP0lp/XQ0dOyQh1PBFw+aRRQS5r0NhMUfUbvPUx0XbMJmQwPVAYgdw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681321506;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=gBNrHe9ZW+eOs2pOSkknYiLXYHRJR067BuOYoakffbY=;
-        b=h1Rl3UUw+HsXoJklhYXycGX0FORTnzR/skaZI5oR/pVl9L5W2KIqwyEMuLP+cp+v
-        kqTV99QSOOMrGkDErsRO65t6Rn1tU20pYwk4xUF71NYnEPTgF3Hpz7m5Zoi14z/QCi8
-        zyA3K1J9/OLAPj2EMBcA//gsOPS09ZmADByWgNTM=
-Received: from [10.10.9.4] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1681321503790696.0069063619653; Wed, 12 Apr 2023 10:45:03 -0700 (PDT)
-Message-ID: <2b23a4bf-cacc-cb6c-f0a4-e71f640729cc@arinc9.com>
-Date:   Wed, 12 Apr 2023 20:44:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
- bindings for MT7988
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Wed, 12 Apr 2023 13:45:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE0E5BA0;
+        Wed, 12 Apr 2023 10:45:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D76216364D;
+        Wed, 12 Apr 2023 17:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AD7C433EF;
+        Wed, 12 Apr 2023 17:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681321505;
+        bh=C2Okaxi8HAPm3p9Co7NK51xvlY6z88fd67UrEVYXqdk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rtL+TXMwzgXBXsDgu16n+fEQrfpKn/7dh/fCcRCEdcNn13GP+T/B6oXQSj2I1aVGH
+         /QUVqOkB64VdrOB3j7yPF+XCMeuDwN3k6/NTgEil9dU4CO4+a6MwGu/vDAqZUj0AuK
+         Ug65B2D8Wu811tM5xnXn1Jr2gIrlxHKnn0nlDiWQqhOrxciWA7IU3Qy2+VDoWy8yIy
+         kUYzcE3ID5BW68gRWLppdHvtgMgDVifOMHuxwTpAnSmTNcj06UH99cYL02yGIl4ncN
+         ixM93NLQ7bouAiToG3fAvq2EJYpH8BP2yRf6LTF3mYFpIwfnMnCkDw5b6nX9RhtbQu
+         udvr9JpWNIbdQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CC32140080; Wed, 12 Apr 2023 14:45:01 -0300 (-03)
+Date:   Wed, 12 Apr 2023 14:45:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230406080141.22924-1-arinc.unal@arinc9.com>
- <20230406080141.22924-3-arinc.unal@arinc9.com>
- <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
- <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
- <951841d3-59a4-fa86-5b45-46afdb2942dd@linaro.org>
- <5a92419c-4d2c-a169-687b-026dc6094cd8@arinc9.com>
- <153a5ed0-5f4f-4879-2677-e5bce5453634@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <153a5ed0-5f4f-4879-2677-e5bce5453634@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v7 2/5] perf cpumap: Add reference count checking
+Message-ID: <ZDbuHbUbhVKdMz9Y@kernel.org>
+References: <20230407230405.2931830-1-irogers@google.com>
+ <20230407230405.2931830-3-irogers@google.com>
+ <ZDWkmmj/UvuiXSWX@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDWkmmj/UvuiXSWX@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.2023 19:39, Krzysztof Kozlowski wrote:
-> On 07/04/2023 11:46, Arınç ÜNAL wrote:
->> On 7.04.2023 12:07, Krzysztof Kozlowski wrote:
->>> On 06/04/2023 21:18, Arınç ÜNAL wrote:
->>>> On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
->>>>> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
->>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>>
->>>>>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
->>>>>> to be used is internal. Add this.
->>>>>>
->>>>>> Some bindings are incorrect for this switch now, so move them to more
->>>>>> specific places.
->>>>>>
->>>>>> Address the incorrect information of which ports can be used as a user
->>>>>> port. Any port can be used as a user port.
->>>>>>
->>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>>>> ---
->>>>>>     .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
->>>>>>     1 file changed, 46 insertions(+), 17 deletions(-)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>>>> index 7045a98d9593..605888ce2bc6 100644
->>>>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>>>>> @@ -160,22 +160,6 @@ patternProperties:
->>>>>>           "^(ethernet-)?port@[0-9]+$":
->>>>>>             type: object
->>>>>>     
->>>>>> -        properties:
->>>>>> -          reg:
->>>>>> -            description:
->>>>>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
->>>>>> -              for user ports.
->>>>>> -
->>>>>> -        allOf:
->>>>>> -          - if:
->>>>>> -              required: [ ethernet ]
->>>>>> -            then:
->>>>>> -              properties:
->>>>>> -                reg:
->>>>>> -                  enum:
->>>>>> -                    - 5
->>>>>> -                    - 6
->>>>>> -
->>>>>
->>>>> I have doubts that the binding is still maintainable/reviewable. First,
->>>>> why do you need all above patterns after removal of entire contents?
->>>>
->>>> The 'type: object' item is still globally used. I'd have to define that
->>>> on each definitions, I suppose?
->>>
->>> Doesn't it come from dsa.yaml/dsa-port.yaml schema?
->>
->> It comes from dsa.yaml#/$defs/ethernet-ports which this schema already
->> refers to. I'll remove the patterns above.
->>
->> Though 'type: object' is not there for "^(ethernet-)?port@[0-9]+$". I
->> think I should add it there as the dsa-port.yaml schema defines the
->> properties of the DSA switch port object.
+Em Tue, Apr 11, 2023 at 03:19:06PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Apr 07, 2023 at 04:04:02PM -0700, Ian Rogers escreveu:
+> > This change is intended to catch:
+> >  - use after put: using a cpumap after you have put it will cause a
+> >    segv.
+> >  - unbalanced puts: two puts for a get will result in a double free
+> >    that can be captured and reported by tools like address sanitizer,
+> >    including with the associated stack traces of allocation and frees.
+> >  - missing puts: if a put is missing then the get turns into a memory
+> >    leak that can be reported by leak sanitizer, including the stack
+> >    trace at the point the get occurs.
+ 
+> I think this should be further split into self contained patches as it
+> does:
 > 
-> It has ref, which is enough.
+> 2. Exports perf_cpu_map__alloc() from libperf for use in tools/perf
 > 
->> So the value matching the
->> "^(ethernet-)?port@[0-9]+$" regular expression is expected to be an
->> object conforming to the structure defined in dsa-port.yaml.
->>
->> Does that make sense?
+> And its usage should be on a separate patch:
 > 
-> Hm, no, sorry, I still do not see what exactly is missing from
-> dsa.yaml/port that you need to define here.
+> > -     struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(int) * nr);
+> > +     struct perf_cpu_map *cpus = perf_cpu_map__alloc(nr);
 
-Nothing, I forgot defining either ref or type is enough.
+From 1f94479edb4decdcec3e902528abb47f0ccd5d16 Mon Sep 17 00:00:00 2001
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 12 Apr 2023 12:54:44 -0300
+Subject: [PATCH 1/1] libperf: Make perf_cpu_map__alloc() available as an
+ internal function for tools/perf to use
 
-Arınç
+We had the open coded equivalent in perf_cpu_map__empty_new(), so reuse
+what is in libperf.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc: Dmitriy Vyukov <dvyukov@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Stephen Brennan <stephen.s.brennan@oracle.com>
+Link: https://lore.kernel.org/lkml/20230407230405.2931830-3-irogers@google.com
+[ Split from a larger patch ]
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/lib/perf/cpumap.c                  | 2 +-
+ tools/lib/perf/include/internal/cpumap.h | 1 +
+ tools/perf/util/cpumap.c                 | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+index 6cd0be7c1bb438e5..0833423c243b9b49 100644
+--- a/tools/lib/perf/cpumap.c
++++ b/tools/lib/perf/cpumap.c
+@@ -10,7 +10,7 @@
+ #include <ctype.h>
+ #include <limits.h>
+ 
+-static struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus)
++struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus)
+ {
+ 	struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(struct perf_cpu) * nr_cpus);
+ 
+diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
+index 35dd29642296e660..f5bffb1f86748ca2 100644
+--- a/tools/lib/perf/include/internal/cpumap.h
++++ b/tools/lib/perf/include/internal/cpumap.h
+@@ -24,6 +24,7 @@ struct perf_cpu_map {
+ #define MAX_NR_CPUS	2048
+ #endif
+ 
++struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus);
+ int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu);
+ bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b);
+ 
+diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+index c8484b75413ef709..072831f0cad46065 100644
+--- a/tools/perf/util/cpumap.c
++++ b/tools/perf/util/cpumap.c
+@@ -160,7 +160,7 @@ size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp)
+ 
+ struct perf_cpu_map *perf_cpu_map__empty_new(int nr)
+ {
+-	struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(int) * nr);
++	struct perf_cpu_map *cpus = perf_cpu_map__alloc(nr);
+ 
+ 	if (cpus != NULL) {
+ 		int i;
+-- 
+2.39.2
+
