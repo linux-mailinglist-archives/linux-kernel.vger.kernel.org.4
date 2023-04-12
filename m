@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1006DFDC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78BC6DFDC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjDLSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S229982AbjDLSkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDLSkC (ORCPT
+        with ESMTP id S230238AbjDLSj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:40:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E42213F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:39:44 -0700 (PDT)
+        Wed, 12 Apr 2023 14:39:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461C861A5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681324719; i=j.neuschaefer@gmx.net;
-        bh=XeBl/5t7UZ4TzAdwmZ2UA9/ZarMbW1PhJCcszk78i7Q=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=IpRg05YIvJHeh07PN8Avj8t7QEq2MU3GKGBCw3nuz6n6L8Ievk/mG5ut5CqQBY+gw
-         Zvck9S6R9tihKQpI/CD38CEeidH1JjEXRHD5CguKMAXnu+iNQZDw9rg4L7nAtydOFt
-         DzJzHShf44rSyG9sC4reMFN6D7IN+CYWAYLQqX3xvQB4VC6NWozHU4W5OVRkScRlaP
-         XfnGe/mNPboC7xOGOHD+IhXtNyLTueJ8xi5NOAi0YV/eTrn0Gs9gvRMLtrbivyNpOA
-         gpgWwyQJPkarNCL9egWFlP+r/ReTSbZuYJrIavGySetP9Ryvz+5fAVw5jApEf8+NWa
-         AOvkERRmtWwhA==
+        t=1681324722; i=j.neuschaefer@gmx.net;
+        bh=e3csk9QDtuoyy0hLFZXVSqs18PWEMHsMdfYpX2DjbKI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=F0OHcD5qharOJwVe/I60yV31iXqhUkwkvS7Z18lHz3OANRoAMWc53umHtYYhB+jKi
+         5TbBM0ck9cpngzWF7C6K1QUqqRMIZo+uCa159JP3Fll76YXg29cNhPzvge9vDsp8gV
+         gMPmYzBb+uH/22ldeDBJbV0FE/mLYs72c/VGcsYTewAO9/MHf1FJ2zJ+XBWJSgQMxs
+         MAGLNWs629BiovipPQ6OUSMfmfsAPzfQzx/dbJwoItNqsBFB13elNn6oYj1MX6ayx9
+         gcdkAbaFvwl9VNNb/XMU7Q4G1RWmOjTB7+Sz++E4B/58BpN6JrllbNIcUzc56kJwna
+         yIZQlzYfi9Kbg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MA7KU-1pfTHg3b2o-00BbAY; Wed, 12
- Apr 2023 20:38:38 +0200
+Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Md6Qr-1qLRx43G5b-00aH3p; Wed, 12
+ Apr 2023 20:38:41 +0200
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     openbmc@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -37,32 +37,34 @@ Cc:     linux-kernel@vger.kernel.org,
         Joel Stanley <joel@jms.id.au>,
         Paul Menzel <pmenzel@molgen.mpg.de>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v3 1/2] soc: nuvoton: Add a menu for Nuvoton SoC drivers
-Date:   Wed, 12 Apr 2023 20:38:32 +0200
-Message-Id: <20230412183834.3769519-1-j.neuschaefer@gmx.net>
+Subject: [PATCH v3 2/2] soc: nuvoton: Add "select REGMAP" to WPCM450 SoC driver
+Date:   Wed, 12 Apr 2023 20:38:33 +0200
+Message-Id: <20230412183834.3769519-2-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230412183834.3769519-1-j.neuschaefer@gmx.net>
+References: <20230412183834.3769519-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:0euLrYO+TWx5yPIpbwwSG/oxIf0i/WtN/pDJPApWgfXg7uSArUC
- viSBsOw/okp8bGMeD3UBPwh5K1fsreKnKbLM2mcadU8mCXpg0j51ze2RTmXf5N/6rZphiap
- KwXCZSM9GGM9cCyzZUGR6zaEcvyfsVOFtNk6p2WGHeADyyZxCtewnD2usYA3HFQBLvpwAcq
- 2Is66ujuiCaww7S3ek9MQ==
-UI-OutboundReport: notjunk:1;M01:P0:DR9xuAogX4I=;e8gm7IicEqO7J0c70S24MaL03FZ
- G4JTn+Ge3KjUvL5LdrBWsvpAJ3mlUzXD2Qr5CuKj2/8gcudZmRNh6YkzhWhJz37jG7ZBdWfSM
- yVo2/7GthY9CrbbVV0hvAXuoslBUEVF0BfEsuWCiooFyJRQsSrUeJ8C51cV0DUx+uiOwVbo25
- j+kZUk9wxsnQPx7BvkpmFP5awHoZZw7b4ca5mhLsPw/gOiaPdK4AsEGaVJktk42yCQJbwbu1i
- tAL3g8AzKRRjmBXIcsKkfdsp4iK3llDaFjJslUWdytnJWsl9yy8qXEQkcz7S8WOz5BxJuDcEQ
- rartVO1eKj4t2fvu16rZ2SKiWQ2ICVG9bz0nQNnQIDYUChhID3ag1A/SvEm4dgj4tfl0Plj+x
- dVT5rDxdrcfYVGcTPWfVrTrsTDk/f91MU9NScK+GScAJx2+mEr3EuvNV18oNiwbhocf3x69Q5
- mBHv/kFOw3QoeM4BaoMkf9aM9IyGeMFkx8MLAzxL8X5I48+OTUIkSZt9kcCPuv0O67leIKtSI
- h0lNcSBdo0jrtD+ar960+dO+MBd5S/5bf3JOuJBES2eBbjSI7AlL3pyNMWxFYOddCsjJC0Yce
- old31B3cr2SMGrpcE8sbv5FTDsgIeRBi+0rb4OG0VtydrVvw7Z7u3M5UtxVycyF9jz03aSpuw
- pAqTWsmfgRtfD65mZh5TAmbkomQUHEv41tazCBfw109pLGopo5zFiXpmUjlsWZkfIOhGh/sz1
- gvLPY3KIs5naGXKb8Br+K/UKm+NIArzZcPdLBZtlHjHYgOZlLJx4ym4bAEQSAGUO2oDHMEAsO
- W6viRJWAX2n4TDOJOeuKlyeZ+Lb+w557lmxOMcbG4Kyq3U8CKAghwpd+K/h2cPMojrtNUP4y6
- 5Iwyu4IpybGd1pSUS8R9UndvrnWacn50UP0DCi+lHlj3jfkYvTOzq4GdLravBOm83mF/KBTBy
- 4SPfjXViDFICbfcR/bpSFGOoEAs=
+X-Provags-ID: V03:K1:Sah6L9Z4qPYitnzI9t240ENQHo3+eFI+OoSRtsT2MmfdOy5jjO+
+ VP9P4lD3CzwU7l1sYs83RBd/iKKCVbJt1jigQWaDTehB1kGqPC2W1l5Iqw2j+9hUrj0WvSc
+ G1t/4bo5bl+yr0Y8kVY9jw4RA1lVPhGsgJPrfVE230KMDFaEE3dRxSC0tTetNCz3ZMVmKqK
+ Uq/X2Ibd+/vcjyRE5jeUw==
+UI-OutboundReport: notjunk:1;M01:P0:hGUsEb3yO9g=;7aSRVvyg+8zefx7QX4jTJYPKutv
+ gEiSEsjtKIQrN42icmzeWvhj2iml8muSLj9X6Klfwxx4q6j1QTe3NypI2o9Rp4nfhA2WuUy0a
+ jX4EJukddIEW1Zt9vxppsmJYqu2cf/9CanqQLNVt1qYGDCq87oaW57rkvwixu7DJWhi/ZQKjU
+ dWRUU5ntPDR9mXPliSyvld+kgZ9RDjQ3uyi4paKqhMc5TY3PMVuP7KKAfc+R3e4j0djtBMGYM
+ iyDnzxfl5oLNXabGrXJwf52lnX6uMJz1Kez/wCYEKg4WTqFLIUSaSCNPLcqkpcamdQatjqCwt
+ 5SLc9JAhejkwyT3Pka5P9lE7+/6Eb2Pek2E0x9Fvdbh7Adogq3njy8W+wT9dfrAJvSQ5fFBWc
+ IDjq+gNAmWthmi4AZwGR4IThMJw3OJDaYhuW/Gxg7P5CICMCBs92Y/kY+ag+E8mKLIiIe9J9Y
+ lQhV3pyAPvGSX7zaRZG0OCA7zAcV728nH2xE7L4w07pjiXJg2gE0FZLXqRoKmmW9hdabNrRro
+ G/OW7qEHkyi/1+URaJBfAVdMQ5bzHx05da9OvaM/uKsy8v3bpBTHCQ9gQCO+uicY4SHuTSGQD
+ 3fUbFj4d8Or9bjA+DlWUBIqCpvlGTy8rSglVuhM8BA199UBz/zV5WqcRgK/riP3D6nZ2Z2JTr
+ /RvJOB7YO8CNDh3LxafE4UeTUrjGiDVHpFRh8joSMQtaFAnIC87sHRgVdN3XNjIFwLz5QUlbZ
+ ldcCtQ71Hel9iRI1twuuN6wZMAtgYz8J0nb1xiZ95D/1f4UXkr0suqrFtqHINFTvc7rCVkNs5
+ wnQ4Lfzu9QPivRvy4nBkz4hUxJFuDXYGze9cT4nCFBEIm6/Dr85Ss7kqAguwddq+ON8bj740G
+ u4hGez7nF/Kseql0tD8xGJ5ArCncG2q3SAEf1feZs3Alol7/LaOfJeNeXso5/GXgL0URB89c6
+ 9aCKwA==
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
@@ -73,9 +75,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a menu "Nuvoton SoC drivers" to make it easier to add other Nuvoton
-SoC drivers later on and to prevent asking about the Nuvoton WPCM450 SoC
-driver when configuring a kernel without support for Nuvoton SoCs.
+Select CONFIG_REGMAP from CONFIG_WPCM450_SOC, because the driver relies
+on regmap to work.
 
 Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Link: https://lore.kernel.org/lkml/CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ=
@@ -93,29 +94,21 @@ net/
 - Commit message improvements, as suggested by Geert Uytterhoeven.
 - Add Link after Reviewed-by, as checkpatch.pl now suggests
 =2D--
- drivers/soc/nuvoton/Kconfig | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/soc/nuvoton/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
-index df46182088ec2..853392c8a9151 100644
+index 853392c8a9151..2167d3d739d84 100644
 =2D-- a/drivers/soc/nuvoton/Kconfig
 +++ b/drivers/soc/nuvoton/Kconfig
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
--menuconfig WPCM450_SOC
-+menu "Nuvoton SoC drivers"
-+	depends on ARCH_NPCM || COMPILE_TEST
-+
-+config WPCM450_SOC
+@@ -6,6 +6,7 @@ config WPCM450_SOC
  	tristate "Nuvoton WPCM450 SoC driver"
  	default y if ARCH_WPCM450
  	select SOC_BUS
-@@ -9,3 +12,5 @@ menuconfig WPCM450_SOC
-
- 	  This driver provides information such as the SoC model and
- 	  revision.
-+
-+endmenu
++	select REGMAP
+ 	help
+ 	  Say Y here to compile the SoC information driver for Nuvoton
+ 	  WPCM450 SoCs.
 =2D-
 2.39.2
 
