@@ -2,161 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A106DF075
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785946DF06C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjDLJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S231571AbjDLJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjDLJcW (ORCPT
+        with ESMTP id S231578AbjDLJaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:32:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9FE728A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681291920; x=1712827920;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=1XG569kGv8nlWRcNovu9X9F1sTsgpbkAJeSf7sdQN2g=;
-  b=DDhMlVHV2r4lQ+F+UHHQ0cgODcXMFssC/h+NmdcxGoe06HLK5+ykYdX6
-   3Qf/1VEGs3hUXHjkb2n6UBcNUT9dNCM8yxh5oNXcw4kI2OH5oPV3bZ57u
-   D7ECyECnJFJpeuXMfl5o2o6o2FHzLRgBZ+dBucQxRf9z1ChO3P4onCVZw
-   hL6NNC8HXGKGMQ/jJVO1ggM0MdmdYcSxxidD4+c8SLWmgo4BbiqSVbUMh
-   Vi2vArv7gUUPM96Zj8t8gq+LzDKAYisSbpVp2fw4lsVRxhPODp5D9UpCm
-   69I6qmGTlVARYoUlrT0xQBu9Sc0nUM0kFlXYYLax9OTy7tU2wG2j6R1gL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346523258"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="346523258"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 02:28:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="800237928"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="800237928"
-Received: from smoticic-mobl.ger.corp.intel.com (HELO localhost) ([10.252.45.172])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 02:28:20 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Rui Salvaterra <rsalvaterra@gmail.com>, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, paulmck@kernel.org
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks:
- { 0-.... } 3 jiffies s: 309 root: 0x1/.
-In-Reply-To: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
-Date:   Wed, 12 Apr 2023 12:28:17 +0300
-Message-ID: <87r0spcuvi.fsf@intel.com>
+        Wed, 12 Apr 2023 05:30:07 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933666A40
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:29:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id o1so13883140lfc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681291749; x=1683883749;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcb/qkDEsQAl3olw9yoUk92A6JDi4rIg7+uNlXHrrCs=;
+        b=Alwr349E2yAIHR5wfg8SEgSZr/CCUPuG2GWmqALnr6hK6vdoizML4AWTfimx5up2SW
+         cE8J8yP2FMiI6DphLH5GAuGP9jFQhyHr9B9gpzG3o/XOmdzNTJsNKzZ5rhtiPrnMoNN6
+         tUkso/4ZDUl4jc01UGsKK7npR707zP10BciQhEVCmXgwtI00WG/ModH5mWWI2Qd3ge23
+         eZl6c9m0Ll4esPo6mtIne1N0Vq8tCTxps5632eE7aeNA4kvMdRQaqD56z2m+mnJ5V+Se
+         BkbwY8oyLEn7hwSO6+DUHUqZYLNHPwaXJBiwSQp7AkruLSQZxZi+nSJh82LvrlrrozpN
+         kReg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681291749; x=1683883749;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rcb/qkDEsQAl3olw9yoUk92A6JDi4rIg7+uNlXHrrCs=;
+        b=hCYUfMZR8sLg+kvZf1v0BPoatoHT+zad8PUr4e9+WqyMkt81wlNavH8DLxCccHAkA7
+         2y8VwAPLjY927hS7J3B4bX6WCm6omOjTmpHh4fXpBCBZ+FivOLDkrv/YaYS8sHjzC/RS
+         ODSTSDS3wGNzY7lqR3jYr2g1uyKC06EaYA3auQHUDUmOPUGbm4Kex3J8jhBkJm0o+Jyz
+         knJb85OIFPUQSNGpanv3fbtZSjWzkXnBH3AD9GEzsfHHd599BrO0MXMxw5HNLZXzaRN+
+         M2cXKAYHeVPve/8HmtTs/wEh61VsC74V1nG5NWh/bIuBkS7e3ooLlhJPjrsRF5R1/wnq
+         4pLA==
+X-Gm-Message-State: AAQBX9eriba8PYKrIGY265p/TzwA1RhyE3ZqcDuRh1lv2hLwCmTAbNCC
+        NA8O7XyBBUbEmIsGROBIc/7EYA==
+X-Google-Smtp-Source: AKy350ZowSyMYKkqTf7keNy16KvCpT3A3P84fOVnNItqH3nenGNIhyEzgSn0fOn/v5tDeetQ9TjNjA==
+X-Received: by 2002:a19:ad0c:0:b0:4e8:4489:6f06 with SMTP id t12-20020a19ad0c000000b004e844896f06mr3826521lfc.58.1681291749100;
+        Wed, 12 Apr 2023 02:29:09 -0700 (PDT)
+Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
+        by smtp.gmail.com with ESMTPSA id i12-20020ac2522c000000b004db3e330dcesm2959121lfl.178.2023.04.12.02.29.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 02:29:08 -0700 (PDT)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     sj@kernel.org, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCHv2] selftests: damon: add config file
+Date:   Wed, 12 Apr 2023 11:28:54 +0200
+Message-Id: <20230412092854.3306197-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023, Rui Salvaterra <rsalvaterra@gmail.com> wrote:
-> Hi, everyone,
->
-> I apologise in advance if I've sent this to {too many, the wrong}
-> people. For some time now, I've been getting sporadic (in about one
-> out of five boots) DRM-related RCU complaints on an Ivy Bridge-based
-> (Core i7-3720QM) Mac Mini. Call trace (on Linux 6.3-rc6) follows:
+Building and running the subsuite 'damon' of kselftest, shows the
+following issues:
+ selftests: damon: debugfs_attrs.sh
+  /sys/kernel/debug/damon not found
 
-Please file a bug at fdo gitlab [1]. Add drm.debug=0xe and maybe
-log_buf_len=4M or similar kernel parameters, and attach dmesg all the
-way from boot to reproducing the problem.
+By creating a config file enabling DAMON fragments in the
+selftests/damon/ directory the tests pass.
 
-How long is "for some time now"?
+Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/damon/config | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 tools/testing/selftests/damon/config
 
-BR,
-Jani.
-
-
-[1] https://gitlab.freedesktop.org/drm/intel/wikis/How-to-file-i915-bugs
-
->
-> [    5.794026] rcu: INFO: rcu_sched detected expedited stalls on
-> CPUs/tasks: { 0-.... } 3 jiffies s: 309 root: 0x1/.
-> [    5.794044] rcu: blocking rcu_node structures (internal RCU debug):
-> [    5.794045] Sending NMI from CPU 1 to CPUs 0:
-> [    5.794049] NMI backtrace for cpu 0
-> [    5.794051] CPU: 0 PID: 537 Comm: Xorg Not tainted 6.3.0-rc6-debug+ #57
-> [    5.794053] Hardware name: Apple Inc.
-> Macmini6,2/Mac-F65AE981FFA204ED, BIOS 429.0.0.0.0 03/18/2022
-> [    5.794054] RIP: 0010:fwtable_read32+0x45/0x100
-> [    5.794060] Code: 5e 00 49 89 c5 48 8b 45 08 8b b0 2c 1d 00 00 85
-> f6 0f 85 94 00 00 00 8d 83 00 00 fc ff 3d ff 5f 0d 00 77 28 48 03 5d
-> 00 8b 1b <48> 8b 45 08 8b 88 2c 1d 00 00 85 c9 75 48 4c 89 ee 4c 89 e7
-> e8 82
-> [    5.794061] RSP: 0018:ffff88810d17f968 EFLAGS: 00000082
-> [    5.794063] RAX: 0000000000085010 RBX: 0000000000000200 RCX: ffff888101d80000
-> [    5.794064] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffff888101d81f28
-> [    5.794064] RBP: ffff888101d81f08 R08: 0000000000000000 R09: 00000000000032ab
-> [    5.794065] R10: 0000000000000001 R11: 00000000000061b2 R12: ffff888101d81f28
-> [    5.794066] R13: 0000000000000246 R14: ffff888102f693d0 R15: ffff88810d17faef
-> [    5.794067] FS:  00007f579a20da80(0000) GS:ffff888267200000(0000)
-> knlGS:0000000000000000
-> [    5.794068] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    5.794069] CR2: 000055fe9b660028 CR3: 0000000111e97004 CR4: 00000000001706f0
-> [    5.794069] Call Trace:
-> [    5.794071]  <TASK>
-> [    5.794073]  get_reserved.isra.0+0x23/0x30
-> [    5.794076]  get_clock+0x25/0x70
-> [    5.794078]  sclhi+0x43/0x70
-> [    5.794081]  i2c_stop+0x2b/0x40
-> [    5.794083]  bit_xfer+0x22a/0x5d0
-> [    5.794085]  ? __pm_runtime_resume+0x40/0x50
-> [    5.794088]  ? __intel_display_power_get_domain.part.0+0x4d/0x60
-> [    5.794092]  gmbus_xfer+0x3c/0x90
-> [    5.794094]  __i2c_transfer+0x15b/0x4d0
-> [    5.794096]  i2c_transfer+0x3c/0xa0
-> [    5.794098]  drm_do_probe_ddc_edid+0xad/0x120
-> [    5.794101]  drm_get_edid+0x71/0x90
-> [    5.794104]  intel_crt_get_edid+0xf/0x80
-> [    5.794106]  intel_crt_detect_ddc+0x28/0xc0
-> [    5.794107]  intel_crt_detect+0x1f5/0xc40
-> [    5.794108]  ? pollwake+0x61/0x70
-> [    5.794111]  drm_helper_probe_detect+0x43/0xa0
-> [    5.794115]  drm_helper_probe_single_connector_modes+0x403/0x490
-> [    5.794117]  drm_mode_getconnector+0x32d/0x430
-> [    5.794119]  ? drm_connector_list_iter_next+0x7c/0xa0
-> [    5.794120]  ? drm_connector_property_set_ioctl+0x30/0x30
-> [    5.794122]  drm_ioctl_kernel+0x91/0x130
-> [    5.794124]  drm_ioctl+0x1d8/0x410
-> [    5.794125]  ? drm_connector_property_set_ioctl+0x30/0x30
-> [    5.794127]  __x64_sys_ioctl+0x3b9/0x8f0
-> [    5.794129]  ? handle_mm_fault+0xc1/0x170
-> [    5.794131]  ? exc_page_fault+0x18b/0x470
-> [    5.794134]  do_syscall_64+0x2b/0x50
-> [    5.794136]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> [    5.794139] RIP: 0033:0x7f579a1119ef
-> [    5.794141] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24
-> 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00
-> 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28
-> 00 00
-> [    5.794142] RSP: 002b:00007ffc1dee7620 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000010
-> [    5.794143] RAX: ffffffffffffffda RBX: 000055fe9b660060 RCX: 00007f579a1119ef
-> [    5.794144] RDX: 00007ffc1dee76c0 RSI: 00000000c05064a7 RDI: 000000000000000f
-> [    5.794144] RBP: 00007ffc1dee76c0 R08: 0000000000000000 R09: 0000000000000000
-> [    5.794145] R10: 00007f579a6bc1d8 R11: 0000000000000246 R12: 00000000c05064a7
-> [    5.794146] R13: 000000000000000f R14: 00000000c05064a7 R15: 00007ffc1dee76c0
-> [    5.794147]  </TASK>
->
-> Please let me know if you need any additional information (kconfig,
-> etc.) in order to fix this. I will, of course, be happy to test any
-> patch thrown my way.
->
-> Kind regards,
-> Rui
-
+diff --git a/tools/testing/selftests/damon/config b/tools/testing/selftests/damon/config
+new file mode 100644
+index 000000000000..0daf38974eb0
+--- /dev/null
++++ b/tools/testing/selftests/damon/config
+@@ -0,0 +1,7 @@
++CONFIG_DAMON=y
++CONFIG_DAMON_SYSFS=y
++CONFIG_DAMON_DBGFS=y
++CONFIG_DAMON_PADDR=y
++CONFIG_DAMON_VADDR=y
++CONFIG_DAMON_RECLAIM=y
++CONFIG_DAMON_LRU_SORT=y
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.39.2
+
