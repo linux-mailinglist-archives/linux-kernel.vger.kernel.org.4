@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5789A6DEAD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBC66DEADF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjDLFBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 01:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S229561AbjDLFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 01:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLFBX (ORCPT
+        with ESMTP id S229450AbjDLFJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:01:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F61F2D66;
-        Tue, 11 Apr 2023 22:01:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF15A62DFE;
-        Wed, 12 Apr 2023 05:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C868C433EF;
-        Wed, 12 Apr 2023 05:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681275669;
-        bh=G34y1UTsgrhc2za6yW+gBMsV0zsh6UXi4C/xqhhs5j0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHVEiwfcg0/EU4oYhR236DrW8YUs8OMXWN7A4yezlr2i/5mCguZk+rTijhhH8CCpp
-         zNIL7tsecA1Wso4RBu+fCrewkQIXm6L5qUfWHKn2SYadgBhxHQ7VG2ogeJSllt+S6w
-         W3Sve0L8FZGJkx4b/ikC/9kcdTQq/SRq64FoGehSxUScIGaISjL5oFcmcp29K1MW+Q
-         06xgo6kFG+rQaylJc2koHBWMEenS5ISHD9uDkYFgb4R3fCSp7NbJmGeEzCsmEAOFTE
-         puRAA5r1pGwW9UppV+YSQKa0BFatH17WbDzxX7PjZya9RjDgGlPwQO0cHwvcfaE9Xs
-         qrnh82/uSsgDw==
-Date:   Tue, 11 Apr 2023 22:01:06 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
-        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Message-ID: <20230412050106.7v4s3lalg43i6ciw@treble>
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
- <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
- <ZDVft9kysWMfTiZW@FVFF77S0Q05N>
- <20230412041752.i4raswvrnacnjjgy@treble>
- <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
+        Wed, 12 Apr 2023 01:09:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4825A1996;
+        Tue, 11 Apr 2023 22:09:32 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g3so11562529pja.2;
+        Tue, 11 Apr 2023 22:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681276172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=it0Wi4L0e7s40uaIIiJKd4300bUDmSUf9yApkSgXnos=;
+        b=QXkgNXxWy7yAf0sAx+it64ZTfgE7av1zC231AuReQ+ZPxHIJ8XlLaVrY33VKKm9slK
+         eWKwb7wx596Sy+wyPffsiAhHLmF96j8WeqrsnqmZJuDa3Shxbvlqe3e2cWE0/3Xul7vO
+         wYW4JFCkkfRSFqfmL6e4BfgLISd0o3HOjKXVT1KBFBuCB5FY17zqBVHkJpUWMRZbfcVZ
+         LLpbjDYX3Zx5qubqTCMXTz9GvMi5qtOAy6XLL9FEhLqIbGMD0Smc2ODJOEUdAnKtWMmI
+         8iM4LYlqk39UU6ITk5zrWmssJ146t4wL1cv9yToGNFTRF7ULLtUsUbx6g5LUgNuzODUf
+         wCLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681276172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=it0Wi4L0e7s40uaIIiJKd4300bUDmSUf9yApkSgXnos=;
+        b=htyBcOozPXpOn1edrqC8NalLtYSJ31LSr01IdyX01vjM77AmJv2+foWqHqn6z3y4Xm
+         1uMTqIbFy6sBkgr+S4441FB0I+aWIenhU16mWKd0+gyJZEGQoUXwrIlZP//gntLKFFvx
+         Q4jVKtYQveJdl36T2qSks6HyF+KR7mdQpktT1wy+hsh2ENftpyTBGaa/Fi0hOHHtqr2b
+         7/WlBhycYZyfco2Aj2iv+W/w5em+f9XJTG2QqSQl+LO3OIEOxD2d8eHhbYU1Q09KdjJM
+         qYaaCfizR8ptoadtd0w7WVjvHLBOJCVGhzORDluti1i8mZDkUqlJ8SEdJ00Yf5pWP/fh
+         Q9sQ==
+X-Gm-Message-State: AAQBX9fyVPwaPOE/lfb3jop3V0kvsFTVDqv2bzcLzksvINcZFhw+9FkT
+        2MzQJa9h2bP2bRBkcy5zNYFwNS05MUJi1xuwNjY=
+X-Google-Smtp-Source: AKy350Z8WsgewvwVo7a8JR1Ze2cFwFEdFkHf4g9Cp3x4uRa80pOAGrglJJ5aK4yANIb56cXjB/tkbF0q6fX0E1kWOe8=
+X-Received: by 2002:a17:902:988f:b0:1a1:ffc0:8b9e with SMTP id
+ s15-20020a170902988f00b001a1ffc08b9emr4359639plp.4.1681276171666; Tue, 11 Apr
+ 2023 22:09:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com> <0e334497-fbc1-49f7-87ef-8dbf6d25d6a7@paulmck-laptop>
+In-Reply-To: <0e334497-fbc1-49f7-87ef-8dbf6d25d6a7@paulmck-laptop>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 12 Apr 2023 13:09:20 +0800
+Message-ID: <CAABZP2w8Dg5LrsSvMdYp36n_fhj2fF7qTM5CFnFAh1VJKN+HFA@mail.gmail.com>
+Subject: Re: [PATCH] rcu/torture replace wait_event with wait_event_interruptible
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org, lance@osuosl.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 11:48:21PM -0500, Madhavan T. Venkataraman wrote:
-> 
-> 
-> On 4/11/23 23:17, Josh Poimboeuf wrote:
-> > On Tue, Apr 11, 2023 at 02:25:11PM +0100, Mark Rutland wrote:
-> >>> By your own argument, we cannot rely on the compiler as compiler implementations,
-> >>> optimization strategies, etc can change in ways that are incompatible with any
-> >>> livepatch implementation.
-> >>
-> >> That's not quite my argument.
-> >>
-> >> My argument is that if we assume some set of properties that compiler folk
-> >> never agreed to (and were never made aware of), then compiler folk are well
-> >> within their rights to change the compiler such that it doesn't provide those
-> >> properties, and it's very likely that such expectation will be broken. We've
-> >> seen that happen before (e.g. with jump tables).
-> >>
-> >> Consequently I think we should be working with compiler folk to agree upon some
-> >> solution, where compiler folk will actually try to maintain the properties we
-> >> depend upon (and e.g. they could have tests for). That sort of co-design has
-> >> worked well so far (e.g. with things like kCFI).
-> >>
-> >> Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
-> > 
-> > That was the goal of my talk at LPC last year:
-> > 
-> >   https://lpc.events/event/16/contributions/1392/
-> > 
-> > We discussed having the compiler annotate the tricky bits of control
-> > flow, mainly jump tables and noreturns.  It's still on my TODO list to
-> > prototype that.
-> > 
-> > Another alternative which has been suggested in the past by Indu and
-> > others is for objtool to use DWARF/sframe as an input to help guide it
-> > through the tricky bits.
-> > 
-> 
-> I read through the SFrame spec file briefly. It looks like I can easily adapt my
-> version 1 of the livepatch patchset which was based on DWARF to SFrame. If the compiler
-> folks agree to properly support and maintain SFrame, then I could send the next version
-> of the patchset based on SFrame.
-> 
-> But I kinda need a clear path forward before I implement anything. I request the arm64
-> folks to comment on the above approach. Would it be useful to initiate an email discussion
-> with the compiler folks on what they plan to do to support SFrame? Or, should this all
-> happen face to face in some forum like LPC?
+On Wed, Apr 12, 2023 at 12:54=E2=80=AFPM Paul E. McKenney <paulmck@kernel.o=
+rg> wrote:
+>
+> On Wed, Apr 12, 2023 at 09:54:43AM +0800, zhouzhouyi@gmail.com wrote:
+> > From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >
+> > In kfree_rcu_test, kfree_scale_shutdown will be detected as hung task
+> > if kfree_loops is too big. Replace wait_event with wait_event_interrupt=
+ible
+> > to avoid false positive.
+> >
+> > Tested in the PPC VM of Open Source Lab of Oregon State University.
+> >
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > ---
+> >  kernel/rcu/rcuscale.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+> > index 91fb5905a008..b37eec94957c 100644
+> > --- a/kernel/rcu/rcuscale.c
+> > +++ b/kernel/rcu/rcuscale.c
+> > @@ -771,7 +771,7 @@ kfree_scale_cleanup(void)
+> >  static int
+> >  kfree_scale_shutdown(void *arg)
+> >  {
+> > -     wait_event(shutdown_wq,
+> > +     wait_event_interruptible(shutdown_wq,
+>
+> Good catch!!!
+>
+> Would wait_event_idle() work in this case?  The _interruptible()
+> variant indicates that wakeups due to things like POSIX signals is
+> permitted.
+Thank Paul for your guidance and encouragement!
+I will perform a new round of rcu torture test, after this is done, I
+will resend the modified version.
 
-SFrame is basically a simplified version of DWARF unwind, using it as an
-input to objtool is going to have the same issues I mentioned below (and
-as was discussed with your v1).
-
-> > That seems more fragile -- as Madhavan mentioned, GCC-generated DWARF
-> > has some reliability issues -- and also defeats some of the benefits of
-> > reverse-engineering in the first place (we've found many compiler bugs
-> > and other surprising kernel-compiler interactions over the years).
-> > 
-> > Objtool's understanding of the control flow graph has been really
-> > valuable for reasons beyond live patching (e.g., noinstr and uaccess
-> > validation), it's definitely worth finding a way to make that more
-> > sustainable.
-
--- 
-Josh
+Thanks ;-)
+Zhouyi
+>
+>                                                         Thanx, Paul
+>
+> >                  atomic_read(&n_kfree_scale_thread_ended) >=3D kfree_nr=
+ealthreads);
+> >
+> >       smp_mb(); /* Wake before output. */
+> > --
+> > 2.34.1
+> >
