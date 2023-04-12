@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535616DF659
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5556DF65A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjDLNBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S229704AbjDLNCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjDLNBk (ORCPT
+        with ESMTP id S229604AbjDLNCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:01:40 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF5D1731;
-        Wed, 12 Apr 2023 06:01:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LRjjhedzZ5c/ozP5tuZj9A6DWtDY+nd+k3bY5ki1fPjSuPPYPNGmfjXz33FHynuGNc7POrFvF7HTeByKkxOJhVeUppVNL98aCGHrCOo/CgiBRbB+aiaJjmlT1Rtu/YCEdz3EiPYXL9q4aYNHjt6mhn0TDDOo69kHyDfXgu0LfXzJA5wml9ebEGvbyBvRB5BwWu9ftXi/5Se7D1VnSFVLqAil9kDRW3GMYsqJLC9qoxByV/aC8YTc5Sc5MvIciDCzMgkf3FvcFgr/EXhKqNDUvrFFrWlwdTvERv9OSBBDXKuae0k5qUc5U0sPy16oB4UDfy2ez9fnTz61BnDbz6Apvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=On7YhGB5wUuDonglbWwjk27jjBEeMEjXjAFWJafsxlA=;
- b=Snc2gzUN5W10ocWhvCh5CNAsd3Ck3gCN7Nw9TegRnAvc3D/tLPxUFu+tDfIfgiEpL28fPfqHjv18y7gqCqrO2nKi1YQvckIbeD5DJ3HU6u7xmpKNwrGfCNigTGuxxjfy4QaxdJC2/g1YiWVYQv9SNLlUi4oNsf3BW73VpNV6y4gQUpeFJeZx9zgoS5YN2gRplwi+VZZmjkRYFpdg55c4B9GmUTXj3f0Ssi18Z8RPpbS9UbjjXsOmRat2UDQPp5mu2UluacuJ9FEn0J5ZqeOvPIJPkFEDMN7NaKTXH6zPOcHQEM3XQlg1mfAPx75Z+B1fdjQQL9t0ohWQb+RpzH2UTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=On7YhGB5wUuDonglbWwjk27jjBEeMEjXjAFWJafsxlA=;
- b=qqzEz73cSrmrXUBTOvMgTDKeTaHWEX9h/O0zh+sI5TVSDrk1Oi3MNsTbULIn16GjAxIyQ+ODydyNnV6Zi7KDDMyR8xq99AG2hoAR2hr9I8h/r5Owcj1h9wSHJToHkyFsnlGg7E0+qUYV6UMJLwOhNU5OXZ58HPoJJtNkh9v/P6AoVmmfTTEiCUiKldwbCanUXEN4BKNSbJ1HKKGiHOm69dsEfRZqpyJd6Pyn79gbrQfL24MJWYoxQAtVkD922UkoogkRSj1LOiODPR4u6fud+puorSpXAuk6wSYBaaPTuot4H/0xAWAf6mzV1gPNUgWKYKupUWo7akEkIU9YMjJTAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA0PR12MB8906.namprd12.prod.outlook.com (2603:10b6:208:481::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.28; Wed, 12 Apr
- 2023 13:01:36 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2%9]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
- 13:01:36 +0000
-Date:   Wed, 12 Apr 2023 10:01:33 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     ankita@nvidia.com, alex.williamson@redhat.com,
-        naoya.horiguchi@nec.com, oliver.upton@linux.dev,
-        aniketa@nvidia.com, cjia@nvidia.com, kwankhede@nvidia.com,
-        targupta@nvidia.com, vsethi@nvidia.com, acurrid@nvidia.com,
-        apopple@nvidia.com, jhubbard@nvidia.com, danw@nvidia.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 1/6] kvm: determine memory type from VMA
-Message-ID: <ZDarrZmLWlA+BHQG@nvidia.com>
-References: <20230405180134.16932-1-ankita@nvidia.com>
- <20230405180134.16932-2-ankita@nvidia.com>
- <86r0spl18x.wl-maz@kernel.org>
+        Wed, 12 Apr 2023 09:02:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577624C1F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:02:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0FB4C1F891;
+        Wed, 12 Apr 2023 13:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681304519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/X0WTWLoxqqFjJO52ZfP5BN4qu+yplrU+rRnlYdPoXk=;
+        b=pNLK7FQP3MNurs33UmEEFf6ipceVPDMl74m5UhbRsSH0a/iritNuTydiQT5gP8wEGQrn+a
+        LVHnZhnknQonAvy8O6vMlYEQCkcWCCvZxQtN0fHMz8eU51qKgvlhIIoG8Q/7y/MAlWBqT/
+        LHHCcNwr5W1rJ2lyRe+l3c6e2H+ZhFw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DCE85132C7;
+        Wed, 12 Apr 2023 13:01:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +nPIMsarNmTdaAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 12 Apr 2023 13:01:58 +0000
+Date:   Wed, 12 Apr 2023 15:01:58 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     "jstultz@google.com" <jstultz@google.com>,
+        "tjmercier@google.com" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: [PATCH v3] dma-buf/heaps: system_heap: avoid too much allocation
+Message-ID: <ZDarxo2Q4cgFHdbh@dhcp22.suse.cz>
+References: <ZDabMEUFE2N3dvxZ@dhcp22.suse.cz>
+ <ZDaP4/PYyb9tKGQi@dhcp22.suse.cz>
+ <ZDZ4j7UdBt32j28J@dhcp22.suse.cz>
+ <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
+ <20230410073228.23043-1-jaewon31.kim@samsung.com>
+ <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
+ <20230412094440epcms1p445319579ead0d0576bb616ebb07501b4@epcms1p4>
+ <20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804@epcms1p8>
+ <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p2>
+ <20230412123532epcms1p23092e51df04b3fb4e18e90b324ebcaa4@epcms1p2>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86r0spl18x.wl-maz@kernel.org>
-X-ClientProxiedBy: SJ0PR03CA0387.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::32) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB8906:EE_
-X-MS-Office365-Filtering-Correlation-Id: 890c33a8-c11b-46d7-2a95-08db3b560c40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M2HrxIYfNDhXq+z1v/A945Z38U/M7RUvMvVNH2D6dOR8GVag2LJ9w30UaUW1tS1O/KkinAZtUnCT22t+2xvWxT0NyjFUaYSePuHQRV6WVA+RD/s1jXNXml2kHmdzp15U7QHPvs+aimW47Znq6a8N0RFScbOUch+UH1pf7/zhdCWjlAEISJ9+lDDwcdOOFXrg/nb9aTRhktP11WQwfqdU073yPdpeYRSviS1b25C9LFDZ5wLa/80jWyixfqJf4nsoLAH0VDkMU1HoVDBJb0kOjUjcg5NTBMbr6MqpNu8b33/qNUgmA/L/Yu5e6Qg6BkG5RIzKhS/cMMp9bd+T8odkMK5q6EbpHiNQwTdnzSPPmFwI+F4qqhl0iPUqqEtexfNwjdcvjLo/8q5pSNmUOYwb09KPk90OUtV2i+jmVR0ByYVIuWIegB66RZYzsiVmEdZmd3VAicGuSDXFiU3xV7tuu5L3B96wLyVE+zUS9JJ3z/3EtCtZBtd5U8EnptIOhKv6NJBpRck+pqSolPTdOEsIyXiaBux2YW++2cf5Iz6oInnWJaVodtyhnOdcuMf3xrgetSSQNDn/zzpC8k6+TFzkR0cKChFwAfZcHis+/uayyzw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(84040400005)(451199021)(6506007)(6512007)(4326008)(6916009)(6486002)(86362001)(6666004)(5660300002)(8676002)(36756003)(8936002)(41300700001)(316002)(4744005)(478600001)(66476007)(66556008)(66946007)(2906002)(38100700002)(26005)(186003)(2616005)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kyBSMxjfGEXSPEPMNnOvL1tko02uEcnpL8wxccB0M4ZuLdJtAZJuvTrJdPp6?=
- =?us-ascii?Q?d79l6SMhtsIhMsgqCpr8MI2K/QMesda1dcOpn85254gl8hK5x4Dh5MTRB6Sh?=
- =?us-ascii?Q?mjArov4XjM6PXqVUUe9Jd/WSszv8G9b22Rrmjm7yhj39yehxlGzNsu/ReiBD?=
- =?us-ascii?Q?ac2vd04/fM3NutfW2o1tNHIalRIOV7cjIK0c30goS2Pdf1D1R3VPoLWu9GP6?=
- =?us-ascii?Q?/A03A93Hnd+YQctYfd6H3dRq1hRVrzC511Qsa6Sf6ExCAu+rs7NEMx0IwoMn?=
- =?us-ascii?Q?m2c7v8lqtSLrkOb+xZGx7ltWDlF03kMMesHnjP/phQ1f2e8b43zeSFahIu6M?=
- =?us-ascii?Q?wkSROUYZjH+GHyOrTNwyOO+Cnwxfeg1HPCz85DALKtZo/ARM+RmOvou4nVAk?=
- =?us-ascii?Q?d9s2m1/nm0Kc/YTuGPuEbGF2RlLgH5ZopzknWz1dKlkPx3wPDMHWWeslwtVF?=
- =?us-ascii?Q?ahfK4I2OMCd1XkowW+QF5nPbVIQQCv+MD6CZ3cWnjPf0FqzP4DQX0Y2Y3Hdi?=
- =?us-ascii?Q?41muX1pMseZ9irdtsEjDZMPjzeNrNBeBGqNJ6Lh32RdvmuImHo5xOP+uxz0E?=
- =?us-ascii?Q?5vqJL2vIcbRxoFicNU390n3Ph3/Lrm5l15cmw6PB8pC0rSTBS1kSJ7OiIflW?=
- =?us-ascii?Q?2sRyon0TSqU/c/gSbMwvV0J5+bB7HIeiOKyAZSlbJKB77kfyQMU3fwsytgR2?=
- =?us-ascii?Q?BWp6fIxDwlwYh6qBvq1Wl4godPebj/ykeX4799ZVRQON3mEeXNYZh3qyqKcr?=
- =?us-ascii?Q?Yo7xiNhzJornCwNPtRP93TWpC6wz0SHNBJxwfmuIMPIpkg1rqgUEyp/Q1ZGO?=
- =?us-ascii?Q?33KytGtEvRrq2hApAqEQI7VdCAeT+2vmF4F0dCeIq4ahRuMDiHe9zkPtbdAm?=
- =?us-ascii?Q?74RCQ1ayE6giMxipRxYe9e0o5uvcS7jXFFHFo3Pc4cyQpdX/OWbzs3aSn2CT?=
- =?us-ascii?Q?o953Y3kviZ6zhMHPQGRSviT2F0qm8rbbU0pBWJ9W6MBO4XzxvnOlAHgE5MQH?=
- =?us-ascii?Q?nn/WFU72Rjh/TSon7mUfOWGnEN4xE7bQwFpYnT8G74yxPTKBf/J8KGUWad0j?=
- =?us-ascii?Q?HMRcDJpGhFpmLia9ZdYsu+dAwvhAUw2lMTxobB/f5K2GEu09B/6L3r7yqwNA?=
- =?us-ascii?Q?A9+dB0nXJRi54EXqs6FEXEYrNbie3ltxw6L5AjhyVAWnWJ1tlrAmod97GNNg?=
- =?us-ascii?Q?GKuXWY8qd5IjjKq6Z74ofnwYGvFri/l98A9tjsqea0jNgF1BG23sGnwIbEiS?=
- =?us-ascii?Q?8YGsszTjzZLexyKnYhwExN3qv9NJ2tEVezvRYV9fe9DBYcopvhrUxaIXZmUo?=
- =?us-ascii?Q?i06MqehQWRUDu4dBYASIqZe06jZkECz6XGr7GV3K1RmPSRjmnM1NkJfZdcfM?=
- =?us-ascii?Q?eZ37ZYkZhqag/oxxmLll7Ucd9PuDFILCELrMHKU3ilG1uwoQSGpr+0V61+IZ?=
- =?us-ascii?Q?ezmKnpVNJgpPgwVPhfzGBYM33rBoz6PJzD9KLwljo+PKXCgcnmZ6RL499kXV?=
- =?us-ascii?Q?m2N0dlAIxqQECbzVQFlr2ytfhzgPKWo8RaydP5/qhmaDhEZN8YIXhwH/DB8H?=
- =?us-ascii?Q?jDhth6/+llgoBuf/n4ZQEbIP6FtoT0CObtkGd+Xv?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 890c33a8-c11b-46d7-2a95-08db3b560c40
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 13:01:36.3795
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: npvKj0LiFF9gj3v6v8W5upWbfCd3fi3EkZPS8Ch2Et0xDvhhcebx+dWAcrED1OeQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8906
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230412123532epcms1p23092e51df04b3fb4e18e90b324ebcaa4@epcms1p2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:43:26PM +0100, Marc Zyngier wrote:
+On Wed 12-04-23 21:35:32, Jaewon Kim wrote:
+> >On Wed 12-04-23 20:37:59, Jaewon Kim wrote:
+> >> Limiting dmabuf memory may be required. But I think there
+> >> is no nice and reasonable way so far.
+> >
+> >If that is really the way then the patch doesn't really add a big
+> >benefit. It doesn't really prevent OOMs (or panics due to OOM) as the
+> >allocator still allows to consume arbitrary amount of memory. The
+> >provided check is not able to tell between buggy and legit calls.
+> >-- 
+> >Michal Hocko
+> >SUSE Labs
+> 
+> Yes it could be. Though the buggy call is blocked by totalram_pages check,
 
-> What makes it safe? How does VFIO ensures that the memory type used is
-> correct in all circumstances? This has to hold for *ANY* device, not
-> just your favourite toy of the day. Nothing in this patch is horribly
-> wrong, but the above question must be answered before we can consider
-> any of this.
+It seems our definitions of buggy differ here. I do not see much
+difference between totalram_pages +- PAGE_SIZE (or any epsilon for that
+matter). Both would put the system down to its knees without a way out
+other than panic.
 
-In VFIO we now have the concept of "variant drivers" which work with
-specific PCI IDs. The variant drivers can inject device specific
-knowledge into VFIO. In this series the driver injects the cachable
-pgprot when it creates some of the VMAs because it knows the PCI IDs
-it supports, parses the ACPI description, and knows for sure that the
-memory it puts in the cachable VMA is linked with a cache coherent
-interconnect.
+> mm may suffer memory shortage due to the huge memory consumption through
+> dma-buf system heap. We just hope Android LMKD or oomk kills the memory
+> hoggers prior to oom panic.
 
-The generic vfio-pci path is not changed, so 'any device' is not
-relevant here.
+You seem to be missing an important point. If the global OOM killer is
+not able to find a victim the LMKD or oomk are highly unlikely as well
+(unless they ignore OOM_SCORE_ADJ_MIN).
 
-Jason
+> IMO if possible mm should be able to track the dma-buf size as stat in
+> mm_rss_stat for each process.
+
+I do remember some proposals from the past and IIRC the main problem was
+how to attribute those buffers to the actual owner.
+
+I believe I have give you some arguments to consider. The rest is up to
+you. As I've said I do not have any stakes in dmabuf. The patch itself
+is not actively harmful, it is just adding an illusion of a fix while it
+doesn't give much.
+-- 
+Michal Hocko
+SUSE Labs
