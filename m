@@ -2,153 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979546E0025
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1D36E002B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjDLUsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S230094AbjDLUtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjDLUsb (ORCPT
+        with ESMTP id S229630AbjDLUtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:48:31 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987EB61B4;
-        Wed, 12 Apr 2023 13:48:30 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CJO0DL031517;
-        Wed, 12 Apr 2023 20:48:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=K4XHZz2aY2nW6NB6OBt9fcQ6aWSAEbS0apa/t/BVKUs=;
- b=LevbVUH1rieLvZEWkWcoRDCp6krorWyA4FNvBT59LI2AZnvOWMWziKuhsYguXG5PkDHA
- lIwkpgaqPqORzUtWvsf/GtHBiRMQiqHAuhnXiCKolAz5hWQbZb2yUuFJd2rp8vlOi/iv
- +bDCfDYTJD7UVmAa8pOBmwqRjoqg1DAZ05CfbVYaAtnKD+vrmvvsxf6aPilWQRwZYlEE
- tJ9Qepfmaoc/iSK3lXIn1bX4vPGjxgIga1LhD8fzjHxPVd/nnScXLWO7tt5iAGox/5Pd
- do4JndTeM1p+ck6TGEBJnlw0LGw0kLBmbU7FqkFloBn9B767W4pBz7zRSO2BBBMreZdA XA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwsx69en4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 20:48:09 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CKm9nW009140
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 20:48:09 GMT
-Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 13:48:08 -0700
-Message-ID: <67209a0d-1dc5-ce96-e916-85bfd8f6a7f8@quicinc.com>
-Date:   Wed, 12 Apr 2023 13:48:07 -0700
+        Wed, 12 Apr 2023 16:49:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022261A1;
+        Wed, 12 Apr 2023 13:49:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF79662ED0;
+        Wed, 12 Apr 2023 20:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2ACF9C433EF;
+        Wed, 12 Apr 2023 20:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681332552;
+        bh=N6CxG92Ed4Yn5LSSbnRciB027afcs82cjOQu+THWcO0=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=UF5C/YyP9SfpWtDmeWKN+982ajzjj6BoiCHMDIS0cSGCSgo/a56pKaRsfYDIfhhw6
+         Yw3Mnhgqz36vi98izKUlyqQCBc4qL92l7qlowAQdig4hk/oWaHJeZP88Ir+hPQRsTg
+         f52ijdMe+DrRO51YXq75Ukj07uE92UYBefjbEwOREVEzljhcSJSXqvoS8CdLDTZRnZ
+         1gZktu2W99imJqt56DTncCPLs3Wx81qwzIHuySKKQGoHxjmmbsa6Mz3x/ErLnpybl4
+         V8NJJW/ByX4xrXa4YUEu5I8XtppiOyhqjYEK4Yp5LIfLYg7/vMu+6W3NyP+Bo78N0e
+         C0PJh5/yR8q3A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 0E6CAC77B6C;
+        Wed, 12 Apr 2023 20:49:12 +0000 (UTC)
+From:   Abhijeet Rastogi via B4 Relay 
+        <devnull+abhijeet.1989.gmail.com@kernel.org>
+Date:   Wed, 12 Apr 2023 13:49:08 -0700
+Subject: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v11 12/26] gunyah: vm_mgr: Add/remove user memory regions
-To:     Will Deacon <will@kernel.org>
-CC:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-13-quic_eberman@quicinc.com>
- <20230324183659.GB28266@willie-the-truck>
- <5d1c6160-6bc4-5246-2a0b-de5ddcbbc2c4@quicinc.com>
- <20230411211940.GC23890@willie-the-truck>
-Content-Language: en-US
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <20230411211940.GC23890@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aEoLzdQIFUpvDG41hNSkfTxWy3q6rP-_
-X-Proofpoint-ORIG-GUID: aEoLzdQIFUpvDG41hNSkfTxWy3q6rP-_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_11,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=864 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304120176
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAEMZN2QC/x2N0QqDMAxFf0XyvEIbZbD9yhglrdnMw6IkIgPx3
+ 1f3eDiXc3dwNmGHe7eD8SYuszZIlw7qRPrmIGNjwIh9HBIG0WpMzlmWzXOdVfNKJRdZPQw9Yr3
+ FkTBdoRVK24VipHU6Gx/yle0Ui/FLvv/bx/M4ftkrbyCGAAAA
+To:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org,
+        Abhijeet Rastogi <abhijeet.1989@gmail.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681332551; l=2681;
+ i=abhijeet.1989@gmail.com; s=20230412; h=from:subject:message-id;
+ bh=diB2UNBoozij8cEFsyQbJS4LF1vmwJ3a6Chw+mzNh7I=;
+ b=P+q2BDiUkpHSIUlanv0uhX+uIFT2uT4OzEwmTdXXla/nmmIrpI/IXDTzgS0FBPJ5E2k2s7yp6
+ BTzbnfMaj1vAOe9Em5PMNAMEQLfL4s9XOHYeLIGoyhXO/lySLPcoEuQ
+X-Developer-Key: i=abhijeet.1989@gmail.com; a=ed25519;
+ pk=VinODWUuJys1VAWZP2Uv9slcHekoZvxAp4RY1p5+OfU=
+X-Endpoint-Received: by B4 Relay for abhijeet.1989@gmail.com/20230412 with auth_id=40
+X-Original-From: Abhijeet Rastogi <abhijeet.1989@gmail.com>
+Reply-To: <abhijeet.1989@gmail.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Abhijeet Rastogi <abhijeet.1989@gmail.com>
 
+Current range [8, 20] is set purely due to historical reasons
+because at the time, ~1M (2^20) was considered sufficient.
 
-On 4/11/2023 2:19 PM, Will Deacon wrote:
-> On Tue, Apr 11, 2023 at 01:34:34PM -0700, Elliot Berman wrote:
->> On 3/24/2023 11:37 AM, Will Deacon wrote:
->>> On Fri, Mar 03, 2023 at 05:06:18PM -0800, Elliot Berman wrote:
->>>> +
->>>> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
->>>> +					FOLL_WRITE | FOLL_LONGTERM, mapping->pages);
->>>> +	if (pinned < 0) {
->>>> +		ret = pinned;
->>>> +		mapping->npages = 0; /* update npages for reclaim */
->>>> +		goto reclaim;
->>>> +	} else if (pinned != mapping->npages) {
->>>> +		ret = -EFAULT;
->>>> +		mapping->npages = pinned; /* update npages for reclaim */
->>>> +		goto reclaim;
->>>> +	}
->>>
->>> I think Fuad mentioned this on an older version of these patches, but it
->>> looks like you're failing to account for the pinned memory here which is
->>> a security issue depending on who is able to issue the ioctl() calling
->>> into here.
->>>
->>> Specifically, I'm thinking that your kXalloc() calls should be using
->>> GFP_KERNEL_ACCOUNT in this function and also that you should be calling
->>> account_locked_vm() for the pages being pinned.
->>>
->>
->> Added the accounting for the v12.
->>
->>> Finally, what happens if userspace passes in a file mapping?
->>
->> Userspace will get EBADADDR (-14) back when trying to launch the VM
->> (pin_user_pages_fast returns this as you might have been expecting). We
->> haven't yet had any need to support file-backed mappings.
-> 
-> Hmm, no, that's actually surprising to me. I'd have thought GUP would
-> happily pin page-cache pages for file mappings, so I'm intrigued as to
-> which FOLL_ flag is causing you to get an error code back. Can you
-> enlighten me on where the failure originates, please?
+Previous change regarding this limit is here.
 
-Ah this ended up being an error on my part. Userspace was opening the 
-file as RO and Gunyah driver will unconditionally add FOLL_WRITE as part 
-of the gup flags. I got the flags aligned and seemed to be able to boot 
-the VM ok and it works as expected.
+Link: https://lore.kernel.org/all/86eabeb9dd62aebf1e2533926fdd13fed48bab1f.1631289960.git.aclaudi@redhat.com/T/#u
 
-Thanks,
-Elliot
+Signed-off-by: Abhijeet Rastogi <abhijeet.1989@gmail.com>
+---
+The conversation for this started at: 
+
+https://www.spinics.net/lists/netfilter/msg60995.html
+
+The upper limit for algo is any bit size less than 32, so this
+change will allow us to set bit size > 20. Today, it is common to have
+RAM available to handle greater than 2^20 connections per-host.
+
+Distros like RHEL already have higher limits set.
+---
+ net/netfilter/ipvs/Kconfig      | 4 ++--
+ net/netfilter/ipvs/ip_vs_conn.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index 271da8447b29..3e3371f8c0f9 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -44,7 +44,7 @@ config	IP_VS_DEBUG
+ 
+ config	IP_VS_TAB_BITS
+ 	int "IPVS connection table size (the Nth power of 2)"
+-	range 8 20
++	range 8 31
+ 	default 12
+ 	help
+ 	  The IPVS connection hash table uses the chaining scheme to handle
+@@ -54,7 +54,7 @@ config	IP_VS_TAB_BITS
+ 
+ 	  Note the table size must be power of 2. The table size will be the
+ 	  value of 2 to the your input number power. The number to choose is
+-	  from 8 to 20, the default number is 12, which means the table size
++	  from 8 to 31, the default number is 12, which means the table size
+ 	  is 4096. Don't input the number too small, otherwise you will lose
+ 	  performance on it. You can adapt the table size yourself, according
+ 	  to your virtual server application. It is good to set the table size
+diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+index 13534e02346c..bc0fe1a698d4 100644
+--- a/net/netfilter/ipvs/ip_vs_conn.c
++++ b/net/netfilter/ipvs/ip_vs_conn.c
+@@ -1484,8 +1484,8 @@ int __init ip_vs_conn_init(void)
+ 	int idx;
+ 
+ 	/* Compute size and mask */
+-	if (ip_vs_conn_tab_bits < 8 || ip_vs_conn_tab_bits > 20) {
+-		pr_info("conn_tab_bits not in [8, 20]. Using default value\n");
++	if (ip_vs_conn_tab_bits < 8 || ip_vs_conn_tab_bits > 31) {
++		pr_info("conn_tab_bits not in [8, 31]. Using default value\n");
+ 		ip_vs_conn_tab_bits = CONFIG_IP_VS_TAB_BITS;
+ 	}
+ 	ip_vs_conn_tab_size = 1 << ip_vs_conn_tab_bits;
+
+---
+base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+change-id: 20230412-increase_ipvs_conn_tab_bits-4322c90da216
+
+Best regards,
+-- 
+Abhijeet Rastogi <abhijeet.1989@gmail.com>
+
