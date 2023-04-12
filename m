@@ -2,162 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBEA6DFB3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1C36DFB3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjDLQWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S230375AbjDLQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjDLQVu (ORCPT
+        with ESMTP id S231131AbjDLQWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:21:50 -0400
-Received: from mail-lj1-x263.google.com (mail-lj1-x263.google.com [IPv6:2a00:1450:4864:20::263])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6087983E3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:21:35 -0700 (PDT)
-Received: by mail-lj1-x263.google.com with SMTP id a29so13238118ljq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681316493; x=1683908493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xsy5P1BFSd01HwRZSprmpkjXfSG/kvuR7yEFBLxIChw=;
-        b=kiKTqQdjnb9Q3KCXeG88cm0N+JW61wRqiSgx2+fgx9iG+BD8yZKIQR54wwTLQRf0d7
-         3ll7YHX+7okVMZWDh0Ubllk7Aq/0axfCzSxJKy3PHfJQp07MNdKzF+KA/oxbCjwdcUbG
-         Bmvl/uTo1R2SCuJsoPTel7CbFLAsQ8KUwkOEU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681316493; x=1683908493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xsy5P1BFSd01HwRZSprmpkjXfSG/kvuR7yEFBLxIChw=;
-        b=bxPG9NbDyHabZIyoXOlxIf1LPx//zBwoKu0M/61XIER2sgS4TwG4lgf+cbCcmiDiTg
-         Kne5ANYIl8MRODkNzPWdMjQwmDTM5MPDn/5UR4xyOPLw8dyUzlCqHd9OpoM/m2fn1qMN
-         b/q9lfcM4vDUmPSzEL9Gjx8bQ0fAPpetf8iplA/YtR68oI/6tXQM8doU001Fa5fCAlQm
-         525JTt6QKwHNnn0yoYhvWpZD48fDHHdT3qLrkN2HdinNQyKQllNpmDOuUYBdcSRi/sL+
-         c999rsKQoHw8ItEHRnL4qWMIreGIhM/8OmgGrs/Ss8m6FUic/l43ccb00xrsmYv31E91
-         kmbA==
-X-Gm-Message-State: AAQBX9dvZdMgoNeuy27GAdQJ5kJRnr3N1Sqk801fTIdTNAO1pF+cs15e
-        DiloHOqhKEoZYidbyusKYkpuYIHo9a44ZeImmivKtWU2GUw0
-X-Google-Smtp-Source: AKy350aEVWhrzNmJ+fgfBL5/m13X6W0SCZpEkb+Sk3T5iUyme2M85gnGSDWv06uZL745HN8sz+s3nWlgEdCp
-X-Received: by 2002:a2e:b2ce:0:b0:2a7:80ee:fa78 with SMTP id 14-20020a2eb2ce000000b002a780eefa78mr3156000ljz.51.1681316493244;
-        Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id t19-20020a2e8e73000000b002a77614d960sm2108109ljk.62.2023.04.12.09.21.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v6 4/4] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Wed, 12 Apr 2023 18:21:14 +0200
-Message-Id: <20230412162114.19389-5-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230412162114.19389-1-kal.conley@dectris.com>
-References: <20230412162114.19389-1-kal.conley@dectris.com>
+        Wed, 12 Apr 2023 12:22:17 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705879750;
+        Wed, 12 Apr 2023 09:21:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681316492; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=lrbSRml3xVu0YeeBamAqD09a/m5UTQLSsXzER7u7K4SaeM3heOPY7Veu6/qko6cwpGwMjJgv6FPU9u1sw6yR8eDQy88FH98XvPo7Bpc8lYq8O5J6xktwL4F3Dt2+81zCNr7RhCF1BJySlFB3qCOcr9e6HyeBSBN3dQ2cephkKRw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681316492; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Wck8HD9Sy7CyXZlzDWG6BVFUCDUQ5CegNpVgjUnegBA=; 
+        b=A7FhriqgVbJ6YkT8TGv6j+bvqylRtd7BfLxT33vrDKsG11p/1rFScF4htD+zkKYv1G+YjItcSxwT5Yk2fF1CwUQ23O5p4wr1QHDwOzo0ncC45+qGwwu1iKkGBOjBZqooHjDvS9mVnXyQEf6FDYkzcKtHyAq/WM3clX/ZfQEH51U=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681316492;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=Wck8HD9Sy7CyXZlzDWG6BVFUCDUQ5CegNpVgjUnegBA=;
+        b=VSksN/AfyX0vDyTc3pYj+2E1ai9FLegAyFo02Mcg99BUSsencqudW+TEawdXpwjh
+        amkhYXYB+CvrLRWxBDtzCDAhgZuh9oojZvGAsXxbs55k+OosOdzNMVAzGp3yOberJ3c
+        b1Mg8Q8EPh+soXfhkzrfWhKnF0Kp3ylXQb/QZXxg=
+Received: from [10.10.9.4] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681316491413307.82113764393307; Wed, 12 Apr 2023 09:21:31 -0700 (PDT)
+Message-ID: <0d242292-16b7-6837-7d1a-b70c41309e6b@arinc9.com>
+Date:   Wed, 12 Apr 2023 19:21:25 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Aw: Re: Re: Re: Re: [PATCH v3 0/5] arm: dts: mt7623: relocate
+ gmacs, mt7530 switch, and add port@5
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
+References: <20230210182505.24597-1-arinc.unal@arinc9.com>
+ <c3ab9a9b-3eb2-8fb0-d5d7-c0b7c684d3a7@arinc9.com>
+ <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
+ <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
+ <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
+ <2dc2fc39-b0d5-c872-36bf-fde851debe4b@arinc9.com>
+ <A329B2DF-04B7-40FA-BBCE-1F1012A6DBBD@public-files.de>
+ <fb96d8eb-2eb7-db19-1135-1a833294dd67@arinc9.com>
+ <trinity-899c01a6-0fc5-4900-aea8-2b43802c8329-1676814734826@3c-app-gmx-bs35>
+ <trinity-3f46d325-bc45-4ee7-ae86-c8db4467aa94-1681303779505@3c-app-gmx-bap50>
+ <703ad8a8-f84e-6404-4cce-5386bfaa2bd7@arinc9.com>
+ <trinity-489cdc3b-e861-49d0-b1ec-e964f00388df-1681312277092@3c-app-gmx-bap50>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <trinity-489cdc3b-e861-49d0-b1ec-e964f00388df-1681312277092@3c-app-gmx-bap50>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+On 12.04.2023 18:11, Frank Wunderlich wrote:
+> Hi
+> 
+>> Gesendet: Mittwoch, 12. April 2023 um 16:31 Uhr
+>> Von: "Arınç ÜNAL" <arinc.unal@arinc9.com>
+>>> looks good so far, but i have not managed how to change dsa master from the preferred port (eth0) to the second one...
+>>> any idea how the correct syntax is for iproute2?
+>>
+>> https://www.kernel.org/doc/html/latest/networking/dsa/configuration.html#affinity-of-user-ports-to-cpu-ports
+>>
+>> In short: ip link set lan0 type dsa conduit eth1
+> 
+> thanks, it changes the master when i upgrade iproute to 6.1 (from debian bullseye-backports), but i cannot do any traffic on it after switching to gmac1...
+> 
+> 5: wan@eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+>      link/ether f2:d2:51:56:cd:3d brd ff:ff:ff:ff:ff:ff
+>      inet 192.168.0.11/24 scope global wan
+>         valid_lft forever preferred_lft forever
+> 
+> see no p5-TX/gmac-rx
+> 
+> root@bpi-r2:~# ethtool -S eth1
+> NIC statistics:
+>       tx_bytes: 5156
+>       tx_packets: 61
+>       tx_skip: 0
+>       tx_collisions: 0
+>       rx_bytes: 0
+>       rx_packets: 0
+>       rx_overflow: 0
+>       rx_fcs_errors: 0
+>       rx_short_errors: 0
+>       rx_long_errors: 0
+>       rx_checksum_errors: 0
+>       rx_flow_control_packets: 0
+>       rx_xdp_redirect: 0
+>       rx_xdp_pass: 0
+>       rx_xdp_drop: 0
+>       rx_xdp_tx: 0
+>       rx_xdp_tx_errors: 0
+>       tx_xdp_xmit: 0
+>       tx_xdp_xmit_errors: 0
+>       p05_TxDrop: 0
+>       p05_TxCrcErr: 0
+>       p05_TxUnicast: 0
+>       p05_TxMulticast: 0
+>       p05_TxBroadcast: 0
+>       p05_TxCollision: 0
+>       p05_TxSingleCollision: 0
+>       p05_TxMultipleCollision: 0
+>       p05_TxDeferred: 0
+>       p05_TxLateCollision: 0
+>       p05_TxExcessiveCollistion: 0
+>       p05_TxPause: 0
+>       p05_TxPktSz64: 0
+>       p05_TxPktSz65To127: 0
+>       p05_TxPktSz128To255: 0
+>       p05_TxPktSz256To511: 0
+>       p05_TxPktSz512To1023: 0
+>       p05_Tx1024ToMax: 0
+>       p05_TxBytes: 0
+>       p05_RxDrop: 0
+>       p05_RxFiltering: 16
+>       p05_RxUnicast: 11
+>       p05_RxMulticast: 38
+>       p05_RxBroadcast: 12
+>       p05_RxAlignErr: 0
+>       p05_RxCrcErr: 0
+>       p05_RxUnderSizeErr: 0
+>       p05_RxFragErr: 0
+>       p05_RxOverSzErr: 0
+>       p05_RxJabberErr: 0
+>       p05_RxPause: 0
+>       p05_RxPktSz64: 17
+>       p05_RxPktSz65To127: 44
+>       p05_RxPktSz128To255: 0
+>       p05_RxPktSz256To511: 0
+>       p05_RxPktSz512To1023: 0
+>       p05_RxPktSz1024ToMax: 0
+>       p05_RxBytes: 5156
+>       p05_RxCtrlDrop: 0
+>       p05_RxIngressDrop: 0
+>       p05_RxArlDrop: 0
+> 
+> maybe i miss something?
+> 
+> i'm not sure it is a problem with richards Patch or p5/gmac1
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
+Did you apply the vlan and flooding fix patches from Richard?
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7eccf57a0ccc..86797de7fc50 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
--- 
-2.39.2
-
+Arınç
