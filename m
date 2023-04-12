@@ -2,139 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08C06DF673
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58ABB6DF663
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjDLNFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S229609AbjDLND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDLNFn (ORCPT
+        with ESMTP id S229611AbjDLNDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:05:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9301846B1;
-        Wed, 12 Apr 2023 06:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681304743; x=1712840743;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=SIIbTWQFtQiwPFHLG3XRxl427QCGbNZPIB/wgRCV9gw=;
-  b=ImipW82lxvv7OmeYSD/zm32eB6/dUxj7Gj5E/grSNNfbFKpE9Sgp9UGA
-   24qwRQLHkl4D/dLdat0YtV/OY+2GXBTAMoExdWLlKgq5y7AozVkIxGO+Y
-   tYxgwh4H5LH28+4+MLhMaXYJ3xzxTpkrWvGKHWOmda2rsZmdkRAtEUrYa
-   IZ+6jPk4QPzN4MIfMNvsdbLHHyC0YqyVXtv3C5k5fmXrPW1Rv2DLGaidP
-   oO9/hYASxYMRha8JtTG6P6b6V3w7j9v16OXHdVN7QQBclmWRQErzNc/Zv
-   RutCD9qxnSvWsGm3DxoQwJgd1VPA3b17FLt2fDfiKTXlW7pAExDeto0OI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332583354"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332583354"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639226969"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="639226969"
-Received: from chanse1-mobl2.ger.corp.intel.com ([10.251.213.80])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:47 -0700
-Date:   Wed, 12 Apr 2023 16:03:45 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Johan Hovold <johan@kernel.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] serial: fix TIOCSRS485 locking
-In-Reply-To: <20230412124811.11217-1-johan@kernel.org>
-Message-ID: <1c814de8-ea36-7a63-34c2-b957d6608cec@linux.intel.com>
-References: <20230412124811.11217-1-johan@kernel.org>
+        Wed, 12 Apr 2023 09:03:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832C340F2;
+        Wed, 12 Apr 2023 06:03:53 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE81F6603102;
+        Wed, 12 Apr 2023 14:03:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681304632;
+        bh=n6UmEOVTw+KXN9/725bQQxVPB20qNDRrZSlz09sXOMo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AQGqtRCpfP1ZuiophrOrBi4nZp+IoEZLBUmkBU7M1yFW3J4w/j+9WFvTAaK4aAfy0
+         5mYHWH2h9wjO2WBZ32CNT1xRWPLebR3bOjhc4EYA2r8GAUkpXyuAw45LR3pxru37GU
+         TJBMilPa+oR0ba/Sl+XjUj2izfyuitVr5N5O7t6jLvyKSSm9hcJWe2N8F2ludKsfQs
+         BPXQNPKykaAn/QFWyaCAVLBVUDCUiSYmVAgcgUuhU29wxTbleKy57mWETsDJ/lmNi4
+         eoW0EreMLhn9a2r7hNzEA0Rgm3J1Ixu9cUE3XdTH20jdV2vDUVROKrAgOAx3yO8xAA
+         GmQOR2WRqCCBw==
+Message-ID: <eb770f19-ada5-81bb-5ea3-798edabca70f@collabora.com>
+Date:   Wed, 12 Apr 2023 15:03:48 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1754916380-1681304629=:2300"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 02/27] dt-bindings: phy: mediatek,dsi-phy: Add compatible
+ for MT6795 Helio X10
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>, matthias.bgg@gmail.com
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-3-angelogioacchino.delregno@collabora.com>
+ <20684378-cf3e-0299-d390-287b7bafbda5@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20684378-cf3e-0299-d390-287b7bafbda5@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1754916380-1681304629=:2300
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 12 Apr 2023, Johan Hovold wrote:
-
-> The RS485 multipoint addressing support for some reason added a new
-> ADDRB termios cflag which is (only!) updated from one of the RS485
-> ioctls.
+Il 12/04/23 14:59, Alexandre Mergnat ha scritto:
+> On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
+>> Add a compatible string for MediaTek Helio X10 MT6795: this SoC uses
+>> the same DSI PHY as MT8173.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml 
+>> b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+>> index 26f2b887cfc1..a9f78344efdb 100644
+>> --- a/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml
+>> @@ -24,6 +24,10 @@ properties:
+>>             - enum:
+>>                 - mediatek,mt7623-mipi-tx
+>>             - const: mediatek,mt2701-mipi-tx
+>> +      - items:
+>> +          - enum:
+>> +              - mediatek,mt6795-mipi-tx
+>> +          - const: mediatek,mt8173-mipi-tx
 > 
-> Make sure to take the termios rw semaphore for the right ioctl (i.e.
-> set, not get).
+> AFAIK, it should be:
+>        - items:
+>            - const: mediatek,mt6795-mipi-tx
+>            - const: mediatek,mt8173-mipi-tx
 > 
-> Fixes: ae50bb275283 ("serial: take termios_rwsem for ->rs485_config() & pass termios as param")
-> Cc: stable@vger.kernel.org	# 6.0
-> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
-> 
-> I did not have time to review the multipoint addressing patches at the
-> time and only skimmed the archives now, but I can't seem to find any
-> motivation for why a precious termios bit was seemingly wasted on ADDRB
-> when it is only updated from the RS485 ioctls.
-> 
-> I hope it wasn't done just to simplify the implementation of
-> tty_get_frame_size()? Or was it a left-over from the RFC which
-> apparently actually used termios to enable this feature?
-
-No. I made it intentionally. It felt natural place for storing it because 
-ADDRB does impact the wire format and cflag is where other wire-format 
-impacting bits are also stored.
-
-> Should we consider dropping the Linux-specific ADDRB bit again?
-> 
-> Johan
-> 
-> 
->  drivers/tty/serial/serial_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 2bd32c8ece39..728cb72be066 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -1552,7 +1552,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->  		goto out;
->  
->  	/* rs485_config requires more locking than others */
-> -	if (cmd == TIOCGRS485)
-> +	if (cmd == TIOCSRS485)
->  		down_write(&tty->termios_rwsem);
->  
->  	mutex_lock(&port->mutex);
-> @@ -1595,7 +1595,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->  	}
->  out_up:
->  	mutex_unlock(&port->mutex);
-> -	if (cmd == TIOCGRS485)
-> +	if (cmd == TIOCSRS485)
->  		up_write(&tty->termios_rwsem);
->  out:
->  	return ret;
+> Since it isn't respected above for mt7623, it may be tolerated.
+> Please, take this comment as a suggestion, isn't a NAK from me.
 > 
 
-Indeed, the caps are so blinding.
+First of all, Thanks!
+I want to explain, though, the reason for that.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+If you check all the commits, on some I did it as you just proposed, while
+on some others I did it with an enum before const: that's simply because I
+*totally expect* some to grow, while others (const - const) I was either
+unsure, or totally *not* expecting them to grow soon!
 
--- 
- i.
+>>         - items:
+>>             - enum:
+>>                 - mediatek,mt8365-mipi-tx
+> 
+> Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+> 
 
---8323329-1754916380-1681304629=:2300--
+Thanks again!
+
+Cheers,
+Angelo
