@@ -2,99 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CD36DFDD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED6A6DFDD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjDLSoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S229719AbjDLSpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjDLSoD (ORCPT
+        with ESMTP id S229598AbjDLSpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:44:03 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D65440E1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:44:02 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id z3so4132802qvs.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20221208.gappssmtp.com; s=20221208; t=1681325041; x=1683917041;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NA3yKE/A/kXoMe2VU/QiDPUbIiNd9/qULMU5+xukd6U=;
-        b=T96QhM5Sh+19QAqixHf79oSq09AeNY57s1bb9hNgC1Fjdlfd+Lk9MayayE6mffYJ7+
-         92/xlz+ghBXN+hpjI2YWV4wgPGFVyNVPhTSHBe17VgzAENIaAyOZdFv0nlM5U/q7QvUk
-         LGWGdDIEvpN8UsXExM8Z74bi+XuMf72JY3Z8CI2zUMDkImIm8AA21IXU2qPuvHfepNYr
-         RJCQ1dm8j/TPvS49mvv1Ax8VxFjAwJF5VyAh5UMRrGrgOO1f0RdTmhoK0Tx02Aw0sXyJ
-         pqIlb4q/3rWhIFb2I/pcBbv1grpU0kbkpCRefnDTbSdtaVzc+NUNj1yqB4MWImjmYb+V
-         8jvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681325041; x=1683917041;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NA3yKE/A/kXoMe2VU/QiDPUbIiNd9/qULMU5+xukd6U=;
-        b=Arpaf/TZrKQcP4IxpOVLKiuRgaYYlry+TL+jxswsM9urXxvgaGFjZkBbp3Kc7boQwt
-         7idnu6gp0hZ22anXa8hPoCJq7nzJ8diXi4lkFFWD1tRd1vOKBsEfTVq+AlAAT9pMlW7X
-         vHnODT4iRvXcdXb/1MA3D6g6pZLzLx76pbfde6zE57b1wwVhTBuPtM2C4dh++CmALp4c
-         kpcxeijcZy2JnJhK6utFjQx7+4w1On/8ssYDpVaXvncANLFqYoOKnYFUgcfCISLSQMOF
-         IrRg4qUT3ojeMjfl+/cdaYu/qBt5v/CtYv6N262tKqMST0MsE3Z61WbwVWcR7CE5qYKQ
-         lE5Q==
-X-Gm-Message-State: AAQBX9dR0AmIZMb+divuUck8XX6aRx+RxkTViONiTwODjpatJVv0EKfU
-        n6hAE0yNawhUEdPlMF7JPhrZxQ==
-X-Google-Smtp-Source: AKy350Y3OC9A50D1pW6cq4oVehWpe37l+cmYeLQ8rIj8dC+wF1vYlypEuM8OFvq1g0Zqah6s+Gwivw==
-X-Received: by 2002:ad4:4eef:0:b0:5a3:725e:425c with SMTP id dv15-20020ad44eef000000b005a3725e425cmr27210024qvb.2.1681325041277;
-        Wed, 12 Apr 2023 11:44:01 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain ([2606:6d00:15:199e::580])
-        by smtp.gmail.com with ESMTPSA id m10-20020ad44b6a000000b005dd8b9345cesm4987525qvx.102.2023.04.12.11.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 11:44:00 -0700 (PDT)
-Message-ID: <3fa75b5748022c63dfb75ff82e1d4a84d58a296a.camel@ndufresne.ca>
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Deborah Brouwer <deborah.brouwer@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
-        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        kernel@collabora.com
-Date:   Wed, 12 Apr 2023 14:44:00 -0400
-In-Reply-To: <20230412025834.GA301301@mit.edu>
-References: <20230406215615.122099-1-daniel.almeida@collabora.com>
-         <ZDSRSWhWsN34MghQ@xps>
-         <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
-         <20230412025834.GA301301@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 12 Apr 2023 14:45:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A08E3C21;
+        Wed, 12 Apr 2023 11:45:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 126C5D75;
+        Wed, 12 Apr 2023 11:45:47 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 155CC3F6C4;
+        Wed, 12 Apr 2023 11:45:00 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 19:44:54 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        michal.simek@amd.com, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com
+Subject: Re: [RFC v1 0/2] Introducing generic SCMI pinctrl driver
+ implementation
+Message-ID: <ZDb8JvQd3Sv3xfRn@e120937-lin>
+References: <cover.1680793130.git.oleksii_moisieiev@epam.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680793130.git.oleksii_moisieiev@epam.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Theodore,
+On Fri, Apr 07, 2023 at 10:18:26AM +0000, Oleksii Moisieiev wrote:
+> This RFC patch series is intended to introduce the potential generic driver for
+> pin controls over SCMI protocol, provided in the latest beta version of DEN0056 [0].
+> 
 
-Le mardi 11 avril 2023 =C3=A0 22:58 -0400, Theodore Ts'o a =C3=A9crit=C2=A0=
-:
-> And for those distributions that don't currently ship Rust, such as
-> Fedora, if someone could build their own unofficial packages, until we
-> can convince Red Hat to start shipping -their own supported Rust
-> compilers, that might be a great way of bridging that gap.
+Hi Oleksii,
 
-Rust can be installed from package on Fedora. I sense a lot of unverified
-supposition to justify your argument. I don't believe this contribute much =
-to
-the discussion. It takes about 30s to search on your preferred search engin=
-e and
-find the fact the Fedora ships rustc, and the version is very recent.
+a few general remarks here down below and more specific comments will
+come inline in the remaining patches of the series.
 
-regards,
-Nicolas
+CC'ing also a few more people possibly interested in your series.
+
+> On ARM-based systems, a separate Cortex-M based System Control Processor (SCP)
+> provides control on pins, as well as with power, clocks, reset controllers. In this case,
+> kernel should use one of the possible transports, described in [0] to access SCP and
+> control clocks/power-domains etc. This driver is using SMC transport to communicate with SCP via
+> SCMI protocol and access to the Pin Control Subsystem.
+> 
+> The provided driver consists of 2 parts:
+>  - firmware/arm_scmi/pinctrl.c - the SCMI pinctrl protocol inmplementation
+>    responsible for the communication with SCP firmware.
+> 
+>  - drivers/pinctrl/pinctrl-scmi.c - pinctrl driver, which is using pinctrl
+>   protocol implementation to access all necessary data.
+> 
+
+As discussed offline, the patches you posted to add support for the new
+SCMI pinctrl protocol and the related SCMI pinctrl driver are using the
+old SCMI API (include/linux/scmi_protocol.h) that changed significantly
+since v5.13, so at first they need to be ported to current mainline API.
+
+You can look on the latest v6.3-rc  at:
+
+	drivers/firmware/arm_scmi/power.c
+ 	drivers/firmware/arm_scmi/scmi_pm_domain.c
+
+for a simple example of a core protocol and related driver using the new API.
+
+On the protocol side you can ignore really the part related to "scmi_protocol_events"
+that you find there since it is related to notifications and there are no notifs in
+SCMI Pinctrl as of now.
+
+In a nutshell the protocol layer now receives a protocol handle (instead
+of the instance handle) during protocol_init and uses that to build/send
+messages; it has to be used also to store any protocol private data
+with ph->set/get_priv() (no more direct access to handle->privs)
+
+That same protocol handle is then used by the SCMI driver users during
+tehir probes, so, in your pinctrl SCMI driver probe, you should do something like
+this early on:
+
+	pinctrl_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PINCTRL, &ph);
+
+store the 'ph' somewhere and and then use it all over:
+
+	pinctrl_ops->set_mux(ph, selector, group);
+
+Beside the API a few helpers has been added too (ph->hops) that can be
+re-used by protocol code to implement straight away some common SCMI machinery
+like the extended_name_get and the handling of multi-part replies
+(like in PINCTRL_LIST_ASSOCIATIONS)...I think you can ignore these ph->hops and
+just keep your original code, I'll take care to port these functionalities to
+the common helpers later on top of your series if it is fine for you...
+(also because I think at least a small modification in the core helpers will be
+needed to support PINCTRL usage since it deviates a bit from existent protos...:P)
+
+> Configuration:
+> The scmi-pinctrl driver can be configured using DT bindings.
+> For example:
+> / {
+> 	cpu_scp_shm: scp-shmem@0x53FF0000 {
+> 		compatible = "arm,scmi-shmem";
+> 		reg = <0x0 0x53FF0000 0x0 0x1000>;
+> 	};
+> 
+> 	firmware {
+> 		scmi {
+> 			compatible = "arm,scmi-smc";
+> 			arm,smc-id = <0x82000002>;
+> 			shmem = <&cpu_scp_shm>;
+> 			#address-cells = <1>;
+> 			#size-cells = <0>;
+> 
+> 			scmi_pinctrl: protocol@19 {
+> 				reg = <0x18>;
+> 				#pinctrl-cells = <0>;
+> 
+> 				i2c2_pins: i2c2 {
+> 					groups = "i2c2_a";
+> 					function = "i2c2";
+> 				};
+> 			};
+> 		};
+> 	};
+> };
+> 
+
+These will need a proper formal explanation in DT bindings at:
+
+	Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+
+to highlight the usage of "#pinctrl-cells" and whatever else is needed
+to be documented with related links to existing reused bindings is any.
+(and CC that patch to the proper DT maintainers and MLs... IOW look at
+what get_maintanel.pl says)
+
+> &pfc {
+> 	/delete-node/i2c2;
+> };
+> 
+> So basically, it's enough to move pfc subnode, which configures pin group that should work through
+> SCMI protocol to scmi_pinctrl node. The current driver implementation is using generic pinctrl dt_node
+> format.
+> 
+> I've tested this driver on the Renesas H3ULCB Kingfisher board with pinctrl driver ported to the
+> Arm-trusted-firmware. Unfortunately, not all hardware was possible to test because the Renesas
+> pinctrl driver has gaps in pins and groups numeration, when Spec [0] requires pins, groups and
+> functions numerations to be 0..n without gaps.
+> 
+> This implementation still reqires some features, such as gpio support, but I've posted it as RFC to
+> start the discussion regarding the driver format.
+> 
+> [0] https://developer.arm.com/documentation/den0056/latest
+> 
+
+Thanks for this,
+Cristian
