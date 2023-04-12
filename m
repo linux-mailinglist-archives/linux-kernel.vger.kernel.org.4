@@ -2,237 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5396DFC1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCDB6DFC23
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDLRAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S231326AbjDLRBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDLRAm (ORCPT
+        with ESMTP id S230359AbjDLRB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:00:42 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAAB86A2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:00:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id kh6so10463425plb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681318808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+oanG2L1no3cfGxUr2f5jC5PPLghnpHBRMM+yz7rcqg=;
-        b=ETda2EF8CeXNpRP+t6JDEdQjQy9SuS5w1CFty3glJHeryif4TOjMLgsh61/0aNSX3l
-         WY1ZA7XUoVt89GbEf1jgCheNGw9MaytQLgyFBlcuxrJ+BaaNq6YZC3nyYAPwracjWBIX
-         AP7RHR/Gh4cWRg0sf645I9NV8n3Mjoxl6J3uaTWZzNxymh/wVr5dZ+jXvjqqYLj0x6/O
-         sJI4IlQoXsviOEiFA0c0IoPYmF1Yu5VmihBQsL/2pIJqwIIKXT1R6D+9wgANE3BD+Bku
-         nt9FbMEFzgJRnu08QofJrkWn+NBu7u5GbQ14Tqu+fUahxwRLIEX/5KBfYqjrytmtvEOB
-         MpAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681318808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+oanG2L1no3cfGxUr2f5jC5PPLghnpHBRMM+yz7rcqg=;
-        b=AEDc6ZTRgX1Ku6clA1QnQQDZETsO2s5VtM8IzbW+1QQMTGtuHhamfn8m2bpXGhGg6X
-         Y6D6Ptw7wHzBqiQLS/Miz79JmkRuS/fNsQmmnI/VJWZbYAJTWwVSV2u6I5VW85V37Gts
-         /y8UenizvrmI6G3pN8SRF2l8q0aupczqA+gYmCVl+b2hPa711QFuMyVCDGRgQh/6FzOv
-         E5wm2AWFjEuZZikjbpsrNnfEKHDsC3zvleUGfB9JMw+PDZfUB+BYZ/fpNeypZ5eP1fiD
-         4xlz3VBzfc4X1wom/TzROiFNPPFbz7TywEeGTAf8InxO9H5WEmsrl89Bfvh++Cnz5h8Z
-         9rFw==
-X-Gm-Message-State: AAQBX9fckFA1fmj/+ixH5qdqnONGQ6ePc47t3BFWxFctxa1E5SBpczJ2
-        nSRH2ELDczN/ptMkAahfWXxMqQ==
-X-Google-Smtp-Source: AKy350ZyGAHpWAWIglbbCQpXeWBI+mmZnj2uqsJASDPZg4pKPfpA1jxJzKxrtxsUWwfHCkGWCv9/MA==
-X-Received: by 2002:a17:90a:b294:b0:246:fdad:28ca with SMTP id c20-20020a17090ab29400b00246fdad28camr2727902pjr.38.1681318807683;
-        Wed, 12 Apr 2023 10:00:07 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:1cd7:1135:5e45:5f77])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170902eb1100b001a52dd51ff6sm7800419plb.269.2023.04.12.10.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 10:00:07 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 11:00:04 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] soc: ti: pruss: Add pruss_get()/put() API
-Message-ID: <20230412170004.GA86761@p14s>
-References: <20230412103012.1754161-1-danishanwar@ti.com>
- <20230412103012.1754161-2-danishanwar@ti.com>
+        Wed, 12 Apr 2023 13:01:26 -0400
+Received: from MW2PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012011.outbound.protection.outlook.com [52.101.48.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FF38698
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:01:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ngrhajGRlXSi7asm8qUcXw1g3ZlRPSNykMoCJBbtt18IPEx40N9NGXUFt67Na22gR/9pdrhhIySJEJnvoXfFDfIV8/yszBwNYyTeOgo8boouWQkpawLroaLyXXKbaPlgV2wd9yuCNaJoszal0MCu+LiZ4pgY8k9kyQzUKhT2YGQ8Ldc2n9E81rUOSG7aATlG3vkMyLIaN6J3wnWRehg48nHnKBCwIouHsRDbOX9Fdati4Pe2zSJ+e23yZXH0xFz1glvkhm3Sr5qPlbLCjyW8ySTaAcNauiItY6/HAfl8TIHKaYgnuLgx4ZSmADi5ng+BRdRrRyEgsOx6naxaEc5sMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tLER7wPvH9ED6SmWkNyjUv1DUvnSHd7aK4mIwvXto/A=;
+ b=dvlAqVaPPLVq/OzyvAd+KZKy+EiZP5iES0GsWWOFPnfw2twUB0FEeaTG/gKksnhb2dyOy26ABJogoQqDaV9R2Hv/K8sJH/RdqmcFcFoYtp5j/0Pob5FmCFjh9HZo74PtH17ET7wTUczJxg9UXI9RBjngzFpJG7vdR9r2G/rhyH4a9+VSQ98S0+A+4vVOhNFdzSv2PLbuZLz4sSq2kGTgt7hfafkstHTjdqd8Hjhss6TmglCeSe1Blk0TgB92IhI9ieEInLdXdd9/B9KgVlUlTWt45QF6jlYf5L/25mMEmqikIgFxsX2iYxaxyaKGO7MmeyGy8hcnbDlOpP2J6NTiEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tLER7wPvH9ED6SmWkNyjUv1DUvnSHd7aK4mIwvXto/A=;
+ b=fmGnN9SnLudAtnUcBalt1jQUXptXna7gN+npqRUTBg5dnoQyiy0pIimoNDvHy44WSr4Kotx2fRgouCLPM/iXJD4MphpCC2aWe6VLuGXIMseSVHwdy19oAmcGRe3uyzA2PC+qpaui7Vv1kn9TOGBjnWEJiOpuggcrkUM4GOpY8YM=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by IA1PR05MB10080.namprd05.prod.outlook.com (2603:10b6:208:3db::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
+ 2023 17:00:49 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::f1bc:4933:8701:7ff0]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::f1bc:4933:8701:7ff0%7]) with mapi id 15.20.6298.030; Wed, 12 Apr 2023
+ 17:00:49 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel test robot <yujie.liu@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Hugh Dickins <hughd@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
+ inaccessible
+Thread-Topic: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
+ inaccessible
+Thread-Index: AQHZa4FwosvoCxZx+kWFav90J+Ui/a8k84GAgABgfg+AARGUgIAAhiWJgAD94QA=
+Date:   Wed, 12 Apr 2023 17:00:49 +0000
+Message-ID: <03BCE979-33B1-486F-A969-0475A35DEBB5@vmware.com>
+References: <20230410075224.827740-1-ying.huang@intel.com>
+ <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com>
+ <87zg7f19xu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <D432368D-7E3F-47C8-8BE3-A0D11BC6EA2D@vmware.com>
+ <87sfd5zx5b.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87sfd5zx5b.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|IA1PR05MB10080:EE_
+x-ms-office365-filtering-correlation-id: 3f75f49c-fb45-4229-1e32-08db3b777782
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3qkhyr61ejIggDG9SRcnNshUx6CtHfa3Fp7yPO8PQ+zLnh15LKQyUO+G/NTYoOKo82DqnX5FYdiCGcWpHMSPUb6WYLbFGD0O8puEbU465chlP+MSe//P3VVK3UW6GX7QlQ+ch6St2z8lKFcBhemayvAM3PofvUyJm3MZUKA0md7raJeEBjc9WvY1T2o34IJ0sotwul2PWfeC+NgDNvvi1ow7GuKZwlDbBTOXNpHZV/tvmO0TjbwipZ0mcT5Lf7+qHELDm9LLdz9t/tkVziVo7pOQM1IvrsJEWTE0k+IFqTs7Ru+U4hoGsDrUDY2tsCMru8kRF7bnByspThSty6mVoCCfrLqAWZXP1ymTugqQGUrL/sRqyqXS6JgUdH859eykuvOtYV3/WxRjos9e/EwITApslqXORGJA7ICdhuxGS9bLVFQaEkXQphQFE99r5GQKssV2sfC23w+HlsHAwf+r7yj3zVtRRr1veBxaMH4twOimLHYP9Q8sPPFg8bcIblHEyTSqzZp3YgOYhXi6OA9XYoNFcMhd1vzZPOq02NCOyuZOA3hmIeddO33EYCGWkG+oXPVKKu3Ow6J4X26SUUYsGsSn/xm91c5B2EaR7kCl4J2kChrr78unSnAWtlV93gxCOXpX9hxtCiSFhdPlhVsOlwceab70bq0ZTzEww6OOywGQdyqT2rgGA7pxrYFYt6ia+K1KZG4dxHLJblrVc8Snnw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(366004)(376002)(396003)(346002)(451199021)(83380400001)(2616005)(76116006)(4326008)(71200400001)(26005)(54906003)(6486002)(478600001)(6512007)(6506007)(53546011)(186003)(38100700002)(2906002)(36756003)(33656002)(5660300002)(122000001)(316002)(66476007)(66446008)(6916009)(66556008)(41300700001)(66946007)(8936002)(86362001)(64756008)(38070700005)(8676002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TXZ4UGFoYmRNcWdNckFldnFkVEg2VXRqZkU2ek82RUF3YmFhSkVqU3BSY3lW?=
+ =?utf-8?B?RW5GSjJnMEIyWFdXNW1TQVpvUWxKVkJyQWRISHd3cHo3VXJjV09wa2NxR2Zn?=
+ =?utf-8?B?TTFnek5ZWlk0OE1YOGR4cUhLYmE0TjdyVkFuWHZCM0ZDWTlycHVseDV0WFRE?=
+ =?utf-8?B?YlNkOXJuc2czbFBPZ0J6dGEyamE1SDZKYzZiUXNWWk5NWVY4eUVJMWZLL2hV?=
+ =?utf-8?B?WWdjQXV3UzRPMWJhVTk5dVVpY3RPTE8yaElqZy9kTjRkKzNUbEFLWUNjWGNZ?=
+ =?utf-8?B?bDFSd3hpZmZPTGIrY2E4cHNXTDdsYzFRd2cxRmFBQ055elZaRHcrQllxYTRr?=
+ =?utf-8?B?blAvNjZYTzc2ZEhuMEFVNVVwcDdtNUkrUkJiQkdXdHRXNTVGUGZYMHozKzlM?=
+ =?utf-8?B?RjBGWERKZ0hCWTVHdW1lY3haZEZZczJ3aHhQNHhGcUxIdGlKdWlpNkY1ZkJD?=
+ =?utf-8?B?YWZmQTZmTEwyY3FiRDRDWEozMFhSNXdScSszZnppTUJGclpNWnRWWGE0YVQ0?=
+ =?utf-8?B?Qmg2WTVQY3hPdmtnTWZ6YjBxRmZzL1p4ejhPRjcrUURETzdoOUpHOVZWVWJE?=
+ =?utf-8?B?K1R2R3JJS1c1YjdJWHFpYjFFUVlLWnV3eHN1dytKUDdNYUNzcnpwc1ZObkp0?=
+ =?utf-8?B?dTIzeTY4dVBvOTBrL2pvdmdNOWthRnR0OERpaVQ1THpmbFJhQkZpa3MwYVMz?=
+ =?utf-8?B?UC9FUjlLY2xDSVAzRlR1NjVjbXFhY1czSDJsdjMvWDZ6TGJLMDNIa2NRSVBk?=
+ =?utf-8?B?cmdrQ1k2K0xqWkFBT0htalNNMzluajBpb2NVL0Y5MzNNMDB6Umc0aXdKQUNh?=
+ =?utf-8?B?U1pObzNRREJuMnNRZmhYaG90OHk5M2NIU2VJMyttWlUrak91MlFjVEJkQzJM?=
+ =?utf-8?B?UmNvUFBmMGsxOU9vNGNFMEdJWlUyM0R1dkYrU1VwNXdPNjV5RVU5a0NYakdE?=
+ =?utf-8?B?bXdrdGJRVURFdzREUjlhK3dpOWR0UWd4SjZKOUhVbis5eWdwYVdwU0tnZHo0?=
+ =?utf-8?B?aEV6Y1NpYkFkZHpGb0k4M25xbDdDckc5TTlsbVRFaExQQkZETkxzYklLeSts?=
+ =?utf-8?B?UlJkTzBLK3lOM0p6ek1pczhDUW9JMEs4WUs1WDZCbWUzVmhUdTIxZ1RyN0tT?=
+ =?utf-8?B?THlGOWNwMG1xeDdtRjlOVk5IcGd2dFpzSnF5UEZ2SWdyYWZ1S01qZjlLYVBk?=
+ =?utf-8?B?aFRGSXJ5TGRkaFZpQ2E5bmp6TWFhcm8yOVdVa2hHMGwrSU50cy9xcFlPdytz?=
+ =?utf-8?B?K09aUkZSOElka0ZKWGlkVUkwV3lkNDQrU0lVOVJ0eGZYbk9NZXdqa2dCZFhQ?=
+ =?utf-8?B?QXJvTmN3K2pORXZWOVYwWng4T3AzY1k2OUY1SmViMnF6VWp5SDBHaXZ4dmJC?=
+ =?utf-8?B?Y1VZSm42MUlvQkc5NE5PcjhrZmtQYXBOWUdxWXdiWGs2OFd3aHZtaGlsTUFC?=
+ =?utf-8?B?S3RGSUtNRHNUTXlPTk1CNjBHclIwTkxpQ2J5b1F2M1R6b25NdkkvQWRURnhu?=
+ =?utf-8?B?UFh6eE9USzQ4NkNJMDk3aVhZT21rdVhoT1E5RlN3RTlJZVZJa3FIU1BqNVo0?=
+ =?utf-8?B?NVV5YmZXQTFXUnpWNWNwd3pYV0ptU2xpN0tYVFJ1NG1lMlNGVExkRG0zTzBF?=
+ =?utf-8?B?V1kxNGRaRUE2U2R5NG5iWGtsUmI4dm1iM0RNaFp5RGFmdnBzQkNGV2ZiQWxw?=
+ =?utf-8?B?SHBiOXJuWHg5Slk3RFFXditqclRwNmVnSUd5eWhLMFFjWTdRTjBPWEMvUm81?=
+ =?utf-8?B?TzF2R1h6ejNtbXVaeTlwa1p2QWc2NEJBZThyTTBNbVpQTHZiOUJEWmQ2bG1V?=
+ =?utf-8?B?UmJ2Qm5hQlhWNjViNW9MbWwzcWpqSDQ4YlJtOEM0YVU1VzErR2lHZVVmRW9j?=
+ =?utf-8?B?NE4rUWh3SnRXbjhCWnBaZnNwcjFRK3FmTG5KUndWbGZzNytBVUhzbkxTYU1r?=
+ =?utf-8?B?eE4vdFcwKzZtYkpwVlhyOWpqZ3dHakhDOHRJc1AxZzJOK3Rvd3c5K3AxeHdj?=
+ =?utf-8?B?YjZRb0FDQ2h6Yy96NmI0dHNIdGlDRU9MQVM2TzdVUit0OXppdENJUEdoWVdT?=
+ =?utf-8?B?bHhCMGtWZ1BJVlEvZklyV3RrUzh6bkNUdWdKMC9Udi9CRzVITzdkRTU1YzJW?=
+ =?utf-8?Q?U56XJWXdNj/Y9/IdLdQdweAqp?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5560C2C38C23E74EA05AA913EC4CABB1@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412103012.1754161-2-danishanwar@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f75f49c-fb45-4229-1e32-08db3b777782
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 17:00:49.4895
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FccdlKsNnsF7wvlmHxAKWxQsfggusB9uf/bhZTpEfDLCPbB5LGxrlbzOsFf+cOy7I1SeC2XhHdAZ/UEhTEyzTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR05MB10080
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 04:00:09PM +0530, MD Danish Anwar wrote:
-> From: Tero Kristo <t-kristo@ti.com>
-> 
-> Add two new get and put API, pruss_get() and pruss_put() to the
-> PRUSS platform driver to allow client drivers to request a handle
-> to a PRUSS device. This handle will be used by client drivers to
-> request various operations of the PRUSS platform driver through
-> additional API that will be added in the following patches.
-> 
-> The pruss_get() function returns the pruss handle corresponding
-> to a PRUSS device referenced by a PRU remoteproc instance. The
-> pruss_put() is the complimentary function to pruss_get().
-> 
-> Co-developed-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/soc/ti/pruss.c       | 62 ++++++++++++++++++++++++++++++++++++
->  include/linux/pruss_driver.h | 18 +++++++++++
->  2 files changed, 80 insertions(+)
-> 
-
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index 6882c86b3ce5..3fac92df8790 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -6,6 +6,7 @@
->   * Author(s):
->   *	Suman Anna <s-anna@ti.com>
->   *	Andrew F. Davis <afd@ti.com>
-> + *	Tero Kristo <t-kristo@ti.com>
->   */
->  
->  #include <linux/clk-provider.h>
-> @@ -18,6 +19,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/pruss_driver.h>
->  #include <linux/regmap.h>
-> +#include <linux/remoteproc.h>
->  #include <linux/slab.h>
->  
->  /**
-> @@ -30,6 +32,66 @@ struct pruss_private_data {
->  	bool has_core_mux_clock;
->  };
->  
-> +/**
-> + * pruss_get() - get the pruss for a given PRU remoteproc
-> + * @rproc: remoteproc handle of a PRU instance
-> + *
-> + * Finds the parent pruss device for a PRU given the @rproc handle of the
-> + * PRU remote processor. This function increments the pruss device's refcount,
-> + * so always use pruss_put() to decrement it back once pruss isn't needed
-> + * anymore.
-> + *
-> + * This API doesn't check if @rproc is valid or not. It is expected the caller
-> + * will have done a pru_rproc_get() on @rproc, before calling this API to make
-> + * sure that @rproc is valid.
-> + *
-> + * Return: pruss handle on success, and an ERR_PTR on failure using one
-> + * of the following error values
-> + *    -EINVAL if invalid parameter
-> + *    -ENODEV if PRU device or PRUSS device is not found
-> + */
-> +struct pruss *pruss_get(struct rproc *rproc)
-> +{
-> +	struct pruss *pruss;
-> +	struct device *dev;
-> +	struct platform_device *ppdev;
-> +
-> +	if (IS_ERR_OR_NULL(rproc))
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	dev = &rproc->dev;
-> +
-> +	/* make sure it is PRU rproc */
-> +	if (!dev->parent || !is_pru_rproc(dev->parent))
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	ppdev = to_platform_device(dev->parent->parent);
-> +	pruss = platform_get_drvdata(ppdev);
-> +	if (!pruss)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	get_device(pruss->dev);
-> +
-> +	return pruss;
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_get);
-> +
-> +/**
-> + * pruss_put() - decrement pruss device's usecount
-> + * @pruss: pruss handle
-> + *
-> + * Complimentary function for pruss_get(). Needs to be called
-> + * after the PRUSS is used, and only if the pruss_get() succeeds.
-> + */
-> +void pruss_put(struct pruss *pruss)
-> +{
-> +	if (IS_ERR_OR_NULL(pruss))
-> +		return;
-> +
-> +	put_device(pruss->dev);
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_put);
-> +
->  static void pruss_of_free_clk_provider(void *data)
->  {
->  	struct device_node *clk_mux_np = data;
-> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
-> index ecfded30ed05..cb40c2b31045 100644
-> --- a/include/linux/pruss_driver.h
-> +++ b/include/linux/pruss_driver.h
-> @@ -9,7 +9,9 @@
->  #ifndef _PRUSS_DRIVER_H_
->  #define _PRUSS_DRIVER_H_
->  
-> +#include <linux/remoteproc/pruss.h>
->  #include <linux/types.h>
-> +#include <linux/err.h>
->  
->  /*
->   * enum pruss_mem - PRUSS memory range identifiers
-> @@ -51,4 +53,20 @@ struct pruss {
->  	struct clk *iep_clk_mux;
->  };
->  
-> +#if IS_ENABLED(CONFIG_TI_PRUSS)
-> +
-> +struct pruss *pruss_get(struct rproc *rproc);
-> +void pruss_put(struct pruss *pruss);
-> +
-> +#else
-> +
-> +static inline struct pruss *pruss_get(struct rproc *rproc)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +static inline void pruss_put(struct pruss *pruss) { }
-> +
-> +#endif /* CONFIG_TI_PRUSS */
-> +
->  #endif	/* _PRUSS_DRIVER_H_ */
-> -- 
-> 2.34.1
-> 
+DQoNCj4gT24gQXByIDExLCAyMDIzLCBhdCA2OjUwIFBNLCBIdWFuZywgWWluZyA8eWluZy5odWFu
+Z0BpbnRlbC5jb20+IHdyb3RlOg0KPiANCj4gISEgRXh0ZXJuYWwgRW1haWwNCj4gDQo+IE5hZGF2
+IEFtaXQgPG5hbWl0QHZtd2FyZS5jb20+IHdyaXRlczoNCj4gDQo+Pj4gT24gQXByIDEwLCAyMDIz
+LCBhdCA2OjMxIFBNLCBIdWFuZywgWWluZyA8eWluZy5odWFuZ0BpbnRlbC5jb20+IHdyb3RlOg0K
+Pj4+IA0KPj4+ICEhIEV4dGVybmFsIEVtYWlsDQo+Pj4gDQo+Pj4gSGksIEFtaXQsDQo+Pj4gDQo+
+Pj4gVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgcmV2aWV3IQ0KPj4+IA0KPj4+IE5hZGF2IEFtaXQg
+PG5hbWl0QHZtd2FyZS5jb20+IHdyaXRlczoNCj4+PiANCj4+Pj4+IE9uIEFwciAxMCwgMjAyMywg
+YXQgMTI6NTIgQU0sIEh1YW5nIFlpbmcgPHlpbmcuaHVhbmdAaW50ZWwuY29tPiB3cm90ZToNCj4+
+Pj4+IA0KPj4+Pj4gMERheS9MS1AgcmVwb3J0ZWQgYSBwZXJmb3JtYW5jZSByZWdyZXNzaW9uIGZv
+ciBjb21taXQNCj4+Pj4+IDdlMTJiZWI4Y2EyYSAoIm1pZ3JhdGVfcGFnZXM6IGJhdGNoIGZsdXNo
+aW5nIFRMQiIpLiBJbiB0aGUgY29tbWl0LCB0aGUNCj4+Pj4+IFRMQiBmbHVzaGluZyBkdXJpbmcg
+cGFnZSBtaWdyYXRpb24gaXMgYmF0Y2hlZC4gIFNvLCBpbg0KPj4+Pj4gdHJ5X3RvX21pZ3JhdGVf
+b25lKCksIHB0ZXBfY2xlYXJfZmx1c2goKSBpcyByZXBsYWNlZCB3aXRoDQo+Pj4+PiBzZXRfdGxi
+X3ViY19mbHVzaF9wZW5kaW5nKCkuICBJbiBmdXJ0aGVyIGludmVzdGlnYXRpb24sIGl0IGlzIGZv
+dW5kDQo+Pj4+PiB0aGF0IHRoZSBUTEIgZmx1c2hpbmcgY2FuIGJlIGF2b2lkZWQgaW4gcHRlcF9j
+bGVhcl9mbHVzaCgpIGlmIHRoZSBQVEUNCj4+Pj4+IGlzIGluYWNjZXNzaWJsZS4gIEluIGZhY3Qs
+IHdlIGNhbiBvcHRpbWl6ZSBpbiBzaW1pbGFyIHdheSBmb3IgdGhlDQo+Pj4+PiBiYXRjaGVkIFRM
+QiBmbHVzaGluZyB0b28gdG8gaW1wcm92ZSB0aGUgcGVyZm9ybWFuY2UuDQo+Pj4+PiANCj4+Pj4+
+IFNvIGluIHRoaXMgcGF0Y2gsIHdlIGNoZWNrIHB0ZV9hY2Nlc3NpYmxlKCkgYmVmb3JlDQo+Pj4+
+PiBzZXRfdGxiX3ViY19mbHVzaF9wZW5kaW5nKCkgaW4gdHJ5X3RvX3VubWFwL21pZ3JhdGVfb25l
+KCkuICBUZXN0cyBzaG93DQo+Pj4+PiB0aGF0IHRoZSBiZW5jaG1hcmsgc2NvcmUgb2YgdGhlIGFu
+b24tY293LXJhbmQtbXQgdGVzdCBjYXNlIG9mDQo+Pj4+PiB2bS1zY2FsYWJpbGl0eSB0ZXN0IHN1
+aXRlIGNhbiBpbXByb3ZlIHVwIHRvIDIuMSUgd2l0aCB0aGUgcGF0Y2ggb24gYQ0KPj4+Pj4gSW50
+ZWwgc2VydmVyIG1hY2hpbmUuICBUaGUgVExCIGZsdXNoaW5nIElQSSBjYW4gcmVkdWNlIHVwIHRv
+IDQ0LjMlLg0KPj4+PiANCj4+Pj4gTEdUTS4NCj4+PiANCj4+PiBUaGFua3MhDQo+Pj4gDQo+Pj4+
+IEkga25vdyBpdOKAmXMgbWVhbmluZ2xlc3MgZm9yIHg4NiAoYnV0IHBlcmhhcHMgQVJNIHdvdWxk
+IHVzZSB0aGlzIGluZnJhDQo+Pj4+IHRvbyk6IGRvIHdlIG5lZWQgc21wX21iX19hZnRlcl9hdG9t
+aWMoKSBhZnRlciBwdGVwX2dldF9hbmRfY2xlYXIoKSBhbmQNCj4+Pj4gYmVmb3JlIHB0ZV9hY2Nl
+c3NpYmxlKCk/DQo+Pj4gDQo+Pj4gV2h5IGRvIHdlIG5lZWQgdGhlIG1lbW9yeSBiYXJyaWVyPyAg
+SUlVQywgdGhlIFBUTCBpcyBsb2NrZWQsIHNvIFBURQ0KPj4+IHZhbHVlIHdpbGwgbm90IGJlIGNo
+YW5nZWQgdW5kZXIgdXMuICBBbnl0aGluZyBlbHNlPw0KPj4gDQo+PiBJIHdhcyB0aGlua2luZyBh
+Ym91dCB0aGUgb3JkZXJpbmcgd2l0aCByZXNwZWN0IHRvDQo+PiBhdG9taWNfcmVhZCgmbW0tPnRs
+Yl9mbHVzaF9wZW5kaW5nKSwgd2hpY2ggaXMgbm90IHByb3RlY3RlZCBieSB0aGUgUFRMLg0KPj4g
+SSBndWVzcyB5b3UgY2FuIGNvcnJlY3RseSBhcmd1ZSB0aGF0IGJlY2F1c2Ugb2Ygb3RoZXIgY29u
+dHJvbC1mbG93DQo+PiBkZXBlbmRlbmNpZXMsIHRoZSBiYXJyaWVyIGlzIG5vdCBuZWNlc3Nhcnku
+DQo+IA0KPiBGb3Igb3JkZXJpbmcgYmV0d2VlbiBwdGVwX2dldF9hbmRfY2xlYXIoKSBhbmQNCj4g
+YXRvbWljX3JlYWQoJm1tLT50bGJfZmx1c2hfcGVuZGluZyksIEkgdGhpbmsgUFRMIGhhcyBwcm92
+aWRlZCB0aGUNCj4gbmVjZXNzYXJ5IHByb3RlY3Rpb24gYWxyZWFkeS4gIFRoZSBjb2RlIHBhdGgg
+dG8gd3JpdGUNCj4gbW0tPnRsYl9mbHVzaF9wZW5kaW5nIGlzLA0KPiANCj4gIHRsYl9nYXRoZXJf
+bW11DQo+ICAgIGluY190bGJfZmx1c2hfcGVuZGluZyAgICAgICBhKQ0KPiAgbG9jayBQVEwNCj4g
+IGNoYW5nZSBQVEUgICAgICAgICAgICAgICAgICAgIGIpDQo+ICB1bmxvY2sgUFRMDQo+ICB0bGJf
+ZmluaXNoX21tdQ0KPiAgICBkZWNfdGxiX2ZsdXNoX3BlbmRpbmcgICAgICAgYykNCj4gDQo+IFdo
+aWxlIGNvZGUgcGF0aCBvZiB0cnlfdG9fdW5tYXAvbWlncmF0ZV9vbmUgaXMsDQo+IA0KPiAgbG9j
+ayBQVEwNCj4gIHJlYWQgYW5kIGNoYW5nZSBQVEUgICAgICAgICAgIGQpDQo+ICByZWFkIG1tLT50
+bGJfZmx1c2hfcGVuZGluZyAgICBlKQ0KPiAgdW5sb2NrIFBUTA0KPiANCj4gRXZlbiBpZiBlKSBv
+Y2N1cnMgYmVmb3JlIGQpLCB0aGV5IGNhbm5vdCBvY2N1ciBhdCB0aGUgc2FtZSB0aW1lIG9mIGIp
+Lg0KPiBEbyBJIG1pc3MgYW55dGhpbmc/DQoNCllvdSBkaWRu4oCZdCBtaXNzIGFueXRoaW5nLiBJ
+IHdlbnQgb3ZlciB0aGUgY29tbWVudCBvbg0KaW5jX3RsYl9mbHVzaF9wZW5kaW5nKCkgYW5kIHlv
+dSBmb2xsb3cgdGhlIHNjaGVtZS4NCg0KDQoNCg==
