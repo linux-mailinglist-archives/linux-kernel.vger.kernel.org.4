@@ -2,250 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1186DEB8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E14D6DEB94
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjDLGJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S229602AbjDLGME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDLGJP (ORCPT
+        with ESMTP id S229451AbjDLGMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:09:15 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20953A82;
-        Tue, 11 Apr 2023 23:09:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kV3GIp1Zy2t+1sRWVu4XXxwagXGX2vZvxzd0PrcyoLKMe8485VF8x0+r56hKAEVI079ZgfWMT3RwKCYaDfJxEAo9d2070qFbRWz7b0tCjTy1nIloLtiCUFERuszBc8+R9G3E16UPZ7uu7xKbXPTCEGem+CGfkdOa7v1aRsuV67xs+ZBchnw8CpUuM7XfKVDWviHV1U8xHDg4YGIm938UCjAi4J0HmOijt9tI61pakAraGu22lbr0hjwu0pEbLeFp0n9yRaAfXet+m5T/K2ZzFXo1stz2Wt278ikFdOLFU7SXh3Ru6GFq+36NrGkiKWDB5KmbOqP5PwSm9y2mMKJPKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zc6jiPmXwX5xNdCX1tgrCXHJSGYZ0qNWo+39BPRLkIE=;
- b=hmB27agSaOqWgPyEy/ZouE04o3NCJoASxNH4aHYzj9xfVAEVY3A/b+7FTo4xRZC71yuxAoSFTRAAkk2oNMe1aGUhIjEC78OI9eypoU6dOTObcfl9Zaxwf/O6PwXtLgAS4ntncBE478vkOLXEzmidHKbxE/RO84hJSUnKGZ/YjiPCpSh0u2xFqgJa3LtdSoA0rli8xNgB9mIpVXazzn7eiEacIkQTAZPmsYW+zEg8mKmpE52G2hIBaByWTxWkMb8tgf47VMOry8xlAM4fs1jgVj3gkRTImH/nUJ2pZP/WCdczYTK82rZsySdx2pDS+UvP4NAaPa1zJhUoW1X198/gpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zc6jiPmXwX5xNdCX1tgrCXHJSGYZ0qNWo+39BPRLkIE=;
- b=IANeCaNcZkiRS9RNlNtheyCmBhmzCWVwsEqXIKmpd4tFKjIp6/ldvNkFszLi7euOOlBymSP65uwY5mvjovULo/LTl4iIzkn+809azmrzgywcqBC1LyGfLHnrGUGFiY1XjYXS1gxF9ZxbI7anenlWmqOE6NdEJw+MB0nVM7OTyjM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by SA0PR12MB7461.namprd12.prod.outlook.com (2603:10b6:806:24b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 06:09:11 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
- 06:09:11 +0000
-Date:   Wed, 12 Apr 2023 11:38:52 +0530
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, g@blr-5cg13462pl.amd.com
-Cc:     ray.huang@amd.com, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, joel@joelfernandes.org,
-        gautham.shenoy@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq/schedutil: Add fast_switch callback check
-Message-ID: <ZDZK9Jpjj6ysOJmg@BLR-5CG13462PL.amd.com>
-References: <20230410095045.14872-1-wyes.karny@amd.com>
- <20230410095250.14908-1-wyes.karny@amd.com>
- <CAJZ5v0jH4uatAR7HiGY_MYASOcdwxvwkUZaMCHcznd-0idLCUA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+        Wed, 12 Apr 2023 02:12:02 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B40EB8;
+        Tue, 11 Apr 2023 23:11:57 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 67E62320098D;
+        Wed, 12 Apr 2023 02:11:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 12 Apr 2023 02:11:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1681279914; x=1681366314; bh=zCoRdIQdFskgYUogzhttPcJGcLIA01hI0zS
+        eBw9jOCU=; b=eo533Ot7lRmqcZEL8ObL2+MSfER7jf09eXw4QLDooqU3aNtxa2r
+        ZlgN7fvgETD4/aW7goMoqjBz8RBoR3Oi5eFyxnEnKPhCt8qLNTx8Uhv1wSXtybvO
+        yMTJEStxO8TeBIXVGyXqvSyX8SJgxK2BB1GqVqQO9efXd1yn7kzsYO83xxYVUQO+
+        UqeW9K7zjsEbmVoSQ6lM0mRFMRC6NCJrromxVduIq4+HVVoxTcE+0ODVOEe1UHDI
+        s8c9xJhjh6DsCKXvcPLBeE3yXujPk/phns3475jtUDjy8lraolLFzdOoBsLculOH
+        A5fEcvTat4bY/ijURKUEPN3uFInnntgg8DQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1681279914; x=
+        1681366314; bh=zCoRdIQdFskgYUogzhttPcJGcLIA01hI0zSeBw9jOCU=; b=M
+        ErYJz1/Eqc2oAZXB348fVvGttNGyZAjICJhh1YgTsUcqhJbreLT6LXkpEyB19hEQ
+        hwrY6K832UtuRLZr1/7rnXA7q4kD04UeAlDSmtVVfH4daDB0Aw5Kl8Hz8ExfEgd9
+        mOC2rVonfaI+kFk53vhzehtUFnZseewUA1JWlqIGpclFWtdM0xFZ/GwyjM1zXfku
+        /StzUkdG65qbBPPvBagnYtR4+A62AteRSVaBOeg43ByhoY9j5Xok8rm2RDjfxRAh
+        tFSkULtLYNOpOTkrpdYmrzFhAYL3nnGkBIy8nr8DBswzFDt6jiTuqy98LkimAPjn
+        Oz0oHO90StMmvdqFqUkUg==
+X-ME-Sender: <xms:qUs2ZH4vtfzuzUtNmQEMaZJ-ZKNdUqP_93JWFPbsMqkjq5ecaEgYLg>
+    <xme:qUs2ZM6I7rXp3xZkHWBd3Gy49-iM_r4PJp9fJEDxzTUs7G_rfQH20mDGEpxQDgA3v
+    OiT7VzxC4XfAQ>
+X-ME-Received: <xmr:qUs2ZOerwX4lfl5jBwg6DG-iCERb2XdED_OMSdmN10OAgCDzE0arGvtN0ZpGt0x7VlHOcZn7i1qoYCQF4iCKd0dD8bKUWjRDa7d1Jw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekhedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeekvd
+    dtgeehffefffevhfeileetffduueeuueevheeugeekgfduhedugfehuefhfeenucffohhm
+    rghinhepfhhunhgtthhiohhnrghlihhthidrhihouhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:qUs2ZIInvwj1-a01h1tHCndtSyCiihyvC3DuA6vbVzTMGeG4ho-vHw>
+    <xmx:qUs2ZLJi_trDbJXNN9WE4U0HKGA32qUVy7sq3hXEsnoVLROF_5KIEQ>
+    <xmx:qUs2ZByO-qNh_2acgnCHL144OmIng7xLhMifBH6RdoXGVS6hek78Bg>
+    <xmx:qks2ZAAne9KqqHPma7R03WNLKUY0chS4FDRpIAHgFd3jdAen8mbipA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Apr 2023 02:11:52 -0400 (EDT)
+Date:   Wed, 12 Apr 2023 08:11:49 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <2023041238-hardcore-basil-c6d1@gregkh>
+References: <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+ <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
+ <2023041131-boxy-excavator-1183@gregkh>
+ <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+ <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
+ <ZDWLRxkFjsGZazXD@phenom.ffwll.local>
+ <19e3438f-8e85-9da4-cd9d-8fc19559abd7@quicinc.com>
+ <ZDWlIuRHYPP1DeYi@phenom.ffwll.local>
+ <086e08a2-13b3-870c-4b17-1fdc9d56d551@quicinc.com>
+ <ZDWrLnWCzIrybHWB@phenom.ffwll.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jH4uatAR7HiGY_MYASOcdwxvwkUZaMCHcznd-0idLCUA@mail.gmail.com>
-X-ClientProxiedBy: PN3PR01CA0162.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:c8::6) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SA0PR12MB7461:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3699b388-cb2f-4207-398c-08db3b1c6eaf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ji4BTlP3bbrVh/G4CXUo/NVTNtsSnFucyqWnN46ZyDQS/XO2+1jrrOx/t+3TSZzieGwJ59mLFpGzWckcXWfhMCpmTiES44Jl2euYOO43MtKatMyHue0+AymN4gTVAEcUMHDxuLkRiQAQ0J7seygInmpbonFVr/55+hJJdbcfrRKyy9O1BpTdMMAo7vr6AU3/k5//ccwRtqcRNyOv3OjVGbVfJhUimafNCD9/niXvJTTadJJ5eWnjXFsALo8RLmOskm2dFPAj5LzqTRFXGO7n1uBIl5AstP6jDYFWMMnJlmI9bM+ExqneC9rk9UI6qNe1tdnHk7fXA/Zfm1ts3bSpE88jNzKA6OZZ237mxz32ntV24qa94WPbXZtdhfZT0xhsnnhPV0hPCgjL9J+EeU8i39j8hiY1RgbsMUaCeibiLrts7BZJSgvR5hxAxNcqOTqrj5ITMz++dTOcD7RNViKFVPf54k90O/31BP/i9/NS20M9tkAFWHGqiUhPvdCbKdAvkuNTIih87U3dn1WjNDYdo5Ca6GMjG5NmZXo1vRukN0kb/y0TYDHSAcE4ByEyBtj8u4BUCKaFpvcaEXpe4gOr9f6PLHJctn54evOLxluu7Bw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199021)(6666004)(8936002)(66899021)(44832011)(7416002)(6486002)(5660300002)(86362001)(66476007)(66946007)(8676002)(4326008)(66556008)(478600001)(38100700002)(53546011)(2906002)(83380400001)(6506007)(6512007)(186003)(41300700001)(316002)(26005)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVJIdGdDTVh5ejBOamt3SERibWNCa0QxWktCRWlCYjV4NFIrYjkzcGJiZEdV?=
- =?utf-8?B?WjFpSGF2N0VWODRoa2JnTXJSR1B4eTNZMW5JQmFpOEtzYkUzZXVUVGhRcXZB?=
- =?utf-8?B?MFlqM2lnSUJxQWl6K2hMd2dVTWI5ZzEyaEVYNkZXQUpseE1YSTlGeEVzeThQ?=
- =?utf-8?B?TFZKREpCSTVWNUU0V3pKMWVldVJLMGlJMFpYOVJ4QXRDa01vZkpFZEZ5LzBP?=
- =?utf-8?B?anVUa3lyNUZCMkE2cE43L1loSHJ5STEwdzU2TytINkJINnpzOHRUYnp2eGtY?=
- =?utf-8?B?cjViVk5nbW1HVUt4MkVKUk9adzNrUVJwMWJjQnp5dVRueC9ucWdQRUV4Qk9J?=
- =?utf-8?B?WFQxQnNMWElwVXRNb0N3L1JmWHdjVmsyVlpmd2cvUmhrV1NQemloRVhmNFNM?=
- =?utf-8?B?VnRCVWFDN0tpWlduSkVheU9wMHB6YnBldFJDaHRZamZOOVFFOE9nOHowenRT?=
- =?utf-8?B?bnZxYU1iaTN0SEFZZGZIMXc4YXRFTCtDdXJTT0NBUjZuaFN3QWdHTHJTRmVS?=
- =?utf-8?B?ZmtFODVGTlFxNzFWWm1YZDI4aVlSSEl0dDA3bmdDNkFjSEg2UWxCQ2IzREpP?=
- =?utf-8?B?WWhkaGdVdmhtb2U1SmZ2cGMzTmY5akx4bG5ZbzFUZyt2TUhRT0tyZC9sdWRw?=
- =?utf-8?B?S3lVNC9PcER1N002bWFMTlQ1K3pKSGpBNFhEdUlLZVdLcUtxNzRBdStjckFU?=
- =?utf-8?B?SDZ4R0hBQ3NVajBhVTJ1a3Jkdk0rUGNGWmhFYm5uNUhIWmdPajdUdXhtRThn?=
- =?utf-8?B?VDJ5bU9FR3R6cWxNcUl5T3VQanA3ZXlDSWJucGJkZVlEOFVzQkVGTXpTaTd6?=
- =?utf-8?B?Z0V2emloS0U2T0g0NWl1NFdRbk1DNHZCSTB3aFlmMHdDVHU4NU9XYjRFVXdS?=
- =?utf-8?B?RDgzWnN1U1kyb0JRdTVPdEQycUdVVVYxWWZPakQ0K3V4cE5jLzZlNno1NDR1?=
- =?utf-8?B?UDZKcUtqeFEwY1BVd2h1d0lpTWxadUJhZVFQakpNWnVsYU9XazZIN2FCcC9E?=
- =?utf-8?B?VW5sbERVQnFLMjlCMmRSWkltdGE1Z0ZtMlUwdThwSkVYTHROQzBVb09rZXpW?=
- =?utf-8?B?ZlYvL0x4eHlpYW94Ny9xYmRyQm8yeGdhZGZ1eFBiWWFpM0hCZDgxc2xFcXQr?=
- =?utf-8?B?ZXR2aS84d3UrSUNleHA1eEwxekhIaVA3NDNIVUt5YXdhclozdFlLWFJLOUJC?=
- =?utf-8?B?eWl4bkNrVTc3TFV0SjFianduQys3MDl3bzkxZ2VKdzQyaGU2Vmd0NkltYjZY?=
- =?utf-8?B?a3o3QlpxR3V1NUlsUkZDK2kwUXJyQjYwWW1YelZGRHg0ZE9XV09oVnVkb2RC?=
- =?utf-8?B?cmtiRENZZnQ4akdSdGxZb3loWGh5ZFhHMk8wanY0ejc1L3hINGZWSDhyY1Zl?=
- =?utf-8?B?N01xQXJtbURWajBhekdBQ3g4dTc4M1BtZk1XRWplRHRvOWxxdE5hWFR2Vkdy?=
- =?utf-8?B?amtId1ptN2krTlBpRWw3N2tWa1I5bHNxNHBNbGt4YWhhYXk5a0VqZVhleTJr?=
- =?utf-8?B?aUdBYTRHelk4MUNPQlg5akRJUmNZNE9LdXRLVkZwT0U5Z1Q5MEV1Vmdsc0M2?=
- =?utf-8?B?VG5pSkh4c2kzMmpHOU9IMUZaMHgyVkU3aG5EYkwyYWlGVmtIc3JHNFBGeWVu?=
- =?utf-8?B?SkMzaHlhOTBmb2ZLMTA5MFd0c0svZ0YyZXB5dzJaOWQyaCtWZStTWUhDL0Z2?=
- =?utf-8?B?WVhhOXNqNjVlRndCdHBIcGJtTkhNa05HajBraDJBaWwxNnhKNVF1MWpERnBi?=
- =?utf-8?B?cXFPbEZpNVlSN0xkUHpaa1lmUnk2VFVGRmdUeEovWUhib0gyd3Nid3cvejli?=
- =?utf-8?B?RzAwc0YrVXBtSG1lZkZCQlpDRG1lV1l6Yk1BbFZlS0Z4UUxlTVBzWHhMWDd6?=
- =?utf-8?B?SlM4b3pSa2VCZ0tiTytqMHhrZDU5SzBNeGRURVB0NStvZEpJelozMmxVdHZK?=
- =?utf-8?B?aEhPTWFib3NBbU5GdzU1c1V6QlRLbnNjQkFBUHJBdjYza0IyVzNNcjUzRzls?=
- =?utf-8?B?ZU5EcThHQnNPbUNROUp0bUNwMHV4YnNNcFhoa3EvMHYxalhNT04xK280WDdM?=
- =?utf-8?B?SVBuTUpxaTZyUkJGaVFOclFSeWJQYU1iZWs0NklxeDk3ZW1PVWVHZC85RjRZ?=
- =?utf-8?Q?qhUyDCEZJjahJzz75EHSs1Rxp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3699b388-cb2f-4207-398c-08db3b1c6eaf
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 06:09:10.8333
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U1bFOYOnt54TYgkR20ALgmQUe7HqsPY9iz+W2XHyrqUTyUzZ1yjZ5TjtIZzBWdLsQkKQfsj9twZ1+SD/PVT15Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7461
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZDWrLnWCzIrybHWB@phenom.ffwll.local>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
-
-On 11 Apr 17:55, Rafael J. Wysocki wrote:
-> On Mon, Apr 10, 2023 at 11:53â€¯AM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > The set value of `fast_switch_enabled` flag doesn't guarantee that
-> > fast_switch callback is set. For some drivers such as amd_pstate, the
-> > adjust_perf callback is used but it still sets `fast_switch_possible`
-> > flag. This is not wrong because this flag doesn't imply fast_switch
-> > callback is set, it implies whether the driver can guarantee that
-> > frequency can be changed on any CPU sharing the policy and that the
-> > change will affect all of the policy CPUs without the need to send any
-> > IPIs or issue callbacks from the notifier chain.  Therefore add an extra
-> > NULL check before calling fast_switch in sugov_update_single_freq
-> > function.
-> >
-> > Ideally `sugov_update_single_freq` function should not be called with
-> > amd_pstate. But in a corner case scenario, when aperf/mperf overflow
-> > occurs, kernel disables frequency invariance calculation which causes
-> > schedutil to fallback to sugov_update_single_freq which currently relies
-> > on the fast_switch callback.
+On Tue, Apr 11, 2023 at 08:47:10PM +0200, Daniel Vetter wrote:
+> On Tue, Apr 11, 2023 at 12:37:23PM -0600, Jeffrey Hugo wrote:
+> > On 4/11/2023 12:21 PM, Daniel Vetter wrote:
+> > > On Tue, Apr 11, 2023 at 11:18:29AM -0600, Jeffrey Hugo wrote:
+> > > > On 4/11/2023 10:31 AM, Daniel Vetter wrote:
+> > > > > On Tue, Apr 11, 2023 at 09:29:27AM -0600, Jeffrey Hugo wrote:
+> > > > > > On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
+> > > > > > > On 4/11/2023 9:13 AM, Greg KH wrote:
+> > > > > > > > On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
+> > > > > > > > > On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+> > > > > > > > > > On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+> > > > > > > > > > > On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+> > > > > > > > > > > > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+> > > > > > > > > > > > > Hi all,
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > After merging the driver-core tree, today's linux-next build (x86_64
+> > > > > > > > > > > > > allmodconfig) failed like this:
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > In file included from include/linux/linkage.h:7,
+> > > > > > > > > > > > >                      from include/linux/kernel.h:17,
+> > > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function
+> > > > > > > > > > > > > 'mhi_qaic_ctrl_init':
+> > > > > > > > > > > > > include/linux/export.h:27:22: error: passing
+> > > > > > > > > > > > > argument 1 of 'class_create' from incompatible
+> > > > > > > > > > > > > pointer type
+> > > > > > > > > > > > > [-Werror=incompatible-pointer-types]
+> > > > > > > > > > > > >        27 | #define THIS_MODULE (&__this_module)
+> > > > > > > > > > > > >           |                     ~^~~~~~~~~~~~~~~
+> > > > > > > > > > > > >           |                      |
+> > > > > > > > > > > > >           |                      struct module *
+> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note:
+> > > > > > > > > > > > > in expansion of macro 'THIS_MODULE'
+> > > > > > > > > > > > >       544 |         mqc_dev_class =
+> > > > > > > > > > > > > class_create(THIS_MODULE,
+> > > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
+> > > > > > > > > > > > >           |                                      ^~~~~~~~~~~
+> > > > > > > > > > > > > In file included from include/linux/device.h:31,
+> > > > > > > > > > > > >                      from include/linux/mhi.h:9,
+> > > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+> > > > > > > > > > > > > include/linux/device/class.h:229:54: note:
+> > > > > > > > > > > > > expected 'const char *' but argument is of type
+> > > > > > > > > > > > > 'struct module *'
+> > > > > > > > > > > > >       229 | struct class * __must_check
+> > > > > > > > > > > > > class_create(const char *name);
+> > > > > > > > > > > > >           |                                          ~~~~~~~~~~~~^~~~
+> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25:
+> > > > > > > > > > > > > error: too many arguments to function
+> > > > > > > > > > > > > 'class_create'
+> > > > > > > > > > > > >       544 |         mqc_dev_class =
+> > > > > > > > > > > > > class_create(THIS_MODULE,
+> > > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
+> > > > > > > > > > > > >           |                         ^~~~~~~~~~~~
+> > > > > > > > > > > > > include/linux/device/class.h:229:29: note: declared here
+> > > > > > > > > > > > >       229 | struct class * __must_check
+> > > > > > > > > > > > > class_create(const char *name);
+> > > > > > > > > > > > >           |                             ^~~~~~~~~~~~
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > Caused by commit
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > >       1aaba11da9aa ("driver core: class: remove
+> > > > > > > > > > > > > module * from class_create()")
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > interacting with commit
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > >       566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > from the drm tree.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > I have applied the following merge fix patch for today.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > > > > > > > > > Date: Tue, 11 Apr 2023 14:16:57 +1000
+> > > > > > > > > > > > > Subject: [PATCH] fixup for "driver core: class:
+> > > > > > > > > > > > > remove module * from class_create()"
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > interacting with "accel/qaic: Add mhi_qaic_cntl"
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Thanks for the fixup. Since Dave is out I've made a
+> > > > > > > > > > > > note about this in my
+> > > > > > > > > > > > handover mail so it won't get lost in the drm-next
+> > > > > > > > > > > > merge window pull. I
+> > > > > > > > > > > > don't think we need any other coordination than
+> > > > > > > > > > > > mention it in each pull to
+> > > > > > > > > > > > Linus, topic tree seems overkill for this. Plus there's no way I can
+> > > > > > > > > > > > untangle the drm tree anyway :-).
+> > > > > > > > > > > 
+> > > > > > > > > > > Want me to submit a patch for the drm tree that moves this to use
+> > > > > > > > > > > class_register() instead, which will make the
+> > > > > > > > > > > merge/build issue go away
+> > > > > > > > > > > for you?  That's my long-term goal here anyway, so converting this new
+> > > > > > > > > > > code to this api today would be something I have to do eventually :)
+> > > > > > > > > > 
+> > > > > > > > > > We kinda closed drm-next for feature work mostly already (just pulling
+> > > > > > > > > > stuff in from subtrees), so won't really help for this merge window.
+> > > > > > > > > > 
+> > > > > > > > > > For everything else I think this is up to Oded, I had no
+> > > > > > > > > > idea qaic needed
+> > > > > > > > > > it's entire own dev class and I don't want to dig into this
+> > > > > > > > > > for the risk I
+> > > > > > > > > > might freak out :-)
+> > > > > > > > > > 
+> > > > > > > > > > Adding Oded.
+> > > > > > > > > > 
+> > > > > > > > > > Cheers, Daniel
+> > > > > > > > > 
+> > > > > > > > > Sorry for the mess.
+> > > > > > > > > 
+> > > > > > > > > I made a note to update to class_register() once my drm-misc access is
+> > > > > > > > > sorted out.  Looks like we'll address the conflict in the merge
+> > > > > > > > > window, and
+> > > > > > > > > catch the update to the new API in the following release.
+> > > > > > > > 
+> > > > > > > > Wait, I think the large question is, "why does this need a separate
+> > > > > > > > class"?  Why are you not using the accel char device and class?  That is
+> > > > > > > > what everything under accel/ should be using, otherwise why put it in
+> > > > > > > > there?
+> > > > > > > > 
+> > > > > > > > And what exactly are you using that class for?  Just device nodes?  If
+> > > > > > > > so, how many?
+> > > > > > > > 
+> > > > > > > > thanks,
+> > > > > > > > 
+> > > > > > > > greg k-h
+> > > > > > > 
+> > > > > > > 
+> > > > > > > Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed
+> > > > > > > out at the time that AIC100/QAIC would need the same functionality.
+> > > > > > > You/Jakub told myself/Mani/Loic that a combined implementation is not
+> > > > > > > acceptable, and every area needs to implement their own version of
+> > > > > > > MHI_UCI.
+> > > > > > > 
+> > > > > > > We took the WWAN subsystem and simplified it to meet our needs.
+> > > > > > > 
+> > > > > > > The functionality is QAIC specific, so wedging it into the Accel node
+> > > > > > > seems to be a poor fit as it would subject Habana and iVPU to the same.
+> > > > > > 
+> > > > > > Also, I forgot to mention.  QAIC is sharing userspace components with WWAN,
+> > > > > > so we really cannot diverge from what WWAN has done and define a new API
+> > > > > > through the Accel node.
+> > > > > 
+> > > > > So there is an accel/drm_device in the qaic driver, but there's also this
+> > > > > different class thing, which I don't get.
+> > > > > 
+> > > > > And yeah if that's an entirely orthogonal thing then I guess that should
+> > > > > be in a different driver/subsystem, all supported with the aux bus to
+> > > > > multiplex the underlying device.
+> > > > > 
+> > > > > I haven't found any explanation for what MHI is (or any of the other
+> > > > > acrynoms), so I'm entirely lost.
+> > > > 
+> > > > MHI is documented at Documentation/mhi/
+> > > > It is also referenced in the QAIC documentation - Documentation/accel/qaic/
+> > > > 
+> > > > It stands for "Modem Host Interface" (arguably a bad name now, but you can
+> > > > guess where it came from).  It is a Qualcomm hardware block and associated
+> > > > software protocol that provides logical channels over a hardware link.  Most
+> > > > commonly used for PCIe.
+> > > > 
+> > > > Pretty much any modern Qualcomm PCIe device implements it.  4G modems, 5G
+> > > > modems, Wifi adapters, AIC100, etc.  Instead of talking "PCIe", the host
+> > > > talks "MHI" to the devices in most cases.
+> > > > 
+> > > > The core implementation for MHI exists in drivers/bus/mhi
+> > > > 
+> > > > MHI_UCI is the MHI Userspace Character Interface.  It looked like most buses
+> > > > (eg USB) provide some direct device access to userspace.  MHI_UCI was
+> > > > formulated along those same lines - provide direct userspace access to a
+> > > > whitelist of channels.  Qualcomm provides some fairly extensive userspace
+> > > > utilities, and various communities have developed open source alternatives
+> > > > using this mechanism.
+> > > > 
+> > > > MHI_UCI was proposed to the community as the common driver (misc device) for
+> > > > all of the MHI devices.  The Net folks came along, saw that it was used for
+> > > > 4G/5G modems (Wireless Wide Area Network devices or WWAN) and decided that
+> > > > they would not tolerate a common implementation.  They NACK'd MHI_UCI and
+> > > > required that a WWAN specific subsystem be developed which would only
+> > > > service WWAN devices.  The Net folks decreed that other subsystems which
+> > > > needed the same functionality need to have their own copy of the
+> > > > implementation.
+> > > > 
+> > > > QAIC devices expose Sahara (a boot time protocol) which has an existing
+> > > > userspace that is also used with Modems, although it looks like WWAN doesn't
+> > > > currently support those generations of products today.  QAIC devices also
+> > > > support DIAG, which is currently supported in WWAN.  The intent was to add
+> > > > the QAIC support for DIAG at a later time since it is not required for the
+> > > > bare minimum viable driver.
+> > > > 
+> > > > So, QAIC devices support the same services, would use the same userspace,
+> > > > but can't use a common implementation because Jakub(net) doesn't want to
+> > > > share and convinced Greg to go along.  I'm not interested in pushing a cross
+> > > > tree fight (arguably already did that with MHI_UCI).  If neither Greg nor
+> > > > Net will accept a common implementation that accelerators can use (QAIC),
+> > > > then the only place I can fit this is in the Accel area.
+> > > > 
+> > > > Using aux bus seems to make little difference if QAIC is the only consumer
+> > > > of this.  I'm willing to refactor the implementation with some feedback and
+> > > > guidence, but the uAPI seems set in stone due to the existing userspace and
+> > > > WWAN (char devs with open/close/read/write/poll).
+> > > 
+> > > Ok, so MHI _is_ the bus. Thanks for the explainer, I should have searched
+> > > a bit more in Documentation/
+> > > 
+> > > > What would make you less unhappy?
+> > > 
+> > > The MHI generic userspace driver interface needs to be in drivers/bus/mhi,
+> > > not in a random driver. I think we should revert 566fc96198b4
+> > > ("accel/qaic: Add mhi_qaic_cntl") and re-land that through Greg's tree (or
+> > > wherever mhi patches go to). This of course assuming that the accel
+> > > userspace on top of the accel/drm_device does work stand-alone, and it's
+> > > just the tooling and other userspace that needs MHI_UCI. If we end with a
+> > > non-functional stack due to that, then I guess the entire driver is a bit
+> > > up for questions, because at least the accel runtime is supposed to just
+> > > run on top of the accel devnode and nothing else. Otherwise container
+> > > stuff gets really bad, among a lot of other things.
+> > > 
+> > 
+> > Looping in the MHI maintainer for your proposal.
+> > 
+> > The accel userspace can work without MHI_UCI.
+> > 
+> > The revert will be non-trivial so I'll look at posting that tomorrow.
 > 
-> Yes, it does.  Which is why that callback must be provided if the
-> driver sets fast_switch_enabled.
-> 
-> Overall, adjust_perf is optional, but fast_switch_enabled can only be
-> set if fast_switch is actually present.
+> Yeah if the full revert is invasive then could we just do a minimal one
+> that drops the various register_chrdev/class_create/device_create calls?
+> That avoids the conflict plus makes sure no uabi is registers for the
+> MHI_UCI. Anything else we can sort out later.
 
-Then should the below logic be changed in sugov_start function?
+That sounds reasonable to me, thanks!
 
-'''
-        else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
-                 uu = sugov_update_single_perf;
-'''
-
-This logic restricts the selection of adjust_perf function based on
-fast_switch_enabled flag. If this fast_switch_enabled check is removed
-then amd_pstate driver can disable this flag and shedutil can select
-adjust_perf without this dependency.
-
-Thanks,
-Wyes
-> 
-> Please fix the driver.
-> 
-> >
-> > Normal flow:
-> >   sugov_update_single_perf
-> >     cpufreq_driver_adjust_perf
-> >       cpufreq_driver->adjust_perf
-> >
-> > Error case flow:
-> >   sugov_update_single_perf
-> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
-> >       cpufreq_driver_fast_switch
-> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
-> >
-> > Fix this NULL pointer dereference issue by doing a NULL check.
-> >
-> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
-> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> >
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  drivers/cpufreq/cpufreq.c        | 11 +++++++++++
-> >  include/linux/cpufreq.h          |  1 +
-> >  kernel/sched/cpufreq_schedutil.c |  2 +-
-> >  3 files changed, 13 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 6d8fd3b8dcb5..364d31b55380 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2138,6 +2138,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> >  }
-> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
-> >
-> > +/**
-> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
-> > + *
-> > + * Return 'true' if the ->fast_switch callback is present for the
-> > + * current driver or 'false' otherwise.
-> > + */
-> > +bool cpufreq_driver_has_fast_switch(void)
-> > +{
-> > +       return !!cpufreq_driver->fast_switch;
-> > +}
-> > +
-> >  /**
-> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-> >   * @cpu: Target CPU.
-> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> > index 65623233ab2f..8a9286fc718b 100644
-> > --- a/include/linux/cpufreq.h
-> > +++ b/include/linux/cpufreq.h
-> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
-> >  /* Pass a target to the cpufreq driver */
-> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> >                                         unsigned int target_freq);
-> > +bool cpufreq_driver_has_fast_switch(void);
-> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
-> >                                 unsigned long min_perf,
-> >                                 unsigned long target_perf,
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index e3211455b203..a1c449525ac2 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -364,7 +364,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
-> >          * concurrently on two different CPUs for the same target and it is not
-> >          * necessary to acquire the lock in the fast switch case.
-> >          */
-> > -       if (sg_policy->policy->fast_switch_enabled) {
-> > +       if (sg_policy->policy->fast_switch_enabled && cpufreq_driver_has_fast_switch()) {
-> >                 cpufreq_driver_fast_switch(sg_policy->policy, next_f);
-> >         } else {
-> >                 raw_spin_lock(&sg_policy->update_lock);
-> > --
-> > 2.34.1
-> >
+greg k-h
