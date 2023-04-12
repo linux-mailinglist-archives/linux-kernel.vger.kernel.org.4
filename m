@@ -2,90 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E7D6E025A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B466E025B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDLXNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 19:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S229934AbjDLXNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDLXNi (ORCPT
+        with ESMTP id S229498AbjDLXNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 19:13:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF21BE1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:12:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681341171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DqjVx8DdVE7yyHJKc/GaG9WLw8shGI6NpWmfl69SUoE=;
-        b=bOyUPGtujdSlzeygurislRRvLpTQ85GAd4UMhkuI8lKbgCkz8XcxkgER+OEFor7Hl1WTOR
-        bKSGT/QXqa/DR1Dfu+z+2H+kf2QV7g0apQGxL2b0iYEoZ+ITLRzzkTteE4zG07bYx5tmnE
-        2zA32RAXw35Q1iCH1Y2+0FKeUZEtPDM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-RzSsyzYVPU2T4nYnBVXo7Q-1; Wed, 12 Apr 2023 19:12:47 -0400
-X-MC-Unique: RzSsyzYVPU2T4nYnBVXo7Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D72A7101A550;
-        Wed, 12 Apr 2023 23:12:45 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 78B9A2166B26;
-        Wed, 12 Apr 2023 23:12:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZDbO3haK/1+7xdRC@infradead.org>
-References: <ZDbO3haK/1+7xdRC@infradead.org> <20230411160902.4134381-1-dhowells@redhat.com> <20230411160902.4134381-5-dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v6 04/18] mm: Make the page_frag_cache allocator use per-cpu
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE0F4680
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:13:36 -0700 (PDT)
+Received: from mail.panix.com (localhost [127.0.0.1])
+        by mailbackend.panix.com (Postfix) with ESMTPA id 4Pxdmv04mMz2pZC;
+        Wed, 12 Apr 2023 19:13:34 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1681341215; bh=McaN/f68QlopTbL9CcHx2/7yPR1k84y49eeRf5KpOh4=;
+        h=In-Reply-To:References:Date:Subject:From:To:Cc;
+        b=aC0EK7Yd+e4ZrZT+QJpsf6afc4ZK9GbZ6iR+Q0gtbWGAq9DeZGdQ51ei9XS9G0pkZ
+         aY1TkHLRgFRO+krj7tY/Hjm7vye2qmOcBUPLkpDF6ryItMyNrkWXTmgxc431nNSj6E
+         dOCXhNkgnM2y+jLST9k5p1+biiUsVkd/7rCMNvnE=
+X-Panix-Received: from 166.84.1.2
+        (SquirrelMail authenticated user pa@panix.com)
+        by mail.panix.com with HTTP;
+        Wed, 12 Apr 2023 19:13:35 -0400
+Message-ID: <9e6fff69b09b36cbdd96499cd0015154.squirrel@mail.panix.com>
+In-Reply-To: <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+References: <20230412150225.3757223-1-javierm@redhat.com>
+    <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
+    <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
+    <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
+    <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
+    <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
+    <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
+    <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+    <40edb0fdb0eaff434f4872dd677923a6.squirrel@mail.panix.com>
+    <87a5zcsqg8.fsf@minerva.mail-host-address-is-not-set>
+Date:   Wed, 12 Apr 2023 19:13:35 -0400
+Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
+ calculated
+From:   "Pierre Asselin" <pa@panix.com>
+To:     "Javier Martinez Canillas" <javierm@redhat.com>
+Cc:     "Pierre Asselin" <pa@panix.com>,
+        "Jocelyn Falempe" <jfalempe@redhat.com>,
+        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Ard Biesheuvel" <ardb@kernel.org>
+User-Agent: SquirrelMail/1.4.23-p1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <399349.1681341160.1@warthog.procyon.org.uk>
-Date:   Thu, 13 Apr 2023 00:12:40 +0100
-Message-ID: <399350.1681341160@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,72 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+(Okay, can't back out *all* of the first patch, just the assignment
+to mode->stride.)
 
-> On Tue, Apr 11, 2023 at 05:08:48PM +0100, David Howells wrote:
-> > Make the page_frag_cache allocator have a separate allocation bucket for
-> > each cpu to avoid racing.  This means that no lock is required, other than
-> > preempt disablement, to allocate from it, though if a softirq wants to
-> > access it, then softirq disablement will need to be added.
-> ...
-> Let me ask a third time as I've not got an answer the last two times:
+Anyway, here you go:
 
-Sorry about that.  I think the problem is that the copy of the message from
-you directly to me arrives after the first copy that comes via a mailing list
-and google then deletes the direct one - as obviously no one could possibly
-want duplicates, right? :-/ - and so you usually get consigned to the
-linux-kernel or linux-fsdevel mailing list folder.
+grub: gfxpayload=keep
+[    0.003333] Console: colour dummy device 128x48
+[    0.003333] printk: console [tty0] enabled
+[    0.419983] fbcon: Taking over console
+[    0.516198] pci 0000:01:05.0: vgaarb: setting as boot VGA device
+[    0.516229] pci 0000:01:05.0: vgaarb: bridge control possible
+[    0.516253] pci 0000:01:05.0: vgaarb: VGA device added:
+decodes=io+mem,owns=io+mem,locks=none
+[    0.516288] vgaarb: loaded
+[    3.343649] simple-framebuffer simple-framebuffer.0: framebuffer at
+0xd8000000, 0x300000 bytes
+[    3.343687] simple-framebuffer simple-framebuffer.0: format=r8g8b8,
+mode=1024x768x24, linelength=4096
+[    3.344199] Console: switching to colour frame buffer device 128x48
+[    3.681177] simple-framebuffer simple-framebuffer.0: fb0: simplefb
+registered!
 
-> > Make the NVMe, mediatek and GVE drivers pass in NULL to page_frag_cache()
-> > and use the default allocation buckets rather than defining their own.
-> 
-> why are these callers treated different from the others?
+[    3.343345] sysfb: si->lfb_depth 32 si->lfb_width 1024
+[    3.343372] sysfb: si->red_size 8 si->red_pos 16
+[    3.343392] sysfb: si->green_size 8 si->green_pos 8
+[    3.343413] sysfb: si->blue_size 8 si->blue_pos 0
+[    3.343433] sysfb: si->rsvd_size 0 si->rsvd_pos 0
+[    3.343453] sysfb: bits_per_pixel 24 si->lfb_linelength 4096
+[    3.343476] sysfb: stride 3072
+[    3.343493] sysfb: format r8g8b8
 
-There are only four users of struct page_frag_cache, the one these patches
-modify::
+So it's the rsvd_size and rsvd_pos that are bogus.  The fix would be to:
+  1) believe si->lfb_depth
+  2) fill with ones a bitmask of size si->lfb_depth
+  3) clear chunks of bits based on si->{red,green,blue,rsvd}_{size,pos}
+  4) printk if the bitmask is not all zeros
+  5) override rsvd_{size,pos} based on the bitmask
+That way you know where the 'x' goes in xrgb.
 
- (1) GVE.
- (2) Mediatek.
- (3) NVMe.
- (4) skbuff.
+Hm.  Could that fix my two boxes but cause a regression for someone else ?
+What if _depth is low but the rsvd_ are right ?
+Then _width and _linelength would be inconsistent with _depth but
+consistent with the recomputed bits_per_pixel ?  How many ways can the
+firmware lie ?
 
-Note that things are slightly confused by there being three very similarly
-named frag allocators (page_frag and page_frag_1k in addition to
-page_frag_cache) and the __page_frag_cache_drain() function gets used for
-things other than just page_frag_cache.
-
-I've replaced the single allocation buckets with per-cpu allocation buckets
-for (1), (2) and (3) so that no locking[*] is required other than pinning it
-to the cpu temporarily - but I can't test them as I don't have hardware.
-
-[*] Note that what's upstream doesn't have locking, and I'm not sure all the
-    users of it are SMP-safe.
-
-That leaves (4).
-
-Upstream, skbuff.c creates two separate per-cpu frag caches and I've elected
-to retain that, except that the per-cpu bits are now inside the frag allocator
-as I'm not entirely sure of the reason that there's a separate napi frag cache
-to the netdev_alloc_cache.
-
-The general page_frag_cache allocator is used by skb_splice_from_iter() if it
-encounters a page it can't take a ref on, so it has been tested through that
-using sunrpc, sunrpc+siw and cifs+siw.
-
-> Can you show any performance numbers?
-
-As far as I can tell, it doesn't make any obvious difference to directly
-pumping data through TCP or TLS over TCP or transferring data over a network
-filesystem such as sunrpc or cifs using siw/TCP.  I've tested this between two
-machines over a 1G and a 10G link.
-
-I can generate some actual numbers tomorrow.
-
-
-Actually, I probably can drop these patches 2-4 from this patchset and just
-use the netdev_alloc_cache in skb_splice_from_iter() for now.  Since that
-copies unspliceable data, I no longer need to allocate frags in the next layer
-up.
-
-David
+We need more testers, don't we ?
 
