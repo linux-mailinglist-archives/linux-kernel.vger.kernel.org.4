@@ -2,137 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB346DFF5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BD16DFF66
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjDLUGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S229928AbjDLUJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDLUGd (ORCPT
+        with ESMTP id S229499AbjDLUJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:06:33 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E18D1B7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:06:30 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230412200627euoutp02837b88dcfce20bc5632a5c02deaa408e~VSLcV3oKG3029830298euoutp02S
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 20:06:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230412200627euoutp02837b88dcfce20bc5632a5c02deaa408e~VSLcV3oKG3029830298euoutp02S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681329987;
-        bh=cDTpSr6yaesmoByZzLbeOs4uBrgU5JYI1gxT5JpD0IY=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=Or4uKRljsdPqDOoTzYgFOmwc9GNFXYHxccPDUK30txg4UFF53jdMPR39jpgPjQJGl
-         WUhjmoT74zTLp0uEC5/YvoI5TgPs/6ZWt6WYq5rKUvLxQKYx0ud3cBj3CJS9dUN9Mt
-         0u+tC6pijcJzIKoJqnh9NV9MQ07ZvJJwsR5k5FXg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230412200625eucas1p194de814c6a39e794ef321dd4a0b15bc5~VSLbOjvn81127611276eucas1p1W;
-        Wed, 12 Apr 2023 20:06:25 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 14.EF.09503.14F07346; Wed, 12
-        Apr 2023 21:06:25 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230412200625eucas1p1b2d245470685f5720807cedc89f5cc33~VSLa8SiGk2591525915eucas1p1K;
-        Wed, 12 Apr 2023 20:06:25 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230412200625eusmtrp1e655cbb364ef27c11448d6719af8b86d~VSLa7tSuO0435404354eusmtrp1k;
-        Wed, 12 Apr 2023 20:06:25 +0000 (GMT)
-X-AuditID: cbfec7f2-ea5ff7000000251f-0e-64370f41deb4
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 8A.F4.34412.14F07346; Wed, 12
-        Apr 2023 21:06:25 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230412200625eusmtip1026dc2552ceb63f6431b5a611a61290a~VSLawnFxH2331123311eusmtip1i;
-        Wed, 12 Apr 2023 20:06:25 +0000 (GMT)
-Received: from [192.168.8.190] (106.210.248.243) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 12 Apr 2023 21:06:24 +0100
-Message-ID: <60dc0eca-dc6c-0df4-548f-0cc55c5ef0f5@samsung.com>
-Date:   Wed, 12 Apr 2023 22:06:23 +0200
+        Wed, 12 Apr 2023 16:09:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D143161B3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681330121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hdO2/I6wOUQxoSSiwra0n4gQA+gYUisy/Yi9wlX79ws=;
+        b=hQLEBxLzsIefIzM49b8iHYgn35Ki1e3lsjxygq95WjOqUjMhj1FR8J5Oe9zpB5tNPeIAyQ
+        5NfkGGLkCi4maozZwj96tUmh3AgM7D0l0xZq5bkO5G4noHpXas19EAMmHB6T2y8KvyoecG
+        1eugd0zUJgSX9IwbHCLRqrXW8HfE3SM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-519-XdMWEGzWMvyUFgR4hLpnNA-1; Wed, 12 Apr 2023 16:08:39 -0400
+X-MC-Unique: XdMWEGzWMvyUFgR4hLpnNA-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-74a904f38f3so88173885a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:08:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681330119; x=1683922119;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hdO2/I6wOUQxoSSiwra0n4gQA+gYUisy/Yi9wlX79ws=;
+        b=NeTliGAE/WpcGnYsmjKz/Bo2z0yCAZKuOqWt1YscEpZDcAKcz4krn/n1l7xrGJamZx
+         UHSF/R1Hpn4qZnByZbg1VgEvVQpKguQz80WXDtjMmtHUak9vQRCDJGX5VQoTQVCyAI0T
+         dhYR9FKkpl4M2zSNEug4wtZtfwr3pdPQpRAcpigxXpYs2CQEYMweYx4ybeq2q2VfjWL5
+         XjNlYjZ7Q1/eVaD8vZSwiYXpeJMLqKvBsbZZpCQgk1+wv8stvSb5Fog+eSXOPRhAUc6a
+         8Z5OnqDqbsRZbOzOgGgv57BxjPfOWXC3wRCk/bo/lkmF5DZMMiuSMruRu48R4XDGkr3S
+         vBRA==
+X-Gm-Message-State: AAQBX9fYlEe2k6wj3XsjYU8W3sau/50bKCki9sUiO2ll7+ud64qfSSo/
+        UwlvMM1xJKRErFXqsFQ6+hnhieJF4zW5UkqDLJVRJb2JUWLsDBam7R5Gm35eVrTyvigXBsx+u1x
+        hHw2mpATCimDOhkggWZFaKj76
+X-Received: by 2002:a05:6214:401a:b0:5aa:14b8:e935 with SMTP id kd26-20020a056214401a00b005aa14b8e935mr5581611qvb.2.1681330119268;
+        Wed, 12 Apr 2023 13:08:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bX1oAtWowJaU6wuzfTqtxyW4XmdGaEUQDzVIuNdn57ibnNFhftBPj9Nv0c9ckS+f1wdk5+SQ==
+X-Received: by 2002:a05:6214:401a:b0:5aa:14b8:e935 with SMTP id kd26-20020a056214401a00b005aa14b8e935mr5581584qvb.2.1681330118958;
+        Wed, 12 Apr 2023 13:08:38 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id pe6-20020a056214494600b005e938eb99ecsm3618698qvb.122.2023.04.12.13.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 13:08:37 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 16:08:36 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>
+Subject: Re: [PATCH v2 16/31] selftests/mm: UFFDIO_API test
+Message-ID: <ZDcPxBvzPOt5POy/@x1n>
+References: <20230412163922.327282-1-peterx@redhat.com>
+ <20230412164257.328375-1-peterx@redhat.com>
+ <CAJHvVcgtAhEkqkYegHONCJz5uJoxRLRdm9Kp8DmkcnZhU=w=9g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.9.0
-Subject: Re: [PATCH] scripts/gdb: use mem instead of core_layout to get the
- module address
-To:     Florian Fainelli <f.fainelli@gmail.com>, <jan.kiszka@siemens.com>,
-        <kbingham@kernel.org>
-CC:     <gost.dev@samsung.com>, <linux-kernel@vger.kernel.org>,
-        <song@kernel.org>, <mcgrof@kernel.org>
-Content-Language: en-US
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <9954a532-871a-e747-908f-bc5a3e32a55f@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.243]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+c45nh0Hq+PUfCsrm9pFyy4UjtqswGpJQRIE3RvtZOrcdNOy
-        LHAxqmno0vIyUsMizVJhijkzU0uXVtq9bZIYOSGHl3JW6948Rv73O+/zPN/3vIePwvl6j1lU
-        rCKZUSmkcgHJJeraXV1LN0wPly1vurtS+G34AUfYa7Xiws7MGkz4ouEyKbTo7UhoLvtJricl
-        JsNbjsRYoSMltztyMMmYce52YjdXJGPksUcZ1bKIg9wjjSOqxD48tacvG0tHZ/AM5EkBvQqe
-        Zn3wyEBcik+XI6joG0dugU87EWhrtrE8hqBxKOpfoMronAyUISjQNpHsx19T7eubk8odBN26
-        a6Q7wqMjoM/gINxM0MHQ1f+aYOde0FHYP8G+9G7I6jF6uNmb3guF5a6JGj70fui+/n5ijtMy
-        aGmvQyz7ga2/BMtAFEXSIaDRcdxjT1oMJtePSfs8uD10GXdbgA6Es80B7AKnoLPWhrlrAj1K
-        QamzCmOFSMgb/kyy7A2D5loOy/7wKPc8wXIa2C3fcTasRZBtqibZC9ZC1mO5G3F6MVQ3LGPt
-        G+D+m/TJCtPAMuTFNpsGOXX5uB4FG6b8B8OUvQxTFjD8P/QKIiqQH5OiTohh1CsUzLEwtTRB
-        naKICTukTDCiv4/m0S/zp3pUNPgxrBVhFGpFQOECH97XyNUyPk8mPX6CUSkPqFLkjLoVzaYI
-        gR8vVNxxiE/HSJOZeIZJZFT/VIzynJWO5Z80mZlBcaxFnfVLb9vhOnXO+7evrbjQnrnzcIs+
-        YuOZ4QKuNO7Z+tKbnGJBV8PL02J+/dy0PP/oNckXFo86pKMJq6xtlYb4hZZLLd2y8U9KoiA8
-        RBkdzwsdezeoMe9b8vDenJwvVynF+7BuebHsFn/dxfBFdxJ/ZsLzV/VlAZ1J35JEuhEvh5fv
-        gEC/FLnyGmf0lNrHizTVcW1Jhrfi0kjXzKq2eRAQZe2VoxidqMQpEh1tv+WvFzp65zenBazT
-        5I71DNlR4WbCcuPHvoFR2564LZ72wCdBzftrPsjyR1I3KZcvGK9PFW7NdWY3Bm0cMFU6+rVk
-        1S6rVrNFLCDUR6QrQnCVWvoH6mQrsaMDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOIsWRmVeSWpSXmKPExsVy+t/xu7qO/OYpBq9nyFr8eneE3eLezZvM
-        Fqe6NzNZXN41h83ixoSnjBbHl/9lc2Dz2DnrLrvHplWdbB7bT05i8vi8SS6AJUrPpii/tCRV
-        ISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEvY8/7ooIHzBW3H/Qz
-        NTC2MXcxcnJICJhIrNv0hbWLkYtDSGApo8SdJetYIRIyEhu/XIWyhSX+XOtigyj6yCgxcf0m
-        FpCEkMBuRomFm5NAbF4BO4kHs16DxVkEVCXOPbnGAhEXlDg58wmYLSoQJfH5QAs7iC0sECMx
-        c8VPRhBbRCBO4vyyx0DLODiYBVIkWv7pQOz6xijx7uJXsCOYBcQlbj2ZzwRSwyagJdHYCTaG
-        U8BWYufPP1AlmhKt23+zQ9jyEtvfzmEGKZcQUJZoP6AA8UqtxOe/zxgnMIrOQnLcLCQLZiGZ
-        NAvJpAWMLKsYRVJLi3PTc4uN9IoTc4tL89L1kvNzNzECY3TbsZ9bdjCufPVR7xAjEwfjIUYJ
-        DmYlEd4fLqYpQrwpiZVVqUX58UWlOanFhxhNgSE0kVlKNDkfmCTySuINzQxMDU3MLA1MLc2M
-        lcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYtGKYFaeVnwv/sGa31xlxkeKShLLFv560VIhr
-        3bxgmP15U39T8IxJGxL4luu94e77ysRr8m3G4erNez7P7FyyTNmug72y/nOSnI02kzzTMia+
-        5V6Sv3/UNz9+mbHhfbmYf4zZ+UrxnTf+HNLbciuAS+z8idkFm6qMVtfWPLTS+d/h7bSEl3/H
-        VYWQinKXGxoLJdrDqqbtS+dlO6D/cGL61tW/J7yWqtsgvDD44g63r8K3n80KZDj1hUPZY66i
-        1cqFy41OnD6bf6Di0FwXQbFtSxZZSxclGj57Vt11+f/KBeJXlq496B+p1fR1w4SoJedi3rvZ
-        u4vNPmr3/vTHxd7d7QJuM55tXq7I4f1JcLr+GSWW4oxEQy3mouJEAMqIlc1aAwAA
-X-CMS-MailID: 20230412200625eucas1p1b2d245470685f5720807cedc89f5cc33
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230412112608eucas1p2e8aa819cf92ccc2bacfe0ff9bfcd7a6f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230412112608eucas1p2e8aa819cf92ccc2bacfe0ff9bfcd7a6f
-References: <20230412111508.892296-1-p.raghav@samsung.com>
-        <CGME20230412112608eucas1p2e8aa819cf92ccc2bacfe0ff9bfcd7a6f@eucas1p2.samsung.com>
-        <ffc82a81-c212-7990-53fb-2f95eb7af2ad@samsung.com>
-        <9954a532-871a-e747-908f-bc5a3e32a55f@gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVcgtAhEkqkYegHONCJz5uJoxRLRdm9Kp8DmkcnZhU=w=9g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> Replace core_layout with its new counterpart mem[MOD_TEXT].
->>>
->>> Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
->>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->>> ---
->>
->> I had one question:
->> - Is there a way to import enum? I currently hard code 0 but it will better if we can
->> use the MOD_TEXT enum instead.
+On Wed, Apr 12, 2023 at 12:47:39PM -0700, Axel Rasmussen wrote:
+> > +#define  uffd_test_fail(...)  do {             \
+> > +               printf("failed [reason: ");     \
+> > +               printf(__VA_ARGS__);            \
+> > +               printf("]\n");                  \
+> > +               ksft_inc_fail_cnt();            \
+> > +       } while (0)
+> > +
+> > +#define  uffd_test_skip(...)  do {             \
+> > +               printf("skipped [reason: ");    \
+> > +               printf(__VA_ARGS__);            \
+> > +               printf("]\n");                  \
+> > +               ksft_inc_xskip_cnt();           \
+> > +       } while (0)
 > 
-> You should be able to with updating constants.py.in and using LX_GDBPARSED()
+> Some of this is duplicating what's in kselftest_harness.h - e.g.
+> assertions, printing test summary, keeping track of pass/fail/skip
+> counts, etc.
+> 
+> I wonder how you feel about using the standard harness? E.g. is the
+> plan to do this (more straightforward?) refactor first, and then
+> switch later? Or is there some reason it can't be used?
 
-Thanks a lot. This helps.
+David asked similar question.  I wanted to arrange the output mostly for:
+(1) one test per line, (2) dump test name before anything (even failing).
+The 2nd one is important for uffd tests since it uses err() which bails out
+immediately on unexpected failures (comparing to uffd_test_fail).
+
+To achieve that I found I can use ksft_inc_xskip_cnt() etc. so I kept using
+the counters in the harness but leave the print format on my own.  I assume
+that's also why these were exported in kselftests.h so when tests want to
+have customized output it can still use the counters.
+
+Thanks,
+
+-- 
+Peter Xu
+
