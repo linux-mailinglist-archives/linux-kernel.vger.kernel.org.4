@@ -2,114 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AED06DFE34
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53C26DFE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjDLS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S229659AbjDLTAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjDLS7R (ORCPT
+        with ESMTP id S229575AbjDLTAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:59:17 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24AE40F9;
-        Wed, 12 Apr 2023 11:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681325925; i=j.neuschaefer@gmx.net;
-        bh=arIfURks3B5Vf0o5lhr2f1M0B+uljezROcQ5CKR6D/E=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=eWiyNxmoZOwn4VwHHTvzv4fpyPOqxFCOIcHOYZvrFaeq1IgeGafY+jvDDR0meDtmj
-         8Zv+0oaRuFibuDC11bFwo8x5/Sf3HJ02wpA/svSnjaE7CWZHsiym96z5xGpwgctTab
-         HEGqShUa3I/P/a7SlK1cPSrb0RVJoeHMlznjXPpI0Bi8UKsQaE08UN6MeyCW84vtie
-         hmrjH2RrD2Ql7b29gb9tTs9KvxRy9BBX05fY6pDGbsCi9xFMKsklq4oQS0CeA7qtPP
-         U8WkrszAi2x0d62SIh8HupyCdCF3qsXGJp8qL8xs6DiIr8jy2gj4qNW5muwY1YgwR4
-         UgXsdC9hxt3qg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5fMY-1pjtSp1GKA-007AXT; Wed, 12
- Apr 2023 20:58:45 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     devicetree@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: leds: Fix reference to definition of default-state
-Date:   Wed, 12 Apr 2023 20:58:31 +0200
-Message-Id: <20230412185831.3788056-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.2
+        Wed, 12 Apr 2023 15:00:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B754EE5;
+        Wed, 12 Apr 2023 11:59:55 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CI7IWr024906;
+        Wed, 12 Apr 2023 18:59:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TaIn1GO7ajcT9IGQ63Uw2sjmE7ififai7+zoeqqWTB8=;
+ b=RfUC+iK/JuzzFrxEq/0bGXd+hj3YGMWz82z1acUhcG/9VF/Hvp2GeoAf3aGyvbQASzwn
+ t1Dh9WjPFPT715oodoN2M7xO5PRdR0kPbutZKetj9Z4dO4wti0ASrL9EGaH8teDzAUzw
+ iGm5SiMz0VGDpn1o6nNPlfSHx27V6hzx42ZYRG10fssnrLjhats0wmqMayQoAEJIWvpR
+ YFDptS6/tZ3wBaBgl47orOuvLe7n74M6Z4eeUdfRBbYyRebYq62Rh88SI0MEYw0t4NCT
+ 99Wp2+v7TVuyUu4s6NysT11bQpcRoUvTTDVU4nnDGWz+90zJ0SHc3CFHbe5iCSov/wJe 0g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwj7wj6tj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 18:59:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CIxjXr025167
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 18:59:45 GMT
+Received: from [10.110.73.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
+ 2023 11:59:44 -0700
+Message-ID: <74c5da6d-d103-a9c8-33ce-84f44b3962ed@quicinc.com>
+Date:   Wed, 12 Apr 2023 11:59:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wM6RI3iIKG+IrVeFv3Ib4KMo0RqAbtrXYms789K8O8DPkDGwkUa
- tIspzwJ2UF1UmTzqzHiTD5ROVW8PmZml6UR4uBliT2bkFukQlynH2+XvadcK6hFzi74loO1
- GRYqxJc9HCKcM1j+0U6hbmRoLmioTFP9UD9wZXA62RTKz2VtE3Np8O9Be4xAg3lzwcf2UQf
- sB5JQZ0RHdMKKVJdenx6Q==
-UI-OutboundReport: notjunk:1;M01:P0:ODxp1wdoa4Y=;WAS43g9EzKnP9KcfgqGL4hLnuz7
- PqRCXyNktVwpi1w18L5VPf2astLGQHzolRNZG72Dc9c5mY3nD6/O7IhjDb6qyd9Qp5TeoFpE4
- taoZlT5B55VuVdzmwf1CtfjhS3qSBSfpmLikpmU8UoR+mx4JbF1/2sPAkxVeevubpzvVHBKjI
- Vie1DCTAAzGIToekyfBx5ri20ZbjDi86kMqLcva5J1I0UXmFr5ByRfJ0mSOntxf6Fz+f7jx2r
- r+pF+gWdfAGUHO2xCQxjEhanLDm/C/advY2ar94iHD0maSw1rVGSfyBB1uuijsY8L39UH7mL1
- xV86pxx6oo/K+RU4Hk6x/Ez67XWJj4yTP2nZWKf+ihF4s/8GMOEwd1pGcbsQlw6Oh3W8DjMkb
- qIk6HGdFONDJR3KD/E9xf/ZiwNhA4e7UXKUwTZjImk/mmsByRbfr5YBkWqgTnXkqlTm2Y2CHl
- ibrTVO03wOuesPbPNqNVQCrh4Wq8Fvu9NzDf4AZc5qmUq/w5H8uX03/MQmgrzNqJK0+jznd6L
- IVDgs45HQsBFAVfAe3Nxqft+/+Z3M4iAae5geJsUFSNOf7e0kJ+gjtCGfFBmJzFg6csW6TLFX
- u35/E7CcWsv35hGTYTnFDGeNYaxPoIrBb8usJzWPFbOCyU7lVYvbhJSxXkzX8hBTfIy/jfNRU
- IbuYHfVMo/e8PYcjA3hmiI6DlZwNlXZPvZ3eMnoEcRGgGXZiakYoSLoCtAh+vYBFA5y6VcCxb
- oEFrpOGKFHP3c0emLd8wiivljJWhjRIeVNfJvTNYt8Ng+LWouJaF1K1FBhnRrcOqjGnUx/kEi
- aH4xl4g6QN4w2nxNz37ubxB2DG0Gfb/mJfylADgF2vpIz5o6ucO+03tyPBwaCTQAAjRfEuQ1K
- gAjVYxE/AYvDBj4o004zqR7H0iTbQ2jr4L1RYgVqZNTP5WXFc3XhNVS4oB7Tikl34J+2O6qso
- OZU+rA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: add DSC range checking during
+ resource reservation
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <sean@poorly.run>, <vkoul@kernel.org>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <andersson@kernel.org>,
+        <dianders@chromium.org>, <dri-devel@lists.freedesktop.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <swboyd@chromium.org>, <linux-kernel@vger.kernel.org>
+References: <1681247380-1607-1-git-send-email-quic_khsieh@quicinc.com>
+ <qvgbm3wimai3jytnikbcixipvwqn2uywqpg4mn6mjh5atergfx@wa4edsrp7y22>
+ <96416911-bca3-b007-b036-1c4463e83aaa@quicinc.com>
+ <24c5aa23-9b3c-787c-10aa-e9d5ad91512b@linaro.org>
+ <49479b93-b364-d882-7a77-08223a94ed36@quicinc.com>
+ <tczt5alqbadkodgorqm4pljpqkn5bc4efpxiy3em7bgu7gqaka@3cdszu4k6rhk>
+ <8310d7ce-7ac0-05a6-b95a-c18a498f7644@quicinc.com>
+ <szwu75yxcfxeyvfvrsyuoc3jeoaylydwtlzm3cevmpr3zpmfpo@wrdgbf3w3de2>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <szwu75yxcfxeyvfvrsyuoc3jeoaylydwtlzm3cevmpr3zpmfpo@wrdgbf3w3de2>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ODjyePmGtkuD9C71SPfBGhBmPRtGvuii
+X-Proofpoint-ORIG-GUID: ODjyePmGtkuD9C71SPfBGhBmPRtGvuii
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_10,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 impostorscore=0 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=875 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120164
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least since the YAML conversion, the default-state property is
-described in leds/common.yaml, so there's no need to point to another
-file for its definition.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Acked-by: Rob Herring <robh@kernel.org>
-=2D--
 
-v3:
-- Rebase on v6.3-rc6
+On 4/12/2023 11:50 AM, Marijn Suijten wrote:
+> On 2023-04-12 10:48:18, Abhinav Kumar wrote:
+> [..]
+>>> The only way to trigger this newly introduced range check is by omitting
+>>> the DSC_x constants and manually writing e.g. an out-of-range value 10
+>>> here, or setting DSC_NONE.  This is only allowed for interfaces.
+>>>
+>>
+>> Correct, its just working on an implicit understanding that the indices
+>> in the catalog
+> 
+> .. this sentence appears to be incomplete: what did you want to say? ..
+> 
 
-v2:
-- https://lore.kernel.org/lkml/20221008131918.1235397-1-j.neuschaefer@gmx.=
-net/
-- Add Rob's ACK
-- Rebase on Marek Vasut's patch in -next
-=2D--
- Documentation/devicetree/bindings/leds/common.yaml | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Its complete.
 
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Document=
-ation/devicetree/bindings/leds/common.yaml
-index 15e3f6645682e..c9b0dde44986c 100644
-=2D-- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -83,8 +83,7 @@ properties:
-       - enum:
-             # LED will act as a back-light, controlled by the framebuffer=
- system
-           - backlight
--            # LED will turn on (but for leds-gpio see "default-state" pro=
-perty in
--            # Documentation/devicetree/bindings/leds/leds-gpio.yaml)
-+            # LED will turn on (see also "default-state" property)
-           - default-on
-             # LED "double" flashes at a load average based rate
-           - heartbeat
-=2D-
-2.39.2
+"Correct, its just working on an implicit understanding that the indices 
+in the catalog which might still be right stick to the RM limits.
 
+Thats why this is not bad to have."
+
+>> which might still be right stick to the RM limits.
+>>
+>> Thats why this is not bad to have.
+> 
+> What do you mean by "RM limits"?  We have constants in the kernel that
+> both define the maximum number of blocks in these arrays and a
+> predefined set of ids that block can have.  These are all used in
+> constant structs in the catalog, so there's nothing "software" or
+> SoC-specific limiting about this (except what is available in the
+> arrays).
+> 
+
+WB_MAX, DSC_MAX, LM_MAX etc are RM limits not catalog limits.
+
+For example, LM_MAX is 8 but in the future if could have a HW which has 
+10 LMs. That time if LM_MAX is not increased, its just a SW number.
+
+Catalog on the other hand, can still list 10 LMs but with the catch that 
+it uses the indices from the rm. So its just an implicit understanding 
+here that catalog uses indices from RM.
+
+Nothing prevents someone from manually adding an entry and forgetting to 
+update the *_MAX in the RM.
+
+Although, yes we will catch that in reviews.
+
+> [..]
+>> I think kuogee just added this to keep it consistent with other checks
+>> present in the RM. So I didnt see any harm with that.
+> 
+> Yep, that's the only reason
+> 
+>> If he did see an issue, i will let him report that here.
+> 
+> If so an out-of-bounds constant was hardcoded in dpu_hw_catalog.c.
+> 
+>> Otherwise, I dont want to spend more time discussing this bounds check
+>> when other blocks already have it.
+> 
+> I'll whip up a patch to clear out the extraneous lookup (assuming there
+> is no other reason/dependency for it to be there...) and can follow that
+> up with removing these range checks of known-good values in `const
+> struct` fields.
+> 
+
+Lets see what you have in mind. As I said, I am not too obsessed with 
+this patch. So i dont want to spend more time convincing why it should 
+be there.
+
+> - Marijn
