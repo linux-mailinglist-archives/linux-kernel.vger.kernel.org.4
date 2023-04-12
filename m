@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9337C6DE9A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55846DE9A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjDLCwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 22:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S229649AbjDLCwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 22:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDLCwL (ORCPT
+        with ESMTP id S229485AbjDLCwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 22:52:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8990A4C13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 19:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681267884;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tcIwrcY+24AnNq9gPNPknyFD/pe/wpL86eaXxqmM7LA=;
-        b=RpCC/6Sq+VpLj3h02UQm4K6XOWpVo3SsdupRXQZDT1XUevJXqVQNKIMn0m7NZHDvzG/TgV
-        dJWw1JvW00vWy4ZCvdCvdVOVzoKntAmV4hNe8EaDr1+/7nchXtFGuRKov4U+oWgbGq0UZI
-        Z01CvylCOhhkU9qGgY1cYAGC8gIkBzA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-281-XPJO4lnJOhqfmGpj9rNyhQ-1; Tue, 11 Apr 2023 22:51:22 -0400
-X-MC-Unique: XPJO4lnJOhqfmGpj9rNyhQ-1
-Received: by mail-wm1-f70.google.com with SMTP id k24-20020a05600c1c9800b003ef6ed5f645so1537717wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 19:51:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681267880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tcIwrcY+24AnNq9gPNPknyFD/pe/wpL86eaXxqmM7LA=;
-        b=DNkQOzZbZhinSY4WXpaXO3rlz4NQbwkdXfSdx50iATTclBqoQnf68orN/uxaEQ3vR0
-         9oNEaVMkNXxSe1MF3E8xtfRbdmSZdHodgnX9OHrfZ65OecT+4njzu3Z21cvW1tMiUIzZ
-         GUGL/csu2PpiGkns0wGbGJDzUeMCJZKS3Ol8q3e8NQTUEt0OYb12BT3BnIEo/CxKns8k
-         CGWwa+WfcCG6hbfhB6ot/cVTLrU+Nw8c3mhl3aIDsregz5yTRnMwOAK33gYoJJFzrvE8
-         3RBOHdgMUxZUAj2i8svJDWQa72YclYwE3y9BtxyCWHQCszdyFqOgP8hg4+amUOUE9aP/
-         93JA==
-X-Gm-Message-State: AAQBX9dmHo9LDQtEm5n1/UQ7mrl9CQUJqu78O2gh9+yGcHINlcFtCpRG
-        XaBWa0TvbyNLvnxyHBuIIWf7BIESNJ6tcYD0gK1GbfdEX1kiQKRcGUjI3F6e4bkJhPCV+t4FmLe
-        enaMOj5XMOpPRMVEr4XDBBDPlP0SZLK54
-X-Received: by 2002:adf:f9cc:0:b0:2f4:7980:cb22 with SMTP id w12-20020adff9cc000000b002f47980cb22mr328827wrr.18.1681267880807;
-        Tue, 11 Apr 2023 19:51:20 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bnBwBEZSLFNp0J/adhIqRltE3YnYlqEiMeksVUlii2FQ0Z7HYqw8kjhzLXjGLZNhdxaf3JqQ==
-X-Received: by 2002:adf:f9cc:0:b0:2f4:7980:cb22 with SMTP id w12-20020adff9cc000000b002f47980cb22mr328821wrr.18.1681267880534;
-        Tue, 11 Apr 2023 19:51:20 -0700 (PDT)
-Received: from redhat.com ([2.52.10.80])
-        by smtp.gmail.com with ESMTPSA id j16-20020adfff90000000b002f2783ba25asm5464259wrr.65.2023.04.11.19.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 19:51:19 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 22:51:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the vhost tree
-Message-ID: <20230411224945-mutt-send-email-mst@kernel.org>
-References: <20230411151953.182c6a92@canb.auug.org.au>
- <871qkqawqr.fsf@meer.lwn.net>
+        Tue, 11 Apr 2023 22:52:17 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D649C4C12;
+        Tue, 11 Apr 2023 19:52:15 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 88A2680ED;
+        Wed, 12 Apr 2023 10:52:14 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 10:52:14 +0800
+Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 10:52:13 +0800
+Message-ID: <7a8aac88-91e1-3c54-efa6-e71ddd0951b4@starfivetech.com>
+Date:   Wed, 12 Apr 2023 10:52:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qkqawqr.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 2/7] soc: starfive: Replace SOC_STARFIVE with
+ ARCH_SATRFIVE
+Content-Language: en-US
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-3-changhuang.liang@starfivetech.com>
+ <a3d5c666-c7c1-7a77-31ac-d3e686bdef59@starfivetech.com>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <a3d5c666-c7c1-7a77-31ac-d3e686bdef59@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:18:36PM -0600, Jonathan Corbet wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> 
-> > Hi all,
-> >
-> > The following commit is also in the jc_docs tree as a different commit
-> > (but the same patch):
-> >
-> >   3a9421482150 ("dma-api-howto: typo fix")
-> >
-> > This is commit
-> >
-> >   2ca956cf8834 ("dma-api-howto: typo fix")
-> >
-> > in the jc_docs tree.
-> 
-> Michael, I'm a bit confused by this one...you sent it to me, but
-> evidently didn't want me to take it?  I can certainly drop it...
-> 
-> Thanks,
-> 
-> jon
 
-Sorry, it's just a holiday here. dropped now.
 
--- 
-MST
+On 2023/4/12 10:11, Walker Chen wrote:
+> 
+> 
+> On 2023/4/11 14:47, Changhuang Liang wrote:
+>> Using ARCH_FOO symbol is preferred than SOC_FOO.
+>>
+>> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+>> ---
+>>  drivers/soc/starfive/Kconfig | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/soc/starfive/Kconfig b/drivers/soc/starfive/Kconfig
+>> index bdb96dc4c989..1e9b0c414fec 100644
+>> --- a/drivers/soc/starfive/Kconfig
+>> +++ b/drivers/soc/starfive/Kconfig
+>> @@ -3,8 +3,8 @@
+>>  config JH71XX_PMU
+>>  	bool "Support PMU for StarFive JH71XX Soc"
+>>  	depends on PM
+>> -	depends on SOC_STARFIVE || COMPILE_TEST
+>> -	default SOC_STARFIVE
+>> +	depends on ARCH_STARFIVE || COMPILE_TEST
+>> +	default ARCH_STARFIVE
+>>  	select PM_GENERIC_DOMAINS
+>>  	help
+>>  	  Say 'y' here to enable support power domain support.
+> 
+> The subject 'ARCH_SATRFIVE' spelling error.
+> 
 
+OK, will fix it.
+
+> Best regards,
+> Walker
