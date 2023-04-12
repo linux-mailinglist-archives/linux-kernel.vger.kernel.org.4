@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E01D6DF9D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6CF6DF9CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjDLPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S230371AbjDLPXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjDLPXL (ORCPT
+        with ESMTP id S231229AbjDLPW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:23:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADF18A61
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:22:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0586E62A6F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 15:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF49C433D2;
-        Wed, 12 Apr 2023 15:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681312955;
-        bh=GWxm8P+3Ri5Spbf8k+0TVoJwpCVsLbHE0FFcIy1IECU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gB6iZ//OBzRXCmp4HY29Hj7DLDG6NFPgzgXKwSEpoRx1cfAvvBjlKxZZaB885ZCN3
-         Ejo6670fu8hEjq4YLGqsg0j039IGh9A6C62MrkYhqvefL1KzuSHLYfdlJEgDAu3N0o
-         PN7tY2DkX5zKHfaiIhk0xlbgoCJuMsGo3Cfb2XfRPI9a0VQdLapKVR2SK23RaoU+Hq
-         znG6UK36Q/Bc4YMBanB6pXj/JNZTsznvFNqg0LOvmp7j3NgB6ADSdv71GQtNc8RIKY
-         o7Cf5Fx2QKVyhK/1fs/p/DroDAMQwsnLRTLBeum6KDo3NB8aVC1Z2Xz7KLMnWF0jWA
-         nieeUnlhZdr5g==
-Date:   Wed, 12 Apr 2023 20:52:31 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        alsa-devel@alsa-project.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, bard.liao@intel.com, tiwai@suse.de
-Subject: Re: [PATCH 00/20] ASoC/soundwire: add support for ACE2.x
-Message-ID: <ZDbMt5BRrAV5UUEw@matsya>
-References: <20230323054452.1543233-1-yung-chuan.liao@linux.intel.com>
- <ZDaC6D8yBiJ4GrXm@matsya>
- <27493df8-e1c7-1a8b-e77e-dc3bd495567b@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27493df8-e1c7-1a8b-e77e-dc3bd495567b@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 11:22:59 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD1B83C5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:22:37 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f8b46f399so29165827b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681312955; x=1683904955;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Ufi2GxBvuU5BOU0JYHGeP8t4XTiyrZw4k2f0d6jHTA=;
+        b=W8kLu2J1WyTCtd+BauQeMmFDXe1ycpcrIvrydUk7vneBkes/R4YX/fsTfanyEKySpa
+         Imh18T0HEnR2LLQRzEkJhMXWj5RKuniwKM3edIXBoFrFet9IzkBNoFn7CHPz5WlgN14g
+         LFTRcvBYWJifziGHrYRUuYJ3niLLwLHiWoYEWj5PjLjR05/AoxVz3+EvRXJRaKvaIFuD
+         yN+WwRcF0i31dIyRnIana+xft8f4Xw6S8VnVrQv2ltMfRrjbGMKa6/0pW/0EQH2HenRz
+         5L+HKCHXKxYMXRRO75B0LWvsJIttJ9f+5/ZPT+RiX+fVkeHcvN4Pt/vCyV2CgKCwAAnL
+         Kn/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681312955; x=1683904955;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Ufi2GxBvuU5BOU0JYHGeP8t4XTiyrZw4k2f0d6jHTA=;
+        b=YYxA1AQtzUohFWy5tNC7aLrFpYEVuMlB53M7XTAnNnf/oJ1RG2D2vFNZ8VqgRafZTU
+         HQbwCgoMdBPIUNx5uIvNsfg02k8Mt19n4B3B9nYF6f4EXGlbeNJA1vFJ3vjHS51ohODb
+         JmROcpUzMp73wU/CTEQNoPfCYNgVU/+z8E2aQrKq0ULPj2VTRTxZFsB0rVUEMlMlux6a
+         XHtuLGJu6CBDcM+QpCRziW219fNV6E9Lx43a9xBEYjODR9FuyMYKforSKXvIg5B2g/Ma
+         buMJWGW4yeaWrGKp7QRqAUlNU8+uCLAoayALls8uJZsSoldNj/nJXdkORC751UHgMhAs
+         MNDg==
+X-Gm-Message-State: AAQBX9e+JOXmgakVlw6XWqcMgGRSqq3fd+u9rC/G3kiRIUKtPu1KFXYf
+        LfGZWvRoOCMKNFxcH0ZmHwfDbkRRc1s=
+X-Google-Smtp-Source: AKy350YVQX90EgvK7CMACVl1el4F03lr6ECkMh/lM4G+iDpfS7iwEu9sffrm9XcRU9iFk2pSjBdteumX2vA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:4001:0:b0:549:1e80:41f9 with SMTP id
+ l1-20020a814001000000b005491e8041f9mr1440306ywn.10.1681312955215; Wed, 12 Apr
+ 2023 08:22:35 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 08:22:33 -0700
+In-Reply-To: <e1e7a37a29c2c7ad22cd14181f24b06088eca451.camel@intel.com>
+Mime-Version: 1.0
+References: <20230405005911.423699-1-seanjc@google.com> <d0af618169ebc17722e7019ca620ec22ee0b49c3.camel@intel.com>
+ <ZC4qF90l77m3X1Ir@google.com> <20230406130119.000011fe.zhi.wang.linux@gmail.com>
+ <e1e7a37a29c2c7ad22cd14181f24b06088eca451.camel@intel.com>
+Message-ID: <ZDbMuZKhAUbrkrc7@google.com>
+Subject: Re: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-04-23, 09:11, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 4/12/23 05:07, Vinod Koul wrote:
-> > On 23-03-23, 13:44, Bard Liao wrote:
-> >> This series uses the abstraction added in past kernel cycles to provide
-> >> support for the ACE2.x integration. The existing SHIM and Cadence
+On Wed, Apr 12, 2023, Kai Huang wrote:
+> On Thu, 2023-04-06 at 13:01 +0300, Zhi Wang wrote:
+> > On Wed, 5 Apr 2023 19:10:40 -0700
+> > Sean Christopherson <seanjc@google.com> wrote:
+> > > TL;DR: trying to enforce "sane" CPUID/feature configuration is a gigantic can of worms.
 > > 
-> > ACE2..?
-> 
-> Not sure I get the comment, this refers to the IP version.
-
-What does ACE mean, it should be expanded so that people know what it
-might refer to..?
-
-> 
-> ACE 2.0 IP used in LunarLake, x refers to future TDB versions.
-> 
-> BTW this depends on the series "[PATCH v2 00/18] ASoC: SOF: Intel:
-> hda-mlink: HDaudio multi-link extension update" applied yesterday by
-> Mark. It'd be really nice if we can have this in 6.4-rc1 to continue
-> adding the rest of the Lunar Lake patches.
-
-That should be mentioned in cover, I can ack this if okay and Mark might
-apply..? or u folks have something else in mind?
-
-> 
-> We tried to limit the number of changes impacting both ASoC and
-> SoundWire subsystems but there's mechanically 2 merges needed (ASoC ->
-> SoundWire for the hda-mlink dependency and SoundWire->ASoC for the
-> interface changes below).
-> 
+> > Interesting point. I was digging the CPUID virtualization OF TDX/SNP.
+> > It would be nice to have a conclusion of what is "sane" and what is the
+> > proper role for KVM, as firmware/TDX module is going to validate the "sane"
+> > CPUID.
 > > 
-> >> registers are now split in 3 (SHIM, IP, SHIM vendor-specific), with some
-> >> parts also moved to the HDaudio Extended Multi link structures. Nothing
-> >> fundamentally different except for the register map.
-> >>
-> >> This series only provides the basic mechanisms to expose SoundWire-based
-> >> DAIs. The PCI parts and DSP management will be contributed later, and the
-> >> DAI ops are now empty as well.
-> >>
-> >> The change is mainly on SoundWire. It would be better to go through
-> >> SoundWire tree.
-> >>
-> >> Pierre-Louis Bossart (20):
-> >>   ASoC: SOF: Intel: shim: add enum for ACE 2.0 IP used in LunarLake
-> >>   soundwire: intel: add ACE2.x SHIM definitions
-> >>   soundwire: intel_ace2x: add empty new ops for LunarLake
-> >>   soundwire/ASOC: Intel: update offsets for LunarLake
-> >>   soundwire: intel/cadence: set ip_offset at run-time
-> >>   ASoC/soundwire: intel: pass hdac_bus pointer for link management
-> >>   soundwire: intel: add eml_lock in the interface for new platforms
-> >>   ASoC: SOF: Intel: hda: retrieve SoundWire eml_lock and pass pointer
-> >>   soundwire: intel_init: use eml_lock parameter
-> >>   soundwire: intel_ace2x: add debugfs support
-> >>   soundwire: intel_ace2x: add link power-up/down helpers
-> >>   soundwire: intel_ace2x: set SYNCPRD before powering-up
-> >>   soundwire: intel_ace2x: configure link PHY
-> >>   soundwire: intel_ace2x: add DAI registration
-> >>   soundwire: intel_ace2x: add sync_arm/sync_go helpers
-> >>   soundwire: intel_ace2x: use common helpers for bus start/stop
-> >>   soundwire: intel_ace2x: enable wake support
-> >>   soundwire: intel_ace2x: add check_cmdsync_unlocked helper
-> >>   soundwire: bus: add new manager callback to deal with peripheral
-> >>     enumeration
-> >>   soundwire: intel_ace2x: add new_peripheral_assigned callback
-> >>
-> >>  drivers/soundwire/Makefile              |   3 +-
-> >>  drivers/soundwire/bus.c                 |   3 +
-> >>  drivers/soundwire/cadence_master.h      |   2 +
-> >>  drivers/soundwire/intel.h               |  16 +
-> >>  drivers/soundwire/intel_ace2x.c         | 390 ++++++++++++++++++++++++
-> >>  drivers/soundwire/intel_ace2x_debugfs.c | 147 +++++++++
-> >>  drivers/soundwire/intel_auxdevice.c     |  17 ++
-> >>  drivers/soundwire/intel_init.c          |  21 +-
-> >>  include/linux/soundwire/sdw.h           |   3 +-
-> >>  include/linux/soundwire/sdw_intel.h     |  88 ++++++
-> >>  sound/soc/sof/intel/hda.c               |  31 +-
-> >>  sound/soc/sof/intel/shim.h              |   1 +
-> >>  12 files changed, 711 insertions(+), 11 deletions(-)
-> >>  create mode 100644 drivers/soundwire/intel_ace2x.c
-> >>  create mode 100644 drivers/soundwire/intel_ace2x_debugfs.c
-> >>
-> >> -- 
-> >> 2.25.1
+> > TDX/SNP requires the CPUID to be pre-configured and validated before creating
+> > a CC guest. (It is done via TDH.MNG.INIT in TDX and inserting a CPUID page in
+> > SNP_LAUNCH_UPDATE in SNP).
 > > 
+> > IIUC according to what you mentioned, KVM should be treated like "CPUID box"
+> > for QEMU and the checks in KVM is only to ensure the requirements of a chosen
+> > one is literally possible and correct. KVM should not care if the
+> > combination, the usage of the chosen ones is insane or not, which gives
+> > QEMU flexibility.
+> > 
+> > As the valid CPUIDs have been decided when creating a CC guest, what should be
+> > the proper behavior (basically any new checks?) of KVM for the later
+> > SET_CPUID2? My gut feeling is KVM should know the "CPUID box" is reduced
+> > at least, because some KVM code paths rely on guest CPUID configuration.
+> 
+> For TDX guest my preference is KVM to save all CPUID entries in TDH.MNG.INIT and
+> manually make vcpu's CPUID point to the saved CPUIDs.  And then KVM just ignore
+> the SET_CPUID2 for TDX guest.
 
--- 
-~Vinod
+It's been a long while since I looked at TDX's CPUID management, but IIRC ignoring
+SET_CPUID2 is not an option becuase the TDH.MNG.INIT only allows leafs that are
+known to the TDX Module, e.g. KVM's paravirt CPUID leafs can't be communicated via
+TDH.MNG.INIT.  KVM's uAPI for initiating TDH.MNG.INIT could obviously filter out
+unsupported leafs, but doing so would lead to potential ABI breaks, e.g. if a leaf
+that KVM filters out becomes known to the TDX Module, then upgrading the TDX Module
+could result in previously allowed input becoming invalid.
+
+Even if that weren't the case, ignoring KVM_SET_CPUID{2} would be a bad option
+becuase it doesn't allow KVM to open behavior in the future, i.e. ignoring the
+leaf would effectively make _everything_ valid input.  If KVM were to rely solely
+on TDH.MNG.INIT, then KVM would want to completely disallow KVM_SET_CPUID{2}.
+
+Back to Zhi's question, the best thing to do for TDX and SNP is likely to require
+that overlap between KVM_SET_CPUID{2} and the "trusted" CPUID be consistent.  The
+key difference is that KVM would be enforcing consistency, not sanity.  I.e. KVM
+isn't making arbitrary decisions on what is/isn't sane, KVM is simply requiring
+that userspace provide a CPUID model that's consistent with what userspace provided
+earlier.
