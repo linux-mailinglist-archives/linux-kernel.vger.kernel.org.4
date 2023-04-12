@@ -2,142 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AAC6E13C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 19:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3438E6DFB27
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjDMRyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 13:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S230220AbjDLQUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDMRyM (ORCPT
+        with ESMTP id S229736AbjDLQUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:54:12 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8CCB1BD;
-        Thu, 13 Apr 2023 10:54:11 -0700 (PDT)
-Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
-        by linux.microsoft.com (Postfix) with ESMTPSA id DF4F721779C8;
-        Thu, 13 Apr 2023 10:54:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DF4F721779C8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681408451;
-        bh=mBbSxMCHFe8/SR3i9nyRfMKZyqc8tkPtmNW6c6fHEfY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J5NyXcvWeUdoXaJtFSZyWOB33qZ/mi+viGOnL/gZJoQd9A8KZ6BY97h+nGCO2vo0r
-         YagTnkFOq9pAFS3oAb+4ANeEjelYZzq/OysVOmA7xGDh9NvpwXWA6fbq2CiLVGrNy5
-         J/Wh/b8xvqFnCZJ+e9t13INdxCcuXfW+P4PWN9J0=
-Date:   Wed, 12 Apr 2023 09:19:51 -0700
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/hyperv: Expose an helper to map PCI interrupts
-Message-ID: <20230412161951.GA894@skinsburskii.localdomain>
-References: <168079806973.14175.17999267023207421381.stgit@skinsburskii.localdomain>
- <168079870998.14175.16015623662679754647.stgit@skinsburskii.localdomain>
- <87o7nrzy9e.ffs@tglx>
+        Wed, 12 Apr 2023 12:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A246961B4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA443636F1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 315B7C4339B;
+        Wed, 12 Apr 2023 16:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681316419;
+        bh=dD6JLHaY5QGrUy9uSU5rAL+T4OMswT/1bJQe6jI91Pw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BplGQgkC6NIBwqKcDa9PYMQuw1KC/Pph0eCWuCRWmDUgQ7Vifipe4ygmb1gw4G7js
+         3NUYkD7DvHDXqgxPIaBvaSZs5/pwMjmiMHM7YbxaRTFHvAoTkMfr2gV/dLaEmCl/u9
+         hk1arFk1WeWJ84wGwOXu9P85ZaIO6kBtNguYl2x1hCxm6jmRmxyRhKf/K2ViGkBtJI
+         ezWk8KWiJsB4J8HvYY70kJKcKxXbmuyxwHxb85cXgBVskizEnjsTbMT445gryxpXRz
+         mxcd0kzwrQ2X5PfGU5eCp7bzluy8QJU6hgk0epCpXNev0U0MRFbQu/hzvx3pDUWZLT
+         R/KQRw0NQFbnw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0CC1EE5244F;
+        Wed, 12 Apr 2023 16:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7nrzy9e.ffs@tglx>
-X-Spam-Status: No, score=-18.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to recover quota data correctly
+From:   patchwork-bot+f2fs@kernel.org
+Message-Id: <168131641904.15557.7224086713255348466.git-patchwork-notify@kernel.org>
+Date:   Wed, 12 Apr 2023 16:20:19 +0000
+References: <20230402112706.42211-1-chao@kernel.org>
+In-Reply-To: <20230402112706.42211-1-chao@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     jaegeuk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 03:51:09PM +0200, Thomas Gleixner wrote:
-> On Thu, Apr 06 2023 at 09:33, Stanislav Kinsburskii wrote:
-> > This patch moves
-> 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submittingpatches
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
-> 
+Hello:
 
-Thanks. I'll elaborate on the reationale in the next revision.
+This patch was applied to jaegeuk/f2fs.git (dev)
+by Jaegeuk Kim <jaegeuk@kernel.org>:
 
-> > a part of currently internal logic into the new
-> > hv_map_msi_interrupt function and makes it globally available helper,
-> > which will be used to map PCI interrupts in case of root partition.
+On Sun,  2 Apr 2023 19:27:06 +0800 you wrote:
+> With -O quota mkfs option, xfstests generic/417 fails due to fsck detects
+> data corruption on quota inodes.
 > 
-> > -static int hv_map_msi_interrupt(struct pci_dev *dev, int cpu, int vector,
-> > -				struct hv_interrupt_entry *entry)
-> > +/**
-> > + * hv_map_msi_interrupt() - "Map" the MSI IRQ in the hypervisor.
+> [ASSERT] (fsck_chk_quota_files:2051)  --> Quota file is missing or invalid quota file content found.
 > 
-> So if you need to put "" on Map then maybe your function is
-> misnomed. Either it maps or it does not, right?
+> The root cause is there is a hole f2fs doesn't hold quota inodes,
+> so all recovered quota data will be dropped due to SBI_POR_DOING
+> flag was set.
+> - f2fs_fill_super
+>  - f2fs_recover_orphan_inodes
+>   - f2fs_enable_quota_files
+>   - f2fs_quota_off_umount
+> <--- quota inodes were dropped --->
+>  - f2fs_recover_fsync_data
+>   - f2fs_enable_quota_files
+>   - f2fs_quota_off_umount
 > 
+> [...]
 
-Thanks, I'll remove the quotation marks in the next update.
+Here is the summary with links:
+  - [f2fs-dev] f2fs: fix to recover quota data correctly
+    https://git.kernel.org/jaegeuk/f2fs/c/cbb356d60c54
 
-> > + * @data:      Describes the IRQ
-> > + * @out_entry: Hypervisor (MSI) interrupt entry (can be NULL)
-> > + *
-> > + * Map the IRQ in the hypervisor by issuing a MAP_DEVICE_INTERRUPT hypercall.
-> > + */
-> > +int hv_map_msi_interrupt(struct irq_data *data,
-> > +			 struct hv_interrupt_entry *out_entry)
-> >  {
-> > -	union hv_device_id device_id = hv_build_pci_dev_id(dev);
-> > +	struct msi_desc *msidesc;
-> > +	struct pci_dev *dev;
-> > +	union hv_device_id device_id;
-> > +	struct hv_interrupt_entry dummy, *entry;
-> > +	struct irq_cfg *cfg = irqd_cfg(data);
-> > +	const cpumask_t *affinity;
-> > +	int cpu, vector;
-> > +
-> > +	msidesc = irq_data_get_msi_desc(data);
-> > +	dev = msi_desc_to_pci_dev(msidesc);
-> > +	device_id = hv_build_pci_dev_id(dev);
-> > +	affinity = irq_data_get_effective_affinity_mask(data);
-> > +	cpu = cpumask_first_and(affinity, cpu_online_mask);
-> 
-> The effective affinity mask of MSI interrupts consists only of online
-> CPUs, to be accurate: it has exactly one online CPU set.
-> 
-> But even if it would have only offline CPUs then the result would be:
-> 
->     cpu = nr_cpu_ids
-> 
-> which is definitely invalid. While a disabled vector targeted to an
-> offline CPU is not necessarily invalid.
-> 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thank you for diving into this logic.
 
-Although this patch only tosses the code and doens't make any functional
-changes, I guess if the fix for the the cpu is found has is required, it
-has to be in a separated patch.
-
-Would you mind to elaborate more of the problem(s)?
-Do you mean that the result of cpumask_first_and has to be checked for not
-being >= nr_cpus_ids?
-Or do you mean there is no need to check the affinity against
-cpu_online_mask at all ans we can simply take any first bit from the
-effective affinity mask?
-
-Also, could ou elaborate more on the disabled vector target to an
-offline CPU? Is there any use case for such scenario (in this case we
-might want to support it)?
-
-I guess the goal of this code is to make sure that hypervisor on't be
-configured to deliver MSI to an online CPU.
-
-Thanks,
-Stanislav
-
-> Thanks,
-> 
->         tglx
