@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630DD6E0129
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE2A6E012B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjDLVtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S229778AbjDLVtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjDLVsz (ORCPT
+        with ESMTP id S229708AbjDLVtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:48:55 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCAC7AAD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:48:54 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id fv6so962220qtb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:48:54 -0700 (PDT)
+        Wed, 12 Apr 2023 17:49:20 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5547527A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:49:12 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id op30so1996264qvb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681336133; x=1683928133;
+        d=gmail.com; s=20221208; t=1681336152; x=1683928152;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YXN+Y8z0sBhaT/hk/KaE/qukBJuYuOXB2JF4ebCC80c=;
-        b=ApQt/vvU9OlwfbStYK6vQpUvUPs7kbbwWvaW+TI7mlJINWl7d4UaGg8dM+KYinnF/t
-         nvifFBdM5F0Up55nAqc/ifhr8K3AB/68VfqSYnCRRHlL1KqHpXW/1wlX+JOVYGTQ+oBo
-         DcMdOavDraEq+CXHyY58Gt/HBcSiwbK5v1si/YpvQNU8EcrkNgLayVXr8EcbfDgR4c60
-         Iv3R2R+/oVQljm3gV23H3mEUdgpKV0b4giSE+tOcD9Pcy2fd2piZM+EojQo0RDQ4WFhV
-         y3YO9RKR6+ST5HhWP5N9+Mgtf3SCGKaC0jB5knOhejhjouUwHFwjOCMw7rwpJhWh5YmW
-         4TSg==
+        bh=pe152ZxpOtlNNDhY6CtkNvt/6HH1FOB+gbav0iLNO6A=;
+        b=Z1aRT4ET/+o4RD+ge1uczp22qmhKNnyV1c4dyeYw0eYI4cIBrA2NYezv0jlbqjNQ2R
+         PnIZS9gCmVbjXhepJ4Ube0N+1lH0VmmXk0NYC5dcEwgLRbfotfNm5ohsrORDFILSZYyR
+         Cp5fxq46zPY/gzV+9mLAehFKlzEPOIpPUBKGoRKxtH5ctjX7DBTBU5UKaKKZR5tqCbKu
+         O79Lev7NmrQXYJcY82kUGzJJBadKQ6Fg3zKtRPRIY1WAR/KA6d8ruWp9ILw15d0Ip1LH
+         THn0aUcIJQxGaScohjhpXxr3gBr1d5a6zAHrxYgImrpEUzCy7QS0x5XD4ln038EnmOvH
+         tyXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681336133; x=1683928133;
+        d=1e100.net; s=20221208; t=1681336152; x=1683928152;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YXN+Y8z0sBhaT/hk/KaE/qukBJuYuOXB2JF4ebCC80c=;
-        b=hyJEOz4DRCLqlHyhsh/mLL7ht5lGT5PM86U+El2IFMYMg65IC8fz3jdTdkGvMAWoLc
-         q37NY3VHjtTs0Eyiaq/j5tPqHgs/EKHPrz2QVvH8cUsIeU0sSMGpyYui8rcBtQLs0ZOY
-         bYui36AH60WmWlRoVtRrL2s+DCRD7FFNCqpEmB2fgY3/9dCB7ecnQ9Z24qod21f/2Shi
-         3+/QZwbFo0yQBkeOYwjrbd6xXH5K+6PpCkdPCuW6egmnMSskbYcHseA65hB/tb8ZQCXQ
-         WjgMq2vcprl7+/eSdm9QkSZsArWQ8ph93Xrla2e7679Ndod3/4Tni3iMfwKonO0fN777
-         bwqA==
-X-Gm-Message-State: AAQBX9e6y6QsGRK+rHbR3da+RrwCa1XSoSMbAMg16WW2IKRU0qLCEu3t
-        4P0c6HuPidAwRg5/Bi43DEo=
-X-Google-Smtp-Source: AKy350ZQbOIzJl8oWcF/bs8xXesve81tuszHPQjx96xheLSHXm/gSCcl5DgLtEGMWbE320oDCK0P3Q==
-X-Received: by 2002:ac8:7d45:0:b0:3de:6d89:adb1 with SMTP id h5-20020ac87d45000000b003de6d89adb1mr6340347qtb.20.1681336133455;
-        Wed, 12 Apr 2023 14:48:53 -0700 (PDT)
+        bh=pe152ZxpOtlNNDhY6CtkNvt/6HH1FOB+gbav0iLNO6A=;
+        b=M+OMB3MEwFCDjyc/ImUV547kYMJF0GO1IYYPaSZHet8PXry22vMHq3GKNDLb8j9Ng/
+         i4WKLM6iVdNoK1s4jt1Pc1B56MoV7RsFE+Le/C2iybucUrb1Vxd1sFCFt8urKz8eneUN
+         FLLwcvJeXFsINMADi0UZYB+8XWm9okZVSdC6pfqjglr3Hkuh4R3/NmPALHHu2mTTOl0w
+         bFxOkIaii9sVn7cyQZ5woHakTstPBvoixz8I+N2vsI4+9bfnH+39T5PkUVjYUc2IRRYj
+         RNcna5ae9POrTo1CRmJjHjHwcscXw6wMlh8HE5CXDg63COjCFs+/QMgtXzR0sD9K9Hgu
+         HOlQ==
+X-Gm-Message-State: AAQBX9chS2XPipyMMUU9AAgn8AtGxkUss6ns/lOHPNxcElVGQViF2ruD
+        H5NA/tAqXRA5UTA2dipmkHY=
+X-Google-Smtp-Source: AKy350bRA12LE8AIunB6s2euq+/3u9Afr6bplFVu3TXtSz5nZAB8Fp7mxRj7U+JovLlltl1twNHIxw==
+X-Received: by 2002:a05:6214:d81:b0:5ee:e4b2:d95b with SMTP id e1-20020a0562140d8100b005eee4b2d95bmr5801819qve.50.1681336151936;
+        Wed, 12 Apr 2023 14:49:11 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b77-20020ae9eb50000000b0074ac9a6b163sm511564qkg.26.2023.04.12.14.48.49
+        by smtp.googlemail.com with ESMTPSA id z7-20020a05620a260700b00746aa080eefsm986qko.6.2023.04.12.14.49.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 14:48:52 -0700 (PDT)
-Message-ID: <7a9ce430-a2af-587f-1598-5dcc43b20766@gmail.com>
-Date:   Wed, 12 Apr 2023 14:48:46 -0700
+        Wed, 12 Apr 2023 14:49:11 -0700 (PDT)
+Message-ID: <abb8db38-5fb2-76b6-ea07-de3c72eaf553@gmail.com>
+Date:   Wed, 12 Apr 2023 14:49:06 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] ARM: compressed: Bump MALLOC_SIZE to 128 KiB
+Subject: Re: [PATCH 3/3] ARM: compressed: Enable ZSTD compression
 Content-Language: en-US
 To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
         linux-arm-kernel@lists.infradead.org
@@ -76,9 +76,9 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Kees Cook <keescook@chromium.org>
 References: <20230412212126.3966502-1-j.neuschaefer@gmx.net>
- <20230412212126.3966502-3-j.neuschaefer@gmx.net>
+ <20230412212126.3966502-4-j.neuschaefer@gmx.net>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230412212126.3966502-3-j.neuschaefer@gmx.net>
+In-Reply-To: <20230412212126.3966502-4-j.neuschaefer@gmx.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,7 +92,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 4/12/23 14:21, Jonathan Neuschäfer wrote:
-> The ZSTD compressor needs about 100 KiB.
+> With the previous two commits, it is possible to enable ZSTD
+> in the decompressor stub for 32-bit ARM.
+> 
+> Unfortunately, ZSTD decompression has been quite slow in my tests
+> (on ARM926EJ-S, ARMv5T):
+> 
+>   - LZO:  7.2 MiB,  6 seconds
+>   - ZSTD: 5.6 MiB, 60 seconds
 > 
 > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
