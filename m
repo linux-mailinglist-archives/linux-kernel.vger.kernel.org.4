@@ -2,118 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C696DFBDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2FF6DFBC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjDLQvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S231401AbjDLQtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbjDLQvO (ORCPT
+        with ESMTP id S231538AbjDLQtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:51:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0114EDB;
-        Wed, 12 Apr 2023 09:50:48 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CGj4w8029053;
-        Wed, 12 Apr 2023 16:49:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Hb+1ofwDe8tPgBwB5flRxmCp0ulTxVP43RknkDd2Gj4=;
- b=m1ZgSXL0rpHd8WN5E670YQZKwc0OBIeLUDefJ9DuSIYaed0RmSo9Aef4eCI1q8oF2BI2
- KgrRnZtmINBfkfUbdC/4+l0Zf0Wz6dZ2M/UvsunwVV9UwOq0qJDdA+vgf8FRcpsXaxH/
- 1QcrWRpdRHny1PGkW3QmJDsBTxXf7VgYNMcfvweDFqGjicg6XTMO3lhM9QeoxHdolPZb
- TK31Ij4pYOy6SFmcw+IArFB8ey+lO+gNTtf8j+bymi/V0egp5kjomMc7f3X2iOBEsGwe
- ReQNPTgyYCUw4Q6UkBBqjB1FLeL2km3IKuAcJVvQQL5J3wqnM8Ml6PoCQ1coSrKk+wQv RA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqensbnr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 16:49:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CGnm49023344
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 16:49:48 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 12 Apr 2023 09:49:45 -0700
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH 3/3] arm64: dts: qcom: ipq5332: add few more reserved memory region
-Date:   Wed, 12 Apr 2023 22:19:20 +0530
-Message-ID: <20230412164920.21862-4-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230412164920.21862-1-quic_kathirav@quicinc.com>
-References: <20230412164920.21862-1-quic_kathirav@quicinc.com>
+        Wed, 12 Apr 2023 12:49:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75AF4495;
+        Wed, 12 Apr 2023 09:48:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A097B6375B;
+        Wed, 12 Apr 2023 16:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B45C433D2;
+        Wed, 12 Apr 2023 16:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681318022;
+        bh=qTDTPft69sngqARhBIeJA14iYjSCz/p1w+ygzUzfdNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TxhEOMUjD6PeE7AEWIEcG0FFr+I05NkdxpGo7d+vCI2w7eYaRlsSJFnr8AF/Q8kCz
+         It45z8FvpfGzPr9MHRzSgQQ6flq0h9ubmFy9QzuNw+E1cQ1wx+rs5UAHbtU36Hv5BI
+         o5piuZCr0RfzoIbqJ+NysBn8k8zBX/UCLb9uKKSaH6kPiSaRS1QCuiYVkE1FB9YQ1H
+         LcU1hnCO2PE9jHro4a9dRZ5hCsUi+Igm3RNkZrzb1FPMrN7UFhzTMPwCPB0FOaiMlT
+         oOWTHU09JWM+7ouV3uSZNmBZDfX+jsoJ2x7JsBbLLFLAvGxDpLJ0CuL6KoBag+rtHW
+         IYnPtd27UV04g==
+Date:   Wed, 12 Apr 2023 09:50:42 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Chris Lew <quic_clew@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
+Message-ID: <20230412165042.jsqhwbn3r364iinr@ripper>
+References: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
+ <20230327144153.3133425-3-quic_bjorande@quicinc.com>
+ <e01c0579-5ce2-459b-0306-7351f8aca561@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0xIDPXGuxARhHVvCN8zyF8JUmZKwY4jx
-X-Proofpoint-ORIG-GUID: 0xIDPXGuxARhHVvCN8zyF8JUmZKwY4jx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_07,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 suspectscore=0 malwarescore=0 mlxlogscore=613 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e01c0579-5ce2-459b-0306-7351f8aca561@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In IPQ SoCs, U-boot will collect the system RAM contents upon crash for
-the post morterm analysis. If we don't reserve the memory region used by
-U-boot, obviously linux will consume it and upon next boot on crash, uboot
-will be loaded in the same region, which will lead to loose some of the
-data, sometimes we may miss out critical information. So lets reserve the
-region used by the U-boot.
+On Fri, Apr 07, 2023 at 03:10:45PM -0700, Chris Lew wrote:
+> 
+> 
+> On 3/27/2023 7:41 AM, Bjorn Andersson wrote:
+> > Rather than duplicating most of the code for constructing the initial
+> > TX_DATA and subsequent TX_DATA_CONT packets, roll them into a single
+> > loop.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> >   drivers/rpmsg/qcom_glink_native.c | 46 +++++++++----------------------
+> >   1 file changed, 13 insertions(+), 33 deletions(-)
+> > 
+> > diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> > index 62634d020d13..082cf7f4888e 100644
+> > --- a/drivers/rpmsg/qcom_glink_native.c
+> > +++ b/drivers/rpmsg/qcom_glink_native.c
+> > @@ -1309,7 +1309,7 @@ static int __qcom_glink_send(struct glink_channel *channel,
+> >   	int ret;
+> >   	unsigned long flags;
+> >   	int chunk_size = len;
+> > -	int left_size = 0;
+> > +	size_t offset = 0;
+> >   	if (!glink->intentless) {
+> >   		while (!intent) {
+> > @@ -1343,49 +1343,29 @@ static int __qcom_glink_send(struct glink_channel *channel,
+> >   		iid = intent->id;
+> >   	}
+> > -	if (wait && chunk_size > SZ_8K) {
+> > -		chunk_size = SZ_8K;
+> > -		left_size = len - chunk_size;
+> > -	}
+> > -	req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA);
+> > -	req.msg.param1 = cpu_to_le16(channel->lcid);
+> > -	req.msg.param2 = cpu_to_le32(iid);
+> > -	req.chunk_size = cpu_to_le32(chunk_size);
+> > -	req.left_size = cpu_to_le32(left_size);
+> > -
+> > -	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
+> > -
+> > -	/* Mark intent available if we failed */
+> > -	if (ret) {
+> > -		if (intent)
+> > -			intent->in_use = false;
+> > -		return ret;
+> > -	}
+> > -
+> > -	while (left_size > 0) {
+> > -		data = (void *)((char *)data + chunk_size);
+> > -		chunk_size = left_size;
+> > -		if (chunk_size > SZ_8K)
+> > +	while (offset < len) {
+> > +		chunk_size = len - offset;
+> > +		if (chunk_size > SZ_8K && (wait || offset > 0))
+> 
+> offset > 0 seems to be a new condition compared to the previous logic.
+> Are we adding this as a cached check because we know if offset is set then
+> fragmented sends are allowed?
+> 
 
-Similarly SBL copies some data into the reserved region and it will be
-used in the crash scenario. So reserve 1MB for SBL as well.
+You're right, I believe my intention was to retain the two inquiries of
+the original code; for the first block, don't split it if we're not
+waiting and for any subsequent blocks always split.
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> I don't think wait would have changed during the loop, so I'm not sure if
+> offset > 0 is adding any extra value to the check.
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index c32217530b41..aec60840a2f0 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -114,6 +114,16 @@
- 		#size-cells = <2>;
- 		ranges;
- 
-+		uboot@4a100000 {
-+			reg = <0x0 0x4a100000 0x0 0x400000>;
-+			no-map;
-+		};
-+
-+		sbl@4a500000 {
-+			reg = <0x0 0x4a500000 0x0 0x100000>;
-+			no-map;
-+		};
-+
- 		tz_mem: tz@4a600000 {
- 			reg = <0x0 0x4a600000 0x0 0x200000>;
- 			no-map;
--- 
-2.17.1
+But you're totally right, offset > 0 would only occur if wait is set and
+wait will not have changed for subsequent blocks.
 
+So while capturing the original conditions, it seems superfluous.
+
+Thanks,
+Bjorn
+
+> >   			chunk_size = SZ_8K;
+> > -		left_size -= chunk_size;
+> > -		req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA_CONT);
+> > +		req.msg.cmd = cpu_to_le16(offset == 0 ? GLINK_CMD_TX_DATA : GLINK_CMD_TX_DATA_CONT);
+> >   		req.msg.param1 = cpu_to_le16(channel->lcid);
+> >   		req.msg.param2 = cpu_to_le32(iid);
+> >   		req.chunk_size = cpu_to_le32(chunk_size);
+> > -		req.left_size = cpu_to_le32(left_size);
+> > +		req.left_size = cpu_to_le32(len - offset - chunk_size);
+> > -		ret = qcom_glink_tx(glink, &req, sizeof(req), data,
+> > -				    chunk_size, wait);
+> > -
+> > -		/* Mark intent available if we failed */
+> > +		ret = qcom_glink_tx(glink, &req, sizeof(req), data + offset, chunk_size, wait);
+> >   		if (ret) {
+> > +			/* Mark intent available if we failed */
+> >   			if (intent)
+> >   				intent->in_use = false;
+> > -			break;
+> > +			return ret;
+> >   		}
+> > +
+> > +		offset += chunk_size;
+> >   	}
+> > -	return ret;
+> > +
+> > +	return 0;
+> >   }
+> >   static int qcom_glink_send(struct rpmsg_endpoint *ept, void *data, int len)
