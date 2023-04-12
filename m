@@ -2,109 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898EB6DE858
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 01:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003776DE867
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjDKX55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 19:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S229630AbjDLAK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 20:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDKX5z (ORCPT
+        with ESMTP id S229556AbjDLAK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:57:55 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59593C17;
-        Tue, 11 Apr 2023 16:57:54 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id gb34so24753378ejc.12;
-        Tue, 11 Apr 2023 16:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681257473; x=1683849473;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lM8PNDHiM8fHyWmRYtIDydQ9V3GrA9VGsex5qRTzOK4=;
-        b=eIimPGklDS8LURKBDS2oanZNRLBmME8ZzTAyhDb7U7X/mKlEFlsAivozD9YvJ+out+
-         osKPpSFXBuETkjVObB+TzXxUz+tafduR0qySwSMipaBvelJPYhnmDLhOXQEPQW92ncqV
-         qJONHY4lrMhx3SFYoXGrkImtNjBj9QfxSr182uctUJSx114X7bhkagiGPtuvRoBRFtqi
-         LQBDT87AXdpyFbBusi03zhADvt0kiVBeBWHu9tme64+6eFK0+38lqgVIJmO0ZQridH0q
-         4R82q9lYcGXtbzTsq3xnYsR3Qm/NBU50E6vpHx+kl8VzGbtmJKCLAsBmmfk1t8aY16qA
-         YTXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681257473; x=1683849473;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lM8PNDHiM8fHyWmRYtIDydQ9V3GrA9VGsex5qRTzOK4=;
-        b=FsdAPS+NbQIeQ47wUmP5A6DNrSEb2KnHU61uciSzy4xyPNcjE1qdgjBuNMEs91wMlZ
-         HsZhGsGWaEo8+lXmDFW8eKo9tq2sa5ZXh+WL7ytlVd0t27h6CIcxN6FSLr6AKK7Huoty
-         cTKjw39RnikTavNH4q4/aDO/lPODpGWg0HY+n24Nyu/XqFmDtJFsXF6AaymnDZU7fUoX
-         AsANWUZxobp4PCI/2W6katxPpjuKxpCbfigHuNDRSbH934pCEYLCpnfe/gsdcFobX9eY
-         FNxh5QqQnzaSlPCuaIKpKT/oQHpl3to7oghSXlKCBWE/gtz6CWDvvyVML0wMuDltJtNw
-         5TMw==
-X-Gm-Message-State: AAQBX9cvTOScsxEVGgN+SkVxMdFair26UDOuLszoeUFYl0Dk5svL2YSd
-        CXRx8KKgLuWi7Q+NwAW1FbE=
-X-Google-Smtp-Source: AKy350YkQiw3MsY7AfwW21RPuFGBlZIrGU9UF9vXpvE2F4eHtuRwpDdUQ0Y4YJYHguhABSgCzP86og==
-X-Received: by 2002:a17:906:4346:b0:947:7b89:6779 with SMTP id z6-20020a170906434600b009477b896779mr10506148ejm.46.1681257473007;
-        Tue, 11 Apr 2023 16:57:53 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090617cb00b008c16025b318sm6595878eje.155.2023.04.11.16.57.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 16:57:52 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 02:57:49 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 1/7] dt-bindings: net: dsa: mediatek,mt7530: correct
- brand name
-Message-ID: <20230411235749.xbghzt7w77swvhnz@skbuf>
-References: <20230407125008.42474-1-arinc.unal@arinc9.com>
+        Tue, 11 Apr 2023 20:10:27 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27AF448A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:10:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VUU8YdRxFr8uf+Ao4zba39BvJm4zyIxed/i9ZfPTFKZCFMUxezBYtFH6gZ66xEA5f+LtvTPxr3Z0UdoB3/L1y1prUQj2aL95FtZvIvDdsPt5xsodRaqt3iD+vxa+EoEkdwg+gX7v5KG9H10D8rVT6lZBDkgPqci+OlMIPczEOX00QYWQ5DVrkk17VbmXdFPeplS2RwuJWxUCKkdddoZJGT/ODhrC2VwXRUdLverZHFb2ltEZg2QotByuKcbQOtff0FqFAFGjdULp5qkiH/EtsMlARB/0GZigGlIgL6QVatrpeOJMmTvI2ZdPYJrRZW5qmwXEOv2sONM4BZRWNhmjtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E95oua5PmlULaxqqutfKvb+BXc2C/6aGLoleJj1x0pI=;
+ b=kFWatfzcXGlfEBNPDlPnQeuAnevvWfAhB5SaAE76c9J6Mh0NDm3WVa3mbsQ51vmzFDScKkHZUvyGnCsyp+B5iRS8T/P4fwhf85OPqy+d3ZH2g942pY+EDxJPag6n+9dM4glFXUpzzzfrzNUmyrPlBykLvc67rDesi/9ez373VsxhMlkVBr/2qAuMU6Xf8SFAt2Pd7AFXVT6didwk1yeWg9QjQGJLtt2rVX8t+EpnyLDSS1VSYyrhX6t44hNmt/phu4LCKQc8K5hTHcQUNd0P/lusbBLbEXaf3lgrvRdLtSuPiSvWqqr1pqNEwKNRUXHPfbXP7Z7h68sQQnxbYhyv1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E95oua5PmlULaxqqutfKvb+BXc2C/6aGLoleJj1x0pI=;
+ b=D3yw4LrSG/aDPZODt2SnbhYE1ItaW31wpjGrRi1vjRjsb2Rd85NOKZ/De8AobDBtNIPulbDORE0chqDGrTrPyNaY5qWcWQqOxQJ8/b7hjc563ZnUIQkk9oRQdTweABAd9hYw9rJD0wNb/c1OjWajuejoBsLmaxqG3B5ntj8Qfx8=
+Received: from DS7PR03CA0257.namprd03.prod.outlook.com (2603:10b6:5:3b3::22)
+ by SN7PR12MB6909.namprd12.prod.outlook.com (2603:10b6:806:263::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
+ 2023 00:10:24 +0000
+Received: from DM6NAM11FT105.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::af) by DS7PR03CA0257.outlook.office365.com
+ (2603:10b6:5:3b3::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35 via Frontend
+ Transport; Wed, 12 Apr 2023 00:10:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT105.mail.protection.outlook.com (10.13.173.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6298.29 via Frontend Transport; Wed, 12 Apr 2023 00:10:24 +0000
+Received: from smtp.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 11 Apr
+ 2023 19:10:22 -0500
+From:   Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+To:     <airlied@gmail.com>, <daniel@ffwll.ch>
+CC:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Anthony Koo <anthony.koo@amd.com>,
+        Iswara Negulendran <iswara.nagulendran@amd.com>,
+        Felipe Clark <felipe.clark@amd.com>,
+        Harry Wentland <Harry.Wentland@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/display: Add missing OLED Vesa brightnesses definitions
+Date:   Tue, 11 Apr 2023 18:09:43 -0600
+Message-ID: <20230412000943.429031-1-Rodrigo.Siqueira@amd.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230407125008.42474-1-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT105:EE_|SN7PR12MB6909:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae2418a0-7b47-4388-13d6-08db3aea4ff8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q7PboFcve4o+7Ne1MazbcJNL7lkWXXPZpM+kidXuwojg9YTXMosJCDIdeEcLZqu7XNGvAwIag1VBI3TcZkjhRpIxFCK9pL6noHDPAI3yqYB0/jObaxGYs2fm9J5rSNmylZtiqEzJLZMFkvDcO5iu9t1VUwXwUvuvE2voLrq/N9w8U6M81awDycbJvAlhxLQ6y5angTXt3vrLKjrE3kbuknn8RNjQp06BHZkd2aVzdabmGx0tmRbI8xomiP1EGUhzCqYFN79dnyIPi8xlZ+9mG2OjKqf63iN2ZBlpMbahg0C5G5cXqNKrz2L4mfTgGnhQH6zYUIYYQhTie4uR1Oex0bRJx+TI8NoXS7AhX/9iFyscPKLROFWm+i6Lfl8oYOg+rhaEtKG+udqqJVLgmd5hEIGhP5cxj+dB2xGzmlgrFoBKX2IH3vR5N2zWyOGVmKJsVLhDFmqVYCYtM78hmPv4X9BTXt+g6XxgrKkpQdYJcCjZX+iD8D/BpPApzGWo4Gw6EO3pGRSAVFV0KRTVVkDNQaYidClF25ia1RGB6ABGIJhJtHreguItuYOdu9aiZZQ+sf24kduRygYvPUwuLc+QR6nHcHlbBdV00OJNycNeW6nOq3r+LRD/yfrw76uNGiPRiZyZD3hHwc6fICQZ0Pge54FRgZzYtIZIH6nesZij3NwQVQl6cyytYvvg+QPOWf0F6EhnAgigLISoTKI8oFs+KOWPluOa8XQRUnXQ1jNeGfQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(66899021)(40460700003)(54906003)(8676002)(4326008)(70586007)(70206006)(478600001)(41300700001)(110136005)(316002)(36756003)(86362001)(83380400001)(336012)(2616005)(426003)(26005)(1076003)(6666004)(47076005)(8936002)(2906002)(82310400005)(5660300002)(40480700001)(36860700001)(16526019)(186003)(82740400003)(81166007)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 00:10:24.0692
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae2418a0-7b47-4388-13d6-08db3aea4ff8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT105.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6909
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arınç,
+This commit adds missing luminance control registers to enable a more
+standard way (VESA) to deal with eDP luminance control.
 
-On Fri, Apr 07, 2023 at 03:50:03PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> The brand name is MediaTek, change it to that.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Cc: Anthony Koo <anthony.koo@amd.com>
+Cc: Iswara Negulendran <iswara.nagulendran@amd.com>
+Cc: Felipe Clark <felipe.clark@amd.com>
+Cc: Harry Wentland <Harry.Wentland@amd.com>
+Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+---
+ include/drm/display/drm_dp.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-It is good practice for series larger than 2 patches to create a cover
-letter, which gives the overview for the changes. Its contents gets used
-as the merge commit description when the series is accepted.
+diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
+index ed10e6b6f99d..7ad749423a48 100644
+--- a/include/drm/display/drm_dp.h
++++ b/include/drm/display/drm_dp.h
+@@ -973,6 +973,7 @@
+ 
+ #define DP_EDP_GENERAL_CAP_2		    0x703
+ # define DP_EDP_OVERDRIVE_ENGINE_ENABLED		(1 << 0)
++# define DP_EDP_PANEL_LUMINANCE_CONTROL_CAPABLE		(1<<4)
+ 
+ #define DP_EDP_GENERAL_CAP_3		    0x704    /* eDP 1.4 */
+ # define DP_EDP_X_REGION_CAP_MASK			(0xf << 0)
+@@ -998,6 +999,7 @@
+ # define DP_EDP_DYNAMIC_BACKLIGHT_ENABLE		(1 << 4)
+ # define DP_EDP_REGIONAL_BACKLIGHT_ENABLE		(1 << 5)
+ # define DP_EDP_UPDATE_REGION_BRIGHTNESS		(1 << 6) /* eDP 1.4 */
++# define DP_EDP_PANEL_LUMINANCE_CONTROL_ENABLE		(1<<7)
+ 
+ #define DP_EDP_BACKLIGHT_BRIGHTNESS_MSB     0x722
+ #define DP_EDP_BACKLIGHT_BRIGHTNESS_LSB     0x723
+@@ -1022,6 +1024,7 @@
+ 
+ #define DP_EDP_DBC_MINIMUM_BRIGHTNESS_SET   0x732
+ #define DP_EDP_DBC_MAXIMUM_BRIGHTNESS_SET   0x733
++#define DP_EDP_PANEL_TARGET_LUMINANCE_VALUE 0x734
+ 
+ #define DP_EDP_REGIONAL_BACKLIGHT_BASE      0x740    /* eDP 1.4 */
+ #define DP_EDP_REGIONAL_BACKLIGHT_0	    0x741    /* eDP 1.4 */
+-- 
+2.39.2
+
