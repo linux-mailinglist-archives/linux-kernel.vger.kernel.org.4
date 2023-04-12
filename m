@@ -2,82 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901C96DF288
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D606DF28A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjDLLG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S229863AbjDLLHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDLLGz (ORCPT
+        with ESMTP id S229536AbjDLLHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:06:55 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6842B6A5F;
-        Wed, 12 Apr 2023 04:06:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 1EA923200971;
-        Wed, 12 Apr 2023 07:06:50 -0400 (EDT)
-Received: from imap43 ([10.202.2.93])
-  by compute5.internal (MEProxy); Wed, 12 Apr 2023 07:06:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1681297609; x=
-        1681384009; bh=rw7S/JgA2JrMVobRPddZrjcohJoirU+TUYEN/TSwRsY=; b=w
-        iCJiNgWhSUXtMxgR2cclqjoBX7mZ+9xy/hZO2yd6asjOPKqakUPvxUGrC1EmJbaF
-        J+bnftwP/dp2L5CcgDrGEHR6CiPKzXrSrkeiunW5tzPbQzbGIiw7FYeZ9xo+njFJ
-        K3sN67Zpd1+1HbQSpySMP24WDa4KsZUaS4xWSQtwjMryzcTCsewHJwRMwySyiaxy
-        IoRsv95Wko+SIPRyvutYFaGFEiQOjI4QBWzHiMMXwlj+cajjxUBWNAtUC6N8PUqF
-        zqj3Q367PNhZMRdYXH+i6gnl7N/cCFAoSLO6CtTZdi31TnZK4rF2rIJmsIduOhIH
-        YwJ2C0js5apLC9tgNBxDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681297609; x=1681384009; bh=rw7S/JgA2JrMV
-        obRPddZrjcohJoirU+TUYEN/TSwRsY=; b=FiMNbLiY/Fg0H4UWtb83QFXwA0Uca
-        bPtZcwAqeNhcwQWnSXEP+O6c8gwTA7AoAv2GqCjvITAI/sRcR3hyTU7n1ejWMw/j
-        G3dpTNcEB9nSOatWE6xEg2rlTecibkVxnMOwDos9Oqh+DY7620mDxiVRbzJqRvBM
-        8mZCaqiUq3Wc9/vuLxkIX/2k8LZbUK0LnLMQiQoOrLqUQU8CsXqvKOYGXXnadh9x
-        92IK8G0g+Fwyo9Q0GVIgJcE1qm9Pdbj1lwMydxwh3LkE28eqxFHmY7xp+aMZ/ND5
-        rQWftFKHTCNeC2mckVQQm53aK4Ogw/mHkQjDfOhSTX1wxxRbjyUdEcNAQ==
-X-ME-Sender: <xms:yZA2ZJzZDzXzzXYmgIcW8UKFV3nUMYFE6-AZfaCSdkPwRU2FT5nGJw>
-    <xme:yZA2ZJTrBwH4OENp7xGx7EcqYVQzaOQ5B_yYgSOPRKnQOxDBwP0p75eT8rL3iNtpk
-    YbvpMIFzhwjRkQ2DcE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpeetlhhi
-    shhtrghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrf
-    grthhtvghrnhepueekffekhfejteehtdeigedujeevvdfhjeelkeehfefhudffhfejgfej
-    ieehhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:yZA2ZDWe1gm_JtrRvXUG0APTzwNLMiWoYNhtCExg2d8FX5lGyvcT-w>
-    <xmx:yZA2ZLhmRBavGrc7NrSTVlojn0cgyStncoDEHnVc8h3JwRdSZMy-VA>
-    <xmx:yZA2ZLDQTG3_C0iRKnDMn7Ylbz9y-XPiyml3uOZK68Rb-9mB1aZTVA>
-    <xmx:yZA2ZONDvwIu5VgevShCMJIsrxw2stX_3lHdk6BN-GZrnkBhZo6rjA>
-Feedback-ID: ifd214418:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 73C162D40074; Wed, 12 Apr 2023 07:06:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <8113942f-589f-4834-9ecf-7f611af82819@app.fastmail.com>
-In-Reply-To: <20230411211651.3791304-1-git@hrdl.eu>
-References: <20230411211651.3791304-1-git@hrdl.eu>
-Date:   Wed, 12 Apr 2023 21:06:29 +1000
-From:   Alistair <alistair@alistair23.me>
-To:     hrdl <git@hrdl.eu>, "Linus Walleij" <linus.walleij@linaro.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Input: cyttsp5 - fix sensing configuration data structure
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        Wed, 12 Apr 2023 07:07:53 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B56D6A60;
+        Wed, 12 Apr 2023 04:07:52 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54c061acbc9so351658207b3.11;
+        Wed, 12 Apr 2023 04:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681297671;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+0tHhoLaNH21wv0oq5mHGI1fOn2fqnxMjXKIfupUAhY=;
+        b=e+swkbxqpSikjMu4Ym4/TcQ6kqy9uQ3Geo9IvLWoYrR77zM4L1lJBhLSISGU5J1Sgm
+         xHHk5vS38naiRIRK4WLlRLso1dMAh8h5c0NLaE9v7PEebn9niewxb4lncH+Mfakeycfq
+         KL0vtdtS/kRHbpdpbqjimd21xhTMEzgy2EhKdZF0MsDxdTgdtkcjYA19jWkqJQ4Cvnul
+         ty6NbM52DcuXqqunzXLQf1CemY2SPtUWkyrg8OE1VznNOtVh4/ElfBurpgG0UqEi4aeF
+         OE6aTqxRoUA+338Vd5f75CbPj7l4nHx788g5QOxkPRd/G/eQHPQxMOwHmu2Ff3h7H+Jd
+         R5Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681297671;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+0tHhoLaNH21wv0oq5mHGI1fOn2fqnxMjXKIfupUAhY=;
+        b=D5Jr0krUe0EoQfrmYG/QahSgcdsGn3ONtdMSSDKTlkqLCNxwARIRRnc7FIHdYT+zSm
+         5Vsn1Ve3tKt4Siun6LkUSIV0PyKTSt2Nfsq+GLTNCOLz16cjWoD5Or1nIHTdPRZx6Ix7
+         EvBmylw7zYGVro+L49A0bJqd/E2I8dvUPv1dt5Dc3WaObwD9SywJN96fbSVYk1lCS0K4
+         VB7o6ulCSlXWDh7wPd9NI0S+dDP6lqgpkulV4ljEo5urxsUlPbVFQ/A3Lt0vqBQhaI7S
+         aFVooOMm0oxz0QNd9Kb9dnuawScwyd/J77awU894RWfbT2P9W9awwHKpR0/I21qyIihG
+         T5nA==
+X-Gm-Message-State: AAQBX9dantb8yaUc/89VxtqeQOZwdD7/zLsNjYY4i4ug3BdLYVo2Qfzp
+        H9w2vDFlkqJijZy99LBIU3esQx72AWvzKpWsPIE=
+X-Google-Smtp-Source: AKy350Y6pqOnwZEL92tv7EI/FvQHD+G5n+I4rzULnolMOyCFbynl2b3l6MESX3o1NwyErd7LTsYLBRsNJdUaPe7qW3I=
+X-Received: by 2002:a81:af0c:0:b0:54c:c979:7f95 with SMTP id
+ n12-20020a81af0c000000b0054cc9797f95mr7858106ywh.9.1681297671489; Wed, 12 Apr
+ 2023 04:07:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-11-wedsonaf@gmail.com>
+ <ZDZOzzMvvxr4rsW4@Boquns-Mac-mini.local>
+In-Reply-To: <ZDZOzzMvvxr4rsW4@Boquns-Mac-mini.local>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Wed, 12 Apr 2023 08:07:40 -0300
+Message-ID: <CANeycqqpR6Gs5Qb_pc2j_QV-JAc8xR360vth6We8xWU1GU5ASA@mail.gmail.com>
+Subject: Re: [PATCH v4 11/13] rust: lock: add `Guard::do_unlocked`
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,38 +73,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023, at 7:16 AM, hrdl wrote:
-> Prior to this patch, the sensing configuration data was not parsed
-> correctly, breaking detection of max_tch. The vendor driver includes
-> this field. This change informs the driver about the correct maximum
-> number of simultaneous touch inputs.
-> 
-> Tested on a Pine64 PineNote with a modified touch screen controller
-> firmware.
-> 
-> Signed-off-by: hrdl <git@hrdl.eu>
+On Wed, 12 Apr 2023 at 03:25, Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> On Tue, Apr 11, 2023 at 02:45:41AM -0300, Wedson Almeida Filho wrote:
+> [...]
+> > +
+> > +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
+> > +        let _ = match guard_state {
+> > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
+> > +            // initialised.
+> > +            None => unsafe { Self::lock(ptr) },
+> > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
+> > +            // initialised.
+> > +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
+> > +        };
+> > +    }
+> >  }
+> >
+>
+> One thing I'm little worried about the above is that we don't store back
+> the new GuardState into `guard_state`, the particular case I'm worried
+> about is as follow:
+>
+>         // IRQ is enabled.
+>         // Disabling IRQ
+>         unsafe { bindings::local_irq_disable(); }
+>
+>         let mut g = unsafe { SpinLockBackend::lock(&mut lock as *mut _) };
+>         // `g` records irq state is "irq disabled"
+>
+>         unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
+>         // restore into "irq disabled" mode.
+>         // IRQ is disabled.
+>
+>         // Enabling IRQ
+>         unsafe { bindings::local_irq_enable(); }
+>         // IRQ is enabled.
+>
+>         unsafe { SpinLockBackend::relock(&mut lock as *mut _, &mut g) }
+>         // `g` still records irq state is "irq disabled"
 
-Reviewed-by: Alistair Francis <alistair@alistair23.me>
+Yes, that's by design. If you want it to record the new "irq enabled"
+state, then you should call `lock()`, not `relock()`.
 
-Alistair
+>         unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
+>         // restore into "irq disabled" mode.
+>         // IRQ is disabled.
+>
+>
+> This looks pretty scary to me, I would expect `relock()` updates the
+> latest GuardState to the guard. Any reason it's implemented this way?
 
-> ---
-> drivers/input/touchscreen/cyttsp5.c | 1 +
-> 1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-> index 16caffa35dd9..30102cb80fac 100644
-> --- a/drivers/input/touchscreen/cyttsp5.c
-> +++ b/drivers/input/touchscreen/cyttsp5.c
-> @@ -111,6 +111,7 @@ struct cyttsp5_sensing_conf_data_dev {
-> __le16 max_z;
-> u8 origin_x;
-> u8 origin_y;
-> + u8 panel_id;
-> u8 btn;
-> u8 scan_mode;
-> u8 max_num_of_tch_per_refresh_cycle;
-> -- 
-> 2.39.2
-> 
-> 
+A `relock()` followed by an `unlock()` takes the state back to how it
+was when `lock()` was originally called: this is precisely why
+`relock()` exists.
+
+Consider the following case:
+
+```
+local_disable_irq();
+let mut guard = spinlock.lock();
+
+guard.do_unlocked(|| {
+    local_irq_enable();
+    schedule();
+});
+
+drop(guard);
+```
+
+What would you expect the state to be? It's meant to be the state
+right before `spinlock.lock()` was called, that's what the guard
+represents.
+
+If you want to preserve a new state, then you don't want `relock()`,
+you just want a new `lock()` call.
+
+> Regards,
+> Boqun
+>
+> >  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
+> >  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
+> >  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
+> >  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
+> > -unsafe impl super::IrqSaveBackend for SpinLockBackend {
+> > +unsafe impl IrqSaveBackend for SpinLockBackend {
+> >      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
+> >          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
+> >          // memory, and that it has been initialised before.
+> > --
+> > 2.34.1
+> >
