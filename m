@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6446DEFB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FA56DEFEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjDLIxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S231482AbjDLI4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjDLIxL (ORCPT
+        with ESMTP id S231461AbjDLI4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:53:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB109EE0;
-        Wed, 12 Apr 2023 01:52:49 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o1so13770232lfc.2;
-        Wed, 12 Apr 2023 01:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681289527;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EXq0HU8lCi/BIMagcmNxGekbvjRXC/+TN8IilpjxaEE=;
-        b=Ik89hVehJpMRhE2IKvpJv9wwIENxCE1lQeIZtswEIPc4MnQX7KsXK6rLvykO2K0QGM
-         qQeg3IbaPBo2RfOF4Pslgo9VFuWq6vOLCpqzmmWMqIA9eTmQYvdLTxdPrra3J6I4S72g
-         xb383ttr+yZpSNYM+U0uCH5AwPlaWS67URNDdunwHTajz/ODjr2yakZoZn3wCJnhHpMG
-         cx6LsZd1vq0QDqb3ilynwjzZAk2Co5Iws73RfcubKDkzJ1vSU6RhJP5rMtuNk6K/GnBa
-         rt5Se0+jJQspNP+3RFXLcLx+5NMjf3Pp7BRYDYadMztfz6WkDOax8apI2ze0owX+Khia
-         jEwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681289527;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EXq0HU8lCi/BIMagcmNxGekbvjRXC/+TN8IilpjxaEE=;
-        b=5g+2cJwXOdUWGjRs0yFljiWJQ0+BWMWP8ZJ8FPkup1/WsBRw+m6zU2RWNy1pH3UYhv
-         C92i6KFPJTNUqsvbRWWuL436J/Vtk9SZHjZXq/28Xvb5XdpplrFydzMd290rGlRucPo+
-         CBF32LaABAAeTZOuTrIRsN4SS53lIXDFZeCFRp8i+mtZ9LUOmFKdbVriG4riWy9prPAD
-         ID4uP4t5poxZd/7r4IHdrp0hJmdRQsk4kNkOC10GOqUooj4A1qG5iopXZKHBCusmZJKc
-         qkqMqC4tIgq/l47rd0zHr24VSFo057GwyAdzmNSW4+RyfodNyyNaIj6aJk+4p6yT+qKk
-         Blxg==
-X-Gm-Message-State: AAQBX9dhd48SvyppxHGUwTIY3/gDz9UTnwjfxWULv4CbKmDhEwht2udh
-        Wle7dEEBki/eJPauh6BV4Bg=
-X-Google-Smtp-Source: AKy350bVEh1gkZXeDtFzDXv/HAtej4XIRWQ9JKxNiC9S21HLe96yp1nuFVqXyR4ls7L/S04Qd3DWVQ==
-X-Received: by 2002:ac2:5607:0:b0:4eb:43f5:738e with SMTP id v7-20020ac25607000000b004eb43f5738emr1519644lfd.60.1681289526910;
-        Wed, 12 Apr 2023 01:52:06 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac25dc2000000b004ec8de8ab3fsm983980lfq.132.2023.04.12.01.52.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 01:52:06 -0700 (PDT)
-Message-ID: <c221d0b5-a142-8154-08a1-5947d037d864@gmail.com>
-Date:   Wed, 12 Apr 2023 11:52:05 +0300
+        Wed, 12 Apr 2023 04:56:12 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A0D9EDE;
+        Wed, 12 Apr 2023 01:55:55 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9A91E616E;
+        Wed, 12 Apr 2023 10:55:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681289737;
+        bh=UDmQ7tdOotgFk5t4ad0iJfZyoWPgoUIsI0VIhJnxXf0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q+TYV5v67df4OrQnVbqUVMf8xRBj/90aGqKD713V8X8PRiI9ynollZUZg6ilFukM9
+         vuqxAWUhJBmUyUK5Xcwp1bVUfxUxdRlWFi4PhRLk50PMGDJxHyk1HKjWF1quCwSKNh
+         aR8GsekZvyDlCs17zh97oufICfEBn5B+vZIaB4+w=
+Message-ID: <2bf56c04-733b-24a5-a344-166a94cd51f7@ideasonboard.com>
+Date:   Wed, 12 Apr 2023 11:55:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/3] iio: add documentation for iio_chan_info_enum
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1677331779.git.mazziesaccount@gmail.com>
- <884c8f386541ac572939b8993df7aea6ad99613b.1677331779.git.mazziesaccount@gmail.com>
- <20230408113029.35429440@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230408113029.35429440@jic23-huawei>
+Subject: Re: [PATCH] drm/omap: dsi: Fix deferred probe warnings
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Sebastian Reichel <sre@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230412073954.20601-1-tony@atomide.com>
+ <20230412085044.GP11253@pendragon.ideasonboard.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230412085044.GP11253@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/23 13:30, Jonathan Cameron wrote:
-> On Sat, 25 Feb 2023 15:55:25 +0200
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On 12/04/2023 11:50, Laurent Pinchart wrote:
+> Hi Tony,
 > 
->> + * @IIO_CHAN_INFO_INT_TIME:	Integration time. Time during which the data is
->> + *				accumulated by the device.
+> Thank you for the patch.
 > 
-> Unit? (seconds I think).
+> On Wed, Apr 12, 2023 at 10:39:53AM +0300, Tony Lindgren wrote:
+>> We may not have dsi->dsidev initialized during probe, and that can
+>> lead into various dsi related warnings as omap_dsi_host_detach() gets
+>> called with dsi->dsidev set to NULL.
+>>
+>> The warnings can be "Fixed dependency cycle(s)" followed by a
+>> WARNING: CPU: 0 PID: 787 at drivers/gpu/drm/omapdrm/dss/dsi.c:4414.
+> 
+> How can this happen ? I assume .detach() can't be called without a
+> priori successful call to .attach(), that that sets dsi->dsidev.
 
-Holy moly. Thanks for bringing this up now. I just checked this and the 
-API doc indeed says clearly and loud the unit is in seconds. This means 
-the BU27034 driver as well as the gain-time-scale helper does this 
-wrong. I hope you can postpone sending them upstream until this gets 
-fixed. I'll try to cook incremental patch on top of the iio/togreg - but 
-I am not sure if I can do it today as I need to run after an hour... 
-Sorry and thanks!
+I had a quick look, and the driver calls mipi_dsi_host_register() in 
+probe, and mipi_dsi_host_unregister() in remove.
 
-Yours,
-	-- Matti
+mipi_dsi_host_unregister() always calls mipi_dsi_detach(), but I don't 
+think mipi_dsi_host_register() always calls attach, which happens later 
+when the peripheral probes.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+  Tomi
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+>> Let's fix the warnings by checking for a valid dsi->dsidev.
+>>
+>> Signed-off-by: Tony Lindgren <tony@atomide.com>
+>> ---
+>>   drivers/gpu/drm/omapdrm/dss/dsi.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/omapdrm/dss/dsi.c b/drivers/gpu/drm/omapdrm/dss/dsi.c
+>> --- a/drivers/gpu/drm/omapdrm/dss/dsi.c
+>> +++ b/drivers/gpu/drm/omapdrm/dss/dsi.c
+>> @@ -4411,7 +4411,7 @@ static int omap_dsi_host_detach(struct mipi_dsi_host *host,
+>>   {
+>>   	struct dsi_data *dsi = host_to_omap(host);
+>>   
+>> -	if (WARN_ON(dsi->dsidev != client))
+>> +	if (dsi->dsidev && WARN_ON(dsi->dsidev != client))
+>>   		return -EINVAL;
+>>   
+>>   	cancel_delayed_work_sync(&dsi->dsi_disable_work);
+> 
 
