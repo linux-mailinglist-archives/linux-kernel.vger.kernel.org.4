@@ -2,169 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD10B6DE8EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80E26DE902
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjDLBdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S229626AbjDLBgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDLBdX (ORCPT
+        with ESMTP id S229507AbjDLBgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:33:23 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A60468B;
-        Tue, 11 Apr 2023 18:33:16 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d2e1a72fcca58-633fc0484d4so731143b3a.3;
-        Tue, 11 Apr 2023 18:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681263195;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7njyoKzJ51EO5yB+UcKz0vkCXJHgabT0CFKCHzXCCZ8=;
-        b=lungnl9bBU45ypPeW/o26colK9OVYNlA2wNxRmSwtzL1no3pCX5s3hsIg4VaWaB15b
-         6hrAomvj/CNKp23ARz26ojNunMAK1WYBeJajGFinAztS3AbzNdW3WjN38G2ElhIVBTFD
-         WNhIbwI/xday4ZjEzcW6npCAUs0jn6PZ1s78GMQv243LntVclVuJtl/fH+dNdav8/fSi
-         zxVPayjMECoCqAoPW0Du8WHFAlfojTmmw3KoxLxlNdPYFHCzQBerjmXxdJNgOBc9pF3U
-         sginLIBFiZbq8UC4GotlOQDm8SYUI7UP9a25seCRSWgLhn2+iY7q4zIZH1zjiGMeuVDN
-         fvow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681263195;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7njyoKzJ51EO5yB+UcKz0vkCXJHgabT0CFKCHzXCCZ8=;
-        b=iz9TLHU6AFL5yb2+esGUVsrp823myEotQusOyUoyiOb0br7aBYcfmzRJuhql63xmgZ
-         cOqNp/h05gyBMsGdnzXWTqQxsyzdK+V3F7FylB8+PvGHpBDjcccYI/TYS0tpuJI9s/X4
-         Cso+W17j5pxwfCmCmO0Me8ByaAfY0Qm+WkhTWlJAyFjh2KyPYSbfKMO/GgkFW8DVc75p
-         2P5wD0tOFe38Zdhw1mo5tKdYDOIn9M0f9UkdQFtZd2KuanWUX5D2102kJTA3QqBfHknm
-         AvHGtrrvi3OLkmTZqquN0K+PslikPm/SLnF9zYL0wnqE1bGtkRSbvkXGXP/6y5WdCM2c
-         LT+w==
-X-Gm-Message-State: AAQBX9cvkqNqSlFPilX86hu+7Zfiuw7GLB+Da8Lom/IQg2NBofFGJ4Vw
-        W1myYkNuun+mEgiOLLbIoTM=
-X-Google-Smtp-Source: AKy350blayWcCnidBV/2PjbeRjzv6tJQpofKRYxMY/itSWcC00zFTUYtRazFn10QP2k0t0S+JGaixA==
-X-Received: by 2002:aa7:9e81:0:b0:638:dc83:2051 with SMTP id p1-20020aa79e81000000b00638dc832051mr860091pfq.32.1681263195558;
-        Tue, 11 Apr 2023 18:33:15 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m9-20020aa78a09000000b00639fc7124c2sm3672126pfa.148.2023.04.11.18.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 18:33:15 -0700 (PDT)
-From:   xu xin <xu.xin.sc@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     kuba@kernel.org
-Cc:     bridge@lists.linux-foundation.org, davem@davemloft.net,
-        edumazet@google.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, roopa@nvidia.com, yang.yang29@zte.com.cn,
-        zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn, razor@blackwall.org
-Subject: Re: [PATCH net-next] net/bridge: add drop reasons for bridge forwarding
-Date:   Wed, 12 Apr 2023 09:33:10 +0800
-Message-Id: <20230412013310.174561-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230407200319.72fd763f@kernel.org>
-References: <20230407200319.72fd763f@kernel.org>
+        Tue, 11 Apr 2023 21:36:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CD840FB;
+        Tue, 11 Apr 2023 18:36:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DC3C6258E;
+        Wed, 12 Apr 2023 01:36:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA09C433D2;
+        Wed, 12 Apr 2023 01:36:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681263402;
+        bh=hSiZ8aa9oBm0phs5wcakiPja02QuQvZtXKOyCGBRUuM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Wx2MgFeLhGwcKDRT5s9VkUKtmtRzufPoV/x0zumGk3pRNh5t+4asIZsoVEhlSUVnj
+         hH8BaNL7yxeU2lPAyMOokhNr3JJq42NVoDsQxQRYqocWLnS3ABm0zPqllz7NWGo+m0
+         EQvJ/b3KPADNuCFRVYh+NxrlU4CuI9X3cb68WAh2cCgQgAq8pjbo2wY9lRX5FPiU6i
+         rOKQetHX/qX1C/u0oskxroBmEpYUIfgA9GFkeKO7ceOOH0L07+qAO11GpoNEUpZWKj
+         lRtYI6xZyu2WI2FRncdJ4IXOs/izFkHs+aPWxrPMtPYZONA/3wlUF4aMp4veaB4Bdu
+         3V1eN1p/q/TqA==
+Received: by mail-ej1-f44.google.com with SMTP id j17so15329033ejs.5;
+        Tue, 11 Apr 2023 18:36:42 -0700 (PDT)
+X-Gm-Message-State: AAQBX9ca0Kiq43wcpki8kePdR2cDtFGLq/QjXbrY0g/IgTQEENsyrARR
+        oepEkFiZx9b0ez6k5HYat1QHYTaNAiu8jd3C1mc=
+X-Google-Smtp-Source: AKy350bfAWR/ZRYMtJP92OTQLgG3LvrYvF1QxL3h4BK9QlDcZowG3gUqT1D4txtlajhHAnW7Xt8ozP7m8WZ+9XparZo=
+X-Received: by 2002:a17:907:2147:b0:94a:597f:30ee with SMTP id
+ rk7-20020a170907214700b0094a597f30eemr4863056ejb.15.1681263400987; Tue, 11
+ Apr 2023 18:36:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230411072741.3ac89dfb@canb.auug.org.au>
+In-Reply-To: <20230411072741.3ac89dfb@canb.auug.org.au>
+From:   Shawn Guo <shawnguo@kernel.org>
+Date:   Wed, 12 Apr 2023 09:36:29 +0800
+X-Gmail-Original-Message-ID: <CAJBJ56JP7QcNnJDEaSohMMD81NnS-88WDiDZtwkuXNSZPATpKQ@mail.gmail.com>
+Message-ID: <CAJBJ56JP7QcNnJDEaSohMMD81NnS-88WDiDZtwkuXNSZPATpKQ@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the imx-mxs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Thu, 6 Apr 2023 19:30:34 +0800 (CST) yang.yang29@zte.com.cn wrote:
->> From: xu xin <xu.xin16@zte.com.cn>
->> 
->> This creates six drop reasons as follows, which will help users know the
->> specific reason why bridge drops the packets when forwarding.
->> 
->> 1) SKB_DROP_REASON_BRIDGE_FWD_NO_BACKUP_PORT: failed to get a backup
->>    port link when the destination port is down.
->> 
->> 2) SKB_DROP_REASON_BRIDGE_FWD_SAME_PORT: destination port is the same
->>    with originating port when forwarding by a bridge.
->> 
->> 3) SKB_DROP_REASON_BRIDGE_NON_FORWARDING_STATE: the bridge's state is
->>    not forwarding.
->> 
->> 4) SKB_DROP_REASON_BRIDGE_NOT_ALLOWED_EGRESS: the packet is not allowed
->>    to go out through the port due to vlan filtering.
->> 
->> 5) SKB_DROP_REASON_BRIDGE_SWDEV_NOT_ALLOWED_EGRESS: the packet is not
->>    allowed to go out through the port which is offloaded by a hardware
->>    switchdev, checked by nbp_switchdev_allowed_egress().
->> 
->> 6) SKB_DROP_REASON_BRIDGE_BOTH_PORT_ISOLATED: both source port and dest
->>    port are in BR_ISOLATED state when bridge forwarding.
+On Tue, Apr 11, 2023 at 5:27=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 >
->> @@ -338,6 +344,33 @@ enum skb_drop_reason {
->>  	 * for another host.
->>  	 */
->>  	SKB_DROP_REASON_IPV6_NDISC_NS_OTHERHOST,
->> +	/** @SKB_DROP_REASON_BRIDGE_FWD_NO_BACKUP_PORT: failed to get a backup
->> +	 * port link when the destination port is down.
->> +	 */
+> Hi all,
 >
->That's not valid kdoc. Text can be on the same line as the value only
->in one-line comments. Otherwise:
->	/**
->	 * @VALUE: bla bla bla
->	 *	more blas.
->	 */
+> Commit
 >
+>   3a6f4dc2c8cf ("dt-bindings: vendor-prefixes: add chargebyte")
+>
+> is missing a Signed-off-by from its committer.
 
-Ok, I didn't notice that.
+Fixed, thanks for reporting!
 
->> +static inline bool should_deliver(const struct net_bridge_port *p, const struct sk_buff *skb,
->> +					 enum skb_drop_reason *need_reason)
->>  {
->>  	struct net_bridge_vlan_group *vg;
->> +	enum skb_drop_reason reason;
->> 
->>  	vg = nbp_vlan_group_rcu(p);
->> -	return ((p->flags & BR_HAIRPIN_MODE) || skb->dev != p->dev) &&
->> -		p->state == BR_STATE_FORWARDING && br_allowed_egress(vg, skb) &&
->> -		nbp_switchdev_allowed_egress(p, skb) &&
->> -		!br_skb_isolated(p, skb);
->> +	if (!(p->flags & BR_HAIRPIN_MODE) && skb->dev == p->dev) {
->> +		reason = SKB_DROP_REASON_BRIDGE_FWD_SAME_PORT;
->> +		goto undeliverable;
->> +	}
->> +	if (p->state != BR_STATE_FORWARDING) {
->> +		reason = SKB_DROP_REASON_BRIDGE_NON_FORWARDING_STATE;
->> +		goto undeliverable;
->> +	}
->> +	if (!br_allowed_egress(vg, skb)) {
->> +		reason = SKB_DROP_REASON_BRIDGE_NOT_ALLOWED_EGRESS;
->> +		goto undeliverable;
->> +	}
->> +	if (!nbp_switchdev_allowed_egress(p, skb)) {
->> +		reason = SKB_DROP_REASON_BRIDGE_SWDEV_NOT_ALLOWED_EGRESS;
->> +		goto undeliverable;
->> +	}
->> +	if (br_skb_isolated(p, skb)) {
->> +		reason = SKB_DROP_REASON_BRIDGE_BOTH_PORT_ISOLATED;
->> +		goto undeliverable;
->> +	}
->> +	return true;
->> +
->> +undeliverable:
->> +	if (need_reason)
->> +		*need_reason = reason;
->> +	return false;
->
->You can return the reason from this function. That's the whole point of
->SKB_NOT_DROPPED_YET existing and being equal to 0.
->
-
-If returning the reasons, then the funtion will have to be renamed because
-'should_deliever()' is expected to return a non-zero value  when it's ok to
-deliever. I don't want to change the name here, and it's better to keep its
-name and use the pointer to store the reasons.
-
->Which is not to say that I know whether the reasons are worth adding
->here. We'll need to hear from bridge experts on that.
+Shawn
