@@ -2,191 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96F36E026A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FF76E0285
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjDLXWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 19:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S229621AbjDLX0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDLXW2 (ORCPT
+        with ESMTP id S229441AbjDLX03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 19:22:28 -0400
-Received: from out-61.mta0.migadu.com (out-61.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFB04EEC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:22:26 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681341744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ash0rC8Buu4gkiLlAq8MxDEdJ92MQI6+z71zxIkVBiY=;
-        b=sJrF7XdNJhWlFXHgNI2ZMyegT3rlbMT1XXa2zvgrn9n0W8gdRS7mLYmp+Vtn9BWQ5kCjm7
-        N6pu16RASFNuPVADhBwckIcmFZe4cIydQWc2SsPx0Qg+RSReGDsOuB2hzKBSKRFSJv1rED
-        8oFHcec1CgqQ/ilQPCruih6hgJ33BRk=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     netdev@vger.kernel.org
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rafal Ozieblo <rafalo@cadence.com>,
-        Harini Katakam <harini.katakam@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH net v2] net: macb: fix a memory corruption in extended buffer descriptor mode
-Date:   Wed, 12 Apr 2023 16:21:44 -0700
-Message-Id: <20230412232144.770336-1-roman.gushchin@linux.dev>
+        Wed, 12 Apr 2023 19:26:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE259E1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681341988; x=1712877988;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i/6MkR1erCX2hwd55lfCdkdYXD42s+7eFWVoKltFV/0=;
+  b=RDkT8fW8Hthbupa3VAHIWdCg0hrHsFMnc948Z2sN6SAZMP/IaqVVBzVT
+   G/ex/8hDatMNTSuL6rEB6dNfuzsf7Ae7QbfKPraj185LAq0Moc2gmk70Y
+   zZ6IP39oRegZ5cCm2oy0Vq+iOe3arwUWmSHadQJ5EAc4AYpz9w/frUgR9
+   EAwS0s8nNyqpMRiUQ/LzSywCj7tkvGHNymgc69Qyc20S8ZhDTh4nJKu62
+   cvxVyntZ29Qu+WYjT96EIYfGZDlbcb6lxW0Bm3kAfDBFeCtEMMBqOFgnn
+   ykR4LkzzuCWMotY0y3mR6/ZTEq/8m69tmV0Xdkr4zidTdVdMtVktMUlql
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="344045585"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="344045585"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 16:26:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="1018918822"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="1018918822"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2023 16:26:26 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmjr8-000Y8V-0f;
+        Wed, 12 Apr 2023 23:26:26 +0000
+Date:   Thu, 13 Apr 2023 07:25:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: include/linux/seq_file.h:247:9: warning: 'strncpy' output may be
+ truncated copying 4 bytes from a string of length 4
+Message-ID: <202304130756.tTyJM1hb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For quite some time we were chasing a bug which looked like a sudden
-permanent failure of networking and mmc on some of our devices.
-The bug was very sensitive to any software changes and even more to
-any kernel debug options.
+Hi Ilya,
 
-Finally we got a setup where the problem was reproducible with
-CONFIG_DMA_API_DEBUG=y and it revealed the issue with the rx dma:
+FYI, the error/warning still remains.
 
-[   16.992082] ------------[ cut here ]------------
-[   16.996779] DMA-API: macb ff0b0000.ethernet: device driver tries to free DMA memory it has not allocated [device address=0x0000000875e3e244] [size=1536 bytes]
-[   17.011049] WARNING: CPU: 0 PID: 85 at kernel/dma/debug.c:1011 check_unmap+0x6a0/0x900
-[   17.018977] Modules linked in: xxxxx
-[   17.038823] CPU: 0 PID: 85 Comm: irq/55-8000f000 Not tainted 5.4.0 #28
-[   17.045345] Hardware name: xxxxx
-[   17.049528] pstate: 60000005 (nZCv daif -PAN -UAO)
-[   17.054322] pc : check_unmap+0x6a0/0x900
-[   17.058243] lr : check_unmap+0x6a0/0x900
-[   17.062163] sp : ffffffc010003c40
-[   17.065470] x29: ffffffc010003c40 x28: 000000004000c03c
-[   17.070783] x27: ffffffc010da7048 x26: ffffff8878e38800
-[   17.076095] x25: ffffff8879d22810 x24: ffffffc010003cc8
-[   17.081407] x23: 0000000000000000 x22: ffffffc010a08750
-[   17.086719] x21: ffffff8878e3c7c0 x20: ffffffc010acb000
-[   17.092032] x19: 0000000875e3e244 x18: 0000000000000010
-[   17.097343] x17: 0000000000000000 x16: 0000000000000000
-[   17.102647] x15: ffffff8879e4a988 x14: 0720072007200720
-[   17.107959] x13: 0720072007200720 x12: 0720072007200720
-[   17.113261] x11: 0720072007200720 x10: 0720072007200720
-[   17.118565] x9 : 0720072007200720 x8 : 000000000000022d
-[   17.123869] x7 : 0000000000000015 x6 : 0000000000000098
-[   17.129173] x5 : 0000000000000000 x4 : 0000000000000000
-[   17.134475] x3 : 00000000ffffffff x2 : ffffffc010a1d370
-[   17.139778] x1 : b420c9d75d27bb00 x0 : 0000000000000000
-[   17.145082] Call trace:
-[   17.147524]  check_unmap+0x6a0/0x900
-[   17.151091]  debug_dma_unmap_page+0x88/0x90
-[   17.155266]  gem_rx+0x114/0x2f0
-[   17.158396]  macb_poll+0x58/0x100
-[   17.161705]  net_rx_action+0x118/0x400
-[   17.165445]  __do_softirq+0x138/0x36c
-[   17.169100]  irq_exit+0x98/0xc0
-[   17.172234]  __handle_domain_irq+0x64/0xc0
-[   17.176320]  gic_handle_irq+0x5c/0xc0
-[   17.179974]  el1_irq+0xb8/0x140
-[   17.183109]  xiic_process+0x5c/0xe30
-[   17.186677]  irq_thread_fn+0x28/0x90
-[   17.190244]  irq_thread+0x208/0x2a0
-[   17.193724]  kthread+0x130/0x140
-[   17.196945]  ret_from_fork+0x10/0x20
-[   17.200510] ---[ end trace 7240980785f81d6f ]---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0bcc4025550403ae28d2984bddacafbca0a2f112
+commit: e37b3dd063a1a68e28a7cfaf77c84c472112e330 s390: enable KCSAN
+date:   1 year, 8 months ago
+config: s390-randconfig-r036-20230413 (https://download.01.org/0day-ci/archive/20230413/202304130756.tTyJM1hb-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e37b3dd063a1a68e28a7cfaf77c84c472112e330
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e37b3dd063a1a68e28a7cfaf77c84c472112e330
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/ocfs2/
 
-[  237.021490] ------------[ cut here ]------------
-[  237.026129] DMA-API: exceeded 7 overlapping mappings of cacheline 0x0000000021d79e7b
-[  237.033886] WARNING: CPU: 0 PID: 0 at kernel/dma/debug.c:499 add_dma_entry+0x214/0x240
-[  237.041802] Modules linked in: xxxxx
-[  237.061637] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         5.4.0 #28
-[  237.068941] Hardware name: xxxxx
-[  237.073116] pstate: 80000085 (Nzcv daIf -PAN -UAO)
-[  237.077900] pc : add_dma_entry+0x214/0x240
-[  237.081986] lr : add_dma_entry+0x214/0x240
-[  237.086072] sp : ffffffc010003c30
-[  237.089379] x29: ffffffc010003c30 x28: ffffff8878a0be00
-[  237.094683] x27: 0000000000000180 x26: ffffff8878e387c0
-[  237.099987] x25: 0000000000000002 x24: 0000000000000000
-[  237.105290] x23: 000000000000003b x22: ffffffc010a0fa00
-[  237.110594] x21: 0000000021d79e7b x20: ffffffc010abe600
-[  237.115897] x19: 00000000ffffffef x18: 0000000000000010
-[  237.121201] x17: 0000000000000000 x16: 0000000000000000
-[  237.126504] x15: ffffffc010a0fdc8 x14: 0720072007200720
-[  237.131807] x13: 0720072007200720 x12: 0720072007200720
-[  237.137111] x11: 0720072007200720 x10: 0720072007200720
-[  237.142415] x9 : 0720072007200720 x8 : 0000000000000259
-[  237.147718] x7 : 0000000000000001 x6 : 0000000000000000
-[  237.153022] x5 : ffffffc010003a20 x4 : 0000000000000001
-[  237.158325] x3 : 0000000000000006 x2 : 0000000000000007
-[  237.163628] x1 : 8ac721b3a7dc1c00 x0 : 0000000000000000
-[  237.168932] Call trace:
-[  237.171373]  add_dma_entry+0x214/0x240
-[  237.175115]  debug_dma_map_page+0xf8/0x120
-[  237.179203]  gem_rx_refill+0x190/0x280
-[  237.182942]  gem_rx+0x224/0x2f0
-[  237.186075]  macb_poll+0x58/0x100
-[  237.189384]  net_rx_action+0x118/0x400
-[  237.193125]  __do_softirq+0x138/0x36c
-[  237.196780]  irq_exit+0x98/0xc0
-[  237.199914]  __handle_domain_irq+0x64/0xc0
-[  237.204000]  gic_handle_irq+0x5c/0xc0
-[  237.207654]  el1_irq+0xb8/0x140
-[  237.210789]  arch_cpu_idle+0x40/0x200
-[  237.214444]  default_idle_call+0x18/0x30
-[  237.218359]  do_idle+0x200/0x280
-[  237.221578]  cpu_startup_entry+0x20/0x30
-[  237.225493]  rest_init+0xe4/0xf0
-[  237.228713]  arch_call_rest_init+0xc/0x14
-[  237.232714]  start_kernel+0x47c/0x4a8
-[  237.236367] ---[ end trace 7240980785f81d70 ]---
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130756.tTyJM1hb-lkp@intel.com/
 
-Lars was fast to find an explanation: according to the datasheet
-bit 2 of the rx buffer descriptor entry has a different meaning in the
-extended mode:
-  Address [2] of beginning of buffer, or
-  in extended buffer descriptor mode (DMA configuration register [28] = 1),
-  indicates a valid timestamp in the buffer descriptor entry.
+All warnings (new ones prefixed by >>):
 
-The macb driver didn't mask this bit while getting an address and it
-eventually caused a memory corruption and a dma failure.
+   In file included from include/linux/seq_file_net.h:5,
+                    from include/net/net_namespace.h:179,
+                    from include/linux/inet.h:42,
+                    from fs/ocfs2/super.c:21:
+   fs/ocfs2/super.c: In function 'ocfs2_show_options':
+>> include/linux/seq_file.h:247:9: warning: 'strncpy' output may be truncated copying 4 bytes from a string of length 4 [-Wstringop-truncation]
+     247 |         strncpy(val_buf, value, length);                \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/ocfs2/super.c:1539:17: note: in expansion of macro 'seq_show_option_n'
+    1539 |                 seq_show_option_n(s, "cluster_stack", osb->osb_cluster_stack,
+         |                 ^~~~~~~~~~~~~~~~~
 
-The problem is resolved by explicitly clearing the problematic bit
-if hw timestamping is used.
 
-Fixes: 7b4296148066 ("net: macb: Add support for PTP timestamps in DMA descriptors")
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+vim +/strncpy +247 include/linux/seq_file.h
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index f77bd1223c8f..541e4dda7950 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1063,6 +1063,10 @@ static dma_addr_t macb_get_addr(struct macb *bp, struct macb_dma_desc *desc)
- 	}
- #endif
- 	addr |= MACB_BF(RX_WADDR, MACB_BFEXT(RX_WADDR, desc->addr));
-+#ifdef CONFIG_MACB_USE_HWSTAMP
-+	if (bp->hw_dma_cap & HW_DMA_CAP_PTP)
-+		addr &= ~GEM_BIT(DMA_RXVALID);
-+#endif
- 	return addr;
- }
- 
+a068acf2ee7769 Kees Cook 2015-09-04  233  
+a068acf2ee7769 Kees Cook 2015-09-04  234  /**
+a068acf2ee7769 Kees Cook 2015-09-04  235   * seq_show_option_n - display mount options with appropriate escapes
+a068acf2ee7769 Kees Cook 2015-09-04  236   *		       where @value must be a specific length.
+a068acf2ee7769 Kees Cook 2015-09-04  237   * @m: the seq_file handle
+a068acf2ee7769 Kees Cook 2015-09-04  238   * @name: the mount option name
+a068acf2ee7769 Kees Cook 2015-09-04  239   * @value: the mount option name's value, cannot be NULL
+a068acf2ee7769 Kees Cook 2015-09-04  240   * @length: the length of @value to display
+a068acf2ee7769 Kees Cook 2015-09-04  241   *
+a068acf2ee7769 Kees Cook 2015-09-04  242   * This is a macro since this uses "length" to define the size of the
+a068acf2ee7769 Kees Cook 2015-09-04  243   * stack buffer.
+a068acf2ee7769 Kees Cook 2015-09-04  244   */
+a068acf2ee7769 Kees Cook 2015-09-04  245  #define seq_show_option_n(m, name, value, length) {	\
+a068acf2ee7769 Kees Cook 2015-09-04  246  	char val_buf[length + 1];			\
+a068acf2ee7769 Kees Cook 2015-09-04 @247  	strncpy(val_buf, value, length);		\
+a068acf2ee7769 Kees Cook 2015-09-04  248  	val_buf[length] = '\0';				\
+a068acf2ee7769 Kees Cook 2015-09-04  249  	seq_show_option(m, name, val_buf);		\
+a068acf2ee7769 Kees Cook 2015-09-04  250  }
+a068acf2ee7769 Kees Cook 2015-09-04  251  
+
+:::::: The code at line 247 was first introduced by commit
+:::::: a068acf2ee77693e0bf39d6e07139ba704f461c3 fs: create and use seq_show_option for escaping
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
