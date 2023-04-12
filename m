@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721DA6DFB17
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6236DFB1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjDLQSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S229484AbjDLQSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDLQSN (ORCPT
+        with ESMTP id S229744AbjDLQSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:18:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477D572BC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:17:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10873621E1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6678EC4339B;
-        Wed, 12 Apr 2023 16:17:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681316249;
-        bh=nB+s4y1cVa3fwfi6O40cHZ5sEurmUD9JrP46j7oa/iw=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=tkNlceuD6IFLx3n848LVw7iSIM/8b59KKvDgNmk4GitWKO87cmeAKZ58AeH3oqhhx
-         aIPXElT3Tziag0CttNFJjgVqHW1FP2hqaTvtei44x2jhhyt7qmQzIgRePxG3KEyn46
-         EGuOE4eNt22DiOYlCxV7jIWTLJuIHKlAKyu+l75AaIX50/OLH5qen/4/+WliKyURl5
-         Raax/uRBov0eNfmjkHKB1fUXwlGd6NxMaaZlhwebN3qmixBzsaC3L/ScUTaHrLIK37
-         +B4v3OLfEUzRK8Mcz5TOq87iRpzl4hP9tGfpuo8TWhbxFU5xDQwmqiMaMmWpZCNWrk
-         XaQDVCGZq4m9Q==
-Date:   Wed, 12 Apr 2023 09:17:27 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH v2] f2fs: relax sanity check if checkpoint is corrupted
-Message-ID: <ZDbZlwH5u3/nOTwL@google.com>
-References: <20230407181539.4136580-1-jaegeuk@kernel.org>
+        Wed, 12 Apr 2023 12:18:33 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0D66E98;
+        Wed, 12 Apr 2023 09:18:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CCK5sT012362;
+        Wed, 12 Apr 2023 18:17:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=qoweobMCw9OjMJIGG9Oluh4CWDKdRBeAll2gFaHrPyY=;
+ b=VZ1F0Bi1Q+9bJySmGN3Dizmwbi7b+vmqMIMIDGFTcW+Ryki2GUbGCgF+/l0pewNECfwk
+ UZBtMP3dREJsSC2G5oUSXHBTZ9+QIdKFqmusw++eQSzQ4GbIiCHrzEC6F6bzKJewZycT
+ MT28TZvLIShZKuHfSLgalbH+LICMtPUH0QKRaxgXbEJ+JBdY7zk5BZjymlW/+Zqk1qIE
+ kcGrig0NOiLUC0SOs9FvM48AgvCnOJ94GWUIEyRqmIvZ9wmNE8mNNFc3MEXcNUN5Q1RD
+ RNKcT1+OJmwyY8ktBOh7fgpp4KmjyvG7CWnDYCw2SXXtKOjqQfavZcC8H67FWwBwv9kr dQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pw7wp0exg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 18:17:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 804B410002A;
+        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5414021A221;
+        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
+Received: from localhost (10.48.1.102) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 12 Apr
+ 2023 18:17:43 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH] usb: typec: ucsi: don't print PPM init deferred errors
+Date:   Wed, 12 Apr 2023 18:17:34 +0200
+Message-ID: <20230412161734.3425090-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407181539.4136580-1-jaegeuk@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.1.102]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_08,2023-04-12_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. extent_cache
- - let's drop the largest extent_cache
-2. invalidate_block
- - don't show the warnings
+ucsi_init() may be deferred as usb_role_sw may be deferred in
+ucsi_register_port(). This results in several PPM init failed (-517)
+messages maybe printed several times upon boot, like on stm32mp135f-dk
+board, until the role_switch driver gets probed.
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+[   19.880945] dwc2 49000000.usb: supply vusb_d not found, using dummy regulator
+[   19.887136] dwc2 49000000.usb: supply vusb_a not found, using dummy regulator
+[   19.975432] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+[   20.155746] dwc2 49000000.usb: EPs: 9, dedicated fifos, 952 entries in SPRAM
+[   20.175429] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
+[   20.184242] dwc2 49000000.usb: DWC OTG Controller
+
+Adopt dev_err_probe() instead of dev_err(), to only print other errors.
+Also print an error in case the wait count has expired.
+
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 ---
+ drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- Change log from v1:
-  - add one more case to skip the error message
-
- fs/f2fs/checkpoint.c   | 10 ++++++++++
- fs/f2fs/extent_cache.c | 22 +++++++++++++++-------
- 2 files changed, 25 insertions(+), 7 deletions(-)
-
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 448ecf5000b8..64b3860f50ee 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -152,6 +152,11 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 	se = get_seg_entry(sbi, segno);
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index f632350f6dcb..4d809e0d7761 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1447,11 +1447,13 @@ static void ucsi_init_work(struct work_struct *work)
  
- 	exist = f2fs_test_bit(offset, se->cur_valid_map);
-+
-+	/* skip data, if we already have an error in checkpoint. */
-+	if (unlikely(f2fs_cp_error(sbi)))
-+		return exist;
-+
- 	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
- 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
- 			 blkaddr, exist);
-@@ -202,6 +207,11 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
- 	case DATA_GENERIC_ENHANCE_UPDATE:
- 		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
- 				blkaddr < MAIN_BLKADDR(sbi))) {
-+
-+			/* Skip to emit an error message. */
-+			if (unlikely(f2fs_cp_error(sbi)))
-+				return false;
-+
- 			f2fs_warn(sbi, "access invalid blkaddr:%u",
- 				  blkaddr);
- 			set_sbi_flag(sbi, SBI_NEED_FSCK);
-diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index 9a8153895d20..bea6ab9d846a 100644
---- a/fs/f2fs/extent_cache.c
-+++ b/fs/f2fs/extent_cache.c
-@@ -23,18 +23,26 @@ bool sanity_check_extent_cache(struct inode *inode)
- {
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct f2fs_inode_info *fi = F2FS_I(inode);
-+	struct extent_tree *et = fi->extent_tree[EX_READ];
- 	struct extent_info *ei;
+ 	ret = ucsi_init(ucsi);
+ 	if (ret)
+-		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
++		dev_err_probe(ucsi->dev, ret, "PPM init failed\n");
  
--	if (!fi->extent_tree[EX_READ])
-+	if (!et)
-+		return true;
-+
-+	ei = &et->largest;
-+	if (!ei->len)
- 		return true;
+ 	if (ret == -EPROBE_DEFER) {
+-		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
++		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT) {
++			dev_err(ucsi->dev, "PPM init failed, stop trying\n");
+ 			return;
++		}
  
--	ei = &fi->extent_tree[EX_READ]->largest;
-+	/* Let's drop, if checkpoint got corrupted. */
-+	if (is_set_ckpt_flags(sbi, CP_ERROR_FLAG)) {
-+		ei->len = 0;
-+		et->largest_updated = true;
-+		return true;
-+	}
- 
--	if (ei->len &&
--		(!f2fs_is_valid_blkaddr(sbi, ei->blk,
--					DATA_GENERIC_ENHANCE) ||
--		!f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
--					DATA_GENERIC_ENHANCE))) {
-+	if (!f2fs_is_valid_blkaddr(sbi, ei->blk, DATA_GENERIC_ENHANCE) ||
-+	    !f2fs_is_valid_blkaddr(sbi, ei->blk + ei->len - 1,
-+					DATA_GENERIC_ENHANCE)) {
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
- 		f2fs_warn(sbi, "%s: inode (ino=%lx) extent info [%u, %u, %u] is incorrect, run fsck to fix",
- 			  __func__, inode->i_ino,
+ 		queue_delayed_work(system_long_wq, &ucsi->work,
+ 				   UCSI_ROLE_SWITCH_INTERVAL);
 -- 
-2.40.0.577.gac1e443424-goog
+2.25.1
 
