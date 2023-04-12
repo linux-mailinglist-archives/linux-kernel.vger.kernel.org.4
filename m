@@ -2,59 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA9E6DF4B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650BC6DF4C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjDLMKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S229953AbjDLMLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjDLMJ4 (ORCPT
+        with ESMTP id S229469AbjDLMLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:09:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A0E1B0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:09:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A61A62950
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E744EC4339B;
-        Wed, 12 Apr 2023 12:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681301386;
-        bh=Q+87XKVYuHwf+nmYe7F44XKhOf48mLS9pm4sbsH0fJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ucgwjt/JPi5iZBPiy03c3YjdzLa/tyjWToGByShxa6PtzxhvkezWW1ZuIqn6RWHpw
-         ulsHMsvuSEGNIYzRORzPn719W4w3bCU5mjd3wnrk8aKgdzsqwe+NPPoGRB/nK3pvGO
-         YQwuBSKS1PjkopVhcwBMwPPwoyJ0k4xev8HS1P6vdMDcXn5aI1XcRTQ2DT2PY0mEVk
-         4f48BGrJdpgJUt4zI+JdF80ZlxlyMYO+qMS8/+h+ZBgZup/aRP8Mv6tlzaKyr6DU9v
-         RoabMnbBLovhI+2sYZdIqiVpqETP/2ZC+OzJ8xQADo425ZxwNdI80KNNh63q59Ej7i
-         ihvHDpBg3+xgw==
-Date:   Wed, 12 Apr 2023 13:09:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Baili Deng <bailideng@google.com>
-Cc:     Guenter Roeck <groeck@google.com>,
-        David Rau <David.Rau.opensource@dm.renesas.com>,
-        support.opensource@diasemi.com, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: da7219: Improve the relability of AAD IRQ process
-Message-ID: <227d1f11-dea0-400a-96c9-dee568730a13@sirena.org.uk>
-References: <20230410092634.4870-1-David.Rau.opensource@dm.renesas.com>
- <d9dac02a-328d-485e-9aff-158852eeb990@sirena.org.uk>
- <CABXOdTfGD_fyi+itsr9Nd834Pb6+4Ej8M9SM5AN=uhXQ1K4DiA@mail.gmail.com>
- <CADP_shKfY6-F_4+_eYv=NC9XcgVA+0H3BkCqH8D9wkqJ5SpMDQ@mail.gmail.com>
+        Wed, 12 Apr 2023 08:11:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DD2B4;
+        Wed, 12 Apr 2023 05:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681301495; x=1712837495;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ewT/IrLeXzhwmk8e73q3/ULj13sZtuYMfUJ09TlK3Rs=;
+  b=mP7D6/EWOW7Nj1eRrJ251nO0kIpSGJlAVBjYkd9cAOC3vkz/5jRWa6Mq
+   KuTL0W1P/EI2qvVt1OzdWGALYqSSDIZIIPbbkW17rVE5pgnEy7T/SzDDl
+   o8sqAENnxzlPKJ/kcLfdAEIdkKr6JsCmO3aiKk88lNq80w9LYYnKCmNIx
+   DGXvLhgGvlAzilsfSHp9XnHN0vThviQdLhjsrd19/XvxZ/BaKVMhC3nri
+   H2BNdlSw/mWO7O9ip+rwAJrv7GqnV118y/Vj9+8ElHw5i7Uyf5uTCfNtT
+   N5E1UjpAKUYKbykgKg0ylPY4th5C4Hr8+jDQdvWVPkdlvRgbxaoyWPQjy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346550590"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="346550590"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:11:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="688934157"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="688934157"
+Received: from amurkovx-mobl.ger.corp.intel.com (HELO [10.213.229.123]) ([10.213.229.123])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:11:28 -0700
+Message-ID: <98bb3388-d671-dcf3-0247-649a702b5e11@linux.intel.com>
+Date:   Wed, 12 Apr 2023 13:10:22 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HGqq5x0t3aI77m3z"
-Content-Disposition: inline
-In-Reply-To: <CADP_shKfY6-F_4+_eYv=NC9XcgVA+0H3BkCqH8D9wkqJ5SpMDQ@mail.gmail.com>
-X-Cookie: Happy feast of the pig!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/7] drm: fdinfo memory stats
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>, Evan Quan <evan.quan@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Sean Paul <sean@poorly.run>,
+        Shashank Sharma <shashank.sharma@amd.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>
+References: <20230411225725.2032862-1-robdclark@gmail.com>
+ <bbbbbf34-2ea5-5344-30db-f976c5198d75@amd.com>
+Content-Language: en-US
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <bbbbbf34-2ea5-5344-30db-f976c5198d75@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,38 +91,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---HGqq5x0t3aI77m3z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 12/04/2023 10:34, Christian König wrote:
+> Am 12.04.23 um 00:56 schrieb Rob Clark:
+>> From: Rob Clark <robdclark@chromium.org>
+>>
+>> Similar motivation to other similar recent attempt[1].  But with an
+>> attempt to have some shared code for this.  As well as documentation.
+>>
+>> It is probably a bit UMA-centric, I guess devices with VRAM might want
+>> some placement stats as well.  But this seems like a reasonable start.
+>>
+>> Basic gputop support: https://patchwork.freedesktop.org/series/116236/
+>> And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+>>
+>> [1] https://patchwork.freedesktop.org/series/112397/
+> 
+> I think the extra client id looks a bit superfluous since the ino of the 
+> file should already be unique and IIRC we have been already using that one.
 
-On Wed, Apr 12, 2023 at 10:32:47AM +0800, Baili Deng wrote:
-> The change in the patch done to address the issue Geunter mentioned is that
-> da7219_aad_handle_gnd_switch_time() is now called before interrupts are
-> enabled. To address the msleep() issue, the delay is now added as a delayed
-> work of its own workqueue.
+Do you mean file_inode(struct drm_file->filp)->i_ino ? That one would be 
+the same number for all clients which open the same device node so 
+wouldn't work.
 
-The point with the question was that this sort of stuff should be in the
-commit messages.  I can't really tell what the change is supposed to do
-as things stand.
+I also don't think the atomic_add_return for client id works either, 
+since it can alias on overflow.
 
-Please don't top post, reply in line with needed context.  This allows
-readers to readily follow the flow of conversation and understand what
-you are talking about and also helps ensure that everything in the
-discussion is being addressed.
+In i915 I use an xarray and __xa_alloc_cyclic.
 
---HGqq5x0t3aI77m3z
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ2n4QACgkQJNaLcl1U
-h9Anygf/ZHIBfSJdWGpYgQ5BSRZ4BRIeIzoPwlN7HkXB7lURVXdyGnp9YPjzvLa1
-9wRVQOX7rhvketKQX64797qKzSplQoOKLudaRkjdWQHllB6HZpciEJ56kdHMKZoP
-3u4HU4fMSIgNw5DV2lRJ47q8fjxm9pB3G51eSvFgpgPFWXs1OKzU058x5n8QYRzG
-LDE6UlciSv2m+jW8Z12EPVNxRKmX6RS8C+Jy8GYFGhTU79mdIpeoAAHpYnF2eFfS
-s4pEBCm0LCE1ySS/rf1Vf6s6Ayn+Gu1vavK/GaXa18MXJ08aozU8VxeIEr/vxgPN
-BkMGapPp/y8XiseNNXv1m4bMF26HFA==
-=n3/l
------END PGP SIGNATURE-----
-
---HGqq5x0t3aI77m3z--
+Tvrtko
