@@ -2,164 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107106DFD1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C226DFD1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDLR4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S230013AbjDLR4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjDLR42 (ORCPT
+        with ESMTP id S229670AbjDLR42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 13:56:28 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F4B59F3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:56:26 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b145b3b03so1135788b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681322186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qC0J8ipO5xQolwxkiv40AtEnP8cuuUuoL3jFk2sT+xU=;
-        b=av8In+IitDjEfmXBb9r8y8s0KgzNn33ghSZo9Q/jk4j+WAQ5n6xIBxI+GILpW98Qjw
-         oKqYBzlcPSNfQuz1T69VJyUyRwvNF/j1lnG0AMnQtClFfd7W6vLOWA8ExKcFUGkAMoiL
-         c+KXy6wLSah2RlGIMcie47xhVxhomLX2VJIb3ltpPCiVYD5+ca2hswJ9XChNykGs4tdB
-         VwdC+KKIT3eSVFNuUeV4lTAhDPDqIXvieEuOSL97MDHwy0um3O9kg91OHYu2xjAT975e
-         VAVOVzTiaIMUEkK7ELglagPtiCc/pLzAjvdlMLzVHhW6Pajbj2DDxksiWeVuMvgLYttB
-         KqPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681322186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qC0J8ipO5xQolwxkiv40AtEnP8cuuUuoL3jFk2sT+xU=;
-        b=Aox7+M6FBz9DWAEML+h0GxX7YeNd9uJbxJ6Po6fHkvgAVLqnF4ea0doaTuKkBUcZYz
-         968To/poW6goOdEjlIW6ZYZJfE+7bWmcOVsIjKutOOmhlzGKIYddFBUCYAO/PE9SCnB6
-         T61e/GuObAVfu4pXPO25NJhg+N3qJ+UTqvVxxPODBIT3aUO0CEnFzTpzD7C5X6OO6cMm
-         WqqNMA6Ryoz4Ul2lJLHaKNtgNqlM082howGvj7ARZBFTvp38TYZkJtMc18cJ+TA8e7iz
-         xsWjf7cXq6dtOkKx7WDzQdtVuEA7h/VmeYlndAXW3moyCAvy2T0Cpc5iQIKaI6LUrFTt
-         hkeg==
-X-Gm-Message-State: AAQBX9f/uH5AgNVWqtfsZ0CD7EIs2hD+GOKka3KOgOcTnhlCQOhDkGt2
-        cPwJ0FvFy+biyaq1Ip8KVX5G7FbriPBPDlDDMwexhw==
-X-Google-Smtp-Source: AKy350bTungGNSfBzyJElO3L4Pqje2XW5a7VPmPwAVWRYoIgihrJFvryebkoCdI1ykq4RWf0nveqt5LC2WxIaa+L08g=
-X-Received: by 2002:a05:6a00:2d22:b0:632:e692:55b2 with SMTP id
- fa34-20020a056a002d2200b00632e69255b2mr1762332pfb.2.1681322185562; Wed, 12
- Apr 2023 10:56:25 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6717840F4;
+        Wed, 12 Apr 2023 10:56:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F80634AD;
+        Wed, 12 Apr 2023 17:56:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E36C433EF;
+        Wed, 12 Apr 2023 17:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681322186;
+        bh=SFPNZ57jgJwdanHftsNasuwe20prsMMXX1x5mPFxK8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mbQXm8E8gmSfb+WziLPWHWtU5vHmm9ryTSwe9KEllaXjP5kcpNN0TCFDCNkRhiz/t
+         raVW/UA3nONz6GyX11z35knLETDH0knkito/Uph7fGiVzoaGJmoHMj3eajNBQ6CbLi
+         r5zKYMJFMa6MY9zyxnC7BkTxlj9gjPINV/ke7dNP2skwFxfr+zNLKx1TzWqGztZc56
+         qBEYfc9uTDkRTSi0V9/+KbQCZUp1+TmXzZ3pNSbzodBV4fyUHVYo5sYhyXXWRQCiog
+         gGlNG4Q0mtQa4tMWqThWr7/2uZMXrH4a+2JfFu6yLPZU+C+okFyk0AD3NP5EM1MDzA
+         OYZlhv/GJ1Hfw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B714940080; Wed, 12 Apr 2023 14:56:23 -0300 (-03)
+Date:   Wed, 12 Apr 2023 14:56:23 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v7 2/5] perf cpumap: Add reference count checking
+Message-ID: <ZDbwx8dbIdQNEtMF@kernel.org>
+References: <20230407230405.2931830-1-irogers@google.com>
+ <20230407230405.2931830-3-irogers@google.com>
+ <ZDWkmmj/UvuiXSWX@kernel.org>
 MIME-Version: 1.0
-References: <168130333143.150247.11159481574477358816.stgit@firesoul>
- <168130336725.150247.12193228778654006957.stgit@firesoul> <ZDbiofWhQhFEfIsr@google.com>
- <34152b76-88c8-0848-9f30-bd9755b1ee25@redhat.com>
-In-Reply-To: <34152b76-88c8-0848-9f30-bd9755b1ee25@redhat.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 12 Apr 2023 10:56:14 -0700
-Message-ID: <CAKH8qBub-b0R42k-J=3gyvKeWVDBy7DoxQCn7GAynEDB8z9rbw@mail.gmail.com>
-Subject: Re: [PATCH bpf V8 2/7] selftests/bpf: Add counters to xdp_hw_metadata
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     brouer@redhat.com, bpf@vger.kernel.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
-        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
-        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
-        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDWkmmj/UvuiXSWX@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 10:52=E2=80=AFAM Jesper Dangaard Brouer
-<jbrouer@redhat.com> wrote:
->
->
-> On 12/04/2023 18.56, Stanislav Fomichev wrote:
-> > On 04/12, Jesper Dangaard Brouer wrote:
-> >> Add counters for skipped, failed and redirected packets.
-> >> The xdp_hw_metadata program only redirects UDP port 9091.
-> >> This helps users to quickly identify then packets are
-> >> skipped and identify failures of bpf_xdp_adjust_meta.
-> >>
-> >> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> >> ---
-> >>   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   15 ++++++++++=
-+++--
-> >>   tools/testing/selftests/bpf/xdp_hw_metadata.c      |    4 +++-
-> >>   2 files changed, 16 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/too=
-ls/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> index b0104763405a..a07ef7534013 100644
-> >> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> @@ -25,6 +25,10 @@ struct {
-> >>      __type(value, __u32);
-> >>   } xsk SEC(".maps");
-> >>
-> >> +volatile __u64 pkts_skip =3D 0;
-> >> +volatile __u64 pkts_fail =3D 0;
-> >> +volatile __u64 pkts_redir =3D 0;
-> >> +
-> >>   extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
-> >>                                       __u64 *timestamp) __ksym;
-> >>   extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
-> >> @@ -59,16 +63,21 @@ int rx(struct xdp_md *ctx)
-> >>                      udp =3D NULL;
-> >>      }
-> >>
-> >> -    if (!udp)
-> >> +    if (!udp) {
-> >> +            pkts_skip++;
-> >>              return XDP_PASS;
-> >> +    }
-> >>
-> >>      /* Forwarding UDP:9091 to AF_XDP */
-> >> -    if (udp->dest !=3D bpf_htons(9091))
-> >> +    if (udp->dest !=3D bpf_htons(9091)) {
-> >> +            pkts_skip++;
-> >>              return XDP_PASS;
-> >> +    }
-> >>
-> >>      ret =3D bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
-> >>      if (ret !=3D 0) {
-> >
-> > [..]
-> >
-> >>              bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
-> >
-> > Maybe let's remove these completely? Merge patch 1 and 2, remove printk=
-,
-> > add counters. We can add more counters in the future if the existing
-> > ones are not enough.. WDYT?
-> >
->
-> Sure, lets just remove all of the bpf_printk, and add these counter inste=
-ad.
-> Rolling V9.
->
-> >> +            pkts_fail++;
->
-> This fail counter should be enough for driver devel to realize that they
-> also need to implement/setup XDP metadata pointers correctly (for
-> bpf_xdp_adjust_meta to work).
+Em Tue, Apr 11, 2023 at 03:19:06PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Apr 07, 2023 at 04:04:02PM -0700, Ian Rogers escreveu:
+> I think this should be further split into self contained patches as it
+> does:
+> These should be in a separate patchset using a new perf_cpu_map__set_nr() macro:
+> 
+> > +     RC_CHK_ACCESS(unmatched_cpus)->nr = unmatched_nr;
+> > +     RC_CHK_ACCESS(matched_cpus)->nr = matched_nr;
 
-Agreed. As long as we have a clear signal "something's not working"
-(instead of failing silently), that should be enough to get to the
-bottom of it..
+One more, next one will be this:
 
-> >>              return XDP_PASS;
-> >>      }
->
+⬢[acme@toolbox perf-tools-next]$ git diff
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 561e2616861f8bd9..760c848c9fa27728 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -2020,8 +2020,8 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+                        matched_cpus->map[matched_nr++] = cpu;
+        }
+
+-       unmatched_cpus->nr = unmatched_nr;
+-       matched_cpus->nr = matched_nr;
++       perf_cpu_map__set_nr(unmatched_cpus, unmatched_nr);
++       perf_cpu_map__set_nr(matched_cpus, matched_nr);
+        *mcpus_ptr = matched_cpus;
+        *ucpus_ptr = unmatched_cpus;
+        return 0;
+⬢[acme@toolbox perf-tools-next]$
+
+From b277851417e0149aff5e6986e1ad6e2d8054e4a6 Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Wed, 12 Apr 2023 14:53:35 -0300
+Subject: [PATCH 1/1] libperf: Add a perf_cpu_map__set_nr() available as an
+ internal function for tools/perf to use
+
+We'll need to reference count check 'struct perf_cpu_map', so wrap
+accesses to its internal state to allow intercepting accesses to its
+instances.
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc: Dmitriy Vyukov <dvyukov@google.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Stephen Brennan <stephen.s.brennan@oracle.com>
+Link: https://lore.kernel.org/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/lib/perf/cpumap.c                  | 5 +++++
+ tools/lib/perf/include/internal/cpumap.h | 2 ++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+index 0833423c243b9b49..6bbcbb83eb14cc45 100644
+--- a/tools/lib/perf/cpumap.c
++++ b/tools/lib/perf/cpumap.c
+@@ -10,6 +10,11 @@
+ #include <ctype.h>
+ #include <limits.h>
+ 
++void perf_cpu_map__set_nr(struct perf_cpu_map *map, int nr_cpus)
++{
++	map->nr = nr_cpus;
++}
++
+ struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus)
+ {
+ 	struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(struct perf_cpu) * nr_cpus);
+diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
+index f5bffb1f86748ca2..b82fd6607a00e3dc 100644
+--- a/tools/lib/perf/include/internal/cpumap.h
++++ b/tools/lib/perf/include/internal/cpumap.h
+@@ -28,4 +28,6 @@ struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus);
+ int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu);
+ bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b);
+ 
++void perf_cpu_map__set_nr(struct perf_cpu_map *map, int nr_cpus);
++
+ #endif /* __LIBPERF_INTERNAL_CPUMAP_H */
+-- 
+2.39.2
+
