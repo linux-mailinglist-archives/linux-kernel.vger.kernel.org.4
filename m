@@ -2,174 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28976E0116
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D623C6E0117
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjDLVli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S230024AbjDLVmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDLVlg (ORCPT
+        with ESMTP id S229482AbjDLVmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:41:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609C33AA6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681335646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3402ptPprQnICYcpNgka/a4MlqR0CMRNa5wxHl7tKqM=;
-        b=TMkaf7m6jiUJs1XZXmBpz5oaD9/19bVIkmfbP2/WK5B1OqAwH+slmbFMuugFgaA2XkY/06
-        zhFjqQHrG/y4VkXIjPMznpK8/yln0BDQKhVVblXlOC8sZjwTTKFSeDyyoZenfb8LKyipDN
-        3kl+0nDUcXH9Om/40hjNecYNPSmueZ0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-261-ibRuteuaNUGbZ3xtX_3Yng-1; Wed, 12 Apr 2023 17:40:45 -0400
-X-MC-Unique: ibRuteuaNUGbZ3xtX_3Yng-1
-Received: by mail-wm1-f72.google.com with SMTP id r20-20020a05600c35d400b003edd2023418so7618802wmq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:40:45 -0700 (PDT)
+        Wed, 12 Apr 2023 17:42:38 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6761F6199
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:42:37 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54bfa5e698eso398969077b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681335756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6gcZqtT4lnmibkmAhvy5qSkAj7O4zzOnoHrhb2P4JMQ=;
+        b=zyZLaOsl6yJiuXzO/tP8LLLLkurKniXcJiiOPaHXlkzEwgHR/qjIyx0oemyPqV2M8o
+         8cNIE5cZg9U6it+lQAT4o/BIfqGJIWHbCvnSoBpt6xZOH27cJ6hTzJnnv1HB71HKpErB
+         9M0orwgXiW7Ipwdh0rOoEu79qMgFWjsqdBSTmRLoaTdrslWMSY3pnSXpTdm6JMWK3pb9
+         F9WFE/X9NRwXd3N8fsm25Rjhb0jRqM5eOGu68AIxzmleO5PFQbkE7JKMq4vMiqcn4z9u
+         XGy7j4bnCX/2eBDZbwkug3feURl9BugCC0dgxrEdCBirqVI46nVeYg2qjjc33MROyvp5
+         jtlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681335644; x=1683927644;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3402ptPprQnICYcpNgka/a4MlqR0CMRNa5wxHl7tKqM=;
-        b=bY5nSGtQXXQfbM//atbkrFhkPSY2Ay61/I/92IFxZBd3EkFHiS1ZyY8XEBMUjXd+PE
-         G5lNcA3ycBrg2TxeKHbLydqCkzQdgy3q0z1RgOgU5XRAJujfz7ObsHG15HXwRXfh52/Q
-         vN4MWxAv2TebfHjCMjoBPBQfc3UdfKMSgQXlu4z/Rv10qoEGKehHFJNFQJNSZ5sR0CsT
-         UtAMtdjNo6gOPVjzV2xTi78RQceEIiWzzFM2LDcIWqxOE/QwST1Dz/0NZDi497vVFe0p
-         u0kEahxxA9bfKhySToDNtMUqzyLbRqgvPF9phYlLrGVbTxnJpAhwnUdPGS2Ett37vLcb
-         lt2w==
-X-Gm-Message-State: AAQBX9f1/6HMZgx92d0l7eAPC5vc4zxYOBeQ/ImfD0qcdeA9xeahtYIn
-        s7a6rSXxLp+A8xjiKvGxWAJTyM/NGgenj1UE5mWIAbHUc1TEyLftirHgVZUNRnFrL6CGk5HMVHI
-        fgjAT95UB6yMnEYbwum4qCyzn
-X-Received: by 2002:a05:6000:1281:b0:2ee:d53b:d9ef with SMTP id f1-20020a056000128100b002eed53bd9efmr9963641wrx.55.1681335644314;
-        Wed, 12 Apr 2023 14:40:44 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y0roijCU4a1Gl2gjyzIFHhagHW9zTdNa2E+8Ko5ITsQqw0KUkF7702LR5DmI7Huudjddqhqw==
-X-Received: by 2002:a05:6000:1281:b0:2ee:d53b:d9ef with SMTP id f1-20020a056000128100b002eed53bd9efmr9963629wrx.55.1681335644030;
-        Wed, 12 Apr 2023 14:40:44 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d420b000000b002ceacff44c7sm18073377wrq.83.2023.04.12.14.40.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 14:40:43 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Pierre Asselin <pa@panix.com>
-Cc:     Pierre Asselin <pa@panix.com>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is
- calculated
-In-Reply-To: <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
-References: <20230412150225.3757223-1-javierm@redhat.com>
- <2e07f818ccdff7023a060e732d7c4ef6.squirrel@mail.panix.com>
- <87jzyhror0.fsf@minerva.mail-host-address-is-not-set>
- <beeff0335ab4cc244d214a7baadba371.squirrel@mail.panix.com>
- <CAFOAJEdKBUg91pDmNYYw5xigUxjifBgOLz2YgD+xQ+WyEy=V2w@mail.gmail.com>
- <1afd3044c2aca9322ecf304941c7df66.squirrel@mail.panix.com>
- <87fs94stgw.fsf@minerva.mail-host-address-is-not-set>
-Date:   Wed, 12 Apr 2023 23:40:43 +0200
-Message-ID: <87cz48srs4.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1681335756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6gcZqtT4lnmibkmAhvy5qSkAj7O4zzOnoHrhb2P4JMQ=;
+        b=eeI9hqxOkU36+wWAkv129CsSCc7CX/czHiDKHBZlN1w/aWDN/qVmKsDEGr9nyg9dTk
+         kVRSUlAhEfINYqHtrtzQXpqyfNWYnsB/bH/n6ebeZmitNxADUTXi9cFmGgwKXRNmUMOE
+         nQv90Y4mosgQkHYOPFnh6SLqCYjHpOPq3LSlXyMJcuaFbLSwzAlYi/tjwMnfBpcRYESw
+         vQ/xh7VyJbKxmzLMnWQ60er+FZMvylE1JAMC7ytE/nUJOwr45MNv40tSuNXjrXrTRALL
+         b4WWaf/IzGfiYD8zX6qi4wXDT0570LPOvUunWJw3qxozONkpPGp64//lkmsaqHDRgLwu
+         gAjQ==
+X-Gm-Message-State: AAQBX9eJFAnH3eEPp2ZT5vHG3+rbW0PCIC1zxNuy1qeepgKgCr0OquQX
+        b7/2E+SmuiYmwMvLvPQ18NY6763Smg2Ojxo+LZ3DEQ==
+X-Google-Smtp-Source: AKy350YqDKQf8R10aYjJykD9u3BO/umK0kaV2L9eci/uO+Y7fkYPhpJYHdEL4fU3sY/AI/o6WKq/vrJ0vnf/2kJSDvc=
+X-Received: by 2002:a81:ed06:0:b0:541:693f:cdd1 with SMTP id
+ k6-20020a81ed06000000b00541693fcdd1mr2458880ywm.9.1681335756617; Wed, 12 Apr
+ 2023 14:42:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230412212126.3966502-1-j.neuschaefer@gmx.net> <20230412212126.3966502-2-j.neuschaefer@gmx.net>
+In-Reply-To: <20230412212126.3966502-2-j.neuschaefer@gmx.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 12 Apr 2023 23:42:25 +0200
+Message-ID: <CACRpkdaVTsPtXkdj3kc4n_0tLhziGfSQ8+1Yi5dKxL+0=8JS_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ARM: compressed: Pass the actual output length to the decompressor
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Nick Terrell <terrelln@fb.com>, Arnd Bergmann <arnd@arndb.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Xin Li <xin3.li@intel.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Paul Bolle <pebolle@tiscali.nl>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-kernel@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Javier Martinez Canillas <javierm@redhat.com> writes:
+On Wed, Apr 12, 2023 at 11:21=E2=80=AFPM Jonathan Neusch=C3=A4fer
+<j.neuschaefer@gmx.net> wrote:
 
-[...]
-
->> ========== Bad after patch, typing blind to log in !==================
->> grub: gfxpayload=keep
->> [    0.003333] Console: colour dummy device 128x48
->> [    0.003333] printk: console [tty0] enabled
->> [    0.423925] fbcon: Taking over console
->> [    0.520030] pci 0000:01:05.0: vgaarb: setting as boot VGA device
->> [    0.520061] pci 0000:01:05.0: vgaarb: bridge control possible
->> [    0.520085] pci 0000:01:05.0: vgaarb: VGA device added:
->> decodes=io+mem,owns=io+mem,locks=none
->> [    0.520120] vgaarb: loaded
->> [    3.290444] simple-framebuffer simple-framebuffer.0: framebuffer at
->> 0xd8000000, 0x240000 bytes
->> [    3.290483] simple-framebuffer simple-framebuffer.0: format=r8g8b8,
->> mode=1024x768x24, linelength=3072
+> ZSTD writes outside of the space that is necessary for the uncompressed
+> data, when it is told it has unlimited output length. To fix this, pass
+> the actual output length (the length of the uncompressed kernel) to the
+> decompressor.
 >
-> Now, this is the part where things start to break I believe. Because you
-> mentioned before that gfxpayload=keep used to set the format to xr8g8b8
-> but now after my patch (and also after the original commit f35cd3fa7729)
-> it is set to r8g8b8 instead.
+> The uncompressed length is already stored as a little endian 32-bit
+> constant before the input_data_end symbol.
 >
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
-I still don't understand why this particular configuration didn't work...
+Really neat fix!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-The framebuffer starts at 0xd8000000 and has a size of 0x240000 bytes, so
-a r8g8b8 pixel format with resolution 1024x768 should be correct. Since is
-1024 * 768 * (24 / 8) = 2359296 = 0x240000.
-
-In any case, it seems that there is something wrong on how the screen_info
-is reported to sysfb since you mentioned that gfxpayload=1024x768x32 leads
-to a format=r8g8b8 and mode=1024x768x24, instead of the format=xr8g8b8 and
-mode=1024x768x32 that is expected.
-
-Could you please apply the following diff that will print all the relevant
-fields from the screen_info that are used to calculate the bpp and stride.
-
-My guess is that the rsvd_size and rsvd_pos are not correct and that's why
-the bpp is set to 24 instead of 32.
-
-diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
-index 5dc23e57089f..6678ac6ff5b1 100644
---- a/drivers/firmware/sysfb_simplefb.c
-+++ b/drivers/firmware/sysfb_simplefb.c
-@@ -58,6 +58,13 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
-         * If a calculated bits_per_pixel is used instead of lfb_depth,
-         * then also ignore lfb_linelength and calculate the stride.
-         */
-+
-+       printk("sysfb: si->lfb_depth %u si->lfb_width %u\n", si->lfb_depth, si->lfb_width);
-+       printk("sysfb: si->red_size %u si->red_pos %u\n", si->red_size, si->red_pos);
-+       printk("sysfb: si->green_size %u si->green_pos %u\n", si->green_size, si->green_pos);
-+       printk("sysfb: si->blue_size %u si->blue_pos %u\n", si->blue_size, si->blue_pos);
-+       printk("sysfb: si->rsvd_size %u si->rsvd_pos %u\n", si->rsvd_size, si->rsvd_pos);
-+
-        if (si->lfb_depth > 8) {
-                bits_per_pixel = max(max3(si->red_size + si->red_pos,
-                                          si->green_size + si->green_pos,
-@@ -69,6 +76,9 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
-                stride = si->lfb_linelength;
-        }
- 
-+       printk("sysfb: bits_per_pixel %u si->lfb_linelength %u\n", bits_per_pixel, si->lfb_linelength);
-+       printk("sysfb: stride %u\n", stride);
-+
-        for (i = 0; i < ARRAY_SIZE(formats); ++i) {
-                const struct simplefb_format *f = &formats[i];
- 
-@@ -86,6 +96,7 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
-                        mode->width = si->lfb_width;
-                        mode->height = si->lfb_height;
-                        mode->stride = stride;
-+                       printk("sysfb: format %s\n", f->name);
-                        return true;
-                }
-        }
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Yours,
+Linus Walleij
