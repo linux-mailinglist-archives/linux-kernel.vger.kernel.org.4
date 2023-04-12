@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F666DF72F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9436F6DF735
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDLN3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S229911AbjDLNbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjDLN3G (ORCPT
+        with ESMTP id S229869AbjDLNa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:29:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B499033
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:28:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-206-4nbod_VCNS6CniD6MKxGaw-1; Wed, 12 Apr 2023 14:27:36 +0100
-X-MC-Unique: 4nbod_VCNS6CniD6MKxGaw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 12 Apr
- 2023 14:27:34 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 12 Apr 2023 14:27:34 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Baolu Lu' <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-CC:     Vinod Koul <vkoul@kernel.org>, Tina Zhang <tina.zhang@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
-Thread-Topic: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
-Thread-Index: AQHZbEHu9QGkmONo40W+xGFseOdGmq8mnrSggAA1HQCAAG80EIAAVAMAgAAVX6A=
-Date:   Wed, 12 Apr 2023 13:27:34 +0000
-Message-ID: <d996281ed80647e0ae38cea00285f710@AcuMS.aculab.com>
-References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
- <20230411064815.31456-12-baolu.lu@linux.intel.com>
- <ec1536af68e6478a9b10a0d884cc988d@AcuMS.aculab.com>
- <6d9ed10d-12ee-792f-fc34-60a8e432c5d2@linux.intel.com>
- <b6ab9a30960d41c9b42e5880b89277e3@AcuMS.aculab.com>
- <cbf041c7-119b-e23a-185d-288194629324@linux.intel.com>
-In-Reply-To: <cbf041c7-119b-e23a-185d-288194629324@linux.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 12 Apr 2023 09:30:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80077ED2;
+        Wed, 12 Apr 2023 06:30:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 549A06351F;
+        Wed, 12 Apr 2023 13:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B567C433D2;
+        Wed, 12 Apr 2023 13:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681306226;
+        bh=eUjpHeBe04yzwPH/Y5RkCFF5/1d41e8J/mtF4gC0FRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NXRV1ELpyfSUd/E6dIYDjffmWl5z++YO7IhkAkMHinQhCIFjjRQHhY8kdggBcF2fY
+         p6+c+GXXn5b/ycBROF8PxMx5dm5CCYlnwm512Z1EU/yNQqSRxZJ3Gg6EkIcqSRCtRR
+         tG9WUh40CbKG9DHKKEn8DYTSlfwkAPz5/8Q8pZ1pP2TyO04kmya4hsNSoR3WOh05sw
+         Z0EGnO5oE9oEDLGk7bS49MMSBPyE+hA6g26Er68vPsQP4s0iE/N/hBz5mM+zK+YG3b
+         KZVxk+e34SYaS0wMovFcRI2y6TzvClW5noBSuMuGM83eSogYytBl+wjX+A1DX4QzUV
+         hfu+f7KiyN45A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7290340080; Wed, 12 Apr 2023 10:30:23 -0300 (-03)
+Date:   Wed, 12 Apr 2023 10:30:23 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/3] Updates to sapphirerapids, alderlake and icelakex
+ events
+Message-ID: <ZDayb2N/d11N68Fi@kernel.org>
+References: <20230411234440.3313680-1-irogers@google.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411234440.3313680-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,11 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQmFvbHUgTHUNCj4gU2VudDogMTIgQXByaWwgMjAyMyAxNDoxMQ0KLi4uDQo+IFRoZSBh
-ZGRyZXNzZXMgdGhlIGZvbGxvd2luZyBpc3N1ZSByZXBvcnRlZCBieSBrbG9jd29yayB0b29sOg0K
-PiANCj4gICAtIG9wZXJhbmRzIG9mIGRpZmZlcmVudCBzaXplIGluIGJpdHdpc2Ugb3BlcmF0aW9u
-cw0KDQpUaGVuIGZpeCB0aGUgc3R1cGlkIHRvb2wgdG8gbm90IGJlIHRoYXQgcGVkYW50aWMuDQoN
-CglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwg
-TW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzog
-MTM5NzM4NiAoV2FsZXMpDQo=
+Em Tue, Apr 11, 2023 at 04:44:37PM -0700, Ian Rogers escreveu:
+> Changes largely stemming from:
+> https://github.com/intel/perfmon/pull/68
+> 
+> Changes generated by:
+> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
 
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Ian Rogers (3):
+>   perf vendor events: Update alderlake to v1.20
+>   perf vendor events: Update icelakex to v1.20
+>   perf vendor events: Update sapphirerapids to v1.12
+> 
+>  .../pmu-events/arch/x86/alderlake/other.json  |     3 +-
+>  .../arch/x86/alderlake/pipeline.json          |     4 +-
+>  .../arch/x86/icelakex/uncore-other.json       |     2 +-
+>  tools/perf/pmu-events/arch/x86/mapfile.csv    |     8 +-
+>  .../arch/x86/sapphirerapids/other.json        |     3 +-
+>  .../arch/x86/sapphirerapids/pipeline.json     |     4 +-
+>  .../x86/sapphirerapids/uncore-memory.json     |   794 +-
+>  .../arch/x86/sapphirerapids/uncore-other.json | 18656 +++++++++++++---
+>  .../arch/x86/sapphirerapids/uncore-power.json |   107 +
+>  9 files changed, 16977 insertions(+), 2604 deletions(-)
+> 
+> -- 
+> 2.40.0.577.gac1e443424-goog
+> 
+
+-- 
+
+- Arnaldo
