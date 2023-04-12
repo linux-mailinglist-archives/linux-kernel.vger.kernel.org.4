@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B038C6DFA36
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8AB6DFA41
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjDLPd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231630AbjDLPdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjDLPdV (ORCPT
+        with ESMTP id S230104AbjDLPdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:33:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665F465A1;
-        Wed, 12 Apr 2023 08:33:19 -0700 (PDT)
+        Wed, 12 Apr 2023 11:33:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F1B5FC2;
+        Wed, 12 Apr 2023 08:33:20 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D7A966031FE;
-        Wed, 12 Apr 2023 16:33:17 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 122EE6603225;
+        Wed, 12 Apr 2023 16:33:18 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681313597;
-        bh=EHR1tsOkZg+sMKl6Vd5ksBS1wb0tpOxwzLny0ukBUrU=;
+        s=mail; t=1681313598;
+        bh=1+oH2VJGxX2IXpJcPBU8K/09H6Zjp51OG61aceue6n0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RiATp0qJbbv8G77QFQUTh91t/g8efaCPwVvgvleE8jMQ+mpBS/VsFu7mdWZVZyaBl
-         9tIfsi8DLVRE5uWVzqe9o1sTFn5dPzQCa/LqBEhY/a6bUTucSRWGJNJ46Lf38La8h8
-         NZXWJdqDUKry+W7vHA/ne0Mc1ak5KMBYE9qn3bm7wUWXThOwAQTqPIcHcpMeBJOBHQ
-         dh+6hEVU0oxYii7szpaqNbj1gdAc4Pbp9ZatL24GytooWQvGZBOQxyxDyRiyI98m7R
-         EHbNJxSti+7nfIzsyOavy8ITyelZI7PKUU17/GdtfNSNftBjPsSxVp9fIvCLl+i2jk
-         2ZB6RAx6U3U6Q==
+        b=It/+A/uOXs6ivhMgiksOy0vKnoqYLUSaRczY4L4AmWojKY09uzozY4sgGMDpaxcr7
+         dcKz8Uvs3/0o37xDyIZVcVtPab9aXuEsBJ7fan7PXmtqZZoir95JIlnan5KHgfE3d2
+         a7oPFD0xr0NC4jQUnCDyhJQUKm6QbqvrIWfsGPaMir6woxjqSIuOPP1SVNMUvwESIf
+         gfR8M66dO1aIg/1bkAqCbaLqun46eFmGSkJDD4Io+Z0mVtCrfTQpI18irqU52DO8Zo
+         vt7KFxSgZi5NgjCsiSeaoz+qtxNADbgT66maEJO6AdOPLJNhLh3MuDMZqTCzGDH2dt
+         7irnGfS2/1khw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     pavel@ucw.cz
@@ -44,9 +44,9 @@ Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/7] dt-bindings: leds: leds-mt6323: Document mt6331 compatible
-Date:   Wed, 12 Apr 2023 17:33:04 +0200
-Message-Id: <20230412153310.241046-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 2/7] dt-bindings: leds: leds-mt6323: Document mt6332 compatible
+Date:   Wed, 12 Apr 2023 17:33:05 +0200
+Message-Id: <20230412153310.241046-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
 References: <20230412153310.241046-1-angelogioacchino.delregno@collabora.com>
@@ -61,27 +61,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mediatek,mt6331-led compatible for the LED controller found
-in the MT6331 PMIC.
+Add support for MT6332 LEDs/WLEDs with compatible "mediatek,mt6332-led".
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/leds/leds-mt6323.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/leds/leds-mt6323.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/leds/leds-mt6323.txt b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
-index 73353692efa1..7dc63af41562 100644
+index 7dc63af41562..052dccb8f2ce 100644
 --- a/Documentation/devicetree/bindings/leds/leds-mt6323.txt
 +++ b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
-@@ -12,7 +12,9 @@ For MediaTek PMIC wrapper bindings see:
- Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
- 
- Required properties:
--- compatible : Must be "mediatek,mt6323-led"
-+- compatible : Must be one of
-+  - "mediatek,mt6323-led"
-+  - "mediatek,mt6331-led"
+@@ -15,6 +15,7 @@ Required properties:
+ - compatible : Must be one of
+   - "mediatek,mt6323-led"
+   - "mediatek,mt6331-led"
++  - "mediatek,mt6332-led"
  - address-cells : Must be 1
  - size-cells : Must be 0
  
