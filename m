@@ -2,110 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896BB6DF5AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB5B6DF5D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjDLMlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S230170AbjDLMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDLMll (ORCPT
+        with ESMTP id S231710AbjDLMnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:41:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E929646B1;
-        Wed, 12 Apr 2023 05:41:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FB8FD75;
-        Wed, 12 Apr 2023 05:42:19 -0700 (PDT)
-Received: from [10.57.55.240] (unknown [10.57.55.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 422CA3F73F;
-        Wed, 12 Apr 2023 05:41:29 -0700 (PDT)
-Message-ID: <71167f33-1e54-53ed-0101-c7293149d89b@arm.com>
-Date:   Wed, 12 Apr 2023 13:41:27 +0100
+        Wed, 12 Apr 2023 08:43:32 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612869EC9;
+        Wed, 12 Apr 2023 05:42:56 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4A87424E01A;
+        Wed, 12 Apr 2023 20:42:37 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 20:42:37 +0800
+Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 20:42:36 +0800
+Message-ID: <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
+Date:   Wed, 12 Apr 2023 20:42:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Content-Language: en-GB
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        yangyicong@hisilicon.com, linuxarm@huawei.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
- <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
- <20230406111607.00007be5@Huawei.com>
- <20230406124040.GD392176@hirez.programming.kicks-ass.net>
- <20230406174445.0000235c@Huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230406174445.0000235c@Huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
+ <20230412084540.295411-2-changhuang.liang@starfivetech.com>
+ <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-06 17:44, Jonathan Cameron wrote:
-> On Thu, 6 Apr 2023 14:40:40 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
->> On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
->>
->>> In the long run I agree it would be good.  Short term there are more instances of
->>> struct pmu that don't have parents than those that do (even after this series).
->>> We need to figure out what to do about those before adding checks on it being
->>> set.
->>
->> Right, I don't think you've touched *any* of the x86 PMUs for example,
->> and getting everybody that boots an x86 kernel a warning isn't going to
->> go over well :-)
->>
-> 
-> It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> 
-> I'd love some inputs on what the x86 PMU devices parents should be?
-> CPU counters in general tend to just spin out of deep in the architecture code.
-> 
-> My overall favorite is an l2 cache related PMU that is spun up in
-> arch/arm/kernel/irq.c init_IRQ()
-> 
-> I'm just not going to try and figure out why...
 
-I think that's simply because the PMU support was hung off the existing 
-PL310 configuration code, which still supports non-DT boardfiles. The 
-PMU shouldn't strictly need to be registered that early, it would just 
-be a bunch more work to ensure that a platform device is available for 
-it to bind to as a regular driver model driver, which wasn't justifiable 
-at the time.
 
-Thanks,
-Robin.
+On 2023/4/12 19:34, Krzysztof Kozlowski wrote:
+> On 12/04/2023 10:45, Changhuang Liang wrote:
+>> StarFive SoCs like the jh7110 use a MIPI D-PHY RX controller based on
+>> a M31 IP. Add a binding for it.
+> 
+> So this is D-PHY? Or the other patch is D-PHY? The naming is quite
+> confusing and your commit msgs are not helping here.
+> 
+> Also the power domain phandle here adds to the confusion.
+> 
+
+Yes, this is DPHY, DPHY has rx and tx, and last version we are discussing that 
+use power domain replace syscon:
+https://lore.kernel.org/all/5dc4ddc2-9d15-ebb2-38bc-8a544ca67e0d@starfivetech.com/
+
+>>
+>> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+>> ---
+>>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 85 +++++++++++++++++++
+>>  1 file changed, 85 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+>>
+[...]
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  lane_maps:
+> 
+> Why did this appear? Underscores are not allowed. It looks like you
+> re-implement some standard property.
+> 
+
+Will change to lane-maps.
+Yes, according to Vinod advice, lane mapping table use device tree
+to parse makes sense.
+
+>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>> +    description:
+>> +      D-PHY rx controller physical lanes and logic lanes mapping table.
+>> +    items:
+>> +      - description: logic lane index point to physical lane clock lane 0
+>> +      - description: logic lane index point to physical lane data lane 0
+>> +      - description: logic lane index point to physical lane data lane 1
+>> +      - description: logic lane index point to physical lane data lane 2
+>> +      - description: logic lane index point to physical lane data lane 3
+>> +      - description: logic lane index point to physical lane clock lane 1
+>> +
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
