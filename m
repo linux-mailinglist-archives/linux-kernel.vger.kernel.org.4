@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F305A6DFC03
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382B46DFC08
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjDLQ6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S230359AbjDLQ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjDLQ63 (ORCPT
+        with ESMTP id S230254AbjDLQ6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:58:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11D9EC3;
-        Wed, 12 Apr 2023 09:58:10 -0700 (PDT)
+        Wed, 12 Apr 2023 12:58:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238149758;
+        Wed, 12 Apr 2023 09:58:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65E6561169;
-        Wed, 12 Apr 2023 16:58:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F623C4339B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A04FF62C91;
         Wed, 12 Apr 2023 16:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6775CC433EF;
+        Wed, 12 Apr 2023 16:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681318689;
-        bh=mvIllIwwL0a3N/4obdyiGIoypl2z7EHLEGkWiecz4W4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=If4vMZlVFmDy4ncqrtHqk9rr1iXk9l3r/MmO2bK2bDYqMNXk42gBYefyiSPPm71d3
-         Gw5GkARm8UyQLJdPj5rbPqtENXbffZCHV6Kar2gKsdaeNb4/0/iXjovTfQJRYlmd+P
-         qJy3mZ7KE5j5jxZAaVgvKtGwb7HH/ulLTCaKAHwqbi/m2oLmZYvDQO6GtJA0Ijbp7Q
-         7afHh3B4zLBvzNQE0MCn0ilUbSCI+eaoE557JjBhG5lFr4SN11yItMQgPuDI8HeUXS
-         hL4dcLIcqMBmAsk1OKYKqNBbAmB7p4j+9daLFIVl7HhYAnNpD5S5RD8QrJ5GouW7/3
-         V29DR5/yTbwbA==
-Date:   Wed, 12 Apr 2023 22:28:05 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 00/10] PCI: dwc: Relatively simple fixes and
- cleanups
-Message-ID: <ZDbjHTenZMxfziZD@matsya>
-References: <20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru>
- <20230411110240.GB5333@thinkpad>
- <20230411165924.4zfwhwxacxxeg7rk@mobilestation>
+        s=k20201202; t=1681318688;
+        bh=qEym68sXMMO79/ef6jwH0/WMRK6ifej8V9kh6pO6Nks=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kdM4KzxIZkv1ULAS4OtVgKDbS37cSTSOjXacui2q0LZoYz8GktC3FJqekjCS2V5nl
+         QYdkMKav/YAvgww2sj5HqyV3XZXd1NJ7JhMZyTX2m88azi37Ki/QxQBU3mBS+8V4v8
+         oaa45whwzZtUoj+N0RgTvdGlMBqEtT7c7beP/1K1qZPif8PPDXfb1EbDx1xlEjSEnt
+         5hEqr2pMWId3pE3bZs3YVpPeYQ7vyO7V4ihViEGvEzcxBdEHJAa1v6VoRwY11OrT5O
+         xoZwIFVbm/FXFGHQ9/HliNnPl/kqsDrZ9ji9FSvA1kBKxYL0lM+Mitz70Abyy5sFbj
+         m7g8t5e30YEmQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     sj@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCHv2] selftests: damon: add config file
+Date:   Wed, 12 Apr 2023 16:58:06 +0000
+Message-Id: <20230412165806.80672-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230412092854.3306197-1-anders.roxell@linaro.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411165924.4zfwhwxacxxeg7rk@mobilestation>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-23, 19:59, Serge Semin wrote:
-> On Tue, Apr 11, 2023 at 04:32:40PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Apr 11, 2023 at 06:39:18AM +0300, Serge Semin wrote:
-> > > It turns out the recent DW PCIe-related patchset was merged in with
-> > > several relatively trivial issues left unsettled (noted by Bjorn and
-> > > Manivannan). All of these lefovers have been fixed in this patchset.
-> > > Namely the series starts with two bug-fixes. The first one concerns the
-> > > improper link-mode initialization in case if the CDM-check is enabled. The
-> > > second unfortunate mistake I made in the IP-core version type helper. In
-> > > particular instead of testing the IP-core version type the macro function
-> > > referred to the just IP-core version which obviously wasn't what I
-> > > intended.
-> > > 
-> > > Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
-> > > message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
-> > > Secondly the Baikal-T1 PCIe Host driver is converted to perform the
-> > > asynchronous probe type which saved us of about 15% of bootup time if no any
-> > > PCIe peripheral device attached to the port.
-> > > 
-> > > Then the patchset contains the Baikal-T1 PCIe driver fix. The
-> > > corresponding patch removes the false error message printed during the
-> > > controller probe procedure. I accidentally added the unconditional
-> > > dev_err_probe() method invocation. It was obviously wrong.
-> > > 
-> > > Then two trivial cleanups are introduced. The first one concerns the
-> > > duplicated fast-link-mode flag unsetting. The second one implies
-> > > dropping a redundant empty line from the dw_pcie_link_set_max_speed()
-> > > function.
-> > > 
-> > > The series continues with a patch inspired by the last @Bjorn note
-> > > regarding the generic resources request interface. As @Bjorn correctly
-> > > said it would be nice to have the new interface used wider in the DW PCIe
-> > > subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
-> > > PCIe driver can be easily converted to using the generic clock names.
-> > > That's what is done in the noted patch.
-> > > 
-> > > The patchset is closed with a series of MAINTAINERS-list related patches.
-> > > Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
-> > > update the MAINTAINER-list with the new files added in the framework of
-> > > that procedure. All the snps,dw-pcie* schemas shall be maintained by the
-> > > DW PCIe core driver maintainers. Secondly seeing how long it took for my
-> > > patchsets to review and not having any comments from the original driver
-> > > maintainers I'd suggest to add myself as the reviewer to the DW PCIe and
-> > > eDMA drivers. Thus hopefully the new updates review process will be
-> > > performed with much less latencies. For the same reason I would also like
-> > > to suggest to add @Manivannan as the DW PCIe/eDMA drivers maintainer if
-> > > he isn't against that idea. What do you think about the last suggestion?
-> > > 
-> > 
-> > I'm willing to co-maintain the drivers.
+Hi Anders,
+
+On Wed, 12 Apr 2023 11:28:54 +0200 Anders Roxell <anders.roxell@linaro.org> wrote:
+
+> Building and running the subsuite 'damon' of kselftest, shows the
+> following issues:
+>  selftests: damon: debugfs_attrs.sh
+>   /sys/kernel/debug/damon not found
 > 
-> Awesome! @Bjorn, @Lorenzo, @Vinod what do you think about this? If you
-> are ok with that shall I resubmit the series with @Mani added to the
-> DW PCIe/eDMA maintainers list or will you create the respective
-> patches yourself?
+> By creating a config file enabling DAMON fragments in the
+> selftests/damon/ directory the tests pass.
+> 
+> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-Pls send the patch, that is preferred.
+checkpatch.pl is warning as below:
 
--- 
-~Vinod
+    WARNING: Reported-by: should be immediately followed by Link: with a URL to the report
+    #20:
+    Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+    Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+
+The reason for the warning can be found from commit d7f1d71e5ef6 ("checkpatch:
+warn when Reported-by: is not followed by Link:")'s commit message.  Do you
+have a link to put here?  I guess the report was made inside Linaro, so might
+have no publicly available link.  Maybe better to add some notes or some funny
+tag like "Link: N/A # no publicly-available link of the report" for convincing
+the tool, but I don't think this should be a blocker for this patch.
+
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  tools/testing/selftests/damon/config | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>  create mode 100644 tools/testing/selftests/damon/config
+> 
+> diff --git a/tools/testing/selftests/damon/config b/tools/testing/selftests/damon/config
+> new file mode 100644
+> index 000000000000..0daf38974eb0
+> --- /dev/null
+> +++ b/tools/testing/selftests/damon/config
+> @@ -0,0 +1,7 @@
+> +CONFIG_DAMON=y
+> +CONFIG_DAMON_SYSFS=y
+> +CONFIG_DAMON_DBGFS=y
+> +CONFIG_DAMON_PADDR=y
+> +CONFIG_DAMON_VADDR=y
+> +CONFIG_DAMON_RECLAIM=y
+> +CONFIG_DAMON_LRU_SORT=y
+> -- 
+> 2.39.2
