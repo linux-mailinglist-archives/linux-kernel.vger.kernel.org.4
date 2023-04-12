@@ -2,119 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBC66DEADF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0686DEAE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjDLFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 01:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S229520AbjDLFQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 01:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLFJd (ORCPT
+        with ESMTP id S229450AbjDLFQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:09:33 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4825A1996;
-        Tue, 11 Apr 2023 22:09:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g3so11562529pja.2;
-        Tue, 11 Apr 2023 22:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681276172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=it0Wi4L0e7s40uaIIiJKd4300bUDmSUf9yApkSgXnos=;
-        b=QXkgNXxWy7yAf0sAx+it64ZTfgE7av1zC231AuReQ+ZPxHIJ8XlLaVrY33VKKm9slK
-         eWKwb7wx596Sy+wyPffsiAhHLmF96j8WeqrsnqmZJuDa3Shxbvlqe3e2cWE0/3Xul7vO
-         wYW4JFCkkfRSFqfmL6e4BfgLISd0o3HOjKXVT1KBFBuCB5FY17zqBVHkJpUWMRZbfcVZ
-         LLpbjDYX3Zx5qubqTCMXTz9GvMi5qtOAy6XLL9FEhLqIbGMD0Smc2ODJOEUdAnKtWMmI
-         8iM4LYlqk39UU6ITk5zrWmssJ146t4wL1cv9yToGNFTRF7ULLtUsUbx6g5LUgNuzODUf
-         wCLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681276172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=it0Wi4L0e7s40uaIIiJKd4300bUDmSUf9yApkSgXnos=;
-        b=htyBcOozPXpOn1edrqC8NalLtYSJ31LSr01IdyX01vjM77AmJv2+foWqHqn6z3y4Xm
-         1uMTqIbFy6sBkgr+S4441FB0I+aWIenhU16mWKd0+gyJZEGQoUXwrIlZP//gntLKFFvx
-         Q4jVKtYQveJdl36T2qSks6HyF+KR7mdQpktT1wy+hsh2ENftpyTBGaa/Fi0hOHHtqr2b
-         7/WlBhycYZyfco2Aj2iv+W/w5em+f9XJTG2QqSQl+LO3OIEOxD2d8eHhbYU1Q09KdjJM
-         qYaaCfizR8ptoadtd0w7WVjvHLBOJCVGhzORDluti1i8mZDkUqlJ8SEdJ00Yf5pWP/fh
-         Q9sQ==
-X-Gm-Message-State: AAQBX9fyVPwaPOE/lfb3jop3V0kvsFTVDqv2bzcLzksvINcZFhw+9FkT
-        2MzQJa9h2bP2bRBkcy5zNYFwNS05MUJi1xuwNjY=
-X-Google-Smtp-Source: AKy350Z8WsgewvwVo7a8JR1Ze2cFwFEdFkHf4g9Cp3x4uRa80pOAGrglJJ5aK4yANIb56cXjB/tkbF0q6fX0E1kWOe8=
-X-Received: by 2002:a17:902:988f:b0:1a1:ffc0:8b9e with SMTP id
- s15-20020a170902988f00b001a1ffc08b9emr4359639plp.4.1681276171666; Tue, 11 Apr
- 2023 22:09:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com> <0e334497-fbc1-49f7-87ef-8dbf6d25d6a7@paulmck-laptop>
-In-Reply-To: <0e334497-fbc1-49f7-87ef-8dbf6d25d6a7@paulmck-laptop>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 12 Apr 2023 13:09:20 +0800
-Message-ID: <CAABZP2w8Dg5LrsSvMdYp36n_fhj2fF7qTM5CFnFAh1VJKN+HFA@mail.gmail.com>
-Subject: Re: [PATCH] rcu/torture replace wait_event with wait_event_interruptible
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org, lance@osuosl.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 01:16:56 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3441BD9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 22:16:51 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230412051644epoutp01c443b6bb49bdc413d575fa6d3d594563~VGCnvevu80418504185epoutp01U
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:16:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230412051644epoutp01c443b6bb49bdc413d575fa6d3d594563~VGCnvevu80418504185epoutp01U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1681276604;
+        bh=b0Tl3wa1A0rsyeO1OYkPsDbplQjwdowp8kNaOSgtlvc=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=LrQXJKbze31urzXZTdZsyJjyC/4bcY1UC1t8RCjUmdSD9ZaBusXC1ZD1v2E7RkOgd
+         izEvcq/GFyMC8iIYjfHbtzVg7dklKbVtAxv0Ogb9q6UXsZi3W980yv/Z/qp7Lv/7jU
+         NfB55l+As47uAvdQ+FRI0I/e1yxGyxKU/PiqBih0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230412051643epcas2p48563904c3edf7f1cee2ea3f40804209f~VGCm8veog1406114061epcas2p4V;
+        Wed, 12 Apr 2023 05:16:43 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Px9tM0kt0z4x9Py; Wed, 12 Apr
+        2023 05:16:43 +0000 (GMT)
+X-AuditID: b6c32a45-e13fa700000026e9-c6-64363eba8ae4
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AD.76.09961.ABE36346; Wed, 12 Apr 2023 14:16:42 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH 0/2] Fix NVMe metadata mapping size for integrity
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "chaitanya.kulkarni@wdc.com" <chaitanya.kulkarni@wdc.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e@epcms2p6>
+Date:   Wed, 12 Apr 2023 14:16:42 +0900
+X-CMS-MailID: 20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmhe5uO7MUg14fi/97jrFZzLr9msXi
+        5SFNi5WrjzJZ9PZvZbOYdOgao8XlXXPYLOYve8puse71exYHTo+Jze/YPc7f28jisWlVJ5vH
+        5iX1HrtvNrB59G1ZxejxeZOcR/uBbqYAjqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwND
+        XUNLC3MlhbzE3FRbJRefAF23zByg45QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5
+        BeYFesWJucWleel6eaklVoYGBkamQIUJ2RkvlnUzFzwVqNjbv4KxgXEjbxcjJ4eEgIlE98UZ
+        bF2MXBxCAjsYJW4enM/UxcjBwSsgKPF3hzBIjbCAo8SMNZ/ZQWwhASWJc2tmMYKUCAsYSNzq
+        NQcJswnoSfxcAjFGROAik0Rb1wtmiPm8EjPan7JA2NIS25dvZYSwNSR+LOuFqhGVuLn6LTuM
+        /f7YfKgaEYnWe2ehagQlHvzcDRWXlDh06CsbyA0SAvkSGw4EQoRrJN4uPwBVoi9xrWMjC8Qn
+        vhLH7+eCmCwCqhKLp0VDNLpIbH/sClLMLCAvsf3tHGaQMLOApsT6XfoQFcoSR26xQFTwSXQc
+        /ssO81HDxt9Y2TvmPWGCaFWTWNRkBBGWkfh6eD5UiYfE9hf3mScwKs5CBPEsJCfMQjhhASPz
+        Kkax1ILi3PTUYqMCQ3isJufnbmIEJ1At1x2Mk99+0DvEyMTBeIhRgoNZSYT3h4tpihBvSmJl
+        VWpRfnxRaU5q8SFGU6DXJzJLiSbnA1N4Xkm8oYmlgYmZmaG5kamBuZI4r7TtyWQhgfTEktTs
+        1NSC1CKYPiYOTqkGppQns4qE30S8f7XKcl1jefmuLZvFfqZWGrLNePOrhP9bpciOsgu2dZLX
+        f0z2zQu6kPAmLvNXpJBa3j1G3dWbZ7wMWpL15pFO2NWpm/YaLxZJPqOR/K1248125dzu5nkv
+        XkZP9nqZ+KVOlsl222KZiY8fF+rb2FWVvpp8bcmRaVe6GkNmXfwW+7zdaXWobcCiIu9P72/O
+        +1nFdORzGsPZvHT+qbaFomnPKneE1qybM/nake8nzf4oXLZvOZ4mf7jQqdtI9928isNcUa/W
+        aC73td3qXR1fOcV6wTer3nnrFNWzdt2539EcHWJxMZL/tYtW6detTivSBawl+uad3LSeYc70
+        bXOt7T3cZ/hm7Tov8FSJpTgj0VCLuag4EQAhNEtSKQQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e
+References: <CGME20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e@epcms2p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:54=E2=80=AFPM Paul E. McKenney <paulmck@kernel.o=
-rg> wrote:
->
-> On Wed, Apr 12, 2023 at 09:54:43AM +0800, zhouzhouyi@gmail.com wrote:
-> > From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> >
-> > In kfree_rcu_test, kfree_scale_shutdown will be detected as hung task
-> > if kfree_loops is too big. Replace wait_event with wait_event_interrupt=
-ible
-> > to avoid false positive.
-> >
-> > Tested in the PPC VM of Open Source Lab of Oregon State University.
-> >
-> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > ---
-> >  kernel/rcu/rcuscale.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-> > index 91fb5905a008..b37eec94957c 100644
-> > --- a/kernel/rcu/rcuscale.c
-> > +++ b/kernel/rcu/rcuscale.c
-> > @@ -771,7 +771,7 @@ kfree_scale_cleanup(void)
-> >  static int
-> >  kfree_scale_shutdown(void *arg)
-> >  {
-> > -     wait_event(shutdown_wq,
-> > +     wait_event_interruptible(shutdown_wq,
->
-> Good catch!!!
->
-> Would wait_event_idle() work in this case?  The _interruptible()
-> variant indicates that wakeups due to things like POSIX signals is
-> permitted.
-Thank Paul for your guidance and encouragement!
-I will perform a new round of rcu torture test, after this is done, I
-will resend the modified version.
+In the case of NVMe, it has an integrity payload consisting of one segment.
+So, rather than configuring SG_LIST, it was changed by direct DMA mapping.
 
-Thanks ;-)
-Zhouyi
->
->                                                         Thanx, Paul
->
-> >                  atomic_read(&n_kfree_scale_thread_ended) >=3D kfree_nr=
-ealthreads);
-> >
-> >       smp_mb(); /* Wake before output. */
-> > --
-> > 2.34.1
-> >
+The page-merge is not performed for the struct bio_vec when creating 
+a integrity payload in block.
+As a result, when creating an integrity paylaod beyond one page, each 
+struct bio_vec is generated, and its bv_len does not exceed the PAGESIZE.
+
+To solve this problem, DMA mapping for metadata was modified to use the 
+total segment size of the integrity payload.
+
+
+Tested like this:
+
+- Format (support pi type 1)
+$ sudo nvme format /dev/nvme2n1 --force -n 1 -i 1 -p 0 -m 0 -l 1 -r
+
+- Run FIO
+[global]
+ioengine=libaio
+group_reporting
+
+[job]
+bs=512k
+iodepth=256
+rw=write
+numjobs=8
+direct=1
+runtime=10s
+filename=/dev/nvme2n1
+
+- Result
+...
+[   93.496218] nvme2n1: I/O Cmd(0x1) @ LBA 62464, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
+[   93.496227] protection error, dev nvme2n1, sector 62464 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
+[   93.538788] nvme2n1: I/O Cmd(0x1) @ LBA 6144, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
+[   93.538798] protection error, dev nvme2n1, sector 6144 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
+[   93.566231] nvme2n1: I/O Cmd(0x1) @ LBA 124928, 1024 blocks, I/O Error (sct 0x0 / sc 0x4)
+[   93.566241] I/O error, dev nvme2n1, sector 124928 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
+[   93.694147] nvme2n1: I/O Cmd(0x1) @ LBA 64512, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
+[   93.694155] protection error, dev nvme2n1, sector 64512 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
+[   93.694299] nvme2n1: I/O Cmd(0x1) @ LBA 5120, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
+[   93.694305] protection error, dev nvme2n1, sector 5120 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
+...
+
+Jinyoung Choi (2):
+  blk-integrity: add rq_integrity_payload_size helper
+  nvme-pci: fix metadata mapping length
+
+ drivers/nvme/host/pci.c       | 9 ++++++---
+ include/linux/blk-integrity.h | 7 +++++++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
