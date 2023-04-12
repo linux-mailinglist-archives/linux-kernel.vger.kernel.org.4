@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256516DEC66
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89C06DEC67
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjDLHSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S229671AbjDLHSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDLHSH (ORCPT
+        with ESMTP id S229458AbjDLHSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:18:07 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014081713
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:18:00 -0700 (PDT)
-Received: from unicom145.biz-email.net
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id HBD00056;
-        Wed, 12 Apr 2023 15:17:56 +0800
-Received: from localhost.localdomain.com (10.200.104.82) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.21; Wed, 12 Apr 2023 15:17:55 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] tools/virtio/ringtest: Replace obsolete memalign() with posix_memalign()
-Date:   Wed, 12 Apr 2023 03:17:53 -0400
-Message-ID: <20230412071753.1966-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Apr 2023 03:18:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC75FF1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:18:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6E49D75;
+        Wed, 12 Apr 2023 00:19:10 -0700 (PDT)
+Received: from pierre123.nice.arm.com (pierre123.nice.arm.com [10.34.100.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B7E273F73F;
+        Wed, 12 Apr 2023 00:18:24 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: [PATCH v2 0/3] cacheinfo: Correctly fallback to using clidr_el1's information
+Date:   Wed, 12 Apr 2023 09:18:03 +0200
+Message-Id: <20230412071809.12670-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   202341215175682d1f7c533356d546f6d3bdac4f0bacd
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-memalign() is obsolete according to its manpage.
+v2:
+cacheinfo: Check sib_leaf in cache_leaves_are_shared()
+- Reformulate commit message
+- Add 'Fixes: f16d1becf96f ("cacheinfo: Use cache identifiers [...]'
+cacheinfo: Check cache properties are present in DT
+- Use of_property_present()
+- Add 'Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>'
+cacheinfo: Add use_arch[|_cache]_info field/function:
+- Make use_arch_cache_info() a static inline function
 
-Replace memalign() with posix_memalign() and remove malloc.h include
-that was there for memalign().
+The cache information can be extracted from either a Device
+Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
+for arm64).
 
-As a pointer is passed into posix_memalign(), initialize *p to NULL
-to silence a warning about the function's return value being used as
-uninitialized (which is not valid anyway because the error is properly
-checked before p is returned).
+When the DT is used but no cache properties are advertised,
+the current code doesn't correctly fallback to using arch information.
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- tools/virtio/ringtest/ptr_ring.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Correct this. Also use the assumption that L1 data/instruction caches
+are private and L2/higher caches are shared when the cache information
+is coming form clidr_el1.
 
-diff --git a/tools/virtio/ringtest/ptr_ring.c b/tools/virtio/ringtest/ptr_ring.c
-index c9b26335f891..a0bf4978eace 100644
---- a/tools/virtio/ringtest/ptr_ring.c
-+++ b/tools/virtio/ringtest/ptr_ring.c
-@@ -26,9 +26,12 @@ typedef int gfp_t;
- 
- static void *kmalloc(unsigned size, gfp_t gfp)
- {
--	void *p = memalign(64, size);
--	if (!p)
--		return p;
-+	void *p;
-+	int ret;
-+
-+	ret = posix_memalign(&p, 64, size)
-+	if (ret < 0)
-+		return NULL;
- 
- 	if (gfp & __GFP_ZERO)
- 		memset(p, 0, size);
+Pierre Gondois (3):
+  cacheinfo: Check sib_leaf in cache_leaves_are_shared()
+  cacheinfo: Check cache properties are present in DT
+  cacheinfo: Add use_arch[|_cache]_info field/function
+
+ drivers/base/cacheinfo.c  | 48 +++++++++++++++++++++++++++++++++++----
+ include/linux/cacheinfo.h | 11 +++++++++
+ 2 files changed, 55 insertions(+), 4 deletions(-)
+
 -- 
-2.27.0
+2.25.1
 
