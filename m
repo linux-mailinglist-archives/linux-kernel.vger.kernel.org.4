@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29466DFBD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346386DFBD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjDLQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S231489AbjDLQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjDLQvE (ORCPT
+        with ESMTP id S231344AbjDLQut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:51:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318C5975A;
-        Wed, 12 Apr 2023 09:50:39 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CFRWXj014864;
-        Wed, 12 Apr 2023 16:49:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=94uMQb9Z5K8OYmr66Tgsh0+f5li0B9huud/KcfyOAxc=;
- b=Y3b9i2gjmK9P1xIlqSnCGTklQFU+iYjqbaLNI6ttl9//6tLRK2ddWHuPsldNJS0O+yB5
- gS/YnZ0+YRARvxOQzhJ44z5VDOsYFkL2TNFIOlEpDD9rNJ/r4PnAhirC86rnPl9/PEwZ
- MThw8JSL76x6434DxyQkZ7FXm13Wvq6MPf6f7dxgP4vgaPF4EkakBsR9AzLr+JJ24sUC
- 1hrrYCuOqRMKhM0PsfCTOF6sxdrj5WFl0OwClSyUsEHKBUsa+f++t09xeEJVzVP3BE7P
- 99SSnairKsDqHI1HJ3oTFjZI5hfY+Vzx14sXqum0XEsmreZZv3OXPgZVpAGfsLRHEih5 +w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwwdp8g08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 16:49:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CGnfXV026648
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 16:49:41 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 12 Apr 2023 09:49:37 -0700
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH 1/3] arm64: dts: qcom: ipq5332: rename mi01.2 dts to rdp441
-Date:   Wed, 12 Apr 2023 22:19:18 +0530
-Message-ID: <20230412164920.21862-2-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230412164920.21862-1-quic_kathirav@quicinc.com>
-References: <20230412164920.21862-1-quic_kathirav@quicinc.com>
+        Wed, 12 Apr 2023 12:50:49 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731627DB3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:50:26 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id i20so16152223ybg.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681318171; x=1683910171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=txytFHb+OHcln9Jf1NBW9iIGnvsknm0ej/9O1NbRSBA=;
+        b=YCiMefLv7nAtRiyKLvPC/8BYbWdlg8KJHhZQHd0CxqSg7iV7nQAw5pqzArjCBGixm2
+         zXot5iJgoLWZ/mK4MVGNMewp24ea/PJs4lj7gftpyJoxUQ5uEGx4IdZY/EQVLitmk5KT
+         6ngATDCRYblqj+B0U1bzhFjQa5iLAHDqJvkXlS/ZDP2Eo7rR1w9yz58ujd5MViELpVAq
+         OmpZ5GqBK8mjF7ukPZlsCKOxgN0nvkgd1x4pk/BKp8j5bhsOi2o4eX+1dg38ehnE6qhT
+         Gtxmarv5LBiqSRfXB2Gg7aBXYEzNH25VP+nmYn/8974Pg14ZikPkZ6kjrUcFYDFyWjM2
+         ddCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681318171; x=1683910171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=txytFHb+OHcln9Jf1NBW9iIGnvsknm0ej/9O1NbRSBA=;
+        b=AFfod8gkPTzeK3DRKHXtmIlfZQqB4oReMXqv+377SqXo0+zjWrc3mECRIZFnc59q24
+         hKGMKH4BWtbS/YtwhSoemZhsYYOHSyTs8ZGI50h8rY1HXO6eVzgmBWdWHGyJGsfO296z
+         +HUfRqlS6nkfNLXsZ+u6s+UMwm9YkYxlv2dX/LqdFLiUnBzlGVXXqVr1YxoPaAztEWD3
+         b6FvvE/ISQoQ5vxj+2jUCWVcGNWIHKaBRpvJeAEFsd/ReI3M6Pi3TfKAuY4ybnjQqJO0
+         h+IR2bSFa/IaRO2CpQt7KGQ96Gk477GFqTuwq2yO0LQDEKh7KgqBQ3sfkrcpZvpU84Cy
+         hI2g==
+X-Gm-Message-State: AAQBX9e04pCKfRjCpvnXJx208SzCRD1bX950n+Swz+dSyAuc6tpCz1er
+        SiQw95btr21qf0po5xR8YSSvs5VLSF3185SmAUTqqg==
+X-Google-Smtp-Source: AKy350YfkY17PxsGQIapL7gdy+Rji3Kd9I7ld/GOAZaRrOshkDZOZjSrKDCizss68KYy7UVaIQC9fVpZ1hGrDSiQdH4=
+X-Received: by 2002:a25:d4d7:0:b0:b8f:37ae:b75b with SMTP id
+ m206-20020a25d4d7000000b00b8f37aeb75bmr1737335ybf.11.1681318170406; Wed, 12
+ Apr 2023 09:49:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LjI1AxpQIUfq77rheLXdRYMT2DkaaUCG
-X-Proofpoint-ORIG-GUID: LjI1AxpQIUfq77rheLXdRYMT2DkaaUCG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_08,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=880 clxscore=1015 spamscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <ZDZ4j7UdBt32j28J@dhcp22.suse.cz> <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
+ <20230410073228.23043-1-jaewon31.kim@samsung.com> <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
+ <20230412094440epcms1p445319579ead0d0576bb616ebb07501b4@epcms1p4>
+ <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p8>
+ <ZDaP4/PYyb9tKGQi@dhcp22.suse.cz> <20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804@epcms1p8>
+In-Reply-To: <20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804@epcms1p8>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Wed, 12 Apr 2023 09:49:19 -0700
+Message-ID: <CABdmKX2fA2nXaSb8k+LE1yeso=ZnboDtxhzmjzrS35GSKv73hQ@mail.gmail.com>
+Subject: Re: [PATCH v3] dma-buf/heaps: system_heap: avoid too much allocation
+To:     jaewon31.kim@samsung.com
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To align with ipq5332-rdp468.dts, lets rename the mi01.2 dts as well to
-ipq5332-rdp441.dts.
+On Wed, Apr 12, 2023 at 4:38=E2=80=AFAM Jaewon Kim <jaewon31.kim@samsung.co=
+m> wrote:
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
- arch/arm64/boot/dts/qcom/Makefile                               | 2 +-
- .../boot/dts/qcom/{ipq5332-mi01.2.dts => ipq5332-rdp441.dts}    | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename arch/arm64/boot/dts/qcom/{ipq5332-mi01.2.dts => ipq5332-rdp441.dts} (100%)
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index e0e2def48470..42736c46203c 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -3,7 +3,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp441.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp441.dts
-similarity index 100%
-rename from arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
-rename to arch/arm64/boot/dts/qcom/ipq5332-rdp441.dts
--- 
-2.17.1
-
+> Yes I think you're right. As a allocator, dma-buf system heap looks to be=
+ loose
+> in memory allocation. Limiting dmabuf memory may be required. But I think=
+ there
+> is no nice and reasonable way so far. And the dma-buf system heap is bein=
+g
+> widely used in Android mobile system. AFAIK the camera consumes huge memo=
+ry
+> through this dma-buf system heap. I actually even looked a huge size requ=
+est
+> over 2GB in one dma-buf request.
+>
+Hey can you point me to where you saw a request that big? That's a
+non-buggy request?!
