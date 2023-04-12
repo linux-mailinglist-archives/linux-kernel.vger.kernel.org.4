@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D766DE92B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23196DE92E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjDLBxy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 21:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S229559AbjDLBzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDLBxx (ORCPT
+        with ESMTP id S229459AbjDLBzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:53:53 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7A54C07
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:47 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id EE183140A95;
-        Wed, 12 Apr 2023 01:53:45 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 7192032;
-        Wed, 12 Apr 2023 01:53:43 +0000 (UTC)
-Message-ID: <2b966f46a5f60de629681527bb00401830118947.camel@perches.com>
-Subject: Re: [RFC PATCH] checkpatch: Support __initconst combined with
- struct definition
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andy@kernel.org>,
-        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc:     Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
-Date:   Tue, 11 Apr 2023 18:53:42 -0700
-In-Reply-To: <ZDVixjH5qLoy1jTW@smile.fi.intel.com>
-References: <20230301094320.15954-1-bjorn@kernel.org>
-         <ZDVixjH5qLoy1jTW@smile.fi.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: 7192032
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Rspamd-Server: rspamout01
-X-Stat-Signature: sy964tf6dhz9dnt7e8zigqqwn7xz8i3m
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19GLVU+nzrGdem+UwEVe+zM911VbiL4lys=
-X-HE-Tag: 1681264423-285885
-X-HE-Meta: U2FsdGVkX19GwP+aELnsxhseFU2M32tOO4PjvNCwiMPweENuspWK00zanBENykIOMWfhhEpA1DpKCsnbQUZdGw==
+        Tue, 11 Apr 2023 21:55:16 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F9140E3;
+        Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso8491009pjt.4;
+        Tue, 11 Apr 2023 18:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681264515;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jkvWNkk1D4zYagSfBASBmBTtHIblQqU2LylpaSD7Fu0=;
+        b=d3exat8iufnqZQMftlidwS/KzkfSzFEd4frI1pTlUJK6dmAApy5q8QnhpVCcH2NmJf
+         Lskbq5bUFr++T78H2Fq7aWrE21WkfBVV47beBDzh22JqOLGFgyNkSSB4LCoUxYPwuZo8
+         UI5YT9/ksJhXJhFvFN3FMVwr5n1VYL7PPGIAUVXQ/7lS+4n4SMxzU3/ie2BRBT9RE1CS
+         cWsUwwqszQXIZKfAjlg5o94URfnRMIk1caZ+MwpkRa5Gk6q7d6Oiq14w9doDTxhyexLm
+         gEvfE5akhJNElOJR+5UCFZ4X1yIiAfsI4EEn7MwXxVv0OWPBbaBJOSRELZ1APB5wwIHC
+         Bz0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681264515;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jkvWNkk1D4zYagSfBASBmBTtHIblQqU2LylpaSD7Fu0=;
+        b=3gdm1oxD4C67rmMy00a2Cl4K9JKO89vO4NpLYOpkOEvai6cqqVptW0VaZmD8JcKVNP
+         o2d7b7lUwNE7lofTyu9tHCF3/hfhRTtu7jUPrWwq+A178WqWlNZCvh2aa4hnkWLYs6EZ
+         fmiuPEZAVw8S4cEQGGW8LSgONJcg0k9Y0ZjsEI3CnBp78h5HyXvxqSBnfAh99HyL72+t
+         BASti7/zKraeweaS3Gyx3VEWOovPBo6GsasPNCO2tpXT+oiSjO2ygUd3SmdN1+gXKgZ3
+         Sdowych3/mQL2e7vvIa9IUhRHkVtvYSDt6LH9im6ILrEHQOHfVliEqF/g+CUmCah6lrT
+         rWzQ==
+X-Gm-Message-State: AAQBX9fGWpE6T6+4vLmVtrKuPX4KIO0ywTUJFqenZWF50e9cpnD/VcRF
+        Rz8YHcd0LXvd1AzrsxhCAP4=
+X-Google-Smtp-Source: AKy350b7gD3T6X+AVV7rB26/Uk5yhOyuv+RWB2wbyKhB7INGSTKioLGeM6O4q56vb57y+EzZ3t06pg==
+X-Received: by 2002:a17:902:d48a:b0:1a5:2757:d40a with SMTP id c10-20020a170902d48a00b001a52757d40amr6243932plg.49.1681264514738;
+        Tue, 11 Apr 2023 18:55:14 -0700 (PDT)
+Received: from localhost.localdomain ([154.220.3.115])
+        by smtp.gmail.com with ESMTPSA id l9-20020a17090270c900b0019b089bc8d7sm8061293plt.78.2023.04.11.18.55.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Apr 2023 18:55:14 -0700 (PDT)
+From:   zhouzhouyi@gmail.com
+To:     paulmck@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lance@osuosl.org
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: [PATCH] rcu/torture replace wait_event with wait_event_interruptible
+Date:   Wed, 12 Apr 2023 09:54:43 +0800
+Message-Id: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com>
+X-Mailer: git-send-email 1.7.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-11 at 16:38 +0300, Andy Shevchenko wrote:
-> On Wed, Mar 01, 2023 at 10:43:20AM +0100, Björn Töpel wrote:
-> > From: Björn Töpel <bjorn@rivosinc.com>
-> > 
-> > Checkpatch sometimes report a false positive for __initconst. E.g., for the
-> > following snippet:
-> > 
-> >  | static const struct strspn_test {
-> >  | 	const char str[16];
-> >  | 	const char accept[16];
-> >  | 	const char reject[16];
-> >  | 	unsigned a;
-> >  | 	unsigned r;
-> >  | } tests[] __initconst = {
-> >  | 	{ "foobar", "", "", 0, 6 },
-> >  | 	{ "abba", "abc", "ABBA", 4, 4 },
-> >  | 	{ "abba", "a", "b", 1, 1 },
-> >  | 	{ "", "abc", "abc", 0, 0},
-> >  | };
-> > 
-> > checkpatch would report:
-> > 
-> >  | ERROR: Use of __initconst requires a separate use of const
-> >  | #190: FILE: ./test_string.c:190:
-> >  | +	} tests[] __initconst = {
-> > 
-> > Improve the reporting by trying harder to find the 'const'.
-> 
-> Joe, what do you think about this?
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
 
-I think the ctx_block_outer_rev  function doesn't handle patch
-context blocks and the loop at best needs to be changed to include
+In kfree_rcu_test, kfree_scale_shutdown will be detected as hung task
+if kfree_loops is too big. Replace wait_event with wait_event_interruptible
+to avoid false positive.
 
-	last if $rawlines[$line] =~ /^@/);.
+Tested in the PPC VM of Open Source Lab of Oregon State University.
 
-And the loop parsing couldn't handle structs with embedded
-unions or structs.
+Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>                
+---
+ kernel/rcu/rcuscale.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I also think that checkpatch will always have false negatives
-and false positives and this might not be that useful as likely
-most compilers should now be able to identify this as well.
+diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+index 91fb5905a008..b37eec94957c 100644
+--- a/kernel/rcu/rcuscale.c
++++ b/kernel/rcu/rcuscale.c
+@@ -771,7 +771,7 @@ kfree_scale_cleanup(void)
+ static int
+ kfree_scale_shutdown(void *arg)
+ {
+-	wait_event(shutdown_wq,
++	wait_event_interruptible(shutdown_wq,
+ 		   atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
+ 
+ 	smp_mb(); /* Wake before output. */
+-- 
+2.34.1
 
