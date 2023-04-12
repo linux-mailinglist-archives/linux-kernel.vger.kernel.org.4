@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54556DF6A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E8E6DF69E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjDLNMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S230254AbjDLNMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjDLNMl (ORCPT
+        with ESMTP id S230046AbjDLNMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 09:12:41 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA077DA8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:12:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id v9so16762740pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681305139; x=1683897139;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0hP3jv/htpFn6noooEWQxBH2VirSMKKiLKRhrd4CVQ=;
-        b=fZEKcEqQe/+CzECq7x8VyAs7MJhvwLRndGyF7cG0pmc00tX1LdoME0zIIdPDsvy7Rl
-         aVhZ1fvndJuiHUJLvPrvV9tW0Wqk7iU611OxZI7S5DSEIA/D4WVLVLUVyb/J5oVrKbUn
-         KidNfSwDklp1sz5DHvQ3D9yMNEClqJFRhETNQ+FUVCl3Okr+KD9fruNFmdwqIMrQ089S
-         OHybyntxkI3zNcWBWNduFlj5QkLw0LdrnAEUOXTE50k0Y8Wpvc0D7xSRql/zlOXyt6Kf
-         J4uAfDRTWwSNZ0D6He50GQjnF+bW6K0cLqa/eH4l4jTHV1UeAqLoji2F/m69lVeLUfH6
-         um0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681305139; x=1683897139;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D0hP3jv/htpFn6noooEWQxBH2VirSMKKiLKRhrd4CVQ=;
-        b=MJf7yf1gHGlp2m0bw/F7AZ/qfA7DLQ7Zyuz+Ejm+T5SkrZNDt8pWFTPF6AyGWtL4DI
-         T/8KFzCvfQaJctg8SVr4IsatvsenY1409WKgHdHx3LQwblea4YlISEqlUUBifIhuskqZ
-         YidNfx4IPWFHBaKUAmLZPMvIUyeuhDWHrCNqKR4Q843Dh+KN3b2CdUkakcbusBX7ByVp
-         5cjg2P1J61WSHGHBFtl1dRj0mw2K2M2TWFtrkbqo3lZeXRunziYUgDFuQEu0GZAJUuWa
-         JIhLVGUQYpEOb9jaDA3Zwkmc/EZGkYewoA/4yexGcstNSjspdosCinX6bfx+Eglcd7fp
-         JgVQ==
-X-Gm-Message-State: AAQBX9eJ48qSzzYHXhD47uKMozfNy+UvkoCUTfsd3aa1IPER8OaJ2QJa
-        8k/6wLtw44ZNyg5T5xuYdh3cfbbE7wjwppT7Hu+OeQ==
-X-Google-Smtp-Source: AKy350bhP6d0Gog2cImJQebeSNPkXwz2gy/C204IjldUdXRq0Jxh4JzCGilWwcsESB01fHh3V/okPvPsFHPoEYowYW0=
-X-Received: by 2002:a17:903:22ca:b0:1a4:f282:91c7 with SMTP id
- y10-20020a17090322ca00b001a4f28291c7mr4899727plg.6.1681305139610; Wed, 12 Apr
- 2023 06:12:19 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F4F7AB1;
+        Wed, 12 Apr 2023 06:12:22 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FC606603102;
+        Wed, 12 Apr 2023 14:12:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681305141;
+        bh=+riuISXy3VPiJ6mOioE8PhdIQu+xEKxpkJXqCAILO9c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=or42XwpmzhGHuSBWzVRtaENPX1BZSaOk/mksrYYXK1Wk1cmkimGKT/p6KShTcSqbj
+         16h4pVLezeTQviuGIXackRKbpaHt0HaUiWp6sAxPaX5Nrj3IHiqlzjW5G/JZStl3gQ
+         vqqvYF3b6HWmNRIFQCdtd9Ybncd4k9b2/cW4ZhGzUjw9JtAHoQTUR6nLp9KSP4zlCW
+         1ss/FGv7Coz/qbCbRSGu5wPGvhVhvhMJmKslKo5hOXPll/s9P/Ez43HqQtja/RnOjV
+         9Wd0ZqmdkNbsA6z+Wtek8GuG8F7Qj+fxNgZOT86K7505zv9scOaW77XWP/vFQ5VnVU
+         dRsYHPbbHmN8A==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        amergnat@baylibre.com, flora.fu@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 0/6] MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper
+Date:   Wed, 12 Apr 2023 15:12:10 +0200
+Message-Id: <20230412131216.198313-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-2-james.clark@arm.com>
-In-Reply-To: <20230404155121.1824126-2-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 12 Apr 2023 14:12:08 +0100
-Message-ID: <CAJ9a7VicZH1uqbdtN9ATWh=4tP7P64PEo_DfLDjRC9LJHL6NcQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/13] coresight: Fix loss of connection info when a
- module is unloaded
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        suzuki.poulose@arm.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 16:51, James Clark <james.clark@arm.com> wrote:
->
-> child_fwnode should be a read only property based on the DT or ACPI. If
-> it's cleared on the parent device when a child is unloaded, then when
-> the child is loaded again the connection won't be remade.
->
-> child_dev should be cleared instead which signifies that the connection
-> should be remade when the child_fwnode registers a new coresight_device.
->
-> Similarly the reference count shouldn't be decremented as long as the
-> parent device exists. The correct place to drop the reference is in
-> coresight_release_platform_data() which is already done.
->
-> Reproducible on Juno with the following steps:
->
->   # load all coresight modules.
->   $ cd /sys/bus/coresight/devices/
->   $ echo 1 > tmc_etr0/enable_sink
->   $ echo 1 > etm0/enable_source
->   # Works fine ^
->
->   $ echo 0 > etm0/enable_source
->   $ rmmod coresight-funnel
->   $ modprobe coresight-funnel
->   $ echo 1 > etm0/enable_source
->   -bash: echo: write error: Invalid argument
->
-> Fixes: 37ea1ffddffa ("coresight: Use fwnode handle instead of device names")
-> Fixes: 2af89ebacf29 ("coresight: Clear the connection field properly")
-> Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-core.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index d3bf82c0de1d..5733294ce5cd 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1419,13 +1419,8 @@ static int coresight_remove_match(struct device *dev, void *data)
->                 if (csdev->dev.fwnode == conn->child_fwnode) {
->                         iterator->orphan = true;
->                         coresight_remove_links(iterator, conn);
-> -                       /*
-> -                        * Drop the reference to the handle for the remote
-> -                        * device acquired in parsing the connections from
-> -                        * platform data.
-> -                        */
-> -                       fwnode_handle_put(conn->child_fwnode);
-> -                       conn->child_fwnode = NULL;
-> +
-> +                       conn->child_dev = NULL;
->                         /* No need to continue */
->                         break;
->                 }
-> --
-> 2.34.1
->
+Changes in v3:
+ - Rebased on next-20230412
+ - Changed if branch to switch in pwrap_init() as suggested
+   by Matthias and Alexandre.
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+Changes in v2:
+ - Rebased on next-20230323
+ - Changed pwrap.txt addition to new yaml file addition
+
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
+
+This series introduces support in the PMIC Wrapper for a different PMIC
+topology, which is commonly found on smartphone boards, using one main
+PMIC and one Companion/Sub PMIC, both accessible *only* through the pwrap;
+be aware that this kind of topology is not *specific to* the Helio X10
+SoC, but common across many kinds of MediaTek smartphone oriented SoCs
+and board designs.
+
+That said, support for the PMIC combo MT6331+MT6332 is provided in this
+series in a form that will be able to initialize the PMICs with crypto
+and DualIO but nothing else: these PMICs are very featureful, so I have
+decided to add this support in more than just one step, as there will
+be multiple patches for multiple different subsystems (..it's a mfd!..).
+
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
+
+AngeloGioacchino Del Regno (6):
+  dt-bindings: soc: mediatek: pwrap: Add compatible for MT6795 Helio X10
+  soc: mediatek: pwrap: Move PMIC read test sequence in function
+  soc: mediatek: pwrap: Add kerneldoc for struct pwrap_slv_type
+  soc: mediatek: mtk-pmic-wrap: Add support for companion PMICs
+  soc: mediatek: mtk-pmic-wrap: Add support for MT6331 w/ MT6332
+    companion
+  soc: mediatek: pwrap: Add support for MT6795 Helio X10
+
+ .../bindings/soc/mediatek/mediatek,pwrap.yaml |   1 +
+ drivers/soc/mediatek/mtk-pmic-wrap.c          | 292 ++++++++++++++++--
+ 2 files changed, 267 insertions(+), 26 deletions(-)
+
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.40.0
+
