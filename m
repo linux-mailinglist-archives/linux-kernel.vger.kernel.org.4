@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BD36DFE20
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439DC6DFE2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjDLS4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S229793AbjDLS5w convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Apr 2023 14:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjDLS4d (ORCPT
+        with ESMTP id S229620AbjDLS5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:56:33 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE5E7A88;
-        Wed, 12 Apr 2023 11:56:29 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l16so6693601wms.1;
-        Wed, 12 Apr 2023 11:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681325788; x=1683917788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kx4nd0Yo7fKfA1q3yw7nuQeOJtjuzCbWsWENU+02X/U=;
-        b=j3e4rNR+ZcZLjp5tAqcuaxLtcjtd0cVx+9n8KNjeZfsJ+Un38teWu5H7Wj7UM3UzH7
-         pNADw8ykTWJjrkYkEMZnnAWIBo17q2oNMwAtsJlpXYWMQpoqOyg7SM3qlnHqWrtVTKbU
-         9myEI+8ivCstaNQ0EfZaGGRQUGw/U0+iPT+tSLc1rcz/dsFISlqxyoYovIzLl6t80zGi
-         QGtlo/bTsGZH7HgOa0mNPafQcVagroJbAJ+Af+E1+tEPflKu+CEr6UvmpIilwsWPLnuH
-         ZZ5z3d/hcV0HiiSD+0Wol5fn6l4rwiJYqmgL7k0Xg1kfaPidYtsdRmnx/OsBdAVLTXgV
-         GZeQ==
+        Wed, 12 Apr 2023 14:57:49 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B6E7280;
+        Wed, 12 Apr 2023 11:57:20 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id j17so21716519ejs.5;
+        Wed, 12 Apr 2023 11:57:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681325788; x=1683917788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681325815; x=1683917815;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kx4nd0Yo7fKfA1q3yw7nuQeOJtjuzCbWsWENU+02X/U=;
-        b=T/OQA5+35Q6N/sPXcCvAsVZWCfBY/UcYK/Eac9YtlOIlOtmrvOtSl21ThHytKjUpjx
-         ECaSupSIioYPVGp9veY+7Q+5xxP1JtW2IwCARwxmkSGJo3kxompToRIk5WDQZLnAutrK
-         2qC7yy+6QbwN3BJxqIetXodSAPe4wjNtHbxhSBneaOu8r1k+Wvv4ZmUJ42ka6e7kwXyT
-         MgK8zxEnezbZ75BimlQ36eOl0YSXslfMNRjdCvKqqJlqVIgIhVqIS/V67VcAvS+eqsX2
-         PY+AE2eCQTaZ17ha0oSpG47BHKAZeZNDATTgpatUva3Y3QokO59LQDoI/gkGMzjg1XGn
-         8/wQ==
-X-Gm-Message-State: AAQBX9cENnqTQcezxfeNGcHcZLns0MalhufZoAxrVfLrpbbaOkykpbcq
-        lkFdfOBy6DZThQBWAUsax3w=
-X-Google-Smtp-Source: AKy350a+FLNsanDgQUnmS909b2/SbHMG0vJ/IXppHzYuIIUpkVQ1uIQRMFeA/k6axvDo1afVpPUhjQ==
-X-Received: by 2002:a7b:ce10:0:b0:3ee:7d95:a39f with SMTP id m16-20020a7bce10000000b003ee7d95a39fmr19381wmc.33.1681325788223;
-        Wed, 12 Apr 2023 11:56:28 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:a00d:9fa0:9d0c:b9db])
-        by smtp.gmail.com with ESMTPSA id r13-20020a05600c35cd00b003ede03e4369sm3362705wmq.33.2023.04.12.11.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 11:56:26 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] arm64: dts: renesas: rzv2l-smarc: Enable CRU, CSI support
-Date:   Wed, 12 Apr 2023 19:56:08 +0100
-Message-Id: <20230412185608.64628-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230412185608.64628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230412185608.64628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        bh=62gwaY7vFs4oo/QchLorKjyrNub9mjhwDQpkTj5sUS0=;
+        b=UCzo1bYSPEkym7F4SFRqqLo9F7kBkICU77Fub0xZ4tpFoev9wkV6J+QLzsYjyOkeLt
+         GMZSapiLqKYYqL50JSw7D0LzyXgpvzbkm/rHOH/9k9la+nV9y3CWpv8qD4v8LjYK3sYw
+         T4uwWJqx9jXb12jlGGsvG22ffpw7suNW682juhQI4+nPMTDguZJlx+Vpl2uEzYLAKwxl
+         iR8EaZ6P3W1m4ws958R3WN98ZlXBwqa6vWZfXs7LaZsJ6v2Ot4XSF/tN6A2wvoPGAJTt
+         9PdLHpdp5pvYkHdrx7035fByAJXybzYrgIW1+Y/S10275LeqTwQ0wFY1rnW5SqL8EsWr
+         DORg==
+X-Gm-Message-State: AAQBX9fQYjZM3wJ+lY7IFSMvO/wQpGBGMYVPye3MZEjY/KwQHHMO2jm2
+        4OpY4Wd2sKgVgyI4yYILfHo0VexbdeleVxDFIo4=
+X-Google-Smtp-Source: AKy350bfHigf5Ig8Sw0xwhsv92J0cQhjUYypZfhsRgJPlh+nVKOHVgX/0TxPHG0uKBBJRePviienoLBDmhAeVH85JCg=
+X-Received: by 2002:a17:907:3f16:b0:8b1:3298:c587 with SMTP id
+ hq22-20020a1709073f1600b008b13298c587mr22529ejc.2.1681325807375; Wed, 12 Apr
+ 2023 11:56:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230410205305.1649678-1-daniel.lezcano@linaro.org>
+ <20230410205305.1649678-3-daniel.lezcano@linaro.org> <CAJZ5v0jysxvCZ2-dXfqfiJfpZGOYwgMwk1kEuiGOQjV3LK4gMw@mail.gmail.com>
+ <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
+In-Reply-To: <c2581726-3e02-104c-f2ac-55268470d2c8@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Apr 2023 20:56:36 +0200
+Message-ID: <CAJZ5v0i65XivddWvP9OSuXePwbeWYsgtOr_GB=BBN_jwsWarjQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] thermal/core: Encapsulate tz->device field
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Tue, Apr 11, 2023 at 10:20 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 11/04/2023 20:19, Rafael J. Wysocki wrote:
+> > On Mon, Apr 10, 2023 at 10:53 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> There are still some drivers needing to play with the thermal zone
+> >> device internals. That is not the best but until we can figure out if
+> >> the information is really needed, let's encapsulate the field used in
+> >> the thermal zone device structure, so we can move forward relocating
+> >> the thermal zone device structure definition in the thermal framework
+> >> private headers.
+> >
+> > I'm not really sure why this is needed, so please explain.
+>
+> Some drivers are accessing tz->device, that implies they have the
+> knowledge of the thermal_zone_device structure but we want to
+> self-encapsulate this structure and reduce the scope of the structure to
+> the thermal core only.
+>
+> The ACPI and the Menlon drivers are the drivers accessing tz->device.
+>
+> By adding this wrapper, these drivers do no longer need the thermal zone
+> device structure definition.
 
-Enable CRU, CSI on RZ/V2L SMARC EVK and tie the CSI to the OV5645 sensor
-using Device Tree overlay. RZ/G2L SMARC EVK and RZ/V2L SMARC EVK have the
-same connections for connecting the CSI to OV5645 sensor so just reuse
-the existing r9a07g044l2-smarc-cru-csi-ov5645.dtso and create a symbolic
-link to this file for RZ/V2L SMARC EVK.
+So you want to move the definition of struct thermal_zone_device from
+include/linux/thermal.h into a local header in drivers/thermal/ and
+make it entirely local to the thermal core IIUC.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/Makefile                            | 1 +
- .../boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso      | 2 +-
- .../boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso      | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
- create mode 120000 arch/arm64/boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso
+Which would be forcing the callers of
+thermal_zone_device_register_with_trips() (and friends) to use
+pointers to a data type that's not completely defined (from their
+perspective), but they would still have access to the trips array
+passed to that function.
 
-diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-index f130165577a8..ebcbd66ba816 100644
---- a/arch/arm64/boot/dts/renesas/Makefile
-+++ b/arch/arm64/boot/dts/renesas/Makefile
-@@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc.dtb
- dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc-cru-csi-ov5645.dtbo
- 
- dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
-+dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc-cru-csi-ov5645.dtbo
- 
- dtb-$(CONFIG_ARCH_R9A09G011) += r9a09g011-v2mevk2.dtb
- 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
-index d834bff9bda2..736c1e688cc8 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Device Tree overlay for the RZ/G2L SMARC EVK with OV5645 camera
-+ * Device Tree overlay for the RZ/{G2L, V2L} SMARC EVK with OV5645 camera
-  * connected to CSI and CRU enabled.
-  *
-  * Copyright (C) 2023 Renesas Electronics Corp.
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso b/arch/arm64/boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso
-new file mode 120000
-index 000000000000..0f175341d3ed
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso
-@@ -0,0 +1 @@
-+r9a07g044l2-smarc-cru-csi-ov5645.dtso
-\ No newline at end of file
--- 
-2.25.1
+That doesn't sound particularly consistent and what's the purpose of doing it?
 
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> ---
+> >>   drivers/thermal/thermal_core.c | 6 ++++++
+> >>   include/linux/thermal.h        | 1 +
+> >>   2 files changed, 7 insertions(+)
+> >>
+> >> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> >> index c5025aca22ee..842f678c1c3e 100644
+> >> --- a/drivers/thermal/thermal_core.c
+> >> +++ b/drivers/thermal/thermal_core.c
+> >> @@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
+> >>   }
+> >>   EXPORT_SYMBOL_GPL(thermal_zone_device_id);
+> >>
+> >> +struct device *thermal_zone_device(struct thermal_zone_device *tzd)
+> >> +{
+> >> +       return &tzd->device;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(thermal_zone_device);
+> >> +
+> >>   /**
+> >>    * thermal_zone_device_unregister - removes the registered thermal zone device
+> >>    * @tz: the thermal zone device to remove
+> >> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> >> index 82ddb32f9876..87837094d549 100644
+> >> --- a/include/linux/thermal.h
+> >> +++ b/include/linux/thermal.h
+> >> @@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
+> >>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+> >>   const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+> >>   int thermal_zone_device_id(struct thermal_zone_device *tzd);
+> >> +struct device *thermal_zone_device(struct thermal_zone_device *tzd);
+> >>
+> >>   int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+> >>                                       struct thermal_cooling_device *,
+> >> --
+> >> 2.34.1
+> >>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
