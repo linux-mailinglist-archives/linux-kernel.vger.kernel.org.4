@@ -2,186 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5180B6DF0F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26856DF0FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjDLJtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S229878AbjDLJuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjDLJtp (ORCPT
+        with ESMTP id S230345AbjDLJuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:49:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1039F6A79;
-        Wed, 12 Apr 2023 02:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681292977; x=1712828977;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xwU26vqz+i6o48xeFGosEf02x2/+P84gSenez762bBM=;
-  b=jg20KNNC4TolaTi45Tbh2JTYJil7rgCB61GGghyhdFeCTfzc23C9DQ0a
-   nKkY69SrGYZYtV6tOXD9ASUgS/E+le0loFOdW61mG7OjrWcgb8i35ny3A
-   6Ll3DP8zS6xPjKRb9lE2UM4l2JQlnkZmPeVlTHyIVedyx40b+i/bmgcAW
-   /GeerVHC++PWavu6z99ZDgKGVprcbnvCJRIoN4iO/MhFVXRSGZpaPqfXC
-   B+ne5wbghGpndcUcH7DrTznRqxXyUOEChCExaccTEmS7xxWsnU+TMKKvt
-   uzTiiZQfCWeT1Su0XGlzRuvb7q6fmN9AmigYmtR9x8sgfRNS9ofRC6Yi2
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,339,1673910000"; 
-   d="scan'208";a="30272747"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 12 Apr 2023 11:49:34 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 12 Apr 2023 11:49:34 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 12 Apr 2023 11:49:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1681292974; x=1712828974;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xwU26vqz+i6o48xeFGosEf02x2/+P84gSenez762bBM=;
-  b=dC4OyqL7aMsrY/2pSTrDmSklV+rwocj8Q7HNfxbG13aHEIN3F2pbBdvQ
-   QKUBHmTBfu8vzFb4S2oSfCWfBio900gYyK2T+e3LZIkBO1ZgPmzsIFnY4
-   fCMs8BAsumxaAf7rumObgNqm0LwjJeu5b1hCFt5ONH+sm2qdM9mqPIzNE
-   JNB125GfwmKM98wOopHm2v2fwx1ebYjEIjCdmTTBRcdJ3K26Mgajvj1hz
-   a7pT2ySFlli9VsGmCaNsNfEHm+TGZGNZ9aDCqr3uOAa+Ijps6ozAM1XyT
-   BjlHlWrPvWp0ZeAW2hPOwCSWusqUp8CjynjuvZCoe7qf/EwioWPM/peYK
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,339,1673910000"; 
-   d="scan'208";a="30272746"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 12 Apr 2023 11:49:34 +0200
-Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.20])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 6F4D2280056;
-        Wed, 12 Apr 2023 11:49:34 +0200 (CEST)
-Message-ID: <a937f0c71497b41dc6b7ceb30dc6fdbbed856714.camel@ew.tq-group.com>
-Subject: Re: [PATCH] i2c: ocores: generate stop condition after timeout in
- polling mode
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     Federico Vaga <federico.vaga@cern.ch>,
-        Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@ew.tq-group.com" <linux@ew.tq-group.com>
-Date:   Wed, 12 Apr 2023 11:49:32 +0200
-In-Reply-To: <20230220161628.463620-1-matthias.schiffer@ew.tq-group.com>
-References: <20230220161628.463620-1-matthias.schiffer@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 12 Apr 2023 05:50:01 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A778035B5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:49:59 -0700 (PDT)
+X-ASG-Debug-ID: 1681292997-1eb14e6d7a6f5b0001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id 4kBpg2Oifq8Tdx6B (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 12 Apr 2023 17:49:57 +0800 (CST)
+X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 12 Apr
+ 2023 17:49:56 +0800
+Received: from [10.32.64.2] (10.32.64.2) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 12 Apr
+ 2023 17:49:55 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <f3c4f38c-d45b-cf68-33e5-2e73dd73213d@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.32.64.2
+Date:   Wed, 12 Apr 2023 17:49:55 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 3/5] ACPI/PCI: Add AER bits #defines for PCIe to
+ PCI/PCI-X Bridge
+To:     Bjorn Helgaas <helgaas@kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH v2 3/5] ACPI/PCI: Add AER bits #defines for PCIe to
+ PCI/PCI-X Bridge
+CC:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
+        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
+        <ying.huang@intel.com>, <rdunlap@infradead.org>,
+        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devel@acpica.org>, <CobeChen@zhaoxin.com>,
+        <TonyWWang@zhaoxin.com>, <ErosZhang@zhaoxin.com>
+References: <20230407232220.GA3830804@bhelgaas>
+From:   LeoLiuoc <LeoLiu-oc@zhaoxin.com>
+In-Reply-To: <20230407232220.GA3830804@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.32.64.2]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1681292997
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 3198
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107310
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 16:17 +0000, Matthias Schiffer wrote:
-> From: Gregor Herburger <gregor.herburger@tq-group.com>
->=20
-> In polling mode, no stop condition is generated after a timeout. This
-> causes SCL to remain low and thereby block the bus. If this happens
-> during a transfer it can cause slaves to misinterpret the subsequent
-> transfer and return wrong values.
->=20
-> To solve this, pass the ETIMEDOUT error up from ocores_process_polling()
-> instead of setting STATE_ERROR directly. The caller is adjusted to call
-> ocores_process_timeout() on error both in polling and in IRQ mode, which
-> will set STATE_ERROR and generate a stop condition.
->=20
-> Fixes: 69c8c0c0efa8 ("i2c: ocores: add polling interface")
-> Signed-off-by: Gregor Herburger <gregor.herburger@tq-group.com>
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
 
-Any chance we can get someone to have a look at this patch?
+在 2023/4/8 7:22, Bjorn Helgaas 写道:
+> Since this patch has nothing to do with ACPI, update subject line to:
+> 
+>    PCI: Add PCIe to PCI/PCI-X Bridge AER fields
+> 
 
-Regards,
-Matthias
+Your description is more reasonable and I will update the header of this 
+patch later.
 
+Yours sincerely,
+Leoliu-oc
 
+> On Tue, Nov 15, 2022 at 11:12:44AM +0800, LeoLiu-oc wrote:
+>> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+>>
+>> Define secondary uncorrectable error mask register, secondary
+>> uncorrectable error severity register and secondary error capabilities and
+>> control register bits in AER capability for PCIe to PCI/PCI-X Bridge.
+>> Please refer to PCIe to PCI/PCI-X Bridge Specification, sec 5.2.3.2,
+>> 5.2.3.3 and 5.2.3.4.
+> 
+> Capitalize register names to match the spec usage.
+> 
+Your suggestion is right, I'll update this in the next release.
 
-> ---
->  drivers/i2c/busses/i2c-ocores.c | 28 +++++++++++++++-------------
->  1 file changed, 15 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-oco=
-res.c
-> index a0af027db04c1..28bcda3f7040a 100644
-> --- a/drivers/i2c/busses/i2c-ocores.c
-> +++ b/drivers/i2c/busses/i2c-ocores.c
-> @@ -342,18 +342,18 @@ static int ocores_poll_wait(struct ocores_i2c *i2c)
->   * ocores_isr(), we just add our polling code around it.
->   *
->   * It can run in atomic context
-> + *
-> + * Return: 0 on success, -ETIMEDOUT on timeout
->   */
-> -static void ocores_process_polling(struct ocores_i2c *i2c)
-> +static int ocores_process_polling(struct ocores_i2c *i2c)
->  {
->  	while (1) {
->  		irqreturn_t ret;
->  		int err;
-> =20
->  		err =3D ocores_poll_wait(i2c);
-> -		if (err) {
-> -			i2c->state =3D STATE_ERROR;
-> -			break; /* timeout */
-> -		}
-> +		if (err)
-> +			return err;
-> =20
->  		ret =3D ocores_isr(-1, i2c);
->  		if (ret =3D=3D IRQ_NONE)
-> @@ -364,6 +364,8 @@ static void ocores_process_polling(struct ocores_i2c =
-*i2c)
->  					break;
->  		}
->  	}
-> +
-> +	return 0;
->  }
-> =20
->  static int ocores_xfer_core(struct ocores_i2c *i2c,
-> @@ -387,16 +389,16 @@ static int ocores_xfer_core(struct ocores_i2c *i2c,
->  	oc_setreg(i2c, OCI2C_DATA, i2c_8bit_addr_from_msg(i2c->msg));
->  	oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_START);
-> =20
-> -	if (polling) {
-> -		ocores_process_polling(i2c);
-> -	} else {
-> +	if (polling)
-> +		ret =3D ocores_process_polling(i2c);
-> +	else
->  		ret =3D wait_event_timeout(i2c->wait,
->  					 (i2c->state =3D=3D STATE_ERROR) ||
-> -					 (i2c->state =3D=3D STATE_DONE), HZ);
-> -		if (ret =3D=3D 0) {
-> -			ocores_process_timeout(i2c);
-> -			return -ETIMEDOUT;
-> -		}
-> +					 (i2c->state =3D=3D STATE_DONE), HZ) ?
-> +						0 : -ETIMEDOUT;
-> +	if (ret) {
-> +		ocores_process_timeout(i2c);
-> +		return ret;
->  	}
-> =20
->  	return (i2c->state =3D=3D STATE_DONE) ? num : -EIO;
+Yours sincerely,
+Leoliu-oc
+>> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
+> 
+> Assuming this goes along with a patch series that adds uses of these
+> definitions:
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+>> ---
+>>   include/uapi/linux/pci_regs.h | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+>> index 57b8e2ffb1dd..37f3baa336d7 100644
+>> --- a/include/uapi/linux/pci_regs.h
+>> +++ b/include/uapi/linux/pci_regs.h
+>> @@ -799,6 +799,11 @@
+>>   #define  PCI_ERR_ROOT_AER_IRQ		0xf8000000 /* Advanced Error Interrupt Message Number */
+>>   #define PCI_ERR_ROOT_ERR_SRC	0x34	/* Error Source Identification */
+>>   
+>> +/* PCIe advanced error reporting extended capabilities for PCIe to PCI/PCI-X Bridge */
+>> +#define PCI_ERR_UNCOR_MASK2		0x30	/* Secondary Uncorrectable Error Mask */
+>> +#define PCI_ERR_UNCOR_SEVER2	0x34	/* Secondary Uncorrectable Error Severit */
+>> +#define PCI_ERR_CAP2			0x38	/* Secondary Advanced Error Capabilities */
+> 
+> Please squash these right up next to the other PCI_ERR_* definitions
+> so it's obvious that they overlap PCI_ERR_ROOT_STATUS and
+> PCI_ERR_ROOT_ERR_SRC (which is fine since one device can't have both),
+> e.g.,
+> 
+>    #define PCI_ERR_ROOT_STATUS     0x30
+>    #define  PCI_ERR_ROOT_COR_RCV           0x00000001 /* ERR_COR Received */
+>    ...
+>    #define PCI_ERR_ROOT_ERR_SRC    0x34    /* Error Source Identification */
+>    #define PCI_ERR_UNCOR_MASK2     0x30    /* PCIe to PCI/PCI-X bridge */
+>    #define PCI_ERR_UNCOR_SEVER2    0x34    /* PCIe to PCI/PCI-X bridge */
+>    #define PCI_ERR_CAP2            0x38    /* PCIe to PCI/PCI-X bridge */
+> 
 
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-http://www.tq-group.com/
+I don't seem to understand what you mean. PCI_ERR_UNCOR_MASK2, 
+PCI_ERR_UNCOR_SEVER2, and PCI_ERR_CAP2 represent the control and 
+handling of individual errors that occur on traditional PCI or PCI-x 
+secondary bus interfaces, these registers are valid only for Bridge. 
+Although PCI_ERR_ROOT_ERR_SRC and PCI_ERR_UNCOR_SEVER2 have the same 
+value, they represent register definitions for different device types.
 
+Yours sincerely,
+Leoliu-oc
+
+>>   /* Virtual Channel */
+>>   #define PCI_VC_PORT_CAP1	0x04
+>>   #define  PCI_VC_CAP1_EVCC	0x00000007	/* extended VC count */
+>> -- 
+>> 2.20.1
+>>
