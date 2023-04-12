@@ -2,94 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFF96DF03A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A106DF075
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjDLJXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S230291AbjDLJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjDLJXr (ORCPT
+        with ESMTP id S230046AbjDLJcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:23:47 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126916195;
-        Wed, 12 Apr 2023 02:23:46 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PxHMK080qz4f4nhq;
-        Wed, 12 Apr 2023 17:23:41 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+ceDZkj7KVGg--.31485S3;
-        Wed, 12 Apr 2023 17:23:42 +0800 (CST)
-Subject: Re: [PATCH -next v5 1/6] md: pass a md_thread pointer to
- md_register_thread()
-To:     Logan Gunthorpe <logang@deltatee.com>, Song Liu <song@kernel.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230410113559.1610455-1-yukuai1@huaweicloud.com>
- <20230410113559.1610455-2-yukuai1@huaweicloud.com>
- <CAPhsuW7rUQ9KFxCQw-iAAA64=x==b-Qu0nnp32TXn-85Okb00w@mail.gmail.com>
- <daa344fe-9d8d-16f9-aded-513f250928b9@huaweicloud.com>
- <CAPhsuW7bBaVsneBHYqwN3yd5k3sg6ZUFqEJad3yOD0=N-e411g@mail.gmail.com>
- <f67e8d9b-dae8-fced-ce7b-b0f8fff2d127@deltatee.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <04a9522e-f0bb-5452-2ff4-4bb8017eb26b@huaweicloud.com>
-Date:   Wed, 12 Apr 2023 17:23:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 12 Apr 2023 05:32:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9FE728A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681291920; x=1712827920;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=1XG569kGv8nlWRcNovu9X9F1sTsgpbkAJeSf7sdQN2g=;
+  b=DDhMlVHV2r4lQ+F+UHHQ0cgODcXMFssC/h+NmdcxGoe06HLK5+ykYdX6
+   3Qf/1VEGs3hUXHjkb2n6UBcNUT9dNCM8yxh5oNXcw4kI2OH5oPV3bZ57u
+   D7ECyECnJFJpeuXMfl5o2o6o2FHzLRgBZ+dBucQxRf9z1ChO3P4onCVZw
+   hL6NNC8HXGKGMQ/jJVO1ggM0MdmdYcSxxidD4+c8SLWmgo4BbiqSVbUMh
+   Vi2vArv7gUUPM96Zj8t8gq+LzDKAYisSbpVp2fw4lsVRxhPODp5D9UpCm
+   69I6qmGTlVARYoUlrT0xQBu9Sc0nUM0kFlXYYLax9OTy7tU2wG2j6R1gL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346523258"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="346523258"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 02:28:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="800237928"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="800237928"
+Received: from smoticic-mobl.ger.corp.intel.com (HELO localhost) ([10.252.45.172])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 02:28:20 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Rui Salvaterra <rsalvaterra@gmail.com>, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, paulmck@kernel.org
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks:
+ { 0-.... } 3 jiffies s: 309 root: 0x1/.
+In-Reply-To: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
+Date:   Wed, 12 Apr 2023 12:28:17 +0300
+Message-ID: <87r0spcuvi.fsf@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <f67e8d9b-dae8-fced-ce7b-b0f8fff2d127@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCHgR+ceDZkj7KVGg--.31485S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
-        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 12 Apr 2023, Rui Salvaterra <rsalvaterra@gmail.com> wrote:
+> Hi, everyone,
+>
+> I apologise in advance if I've sent this to {too many, the wrong}
+> people. For some time now, I've been getting sporadic (in about one
+> out of five boots) DRM-related RCU complaints on an Ivy Bridge-based
+> (Core i7-3720QM) Mac Mini. Call trace (on Linux 6.3-rc6) follows:
 
-在 2023/04/11 23:46, Logan Gunthorpe 写道:
+Please file a bug at fdo gitlab [1]. Add drm.debug=0xe and maybe
+log_buf_len=4M or similar kernel parameters, and attach dmesg all the
+way from boot to reproducing the problem.
 
->>>> Can we do something like:
->>>>
->>>> struct md_thread __rcu *md_register_thread(void (*run) (struct md_thread *),
->>>>                  struct mddev *mddev, const char *name)
->>>
->>> I think this is not necessary, if we don't want to change api, we must
->>> use rcu_assign_pointer for each caller to set md_thread.
->>
->> I think it is better to use rcu_assign_pointer at the caller side.
-> 
-> I agree.
-> 
-> Logan
-> .
-> 
-I'll remove this patch, and use rcu_assign_pointer() in the caller
-directly in the next version.
+How long is "for some time now"?
 
-Thanks,
-Kuai
+BR,
+Jani.
 
+
+[1] https://gitlab.freedesktop.org/drm/intel/wikis/How-to-file-i915-bugs
+
+>
+> [    5.794026] rcu: INFO: rcu_sched detected expedited stalls on
+> CPUs/tasks: { 0-.... } 3 jiffies s: 309 root: 0x1/.
+> [    5.794044] rcu: blocking rcu_node structures (internal RCU debug):
+> [    5.794045] Sending NMI from CPU 1 to CPUs 0:
+> [    5.794049] NMI backtrace for cpu 0
+> [    5.794051] CPU: 0 PID: 537 Comm: Xorg Not tainted 6.3.0-rc6-debug+ #57
+> [    5.794053] Hardware name: Apple Inc.
+> Macmini6,2/Mac-F65AE981FFA204ED, BIOS 429.0.0.0.0 03/18/2022
+> [    5.794054] RIP: 0010:fwtable_read32+0x45/0x100
+> [    5.794060] Code: 5e 00 49 89 c5 48 8b 45 08 8b b0 2c 1d 00 00 85
+> f6 0f 85 94 00 00 00 8d 83 00 00 fc ff 3d ff 5f 0d 00 77 28 48 03 5d
+> 00 8b 1b <48> 8b 45 08 8b 88 2c 1d 00 00 85 c9 75 48 4c 89 ee 4c 89 e7
+> e8 82
+> [    5.794061] RSP: 0018:ffff88810d17f968 EFLAGS: 00000082
+> [    5.794063] RAX: 0000000000085010 RBX: 0000000000000200 RCX: ffff888101d80000
+> [    5.794064] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffff888101d81f28
+> [    5.794064] RBP: ffff888101d81f08 R08: 0000000000000000 R09: 00000000000032ab
+> [    5.794065] R10: 0000000000000001 R11: 00000000000061b2 R12: ffff888101d81f28
+> [    5.794066] R13: 0000000000000246 R14: ffff888102f693d0 R15: ffff88810d17faef
+> [    5.794067] FS:  00007f579a20da80(0000) GS:ffff888267200000(0000)
+> knlGS:0000000000000000
+> [    5.794068] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    5.794069] CR2: 000055fe9b660028 CR3: 0000000111e97004 CR4: 00000000001706f0
+> [    5.794069] Call Trace:
+> [    5.794071]  <TASK>
+> [    5.794073]  get_reserved.isra.0+0x23/0x30
+> [    5.794076]  get_clock+0x25/0x70
+> [    5.794078]  sclhi+0x43/0x70
+> [    5.794081]  i2c_stop+0x2b/0x40
+> [    5.794083]  bit_xfer+0x22a/0x5d0
+> [    5.794085]  ? __pm_runtime_resume+0x40/0x50
+> [    5.794088]  ? __intel_display_power_get_domain.part.0+0x4d/0x60
+> [    5.794092]  gmbus_xfer+0x3c/0x90
+> [    5.794094]  __i2c_transfer+0x15b/0x4d0
+> [    5.794096]  i2c_transfer+0x3c/0xa0
+> [    5.794098]  drm_do_probe_ddc_edid+0xad/0x120
+> [    5.794101]  drm_get_edid+0x71/0x90
+> [    5.794104]  intel_crt_get_edid+0xf/0x80
+> [    5.794106]  intel_crt_detect_ddc+0x28/0xc0
+> [    5.794107]  intel_crt_detect+0x1f5/0xc40
+> [    5.794108]  ? pollwake+0x61/0x70
+> [    5.794111]  drm_helper_probe_detect+0x43/0xa0
+> [    5.794115]  drm_helper_probe_single_connector_modes+0x403/0x490
+> [    5.794117]  drm_mode_getconnector+0x32d/0x430
+> [    5.794119]  ? drm_connector_list_iter_next+0x7c/0xa0
+> [    5.794120]  ? drm_connector_property_set_ioctl+0x30/0x30
+> [    5.794122]  drm_ioctl_kernel+0x91/0x130
+> [    5.794124]  drm_ioctl+0x1d8/0x410
+> [    5.794125]  ? drm_connector_property_set_ioctl+0x30/0x30
+> [    5.794127]  __x64_sys_ioctl+0x3b9/0x8f0
+> [    5.794129]  ? handle_mm_fault+0xc1/0x170
+> [    5.794131]  ? exc_page_fault+0x18b/0x470
+> [    5.794134]  do_syscall_64+0x2b/0x50
+> [    5.794136]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [    5.794139] RIP: 0033:0x7f579a1119ef
+> [    5.794141] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24
+> 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00
+> 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28
+> 00 00
+> [    5.794142] RSP: 002b:00007ffc1dee7620 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000010
+> [    5.794143] RAX: ffffffffffffffda RBX: 000055fe9b660060 RCX: 00007f579a1119ef
+> [    5.794144] RDX: 00007ffc1dee76c0 RSI: 00000000c05064a7 RDI: 000000000000000f
+> [    5.794144] RBP: 00007ffc1dee76c0 R08: 0000000000000000 R09: 0000000000000000
+> [    5.794145] R10: 00007f579a6bc1d8 R11: 0000000000000246 R12: 00000000c05064a7
+> [    5.794146] R13: 000000000000000f R14: 00000000c05064a7 R15: 00007ffc1dee76c0
+> [    5.794147]  </TASK>
+>
+> Please let me know if you need any additional information (kconfig,
+> etc.) in order to fix this. I will, of course, be happy to test any
+> patch thrown my way.
+>
+> Kind regards,
+> Rui
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
