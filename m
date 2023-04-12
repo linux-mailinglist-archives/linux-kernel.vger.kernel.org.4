@@ -2,94 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B0C6DE958
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDE96DE95F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjDLCM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 22:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S229507AbjDLCSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 22:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDLCMz (ORCPT
+        with ESMTP id S229451AbjDLCS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 22:12:55 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F89649F1;
-        Tue, 11 Apr 2023 19:12:54 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6CE4324E053;
-        Wed, 12 Apr 2023 10:12:46 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 10:12:46 +0800
-Received: from [192.168.125.87] (113.72.145.176) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 10:12:45 +0800
-Message-ID: <91855baa-88cb-96b1-d571-4881ea6d24c8@starfivetech.com>
-Date:   Wed, 12 Apr 2023 10:12:44 +0800
+        Tue, 11 Apr 2023 22:18:28 -0400
+Received: from out-18.mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C761BC8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 19:18:27 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681265905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W/v2ryAK8CZAUHZdTuLslXGytUbsEmu0tAq5CoDbGJs=;
+        b=EVpb+ENN6jARMNpd9ix9+37hPTwMi456eyAuIvSLabLqBeRfKRmP6p6QyuVbSN2FEoJ9kN
+        bQ1+GzDLNdrLqAhkz5QLTZcMPzYdNw8qDfLrXWPI1mOTVkDEhMD9kwGwRe3Dzv7cxRiumv
+        yUWTnwmeTyd2PPTkQ5z1D8UEeOfd4cI=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] mm/rmap: convert __page_{set, check}_anon_rmap() to folios
+Date:   Wed, 12 Apr 2023 10:18:11 +0800
+Message-Id: <20230412021811.1503281-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v7 00/22] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230401111934.130844-1-hal.feng@starfivetech.com>
- <20230405-wharf-rejoin-5222e5958611@spud>
- <ce311dcf-67a5-bf15-d0da-88967baf4ee9@starfivetech.com>
- <20230411-gleaming-parasail-34e2b7c3de2e@spud>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20230411-gleaming-parasail-34e2b7c3de2e@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.176]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 22:35:04 +0100, Conor Dooley wrote:
-> On Thu, Apr 06, 2023 at 03:03:14PM +0800, Hal Feng wrote:
->> On Wed,  5 Apr 2023 22:30:45 +0100, Conor Dooley wrote:
-> 
->> > Hal, can you get your folks to resend whatever dts bits that are now
->> > applicable? IOW, the dt-bindings for the entries are in a for-next
->> > branch for some subsystem.
->> 
->> Of course. As far as I know, these nodes include trng / pmu / mmc / qspi.
-> 
-> Just FYI, you can get the lads to resend them whenever, but it's too
-> late for v6.4 now.
+The 2nd parameter in __page_set_anon_rmap() is only used by
+SetPageAnonExclusive(), so there is no need to put
+SetPageAnonExclusive() in  __page_set_anon_rmap().
 
-I knew it later that, trng depends on stg clock dt-bindings, mmc depends on
-syscon dt-bindings which will be merged into the pll clock driver, the
-dt-bindings of qspi need to be fixed due to the actual number of clock
-inputs it need is 3. Walker plans to resend the pmu bits these days, but
-sorry to hear that it's too late now.
+Remove SetPageAnonExclusive() from __page_set_anon_rmap() and modify
+__page_set_anon_rmap() to __folio_set_anon_rmap().
 
-Best regards,
-Hal
+Since __page_check_anon_rmap() needs a folio, we can directly use
+and change it to __folio_check_anon_rmap().
+
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ mm/rmap.c | 54 ++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 28 insertions(+), 26 deletions(-)
+
+diff --git a/mm/rmap.c b/mm/rmap.c
+index ba901c416785..8dc71caa208f 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1129,14 +1129,13 @@ void page_move_anon_rmap(struct page *page, struct vm_area_struct *vma)
+ }
+ 
+ /**
+- * __page_set_anon_rmap - set up new anonymous rmap
+- * @folio:	Folio which contains page.
+- * @page:	Page to add to rmap.
++ * __folio_set_anon_rmap - set up new anonymous rmap
++ * @folio:	Folio to add to rmap.
+  * @vma:	VM area to add page to.
+  * @address:	User virtual address of the mapping	
+  * @exclusive:	the page is exclusively owned by the current process
+  */
+-static void __page_set_anon_rmap(struct folio *folio, struct page *page,
++static void __folio_set_anon_rmap(struct folio *folio,
+ 	struct vm_area_struct *vma, unsigned long address, int exclusive)
+ {
+ 	struct anon_vma *anon_vma = vma->anon_vma;
+@@ -1144,7 +1143,7 @@ static void __page_set_anon_rmap(struct folio *folio, struct page *page,
+ 	BUG_ON(!anon_vma);
+ 
+ 	if (folio_test_anon(folio))
+-		goto out;
++		return;
+ 
+ 	/*
+ 	 * If the page isn't exclusively mapped into this vma,
+@@ -1163,21 +1162,17 @@ static void __page_set_anon_rmap(struct folio *folio, struct page *page,
+ 	anon_vma = (void *) anon_vma + PAGE_MAPPING_ANON;
+ 	WRITE_ONCE(folio->mapping, (struct address_space *) anon_vma);
+ 	folio->index = linear_page_index(vma, address);
+-out:
+-	if (exclusive)
+-		SetPageAnonExclusive(page);
+ }
+ 
+ /**
+- * __page_check_anon_rmap - sanity check anonymous rmap addition
+- * @page:	the page to add the mapping to
++ * __folio_check_anon_rmap - sanity check anonymous rmap addition
++ * @folio:	the folio to add the mapping to
+  * @vma:	the vm area in which the mapping is added
+  * @address:	the user virtual address mapped
+  */
+-static void __page_check_anon_rmap(struct page *page,
++static void __folio_check_anon_rmap(struct folio *folio,
+ 	struct vm_area_struct *vma, unsigned long address)
+ {
+-	struct folio *folio = page_folio(page);
+ 	/*
+ 	 * The page's anon-rmap details (mapping and index) are guaranteed to
+ 	 * be set up correctly at this point.
+@@ -1191,8 +1186,8 @@ static void __page_check_anon_rmap(struct page *page,
+ 	 */
+ 	VM_BUG_ON_FOLIO(folio_anon_vma(folio)->root != vma->anon_vma->root,
+ 			folio);
+-	VM_BUG_ON_PAGE(page_to_pgoff(page) != linear_page_index(vma, address),
+-		       page);
++	VM_BUG_ON_FOLIO(folio_pgoff(folio) != linear_page_index(vma, address),
++		       folio);
+ }
+ 
+ /**
+@@ -1214,6 +1209,7 @@ void page_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
+ 	atomic_t *mapped = &folio->_nr_pages_mapped;
+ 	int nr = 0, nr_pmdmapped = 0;
+ 	bool compound = flags & RMAP_COMPOUND;
++	bool exclusive = !!(flags & RMAP_EXCLUSIVE);
+ 	bool first = true;
+ 
+ 	/* Is page being mapped by PTE? Is this its first map to be added? */
+@@ -1243,7 +1239,7 @@ void page_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
+ 		}
+ 	}
+ 
+-	VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
++	VM_BUG_ON_PAGE(!first && exclusive, page);
+ 	VM_BUG_ON_PAGE(!first && PageAnonExclusive(page), page);
+ 
+ 	if (nr_pmdmapped)
+@@ -1253,11 +1249,12 @@ void page_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
+ 
+ 	if (likely(!folio_test_ksm(folio))) {
+ 		/* address might be in next vma when migration races vma_merge */
+-		if (first)
+-			__page_set_anon_rmap(folio, page, vma, address,
+-					     !!(flags & RMAP_EXCLUSIVE));
+-		else
+-			__page_check_anon_rmap(page, vma, address);
++		if (first) {
++			__folio_set_anon_rmap(folio, vma, address, exclusive);
++			if (exclusive)
++				SetPageAnonExclusive(page);
++		} else
++			__folio_check_anon_rmap(folio, vma, address);
+ 	}
+ 
+ 	mlock_vma_folio(folio, vma, compound);
+@@ -1297,7 +1294,8 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
+ 	}
+ 
+ 	__lruvec_stat_mod_folio(folio, NR_ANON_MAPPED, nr);
+-	__page_set_anon_rmap(folio, &folio->page, vma, address, 1);
++	__folio_set_anon_rmap(folio, vma, address, 1);
++	SetPageAnonExclusive(&folio->page);
+ }
+ 
+ /**
+@@ -2533,17 +2531,20 @@ void hugepage_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
+ {
+ 	struct folio *folio = page_folio(page);
+ 	struct anon_vma *anon_vma = vma->anon_vma;
++	bool exclusive = !!(flags & RMAP_EXCLUSIVE);
+ 	int first;
+ 
+ 	BUG_ON(!folio_test_locked(folio));
+ 	BUG_ON(!anon_vma);
+ 	/* address might be in next vma when migration races vma_merge */
+ 	first = atomic_inc_and_test(&folio->_entire_mapcount);
+-	VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
++	VM_BUG_ON_PAGE(!first && exclusive, page);
+ 	VM_BUG_ON_PAGE(!first && PageAnonExclusive(page), page);
+-	if (first)
+-		__page_set_anon_rmap(folio, page, vma, address,
+-				     !!(flags & RMAP_EXCLUSIVE));
++	if (first) {
++		__folio_set_anon_rmap(folio, vma, address, exclusive);
++		if (exclusive)
++			SetPageAnonExclusive(page);
++	}
+ }
+ 
+ void hugepage_add_new_anon_rmap(struct folio *folio,
+@@ -2553,6 +2554,7 @@ void hugepage_add_new_anon_rmap(struct folio *folio,
+ 	/* increment count (starts at -1) */
+ 	atomic_set(&folio->_entire_mapcount, 0);
+ 	folio_clear_hugetlb_restore_reserve(folio);
+-	__page_set_anon_rmap(folio, &folio->page, vma, address, 1);
++	__folio_set_anon_rmap(folio, vma, address, 1);
++	SetPageAnonExclusive(&folio->page);
+ }
+ #endif /* CONFIG_HUGETLB_PAGE */
+-- 
+2.25.1
+
