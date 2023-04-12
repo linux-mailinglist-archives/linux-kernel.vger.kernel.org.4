@@ -2,147 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40616DE923
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD88B6DE926
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjDLBvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        id S229541AbjDLBxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDLBvy (ORCPT
+        with ESMTP id S229452AbjDLBxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:51:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693452683
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681264313; x=1712800313;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=rqbkeDCMb89vXWak2cABIF08s7WZo7Pke8PlSss02wA=;
-  b=a1GyoF5HKo9vG3oLTV7WJoeF6nTYHHbAfvrl3DbYws4ninNxBWvAfZuf
-   oe/DvTlOy7MJk9wVG5i5MDAcRuk/otxrmNxKLVa6ALpFPnvP0UPeFaRpg
-   +WNv9q5wnnZryKORRckJvf2lRr8Sx7uJEIMGMIFYkSS1v3hpSxAS7xIY/
-   fRYXj75oA1XN7WfCdYEtb/NzBH1TQIsCr3I4zixAG8GS679UJROzKEE58
-   iW7ib++fe4wlXEWMkSI8ja03PuFWgVUwKKhOIcp+tb5p1LlaS9/Ws8Aq9
-   cBHbm9R75qIDxrmsxurUTcd1f2aq4KTCPrtonTGDEw2q87oMB+3Sv7n+U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="332471100"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="332471100"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 18:51:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="812802717"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="812802717"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 18:51:50 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        "Mel Gorman" <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-References: <20230410075224.827740-1-ying.huang@intel.com>
-        <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com>
-        <87zg7f19xu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <D432368D-7E3F-47C8-8BE3-A0D11BC6EA2D@vmware.com>
-Date:   Wed, 12 Apr 2023 09:50:40 +0800
-In-Reply-To: <D432368D-7E3F-47C8-8BE3-A0D11BC6EA2D@vmware.com> (Nadav Amit's
-        message of "Tue, 11 Apr 2023 17:52:02 +0000")
-Message-ID: <87sfd5zx5b.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 11 Apr 2023 21:53:30 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8F11704
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:25 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Px5Lw0DbCzDsg4;
+        Wed, 12 Apr 2023 09:52:40 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 12 Apr 2023 09:53:22 +0800
+Subject: Re: [PATCH] ubi: fastmap: Reserve PEBs and init fm_work when fastmap
+ is used.
+To:     Xiaobing Luo <luoxiaobing0926@gmail.com>, <richard@nod.at>,
+        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>
+CC:     <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230411154634.149350-1-luoxiaobing0926@gmail.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <cc9f9239-22b8-a00b-c46f-1b9ea8cd7395@huawei.com>
+Date:   Wed, 12 Apr 2023 09:53:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230411154634.149350-1-luoxiaobing0926@gmail.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nadav Amit <namit@vmware.com> writes:
+Hi Xiaobing
+> Don't reserve the two fastmap PEBs when fastmap is disabled, then we can
+> use the two PEBs in small ubi device.
+> And don't init the fm_work when fastmap is disabled.
+> 
+> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+> ---
+>   drivers/mtd/ubi/build.c      | 3 ++-
+>   drivers/mtd/ubi/fastmap-wl.c | 2 +-
+>   drivers/mtd/ubi/wl.c         | 6 +++++-
+>   3 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
+> index ad025b2ee417..a98a717b0e66 100644
+> --- a/drivers/mtd/ubi/build.c
+> +++ b/drivers/mtd/ubi/build.c
+> @@ -1120,7 +1120,8 @@ int ubi_detach_mtd_dev(int ubi_num, int anyway)
+>   		kthread_stop(ubi->bgt_thread);
+>   
+>   #ifdef CONFIG_MTD_UBI_FASTMAP
+> -	cancel_work_sync(&ubi->fm_work);
+> +	if (!ubi->fm_disabled)
+> +		cancel_work_sync(&ubi->fm_work);
+>   #endif
+>   	ubi_debugfs_exit_dev(ubi);
+>   	uif_close(ubi);
+> diff --git a/drivers/mtd/ubi/fastmap-wl.c b/drivers/mtd/ubi/fastmap-wl.c
+> index 863f571f1adb..b3df17a782c7 100644
+> --- a/drivers/mtd/ubi/fastmap-wl.c
+> +++ b/drivers/mtd/ubi/fastmap-wl.c
+> @@ -344,7 +344,7 @@ static struct ubi_wl_entry *get_peb_for_wl(struct ubi_device *ubi)
+>   		/* We cannot update the fastmap here because this
+>   		 * function is called in atomic context.
+>   		 * Let's fail here and refill/update it as soon as possible. */
+> -		if (!ubi->fm_work_scheduled) {
+> +		if (!ubi->fm_work_scheduled && !ubi->fm_disabled) {
+>   			ubi->fm_work_scheduled = 1;
+>   			schedule_work(&ubi->fm_work);
+>   		}
 
->> On Apr 10, 2023, at 6:31 PM, Huang, Ying <ying.huang@intel.com> wrote:
->>=20
->> !! External Email
->>=20
->> Hi, Amit,
->>=20
->> Thank you very much for review!
->>=20
->> Nadav Amit <namit@vmware.com> writes:
->>=20
->>>> On Apr 10, 2023, at 12:52 AM, Huang Ying <ying.huang@intel.com> wrote:
->>>>=20
->>>> 0Day/LKP reported a performance regression for commit
->>>> 7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
->>>> TLB flushing during page migration is batched.  So, in
->>>> try_to_migrate_one(), ptep_clear_flush() is replaced with
->>>> set_tlb_ubc_flush_pending().  In further investigation, it is found
->>>> that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
->>>> is inaccessible.  In fact, we can optimize in similar way for the
->>>> batched TLB flushing too to improve the performance.
->>>>=20
->>>> So in this patch, we check pte_accessible() before
->>>> set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
->>>> that the benchmark score of the anon-cow-rand-mt test case of
->>>> vm-scalability test suite can improve up to 2.1% with the patch on a
->>>> Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
->>>=20
->>> LGTM.
->>=20
->> Thanks!
->>=20
->>> I know it=E2=80=99s meaningless for x86 (but perhaps ARM would use this=
- infra
->>> too): do we need smp_mb__after_atomic() after ptep_get_and_clear() and
->>> before pte_accessible()?
->>=20
->> Why do we need the memory barrier?  IIUC, the PTL is locked, so PTE
->> value will not be changed under us.  Anything else?
->
-> I was thinking about the ordering with respect to
-> atomic_read(&mm->tlb_flush_pending), which is not protected by the PTL.
-> I guess you can correctly argue that because of other control-flow
-> dependencies, the barrier is not necessary.
+I think we should keep the fm_work even fm_disabled is true. UBI is 
+running with fastmap scheme as long as CONFIG_MTD_UBI_FASTMAP is 
+enabled, 'ubi->fm_disabled' is just used to control whether to 
+persistence fastmap metadata on flash. Free wear-leveling pebs 
+consuming/producing model still depend on following process:
+Consuming: get_peb_for_wl -> pool->pebs[pool->used++]
+Producing: ubi->fm_work -> update_fastmap_work_fn -> ubi_refill_pools -> 
+wl_pool->used = 0
+If we disable 'ubi->fm_work' when ubi->fm_disabled becomes true, 
+wear-leveing work will fail to get free wl peb until someone try to get 
+free peb by ubi_wl_get_peb().
 
-For ordering between ptep_get_and_clear() and
-atomic_read(&mm->tlb_flush_pending), I think PTL has provided the
-necessary protection already.  The code path to write
-mm->tlb_flush_pending is,
+> diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
+> index 26a214f016c1..8906db89808f 100644
+> --- a/drivers/mtd/ubi/wl.c
+> +++ b/drivers/mtd/ubi/wl.c
+> @@ -1908,7 +1908,11 @@ int ubi_wl_init(struct ubi_device *ubi, struct ubi_attach_info *ai)
+>   	ubi_assert(ubi->good_peb_count == found_pebs);
+>   
+>   	reserved_pebs = WL_RESERVED_PEBS;
+> -	ubi_fastmap_init(ubi, &reserved_pebs);
+> +
+> +#ifdef CONFIG_MTD_UBI_FASTMAP
+> +	if (!ubi->fm_disabled)
+> +		ubi_fastmap_init(ubi, &reserved_pebs);
+> +#endif
+>   
+>   	if (ubi->avail_pebs < reserved_pebs) {
+>   		ubi_err(ubi, "no enough physical eraseblocks (%d, need %d)",
+> 
 
-  tlb_gather_mmu
-    inc_tlb_flush_pending       a)
-  lock PTL
-  change PTE                    b)
-  unlock PTL
-  tlb_finish_mmu
-    dec_tlb_flush_pending       c)
-
-While code path of try_to_unmap/migrate_one is,
-
-  lock PTL
-  read and change PTE           d)
-  read mm->tlb_flush_pending    e)
-  unlock PTL
-
-Even if e) occurs before d), they cannot occur at the same time of b).
-Do I miss anything?
-
-Best Regards,
-Huang, Ying
-
-[snip]
