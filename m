@@ -2,181 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1501F6DF788
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0258B6DF78F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjDLNng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S230372AbjDLNo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDLNne (ORCPT
+        with ESMTP id S230301AbjDLNoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:43:34 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14CB5;
-        Wed, 12 Apr 2023 06:43:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L1W7d2VZXfMyWbaL+QpXDn0fnSFyIi1lgcuu1o5wnCDz4+y6sDKlNJEGZGviztQaSoP6fUdAcWGheNK+2dLDDJrTwYakZeoc+77R5w/olTjX5bHNy5DoXvb1YISS+I5if7h9/F+z313lQ5RSWztvB9QZ3hFs62XFA69bpItCLzQTcZUYurlMVOtQKeXnGH9MSrGR02VW7Ii+AqNA4YZDZrbfKYtjdD9iCgOngpTVaV2x52r+mFJoQxxYMp/myeJwIFV5x5ZxXhv0Adgtjr8kPHUzPsUVlp2XP7rVKgSoew2HY5UucDn0ngSLpOzTkK+9g6DDZ3Sys3Evm4ssS506AA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pZm0lkw6e+YNwYph5V8s63DooepVU7rJOtqyrjT4wGM=;
- b=aj5QNpUalpOEbpKjDqYd894Xs4ubbDJndJ1+Tgdgf06qUXFe3lubphCUndHC3lKc4bA7TrH2oNumrQkld0ElCeT4ABmo5yjB9A8e1SbDQxOoMahqF2/DZi5osomYiuB1cLv4hPXYM8YucgHaOK/D8T7quCe5MhnUlEoN6P1KT98PyyFSks35oz9pszCzOL0galDlC5gY2LQfigu4utW/rSh5TOJTZtEv/1aNPKnZHN8oE7rmoJKQY/4+bqxaG1ZvbOyfHNRc36azGmukAznIPVqMeLBtb7UHO3ICCO6qxm68GO69kcE2QqnjbyFCYEUCCXFkds4xGgFHt0aHbxFymA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZm0lkw6e+YNwYph5V8s63DooepVU7rJOtqyrjT4wGM=;
- b=EIWhOO1CQJb1/GYBzWItsvu9UrMBjwYpe8yegdNBBMYnTPTG8GFz2HprtaZGiv00FFeamHguG2zbcukbtRFsTFXtAEb0sADUgFKhtpnU4rhI7YxdNDxgmqhuuAsxLJLpCwTHClx1GuBWpSYxFFQRJmwKj5sJocR9suyDmtjeVFY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by DB4PR08MB9288.eurprd08.prod.outlook.com (2603:10a6:10:3f4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 13:43:29 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::77dd:14e4:a772:d85f]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::77dd:14e4:a772:d85f%4]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
- 13:43:29 +0000
-Message-ID: <77d91964-de0a-8bd4-12d9-bc16110cfa7c@wolfvision.net>
-Date:   Wed, 12 Apr 2023 15:43:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
+        Wed, 12 Apr 2023 09:44:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415B3448E;
+        Wed, 12 Apr 2023 06:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681307061; x=1712843061;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=cyWKiS1RSxU/uwSpPjQPjlBqvJ8kxFGZIWRB9JB4jbQ=;
+  b=f8owaBOIZgnPAZn65Y/IDqgBbDXKPLNyp6BAJBhIuie9U59YVI5i8g8W
+   rRvl02Q9KjPcUlp8TGX/pVyYWgc8g5gL7VUxKL9wKkssKuAs5PGm8ll9z
+   dKoxqwExSzqAT6wqL6Pd2mvOssb3Ju7OiX0XieTJUVYdWp4BLkt/uuJXh
+   1CbxxBBkVkCNj5OLgwgx9J+AM59YcgEEmaEMGTrQVmoRlg7WXyXxDNhXp
+   fL4WLtS0L7mwKDQ8AtZDFQtPY08NAedI0qZ7z57LCxjWsFliDAVoxMVMn
+   rcgS8V0WyOVhx6GqtFEsY7qFHg/569y1Kdq6gkYSOH2lCSnJMXld1z3j9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="328008900"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="328008900"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="863310736"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="863310736"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2023 06:44:20 -0700
+Received: from [10.251.4.46] (kliang2-mobl1.ccr.corp.intel.com [10.251.4.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id BBE89580871;
+        Wed, 12 Apr 2023 06:44:18 -0700 (PDT)
+Message-ID: <aaa41580-e30a-5a3a-7917-042ddaffe9cf@linux.intel.com>
+Date:   Wed, 12 Apr 2023 09:44:17 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1] perf stat: Introduce skippable evsels
 Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
-        hverkuil@xs4all.nl
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
- <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
- <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
- <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
- <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
- <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
- <ZDaa+qhoZxZ5ymxL@kekkonen.localdomain>
- <8fe5c9c5-6eb0-86ae-9e5d-fbaa72be25fe@wolfvision.net>
- <ZDaemghP0HQSw3Fo@kekkonen.localdomain>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <ZDaemghP0HQSw3Fo@kekkonen.localdomain>
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230411205622.3266490-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230411205622.3266490-1-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0401CA0024.eurprd04.prod.outlook.com
- (2603:10a6:800:4a::34) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|DB4PR08MB9288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87c83fa3-8ab2-46fe-8462-08db3b5be629
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hkf5Xbc0LbCltnbTamdEBwSpg93mOE4fwHcn+8QeYnE1E6+y/tHc4nbDwTXdSKYe0rIUtM9z8xogV9D4UgVfTrx7O4EQpdmSJncL0OWMTALmGU8CJNnSKJiW8sTj7LTfTANOTwGAHgS+wbg9VEVoyjcpSTE/1NB0EPl+8HOjxZZSwzlSoDosx3l78FgtBxktJdgN9QiGj1Sy66+50behC4/X/GdxKYVKl+j8EfdIMLDQir0Mj0I6wJvNAmXtpc1MeiLv5DnwPODyEcm0rW/yvPY3EC1fE4WSTo5iBIU+gECRlFavUmOlBygwGW54xj1pp3hq38nNta0jVGrMLSR7eJP2RBu+VimiWLMVXJaIK7F/avuKMYU+QF3rVJA0+rD8q4oHzVmdK3vMmB6HkyXTf6U20JXk3l4kydmIu7kMG2n25uIUosIqbA3qQ1aUqU1gWttLkVxF6eHs4k/EFLdKZVAIc0gOvc1jpNOYbsfmWwUhlKeUHG813cvWtC6acPhRRECyAQmtU80EeY2nj/yM2rV6IWOnzCwhfj571pwF+IWY7Kg1B3uV7vc/CNK8cYK45ztCg58dPw1GTabn7uBGa7tWVo3oEvHznUeZqpfdu2ELGZS+//b1CRMjkB/qXORn3ocQUH4A+D2VwSB2Jg27Vw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(346002)(396003)(136003)(451199021)(6666004)(8936002)(36916002)(44832011)(6486002)(5660300002)(86362001)(4326008)(31696002)(66556008)(6916009)(53546011)(66476007)(66946007)(8676002)(478600001)(38100700002)(316002)(31686004)(54906003)(2906002)(6506007)(6512007)(2616005)(186003)(41300700001)(36756003)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eFRvQTRvQ3lzdzVNT0h2VjRHVHZ0WVo0M25aZ1JUOEdnNHpRaUJiNG41TWla?=
- =?utf-8?B?blZFVmRqK01vc3lkVGFuNWYxMFZoenpPTTBSTVlRa0ZHM0dsTVdmdVo2bmlD?=
- =?utf-8?B?N0pEQ21KVm9QOGV3ckM3b0srWEs2UVJtM1hkTERLSkltVlRCTW1YSC9FZEwz?=
- =?utf-8?B?VnpmZlZvbEN0aXJ0RjRLdUpqVGk2QzdJSzFnaHNLU2ZHckd5bDJiTFVoSmh1?=
- =?utf-8?B?TGdMQ0ZFSy8xZGUrS1pMYmxkYzVGSS9RQlpXZnY2bUtzcmUwVWE5cXBDM0pW?=
- =?utf-8?B?YTNYQXdMc2xsekd3R2dIMFZiRXRiK0k4bUhZa1U2dFkrblMzekNJSUx5ZzlP?=
- =?utf-8?B?a0szTExYeVBKeEhZajdtRzlSQ0lOQVJadmtITUgrZ09lalk4UzErT0VBb1Er?=
- =?utf-8?B?aUd5K3g1THpZU00ybzh4ZlBSOTAzZ0M5S1RVaG5RRWVxRU9Ia0daMmhraXM1?=
- =?utf-8?B?U1NEdmtjcUdZV3JOckdzOThqUE9RY2pYclE2RUQwTUlNdlVUKzhySWl5Y3RL?=
- =?utf-8?B?MDgyNHkrdElDYmx2QVhYZElGYkF0M3oxMDhXbkxqVk5NUnpmTUNFOG1Jdlgz?=
- =?utf-8?B?TmY0RWFzSjBVTjJPcHNOeG9NYkF4Ym5ndzVuTmZmNVdHMUpkWmlVdjVuZ1Fi?=
- =?utf-8?B?UzVjanFZY1BySnlCS0J1NER4TmxKaGZTU1VuaDVuTFR0LzlIMHF1Z0hZS0tG?=
- =?utf-8?B?WmY1Uk5nc3NJSTdXV1IyRjk5NnE2cjlHeHR3UHZlbUhMRUVZOWY0ajFZeGVs?=
- =?utf-8?B?SnNhS3haQ0hIcnlXdW02Y3FzQ1BRZzNJeFljZEhnSk1NaStVTU1lWVQveFY3?=
- =?utf-8?B?WE8xVlJFVmVUWG15bFB5cTh4VE8zeXl3YnZiK3NXK1dtVTJOOHI1UGVUVkhH?=
- =?utf-8?B?WU12Q3FnVVBkZGtRTWhIWVZxenJpQUtUazVndldIVTFDK3RRWlVoYXZkd3dt?=
- =?utf-8?B?ZXhTNEdnbGgzc2wvdW5INXpUK0t6Q1QwTUJKQnFUQzFHTnFxcmRRREFOZ1Za?=
- =?utf-8?B?bHpOQzlkWDZNcEJjL1lKeWNvakczdlBEQWlLQm9iQW9OdTNLUEsrTzdmTzRw?=
- =?utf-8?B?M0dLSFBnSEtHcUVDTTlDQjdheGhBV3RsbmxvNW5sVmNWdHF2TWFXb0tLUkF3?=
- =?utf-8?B?ZlVQRWhJQTlZemtMZGFSMkxKcHg2QWxSMkl0T1NmOFVPa2RJY3N5RWprVkw1?=
- =?utf-8?B?Q2IwMERKejZjK1I5LzhuVE12L2VZdGhhYWkrYllQc2FvcFVNYVp2eTJ6YWZq?=
- =?utf-8?B?SlRXSytkaVpZOWdZSkR4QlRMSlZkakZtWnhZWjNJM1VTZElyeWFScEgzRUx1?=
- =?utf-8?B?cnFNcVFVM3hoV3RxRkRwdHdaNVNLUUVIS2ZoNzJtTzBxS1FwcHhMSGZ2eksw?=
- =?utf-8?B?KytsMjRTSEh5VTQ5Unhad0lDdnBKK25NOHNwbmZsWDdVRWhVTUJRODdHbVhF?=
- =?utf-8?B?VDJUbFZSeDcyVHcxbHZIQnVNVW4yVUljdEM0TW5Wd3MxWnFlQ1BhZnh6RGw0?=
- =?utf-8?B?L1Z5Wm9kcGdGaVZzeDcwYUtuVUZHejV0VWNRUlYrVkZXN2s2M0ZQd3g4UW5t?=
- =?utf-8?B?USs0Q1F4L0xONEpFWjliMGxZTVkwVmhiclVtbmhzbHg4UlRzZ3VQa0hUcmJv?=
- =?utf-8?B?V01LNVJXaFBhL1lHNW9zd1RhdjB4WjVXdlV3cjdCYUk4dHIwelU3YVVDdm1C?=
- =?utf-8?B?K3JLYjZsYzQrVC9JU05VNkp5VnJNUkovdmV5a00xN3loNTR0cHg0YlJOaXEx?=
- =?utf-8?B?ZjJJK09KUmZkKzY2ZGZvVFZGSVN6MEU4ZzhxOVJqZE5xSVQ2ai9zMTFGZ21k?=
- =?utf-8?B?UVVoTEk2QWlQbGEvdkQvODdyQ3prT3BrdFhkSkVlOXJwaitva0piM3MxUkFX?=
- =?utf-8?B?TE5uNldTRUJiZE10Z3ZLZElBSGlYWVdoQjJaYlYvVkN6ZFRyelFwMjFHQ1Z0?=
- =?utf-8?B?TEZtSDU2MnprNCtxcm1MZll3dXFtdWZ2ejdERmZ5QVRzMURLZk1jbXdnbTBp?=
- =?utf-8?B?M0F3amhlWGVzTzdYaHBMcFNBVThBUWdkYUp4ZlhHbThjZXpzOEZoZnBlOHBv?=
- =?utf-8?B?Q3lYbHNPbDRleWZpTkc4cUNtTU5OYlc4TnZ6NkpJdmEwcFBVSkg3clZvWVhm?=
- =?utf-8?B?N00vemt1SlVtSGt6eGJQYnVkUVJYYU9icVZyOXVJYjJjWS94TGtrUVFDOWQ0?=
- =?utf-8?Q?DIeiKqkLwFu0gy4bJ+UtfxY=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87c83fa3-8ab2-46fe-8462-08db3b5be629
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 13:43:29.4332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TZi/jaHXebmoWbp6cFSt0jXGwqGDrzuJzTMAC0GOUoIVEMVDecPndSiCEBU5FrmDhCnLIGKxrSIZ6LYb6LDpzKE8NCgCsH6EGy3jZZ1Vzz8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB9288
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
 
-On 4/12/23 14:05, Sakari Ailus wrote:
-> Hi Michael,
+
+On 2023-04-11 4:56 p.m., Ian Rogers wrote:
+> Perf stat with no arguments will use default events and metrics. These
+> events may fail to open even with kernel and hypervisor disabled. When
+> these fail then the permissions error appears even though they were
+> implicitly selected. This is particularly a problem with the automatic
+> selection of the TopdownL1 metric group on certain architectures like
+> Skylake:
 > 
-> On Wed, Apr 12, 2023 at 01:57:36PM +0200, Michael Riesch wrote:
->> Hi Sakari,
->>
->> On 4/12/23 13:50, Sakari Ailus wrote:
->>> Hi Michael,
->>>
->>> On Wed, Apr 12, 2023 at 10:00:26AM +0200, Michael Riesch wrote:
->>>>  - Different controls: If moving = (V4L2_CID_FOCUS_ABSOLUTE == current),
->>>>    then what happens if the application performs a
->>>>    V4L2_CID_FOCUS_RELATIVE with -3? current should reach 39,
->>>>    V4L2_CID_FOCUS_ABSOLUTE is still at 42, the lens is still moving from
->>>>    the application's point of view.
->>>
->>> Would there be a reason to implement both of these controls in a single
->>> driver? AFAIU, the relative one should be used if there absolute value
->>> isn't known to the driver.
->>
->> Probably not, but on the other hand there is nothing the prevents a
->> driver developer from doing so, right? Point is that should there be a
->> driver which does implement both controls, we are in trouble AFAIU.
+> ```
+> $ perf stat true
+> Error:
+> Access to performance monitoring and observability operations is limited.
+> Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+> access to performance monitoring and observability operations for processes
+> without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+> More information can be found at 'Perf events and tool security' document:
+> https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+> perf_event_paranoid setting is 2:
+>   -1: Allow use of (almost) all events by all users
+>       Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>> = 0: Disallow raw and ftrace function tracepoint access
+>> = 1: Disallow CPU event access
+>> = 2: Disallow kernel profiling
+> To make the adjusted perf_event_paranoid setting permanent preserve it
+> in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
+> ```
 > 
-> I think the documentation should be improved in this regard.
-
-The documentation of which control exactly? And what items should be added?
-
-Thanks for the pointers!
-
-Best regards,
-Michael
-
+> This patch adds skippable evsels that when they fail to open will be
+> skipped. The TopdownL1 events are marked as skippable. This turns the
+> failure above to:
 > 
-> Also cc Hans.
+> ```
+> $ perf stat true
 > 
+>  Performance counter stats for 'true':
+> 
+>               1.28 msec task-clock:u                     #    0.323 CPUs utilized
+>                  0      context-switches:u               #    0.000 /sec
+>                  0      cpu-migrations:u                 #    0.000 /sec
+>                 48      page-faults:u                    #   37.550 K/sec
+>            206,228      cycles:u                         #    0.161 GHz                         (44.07%)
+>            122,904      instructions:u                   #    0.60  insn per cycle
+>             28,263      branches:u                       #   22.110 M/sec
+>              2,461      branch-misses:u                  #    8.71% of all branches
+>      <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+>    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+>      <not counted>      CPU_CLK_UNHALTED.THREAD:u
+>      <not counted>      UOPS_RETIRED.RETIRE_SLOTS:u
+>      <not counted>      UOPS_ISSUED.ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.REF_XCLK:u
+>      <not counted>      IDQ_UOPS_NOT_DELIVERED.CORE:u
+>    <not supported>      INT_MISC.RECOVERY_CYCLES_ANY:u
+>      <not counted>      CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE:u
+>      <not counted>      CPU_CLK_UNHALTED.THREAD:u
+>      <not counted>      UOPS_ISSUED.ANY:u
+> 
+>        0.003958627 seconds time elapsed
+> 
+>        0.000000000 seconds user
+>        0.004263000 seconds sys
+> 
+> Some events weren't counted. Try disabling the NMI watchdog:
+>         echo 0 > /proc/sys/kernel/nmi_watchdog
+>         perf stat ...
+>         echo 1 > /proc/sys/kernel/nmi_watchdog
+> The events in group usually have to be from the same PMU. Try reorganizing the group.
+> ```
+>
+
+I don't think that's how the perf stat default was designed.
+There should be no multiplexing or <not counted> with perf stat true.
+
+
+> When the events can have kernel/hypervisor disabled, like on
+> Tigerlake, then it continues to succeed as:
+> 
+> ```
+> $ perf stat true
+> 
+>  Performance counter stats for 'true':
+> 
+>               0.57 msec task-clock:u                     #    0.385 CPUs utilized
+>                  0      context-switches:u               #    0.000 /sec
+>                  0      cpu-migrations:u                 #    0.000 /sec
+>                 47      page-faults:u                    #   82.329 K/sec
+>            287,017      cycles:u                         #    0.503 GHz
+>            133,318      instructions:u                   #    0.46  insn per cycle
+>             31,396      branches:u                       #   54.996 M/sec
+>              2,442      branch-misses:u                  #    7.78% of all branches
+>            998,790      TOPDOWN.SLOTS:u                  #     14.5 %  tma_retiring
+>                                                   #     27.6 %  tma_backend_bound
+>                                                   #     40.9 %  tma_frontend_bound
+>                                                   #     17.0 %  tma_bad_speculation
+>            144,922      topdown-retiring:u
+>            411,266      topdown-fe-bound:u
+>            258,510      topdown-be-bound:u
+>            184,090      topdown-bad-spec:u
+>              2,585      INT_MISC.UOP_DROPPING:u          #    4.528 M/sec
+>              3,434      cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/u #    6.015 M/sec
+> 
+>        0.001480954 seconds time elapsed
+> 
+>        0.000000000 seconds user
+>        0.001686000 seconds sys
+> ```
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-stat.c | 39 ++++++++++++++++++++++++++++++---------
+>  tools/perf/util/evsel.c   | 15 +++++++++++++--
+>  tools/perf/util/evsel.h   |  1 +
+>  3 files changed, 44 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 38133afda7fc..024fda0dd943 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -667,6 +667,13 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
+>  			evsel_list->core.threads->err_thread = -1;
+>  			return COUNTER_RETRY;
+>  		}
+> +	} else if (counter->skippable) {
+> +		if (verbose > 0)
+> +			ui__warning("skipping event %s that kernel failed to open .\n",
+> +				    evsel__name(counter));
+> +		counter->supported = false;
+> +		counter->errored = true;
+> +		return COUNTER_SKIP;
+>  	}
+>  
+>  	evsel__open_strerror(counter, &target, errno, msg, sizeof(msg));
+> @@ -1885,15 +1892,29 @@ static int add_default_attributes(void)
+>  		 * Add TopdownL1 metrics if they exist. To minimize
+>  		 * multiplexing, don't request threshold computation.
+>  		 */
+> -		if (metricgroup__has_metric("TopdownL1") &&
+> -		    metricgroup__parse_groups(evsel_list, "TopdownL1",
+> -					    /*metric_no_group=*/false,
+> -					    /*metric_no_merge=*/false,
+> -					    /*metric_no_threshold=*/true,
+> -					    stat_config.user_requested_cpu_list,
+> -					    stat_config.system_wide,
+> -					    &stat_config.metric_events) < 0)
+> -			return -1;
+
+
+I think we should move these to X86 specific code. Maybe we should
+provide something like, arch_perf_stat_default(), for different ARCHs to
+append their specific events with perf stat default, such as
+TopdownL1/L2 on newer Intel machines.
+
+I still don't think we should only rely on the event list for the
+availability of the Topdown feature. For example, the topdown metrics
+hasn't been supported by the KVM yet. If perf stat is launched on a ICL
+VM, you should at least get "not supported" with perf stat true, which
+breaks the design. We need to check the events which are exposed in the
+sysfs, or add a new ABI to expose the capability in
+/sys/devices/cpu/caps/, before appending events to perf stat default.
+
+Thanks,
+Kan
+
+> +		if (metricgroup__has_metric("TopdownL1")) {
+> +			struct evlist *metric_evlist = evlist__new();
+> +			struct evsel *metric_evsel;
+> +
+> +			if (!metric_evlist)
+> +				return -1;
+> +
+> +			if (metricgroup__parse_groups(metric_evlist, "TopdownL1",
+> +							/*metric_no_group=*/false,
+> +							/*metric_no_merge=*/false,
+> +							/*metric_no_threshold=*/true,
+> +							stat_config.user_requested_cpu_list,
+> +							stat_config.system_wide,
+> +							&stat_config.metric_events) < 0)
+> +				return -1;
+> +
+> +			evlist__for_each_entry(metric_evlist, metric_evsel) {
+> +				metric_evsel->skippable = true;
+> +			}
+> +			evlist__splice_list_tail(evsel_list, &metric_evlist->core.entries);
+> +			evlist__delete(metric_evlist);
+> +		}
+> +
+>  		/* Platform specific attrs */
+>  		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
+>  			return -1;
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index dc3faf005c3b..a09654ea18ec 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -290,6 +290,7 @@ void evsel__init(struct evsel *evsel,
+>  	evsel->per_pkg_mask  = NULL;
+>  	evsel->collect_stat  = false;
+>  	evsel->pmu_name      = NULL;
+> +	evsel->skippable     = false;
+>  }
+>  
+>  struct evsel *evsel__new_idx(struct perf_event_attr *attr, int idx)
+> @@ -1717,9 +1718,13 @@ static int get_group_fd(struct evsel *evsel, int cpu_map_idx, int thread)
+>  		return -1;
+>  
+>  	fd = FD(leader, cpu_map_idx, thread);
+> -	BUG_ON(fd == -1);
+> +	BUG_ON(fd == -1 && !leader->skippable);
+>  
+> -	return fd;
+> +	/*
+> +	 * When the leader has been skipped, return -2 to distinguish from no
+> +	 * group leader case.
+> +	 */
+> +	return fd == -1 ? -2 : fd;
+>  }
+>  
+>  static void evsel__remove_fd(struct evsel *pos, int nr_cpus, int nr_threads, int thread_idx)
+> @@ -2101,6 +2106,12 @@ static int evsel__open_cpu(struct evsel *evsel, struct perf_cpu_map *cpus,
+>  
+>  			group_fd = get_group_fd(evsel, idx, thread);
+>  
+> +			if (group_fd == -2) {
+> +				pr_debug("broken group leader for %s\n", evsel->name);
+> +				err = -EINVAL;
+> +				goto out_close;
+> +			}
+> +
+>  			test_attr__ready();
+>  
+>  			/* Debug message used by test scripts */
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 68072ec655ce..98afe3351176 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -95,6 +95,7 @@ struct evsel {
+>  		bool			weak_group;
+>  		bool			bpf_counter;
+>  		bool			use_config_name;
+> +		bool			skippable;
+>  		int			bpf_fd;
+>  		struct bpf_object	*bpf_obj;
+>  		struct list_head	config_terms;
