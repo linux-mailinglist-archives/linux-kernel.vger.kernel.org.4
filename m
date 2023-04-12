@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6236DFB1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63706DFB20
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjDLQSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S229548AbjDLQTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDLQSd (ORCPT
+        with ESMTP id S229999AbjDLQTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:18:33 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0D66E98;
-        Wed, 12 Apr 2023 09:18:14 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CCK5sT012362;
-        Wed, 12 Apr 2023 18:17:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=qoweobMCw9OjMJIGG9Oluh4CWDKdRBeAll2gFaHrPyY=;
- b=VZ1F0Bi1Q+9bJySmGN3Dizmwbi7b+vmqMIMIDGFTcW+Ryki2GUbGCgF+/l0pewNECfwk
- UZBtMP3dREJsSC2G5oUSXHBTZ9+QIdKFqmusw++eQSzQ4GbIiCHrzEC6F6bzKJewZycT
- MT28TZvLIShZKuHfSLgalbH+LICMtPUH0QKRaxgXbEJ+JBdY7zk5BZjymlW/+Zqk1qIE
- kcGrig0NOiLUC0SOs9FvM48AgvCnOJ94GWUIEyRqmIvZ9wmNE8mNNFc3MEXcNUN5Q1RD
- RNKcT1+OJmwyY8ktBOh7fgpp4KmjyvG7CWnDYCw2SXXtKOjqQfavZcC8H67FWwBwv9kr dQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pw7wp0exg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 18:17:45 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 804B410002A;
-        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5414021A221;
-        Wed, 12 Apr 2023 18:17:44 +0200 (CEST)
-Received: from localhost (10.48.1.102) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 12 Apr
- 2023 18:17:43 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] usb: typec: ucsi: don't print PPM init deferred errors
-Date:   Wed, 12 Apr 2023 18:17:34 +0200
-Message-ID: <20230412161734.3425090-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Apr 2023 12:19:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EF17DA8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681316269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qnf9yElTQYFqrnMLB45LKI8SRk00USkcv5dSbMkmIug=;
+        b=K1tUD4nO1cMqgvcKh7FPeyqjN+kDD2rYBYKo+oNDMh2CfJpUI2zBhlLOwOoYEOlye1IiXG
+        dNxUs3MiRBQatTnvuN0Twj7xZmDKvCV3a5ep5gD50TMakFkKrsw6Y/SuGVDIT9W8UrgInp
+        /yQkPCeaIRZzQ/sUOfT84Fpb0i6xEjk=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-320-2S9lsU3hMzCzEDGduY2hew-1; Wed, 12 Apr 2023 12:17:47 -0400
+X-MC-Unique: 2S9lsU3hMzCzEDGduY2hew-1
+Received: by mail-ej1-f70.google.com with SMTP id vt6-20020a170907a60600b009217998c8e3so4254124ejc.14
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:17:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681316266; x=1683908266;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qnf9yElTQYFqrnMLB45LKI8SRk00USkcv5dSbMkmIug=;
+        b=hAL7wbz82ojvQUbVaG9Friq5IpWpgXpDNSGphotTvypiHK5DNAMi7deyjsIlS60oPg
+         tcuK0Ck7C/lNwIGiOAOvdmHazqUyqtSpiwmUrgylK/7Js4W5uAWgHDiUKJ8FVv44/i9c
+         bHjppNLf8JE0c/cdWdum4biGRhoSCrnLNvnk1KZs9RG/K7jzywDqnAD31bkfV2sbqoVy
+         KoxyezzabOeCWQ5eIeZRah1ex3Ej6l381JDbXsCYAMTYGe4AGz3GyeeCtiO9Mok190bJ
+         jFTIwV4qmOkjlVwlYtlQiFPgKT5l1MiU2NlFZj7FxMLqMGNApON1xUIEl0FDGQMBgesS
+         MzBw==
+X-Gm-Message-State: AAQBX9dNY5Chp7nGpVpA2qTaUI5Nuky2Su/qemyL6rN6H/On7jUOnZl/
+        CtD0i8fQVvVsRLXWro5kLkc781V1B7+cNYwCEXHRd3vAfwKFTF2Z1hqBGE3dPSWTdCk1dtNW342
+        lQ88BTx1TzYQqjv+o9b/GYBe4
+X-Received: by 2002:a17:906:3e1b:b0:947:4481:105b with SMTP id k27-20020a1709063e1b00b009474481105bmr6122409eji.3.1681316266556;
+        Wed, 12 Apr 2023 09:17:46 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZkmzRiKnM5DrNfQCtjR0yrisjPx1y54Hxkhfskk9JB9nxG0DC8iSLZdPvUzGtB9AGnC+h9og==
+X-Received: by 2002:a17:906:3e1b:b0:947:4481:105b with SMTP id k27-20020a1709063e1b00b009474481105bmr6122388eji.3.1681316266222;
+        Wed, 12 Apr 2023 09:17:46 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id hs40-20020a1709073ea800b009351546fb54sm7328025ejc.28.2023.04.12.09.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 09:17:45 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <867e3607-52e0-8c02-8dbb-92bb997f079e@redhat.com>
+Date:   Wed, 12 Apr 2023 18:17:44 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH bpf V7 1/7] selftests/bpf: xdp_hw_metadata default disable
+ bpf_printk
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+References: <168098183268.96582.7852359418481981062.stgit@firesoul>
+ <168098188134.96582.7870014252568928901.stgit@firesoul>
+ <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+ <402a3c73-d26d-3619-d69a-c90eb3f0e9ee@redhat.com>
+ <ZDbXEqQc3MpKPmGv@google.com>
+In-Reply-To: <ZDbXEqQc3MpKPmGv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.1.102]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_08,2023-04-12_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ucsi_init() may be deferred as usb_role_sw may be deferred in
-ucsi_register_port(). This results in several PPM init failed (-517)
-messages maybe printed several times upon boot, like on stm32mp135f-dk
-board, until the role_switch driver gets probed.
 
-[   19.880945] dwc2 49000000.usb: supply vusb_d not found, using dummy regulator
-[   19.887136] dwc2 49000000.usb: supply vusb_a not found, using dummy regulator
-[   19.975432] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
-[   20.155746] dwc2 49000000.usb: EPs: 9, dedicated fifos, 952 entries in SPRAM
-[   20.175429] ucsi-stm32g0-i2c 0-0053: PPM init failed (-517)
-[   20.184242] dwc2 49000000.usb: DWC OTG Controller
+On 12/04/2023 18.06, Stanislav Fomichev wrote:
+> On 04/12, Jesper Dangaard Brouer wrote:
+>> On 12/04/2023 00.42, Stanislav Fomichev wrote:
+>>> On Sat, Apr 8, 2023 at 12:24 PM Jesper Dangaard Brouer
+>>>>
+[...]
+>>>
+>>> Are you planning to eventually do somethike similar to what I've
+>>> mentioned in [0]? If not, should I try to send a patch?
+>>
+>> See next patch:
+>>   - [PATCH bpf V7 2/7] selftests/bpf: Add counters to xdp_hw_metadata
+>>
+>> where I add these counters :-)
+> 
+> Oh, nice, let me take a look. I was assuming v7 is mostly the same as
+> v6..
+>   
 
-Adopt dev_err_probe() instead of dev_err(), to only print other errors.
-Also print an error in case the wait count has expired.
+Alexei explicitly asked for these changes to be included in V7.
+Notice, I've already send out a [V8] (addressing Simon's notes).
+Please take a look at V8 instead of V7.
+We are at RC6 and I hope we soon have something we can agree on.
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index f632350f6dcb..4d809e0d7761 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1447,11 +1447,13 @@ static void ucsi_init_work(struct work_struct *work)
- 
- 	ret = ucsi_init(ucsi);
- 	if (ret)
--		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
-+		dev_err_probe(ucsi->dev, ret, "PPM init failed\n");
- 
- 	if (ret == -EPROBE_DEFER) {
--		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
-+		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT) {
-+			dev_err(ucsi->dev, "PPM init failed, stop trying\n");
- 			return;
-+		}
- 
- 		queue_delayed_work(system_long_wq, &ucsi->work,
- 				   UCSI_ROLE_SWITCH_INTERVAL);
--- 
-2.25.1
+[V8] 
+https://lore.kernel.org/all/168130333143.150247.11159481574477358816.stgit@firesoul/
+
+[patchwork] 
+https://patchwork.kernel.org/project/netdevbpf/list/?series=739144&state=%2A&archive=both
+
+
+--Jesper
 
