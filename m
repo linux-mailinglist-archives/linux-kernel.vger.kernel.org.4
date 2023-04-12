@@ -2,310 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE64F6DFCDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5400E6DFCE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjDLRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S230088AbjDLRp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDLRor (ORCPT
+        with ESMTP id S229578AbjDLRpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:44:47 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1132B30E0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:44:46 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f0968734f6so1970255e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681321484; x=1683913484;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2E0Nnkjs6iVqwiEdn+EifW7LQwJ4sdMIYsZcK2qTBrM=;
-        b=Zz4FH4NvcRfFdyp5S5sewPtFadS9p8YCpfkoqjhRUiDQjek6rZF9KLoBKSZtGQO0UN
-         8xvH+hMM6jtHRPVF/5/fsTUV4DtrrgoIEEZkRj8LT9GP7frmZyeURDkXwdsVoVf2nd8b
-         5RzU1whlc2WCsmvQFNwHgeZ1HfZ3UT2QK7r3w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681321484; x=1683913484;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2E0Nnkjs6iVqwiEdn+EifW7LQwJ4sdMIYsZcK2qTBrM=;
-        b=KZJ10qcNUEvZU91hwuz5SDd7T3BP4CwAPrF4z8keBXl5TCRv8WZMX/OlM3Li9G2v+R
-         s3mK7Sn/s0U8OXEVUSGhx+LUb6aEVxgjIfh7s0xu26mv8RQWAf0w4FNtF+Ir8XBL4r6c
-         11+BAB3F06pnpJntVlLaJx7NgPf/GLZ7MLxKIYFCDaRzpUw94v9QHQJDfMmrWDfGE+Ah
-         tpfdgq42tQh6FKYKKk0ReuA5bIS9okBGkzKA3tqQuQedQJk1buuVSW+ABaLYKUKS9gGl
-         hk8c9++HhQH8eX51OgHKmlYyg32giXT7PAjRFTmQQrqjiU4o+zWxJfCs5o304IjJ/4Wy
-         SaUg==
-X-Gm-Message-State: AAQBX9fvVZUOmUxskaNMfUcgeDb28Nsdrmqb59OfGC1kZJIrthP2TtiG
-        0xiuQIiEhGJmA/tqwYms+eo0qg==
-X-Google-Smtp-Source: AKy350Y+XWemTa+mLbLg/mxf9bQ1L3pmRsAspFQVVFKFppaJ5qUP0XyY8xP4nBnfCCgkjj9Cs7PDtw==
-X-Received: by 2002:a5d:664e:0:b0:2c7:1c72:699f with SMTP id f14-20020a5d664e000000b002c71c72699fmr2458605wrw.4.1681321484469;
-        Wed, 12 Apr 2023 10:44:44 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id m3-20020adfdc43000000b002c5691f13eesm17760896wrj.50.2023.04.12.10.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 10:44:44 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 19:44:41 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
-Message-ID: <ZDbuCWKfFlWyiOGp@phenom.ffwll.local>
-Mail-Followup-To: Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Sui Jingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230409132110.494630-1-15330273260@189.cn>
- <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
- <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
+        Wed, 12 Apr 2023 13:45:54 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DED4EEA;
+        Wed, 12 Apr 2023 10:45:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681321506; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=cNGVRv7eKsGOjCKvg2uYtWqlSufHiEoKNQywk8rTaf96M5CzDeCJxf/NUylHApDJLKNuL/TqixqBPpEMTFY6fFSU1sFOtq/mmtbna4viPksXbsKW8nH7le+RU1e0582J7RCmTpXp72lUFoL4h8e9MCVl7g+SoeLqIQLXOlOjMwQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681321506; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=gBNrHe9ZW+eOs2pOSkknYiLXYHRJR067BuOYoakffbY=; 
+        b=jw4hdoKKoSHw75qQr8HDIkHBf8gOxDHvkLSVr1yHA3cD6EOSkSEEqfYZ1GOxUeY9QouVWNyGkf9rLqiBuntpdUzqJ++PBxZK7oISiiesNGJnI88lFrwy0lP0lp/XQ0dOyQh1PBFw+aRRQS5r0NhMUfUbvPUx0XbMJmQwPVAYgdw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681321506;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=gBNrHe9ZW+eOs2pOSkknYiLXYHRJR067BuOYoakffbY=;
+        b=h1Rl3UUw+HsXoJklhYXycGX0FORTnzR/skaZI5oR/pVl9L5W2KIqwyEMuLP+cp+v
+        kqTV99QSOOMrGkDErsRO65t6Rn1tU20pYwk4xUF71NYnEPTgF3Hpz7m5Zoi14z/QCi8
+        zyA3K1J9/OLAPj2EMBcA//gsOPS09ZmADByWgNTM=
+Received: from [10.10.9.4] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681321503790696.0069063619653; Wed, 12 Apr 2023 10:45:03 -0700 (PDT)
+Message-ID: <2b23a4bf-cacc-cb6c-f0a4-e71f640729cc@arinc9.com>
+Date:   Wed, 12 Apr 2023 20:44:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
+ bindings for MT7988
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230406080141.22924-1-arinc.unal@arinc9.com>
+ <20230406080141.22924-3-arinc.unal@arinc9.com>
+ <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
+ <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+ <951841d3-59a4-fa86-5b45-46afdb2942dd@linaro.org>
+ <5a92419c-4d2c-a169-687b-026dc6094cd8@arinc9.com>
+ <153a5ed0-5f4f-4879-2677-e5bce5453634@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <153a5ed0-5f4f-4879-2677-e5bce5453634@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 01:13:37AM +0800, Sui Jingfeng wrote:
-> Hi,
+On 12.04.2023 19:39, Krzysztof Kozlowski wrote:
+> On 07/04/2023 11:46, ArÄ±nÃ§ ÃœNAL wrote:
+>> On 7.04.2023 12:07, Krzysztof Kozlowski wrote:
+>>> On 06/04/2023 21:18, ArÄ±nÃ§ ÃœNAL wrote:
+>>>> On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
+>>>>> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
+>>>>>> From: ArÄ±nÃ§ ÃœNAL <arinc.unal@arinc9.com>
+>>>>>>
+>>>>>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
+>>>>>> to be used is internal. Add this.
+>>>>>>
+>>>>>> Some bindings are incorrect for this switch now, so move them to more
+>>>>>> specific places.
+>>>>>>
+>>>>>> Address the incorrect information of which ports can be used as a user
+>>>>>> port. Any port can be used as a user port.
+>>>>>>
+>>>>>> Signed-off-by: ArÄ±nÃ§ ÃœNAL <arinc.unal@arinc9.com>
+>>>>>> ---
+>>>>>>     .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
+>>>>>>     1 file changed, 46 insertions(+), 17 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>>> index 7045a98d9593..605888ce2bc6 100644
+>>>>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>>> @@ -160,22 +160,6 @@ patternProperties:
+>>>>>>           "^(ethernet-)?port@[0-9]+$":
+>>>>>>             type: object
+>>>>>>     
+>>>>>> -        properties:
+>>>>>> -          reg:
+>>>>>> -            description:
+>>>>>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+>>>>>> -              for user ports.
+>>>>>> -
+>>>>>> -        allOf:
+>>>>>> -          - if:
+>>>>>> -              required: [ ethernet ]
+>>>>>> -            then:
+>>>>>> -              properties:
+>>>>>> -                reg:
+>>>>>> -                  enum:
+>>>>>> -                    - 5
+>>>>>> -                    - 6
+>>>>>> -
+>>>>>
+>>>>> I have doubts that the binding is still maintainable/reviewable. First,
+>>>>> why do you need all above patterns after removal of entire contents?
+>>>>
+>>>> The 'type: object' item is still globally used. I'd have to define that
+>>>> on each definitions, I suppose?
+>>>
+>>> Doesn't it come from dsa.yaml/dsa-port.yaml schema?
+>>
+>> It comes from dsa.yaml#/$defs/ethernet-ports which this schema already
+>> refers to. I'll remove the patterns above.
+>>
+>> Though 'type: object' is not there for "^(ethernet-)?port@[0-9]+$". I
+>> think I should add it there as the dsa-port.yaml schema defines the
+>> properties of the DSA switch port object.
 > 
-> On 2023/4/11 22:53, Daniel Vetter wrote:
-> > On Sun, Apr 09, 2023 at 09:21:10PM +0800, Sui Jingfeng wrote:
-> > > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > 
-> > > We should setting the screen buffer size according to the screen's actual
-> > > size, rather than the size of the GEM object backing the front framebuffer.
-> > > The size of GEM buffer is page size aligned, while the size of active area
-> > > of a specific screen is *NOT* necessarily page size aliged. For example,
-> > > 1680x1050, 1600x900, 1440x900, 800x6000 etc. In those case, the damage rect
-> > > computed by drm_fb_helper_memory_range_to_clip() goes out of bottom bounds
-> > > of the display.
-> > > 
-> > > Run fbdev test of IGT on a x86+ast2400 platform with 1680x1050 resolution
-> > > will cause the system hang with the following call trace:
-> > > 
-> > >    Oops: 0000 [#1] PREEMPT SMP PTI
-> > >    [IGT] fbdev: starting subtest eof
-> > >    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
-> > >    [IGT] fbdev: starting subtest nullptr
-> > > 
-> > >    RIP: 0010:memcpy_erms+0xa/0x20
-> > >    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
-> > >    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
-> > >    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
-> > >    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
-> > >    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
-> > >    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
-> > >    FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
-> > >    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > >    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
-> > >    Call Trace:
-> > >     <TASK>
-> > >     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
-> > >     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
-> > >     process_one_work+0x21f/0x430
-> > >     worker_thread+0x4e/0x3c0
-> > >     ? __pfx_worker_thread+0x10/0x10
-> > >     kthread+0xf4/0x120
-> > >     ? __pfx_kthread+0x10/0x10
-> > >     ret_from_fork+0x2c/0x50
-> > >     </TASK>
-> > >    CR2: ffffa17d40e0b000
-> > >    ---[ end trace 0000000000000000 ]---
-> > > 
-> > > We also add trival code in this patch to restrict the damage rect beyond
-> > > the last line of the framebuffer.
-> > Nice catch!
->  :)
-> > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > ---
-> > >   drivers/gpu/drm/drm_fb_helper.c     | 2 +-
-> > >   drivers/gpu/drm/drm_fbdev_generic.c | 2 ++
-> > >   2 files changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> > > index 64458982be40..a2b749372759 100644
-> > > --- a/drivers/gpu/drm/drm_fb_helper.c
-> > > +++ b/drivers/gpu/drm/drm_fb_helper.c
-> > > @@ -645,7 +645,7 @@ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off,
-> > >   	u32 x1 = 0;
-> > >   	u32 y1 = off / info->fix.line_length;
-> > >   	u32 x2 = info->var.xres;
-> > > -	u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
-> > > +	u32 y2 = min_t(u32, DIV_ROUND_UP(end, info->fix.line_length), info->var.yres);
-> > So for additional robustness I think it'd be good if we change the entire
-> > computation here to use drm_framebuffer data and not fb_info data, because
-> > fundamentally that's what the drm kms code consumes. It should all match
-> > anyway, but I think it makes the code more obviously correct.
-> > 
-> > So in the entire function instead of looking at fb_info->fix we should
-> > probably look at
-> > 
-> > 	struct drm_fb_helper *helper = info->par;
-> > 
-> > And then helper->fb->pitches[0] and helper->fb->height.
-> > 
-> > If you agree would be great if you can please respin with that (and the
-> > commit message augmented to explain why we do the change)?
+> It has ref, which is enough.
 > 
-> Yes, I'm agree.
+>> So the value matching the
+>> "^(ethernet-)?port@[0-9]+$" regular expression is expected to be an
+>> object conforming to the structure defined in dsa-port.yaml.
+>>
+>> Does that make sense?
 > 
-> Thank you for guidance, I will refine this patch with `helper = info->par`.
-> 
-> I will send a v2 when I finished.
-> 
-> > >   	if ((y2 - y1) == 1) {
-> > >   		/*
-> > > diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
-> > > index 8e5148bf40bb..a6daecb5f640 100644
-> > > --- a/drivers/gpu/drm/drm_fbdev_generic.c
-> > > +++ b/drivers/gpu/drm/drm_fbdev_generic.c
-> > > @@ -95,6 +95,8 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
-> > >   	fb_helper->fb = buffer->fb;
-> > >   	screen_size = buffer->gem->size;
-> > I guess you forgot to remove this line here?
-> 
-> Yes, this line should be removed in this patch. I overlooked this, sorry.
-> 
-> > Also I'm not understanding
-> > why this matters, I think you're fix only needs the above chunk, not this
-> > one? If I got this right then please drop this part, there's drivers which
-> > only use drm_fb_helper.c but not drm_fbdev_generic.c, and from what I can
-> > tell they all still set the gem buffer size here.
-> > 
-> > If otoh we need this too, then there's a few more places that need to be
-> > fixed.
-> 
-> I think we need this line, otherwise wrapped around will be happen.
-> 
-> Because I found that the value of variable`y1` will be larger in number than
-> the variable `y2` by 1,
-> 
-> which are computed  in drm_fb_helper_memory_range_to_clip().
-> 
-> 
-> This phenomenon will emerged on platforms with large page size or
-> 
-> non page size divisiable display resolution case. Take the LoongArch and
-> Mips as an example,
-> 
-> the default page size is 16KB(to avoid cache alias).  Even with the most
-> frequently used
-> 
-> 1920x1080 screen, the screen_size can not be divided exactly.
-> 
-> The total size of the shadow buffer is 1920x1080x4 bytes, 1920x1080x4 /
-> 16384 = 506.25
-> 
-> TTM manage the vram in the term of pages, so TTM will allocate 507 pages for
-> us.
-> 
-> 507x16384 = 8306688 bytes.
-> 
-> 
-> drm_fb_helper_memory_range_to_clip() will be called when running fbdev eof
-> test in the IGT.
-> 
-> with 8306688 as its second parameter. while 8306688 / (1920x4) = 1081, this
-> cause y1 out of bound.
-> 
-> Simply restrict y2 with a min_t() function yeild 1080 in this case, but y2 -
-> y1 cause *wrap around* here.
-> 
-> because they are both unsigned number.
-> 
-> 
-> drm_rect_init() function cast this unsigned int type to int type in end of
-> drm_fb_helper_memory_range_to_clip(),
-> 
-> but the last argument of drm_fb_helper_damage() function is a u32 type,
-> 
-> it cast the return value of  drm_rect_height(&damage_area) back to unsigned
-> type.
-> 
-> Yet, another wrapped around with truncation happened in
-> drm_fb_helper_add_damage_clip()
-> 
-> called by subsequent drm_fb_helper_damage() function.
-> 
-> I finally got reject by drm_fbdev_generic_helper_fb_dirty() with follow
-> code:
-> 
-> ```
-> 
->     /* Call damage handlers only if necessary */
->     if (!(clip->x1 < clip->x2 && clip->y1 < clip->y2))
->         return 0;
-> 
-> ```
-> 
-> On x86-64 platform, because 1920x1080x4 dumb buffer is lucky, it be divided
-> exactly by 4KB(page size).
-> 
-> But other resolution will not as luck as this one. Right, fbdev test will be
-> pasted, but wrap around
-> 
-> happens many time.
-> 
-> Therefore, as long as a larger buffer is allowed to exposed to the
-> user-space.
-> 
-> A chance is given to the user-space,  to go beyond of the bottom bound of
-> the actual active display area.
-> 
-> I not sure if this is intended, I feel it should not be allowable by
-> intuition.
+> Hm, no, sorry, I still do not see what exactly is missing from
+> dsa.yaml/port that you need to define here.
 
-Ah yes, thanks for the in-depth explanation. But I think we need a
-different fix, by also limiting y1. Otherwise for really big page sizes
-(64k on arm64 iirc) and really small screens (there's i2c panels with just
-a few lines) we might still run into the issue of y1 being too large.
+Nothing, I forgot defining either ref or type is enough.
 
-So we need to limit both y1 and y2. I think it's ok to let y1 == y2 slip
-through, since as you point out that's filtered later on.
-
-The userspace api is that we should expose the full fbdev buffer and allow
-writes into the entire thing. It's just that for the explicit upload with
-damage rects we need to make sure we're staying within the real buffer.
--Daniel
-
-> > > +	screen_size = sizes->surface_height * buffer->fb->pitches[0];
-> > > +
-> > >   	screen_buffer = vzalloc(screen_size);
-> > >   	if (!screen_buffer) {
-> > >   		ret = -ENOMEM;
-> > Cheers, Daniel
-> > 
-> > > -- 
-> > > 2.25.1
-> > > 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+ArÄ±nÃ§
