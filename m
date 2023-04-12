@@ -2,336 +2,552 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E14D6DEB94
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CFE6DEB9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDLGME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S229661AbjDLGOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDLGMC (ORCPT
+        with ESMTP id S229451AbjDLGO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:12:02 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B40EB8;
-        Tue, 11 Apr 2023 23:11:57 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 67E62320098D;
-        Wed, 12 Apr 2023 02:11:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 12 Apr 2023 02:11:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1681279914; x=1681366314; bh=zCoRdIQdFskgYUogzhttPcJGcLIA01hI0zS
-        eBw9jOCU=; b=eo533Ot7lRmqcZEL8ObL2+MSfER7jf09eXw4QLDooqU3aNtxa2r
-        ZlgN7fvgETD4/aW7goMoqjBz8RBoR3Oi5eFyxnEnKPhCt8qLNTx8Uhv1wSXtybvO
-        yMTJEStxO8TeBIXVGyXqvSyX8SJgxK2BB1GqVqQO9efXd1yn7kzsYO83xxYVUQO+
-        UqeW9K7zjsEbmVoSQ6lM0mRFMRC6NCJrromxVduIq4+HVVoxTcE+0ODVOEe1UHDI
-        s8c9xJhjh6DsCKXvcPLBeE3yXujPk/phns3475jtUDjy8lraolLFzdOoBsLculOH
-        A5fEcvTat4bY/ijURKUEPN3uFInnntgg8DQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1681279914; x=
-        1681366314; bh=zCoRdIQdFskgYUogzhttPcJGcLIA01hI0zSeBw9jOCU=; b=M
-        ErYJz1/Eqc2oAZXB348fVvGttNGyZAjICJhh1YgTsUcqhJbreLT6LXkpEyB19hEQ
-        hwrY6K832UtuRLZr1/7rnXA7q4kD04UeAlDSmtVVfH4daDB0Aw5Kl8Hz8ExfEgd9
-        mOC2rVonfaI+kFk53vhzehtUFnZseewUA1JWlqIGpclFWtdM0xFZ/GwyjM1zXfku
-        /StzUkdG65qbBPPvBagnYtR4+A62AteRSVaBOeg43ByhoY9j5Xok8rm2RDjfxRAh
-        tFSkULtLYNOpOTkrpdYmrzFhAYL3nnGkBIy8nr8DBswzFDt6jiTuqy98LkimAPjn
-        Oz0oHO90StMmvdqFqUkUg==
-X-ME-Sender: <xms:qUs2ZH4vtfzuzUtNmQEMaZJ-ZKNdUqP_93JWFPbsMqkjq5ecaEgYLg>
-    <xme:qUs2ZM6I7rXp3xZkHWBd3Gy49-iM_r4PJp9fJEDxzTUs7G_rfQH20mDGEpxQDgA3v
-    OiT7VzxC4XfAQ>
-X-ME-Received: <xmr:qUs2ZOerwX4lfl5jBwg6DG-iCERb2XdED_OMSdmN10OAgCDzE0arGvtN0ZpGt0x7VlHOcZn7i1qoYCQF4iCKd0dD8bKUWjRDa7d1Jw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekhedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeekvd
-    dtgeehffefffevhfeileetffduueeuueevheeugeekgfduhedugfehuefhfeenucffohhm
-    rghinhepfhhunhgtthhiohhnrghlihhthidrhihouhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:qUs2ZIInvwj1-a01h1tHCndtSyCiihyvC3DuA6vbVzTMGeG4ho-vHw>
-    <xmx:qUs2ZLJi_trDbJXNN9WE4U0HKGA32qUVy7sq3hXEsnoVLROF_5KIEQ>
-    <xmx:qUs2ZByO-qNh_2acgnCHL144OmIng7xLhMifBH6RdoXGVS6hek78Bg>
-    <xmx:qks2ZAAne9KqqHPma7R03WNLKUY0chS4FDRpIAHgFd3jdAen8mbipA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Apr 2023 02:11:52 -0400 (EDT)
-Date:   Wed, 12 Apr 2023 08:11:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <2023041238-hardcore-basil-c6d1@gregkh>
-References: <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
- <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
- <2023041131-boxy-excavator-1183@gregkh>
- <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
- <3879d287-81e0-5e25-8c58-f9554ce2303b@quicinc.com>
- <ZDWLRxkFjsGZazXD@phenom.ffwll.local>
- <19e3438f-8e85-9da4-cd9d-8fc19559abd7@quicinc.com>
- <ZDWlIuRHYPP1DeYi@phenom.ffwll.local>
- <086e08a2-13b3-870c-4b17-1fdc9d56d551@quicinc.com>
- <ZDWrLnWCzIrybHWB@phenom.ffwll.local>
+        Wed, 12 Apr 2023 02:14:29 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D2840D8;
+        Tue, 11 Apr 2023 23:14:27 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id F1D8924E208;
+        Wed, 12 Apr 2023 14:14:20 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 14:14:20 +0800
+Received: from [192.168.125.108] (113.72.145.176) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 14:14:19 +0800
+Message-ID: <89b1dab7-c7a1-4e99-e70d-1cd24b9e2654@starfivetech.com>
+Date:   Wed, 12 Apr 2023 14:14:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZDWrLnWCzIrybHWB@phenom.ffwll.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 6/7] usb: cdns3: add StarFive JH7110 USB driver.
+Content-Language: en-US
+To:     Peter Chen <peter.chen@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Mason Huo" <mason.huo@starfivetech.com>
+References: <20230406015216.27034-1-minda.chen@starfivetech.com>
+ <20230406015216.27034-7-minda.chen@starfivetech.com>
+ <20230411010157.GA2211844@nchen-desktop>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <20230411010157.GA2211844@nchen-desktop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 08:47:10PM +0200, Daniel Vetter wrote:
-> On Tue, Apr 11, 2023 at 12:37:23PM -0600, Jeffrey Hugo wrote:
-> > On 4/11/2023 12:21 PM, Daniel Vetter wrote:
-> > > On Tue, Apr 11, 2023 at 11:18:29AM -0600, Jeffrey Hugo wrote:
-> > > > On 4/11/2023 10:31 AM, Daniel Vetter wrote:
-> > > > > On Tue, Apr 11, 2023 at 09:29:27AM -0600, Jeffrey Hugo wrote:
-> > > > > > On 4/11/2023 9:26 AM, Jeffrey Hugo wrote:
-> > > > > > > On 4/11/2023 9:13 AM, Greg KH wrote:
-> > > > > > > > On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
-> > > > > > > > > On 4/11/2023 9:01 AM, Daniel Vetter wrote:
-> > > > > > > > > > On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
-> > > > > > > > > > > On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
-> > > > > > > > > > > > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
-> > > > > > > > > > > > > Hi all,
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > After merging the driver-core tree, today's linux-next build (x86_64
-> > > > > > > > > > > > > allmodconfig) failed like this:
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > In file included from include/linux/linkage.h:7,
-> > > > > > > > > > > > >                      from include/linux/kernel.h:17,
-> > > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
-> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function
-> > > > > > > > > > > > > 'mhi_qaic_ctrl_init':
-> > > > > > > > > > > > > include/linux/export.h:27:22: error: passing
-> > > > > > > > > > > > > argument 1 of 'class_create' from incompatible
-> > > > > > > > > > > > > pointer type
-> > > > > > > > > > > > > [-Werror=incompatible-pointer-types]
-> > > > > > > > > > > > >        27 | #define THIS_MODULE (&__this_module)
-> > > > > > > > > > > > >           |                     ~^~~~~~~~~~~~~~~
-> > > > > > > > > > > > >           |                      |
-> > > > > > > > > > > > >           |                      struct module *
-> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note:
-> > > > > > > > > > > > > in expansion of macro 'THIS_MODULE'
-> > > > > > > > > > > > >       544 |         mqc_dev_class =
-> > > > > > > > > > > > > class_create(THIS_MODULE,
-> > > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > > > > > > > > > >           |                                      ^~~~~~~~~~~
-> > > > > > > > > > > > > In file included from include/linux/device.h:31,
-> > > > > > > > > > > > >                      from include/linux/mhi.h:9,
-> > > > > > > > > > > > >                      from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
-> > > > > > > > > > > > > include/linux/device/class.h:229:54: note:
-> > > > > > > > > > > > > expected 'const char *' but argument is of type
-> > > > > > > > > > > > > 'struct module *'
-> > > > > > > > > > > > >       229 | struct class * __must_check
-> > > > > > > > > > > > > class_create(const char *name);
-> > > > > > > > > > > > >           |                                          ~~~~~~~~~~~~^~~~
-> > > > > > > > > > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25:
-> > > > > > > > > > > > > error: too many arguments to function
-> > > > > > > > > > > > > 'class_create'
-> > > > > > > > > > > > >       544 |         mqc_dev_class =
-> > > > > > > > > > > > > class_create(THIS_MODULE,
-> > > > > > > > > > > > > MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > > > > > > > > > >           |                         ^~~~~~~~~~~~
-> > > > > > > > > > > > > include/linux/device/class.h:229:29: note: declared here
-> > > > > > > > > > > > >       229 | struct class * __must_check
-> > > > > > > > > > > > > class_create(const char *name);
-> > > > > > > > > > > > >           |                             ^~~~~~~~~~~~
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > Caused by commit
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > >       1aaba11da9aa ("driver core: class: remove
-> > > > > > > > > > > > > module * from class_create()")
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > interacting with commit
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > >       566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > from the drm tree.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > I have applied the following merge fix patch for today.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > > > > > > > > > Date: Tue, 11 Apr 2023 14:16:57 +1000
-> > > > > > > > > > > > > Subject: [PATCH] fixup for "driver core: class:
-> > > > > > > > > > > > > remove module * from class_create()"
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > interacting with "accel/qaic: Add mhi_qaic_cntl"
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Thanks for the fixup. Since Dave is out I've made a
-> > > > > > > > > > > > note about this in my
-> > > > > > > > > > > > handover mail so it won't get lost in the drm-next
-> > > > > > > > > > > > merge window pull. I
-> > > > > > > > > > > > don't think we need any other coordination than
-> > > > > > > > > > > > mention it in each pull to
-> > > > > > > > > > > > Linus, topic tree seems overkill for this. Plus there's no way I can
-> > > > > > > > > > > > untangle the drm tree anyway :-).
-> > > > > > > > > > > 
-> > > > > > > > > > > Want me to submit a patch for the drm tree that moves this to use
-> > > > > > > > > > > class_register() instead, which will make the
-> > > > > > > > > > > merge/build issue go away
-> > > > > > > > > > > for you?  That's my long-term goal here anyway, so converting this new
-> > > > > > > > > > > code to this api today would be something I have to do eventually :)
-> > > > > > > > > > 
-> > > > > > > > > > We kinda closed drm-next for feature work mostly already (just pulling
-> > > > > > > > > > stuff in from subtrees), so won't really help for this merge window.
-> > > > > > > > > > 
-> > > > > > > > > > For everything else I think this is up to Oded, I had no
-> > > > > > > > > > idea qaic needed
-> > > > > > > > > > it's entire own dev class and I don't want to dig into this
-> > > > > > > > > > for the risk I
-> > > > > > > > > > might freak out :-)
-> > > > > > > > > > 
-> > > > > > > > > > Adding Oded.
-> > > > > > > > > > 
-> > > > > > > > > > Cheers, Daniel
-> > > > > > > > > 
-> > > > > > > > > Sorry for the mess.
-> > > > > > > > > 
-> > > > > > > > > I made a note to update to class_register() once my drm-misc access is
-> > > > > > > > > sorted out.  Looks like we'll address the conflict in the merge
-> > > > > > > > > window, and
-> > > > > > > > > catch the update to the new API in the following release.
-> > > > > > > > 
-> > > > > > > > Wait, I think the large question is, "why does this need a separate
-> > > > > > > > class"?  Why are you not using the accel char device and class?  That is
-> > > > > > > > what everything under accel/ should be using, otherwise why put it in
-> > > > > > > > there?
-> > > > > > > > 
-> > > > > > > > And what exactly are you using that class for?  Just device nodes?  If
-> > > > > > > > so, how many?
-> > > > > > > > 
-> > > > > > > > thanks,
-> > > > > > > > 
-> > > > > > > > greg k-h
-> > > > > > > 
-> > > > > > > 
-> > > > > > > Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed
-> > > > > > > out at the time that AIC100/QAIC would need the same functionality.
-> > > > > > > You/Jakub told myself/Mani/Loic that a combined implementation is not
-> > > > > > > acceptable, and every area needs to implement their own version of
-> > > > > > > MHI_UCI.
-> > > > > > > 
-> > > > > > > We took the WWAN subsystem and simplified it to meet our needs.
-> > > > > > > 
-> > > > > > > The functionality is QAIC specific, so wedging it into the Accel node
-> > > > > > > seems to be a poor fit as it would subject Habana and iVPU to the same.
-> > > > > > 
-> > > > > > Also, I forgot to mention.  QAIC is sharing userspace components with WWAN,
-> > > > > > so we really cannot diverge from what WWAN has done and define a new API
-> > > > > > through the Accel node.
-> > > > > 
-> > > > > So there is an accel/drm_device in the qaic driver, but there's also this
-> > > > > different class thing, which I don't get.
-> > > > > 
-> > > > > And yeah if that's an entirely orthogonal thing then I guess that should
-> > > > > be in a different driver/subsystem, all supported with the aux bus to
-> > > > > multiplex the underlying device.
-> > > > > 
-> > > > > I haven't found any explanation for what MHI is (or any of the other
-> > > > > acrynoms), so I'm entirely lost.
-> > > > 
-> > > > MHI is documented at Documentation/mhi/
-> > > > It is also referenced in the QAIC documentation - Documentation/accel/qaic/
-> > > > 
-> > > > It stands for "Modem Host Interface" (arguably a bad name now, but you can
-> > > > guess where it came from).  It is a Qualcomm hardware block and associated
-> > > > software protocol that provides logical channels over a hardware link.  Most
-> > > > commonly used for PCIe.
-> > > > 
-> > > > Pretty much any modern Qualcomm PCIe device implements it.  4G modems, 5G
-> > > > modems, Wifi adapters, AIC100, etc.  Instead of talking "PCIe", the host
-> > > > talks "MHI" to the devices in most cases.
-> > > > 
-> > > > The core implementation for MHI exists in drivers/bus/mhi
-> > > > 
-> > > > MHI_UCI is the MHI Userspace Character Interface.  It looked like most buses
-> > > > (eg USB) provide some direct device access to userspace.  MHI_UCI was
-> > > > formulated along those same lines - provide direct userspace access to a
-> > > > whitelist of channels.  Qualcomm provides some fairly extensive userspace
-> > > > utilities, and various communities have developed open source alternatives
-> > > > using this mechanism.
-> > > > 
-> > > > MHI_UCI was proposed to the community as the common driver (misc device) for
-> > > > all of the MHI devices.  The Net folks came along, saw that it was used for
-> > > > 4G/5G modems (Wireless Wide Area Network devices or WWAN) and decided that
-> > > > they would not tolerate a common implementation.  They NACK'd MHI_UCI and
-> > > > required that a WWAN specific subsystem be developed which would only
-> > > > service WWAN devices.  The Net folks decreed that other subsystems which
-> > > > needed the same functionality need to have their own copy of the
-> > > > implementation.
-> > > > 
-> > > > QAIC devices expose Sahara (a boot time protocol) which has an existing
-> > > > userspace that is also used with Modems, although it looks like WWAN doesn't
-> > > > currently support those generations of products today.  QAIC devices also
-> > > > support DIAG, which is currently supported in WWAN.  The intent was to add
-> > > > the QAIC support for DIAG at a later time since it is not required for the
-> > > > bare minimum viable driver.
-> > > > 
-> > > > So, QAIC devices support the same services, would use the same userspace,
-> > > > but can't use a common implementation because Jakub(net) doesn't want to
-> > > > share and convinced Greg to go along.  I'm not interested in pushing a cross
-> > > > tree fight (arguably already did that with MHI_UCI).  If neither Greg nor
-> > > > Net will accept a common implementation that accelerators can use (QAIC),
-> > > > then the only place I can fit this is in the Accel area.
-> > > > 
-> > > > Using aux bus seems to make little difference if QAIC is the only consumer
-> > > > of this.  I'm willing to refactor the implementation with some feedback and
-> > > > guidence, but the uAPI seems set in stone due to the existing userspace and
-> > > > WWAN (char devs with open/close/read/write/poll).
-> > > 
-> > > Ok, so MHI _is_ the bus. Thanks for the explainer, I should have searched
-> > > a bit more in Documentation/
-> > > 
-> > > > What would make you less unhappy?
-> > > 
-> > > The MHI generic userspace driver interface needs to be in drivers/bus/mhi,
-> > > not in a random driver. I think we should revert 566fc96198b4
-> > > ("accel/qaic: Add mhi_qaic_cntl") and re-land that through Greg's tree (or
-> > > wherever mhi patches go to). This of course assuming that the accel
-> > > userspace on top of the accel/drm_device does work stand-alone, and it's
-> > > just the tooling and other userspace that needs MHI_UCI. If we end with a
-> > > non-functional stack due to that, then I guess the entire driver is a bit
-> > > up for questions, because at least the accel runtime is supposed to just
-> > > run on top of the accel devnode and nothing else. Otherwise container
-> > > stuff gets really bad, among a lot of other things.
-> > > 
-> > 
-> > Looping in the MHI maintainer for your proposal.
-> > 
-> > The accel userspace can work without MHI_UCI.
-> > 
-> > The revert will be non-trivial so I'll look at posting that tomorrow.
+
+
+On 2023/4/11 9:01, Peter Chen wrote:
+> On 23-04-06 09:52:15, Minda Chen wrote:
+>> Adds Specific Glue layer to support USB peripherals on
+>> StarFive JH7110 SoC.
+>> There is a Cadence USB3 core for JH7110 SoCs, the cdns
+>> core is the child of this USB wrapper module device.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  MAINTAINERS                        |   7 +
+>>  drivers/usb/cdns3/Kconfig          |  11 +
+>>  drivers/usb/cdns3/Makefile         |   1 +
+>>  drivers/usb/cdns3/cdns3-starfive.c | 378 +++++++++++++++++++++++++++++
+>>  drivers/usb/cdns3/core.h           |   3 +
+>>  5 files changed, 400 insertions(+)
+>>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d98b70d62fd4..0610bbf921bb 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19977,6 +19977,13 @@ F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+>>  F:	drivers/phy/starfive/phy-jh7110-pcie.c
+>>  F:	drivers/phy/starfive/phy-jh7110-usb.c
+>>  
+>> +STARFIVE JH71X0 USB DRIVERS
+>> +M:	Emil Renner Berthing <kernel@esmil.dk>
+>> +M:	Minda Chen <minda.chen@starfivetech.com>
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> +F:	drivers/usb/cdns3/cdns3-starfive.c
+>> +
+>>  STATIC BRANCH/CALL
+>>  M:	Peter Zijlstra <peterz@infradead.org>
+>>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+>> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
+>> index b98ca0a1352a..0a514b591527 100644
+>> --- a/drivers/usb/cdns3/Kconfig
+>> +++ b/drivers/usb/cdns3/Kconfig
+>> @@ -78,6 +78,17 @@ config USB_CDNS3_IMX
+>>  
+>>  	  For example, imx8qm and imx8qxp.
+>>  
+>> +config USB_CDNS3_STARFIVE
+>> +	tristate "Cadence USB3 support on StarFive SoC platforms"
+>> +	depends on ARCH_STARFIVE || COMPILE_TEST
+>> +	help
+>> +	  Say 'Y' or 'M' here if you are building for StarFive SoCs
+>> +	  platforms that contain Cadence USB3 controller core.
+>> +
+>> +	  e.g. JH7110.
+>> +
+>> +	  If you choose to build this driver as module it will
+>> +	  be dynamically linked and module will be called cdns3-starfive.ko
+>>  endif
+>>  
+>>  if USB_CDNS_SUPPORT
+>> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
+>> index 61edb2f89276..48dfae75b5aa 100644
+>> --- a/drivers/usb/cdns3/Makefile
+>> +++ b/drivers/usb/cdns3/Makefile
+>> @@ -24,6 +24,7 @@ endif
+>>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)		+= cdns3-pci-wrap.o
+>>  obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
+>>  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
+>> +obj-$(CONFIG_USB_CDNS3_STARFIVE)		+= cdns3-starfive.o
+>>  
+>>  cdnsp-udc-pci-y					:= cdnsp-pci.o
+>>  
+>> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+>> new file mode 100644
+>> index 000000000000..925209a97bf9
+>> --- /dev/null
+>> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+>> @@ -0,0 +1,378 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/**
+>> + * cdns3-starfive.c - StarFive specific Glue layer for Cadence USB Controller
+>> + *
+>> + * Copyright (C) 2022 Starfive, Inc.
+>> + * Author:	Yanhong Wang <yanhong.wang@starfivetech.com>
+>> + * Author:	Mason Huo <mason.huo@starfivetech.com>
+>> + * Author:	Minda Chen <minda.chen@starfivetech.com>
+>> + */
+>> +
+>> +#include <linux/bits.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/io.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/reset.h>
+>> +#include <linux/usb/otg.h>
+>> +#include "core.h"
+>> +
+>> +#define USB_STRAP_HOST			BIT(17)
+>> +#define USB_STRAP_DEVICE		BIT(18)
+>> +#define USB_STRAP_MASK			GENMASK(18, 16)
+>> +
+>> +#define USB_SUSPENDM_HOST		BIT(19)
+>> +#define USB_SUSPENDM_MASK		BIT(19)
+>> +#define CDNS_IRQ_WAKEUP_INDEX		3
+>> +
+>> +struct cdns_starfive {
+>> +	struct device *dev;
+>> +	struct phy *usb2_phy;
+>> +	struct phy *usb3_phy;
+>> +	struct regmap *stg_syscon;
+>> +	struct reset_control *resets;
+>> +	struct clk_bulk_data *clks;
+>> +	int num_clks;
+>> +	enum phy_mode phy_mode;
+>> +	u32 stg_usb_mode;
+>> +};
+>> +
+>> +static int set_phy_power_on(struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = phy_power_on(data->usb2_phy);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = phy_power_on(data->usb3_phy);
+>> +	if (ret)
+>> +		phy_power_off(data->usb2_phy);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static void set_phy_power_off(struct cdns_starfive *data)
+>> +{
+>> +	phy_power_off(data->usb3_phy);
+>> +	phy_power_off(data->usb2_phy);
+>> +}
+>> +
+>> +static void cdns_mode_init(struct platform_device *pdev,
+>> +				struct cdns_starfive *data)
+>> +{
+>> +	enum usb_dr_mode mode;
+>> +
+>> +	mode = usb_get_dr_mode(&pdev->dev);
+>> +
+>> +	switch (mode) {
+>> +	case USB_DR_MODE_HOST:
+>> +		regmap_update_bits(data->stg_syscon,
+>> +			data->stg_usb_mode,
+>> +			USB_STRAP_MASK,
+>> +			USB_STRAP_HOST);
+>> +		regmap_update_bits(data->stg_syscon,
+>> +			data->stg_usb_mode,
+>> +			USB_SUSPENDM_MASK,
+>> +			USB_SUSPENDM_HOST);
+>> +		data->phy_mode = PHY_MODE_USB_HOST;
+>> +		break;
+>> +
+>> +	case USB_DR_MODE_PERIPHERAL:
+>> +		regmap_update_bits(data->stg_syscon, data->stg_usb_mode,
+>> +			USB_STRAP_MASK, USB_STRAP_DEVICE);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_usb_mode,
+>> +			USB_SUSPENDM_MASK, 0);
+>> +		data->phy_mode = PHY_MODE_USB_DEVICE;
+>> +		break;
+>> +
+>> +	case USB_DR_MODE_OTG:
+>> +		data->phy_mode = PHY_MODE_USB_OTG;
+>> +	default:
+>> +		break;
+>> +	}
+>> +}
+>> +
+>> +static int cdns_clk_rst_init(struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
+>> +	if (data->num_clks < 0)
+>> +		return dev_err_probe(data->dev, -ENODEV,
+>> +			"Failed to get clocks\n");
+>> +
+>> +	data->resets = devm_reset_control_array_get_exclusive(data->dev);
+>> +	if (IS_ERR(data->resets)) {
+>> +		return dev_err_probe(data->dev, PTR_ERR(data->resets),
+>> +			"Failed to get resets");
+>> +	}
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return dev_err_probe(data->dev, ret,
+>> +			"failed to enable clocks\n");
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret) {
+>> +		ret = dev_err_probe(data->dev, ret,
+>> +			"failed to reset clocks\n");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	return ret;
+>> +
+>> +err_clk_init:
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	return ret;
+>> +}
+>> +
+>> +static int cdns3_starfive_phy_init(struct device *dev, struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = phy_init(data->usb2_phy);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = phy_init(data->usb3_phy);
+>> +	if (ret)
+>> +		goto err_phy3_init;
+>> +
+>> +	ret = set_phy_power_on(data);
+>> +	if (ret)
+>> +		goto err_phy_power_on;
+>> +
+>> +	phy_set_mode(data->usb2_phy, data->phy_mode);
+>> +	phy_set_mode(data->usb3_phy, data->phy_mode);
+>> +
+>> +	return 0;
+>> +
+>> +err_phy_power_on:
+>> +	phy_exit(data->usb3_phy);
+>> +err_phy3_init:
+>> +	phy_exit(data->usb2_phy);
+>> +	return ret;
+>> +}
+>> +
+>> +static int cdns3_starfive_platform_device_add(struct platform_device *pdev,
+>> +		struct cdns_starfive *data)
+>> +{
+>> +	struct platform_device *cdns3;
+>> +	struct resource	cdns_res[CDNS_RESOURCES_NUM], *res;
+>> +	struct device *dev = &pdev->dev;
+>> +	const char *reg_name[CDNS_IOMEM_RESOURCES_NUM] = {"otg", "xhci", "dev"};
+>> +	const char *irq_name[CDNS_IRQ_RESOURCES_NUM] = {"host", "peripheral", "otg", "wakeup"};
+>> +	int i, ret, res_idx = 0;
+>> +
+>> +	cdns3 = platform_device_alloc("cdns-usb3", PLATFORM_DEVID_AUTO);
+>> +	if (!cdns3)
+>> +		return dev_err_probe(dev, -ENOMEM,
+>> +			"couldn't alloc cdns3 usb device\n");
+>> +
+>> +	cdns3->dev.parent = dev;
+>> +	memset(cdns_res, 0, sizeof(cdns_res));
+>> +
+>> +	for (i = 0; i < CDNS_IOMEM_RESOURCES_NUM; i++) {
+>> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, reg_name[i]);
+>> +		if (!res) {
+>> +			ret = dev_err_probe(dev,
+>> +				-ENXIO, "couldn't get %s reg resource\n", reg_name[i]);
+>> +			goto free_memory;
+>> +		}
+>> +		cdns_res[res_idx] = *res;
+>> +		res_idx++;
+>> +	}
+>> +
+>> +	for (i = 0; i < CDNS_IRQ_RESOURCES_NUM; i++) {
+>> +		if (i == CDNS_IRQ_WAKEUP_INDEX) {
+>> +			ret = platform_get_irq_byname_optional(pdev, irq_name[i]);
+>> +			if (ret < 0)
+>> +				continue;
+>> +		} else {
+>> +			ret = platform_get_irq_byname(pdev, irq_name[i]);
+>> +			if (ret < 0) {
+>> +				dev_err(dev, "couldn't get %s irq\n", irq_name[i]);
+>> +				goto free_memory;
+>> +			}
+>> +		}
+>> +		cdns_res[res_idx].start = ret;
+>> +		cdns_res[res_idx].end = ret;
+>> +		cdns_res[res_idx].flags = IORESOURCE_IRQ;
+>> +		cdns_res[res_idx].name = irq_name[i];
+>> +		res_idx++;
+>> +	}
+>> +
+>> +	ret = platform_device_add_resources(cdns3, cdns_res, res_idx);
+>> +	if (ret) {
+>> +		dev_err(dev, "couldn't add res to cdns3 device\n");
+>> +		goto free_memory;
+>> +	}
+>> +
+>> +	ret = platform_device_add(cdns3);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to register cdns3 device\n");
+>> +		goto free_memory;
+>> +	}
+>> +
+>> +	return ret;
+>> +free_memory:
+>> +	platform_device_put(cdns3);
+>> +	return ret;
+>> +}
+>> +
+>> +static int cdns_starfive_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct cdns_starfive *data;
+>> +	unsigned int args;
+>> +	int ret;
+>> +
+>> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	platform_set_drvdata(pdev, data);
+>> +
+>> +	data->dev = dev;
+>> +
+>> +	data->stg_syscon = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
+>> +		"starfive,stg-syscon", 1, &args);
+>> +
+>> +	if (IS_ERR(data->stg_syscon))
+>> +		return dev_err_probe(dev, PTR_ERR(data->stg_syscon),
+>> +			"Failed to parse starfive,stg-syscon\n");
+>> +
+>> +	data->stg_usb_mode = args;
+>> +
+>> +	cdns_mode_init(pdev, data);
+>> +
+>> +	ret = cdns_clk_rst_init(data);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	data->usb2_phy = devm_phy_optional_get(dev, "usb2-phy");
+>> +	if (IS_ERR(data->usb2_phy))
+>> +		return dev_err_probe(dev, PTR_ERR(data->usb2_phy),
+>> +			"Failed to parse usb2 phy\n");
+>> +
+>> +	data->usb3_phy = devm_phy_optional_get(dev, "usb3-phy");
+>> +	if (IS_ERR(data->usb3_phy))
+>> +		return dev_err_probe(dev, PTR_ERR(data->usb3_phy),
+>> +			"Failed to parse usb3 phy\n");
+>> +
 > 
-> Yeah if the full revert is invasive then could we just do a minimal one
-> that drops the various register_chrdev/class_create/device_create calls?
-> That avoids the conflict plus makes sure no uabi is registers for the
-> MHI_UCI. Anything else we can sort out later.
-
-That sounds reasonable to me, thanks!
-
-greg k-h
+> You may not change the comment for if above functions are failed, there
+> is not opposite functions for clk and reset.
+> 
+> Others are okay for me.
+> 
+> Peter
+> 
+OK, I will change this. Thank you very much.
+>> +	cdns3_starfive_phy_init(dev, data);
+>> +
+>> +	ret = cdns3_starfive_platform_device_add(pdev, data);
+>> +	if (ret) {
+>> +		set_phy_power_off(data);
+>> +		phy_exit(data->usb3_phy);
+>> +		phy_exit(data->usb2_phy);
+>> +		reset_control_assert(data->resets);
+>> +		clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +		return dev_err_probe(dev, ret, "Failed to create children\n");
+>> +	}
+>> +
+>> +	device_set_wakeup_capable(dev, true);
+>> +	pm_runtime_set_active(dev);
+>> +	pm_runtime_enable(dev);
+>> +
+>> +	dev_info(dev, "usb mode %d probe success\n", data->phy_mode);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_starfive_remove_core(struct device *dev, void *c)
+>> +{
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +
+>> +	platform_device_unregister(pdev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_starfive_remove(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +
+>> +	pm_runtime_get_sync(dev);
+>> +	device_for_each_child(dev, NULL, cdns_starfive_remove_core);
+>> +
+>> +	set_phy_power_off(data);
+>> +	phy_exit(data->usb2_phy);
+>> +	phy_exit(data->usb3_phy);
+>> +
+>> +	reset_control_assert(data->resets);
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_put_noidle(dev);
+>> +	platform_set_drvdata(pdev, NULL);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#ifdef CONFIG_PM
+>> +static int cdns_starfive_resume(struct device *dev)
+>> +{
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +	int ret;
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = cdns3_starfive_phy_init(dev, data);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int cdns_starfive_suspend(struct device *dev)
+>> +{
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +
+>> +	set_phy_power_off(data);
+>> +	phy_exit(data->usb2_phy);
+>> +	phy_exit(data->usb3_phy);
+>> +	reset_control_assert(data->resets);
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +
+>> +	return 0;
+>> +}
+>> +#endif
+>> +
+>> +static const struct dev_pm_ops cdns_starfive_pm_ops = {
+>> +	SET_RUNTIME_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume, NULL)
+>> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume)
+>> +};
+>> +
+>> +static const struct of_device_id cdns_starfive_of_match[] = {
+>> +	{ .compatible = "starfive,jh7110-usb", },
+>> +	{ /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
+>> +
+>> +static struct platform_driver cdns_starfive_driver = {
+>> +	.probe		= cdns_starfive_probe,
+>> +	.remove		= cdns_starfive_remove,
+>> +	.driver		= {
+>> +		.name	= "cdns3-starfive",
+>> +		.of_match_table	= cdns_starfive_of_match,
+>> +		.pm	= &cdns_starfive_pm_ops,
+>> +	},
+>> +};
+>> +module_platform_driver(cdns_starfive_driver);
+>> +
+>> +MODULE_ALIAS("platform:cdns3-starfive");
+>> +MODULE_AUTHOR("YanHong Wang <yanhong.wang@starfivetech.com>");
+>> +MODULE_AUTHOR("Mason Huo <mason.huo@starfivetech.com>");
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_DESCRIPTION("Cadence USB3 StarFive Glue Layer");
+>> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+>> index 2d332a788871..8d44ab504898 100644
+>> --- a/drivers/usb/cdns3/core.h
+>> +++ b/drivers/usb/cdns3/core.h
+>> @@ -38,6 +38,9 @@ struct cdns_role_driver {
+>>  };
+>>  
+>>  #define CDNS_XHCI_RESOURCES_NUM	2
+>> +#define CDNS_IOMEM_RESOURCES_NUM	3
+>> +#define CDNS_IRQ_RESOURCES_NUM		4
+>> +#define CDNS_RESOURCES_NUM	(CDNS_IOMEM_RESOURCES_NUM + CDNS_IRQ_RESOURCES_NUM)
+>>  
+>>  struct cdns3_platform_data {
+>>  	int (*platform_suspend)(struct device *dev,
+>> -- 
+>> 2.17.1
+>> 
+> 
