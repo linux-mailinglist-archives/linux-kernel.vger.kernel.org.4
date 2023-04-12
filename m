@@ -2,199 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FB76DF762
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9DE6DF773
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjDLNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S230143AbjDLNkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDLNiE (ORCPT
+        with ESMTP id S229565AbjDLNkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:38:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719491709;
-        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
+        Wed, 12 Apr 2023 09:40:21 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6029005;
+        Wed, 12 Apr 2023 06:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681306682; x=1712842682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pnUjDJ/xUCsHQjHZB7cPemWJJbBm5AuX1hvD8ONxtnY=;
-  b=BdkbXRm6HE3LEU7IkzTiyAOuUWq64mFlkicXZOFDUDqfw2AbzjIRlldq
-   R5OcaMj/05R1c0mCwLLMl9AoGdXq8oa/6+hL5+cxQfkKpQouGlg6gk/bg
-   icttqWGOlAo0UKLFb655agU+YiIldiURQ3Uyamou0IbQB701iRAndcTco
-   kEaY7Qqe2Fzwh7Jk66AW3DI+1SQ/sz87gUpdZlIWBsuq42B01K8YOQCgt
-   2RHiKBc5m5DCdCej3lvR8m9cMY5Ig4NyDO78CrTCZ9D2xvmv92wDbpvdJ
-   7LBWi/P8bZJIIV8dLlXnDVPUcxeiiTv2vRJr9oGrO2ENQQyUlqPTaV+bI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323520851"
+  t=1681306796; x=1712842796;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4GCFBR6AvRzdkg82R+k92xqDhMfr7gxMVkai6zQEA5c=;
+  b=nA3QXfUIg45/qb6gt/NXWQyG7fhozk1cfjwFrMD9wFj61Jlcf0l80S2s
+   +TmHeHlUK09hal93ZTd9tjk+kmib6znejLXmgLW7LDA8efLBE8VpPF/m/
+   INeLaMIaL/D/yrtLt6naB5pLi5fbvAMhYlZjDVU+K2mrOyWOwyF5CranF
+   e5R1fnvvd4Fx95BgZ/bPXJOSfEHrXQpfW7y2Y1p0Y1/nuzQ9sMVyobTn7
+   VxXxMw6BbcF4up4V1tkVQ7o7mgVZwDp2HE6gEaC0p8xjumTMEjuYjYHOD
+   AgKahtzXSReYXsZRZI+lx6EIZ7jYU1eOelOTpSKkX36Pseq6JAf7bOgmF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="341390508"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="323520851"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:38:01 -0700
+   d="scan'208";a="341390508"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:39:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="1018745687"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639232458"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="1018745687"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2023 06:37:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pmafc-00FxVI-2F;
-        Wed, 12 Apr 2023 16:37:56 +0300
-Date:   Wed, 12 Apr 2023 16:37:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: Re: [RFC PATCH 2/2] iio: light: Add support for APDS9306 Light Sensor
-Message-ID: <ZDa0NIot/4aRJ0pI@smile.fi.intel.com>
-References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
- <20230411011203.5013-3-subhajit.ghosh@tweaklogic.com>
- <ZDVWB9xV9Cdbwyqd@smile.fi.intel.com>
- <ab1d9746-4d23-efcc-0ee1-d2b8c634becd@tweaklogic.com>
+   d="scan'208";a="639232458"
+Received: from amlin-018-114.igk.intel.com ([10.102.18.114])
+  by orsmga003.jf.intel.com with ESMTP; 12 Apr 2023 06:39:52 -0700
+From:   Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+To:     jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Subject: [RFC PATCH v1] ice: add CGU info to devlink info callback
+Date:   Wed, 12 Apr 2023 15:38:11 +0200
+Message-Id: <20230412133811.2518336-1-arkadiusz.kubalewski@intel.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab1d9746-4d23-efcc-0ee1-d2b8c634becd@tweaklogic.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:29:15PM +0800, Subhajit Ghosh wrote:
+If Clock Generation Unit and dplls are present on NIC board user shall
+know its details.
+Provide the devlink info callback with a new:
+- fixed type object `cgu.id` - hardware variant of onboard CGU
+- running type object `fw.cgu` - CGU firmware version
+- running type object `fw.cgu.build` - CGU configuration build version
 
-...
+These information shall be known for debugging purposes.
 
-> > > +static const struct regmap_config apds9306_regmap = {
-> > > +	.name = "apds9306_regmap",
-> > > +	.reg_bits = 8,
-> > > +	.val_bits = 8,
-> > > +	.rd_table = &apds9306_readable_table,
-> > > +	.wr_table = &apds9306_writable_table,
-> > > +	.volatile_table = &apds9306_volatile_table,
-> > > +	.precious_table = &apds9306_precious_table,
-> > > +	.max_register = APDS9306_ALS_THRES_VAR,
-> > > +	.cache_type = REGCACHE_RBTREE,
-> > 
-> > Do you need an internal regmap lock? If so, why?
-> For event interface - interrupt enable, adaptive interrupt enable,
-> upper and lower threshold values, selection of clear or als
-> channels for interrupt, the mutex in the driver's private data structure
-> is not used.
-> I thought to use the regmap's internal locking mechanism for
-> mutual exclusion as the values are directly written to or read from
-> the device registers form the write_event(), read_event(),
-> write_event_config() and read_event_config().
-> What do you think?
+Test (on NIC board with CGU)
+$ devlink dev info <bus_name>/<dev_name> | grep cgu
+        cgu.id 8032
+        fw.cgu 6021
+        fw.cgu.build 0x1030001
 
-I didn't get. If you have a sequence of registers to be read/write/modified/etc
-in IRQ handler and/or elsewhere and at the same time in IRQ or elsewhere you
-have even a single IO access to the hardware you have to be sure that the IO
-ordering has no side effects. regmap API does not guarantee that. It only works
-on a simple read/write/modify of a _single_ register, or a coupled group of
-registers (like bulk ops), if your case is sparse, you on your own and probably
-lucky enough not to have an issue during the testing. So, take your time and
-think more about what you are doing in the driver and what locking schema
-should take place.
+Test (on NIC board without CGU)
+$ devlink dev info <bus_name>/<dev_name> | grep cgu -c
+0
 
-...
+Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+---
+ Documentation/networking/devlink/ice.rst     | 14 +++++++++
+ drivers/net/ethernet/intel/ice/ice_devlink.c | 30 ++++++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_main.c    |  5 +++-
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c  | 12 ++++----
+ drivers/net/ethernet/intel/ice/ice_type.h    |  9 +++++-
+ 5 files changed, 62 insertions(+), 8 deletions(-)
 
-> > > +static int apds9306_power_state(struct apds9306_data *data,
-> > > +		enum apds9306_power_states state)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	/* Reset not included as it causes ugly I2C bus error */
-> > > +	switch (state) {
-> > > +	case standby:
-> > > +		return regmap_field_write(data->regfield_en, 0);
-> > > +	case active:
-> > > +		ret = regmap_field_write(data->regfield_en, 1);
-> > > +		if (ret)
-> > > +			return ret;
-> > > +		/* 5ms wake up time */
-> > > +		usleep_range(5000, 10000);
-> > > +		break;
-> > > +	default:
-> > > +		return -EINVAL;
-> > > +	}
-> > 
-> > > +	return 0;
-> > 
-> > Move that to a single user of this line inside the switch-case.
-> Sorry, I did not get you. Can you please elaborate?
-
-The user of this return is only one case in the switch. Instead of breaking
-the switch-case, just move this return statement to there.
-
-...
-
-> > > +	struct device *dev = &data->client->dev;
-> > 
-> > Why data contains I²C client pointer, what for?
-> I copied the implementation. It will be re-implemented.
-
-I mean, how client pointer is used in comparison to the plain pointer to the
-generic device object.
-
-...
-
-> > > +		while (retries--) {
-> > > +			ret = regmap_read(data->regmap, APDS9306_MAIN_STATUS,
-> > > +					&status);
-> > > +			if (ret) {
-> > > +				dev_err(dev, "read status failed: %d\n", ret);
-> > > +				return ret;
-> > > +			}
-> > > +			if (status & APDS9306_ALS_DATA_STAT_MASK)
-> > > +				break;
-> > > +			/*
-> > > +			 * In case of continuous one-shot read from userspace,
-> > > +			 * new data is available after sampling period.
-> > > +			 * Delays are in the range of 25ms to 2secs.
-> > > +			 */
-> > > +			fsleep(delay);
-> > > +		}
-> > 
-> > regmap_read_poll_timeout().
-> According to the regmap_read_poll_timeout() documentation, the maximum time
-> to sleep between reads should be less than ~20ms as it uses usleep_range().
-> 
-> If userspace is doing continuous reads, then data is available after sampling
-> period (25ms to 2sec) or integration time (3.125ms to 400ms) whichever is
-> greater.
-> 
-> The runtime_suspend() function is called after 5 seconds, so the device is
-> still active and running.
-> 
-> If the ALS data bit is not set in status reg, it is efficient to sleep for
-> one sampling period rather than continuously checking the status reg
-> within ~20ms if we use regmap_read_poll_timeout().
-> 
-> Do you have any suggestions?
-
-Yes, Use proposed API. It takes _two_ timeout parameters, one of which is the
-same as your delay. You may actually resplit it by multiplying retries and
-decreasing delay to satisfy the regmap_read_poll_timeout() recommendation.
-
+diff --git a/Documentation/networking/devlink/ice.rst b/Documentation/networking/devlink/ice.rst
+index 10f282c2117c..3a54421c503d 100644
+--- a/Documentation/networking/devlink/ice.rst
++++ b/Documentation/networking/devlink/ice.rst
+@@ -23,6 +23,11 @@ The ``ice`` driver reports the following versions
+       - fixed
+       - K65390-000
+       - The Product Board Assembly (PBA) identifier of the board.
++    * - ``cgu.id``
++      - fixed
++      - 8032
++      - The Clock Generation Unit (CGU) hardware version identifier on the
++        board.
+     * - ``fw.mgmt``
+       - running
+       - 2.1.7
+@@ -89,6 +94,15 @@ The ``ice`` driver reports the following versions
+       - running
+       - 0xee16ced7
+       - The first 4 bytes of the hash of the netlist module contents.
++    * - ``fw.cgu``
++      - running
++      - 6021
++      - Version of Clock Generation Unit (CGU) firmware.
++    * - ``fw.cgu.build``
++      - running
++      - 0x1030001
++      - Version of Clock Generation Unit (CGU) firmware configuration build.
++
+ 
+ Flash Update
+ ============
+diff --git a/drivers/net/ethernet/intel/ice/ice_devlink.c b/drivers/net/ethernet/intel/ice/ice_devlink.c
+index bc44cc220818..06fe895739af 100644
+--- a/drivers/net/ethernet/intel/ice/ice_devlink.c
++++ b/drivers/net/ethernet/intel/ice/ice_devlink.c
+@@ -193,6 +193,33 @@ ice_info_pending_netlist_build(struct ice_pf __always_unused *pf,
+ 		snprintf(ctx->buf, sizeof(ctx->buf), "0x%08x", netlist->hash);
+ }
+ 
++static void ice_info_cgu_id(struct ice_pf *pf, struct ice_info_ctx *ctx)
++{
++	if (ice_is_feature_supported(pf, ICE_F_CGU)) {
++		struct ice_hw *hw = &pf->hw;
++
++		snprintf(ctx->buf, sizeof(ctx->buf), "%u", hw->cgu.id);
++	}
++}
++
++static void ice_info_cgu_fw_version(struct ice_pf *pf, struct ice_info_ctx *ctx)
++{
++	if (ice_is_feature_supported(pf, ICE_F_CGU)) {
++		struct ice_hw *hw = &pf->hw;
++
++		snprintf(ctx->buf, sizeof(ctx->buf), "%u", hw->cgu.fw_ver);
++	}
++}
++
++static void ice_info_cgu_fw_build(struct ice_pf *pf, struct ice_info_ctx *ctx)
++{
++	if (ice_is_feature_supported(pf, ICE_F_CGU)) {
++		struct ice_hw *hw = &pf->hw;
++
++		snprintf(ctx->buf, sizeof(ctx->buf), "0x%x", hw->cgu.cfg_ver);
++	}
++}
++
+ #define fixed(key, getter) { ICE_VERSION_FIXED, key, getter, NULL }
+ #define running(key, getter) { ICE_VERSION_RUNNING, key, getter, NULL }
+ #define stored(key, getter, fallback) { ICE_VERSION_STORED, key, getter, fallback }
+@@ -224,6 +251,7 @@ static const struct ice_devlink_version {
+ 	void (*fallback)(struct ice_pf *pf, struct ice_info_ctx *ctx);
+ } ice_devlink_versions[] = {
+ 	fixed(DEVLINK_INFO_VERSION_GENERIC_BOARD_ID, ice_info_pba),
++	fixed("cgu.id", ice_info_cgu_id),
+ 	running(DEVLINK_INFO_VERSION_GENERIC_FW_MGMT, ice_info_fw_mgmt),
+ 	running("fw.mgmt.api", ice_info_fw_api),
+ 	running("fw.mgmt.build", ice_info_fw_build),
+@@ -235,6 +263,8 @@ static const struct ice_devlink_version {
+ 	running("fw.app.bundle_id", ice_info_ddp_pkg_bundle_id),
+ 	combined("fw.netlist", ice_info_netlist_ver, ice_info_pending_netlist_ver),
+ 	combined("fw.netlist.build", ice_info_netlist_build, ice_info_pending_netlist_build),
++	running("fw.cgu", ice_info_cgu_fw_version),
++	running("fw.cgu.build", ice_info_cgu_fw_build),
+ };
+ 
+ /**
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 6b28b95a7254..a3adc03bdd0a 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -4822,8 +4822,11 @@ static void ice_init_features(struct ice_pf *pf)
+ 		ice_gnss_init(pf);
+ 
+ 	if (ice_is_feature_supported(pf, ICE_F_CGU) ||
+-	    ice_is_feature_supported(pf, ICE_F_PHY_RCLK))
++	    ice_is_feature_supported(pf, ICE_F_PHY_RCLK)) {
++		ice_aq_get_cgu_info(&pf->hw, &pf->hw.cgu.id,
++				    &pf->hw.cgu.cfg_ver, &pf->hw.cgu.fw_ver);
+ 		ice_dpll_init(pf);
++	}
+ 
+ 	/* Note: Flow director init failure is non-fatal to load */
+ 	if (ice_init_fdir(pf))
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp_hw.c b/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
+index 39b692945f73..90c1cc1e4401 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp_hw.c
+@@ -3481,13 +3481,13 @@ bool ice_is_cgu_present(struct ice_hw *hw)
+ 	if (!ice_find_netlist_node(hw, ICE_AQC_LINK_TOPO_NODE_TYPE_CLK_CTRL,
+ 				   ICE_ACQ_GET_LINK_TOPO_NODE_NR_ZL30632_80032,
+ 				   NULL)) {
+-		hw->cgu_part_number = ICE_ACQ_GET_LINK_TOPO_NODE_NR_ZL30632_80032;
++		hw->cgu.part_number = ICE_ACQ_GET_LINK_TOPO_NODE_NR_ZL30632_80032;
+ 		return true;
+ 	} else if (!ice_find_netlist_node(hw,
+ 					  ICE_AQC_LINK_TOPO_NODE_TYPE_CLK_CTRL,
+ 					  ICE_ACQ_GET_LINK_TOPO_NODE_NR_SI5383_5384,
+ 					  NULL)) {
+-		hw->cgu_part_number = ICE_ACQ_GET_LINK_TOPO_NODE_NR_SI5383_5384;
++		hw->cgu.part_number = ICE_ACQ_GET_LINK_TOPO_NODE_NR_SI5383_5384;
+ 		return true;
+ 	}
+ 
+@@ -3507,7 +3507,7 @@ ice_cgu_get_pin_desc_e823(struct ice_hw *hw, bool input, int *size)
+ {
+ 	static const struct ice_cgu_pin_desc *t;
+ 
+-	if (hw->cgu_part_number ==
++	if (hw->cgu.part_number ==
+ 	    ICE_ACQ_GET_LINK_TOPO_NODE_NR_ZL30632_80032) {
+ 		if (input) {
+ 			t = ice_e823_zl_cgu_inputs;
+@@ -3516,7 +3516,7 @@ ice_cgu_get_pin_desc_e823(struct ice_hw *hw, bool input, int *size)
+ 			t = ice_e823_zl_cgu_outputs;
+ 			*size = ARRAY_SIZE(ice_e823_zl_cgu_outputs);
+ 		}
+-	} else if (hw->cgu_part_number ==
++	} else if (hw->cgu.part_number ==
+ 		   ICE_ACQ_GET_LINK_TOPO_NODE_NR_SI5383_5384) {
+ 		if (input) {
+ 			t = ice_e823_si_cgu_inputs;
+@@ -3778,10 +3778,10 @@ int ice_get_cgu_rclk_pin_info(struct ice_hw *hw, u8 *base_idx, u8 *pin_num)
+ 	case ICE_DEV_ID_E823C_SGMII:
+ 		*pin_num = ICE_E822_RCLK_PINS_NUM;
+ 		ret = 0;
+-		if (hw->cgu_part_number ==
++		if (hw->cgu.part_number ==
+ 		    ICE_ACQ_GET_LINK_TOPO_NODE_NR_ZL30632_80032)
+ 			*base_idx = ZL_REF1P;
+-		else if (hw->cgu_part_number ==
++		else if (hw->cgu.part_number ==
+ 			 ICE_ACQ_GET_LINK_TOPO_NODE_NR_SI5383_5384)
+ 			*base_idx = SI_REF1P;
+ 		else
+diff --git a/drivers/net/ethernet/intel/ice/ice_type.h b/drivers/net/ethernet/intel/ice/ice_type.h
+index 128bc4d326f9..814166d959ee 100644
+--- a/drivers/net/ethernet/intel/ice/ice_type.h
++++ b/drivers/net/ethernet/intel/ice/ice_type.h
+@@ -820,6 +820,13 @@ struct ice_mbx_data {
+ 	u16 async_watermark_val;
+ };
+ 
++struct ice_cgu_info {
++	u32 id;
++	u32 cfg_ver;
++	u32 fw_ver;
++	u8 part_number;
++};
++
+ /* Port hardware description */
+ struct ice_hw {
+ 	u8 __iomem *hw_addr;
+@@ -963,7 +970,7 @@ struct ice_hw {
+ 	DECLARE_BITMAP(hw_ptype, ICE_FLOW_PTYPE_MAX);
+ 	u8 dvm_ena;
+ 	u16 io_expander_handle;
+-	u8 cgu_part_number;
++	struct ice_cgu_info cgu;
+ };
+ 
+ /* Statistics collected by each port, VSI, VEB, and S-channel */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.31.1
 
