@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB18A6DEBD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC7C6DEBDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjDLGdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S229752AbjDLGg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjDLGdM (ORCPT
+        with ESMTP id S229531AbjDLGgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:33:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ECE59FA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681281140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYkU2h5uuqeCAix2xVoQ4YssyuBrvdvQQLmL8KGrxsM=;
-        b=UUCwMGadrki5JWKlGDd5YjsjNgtVCTlnEpCZt6j+HLOJjofGhPeyd2f4mk6t3iGow0CjMe
-        ctdATfOLqFNk3wIFeRSF2Amgv5hpoMJsQx+LQ8Renv/oCF00vf8nWjF5RAtZpg/1fhBbrQ
-        qKxHSLFai7Q4MAeJVMnbPDj+25CDEJY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-9vvyyCxoNmikpa99EVdNig-1; Wed, 12 Apr 2023 02:32:19 -0400
-X-MC-Unique: 9vvyyCxoNmikpa99EVdNig-1
-Received: by mail-wr1-f70.google.com with SMTP id v20-20020adfa1d4000000b002f3dee3d83dso422646wrv.16
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 23:32:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681281137; x=1683873137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iYkU2h5uuqeCAix2xVoQ4YssyuBrvdvQQLmL8KGrxsM=;
-        b=7abKxGcYGJK8lG1NZurgyNzyGORwu1TaoE05dG65le5W03Ed5vTcGh/2DLY6zgyhUU
-         YqOgjm2UprCNFdzcAZyc1P1GYWIwzd6uNb+5NZqDPNOR/zgwnop90XDhmUk7qqCzmWYG
-         ssnIKJ4qSUWgje+p57tCzL9Et9qwSjhKzuLKsTSJHpkcobV0UR7i+mP/KjLemIWYp8Uh
-         EaJgmsPNuLYhNFicDRpjXuiwpDkmKExupkxTQC0OvSTdz3TDwxQ/Z6zpJsfrJYEif+e0
-         TfZyidxOd2BoRFkxb4d1q+S/p0UiasIN0d7aL3J11Kc7E2jmXn9m1D9zl97OO3ny3LFz
-         wNWA==
-X-Gm-Message-State: AAQBX9cr1qFOHu2bvh6OVKfwQC54UnEDu6pQy/BMtg4ZcsPrWaYPfK1C
-        JeJwxHEfM+58cvyiR70OYJs56c0+rxzKjoYtlVPmWgmQ96ZQLiIIVkoVs7WVaHiQn7xg1sVdhff
-        1FX1KsAqsOMeHQfLJPw17wpi+WFm1tYunZEbwxBlJS0dDNw9b89Y2bQ==
-X-Received: by 2002:a5d:4f0e:0:b0:2ef:b5e1:f6f9 with SMTP id c14-20020a5d4f0e000000b002efb5e1f6f9mr1138577wru.8.1681281137429;
-        Tue, 11 Apr 2023 23:32:17 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bq+8zhP15Uz7cAyV/Z2wcK+XlbYPBXQnmfbUh0oOiNvYPBIB4YmU5DtGfzZWjmjnceIOMDqjcTSn3ph7ZNmlE=
-X-Received: by 2002:a5d:4f0e:0:b0:2ef:b5e1:f6f9 with SMTP id
- c14-20020a5d4f0e000000b002efb5e1f6f9mr1138568wru.8.1681281137152; Tue, 11 Apr
- 2023 23:32:17 -0700 (PDT)
+        Wed, 12 Apr 2023 02:36:25 -0400
+Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F633ABC;
+        Tue, 11 Apr 2023 23:36:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1681281325; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=NzNsS2/s3ggnwdPWs1LT1U+940QyJQEdBkHx0dCsnjPz1KBi7d4NTZAasmT3tLnPa+Am25P2OwTCyCAKqYe+YMlHPqVRLX61kNWdj+61YxabCcwQz1GsRUAYHW8Q4Hzb47Y+JeugfaNS0TgjKa1iLS0qw+I0w6/RcVfJxqyG8dY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1681281325; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=LEPnkj3K1wy0jHie1VObqUDSJC9LSEQ73vz8Z00XgD0=; 
+        b=NFPMMlxwi55dTwuno7s0louUyiFElGrer1GCtOs4Z1b0v3l6RfLjXZ3HJx+igRLHwDDcpoqikt/4B8E2Llb7oFwMarCR/xkytcY+bisyF1+JSVwj0cOBkowX0tcaYulepKxcYPY/PlXf46OI9v9DdB2wpPpG51ZJYY1dZe+IWZ4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1681281325;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=LEPnkj3K1wy0jHie1VObqUDSJC9LSEQ73vz8Z00XgD0=;
+        b=NNUBrGUY6C7wCC+qOZuWYV6rK5n64CAhWSXych0nyGxMe8E5e8P78jdNgvtPnG2P
+        5i5rRZTTVGzyNA3Iu4nLT02MLqYiGwSnGFecbKpRUnIMKCzLflx1FipEtnOjChH9jr4
+        pUcT9O+5qiginxdpOjCjKPOcDFRhbXkJZLrRnueM=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1681281322643174.6545830352395; Tue, 11 Apr 2023 23:35:22 -0700 (PDT)
+Message-ID: <781d4288-f7c6-f3e6-a132-77bff41880c7@arinc9.com>
+Date:   Wed, 12 Apr 2023 09:35:15 +0300
 MIME-Version: 1.0
-References: <20230410150130.837691-1-lulu@redhat.com> <CACGkMEvTdgvqacFmMJZD4u++YJwESgSmLF6CMdAJBBqkxpZKgg@mail.gmail.com>
- <CACLfguWKw68=wZNa7Ga+Jm8xTE93A_5za3Dc=S_z7ds9FCkRKg@mail.gmail.com> <CACGkMEv3aca0Thx+X3WZxbV2HK7514G3RzR+A0PqRu7k6Deztg@mail.gmail.com>
-In-Reply-To: <CACGkMEv3aca0Thx+X3WZxbV2HK7514G3RzR+A0PqRu7k6Deztg@mail.gmail.com>
-From:   Cindy Lu <lulu@redhat.com>
-Date:   Wed, 12 Apr 2023 14:31:38 +0800
-Message-ID: <CACLfguXBeodQ=b-RAQ4JsaSnjS_ZNutr2nbunmdv1S8Gxz8gfg@mail.gmail.com>
-Subject: Re: [PATCH] vhost_vdpa: fix unmap process in no-batch mode
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v2 net-next 06/14] net: dsa: mt7530: do not set CPU
+ port interfaces to PHY_INTERFACE_MODE_NA
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230407134626.47928-1-arinc.unal@arinc9.com>
+ <20230407134626.47928-7-arinc.unal@arinc9.com>
+ <20230411145416.kovyu3wb3dhtgbl4@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230411145416.kovyu3wb3dhtgbl4@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,104 +82,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 5:14=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
-ote:
->
-> On Tue, Apr 11, 2023 at 3:29=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote:
-> >
-> > On Tue, Apr 11, 2023 at 11:10=E2=80=AFAM Jason Wang <jasowang@redhat.co=
-m> wrote:
-> > >
-> > > On Mon, Apr 10, 2023 at 11:01=E2=80=AFPM Cindy Lu <lulu@redhat.com> w=
-rote:
-> > > >
-> > > > While using the no-batch mode, the process will not begin with
-> > > > VHOST_IOTLB_BATCH_BEGIN, so we need to add the
-> > > > VHOST_IOTLB_INVALIDATE to get vhost_vdpa_as, the process is the
-> > > > same as VHOST_IOTLB_UPDATE
-> > > >
-> > > > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > > > ---
-> > > >  drivers/vhost/vdpa.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > > index 7be9d9d8f01c..32636a02a0ab 100644
-> > > > --- a/drivers/vhost/vdpa.c
-> > > > +++ b/drivers/vhost/vdpa.c
-> > > > @@ -1074,6 +1074,7 @@ static int vhost_vdpa_process_iotlb_msg(struc=
-t vhost_dev *dev, u32 asid,
-> > > >                 goto unlock;
-> > > >
-> > > >         if (msg->type =3D=3D VHOST_IOTLB_UPDATE ||
-> > > > +           msg->type =3D=3D VHOST_IOTLB_INVALIDATE ||
-> > >
-> > > I'm not sure I get here, invalidation doesn't need to create a new AS=
-.
-> > >
-> > > Or maybe you can post the userspace code that can trigger this issue?
-> > >
-> > > Thanks
-> > >
-> > sorry I didn't write it clearly
-> > For this issue can reproduce in vIOMMU no-batch mode support because
-> > while the vIOMMU enabled, it will
-> > flash a large memory to unmap, and this memory are haven't been mapped
-> > before, so this unmapping will fail
-> >
-> > qemu-system-x86_64: failed to write, fd=3D12, errno=3D14 (Bad address)
-> > qemu-system-x86_64: vhost_vdpa_dma_unmap(0x7fa26d1dd190, 0x0,
-> > 0x80000000) =3D -5 (Bad address)
->
-> So if this is a simple unmap, which error condition had you met in
-> vhost_vdpa_process_iotlb_msg()?
->
-> I think you need to trace to see what happens. For example:
->
-this happens when vIOMMU enable and vdpa binds to vfio-pci run testpmd
-the qemu will unmapped whole memory that was used and then mapped the
-iommu MR section
-This memory much larger than the memory mapped to vdpa(this is what
-actually mapped to
-vdpa device in no-iommu MR)
+On 11.04.2023 17:54, Vladimir Oltean wrote:
+> On Fri, Apr 07, 2023 at 04:46:18PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> There is no need to set priv->p5_interface and priv->p6_interface to
+>> PHY_INTERFACE_MODE_NA on mt7530_setup() and mt7531_setup().
+>>
+>> As Vladimir explained, in include/linux/phy.h we have:
+>>
+>> Therefore, do not put 0 into a variable containing 0.
+> 
+> The explanation is unnecessarily long. I only provided it to make sure
+> you understand.
 
-> 1) can the code pass asid_to_iotlb()
-> 2) if not, ASID 0 has been deleted since all the mappings have been unmap=
-ped
->
-> if ASID 0 has been completely unmap, any reason we need to unmap it
-> again? And do we need to drop the vhost_vdpa_remove_as() from both
->
+I don't see a problem with a bit of verbosity on the patch log. It 
+should make the reader understand the code path better.
 
-> 1) vhost_vdpa_unmap()
-> and
-> 2) vhost_vdpa_process_iotlb_msg()
-> ?
->
-> Thanks
->
-the code passed the asid_to_iotlb(), The iotlb is NULL at this situation
-and the vhost_vdpa_process_iotlb_msg will return fail. this will cause
-the mapping
- in qemu fail
-
-thanks
-cindy
-
-> > qemu-system-x86_64: failed to write, fd=3D12, errno=3D14 (Bad address)
-> > ....
-> > in batch mode this operation will begin with VHOST_IOTLB_BATCH_BEGIN,
-> > so don't have this issue
-> >
-> > Thanks
-> > cindy
-> > > >             msg->type =3D=3D VHOST_IOTLB_BATCH_BEGIN) {
-> > > >                 as =3D vhost_vdpa_find_alloc_as(v, asid);
-> > > >                 if (!as) {
-> > > > --
-> > > > 2.34.3
-> > > >
-> > >
-> >
->
-
+Arınç
