@@ -2,134 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0706DFB8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F6F6DFB82
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjDLQmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S230136AbjDLQji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDLQmP (ORCPT
+        with ESMTP id S229612AbjDLQjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:42:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06398268B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=09jtKKMdBkZ99/jQ3MHG3Gpu4kZKeE61xD5S9ADSCnE=;
-        b=QQL4bDt5LMYcrAWuj9OeLBN47vVfL3HJybzVJlLa9Ru7R8oPNjLO30qg4TarXSvIQ2GAh+
-        MobKBXMajBrxEipfW09FB0GIBom6h8UnBlHtFTC0lpr+7C5Z8afSoC95BFvxFU7tTOEnHH
-        +RD3bPjHQQVRgv57/CzIiNf2+KLw00s=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-222-vzCsdpQ7OzepawJY9Cp-HA-1; Wed, 12 Apr 2023 12:39:27 -0400
-X-MC-Unique: vzCsdpQ7OzepawJY9Cp-HA-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-5ef4122d2dbso1347536d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:39:26 -0700 (PDT)
+        Wed, 12 Apr 2023 12:39:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E4A268B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:39:35 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50489b16e6aso2793488a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681317573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wjsnIpfOQB8bXiCEyrFPNZ7eINu8y00FwWxIEZFO2H8=;
+        b=Svb4qAOBP+hW/lCQsPo+DQoVQzZnNdUGZUthwNi58ITBxz8whyBqb0ZnH+ImgAFGRc
+         p44f2selI+AQD100B9gCrOL6dfxkuKO8G84ICcoj9ugmWQo1EVuBciFpHTfP3MyGImEv
+         oo00lqssDo8U18xmtpxVrjAoM7dojbhS8EA8Xx7Og3BcgpvQDykAv0ZaQg3a+FaAHwFj
+         17l4KA5IADwEPyuy5ldHi+3zNK7mmfrXwu+ofdfF+LpIYFqOLbCzJX8tsuxpFWtzPFJd
+         hX04/hRUBBwnAwVqES8lkohsYw+rIPeaWTlwCCoEj+MYiv7x53CKrb2pUXsiqMWHQVbn
+         M4fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317565; x=1683909565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=09jtKKMdBkZ99/jQ3MHG3Gpu4kZKeE61xD5S9ADSCnE=;
-        b=ijjePcHlUR0deFx6fOVFQbKKoZBFQNmRoWpOZICwPua3Bbz2c5heXOgCmRQiQSkCxm
-         Ij9/QMAc0OW3PCIeZgP7DzqYLKPVL4nPBFJbW8TVuNNH0YEA9gHvuzhwEAvZzV9IjQk0
-         psQ9Yaok4J2pv1DQVxtXR66Q5c2ckjfDNeVw5/Pf7x65jh/EYZNfZ+gEdD3U3Zi+Z67V
-         s8esR22rXozSdmFO+xiwzwIw3bTXUovUW6MjTtSaCZQc2vumx0UUaPFWiR/4oP/o/K2c
-         M7FThfF/mENFmY4ZBNLF+41t8y0bAv/hFBtWFAUUF8G8a6LcCRucJFLNUiN2fquQ1ulq
-         T9wQ==
-X-Gm-Message-State: AAQBX9ckovkZejSY6CJqHbUWYlWkk+7DpY8l7+uIvU5XsiL1cDQiaA5E
-        +m6CzlaBHVm9EaKgNYjJ5f4okDlo60AniHYKd3fy8cDRGPWTPaIBC20GRz/gXVB/e3eT6Z6rM+t
-        Q/O2wpSsqq3qoM2NppD2cxzng
-X-Received: by 2002:a05:6214:401a:b0:5ea:a212:3fe1 with SMTP id kd26-20020a056214401a00b005eaa2123fe1mr4433892qvb.4.1681317565691;
-        Wed, 12 Apr 2023 09:39:25 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yg5QWvOjiNFwdYfa/fZm9pN7qYxhapB7GAqOu9LrBAaJTeYn6HJOMM2S2srwUeyNYUeY/ZiA==
-X-Received: by 2002:a05:6214:401a:b0:5ea:a212:3fe1 with SMTP id kd26-20020a056214401a00b005eaa2123fe1mr4433881qvb.4.1681317565461;
-        Wed, 12 Apr 2023 09:39:25 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id u13-20020a0cc48d000000b005ead602acfesm2669536qvi.35.2023.04.12.09.39.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:39:24 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>, peterx@redhat.com,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-stable <stable@vger.kernel.org>
-Subject: [PATCH v2 01/31] Revert "userfaultfd: don't fail on unrecognized features"
-Date:   Wed, 12 Apr 2023 12:38:52 -0400
-Message-Id: <20230412163922.327282-2-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
-References: <20230412163922.327282-1-peterx@redhat.com>
+        d=1e100.net; s=20221208; t=1681317573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wjsnIpfOQB8bXiCEyrFPNZ7eINu8y00FwWxIEZFO2H8=;
+        b=OZAs5+d5eNlo0ON3qLFZoOe3DKtWwSqp1SA0ZHSeHjioz1bi0VxMgOBAFCngAHR8L8
+         /luQKjpIHnEj/p3kD1Rva+sOcJxk6Nf29ch695S2yW+Affkn0+h4J6sFlA8hND6p8sjp
+         z6WctN8RCZ1S/CaHGaj2QmBw7fMJOVecNFIcrdTCiEV4E40ksbAdsAQBX3kJfKttwDZq
+         Mw38FATUqJUgVEzCbyZmTq5LWBpJkRFqCMitnGzSDX0Kf5ehY1Ge28bN3RlhrP0kZR5S
+         PiZIA5QuajcNpZM7hkQFk9hzi5QDaLwetIpwxQGNr37bU0WsfIL+bttHJY07CeQr7fX9
+         ZIfw==
+X-Gm-Message-State: AAQBX9eGcJXKOfpUtcrWMToKwBzjHUorMRti0TR7XUs6Gu8zBTRJ2Z0K
+        Sr/776G0RxNYw1kP2I+K9NDRxA==
+X-Google-Smtp-Source: AKy350aL10p8ZvO/uuBSLAFaGHPL+GVZnp473n+I6x+oIN043R05Kjx5EBQEvM6M53B/enOB1WnRKQ==
+X-Received: by 2002:aa7:d58c:0:b0:504:b60a:e7e8 with SMTP id r12-20020aa7d58c000000b00504b60ae7e8mr3197279edq.20.1681317573432;
+        Wed, 12 Apr 2023 09:39:33 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:938a:b3db:7c59:795e? ([2a02:810d:15c0:828:938a:b3db:7c59:795e])
+        by smtp.gmail.com with ESMTPSA id c31-20020a509fa2000000b005049c1f1c60sm3535728edf.65.2023.04.12.09.39.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 09:39:33 -0700 (PDT)
+Message-ID: <153a5ed0-5f4f-4879-2677-e5bce5453634@linaro.org>
+Date:   Wed, 12 Apr 2023 18:39:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
+ bindings for MT7988
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230406080141.22924-1-arinc.unal@arinc9.com>
+ <20230406080141.22924-3-arinc.unal@arinc9.com>
+ <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
+ <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+ <951841d3-59a4-fa86-5b45-46afdb2942dd@linaro.org>
+ <5a92419c-4d2c-a169-687b-026dc6094cd8@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5a92419c-4d2c-a169-687b-026dc6094cd8@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a proposal to revert commit 914eedcb9ba0ff53c33808.
+On 07/04/2023 11:46, Arınç ÜNAL wrote:
+> On 7.04.2023 12:07, Krzysztof Kozlowski wrote:
+>> On 06/04/2023 21:18, Arınç ÜNAL wrote:
+>>> On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
+>>>> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
+>>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>
+>>>>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
+>>>>> to be used is internal. Add this.
+>>>>>
+>>>>> Some bindings are incorrect for this switch now, so move them to more
+>>>>> specific places.
+>>>>>
+>>>>> Address the incorrect information of which ports can be used as a user
+>>>>> port. Any port can be used as a user port.
+>>>>>
+>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>> ---
+>>>>>    .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
+>>>>>    1 file changed, 46 insertions(+), 17 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>> index 7045a98d9593..605888ce2bc6 100644
+>>>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>>>> @@ -160,22 +160,6 @@ patternProperties:
+>>>>>          "^(ethernet-)?port@[0-9]+$":
+>>>>>            type: object
+>>>>>    
+>>>>> -        properties:
+>>>>> -          reg:
+>>>>> -            description:
+>>>>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+>>>>> -              for user ports.
+>>>>> -
+>>>>> -        allOf:
+>>>>> -          - if:
+>>>>> -              required: [ ethernet ]
+>>>>> -            then:
+>>>>> -              properties:
+>>>>> -                reg:
+>>>>> -                  enum:
+>>>>> -                    - 5
+>>>>> -                    - 6
+>>>>> -
+>>>>
+>>>> I have doubts that the binding is still maintainable/reviewable. First,
+>>>> why do you need all above patterns after removal of entire contents?
+>>>
+>>> The 'type: object' item is still globally used. I'd have to define that
+>>> on each definitions, I suppose?
+>>
+>> Doesn't it come from dsa.yaml/dsa-port.yaml schema?
+> 
+> It comes from dsa.yaml#/$defs/ethernet-ports which this schema already 
+> refers to. I'll remove the patterns above.
+> 
+> Though 'type: object' is not there for "^(ethernet-)?port@[0-9]+$". I 
+> think I should add it there as the dsa-port.yaml schema defines the 
+> properties of the DSA switch port object. 
 
-I found this when writting a simple UFFDIO_API test to be the first unit
-test in this set.  Two things breaks with the commit:
+It has ref, which is enough.
 
-  - UFFDIO_API check was lost and missing.  According to man page, the
-  kernel should reject ioctl(UFFDIO_API) if uffdio_api.api != 0xaa.  This
-  check is needed if the api version will be extended in the future, or
-  user app won't be able to identify which is a new kernel.
+> So the value matching the 
+> "^(ethernet-)?port@[0-9]+$" regular expression is expected to be an 
+> object conforming to the structure defined in dsa-port.yaml.
+> 
+> Does that make sense?
 
-  - Feature flags checks were removed, which means UFFDIO_API with a
-  feature that does not exist will also succeed.  According to the man
-  page, we should (and it makes sense) to reject ioctl(UFFDIO_API) if
-  unknown features passed in.
+Hm, no, sorry, I still do not see what exactly is missing from
+dsa.yaml/port that you need to define here.
 
-Link: https://lore.kernel.org/r/20220722201513.1624158-1-axelrasmussen@google.com
-Fixes: 914eedcb9ba0 ("userfaultfd: don't fail on unrecognized features")
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: linux-stable <stable@vger.kernel.org>
-Acked-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- fs/userfaultfd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 8395605790f6..3b2a41c330e6 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1977,8 +1977,10 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	ret = -EFAULT;
- 	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
- 		goto out;
--	/* Ignore unsupported features (userspace built against newer kernel) */
--	features = uffdio_api.features & UFFD_API_FEATURES;
-+	features = uffdio_api.features;
-+	ret = -EINVAL;
-+	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
-+		goto err_out;
- 	ret = -EPERM;
- 	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
- 		goto err_out;
--- 
-2.39.1
+Best regards,
+Krzysztof
 
