@@ -2,112 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A8B6DF0E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5180B6DF0F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjDLJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S229998AbjDLJtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDLJtA (ORCPT
+        with ESMTP id S229822AbjDLJtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:49:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EE76A49;
-        Wed, 12 Apr 2023 02:48:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D452762AD0;
-        Wed, 12 Apr 2023 09:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F66C433EF;
-        Wed, 12 Apr 2023 09:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681292938;
-        bh=YhO7oLDI69/5qiBwVnBLl/hPTPOq8YVbBw8jqTLh4yY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oG/oFd/m00RHTICGEWcqM64+kCwGo1vPJbVoL9puGmi5nWZM0LkRcplh7QmSKD6zv
-         V1LvQSKBcS9kSDRbSeLORUoMBdEbmGTbIBALV02kzqQfuPSJb/YF240QyxAgyCU+ks
-         ohOUdnISDEdt7eiIE48jOCbSSZpXX0n4uaav00U0ac2ze63AkzIY2TUq/A8hlmk4qy
-         BSCiDawWe9wYVyUt1gpcpiOz6SFFSswudNt1FNRXBtyv7Az88ulUf+Wu+ob+im1Vbd
-         HV4UastKwOv3gKC+ft1+2nWXzwqt/z1wTFmCpGA3mJYrvYA7WYD8BiQkzz3ih6IzRR
-         xdioNn5apaAJQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pmX5y-007mjQ-OU;
-        Wed, 12 Apr 2023 10:48:56 +0100
-Date:   Wed, 12 Apr 2023 10:48:54 +0100
-Message-ID: <86wn2hl9bt.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Ankit Agrawal <ankita@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        Aniket Agashe <aniketa@nvidia.com>, Neo Jia <cjia@nvidia.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        "Tarun Gupta (SW-GPU)" <targupta@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Andy Currid <acurrid@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dan Williams <danw@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Wed, 12 Apr 2023 05:49:45 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1039F6A79;
+        Wed, 12 Apr 2023 02:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1681292977; x=1712828977;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xwU26vqz+i6o48xeFGosEf02x2/+P84gSenez762bBM=;
+  b=jg20KNNC4TolaTi45Tbh2JTYJil7rgCB61GGghyhdFeCTfzc23C9DQ0a
+   nKkY69SrGYZYtV6tOXD9ASUgS/E+le0loFOdW61mG7OjrWcgb8i35ny3A
+   6Ll3DP8zS6xPjKRb9lE2UM4l2JQlnkZmPeVlTHyIVedyx40b+i/bmgcAW
+   /GeerVHC++PWavu6z99ZDgKGVprcbnvCJRIoN4iO/MhFVXRSGZpaPqfXC
+   B+ne5wbghGpndcUcH7DrTznRqxXyUOEChCExaccTEmS7xxWsnU+TMKKvt
+   uzTiiZQfCWeT1Su0XGlzRuvb7q6fmN9AmigYmtR9x8sgfRNS9ofRC6Yi2
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,339,1673910000"; 
+   d="scan'208";a="30272747"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 12 Apr 2023 11:49:34 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 12 Apr 2023 11:49:34 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 12 Apr 2023 11:49:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1681292974; x=1712828974;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xwU26vqz+i6o48xeFGosEf02x2/+P84gSenez762bBM=;
+  b=dC4OyqL7aMsrY/2pSTrDmSklV+rwocj8Q7HNfxbG13aHEIN3F2pbBdvQ
+   QKUBHmTBfu8vzFb4S2oSfCWfBio900gYyK2T+e3LZIkBO1ZgPmzsIFnY4
+   fCMs8BAsumxaAf7rumObgNqm0LwjJeu5b1hCFt5ONH+sm2qdM9mqPIzNE
+   JNB125GfwmKM98wOopHm2v2fwx1ebYjEIjCdmTTBRcdJ3K26Mgajvj1hz
+   a7pT2ySFlli9VsGmCaNsNfEHm+TGZGNZ9aDCqr3uOAa+Ijps6ozAM1XyT
+   BjlHlWrPvWp0ZeAW2hPOwCSWusqUp8CjynjuvZCoe7qf/EwioWPM/peYK
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,339,1673910000"; 
+   d="scan'208";a="30272746"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 12 Apr 2023 11:49:34 +0200
+Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.20])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 6F4D2280056;
+        Wed, 12 Apr 2023 11:49:34 +0200 (CEST)
+Message-ID: <a937f0c71497b41dc6b7ceb30dc6fdbbed856714.camel@ew.tq-group.com>
+Subject: Re: [PATCH] i2c: ocores: generate stop condition after timeout in
+ polling mode
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     Federico Vaga <federico.vaga@cern.ch>,
+        Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v3 0/6] Expose GPU memory as coherently CPU accessible
-In-Reply-To: <BY5PR12MB3763086D7CD36B7B158FC426B09B9@BY5PR12MB3763.namprd12.prod.outlook.com>
-References: <20230405180134.16932-1-ankita@nvidia.com>
-        <46f68930-fdfc-db3d-5f28-521ff76e170a@redhat.com>
-        <BY5PR12MB3763086D7CD36B7B158FC426B09B9@BY5PR12MB3763.namprd12.prod.outlook.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ankita@nvidia.com, david@redhat.com, jgg@nvidia.com, alex.williamson@redhat.com, naoya.horiguchi@nec.com, oliver.upton@linux.dev, aniketa@nvidia.com, cjia@nvidia.com, kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com, acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com, danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "linux@ew.tq-group.com" <linux@ew.tq-group.com>
+Date:   Wed, 12 Apr 2023 11:49:32 +0200
+In-Reply-To: <20230220161628.463620-1-matthias.schiffer@ew.tq-group.com>
+References: <20230220161628.463620-1-matthias.schiffer@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 09:43:56 +0100,
-Ankit Agrawal <ankita@nvidia.com> wrote:
-> 
-> Thanks David, response inline.
-> 
-> [...]
-> 
-> > I briefly skimmed over the series, the patch subject prefixes are a bit
-> > misleading IMHO and could be improved:
-> 
-> Understood. Will fix that in the next iteration.
-> 
-> 
-> >> Ankit Agrawal (6):
-> >>    kvm: determine memory type from VMA
-> 
-> > this is arch64 specific kvm (kvm/aarch64: ?)
-> Right. I'll change the prefix to kvm/aarch64
+On Mon, 2023-02-20 at 16:17 +0000, Matthias Schiffer wrote:
+> From: Gregor Herburger <gregor.herburger@tq-group.com>
+>=20
+> In polling mode, no stop condition is generated after a timeout. This
+> causes SCL to remain low and thereby block the bus. If this happens
+> during a transfer it can cause slaves to misinterpret the subsequent
+> transfer and return wrong values.
+>=20
+> To solve this, pass the ETIMEDOUT error up from ocores_process_polling()
+> instead of setting STATE_ERROR directly. The caller is adjusted to call
+> ocores_process_timeout() on error both in polling and in IRQ mode, which
+> will set STATE_ERROR and generate a stop condition.
+>=20
+> Fixes: 69c8c0c0efa8 ("i2c: ocores: add polling interface")
+> Signed-off-by: Gregor Herburger <gregor.herburger@tq-group.com>
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-Please look at the git log: the idiomatic prefix is
-"KVM: arm64: Something starting with a capital letter"
 
-AArch64 is almost never used anywhere in the arm64 tree.
+Any chance we can get someone to have a look at this patch?
 
-	M.
+Regards,
+Matthias
 
--- 
-Without deviation from the norm, progress is not possible.
+
+
+> ---
+>  drivers/i2c/busses/i2c-ocores.c | 28 +++++++++++++++-------------
+>  1 file changed, 15 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-oco=
+res.c
+> index a0af027db04c1..28bcda3f7040a 100644
+> --- a/drivers/i2c/busses/i2c-ocores.c
+> +++ b/drivers/i2c/busses/i2c-ocores.c
+> @@ -342,18 +342,18 @@ static int ocores_poll_wait(struct ocores_i2c *i2c)
+>   * ocores_isr(), we just add our polling code around it.
+>   *
+>   * It can run in atomic context
+> + *
+> + * Return: 0 on success, -ETIMEDOUT on timeout
+>   */
+> -static void ocores_process_polling(struct ocores_i2c *i2c)
+> +static int ocores_process_polling(struct ocores_i2c *i2c)
+>  {
+>  	while (1) {
+>  		irqreturn_t ret;
+>  		int err;
+> =20
+>  		err =3D ocores_poll_wait(i2c);
+> -		if (err) {
+> -			i2c->state =3D STATE_ERROR;
+> -			break; /* timeout */
+> -		}
+> +		if (err)
+> +			return err;
+> =20
+>  		ret =3D ocores_isr(-1, i2c);
+>  		if (ret =3D=3D IRQ_NONE)
+> @@ -364,6 +364,8 @@ static void ocores_process_polling(struct ocores_i2c =
+*i2c)
+>  					break;
+>  		}
+>  	}
+> +
+> +	return 0;
+>  }
+> =20
+>  static int ocores_xfer_core(struct ocores_i2c *i2c,
+> @@ -387,16 +389,16 @@ static int ocores_xfer_core(struct ocores_i2c *i2c,
+>  	oc_setreg(i2c, OCI2C_DATA, i2c_8bit_addr_from_msg(i2c->msg));
+>  	oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_START);
+> =20
+> -	if (polling) {
+> -		ocores_process_polling(i2c);
+> -	} else {
+> +	if (polling)
+> +		ret =3D ocores_process_polling(i2c);
+> +	else
+>  		ret =3D wait_event_timeout(i2c->wait,
+>  					 (i2c->state =3D=3D STATE_ERROR) ||
+> -					 (i2c->state =3D=3D STATE_DONE), HZ);
+> -		if (ret =3D=3D 0) {
+> -			ocores_process_timeout(i2c);
+> -			return -ETIMEDOUT;
+> -		}
+> +					 (i2c->state =3D=3D STATE_DONE), HZ) ?
+> +						0 : -ETIMEDOUT;
+> +	if (ret) {
+> +		ocores_process_timeout(i2c);
+> +		return ret;
+>  	}
+> =20
+>  	return (i2c->state =3D=3D STATE_DONE) ? num : -EIO;
+
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
