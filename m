@@ -2,137 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9293B6E013C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E206E0141
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjDLVyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S229816AbjDLV5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjDLVyV (ORCPT
+        with ESMTP id S229564AbjDLV5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:54:21 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8EF5259
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:54:19 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id i8so3951335plt.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1681336459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o22buf+xWsiAjf8q6ZesO0xScrJcUXPqlMC3QN5HAOw=;
-        b=Yy3j4sLbegTgjTgcaNkTrZN/7M/ZDOBxoDHaSLn5Pvs9AGyWlutR7JOp3C/z4US/gp
-         JNPTAtUNdJOlsJMwAZAYLjjXgeUJyPzUdHpGtSOGmX5lYsrPKucYHAo/cYimJILvx4gB
-         OKFw08M/dWu59tVxZ7w1Dzgj3U+EnZFrEXJ64FYZtEh1KqO/19LCCZEvZWCjoKE9pdAr
-         vs2zzEf263lIvs3SmG2hUA02lOqYO8qc3/+kQc9ScXsTt2CnOeRnQUKRL1IcGhl/LPN8
-         a8PKswraiwJP8W5Xv2F1/P+DwTWy25rTTwzQ3gnPCBPPhpnguImNFaCwzMSw5648XLbi
-         eIiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681336459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o22buf+xWsiAjf8q6ZesO0xScrJcUXPqlMC3QN5HAOw=;
-        b=Nkxgm8t+tnHYqzaLRVC201FAsDBeWhrHdK4wbevMFlXd7cSO1jgTr0E6Mx+4FAo6xW
-         7zaCHjKcZskWur1p6mlliPVbepWqGba4poWrrOVbFfUxObTEUQquu8w7cL1gFvCjvXDF
-         L+JSS4aVciUnieWK4PDrIt9Xso2g3oP5sx7aKyC97YibYu+UTkYBKZA7s3PmQ6gs4cE6
-         iEGM4vupIhV2kgGsVkKS4G2BDvtwuDM3HPjhX8uS2OU7HoNNZjHzNN+ctN/Rpp2m77s+
-         DENKc/BDKhdXtqsIAXYddd7ay0xGEuO9WmvaHrbfMrkgtQ6ChykPkfmL4VLTngW9LmBQ
-         a5Tw==
-X-Gm-Message-State: AAQBX9fp5enPv5tStqFtaz/4vnb/zMh4obef/cLxXG2EZxUkubL4JHQ9
-        ueA/v9iTp5jLKFPCn1fxBb5BSo0PN9w/1Qh2RRGJn+vr
-X-Google-Smtp-Source: AKy350aC1dzQ8x6PzYL+9Tqb4+YvtNMti2RvQcBthymKE8OIbVbW6YHQBEHsX8JXr4+ccGakpel1Hg==
-X-Received: by 2002:a17:902:c713:b0:1a4:fcc9:ec61 with SMTP id p19-20020a170902c71300b001a4fcc9ec61mr332187plp.5.1681336458813;
-        Wed, 12 Apr 2023 14:54:18 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-41-174.pa.nsw.optusnet.com.au. [49.180.41.174])
-        by smtp.gmail.com with ESMTPSA id i4-20020a1709026ac400b001a1b66af22fsm71183plt.62.2023.04.12.14.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 14:54:18 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pmiPv-002eH2-Dy; Thu, 13 Apr 2023 07:54:15 +1000
-Date:   Thu, 13 Apr 2023 07:54:15 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     syzbot <syzbot+listea0b12829deaef4101fd@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] Monthly xfs report
-Message-ID: <20230412215415.GM3223426@dread.disaster.area>
-References: <000000000000529f1805f81b23c2@google.com>
- <20230411013512.GX3223426@dread.disaster.area>
- <20230411043517.GC360895@frogsfrogsfrogs>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411043517.GC360895@frogsfrogsfrogs>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 17:57:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B912D44
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:57:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3F006397A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 21:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B1DC433EF;
+        Wed, 12 Apr 2023 21:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681336639;
+        bh=6pRvLGc87JTXtP4muzgwevPzgBKLZDkUknq8v/ar9Ik=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NcieaChHyrNGnCn7GnJNkduQweAwfHG4D+WlMj0KByLMYkb+Yw5eawpuWpyDke/vp
+         Jsf7xKCznL2j0yKer+6MO1ryeP1EfxxFG3yJT2IxKN0riQOmQtyzBSbL70eve4O771
+         taqdi4LjEi0Jks86rFGfNpz/4hB6flnEUQzCwjGY=
+Date:   Wed, 12 Apr 2023 14:57:18 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Liu Shixin <liushixin2@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <muchun.song@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] mm: hwpoison: support recovery from HugePage
+ copy-on-write faults
+Message-Id: <20230412145718.0bcb7dd98112a3010711ad0b@linux-foundation.org>
+In-Reply-To: <20230412181350.GA22818@monkey>
+References: <20230411092741.780679-1-liushixin2@huawei.com>
+        <20230412181350.GA22818@monkey>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 09:35:17PM -0700, Darrick J. Wong wrote:
-> On Tue, Apr 11, 2023 at 11:35:12AM +1000, Dave Chinner wrote:
-> > On Thu, Mar 30, 2023 at 02:58:43AM -0700, syzbot wrote:
-> > 
-> > > 13      Yes   general protection fault in __xfs_free_extent
-> > >               https://syzkaller.appspot.com/bug?extid=bfbc1eecdfb9b10e5792
-> > 
-> > Growfs issue. Looks like a NULL pag, which means the fsbno passed
-> > to __xfs_free_extent() is invalid. Without looking further, this
-> > looks like it's a corrupt AGF length or superblock size and this has
-> > resulted in the calculated fsbno starting beyond the end of the last
-> > AG that we are about to grow. That means the agno is beyond EOFS,
-> > xfs_perag_get(agno) ends up NULL, and __xfs_free_extent() goes
-> > splat.  Likely requires corruption to trigger.
-> > 
-> > Low priority, low severity.
+On Wed, 12 Apr 2023 11:13:50 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+
+> On 04/11/23 17:27, Liu Shixin wrote:
+> > Patch a873dfe1032a ("mm, hwpoison: try to recover from copy-on write faults")
+> > introduced a new copy_user_highpage_mc() function, and fix the kernel crash
+> > when the kernel is copying a normal page as the result of a copy-on-write
+> > fault and runs into an uncorrectable error. But it doesn't work for HugeTLB.
 > 
-> I've been wondering for quite a while if the code that creates those
-> defer items ought to be shutting down the fs if they can't get a perag
-> to stuff in the intent.  xfs_perag_intent_get seems like a reasonable
-> place to shut down the fs with a corruption warning if someone feeds in
-> a totally garbage fsblock range.
-
-You know, I think this might be the same as thex  case below where
-a bogus AGF field is getting past the verifiers in recovery...
-
+> Andrew asked about user-visible effects.  Perhaps, a better way of
+> stating this in the commit message might be:
 > 
-> > > 5       Yes   KASAN: use-after-free Read in xfs_btree_lookup_get_block
-> > >               https://syzkaller.appspot.com/bug?extid=7e9494b8b399902e994e
-> > 
-> > Recovery of reflink COW extents, we have a corrupted journal
-> > 
-> >    [   52.495566][ T5067] XFS (loop0): Mounting V5 Filesystem bfdc47fc-10d8-4eed-a562-11a831b3f791
-> >    [   52.599681][ T5067] XFS (loop0): Torn write (CRC failure) detected at log block 0x180. Truncating head block from 0x200.
-> >    [   52.636680][ T5067] XFS (loop0): Starting recovery (logdev: internal)
-> > 
-> > And then it looks to have a UAF on the refcountbt cursor that is
-> > first initialised in xfs_refcount_recover_cow_leftovers(). Likely
-> > tripping over a corrupted refcount btree of some kind. Probably one
-> > for Darrick to look into.
+> Commit a873dfe1032a ("mm, hwpoison: try to recover from copy-on write
+> faults") introduced the routine copy_user_highpage_mc() to gracefully
+> handle copying of user pages with uncorrectable errors.  Previously,
+> such copies would result in a kernel crash.  hugetlb has separate code
+> paths for copy-on-write and does not benefit from the changes made in
+> commit a873dfe1032a.
 > 
-> Somehow the bogus refcount level field in the AGF is getting past the
-> verifiers.  I'll look into this later.
+> Modify hugetlb copy-on-write code paths to use copy_mc_user_highpage()
+> so that they can also gracefully handle uncorrectable errors in user
+> pages.  This involves changing the hugetlb specific routine
+> ?copy_user_folio()? from type void to int so that it can return an error.
+> Modify the hugetlb userfaultfd code in the same way so that it can return
+> -EHWPOISON if it encounters an uncorrectable error.
 
-... because like this one, it seems to require corruption getting
-deep into the modification operation without being detected.
+Thanks, but...  what are the runtime effects?  What does hugetlb
+presently do when encountering these uncorrectable error?
 
-As for shutdown when a perag cannot be obtained by defer items, I'm
-hoping that the perag get operations slowly disappear from those as
-we slowly move the perag references higher up the heirarchy. The
-perag should not go away in the middle of a defer chain, so I don't
-think we should ever get a NULL from a lookup except in the case of
-buggy code....
 
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
