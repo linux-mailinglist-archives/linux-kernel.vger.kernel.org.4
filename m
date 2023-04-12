@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403886DE986
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B8B6DE989
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjDLCgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 22:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S229633AbjDLCg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 22:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDLCgK (ORCPT
+        with ESMTP id S229536AbjDLCg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 22:36:10 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618D75241;
-        Tue, 11 Apr 2023 19:36:08 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Tue, 11 Apr 2023 22:36:27 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050B44EDC;
+        Tue, 11 Apr 2023 19:36:18 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1B98D24E203;
-        Wed, 12 Apr 2023 10:36:02 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 10:36:02 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9F69124E1D1;
+        Wed, 12 Apr 2023 10:36:16 +0800 (CST)
+Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 10:36:16 +0800
 Received: from [192.168.125.89] (113.72.145.176) by EXMBX067.cuchost.com
  (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 10:36:01 +0800
-Message-ID: <fa83f623-517f-9b4f-9b82-9cae4a0aba60@starfivetech.com>
-Date:   Wed, 12 Apr 2023 10:36:00 +0800
+ 2023 10:36:15 +0800
+Message-ID: <3557b890-fa43-f16b-95fd-6fc44204086d@starfivetech.com>
+Date:   Wed, 12 Apr 2023 10:36:14 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v1 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
- allowlist
+Subject: Re: [PATCH v1 1/3] riscv: dts: starfive: Enable axp15060 pmic for
+ cpufreq
 Content-Language: en-US
 To:     Conor Dooley <conor.dooley@microchip.com>
 CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -48,10 +48,10 @@ CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
 References: <20230411083257.16155-1-mason.huo@starfivetech.com>
- <20230411083257.16155-3-mason.huo@starfivetech.com>
- <20230411-rewire-outlook-a5fb631fb635@wendy>
+ <20230411083257.16155-2-mason.huo@starfivetech.com>
+ <20230411-chimp-unvarying-142394732ff5@wendy>
 From:   Mason Huo <mason.huo@starfivetech.com>
-In-Reply-To: <20230411-rewire-outlook-a5fb631fb635@wendy>
+In-Reply-To: <20230411-chimp-unvarying-142394732ff5@wendy>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [113.72.145.176]
@@ -59,7 +59,8 @@ X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX067.cuchost.com
  (172.16.6.67)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,30 +69,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/4/11 17:20, Conor Dooley wrote:
-> On Tue, Apr 11, 2023 at 04:32:56PM +0800, Mason Huo wrote:
->> Add the compatible strings for supporting the generic
->> cpufreq driver on the StarFive JH7110 SoC.
+On 2023/4/11 17:13, Conor Dooley wrote:
+> On Tue, Apr 11, 2023 at 04:32:55PM +0800, Mason Huo wrote:
+>> The VisionFive 2 board has an embedded pmic axp15060,
+>> which supports the cpu DVFS through the dcdc2 regulator.
+>> This patch enables axp15060 pmic and configs the dcdc2.
 >> 
 >> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
 >> ---
->>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->>  1 file changed, 1 insertion(+)
+>>  .../starfive/jh7110-starfive-visionfive-2.dtsi    | 15 +++++++++++++++
+>>  1 file changed, 15 insertions(+)
 >> 
->> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
->> index e85703651098..a1ac955aa7e2 100644
->> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
->> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
->> @@ -92,6 +92,7 @@ static const struct of_device_id allowlist[] __initconst = {
->>  
->>  	{ .compatible = "xlnx,zynq-7000", },
->>  	{ .compatible = "xlnx,zynqmp", },
->> +	{ .compatible = "starfive,jh7110", },
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index 2a6d81609284..df582bddae4b 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -114,6 +114,21 @@ &i2c5 {
+>>  	pinctrl-names = "default";
+>>  	pinctrl-0 = <&i2c5_pins>;
+>>  	status = "okay";
+>> +
+>> +	pmic: axp15060_reg@36 {
 > 
-> This struct looks to be in alphabetical order with a blank line between
-> vendors.
-
-Right. Should place it behind "st-ericsson".
+> No underscores in node names please & "pmic" is the generic node name
+> for pmics.
+> 
+> Cheers,
+> Conor.
+> 
+Address it in next version.
 
 Thanks
 Mason
+>> +		compatible = "x-powers,axp15060";
+>> +		reg = <0x36>;
+>> +
+>> +		regulators {
+>> +			reg_dcdc2: dcdc2 {
+>> +				regulator-boot-on;
+>> +				regulator-always-on;
+>> +				regulator-min-microvolt = <500000>;
+>> +				regulator-max-microvolt = <1540000>;
+>> +				regulator-name = "vdd-cpu";
+>> +			};
+>> +		};
+>> +	};
+>>  };
+>>  
+>>  &i2c6 {
+>> -- 
+>> 2.39.2
+>> 
