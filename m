@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCE56DF196
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A326DF197
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjDLKFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S231386AbjDLKFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDLKFR (ORCPT
+        with ESMTP id S230506AbjDLKFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:05:17 -0400
+        Wed, 12 Apr 2023 06:05:18 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D8398681
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:05:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67C1A9000
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:05:10 -0700 (PDT)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxJPxUgjZksiwbAA--.41929S3;
-        Wed, 12 Apr 2023 18:05:08 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8AxJMRVgjZktywbAA--.30598S3;
+        Wed, 12 Apr 2023 18:05:09 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxSL1SgjZke9wgAA--.34313S4;
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxSL1SgjZke9wgAA--.34313S5;
         Wed, 12 Apr 2023 18:05:08 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>
 Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
         loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v1 2/4] LoongArch: Add larch_insn_gen_break() to generate break insns
-Date:   Wed, 12 Apr 2023 18:04:59 +0800
-Message-Id: <1681293901-24918-3-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v1 3/4] LoongArch: Use larch_insn_gen_break() for kprobes
+Date:   Wed, 12 Apr 2023 18:05:00 +0800
+Message-Id: <1681293901-24918-4-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1681293901-24918-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1681293901-24918-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8DxSL1SgjZke9wgAA--.34313S4
+X-CM-TRANSID: AQAAf8DxSL1SgjZke9wgAA--.34313S5
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KFWfXF4furWUWFW8ZFyxKrg_yoW8uw4DpF
-        nrZrn5KrW5GryfGr9Ig3y5Zr15Jws7WwsFqFsIya4xGrWUX3W5XF10gryqqFyjvan5WFW0
-        q3WSqw12v3W5JaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGw13JF48Kry8Jry7Cr18uFg_yoWrZF4UpF
+        srAwn3XF4rWr95GryDJws8Zr1Yyrs5uwsFqF15CaySkFW2qrn8tF1kKrWqyF98K3yvkFWI
+        qw17t348X3W7ArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
         b3xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
@@ -59,66 +59,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There exist various break insns such as BRK_KPROBE_BP, BRK_KPROBE_SSTEPBP,
-BRK_UPROBE_BP and BRK_UPROBE_XOLBP, add larch_insn_gen_break() to generate
-break insns simpler and easier, this is preparation for later patch.
+For now, we can use larch_insn_gen_break() to define KPROBE_BP_INSN and
+KPROBE_SSTEPBP_INSN. Because larch_insn_gen_break() returns instruction
+word, pass around instruction word instead of union for the functions
+insns_not_supported(), insns_need_simulation() and arch_simulate_insn(),
+no functional change intended.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/include/asm/inst.h | 12 ++++++++++++
- arch/loongarch/kernel/inst.c      |  9 +++++++++
- 2 files changed, 21 insertions(+)
+ arch/loongarch/include/asm/inst.h    | 18 +++++++++++++++---
+ arch/loongarch/include/asm/kprobes.h |  2 +-
+ arch/loongarch/kernel/kprobes.c      | 21 +++++----------------
+ 3 files changed, 21 insertions(+), 20 deletions(-)
 
 diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index af494b5..95b3c20 100644
+index 95b3c20..a0fce06 100644
 --- a/arch/loongarch/include/asm/inst.h
 +++ b/arch/loongarch/include/asm/inst.h
-@@ -456,6 +456,8 @@ u32 larch_insn_gen_nop(void);
- u32 larch_insn_gen_b(unsigned long pc, unsigned long dest);
- u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest);
+@@ -409,8 +409,12 @@ static inline bool is_self_loop_ins(union loongarch_instruction *ip, struct pt_r
+ void simu_pc(struct pt_regs *regs, union loongarch_instruction insn);
+ void simu_branch(struct pt_regs *regs, union loongarch_instruction insn);
  
-+u32 larch_insn_gen_break(int imm);
-+
- u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj, enum loongarch_gpr rk);
- u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj);
- 
-@@ -474,6 +476,16 @@ static inline bool unsigned_imm_check(unsigned long val, unsigned int bit)
- 	return val < (1UL << bit);
- }
- 
-+#define DEF_EMIT_REG0I15_FORMAT(NAME, OP)				\
-+static inline void emit_##NAME(union loongarch_instruction *insn,	\
-+			       int imm)					\
-+{									\
-+	insn->reg0i15_format.opcode = OP;				\
-+	insn->reg0i15_format.immediate = imm;				\
-+}
-+
-+DEF_EMIT_REG0I15_FORMAT(break, break_op)
-+
- #define DEF_EMIT_REG0I26_FORMAT(NAME, OP)				\
- static inline void emit_##NAME(union loongarch_instruction *insn,	\
- 			       int offset)				\
-diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
-index 258ef26..31b8efe 100644
---- a/arch/loongarch/kernel/inst.c
-+++ b/arch/loongarch/kernel/inst.c
-@@ -208,6 +208,15 @@ u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest)
- 	return insn.word;
- }
- 
-+u32 larch_insn_gen_break(int imm)
-+{
+-static inline bool insns_not_supported(union loongarch_instruction insn)
++static inline bool insns_not_supported(u32 code)
+ {
 +	union loongarch_instruction insn;
 +
-+	emit_break(&insn, imm);
++	insn.word = code;
 +
-+	return insn.word;
-+}
-+
- u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj, enum loongarch_gpr rk)
+ 	switch (insn.reg2i14_format.opcode) {
+ 	case llw_op:
+ 	case lld_op:
+@@ -429,8 +433,12 @@ static inline bool insns_not_supported(union loongarch_instruction insn)
+ 	return false;
+ }
+ 
+-static inline bool insns_need_simulation(union loongarch_instruction insn)
++static inline bool insns_need_simulation(u32 code)
  {
- 	union loongarch_instruction insn;
++	union loongarch_instruction insn;
++
++	insn.word = code;
++
+ 	if (is_pc_ins(&insn))
+ 		return true;
+ 
+@@ -440,8 +448,12 @@ static inline bool insns_need_simulation(union loongarch_instruction insn)
+ 	return false;
+ }
+ 
+-static inline void arch_simulate_insn(union loongarch_instruction insn, struct pt_regs *regs)
++static inline void arch_simulate_insn(u32 code, struct pt_regs *regs)
+ {
++	union loongarch_instruction insn;
++
++	insn.word = code;
++
+ 	if (is_pc_ins(&insn))
+ 		simu_pc(regs, insn);
+ 	else if (is_branch_ins(&insn))
+diff --git a/arch/loongarch/include/asm/kprobes.h b/arch/loongarch/include/asm/kprobes.h
+index 798020a..7ef7a0f 100644
+--- a/arch/loongarch/include/asm/kprobes.h
++++ b/arch/loongarch/include/asm/kprobes.h
+@@ -22,7 +22,7 @@ do {									\
+ 
+ #define kretprobe_blacklist_size	0
+ 
+-typedef union loongarch_instruction kprobe_opcode_t;
++typedef u32 kprobe_opcode_t;
+ 
+ /* Architecture specific copy of original instruction */
+ struct arch_specific_insn {
+diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
+index 08c78d2..9f699f0 100644
+--- a/arch/loongarch/kernel/kprobes.c
++++ b/arch/loongarch/kernel/kprobes.c
+@@ -4,19 +4,8 @@
+ #include <linux/preempt.h>
+ #include <asm/break.h>
+ 
+-static const union loongarch_instruction breakpoint_insn = {
+-	.reg0i15_format = {
+-		.opcode = break_op,
+-		.immediate = BRK_KPROBE_BP,
+-	}
+-};
+-
+-static const union loongarch_instruction singlestep_insn = {
+-	.reg0i15_format = {
+-		.opcode = break_op,
+-		.immediate = BRK_KPROBE_SSTEPBP,
+-	}
+-};
++#define KPROBE_BP_INSN		larch_insn_gen_break(BRK_KPROBE_BP)
++#define KPROBE_SSTEPBP_INSN	larch_insn_gen_break(BRK_KPROBE_SSTEPBP)
+ 
+ DEFINE_PER_CPU(struct kprobe *, current_kprobe);
+ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+@@ -24,7 +13,7 @@ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+ static void arch_prepare_ss_slot(struct kprobe *p)
+ {
+ 	p->ainsn.insn[0] = *p->addr;
+-	p->ainsn.insn[1] = singlestep_insn;
++	p->ainsn.insn[1] = KPROBE_SSTEPBP_INSN;
+ 	p->ainsn.restore = (unsigned long)p->addr + LOONGARCH_INSN_SIZE;
+ }
+ NOKPROBE_SYMBOL(arch_prepare_ss_slot);
+@@ -68,7 +57,7 @@ NOKPROBE_SYMBOL(arch_prepare_kprobe);
+ /* Install breakpoint in text */
+ void arch_arm_kprobe(struct kprobe *p)
+ {
+-	*p->addr = breakpoint_insn;
++	*p->addr = KPROBE_BP_INSN;
+ 	flush_insn_slot(p);
+ }
+ NOKPROBE_SYMBOL(arch_arm_kprobe);
+@@ -253,7 +242,7 @@ bool kprobe_breakpoint_handler(struct pt_regs *regs)
+ 		}
+ 	}
+ 
+-	if (addr->word != breakpoint_insn.word) {
++	if (*addr != KPROBE_BP_INSN) {
+ 		/*
+ 		 * The breakpoint instruction was removed right
+ 		 * after we hit it.  Another cpu has removed
 -- 
 2.1.0
 
