@@ -2,179 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A126DF1D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B906DF1CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjDLKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S231176AbjDLKQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDLKSo (ORCPT
+        with ESMTP id S229521AbjDLKQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:18:44 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35856558B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:18:42 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 8A4095FD61;
-        Wed, 12 Apr 2023 13:18:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681294720;
-        bh=PP2Y/Il+dezNqPtLgzxWk2KfTtgfTZFcl/FVi9Ukg8I=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=JUawYNHO0kedtMwE4ATrHSnma36lVIFO0H414zIv4o1agtnn6VjqYcrXlLhrC31ZF
-         AU0ra4RbFNMyGaW9Va7ofCBLYdHCSFJOF+H4SR3v2uDjqG3XtU8VMWPrGunpQx+ptl
-         JyrD7XWF2uRHagy/0pYmOdVpG8QaPPmrHYZr9+u4VnWquyktm2eCB1JUqDlz13ZdeA
-         n9RUcm9Y43iSbFGsWrEU8JIqiL+XWiKNPWSeiI5kPhfvogXEsBLI9bA/R24C2U/jI5
-         ZAsyKiUxrZLN5ehbY9GrNLMkcSc3iWHA6HOBCk6TtZE0Otylo2eAgfPOU56Mb8qyAp
-         VPsNm0MB+xaRQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 12 Apr 2023 13:18:40 +0300 (MSK)
-Message-ID: <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
-Date:   Wed, 12 Apr 2023 13:14:52 +0300
+        Wed, 12 Apr 2023 06:16:50 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41130CB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:16:49 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54f6a796bd0so95065377b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681294609; x=1683886609;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=19dXlvHgMePLLzjJNE3ILaQBnedS0pYMNzyfIhoRXxM=;
+        b=EAQfrASv8KPDAv4+pdLnYB1XvWdCG7BadG3EAWkTPPvVu2WBJVwxQm5f3l+6H0/jXN
+         XS6n5ikdV770ofbD9X+Xa1hogZytqUvOK3WbjoaYpClNJiQKJKMWrqyOkYVBtZhOIg3T
+         n3gKngm1vDtu+KKmTbiVAbCMsq3z6NpoxFSw0DRAMvOR7xQYXFje0S3YfXI97Cvvl5UN
+         HWAxKX4no7XAg6CDu3zpAEtAY7OfQvAdVv7828OSrDKFTsZjke2iu6ZsRi2qRhNsmibD
+         C8DOad/FaPWFbFZ213gQ/GT0797QI2vO5fXEUknzvesvgL6VHK50g99XoO2ovG/K/z0I
+         pCKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681294609; x=1683886609;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=19dXlvHgMePLLzjJNE3ILaQBnedS0pYMNzyfIhoRXxM=;
+        b=ru9+qEG/J9qShdUwD3rk9tlHMejC6exeZNPEy+BtfRbZkeIKUpShjK2n1xF6E6uAL1
+         TnZK5DFUHohgnSCzePBSrpzPUBPo4PW3ZWDcSTwyUxA0pNiglMOJMcMTNsu1YIbmYl9b
+         BlYahESyTnWTEhDUmEr7icFuO0Fap0bTgc8xOlfi7PeCnoOnwGIWAtelO/Xy3rSxCcVE
+         UewNxbutNNRNOMIM0RE4IqJ0Uc0Pjep4dqOdp5PGWggwMrhNjf/5ISOx24AP6LWELe1o
+         beHbPZmFLKCezXZzbAVMDq5m3/g5NegGkHb4jDeBIpTI94B/oTD5VO9T7veiSSAsmPyn
+         xvnA==
+X-Gm-Message-State: AAQBX9eZvw3UUHK23TesoOCPDKHe/yHYg/38Gwb+YEGTFP+QDMkuwI4Q
+        n54Mz3yRFGaNYzC9BsiVxlk8I7WGfCn0GPMWXapzbFy8yw==
+X-Google-Smtp-Source: AKy350Zbl3xTmIJhw9eX8Q6upCZv7QKX45sX7JtpGJJaFIZE+ybDiJmirCSO3VVFaUGoUxmOUUDVuGGBn6ZRB8avHh4=
+X-Received: by 2002:a81:bc48:0:b0:54f:a609:e88 with SMTP id
+ b8-20020a81bc48000000b0054fa6090e88mr454918ywl.7.1681294608809; Wed, 12 Apr
+ 2023 03:16:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
- <20230412094400.3c82f631@xps-13>
- <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
- <20230412113654.183350d0@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230412113654.183350d0@xps-13>
+References: <CALjTZvZ=Y1psyd0nmfzm6GhqMKvq5V_NQCWb_X02nasp1CpfcQ@mail.gmail.com>
+ <87r0spcuvi.fsf@intel.com>
+In-Reply-To: <87r0spcuvi.fsf@intel.com>
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+Date:   Wed, 12 Apr 2023 11:16:37 +0100
+Message-ID: <CALjTZvao=N7wxyj_DpqzWUhdJwEsWSKUo3ddi-3ubgMp8BXi_Q@mail.gmail.com>
+Subject: Re: [BUG?] INFO: rcu_sched detected expedited stalls on CPUs/tasks: {
+ 0-.... } 3 jiffies s: 309 root: 0x1/.
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        paulmck@kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 04:12:00 #21090163
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Jani,
 
+On Wed, 12 Apr 2023 at 10:28, Jani Nikula <jani.nikula@linux.intel.com> wrote:
+>
+> Please file a bug at fdo gitlab [1]. Add drm.debug=0xe and maybe
+> log_buf_len=4M or similar kernel parameters, and attach dmesg all the
+> way from boot to reproducing the problem.
 
-On 12.04.2023 12:36, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +0300:
-> 
->> On 12.04.2023 10:44, Miquel Raynal wrote:
->>> Hi Arseniy,
->>>
->>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +0300:
->>>   
->>>> This NAND reads only few user's bytes in ECC mode (not full OOB), so  
->>>
->>> "This NAND reads" does not look right, do you mean "Subpage reads do
->>> not retrieve all the OOB bytes,"?
->>>   
->>>> fill OOB buffer with zeroes to not return garbage from previous reads
->>>> to user.
->>>> Otherwise 'nanddump' utility prints something like this for just erased
->>>> page:
->>>>
->>>> ...
->>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>   OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad d3 be
->>>>   OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e 88 6e
->>>>   OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 7c ff
->>>>   OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa 2f 5e
->>>>
->>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>> ---
->>>>  drivers/mtd/nand/raw/meson_nand.c | 5 +++++
->>>>  1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>> index f84a10238e4d..f2f2472cb511 100644
->>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>  static int meson_nfc_read_page_raw(struct nand_chip *nand, u8 *buf,
->>>>  				   int oob_required, int page)
->>>>  {
->>>> +	struct mtd_info *mtd = nand_to_mtd(nand);
->>>>  	u8 *oob_buf = nand->oob_poi;
->>>>  	int ret;
->>>>  
->>>> +	memset(oob_buf, 0, mtd->oobsize);  
->>>
->>> I'm surprised raw reads do not read the entire OOB?  
->>
->> Yes! Seems in case of raw access (what i see in this driver) number of OOB bytes read
->> still depends on ECC parameters: for each portion of data covered with ECC code we can
->> read it's ECC code and "user bytes" from OOB - it is what i see by dumping DMA buffer by
->> printk(). For example I'm working with 2K NAND pages, each page has 2 x 1K ECC blocks.
->> For each ECC block I have 16 OOB bytes which I can access by read/write. Each 16 bytes
->> contains 2 bytes of user's data and 14 bytes ECC codes. So when I read page in raw mode
->> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB is reported as 64 bytes.
-> 
-> In all modes, when you read OOB, you should get the full OOB. The fact
-> that ECC correction is enabled or disabled does not matter. If the NAND
-> features OOB sections of 64 bytes, you should get the 64 bytes.
-> 
-> What happens sometimes, is that some of the bytes are not protected
-> against bitflips, but the policy is to return the full buffer.
+Sure, will do, thanks!
 
-Ok, so to clarify case for this NAND controller:
-1) In both ECC and raw modes i need to return the same raw OOB data (e.g. user bytes
-   + ECC codes)?
-2) If I have access to only 32 bytes of OOB (in case above), I must report that size
-   of OOB is only 32 bytes during initialization?
+> How long is "for some time now"?
 
-Thanks, Arseniy
+That's a wonderful question. I actually found a screenshot I took on
+the 14th October(!) with one of these traces. I don't know the exact
+kernel version, but since I've been running weekly release candidates
+for years, it shouldn't be hard to pinpoint, if strictly needed. Since
+the trace seemed informative and I haven't noticed any problems, I was
+kind of hoping it would solve itself in time. I guess my patience
+lasted 6 months. :)
 
-> 
->>
->> Thanks, Arseniy
->>
->>>   
->>>> +
->>>>  	ret = meson_nfc_read_page_sub(nand, page, 1);
->>>>  	if (ret)
->>>>  		return ret;
->>>> @@ -881,6 +884,8 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
->>>>  	u8 *oob_buf = nand->oob_poi;
->>>>  	int ret, i;
->>>>  
->>>> +	memset(oob_buf, 0, mtd->oobsize);
->>>> +
->>>>  	ret = meson_nfc_read_page_sub(nand, page, 0);
->>>>  	if (ret)
->>>>  		return ret;  
->>>
->>>
->>> Thanks,
->>> Miquèl  
-> 
-> 
-> Thanks,
-> Miquèl
+Kind regards,
+Rui
