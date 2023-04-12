@@ -2,60 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED336DEF2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADD36DEDDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjDLIsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S230342AbjDLIfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjDLIsY (ORCPT
+        with ESMTP id S230325AbjDLIfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:48:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E447B83C9;
-        Wed, 12 Apr 2023 01:47:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48ECB6312F;
-        Wed, 12 Apr 2023 08:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02ACDC433EF;
-        Wed, 12 Apr 2023 08:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681289253;
-        bh=i58OPev1xWXPczAb6BN2BsGG/o+UwjXcbWhWpzsoV8E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KDfw2eqxSM93Ef9s9SZbgUvXiXj2gM7AYGdjPDgtAfN1qkeVFj3wXxVgQOtlOaLsC
-         HNSNR1Gr1BJcz+GrolK0IacoAEuz1uv/obiDSrVqAtuJOfFPl2eJGLEpm7szo7zDre
-         O+rBR16au4u254v3QFHudLvX0eMpSGCjGFmiPztw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.2 000/173] 6.2.11-rc1 review
-Date:   Wed, 12 Apr 2023 10:32:06 +0200
-Message-Id: <20230412082838.125271466@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
+        Wed, 12 Apr 2023 04:35:20 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB27D8C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:33:35 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63243b0e85aso266577b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681288341;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HUjigYVffbbURKl5RPLkwpnEmgUmPBqHMcpL1iCa1Oc=;
+        b=bgTTkPKbrlCYYqt26TI8lLVGTKRAsjo/8WDL+h5eGR7Vo1Hd382/mB2Vt32QI2ZJWa
+         Y3JbX6lYgB1+8jwrur3/ligLbtAkFJdSpuwkwai+Mw/T3r57eRYRB5s253bf7p4Nss+i
+         X4s0f60P1u/FMvq/XomgMTGmIJi2Chmx4jwkyoqVrT350Ndf/VHq4fCQZYrkJc+wCCKt
+         U1ejUKEV4kDpOoWtZPznn2o4B8TiVXa4KxzAqSCV/m98TRTnnxtfLQAitDbs+H4qMXCA
+         QTmNIe+nwDipn6kZ+Etn7unoFvJ7yCe9kzjhVeiMlYBzesSv0XrLAPXwlsVRTaOtmiqk
+         ArDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681288341;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUjigYVffbbURKl5RPLkwpnEmgUmPBqHMcpL1iCa1Oc=;
+        b=KBl0hpeRS7p19OOKnbG+KpGnmYhs0Bp1PMSm2cVB7usJ76MZ6t/pAiKnvlFl4yFGIl
+         Ka413VX4uZ2eooXYqhYaC9PFT1Nv14gxoKlgtX5ZUfCxlwFytqIEZkTWBOP3TpvQO7jj
+         bdxjsbcIXLGnfzo3vIWkAVcAp2Dy4rYFwjDbu6RTdkWKCgvLRCQPbyXYQnJvNzWxD2Cg
+         fisnQhdvZAMk45iapcdMLDO9gOQpDr/keTYpgXvyfO3Mx4uGu5Yr/amFkJTsYmde7VB9
+         yi/BmskMlpXD9QYP9TLlAaQje49sZjAVJ/5VjyKiEiMwMF2o7mFbDEEmFe1+hPRic67I
+         VoBw==
+X-Gm-Message-State: AAQBX9f3JXcU2pOv76JOUmWQ8ts/Lf7l0j4NJ57JnWwKY9sEmCZp+E9v
+        e2uNyrjnSRHvLn0DaWEWbd8iyw==
+X-Google-Smtp-Source: AKy350Y3Hiqp8yUCqdbWSIkbPCQCzwWxUextb0DV+nXIRC9Hszepb3ofQ7TtqjpwvBW/EsHu6CXZ9Q==
+X-Received: by 2002:a17:902:ec8b:b0:1a0:53ba:ff1f with SMTP id x11-20020a170902ec8b00b001a053baff1fmr1761001plg.0.1681288340701;
+        Wed, 12 Apr 2023 01:32:20 -0700 (PDT)
+Received: from [10.200.10.123] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id ay2-20020a1709028b8200b0019a7c890c5asm11027513plb.263.2023.04.12.01.32.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 01:32:20 -0700 (PDT)
+Message-ID: <7f928c82-0aaf-5fac-6a54-a3d95a87b296@bytedance.com>
+Date:   Wed, 12 Apr 2023 16:32:09 +0800
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.11-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.2.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.2.11-rc1
-X-KernelTest-Deadline: 2023-04-14T08:28+00:00
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] mm: slub: annotate kmem_cache_node->list_lock as
+ raw_spinlock
+Content-Language: en-US
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>, longman@redhat.com
+Cc:     "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhao Gongyi <zhaogongyi@bytedance.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230411130854.46795-1-zhengqi.arch@bytedance.com>
+ <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
+ <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
+ <f54cfeb9-f1c3-e656-d344-4cbf97a7c28a@suse.cz>
+ <932bf921-a076-e166-4f95-1adb24d544cf@bytedance.com>
+ <ZDZG6wlWIE4dzd4W@Boquns-Mac-mini.local>
+ <PH0PR11MB58805856C1C47D49D1BA8092DA9B9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <e6a21ac6-939c-c686-387b-20f81ba5be53@suse.cz>
+ <29efad1c-5ad4-5d26-b1b9-eeee6119e711@bytedance.com>
+In-Reply-To: <29efad1c-5ad4-5d26-b1b9-eeee6119e711@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,795 +99,353 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.2.11 release.
-There are 173 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
 
-Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
-Anything received after that time might be too late.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.11-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.2.11-rc1
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    mm: enable maple tree RCU mode by default.
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: add RCU lock checking to rcu callback functions
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: add smp_rmb() to dead node detection
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: remove extra smp_wmb() from mas_dead_leaves()
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: fix freeing of nodes in rcu mode
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: detect dead nodes in mas_start()
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: refine ma_state init from mas_start()
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: be more cautious about dead nodes
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: fix mas_prev() and mas_find() state handling
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: fix handle of invalidated state in mas_wr_store_setup()
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: reduce user error potential
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: fix potential rcu issue
-
-Liam R. Howlett <Liam.Howlett@Oracle.com>
-    maple_tree: remove GFP_ZERO from kmem_cache_alloc() and kmem_cache_alloc_bulk()
-
-Alistair Popple <apopple@nvidia.com>
-    mm: take a page reference when removing device exclusive entries
-
-Robert Foss <rfoss@kernel.org>
-    drm/bridge: lt9611: Fix PLL being unable to lock
-
-Tim Huang <tim.huang@amd.com>
-    drm/amdgpu: skip psp suspend for IMU enabled ASICs mode2 reset
-
-Alex Deucher <alexander.deucher@amd.com>
-    drm/amdgpu: for S0ix, skip SDMA 5.x+ suspend/resume
-
-Roman Li <roman.li@amd.com>
-    drm/amd/display: Clear MST topology if it fails to resume
-
-Peng Zhang <zhangpeng.00@bytedance.com>
-    maple_tree: fix a potential concurrency bug in RCU mode
-
-Peng Zhang <zhangpeng.00@bytedance.com>
-    maple_tree: fix get wrong data_end in mtree_lookup_walk()
-
-Peter Xu <peterx@redhat.com>
-    mm/hugetlb: fix uffd wr-protection for CoW optimization path
-
-Rongwei Wang <rongwei.wang@linux.alibaba.com>
-    mm/swap: fix swap_info_struct race between swapoff and get_swap_pages()
-
-Zheng Yejian <zhengyejian1@huawei.com>
-    ring-buffer: Fix race while reader and writer are on the same page
-
-Min Li <lm0963hack@gmail.com>
-    drm/i915: fix race condition UAF in i915_perf_add_config_ioctl
-
-Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-    drm/i915: Fix context runtime accounting
-
-Karol Herbst <kherbst@redhat.com>
-    drm/nouveau/disp: Support more modes by checking with lower bpc
-
-Boris Brezillon <boris.brezillon@collabora.com>
-    drm/panfrost: Fix the panfrost_mmu_map_fault_addr() error path
-
-Jens Axboe <axboe@kernel.dk>
-    ublk: read any SQE values upfront
-
-Felix Fietkau <nbd@nbd.name>
-    wifi: mt76: ignore key disable commands
-
-Lorenzo Bianconi <lorenzo@kernel.org>
-    wifi: mt76: mt7921: fix fw used for offload check for mt7922
-
-Yafang Shao <laoar.shao@gmail.com>
-    mm: vmalloc: avoid warn_alloc noise caused by fatal signal
-
-Sergey Senozhatsky <senozhatsky@chromium.org>
-    zsmalloc: document freeable stats
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracing/synthetic: Make lastcmd_mutex static
-
-Kan Liang <kan.liang@linux.intel.com>
-    perf/core: Fix the same task check in perf_event_set_output
-
-Peter Zijlstra <peterz@infradead.org>
-    perf: Optimize perf_pmu_migrate_context()
-
-Yu Kuai <yukuai3@huawei.com>
-    block: don't set GD_NEED_PART_SCAN if scan partition failed
-
-Ming Lei <ming.lei@redhat.com>
-    block: ublk: make sure that block size is set correctly
-
-Thiago Rafael Becker <tbecker@redhat.com>
-    cifs: sanitize paths in cifs_update_super_prepath.
-
-Keith Busch <kbusch@kernel.org>
-    nvme: fix discard support without oncs
-
-Zhong Jinghua <zhongjinghua@huawei.com>
-    scsi: iscsi_tcp: Check that sock is valid before iscsi_set_param()
-
-Li Zetao <lizetao1@huawei.com>
-    scsi: qla2xxx: Fix memory leak in qla2x00_probe_one()
-
-Wojciech Lukowicz <wlukowicz01@gmail.com>
-    io_uring: fix memory leak when removing provided buffers
-
-Wojciech Lukowicz <wlukowicz01@gmail.com>
-    io_uring: fix return value when removing provided buffers
-
-Nuno Sá <nuno.sa@analog.com>
-    iio: adc: ad7791: fix IRQ flags
-
-Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-    ASoC: SOF: avoid a NULL dereference with unsupported widgets
-
-Jason Montleon <jmontleo@redhat.com>
-    ASoC: hdac_hdmi: use set_stream() instead of set_tdm_slots()
-
-Jason Gunthorpe <jgg@ziepe.ca>
-    iommufd: Do not corrupt the pfn list when doing batch carry
-
-Jason Gunthorpe <jgg@ziepe.ca>
-    iommufd: Fix unpinning of pages when an access is present
-
-Jason Gunthorpe <jgg@ziepe.ca>
-    iommufd: Check for uptr overflow
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracing: Free error logs of tracing instances
-
-Daniel Bristot de Oliveira <bristot@kernel.org>
-    tracing/osnoise: Fix notify new tracing_max_latency
-
-Daniel Bristot de Oliveira <bristot@kernel.org>
-    tracing/timerlat: Notify new max thread latency
-
-Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-    tracing/synthetic: Fix races on freeing last_cmd
-
-Song Yoong Siang <yoong.siang.song@intel.com>
-    net: stmmac: Add queue reset into stmmac_xdp_open() function
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Add acpi_backlight=video quirk for Lenovo ThinkPad W530
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Add acpi_backlight=video quirk for Apple iMac14,1 and iMac14,2
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Make acpi_backlight=video work independent from GPU driver
-
-Hans de Goede <hdegoede@redhat.com>
-    ACPI: video: Add auto_detect arg to __acpi_video_get_backlight_type()
-
-Oliver Hartkopp <socketcan@hartkopp.net>
-    can: isotp: isotp_recvmsg(): use sock_recv_cmsgs() to get SOCK_RXQ_OVFL infos
-
-Michal Sojka <michal.sojka@cvut.cz>
-    can: isotp: isotp_ops: fix poll() to not report false EPOLLOUT events
-
-Oliver Hartkopp <socketcan@hartkopp.net>
-    can: isotp: fix race between isotp_sendsmg() and isotp_release()
-
-Oleksij Rempel <linux@rempel-privat.de>
-    can: j1939: j1939_tp_tx_dat_new(): fix out-of-bounds memory access
-
-Christian Brauner <brauner@kernel.org>
-    fs: drop peer group ids under namespace lock
-
-Zheng Yejian <zhengyejian1@huawei.com>
-    ftrace: Fix issue that 'direct->addr' not restored in modify_ftrace_direct()
-
-John Keeping <john@metanate.com>
-    ftrace: Mark get_lock_parent_ip() __always_inline
-
-Keith Busch <kbusch@kernel.org>
-    blk-mq: directly poll requests
-
-William Breathitt Gray <william.gray@linaro.org>
-    counter: 104-quad-8: Fix Synapse action reported for Index signals
-
-William Breathitt Gray <william.gray@linaro.org>
-    counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
-
-Steve Clevenger <scclevenger@os.amperecomputing.com>
-    coresight-etm4: Fix for() loop drvdata->nr_addr_cmp range bug
-
-Suzuki K Poulose <suzuki.poulose@arm.com>
-    coresight: etm4x: Do not access TRCIDR1 for identification
-
-Muchun Song <muchun.song@linux.dev>
-    mm: kfence: fix handling discontiguous page
-
-Muchun Song <muchun.song@linux.dev>
-    mm: kfence: fix PG_slab and memcg_data clearing
-
-Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-    KVM: SVM: Flush Hyper-V TLB when required
-
-Sean Christopherson <seanjc@google.com>
-    KVM: nVMX: Do not report error code when synthesizing VM-Exit from Real Mode
-
-Sean Christopherson <seanjc@google.com>
-    KVM: x86: Clear "has_error_code", not "error_code", for RM exception injection
-
-Mario Limonciello <mario.limonciello@amd.com>
-    x86/ACPI/boot: Use FADT version to check support for online capable
-
-Eric DeVolder <eric.devolder@oracle.com>
-    x86/acpi/boot: Correct acpi_is_processor_usable() check
-
-Andy Chi <andy.chi@canonical.com>
-    ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-
-Jeremy Soller <jeremy@system76.com>
-    ALSA: hda/realtek: Add quirk for Clevo X370SNW
-
-Namjae Jeon <linkinjeon@kernel.org>
-    ksmbd: fix slab-out-of-bounds in init_smb2_rsp_hdr
-
-Marios Makassikis <mmakassikis@freebox.fr>
-    ksmbd: do not call kvmalloc() with __GFP_NORETRY | __GFP_NO_WARN
-
-Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-    serial: 8250: Prevent starting up DMA Rx on THRI interrupt
-
-Geert Uytterhoeven <geert+renesas@glider.be>
-    dt-bindings: serial: renesas,scif: Fix 4th IRQ for 4-IRQ SCIFs
-
-Shiyang Ruan <ruansy.fnst@fujitsu.com>
-    fsdax: force clear dirty mark if CoW
-
-Shiyang Ruan <ruansy.fnst@fujitsu.com>
-    fsdax: unshare: zero destination if srcmap is HOLE or UNWRITTEN
-
-Shiyang Ruan <ruansy.fnst@fujitsu.com>
-    fsdax: dedupe should compare the min of two iters' length
-
-Ryusuke Konishi <konishi.ryusuke@gmail.com>
-    nilfs2: fix sysfs interface lifetime
-
-Ryusuke Konishi <konishi.ryusuke@gmail.com>
-    nilfs2: fix potential UAF of struct nilfs_sc_info in nilfs_segctor_thread()
-
-Sherry Sun <sherry.sun@nxp.com>
-    tty: serial: fsl_lpuart: fix crash in lpuart_uport_is_active
-
-Sherry Sun <sherry.sun@nxp.com>
-    tty: serial: fsl_lpuart: avoid checking for transfer complete when UARTCTRL_SBK is asserted in lpuart32_tx_empty
-
-Biju Das <biju.das.jz@bp.renesas.com>
-    tty: serial: sh-sci: Fix Rx on RZ/G2L SCI
-
-Biju Das <biju.das.jz@bp.renesas.com>
-    tty: serial: sh-sci: Fix transmit end interrupt handler
-
-Mårten Lindahl <marten.lindahl@axis.com>
-    iio: light: vcnl4000: Fix WARN_ON on uninitialized lock
-
-Kai-Heng Feng <kai.heng.feng@canonical.com>
-    iio: light: cm32181: Unregister second I2C client if present
-
-Nuno Sá <nuno.sa@analog.com>
-    iio: buffer: make sure O_NONBLOCK is respected
-
-Nuno Sá <nuno.sa@analog.com>
-    iio: buffer: correctly return bytes written in output buffers
-
-Mehdi Djait <mehdi.djait.k@gmail.com>
-    iio: accel: kionix-kx022a: Get the timestamp from the driver's private data in the trigger_handler
-
-Nuno Sá <nuno.sa@analog.com>
-    iio: adc: max11410: fix read_poll_timeout() usage
-
-William Breathitt Gray <william.gray@linaro.org>
-    iio: dac: cio-dac: Fix max DAC write value check for 12-bit
-
-Lars-Peter Clausen <lars@metafoo.de>
-    iio: adc: ti-ads7950: Set `can_sleep` flag for GPIO chip
-
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-    iio: adc: qcom-spmi-adc5: Fix the channel name
-
-Arnd Bergmann <arnd@arndb.de>
-    iio: adis16480: select CONFIG_CRC32
-
-Ian Ray <ian.ray@ge.com>
-    drivers: iio: adc: ltc2497: fix LSB shift
-
-Bjørn Mork <bjorn@mork.no>
-    USB: serial: option: add Quectel RM500U-CN modem
-
-Enrico Sau <enrico.sau@gmail.com>
-    USB: serial: option: add Telit FE990 compositions
-
-RD Babiera <rdbabiera@google.com>
-    usb: typec: altmodes/displayport: Fix configure initial pin assignment
-
-Kees Jan Koster <kjkoster@kjkoster.org>
-    USB: serial: cp210x: add Silicon Labs IFS-USB-DATACABLE IDs
-
-Heikki Krogerus <heikki.krogerus@linux.intel.com>
-    usb: dwc3: pci: add support for the Intel Meteor Lake-S
-
-Pawel Laszczak <pawell@cadence.com>
-    usb: cdnsp: Fixes error: uninitialized symbol 'len'
-
-D Scott Phillips <scott@os.amperecomputing.com>
-    xhci: also avoid the XHCI_ZERO_64B_REGS quirk with a passthrough iommu
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Free the command allocated for setting LPM if we return early
-
-Wayne Chang <waynec@nvidia.com>
-    usb: xhci: tegra: fix sleep in atomic call
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    Revert "usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS"
-
-Lukas Wunner <lukas@wunner.de>
-    PCI/DOE: Fix memory leak with CONFIG_DEBUG_OBJECTS=y
-
-Lukas Wunner <lukas@wunner.de>
-    PCI/DOE: Silence WARN splat with CONFIG_DEBUG_OBJECTS=y
-
-Lukas Wunner <lukas@wunner.de>
-    cxl/pci: Handle excessive CDAT length
-
-Lukas Wunner <lukas@wunner.de>
-    cxl/pci: Handle truncated CDAT entries
-
-Lukas Wunner <lukas@wunner.de>
-    cxl/pci: Handle truncated CDAT header
-
-Lukas Wunner <lukas@wunner.de>
-    cxl/pci: Fix CDAT retrieval on big endian
-
-Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-    net: stmmac: check fwnode for phy device before scanning for phy
-
-Ard Biesheuvel <ardb@kernel.org>
-    arm64: compat: Work around uninitialized variable warning
-
-Shailend Chand <shailend@google.com>
-    gve: Secure enough bytes in the first TX desc for all TCP pkts
-
-Eric Dumazet <edumazet@google.com>
-    netlink: annotate lockless accesses to nlk->max_recvmsg_len
-
-Andy Roulin <aroulin@nvidia.com>
-    ethtool: reset #lanes when lanes is omitted
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    ping: Fix potentail NULL deref for /proc/net/icmp.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    raw: Fix NULL deref in raw_get_next().
-
-Eric Dumazet <edumazet@google.com>
-    raw: use net_hash_mix() in hash function
-
-Lingyu Liu <lingyu.liu@intel.com>
-    ice: Reset FDIR counter in FDIR init stage
-
-Simei Su <simei.su@intel.com>
-    ice: fix wrong fallback logic for FDIR
-
-Dai Ngo <dai.ngo@oracle.com>
-    NFSD: callback request does not use correct credential for AUTH_SYS
-
-Jeff Layton <jlayton@kernel.org>
-    sunrpc: only free unix grouplist after RCU settles
-
-Corinna Vinschen <vinschen@redhat.com>
-    net: stmmac: fix up RX flow hash indirection table when setting channels
-
-Siddharth Vadapalli <s-vadapalli@ti.com>
-    net: ethernet: ti: am65-cpsw: Fix mdio cleanup in probe
-
-Dhruva Gole <d-gole@ti.com>
-    gpio: davinci: Add irq chip flag to skip set wake
-
-Dhruva Gole <d-gole@ti.com>
-    gpio: davinci: Do not clear the bank intr enable bit in save_context
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: Clean up display of current_value on Thinkstation
-
-Mark Pearson <mpearson-lenovo@squebb.ca>
-    platform/x86: think-lmi: Fix memory leaks when parsing ThinkStation WMI strings
-
-Armin Wolf <W_Armin@gmx.de>
-    platform/x86: think-lmi: Fix memory leak when showing current settings
-
-Ziyang Xuan <william.xuanziyang@huawei.com>
-    ipv6: Fix an uninit variable access bug in __ip6_make_skb()
-
-Sricharan Ramabadhran <quic_srichara@quicinc.com>
-    net: qrtr: Do not do DEL_SERVER broadcast after DEL_CLIENT
-
-Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-    drm/i915/huc: Cancel HuC delayed load timer on reset.
-
-Xin Long <lucien.xin@gmail.com>
-    sctp: check send stream number after wait_for_sndbuf
-
-Felix Fietkau <nbd@nbd.name>
-    net: ethernet: mtk_eth_soc: fix remaining throughput regression
-
-Gustav Ekelund <gustaek@axis.com>
-    net: dsa: mv88e6xxx: Reset mv88e6393x force WD event bit
-
-Jakub Kicinski <kuba@kernel.org>
-    net: don't let netpoll invoke NAPI if in xmit context
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: hda/hdmi: Preserve the previous PCM device upon re-enablement
-
-Eric Dumazet <edumazet@google.com>
-    icmp: guard against too small mtu
-
-Jeff Layton <jlayton@kernel.org>
-    nfsd: call op_release, even when op_func returns an error
-
-Chuck Lever <chuck.lever@oracle.com>
-    NFSD: Avoid calling OPDESC() with ops->opnum == OP_ILLEGAL
-
-Hans de Goede <hdegoede@redhat.com>
-    wifi: brcmfmac: Fix SDIO suspend/resume regression
-
-Andrea Righi <andrea.righi@canonical.com>
-    l2tp: generate correct module alias strings
-
-Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-    net: stmmac: remove redundant fixup to support fixed-link mode
-
-Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-    net: stmmac: check if MAC needs to attach to a PHY
-
-Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-    net: phylink: add phylink_expects_phy() method
-
-Ziyang Xuan <william.xuanziyang@huawei.com>
-    net: qrtr: Fix a refcount bug in qrtr_recvmsg()
-
-Felix Fietkau <nbd@nbd.name>
-    wifi: mac80211: fix invalid drv_sta_pre_rcu_remove calls for non-uploaded sta
-
-Ryder Lee <ryder.lee@mediatek.com>
-    wifi: mac80211: fix the size calculation of ieee80211_ie_len_eht_cap()
-
-Nico Boehr <nrb@linux.ibm.com>
-    KVM: s390: pv: fix external interruption loop not always detected
-
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-    ASoC: codecs: lpass: fix the order or clks turn off during suspend
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    pwm: meson: Explicitly set .polarity in .get_state()
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    pwm: sprd: Explicitly set .polarity in .get_state()
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    pwm: iqs620a: Explicitly set .polarity in .get_state()
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    pwm: cros-ec: Explicitly set .polarity in .get_state()
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    pwm: hibvt: Explicitly set .polarity in .get_state()
-
-Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-    ASoC: SOF: ipc4: Ensure DSP is in D0I0 during sof_ipc4_set_get_data()
-
-Mohammed Gamal <mgamal@redhat.com>
-    Drivers: vmbus: Check for channel allocation before looking up relids
-
-Randy Dunlap <rdunlap@infradead.org>
-    gpio: GPIO_REGMAP: select REGMAP instead of depending on it
-
-Ville Syrjälä <ville.syrjala@linux.intel.com>
-    drm/i915: Add a .color_post_update() hook
-
-Ville Syrjälä <ville.syrjala@linux.intel.com>
-    drm/i915: Move the DSB setup/cleaup into the color code
-
-Mike Snitzer <snitzer@kernel.org>
-    dm: fix improper splitting for abnormal bios
-
-Heinz Mauelshagen <heinzm@redhat.com>
-    dm: change "unsigned" to "unsigned int"
-
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-    dm integrity: Remove bi_sector that's only used by commented debug code
-
-Joe Thornber <ejt@redhat.com>
-    dm cache: Add some documentation to dm-cache-background-tracker.h
-
-
--------------
-
-Diffstat:
-
- .../devicetree/bindings/serial/renesas,scif.yaml   |   4 +-
- Documentation/mm/zsmalloc.rst                      |   2 +
- Makefile                                           |   4 +-
- arch/arm64/kernel/compat_alignment.c               |  32 +-
- arch/s390/kvm/intercept.c                          |  32 +-
- arch/x86/kernel/acpi/boot.c                        |   9 +-
- arch/x86/kvm/kvm_onhyperv.h                        |   5 +
- arch/x86/kvm/svm/svm.c                             |  37 +-
- arch/x86/kvm/svm/svm_onhyperv.h                    |  15 +
- arch/x86/kvm/vmx/nested.c                          |   7 +-
- arch/x86/kvm/x86.c                                 |  11 +-
- block/blk-mq.c                                     |   4 +-
- block/genhd.c                                      |   8 +-
- drivers/acpi/acpi_video.c                          |  15 +-
- drivers/acpi/video_detect.c                        |  58 +++-
- drivers/block/ublk_drv.c                           |  26 +-
- drivers/counter/104-quad-8.c                       |  31 +-
- drivers/cxl/core/pci.c                             |  38 +-
- drivers/cxl/cxlpci.h                               |  14 +
- drivers/gpio/Kconfig                               |   2 +-
- drivers/gpio/gpio-davinci.c                        |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  18 +
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |   2 +
- drivers/gpu/drm/bridge/lontium-lt9611.c            |   1 +
- drivers/gpu/drm/i915/display/intel_color.c         |  23 ++
- drivers/gpu/drm/i915/display/intel_color.h         |   3 +
- drivers/gpu/drm/i915/display/intel_display.c       |  28 +-
- drivers/gpu/drm/i915/display/intel_display.h       |   8 +
- .../gpu/drm/i915/gt/intel_execlists_submission.c   |  12 +-
- drivers/gpu/drm/i915/gt/uc/intel_huc.c             |   7 +
- drivers/gpu/drm/i915/gt/uc/intel_huc.h             |   7 +-
- drivers/gpu/drm/i915/i915_perf.c                   |   6 +-
- drivers/gpu/drm/nouveau/dispnv50/disp.c            |  32 ++
- drivers/gpu/drm/nouveau/nouveau_dp.c               |   8 +-
- drivers/gpu/drm/panfrost/panfrost_mmu.c            |   1 +
- drivers/hv/connection.c                            |   4 +
- drivers/hwtracing/coresight/coresight-etm4x-core.c |  24 +-
- drivers/hwtracing/coresight/coresight-etm4x.h      |  20 +-
- drivers/iio/accel/kionix-kx022a.c                  |   2 +-
- drivers/iio/adc/ad7791.c                           |   2 +-
- drivers/iio/adc/ltc2497.c                          |   6 +-
- drivers/iio/adc/max11410.c                         |  22 +-
- drivers/iio/adc/qcom-spmi-adc5.c                   |  10 +-
- drivers/iio/adc/ti-ads7950.c                       |   1 +
- drivers/iio/dac/cio-dac.c                          |   4 +-
- drivers/iio/imu/Kconfig                            |   1 +
- drivers/iio/industrialio-buffer.c                  |  21 +-
- drivers/iio/light/cm32181.c                        |  12 +
- drivers/iio/light/vcnl4000.c                       |   3 +-
- drivers/iommu/iommufd/pages.c                      |  16 +-
- drivers/md/dm-bio-prison-v1.c                      |  10 +-
- drivers/md/dm-bio-prison-v2.c                      |  12 +-
- drivers/md/dm-bio-prison-v2.h                      |  10 +-
- drivers/md/dm-bufio.c                              |  58 ++--
- drivers/md/dm-cache-background-tracker.c           |   8 +-
- drivers/md/dm-cache-background-tracker.h           |  46 ++-
- drivers/md/dm-cache-metadata.c                     |  40 +--
- drivers/md/dm-cache-metadata.h                     |   4 +-
- drivers/md/dm-cache-policy-internal.h              |  10 +-
- drivers/md/dm-cache-policy-smq.c                   | 163 ++++-----
- drivers/md/dm-cache-policy.c                       |   2 +-
- drivers/md/dm-cache-policy.h                       |   4 +-
- drivers/md/dm-cache-target.c                       |  50 +--
- drivers/md/dm-core.h                               |   6 +-
- drivers/md/dm-crypt.c                              |  48 +--
- drivers/md/dm-delay.c                              |   6 +-
- drivers/md/dm-ebs-target.c                         |   2 +-
- drivers/md/dm-era-target.c                         |  32 +-
- drivers/md/dm-exception-store.c                    |   6 +-
- drivers/md/dm-exception-store.h                    |  18 +-
- drivers/md/dm-flakey.c                             |  22 +-
- drivers/md/dm-integrity.c                          | 328 +++++++++---------
- drivers/md/dm-io-rewind.c                          |   4 +-
- drivers/md/dm-io.c                                 |  32 +-
- drivers/md/dm-ioctl.c                              |  18 +-
- drivers/md/dm-kcopyd.c                             |  30 +-
- drivers/md/dm-linear.c                             |   2 +-
- drivers/md/dm-log-userspace-base.c                 |   6 +-
- drivers/md/dm-log-userspace-transfer.c             |   2 +-
- drivers/md/dm-log-writes.c                         |  10 +-
- drivers/md/dm-log.c                                |  10 +-
- drivers/md/dm-mpath.c                              |  46 +--
- drivers/md/dm-mpath.h                              |   2 +-
- drivers/md/dm-path-selector.h                      |   2 +-
- drivers/md/dm-ps-io-affinity.c                     |   4 +-
- drivers/md/dm-ps-queue-length.c                    |  10 +-
- drivers/md/dm-ps-round-robin.c                     |   6 +-
- drivers/md/dm-ps-service-time.c                    |  14 +-
- drivers/md/dm-raid.c                               |   2 +-
- drivers/md/dm-raid1.c                              |  22 +-
- drivers/md/dm-region-hash.c                        |  22 +-
- drivers/md/dm-rq.c                                 |  16 +-
- drivers/md/dm-rq.h                                 |   2 +-
- drivers/md/dm-snap-persistent.c                    |   8 +-
- drivers/md/dm-snap-transient.c                     |   6 +-
- drivers/md/dm-snap.c                               |  34 +-
- drivers/md/dm-stats.c                              |  74 ++--
- drivers/md/dm-stats.h                              |   6 +-
- drivers/md/dm-stripe.c                             |  10 +-
- drivers/md/dm-switch.c                             |  46 +--
- drivers/md/dm-table.c                              |  25 +-
- drivers/md/dm-thin-metadata.c                      |  24 +-
- drivers/md/dm-thin.c                               |  46 +--
- drivers/md/dm-uevent.c                             |   4 +-
- drivers/md/dm-uevent.h                             |   4 +-
- drivers/md/dm-verity-fec.c                         |  30 +-
- drivers/md/dm-verity-fec.h                         |  18 +-
- drivers/md/dm-verity-target.c                      |  30 +-
- drivers/md/dm-verity.h                             |   8 +-
- drivers/md/dm-writecache.c                         |  80 ++---
- drivers/md/dm.c                                    |  55 ++-
- drivers/md/dm.h                                    |   4 +-
- drivers/md/persistent-data/dm-array.c              |  69 ++--
- drivers/md/persistent-data/dm-array.h              |   2 +-
- drivers/md/persistent-data/dm-bitset.c             |  12 +-
- drivers/md/persistent-data/dm-block-manager.c      |  16 +-
- drivers/md/persistent-data/dm-block-manager.h      |   6 +-
- drivers/md/persistent-data/dm-btree-remove.c       |  46 +--
- drivers/md/persistent-data/dm-btree-spine.c        |   4 +-
- drivers/md/persistent-data/dm-btree.c              |  98 +++---
- drivers/md/persistent-data/dm-btree.h              |  12 +-
- .../persistent-data/dm-persistent-data-internal.h  |   6 +-
- drivers/md/persistent-data/dm-space-map-common.c   |  28 +-
- drivers/md/persistent-data/dm-space-map-metadata.c |  20 +-
- .../md/persistent-data/dm-transaction-manager.c    |  16 +-
- .../md/persistent-data/dm-transaction-manager.h    |   2 +-
- drivers/net/dsa/mv88e6xxx/chip.c                   |   2 +-
- drivers/net/dsa/mv88e6xxx/global2.c                |  20 ++
- drivers/net/dsa/mv88e6xxx/global2.h                |   1 +
- drivers/net/ethernet/google/gve/gve.h              |   2 +
- drivers/net/ethernet/google/gve/gve_tx.c           |  12 +-
- drivers/net/ethernet/intel/ice/ice_virtchnl_fdir.c |  23 +-
- drivers/net/ethernet/mediatek/mtk_eth_soc.c        |   4 +
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c  |   1 -
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |  21 +-
- drivers/net/ethernet/ti/am65-cpsw-nuss.c           |   6 +-
- drivers/net/phy/phylink.c                          |  19 +
- .../wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c  |  36 +-
- .../wireless/broadcom/brcm80211/brcmfmac/sdio.h    |   2 +
- drivers/net/wireless/mediatek/mt76/mt7603/main.c   |  10 +-
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c    |  70 ++--
- drivers/net/wireless/mediatek/mt76/mt7615/main.c   |  15 +-
- drivers/net/wireless/mediatek/mt76/mt7615/mt7615.h |   6 +-
- drivers/net/wireless/mediatek/mt76/mt76x02_util.c  |  18 +-
- drivers/net/wireless/mediatek/mt76/mt7915/main.c   |  13 +-
- drivers/net/wireless/mediatek/mt76/mt7921/main.c   |  13 +-
- drivers/net/wireless/mediatek/mt76/mt7921/pci.c    |   2 +-
- drivers/net/wireless/mediatek/mt76/mt7996/main.c   |  13 +-
- drivers/nvme/host/core.c                           |   6 +-
- drivers/pci/doe.c                                  |  30 +-
- drivers/platform/x86/think-lmi.c                   |  20 +-
- drivers/pwm/pwm-cros-ec.c                          |   1 +
- drivers/pwm/pwm-hibvt.c                            |   1 +
- drivers/pwm/pwm-iqs620a.c                          |   1 +
- drivers/pwm/pwm-meson.c                            |   8 +
- drivers/pwm/pwm-sprd.c                             |   1 +
- drivers/scsi/iscsi_tcp.c                           |   3 +-
- drivers/scsi/qla2xxx/qla_os.c                      |   1 +
- drivers/tty/serial/8250/8250_port.c                |  11 +
- drivers/tty/serial/fsl_lpuart.c                    |  10 +-
- drivers/tty/serial/sh-sci.c                        |  10 +-
- drivers/usb/cdns3/cdnsp-ep0.c                      |   3 +-
- drivers/usb/dwc3/dwc3-pci.c                        |   4 +
- drivers/usb/host/xhci-pci.c                        |   7 +-
- drivers/usb/host/xhci-tegra.c                      |   6 +-
- drivers/usb/host/xhci.c                            |   7 +-
- drivers/usb/serial/cp210x.c                        |   1 +
- drivers/usb/serial/option.c                        |  10 +
- drivers/usb/typec/altmodes/displayport.c           |   6 +-
- fs/cifs/fs_context.c                               |  13 +-
- fs/cifs/fs_context.h                               |   3 +
- fs/cifs/misc.c                                     |   2 +-
- fs/dax.c                                           |  52 ++-
- fs/ksmbd/connection.c                              |   5 +-
- fs/ksmbd/server.c                                  |   5 +-
- fs/ksmbd/smb2pdu.c                                 |   3 -
- fs/ksmbd/smb_common.c                              | 138 ++++++--
- fs/ksmbd/smb_common.h                              |   2 +-
- fs/namespace.c                                     |   2 +-
- fs/nfsd/blocklayout.c                              |   1 +
- fs/nfsd/nfs4callback.c                             |   4 +-
- fs/nfsd/nfs4xdr.c                                  |  15 +-
- fs/nilfs2/segment.c                                |   3 +-
- fs/nilfs2/super.c                                  |   2 +
- fs/nilfs2/the_nilfs.c                              |  12 +-
- include/acpi/video.h                               |  15 +-
- include/linux/device-mapper.h                      |  38 +-
- include/linux/dm-bufio.h                           |  12 +-
- include/linux/dm-dirty-log.h                       |   6 +-
- include/linux/dm-io.h                              |   8 +-
- include/linux/dm-kcopyd.h                          |  22 +-
- include/linux/dm-region-hash.h                     |   2 +-
- include/linux/ftrace.h                             |   2 +-
- include/linux/mm_types.h                           |   3 +-
- include/linux/pci-doe.h                            |   8 +-
- include/linux/phylink.h                            |   1 +
- include/net/raw.h                                  |  15 +-
- io_uring/io_uring.c                                |   2 +-
- io_uring/kbuf.c                                    |   7 +-
- kernel/events/core.c                               |  14 +-
- kernel/fork.c                                      |   3 +
- kernel/trace/ftrace.c                              |  15 +-
- kernel/trace/ring_buffer.c                         |  13 +-
- kernel/trace/trace.c                               |   1 +
- kernel/trace/trace_events_synth.c                  |  19 +-
- kernel/trace/trace_osnoise.c                       |   4 +-
- lib/maple_tree.c                                   | 383 +++++++++++++--------
- mm/hugetlb.c                                       |  14 +-
- mm/kfence/core.c                                   |  32 +-
- mm/memory.c                                        |  16 +-
- mm/mmap.c                                          |   3 +-
- mm/swapfile.c                                      |   3 +-
- mm/vmalloc.c                                       |   8 +-
- net/can/isotp.c                                    |  74 ++--
- net/can/j1939/transport.c                          |   5 +-
- net/core/netpoll.c                                 |  19 +-
- net/ethtool/linkmodes.c                            |   7 +-
- net/ipv4/icmp.c                                    |   5 +
- net/ipv4/ping.c                                    |   8 +-
- net/ipv4/raw.c                                     |  49 +--
- net/ipv4/raw_diag.c                                |  10 +-
- net/ipv6/ip6_output.c                              |   7 +-
- net/ipv6/raw.c                                     |  14 +-
- net/l2tp/l2tp_ip.c                                 |   8 +-
- net/l2tp/l2tp_ip6.c                                |   8 +-
- net/mac80211/sta_info.c                            |   3 +-
- net/mac80211/util.c                                |   2 +-
- net/netlink/af_netlink.c                           |  15 +-
- net/qrtr/af_qrtr.c                                 |   2 +
- net/qrtr/ns.c                                      |  15 +-
- net/sctp/socket.c                                  |   4 +
- net/sunrpc/svcauth_unix.c                          |  17 +-
- sound/pci/hda/patch_hdmi.c                         |  11 +
- sound/pci/hda/patch_realtek.c                      |   2 +
- sound/soc/codecs/hdac_hdmi.c                       |  17 +-
- sound/soc/codecs/lpass-rx-macro.c                  |   4 +-
- sound/soc/codecs/lpass-tx-macro.c                  |   4 +-
- sound/soc/codecs/lpass-wsa-macro.c                 |   4 +-
- sound/soc/sof/ipc4-topology.c                      |   8 +
- sound/soc/sof/ipc4.c                               |   8 +
- tools/testing/radix-tree/maple.c                   |  18 +-
- 241 files changed, 2637 insertions(+), 1757 deletions(-)
-
-
+On 2023/4/12 15:30, Qi Zheng wrote:
+> 
+> 
+> On 2023/4/12 14:50, Vlastimil Babka wrote:
+>>
+>>
+>> On 4/12/23 08:44, Zhang, Qiang1 wrote:
+>>>>
+>>>>
+>>>> On 2023/4/11 22:19, Vlastimil Babka wrote:
+>>>>> On 4/11/23 16:08, Qi Zheng wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2023/4/11 21:40, Vlastimil Babka wrote:
+>>>>>>> On 4/11/23 15:08, Qi Zheng wrote:
+>>>>>>>> The list_lock can be held in the critical section of
+>>>>>>>> raw_spinlock, and then lockdep will complain about it
+>>>>>>>> like below:
+>>>>>>>>
+>>>>>>>>     =============================
+>>>>>>>>     [ BUG: Invalid wait context ]
+>>>>>>>>     6.3.0-rc6-next-20230411 #7 Not tainted
+>>>>>>>>     -----------------------------
+>>>>>>>>     swapper/0/1 is trying to lock:
+>>>>>>>>     ffff888100055418 (&n->list_lock){....}-{3:3}, at: 
+>>>>>>>> ___slab_alloc+0x73d/0x1330
+>>>>>>>>     other info that might help us debug this:
+>>>>>>>>     context-{5:5}
+>>>>>>>>     2 locks held by swapper/0/1:
+>>>>>>>>      #0: ffffffff824e8160 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, 
+>>>>>>>> at: cblist_init_generic+0x22/0x2d0
+>>>>>>>>      #1: ffff888136bede50 (&ACCESS_PRIVATE(rtpcp, 
+>>>>>>>> lock)){....}-{2:2}, at: cblist_init_generic+0x232/0x2d0
+>>>>>>>>     stack backtrace:
+>>>>>>>>     CPU: 0 PID: 1 Comm: swapper/0 Not tainted 
+>>>>>>>> 6.3.0-rc6-next-20230411 #7
+>>>>>>>>     Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
+>>>>>>>> 1.14.0-2 04/01/2014
+>>>>>>>>     Call Trace:
+>>>>>>>>      <TASK>
+>>>>>>>>      dump_stack_lvl+0x77/0xc0
+>>>>>>>>      __lock_acquire+0xa65/0x2950
+>>>>>>>>      ? arch_stack_walk+0x65/0xf0
+>>>>>>>>      ? arch_stack_walk+0x65/0xf0
+>>>>>>>>      ? unwind_next_frame+0x602/0x8d0
+>>>>>>>>      lock_acquire+0xe0/0x300
+>>>>>>>>      ? ___slab_alloc+0x73d/0x1330
+>>>>>>>>      ? find_usage_forwards+0x39/0x50
+>>>>>>>>      ? check_irq_usage+0x162/0xa70
+>>>>>>>>      ? __bfs+0x10c/0x2c0
+>>>>>>>>      _raw_spin_lock_irqsave+0x4f/0x90
+>>>>>>>>      ? ___slab_alloc+0x73d/0x1330
+>>>>>>>>      ___slab_alloc+0x73d/0x1330
+>>>>>>>>      ? fill_pool+0x16b/0x2a0
+>>>>>>>>      ? look_up_lock_class+0x5d/0x160
+>>>>>>>>      ? register_lock_class+0x48/0x500
+>>>>>>>>      ? __lock_acquire+0xabc/0x2950
+>>>>>>>>      ? fill_pool+0x16b/0x2a0
+>>>>>>>>      kmem_cache_alloc+0x358/0x3b0
+>>>>>>>>      ? __lock_acquire+0xabc/0x2950
+>>>>>>>>      fill_pool+0x16b/0x2a0
+>>>>>>>>      ? __debug_object_init+0x292/0x560
+>>>>>>>>      ? lock_acquire+0xe0/0x300
+>>>>>>>>      ? cblist_init_generic+0x232/0x2d0
+>>>>>>>>      __debug_object_init+0x2c/0x560
+>>>>
+>>>> This "__debug_object_init" is because INIT_WORK() is called in
+>>>> cblist_init_generic(), so..
+>>>>
+>>>>>>>>      cblist_init_generic+0x147/0x2d0
+>>>>>>>>      rcu_init_tasks_generic+0x15/0x190
+>>>>>>>>      kernel_init_freeable+0x6e/0x3e0
+>>>>>>>>      ? rest_init+0x1e0/0x1e0
+>>>>>>>>      kernel_init+0x1b/0x1d0
+>>>>>>>>      ? rest_init+0x1e0/0x1e0
+>>>>>>>>      ret_from_fork+0x1f/0x30
+>>>>>>>>      </TASK>
+>>>>>>>>
+>>>>>>>> The fill_pool() can only be called in the !PREEMPT_RT kernel
+>>>>>>>> or in the preemptible context of the PREEMPT_RT kernel, so
+>>>>>>>> the above warning is not a real issue, but it's better to
+>>>>>>>> annotate kmem_cache_node->list_lock as raw_spinlock to get
+>>>>>>>> rid of such issue.
+>>>>>>>
+>>>>>>> + CC some RT and RCU people
+>>>>>>
+>>>>>> Thanks.
+>>>>>>
+>>>>>>>
+>>>>>>> AFAIK raw_spinlock is not just an annotation, but on RT it 
+>>>>>>> changes the
+>>>>>>> implementation from preemptible mutex to actual spin lock, so it 
+>>>>>>> would be
+>>>>>>
+>>>>>> Yeah.
+>>>>>>
+>>>>>>> rather unfortunate to do that for a spurious warning. Can it be 
+>>>>>>> somehow
+>>>>>>> fixed in a better way?
+>>>>
+>>>> ... probably a better fix is to drop locks and call INIT_WORK(), or 
+>>>> make
+>>>> the cblist_init_generic() lockless (or part lockless), given it's just
+>>>> initializing the cblist, it's probably doable. But I haven't taken a
+>>>> careful look yet.
+>>>>
+>>>
+>>>
+>>> This is just one of the paths that triggers an invalid wait,  the 
+>>> following paths can also trigger:
+>>>
+>>> [  129.914547] [ BUG: Invalid wait context ]
+>>> [  129.914775] 6.3.0-rc1-yocto-standard+ #2 Not tainted
+>>> [  129.915044] -----------------------------
+>>> [  129.915272] kworker/2:0/28 is trying to lock:
+>>> [  129.915516] ffff88815660f570 (&c->lock){-.-.}-{3:3}, at: 
+>>> ___slab_alloc+0x68/0x12e0
+>>> [  129.915967] other info that might help us debug this:
+>>> [  129.916241] context-{5:5}
+>>> [  129.916392] 3 locks held by kworker/2:0/28:
+>>> [  129.916642]  #0: ffff888100084d48 
+>>> ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x515/0xba0
+>>> [  129.917145]  #1: ffff888100c17dd0 
+>>> ((work_completion)(&(&krcp->monitor_work)->work)){+.+.}-{0:0}, at: 
+>>> process_on0
+>>> [  129.917758]  #2: ffff8881565f8508 (krc.lock){....}-{2:2}, at: 
+>>> kfree_rcu_monitor+0x29f/0x810
+>>> [  129.918207] stack backtrace:
+>>> [  129.918374] CPU: 2 PID: 28 Comm: kworker/2:0 Not tainted 
+>>> 6.3.0-rc1-yocto-standard+ #2
+>>> [  129.918784] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), 
+>>> BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.o4
+>>> [  129.919397] Workqueue: events kfree_rcu_monitor
+>>> [  129.919662] Call Trace:
+>>> [  129.919812]  <TASK>
+>>> [  129.919941]  dump_stack_lvl+0x64/0xb0
+>>> [  129.920171]  dump_stack+0x10/0x20
+>>> [  129.920372]  __lock_acquire+0xeb8/0x3a80
+>>> [  129.920603]  ? ret_from_fork+0x2c/0x50
+>>> [  129.920824]  ? __pfx___lock_acquire+0x10/0x10
+>>> [  129.921068]  ? unwind_next_frame.part.0+0x1ba/0x3c0
+>>> [  129.921343]  ? ret_from_fork+0x2c/0x50
+>>> [  129.921573]  ? __this_cpu_preempt_check+0x13/0x20
+>>> [  129.921847]  lock_acquire+0x194/0x480
+>>> [  129.922060]  ? ___slab_alloc+0x68/0x12e0
+>>> [  129.922293]  ? __pfx_lock_acquire+0x10/0x10
+>>> [  129.922529]  ? __pfx_mark_lock.part.0+0x10/0x10
+>>> [  129.922778]  ? __kasan_check_read+0x11/0x20
+>>> [  129.922998]  ___slab_alloc+0x9a/0x12e0
+>>> [  129.923222]  ? ___slab_alloc+0x68/0x12e0
+>>> [  129.923452]  ? __pfx_mark_lock.part.0+0x10/0x10
+>>> [  129.923706]  ? __kasan_check_read+0x11/0x20
+>>> [  129.923937]  ? fill_pool+0x22a/0x370
+>>> [  129.924161]  ? __lock_acquire+0xf5b/0x3a80
+>>> [  129.924387]  ? fill_pool+0x22a/0x370
+>>> [  129.924590]  __slab_alloc.constprop.0+0x5b/0x90
+>>> [  129.924832]  kmem_cache_alloc+0x296/0x3d0
+>>> [  129.925073]  ? fill_pool+0x22a/0x370
+>>> [  129.925291]  fill_pool+0x22a/0x370
+>>> [  129.925495]  ? __pfx_fill_pool+0x10/0x10
+>>> [  129.925718]  ? __pfx___lock_acquire+0x10/0x10
+>>> [  129.926034]  ? __kasan_check_read+0x11/0x20
+>>> [  129.926269]  ? check_chain_key+0x200/0x2b0
+>>> [  129.926503]  __debug_object_init+0x82/0x8c0
+>>> [  129.926734]  ? __pfx_lock_release+0x10/0x10
+>>> [  129.926984]  ? __pfx___debug_object_init+0x10/0x10
+>>> [  129.927249]  ? __kasan_check_read+0x11/0x20
+>>> [  129.927498]  ? do_raw_spin_unlock+0x9c/0x100
+>>> [  129.927758]  debug_object_activate+0x2d1/0x2f0
+>>> [  129.928022]  ? __pfx_debug_object_activate+0x10/0x10
+>>> [  129.928300]  ? __this_cpu_preempt_check+0x13/0x20
+>>> [  129.928583]  __call_rcu_common.constprop.0+0x94/0xeb0
+>>> [  129.928897]  ? __this_cpu_preempt_check+0x13/0x20
+>>> [  129.929186]  ? __pfx_rcu_work_rcufn+0x10/0x10
+>>> [  129.929459]  ? __pfx___call_rcu_common.constprop.0+0x10/0x10
+>>> [  129.929803]  ? __pfx_lock_acquired+0x10/0x10
+>>> [  129.930067]  ? __pfx_do_raw_spin_trylock+0x10/0x10
+>>> [  129.930363]  ? kfree_rcu_monitor+0x29f/0x810
+>>> [  129.930627]  call_rcu+0xe/0x20
+>>> [  129.930821]  queue_rcu_work+0x4f/0x60
+>>> [  129.931050]  kfree_rcu_monitor+0x5d3/0x810
+>>> [  129.931302]  ? __pfx_kfree_rcu_monitor+0x10/0x10
+>>> [  129.931587]  ? __this_cpu_preempt_check+0x13/0x20
+>>> [  129.931878]  process_one_work+0x607/0xba0
+>>> [  129.932129]  ? __pfx_process_one_work+0x10/0x10
+>>> [  129.932408]  ? worker_thread+0xd6/0x710
+>>> [  129.932653]  worker_thread+0x2d4/0x710
+>>> [  129.932888]  ? __pfx_worker_thread+0x10/0x10
+>>> [  129.933154]  kthread+0x18b/0x1c0
+>>> [  129.933363]  ? __pfx_kthread+0x10/0x10
+>>> [  129.933598]  ret_from_fork+0x2c/0x50
+>>> [  129.933825]  </TASK>
+>>>
+>>> Maybe no need to convert ->list_lock to raw_spinlock.
+>>>
+>>> --- a/lib/debugobjects.c
+>>> +++ b/lib/debugobjects.c
+>>> @@ -562,10 +562,10 @@ __debug_object_init(void *addr, const struct 
+>>> debug_obj_descr *descr, int onstack
+>>>          unsigned long flags;
+>>>
+>>>          /*
+>>> -        * On RT enabled kernels the pool refill must happen in 
+>>> preemptible
+>>> +        * The pool refill must happen in preemptible
+>>>           * context:
+>>>           */
+>>> -       if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())
+>>> +       if (preemptible())
+>>>                  fill_pool();
+>>
+>> +CC Peterz
+>>
+>> Aha so this is in fact another case where the code is written with
+>> actual differences between PREEMPT_RT and !PREEMPT_RT in mind, but
+>> CONFIG_PROVE_RAW_LOCK_NESTING always assumes PREEMPT_RT?
+> 
+> Maybe we should make CONFIG_PROVE_RAW_LOCK_NESTING depend on
+> CONFIG_PREEMPT_RT:
+
+I found a discussion [1] of why CONFIG_PROVE_RAW_LOCK_NESTING didn't
+depend on CONFIG_PREEMPT_RT before in the commit history:
+
+```
+ >>> We now always get a "Invalid wait context" warning with
+ >>> CONFIG_PROVE_RAW_LOCK_NESTING=y, see the full warning below:
+ >>>
+ >>>        [    0.705900] =============================
+ >>>        [    0.706002] [ BUG: Invalid wait context ]
+ >>>        [    0.706180] 5.13.0+ #4 Not tainted
+ >>>        [    0.706349] -----------------------------
+ >> I believe the purpose of CONFIG_PROVE_RAW_LOCK_NESTING is experimental
+ >> and it is turned off by default. Turning it on can cause problem as
+ >> shown in your lockdep splat. Limiting it to just PREEMPT_RT will defeat
+ >> its purpose to find potential spinlock nesting problem in non-PREEMPT_RT
+ >> kernel.
+ > As far as I know, a spinlock can nest another spinlock. In
+ > non-PREEMPT_RT kernel
+ > spin_lock and raw_spin_lock are same , so here acquiring a spin_lock 
+in hardirq
+ > context is acceptable, the warning is not needed. My knowledge on this
+ > is not enough,
+ > Will dig into this.
+ >
+ >> The point is to fix the issue found,
+ > Agree. I thought there was a spinlock usage issue, but by checking
+ > deactivate_slab context,
+ > looks like the spinlock usage is well. Maybe I'm missing something?
+
+Yes, spinlock and raw spinlock are the same in non-RT kernel. They are
+only different in RT kernel. However, non-RT kernel is also more heavily
+tested than the RT kernel counterpart. The purpose of this config option
+is to expose spinlock nesting problem in more areas of the code. If you
+look at the config help text of PROVE_RAW_LOCK_NESTING:
+
+          help
+           Enable the raw_spinlock vs. spinlock nesting checks which ensure
+           that the lock nesting rules for PREEMPT_RT enabled kernels are
+           not violated.
+
+           NOTE: There are known nesting problems. So if you enable this
+           option expect lockdep splats until these problems have been fully
+           addressed which is work in progress. This config switch allows to
+           identify and analyze these problems. It will be removed and the
+           check permanentely enabled once the main issues have been fixed.
+
+           If unsure, select N.
+
+So lockdep splat is expected. It will take time to address all the
+issues found.
+```
+
+Also +Waiman Long.
+
+
+[1]. 
+https://lore.kernel.org/lkml/1c4c058b-3745-5586-4961-79d83fb5b049@redhat.com/
+
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index f0d5b82e478d..257b170aacb6 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1262,6 +1262,7 @@ config PROVE_LOCKING
+>   config PROVE_RAW_LOCK_NESTING
+>          bool "Enable raw_spinlock - spinlock nesting checks"
+>          depends on PROVE_LOCKING
+> +       depends on PREEMPT_RT
+>          default n
+>          help
+>           Enable the raw_spinlock vs. spinlock nesting checks which ensure
+> 
+>>
+>>>          db = get_bucket((unsigned long) addr);
+>>>
+>>>
+>>>
+>>> Thanks
+>>> Zqiang
+>>>
+>>>>
+>>>>
+>>>> Regards,
+>>>> Boqun
+>>>>
+>>>>>>
+>>>>>> It's indeed unfortunate for the warning in the commit message. But
+>>>>>> functions like kmem_cache_alloc(GFP_ATOMIC) may indeed be called
+>>>>>> in the critical section of raw_spinlock or in the hardirq context, 
+>>>>>> which
+>>>>>
+>>>>> Hmm, I thought they may not, actually.
+>>>>>
+>>>>>> will cause problem in the PREEMPT_RT kernel. So I still think it is
+>>>>>> reasonable to convert kmem_cache_node->list_lock to raw_spinlock 
+>>>>>> type.
+>>>>>
+>>>>> It wouldn't be the complete solution anyway. Once we allow even a 
+>>>>> GFP_ATOMIC
+>>>>> slab allocation for such context, it means also page allocation can 
+>>>>> happen
+>>>>> to refill the slabs, so lockdep will eventually complain about 
+>>>>> zone->lock,
+>>>>> and who knows what else.
+>>>>
+>>>> Oh, indeed. :(
+>>>>
+>>>>>
+>>>>>> In addition, there are many fix patches for this kind of warning 
+>>>>>> in the
+>>>>>> git log, so I also think there should be a general and better 
+>>>>>> solution. :)
+>>>>>
+>>>>> Maybe, but given above, I doubt it's this one.
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>> -- 
+>>>> Thanks,
+>>>> Qi
+> 
+
+-- 
+Thanks,
+Qi
