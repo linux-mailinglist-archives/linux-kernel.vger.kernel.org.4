@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881E36DEBC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2B06DEBC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDLGZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S229707AbjDLG11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjDLGZX (ORCPT
+        with ESMTP id S229513AbjDLG1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:25:23 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1EC129;
-        Tue, 11 Apr 2023 23:25:22 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id h14so222427qvr.7;
-        Tue, 11 Apr 2023 23:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681280722; x=1683872722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3XP1IEdAW1/2UUojFCGpGs+sDLAz3kCUnv2U6KCFQcc=;
-        b=WBwQf1YgAoeklHXYHtSkJ12jBQ3EiYc46fuxlQcBL625G/RMZykzcB1sptjJZtPX8C
-         Nm26WM5laj9xX+N7911d5BsAyKs12RnDKFc311OB7QQ5dxuUvSySzYcZ1x9nd/Muip4l
-         yBhdI+wPay2vQX0bUeAwAsOvasJg4nUoJ6A6OaUKShceO2F+p5RQuqYbtHleUYrxWg79
-         FvnWd9n0S2WKyKgzi5AAAhBSqb7tpcfc9oUWD8uK/Z3d9eaQqkkuhZKnUiMkedXhdDQO
-         mvJTMGJkr2mk7JYhM3NWQIdmKEwWd2OQ9Sm1NMuEtaVzkh68BIJ81R9A00Cqz2Sz4p+h
-         VmoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681280722; x=1683872722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3XP1IEdAW1/2UUojFCGpGs+sDLAz3kCUnv2U6KCFQcc=;
-        b=JJU2gTd/aZICriCpBSo5EiBA9oHE7up3nhWsl0NG05QZJqi36LPS7wjfeuxnHNm3Xq
-         BkE5w9BDWfa2rY6HMaErA8Q9a0XBy1aLT+VDKsRm3OxLgvgAtdblwsE2AkXOhRCE+mG2
-         qgV2+Cfy5/jJE4GUPpD/kPSQcIEHpEtYhqTr1wx4ZHvoJ36ZeU0lPOS4Jq773+IvbZLH
-         FRHmYFq40eCL++owAz91BKZ2+Pak/jtLYd+nhrjoho1+qM8teLsbcB0JndeV33sJ72L1
-         LiIxRntit/oD+w5IlCJ+327venTsxBSZ9RS5aY5Br4cjCajtxJ8eVeHoCHya6d9amtmn
-         kQjw==
-X-Gm-Message-State: AAQBX9cxWoEBDvBHkKlsE8J6/ZeigXPUgsKsG9eIxPbAvgfL9lPVnNbX
-        8sEoPl7zKhwe6LmEYMqnHizNEQMgq0g=
-X-Google-Smtp-Source: AKy350ZaA8NH3A5LpJuiKElAGI50mB+Pfrmg9UDeloYZ3p3Ep37nh0sxUOu2azMRSkN9MG93ZSjmYw==
-X-Received: by 2002:a05:6214:e6c:b0:5ed:90ce:ef28 with SMTP id jz12-20020a0562140e6c00b005ed90ceef28mr14313910qvb.39.1681280722005;
-        Tue, 11 Apr 2023 23:25:22 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id t186-20020a3746c3000000b00746ae84ea6csm4472717qka.3.2023.04.11.23.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 23:25:21 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id F389D27C0054;
-        Wed, 12 Apr 2023 02:25:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 12 Apr 2023 02:25:21 -0400
-X-ME-Sender: <xms:0E42ZClr9zBKBCsC7HIlUTkcZluTvboOWBSSQaD-t0vwuOnb0DanlA>
-    <xme:0E42ZJ2SYcMjuBSTUGqmUW-Pyyu2BQroqEaljKzbY5lTu2iJ4av04R9uwv2wVP6_c
-    uKitNMemv-z2FgQkA>
-X-ME-Received: <xmr:0E42ZArTYCAdWERIsQ0LedcPN1BQWa-oYgTMKWIJliR1WrMzDdzTcW38-F0y47Gx7jjShONmU8topD0OkciXU9Cs3hIGU80Z_fc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekhedguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:0E42ZGlD8ESz7MEJJpoJ5VM1YZ5HgMx0dyRsBOd6hC1xBSpfs_Bdig>
-    <xmx:0E42ZA3O7KXAXHrzMRgFCJoBz2w5Q58SFhIoEtC-O5TTsnerQKVvkw>
-    <xmx:0E42ZNsF1iEyBuBljAKqUK-p_n0rFcF1XSYXx70_ScX7Oai7JMPiMw>
-    <xmx:0E42ZBKScpLTYoj2rChQZkNH6H1bea9bIUmi19vKu5z0Q4xHCqMbXA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Apr 2023 02:25:20 -0400 (EDT)
-Date:   Tue, 11 Apr 2023 23:25:19 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v4 11/13] rust: lock: add `Guard::do_unlocked`
-Message-ID: <ZDZOzzMvvxr4rsW4@Boquns-Mac-mini.local>
-References: <20230411054543.21278-1-wedsonaf@gmail.com>
- <20230411054543.21278-11-wedsonaf@gmail.com>
+        Wed, 12 Apr 2023 02:27:25 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F739129;
+        Tue, 11 Apr 2023 23:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681280842; x=1712816842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0oFXd/j/ZCtmJRDoDRxJJvoLSwqd30a5/biS7X1TG58=;
+  b=gSv0gEmAOCuDh2waI2/8XWbK4KSBaOEnZGGIrgij7sh0H3dSgVH6El2q
+   ev7Iy4YOMbNsfiojj5kUL+JKgI7SPff9kojnI38HgunDJJrNC7FZfM+Q3
+   eEXuleZBUmucG/aBc0Trof8fosszldV0lgnqSKUVj5fqQ0HghLN12NSeq
+   Kp9VsWpPeGmRnhpc3+pufZC/F9bXCpnxP5mtKHPt3sZFmamcEqvXL09xB
+   zOCLDf1H3/FKhZYNFidTPpagNrfrrq0ReIWXBn548DPf5BqFj3V6OzYHe
+   bZrwZALF4+7mEfJ5JyCh0Y3zBJeo1gHdVxMvLJz+2R/tfV/KO8mFZ3JtT
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,338,1673938800"; 
+   d="asc'?scan'208";a="208721680"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2023 23:27:20 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 11 Apr 2023 23:27:20 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 11 Apr 2023 23:27:18 -0700
+Date:   Wed, 12 Apr 2023 07:27:03 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Walker Chen <walker.chen@starfivetech.com>
+CC:     Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v1 5/7] soc: starfive: Use call back to parse device tree
+ resources
+Message-ID: <20230412-dwindling-tattoo-220650300f1f@wendy>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-6-changhuang.liang@starfivetech.com>
+ <eeb7dadb-1cfd-d270-158b-5dd2e5f2bd1a@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5FwCN1gjD8flHocD"
 Content-Disposition: inline
-In-Reply-To: <20230411054543.21278-11-wedsonaf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <eeb7dadb-1cfd-d270-158b-5dd2e5f2bd1a@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,64 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 02:45:41AM -0300, Wedson Almeida Filho wrote:
-[...]
-> +
-> +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> +        let _ = match guard_state {
-> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> +            // initialised.
-> +            None => unsafe { Self::lock(ptr) },
-> +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> +            // initialised.
-> +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
-> +        };
-> +    }
->  }
->  
+--5FwCN1gjD8flHocD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One thing I'm little worried about the above is that we don't store back
-the new GuardState into `guard_state`, the particular case I'm worried
-about is as follow:
+On Wed, Apr 12, 2023 at 02:07:52PM +0800, Walker Chen wrote:
+>=20
+>=20
+> On 2023/4/11 14:47, Changhuang Liang wrote:
+> > Different compatible parse device tree resources work in different ways.
+> >=20
+> > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+>=20
+> I don't think it's necessary to submit multiple patches separately for th=
+e same .c file
+> unless it is very necessary. Because the disadvantage of separating multi=
+ple patches=20
+> is that some information lacks completeness and coherence.
 
-	// IRQ is enabled.
-	// Disabling IRQ
-	unsafe { bindings::local_irq_disable(); }
+Other than patches 4 & 6, which could be squashed, the breakdown here is
+fine IMO. Doing one thing per patch makes it obvious to the reader
+*what* is happening.
 
-	let mut g = unsafe { SpinLockBackend::lock(&mut lock as *mut _) };
-	// `g` records irq state is "irq disabled"
+There's just some missing boilerplate in the commit messages across the
+series that the DPHY PMU does not have a reg nor interrupts, and this
+work is being done to support that.
 
-	unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
-	// restore into "irq disabled" mode.
-	// IRQ is disabled.
+Cheers,
+Conor.
 
-	// Enabling IRQ
-	unsafe { bindings::local_irq_enable(); }
-	// IRQ is enabled.
+--5FwCN1gjD8flHocD
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	unsafe { SpinLockBackend::relock(&mut lock as *mut _, &mut g) }
-	// `g` still records irq state is "irq disabled"
+-----BEGIN PGP SIGNATURE-----
 
-	unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
-	// restore into "irq disabled" mode.
-	// IRQ is disabled.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDZPMwAKCRB4tDGHoIJi
+0htHAP9THN3zvMQq0pjNoX3Dm0EMizqv5U1cfly39UetP3sIRQD/SWUkFbuqhbQf
+U2JRE3tzABbWkjTYzBrcssVqkS2c5gA=
+=XK0O
+-----END PGP SIGNATURE-----
 
-
-This looks pretty scary to me, I would expect `relock()` updates the
-latest GuardState to the guard. Any reason it's implemented this way?
-
-Regards,
-Boqun
-
->  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
->  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
->  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
->  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
-> -unsafe impl super::IrqSaveBackend for SpinLockBackend {
-> +unsafe impl IrqSaveBackend for SpinLockBackend {
->      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
->          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
->          // memory, and that it has been initialised before.
-> -- 
-> 2.34.1
-> 
+--5FwCN1gjD8flHocD--
