@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BD06DF905
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1B16DF908
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjDLOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S229793AbjDLOxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDLOwo (ORCPT
+        with ESMTP id S229626AbjDLOxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:52:44 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AC85B99
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:52:38 -0700 (PDT)
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 17E263F429
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681311156;
-        bh=hvqL5OvNUsZFZ+sHFmNlvVzy0tXAUd/iqPbCE7rbU6Q=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=A/TfUhI3f/UPL84W3whA4eG0Wdx/lBn4TNfGEN0LKZDcUK/oGINKgfOLh1eAMNuba
-         uuYLntYchwDKW7L7XNSdHHfVwG2CoKnRiH2PbZklQqTbzu3o2qRkoofzgaWfNrwGLa
-         3GcRW+KmnPXrznnwrJuZw50iAiHA6GK7iWPpmuH+MpgdkaLK/Pz5Ii9GyQCcstwEAy
-         CNO4u8yG2plPke5k6k3KUxiFUF5WIyZPvpkWSbYp2gXX65Nt6TBFX4Rz6yZHusS6+R
-         8zmD+tUN46vcFshXz2DzkByO42nEbyWU4jT4OBLXIDsZ6VltT916GfHPuQsYKsf487
-         V3IAVkTBbxtbQ==
-Received: by mail-yb1-f200.google.com with SMTP id j203-20020a2523d4000000b00b8f21897f2fso6102414ybj.22
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:52:36 -0700 (PDT)
+        Wed, 12 Apr 2023 10:53:13 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD543A90
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:53:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id o19-20020a254113000000b00b8ed021361bso12702719yba.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681311184;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CwA0wdGrULC2XXBzkQfVWleO9hyls9jS7CAlyZ8lvMo=;
+        b=BGJ19UUT/KQmXwBdHwvfufxanTrfOtkalEb3y2N+im3F2wdY+eRyJvh/ocOo8nqvpt
+         uIcfLl18+AYnrHG4kmP2Uz8d6wIAZ9dx8yRd9Umw2JeCcoKxqj5pmjixgiZHtkC2BrgW
+         oSHxZTZMW29EHRY01yVSztq5fRm8X1vjMchRqarRQjuPc/GNpryrcg5n7M2vJzY9DhIQ
+         +w2LOGFSsfRD4VqKwBlOEX8NzX+CuE3pYgcQxQOePaJ2fG446CSGdzQ2QUOhRZ6jjgRB
+         5pEb2j+e+90dkmujhtCU8zi9mrzviRnvG+dSdZyM1nUjKupT6dPf7tEIjh3t5Qb4NvIu
+         s4SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681311155; x=1683903155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hvqL5OvNUsZFZ+sHFmNlvVzy0tXAUd/iqPbCE7rbU6Q=;
-        b=T7xYIq9R9/PAf4h5yyHQIhh8u3EHvM21rdn8v9EMU+goudbZPK0KuZvYzrTz8fdJg7
-         GoM6ELzakbcVC7WtgJ2Y1SUZCoDY2EUqBb4Q7KuKkH1+QhbjOegGZ5uALYMheUBsRO1S
-         POcEvsGnxYnlamYLVievSNAQ2s4Jqg2jfBG2M0e3PaEeoocWf2VC2WKkwqkn82ho/iV+
-         s7Dlshwk0ZGaOjxUQVc7AKzqUgzMUgYnxuokyoVfWe+VhBLIq8KjSgw6pY4VUFoJr7zK
-         MGCyh0+eaWP7jyE8Cab5+L8tTtOkLZhjPw2Y979O+tsCbDH5ZBp4rCRclKgZOObqnai6
-         NYzw==
-X-Gm-Message-State: AAQBX9dAXHGmgkjYsPd1/Ax9JPoUlLuq5FwH8eibfDSrp4MujhWsNagL
-        8qkJyo8xp+l9vUxSqQWCysl+HdA79jmGYym/pz8X23p3iBiN2nOdTWXMYBlzta9zcTdhEVitkyU
-        sJ/uF+82VZx3jQOGP7tmp0i1CGt3Is6b5/v+HUNoCXJpabbpHd7k0BDkZ5w==
-X-Received: by 2002:a25:d884:0:b0:b8e:f1ef:a144 with SMTP id p126-20020a25d884000000b00b8ef1efa144mr2178691ybg.0.1681311155118;
-        Wed, 12 Apr 2023 07:52:35 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YCHx1IlZRvzchQUAJk2tjUBg0HPj0JYKDBVhf6geq3Hy3rc7/eGhsBMiMfc3b+M7sGcaUGyylOozZ3OjdEFZ8=
-X-Received: by 2002:a25:d884:0:b0:b8e:f1ef:a144 with SMTP id
- p126-20020a25d884000000b00b8ef1efa144mr2178685ybg.0.1681311154914; Wed, 12
- Apr 2023 07:52:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com>
- <20230404122652.275005-2-aleksandr.mikhalitsyn@canonical.com> <20230411224737.00001d67.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230411224737.00001d67.zhi.wang.linux@gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Wed, 12 Apr 2023 16:52:23 +0200
-Message-ID: <CAEivzxfxm9Kg-ap9QeceGgTeCd0du7FrH7Kmi2dRZH6gah-8HQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] KVM: SVM: free sev_*asid_bitmap init if SEV init fails
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     pbonzini@redhat.com, Sean Christopherson <seanjc@google.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1681311184;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CwA0wdGrULC2XXBzkQfVWleO9hyls9jS7CAlyZ8lvMo=;
+        b=6ShHYmWmOJZfT+H4I2mueY5npBG84DwEMMUvefgPk6fRKnzXkxzWAMMOTE/a1wk9zw
+         h9DO+EZDK+vbT8G8SeBHgCeuX31PeV/w7Y95NLOsYl6yvV3rz3Dot/jAw2u/VUqnfL2a
+         Hzg1W+sZjNEiHpOxwMX+pW2xiVZ+faX3w0ZUsPt7okAJ3YbALvMh/JTSUQXloXGt3wd1
+         R2ANpDdSRKghIWM12nC7ym0CcHBtMvtk+uAMQBl3KLi0mRMeixErkrxn27aHZ+iBF0l2
+         nzHEe8zp5u4GFyvuWXL/n+9YBwgdKriVAZC/yIfNtzN6qmdmYN5UVykcdQDKeU6eD8Qr
+         AWEA==
+X-Gm-Message-State: AAQBX9cEMFDdi7VnBgIXWhu+T9tOQZmg/Tp4ZYmNX3Yk84n1gAiKdtf7
+        5iGOWrs8ztItf/eSb/cj8hnudUPYh8I=
+X-Google-Smtp-Source: AKy350Y9H8x8fkMOv72KbbGnFPvZ5mHfzvPfBgJCLqdyjWcNAGuZGxLlLfr/LwfWgzBFvM7gkBOLd4qRA1E=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:901c:7904:40a1:1b6c])
+ (user=glider job=sendgmr) by 2002:a25:c905:0:b0:b77:81f:42dc with SMTP id
+ z5-20020a25c905000000b00b77081f42dcmr12063363ybf.1.1681311184657; Wed, 12 Apr
+ 2023 07:53:04 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 16:52:59 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230412145300.3651840-1-glider@google.com>
+Subject: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, elver@google.com,
+        dvyukov@google.com, kasan-dev@googlegroups.com,
+        Dipanjan Das <mail.dipanjan.das@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,61 +68,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 9:47=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com>=
- wrote:
->
-> On Tue,  4 Apr 2023 14:26:51 +0200
-> Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> > If misc_cg_set_capacity() fails for some reason then we have
-> > a memleak for sev_reclaim_asid_bitmap/sev_asid_bitmap. It's
-> > not a case right now, because misc_cg_set_capacity() just can't
-> > fail and check inside it is always successful.
-> >
-> > But let's fix that for code consistency.
-> >
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: St=C3=A9phane Graber <stgraber@ubuntu.com>
-> > Cc: kvm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> >  arch/x86/kvm/svm/sev.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index c25aeb550cd9..a42536a0681a 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -2213,8 +2213,13 @@ void __init sev_hardware_setup(void)
-> >       }
-> >
-> >       sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
-> > -     if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
-> > +     if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count)) {
-> > +             bitmap_free(sev_reclaim_asid_bitmap);
-> > +             sev_reclaim_asid_bitmap =3D NULL;
-> > +             bitmap_free(sev_asid_bitmap);
-> > +             sev_asid_bitmap =3D NULL;
-> >               goto out;
-> > +     }
-> >
-> >       pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
-> >       sev_supported =3D true;
->
-> It would be nice that another case can also be fixed:
->
->         sev_es_asid_count =3D min_sev_asid - 1;
->         if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
->                 goto out; /* <----HERE */
+As reported by Dipanjan Das, when KMSAN is used together with kernel
+fault injection (or, generally, even without the latter), calls to
+kcalloc() or __vmap_pages_range_noflush() may fail, leaving the
+metadata mappings for the virtual mapping in an inconsistent state.
+When these metadata mappings are accessed later, the kernel crashes.
 
-Nope.
+To address the problem, we return a non-zero error code from
+kmsan_vmap_pages_range_noflush() in the case of any allocation/mapping
+failure inside it, and make vmap_pages_range_noflush() return an error
+if KMSAN fails to allocate the metadata.
 
-There is no leak. Because when we are at this point then sev_supported
-=3D true and everything is fine.
+This patch also removes KMSAN_WARN_ON() from vmap_pages_range_noflush(),
+as these allocation failures are not fatal anymore.
 
->
-> Maybe it would be a good idea to factor out an common error handling path=
-.
+Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
+Link: https://lore.kernel.org/linux-mm/CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com/
+Fixes: b073d7f8aee4 ("mm: kmsan: maintain KMSAN metadata for page operations")
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ include/linux/kmsan.h | 19 ++++++++++---------
+ mm/kmsan/shadow.c     | 27 ++++++++++++++++++---------
+ mm/vmalloc.c          |  6 +++++-
+ 3 files changed, 33 insertions(+), 19 deletions(-)
+
+diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
+index e38ae3c346184..a0769d4aad1c8 100644
+--- a/include/linux/kmsan.h
++++ b/include/linux/kmsan.h
+@@ -134,11 +134,12 @@ void kmsan_kfree_large(const void *ptr);
+  * @page_shift:	page_shift passed to vmap_range_noflush().
+  *
+  * KMSAN maps shadow and origin pages of @pages into contiguous ranges in
+- * vmalloc metadata address range.
++ * vmalloc metadata address range. Returns 0 on success, callers must check
++ * for non-zero return value.
+  */
+-void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
+-				    pgprot_t prot, struct page **pages,
+-				    unsigned int page_shift);
++int kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
++				   pgprot_t prot, struct page **pages,
++				   unsigned int page_shift);
+ 
+ /**
+  * kmsan_vunmap_kernel_range_noflush() - Notify KMSAN about a vunmap.
+@@ -281,11 +282,11 @@ static inline void kmsan_kfree_large(const void *ptr)
+ {
+ }
+ 
+-static inline void kmsan_vmap_pages_range_noflush(unsigned long start,
+-						  unsigned long end,
+-						  pgprot_t prot,
+-						  struct page **pages,
+-						  unsigned int page_shift)
++static inline int kmsan_vmap_pages_range_noflush(unsigned long start,
++						 unsigned long end,
++						 pgprot_t prot,
++						 struct page **pages,
++						 unsigned int page_shift)
+ {
+ }
+ 
+diff --git a/mm/kmsan/shadow.c b/mm/kmsan/shadow.c
+index a787c04e9583c..b8bb95eea5e3d 100644
+--- a/mm/kmsan/shadow.c
++++ b/mm/kmsan/shadow.c
+@@ -216,27 +216,29 @@ void kmsan_free_page(struct page *page, unsigned int order)
+ 	kmsan_leave_runtime();
+ }
+ 
+-void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
+-				    pgprot_t prot, struct page **pages,
+-				    unsigned int page_shift)
++int kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
++				   pgprot_t prot, struct page **pages,
++				   unsigned int page_shift)
+ {
+ 	unsigned long shadow_start, origin_start, shadow_end, origin_end;
+ 	struct page **s_pages, **o_pages;
+-	int nr, mapped;
++	int nr, mapped, err = 0;
+ 
+ 	if (!kmsan_enabled)
+-		return;
++		return 0;
+ 
+ 	shadow_start = vmalloc_meta((void *)start, KMSAN_META_SHADOW);
+ 	shadow_end = vmalloc_meta((void *)end, KMSAN_META_SHADOW);
+ 	if (!shadow_start)
+-		return;
++		return 0;
+ 
+ 	nr = (end - start) / PAGE_SIZE;
+ 	s_pages = kcalloc(nr, sizeof(*s_pages), GFP_KERNEL);
+ 	o_pages = kcalloc(nr, sizeof(*o_pages), GFP_KERNEL);
+-	if (!s_pages || !o_pages)
++	if (!s_pages || !o_pages) {
++		err = -ENOMEM;
+ 		goto ret;
++	}
+ 	for (int i = 0; i < nr; i++) {
+ 		s_pages[i] = shadow_page_for(pages[i]);
+ 		o_pages[i] = origin_page_for(pages[i]);
+@@ -249,10 +251,16 @@ void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
+ 	kmsan_enter_runtime();
+ 	mapped = __vmap_pages_range_noflush(shadow_start, shadow_end, prot,
+ 					    s_pages, page_shift);
+-	KMSAN_WARN_ON(mapped);
++	if (mapped) {
++		err = mapped;
++		goto ret;
++	}
+ 	mapped = __vmap_pages_range_noflush(origin_start, origin_end, prot,
+ 					    o_pages, page_shift);
+-	KMSAN_WARN_ON(mapped);
++	if (mapped) {
++		err = mapped;
++		goto ret;
++	}
+ 	kmsan_leave_runtime();
+ 	flush_tlb_kernel_range(shadow_start, shadow_end);
+ 	flush_tlb_kernel_range(origin_start, origin_end);
+@@ -262,6 +270,7 @@ void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
+ ret:
+ 	kfree(s_pages);
+ 	kfree(o_pages);
++	return err;
+ }
+ 
+ /* Allocate metadata for pages allocated at boot time. */
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index a50072066221a..1355d95cce1ca 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -605,7 +605,11 @@ int __vmap_pages_range_noflush(unsigned long addr, unsigned long end,
+ int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
+ 		pgprot_t prot, struct page **pages, unsigned int page_shift)
+ {
+-	kmsan_vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
++	int ret = kmsan_vmap_pages_range_noflush(addr, end, prot, pages,
++						 page_shift);
++
++	if (ret)
++		return ret;
+ 	return __vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
+ }
+ 
+-- 
+2.40.0.577.gac1e443424-goog
+
