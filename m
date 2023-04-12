@@ -2,170 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456086DF124
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E642D6DF120
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjDLJyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S230000AbjDLJxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjDLJyg (ORCPT
+        with ESMTP id S229586AbjDLJxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:54:36 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B39526BE;
-        Wed, 12 Apr 2023 02:54:34 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PxHyp38YFz16Ny5;
-        Wed, 12 Apr 2023 17:50:58 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 17:54:31 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] perf/core: Fix perf_sample_data not properly initialized for different swevents in perf_tp_event()
-Date:   Wed, 12 Apr 2023 09:52:40 +0000
-Message-ID: <20230412095240.181516-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Wed, 12 Apr 2023 05:53:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD61C26BE;
+        Wed, 12 Apr 2023 02:53:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59C7A62AFB;
+        Wed, 12 Apr 2023 09:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AFF5C433EF;
+        Wed, 12 Apr 2023 09:53:39 +0000 (UTC)
+Date:   Wed, 12 Apr 2023 10:53:36 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Song Liu <song@kernel.org>, jim.cromie@gmail.com,
+        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
+ module_memory")
+Message-ID: <ZDZ/oLGXa9DnIWbL@arm.com>
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+ <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+ <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+ <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+ <ZDV4YGjRpuqcI7F3@arm.com>
+ <ZDWT6UoWshTUBU+u@bombadil.infradead.org>
+ <ZDXmq1B2W0h2rrYW@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDXmq1B2W0h2rrYW@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-data->sample_flags may be modified in perf_prepare_sample(),
-in perf_tp_event(), different swevents use the same on-stack
-perf_sample_data, the previous swevent may change sample_flags in
-perf_prepare_sample(), as a result, some members of perf_sample_data are
-not correctly initialized when next swevent_event preparing sample
-(for example data->id, the value varies according to swevent).
+On Tue, Apr 11, 2023 at 04:00:59PM -0700, Luis Chamberlain wrote:
+> On Tue, Apr 11, 2023 at 10:07:53AM -0700, Luis Chamberlain wrote:
+> > On Tue, Apr 11, 2023 at 04:10:24PM +0100, Catalin Marinas wrote:
+> > > On Mon, Apr 03, 2023 at 01:43:58PM -0700, Luis Chamberlain wrote:
+> > > > On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
+> > > > > On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > > > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
+> > > > > > > kmemleak is reporting 19 leaks during boot
+> > > > > > >
+> > > > > > > because the hexdumps appeared to have module-names,
+> > > > > > > and Ive been hacking nearby, and see the same names
+> > > > > > > every time I boot my test-vm, I needed a clearer picture
+> > > > > > > Jason corroborated and bisected.
+> > > > > > >
+> > > > > > > the 19 leaks split into 2 groups,
+> > > > > > > 9 with names of builtin modules in the hexdump,
+> > > > > > > all with the same backtrace
+> > > > > > > 9 without module-names (with a shared backtrace)
+> > > > > > > +1 wo name-ish and a separate backtrace
+> > > > > >
+> > > > > > Song, please take a look.
+> > > > > 
+> > > > > I will look into this next week.
+> > > > 
+> > > > I'm thinking this may be it, at least this gets us to what we used to do
+> > > > as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
+> > > > support") and right before Song's patch.
+> > > > 
+> > > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > > index 6b6da80f363f..3b9c71fa6096 100644
+> > > > --- a/kernel/module/main.c
+> > > > +++ b/kernel/module/main.c
+> > > > @@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
+> > > >  		 * which is inside the block. Just mark it as not being a
+> > > >  		 * leak.
+> > > >  		 */
+> > > > -		kmemleak_ignore(ptr);
+> > > > +		if (type == MOD_INIT_TEXT)
+> > > > +			kmemleak_ignore(ptr);
+> > > > +		else
+> > > > +			kmemleak_not_leak(ptr);
+> > > >  		if (!ptr) {
+> > > >  			t = type;
+> > > >  			goto out_enomem;
+> > > > 
+> > > > We used to use the grey area for the TEXT but the original commit
+> > > > doesn't explain too well why we grey out init but not the others. Ie
+> > > > why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
+> > > 
+> > > It's safe to use the 'grey' colour in all cases. For text sections that
+> > > don't need scanning, there's a slight chance of increasing the false
+> > > negatives, 
+> > 
+> > It turns out that there are *tons* of false positives today, unless
+> > these are real leaks.
+> 
+> I should clarify: *if* we leave things as-is, we seem to get tons of
+> false positives.
 
-A simple scenario triggers this problem is as follows:
+Which makes sense if kmemleak_ignore() is used, such objects would not
+be scanned. I'd just replace it with kmemleak_not_leak() irrespective of
+the type.
 
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014396 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014662 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014910 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209015164 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 860
-  -rw------- 1 root root  95694 Apr 12 09:01 perf.data.2023041209014396
-  -rw------- 1 root root 606430 Apr 12 09:01 perf.data.2023041209014662
-  -rw------- 1 root root  82246 Apr 12 09:01 perf.data.2023041209014910
-  -rw------- 1 root root  82342 Apr 12 09:01 perf.data.2023041209015164
-  # perf script -i perf.data.2023041209014396
-  0x11d58 [0x80]: failed to process type: 9 [Bad address]
-
-Solution: Add perf_sample_data_flags_{save, restore} helpers to save and
-restore sample_flags when processing different swevents
-
-After fix:
-
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442259 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442514 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442760 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209443003 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 864
-  -rw------- 1 root root 100166 Apr 12 09:44 perf.data.2023041209442259
-  -rw------- 1 root root 606438 Apr 12 09:44 perf.data.2023041209442514
-  -rw------- 1 root root  82246 Apr 12 09:44 perf.data.2023041209442760
-  -rw------- 1 root root  82342 Apr 12 09:44 perf.data.2023041209443003
-  # perf script -i perf.data.2023041209442259 | head -n 5
-              perf   232 [000]    66.846217: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=D ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846449: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846546: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846606: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846646: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-
-Fixes: bb447c27a467 ("perf/core: Set data->sample_flags in perf_prepare_sample()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- include/linux/perf_event.h | 11 +++++++++++
- kernel/events/core.c       | 13 ++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..7499bd3a2ed5 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1185,6 +1185,17 @@ struct perf_sample_data {
- 		    PERF_MEM_S(LOCK, NA)  |\
- 		    PERF_MEM_S(TLB, NA))
- 
-+/* Note: caller must ensure flags is not NULL */
-+static inline void perf_sample_data_flags_save(struct perf_sample_data *data, u64 *flags)
-+{
-+	*flags = data->sample_flags;
-+}
-+
-+static inline void perf_sample_data_flags_restore(struct perf_sample_data *data, u64 flags)
-+{
-+	data->sample_flags = flags;
-+}
-+
- static inline void perf_sample_data_init(struct perf_sample_data *data,
- 					 u64 addr, u64 period)
- {
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..ea1fb63a6037 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10136,6 +10136,7 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
- {
- 	struct perf_sample_data data;
- 	struct perf_event *event;
-+	u64 sample_flags;
- 
- 	struct perf_raw_record raw = {
- 		.frag = {
-@@ -10150,8 +10151,18 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
- 	perf_trace_buf_update(record, event_type);
- 
- 	hlist_for_each_entry_rcu(event, head, hlist_entry) {
--		if (perf_tp_event_match(event, &data, regs))
-+		if (perf_tp_event_match(event, &data, regs)) {
-+			/*
-+			 * sample_flags may be modified in perf_event_output_*
-+			 * (see perf_prepare_sample). For different swevents,
-+			 * use the same on-stack perf_sample_data, therefore,
-+			 * need to save samle_flags, and restore it
-+			 * after perf_swevent_event.
-+			 */
-+			perf_sample_data_flags_save(&data, &sample_flags);
- 			perf_swevent_event(event, count, &data, regs);
-+			perf_sample_data_flags_restore(&data, sample_flags);
-+		}
- 	}
- 
- 	/*
 -- 
-2.30.GIT
-
+Catalin
