@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2205B6DECF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B106DED02
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjDLHvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S229523AbjDLHxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjDLHvl (ORCPT
+        with ESMTP id S229513AbjDLHwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:51:41 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EED59FF;
-        Wed, 12 Apr 2023 00:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WDasEsbrZhq6Y6NIih1XXwyVWPjBSJhq2DHjFCLMKyU=; b=fFqzuowZKwSTde6gG9QCNF4AeM
-        wFNcTZtQuE/+ZJKEE1xmzTEG3bJCxaTw2LqZKs9ElseEkHen+IU6tU7YdSeOo1YWgc7QTqj0N1d+t
-        7deQ2ITZBv+gbdo5Uv5xrYSSGDNiBzUaI1OKVu5a1gmxeZXLuLhI7ML2VEqXQsSf5BW1+g91fFmil
-        9tVV+nxo69zsc4OoJ3zFxKQ34kU9hNDaXyoty9P/7PwGB6zLk2HdnCGAvwpm1J2Y+c2jk7ghylFOO
-        gzAOm1mVq6vXnfsiSLvPH1R4oae1MHK+++Vp2SoZZAUrpKdiXWsDEJ69RZ3u139Bqw+vwoY5KQAMv
-        Zps9iteg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48782)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pmVGJ-0007f7-CV; Wed, 12 Apr 2023 08:51:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pmVGD-0004wd-Rw; Wed, 12 Apr 2023 08:51:21 +0100
-Date:   Wed, 12 Apr 2023 08:51:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net,
-        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "linux-stm32 @ st-md-mailman . stormreply . com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "alexis . lothore @ bootlin . com" <alexis.lothore@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net] net: phylink: check for SFP bus presence in
- phylink_expects_phy
-Message-ID: <ZDZi+fs13A8JJFOs@shell.armlinux.org.uk>
-References: <20230412074850.41260-1-maxime.chevallier@bootlin.com>
+        Wed, 12 Apr 2023 03:52:55 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA4E5FEF;
+        Wed, 12 Apr 2023 00:52:44 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 6484024DF03;
+        Wed, 12 Apr 2023 15:52:43 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 15:52:43 +0800
+Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 15:52:42 +0800
+Message-ID: <9f729ae6-8b20-e77c-18f7-cbe093f8a3b9@starfivetech.com>
+Date:   Wed, 12 Apr 2023 15:52:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412074850.41260-1-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/7] soc: starfive: Use call back to parse device tree
+ resources
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-6-changhuang.liang@starfivetech.com>
+ <20230411-stimuli-reapprove-4659d50e5d2e@spud>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230411-stimuli-reapprove-4659d50e5d2e@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 09:48:50AM +0200, Maxime Chevallier wrote:
-> When an SFP bus is present, we don't expect a PHY to be attached
-> directly from the MAC driver, it will be handled by phylink at SFP
-> attach time.
 
-If we have a SFP, then phylink should be configured for in-band mode.
-Maybe fix the firmware description instead?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+On 2023/4/12 5:06, Conor Dooley wrote:
+> On Mon, Apr 10, 2023 at 11:47:41PM -0700, Changhuang Liang wrote:
+>> Different compatible parse device tree resources work in different ways.
+> 
+> Right now there is only one compatible, so this commit message needs to
+> be expanded on to provide more information on your motivation.
+> 
+
+OK, will add more commit message.
+
+>> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> 
+>>  static int jh71xx_pmu_init_domain(struct jh71xx_pmu *pmu, int index)
+>>  {
+[...]
+>>  
+>>  	match_data = of_device_get_match_data(dev);
+>>  	if (!match_data)
+>>  		return -EINVAL;
+>>  
+>> +	if (match_data->pmu_parse_dt) {
+> 
+> How can this be false?
+> 
+> Cheers,
+> Conor.
+
+Yes, it will not be false, I will delete this if condition
