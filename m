@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CFA6DF483
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5A56DF487
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjDLL5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231569AbjDLL53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDLL5J (ORCPT
+        with ESMTP id S231528AbjDLL5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:57:09 -0400
+        Wed, 12 Apr 2023 07:57:11 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08534C1F;
-        Wed, 12 Apr 2023 04:57:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB8E122;
+        Wed, 12 Apr 2023 04:57:08 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:c2e:89bd:4b8e:9e98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6938C6603287;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DDA9866032A3;
         Wed, 12 Apr 2023 12:57:06 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681300626;
-        bh=efIIMyuWo/5TTgMlaw7lz63p4NVD+adWtS/yB46zFOY=;
+        s=mail; t=1681300627;
+        bh=Z3HYyLRnEplLqBnkmec6ZntqXFnZYp8pEzGAOkE5PsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZeGpAFM6pcw3J7zRYQBJDalcxfVvQoVL5rdvgJkoQcgHuZnGYeZVC93baNNM0nsZm
-         8MchA+pQYm0SMz8KUtaAbvgE/ypBAJIal8PV7l1w3qH9/mz8Q4pIs5tXB0l6U7BQBM
-         7Svb2GHm0svvw1XIJCgnnUMYJNTNBOEMUxrjVI1XoqvAdn/zsjVpXYSLXUR6GoGab2
-         3pBGJH2uXuLB7rJ7U9ULJNcBOM/iLBeHIHNjyx52iK118zEubOQRszKtGp9bIZMJCg
-         zEDWG3oiPXugnKmeoKN37yrzbGnClCDfUKqRXM9s+6FimEwtYSDhQrp5Ojqyo5uV2H
-         zIeRAQahsDCsw==
+        b=jL10UerktF4dE7mDzyEEZCb/v90Gzn/cc4JrxF6CZl1PFw4vZD+yuZy+bFB2Aksss
+         Uy46J74vnaypnZ8M8BwY2ZESLJeEIWSc6Vcvvp/yC1ZhmlZiHzfvummsWXhgII82VB
+         3/LmqWLiHHru8qgVmy2FFeZ8r5sW7/aWgMB8Ns7L/sAqgAk/Q37xes2IL48jNa2sYM
+         xfaguveoxoRTI7nZucylXWpMbs9u7hFYT+lJmbBlrPd3wDlPTMZaZZ4GGaLik2k+zy
+         scch5LKe7vwpTcEEnxxFcVGP+r/vIfuaIMG/SwUO0ivvWxSBjXUl+YsMKZsFAjU6At
+         UWEXwGOsDI0Kg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
         mchehab@kernel.org, robh+dt@kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 06/13] media: verisilicon: Add AV1 decoder mode and controls
-Date:   Wed, 12 Apr 2023 13:56:45 +0200
-Message-Id: <20230412115652.403949-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 07/13] media: verisilicon: Check AV1 bitstreams bit depth
+Date:   Wed, 12 Apr 2023 13:56:46 +0200
+Message-Id: <20230412115652.403949-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
 References: <20230412115652.403949-1-benjamin.gaignard@collabora.com>
@@ -58,76 +58,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add AV1 decoder as new decoder mode to Hantro driver.
-Register needed AV1 controls for the decoder.
+The driver supports 8 and 10 bits bitstreams, make sure to discard
+other cases.
+It could happens that userland test if V4L2_CID_STATELESS_AV1_SEQUENCE
+exists without setting bit_depth field in this case use
+HANTRO_DEFAULT_BIT_DEPTH value.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro.h   |  3 +++
- .../media/platform/verisilicon/hantro_drv.c   | 21 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ .../media/platform/verisilicon/hantro_drv.c   | 36 +++++++++++++++++++
+ .../media/platform/verisilicon/hantro_v4l2.c  |  4 +++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 2989ebc631cc..61480825b856 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -38,6 +38,7 @@ struct hantro_postproc_ops;
- #define HANTRO_H264_DECODER	BIT(18)
- #define HANTRO_HEVC_DECODER	BIT(19)
- #define HANTRO_VP9_DECODER	BIT(20)
-+#define HANTRO_AV1_DECODER	BIT(21)
- #define HANTRO_DECODERS		0xffff0000
- 
- /**
-@@ -111,6 +112,7 @@ struct hantro_variant {
-  * @HANTRO_MODE_VP8_DEC: VP8 decoder.
-  * @HANTRO_MODE_HEVC_DEC: HEVC decoder.
-  * @HANTRO_MODE_VP9_DEC: VP9 decoder.
-+ * @HANTRO_MODE_AV1_DEC: AV1 decoder
-  */
- enum hantro_codec_mode {
- 	HANTRO_MODE_NONE = -1,
-@@ -120,6 +122,7 @@ enum hantro_codec_mode {
- 	HANTRO_MODE_VP8_DEC,
- 	HANTRO_MODE_HEVC_DEC,
- 	HANTRO_MODE_VP9_DEC,
-+	HANTRO_MODE_AV1_DEC,
- };
- 
- /*
 diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index d20e62c025ae..74641c972f1e 100644
+index 74641c972f1e..71bd68e63859 100644
 --- a/drivers/media/platform/verisilicon/hantro_drv.c
 +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -525,6 +525,27 @@ static const struct hantro_ctrl controls[] = {
- 		.cfg = {
- 			.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR,
- 		},
-+	}, {
-+		.codec = HANTRO_AV1_DECODER,
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_AV1_FRAME,
-+		},
-+	}, {
-+		.codec = HANTRO_AV1_DECODER,
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
-+			.dims = { V4L2_AV1_MAX_TILE_COUNT },
-+		},
-+	}, {
-+		.codec = HANTRO_AV1_DECODER,
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_AV1_SEQUENCE,
-+		},
-+	}, {
-+		.codec = HANTRO_AV1_DECODER,
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_AV1_FILM_GRAIN,
-+		},
- 	},
+@@ -275,7 +275,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 		/* We only support profile 0 */
+ 		if (dec_params->profile != 0)
+ 			return -EINVAL;
++	} else if (ctrl->id == V4L2_CID_STATELESS_AV1_SEQUENCE) {
++		const struct v4l2_ctrl_av1_sequence *sequence = ctrl->p_new.p_av1_sequence;
++
++		if (sequence->bit_depth != 8 && sequence->bit_depth != 10)
++			return -EINVAL;
+ 	}
++
+ 	return 0;
+ }
+ 
+@@ -346,6 +352,30 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	return 0;
+ }
+ 
++static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct hantro_ctx *ctx;
++
++	ctx = container_of(ctrl->handler,
++			   struct hantro_ctx, ctrl_handler);
++
++	switch (ctrl->id) {
++	case V4L2_CID_STATELESS_AV1_SEQUENCE:
++	{
++		int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
++
++		if (ctx->bit_depth == bit_depth)
++			return 0;
++
++		return hantro_reset_raw_fmt(ctx, bit_depth);
++	}
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+ 	.try_ctrl = hantro_try_ctrl,
+ };
+@@ -363,6 +393,11 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+ 	.s_ctrl = hantro_hevc_s_ctrl,
  };
  
++static const struct v4l2_ctrl_ops hantro_av1_ctrl_ops = {
++	.try_ctrl = hantro_try_ctrl,
++	.s_ctrl = hantro_av1_s_ctrl,
++};
++
+ #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+ 					 V4L2_JPEG_ACTIVE_MARKER_COM | \
+ 					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
+@@ -540,6 +575,7 @@ static const struct hantro_ctrl controls[] = {
+ 		.codec = HANTRO_AV1_DECODER,
+ 		.cfg = {
+ 			.id = V4L2_CID_STATELESS_AV1_SEQUENCE,
++			.ops = &hantro_av1_ctrl_ops,
+ 		},
+ 	}, {
+ 		.codec = HANTRO_AV1_DECODER,
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index 4445dec630cb..3293060a8c67 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -86,6 +86,10 @@ hantro_check_depth_match(const struct hantro_fmt *fmt, int bit_depth)
+ 	if (!fmt->match_depth && !fmt->postprocessed)
+ 		return true;
+ 
++	/* 0 means default depth, which is 8 */
++	if (!bit_depth)
++		bit_depth = HANTRO_DEFAULT_BIT_DEPTH;
++
+ 	fmt_depth = hantro_get_format_depth(fmt->fourcc);
+ 
+ 	/*
 -- 
 2.34.1
 
