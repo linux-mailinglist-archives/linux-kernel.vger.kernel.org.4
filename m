@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6871B6DF224
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227776DF227
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjDLKpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S230038AbjDLKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjDLKpY (ORCPT
+        with ESMTP id S230045AbjDLKqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:45:24 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEB483D6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:20 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d20-20020a056e020c1400b003261821bf26so1978989ile.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681296320; x=1683888320;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=phEY5JrOJ7bL5ArsZNO3g5AGRU38lwvq/bBXqMuMhoE=;
-        b=bRYWPuHPEfpIcqbq0Jm1zTRnDdG44YsnGtQvpnHTnMK7kGcPV+b5Wb1YSCf7Z3kEwp
-         63Q/Bj0gKf+Pq8pphWMN+EXih35Ljj5ZpaLX5UxrANGiMysQ4WREcdvNVDcT8/W1yBux
-         nEcFfXQ2nm43mRVYLkmFjVQ00oXVINk6f44NBzC6MBdNqEyaHSzJ2ATUY5xHUpnkCCDC
-         T85yFB8fHD5H7UW1sF0xUqZg7njLGNYC3G7AkJJzgHdtpEtoWCGAc+JNamZwkJIccrJ5
-         BGfrnY+ZUDeaj0gMNIUEGU2jmw6JJFm638OVkt/nlcXdvMC4i6AZvPS6MuhUNptYLUSJ
-         t4BA==
-X-Gm-Message-State: AAQBX9dT8SZYkeR4x4xdHyfh0AC3A9xVDWJaeU/ZxkjHPlN8aQ50bdQS
-        QclZG5jpJfF0bbWgKtupCwE+p367rU4pP6Hm27mXofE8ofAX
-X-Google-Smtp-Source: AKy350aR0QR/aDQVYs8GizD8CoW+L/wGtwuimNdmVHFR7PfEhhEkF8gxpwLZewDyHDj+7GWzYDufYaJm4Wg70QLjap7CPIAaIUKm
+        Wed, 12 Apr 2023 06:46:03 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8476EAD
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vfw8Fy8_1681296340;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vfw8Fy8_1681296340)
+          by smtp.aliyun-inc.com;
+          Wed, 12 Apr 2023 18:45:41 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/page_alloc: consider pfn holes after pfn_valid() in __pageblock_pfn_to_page()
+Date:   Wed, 12 Apr 2023 18:45:31 +0800
+Message-Id: <62e231a8f2e50c04dcadc7a0cfaa6dea5ce1ec05.1681296022.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8905:0:b0:744:f5bb:6e60 with SMTP id
- k5-20020a5e8905000000b00744f5bb6e60mr5494942ioj.1.1681296319962; Wed, 12 Apr
- 2023 03:45:19 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 03:45:19 -0700
-In-Reply-To: <CANp29Y4V7LsaJk0h3GyWV-chE8YkwM2qX33_hy9ZF5si8ZLdDg@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e9e5a905f9214d8c@google.com>
-Subject: Re: [syzbot] [dri?] WARNING in vkms_get_vblank_timestamp
-From:   syzbot <syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-kernel@vger.kernel.org, melissa.srw@gmail.com,
-        nogikh@google.com, rodrigosiqueiramelo@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Now the __pageblock_pfn_to_page() is used by set_zone_contiguous(),
+which checks whether the given zone contains holes, and uses pfn_valid()
+to check if the end pfn is valid. However pfn_valid() can not make sure
+the end pfn is not a hole if the size of a pageblock is larger than the
+size of a sub-mem_section, since the struct page getting by pfn_to_page()
+may represent a hole or an unusable page frame, which may cause incorrect
+zone contiguous is set.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Though another user of pageblock_pfn_to_page() in compaction seems work
+well now, it is better to avoid scanning or touching these offline pfns.
+So like commit 2d070eab2e82 ("mm: consider zone which is not fully
+populated to have holes"), we should also use pfn_to_online_page() for
+the end pfn to make sure it is a valid pfn with usable page frame.
+Meanwhile the pfn_valid() for end pfn can be dropped now.
 
-Reported-and-tested-by: syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com
+Moreover we've already used pfn_to_online_page() for start pfn to make
+sure it is online and valid, so the pfn_valid() for the start pfn is
+unnecessary, drop it.
 
-Tested on:
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ mm/page_alloc.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-commit:         7d8214bb Add linux-next specific files for 20230412
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1387763dc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=923e20c1867d7c1c
-dashboard link: https://syzkaller.appspot.com/bug?extid=75cc0f9f7e6324dd2501
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index d0eb280ec7e4..8076f519c572 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1512,9 +1512,6 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+ 	/* end_pfn is one past the range we are checking */
+ 	end_pfn--;
+ 
+-	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn))
+-		return NULL;
+-
+ 	start_page = pfn_to_online_page(start_pfn);
+ 	if (!start_page)
+ 		return NULL;
+@@ -1522,7 +1519,9 @@ struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+ 	if (page_zone(start_page) != zone)
+ 		return NULL;
+ 
+-	end_page = pfn_to_page(end_pfn);
++	end_page = pfn_to_online_page(end_pfn);
++	if (!end_page)
++		return NULL;
+ 
+ 	/* This gives a shorter code than deriving page_zone(end_page) */
+ 	if (page_zone_id(start_page) != page_zone_id(end_page))
+-- 
+2.27.0
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
