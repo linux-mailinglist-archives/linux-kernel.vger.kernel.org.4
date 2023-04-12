@@ -2,62 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2706C6E00E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516F46E00E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjDLVaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S229786AbjDLVbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjDLVat (ORCPT
+        with ESMTP id S229498AbjDLVbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:30:49 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBA393DE;
-        Wed, 12 Apr 2023 14:30:23 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CJTWAB007793;
-        Wed, 12 Apr 2023 21:29:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=bXdrSJqSpeC4V4Q0x3boHlrCc8/cule5AASS6t5grGE=;
- b=CpO6OHCajrI0WUVal1n9Ba/30Oyk+t6xOfwfMan1V+X/22fSPQOCFvQNtQQCMaTrqopF
- +4bf/DmxgpFMr1Gvs6vpw1X+VS5CBVTk3KV6yS9JKvzmRe9pG/qg+UP/CG2KMOx+ZfTv
- oFDlOcj5j3GOCnWanc+GWiQgcLIB5DRAudkPVjrIGhaBCHdF3DtyDlyLHPFfA7FL5Eg0
- qKW6pTNj615zz3xSnPwFPTGbCYrWthTmoi8/HuatpGbKf19gWIc4UKv49PBTV34NQy7r
- kQngQGEG2CaPW6MVBlZ0n6OMF0/WTVOtY1Q/yDTHvu3W7Pl76DCtI6XASxvaf2+cFpPh 2w== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0etscn0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Apr 2023 21:29:56 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33CKatV3012630;
-        Wed, 12 Apr 2023 21:29:54 GMT
-Received: from brm-x62-22.us.oracle.com (brm-x62-22.us.oracle.com [10.80.150.48])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3puwe9rak4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 12 Apr 2023 21:29:54 +0000
-From:   Henry Willard <henry.willard@oracle.com>
-To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] MIPS: Don't clear _PAGE_SPECIAL in _PAGE_CHG_MASK
-Date:   Wed, 12 Apr 2023 15:29:53 -0600
-Message-Id: <20230412212953.388185-1-henry.willard@oracle.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Apr 2023 17:31:01 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2040.outbound.protection.outlook.com [40.107.7.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB3F7D9E;
+        Wed, 12 Apr 2023 14:30:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jp0WCEeba18CU9M4hAH6W6frWIxCvQ1r5mmw7vlvhVeNFJZOAcbi/ReXkYSr9+NNShQBYlokmWTtXCT44bFd+FrA0JIOMB/Wn7erDj8L5v8WuclAhs3R63y0W9I/YNWm0zA2M6fN/0IoU9Bk4VXzOTyvQGRRqQTmz1c97Bk/rbN/Qd3rqIGONCfhHEIcmHLQ4UUROgVyY0Y9QuHM3XVGsF2cvcwrTTYSIUV7bq8OwZNjdOxwfGcW/z2U1PH5SvTm0lq0LIc0EWEM8aSanZstxmMbOcOCv8y114xwN0F4oWqzoeA5XmMhmQjn3hf2+5qd2TQHsH/Rqhni0vNYSHmATw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PMhDTt8xHL3LyaU/8xpnfgRr2kjU0VVqdJ6icrhrECU=;
+ b=elC0YFy/T4CkesxFyS0sYU/R3W5Twp/pQc/2E49y1j0z9QzTJL4T+lCdukFO4VmVvZEKlT1oTKR+GmDWXBlL6BOrqOmtWaoVpEKYISmDljchUj2Qo2jq86wVdpHbGnBc+yyhVfempKXZ4cHrj9fVLtIkYRPEQ8axW3eXD6BqO0PwqHSTyjWvgeBT5OlCwR3MdIjO63IWjiXqiFs69Pj16vgl3sQJ/CwrHzLj6Tzp/5aeAFF13c9VAuR2QzcGGtHFnsscf/RUIknnLidAezU3INO3qbu4c46QrG5vFAbRJoC06E6RtnLd2QBK8JgZimBV+6VWIJfT19m4rQKwpwk36g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PMhDTt8xHL3LyaU/8xpnfgRr2kjU0VVqdJ6icrhrECU=;
+ b=pF86ClAM+niZv2nWE26L0VVmoHWWlbv19RBTEmTAqRNTAIiwpJKP+XRP48IJnRbl+Snc2LKxdtpjWCrJfKsG+aRhkRdTSWh5UEJXxUFS7mtNMzvcezduNJI/BIwJ3l+grSIjtLQq08KNDUaDaQzL0Y9ZA3uLiWYamL+hqZqMWAM=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by DB9PR04MB9820.eurprd04.prod.outlook.com (2603:10a6:10:4c3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Wed, 12 Apr
+ 2023 21:30:06 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::8516:ebc7:c128:e69d]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::8516:ebc7:c128:e69d%6]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
+ 21:30:06 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Roy Pledge <roy.pledge@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, "Y.B. Lu" <yangbo.lu@nxp.com>,
+        "Diana Madalina Craciun (OSS)" <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 0/6] bus: fsl-mc: Make remove function return void
+Thread-Topic: [PATCH 0/6] bus: fsl-mc: Make remove function return void
+Thread-Index: AQHZU6GBM20rPir9q0ygz08QWqv0C68oHDoAgABHrAA=
+Date:   Wed, 12 Apr 2023 21:30:05 +0000
+Message-ID: <AM0PR04MB6289BB9BA4BC0B398F2989108F9B9@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230412171056.xcluewbuyytm77yp@pengutronix.de>
+In-Reply-To: <20230412171056.xcluewbuyytm77yp@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DB9PR04MB9820:EE_
+x-ms-office365-filtering-correlation-id: ec435dec-bf04-4c33-4637-08db3b9d1577
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: l620WJPT3VkipPNCLsry1/kdB+xD3GmAW3g9UpIVetJ/lHz382v/ia81eQRGHPJXVFzs+EUerJCA4a7pjGoWHCf2A8EREUNlVD7oYiroQ/29tbtq4G7kd9EPp3NhNA1fprsi1Sb4U1AWS3GzMN+yvfkC77po29F+0+UkUxZi7nUbIuf55ULcGnkiVmJ8UiN7FpAx7GrL5rhVkJGph1yoBfzAK6ZOMVB+zg2FDXC11Atz4sQXJsm17MSmvtQC1ky7sQbluBcowjvX4lu0hwGj9+EO6ccoWqNQy/OMAUth54t7bvlxaNkTAU4xRkor5t4wyTaStquIi0QVYA1j3JJuOky+QVcZzeNhKnfXrV3FJuw2P+b8CSisJ2a+r2iHI6JOhiAFtSXuS3D9FRJEzL/5LJdf5fkK9HeXcrlRsSeUhHedka8v8H7pLpO1z1YlkOwSfCmQyY2DGhf19IBXylx5yhgPLG3BxyQpO8Ljtxb/AcJu9UUsJkabmiMq0/xzNrFMl3bswl9ZPx//SWZHPmA5x4mZA4OZ+Xx4CyyIrbObjF94pBTQQFuI2IAVkB7rTy+ds08gpHn8o0tyGv6+iG1tO3dpQeYXIqrtlBGi4CSky7PyxBTA4h8EwJ/yvHstG6WBiUHQwEZ8e6C21zDwT+NwyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(376002)(346002)(136003)(451199021)(4326008)(71200400001)(41300700001)(66446008)(66946007)(54906003)(64756008)(66556008)(478600001)(8676002)(66476007)(76116006)(110136005)(316002)(33656002)(86362001)(66574015)(6506007)(9686003)(83380400001)(26005)(53546011)(7696005)(55236004)(122000001)(2906002)(7416002)(5660300002)(8936002)(55016003)(38070700005)(38100700002)(186003)(52536014)(921005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?xHHAQeDctD/F270s0NOMW3udQV6+E9ONJDyVp/Z5nTT13dvmqotKumSUiL?=
+ =?iso-8859-1?Q?2+YVrqMhCN60sE1F/AkVltk6aJd7ykZmbIcrZhDX4j+7ZjUBhAj8YfHAe0?=
+ =?iso-8859-1?Q?MV8GGQE6Fqzdln92KYmEwOlIIypbAtwOXnyQi3+m8PL0NLopDBurILF1ya?=
+ =?iso-8859-1?Q?Gwp3Covh4jbknZ5Q59z7UxFtOuRP3jL7D0x8n1BJpMnxkU/gD5qYp5U0wQ?=
+ =?iso-8859-1?Q?o/WBtTqLrw2syMkKS6KG+vy05dcJXKJNPn/opMgtPuZwwD4gFKPvt41G1z?=
+ =?iso-8859-1?Q?JlqKSPbqIy11jgfG6K/2o9P7VjLDQD6CZX7owjeyPBhWUReKsbh2jLgQzQ?=
+ =?iso-8859-1?Q?xOOOBCMIXJY71WQT4lLiTgr0pPXEz5NKgsNNteNeECXIW23Z2fzbCiBP+L?=
+ =?iso-8859-1?Q?nXjRwRaPv27UUond8DVc+ntXEN2Pmx1oBimb6rB8HATcIaHiRuPIoPngLI?=
+ =?iso-8859-1?Q?yRG4YjSImjUez5tFbUdkwFMT5hmHYF2OxkgNWZ7f3ugVugIgWwRT/+4Vtk?=
+ =?iso-8859-1?Q?0SCEmBafFnIn5+RvpypobBANDXHXqWDDm/cUGFLSUzSdkAqK8BQGFzT3L+?=
+ =?iso-8859-1?Q?YehN657Y8xj2SY3fsHXxnSMwub1oSGNVeS7NC+wFAp5i74LWLSbWGEui7d?=
+ =?iso-8859-1?Q?SPQl5cpehQ9Ph+pan9Vsrti4gbSfJzZNcLUukD2p5pHgaE0PNboTC953O2?=
+ =?iso-8859-1?Q?16Akz7lX/iS5vn+eQfr9fOzPKw+iWegUICqZtBZ82MR08Rjd5gWnADkS7y?=
+ =?iso-8859-1?Q?Y7BWYmFcWVWnk0sCCz5piyfyj5/iLsHWhRIHDWtM/asCNFnaMpI1POE61l?=
+ =?iso-8859-1?Q?m0vSmgvT2XRBhlhuiUcrg85LKY1FSGyaPJxjjAO6SC10Rf2Ra5c4shXdpm?=
+ =?iso-8859-1?Q?BtMqPdod9/dNiclG8d2YGSCRy9qQvhNaTyWauDzz/EFtX8r0iLufjKPhxO?=
+ =?iso-8859-1?Q?YNYuqVoYYBtPuDUo84/gd6kxre9jDvfhYcxD4RhAdAW3mlICDdnemvJQWN?=
+ =?iso-8859-1?Q?RBcrF51EM7p7OAGYx0DN+6f+i9ZZWZN+uWM3Zgd5LFEwzdFffuMXxYKmq5?=
+ =?iso-8859-1?Q?d0L1XH0xAoEUZ1+9Z5SX/Bb3qWAYlT6yQb/Jd2Qz/RKax3iq0ZPscWqbiS?=
+ =?iso-8859-1?Q?Abnh6teSFa6y2c0jhcMgOnz4cmMRY0uAzdbU1ur4m2rkzEkTJyqCe0p54D?=
+ =?iso-8859-1?Q?rudq1SaHDv9O1ab0REMeDLUlyXTj18wxK5uPf3ptF2tnH6MP3uzHmpJUDJ?=
+ =?iso-8859-1?Q?vL1EDOz6tzyn5oRuq7/eB6wojahFtfbQi9HjoT6D67h05jVvU7crhPM/X8?=
+ =?iso-8859-1?Q?scJyTIOwC5NaBgkUg61IyaEMaEhJp/JxO/yiW9jfdghJt74Pw4rV+LnHlA?=
+ =?iso-8859-1?Q?5ru9F23ucXYjC6/Koceu7Sf6n4jj5cUfGr1/p9xVRUqX2rVO8OCzAd0hJ4?=
+ =?iso-8859-1?Q?3oI21WDPxu/nMUjBPvnlpPuwrPdgidtDe0lF9Gwqpg5ehbrOr0AM/F3dZL?=
+ =?iso-8859-1?Q?AwxNB6jtadDeRi8QL1mgAgagCzfYnaWud8CRdsHXgKwxYSKB5cXIRcW03z?=
+ =?iso-8859-1?Q?67sOzUjAQmIq3kwUqLp0lDZmWW13pqPkwmK/J64eg1hKz2sQReYavpuPgG?=
+ =?iso-8859-1?Q?SXxDDi+ZGNnVE=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_12,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120183
-X-Proofpoint-GUID: 2_Y7AlEXgNk-dEm2slUp1j_nW3Jx5VIL
-X-Proofpoint-ORIG-GUID: 2_Y7AlEXgNk-dEm2slUp1j_nW3Jx5VIL
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec435dec-bf04-4c33-4637-08db3b9d1577
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 21:30:05.8805
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hErjG+UfQLjzL0rI6Yw8rghqhqB6H/aytPqCbJA9AjxtE9/JJ+W5Q+fZd5WJdD61lMVZgYIalchiL+Kv2OduVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9820
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,48 +141,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the special case where
 
-	p = mmap(NULL, ALLOC_SIZE, PROT_READ,
-                MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
 
-is followed by
+> -----Original Message-----
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Sent: Wednesday, April 12, 2023 12:11 PM
+> To: Stuart Yoder <stuyoder@gmail.com>; Laurentiu Tudor
+> <laurentiu.tudor@nxp.com>; Roy Pledge <roy.pledge@nxp.com>; Leo Li
+> <leoyang.li@nxp.com>; Horia Geanta <horia.geanta@nxp.com>; Pankaj
+> Gupta <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>;
+> Herbert Xu <herbert@gondor.apana.org.au>; David S. Miller
+> <davem@davemloft.net>; Vinod Koul <vkoul@kernel.org>; Ioana Ciornei
+> <ioana.ciornei@nxp.com>; Eric Dumazet <edumazet@google.com>; Jakub
+> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Y.B. Lu
+> <yangbo.lu@nxp.com>; Diana Madalina Craciun (OSS)
+> <diana.craciun@oss.nxp.com>; Alex Williamson
+> <alex.williamson@redhat.com>; Richard Cochran
+> <richardcochran@gmail.com>
+> Cc: kvm@vger.kernel.org; netdev@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-crypto@vger.kernel.org;
+> kernel@pengutronix.de; dmaengine@vger.kernel.org; linuxppc-
+> dev@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org
+> Subject: Re: [PATCH 0/6] bus: fsl-mc: Make remove function return void
+>=20
+> Hello,
+>=20
+> On Fri, Mar 10, 2023 at 11:41:22PM +0100, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >
+> > many bus remove functions return an integer which is a historic
+> > misdesign that makes driver authors assume that there is some kind of
+> > error handling in the upper layers. This is wrong however and
+> > returning and error code only yields an error message.
+> >
+> > This series improves the fsl-mc bus by changing the remove callback to
+> > return no value instead. As a preparation all drivers are changed to
+> > return zero before so that they don't trigger the error message.
+>=20
+> Who is supposed to pick up this patch series (or point out a good reason =
+for
+> not taking it)?
 
-	rc = mprotect(p, ALLOC_SIZE, PROT_NONE);
+Previously Greg KH picked up MC bus patches.
 
-the _PAGE_SPECIAL bit in the page tables will be cleared by
-mistake and the later unmapped operations will incorrectly
-modify the struct page for the the zero page. This sequence
-occurs in the madvise05 test of the Linux Test Project
-suite of tests.
+If no one is picking up them this time, I probably can take it through the =
+fsl soc tree.
 
-This was discovered while testing an older version of the kernel
-(5.4.17) on a MIPS device. Unfortunately, support for this device
-is not available in newer kernels, so I can't test this with the
-latest Linux kernel code. It looks like the problem exists in
-newer kernels, but I can't verify it. Except for the LTP test,
-this sequence of calls is probably not common.
-
-Passing it along in the hope it will be useful to someone.
-
-Signed-off-by: Henry Willard <henry.willard@oracle.com>
----
- arch/mips/include/asm/pgtable-bits.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 2362842ee2b5..1c576679aa87 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -280,6 +280,7 @@ static inline uint64_t pte_to_entrylo(unsigned long pte_val)
- #define __WRITEABLE	(_PAGE_SILENT_WRITE | _PAGE_WRITE | _PAGE_MODIFIED)
- 
- #define _PAGE_CHG_MASK	(_PAGE_ACCESSED | _PAGE_MODIFIED |	\
--			 _PAGE_SOFT_DIRTY | _PFN_MASK | _CACHE_MASK)
-+			 _PAGE_SOFT_DIRTY | _PFN_MASK |   \
-+			 _CACHE_MASK | _PAGE_SPECIAL)
- 
- #endif /* _ASM_PGTABLE_BITS_H */
--- 
-2.31.1
-
+Regards,
+Leo
