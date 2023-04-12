@@ -2,110 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D00D6DFD76
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C926DFD80
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjDLS0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S229980AbjDLS1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjDLS0h (ORCPT
+        with ESMTP id S229583AbjDLS1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:26:37 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F41B59C6;
-        Wed, 12 Apr 2023 11:26:36 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v9so17798999pjk.0;
-        Wed, 12 Apr 2023 11:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681323996; x=1683915996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qe4SS5MwqgNNblasLyBUlGHPWf5yZ2STwXpKEpxvmgk=;
-        b=D6xcB4D7MIBRR03l3RpjS/l27LEHg1viozYtwZQliZiaIVrC1xMrJpPnq8o1gzm14I
-         JinmTIp358cI33pWMrORKQjFCOlJXwjAlLcNb5AnbynV6VZyjfLzDiWsLBViXVvEnLF4
-         X9S/aXCudZ/20PGfQpYuRUbeRjP2nQ5kAcU5U2HcC/vzbH+MdXAWWMOwtDIsV6J6utNz
-         JnD2Jd/YQmdasVSwJXw1J+yGtQcbhRmpXeOQLBQCzXWB1LM58DLi1p0FhFMlCEBCnlKi
-         UM9H/rWDEcR6vfqsvyrKzg/07TW1DYjzNfX2+WXz47oV2qD6pQ3+mgdb1AQrsRpVHYOf
-         bHXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681323996; x=1683915996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qe4SS5MwqgNNblasLyBUlGHPWf5yZ2STwXpKEpxvmgk=;
-        b=dDhCeT+C/SGiMAn+KHBYrv6TnlGIrHuYa9wMciU0NLwUp1Q0iRC5rzQQ5d2+zOiotd
-         502SWJ+BB4V9mDq0b+1nRwxsp2XLiOqKMyANXRmiKSFW+FCzBnwawLgBRtuwX7o71pzr
-         grHfqL+RhlW5/XiH+v0vZFV9Bpds1uFa98vPL/pU0NyN91oIBEHEK35T0T94hVDSbkSP
-         nUnknBWpvedF7koS1J3vmfeIx7Lt7PX4rOiQaqRRtIfSsWT1txq70WSIpEO4xfhti5RA
-         OSxNOB15GSWwL7cgeGYdbrfhjfGHlZQHZxcoqCW/+VghhS5F/Q9bq5s5rDfqgiipARNp
-         /AWA==
-X-Gm-Message-State: AAQBX9cwZoX4QK/+SNBW5vG941YrcpJ4Lgr2qWY2MR0sxZYBavOD377E
-        YFxXKUDJF5lP3NXMwp/V5ajuKGyDazg=
-X-Google-Smtp-Source: AKy350ZY15V6gkegcb0Q7rjtO2w8QTHnGTN1o6Fr4iEddJn3QSOwS1OoAKOb2SPug3kfMTM2pb/XiA==
-X-Received: by 2002:a05:6a20:4a29:b0:e8:d62c:4aa9 with SMTP id fr41-20020a056a204a2900b000e8d62c4aa9mr15718758pzb.24.1681323995446;
-        Wed, 12 Apr 2023 11:26:35 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id j16-20020a62e910000000b006258dd63a3fsm12017502pfh.56.2023.04.12.11.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 11:26:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Apr 2023 08:26:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-Subject: Re: [PATCH v4 0/5] cgroup/cpuset: Fix CLONE_INTO_CGROUP problem &
- other issues
-Message-ID: <ZDb32V9xcWOi2_CL@slm.duckdns.org>
-References: <20230411133601.2969636-1-longman@redhat.com>
+        Wed, 12 Apr 2023 14:27:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E25BA5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681324054; x=1712860054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VTdyIpjaATWa7mekoiTWRCLcyz15fwCjJ1LRg3DqtMo=;
+  b=HAJCMKZ4TxEsvz40dKMjIudBA7I7DQGjldNVBbiD0Tn6qeRTgoaktPQi
+   QeXg8ni6sCs73iqfmpnRmIW+dhmA2z4MJbFrj3lllwqZY9qHt/6NXO/Wc
+   Mnx7ipec1uSbCwiM+wU9ND7cmZpJ7zBelT9hYOPrpCj8a7bEvxhZl/yLW
+   JHYRDD/RE2TLGbojfNQRWxQqKJlTdYKf/qKSj3/CMBkXPDLu6idDe2Kxw
+   hqf2UAWzDRP4iOQKkJ96ShFR5syjv6SKQ9id8tm1HiJ9tR3N+exRiYWGK
+   OCbmNTQmRW03iAdQB9sjkJqbIf9S0a8eQZDqfBlw5BdVb7aTOmzndJpfq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="342738375"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="342738375"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:27:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="778403203"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="778403203"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2023 11:27:26 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmfBg-000Xyz-2T;
+        Wed, 12 Apr 2023 18:27:20 +0000
+Date:   Thu, 13 Apr 2023 02:27:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, elver@google.com,
+        dvyukov@google.com, kasan-dev@googlegroups.com,
+        Dipanjan Das <mail.dipanjan.das@gmail.com>
+Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in
+ kmsan_vmap_pages_range_noflush()
+Message-ID: <202304130223.epEIvA1E-lkp@intel.com>
+References: <20230412145300.3651840-1-glider@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411133601.2969636-1-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230412145300.3651840-1-glider@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 09:35:56AM -0400, Waiman Long wrote:
->  v4:
->   - Add missing rcu_read_lock/unlock to cpuset_cancel_fork() in patch 3.
->   - Add patch 5 to reduce performance impact for the
->     non-CLONE_INTO_CGROUP case.
-> 
->  v3:
->   - Update patches 2 & 3 to put task_cs() call under rcu_read_lock().
-> 
->  v2:
->   - Drop v1 patch 3
->   - Add a new patch to fix an issue in cpuset_cancel_attach() and
->     another patch to add cpuset_can_fork() and cpuset_cacnel_fork()
->     methods.
-> 
-> The first patch in this series fixes a problem in
-> cpuset_cancel_attach(). Patches 2 and 3 fixes the CLONE_INTO_CGROUP
-> problem in cpuset. Patch 4 is a minor fix. The last patch is a
-> performance optimization patch for the non-CLONE_INTO_CGROUP case.
+Hi Alexander,
 
-Applied 1-4 to cgroup/for-6.3-fixes w/ stable cc'd. Given that the fixes are
-a bit involved, the breakages have been there for quite a while and the
-cpuset code has changed quite a bit, backporting might not be trivial tho.
-Let's see how that goes.
+kernel test robot noticed the following build errors:
 
-Thanks.
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Potapenko/mm-kmsan-handle-alloc-failures-in-kmsan_ioremap_page_range/20230412-225414
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230412145300.3651840-1-glider%40google.com
+patch subject: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230413/202304130223.epEIvA1E-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f8f0837563234abfae564b24278879d42d52a6e8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Potapenko/mm-kmsan-handle-alloc-failures-in-kmsan_ioremap_page_range/20230412-225414
+        git checkout f8f0837563234abfae564b24278879d42d52a6e8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130223.epEIvA1E-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:9:
+>> include/linux/kmsan.h:291:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +291 include/linux/kmsan.h
+
+68ef169a1dd20d Alexander Potapenko 2022-09-15  284  
+f8f0837563234a Alexander Potapenko 2023-04-12  285  static inline int kmsan_vmap_pages_range_noflush(unsigned long start,
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  286  						 unsigned long end,
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  287  						 pgprot_t prot,
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  288  						 struct page **pages,
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  289  						 unsigned int page_shift)
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  290  {
+b073d7f8aee4eb Alexander Potapenko 2022-09-15 @291  }
+b073d7f8aee4eb Alexander Potapenko 2022-09-15  292  
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
