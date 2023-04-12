@@ -2,335 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3906DF4AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEF26DF4A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjDLMHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S230154AbjDLMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjDLMHm (ORCPT
+        with ESMTP id S231364AbjDLMFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:07:42 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9768DEA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:07:34 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B864E5FD61;
-        Wed, 12 Apr 2023 15:07:32 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681301252;
-        bh=RBlTRXDLIteQfdx/CeJXxmURxfAOJvNhit6F9MPESy4=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type;
-        b=D+pg0wIZ7FXTcZB1ZGrPGPc7lo4jYYWNoCGcH1CGstZ4HPo7CcfXBijql17Nmq7jw
-         gNMSXdqx0ysI1DaqTE9eLmMt9/u8D/gXVdrPOw34Sm9uPbS4gAhaxws5RDVsLvgYCU
-         e9Yjbmhf1OJv6Ly/icYm5y3ljwHueJ0FPjg3hOlXmIsMOOldkU2V4PmAJOdIAVFOna
-         JTld0d73+1HIH8ZjtXt0TdB6v1sw1euve6Jp9EGGqjxzxn+2C9preXYTaNHwIfFD8i
-         PfOWzCjNyt+j3nYeJ6ZXFMwwzk4BNxz3GU2gx1fmmbtNCBO8+l8mOSqZYFc8m6Plju
-         RrSSVkSRcE8Ig==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 12 Apr 2023 15:07:31 +0300 (MSK)
-Message-ID: <4f552f57-c31e-985c-82be-081dff38d377@sberdevices.ru>
-Date:   Wed, 12 Apr 2023 15:03:43 +0300
+        Wed, 12 Apr 2023 08:05:52 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DA2B7;
+        Wed, 12 Apr 2023 05:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681301152; x=1712837152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iNHXn7Y7088Jm9D91nEHAacZ/cTLuLTbGyvLMhXVDd0=;
+  b=Pg51DmKrMgfwrXEjW2J+YpMIuyRdcDrshQegXcKPhWpF9djpNw4oD+8f
+   LZ2HexohPA2o8AfF9zPhs+2qTqVLDXub3DKUnaYhgKBNK7BKmhhMDspA4
+   Vo0vP3lZ+iF3RNt1QOZKlK0qw9l1miEtsnhoNyoCbyBSME2X1FzO5QXpj
+   VtTx9tFNHZS7/k4UY7659pUbrq8NUSqbggye3otkC4MV8hEWXIi1eW1z8
+   ODlhvrN8rnp/SGATLEPax9tnHilJGv4se4DAutdFHdb3tR9W62j8/mycc
+   J0uGM4de9G807Y3qB09pkYC3U3TCUjvTFoLQfMo82UnKmSX2CuCswYd2w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="332568301"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332568301"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:05:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="800290120"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="800290120"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:05:49 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 5FBC1120D2E;
+        Wed, 12 Apr 2023 15:05:46 +0300 (EEST)
+Date:   Wed, 12 Apr 2023 15:05:46 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Riesch via B4 Relay 
+        <devnull+michael.riesch.wolfvision.net@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl
+Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
+ group status controls for zoom and focus
+Message-ID: <ZDaemghP0HQSw3Fo@kekkonen.localdomain>
+References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+ <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+ <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
+ <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
+ <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
+ <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
+ <ZDaa+qhoZxZ5ymxL@kekkonen.localdomain>
+ <8fe5c9c5-6eb0-86ae-9e5d-fbaa72be25fe@wolfvision.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
- read/write
-Content-Language: en-US
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
- <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
- <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
-In-Reply-To: <3f247cbe-2798-4871-82a5-5124142fdcc5@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 04:12:00 #21090163
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8fe5c9c5-6eb0-86ae-9e5d-fbaa72be25fe@wolfvision.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michael,
 
-
-On 12.04.2023 13:24, Arseniy Krasnov wrote:
+On Wed, Apr 12, 2023 at 01:57:36PM +0200, Michael Riesch wrote:
+> Hi Sakari,
 > 
+> On 4/12/23 13:50, Sakari Ailus wrote:
+> > Hi Michael,
+> > 
+> > On Wed, Apr 12, 2023 at 10:00:26AM +0200, Michael Riesch wrote:
+> >>  - Different controls: If moving = (V4L2_CID_FOCUS_ABSOLUTE == current),
+> >>    then what happens if the application performs a
+> >>    V4L2_CID_FOCUS_RELATIVE with -3? current should reach 39,
+> >>    V4L2_CID_FOCUS_ABSOLUTE is still at 42, the lens is still moving from
+> >>    the application's point of view.
+> > 
+> > Would there be a reason to implement both of these controls in a single
+> > driver? AFAIU, the relative one should be used if there absolute value
+> > isn't known to the driver.
 > 
-> On 12.04.2023 12:37, Liang Yang wrote:
->> Hi Arseniy,
->>
->> Thanks for pointing out this problem. also comment inline.
->>
->> On 2023/4/12 14:16, Arseniy Krasnov wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> This fixes read/write functionality. New command sequences were ported
->>> from old vendor's driver. Without this patch driver works unstable. This
->>> change is tested with 'nanddump'/'nandwrite' utilities and mounting
->>> JFFS2 filesystem on AXG family (A113X SoC).
->>>
->>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>> ---
->>>   drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
->>>   1 file changed, 101 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>> index 074e14225c06..256c37c76526 100644
->>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>> @@ -26,6 +26,7 @@
->>>   #define NFC_CMD_IDLE        (0xc << 14)
->>>   #define NFC_CMD_CLE        (0x5 << 14)
->>>   #define NFC_CMD_ALE        (0x6 << 14)
->>> +#define NFC_CMD_DRD        (0x8 << 14)
->>>   #define NFC_CMD_ADL        ((0 << 16) | (3 << 20))
->>>   #define NFC_CMD_ADH        ((1 << 16) | (3 << 20))
->>>   #define NFC_CMD_AIL        ((2 << 16) | (3 << 20))
->>> @@ -84,6 +85,7 @@
->>>     #define DMA_BUSY_TIMEOUT    0x100000
->>>   #define CMD_FIFO_EMPTY_TIMEOUT    1000
->>> +#define DEVICE_READY_TIMEOUT    1000
->>>     #define MAX_CE_NUM        2
->>>   @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
->>>       }
->>>   }
->>>   +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
->>> +                     unsigned int timeout_ms)
->>> +{
->>> +    u32 cmd_size = 0;
->>> +    int ret;
->>> +
->>> +    /* wait cmd fifo is empty */
->>> +    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
->>> +                     !NFC_CMD_GET_SIZE(cmd_size),
->>> +                     10, timeout_ms * 1000);
->>> +    if (ret)
->>> +        dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
->>> +
->>> +    return ret;
->>> +}
->>> +
->>>   static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
->>>   {
->>> +    meson_nfc_wait_cmd_finish(nfc, 0);
->>> +
->>>       writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
->>>              nfc->reg_base + NFC_REG_CMD);
->>>   }
->>> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
->>>        */
->>>       meson_nfc_cmd_idle(nfc, 0);
->>>       meson_nfc_cmd_idle(nfc, 0);
->>> +    meson_nfc_wait_cmd_finish(nfc, 1000);
->>>   }
->>>   -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
->>> -                     unsigned int timeout_ms)
->>> -{
->>> -    u32 cmd_size = 0;
->>> -    int ret;
->>> -
->>> -    /* wait cmd fifo is empty */
->>> -    ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
->>> -                     !NFC_CMD_GET_SIZE(cmd_size),
->>> -                     10, timeout_ms * 1000);
->>> -    if (ret)
->>> -        dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
->>> -
->>> -    return ret;
->>> -}
->>>     static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
->>>   {
->>> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->>>       return 0;
->>>   }
->>>   +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
->>> +{
->>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>> +
->>> +    writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
->>> +    meson_nfc_cmd_idle(nfc, nfc->timing.twb);
->>> +    meson_nfc_drain_cmd(nfc);
->>> +
->>> +    return readl(nfc->reg_base + NFC_REG_BUF);
->>> +}
->>> +
->>> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
->>> +{
->>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>> +    u32 cs = nfc->param.chip_select;
->>> +    unsigned long cnt = 0;
->>> +
->>> +    meson_nfc_drain_cmd(nfc);
->>> +
->>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
->>> +
->>> +    /* 10 ms. */
->>> +    while (cnt < DEVICE_READY_TIMEOUT) {
->>> +        uint8_t status;
->>> +
->>> +        status = meson_nfc_read_byte(nand);
->>> +
->>> +        if (status & NAND_STATUS_READY)
->>> +            break;
->>> +
->>> +        usleep_range(10, 11);
->>> +        cnt++;
->>> +    }
->>> +
->>> +    if (cnt == DEVICE_READY_TIMEOUT) {
->>> +        dev_err(nfc->dev, "device ready timeout\n");
->>> +        return -ETIMEDOUT;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>   static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>                       int page, int raw)
->>>   {
->>> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>       u32 cmd;
->>>       int ret;
->>>   +    ret = meson_nfc_wait_dev_ready(nand);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       meson_nfc_select_chip(nand, nand->cur_cs);
->>>         data_len =  mtd->writesize + mtd->oobsize;
->>> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>>                        NFC_CMD_SCRAMBLER_DISABLE);
->>>       }
->>>   +    ret = meson_nfc_wait_dma_finish(nfc);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->>>       writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>       meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
->>>         meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
->>>   +    ret = meson_nfc_wait_dev_ready(nand);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       return ret;
->>>   }
->>>   @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
->>>       } while (!ret);
->>>   }
->>>   +static inline int meson_nfc_send_read(struct nand_chip *nand)
->>> +{
->>> +    struct meson_nfc *nfc = nand_get_controller_data(nand);
->>> +    u32 cs = nfc->param.chip_select;
->>> +    int ret;
->>> +
->>> +    ret = meson_nfc_wait_dev_ready(nand);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>
->> it already calls meson_nfc_queue_rb() in meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in meson_nfc_queue_rb()? and we can use the irq method.
->> also without Ready/Busy pin, the meson_nfc_queue_rb() should change like below:
->>     ......
->>     #define NFC_CMD_RB_INT    ((0xb << 10) | BIT(18))
+> Probably not, but on the other hand there is nothing the prevents a
+> driver developer from doing so, right? Point is that should there be a
+> driver which does implement both controls, we are in trouble AFAIU.
 
-Sorry, I can see this define as (and it is used in the driver):
-#define NFC_CMD_RB_INT          BIT(14) 
+I think the documentation should be improved in this regard.
 
-in drivers/mtd/nand/raw/meson_nand.c
+Also cc Hans.
 
-Which one is correct ?
+-- 
+Regards,
 
-Thanks, Arseniy
-
->>
->>     meson_nfc_cmd_idle(nfc, 0);
->>     cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
->>     writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>     meson_nfc_cmd_idle(nfc, 5);
->>     cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
->>     writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>
->>     ret = wait_for_completion_timeout(&nfc->completion,
->>                       msecs_to_jiffies(timeout_ms));
->>     if (ret == 0)
->>         ret = -1;
->>
->>     writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
->>     ......
->>
-> 
->     
-> Thanks for reply! I'll try this code! One more question about OOB processing in this
-> driver (as You are author of it):
-> 
->    OOB size is 64 bytes, but for example if I have 1K ECC, 2 bytes user bytes and 14
->    bytes for ECC code for each 1K. In this case I have access to only 32 bytes of OOB:
->    2 x (2 user bytes + 14 ECC bytes). Correct me if i'm wrong, but rest of OOB (next
->    32 bytes) become unavailable (in both raw and ECC modes) ?
-> 
-> Thanks, Arseniy
-> 
->>>   static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>                      int page, int raw)
->>>   {
->>> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>       data_len =  mtd->writesize + mtd->oobsize;
->>>       info_len = nand->ecc.steps * PER_INFO_BYTE;
->>>   +    ret = meson_nfc_wait_dev_ready(nand);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
->>>       if (ret)
->>>           return ret;
->>>   +    ret = meson_nfc_send_read(nand);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
->>>                        data_len, meson_chip->info_buf,
->>>                        info_len, DMA_FROM_DEVICE);
->>> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>       }
->>>         ret = meson_nfc_wait_dma_finish(nfc);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
->>>         meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
->>
+Sakari Ailus
