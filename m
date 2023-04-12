@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B626DEA8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAC66DEA8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjDLEck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S229663AbjDLEda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDLEcj (ORCPT
+        with ESMTP id S229656AbjDLEdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:32:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5CF4690;
-        Tue, 11 Apr 2023 21:32:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px8vN54gQz4xDH;
-        Wed, 12 Apr 2023 14:32:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681273953;
-        bh=79XUsW9JM9lKv08F08HgfhXy4MTjdplbRl0f767X6qQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Cd1QPzYFbmH0OYlbQPSU7dgZRSPSQBUusoNOwWND2WJCOPBeWEJxW6B4J5Nf5N8QY
-         ZkSkbA/p8GDHgwyaCgKFbAONrQ2B4qzGzXoJZRk0JT83LivYdgzWv5D5QBlF1fADPD
-         5DOrRm2qyBWw2QAf7x8WhnkmIUoFZUjYNsE6VkMIxsohWNPBx5bFkyvlrl2jY17kiZ
-         UadsfzA/SRS2IUT+/Nu7pI8Bo6H3r1Onxwxd8W5AOflo9tIRjssXcLAxwfhJyHXqUP
-         zJ0HbxeFxn4BOrMFixGi3D0LT9LMj9TlB7/191WW3GSOcGJ0rEIT//KNH8s0I/ewBO
-         FTfNduOLiwicA==
-Date:   Wed, 12 Apr 2023 14:32:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Yi Liu <yi.l.liu@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the vfio tree
-Message-ID: <20230412143229.0c379a7f@canb.auug.org.au>
+        Wed, 12 Apr 2023 00:33:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4524690
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:33:21 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C447kn019794;
+        Wed, 12 Apr 2023 04:33:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=5jqR/gmWFAuu1wVu6uuEschRlPfhwalbwHfoHfxxsIo=;
+ b=mJJuiWZu6jN841JxTOE1F06BMFDrdxmFraveRe1JPKu8/ABdt/P8W80qICNCCD4mgdvp
+ ZIg1J4TrICqZkbEgi3mKhjJc8wBg+1YQ3q8RHX6Ffc6f/DwSx/sTfGF6gwjOXWX/TGKH
+ ga0qz12aqPwDVnEjobSf9rqlgAr9V+97rW/EautOuBEsslJ4TGpv4JOZg7KHQkUBi0Vj
+ oYx8L9FTClGDV8s8WkDFxNFFsjkod1jgaprF6Yr/c9FbPBKa7UkXmTihroOVSa38kan3
+ AjvnnG+xUKPiOntDewCuXFOzAHfBfb5trWlFzThIGS0LG292WefSod79czvxbUdnOFd1 KQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pw9b9hfk6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 04:33:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33C4XAF2007956
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 04:33:10 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 21:33:08 -0700
+From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Subject: [PATCH] arm64: kernel: Fix kernel warning when nokaslr is passed to commandline
+Date:   Wed, 12 Apr 2023 10:02:58 +0530
+Message-ID: <20230412043258.397455-1-quic_pkondeti@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZNKm3CLd45G83YMQPnuqCDg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 54WOu-MfX6C5MyJb_hz-35BsfmgnFRTu
+X-Proofpoint-ORIG-GUID: 54WOu-MfX6C5MyJb_hz-35BsfmgnFRTu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ phishscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120039
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZNKm3CLd45G83YMQPnuqCDg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+'Unknown kernel command line parameters "nokaslr", will be passed to
+user space' message is noticed in the dmesg when nokaslr is passed to
+the kernel commandline on ARM64 platform. This is because nokaslr param
+is handled by early cpufeature detection infrastructure and the parameter
+is never consumed by a kernel param handler. Fix this warning by
+providing a dummy kernel param handler for nokaslr.
 
-Hi all,
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+---
+ arch/arm64/kernel/idreg-override.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-After merging the vfio tree, today's linux-next build (htmldocs) produced
-this warning:
+diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
+index 95133765ed29..75ceb7c07af7 100644
+--- a/arch/arm64/kernel/idreg-override.c
++++ b/arch/arm64/kernel/idreg-override.c
+@@ -177,6 +177,13 @@ static const struct {
+ 	{ "nokaslr",			"kaslr.disabled=1" },
+ };
+ 
++static int __init parse_nokaslr(char *unused)
++{
++	/* nokaslr param handling is done by early cpufeature code */
++	return 0;
++}
++early_param("nokaslr", parse_nokaslr);
++
+ static int __init find_field(const char *cmdline,
+ 			     const struct ftr_set_desc *reg, int f, u64 *v)
+ {
+-- 
+2.25.1
 
-Documentation/virt/kvm/devices/vfio.rst:45: WARNING: Literal block expected=
-; none found.
-
-Introduced by commit
-
-  25e1b301a946 ("docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GR=
-OUP_GET_DEVICE_FD ordering")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZNKm3CLd45G83YMQPnuqCDg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ2NF0ACgkQAVBC80lX
-0GxJbwf9GQ5WcPU5ovoOpWdfDVHAvUlN5AN++GHQCGuM1/OM18yMYByonmB3y9K6
-uL7yu/dfvDawMfQTt4ZvM+Sy2+963qt8JCx1zPSOuo4pRrxGwWMk6afSd4s5bnHh
-2JMzJbHnn46rKPenp8SgG4YO96xiFq5RGVod4FAE30bMuvqWoN6nza4BcYmzTcD5
-U22QqtZhluQD0tlKCnRMir1uPLFj8Z8YgwhHxR0qHhIMoQJ6BTlUDXNjV0WGgpaP
-vS9rRzemnzf3g0vwmhB7Mkc3er9NcO5ZrK0IC8pOQCodhc5jpFZ7EhDkfa33c+Rx
-X34luicoXE+aDpF/IFJCbZPLwugzfQ==
-=Zs8B
------END PGP SIGNATURE-----
-
---Sig_/ZNKm3CLd45G83YMQPnuqCDg--
