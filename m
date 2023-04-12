@@ -2,231 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6C46DF7E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180256DF7EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjDLOCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S230289AbjDLODO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDLOCH (ORCPT
+        with ESMTP id S229555AbjDLODM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:02:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623BC5B93
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:02:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECDAC62D40
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC6EAC433AA;
-        Wed, 12 Apr 2023 14:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681308125;
-        bh=PmoX6ElyNj8nnAlD2D0BUhsJ7+dyih1L4pLdR6zn1p0=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=SqJoXmeAJf09tjkUjSnJ2suT+FIMnLzGUpq+cqDJSetHWhl9p6ic2TkvZkZsQG/6z
-         uVFvbngFDpk3yCGWfprk8LUwDshV7ZG9bH3Gs4CBhC4dqVX7VThWpGIOVJ+5/pw3Z3
-         jbYvC+pg7IUHiay5M2UcjU1LBS00R8KPuSHgJ1UiWwXx1j9/O38+Tneg75KUu+LUae
-         564cz+mnICVlscujIs/gDxQXKEmLa9qXa4l23UvswozRXxB0aesJLJgoIgzTj/ueiL
-         9S9wEEIKGOEckn4pMe7E8JLO5Q2ZbqVI2WFwn+2t3XCiZVH3DwWgpI9GhQRQHni5AF
-         7h3lIQ26LbCTw==
-Message-ID: <8110b7db7edd60cf052d027b858cfd27693cd6e4.camel@kernel.org>
-Subject: Re: NULL pointer dereference in drm_dp_add_payload_part2+0xca/0x100
-From:   Jeff Layton <jlayton@kernel.org>
-To:     amd-gfx <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 12 Apr 2023 10:02:03 -0400
-In-Reply-To: <fed2a3f9111713cc619cbd54d7c1be0987c7da7b.camel@kernel.org>
-References: <fed2a3f9111713cc619cbd54d7c1be0987c7da7b.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 12 Apr 2023 10:03:12 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C07FF2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681308190; x=1712844190;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=n/9nWg9ADNDZxhAMoIa6mw8OZXc7bxhlG+mD8jYD9jY=;
+  b=TQI6/omJ7JdfsbOIcslMNJDCUiypnMlaOjvu547LLSunpVmsdMONHaWq
+   4nPkw781up7hZyck9JhWJDA/17DFN0mUQouDHCT6rMoWya4QiFAoZ95PR
+   GPJazL/XSzpiYsBgB/feH+Ch9ukPvQKXTibmMc5nY2SpPSkN8O9IfHjyr
+   PVs9BlWzp/UDrcv8ePQ9BTJdfJoekmMW7r/xBLsix27Mo1TfyVt+MkRGg
+   FvCYkEyNMcj3rkQOml6ZHvfdBkL1a0HviNDyeTCtzEMs360oR+vpAD6/I
+   Q4HYB7NGGRdtzeVnah0N//FdR4MB7YiPuwdWkxDwNUDa7wHNr5HR18kbP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="342660767"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="342660767"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:02:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="691540396"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="691540396"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.215.58]) ([10.254.215.58])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:02:45 -0700
+Message-ID: <b90f0222-3faa-b909-c82a-d4fbf8a1a1ae@linux.intel.com>
+Date:   Wed, 12 Apr 2023 22:02:43 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     baolu.lu@linux.intel.com, Vinod Koul <vkoul@kernel.org>,
+        Tina Zhang <tina.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Joerg Roedel <joro@8bytes.org>
+References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
+ <20230411064815.31456-12-baolu.lu@linux.intel.com>
+ <ec1536af68e6478a9b10a0d884cc988d@AcuMS.aculab.com>
+ <6d9ed10d-12ee-792f-fc34-60a8e432c5d2@linux.intel.com>
+ <b6ab9a30960d41c9b42e5880b89277e3@AcuMS.aculab.com>
+ <cbf041c7-119b-e23a-185d-288194629324@linux.intel.com>
+ <d996281ed80647e0ae38cea00285f710@AcuMS.aculab.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <d996281ed80647e0ae38cea00285f710@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-04-08 at 07:46 -0400, Jeff Layton wrote:
-> I've hit some repeated crashes in drm_dp_add_payload_part2. Here's one
-> from this morning that occurred not long after booting the machine. I
-> hadn't even logged in yet -- it was still at a gdm prompt:
->=20
-> Apr 08 05:34:20 tleilax kernel: amdgpu 0000:30:00.0: [drm] Failed to crea=
-te MST payload for port 0000000074d1d8eb: -5
-> Apr 08 05:34:20 tleilax kernel: BUG: kernel NULL pointer dereference, add=
-ress: 0000000000000008
-> Apr 08 05:34:20 tleilax kernel: #PF: supervisor read access in kernel mod=
-e
-> Apr 08 05:34:20 tleilax kernel: #PF: error_code(0x0000) - not-present pag=
-e
-> Apr 08 05:34:20 tleilax kernel: PGD 0 P4D 0=20
-> Apr 08 05:34:20 tleilax kernel: Oops: 0000 [#1] PREEMPT SMP NOPTI
-> Apr 08 05:34:20 tleilax kernel: CPU: 8 PID: 2278 Comm: gnome-shell Kdump:=
- loaded Not tainted 6.2.9-200.fc37.x86_64 #1
-> Apr 08 05:34:20 tleilax kernel: Hardware name: Micro-Star International C=
-o., Ltd. MS-7A33/X370 SLI PLUS (MS-7A33), BIOS 3.JR 11/29/2019
-> Apr 08 05:34:20 tleilax kernel: RIP: 0010:drm_dp_add_payload_part2+0xca/0=
-x100 [drm_display_helper]
-> Apr 08 05:34:20 tleilax kernel: Code: 8b 7e 08 44 89 e9 4c 89 c2 48 c7 c6=
- 60 d2 55 c0 e8 ab 69 54 c5 44 89 e8 5b 5d 41 5c 41 5d e9 2d 73 a2 c5 48 8b=
- 80 60 05 00 00 <48> 8b 76 08 4c 8b 40 60 48 85 f6 74 04 48 8b 76 08 4>
-> Apr 08 05:34:20 tleilax kernel: RSP: 0018:ffffa4238a2db590 EFLAGS: 000102=
-46
-> Apr 08 05:34:20 tleilax kernel: RAX: ffff961550cac000 RBX: ffff961550cac0=
-00 RCX: ffffffffc055ca98
-> Apr 08 05:34:20 tleilax kernel: RDX: ffff9615a6326140 RSI: 00000000000000=
-00 RDI: ffff9615578a4568
-> Apr 08 05:34:20 tleilax kernel: RBP: 0000000000000001 R08: 00000000ffffff=
-fb R09: 0000000000000000
-> Apr 08 05:34:20 tleilax kernel: R10: 0000000000000002 R11: 00000000000001=
-00 R12: ffff9615578a4000
-> Apr 08 05:34:20 tleilax kernel: R13: ffff96154a5b8de0 R14: ffffffffc0d9d9=
-80 R15: ffff9615589c1f90
-> Apr 08 05:34:20 tleilax kernel: FS:  00007f1c8ad775c0(0000) GS:ffff96241f=
-000000(0000) knlGS:0000000000000000
-> Apr 08 05:34:20 tleilax kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 00000000=
-80050033
-> Apr 08 05:34:20 tleilax kernel: CR2: 0000000000000008 CR3: 000000012f9080=
-00 CR4: 00000000003506e0
-> Apr 08 05:34:20 tleilax kernel: Call Trace:
-> Apr 08 05:34:20 tleilax kernel:  <TASK>
-> Apr 08 05:34:20 tleilax kernel:  dm_helpers_dp_mst_send_payload_allocatio=
-n+0x83/0xb0 [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  dc_link_allocate_mst_payload+0x16d/0x280=
- [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  core_link_enable_stream+0x8ec/0xa10 [amd=
-gpu]
-> Apr 08 05:34:20 tleilax kernel:  ? optc1_set_drr+0x136/0x1e0 [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  dce110_apply_ctx_to_hw+0x61b/0x670 [amdg=
-pu]
-> Apr 08 05:34:20 tleilax kernel:  dc_commit_state_no_check+0x39b/0xcd0 [am=
-dgpu]
-> Apr 08 05:34:20 tleilax kernel:  dc_commit_state+0x107/0x120 [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  amdgpu_dm_atomic_commit_tail+0x5bf/0x2d2=
-0 [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  ? cpufreq_this_cpu_can_update+0x12/0x60
-> Apr 08 05:34:20 tleilax kernel:  ? sugov_get_util+0x7e/0x90
-> Apr 08 05:34:20 tleilax kernel:  ? sugov_update_single_freq+0xb7/0x180
-> Apr 08 05:34:20 tleilax kernel:  ? _raw_spin_lock+0x13/0x40
-> Apr 08 05:34:20 tleilax kernel:  ? raw_spin_rq_lock_nested+0x1e/0x70
-> Apr 08 05:34:20 tleilax kernel:  ? psi_group_change+0x168/0x400
-> Apr 08 05:34:20 tleilax kernel:  ? _raw_spin_unlock+0x15/0x30
-> Apr 08 05:34:20 tleilax kernel:  ? finish_task_switch.isra.0+0x9b/0x300
-> Apr 08 05:34:20 tleilax kernel:  ? __switch_to+0x106/0x410
-> Apr 08 05:34:20 tleilax kernel:  ? __schedule+0x3d4/0x13c0
-> Apr 08 05:34:20 tleilax kernel:  ? dma_resv_get_fences+0x11b/0x220
-> Apr 08 05:34:20 tleilax kernel:  ? get_nohz_timer_target+0x18/0x190
-> Apr 08 05:34:20 tleilax kernel:  ? lock_timer_base+0x61/0x80
-> Apr 08 05:34:20 tleilax kernel:  ? _raw_spin_unlock_irqrestore+0x23/0x40
-> Apr 08 05:34:20 tleilax kernel:  ? __mod_timer+0x29e/0x3d0
-> Apr 08 05:34:20 tleilax kernel:  ? preempt_count_add+0x6a/0xa0
-> Apr 08 05:34:20 tleilax kernel:  ? _raw_spin_lock_irq+0x19/0x40
-> Apr 08 05:34:20 tleilax kernel:  ? _raw_spin_unlock_irq+0x1b/0x40
-> Apr 08 05:34:20 tleilax kernel:  ? wait_for_completion_timeout+0x13a/0x17=
-0
-> Apr 08 05:34:20 tleilax kernel:  ? wait_for_completion_interruptible+0x13=
-5/0x1e0
-> Apr 08 05:34:20 tleilax kernel:  ? __pfx_dma_fence_default_wait_cb+0x10/0=
-x10
-> Apr 08 05:34:20 tleilax kernel:  commit_tail+0x94/0x130
-> Apr 08 05:34:20 tleilax kernel:  drm_atomic_helper_commit+0x112/0x140
-> Apr 08 05:34:20 tleilax kernel:  drm_atomic_commit+0x96/0xc0
-> Apr 08 05:34:20 tleilax kernel:  ? __pfx___drm_printfn_info+0x10/0x10
-> Apr 08 05:34:20 tleilax kernel:  drm_mode_atomic_ioctl+0x959/0xb50
-> Apr 08 05:34:20 tleilax kernel:  ? __pfx_drm_mode_atomic_ioctl+0x10/0x10
-> Apr 08 05:34:20 tleilax kernel:  drm_ioctl_kernel+0xc9/0x170
-> Apr 08 05:34:20 tleilax kernel:  drm_ioctl+0x22f/0x410
-> Apr 08 05:34:20 tleilax kernel:  ? __pfx_drm_mode_atomic_ioctl+0x10/0x10
-> Apr 08 05:34:20 tleilax kernel:  amdgpu_drm_ioctl+0x4a/0x80 [amdgpu]
-> Apr 08 05:34:20 tleilax kernel:  __x64_sys_ioctl+0x90/0xd0
-> Apr 08 05:34:20 tleilax kernel:  do_syscall_64+0x5b/0x80
-> Apr 08 05:34:20 tleilax kernel:  ? __x64_sys_ioctl+0xa8/0xd0
-> Apr 08 05:34:20 tleilax kernel:  ? syscall_exit_to_user_mode+0x17/0x40
-> Apr 08 05:34:20 tleilax kernel:  ? do_syscall_64+0x67/0x80
-> Apr 08 05:34:20 tleilax kernel:  ? sched_clock_cpu+0xb/0xc0
-> Apr 08 05:34:20 tleilax kernel:  ? __irq_exit_rcu+0x3d/0x140
-> Apr 08 05:34:20 tleilax kernel:  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> Apr 08 05:34:20 tleilax kernel: RIP: 0033:0x7f1c8e723d6f
-> Apr 08 05:34:20 tleilax kernel: Code: 00 48 89 44 24 18 31 c0 48 8d 44 24=
- 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10=
- 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 0>
-> Apr 08 05:34:20 tleilax kernel: RSP: 002b:00007ffea61067d0 EFLAGS: 000002=
-46 ORIG_RAX: 0000000000000010
-> Apr 08 05:34:20 tleilax kernel: RAX: ffffffffffffffda RBX: 00005571af410f=
-b0 RCX: 00007f1c8e723d6f
-> Apr 08 05:34:20 tleilax kernel: RDX: 00007ffea6106870 RSI: 00000000c03864=
-bc RDI: 000000000000000a
-> Apr 08 05:34:20 tleilax kernel: RBP: 00007ffea6106870 R08: 00000000000000=
-11 R09: 0000000000000011
-> Apr 08 05:34:20 tleilax kernel: R10: 00005571ae320010 R11: 00000000000002=
-46 R12: 00000000c03864bc
-> Apr 08 05:34:20 tleilax kernel: R13: 000000000000000a R14: 00005571ae6ff1=
-40 R15: 00005571b0261950
-> Apr 08 05:34:20 tleilax kernel:  </TASK>
-> Apr 08 05:34:20 tleilax kernel: Modules linked in: rfcomm snd_seq_dummy s=
-nd_hrtimer rpcrdma rdma_cm iw_cm ib_cm ib_core xt_CHECKSUM xt_MASQUERADE xt=
-_conntrack ipt_REJECT nf_nat_tftp nf_conntrack_tftp nf_conntrack_netbi>
-> Apr 08 05:34:20 tleilax kernel:  videobuf2_memops rapl mxm_wmi videobuf2_=
-v4l2 wmi_bmof snd_pcm k10temp rfkill pcspkr videobuf2_common i2c_piix4 snd_=
-timer joydev videodev snd mc parport_pc soundcore parport gpio_amdpt g>
-> Apr 08 05:34:20 tleilax kernel: CR2: 0000000000000008
-> Apr 08 05:34:20 tleilax kernel: ---[ end trace 0000000000000000 ]---
->=20
-> $ ./scripts/faddr2line --list /usr/lib/debug/lib/modules/6.2.9-200.fc37.x=
-86_64/kernel/drivers/gpu/drm/display/drm_display_helper.ko.debug drm_dp_add=
-_payload_part2+0xca/0x100
-> drm_dp_add_payload_part2+0xca/0x100:
->=20
-> drm_dp_add_payload_part2 at /usr/src/debug/kernel-6.2.9/linux-6.2.9-200.f=
-c37.x86_64/drivers/gpu/drm/display/drm_dp_mst_topology.c:3407
->  3402 	{
->  3403 		int ret =3D 0;
->  3404 =09
->  3405 		/* Skip failed payloads */
->  3406 		if (payload->vc_start_slot =3D=3D -1) {
-> > 3407<			drm_dbg_kms(state->dev, "Part 1 of payload creation for %s fail=
-ed, skipping part 2\n",
->  3408 				    payload->port->connector->name);
->  3409 			return -EIO;
->  3410 		}
->  3411 =09
->  3412 		ret =3D drm_dp_create_payload_step2(mgr, payload);
->=20
-> Since %rsi is NULL and the ->dev field is 8 bytes into the struct, I'm
-> guessing that means that "state" was NULL here.
->=20
-> I'm assuming that the real bug is in the caller (and I'm happy to help
-> track that down), but would it make sense to allow this function to
-> gracefully handle a NULL state pointer? IOW something like this?
->=20
->      drm_dbg_kms(state ? state->dev : NULL, "Part 1 of payload creation f=
-or %s failed, skipping part 2\n",
->=20
-> I think that would at least prevent this problem from crashing the machin=
-e.
->=20
+On 2023/4/12 21:27, David Laight wrote:
+> From: Baolu Lu
+>> Sent: 12 April 2023 14:11
+> ...
+>> The addresses the following issue reported by klocwork tool:
+>>
+>>    - operands of different size in bitwise operations
+> Then fix the stupid tool to not be that pedantic.
 
-FWIW, I patched my kernel with the above, and it did seem to save the
-box from crashing when this happened again:
+Good idea. But before the users/customers stop complaining, let's have a
+cleanup like this. :-)
 
-    [14357.953046] amdgpu 0000:30:00.0: [drm] Failed to create MST payload =
-for port 000000006d3a3885: -5
-    [14358.025845] [drm] DM_MST: stopping TM on aconnector: 00000000ef1bcb7=
-9 [id: 86]
-    [14358.593779] [drm] DM_MST: starting TM on aconnector: 00000000ef1bcb7=
-9 [id: 86]
-
-In this case, all of my windows got moved to the secondary monitor, but
-the machine stayed up and running. I think seems to mostly occur when
-the display goes to sleep.
-
---=20
-Jeff Layton <jlayton@kernel.org>
+Best regards,
+baolu
