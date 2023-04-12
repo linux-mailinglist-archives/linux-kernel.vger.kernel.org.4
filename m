@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8996DF193
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A159E6DF194
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjDLKFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
+        id S229841AbjDLKF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDLKFK (ORCPT
+        with ESMTP id S230325AbjDLKFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:05:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063877A98
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:05:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98CF86329B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:04:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86473C4339B;
-        Wed, 12 Apr 2023 10:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681293899;
-        bh=oeHVXBgw/xh3zO+Pnydf9J/h2XOmECN7MIu3+GNG39Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lBFqo8YoK03T36dsFTv0c8crR6XKvyEmC7Zy7yUk/pR0W3Aj690J83FeJl5xtOzxT
-         4ymA1st86pkF1mvmWcENDVb5SuTrqPttM8b4NZf7Hvni9wesNNIsUESI/eVJadDMzq
-         UUbXFMDNbafgVI2pNfNu3Ylud/NcRiKkGyPik/MBpSz5pHlDCRKaTdl9T64dxxo/Vt
-         yH99WngCgxHZDrAqndV9njV5r2zHT7fVyQ/ScWCyT9H4Gu9Xb7fOaHf5Gce1LPvj9e
-         F0iYnoc1sfivTAHf6fAx1JKXtt5ezSchEvqtbrDEOEcMvr27msch08aFaUpa1Uj+GP
-         Q/8DsGMHwNQgw==
-Date:   Wed, 12 Apr 2023 15:34:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH RESEND] soundwire: bus: Fix unbalanced pm_runtime_put()
- causing usage count underflow
-Message-ID: <ZDaCRwU+WFqNo5iL@matsya>
-References: <20230406134640.8582-1-rf@opensource.cirrus.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406134640.8582-1-rf@opensource.cirrus.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 06:05:17 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5D057D84
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:05:08 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxhdhTgjZkqCwbAA--.42388S3;
+        Wed, 12 Apr 2023 18:05:07 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxSL1SgjZke9wgAA--.34313S2;
+        Wed, 12 Apr 2023 18:05:07 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v1 0/4] Add uprobes support for LoongArch
+Date:   Wed, 12 Apr 2023 18:04:57 +0800
+Message-Id: <1681293901-24918-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxSL1SgjZke9wgAA--.34313S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Jr45XF17XrWxAFWxCw4kWFg_yoW8JryrpF
+        9rurnxJF45G3s3Jr9xtas3ur1Fyr4xGrW2q3ZIy34rAr42vF15Jr18KrZrJF90k3y5KrW0
+        qF1rW3yYga4UJ3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06-04-23, 14:46, Richard Fitzgerald wrote:
-> This reverts commit
-> 443a98e649b4 ("soundwire: bus: use pm_runtime_resume_and_get()")
-> 
-> Change calls to pm_runtime_resume_and_get() back to pm_runtime_get_sync().
-> This fixes a usage count underrun caused by doing a pm_runtime_put() even
-> though pm_runtime_resume_and_get() returned an error.
-> 
-> The three affected functions ignore -EACCES error from trying to get
-> pm_runtime, and carry on, including a put at the end of the function.
-> But pm_runtime_resume_and_get() does not increment the usage count if it
-> returns an error. So in the -EACCES case you must not call
-> pm_runtime_put().
-> 
-> The documentation for pm_runtime_get_sync() says:
->  "Consider using pm_runtime_resume_and_get() ...  as this is likely to
->  result in cleaner code."
-> 
-> In this case I don't think it results in cleaner code because the
-> pm_runtime_put() at the end of the function would have to be conditional on
-> the return value from pm_runtime_resume_and_get() at the top of the
-> function.
-> 
-> pm_runtime_get_sync() doesn't have this problem because it always
-> increments the count, so always needs a put. The code can just flow through
-> and do the pm_runtime_put() unconditionally.
+v1:
+  -- Split the RFC patch #2 into two patches
+  -- Use larch_insn_gen_break() to generate break insns
+     for kprobes and uprobes
+  -- Pass around instruction word instead of union for
+     insns_not_supported(), insns_need_simulation() and
+     arch_simulate_insn() to avoid type conversion for callers
+  -- Add a simple test case for uprobes in the commit message
 
-Applied, thanks
+Tiezhu Yang (4):
+  LoongArch: Move three functions from kprobes.c to inst.h
+  LoongArch: Add larch_insn_gen_break() to generate break insns
+  LoongArch: Use larch_insn_gen_break() for kprobes
+  LoongArch: Add uprobes support
+
+ arch/loongarch/Kconfig               |   3 +
+ arch/loongarch/include/asm/inst.h    |  63 ++++++++++++++++
+ arch/loongarch/include/asm/kprobes.h |   2 +-
+ arch/loongarch/include/asm/uprobes.h |  36 ++++++++++
+ arch/loongarch/kernel/Makefile       |   1 +
+ arch/loongarch/kernel/inst.c         |   9 +++
+ arch/loongarch/kernel/kprobes.c      |  67 ++---------------
+ arch/loongarch/kernel/traps.c        |   9 ++-
+ arch/loongarch/kernel/uprobes.c      | 135 +++++++++++++++++++++++++++++++++++
+ 9 files changed, 259 insertions(+), 66 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/uprobes.h
+ create mode 100644 arch/loongarch/kernel/uprobes.c
 
 -- 
-~Vinod
+2.1.0
+
