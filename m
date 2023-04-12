@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DD16DF753
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E776DF75B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjDLNgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S229660AbjDLNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjDLNgH (ORCPT
+        with ESMTP id S229521AbjDLNhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:36:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CB112A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:35:02 -0700 (PDT)
+        Wed, 12 Apr 2023 09:37:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551071703
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681306479;
+        s=mimecast20190719; t=1681306583;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=avnUO+n0BtEa4d40ZQG2oXgOaFPN9DVhnjMogjSitH8=;
-        b=Xeb/0xJElLv/x2I8MD/DQDpD58lunIZb/q6djhkEmuZJSOtBDjw/phqETFrM1XvcCkJJjU
-        UFAyeYYpnkhtjLr6RDrCktdy2tJ4uZ++JGJoMDr4G18AqZW6YE1ABgkyqa7jhsED0Y+ACD
-        7hFwGMvBNcOjvq3lVGWMAor61ZMR/S4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4ewXy379Ae29fQc/OJYG3QVSYdaG46iuKGeWsmru53A=;
+        b=U+syPHqQ4QIl1735h+1kBN77nMAgk7l4pJgHv2+9WC6sN2RR/BTSDZpGG4iPxGyTN1nVNn
+        GapgtaPJ3UINTIphtBxmtNH0PofOgYDn4IwEHAenVZNyilTfPuV1q+he95cPDF7hVhFemD
+        Zg3oBgzOmSIcCxIoliDSmnZOlB51hOo=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-WJCVsKfzO7iC_ZSPnhIThA-1; Wed, 12 Apr 2023 09:34:38 -0400
-X-MC-Unique: WJCVsKfzO7iC_ZSPnhIThA-1
-Received: by mail-ej1-f72.google.com with SMTP id vx12-20020a170907a78c00b0094a9009d99bso3687098ejc.21
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:34:38 -0700 (PDT)
+ us-mta-619-UhsBAvYFNDmYRysHut8OmQ-1; Wed, 12 Apr 2023 09:36:22 -0400
+X-MC-Unique: UhsBAvYFNDmYRysHut8OmQ-1
+Received: by mail-qt1-f200.google.com with SMTP id x9-20020ac85f09000000b003e4ecb5f613so2994794qta.21
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:36:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681306477;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=avnUO+n0BtEa4d40ZQG2oXgOaFPN9DVhnjMogjSitH8=;
-        b=G8bZ7AtFImVjdna9ntwG86QY1NwHDLws5cyGfEM5aBUPl4C1DwnpZ/hNAekIaa4d69
-         u07XxZTB6f8ELx1N/hMjY21m691egW+30GHo7Sj28Ito1n7vfcPJjddLSRLFcAePMVTc
-         fx/eqAGYNPRL+0luGG3OTfaC03FV1GNWe8T24ZgTjxGxHYyGm7zwsmVkIJtuN5xitNXs
-         N/WJfrDbiqMn3yvPjJxhCCoiIJWF8R2iNrE5Gnaeh5xcpC7erhStShb8ukG5FlByLAwT
-         JvxqNnPX0eiAiWNASTREj5a0/xo6zaYyoeFk4YHXncpstS4yP8hXLw+fwZmOgLQREgQc
-         khAA==
-X-Gm-Message-State: AAQBX9emkHQW3X/YYzknNYyQSmansOUDrkNj/mADhaQ2BCLURXaHs2pa
-        PSzOo327H+tcMkjlebqajbZaHsTvw5L8tYcAf3slHQmi3EsjXbUS0pZCKJ7vbeGSkiYFi/34qs8
-        r8b6ybmGi/JvJqV4JhgwL3UqV
-X-Received: by 2002:a17:906:99c8:b0:8e6:bcb6:469e with SMTP id s8-20020a17090699c800b008e6bcb6469emr2343008ejn.0.1681306476782;
-        Wed, 12 Apr 2023 06:34:36 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YgapZMeMC4Rm/QdXzs4rXyxXgFabYvm7ZL0sTQJ3wSeNGkMdybuNwlZL/acPVv3QhRoQAsuw==
-X-Received: by 2002:a17:906:99c8:b0:8e6:bcb6:469e with SMTP id s8-20020a17090699c800b008e6bcb6469emr2342948ejn.0.1681306475958;
-        Wed, 12 Apr 2023 06:34:35 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 22-20020a170906319600b00930525d89e2sm7264423ejy.89.2023.04.12.06.34.35
+        d=1e100.net; s=20210112; t=1681306582; x=1683898582;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ewXy379Ae29fQc/OJYG3QVSYdaG46iuKGeWsmru53A=;
+        b=Cz4PtZjnHTukwE/Frx0v6c7gIY7dUknJOBm6s6S2BrFktIVqx4i0KYleG13pyQJ5RT
+         QJMUav8hZBkfSoNJB7CYch1jvOu0RmGfWaO9QRgL3fc49KnFkpzxbv5RmgkYJnhDjk7/
+         WtP20v2HRHqZFy+fEs2YWgel/1ULqvsVwgVWlkV9JmvfuyZdXOqZkNOhpZIWLtfNJ1Rs
+         HFl6F6kwOqaA1KpzYt0aZ2sNXFyQWSyrqmVeQ2rX8reQBiBCtqO64SCF0jZ8kgcSUNlH
+         SI7hC3Ycf3Z8Q8nJ0n+zdMaCQ3UMsCmGvSeUSD+Mo2BmV1Rw2kltcH2y+aD5lwwIonSU
+         GOsA==
+X-Gm-Message-State: AAQBX9fGZZX+Q8nUfTwrhKD7pZB/3V2iCfc+fYwx+DBsreLSsWeakDrS
+        rvXjTemQVKGlV2YGAXJ10bQ+cVxgyY9i/zY7WvBdhUGLFrz4pA9r7yWNcgO6HO0STljbCAX7AJE
+        TNaDnr2IGGx755fyHXAqnynYY
+X-Received: by 2002:ac8:5c05:0:b0:3e4:f002:2b6e with SMTP id i5-20020ac85c05000000b003e4f0022b6emr28307300qti.32.1681306582010;
+        Wed, 12 Apr 2023 06:36:22 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YyZakv16OmdCaib4fyStvbl02JokYTyFrIjcpCov1kK+TXwjvTomfRXeP9cHOs285MySvRIA==
+X-Received: by 2002:ac8:5c05:0:b0:3e4:f002:2b6e with SMTP id i5-20020ac85c05000000b003e4f0022b6emr28307277qti.32.1681306581718;
+        Wed, 12 Apr 2023 06:36:21 -0700 (PDT)
+Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
+        by smtp.gmail.com with ESMTPSA id w25-20020ac843d9000000b003e693d92781sm3263730qtn.70.2023.04.12.06.36.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 06:34:35 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 00D35AA78D2; Wed, 12 Apr 2023 15:34:34 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Kal Cutter Conley <kal.conley@dectris.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-In-Reply-To: <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
-References: <20230406130205.49996-1-kal.conley@dectris.com>
- <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
- <ZDBEng1KEEG5lOA6@boxer>
- <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 12 Apr 2023 15:34:34 +0200
-Message-ID: <875ya12phx.fsf@toke.dk>
+        Wed, 12 Apr 2023 06:36:21 -0700 (PDT)
+Message-ID: <e0ee22ee5a60f45b39fe420c517db68cb83b850d.camel@redhat.com>
+Subject: Re: [PATCH v3 2/2] cacheinfo: Add arm64 early level initializer
+ implementation
+From:   Radu Rendec <rrendec@redhat.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 12 Apr 2023 09:36:19 -0400
+In-Reply-To: <20230412114011.4gexyfnl6hu236kp@bogus>
+References: <20230406233926.1670094-1-rrendec@redhat.com>
+         <20230406233926.1670094-3-rrendec@redhat.com>
+         <20230412114011.4gexyfnl6hu236kp@bogus>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,56 +85,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kal Cutter Conley <kal.conley@dectris.com> writes:
+On Wed, 2023-04-12 at 12:40 +0100, Sudeep Holla wrote:
+> On Thu, Apr 06, 2023 at 07:39:26PM -0400, Radu Rendec wrote:
+> > This patch adds an architecture specific early cache level detection
+> > handler for arm64. This is basically the CLIDR_EL1 based detection that
+> > was previously done (only) in init_cache_level().
+> >=20
+> > This is part of a patch series that attempts to further the work in
+> > commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU")=
+.
+> > Previously, in the absence of any DT/ACPI cache info, architecture
+> > specific cache detection and info allocation for secondary CPUs would
+> > happen in non-preemptible context during early CPU initialization and
+> > trigger a "BUG: sleeping function called from invalid context" splat on
+> > an RT kernel.
+> >=20
+> > This patch does not solve the problem completely for RT kernels. It
+> > relies on the assumption that on most systems, the CPUs are symmetrical
+> > and therefore have the same number of cache leaves. The cacheinfo memor=
+y
+> > is allocated early (on the primary CPU), relying on the new handler. If
+> > later (when CLIDR_EL1 based detection runs again on the secondary CPU)
+> > the initial assumption proves to be wrong and the CPU has in fact more
+> > leaves, the cacheinfo memory is reallocated, and that still triggers a
+> > splat on an RT kernel.
+> >=20
+> > In other words, asymmetrical CPU systems *must* still provide cacheinfo
+> > data in DT/ACPI to avoid the splat on RT kernels (unless secondary CPUs
+> > happen to have less leaves than the primary CPU). But symmetrical CPU
+> > systems (the majority) can now get away without the additional DT/ACPI
+> > data and rely on CLIDR_EL1 based detection.
+> >=20
+> > Signed-off-by: Radu Rendec <rrendec@redhat.com>
+> > ---
+> > =C2=A0arch/arm64/kernel/cacheinfo.c | 32 ++++++++++++++++++++++++------=
+--
+> > =C2=A01 file changed, 24 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinf=
+o.c
+> > index c307f69e9b55..520d17e4ebe9 100644
+> > --- a/arch/arm64/kernel/cacheinfo.c
+> > +++ b/arch/arm64/kernel/cacheinfo.c
+> > @@ -38,21 +38,37 @@ static void ci_leaf_init(struct cacheinfo *this_lea=
+f,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0this_leaf->type =3D typ=
+e;
+> > =C2=A0}
+> > =C2=A0
+> > -int init_cache_level(unsigned int cpu)
+> > +static void detect_cache_level(unsigned int *level, unsigned int *leav=
+es)
+> > =C2=A0{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int ctype, level, l=
+eaves;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int fw_level, ret;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cpu_cacheinfo *this_c=
+pu_ci =3D get_cpu_cacheinfo(cpu);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int ctype;
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (level =3D 1, leaves =3D=
+ 0; level <=3D MAX_CACHE_LEVEL; level++) {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ctype =3D get_cache_type(level);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (*level =3D 1, *leaves =
+=3D 0; *level <=3D MAX_CACHE_LEVEL; (*level)++) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ctype =3D get_cache_type(*level);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ctype =3D=3D CACHE_TYPE_NOCACHE) {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0level-=
+-;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(*leve=
+l)--;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+break;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Separate instruction and data caches */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0leaves +=3D (ctype =3D=3D CACHE_TYPE_SEPARATE) ? 2 : 1=
+;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0*leaves +=3D (ctype =3D=3D CACHE_TYPE_SEPARATE) ? 2 : =
+1;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +}
+>=20
+> I prefer to use locals and assign the value to keep it simple/easy to fol=
+low.
+> Compiler can/will optimise this anyway. But I am fine either way.
 
->> > > Add core AF_XDP support for chunk sizes larger than PAGE_SIZE. This
->> > > enables sending/receiving jumbo ethernet frames up to the theoretical
->> > > maxiumum of 64 KiB. For chunk sizes > PAGE_SIZE, the UMEM is required
->> > > to consist of HugeTLB VMAs (and be hugepage aligned). Initially, only
->> > > SKB mode is usable pending future driver work.
->> >
->> > Hmm, interesting. So how does this interact with XDP multibuf?
->>
->> To me it currently does not interact with mbuf in any way as it is enabled
->> only for skb mode which linearizes the skb from what i see.
->>
->> I'd like to hear more about Kal's use case - Kal do you use AF_XDP in SKB
->> mode on your side?
->
-> Our use-case is to receive jumbo Ethernet frames up to 9000 bytes with
-> AF_XDP in zero-copy mode. This patchset is a step in this direction.
-> At the very least, it lets you test out the feature in SKB mode
-> pending future driver support. Currently, XDP multi-buffer does not
-> support AF_XDP at all. It could support it in theory, but I think it
-> would need some UAPI design work and a bit of implementation work.
->
-> Also, I think that the approach taken in this patchset has some
-> advantages over XDP multi-buffer:
->     (1) It should be possible to achieve higher performance
->         (a) because the packet data is kept together
->         (b) because you need to acquire and validate less descriptors
-> and touch the queue pointers less often.
->     (2) It is a nicer user-space API.
->         (a) Since the packet data is all available in one linear
-> buffer. This may even be a requirement to avoid an extra copy if the
-> data must be handed off contiguously to other code.
->
-> The disadvantage of this patchset is requiring the user to allocate
-> HugeTLB pages which is an extra complication.
->
-> I am not sure if this patchset would need to interact with XDP
-> multi-buffer at all directly. Does anyone have anything to add here?
+To be honest, I was on the fence about this and decided to go with the
+pointers, but now that you brought it up, I changed my mind :)
 
-Well, I'm mostly concerned with having two different operation and
-configuration modes for the same thing. We'll probably need to support
-multibuf for AF_XDP anyway for the non-ZC path, which means we'll need
-to create a UAPI for that in any case. And having two APIs is just going
-to be more complexity to handle at both the documentation and
-maintenance level.
+If I keep the original names for the locals and use something else for
+the arguments, the patch will look cleaner and it will be obvious for
+anyone looking at it that the algorithm for counting the levels/leaves
+is unchanged.
 
-It *might* be worth it to do this if the performance benefit is really
-compelling, but, well, you'd need to implement both and compare directly
-to know that for sure :)
+Best regards,
+Radu
 
--Toke
+> I need Will's(or Catalin's)=C2=A0 ack if I have to take the changes via
+> Greg's tree.
+>=20
 
