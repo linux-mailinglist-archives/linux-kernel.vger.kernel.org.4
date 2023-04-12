@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD95D6DFBA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B88C6DFBA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjDLQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S231326AbjDLQpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjDLQpD (ORCPT
+        with ESMTP id S231262AbjDLQpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:45:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9BE977B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:52 -0700 (PDT)
+        Wed, 12 Apr 2023 12:45:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BB7976C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317831;
+        s=mimecast20190719; t=1681317835;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q6fb7dGe8Qh9zpC1XHTDp4auTsAlmohzusSG+yhHPLI=;
-        b=JDRit7WOzUsZLUWMU+pHu93i8EbKOUTZ8EJmmPEn9yI8rmE+d1PsKh5H+rYP3XnY5GHtd4
-        gtfySFhFZfdUCd+mMJTEupWj/AmPqsSTDuYaCMmCxTLAAG+EGWGYZubxOYSjVc+elc3vhQ
-        H7tV51F/FYXYIQdxp3W5af9XF3mzhOI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ujW8sSFyaGmImGgAfN35Mc7lSxeHHva64g4oK3AlUaQ=;
+        b=WXECe1r6sPYXuk3zpYqSWkeXZe2UPAHh4H3sw6TFjkoID1Vo2eKaDVjsrU7EKg9iDY6/yE
+        irPfZkc4yVDT1ODIAGZwI44RLEj9kBi7UBaMV8PTa3WsHT7R2ChV4YhXSJ0YqqdW28A2YC
+        NGonSFHPFkvm86ASfkzCA/x1mHIezIE=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-643-_cxnZK6MPr2gGqv57ODuMg-1; Wed, 12 Apr 2023 12:43:50 -0400
-X-MC-Unique: _cxnZK6MPr2gGqv57ODuMg-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74acb477be6so2310485a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:50 -0700 (PDT)
+ us-mta-636-hVDJx8isO0GSeEqGox967A-1; Wed, 12 Apr 2023 12:43:54 -0400
+X-MC-Unique: hVDJx8isO0GSeEqGox967A-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3e948dfe9c9so365011cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317829; x=1683909829;
+        d=1e100.net; s=20221208; t=1681317832; x=1683909832;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q6fb7dGe8Qh9zpC1XHTDp4auTsAlmohzusSG+yhHPLI=;
-        b=BnJICVU/msEcEC6OzdtpGiZzp7/3fRPu9hiysijvi1zXodHxrSkARamRFUjS3n55F8
-         R+GLws2c52KIPxkD088vf5kAmr3ZrzK7FY/QbvbI5IOc1yH3iUvqGU9mFqDB0qmT4T5a
-         VcP3RTsMNaUONDXcia5G3+mNesnB5MVBMMWYahe/wj/87NjjBGTSFctuTqhz/LtO2j4N
-         Fm+hyD0Y7tEKbKMmRRLzfTS6E7zt4XViEYvsLDCYcYB9T2h8YY+/2Bb0c04nbibindIc
-         PINiWpFHsGEeQ49pS4ntwrqo2pBMNaJUMpNh0qX8SYEabxV979EB352S+tMvA+CkRUjW
-         SKzA==
-X-Gm-Message-State: AAQBX9exEPvER/e+z6cAIVRdsIPKfzb2ppcFQRUJRP5gEUf5ipFAEP94
-        citSrbE6NbbDa4OmGPufJuMzrXCGt7LM80wp8ES64Uw85EkXGMWOR7K7AxmgQKdTQwzNjWASoKA
-        KXGAQ6vL9yMcccE1kDVYpy0fSm2FyM/8AThp51TQ4cdt7dYEFB943eBMgRLBHDUxMlzEFBvLBmn
-        AaAIw/WQ==
-X-Received: by 2002:a05:6214:410e:b0:5e8:e227:982e with SMTP id kc14-20020a056214410e00b005e8e227982emr4492241qvb.3.1681317829026;
-        Wed, 12 Apr 2023 09:43:49 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bUncXTyJW92k3ESgGa7qeDhT/mpGdY2qSDyncYCia8CnYIFPtqWX76/SVSSYIWo1RN9ImdVA==
-X-Received: by 2002:a05:6214:410e:b0:5e8:e227:982e with SMTP id kc14-20020a056214410e00b005e8e227982emr4492202qvb.3.1681317828637;
-        Wed, 12 Apr 2023 09:43:48 -0700 (PDT)
+        bh=ujW8sSFyaGmImGgAfN35Mc7lSxeHHva64g4oK3AlUaQ=;
+        b=eHuJap8/sNTuLd5HBkPYq0f8xLqrGdE+eFLnCfDX+nQatqv+nSLIYQc1LwBaGtrDYs
+         3R7IVaaAqmrOboBui2xQp2vz22A1w3MNiFccJjJK6ZC525DpnJUQ8Log9dtA5azfS6EJ
+         SCKzobdXVZYLt+jNkpmnjajK/xmhkLgTl5o2e2qfsdoaPDHaZu87ZIkuiB+dN3nuWc4c
+         mAOFEiuYPRkz8b5fi4Z5Y4oBWGNd487q/NT3eimB63Kd4kw96cK4YZR5hpmPNtkQwb9i
+         utGiLWnaAIHbRMvmPaWjzIcAHWUO50bkdznkb+pa1QdbmkEydI+rlMJ+JfR82ZGn2MBg
+         qDhg==
+X-Gm-Message-State: AAQBX9enWlpzQqMmwv9/ClpFHRtqn2s8YWiMtbUvtOC0tm16krG0dydn
+        VMskcd+Yr3RROglRvJ3KI81BAwU/Mo5Y5aTj2+bD3tWibcwpUP9uFZiFlzoE+v24kjKxkn5K7Ur
+        izW5z2uEE/ahqBxgk1gCVt5tY1ANfBBrLZO1MHcDL7TrB2fytObva5YSXXE2R44RI4RkvMcVitK
+        3pyIfRlw==
+X-Received: by 2002:a05:622a:50d:b0:3e3:1d31:e37 with SMTP id l13-20020a05622a050d00b003e31d310e37mr4709095qtx.1.1681317832542;
+        Wed, 12 Apr 2023 09:43:52 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aZLU+frgjQvwfaxCNQHkNm3VqYZWvrTQZf2mrndcXgxwvn/h9oIaDpV8SbGuCpWFsDqkjI3A==
+X-Received: by 2002:a05:622a:50d:b0:3e3:1d31:e37 with SMTP id l13-20020a05622a050d00b003e31d310e37mr4709058qtx.1.1681317832132;
+        Wed, 12 Apr 2023 09:43:52 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id w23-20020ac86b17000000b003e6948a8966sm3274810qts.21.2023.04.12.09.43.46
+        by smtp.gmail.com with ESMTPSA id h2-20020ac87442000000b003e3914c6839sm4369508qtr.43.2023.04.12.09.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:43:47 -0700 (PDT)
+        Wed, 12 Apr 2023 09:43:51 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -67,9 +67,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Mike Rapoport <rppt@linux.vnet.ibm.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v2 21/31] selftests/mm: Allow allocate_area() to fail properly
-Date:   Wed, 12 Apr 2023 12:43:45 -0400
-Message-Id: <20230412164345.328659-1-peterx@redhat.com>
+Subject: [PATCH v2 22/31] selftests/mm: Add framework for uffd-unit-test
+Date:   Wed, 12 Apr 2023 12:43:48 -0400
+Message-Id: <20230412164348.328710-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
 References: <20230412163922.327282-1-peterx@redhat.com>
@@ -85,169 +85,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mostly to detect hugetlb allocation errors and skip hugetlb tests when
-pages are not allocated.
+Add a framework to be prepared to move unit tests from uffd-stress.c into
+uffd-unit-tests.c.  The goal is to allow detection of uffd features for
+each test, and also loop over specified types of memory that a test support.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/uffd-common.c | 47 +++++++++++++++++-------
- tools/testing/selftests/mm/uffd-common.h |  4 +-
- 2 files changed, 36 insertions(+), 15 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 124 +++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.c         |  37 ++++++
+ tools/testing/selftests/mm/vm_util.h         |   2 +
+ 3 files changed, 163 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index daa2a95408e6..bc6c5c38d6dd 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -44,10 +44,15 @@ static void anon_release_pages(char *rel_area)
- 		err("madvise(MADV_DONTNEED) failed");
- }
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index bb492c258486..936b24a6f468 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -9,6 +9,66 @@
  
--static void anon_allocate_area(void **alloc_area, bool is_src)
-+static int anon_allocate_area(void **alloc_area, bool is_src)
+ #ifdef __NR_userfaultfd
+ 
++/* The unit test doesn't need a large or random size, make it 32MB for now */
++#define  UFFD_TEST_MEM_SIZE               (32UL << 20)
++
++#define  MEM_ANON                         BIT_ULL(0)
++#define  MEM_SHMEM                        BIT_ULL(1)
++#define  MEM_SHMEM_PRIVATE                BIT_ULL(2)
++#define  MEM_HUGETLB                      BIT_ULL(3)
++#define  MEM_HUGETLB_PRIVATE              BIT_ULL(4)
++
++struct mem_type {
++	const char *name;
++	unsigned int mem_flag;
++	uffd_test_ops_t *mem_ops;
++	bool shared;
++};
++typedef struct mem_type mem_type_t;
++
++mem_type_t mem_types[] = {
++	{
++		.name = "anon",
++		.mem_flag = MEM_ANON,
++		.mem_ops = &anon_uffd_test_ops,
++		.shared = false,
++	},
++	{
++		.name = "shmem",
++		.mem_flag = MEM_SHMEM,
++		.mem_ops = &shmem_uffd_test_ops,
++		.shared = true,
++	},
++	{
++		.name = "shmem-private",
++		.mem_flag = MEM_SHMEM_PRIVATE,
++		.mem_ops = &shmem_uffd_test_ops,
++		.shared = false,
++	},
++	{
++		.name = "hugetlb",
++		.mem_flag = MEM_HUGETLB,
++		.mem_ops = &hugetlb_uffd_test_ops,
++		.shared = true,
++	},
++	{
++		.name = "hugetlb-private",
++		.mem_flag = MEM_HUGETLB_PRIVATE,
++		.mem_ops = &hugetlb_uffd_test_ops,
++		.shared = false,
++	},
++};
++
++/* Returns: UFFD_TEST_* */
++typedef void (*uffd_test_fn)(void);
++
++typedef struct {
++	const char *name;
++	uffd_test_fn uffd_fn;
++	unsigned int mem_targets;
++	uint64_t uffd_feature_required;
++} uffd_test_case_t;
++
+ static void uffd_test_report(void)
  {
- 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
- 			   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (*alloc_area == MAP_FAILED) {
-+		*alloc_area = NULL;
-+		return -errno;
-+	}
-+	return 0;
+ 	printf("Userfaults unit tests: pass=%u, skip=%u, fail=%u (total=%u)\n",
+@@ -105,9 +165,50 @@ static int test_uffd_api(bool use_dev)
+ 	return 1;
  }
  
- static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
-@@ -65,7 +70,7 @@ static void hugetlb_release_pages(char *rel_area)
++/*
++ * This function initializes the global variables.  TODO: remove global
++ * vars and then remove this.
++ */
++static int uffd_setup_environment(uffd_test_case_t *test, mem_type_t *mem_type)
++{
++	map_shared = mem_type->shared;
++	uffd_test_ops = mem_type->mem_ops;
++
++	if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB))
++		page_size = default_huge_page_size();
++	else
++		page_size = psize();
++
++	nr_pages = UFFD_TEST_MEM_SIZE / page_size;
++	/* TODO: remove this global var.. it's so ugly */
++	nr_cpus = 1;
++
++	return uffd_test_ctx_init(test->uffd_feature_required);
++}
++
++static bool uffd_feature_supported(uffd_test_case_t *test)
++{
++	uint64_t features;
++
++	if (uffd_get_features(&features))
++		return false;
++
++	return (features & test->uffd_feature_required) ==
++	    test->uffd_feature_required;
++}
++
++uffd_test_case_t uffd_tests[] = {
++};
++
+ int main(int argc, char *argv[])
+ {
++	int n_tests = sizeof(uffd_tests) / sizeof(uffd_test_case_t);
++	int n_mems = sizeof(mem_types) / sizeof(mem_type_t);
++	uffd_test_case_t *test;
++	mem_type_t *mem_type;
++	char test_name[128];
+ 	int has_uffd;
++	int i, j;
+ 
+ 	has_uffd = test_uffd_api(false);
+ 	has_uffd |= test_uffd_api(true);
+@@ -116,6 +217,29 @@ int main(int argc, char *argv[])
+ 		printf("Userfaultfd not supported or unprivileged, skip all tests\n");
+ 		exit(KSFT_SKIP);
  	}
- }
++
++	for (i = 0; i < n_tests; i++) {
++		test = &uffd_tests[i];
++		for (j = 0; j < n_mems; j++) {
++			mem_type = &mem_types[j];
++			if (!(test->mem_targets & mem_type->mem_flag))
++				continue;
++			snprintf(test_name, sizeof(test_name),
++				 "%s on %s", test->name, mem_type->name);
++
++			uffd_test_start(test_name);
++			if (!uffd_feature_supported(test)) {
++				uffd_test_skip("feature missing");
++				continue;
++			}
++			if (uffd_setup_environment(test, mem_type)) {
++				uffd_test_skip("environment setup failed");
++				continue;
++			}
++			test->uffd_fn();
++		}
++	}
++
+ 	uffd_test_report();
  
--static void hugetlb_allocate_area(void **alloc_area, bool is_src)
-+static int hugetlb_allocate_area(void **alloc_area, bool is_src)
- {
- 	off_t size = nr_pages * page_size;
- 	off_t offset = is_src ? 0 : size;
-@@ -77,14 +82,16 @@ static void hugetlb_allocate_area(void **alloc_area, bool is_src)
- 			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
- 			   (is_src ? 0 : MAP_NORESERVE),
- 			   mem_fd, offset);
--	if (*alloc_area == MAP_FAILED)
--		err("mmap of hugetlbfs file failed");
-+	if (*alloc_area == MAP_FAILED) {
-+		*alloc_area = NULL;
+ 	return ksft_get_fail_cnt() ? KSFT_FAIL : KSFT_PASS;
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 5ee6c4688a7c..1bc0ceb01adb 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -254,3 +254,40 @@ int uffd_open_sys(unsigned int flags)
+ 	return -1;
+ #endif
+ }
++
++int uffd_open(unsigned int flags)
++{
++	int uffd = uffd_open_sys(flags);
++
++	if (uffd < 0)
++		uffd = uffd_open_dev(flags);
++
++	return uffd;
++}
++
++int uffd_get_features(uint64_t *features)
++{
++	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
++	/*
++	 * This should by default work in most kernels; the feature list
++	 * will be the same no matter what we pass in here.
++	 */
++	int fd = uffd_open(UFFD_USER_MODE_ONLY);
++
++	if (fd < 0)
++		/* Maybe the kernel is older than user-only mode? */
++		fd = uffd_open(0);
++
++	if (fd < 0)
++		return fd;
++
++	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
++		close(fd);
 +		return -errno;
 +	}
- 
- 	if (map_shared) {
- 		area_alias = mmap(NULL, size, PROT_READ | PROT_WRITE,
- 				  MAP_SHARED, mem_fd, offset);
- 		if (area_alias == MAP_FAILED)
--			err("mmap of hugetlb file alias failed");
-+			return -errno;
- 	}
- 
- 	if (is_src) {
-@@ -96,6 +103,7 @@ static void hugetlb_allocate_area(void **alloc_area, bool is_src)
- 		*alloc_area_alias = area_alias;
- 
- 	close(mem_fd);
-+	return 0;
- }
- 
- static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset)
-@@ -112,7 +120,7 @@ static void shmem_release_pages(char *rel_area)
- 		err("madvise(MADV_REMOVE) failed");
- }
- 
--static void shmem_allocate_area(void **alloc_area, bool is_src)
-+static int shmem_allocate_area(void **alloc_area, bool is_src)
- {
- 	void *area_alias = NULL;
- 	size_t bytes = nr_pages * page_size, hpage_size = read_pmd_pagesize();
-@@ -132,15 +140,20 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
- 
- 	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
- 			   mem_fd, offset);
--	if (*alloc_area == MAP_FAILED)
--		err("mmap of memfd failed");
-+	if (*alloc_area == MAP_FAILED) {
-+		*alloc_area = NULL;
-+		return -errno;
-+	}
- 	if (test_collapse && *alloc_area != p)
- 		err("mmap of memfd failed at %p", p);
- 
- 	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
- 			  mem_fd, offset);
--	if (area_alias == MAP_FAILED)
--		err("mmap of memfd alias failed");
-+	if (area_alias == MAP_FAILED) {
-+		munmap(*alloc_area, bytes);
-+		*alloc_area = NULL;
-+		return -errno;
-+	}
- 	if (test_collapse && area_alias != p_alias)
- 		err("mmap of anonymous memory failed at %p", p_alias);
- 
-@@ -150,6 +163,7 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
- 		area_dst_alias = area_alias;
- 
- 	close(mem_fd);
-+	return 0;
- }
- 
- static void shmem_alias_mapping(__u64 *start, size_t len, unsigned long offset)
-@@ -282,14 +296,19 @@ static void uffd_test_ctx_clear(void)
- 	munmap_area((void **)&area_remap);
- }
- 
--void uffd_test_ctx_init(uint64_t features)
-+int uffd_test_ctx_init(uint64_t features)
- {
- 	unsigned long nr, cpu;
-+	int ret;
- 
- 	uffd_test_ctx_clear();
- 
--	uffd_test_ops->allocate_area((void **)&area_src, true);
--	uffd_test_ops->allocate_area((void **)&area_dst, false);
-+	ret = uffd_test_ops->allocate_area((void **)&area_src, true);
-+	if (ret)
-+		return ret;
-+	ret = uffd_test_ops->allocate_area((void **)&area_dst, false);
-+	if (ret)
-+		return ret;
- 
- 	userfaultfd_open(&features);
- 
-@@ -337,6 +356,8 @@ void uffd_test_ctx_init(uint64_t features)
- 	for (cpu = 0; cpu < nr_cpus; cpu++)
- 		if (pipe2(&pipefd[cpu * 2], O_CLOEXEC | O_NONBLOCK))
- 			err("pipe");
++
++	*features = uffdio_api.features;
++	close(fd);
 +
 +	return 0;
- }
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 481354141533..634eb2f41145 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -50,6 +50,8 @@ int uffd_register(int uffd, void *addr, uint64_t len,
+ int uffd_unregister(int uffd, void *addr, uint64_t len);
+ int uffd_open_dev(unsigned int flags);
+ int uffd_open_sys(unsigned int flags);
++int uffd_open(unsigned int flags);
++int uffd_get_features(uint64_t *features);
  
- void wp_range(int ufd, __u64 start, __u64 len, bool wp)
-diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index 0ec07d025cfe..9479a0649d7f 100644
---- a/tools/testing/selftests/mm/uffd-common.h
-+++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -80,7 +80,7 @@ struct uffd_args {
- };
- 
- struct uffd_test_ops {
--	void (*allocate_area)(void **alloc_area, bool is_src);
-+	int (*allocate_area)(void **alloc_area, bool is_src);
- 	void (*release_pages)(char *rel_area);
- 	void (*alias_mapping)(__u64 *start, size_t len, unsigned long offset);
- 	void (*check_pmd_mapping)(void *p, int expect_nr_hpages);
-@@ -101,7 +101,7 @@ extern uffd_test_ops_t hugetlb_uffd_test_ops;
- extern uffd_test_ops_t *uffd_test_ops;
- 
- void uffd_stats_report(struct uffd_args *args, int n_cpus);
--void uffd_test_ctx_init(uint64_t features);
-+int uffd_test_ctx_init(uint64_t features);
- void userfaultfd_open(uint64_t *features);
- int uffd_read_msg(int ufd, struct uffd_msg *msg);
- void wp_range(int ufd, __u64 start, __u64 len, bool wp);
+ /*
+  * On ppc64 this will only work with radix 2M hugepage size
 -- 
 2.39.1
 
