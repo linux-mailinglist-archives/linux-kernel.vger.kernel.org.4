@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED26F6DED58
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3712E6DED5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjDLIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S229949AbjDLIQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjDLIQD (ORCPT
+        with ESMTP id S229615AbjDLIQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:16:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916CDFC;
-        Wed, 12 Apr 2023 01:16:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C98862F53;
-        Wed, 12 Apr 2023 08:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145D7C433EF;
-        Wed, 12 Apr 2023 08:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681287360;
-        bh=cYGLuhrnmzlOrQY4GPjvQrjAZMGeHUI8Q3IUNRi/rpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L2vJGHEj9+I6HvrX/reWlTyE3ZjC7n016eJ0kRowVvlirkFCmMnKZuAEqvJmSOHsn
-         Cbjpzph6EbRTHLbYVh6n7pRqjNC6SVPyFJj2dr6jPW831dY41JDkYHvK5TtSdGi0aL
-         m378zOczEuQr3npwBi4jvS5prLcK1UWrPVhoaoJ8KhVqh9b/3bknngcA7Ck6YPMW37
-         sQXEqwZAhNIw6RITV6rIp+vJywCR2Sc9IyuezN1JuoojcXVZukKEOdDtH06iL3SW1U
-         418v0oYtLRmLFzAU22Z5GilXjGlnrAFlRf/ATedgbH1R+T2QsUU/rP0tl1HzJK4KFb
-         tfWIGSmQ+kHOQ==
-Date:   Wed, 12 Apr 2023 10:15:53 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "dt-bindings: PCI: qcom: Add iommu-map properties"
-Message-ID: <ZDZouY0PEL64MT6N@lpieralisi>
-References: <20230411121533.22454-1-manivannan.sadhasivam@linaro.org>
- <20230411174742.GA3428751-robh@kernel.org>
- <20230411184231.GA59982@thinkpad>
+        Wed, 12 Apr 2023 04:16:36 -0400
+Received: from out203-205-221-242.mail.qq.com (out203-205-221-242.mail.qq.com [203.205.221.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CAEC2;
+        Wed, 12 Apr 2023 01:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681287393;
+        bh=Zg7cJ0N5bxqHMBmSaRWwD4RCA39YjoHwbrackzoeNlo=;
+        h=From:To:Cc:Subject:Date;
+        b=E9KpF5Hd+E4ILwlf8rMs8qRgxJ4Q0TAPYbfmqgNrPP4sSXzBP3h5sR831MxdbXxof
+         Y3uSOWXiupRYzSM0O7C5P++odIm4nohyPL9eQoHXBabLVePbRvUTZDgfsher7apQDu
+         NJoi6T+HRwlQyug+IzG+FMwsYT2L3tNGy9poPuyU=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id 41A946FA; Wed, 12 Apr 2023 16:16:26 +0800
+X-QQ-mid: xmsmtpt1681287386th3gm2jcb
+Message-ID: <tencent_A0E82E0BEE925285F8156D540731DF805F05@qq.com>
+X-QQ-XMAILINFO: NojR6Ao/DkEDmiSI3Qg84sUcSSkbAMO67ajz8zB4ch+AK+3RcEtgF76MQBQgEk
+         3DG1rk5jrAzIXcgEDwhOtrTjOH1PI36PlZeJw4+y5OrSLSx5XkVI2ypW95TAz/+wH7pPJ/W0btk1
+         KfvUpDGiz689PR+ync9qYRyhaqzwmjIAzaxpUDi8nK1VBOrqY2oaKH36bVCEONuWn6NdZiVMiVgi
+         Mcgft6+zrRR86jkgJNq/8IjYNB97HcVJ1gxXmpQorxgOYFA5rcLBC8OFeY1gSwkL3N2jneM+cAH5
+         Bn5n5RY7Y2T+NVCWnYogt9bfQqE6F7k8H4WrMVTIwQriJuvOHc02lUhb+xBdYr865oNTwllH+QjP
+         AkoZ7PNkyu2EYhQY/8tRP4lBZ3pBGf0MtTCI0wWVvX4zGX/eCN4hypP36BXJdj43YyF7FOOH0X9S
+         uKnXwsaXNmtH7Sx6DxJus5dT/iHeUcye6iMJ2gQJjiAPxJZlrQMjjZbvj0/9aog/8W3SBt3moMqz
+         aoHKXMvUNoxqR4m1x7gxn7k8Xz6s2dtscAZ0l17D6YV46Zwgh/lj+Nrz2fNOu82KPHUwS3O+HPft
+         3AE87url8UB3pEwA5WcUqduEUEeudtQL6x4xANsoMdiPFzTL2a1AKh9A7EQe+/FHQj8woFhCz1N+
+         nwC00xPuhryM3QxHdLAsU+rQ4GK7wUWXrTeh5oNHy+Yr7NNqearyljVsjbq3bFpeL1SksD3ZexIw
+         P7QtqHqRKYUXm8x4vbGN1x6F6D4X87YPaNEe67tcFKJaHnn+WJH1PKdZ0jJG26UuTOH9a2rfWZxZ
+         /vR0NAO348vhOUiUmDXQ82c8J+W7ncOOrFo6owVUBhInktQ9avQOFsi7A/77QYkP/Z1IcNGRmKcK
+         yQTwNWkvkJe+mH5nmN1V7uRzGtNYQo8snthivgBCWfTzVXBnnZOtbclTFbHHBo7qmgBe+kuQwEpQ
+         KkTqn4zJ5z27GyS5rcAlTqKvIgKvzXKbXEWCecqTk1fSqn+Z/oYg==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org, rongtao@cestc.cn
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] samples/bpf: sampleip: Replace PAGE_OFFSET with _text address
+Date:   Wed, 12 Apr 2023 16:16:24 +0800
+X-OQ-MSGID: <20230412081625.55541-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411184231.GA59982@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:12:31AM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Apr 11, 2023 at 12:47:42PM -0500, Rob Herring wrote:
-> > On Tue, Apr 11, 2023 at 05:45:33PM +0530, Manivannan Sadhasivam wrote:
-> > > This reverts commit 6ebfa40b63ae65eac20834ef4f45355fc5ef6899.
-> > > 
-> > > "iommu-map" property is already documented in commit
-> > 
-> > Need the commit hash here.
-> > 
-> > > ("dt-bindings: PCI: qcom: Add SM8550 compatible") along with the "iommus"
-> > > property.
-> > 
-> > Shouldn't there be a patch removing "iommus" as discussed?
-> > 
-> 
-> Yeah, that was my intention after the dts patches were merged. And since the
-> dts patches are in linux-next now, I could finally send the patch.
+From: Rong Tao <rongtao@cestc.cn>
 
-I don't understand what's the plan here. By the way, instead of merging
-this revert I just dropped the commit that this patch is reverting from
-the controller/qcom branch, please have a look to check if everything is
-what you expect it to be there.
+Macro PAGE_OFFSET(0xffff880000000000) in sampleip_user.c is inaccurate,
+for example, in aarch64 architecture, this value depends on the
+CONFIG_ARM64_VA_BITS compilation configuration, this value defaults to 48,
+the corresponding PAGE_OFFSET is 0xffff800000000000, if we use the value
+defined in sampleip_user.c, then all KSYMs obtained by sampleip are (user)
 
-Lorenzo
+Symbol error due to PAGE_OFFSET error:
 
-> - Mani
-> 
-> > > 
-> > > So let's revert the commit that just added "iommu-map" to avoid
-> > > duplication.
-> > > 
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 2 --
-> > >  1 file changed, 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > index 5d236bac99b6..a1318a4ecadf 100644
-> > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > @@ -78,8 +78,6 @@ properties:
-> > >  
-> > >    dma-coherent: true
-> > >  
-> > > -  iommu-map: true
-> > > -
-> > >    interconnects:
-> > >      maxItems: 2
-> > >  
-> > > -- 
-> > > 2.25.1
-> > > 
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+    $ sudo ./sampleip 1
+    Sampling at 99 Hertz for 1 seconds. Ctrl-C also ends.
+    ADDR                KSYM                             COUNT
+    0xffff80000810ceb8  (user)                           1
+    0xffffb28ec880      (user)                           1
+    0xffff8000080c82b8  (user)                           1
+    0xffffb23fed24      (user)                           1
+    0xffffb28944fc      (user)                           1
+    0xffff8000084628bc  (user)                           1
+    0xffffb2a935c0      (user)                           1
+    0xffff80000844677c  (user)                           1
+    0xffff80000857a3a4  (user)                           1
+    ...
+
+A few examples of addresses in the CONFIG_ARM64_VA_BITS=48 environment in
+the aarch64 environment:
+
+    $ sudo head /proc/kallsyms
+    ffff8000080a0000 T _text
+    ffff8000080b0000 t gic_handle_irq
+    ffff8000080b0000 T _stext
+    ffff8000080b0000 T __irqentry_text_start
+    ffff8000080b00b0 t gic_handle_irq
+    ffff8000080b0230 t gic_handle_irq
+    ffff8000080b03b4 T __irqentry_text_end
+    ffff8000080b03b8 T __softirqentry_text_start
+    ffff8000080b03c0 T __do_softirq
+    ffff8000080b0718 T __entry_text_start
+
+We just need to replace the PAGE_OFFSET with the address _text in
+/proc/kallsyms to solve this problem:
+
+    $ sudo ./sampleip 1
+    Sampling at 99 Hertz for 1 seconds. Ctrl-C also ends.
+    ADDR                KSYM                             COUNT
+    0xffffb2892ab0      (user)                           1
+    0xffffb2b1edfc      (user)                           1
+    0xffff800008462834  __arm64_sys_ppoll                1
+    0xffff8000084b87f4  eventfd_read                     1
+    0xffffb28e6788      (user)                           1
+    0xffff8000081e96d8  rcu_all_qs                       1
+    0xffffb2ada878      (user)                           1
+    ...
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/bpf/sampleip_user.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.c
+index 921c505bb567..9283f47844fb 100644
+--- a/samples/bpf/sampleip_user.c
++++ b/samples/bpf/sampleip_user.c
+@@ -21,10 +21,10 @@
+ #define DEFAULT_FREQ	99
+ #define DEFAULT_SECS	5
+ #define MAX_IPS		8192
+-#define PAGE_OFFSET	0xffff880000000000
+ 
+ static int map_fd;
+ static int nr_cpus;
++static long _text_addr;
+ 
+ static void usage(void)
+ {
+@@ -108,7 +108,7 @@ static void print_ip_map(int fd)
+ 	/* sort and print */
+ 	qsort(counts, max, sizeof(struct ipcount), count_cmp);
+ 	for (i = 0; i < max; i++) {
+-		if (counts[i].ip > PAGE_OFFSET) {
++		if (counts[i].ip > _text_addr) {
+ 			sym = ksym_search(counts[i].ip);
+ 			if (!sym) {
+ 				printf("ksym not found. Is kallsyms loaded?\n");
+@@ -169,6 +169,13 @@ int main(int argc, char **argv)
+ 		return 2;
+ 	}
+ 
++	/* used to determine whether the address is kernel space */
++	_text_addr = ksym_get_addr("_text");
++	if (!_text_addr) {
++		fprintf(stderr, "ERROR: no '_text' in /proc/kallsyms\n");
++		return 3;
++	}
++
+ 	/* create perf FDs for each CPU */
+ 	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+ 	links = calloc(nr_cpus, sizeof(struct bpf_link *));
+-- 
+2.31.1
+
