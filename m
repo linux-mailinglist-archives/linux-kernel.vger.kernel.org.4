@@ -2,175 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507716DF525
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146426DF515
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDLM0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S230017AbjDLMYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjDLM0Y (ORCPT
+        with ESMTP id S231131AbjDLMYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:26:24 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E23730EE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:26:22 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6E1BA5FD61;
-        Wed, 12 Apr 2023 15:26:20 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681302380;
-        bh=baVoUdcsUqQcacvPIKW5rpkoBB26wb+sRo1ToEofS4c=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=gw3B8kamxj1vZtPCgZJBSYd8iVChCa3k+nQseoju53SZlkyj8Cj3hL5TtqtA2KcMO
-         X7m3htakzFZHZMTm90rKJ8CXOLNizXYiBujXPoARWRdxbFVnMI53P3NtoqcBCaXgle
-         PMQwEx5txmqOmOIsezmVN9L5VYjo2ta+PEzXkwZ9M498wtYn+E7k/i4fulffmD8lUP
-         ai8miLFzCB/fe/IuxbixIXSRKohd8VzgSYrL/2E99/GvD9WGCC/4qwFfY5WM3VSzvK
-         IB/TplicwUhvKjnmmyX4hZ6l1sPz8/S2CSDSLOmP6SgQkg/R3JyoEpoBImhLNbfaow
-         I6A0XQaRjvRFA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 12 Apr 2023 15:26:19 +0300 (MSK)
-Message-ID: <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
-Date:   Wed, 12 Apr 2023 15:22:26 +0300
-MIME-Version: 1.0
+        Wed, 12 Apr 2023 08:24:25 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5C276B9;
+        Wed, 12 Apr 2023 05:24:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jIlV6KmQ5lul4nNIBGoanQQ8kiphiVDNlwFbiro8SCgbymfgHcvlWix7TtBf2ITKTmmd751aAr9rYYUMW1vQhjJRbtZ3c16dy8NOO6VgKu40L8+GWqnb5OLunqeJNbScznecv3zg09qTNUbQog2TWw/e+sS3+GVhU0QiTIaQ0sjKNsqdwHrf40adxNH10JqbTZJDstGBqV0cCum0teuug6NNqOz+MYNVWZ28BN5o76rGM1ecpKaZcAB2ztiUfFBuCP0O1u/U8csng0cC3AEy5xGuNYica6vMRCBsfSMikCk8oZ6Do0wrz7g19UNXfegumd9YkLLUx6Tww58evsZ7ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=heg35P71C/DU03bOC8umryfXh1DUcNpzxNoVgNqfVnk=;
+ b=jK5C2JnazPXxSqRUKYWRum+EpyCLkpf4MiN7X2m7i5ZefICv3p9TFYg+b+OWbUHKi19X6wlx9H+gYQAZ+2OV7dDoPQcd94A6UYUHsuhd3UkN4SX3XFuFC3P9qBhgfDt2U3n934iqv3uw0A3WCYWA/6dmgodS0SrES69Z/Mtm/xQzrwnr6Q1x9cWtyOq6mAQFq0JhijEmG4oHlCz2a5jscqV19Hxu2XbjP+Ofsg8j4Y9veZCO/OLbUyvUXB+Iy90/bnKQv8rqRjdcRzFOilH+kaDlSZp/kko993ccBCBIhmkwsqke4UkREW3pmN/T/Jw9cDC5yVpQiuFAS98lKtn29g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=heg35P71C/DU03bOC8umryfXh1DUcNpzxNoVgNqfVnk=;
+ b=wgnukGl5Qn3MVrA/hUvq8RRXW1ujzvwLjVVR2Z1Zb5V2InCmJTm2OLaH9PEKNCZ55RH+kFBVBlmFcyEvJkKvIu6It4UpoWCY3AJmArSCsXNufMVE0N0DEQSqp03IorDs9PojrCokG4S4UkBg4EGunPHc6cdMDDtt/n0W3ed3S68=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN7PR12MB8819.namprd12.prod.outlook.com (2603:10b6:806:32a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Wed, 12 Apr
+ 2023 12:24:08 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
+ 12:24:08 +0000
+Message-ID: <53c2e18b-48ec-fded-e1d8-7b345dea49ba@amd.com>
+Date:   Wed, 12 Apr 2023 14:22:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/7] drm: fdinfo memory stats
 Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
- <20230412094400.3c82f631@xps-13>
- <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
- <20230412113654.183350d0@xps-13>
- <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
- <20230412141824.755b2bca@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230412141824.755b2bca@xps-13>
-Content-Type: text/plain; charset="UTF-8"
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>, Evan Quan <evan.quan@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Sean Paul <sean@poorly.run>,
+        Shashank Sharma <shashank.sharma@amd.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>
+References: <20230411225725.2032862-1-robdclark@gmail.com>
+ <bbbbbf34-2ea5-5344-30db-f976c5198d75@amd.com>
+ <98bb3388-d671-dcf3-0247-649a702b5e11@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <98bb3388-d671-dcf3-0247-649a702b5e11@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 04:12:00 #21090163
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0163.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:99::6) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SN7PR12MB8819:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87a7b358-7976-478c-ea8e-08db3b50d053
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sPOVcqrF9OUzZsU0fwu5CotOmYZ/zE+0sQwxjRBnrxh0AQBswsJvpxElRt1zcgzPLBuxAq+usDbfkBFJLbASqwkbj8QXOpyYYAYUd/96zhUyXTxL9Bi7Zw9MQknIcOOIvRoTqFiXW2ehC76P8QksebF6vcywSQZLIKUMgY9EJxGSozEGphgHLc2MnTRAFmYTQqvYvpfxCIh42ZCj0iiIqaNw3Ms7CZYSG8NQXTKw+el5GdymX/kguqmRPuk9cHedLIncdec4bmdaxuuc9tRhVgAXvOIhy0a5JCyS9VYB+ezRR1cRRmWMUjK2jDcuXkGQlCFFSWu5JQcGYTxqNXFSltpZarvL+7W9BA/G7FwQPlThCdQIiaL3ueIxoWHHydCSuX1W9OFqh/rgWNK1dEDiraphPzfVT/PwQKbhgiR1q4k4cfDamcnZIhtKQ4zibwNbjcAm7vRDGASg0mJnWGM6oAFF8Si4Rr5BBbO9MbIwczlbfTWFsrGHEETX5P4696y5/uynitoO4Fj0JH0AV4Ph06311jIzPX7qiJHZK4c3Uq3sN9vFoYoBcRlkHjSG8Dprh9gZO2O7ebjom/jzU2Oek7F4IZ6wKDKRCjRsv8pqy5e10ZD/r9jvaLQZflUix4HtNoJ8IMEkRoVNGPri86lcDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199021)(478600001)(110136005)(53546011)(6506007)(186003)(5660300002)(54906003)(316002)(2906002)(966005)(66946007)(4326008)(6666004)(6486002)(7416002)(66476007)(41300700001)(8676002)(8936002)(66556008)(31696002)(86362001)(6512007)(36756003)(2616005)(38100700002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2orY1g5QUt2YUEyT2wwZ1BlM050MVpaVkNvRnZxTnJmYXk5V3JTTjZRTUJw?=
+ =?utf-8?B?cnRlblB6T01EYVRRWk9RWUdOMERDUHlFWlJmVDE1Z3diWFBWN3ZiQnZBcEJX?=
+ =?utf-8?B?MUFHOFNNVi85UlczWWUrNS8yWllvQy92U3NMMUl6T3Z1NlU0eG0rVjN4RzhS?=
+ =?utf-8?B?cStRQ0NoVHUxcDlkeEVpVE9YblBkZ3l6SXZMTmF2NEtFbEgwNjgyY2JSRS9x?=
+ =?utf-8?B?U2ZFbW1pREJQakw0Q2Q3cjhKVTZtQ2pxKzR6ekpXSVdkMlZydWluTGVQanUx?=
+ =?utf-8?B?aHV5ejExeDFJajBvQlozaGVYSjIzMkNuNWpNSGloMENCYTdrUHVaZk9BQlc5?=
+ =?utf-8?B?eSsySjhwZlhzMkVKb0NPeGMvRnduMjVNVkJIQjA2ZmZSVU05ZjZoVG00YkJF?=
+ =?utf-8?B?Y0xwRlREQUhwamFsYUhTZmlWc0syRFRBZGhPcEhENm55NWJiWGNTbHcyME1V?=
+ =?utf-8?B?OUVuN0lVYmViTTVTZ0tkMG5uK1VPU3dDbmMvcElJa1duQ2c3RW9xODM0bEph?=
+ =?utf-8?B?QXNBdmNCUTFTQlpSSzJYN0FCVjlBWGxqWisyczU2a1VrczUwNTgwUE9qUzVR?=
+ =?utf-8?B?Y04zV3Uxakw1ekFHVkJjclJDZ1ZaYlVTUkhFdVZyVnFnMTFHdTEycnR4RzEy?=
+ =?utf-8?B?SVlCU3JzL3g1TEhMaGJuUE0zVXpEK3FZMU1LdU93SytpRWw0b05PZVhYZVc5?=
+ =?utf-8?B?OWJHMVFpMmxUaG5mTUVLT0h2VlQrM2hlTzBiUytQTENnTzdlT0RpSkZpenpS?=
+ =?utf-8?B?WGRVRG5nb29aV2FWa3RzSHIzbklYaEN1eUdPV2NSUWhQbXBzMVJzR1djWncx?=
+ =?utf-8?B?WndIUFZYaUUwUDA0bUdTd1kreWZvMFVqQ2swZUhoRGp1dklpelMydEpidldF?=
+ =?utf-8?B?ODhPUE9UVEt3MU4ySjFKNzVHOTEzcWhoMmgrdDBxREFkMXl6SDRDaFpEV3NE?=
+ =?utf-8?B?WGRibXF1WGtWZnM3MTFoaHBsYU56ajRaMHdBVFRqQk5jbUhTSFVEVkdFY2pa?=
+ =?utf-8?B?VVlBTW5OUkRiUmE4SnZJbTBDY1dhUE5EMG1ZL2p6U09CY09UVnl6K25YY3FV?=
+ =?utf-8?B?cklZRGVGclgrVGF1bmQxQ3IxWXVEYzM3NHFKZ0NpdFQ5WjVRUmI2NnJoZ0Fa?=
+ =?utf-8?B?cGIzQnIzRWdFYk1NVVNaZVVPaTgzckxXZU1FbTFVaTYrZG9Odm5FTkVvcUlN?=
+ =?utf-8?B?Z2JseVN0ODV3KzFTYVRWb0lmSWo0U2xieDA4WXc0VGFsdDBhZTMvZXR6cmgz?=
+ =?utf-8?B?YUVBVjRGdDdvemNwMEd3d3RaUjVZRDJSKyttRmRJdmxFRVZKMDdiWWxFcmJ2?=
+ =?utf-8?B?TTgvTEs1TlpRTWh0a21ZQVpBNFNNQk5YbWw3QU1jWGRnbCs5Q2dZWHcrY3ps?=
+ =?utf-8?B?R3AzMUwxbjB1S3k2NitMaUJmUUhTZlVpeWlJVlcvekI4K1loUktjU0NkdXV5?=
+ =?utf-8?B?QW8rQkFOMkNuN1VibkNtN2Q4TW5YMUVoc2c3VkdtSGJncVVISkRYYnZOcEZl?=
+ =?utf-8?B?bm1USDMzY0pmM09MazNWT3NKeGhzc0RrNjhLTXNIMlNGNHhLbzhZMVg2N3NR?=
+ =?utf-8?B?RXhDdExEZzFYYzBvd1BYcUF5MGI0ZE5HMmUxUXMzY1NEN0dXeVNXdEpRTzEx?=
+ =?utf-8?B?b1AwTFVHOURMMk5xZ3JDYWRJU2N1V0dxQVpyM08vZnNJTzYxWDZWanZTODlM?=
+ =?utf-8?B?WWZvdTlSbzU2WlpRZ2k3eVNjajh1Mm82ZmVrUGhlcW5xTUZFOU5mNzcrZW9W?=
+ =?utf-8?B?THpzNks1NWFMdFdTZ2Z3eXBnRFlqSFZSdk5DY2lkZUZqb1FFMEJpUnhXd3N1?=
+ =?utf-8?B?dlRaZmUxd1pJdWJINUdHUmZyWS9lS3dwWTJJUVNnYTlLUmhtSkpYb2NCUjZl?=
+ =?utf-8?B?ZGNsK1EzSFJTeHlONnVZQ3YweEJXUWRXTmZFU2Fxb3M5YUxMZ0hFYjRVWVBv?=
+ =?utf-8?B?V3NQcVJyQjBNT3NWUERaT0tZWFN2MkFPQ0p1bG5XalRDa0xpOE9Rd1V2TlBk?=
+ =?utf-8?B?cDJKaFN6SDl4WFNadTFycTRSNHJ0S3BFZXIweFhZOEFjWXNmcHBpNlI1c2NG?=
+ =?utf-8?B?NmltN1l0b21CajdienBPbjY0ZThsWWpkS29jWUxXbGhYbUdiZWlOc1JSSEhx?=
+ =?utf-8?B?ekhvLzZvUVU1cHczUmVGaTBIOEU4M3YzNGVXbWVPQTJ5YzFTb1JabEhXNFN4?=
+ =?utf-8?Q?G+03p8kojsoqeXwpoNtzuFMPrei37BL+aUBnXbpteV2U?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87a7b358-7976-478c-ea8e-08db3b50d053
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 12:24:08.3843
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: damCiX+BEHrJgH1SDR1v9UrtPgkV3U4R1pBye3XQbhUDE6ZVVMyZfrWaFwkt+N+h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8819
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12.04.2023 15:18, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +0300:
-> 
->> On 12.04.2023 12:36, Miquel Raynal wrote:
->>> Hi Arseniy,
+Am 12.04.23 um 14:10 schrieb Tvrtko Ursulin:
+>
+> On 12/04/2023 10:34, Christian König wrote:
+>> Am 12.04.23 um 00:56 schrieb Rob Clark:
+>>> From: Rob Clark <robdclark@chromium.org>
 >>>
->>> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +0300:
->>>   
->>>> On 12.04.2023 10:44, Miquel Raynal wrote:  
->>>>> Hi Arseniy,
->>>>>
->>>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +0300:
->>>>>     
->>>>>> This NAND reads only few user's bytes in ECC mode (not full OOB), so    
->>>>>
->>>>> "This NAND reads" does not look right, do you mean "Subpage reads do
->>>>> not retrieve all the OOB bytes,"?
->>>>>     
->>>>>> fill OOB buffer with zeroes to not return garbage from previous reads
->>>>>> to user.
->>>>>> Otherwise 'nanddump' utility prints something like this for just erased
->>>>>> page:
->>>>>>
->>>>>> ...
->>>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>   OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad d3 be
->>>>>>   OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e 88 6e
->>>>>>   OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 7c ff
->>>>>>   OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa 2f 5e
->>>>>>
->>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>>> ---
->>>>>>  drivers/mtd/nand/raw/meson_nand.c | 5 +++++
->>>>>>  1 file changed, 5 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>>>> index f84a10238e4d..f2f2472cb511 100644
->>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>>>  static int meson_nfc_read_page_raw(struct nand_chip *nand, u8 *buf,
->>>>>>  				   int oob_required, int page)
->>>>>>  {
->>>>>> +	struct mtd_info *mtd = nand_to_mtd(nand);
->>>>>>  	u8 *oob_buf = nand->oob_poi;
->>>>>>  	int ret;
->>>>>>  
->>>>>> +	memset(oob_buf, 0, mtd->oobsize);    
->>>>>
->>>>> I'm surprised raw reads do not read the entire OOB?    
->>>>
->>>> Yes! Seems in case of raw access (what i see in this driver) number of OOB bytes read
->>>> still depends on ECC parameters: for each portion of data covered with ECC code we can
->>>> read it's ECC code and "user bytes" from OOB - it is what i see by dumping DMA buffer by
->>>> printk(). For example I'm working with 2K NAND pages, each page has 2 x 1K ECC blocks.
->>>> For each ECC block I have 16 OOB bytes which I can access by read/write. Each 16 bytes
->>>> contains 2 bytes of user's data and 14 bytes ECC codes. So when I read page in raw mode
->>>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB is reported as 64 bytes.  
+>>> Similar motivation to other similar recent attempt[1].  But with an
+>>> attempt to have some shared code for this.  As well as documentation.
 >>>
->>> In all modes, when you read OOB, you should get the full OOB. The fact
->>> that ECC correction is enabled or disabled does not matter. If the NAND
->>> features OOB sections of 64 bytes, you should get the 64 bytes.
+>>> It is probably a bit UMA-centric, I guess devices with VRAM might want
+>>> some placement stats as well.  But this seems like a reasonable start.
 >>>
->>> What happens sometimes, is that some of the bytes are not protected
->>> against bitflips, but the policy is to return the full buffer.  
+>>> Basic gputop support: https://patchwork.freedesktop.org/series/116236/
+>>> And already nvtop support: https://github.com/Syllo/nvtop/pull/204
+>>>
+>>> [1] https://patchwork.freedesktop.org/series/112397/
 >>
->> Ok, so to clarify case for this NAND controller:
->> 1) In both ECC and raw modes i need to return the same raw OOB data (e.g. user bytes
->>    + ECC codes)?
-> 
-> Well, you need to cover the same amount of data, yes. But in the ECC
-> case the data won't be raw (at least not all of it).
+>> I think the extra client id looks a bit superfluous since the ino of 
+>> the file should already be unique and IIRC we have been already using 
+>> that one.
+>
+> Do you mean file_inode(struct drm_file->filp)->i_ino ? That one would 
+> be the same number for all clients which open the same device node so 
+> wouldn't work.
 
-So "same amount of data", in ECC mode current implementation returns only user OOB bytes (e.g.
-OOB data excluding ECC codes), in raw it returns user bytes + ECC codes. IIUC correct
-behaviour is to always return user bytes + ECC codes as OOB data even in ECC mode ?
+Ah, right. DMA-buf used a separate ino per buffer, but we don't do that 
+for the drm_file.
 
-Thanks, Arseniy
+>
+> I also don't think the atomic_add_return for client id works either, 
+> since it can alias on overflow.
 
-> 
->> 2) If I have access to only 32 bytes of OOB (in case above), I must report that size
->>    of OOB is only 32 bytes during initialization?
-> 
-> I believe it's just an implementation error in the controller driver.
-> This controller can be used on NAND chips with other geometries, please
-> don't play with it.
-> 
-> Thanks,
-> Miquèl
+Yeah, we might want to use a 64bit number here if any.
+
+Christian.
+
+>
+> In i915 I use an xarray and __xa_alloc_cyclic.
+>
+> Regards,
+>
+> Tvrtko
+
