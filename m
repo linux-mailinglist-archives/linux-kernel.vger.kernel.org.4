@@ -2,203 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D046DF3E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C8E6DF3E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjDLLjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S230414AbjDLLjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjDLLiw (ORCPT
+        with ESMTP id S231430AbjDLLjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:38:52 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C642D67
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:38:28 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230412113801epoutp01f724d913657053abcd31927f4c0c4c6b~VLPhjW9jl2718827188epoutp01C
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:38:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230412113801epoutp01f724d913657053abcd31927f4c0c4c6b~VLPhjW9jl2718827188epoutp01C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681299481;
-        bh=PCRyiCdo9buNSVxIlVwF0a59tYap8pCla0PxLClsOhY=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=ETn2rUFy1Ub3gcUDd91EwRpYobL2nDvHifKXG5TbfZW0l7jGp0wXALXt0oZ//7ail
-         UQXYH9himAhhweC/vO03XKCrHw4m7pkHMud290MnXJCbO7GO4Z6HxPSun4D+332Bqw
-         AFCc5RKigJe5gsEj23rdmIgHR/ntZeGKz+wlWAm4=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20230412113800epcas1p3fb76ac32ffb9cb6631f65160c6e36c1b~VLPgvL3RJ0352403524epcas1p3o;
-        Wed, 12 Apr 2023 11:38:00 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.248]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PxLLH6y74z4x9Pv; Wed, 12 Apr
-        2023 11:37:59 +0000 (GMT)
-X-AuditID: b6c32a37-c1fff7000000243f-24-64369817ca3d
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        25.16.09279.71896346; Wed, 12 Apr 2023 20:37:59 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH v3] dma-buf/heaps: system_heap: avoid too much
- allocation
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ZDaP4/PYyb9tKGQi@dhcp22.suse.cz>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804@epcms1p8>
-Date:   Wed, 12 Apr 2023 20:37:59 +0900
-X-CMS-MailID: 20230412113759epcms1p8cb15b54e3a96c7616419cb030d16f804
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmrq74DLMUg+7N5hZz1q9hs3h5SNNi
-        4cO7zBarN/ladG+eyWjR+/4Vk8WfExvZLC7vmsNmcW/Nf1aL+30OFqfufma3eLf+C5sDj8fh
-        N++ZPfZ+W8DisXPWXXaPBZtKPTZ9msTucefaHjaPEzN+s3j0bVnF6LF+y1UWj8+b5AK4orJt
-        MlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4COVlIoS8wp
-        BQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ+zp
-        7Gcr6FGqOPVzG1MD40LpLkZODgkBE4lzs+aydTFycQgJ7GCUeDdxMZDDwcErICjxd4cwSI2w
-        gL/EvhdzGEFsIQElibM/rrBDxHUlmrpXs4DYbALaEu8XTGIFsUWAaro27wSbySxwmVmi9eo+
-        NohlvBIz2p+yQNjSEtuXbwUbyimgJ7H24BlWiLioxM3Vb9lh7PfH5jNC2CISrffOMkPYghIP
-        fu5mhJnz5/hzqPnFEss6HzBB2DUSK86tgoqbSzS8XQlm8wr4Stz5uRhsF4uAqsSGjS+g5rhI
-        vGv/CjafWUBeYvvbOcygcGAW0JRYv0sfokRRYufvuYwQJXwS7772sMK81bDxNzs29o55T6DO
-        UZNoefYVql5G4u+/Z6wTGJVmIUJ6FpLFsxAWL2BkXsUollpQnJueWmxYYAyP3OT83E2M4PSr
-        Zb6DcdrbD3qHGJk4GA8xSnAwK4nw/nAxTRHiTUmsrEotyo8vKs1JLT7EaAr08kRmKdHkfGAG
-        yCuJNzSxNDAxMzKxMLY0NlMS5/3yVDtFSCA9sSQ1OzW1ILUIpo+Jg1OqgWn1i2Wv1So2H6m+
-        FfR/5ieFA5M1DSZKqJjfXj9frPeS1jebK3y333o9nsAtqlpzWObetv9NrLsmPN/gzMpQMU1D
-        4xHz7+8XLL5Gf303q3GdvMx2vVNb0iLblzZut7nha+g8ccMGBUNt7n99XBceVNTy/ut8OH+T
-        sP+npl1bbh3Z8SWjuvRnTOl3h7NvG2YuLVfP+9Je1Hz62cWzVb//HVyspZvCVP5y/SOVHfvm
-        HjsrdoTxG2fO0+Mcj166PV76a9lBBV2GhVLzQlifM9hfn8K9o7Tr+72m2clBj5sv/T6v5hS9
-        V2f+wl+TjZk+zbmoubA/NqTO6cfTZxOnx9upcxcnf5hv+2fh+7y8czP3WP8P+qzEUpyRaKjF
-        XFScCABalK9zSAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7
-References: <ZDaP4/PYyb9tKGQi@dhcp22.suse.cz>
-        <ZDZ4j7UdBt32j28J@dhcp22.suse.cz> <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
-        <20230410073228.23043-1-jaewon31.kim@samsung.com>
-        <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
-        <20230412094440epcms1p445319579ead0d0576bb616ebb07501b4@epcms1p4>
-        <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p8>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 07:39:13 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2616E8D;
+        Wed, 12 Apr 2023 04:38:50 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id d204so2919398ybh.6;
+        Wed, 12 Apr 2023 04:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681299529;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3dVbDu7hAlbrDiv9/ZUJT5TunPW1jIu8qSPcKdVUhU=;
+        b=E8YA+5NwAFyuyF5c9CAsk6B3qXsfn6KDFcmfhhsycsEhhLITBpjTy8RyTKB8oyWR8/
+         z8WN9HxcDM4Zpyt9tSxUyb+SZAwuBr+jG8WPlXt+DrU3H74bqT7+46BYsddmRAd2dbBN
+         PRVK9XdznWPklPcpGIrVIJaSBuZj3D7s0IQQm1a6zZFimcxTzy3K4c81Yf9vcXdX/Tak
+         7OW8sl1zchJTB429wrO68zU27RYjFwWJKDB2UMBO3QHlUBaJX6YpwosWDg9E7AbHeRcU
+         aM9j8E8xBYHBUgCx/LRkSYa/fzNqyMMqnc/7Kg/t6epWC+NPOt3zzfZcNx6hd3+qv626
+         8tsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681299529;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n3dVbDu7hAlbrDiv9/ZUJT5TunPW1jIu8qSPcKdVUhU=;
+        b=xBzY5TswBY8bxeyy9m9sqSPCWXU6mhB4dOASenf4f4cGtktEJxC/Iy7SN9BVqi7cJ+
+         YZ/55LG4R4jzTCgCmf2Tjg9sJeJFNMhq5pos7Jz1GgtQYY3Uuv35F26AiKMrmWw4Yf6g
+         WrxQLGqOYuklFumEURfnjresTLP0mfisYpmUwlaYChMOWTzuIyzmDGr0S4WVDcvcW/lC
+         /wOL+0VdYGYRr3uUqPL+X+E6icd1vy2wtjKGmAeaIU9Bbp07edkc16/+VylYeLrs56Fe
+         KY+49Qa7N2aWQD85xDRTS0xd/4d7UYGfbMGpXJTuj/VYKUcMT/OODIVF1luYRPg3a7dw
+         ViSA==
+X-Gm-Message-State: AAQBX9f0Dq9OF4PApsi1eqruuCnSINpOxc9YYHDZ8KxAUf2cA3O2urU7
+        HMUAfwc+0ncWYt4SjrpFMxXE5xCJaYX7OvABy/A=
+X-Google-Smtp-Source: AKy350brNge+xFYJe3IaBRFamG5X/vSyGyNc5rgLbVaEWJaioYUVHjGnuijcFavHtqRc1Yin0k92d8Y8dJ0l3WWZ3lM=
+X-Received: by 2002:a25:d705:0:b0:b6b:6a39:949c with SMTP id
+ o5-20020a25d705000000b00b6b6a39949cmr6851264ybg.6.1681299528860; Wed, 12 Apr
+ 2023 04:38:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-2-wedsonaf@gmail.com>
+ <20230411214205.5753343f.gary@garyguo.net>
+In-Reply-To: <20230411214205.5753343f.gary@garyguo.net>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Wed, 12 Apr 2023 08:38:37 -0300
+Message-ID: <CANeycqqM-k2odQzNffaYQ6Nrxii=XUp3VsQ8mQ3vw=WA5mykJw@mail.gmail.com>
+Subject: Re: [PATCH v4 02/13] rust: sync: introduce `Lock` and `Guard`
+To:     Gary Guo <gary@garyguo.net>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Wed 12-04-23 18:44:40, Jaewon Kim wrote:
->> >On Wed 12-04-23 17:57:26, Jaewon Kim wrote:
->> >> >Sorry for being late. I know there was some pre-existing discussion
->> >> >around that but I didn't have time to participate.
->> >> >
->> >> >On Mon 10-04-23 16:32:28, Jaewon Kim wrote:
->> >> >> @@ -350,6 +350,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
->> >> >>  	struct page *page, *tmp_page;
->> >> >>  	int i, ret = -ENOMEM;
->> >> >>  
->> >> >> +	if (len / PAGE_SIZE > totalram_pages())
->> >> >> +		return ERR_PTR(-ENOMEM);
->> >> >> +
->> >> >
->> >> >This is an antipattern imho. Check 7661809d493b ("mm: don't allow
->> >> >oversized kvmalloc() calls") how kvmalloc has dealt with a similar
->> >> 
->> >> Hello Thank you for the information.
->> >> 
->> >> I tried to search the macro of INT_MAX.
->> >> 
->> >> include/vdso/limits.h
->> >> #define INT_MAX         ((int)(~0U >> 1))
->> >> 
->> >> AFAIK the dma-buf system heap user can request that huge size more than 2GB.
->> >
->> >Do you have any pointers? This all is unreclaimable memory, right? How
->> >are those users constrained to not go overboard?
->> 
->> Correct dma-buf system heap memory is unreclaimable. To avoid that huge request,
->> this patch includes __GFP_RETRY_MAYFAIL.
+On Tue, 11 Apr 2023 at 17:42, Gary Guo <gary@garyguo.net> wrote:
 >
->__GFP_RETRY_MAYFAIL doesn't avoud huge requests. It will drain the free
->available memory to the edge of OOM (especially for low order requests)
->so effectively anybody else requesting any memory (GFP_KERNEL like req.)
->will hit the oom killer very likely).
+> On Tue, 11 Apr 2023 02:45:32 -0300
+> Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
 >
->>  #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_RETRY_MAYFAIL)
->> 
->> >
->> >> So
->> >> I think totalram_pages() is better than INT_MAX in this case.
->> >> 
->> >> >issue. totalram_pages doesn't really tell you anything about incorrect
->> >> >users. You might be on a low memory system where the request size is
->> >> >sane normally, it just doesn't fit into memory on that particular
->> >> >machine.
->> >> 
->> >> Sorry maybe I'm not fully understand what you meant. User may requested
->> >> a huge size like 3GB on 2GB ram device. But I think that should be rejected
->> >> because it is bigger than the device ram size.
->> >
->> >Even totalram_pages/10 can be just unfeasible amount of data to be
->> >allocated without a major disruption. totalram_pages is no measure of
->> >the memory availability.
->> >If you want to have a ballpark estimation then si_mem_available might be
->> >something you are looking for. But I thought the sole purpose of this
->> >patch is to catch obviously buggy callers (like sign overflow lenght
->> >etc) rather than any memory consumption sanity check.
->> 
->> Yes if we want to avoid some big size, si_mem_available could be one option.
->> Actually I tried to do totalram_pages() / 2 like the old ion system heap in
->> the previous patch version. Anyway totalram_pages in this patch is used to
->> avoid the buggy size.
+> > From: Wedson Almeida Filho <walmeida@microsoft.com>
+> >
+> > They are generic Rust implementations of a lock and a lock guard that
+> > contain code that is common to all locks. Different backends will be
+> > introduced in subsequent commits.
+> >
+> > Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > Suggested-by: Gary Guo <gary@garyguo.net>
+> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> > ---
+> > v1 -> v2: No changes
+> > v2 -> v3: Use new Opaque::ffi_init from Benno's series
+> > v3 -> v4: Fixed name of parameter in Lock comment
+> >
+> >  rust/kernel/sync.rs      |   2 +-
+> >  rust/kernel/sync/lock.rs | 162 +++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 163 insertions(+), 1 deletion(-)
+> >  create mode 100644 rust/kernel/sync/lock.rs
+> >
+> > diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> > index 541d235ffbeb..81b0998eaa18 100644
+> > --- a/rust/kernel/sync.rs
+> > +++ b/rust/kernel/sync.rs
+> > @@ -8,6 +8,7 @@
+> >  use crate::types::Opaque;
+> >
+> >  mod arc;
+> > +pub mod lock;
+> >
+> >  pub use arc::{Arc, ArcBorrow, UniqueArc};
+> >
+> > @@ -25,7 +26,6 @@ impl LockClassKey {
+> >          Self(Opaque::uninit())
+> >      }
+> >
+> > -    #[allow(dead_code)]
+> >      pub(crate) fn as_ptr(&self) -> *mut bindings::lock_class_key {
+> >          self.0.get()
+> >      }
+> > diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+> > new file mode 100644
+> > index 000000000000..1a8ecccf4f24
+> > --- /dev/null
+> > +++ b/rust/kernel/sync/lock.rs
+> > @@ -0,0 +1,162 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +//! Generic kernel lock and guard.
+> > +//!
+> > +//! It contains a generic Rust lock and guard that allow for different backends (e.g., mutexes,
+> > +//! spinlocks, raw spinlocks) to be provided with minimal effort.
+> > +
+> > +use super::LockClassKey;
+> > +use crate::{bindings, init::PinInit, pin_init, str::CStr, types::Opaque};
+> > +use core::{cell::UnsafeCell, marker::PhantomData, marker::PhantomPinned};
+> > +use macros::pin_data;
+> > +
+> > +/// The "backend" of a lock.
+> > +///
+> > +/// It is the actual implementation of the lock, without the need to repeat patterns used in all
+> > +/// locks.
+> > +///
+> > +/// # Safety
+> > +///
+> > +/// - Implementers must ensure that only one thread/CPU may access the protected data once the lock
+> > +/// is owned, that is, between calls to `lock` and `unlock`.
+> > +pub unsafe trait Backend {
+> > +    /// The state required by the lock.
+> > +    type State;
+> > +
+> > +    /// The state required to be kept between lock and unlock.
+> > +    type GuardState;
+> > +
+> > +    /// Initialises the lock.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must be valid for write for the duration of the call, while `name` and `key` must
+> > +    /// remain valid for read indefinitely.
+> > +    unsafe fn init(
+> > +        ptr: *mut Self::State,
+> > +        name: *const core::ffi::c_char,
+> > +        key: *mut bindings::lock_class_key,
+> > +    );
 >
->So let me repeat that totalram_pages is a wrong thing to do(tm).
->
->This is not a subsystem I would feel like nacking a patch, but consider
->this feedback as strong of a rejection as somebody external can give
->you. A mm internal allocator would get an outright nack.
->
->What you are doing is just wrong and an antipattern to what other
->allocators do. Either use something like INT_MAX to catch overflows or
->do not try to catch buggy code but pretend a better memory consumer
->citizen by using something like si_mem_available (ideally think of
->other potential memory users so do not allow any request to use all
->of it). The later might require much more involved interface and I do
->rememeber some attempts to account and limit dmabuf memory better.
->
->> And as we discussed in v2 patch, __GFP_RETRY_MAYFAIL was added. And I think
->> the gfp makes us feel better in memory perspective.
->
->wishful thinking that is.
->-- 
->Michal Hocko
->SUSE Labs
+> Any reason that this takes FFI types rather than just `&'static CStr` and `&'static LockClassKey`?
 
-Yes I think you're right. As a allocator, dma-buf system heap looks to be loose
-in memory allocation. Limiting dmabuf memory may be required. But I think there
-is no nice and reasonable way so far. And the dma-buf system heap is being
-widely used in Android mobile system. AFAIK the camera consumes huge memory
-through this dma-buf system heap. I actually even looked a huge size request
-over 2GB in one dma-buf request.
+Yes, because we want to move work that is done by all backend
+implementations into `Lock`. This includes calls to convert these to
+ffi types.
 
-Jaewon Kim
+> > +
+> > +    /// Acquires the lock, making the caller its owner.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// Callers must ensure that [`Backend::init`] has been previously called.
+> > +    #[must_use]
+> > +    unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState;
+> > +
+> > +    /// Releases the lock, giving up its ownership.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// It must only be called by the current owner of the lock.
+> > +    unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState);
+> > +}
+> > +
+> > +/// A mutual exclusion primitive.
+> > +///
+> > +/// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock banckend
+> > +/// specified as the generic parameter `B`.
+> > +#[pin_data]
+> > +pub struct Lock<T: ?Sized, B: Backend> {
+> > +    /// The kernel lock object.
+> > +    #[pin]
+> > +    state: Opaque<B::State>,
+> > +
+> > +    /// Some locks are known to be self-referential (e.g., mutexes), while others are architecture
+> > +    /// or config defined (e.g., spinlocks). So we conservatively require them to be pinned in case
+> > +    /// some architecture uses self-references now or in the future.
+> > +    #[pin]
+> > +    _pin: PhantomPinned,
+> > +
+> > +    /// The data protected by the lock.
+> > +    data: UnsafeCell<T>,
+> > +}
+> > +
+> > +// SAFETY: `Lock` can be transferred across thread boundaries iff the data it protects can.
+> > +unsafe impl<T: ?Sized + Send, B: Backend> Send for Lock<T, B> {}
+> > +
+> > +// SAFETY: `Lock` serialises the interior mutability it provides, so it is `Sync` as long as the
+> > +// data it protects is `Send`.
+> > +unsafe impl<T: ?Sized + Send, B: Backend> Sync for Lock<T, B> {}
+> > +
+> > +impl<T, B: Backend> Lock<T, B> {
+> > +    /// Constructs a new lock initialiser.
+> > +    #[allow(clippy::new_ret_no_self)]
+> > +    pub fn new(t: T, name: &'static CStr, key: &'static LockClassKey) -> impl PinInit<Self> {
+> > +        pin_init!(Self {
+> > +            data: UnsafeCell::new(t),
+> > +            _pin: PhantomPinned,
+> > +            // SAFETY: `slot` is valid while the closure is called and both `name` and `key` have
+> > +            // static lifetimes so they live indefinitely.
+> > +            state <- Opaque::ffi_init(|slot| unsafe {
+> > +                B::init(slot, name.as_char_ptr(), key.as_ptr())
+> > +            }),
+> > +        })
+> > +    }
+> > +}
+>
+> There is not drop implementation on `Lock`, which implies all locks can
+> be just forgotten?
+
+Yes, all locks can be forgotten.
+
+> I believe we discussed a case where this is can lead to UAF when a lock
+> is dropped while it is locked (e.g. because the guard is forgotten).
+
+Yes, this is the issue brought up by Boqun:
+https://github.com/Rust-for-Linux/linux/issues/862
+
+The issue arises when a mutex guard is forgotten and the task that
+owns it exits. Then another task trying to acquire the mutex will lead
+to a UAF. A drop implementation on the lock doesn't solve this.
+
+One solution is to increment the refcount on the current task when we
+acquire the mutex and decrement it when we release, but if we do that,
+the cost of acquiring/releasing a mutex gets much worse in Rust than
+it is in C.
+
+Another solution might be to force disable CONFIG_MUTEX_SPIN_ON_OWNER
+when Rust is enabled, which is undesirable because it affects the
+performance of C code as well.
+
+Even a closure-based lock (which I believe you suggested at the time)
+doesn't solve this completely because the thread may exit during the
+closure execution and leave a dangling pointer in the mutex.
+
+So we don't have a good solution for this yet.
+
+> > +
+> > +impl<T: ?Sized, B: Backend> Lock<T, B> {
+> > +    /// Acquires the lock and gives the caller access to the data protected by it.
+> > +    pub fn lock(&self) -> Guard<'_, T, B> {
+> > +        // SAFETY: The constructor of the type calls `init`, so the existence of the object proves
+> > +        // that `init` was called.
+> > +        let state = unsafe { B::lock(self.state.get()) };
+> > +        // SAFETY: The lock was just acquired.
+> > +        unsafe { Guard::new(self, state) }
+> > +    }
+> > +}
+> > +
+> > +/// A lock guard.
+> > +///
+> > +/// Allows mutual exclusion primitives that implement the `Backend` trait to automatically unlock
+> > +/// when a guard goes out of scope. It also provides a safe and convenient way to access the data
+> > +/// protected by the lock.
+> > +#[must_use = "the lock unlocks immediately when the guard is unused"]
+> > +pub struct Guard<'a, T: ?Sized, B: Backend> {
+> > +    pub(crate) lock: &'a Lock<T, B>,
+> > +    pub(crate) state: B::GuardState,
+> > +    _not_send: PhantomData<*mut ()>,
+> > +}
+> > +
+> > +// SAFETY: `Guard` is sync when the data protected by the lock is also sync.
+> > +unsafe impl<T: Sync + ?Sized, B: Backend> Sync for Guard<'_, T, B> {}
+> > +
+> > +impl<T: ?Sized, B: Backend> core::ops::Deref for Guard<'_, T, B> {
+> > +    type Target = T;
+> > +
+> > +    fn deref(&self) -> &Self::Target {
+> > +        // SAFETY: The caller owns the lock, so it is safe to deref the protected data.
+> > +        unsafe { &*self.lock.data.get() }
+> > +    }
+> > +}
+> > +
+> > +impl<T: ?Sized, B: Backend> core::ops::DerefMut for Guard<'_, T, B> {
+> > +    fn deref_mut(&mut self) -> &mut Self::Target {
+> > +        // SAFETY: The caller owns the lock, so it is safe to deref the protected data.
+> > +        unsafe { &mut *self.lock.data.get() }
+> > +    }
+> > +}
+> > +
+> > +impl<T: ?Sized, B: Backend> Drop for Guard<'_, T, B> {
+> > +    fn drop(&mut self) {
+> > +        // SAFETY: The caller owns the lock, so it is safe to unlock it.
+> > +        unsafe { B::unlock(self.lock.state.get(), &self.state) };
+> > +    }
+> > +}
+> > +
+> > +impl<'a, T: ?Sized, B: Backend> Guard<'a, T, B> {
+> > +    /// Constructs a new immutable lock guard.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// The caller must ensure that it owns the lock.
+> > +    pub(crate) unsafe fn new(lock: &'a Lock<T, B>, state: B::GuardState) -> Self {
+> > +        Self {
+> > +            lock,
+> > +            state,
+> > +            _not_send: PhantomData,
+> > +        }
+> > +    }
+> > +}
+>
