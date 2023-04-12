@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83056DF9D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FB06DF9DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjDLPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S230414AbjDLPZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjDLPYA (ORCPT
+        with ESMTP id S231578AbjDLPY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:24:00 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9956EA1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:23:41 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id bl15so10098560qtb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1681313020; x=1683905020;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/E244aiAIcJteNUm2g4L6wCEgk4wHVyuDmdP/JQSqeM=;
-        b=Kp9E8Fd/WTrYSSeoo9KBh1EftdY3j+iuaOJTMcIvpFxA2yPnI3cDartcEmE7A9/Agf
-         oyYsrrwGfKn5NzQCtxcbog/wucmjejZx6KPj7Tp4LY6v1WQS3n6wcTTIhUN0L9VJ/D+D
-         Cd7QmiowIfGjwME5ia6RCy8QLRzk1AECUKluPcK3RMq1VYncfv7Vdtjv3pfWa1oztjFW
-         7HeYoQMVerCbNDjyHsAXA1Nt6j9hXO3D7L1LCDJ4uEN+jv3Z7mh/D6ER92Yvw+laY7g4
-         oBalJAWScdUdRo9t6zfsse9mDN3hW2hDb5gGxpELlfPMHzcRFAGusr8MNHAe667T2w/c
-         jKpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681313020; x=1683905020;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/E244aiAIcJteNUm2g4L6wCEgk4wHVyuDmdP/JQSqeM=;
-        b=bficxyi7OWT+nmYyDVmySeSRvstivm3Fy11S05rVmeO6INAz1ep+A/7GW8d9fPIE/u
-         IyZ0cS6y5b2aJkS5jxGLrw0vWJSPd7aeLpIdpl57VD8EpP6wQV5nQkJlHZnuAzWf8tFq
-         ajScP6l+qSph+nEMRpIswBGDyts1/1E8/ZGY66dpb2UqUk2ZfSfK38DiOXK0cHo3j3pL
-         DyUj3vV673xgFZXfXEM7vf83bJfYn+3qc+sINye4KFdkZssgyZZmrWi8cZybpeElHS2U
-         n6VJ6mYhgOuhttsjMfQKMjz/AXd5QXjxYdIFa8RGStK5+5QmLelv77We7iyF42UIAASI
-         3H8A==
-X-Gm-Message-State: AAQBX9eCHAyHI2v417TG6FiiJyPQjz9Sgy0FqHTTdnbmVPH5Eqpo610r
-        a50vcr4v0oTL2MnM5X643h+dVQ==
-X-Google-Smtp-Source: AKy350YdHHKPja00olWR+pbPgiAi8UG3+5u351p3NI4uYhU7UksPv84K8e5Odt3i/EYydukTbCGCEQ==
-X-Received: by 2002:ac8:5a46:0:b0:3e4:ed0d:6a87 with SMTP id o6-20020ac85a46000000b003e4ed0d6a87mr4107807qta.32.1681313019992;
-        Wed, 12 Apr 2023 08:23:39 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id he35-20020a05622a602300b003d9650a7a9csm3154296qtb.46.2023.04.12.08.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:23:39 -0700 (PDT)
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, muchun.song@linux.dev,
-        rientjes@google.com, souravpanda@google.com
-Subject: [PATCH] mm: hugetlb_vmemmap: provide stronger vmemmap allocaction gurantees
-Date:   Wed, 12 Apr 2023 15:23:37 +0000
-Message-Id: <20230412152337.1203254-1-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+        Wed, 12 Apr 2023 11:24:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B038D127;
+        Wed, 12 Apr 2023 08:24:57 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CF8kR7031932;
+        Wed, 12 Apr 2023 15:24:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=u/b5jkG8ErubPZ7jxSxX4nJ4W/dT3PW1Mo6wS1qer48=;
+ b=rlYw2VqtZpWF99BOhZaswm4q/oO83v/AS9Q/qWefffrBD3KP2C/m78AwbYoV1gpEiAJ9
+ C+DxQH7ZrhKnMJISo/5cH+4f0twfS8iSJGaStv3W33sMKsnbcq4Q/jliVho1v6ygJfON
+ DcGwyW/brUEu3Q7FCJbU7OYfxikPx+f6Ihvpp6tTy+otAC0FczpgsTkJ+s9NvVr2SK0t
+ yzngl5Q55eQyyKmATYl+ZPdpUMGKFI1bJaDKSHNb7ar7B06FAxLEpr+HqBFIPs776QD4
+ 07ZBXjARPMTNZuhxHuOF9qBDW447pmTHhKB/qxPM8EdSM+XAmH3Er22LLrETPjOd8KPj LA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwx284bsm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 15:24:43 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33CD55dA027912;
+        Wed, 12 Apr 2023 15:24:42 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pu0jjch2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 15:24:42 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33CFOfVK39453418
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 15:24:41 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 450755805C;
+        Wed, 12 Apr 2023 15:24:41 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 945B75805D;
+        Wed, 12 Apr 2023 15:24:40 +0000 (GMT)
+Received: from [9.160.16.129] (unknown [9.160.16.129])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Apr 2023 15:24:40 +0000 (GMT)
+Message-ID: <d13ba4a0-44d4-e8d3-fccd-0e44174a7359@linux.ibm.com>
+Date:   Wed, 12 Apr 2023 10:24:39 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/ibm-cffps) Use default debugfs
+ attributes and lock function
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+References: <20230405145230.68631-1-eajames@linux.ibm.com>
+ <20230405145230.68631-3-eajames@linux.ibm.com>
+ <9c3d277f-a23b-447f-8850-354f54deb07b@roeck-us.net>
+Content-Language: en-US
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <9c3d277f-a23b-447f-8850-354f54deb07b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hacvsgNZtQyWYLKlhFjevn7hClUquEBd
+X-Proofpoint-ORIG-GUID: hacvsgNZtQyWYLKlhFjevn7hClUquEBd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_06,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ phishscore=0 mlxscore=0 impostorscore=0 clxscore=1015 spamscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304120132
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HugeTLB pages have a struct page optimizations where struct pages for tail
-pages are freed. However, when HugeTLB pages are destroyed, the memory for
-struct pages (vmemmap) need to be allocated again.
 
-Currently, __GFP_NORETRY flag is used to allocate the memory for vmemmap,
-but given that this flag makes very little effort to actually reclaim
-memory the returning of huge pages back to the system can be problem. Lets
-use __GFP_RETRY_MAYFAIL instead. This flag is also performs graceful
-reclaim without causing ooms, but at least it may perform a few retries,
-and will fail only when there is genuinely little amount of unused memory
-in the system.
+On 4/7/23 11:10, Guenter Roeck wrote:
+> On Wed, Apr 05, 2023 at 09:52:30AM -0500, Eddie James wrote:
+>> Switch the driver to use the default debugfs attributes instead of
+>> ones that provide the same data under different names. Use the lock
+>> functions for the debugfs and led attributes, and simplify the input
+>> history operation by dropping the timer and lock.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/hwmon/pmbus/ibm-cffps.c | 273 ++++++++++++++------------------
+>>   1 file changed, 118 insertions(+), 155 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+>> index e3294a1a54bb..2d7ec00e047b 100644
+>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+>> @@ -18,12 +18,6 @@
+>>   
+> [ ... ]
+>>   			}
+>> @@ -225,29 +183,27 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>>   			rc = i * 4;
+>>   			break;
+>>   		default:
+>> -			return -EOPNOTSUPP;
+>> +			rc = -EOPNOTSUPP;
+>> +			break;
+>>   		}
+>> -		goto done;
+>> +		break;
+>>   	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
+>> -		rc = i2c_smbus_read_byte_data(psu->client,
+>> -					      PMBUS_ON_OFF_CONFIG);
+>> -		if (rc < 0)
+>> -			return rc;
+>> -
+>> -		rc = snprintf(data, 3, "%02x", rc);
+>> -		goto done;
+>> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
+>> +		if (rc >= 0)
+>> +			rc = snprintf(data, 3, "%02x", rc);
+>> +		break;
+>>   	default:
+>> -		return -EINVAL;
+>> +		rc = -EINVAL;
+>> +		break;
+>>   	}
+>>   
+>> -	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
+>> +unlock:
+>> +	pmbus_unlock(psu->client);
+>>   	if (rc < 0)
+>>   		return rc;
+>>   
+>> -done:
+>>   	data[rc] = '\n';
+>>   	rc += 2;
+>> -
+> I hate to say (repeat) that, but please refrain from whitespace changes.
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Suggested-by: David Rientjes <rientjes@google.com>
----
- mm/hugetlb_vmemmap.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index a559037cce00..c4226d2af7cc 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -475,9 +475,12 @@ int hugetlb_vmemmap_restore(const struct hstate *h, struct page *head)
- 	 * the range is mapped to the page which @vmemmap_reuse is mapped to.
- 	 * When a HugeTLB page is freed to the buddy allocator, previously
- 	 * discarded vmemmap pages must be allocated and remapping.
-+	 *
-+	 * Use __GFP_RETRY_MAYFAIL to fail only when there is genuinely little
-+	 * unused memory in the system.
- 	 */
- 	ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse,
--				  GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE);
-+				  GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_THISNODE);
- 	if (!ret) {
- 		ClearHPageVmemmapOptimized(head);
- 		static_branch_dec(&hugetlb_optimize_vmemmap_key);
--- 
-2.40.0.577.gac1e443424-goog
+Sure, sorry.
 
+Thanks,
+
+Eddie
+
+
+>
+> Guenter
+>
+>>   	return simple_read_from_buffer(buf, count, ppos, data, rc);
+>>   }
