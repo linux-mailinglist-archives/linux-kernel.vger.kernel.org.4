@@ -2,143 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37BE6DF0CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78DB6DF0B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjDLJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S229917AbjDLJm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDLJoN (ORCPT
+        with ESMTP id S229559AbjDLJmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:44:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611DA6A78;
-        Wed, 12 Apr 2023 02:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681292626; x=1712828626;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LwEHEzc7bD+80SZfiRcNMHZOLAyRIwPq6TVR/GpsF7s=;
-  b=fcIBJlSuCcMeU2IKjtOhoATQ3OWgvWyDB5mBmmQNqb34JADJoFvHbpFB
-   E+dzHsEadE/78GxW15s2gainU8BB2payTNEoszrjH4T5OYBS5hTW1Oi7a
-   1m7dZRhGw5vadcDaHVCjCNcjOcc5fcRxokfhc8dYwLJ66NtGYKIzfa+z3
-   LyRt9e00YhZYbEE2sAtNdT8hnbh3cqaAojg++XSxeO8rOBZOs2p7qoDHv
-   Ujo00W+0xzs0qiu++4OFMBThfs5VLW1iRfmttow5uAcT9fzAatRyyI99O
-   Ns6eFs6n4dx2VmFqhtKezypMFpjWVSFzhATbVYUQ837CXjr6Jw3nuYQcJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346526472"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="346526472"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 02:43:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="682430970"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="682430970"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by orsmga007.jf.intel.com with ESMTP; 12 Apr 2023 02:43:38 -0700
-From:   Song Yoong Siang <yoong.siang.song@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH net-next v3 4/4] net: stmmac: add Rx HWTS metadata to XDP ZC receive pkt
-Date:   Wed, 12 Apr 2023 17:42:35 +0800
-Message-Id: <20230412094235.589089-5-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230412094235.589089-1-yoong.siang.song@intel.com>
-References: <20230412094235.589089-1-yoong.siang.song@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 12 Apr 2023 05:42:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B42365B9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:42:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E0161582
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED620C433D2;
+        Wed, 12 Apr 2023 09:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681292571;
+        bh=68JdKgkUn5uNY3LQiJfscPHIj+ahYETLBDqXatqZd6U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fnYOuj4UBwf8T7J0QshcTEPprPi2ntWTZzMIvEKUaLn1GoOyD4ew3d/8fInUpp+eI
+         UUb8s1y45PKp+pVV2i4lNwywLP3r4fZRPTPCqc4bCCZbAk8pevz1ViEIXiUtSxA28F
+         l74nyy/J672+tw0D/Uz9M87AfESSKt5uEiQKhxHztpi6+2aywFbKz2mttrdex9v3Oq
+         A4gcHv+xZ0r/5w+6ir/owzI6N1Y/0ZCzU7PV96yAssQEnMqBLyLmkuvKrDLOklf4vI
+         ZijXYUyQ0n3g0F5ZBt6IDUm0pqsTo2+bnRpI3+u4nVUSgYzd/UnSbrfBrG+xiBXvMd
+         UuAtofRX38D4g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pmWzz-007mag-NT;
+        Wed, 12 Apr 2023 10:42:43 +0100
+Date:   Wed, 12 Apr 2023 10:42:43 +0100
+Message-ID: <86y1mxl9m4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kunkun Jiang <jiangkunkun@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        <wanghaibin.wang@huawei.com>, <chenxiang66@hisilicon.com>,
+        <tangnianyao@huawei.com>
+Subject: Re: [PATCH] irqchipi/gic-v4: Ensure accessing the correct RD when and writing INVLPIR
+In-Reply-To: <20230412041510.497-1-jiangkunkun@huawei.com>
+References: <20230412041510.497-1-jiangkunkun@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiangkunkun@huawei.com, tglx@linutronix.de, yuzenghui@huawei.com, linux-kernel@vger.kernel.org, wanghaibin.wang@huawei.com, chenxiang66@hisilicon.com, tangnianyao@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add receive hardware timestamp metadata support via kfunc to XDP Zero Copy
-receive packets.
+On Wed, 12 Apr 2023 05:15:10 +0100,
+Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> 
+> commit f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between
+> vPE affinity change and RD access") tried to address the race
+> between the RD accesses and the vPE affinity change, but somehow
+> forgot to take GICR_INVLPIR into account. Let's take the vpe_lock
+> before evaluating vpe->col_idx to fix it.
+>
+> Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
+> Signed-off-by: Kunkun Jiang <jiangkunkun@huawei.com>
+> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+> Signed-off-by: Nianyao Tang <tangnianyao@huawei.com>
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Yup, nice catch. A few remarks though:
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index ed660927b628..1c4dbac90717 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1611,6 +1611,12 @@ static int stmmac_alloc_rx_buffers_zc(struct stmmac_priv *priv,
- 	struct stmmac_rx_queue *rx_q = &dma_conf->rx_queue[queue];
- 	int i;
- 
-+	/* struct stmmac_xdp_buff is using cb field (maximum size of 24 bytes)
-+	 * in struct xdp_buff_xsk to stash driver specific information. Thus,
-+	 * use this macro to make sure no size violations.
-+	 */
-+	XSK_CHECK_PRIV_TYPE(struct stmmac_xdp_buff);
-+
- 	for (i = 0; i < dma_conf->dma_rx_size; i++) {
- 		struct stmmac_rx_buffer *buf;
- 		dma_addr_t dma_addr;
-@@ -4999,6 +5005,16 @@ static bool stmmac_rx_refill_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
- 	return ret;
+- the subject looks odd: there is a spurious 'and' there, and it
+  doesn't say this is all about VPE doorbell invalidation (the code
+  that deals with direct LPI is otherwise fine)
+
+- the SoB chain is also odd. You should be last in the chain, and all
+  the others have Co-developed-by tags in addition to the SoB, unless
+  you wanted another tag
+
+- I'm curious about how you triggered the issue. Could you please
+  elaborate on that>
+
+Finally, I think we can fix it in a better way, see below:
+
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 586271b8aa39..041f06922587 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -3943,13 +3943,17 @@ static void its_vpe_send_inv(struct irq_data *d)
+>  
+>  	if (gic_rdists->has_direct_lpi) {
+>  		void __iomem *rdbase;
+> +		unsigned long flags;
+> +		int cpu;
+>  
+>  		/* Target the redistributor this VPE is currently known on */
+> -		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+> -		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
+> +		cpu = vpe_to_cpuid_lock(vpe, &flags);
+> +		raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
+> +		rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
+>  		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
+>  		wait_for_syncr(rdbase);
+> -		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+> +		raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
+> +		vpe_to_cpuid_unlock(vpe, flags);
+>  	} else {
+>  		its_vpe_send_cmd(vpe, its_send_inv);
+>  	}
+
+The main reason this bug crept in is that we have a some pretty silly
+code duplication going on.
+
+Wouldn't it be nice if irq_to_cpuid() could work out whether it is
+dealing with a LPI or a VLPI like it does today, but also directly
+with a VPE? We could then use the same code as derect_lpi_inv(). I
+came up with this the hack below, which is totally untested as I don't
+have access to GICv4.1 HW.
+
+Could you give it a spin?
+
+Thanks,
+
+	M.
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index 586271b8aa39..cfb8be3e17d6 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -271,13 +271,24 @@ static void vpe_to_cpuid_unlock(struct its_vpe *vpe, unsigned long flags)
+ 	raw_spin_unlock_irqrestore(&vpe->vpe_lock, flags);
  }
  
-+static struct stmmac_xdp_buff *xsk_buff_to_stmmac_ctx(struct xdp_buff *xdp)
-+{
-+	/* In XDP zero copy data path, xdp field in struct xdp_buff_xsk is used
-+	 * to represent incoming packet, whereas cb field in the same structure
-+	 * is used to store driver specific info. Thus, struct stmmac_xdp_buff
-+	 * is laid on top of xdp and cb fields of struct xdp_buff_xsk.
-+	 */
-+	return (struct stmmac_xdp_buff *)xdp;
++static struct irq_chip its_vpe_irq_chip;
++
+ static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
+ {
+-	struct its_vlpi_map *map = get_vlpi_map(d);
++	struct its_vpe *vpe = NULL;
+ 	int cpu;
+ 
+-	if (map) {
+-		cpu = vpe_to_cpuid_lock(map->vpe, flags);
++	if (d->chip == &its_vpe_irq_chip)
++		vpe = irq_data_get_irq_chip_data(d);
++
++	if (!vpe) {
++		struct its_vlpi_map *map = get_vlpi_map(d);
++		if (map)
++			vpe = map->vpe;
++	}
++
++	if (vpe) {
++		cpu = vpe_to_cpuid_lock(vpe, flags);
+ 	} else {
+ 		/* Physical LPIs are already locked via the irq_desc lock */
+ 		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
+@@ -291,9 +302,18 @@ static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
+ 
+ static void irq_to_cpuid_unlock(struct irq_data *d, unsigned long flags)
+ {
+-	struct its_vlpi_map *map = get_vlpi_map(d);
++	struct its_vpe *vpe = NULL;
++
++	if (d->chip == &its_vpe_irq_chip)
++		vpe = irq_data_get_irq_chip_data(d);
++
++	if (vpe) {
++		struct its_vlpi_map *map = get_vlpi_map(d);
++		if (map)
++			vpe = map->vpe;
++	}
+ 
+-	if (map)
++	if (vpe)
+ 		vpe_to_cpuid_unlock(map->vpe, flags);
+ }
+ 
+@@ -1431,14 +1451,29 @@ static void wait_for_syncr(void __iomem *rdbase)
+ 		cpu_relax();
+ }
+ 
+-static void direct_lpi_inv(struct irq_data *d)
++static void __direct_lpi_inv(struct irq_data *d, u64 val)
+ {
+-	struct its_vlpi_map *map = get_vlpi_map(d);
+ 	void __iomem *rdbase;
+ 	unsigned long flags;
+-	u64 val;
+ 	int cpu;
+ 
++	/* Target the redistributor this LPI is currently routed to */
++	cpu = irq_to_cpuid_lock(d, &flags);
++	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
++
++	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
++	gic_write_lpir(val, rdbase + GICR_INVLPIR);
++	wait_for_syncr(rdbase);
++
++	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
++	irq_to_cpuid_unlock(d, flags);
 +}
 +
- static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- {
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
-@@ -5028,6 +5044,7 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 	}
- 	while (count < limit) {
- 		struct stmmac_rx_buffer *buf;
-+		struct stmmac_xdp_buff *ctx;
- 		unsigned int buf1_len = 0;
- 		struct dma_desc *np, *p;
- 		int entry;
-@@ -5113,6 +5130,11 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 			goto read_again;
- 		}
- 
-+		ctx = xsk_buff_to_stmmac_ctx(buf->xdp);
-+		ctx->priv = priv;
-+		ctx->p = p;
-+		ctx->np = np;
++static void direct_lpi_inv(struct irq_data *d)
++{
++	struct its_vlpi_map *map = get_vlpi_map(d);
++	u64 val;
 +
- 		/* XDP ZC Frame only support primary buffers for now */
- 		buf1_len = stmmac_rx_buf1_len(priv, p, status, len);
- 		len += buf1_len;
--- 
-2.34.1
+ 	if (map) {
+ 		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
+ 
+@@ -1451,15 +1486,7 @@ static void direct_lpi_inv(struct irq_data *d)
+ 		val = d->hwirq;
+ 	}
+ 
+-	/* Target the redistributor this LPI is currently routed to */
+-	cpu = irq_to_cpuid_lock(d, &flags);
+-	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
+-	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
+-	gic_write_lpir(val, rdbase + GICR_INVLPIR);
+-
+-	wait_for_syncr(rdbase);
+-	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
+-	irq_to_cpuid_unlock(d, flags);
++	__direct_lpi_inv(d, val);
+ }
+ 
+ static void lpi_update_config(struct irq_data *d, u8 clr, u8 set)
+@@ -3941,18 +3968,10 @@ static void its_vpe_send_inv(struct irq_data *d)
+ {
+ 	struct its_vpe *vpe = irq_data_get_irq_chip_data(d);
+ 
+-	if (gic_rdists->has_direct_lpi) {
+-		void __iomem *rdbase;
+-
+-		/* Target the redistributor this VPE is currently known on */
+-		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+-		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
+-		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
+-		wait_for_syncr(rdbase);
+-		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
+-	} else {
++	if (gic_rdists->has_direct_lpi)
++		__direct_lpi_inv(d, d->parent_data->hwirq);
++	else
+ 		its_vpe_send_cmd(vpe, its_send_inv);
+-	}
+ }
+ 
+ static void its_vpe_mask_irq(struct irq_data *d)
 
+
+-- 
+Without deviation from the norm, progress is not possible.
