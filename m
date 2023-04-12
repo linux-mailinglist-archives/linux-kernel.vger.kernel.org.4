@@ -2,148 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E49E6E007F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C056E0083
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 23:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjDLVHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 17:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        id S229866AbjDLVKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 17:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLVHb (ORCPT
+        with ESMTP id S229481AbjDLVKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 17:07:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F745249
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:07:28 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id t14so16290367lft.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:07:28 -0700 (PDT)
+        Wed, 12 Apr 2023 17:10:01 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921715249
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:09:59 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id xi5so32227199ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681333647; x=1683925647;
+        d=rasmusvillemoes.dk; s=google; t=1681333798; x=1683925798;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TouGPU+Efoq/WGt/vDKkhltZTB+4TxGu4UL9u2kA4UE=;
-        b=uM9DmsgCbpsezm1URvfxA1QlpROL2JDARNWITPqAhDWCPoJrX7aKohknLbrgtm0zUV
-         xhY9VfEH1Mr5O9m9+Ff8qZpev+gC3BUBPrjWOBvzsTv2mXeOe88nMIC9A1Gd67HuuQXa
-         rwKPBdychE/adJ1gHlPw/9gZkAuOAZPWH90JZ+PsfLoH9Ehzkt+zAsxlaeV4jonWVliM
-         sSFzBoDFiUWOZeiJWtXBYy1ssRQyq5A159Zi6S5ncs1ggbjZCGHpUWkoTy4OTP1j5Wza
-         tPUlRrXIAE5q/5nbj5gtrpG5FLm36G1y7zOTD9sz779btG6mJCt+EXz/o3fdQdO/Qu4m
-         IPSg==
+        bh=i/kMT9mr+25HY+RsVOy9xcwPUFiyIdNsJI3BZxlExUE=;
+        b=H763iIwxW4lmkk7sCENm5pBjdC5KL8xsC+GYAVjcCkvKd7wCwcYBFh6iKuUn1tbyRd
+         kbOBXuqZ3yEtSX2OD6h+V8OVLoYiwdn58wsVD8EcqOJFgEyzBzGudY99gZtNUTmQ1J9H
+         HPvbjwc4m4hbTfnDSGB3CA7KjhZ6SwE39TMQI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681333647; x=1683925647;
+        d=1e100.net; s=20221208; t=1681333798; x=1683925798;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TouGPU+Efoq/WGt/vDKkhltZTB+4TxGu4UL9u2kA4UE=;
-        b=P+1/9C+vP3hmdKtikP12IBSpTXq4qITlGfYiTMfv/a+cdtKtWkv9zPhaDUPCimtwAy
-         aTZwJdaV5am8x36y4WYP33Jx8xFkblIDNsDBj2/GLMIO4ULf7LkK9zYphW5S1a/tkzue
-         EFiEJAvtluQvFAejMXn0+gPrXaLuCN1LMru5Y7GXf/y0VMJOCSsFLFAuk8PPpnYloYKR
-         K3jKGOYmaRXBkbcike4mUEvqiBlOUaDG1OxMQjq753dwoz6HOrjpsKgGZSe7ZnTdJNfW
-         LM6lDoIg2pqmG+Fi7IP5lYhhTZFTLPLpjXUrusq5MFpfa2rghK5efrOMojpQBgDqg0lc
-         81og==
-X-Gm-Message-State: AAQBX9cz/t1nzzoaQ2jbvL6uHFkjmg6mSIUK/wqLJ82V4q33BgnypZf0
-        lkKcdAgSMDQ71GW+vwOihUPg2g==
-X-Google-Smtp-Source: AKy350bX2h3G0tTnQ38bAbnmsibh59UeenWLaYQupyr78fByKFQuaH3FwLV2XZmERAmoTvQ+8nje4w==
-X-Received: by 2002:a05:6512:49c:b0:4e9:67ee:6383 with SMTP id v28-20020a056512049c00b004e967ee6383mr64065lfq.2.1681333647186;
-        Wed, 12 Apr 2023 14:07:27 -0700 (PDT)
-Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
-        by smtp.gmail.com with ESMTPSA id v17-20020ac25931000000b004ec8b638115sm1487244lfi.193.2023.04.12.14.07.25
+        bh=i/kMT9mr+25HY+RsVOy9xcwPUFiyIdNsJI3BZxlExUE=;
+        b=Jgk8nzKEOv5/yQy4y5dZ46svi81NhQwtIt4ovmgIuG0kOzXqSJ7q+34/vCkuOgbXJr
+         GsXsWA+7D0ehXcHrRNR7mS3WJyrPEmGUPdQadZq1y+qZ+zLeSoqSjbFJvWf8DSA635lq
+         fldyUWPaBr8sTwh5MPV1UlYFaUkSMtbghTkqqqRyCUgirGaOFuh1K3FANFiuTUVvmeZS
+         FgyTyuQxCojiSDpY1uKqSvDcKqW/Q8SemZAfQCbyiKyHPoyg01dQ8yQiPFuYM/RWgULt
+         aWcouXbf8c87kLB2DjAPdqCn5airtVRtxf9fNMkL2qJPn+zTXtgF5+wcQj+6LsH59JJN
+         myvA==
+X-Gm-Message-State: AAQBX9coulqhPs6XonNKqRic7QRimBDFDIm0YvdQvWo7Wi3FaMt2XmCO
+        MayH6eaPSElaIpcfftnnLRwsDlhrD/ouwZ0rCzc=
+X-Google-Smtp-Source: AKy350a9oAACjSFYzXlojxbqMxQgaf0qbcPEGU/4kteamkBR1EcRccGhVPXfswVzUWfa1EZzUzzAjA==
+X-Received: by 2002:a17:906:d7bc:b0:94a:6625:5971 with SMTP id pk28-20020a170906d7bc00b0094a66255971mr236925ejb.33.1681333798032;
+        Wed, 12 Apr 2023 14:09:58 -0700 (PDT)
+Received: from [192.168.1.128] ([80.208.70.1])
+        by smtp.gmail.com with ESMTPSA id jg21-20020a170907971500b0094a0b64a121sm6100780ejc.45.2023.04.12.14.09.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 14:07:26 -0700 (PDT)
-Message-ID: <07b8731d-f9b6-c759-808d-56ae5881e251@linaro.org>
-Date:   Wed, 12 Apr 2023 23:07:24 +0200
+        Wed, 12 Apr 2023 14:09:57 -0700 (PDT)
+Message-ID: <31abaa2d-f93b-e2df-4605-04c276ea7397@rasmusvillemoes.dk>
+Date:   Wed, 12 Apr 2023 23:09:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sa8775p-ride: enable UFS
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230411130446.401440-1-brgl@bgdev.pl>
- <20230411130446.401440-6-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230411130446.401440-6-brgl@bgdev.pl>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/1] kernel.h: Split out COUNT_ARGS() and CONCATENATE()
+Content-Language: en-US, da
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230411102454.85898-1-andriy.shevchenko@linux.intel.com>
+ <20230411152119.c9bb83a8566e37f6d8dbc590@linux-foundation.org>
+ <ZDaqi1jE0Fkg5BSp@smile.fi.intel.com>
+ <20230412115531.17bb1aed232952c79aba0f2a@linux-foundation.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20230412115531.17bb1aed232952c79aba0f2a@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11.04.2023 15:04, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 12/04/2023 20.55, Andrew Morton wrote:
+> On Wed, 12 Apr 2023 15:56:43 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Enable the UFS and its PHY on sa8775p-ride.
+>> On Tue, Apr 11, 2023 at 03:21:19PM -0700, Andrew Morton wrote:
+>>> On Tue, 11 Apr 2023 13:24:54 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>>>
+>>>> kernel.h is being used as a dump for all kinds of stuff for a long time.
+>>>> The COUNT_ARGS() and CONCATENATE() macros may be used in some places
+>>>> without need of the full kernel.h dependency train with it.
+>>>>
+>>>> Here is the attempt on cleaning it up by splitting out these macros().
+>>>>
+>>>> --- a/include/linux/kernel.h
+>>>> +++ b/include/linux/kernel.h
+>>>> @@ -13,6 +13,7 @@
+>>>>  
+>>>>  #include <linux/stdarg.h>
+>>>>  #include <linux/align.h>
+>>>> +#include <linux/args.h>
+>>>
+>>> A more energetic patch would have included args.h into each file which
+>>> calls COUNT_ARGS() and CONCATENATE(), and not included args.h into
+>>> kernel.h.  And that appears to be very easy - only bpf uses these things?
+>>>
+>>> In fact these macros are so weird and ugly I'd be inclined to move them
+>>> into some bpf header so we don't have to see them again.  No
+>>> args.h, which might avoid encouraging others to use them.
+>>
+>> We have more users than one 
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> I cant find any?
 
-Konrad
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> index f238a02a5448..2bb001a3ea55 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> @@ -5,6 +5,7 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  
->  #include "sa8775p.dtsi"
-> @@ -20,6 +21,7 @@ aliases {
->  		serial2 = &uart17;
->  		i2c18 = &i2c18;
->  		spi16 = &spi16;
-> +		ufshc1 = &ufs_mem_hc;
->  	};
->  
->  	chosen {
-> @@ -426,6 +428,23 @@ &uart17 {
->  	status = "okay";
->  };
->  
-> +&ufs_mem_hc {
-> +	reset-gpios = <&tlmm 149 GPIO_ACTIVE_LOW>;
-> +	vcc-supply = <&vreg_l8a>;
-> +	vcc-max-microamp = <1100000>;
-> +	vccq-supply = <&vreg_l4c>;
-> +	vccq-max-microamp = <1200000>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&ufs_mem_phy {
-> +	vdda-phy-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l1c>;
-> +
-> +	status = "okay";
-> +};
-> +
->  &xo_board_clk {
->  	clock-frequency = <38400000>;
->  };
+True, git grep COUNT_ARGS doesn't find anything other than the
+bpf_probe.h user.
+
+>> and a couple of users that reimplement this macro
+>> under different names.
+>>
+> Where are these?
+
+Amusingly, bpf have at least
+
+tools/lib/bpf/bpf_core_read.h:#define ___narg(...) ___nth(_,
+##__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+tools/lib/bpf/bpf_helpers.h:    ___bpf_nth(_, ##__VA_ARGS__, 12, 11, 10,
+9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+tools/lib/bpf/bpf_tracing.h:#define ___bpf_narg(...) ___bpf_nth(_,
+##__VA_ARGS__, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+OK, so that's under tools/, but we really should be able to make a
+cpp-tricks-header that's usable by the kernel itself as well as tools.
+
+There's also
+
+include/linux/arm-smccc.h:      ___count_args(__VA_ARGS__, 7, 6, 5, 4,
+3, 2, 1, 0)
+arch/x86/include/asm/rmwcc.h:#define RMWcc_ARGS(X...) __RMWcc_ARGS(,
+##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+and some efi_nargs that seems a little more elaborate (though I doubt
+they couldn't just make do with the standard macro).
+
+There's probably even more, this is just what grepping for a typical
+implementation showed.
+
+> What the heck does it do
+
+It counts the number of arguments given to a variadic macro.
+
+> and why is it so ugly
+
+Because cpp.
+
+> and why isn't it documented.  Shudder.
+
+Yeah, some comments on how it works and its limitation(s) would probably
+be in order.
+
+Rasmus
+
