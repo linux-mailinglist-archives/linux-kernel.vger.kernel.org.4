@@ -2,125 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166376DF20D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B9B6DF215
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjDLKeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S229854AbjDLKfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDLKeH (ORCPT
+        with ESMTP id S229708AbjDLKfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:34:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0985C2D48;
-        Wed, 12 Apr 2023 03:34:06 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pmXnc-0001gq-N8; Wed, 12 Apr 2023 12:34:00 +0200
-Message-ID: <c63dab2b-906d-5383-39f9-b02e7d7d2659@leemhuis.info>
-Date:   Wed, 12 Apr 2023 12:34:00 +0200
+        Wed, 12 Apr 2023 06:35:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712505B81
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:34:59 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z26so13945864lfj.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681295697; x=1683887697;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4HYP1E62hZMod1XVNBzfyD/sK2aIAa5ZCyJ04UGDkE8=;
+        b=MXIhSo/wAmI6d3Prg/WfOICdVN4TkNa/122j2dZPh703T6YEtMk8tdP20jFagefEHS
+         53M7rK/CD1hDdlV8naz1A4ijkp8BpWou9r3icDTH5vDOMeuhpcR+dGqLOZcBE2fpQxVS
+         R3gaICweFaG244TfSAU1YKelRJTJXaYRCbh7I1WE6MIUh6Ctk+z4i5cWTsLYnjEp1w18
+         LmEiN03r9dLBnQR47Ii1d79Wz0aXFPuuLg0fTygtDLoIKwfRUgcpEvwZxvgqAYzfSsOm
+         LZ7Ahbe1GFvg7Hiusf0L93G6Mw1k7O3UdpL1vNeFN2Kc/4rd+F7hriniQL1AgP+MPDi7
+         Nh+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681295697; x=1683887697;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4HYP1E62hZMod1XVNBzfyD/sK2aIAa5ZCyJ04UGDkE8=;
+        b=yxHnuGi4TLQGg61jkdoaMQzurZQZ+/fbkoytL7/eqmcTsbyT+odRIVmNU6IOJC41Cy
+         mWab628Oj4iNaOa+u9U5rFPj7zLwtrAUsy8wO47V0Hl19pTWxe1yTN42mGqeK4MpzLMP
+         SEl0aVACjwWgCNMd9YJzBiY+NuMOK7zERcOp9XYXhXfbECarZ2Ew5ffyrYyDNQOm0VDa
+         qK24hoAFrSqQx2jJ/uanZMGIZ/i09rQ7k6N3rQdyjxXEsRK9Cqv38mRfhhJZv02xLU1T
+         sjVpvr1BIfg/DcQb7iTZpNeXZ+7D/rHZqO1OF2GfcNeFruRrF81668j2gvBo/n9Er2D4
+         b+Og==
+X-Gm-Message-State: AAQBX9fNVcgYNnT9OfGTjbbB6vcIK8mJs++qP4aHymOGJ9Wbn0Ti41Jl
+        qxV7fFnkn27GgzSHwaBVgPzP4A==
+X-Google-Smtp-Source: AKy350Y/y0xS8SNG2pWuCP31NpheHI341wXm1QiuOUJaGfor+CBT+sfNXYDCnxVWvKbYdnxxgeAQng==
+X-Received: by 2002:ac2:5e91:0:b0:4eb:29b0:1ca4 with SMTP id b17-20020ac25e91000000b004eb29b01ca4mr474557lfq.8.1681295697594;
+        Wed, 12 Apr 2023 03:34:57 -0700 (PDT)
+Received: from [192.168.1.101] (abxj23.neoplus.adsl.tpnet.pl. [83.9.3.23])
+        by smtp.gmail.com with ESMTPSA id t11-20020a19ad0b000000b004dc4d26c324sm2935225lfc.143.2023.04.12.03.34.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 03:34:57 -0700 (PDT)
+Message-ID: <40ccea6a-c536-82ba-3f97-634cbc9a5869@linaro.org>
+Date:   Wed, 12 Apr 2023 12:34:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217310 - mt7921e swiotlb buffer is full
-Cc:     Petr Tesarik <petr.tesarik.ext@huawei.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,gcc-sc7180: document CX
+ power domain
+Content-Language: en-US
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230408134820.76050-1-krzysztof.kozlowski@linaro.org>
+ <20230408134820.76050-2-krzysztof.kozlowski@linaro.org>
+ <4757c33c-7e71-262d-a51a-c5f9fb53ff41@linaro.org>
+ <d4a8054c-443e-d9ba-9641-ff721254d254@quicinc.com>
+ <c70c1a4d-50c5-2b50-18c9-7c46c3803cd4@linaro.org>
+ <2f9f9cdd-cfbe-ca22-7308-d6b1f0c1c455@quicinc.com>
+ <6406469d-289b-af4e-83f8-8259f5dcaf00@linaro.org>
+ <40854a28-3f64-c0fd-9b77-db92cb0fbe13@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <40854a28-3f64-c0fd-9b77-db92cb0fbe13@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681295646;7d9805e5;
-X-HE-SMSGID: 1pmXnc-0001gq-N8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
 
-Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
-not CCed them in mails like this.
-
-Petr, I CCed you because you apparently dealt with another case with a
-similar error message.
-
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217310 :
-
->  Mike Lothian 2023-04-08 12:03:01 UTC
+On 12.04.2023 07:42, Rajendra Nayak wrote:
 > 
-> Created attachment 304097 [details]
-> dmesg
+> On 4/11/2023 7:15 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 11.04.2023 15:31, Rajendra Nayak wrote:
+>>>
+>>> On 4/11/2023 4:57 PM, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 11.04.2023 06:56, Rajendra Nayak wrote:
+>>>>>
+>>>>>
+>>>>> On 4/8/2023 7:33 PM, Konrad Dybcio wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 8.04.2023 15:48, Krzysztof Kozlowski wrote:
+>>>>>>> The GCC clock controller needs CX power domain, at least according to
+>>>>>>> DTS:
+>>>>>>>
+>>>>>>>      sc7180-trogdor-pompom-r3.dtb: clock-controller@100000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+>>>>>>>
+>>>>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>>> ---
+>>>>>> +CC Rajendra (author of 5d6fc6321db1 ("arm64: dts: qcom:
+>>>>>> sc7180: Add required-opps for USB"))
+>>>>>>
+>>>>>> Rajendra, shouldn't SC7180 GCC have PM ops to make sure a vote
+>>>>>> is only there when AP is active?
+>>>> So IIUC, CX is never supposed to be shut down?
+>>>
+>>> Atleast sc7180 and sc7280 do not support full CX shutdown (or power
+>>> collapse as its called), it only transitions to a Retention state
+>>> and even that in the system-wide suspend path only
+>> And won't outstanding votes on that resource prevent the system
+>> from entering a system-wide low power state?
 > 
-> Since the start of the 6.3 kernel cycle I've been having issues with my
-> wifi when it's been going at high speeds, which usually requires me
-> having to disable and re enable wifi to get it going again
+> I think most of what you are asking was discussed at https://lore.kernel.org/all/5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com/
 > 
-> When this happens I see this in the logs:
+OK so 7[12]80 never actually power off CX fully. Understood.
+
+> Are we seeing something broken on sc7180/sc7280 platforms?
+I don't know, I don't have any devices. I'm just asking questions
+to make sure things weren't unintentionally broken.
+
+> If there is an outstanding vote on CX it would prevent CX from
+> going down, but ideally we should not have an outstanding vote
+> from USB (atleast) since we now support RET for the USB GDSC.
+> If there is some other GDSC (within GCC) thats left turned ON,
+> yes, that would still prevent CX from going down.
+Makes sense!
+
+Konrad
 > 
-> mt7921e 0000:05:00.0: swiotlb buffer is full (sz: 4096 bytes), total
-> 32768 (slots), used 32160 (slots)
-> 
-> I'm running the latest firmware from
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-> 
-> And I don't see this on 6.2
-> 
-> I've attached my dmesg and the device is listed as:
-> 
-> 05:00.0 Network controller [0280]: MEDIATEK Corp. MT7921 802.11ax PCI
-> Express Wireless Network Adapter [14c3:7961]
-
-And later:
-
-> I managed to work around it by setting swiotlb=131072
-
-See the ticket for more details.
-
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.2..v6.3-rc6
-https://bugzilla.kernel.org/show_bug.cgi?id=217310
-#regzbot title: dma-mapping: / net: wireless: mt7921e swiotlb buffer is full
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+>>
+>> Konrad
+>>>
+>>>>
+>>>> Konrad
+>>>>>
+>>>>> hmm, I am not quite sure why we would want the performance votes
+>>>>> from peripherals dropped when CPUs go down in idle?
+>>>>>
+>>>>>> Are all GDSCs powered by CX?
+>>>>>> If not, wouldn't this also need power-domain-names to
+>>>>>> facilitate e.g. potential MX-powered ones?
+>>>>>
+>>>>> For sc7180 GCC, yes.
+>>>>>
+>>>>>>
+>>>>>> Konrad
+>>>>>>>     .../devicetree/bindings/clock/qcom,gcc-sc7180.yaml         | 7 +++++++
+>>>>>>>     1 file changed, 7 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>>>> index 06dce0c6b7d0..8bf9b6f49550 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+>>>>>>> @@ -32,6 +32,10 @@ properties:
+>>>>>>>           - const: bi_tcxo_ao
+>>>>>>>           - const: sleep_clk
+>>>>>>>     +  power-domains:
+>>>>>>> +    items:
+>>>>>>> +      - description: CX domain
+>>>>>>> +
+>>>>>>>     required:
+>>>>>>>       - compatible
+>>>>>>>       - clocks
+>>>>>>> @@ -45,6 +49,8 @@ unevaluatedProperties: false
+>>>>>>>     examples:
+>>>>>>>       - |
+>>>>>>>         #include <dt-bindings/clock/qcom,rpmh.h>
+>>>>>>> +    #include <dt-bindings/power/qcom-rpmpd.h>
+>>>>>>> +
+>>>>>>>         clock-controller@100000 {
+>>>>>>>           compatible = "qcom,gcc-sc7180";
+>>>>>>>           reg = <0x00100000 0x1f0000>;
+>>>>>>> @@ -52,6 +58,7 @@ examples:
+>>>>>>>                    <&rpmhcc RPMH_CXO_CLK_A>,
+>>>>>>>                    <&sleep_clk>;
+>>>>>>>           clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
+>>>>>>> +      power-domains = <&rpmhpd SC7180_CX>;
+>>>>>>>           #clock-cells = <1>;
+>>>>>>>           #reset-cells = <1>;
+>>>>>>>           #power-domain-cells = <1>;
