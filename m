@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769496DFE4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAE26DFE4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjDLTDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S230028AbjDLTD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDLTDs (ORCPT
+        with ESMTP id S229769AbjDLTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:03:48 -0400
+        Wed, 12 Apr 2023 15:03:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7693830C8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634A519AD
         for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:03:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 100566386B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44606C433D2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F32C763871
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9879AC433A0;
         Wed, 12 Apr 2023 19:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1681326226;
-        bh=os7uY3nMTCWb+jG1PKMR9S3yUK1VjSJJlj7joM5hI9A=;
+        bh=xaXnGfbC/VMDQDGu1YDrIHmJbcCkfgf/aMjvRsvTeLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QWt5t1kVr9C1RDqVU4+9Zo/cjruM2zWe+BLhm+LRCAl1RaCMobV8Gu2Mdwx6cvPcI
-         w1xXBL0pHHtKfsI+8jpBAa5bdj3/ibHeDsx2ZAOGY7RGwZ5vk3LHm6nAWoDfydjvQZ
-         2Y9zerupDngDJFU2DsoSt6FxRvqq8l+6veIWlRtFHWr644unF8dlcgeuoLwN4mzeTL
-         pV+DDprL7Vu2f6S7jXTdKbqbM9qBFCQh/Krf3Rm2F0qW5jFXVUmdA9jKaz0g63Yld6
-         HjeK8y+C5X3zDC7yXvlXLWNqJzCXjBlzn2/L/tO5JIL+7WHxSNvTiAgb/x8W3Hg4uX
-         kRceCXII2Gqvw==
+        b=qLyqRwZ7Cm9rjuMjVK1mOv2LqbY4qSfm/yt2qOzI90jMhIHqgq3Ne5OXSfZj5MnfC
+         /G9y/FHQz5d2PLw0bF5VWTTAthGhPRPxoBpO+1f1ZzzDnPcLclndGWA2e5eC6nbWU5
+         tKJ8Jl5bhwLJ2D0jboWiZimpuyS92Mss683UZM8Qz+owmWnqpp9lFOgsckrwPOonmt
+         gLNYTiI2BWey0p+J4oSdLlrU4WZhr/hoY38iDSJmW4vSZCHfap0N0AA+YanzZY4jzV
+         //2ty/m4b9zemQ/58plj+1OcX8fQdafga5hgJcAAOV14c2ktHILY7a8B1nT7ja+n4L
+         kOa8ttD6I5loQ==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 3/9] objtool: Limit unreachable warnings to once per function
-Date:   Wed, 12 Apr 2023 12:03:18 -0700
-Message-Id: <81ed0b8e5218ac6ecae49af901bf5e0fb3687cef.1681325924.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 4/9] objtool: Add symbol iteration helpers
+Date:   Wed, 12 Apr 2023 12:03:19 -0700
+Message-Id: <59023e5886ab125aa30702e633be7732b1acaa7e.1681325924.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1681325924.git.jpoimboe@kernel.org>
 References: <cover.1681325924.git.jpoimboe@kernel.org>
@@ -55,76 +55,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unreachable instruction warnings are limited to once per object file.
-That no longer makes sense for vmlinux validation, which might have
-more unreachable instructions lurking in other places.  Change it to
-once per function.
-
-Note this affects some other (much rarer) non-fatal warnings as well.
-In general I think one-warning-per-function makes sense, as related
-warnings can accumulate quickly and we want to eventually get back to
-failing the build with -Werror anyway.
+Add [sec_]for_each_sym() and use them.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c                | 5 +++--
- tools/objtool/include/objtool/elf.h  | 1 +
- tools/objtool/include/objtool/warn.h | 5 ++++-
- 3 files changed, 8 insertions(+), 3 deletions(-)
+ tools/objtool/check.c               | 98 ++++++++++++-----------------
+ tools/objtool/elf.c                 |  2 +-
+ tools/objtool/include/objtool/elf.h |  9 +++
+ 3 files changed, 51 insertions(+), 58 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e85440db7a5f..de0d0234527d 100644
+index de0d0234527d..d1d47baa252c 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -4509,6 +4509,7 @@ static int validate_sls(struct objtool_file *file)
- static int validate_reachable_instructions(struct objtool_file *file)
+@@ -470,7 +470,7 @@ static int decode_instructions(struct objtool_file *file)
+ 
+ //		printf("%s: last chunk used: %d\n", sec->name, (int)idx);
+ 
+-		list_for_each_entry(func, &sec->symbol_list, list) {
++		sec_for_each_sym(sec, func) {
+ 			if (func->type != STT_NOTYPE && func->type != STT_FUNC)
+ 				continue;
+ 
+@@ -924,7 +924,7 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
+ 
+ static int create_cfi_sections(struct objtool_file *file)
  {
- 	struct instruction *insn;
-+	int warnings = 0;
- 
- 	if (file->ignore_unreachables)
- 		return 0;
-@@ -4518,10 +4519,10 @@ static int validate_reachable_instructions(struct objtool_file *file)
- 			continue;
- 
- 		WARN_INSN(insn, "unreachable instruction");
--		return 1;
-+		warnings++;
+-	struct section *sec, *s;
++	struct section *sec;
+ 	struct symbol *sym;
+ 	unsigned int *loc;
+ 	int idx;
+@@ -937,19 +937,14 @@ static int create_cfi_sections(struct objtool_file *file)
  	}
  
--	return 0;
-+	return warnings;
- }
+ 	idx = 0;
+-	for_each_sec(file, s) {
+-		if (!s->text)
++	for_each_sym(file, sym) {
++		if (sym->type != STT_FUNC)
+ 			continue;
  
- int check(struct objtool_file *file)
+-		list_for_each_entry(sym, &s->symbol_list, list) {
+-			if (sym->type != STT_FUNC)
+-				continue;
+-
+-			if (strncmp(sym->name, "__cfi_", 6))
+-				continue;
++		if (strncmp(sym->name, "__cfi_", 6))
++			continue;
+ 
+-			idx++;
+-		}
++		idx++;
+ 	}
+ 
+ 	sec = elf_create_section(file->elf, ".cfi_sites", 0, sizeof(unsigned int), idx);
+@@ -957,28 +952,23 @@ static int create_cfi_sections(struct objtool_file *file)
+ 		return -1;
+ 
+ 	idx = 0;
+-	for_each_sec(file, s) {
+-		if (!s->text)
++	for_each_sym(file, sym) {
++		if (sym->type != STT_FUNC)
+ 			continue;
+ 
+-		list_for_each_entry(sym, &s->symbol_list, list) {
+-			if (sym->type != STT_FUNC)
+-				continue;
+-
+-			if (strncmp(sym->name, "__cfi_", 6))
+-				continue;
++		if (strncmp(sym->name, "__cfi_", 6))
++			continue;
+ 
+-			loc = (unsigned int *)sec->data->d_buf + idx;
+-			memset(loc, 0, sizeof(unsigned int));
++		loc = (unsigned int *)sec->data->d_buf + idx;
++		memset(loc, 0, sizeof(unsigned int));
+ 
+-			if (elf_add_reloc_to_insn(file->elf, sec,
+-						  idx * sizeof(unsigned int),
+-						  R_X86_64_PC32,
+-						  s, sym->offset))
+-				return -1;
++		if (elf_add_reloc_to_insn(file->elf, sec,
++					  idx * sizeof(unsigned int),
++					  R_X86_64_PC32,
++					  sym->sec, sym->offset))
++			return -1;
+ 
+-			idx++;
+-		}
++		idx++;
+ 	}
+ 
+ 	return 0;
+@@ -2205,23 +2195,20 @@ static int add_func_jump_tables(struct objtool_file *file,
+  */
+ static int add_jump_table_alts(struct objtool_file *file)
+ {
+-	struct section *sec;
+ 	struct symbol *func;
+ 	int ret;
+ 
+ 	if (!file->rodata)
+ 		return 0;
+ 
+-	for_each_sec(file, sec) {
+-		list_for_each_entry(func, &sec->symbol_list, list) {
+-			if (func->type != STT_FUNC)
+-				continue;
++	for_each_sym(file, func) {
++		if (func->type != STT_FUNC)
++			continue;
+ 
+-			mark_func_jump_tables(file, func);
+-			ret = add_func_jump_tables(file, func);
+-			if (ret)
+-				return ret;
+-		}
++		mark_func_jump_tables(file, func);
++		ret = add_func_jump_tables(file, func);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	return 0;
+@@ -2533,30 +2520,27 @@ static bool is_profiling_func(const char *name)
+ 
+ static int classify_symbols(struct objtool_file *file)
+ {
+-	struct section *sec;
+ 	struct symbol *func;
+ 
+-	for_each_sec(file, sec) {
+-		list_for_each_entry(func, &sec->symbol_list, list) {
+-			if (func->bind != STB_GLOBAL)
+-				continue;
++	for_each_sym(file, func) {
++		if (func->bind != STB_GLOBAL)
++			continue;
+ 
+-			if (!strncmp(func->name, STATIC_CALL_TRAMP_PREFIX_STR,
+-				     strlen(STATIC_CALL_TRAMP_PREFIX_STR)))
+-				func->static_call_tramp = true;
++		if (!strncmp(func->name, STATIC_CALL_TRAMP_PREFIX_STR,
++			     strlen(STATIC_CALL_TRAMP_PREFIX_STR)))
++			func->static_call_tramp = true;
+ 
+-			if (arch_is_retpoline(func))
+-				func->retpoline_thunk = true;
++		if (arch_is_retpoline(func))
++			func->retpoline_thunk = true;
+ 
+-			if (arch_is_rethunk(func))
+-				func->return_thunk = true;
++		if (arch_is_rethunk(func))
++			func->return_thunk = true;
+ 
+-			if (arch_ftrace_match(func->name))
+-				func->fentry = true;
++		if (arch_ftrace_match(func->name))
++			func->fentry = true;
+ 
+-			if (is_profiling_func(func->name))
+-				func->profiling_func = true;
+-		}
++		if (is_profiling_func(func->name))
++			func->profiling_func = true;
+ 	}
+ 
+ 	return 0;
+@@ -4222,7 +4206,7 @@ static int validate_section(struct objtool_file *file, struct section *sec)
+ 	struct symbol *func;
+ 	int warnings = 0;
+ 
+-	list_for_each_entry(func, &sec->symbol_list, list) {
++	sec_for_each_sym(sec, func) {
+ 		if (func->type != STT_FUNC)
+ 			continue;
+ 
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 6806ce01d933..500e92979a31 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -474,7 +474,7 @@ static int read_symbols(struct elf *elf)
+ 
+ 	/* Create parent/child links for any cold subfunctions */
+ 	list_for_each_entry(sec, &elf->sections, list) {
+-		list_for_each_entry(sym, &sec->symbol_list, list) {
++		sec_for_each_sym(sec, sym) {
+ 			char pname[MAX_NAME_LEN + 1];
+ 			size_t pnamelen;
+ 			if (sym->type != STT_FUNC)
 diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index ad0024da262b..a668173a5869 100644
+index a668173a5869..78e2d0fc21ca 100644
 --- a/tools/objtool/include/objtool/elf.h
 +++ b/tools/objtool/include/objtool/elf.h
-@@ -61,6 +61,7 @@ struct symbol {
- 	u8 return_thunk      : 1;
- 	u8 fentry            : 1;
- 	u8 profiling_func    : 1;
-+	u8 warned	     : 1;
- 	struct list_head pv_target;
- 	struct list_head reloc_list;
- };
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index b1c920dc9516..4ef9b278e5fd 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -55,7 +55,10 @@ static inline char *offstr(struct section *sec, unsigned long offset)
+@@ -189,4 +189,13 @@ struct symbol *find_func_containing(struct section *sec, unsigned long offset);
+ #define for_each_sec(file, sec)						\
+ 	list_for_each_entry(sec, &file->elf->sections, list)
  
- #define WARN_INSN(insn, format, ...)					\
- ({									\
--	WARN_FUNC(format, insn->sec, insn->offset,  ##__VA_ARGS__);	\
-+	if (!insn->sym || !insn->sym->warned)				\
-+		WARN_FUNC(format, insn->sec, insn->offset, ##__VA_ARGS__);\
-+	if (insn->sym)							\
-+		insn->sym->warned = 1;					\
- })
- 
- #define BT_FUNC(format, insn, ...)			\
++#define sec_for_each_sym(sec, sym)					\
++	list_for_each_entry(sym, &sec->symbol_list, list)
++
++#define for_each_sym(file, sym)						\
++	for (struct section *__sec, *__fake = (struct section *)1;	\
++	     __fake; __fake = NULL)					\
++		for_each_sec(file, __sec)				\
++			sec_for_each_sym(__sec, sym)
++
+ #endif /* _OBJTOOL_ELF_H */
 -- 
 2.39.2
 
