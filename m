@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505266DF93F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A788A6DF946
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjDLPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S230200AbjDLPDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDLPC1 (ORCPT
+        with ESMTP id S229532AbjDLPDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:02:27 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13383DC;
-        Wed, 12 Apr 2023 08:02:26 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id h198so18553520ybg.12;
-        Wed, 12 Apr 2023 08:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681311745; x=1683903745;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb/hrMpWmod5eDn2r5u9iuaYuz4x9DdXJpN5xVKf0r8=;
-        b=gJO060poeQQaI+xxCB54ch1IabTjPkvIUQ72oUiKp+EV+ZbQu/ZjDo/G8Lt2sH5fEC
-         j8nBayJGT/IEoU6by+litK4n4SAF/birLQ1Fp8x4kIT6Qmr81QkG8D+qWsLpcjmNu5tc
-         iFrsqckG5XVKDaRTnO1XWd9BzYcw+NVbjx/txj8ReQQVj2PiyRzmh6jiBM2/thm10c/y
-         t+sJpPKD1PYOd3pJOLulGcXLfgMH3fbYaeoecXbVzWR9k6DqAPp3TZjVKEgY/ftG/SYQ
-         muXyfCvf+I3n7fXFIf20TdLekMgtcHd0yobUhgb7Bwe1UNuFakAMDfyJ64of4cZHrCOu
-         yoEg==
+        Wed, 12 Apr 2023 11:03:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D706E7EDD
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681311774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fOTqvY719R4jZzP4ns7YSiBLEN7m3bKNAvtcXsEuWyw=;
+        b=LXSZiBdXZnJ+wHfNzNUFxNwv5jxz6MSFNCTxEC2A31/ZpxMN8ZsK2PGaTDfrckerdXv5P8
+        nzzWZ/URbqKZd6YlHO6vpojaOoxHBxMeKa+vig5NhcNA+Y88pl7gf61POnun3jNkgSU5fq
+        /fWuQC5ySeSQMGlvJrwQyCSVdw03LYE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-626-h75HzmqYPN-vw8m_MbpyNg-1; Wed, 12 Apr 2023 11:02:47 -0400
+X-MC-Unique: h75HzmqYPN-vw8m_MbpyNg-1
+Received: by mail-wm1-f69.google.com with SMTP id k24-20020a05600c1c9800b003ef6ed5f645so2398964wms.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:02:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681311745; x=1683903745;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1681311765; x=1683903765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Fb/hrMpWmod5eDn2r5u9iuaYuz4x9DdXJpN5xVKf0r8=;
-        b=NWe50wa/yc2xS6PwEBFZFKP2+4GIewIFNs7GmICFPNkJaGAj5f/UTHcHqNdmpfMCW/
-         tFiJ+t+WVdjIGADv8pN3XnTmYSqu57MYBvFuQKoKVe7ogF5AyEofidqjEHQ/UXLfTJmx
-         iwxKB84lUri+msrVrwv+AqTArY00v5DoRS2r/GgGEtSoFSFgZLQPEG1K92Vaxs7fw9aS
-         OLLYiubEBT7exvTxW1WuV4ovZr2uEYGrK9RzSNAa1o9zLRThcvsArBYYt2halv3Zp8Mk
-         ZeuPDgRfvzk2yWIKrbsTuYtVMdjQD+I/zSXt+vuHkQeO+gZ8CzYV5kIlvqkQs+q6MQSG
-         QQsw==
-X-Gm-Message-State: AAQBX9f1+IA6pccbiiUC/jJvD3oTE1KpzMQhvlquwuyCj1Xt4l2wLXIX
-        IOAsGX/SE8+I4HR0K6RF/k8l4PCH5r+8i6gPVzw=
-X-Google-Smtp-Source: AKy350bskx3m/N8JdTwSvkMUCyNbEWVYO6Gy/bnZZH/M1tM7Yx+EJ8SZHDl+NisCN99VMVzHM7tCkUGgS03zI5U1Ix0=
-X-Received: by 2002:a25:d657:0:b0:b76:ae61:b68b with SMTP id
- n84-20020a25d657000000b00b76ae61b68bmr9219687ybg.5.1681311745171; Wed, 12 Apr
- 2023 08:02:25 -0700 (PDT)
+        bh=fOTqvY719R4jZzP4ns7YSiBLEN7m3bKNAvtcXsEuWyw=;
+        b=4HCyVeoMX6TyB4e9gjOAl487FRJLOzL0WG38YyQxJKkPjm8Do5GHWnTAiZW8wErGRD
+         e81v6hPCfJA/1iwdntITf4M0QqAt+VuIVwcFZSeJHwz2M74G5rN9amYM/vzjdjgkKUpJ
+         ngTxDUFFsp5sRwL1RLF6YnRkQk/9Tx5W42MZ4X8ogXfeFtrqgoVUByVoGynvav+tYzER
+         1pp5XY5IoNhqTz5FdnbUMKVDr4aqNLAM12Z3wnGpCLHIkSsS1rJ4j2IbncYrNwK2B6PN
+         JmrReX2l2YYCRLHAb6+noEswhlL4scd6chsNL+l2+1UFpyvlBlnyY12Dl+buN3Fxkvqa
+         glcQ==
+X-Gm-Message-State: AAQBX9cGMFTB/iCt/9ju74x9wD70SOgiqSSYjDtwwQ8paKSY2WS3ANKn
+        /VgraEkLK0scMLGPHneZmmnJ1VfLWNTzjCak8r/w6bxLtv66Lx7TPqJO9+en7svwfvFKrN+tE/m
+        cAIv3bNHdAHibkf+mCC1BJrkdfiQxsJIeeTfmUEYTN5KPtplxCW8Rm8i12tpRpBY00Z/AwGkqte
+        Bue/ts7Rs=
+X-Received: by 2002:a7b:c406:0:b0:3ed:ca62:418e with SMTP id k6-20020a7bc406000000b003edca62418emr12888236wmi.9.1681311765095;
+        Wed, 12 Apr 2023 08:02:45 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zs3sEW6ZK/haeqlD0EesehbH1qFxifoinpDruNHzuIvT1CjAWb8Wn3A32owwiWpevsufxCtA==
+X-Received: by 2002:a7b:c406:0:b0:3ed:ca62:418e with SMTP id k6-20020a7bc406000000b003edca62418emr12888200wmi.9.1681311764728;
+        Wed, 12 Apr 2023 08:02:44 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id s5-20020a7bc385000000b003edcc2223c6sm2620876wmj.28.2023.04.12.08.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 08:02:44 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pierre Asselin <pa@panix.com>,
+        Jocelyn Falempe <jfalempe@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH] firmware/sysfb: Fix wrong stride when bits-per-pixel is calculated
+Date:   Wed, 12 Apr 2023 17:02:25 +0200
+Message-Id: <20230412150225.3757223-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230410120629.642955-1-kal.conley@dectris.com>
- <20230410120629.642955-3-kal.conley@dectris.com> <CAJ8uoz0NczOxbs7xqwC4B9YDP5fN1oECBi53yHoaZbvTxcm_fg@mail.gmail.com>
- <CAHApi-kp5FVfHm4tVObbOz7yu6o7PjaFLw8XgLB0OFY=pSuaKg@mail.gmail.com>
-In-Reply-To: <CAHApi-kp5FVfHm4tVObbOz7yu6o7PjaFLw8XgLB0OFY=pSuaKg@mail.gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Wed, 12 Apr 2023 17:02:14 +0200
-Message-ID: <CAJ8uoz3=hPW7sTzq=aroZkrOdQSNfjZjEQHQRe0uZmKSHnDkNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/4] xsk: Support UMEM chunk_size > PAGE_SIZE
-To:     Kal Cutter Conley <kal.conley@dectris.com>
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,34 +82,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 at 16:30, Kal Cutter Conley <kal.conley@dectris.com> wrote:
->
-> > > -       pool->unaligned = unaligned;
-> > >         pool->frame_len = umem->chunk_size - umem->headroom -
-> > >                 XDP_PACKET_HEADROOM;
-> > > +       pool->unaligned = unaligned;
-> >
-> > nit: This change is not necessary.
->
-> Do you mind if we keep it? It makes the assignments better match the
-> order in the struct declaration.
+The commit f35cd3fa7729 ("firmware/sysfb: Fix EFI/VESA format selection")
+fixed format selection, by calculating the bits-per-pixel instead of just
+using the reported color depth.
 
-Do not mind.
+But unfortunately this broke some modes because the stride is always set
+to the reported line length (in bytes), which could not match the actual
+stride if the calculated bits-per-pixel doesn't match the reported depth.
 
-> > > -static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map)
-> > > +static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map, u32 page_size)
-> > >  {
-> > >         u32 i;
-> > >
-> > > -       for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
-> > > -               if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
-> > > +       for (i = 0; i + 1 < dma_map->dma_pages_cnt; i++) {
-> >
-> > I think the previous version is clearer than this new one.
->
-> I like using `i + 1` since it matches the subscript usage. I'm used to
-> writing it like this for SIMD code where subtraction may wrap if the
-> length is unsigned, that doesn't matter in this case though. I can
-> restore the old way if you want.
+Fixes: f35cd3fa7729 ("firmware/sysfb: Fix EFI/VESA format selection")
+Reported-by: Pierre Asselin <pa@panix.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-Please restore it in that case. I am not used to SIMD code :-).
+ drivers/firmware/sysfb_simplefb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
+index 82c64cb9f531..5dc23e57089f 100644
+--- a/drivers/firmware/sysfb_simplefb.c
++++ b/drivers/firmware/sysfb_simplefb.c
+@@ -28,7 +28,7 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
+ 			     struct simplefb_platform_data *mode)
+ {
+ 	__u8 type;
+-	u32 bits_per_pixel;
++	u32 bits_per_pixel, stride;
+ 	unsigned int i;
+ 
+ 	type = si->orig_video_isVGA;
+@@ -54,14 +54,19 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
+ 	 * bits_per_pixel here and ignore lfb_depth. In the loop below,
+ 	 * ignore simplefb formats with alpha bits, as EFI and VESA
+ 	 * don't specify alpha channels.
++	 *
++	 * If a calculated bits_per_pixel is used instead of lfb_depth,
++	 * then also ignore lfb_linelength and calculate the stride.
+ 	 */
+ 	if (si->lfb_depth > 8) {
+ 		bits_per_pixel = max(max3(si->red_size + si->red_pos,
+ 					  si->green_size + si->green_pos,
+ 					  si->blue_size + si->blue_pos),
+ 				     si->rsvd_size + si->rsvd_pos);
++		stride = DIV_ROUND_UP(si->lfb_width * bits_per_pixel, 8);
+ 	} else {
+ 		bits_per_pixel = si->lfb_depth;
++		stride = si->lfb_linelength;
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(formats); ++i) {
+@@ -80,7 +85,7 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
+ 			mode->format = f->name;
+ 			mode->width = si->lfb_width;
+ 			mode->height = si->lfb_height;
+-			mode->stride = si->lfb_linelength;
++			mode->stride = stride;
+ 			return true;
+ 		}
+ 	}
+
+base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+-- 
+2.40.0
+
