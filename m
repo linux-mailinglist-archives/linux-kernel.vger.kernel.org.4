@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE60C6DEC4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BB26DEC58
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDLHOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S229869AbjDLHO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDLHOA (ORCPT
+        with ESMTP id S229451AbjDLHO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:14:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD20F1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:13:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id f26so20248390ejb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681283638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SSb8+3GCZjbScMcwhrVNFlcYVQrPjCh+ouHXg2g6vWE=;
-        b=t8Xz7E9XCnpbOXwsyz8O03mqMBfcFwjo2T++uD1k1tMQBk9dKFNXnMGnukEG9HYhF/
-         1qi9GWSfbcc+9hH4qhyLqkp8FQ0JXB0np7ELNbdnONnU6t84N6OW0Gv3FOQgcq602yCL
-         WAJWZEg6Oq4JFPsDHPGu3hy2XteM3p8fIza8T7ZId+gvpejruoMew5pw3CHfNtehRLin
-         Gh6MWQfuTqJtRpVqa+6QfJHqjfA/8SomnkmlcjgDC8xR1jmC8NRn0BqRi95L+hyA0R5U
-         t86TwDKpHzTYRR0EWV8LREIdklHIKBiLRVQJDYJ13lyFY7Ot66wfsBB/rDiWnohhGbQO
-         jBOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681283638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SSb8+3GCZjbScMcwhrVNFlcYVQrPjCh+ouHXg2g6vWE=;
-        b=hkqi+TIJdaU3f+c8RDWVdJcohVtmJNwbLRJcbGIoY/lHL08urXHf+CU0HXW50x2pdg
-         lN/w4RbTd70mU8wkccXJV31R6rPPlR4eTyRW6NaGSTtdCG9Tp7uU/A0giSBboyXZkPOS
-         aPOMH3vePCkNDgSPrL0jsu9q+ZRfghdz79uH+W1cWZ8TDp7RUQce8Is/NyGF6M52wywX
-         4sb51GAzLEfGq2DXMBU1Cc/dtoky0/bkSnnAI/2VOFXoYqEwXDQblw2NLPR2+m+IioK/
-         feLyFc1jma9pUcCrG35y7fEpw/AW7ihiKyUXoaTBT9Wg2EgsietQFgBM4XSMtBB8BtZs
-         lGaQ==
-X-Gm-Message-State: AAQBX9e2tov7W0hafR71tmqscP7BrZH5w9TBl3GpgLfy/Gle4nerfBXu
-        R8ioCAkV4JcyCohXLd+QIgVOh5veMG4Ng1J4Eqg=
-X-Google-Smtp-Source: AKy350YvNxNAcnAmDGZ1SZtTtgBgAJyImltMTkW5Dfa1JOksPBss0D9cjHcRM6QSzXZzwziyoC5owg==
-X-Received: by 2002:a17:907:1686:b0:930:f953:962c with SMTP id hc6-20020a170907168600b00930f953962cmr16169593ejc.1.1681283637718;
-        Wed, 12 Apr 2023 00:13:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
-        by smtp.gmail.com with ESMTPSA id n14-20020a1709065dae00b009334219656dsm6900701ejv.56.2023.04.12.00.13.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 00:13:57 -0700 (PDT)
-Message-ID: <77cadd45-0b15-af1a-9eab-ebe0b3241473@linaro.org>
-Date:   Wed, 12 Apr 2023 09:13:56 +0200
+        Wed, 12 Apr 2023 03:14:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497A62708
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:14:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 035761F896;
+        Wed, 12 Apr 2023 07:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681283694;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uOFbCO2QvsRGjVIbkwUWdDTNOrQjcipph+4xXKb4nHk=;
+        b=RZ1cmlbyoAjJj4zpJykutWBDVWn9Zw41LA20k0t+a8AgnE4Io5bbktzknBYil7x9gyZOUR
+        zccfZo+BZAYKhRwX7iA1eQllvSYko4PAxc0/fpJd+6+6ltUtcPckrqazb2eXFYqJt3xG5H
+        8bTDONsHNLhDPopjflc1tpKEduiQRGc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681283694;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uOFbCO2QvsRGjVIbkwUWdDTNOrQjcipph+4xXKb4nHk=;
+        b=oqSDwr1faSiuosL2RxRJiWKMdQIFHI557svG+2LvjLS1A8WqRbh3qQoJhcNCCMAJZCZ98+
+        7Pi2n+YSygIQMLBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6D3413498;
+        Wed, 12 Apr 2023 07:14:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Eod0K21aNmRbMgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 12 Apr 2023 07:14:53 +0000
+Date:   Wed, 12 Apr 2023 09:14:52 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Daniel =?iso-8859-2?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
+        chrubis <chrubis@suse.cz>, Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Benjamin Copeland <ben.copeland@linaro.org>,
+        Tudor Cretu <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Message-ID: <20230412071452.GD1949572@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
+ <20230411220811.GA1798729@pevik>
+ <CAEUSe7_JvM8SD15DVnXOsSyPhS+sF=9JEDzV+NW2XZ=MwVMBUw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] ARM: dts: mvebu: Add device tree binding for
- Marvell Armada 38x
-Content-Language: en-US
-To:     Tony Dinh <mibodhi@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20230412025737.20280-1-mibodhi@gmail.com>
- <20230412025737.20280-2-mibodhi@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230412025737.20280-2-mibodhi@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEUSe7_JvM8SD15DVnXOsSyPhS+sF=9JEDzV+NW2XZ=MwVMBUw@mail.gmail.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 04:57, Tony Dinh wrote:
-> Add device tree binding for Marvell Armada 38x.
-> 
-> Signed-off-by: Tony Dinh <mibodhi@gmail.com>
+> Hello!
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+> On Tue, 11 Apr 2023 at 16:08, Petr Vorel <pvorel@suse.cz> wrote:
 
-This is not DTS. These are bindings.
+> > > On Thu, 6 Apr 2023 at 16:26, Petr Vorel <pvorel@suse.cz> wrote:
 
-> ---
-> 
-> Changes in v2:
-> - Add marvell,38x.yaml. For now, add this binding to the Marvell
-> directory to keep it consistent with other Marvell yaml files.
-> At a later date and a separate patch, consolidate the Marvell
-> yaml files into  marvell.yaml.
-> 
->  .../bindings/arm/marvell/armada-38x.yaml      | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
+> > > > > On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
+> > > > > > Following LTP syscalls failed on the i386 and arm environments with
+> > > > > > Linux next / mainline kernels. The userspace is coming from Open
+> > > > > > Embedded kirkstone.
 
-marvell,armada-38x.yaml
+> > > > > Thanks for the report and summary! I went through the list and found
+> > > > > that most if not all of the bugs looks like incompatibilities
+> > > > > with musl, not with 32-bit. It's probably not well tested with
+> > > > > musl.
 
-Or just squash it with existing armada bindings... Keeping one binding
-per one SoC group is a bit a lot.
+> > > > > Can you try again with glibc and see if there are any remaining
+> > > > > issues then? LTP should probably be fixed to work with both, but
+> > > > > if nobody has done that so far, it's likely that this has come
+> > > > > up in the past but ran into problems upstreaming the fixes.
 
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml b/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
-> new file mode 100644
-> index 000000000000..096bd46d932a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
-> @@ -0,0 +1,27 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/marvell/marvell,38x.yaml#
+> > > > > > Anyone seeing this problem on 32-bit i386 or arm ?
+> > > > > > You get to see "segfault" in the following logs that have been noticed
+> > > > > > on i386 only.
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+> > > > > > This is not a new problem. We have been noticing these failures for a
+> > > > > > really long time.
+> > > > > > Would it be worth investigating the reason for failures on 32bit architectures ?
+
+> > > > > > Test logs,
+> > > > > > -----
+> > > > > > [    0.000000] Linux version 6.3.0-rc5-next-20230406 (tuxmake@tuxmake)
+> > > > > > (i686-linux-gnu-gcc (Debian 11.3.0-11) 11.3.0, GNU ld (GNU Binutils
+> > > > > > for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1680759389
 
 
-Best regards,
-Krzysztof
+> > > > > > Test environment: i386
+> > > > > > Suite: ltp-syscalls
+> > > > > > Toolchain: gcc-11
 
+
+> > > > > > fstatfs02
+> > > > > > fstatfs02    1  TPASS  :  expected failure - errno = 9 : Bad file descriptor
+> > > > > > fstatfs02    2  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
+> > > > > > received (pid = 17841).
+> > > > > > fstatfs02    3  TBROK  :  tst_sig.c:232: Remaining cases broken
+> > > > This is IMHO using the old LTP API.
+> > > > testcases/kernel/syscalls/fstatfs/fstatfs02.c was converted to new LTP API in
+> > > > 5a8f89d35 ("syscalls/statfs02, fstatfs02: Convert to new API"), which was
+> > > > released in 20220930. There is already newer release 20230127.
+> > > > Generally it's safer to test mainline kernel with LTP master,
+> > > > but this fix has already been in the latest LTP release 20230127.
+> > > > And this error has been later fixed with
+> > > > 492542072 ("syscalls/statfs02, fstatfs02: Accept segfault instead of EFAULT")
+> > I'm sorry, I was wrong stating that unexpected signal SIGSEGV(11)
+> > error was fixed by 492542072.
+
+> > > Thanks for insite about the failed test investigations.
+
+
+> > > > @Naresh which LTP do you use for testing? It must be some older LTP :(.
+
+> > > Our build system started running LTP version 20230127.
+> > I'm sorry, I obviously misinterpreted the test output as old LTP code.
+
+> No, you were right! We were running an older version and because of
+> this discussion we have now updated to 20230127 in Kirkstone. This
+> update from Naresh and these findings are with 20230127.
+
+Great, thank you! Using the latest release (or git master) really saves of all
+of us.
+
+Kind regards,
+Petr
+
+> Thanks for looking into this! Greetings!
+
+> Daniel Díaz
+> daniel.diaz@linaro.org
