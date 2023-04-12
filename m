@@ -2,118 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A8C6DED66
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A846DED68
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDLISn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S229661AbjDLITe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLISl (ORCPT
+        with ESMTP id S229481AbjDLITd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:18:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B0101;
-        Wed, 12 Apr 2023 01:18:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0DC7628BF;
-        Wed, 12 Apr 2023 08:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6621EC4339B;
-        Wed, 12 Apr 2023 08:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681287519;
-        bh=QSicr5mrALt9A0DHx31xXuJbWSy0cFJuT000niRtI90=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sOz/Z4HbjF/d86Shdee4qy9zGXAma1nruikqtVEPJont9pf9mwWMWgS6KAKR56sRm
-         lYFFrMSwP4V5qxYUIYclxVwyMJqoKAjfw3R794Qu0E4XVDstjkUrbvNTil7OJxUZQ9
-         yRU4xg/t7gnUW3ozuldST4AMt9q9n5ik5hgamqnu7IpA9CNDjPG6Jx9ATF8b5R4tYh
-         Suyxw6QDyT90J9sZS7gc9+7VlmVM6NivJShLnP11H31Qd9RET+h5gH21uW27VH3maR
-         CNbfNR9hpi0jg+ZM2nvioRBeFMcWorGAiviZJITUP0LshWVtTGyN3Fger5n4J7J/qg
-         +q6ugG66PeKbg==
-Message-ID: <6899de08-252e-3558-fca7-b7f91b33ec61@kernel.org>
-Date:   Wed, 12 Apr 2023 17:18:37 +0900
+        Wed, 12 Apr 2023 04:19:33 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FA7C2;
+        Wed, 12 Apr 2023 01:19:30 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 3BBD824E1BE;
+        Wed, 12 Apr 2023 16:19:29 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 16:19:29 +0800
+Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
+ 2023 16:19:28 +0800
+Message-ID: <68839732-2d3f-aafc-8744-550f4bfa27f0@starfivetech.com>
+Date:   Wed, 12 Apr 2023 16:19:27 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] zonefs: remove unnecessary kobject_del()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 6/7] soc: starfive: Add dphy pmu support
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230412031904.13739-1-frank.li@vivo.com>
- <9a92e541-cf98-4ac5-c181-4a6ba76d08f8@kernel.org>
- <2023041238-stench-magnetism-0256@gregkh>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <2023041238-stench-magnetism-0256@gregkh>
-Content-Type: text/plain; charset=UTF-8
+To:     Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
+ <20230411064743.273388-7-changhuang.liang@starfivetech.com>
+ <20230411-iron-everybody-70b78e94aee5@spud>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230411-iron-everybody-70b78e94aee5@spud>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [113.72.145.176]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/12/23 17:11, Greg KH wrote:
-> On Wed, Apr 12, 2023 at 05:04:16PM +0900, Damien Le Moal wrote:
->> On 4/12/23 12:19, Yangtao Li wrote:
->>> kobject_put() actually covers kobject removal automatically, which is
->>> single stage removal. So kill kobject_del() directly.
->>>
->>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>> ---
->>>  fs/zonefs/sysfs.c | 1 -
->>>  1 file changed, 1 deletion(-)
->>>
->>> diff --git a/fs/zonefs/sysfs.c b/fs/zonefs/sysfs.c
->>> index 8ccb65c2b419..a535bdea1097 100644
->>> --- a/fs/zonefs/sysfs.c
->>> +++ b/fs/zonefs/sysfs.c
->>> @@ -113,7 +113,6 @@ void zonefs_sysfs_unregister(struct super_block *sb)
->>>  	if (!sbi || !sbi->s_sysfs_registered)
->>>  		return;
->>>  
->>> -	kobject_del(&sbi->s_kobj);
->>>  	kobject_put(&sbi->s_kobj);
->>>  	wait_for_completion(&sbi->s_kobj_unregister);
->>>  }
+
+
+On 2023/4/12 5:15, Conor Dooley wrote:
+> On Mon, Apr 10, 2023 at 11:47:42PM -0700, Changhuang Liang wrote:
+>> Add dphy pmu to turn on/off the dphy power switch.
+[...]
+>> +
+>>  static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+>>  {
+>>  	struct jh71xx_pmu *pmu = pmd->pmu;
+>> @@ -191,6 +213,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+>>  
+>>  	if (pmu->match_data->pmu_type == JH71XX_PMU_GENERAL)
+>>  		ret = jh71xx_pmu_general_set_state(pmd, mask, on);
+>> +	else if (pmu->match_data->pmu_type == JH71XX_PMU_DPHY)
+>> +		ret = jh71xx_pmu_dphy_set_state(pmd, mask, on);
+> 
+> Perhaps I am verging on over-complication, but I dislike this carry on.
+> Is this the only time we'll see a power domain provider coming out of
+> a syscon, or are there likely to be more?
+> Either way, I think having an ops struct w/ both parse_dt() and the
+> set_state() implementations would be neater than what you have here.
+> 
+
+OK, I will use call back make here neater.
+
+> Very much open to dissenting opinions there though. Emil? Walker?
+> 
+> Cheers,
+> Conor.
+> 
+>>  
+>>  	return ret;
+>>  }
+[...]
+>> -- 
+>> 2.25.1
 >>
->> What I am not sure about here is that if CONFIG_DEBUG_KOBJECT_RELEASE is
->> enabled, the kobj release is delayed, so the kobject will stay in sysfs
->> potentially after the umount() returns. Not exactly nice as that potentially
->> create races in user space... Not 100% sure though.
->>
->> Greg ? Any thoughts on this ?
-> 
-> Yes, it's all a mess :(
-> 
-> See the other messatges in this thread:
-> 	https://lore.kernel.org/r/20230406120716.80980-1-frank.li@vivo.com
-> 
-> Please don't take this patch for now, this all needs to be revisited.
-> 
-> We have two reference counted objects with different lifespans trying to
-> be embedded in the same structure, causing a mess.
-> 
-> But, if we split them apart, that too has issues.  I've been thinking
-> about how to resolve this, but don't have any solid ideas yet, and been
-> swamped with other things...
-> 
-> For now, let's just leave this all alone, it's not unique to this one
-> filesystem, they all have the same pattern, and we need to solve them
-> all properly at the same time by moving the common code into the driver
-> core so that filesystems don't have to worry about this mess.
-
-That was my thinking. Will try to think about a solution as well.
-Likely, some helpers for FSes sysfs attributes somewhere in fs/*.c are needed to
-not use the kobj directly as part of the fs_info structs.
-
-
