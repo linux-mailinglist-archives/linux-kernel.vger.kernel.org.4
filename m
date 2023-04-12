@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FA76DF578
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C766DF57E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjDLMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S231743AbjDLMhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjDLMhO (ORCPT
+        with ESMTP id S231676AbjDLMhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:37:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDE57DBD;
-        Wed, 12 Apr 2023 05:36:49 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id s2so7473911wra.7;
-        Wed, 12 Apr 2023 05:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681303008; x=1683895008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5+yJqelcjnVJsBvuc5XbMPT6WJPDQKryMhB4y470pSo=;
-        b=LLjqDK8tdTHUH7mzFIFmfQT8xQyuLtVYbmR7OQrKeNzsqHXLj5BBQMhtKqzkyUOumi
-         Sn/FVrn77yRrZUvVN/HJuEHXk/hHx7wn1bvjgdWUlsHOf/xX2c58NYs7Pb4IjjyABuXJ
-         w3agsCkggYVx3P+20Poa/ChhqMclxJlCHVv6UQRDUKXEyh2AO/A2pJg8bMu868T2DGa+
-         hhoq5XcdPPbLdXlR/sjZKqdDnicTwRtks9MloCIznQD29X6PMwXA0qlZEltcag2yqo0k
-         qPm6j05xWOMfFQ7zE8JislSdbLHAMo8LpDUZSfG5aZy/z2WIvaDc7lTllYO7QMVQsCju
-         InTA==
+        Wed, 12 Apr 2023 08:37:20 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3502136;
+        Wed, 12 Apr 2023 05:36:58 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id u24-20020a9d7218000000b006a413c893c8so1602142otj.10;
+        Wed, 12 Apr 2023 05:36:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681303008; x=1683895008;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+yJqelcjnVJsBvuc5XbMPT6WJPDQKryMhB4y470pSo=;
-        b=iJH3v0x7qgabSW7UiMqxDmo1xKuqHqDq1+LN/FKCrrjE1+o9VrUVMZtW3ftx93yqF+
-         Dg88yRViiqiPY5Z+0+Ukpyq/htQU49fcWAJgezlV+6M35H8pjIMU9yexvqOEq80V1AnK
-         f9fpmrmg3xPMdG216+si1ldqnLx3oMeXikSbds4JoWSFC15q13zSJL+nYjrS3EjhDIuG
-         ua5UBit9XUgqxVTOL8ufIY13snKpMOtfhXC2i+BrNIKPcMgWJxVuQSfo9Sk79Vde5oy9
-         axWN4F6ERl3W/S4LiW3JxT668u9dI/gs9QWJkU7n+vXN+bueIDGR4MmFibh5iAVnIOwL
-         y0TA==
-X-Gm-Message-State: AAQBX9cdKFtiMU44FePsP8caxkjlI8jHu8fxx4y6wNYikIkyf+v1ncOC
-        x9kJx6EGRFxzgXAa+Fn+lMw=
-X-Google-Smtp-Source: AKy350YfaWPBQRxXe37/4nw4RvtdvOSXPdUuUJj6f7mSjFILGvCzsrsicMkzLrBGLQ3m32F6fCsuGw==
-X-Received: by 2002:adf:ec82:0:b0:2d7:67bc:344a with SMTP id z2-20020adfec82000000b002d767bc344amr13517948wrn.37.1681303007626;
-        Wed, 12 Apr 2023 05:36:47 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m8-20020adffe48000000b002c55521903bsm17181465wrs.51.2023.04.12.05.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 05:36:46 -0700 (PDT)
-Message-ID: <3e8c6b55-5b5e-5141-8f63-d7f0fc7d1699@gmail.com>
-Date:   Wed, 12 Apr 2023 14:36:44 +0200
+        d=1e100.net; s=20210112; t=1681303017; x=1683895017;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O9jOdXT+V+Zebmm8aG72BfjVRbdNVFQ3IJ98e2LoaQk=;
+        b=olgxdaTOIhpw2U5bt/nLzF0cR0jgfAS0+mgB7CreozjO7po4Me3SWFDC+t0A8yLt/Q
+         DL641SEDpMzM+Uo7ya1Z0o0j5rGILDPSp68y0ZQCUaavEF186rOIH7bg4fGaXgpjnABL
+         bChKLi50hzrhHzgIunCg75/pCLJSURNnd7HSFhTrisjqhKDrhdM/dK4hgmdmWDVReDHg
+         EXqg85CIUoFTWfjYyhQt3DvIzRztqDiEG1OsmJSb5cB6m1QW8WFct1goytZBfPHAp53D
+         DJ8Ujka67UThuK0mkPugKtGeCjV/Od5fFtKj8YU4MF8HsRYvrwm4OHOFQ4+mAWmdMxBN
+         SRVA==
+X-Gm-Message-State: AAQBX9dtinkA4h3mB79enkMmusWx6kN2gxNW3SQPDKbVWYNOi3AEMR0W
+        wWScP/s9S9GRhcFrHF/rmQ==
+X-Google-Smtp-Source: AKy350YCmmL8l5yHH833Xd2sbcl1HHzX9eJq4tR5XRATEpUVzPaDkVbwu1IyS1SBmIWmKcwdtb0cMg==
+X-Received: by 2002:a9d:7f85:0:b0:6a3:780:5848 with SMTP id t5-20020a9d7f85000000b006a307805848mr6617802otp.25.1681303017217;
+        Wed, 12 Apr 2023 05:36:57 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a14-20020a056830100e00b006864b5f4650sm6505510otp.46.2023.04.12.05.36.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 05:36:56 -0700 (PDT)
+Received: (nullmailer pid 1486735 invoked by uid 1000);
+        Wed, 12 Apr 2023 12:36:56 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 08/27] dt-bindings: display: mediatek: wdma: Add
- compatible for MediaTek MT6795
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-9-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230412112739.160376-9-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Tony Dinh <mibodhi@gmail.com>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+In-Reply-To: <20230412025737.20280-2-mibodhi@gmail.com>
+References: <20230412025737.20280-1-mibodhi@gmail.com>
+ <20230412025737.20280-2-mibodhi@gmail.com>
+Message-Id: <168130276446.1439316.3427548118074442016.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] ARM: dts: mvebu: Add device tree binding for
+ Marvell Armada 38x
+Date:   Wed, 12 Apr 2023 07:36:56 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,32 +70,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795's WDMA block: this
-> is the same as MT8173.
+On Tue, 11 Apr 2023 19:57:35 -0700, Tony Dinh wrote:
+> Add device tree binding for Marvell Armada 38x.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Tony Dinh <mibodhi@gmail.com>
 > ---
->   .../devicetree/bindings/display/mediatek/mediatek,wdma.yaml    | 3 +++
->   1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
-> index 7d7cc1ab526b..1a19b3ef036f 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
-> @@ -23,6 +23,9 @@ properties:
->       oneOf:
->         - items:
->             - const: mediatek,mt8173-disp-wdma
-> +      - items:
-> +          - const: mediatek,mt6795-disp-wdma
-> +          - const: mediatek,mt8173-disp-wdma
+> Changes in v2:
+> - Add marvell,38x.yaml. For now, add this binding to the Marvell
+> directory to keep it consistent with other Marvell yaml files.
+> At a later date and a separate patch, consolidate the Marvell
+> yaml files into  marvell.yaml.
+> 
+>  .../bindings/arm/marvell/armada-38x.yaml      | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
+> 
 
-:D
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+yamllint warnings/errors:
 
->   
->     reg:
->       maxItems: 1
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/arm/marvell/armada-38x.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230412025737.20280-2-mibodhi@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
