@@ -2,140 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165726DFBF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34926DFBF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjDLQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S230209AbjDLQ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjDLQ4V (ORCPT
+        with ESMTP id S229992AbjDLQ4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:56:21 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CCC76AE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:55:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id j17so20865438ejs.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:55:52 -0700 (PDT)
+        Wed, 12 Apr 2023 12:56:34 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CA59ECB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:56:07 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6345d4c8b25so777633b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681318533;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mL1Dmw1t8cH96ZKM0Y0rJ8RmORlNySoRf2nYIAB9Jzo=;
-        b=d28p+fne4GmzRaXHcfIxScgVDg2XtPaJGzWNaeaYsnNrQP/mFYMAIAV3JVbIhWDMbu
-         Fa+/y0rOjrQPkLzfSI6ggc0jbtP9nYDqnOK077i5kTPh8kOdV3bpjER9aYcC8vx/sHXf
-         HdT2ny8s6RCRLIUyjNv7y+Ibx+zZyzkG8t5szrFkZzvxweU3bHSpAcmn+pNldAXxUH8d
-         p1ZhmAYs7zvjgQiOszonoIM3nAVZ/FLwjfVIHk9otAEY6sN0RaSz9SJ3uqwLgFyz5u8A
-         wEZkcdzxtdnDXXTnp4vMPvK7zFjOCAV86N8J/5DyF+XoPB3yX3zTK3yYn/4clac6Z2gG
-         bFMw==
+        d=google.com; s=20221208; t=1681318563;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r5aQP8BO2zo9XrojS0bD6j1oYwbTGaaKe2CEIkMg+Cc=;
+        b=oVLoNRJYCUybQHOCGDc1/+VV+Wd3aSZ7iKoewHhOxr1x7l07u7jhjgNxGtvZ+BZiGP
+         c0df6kLIh/auurIKDofimLBIjub63gz2i2tflYknIZNj2NnK506IT3EyqDEs7OBDGJOw
+         Du1gx6ak04OGqUV5ei38bvHmLTob16K6WNbOzXVmiZCC6zqQc5aP40cItoZfBTFJxJiR
+         Oj7oWnxeVM3mdxoWqLd4ZHyFIzGKvXmkUTBFIJzsVjT/MUQkrsa9QNrCYmRFOXRLWd9b
+         TEA6YsK/kVrHl8IF0FY22x7gwd2A6zHfKONJF6sMgQaCSt1EUuPHDQUfPHyBBvBBj1Nf
+         kzrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681318533;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mL1Dmw1t8cH96ZKM0Y0rJ8RmORlNySoRf2nYIAB9Jzo=;
-        b=L4CBK2Fs4BfTZ+PC3V5Y650Wg0xuUbyAQVOcHQNSOqb2KGehmOl9WEYEOqITsnO57l
-         eGgmBYEc+iURhAdxoa1cER//dHEwprAbfJMm/Sm6bzuKsP+Bmq0A8pWoK/E2yp8WJWK8
-         WoIEYNrtIyNFgaSjSEJP3oJ5sNdbnPPqTTX5QPlWFkPxkLzXeNV3UPFzR0ED/qqkzDfi
-         rDca6f1x5m0H0eSzAdda/5HK95nDYNXJ78Nf9+Os7ICMdSEcEbGhIHAFs4oc+YYVmzSO
-         bH1LqGKznJuEN9Mn8SEcvnRiT+9qijJljkLE3ljqsXDRlXaGroQCnTALaRKz/bsn9L66
-         zSQQ==
-X-Gm-Message-State: AAQBX9cY0ubffHbn1MCfepEKoNN2RyYzeJxoW9fCh5y/VSmaY/Kf+tde
-        cfAph0+I2kQa/sjU/E95sNlG3g==
-X-Google-Smtp-Source: AKy350Z1Gn9hA8XdncuSMlmsY8g62jmSran04JCDS9kQw1y/M/VsEQjsDf8807x9ocMfcFbFGA7tSQ==
-X-Received: by 2002:a17:906:538d:b0:94a:582d:169f with SMTP id g13-20020a170906538d00b0094a582d169fmr12936153ejo.5.1681318532872;
-        Wed, 12 Apr 2023 09:55:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:938a:b3db:7c59:795e? ([2a02:810d:15c0:828:938a:b3db:7c59:795e])
-        by smtp.gmail.com with ESMTPSA id f9-20020aa7d849000000b00505034c27b9sm822863eds.28.2023.04.12.09.55.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 09:55:32 -0700 (PDT)
-Message-ID: <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
-Date:   Wed, 12 Apr 2023 18:55:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Content-Language: en-US
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
- <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1681318563;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r5aQP8BO2zo9XrojS0bD6j1oYwbTGaaKe2CEIkMg+Cc=;
+        b=LKTW0A97TErqPtHxb5VVK2/nEMoEwu/0wQa1wLyKKEmJJgT01LIZnYpveXAUEguXuy
+         zcQmpMxb0yTs/mUgBKtopRW/c+Z7fBcfgMiog1qIRM0uTq0uhUgZQHsWaKR19bOeCqzI
+         bGTnkrTywVwkda0sRibwhZMJqhAvvwJQyFrGxa75DM7pEFNwS0ahxXFtIdGxA6ix/UcR
+         0Ed3ss/bc+n8M7nTmd0ppX23TyLTrqJg+aAcC4f7KDrXizEgJXME8Y1g4od3r5bhPB+e
+         P4KxIN919SdLkdu2K+EAGSnVwDRRiPDAgks2qV7jWAYRtzQZJOX+gEftmd/8u2r+cHSW
+         LRVQ==
+X-Gm-Message-State: AAQBX9decoLWvj2/m83NVo1xKqEeC/+Z4X2JZnVvWouB2W3roHrS1rE9
+        ynHMyAB4fRUnlszTwmB0u7Kjlc0=
+X-Google-Smtp-Source: AKy350a13a5HToDhjS1k1UbKJ/IVQbgV0gzzJs4B82pMPsxUQcRF3Po0gAx3EgHJsgANJfb6CfMCn/I=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6a00:2d15:b0:62d:afc6:c152 with SMTP id
+ fa21-20020a056a002d1500b0062dafc6c152mr569870pfb.5.1681318563183; Wed, 12 Apr
+ 2023 09:56:03 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 09:56:01 -0700
+In-Reply-To: <168130336725.150247.12193228778654006957.stgit@firesoul>
+Mime-Version: 1.0
+References: <168130333143.150247.11159481574477358816.stgit@firesoul> <168130336725.150247.12193228778654006957.stgit@firesoul>
+Message-ID: <ZDbiofWhQhFEfIsr@google.com>
+Subject: Re: [PATCH bpf V8 2/7] selftests/bpf: Add counters to xdp_hw_metadata
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org,
+        "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 14:42, Changhuang Liang wrote:
+On 04/12, Jesper Dangaard Brouer wrote:
+> Add counters for skipped, failed and redirected packets.
+> The xdp_hw_metadata program only redirects UDP port 9091.
+> This helps users to quickly identify then packets are
+> skipped and identify failures of bpf_xdp_adjust_meta.
+> 
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>  .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   15 +++++++++++++--
+>  tools/testing/selftests/bpf/xdp_hw_metadata.c      |    4 +++-
+>  2 files changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> index b0104763405a..a07ef7534013 100644
+> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> @@ -25,6 +25,10 @@ struct {
+>  	__type(value, __u32);
+>  } xsk SEC(".maps");
+>  
+> +volatile __u64 pkts_skip = 0;
+> +volatile __u64 pkts_fail = 0;
+> +volatile __u64 pkts_redir = 0;
+> +
+>  extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+>  					 __u64 *timestamp) __ksym;
+>  extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+> @@ -59,16 +63,21 @@ int rx(struct xdp_md *ctx)
+>  			udp = NULL;
+>  	}
+>  
+> -	if (!udp)
+> +	if (!udp) {
+> +		pkts_skip++;
+>  		return XDP_PASS;
+> +	}
+>  
+>  	/* Forwarding UDP:9091 to AF_XDP */
+> -	if (udp->dest != bpf_htons(9091))
+> +	if (udp->dest != bpf_htons(9091)) {
+> +		pkts_skip++;
+>  		return XDP_PASS;
+> +	}
+>  
+>  	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
+>  	if (ret != 0) {
+
+[..]
+
+>  		bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
+
+Maybe let's remove these completely? Merge patch 1 and 2, remove printk,
+add counters. We can add more counters in the future if the existing
+ones are not enough.. WDYT?
+
+> +		pkts_fail++;
+>  		return XDP_PASS;
+>  	}
+>  
+> @@ -78,6 +87,7 @@ int rx(struct xdp_md *ctx)
+>  
+>  	if (meta + 1 > data) {
+>  		bpf_printk("bpf_xdp_adjust_meta doesn't appear to work");
+> +		pkts_fail++;
+>  		return XDP_PASS;
+>  	}
+>  
+> @@ -91,6 +101,7 @@ int rx(struct xdp_md *ctx)
+>  	else
+>  		meta->rx_hash = 0; /* Used by AF_XDP as not avail signal */
+>  
+> +	pkts_redir++;
+>  	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> index 1c8acb68b977..3b942ef7297b 100644
+> --- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> @@ -212,7 +212,9 @@ static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd)
+>  	while (true) {
+>  		errno = 0;
+>  		ret = poll(fds, rxq + 1, 1000);
+> -		printf("poll: %d (%d)\n", ret, errno);
+> +		printf("poll: %d (%d) skip=%llu fail=%llu redir=%llu\n",
+> +		       ret, errno, bpf_obj->bss->pkts_skip,
+> +		       bpf_obj->bss->pkts_fail, bpf_obj->bss->pkts_redir);
+>  		if (ret < 0)
+>  			break;
+>  		if (ret == 0)
 > 
 > 
-> On 2023/4/12 19:34, Krzysztof Kozlowski wrote:
->> On 12/04/2023 10:45, Changhuang Liang wrote:
->>> StarFive SoCs like the jh7110 use a MIPI D-PHY RX controller based on
->>> a M31 IP. Add a binding for it.
->>
->> So this is D-PHY? Or the other patch is D-PHY? The naming is quite
->> confusing and your commit msgs are not helping here.
->>
->> Also the power domain phandle here adds to the confusion.
->>
-> 
-> Yes, this is DPHY, DPHY has rx and tx, and last version we are discussing that 
-> use power domain replace syscon:
-> https://lore.kernel.org/all/5dc4ddc2-9d15-ebb2-38bc-8a544ca67e0d@starfivetech.com/
-
-The other patch - DPHY PMU - is confusing. Instead of writing short
-commits, explain more.
-
-> 
->>>
->>> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->>> ---
->>>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 85 +++++++++++++++++++
->>>  1 file changed, 85 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
->>>
-> [...]
->>> +
->>> +  power-domains:
->>> +    maxItems: 1
->>> +
->>> +  lane_maps:
->>
->> Why did this appear? Underscores are not allowed. It looks like you
->> re-implement some standard property.
->>
-> 
-> Will change to lane-maps.
-> Yes, according to Vinod advice, lane mapping table use device tree
-> to parse makes sense.
-
-Hm, I have a feeling that I saw such property, so you should dig into
-existing and in-flight bindings.
-
-Best regards,
-Krzysztof
-
