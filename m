@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07D66DF37E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59486DF37B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjDLL2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S231392AbjDLL2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjDLL2O (ORCPT
+        with ESMTP id S230373AbjDLL2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:28:14 -0400
+        Wed, 12 Apr 2023 07:28:10 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F0B2D40;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507BA59D3;
         Wed, 12 Apr 2023 04:28:04 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD5396603222;
-        Wed, 12 Apr 2023 12:27:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2CEBB660320E;
+        Wed, 12 Apr 2023 12:27:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681298878;
-        bh=xWx6EegFN/Cbl8Z4PW24l4hQjXItZf81rLKoJwUO+Qo=;
+        s=mail; t=1681298879;
+        bh=7rZitvRQVOG3LtVlh2pg7pj+YeXMzPdPvImLoCRUT80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=en1fQNlpo7h26/3IGRfMpiL0JCdY+sdr34CvR3a22Mg5ATikZObWikLJOC5tP/Zq8
-         yeNSzjV2lluyQoldlcc351dLO/sfJIWdfEtvAmFU/daLTEr18dweZIbLx0uyyEBD0d
-         VI9oB28mqgxMHs6Erw1BBiXpgRJjHV7j0WrfaGcaGhalGxcCqtEseHI4F/XQpcq9Oc
-         zyAh6aIfUVyaaTH2A8HCzS8Kyt9Kx3Yxx0LMqZ2Hb1X+lD1tOJRnF79Z4zdEOGxV3r
-         4BP5lZkpcjNQcHoSt2Cj0D5weFNsgCx7Q8y4+lRBRubKn3Y2Q21jHLcQVWe/sCt7nZ
-         b2pQWmeXfT2AA==
+        b=ZqchzHTr1PZSfCK9PeJ3tYn2tZ1fzdRS2ib535aG+RDtPJF9zAqcDKd9ABv8VifGc
+         SKbF/PbuwGGzLCCrn7XZZeWelHPfneR2Q175nUandaTe6WicOxf7VIPFfK4aUlPKgK
+         uJ78UxmiRfEmRhhQwnHRcQCOZ118Cg8MKv9NGh0IzEq6JkqcUfT45m4XX4hizAoFRB
+         dE0aYkqTyFY0QqTag7fCayslQEdDnznygbcW4tj6kgS7c6xaOPrzHxRKBQAIRXcLhy
+         RhighPeA/dqQ76ZfwzwFOkE7QFlcgQ8bGiXTFi5HyUizvw4nTwNbKe5AoLFQrXldBn
+         d8hcGXviMB/7w==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -48,9 +48,9 @@ Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
         linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
         kernel@collabora.com, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH 09/27] dt-bindings: display: mediatek: color: Add compatible for MediaTek MT6795
-Date:   Wed, 12 Apr 2023 13:27:21 +0200
-Message-Id: <20230412112739.160376-10-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 10/27] dt-bindings: display: mediatek: gamma: Add compatible for MediaTek MT6795
+Date:   Wed, 12 Apr 2023 13:27:22 +0200
+Message-Id: <20230412112739.160376-11-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
 References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
@@ -65,26 +65,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible string for MediaTek Helio X10 MT6795's COLOR block: this
+Add a compatible string for MediaTek Helio X10 MT6795's GAMMA block: this
 is the same as MT8173.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../devicetree/bindings/display/mediatek/mediatek,color.yaml     | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/display/mediatek/mediatek,gamma.yaml  | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.yaml
-index 62306c88f485..449b37c7560f 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.yaml
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.yaml
-@@ -35,6 +35,7 @@ properties:
-           - const: mediatek,mt2701-disp-color
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.yaml
+index a5c6a91fac71..e07bce01ebdc 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,gamma.yaml
+@@ -25,6 +25,10 @@ properties:
+           - const: mediatek,mt8173-disp-gamma
+       - items:
+           - const: mediatek,mt8183-disp-gamma
++      - items:
++          - enum:
++              - mediatek,mt6795-disp-gamma
++          - const: mediatek,mt8173-disp-gamma
        - items:
            - enum:
-+              - mediatek,mt6795-disp-color
-               - mediatek,mt8183-disp-color
-               - mediatek,mt8186-disp-color
-               - mediatek,mt8188-disp-color
+               - mediatek,mt8186-disp-gamma
 -- 
 2.40.0
 
