@@ -2,175 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721CF6E003C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147056E003D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjDLUz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S229810AbjDLU4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDLUzy (ORCPT
+        with ESMTP id S229626AbjDLU4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:55:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186B9C4;
-        Wed, 12 Apr 2023 13:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681332953; x=1712868953;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pDO6FpCnkvUSXgRBpIxfmZf8s5GR0Uff/N1Rp7s+QpI=;
-  b=g/U5lEweRr7EFKYTt14qjg+qCowNcF1YZiEhFmX813Woz36qVNnFAf9W
-   XGSpHPq/H4dSsDJw5Enuv8H/maYpu1wbRCPI+t04cD3NYzSEDeZUhZtfC
-   eenpPahvpzdcp/ffzaKXp7qY5t92AuXHclnDuXAYuDZM5MkmFf5giHcqV
-   ZU0qDNkaPX0A3y28ZDFbT01JxLvO9UjhEOc6MpT4i16Gbu0NdKxal6izp
-   3KJqTYKk7OPskpNIF5huIbiMgSuH6c0Hm063bS2zRcoXohRaZq5tVqJXO
-   1elYTPKKG/FNnCbW6dSt/A0Gm9wY3ZKjYGAr/utZSZnqFQs57yW0fWEJr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="430307803"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="430307803"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 13:55:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="863460445"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="863460445"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2023 13:55:52 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 13:55:51 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 12 Apr 2023 13:55:51 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 12 Apr 2023 13:55:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=noTE0jvHQle6aaqOddd9m1n5r9D1AwSxmuW8D8h6OuGOOvDVu0+nbIR51KdPxZc7ZapLY0mVkbsxKTAG7Gs9F+krsOJhOMuLqzscd4CMiBo8YyGyRg5ztSjtVz+0d9vTS39NLM4ziwMgBCgh3S2nnZ354YaVY9QBavWi93jcH175ax1o5RukhN2Qui05ztht+QOQB8960vMEtUpjCMd2U9IBdhku7ewW3IeHMQmB24d53+B8UkvpENIW7g7JsWc8emDIJesN9gKEL8mFZvk6G6fWn4GPRcMUDdHG9KoRj+IZapju/JTbKreRq5iKkzF6MWGMK4o2AqbPeMCtQ5H1tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0kMPa4ZoKALyEqbAe150WD95ybBjrz/4FzL5+QqCf0E=;
- b=VkvfOJq//dm17OjoCWWBeseFgjRlya87JEnmDQYdJ03X+wcpGLIb4Rdioy07Gok5zVlt7PFcEPsntnk0UbG1l7d8si2U7PznTTOQEBAhjSsk+GFSRloY6jsK+zbQLA6WwF9sMsvbtlOZlgJziOEhXD8DVlnqqymazVbeJo34UgvBBXWsEu13GxtmMoumzacz4juTY9SqTbbFn/HsHov01D7ywaeMux7gBjH3VDnn51S4ysPFIxqsAolLtb6SWpbJu+l//xJyQHQrsMHUcyMoHQMuC4PEMogkK05YEqMeL1mcitpgK0m9K1u0hUUwBB1Wq4H24xt5bDaNlqq9Wa28Zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
- by PH0PR11MB4853.namprd11.prod.outlook.com (2603:10b6:510:40::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
- 2023 20:55:49 +0000
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::6222:859a:41a7:e55b]) by CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::6222:859a:41a7:e55b%2]) with mapi id 15.20.6298.030; Wed, 12 Apr 2023
- 20:55:49 +0000
-Message-ID: <677ed6c5-51fc-4b8b-d9a4-42e4cfe9006c@intel.com>
-Date:   Wed, 12 Apr 2023 13:55:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH net-next v3 3/4] net: stmmac: add Rx HWTS metadata to XDP
- receive pkt
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
+        Wed, 12 Apr 2023 16:56:19 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71667ABC
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:56:09 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F30DA20002;
+        Wed, 12 Apr 2023 20:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681332968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9yIlgn+nqUfhaQEkEPrR1FDW24JZolFKiV1qOylSnE8=;
+        b=FVpCba4anHESsRCB/9FjrlZd0UWj3m1usLesKxSpJ9NHBhCEimX3MfGeLZB7M9lhHCuG0H
+        80qNIyw5vyRgYnrXLHawB7nKDhAwmkz5bZoBtT6t7fpaizs4NngS7KMjIVj9R2YUhW48ZV
+        FjcAkuve+KO6VGScICVUiPTU8CYx2qxMZL+JvSjxl8YFJOffGY+/Hi3Nn+sBODhxD8KiYY
+        4ow3t/3C8168n1uhdQJYeC7T90WA9SFeDb3MX5oEW7SavKYPB2KZbbewPa+Bv+shzgpFkh
+        fjcPNCNA8aQIIzp/B4pbajuFX2VockxQ34WFMU/gZlvLeXe6Uo76KhoSDrGVKg==
+Date:   Wed, 12 Apr 2023 22:56:03 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <xdp-hints@xdp-project.net>
-References: <20230412094235.589089-1-yoong.siang.song@intel.com>
- <20230412094235.589089-4-yoong.siang.song@intel.com>
- <ZDbjkwGS5L9wdS5h@google.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-In-Reply-To: <ZDbjkwGS5L9wdS5h@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0063.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::40) To CO1PR11MB5089.namprd11.prod.outlook.com
- (2603:10b6:303:9b::16)
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before
+ read
+Message-ID: <20230412225603.5fba1a9e@xps-13>
+In-Reply-To: <20230412191548.ov5fufxkwqvdgrz2@CAB-WSD-L081021>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+        <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
+        <20230412094400.3c82f631@xps-13>
+        <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
+        <20230412113654.183350d0@xps-13>
+        <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
+        <20230412141824.755b2bca@xps-13>
+        <eedaaed9-0a41-2c18-9eb2-792613566986@sberdevices.ru>
+        <20230412145715.58c2be4a@xps-13>
+        <7c996832-258f-001c-56bd-87bbdf23eeaa@amlogic.com>
+        <20230412191548.ov5fufxkwqvdgrz2@CAB-WSD-L081021>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|PH0PR11MB4853:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2280f081-25b7-4c06-c81f-08db3b984b74
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3DRnJL6yKTvP9Q0UR+LlBxBpj3JZwk5lWg+DQfTnJNWhmUmOekoqQ4EpBKMITrcUEdefWkPHPdohZO0CEjdzpj8UZtUvQcE246sTGXwvum5yylq1tbxIyM6bDsKwNcjCkux1Fz+t4HMMHxYr2q/j3oBmHVNI/wj7FyQU+5M9VoI2dW0WvxO3ukoMxtTyMTBmq4K1mQjPhph+6xKtImSBinCbl9ftql10FLznnXtpQZTjpKeU1IQBT61wePTLMEDY0QX8/oksA03yXN92OkQTb6ivWKGLVaNgxvGIY9ELSGje46EUxJRjgrbybnqV3G5DubTm/mMwSFUPBxp7QxbbF8GVF3C2ToA0C/VyLpqohuHAVSgUVeJop23BAw/1Z5hYWIr7pN8i2ki1fC/zDCfGuSk+GI2cj7wZsLPKgnY3ZjdJppP1Dym+sZA/a5TYmd057fIZssrRkB/5qCjGb4NobNj9uduP+L6V6nZ20pqAfucRNMUT7w2x4TFmEdWJi0c0D2pBpyD9BZ95tK7iH362RpX/RweUlBCEQU7O61IJ6qa4ZaPP9pkwdMoW5fdPYMFZ5EIyefTXX/JD34a9WORhqXcD3ncYA5Gvo8voAGEMZmXYUikPY/PRS98JnRls7x3YqQFycdcie/ual9HO45fhFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199021)(5660300002)(7416002)(8936002)(478600001)(110136005)(31686004)(6636002)(54906003)(6666004)(41300700001)(83380400001)(4326008)(8676002)(66946007)(66556008)(6486002)(66476007)(316002)(6506007)(6512007)(186003)(53546011)(26005)(2906002)(2616005)(38100700002)(31696002)(36756003)(82960400001)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bG1hT2N3eCthQ0xSa2pqSlRxU3I2YVo2eFJ0WHFCSENoRE5FOXBrVHZzMW9W?=
- =?utf-8?B?bHozYjhwSTNwMjd2WEw0a25vSXNWOUtwT1F6c0Z3QmJBR3VHZWs3VlVpN1ZN?=
- =?utf-8?B?dTQxaEZXTDV4SVgyeFp6QzNXd0kvRUlRamhENmdrNjVhWW8yNEtUSHFjcmFO?=
- =?utf-8?B?MHduMXNnaXd2alRGakFMaElNcG5OdytYV1JuQ2NKcTVMb2JncnZTRDArQ0sx?=
- =?utf-8?B?V2ErTml5T1lxYjdQZlVTbCs1TGhCYjJ0VkFXdkt3Qm9YS3hxZXdFNkhZZWEx?=
- =?utf-8?B?YlUxYXVJbjBuSFpTSDlKVVp4WGVWNjE5YkVhc1FFMzBjemNNUDljYzQzK29w?=
- =?utf-8?B?a2M3OFFhTGFCYTE0aWVEQ1lCMTVvQ0VraC9sVFdxUU91RSt4aXIxMmRVbkxh?=
- =?utf-8?B?eDBQelUrVkplTFd6RkhHQmRhQmU2K0VTQmt4NDdtbjIwaDFYemREejYxa01V?=
- =?utf-8?B?RS9Ka0k1ak5mYUp0WG82TlZYcjgveGtsT0VMMjZlQmRxSzNaU3luT3ZxSlI5?=
- =?utf-8?B?MHFaNFpzZ3hpM1cxclB2S0tidU9QV0liUGQ5K2FITVVrejEwTFhOaGVyTnEv?=
- =?utf-8?B?RFkrbkVBdkUyQml4UWV1aHhQK0ozeEdaVUNrNUR0cE05cGNMYjlSYUJLWHpk?=
- =?utf-8?B?S2x4dUp4WlZkWnY4ZW9xT21SQnBzWVRDaGxXWm01Y3ZwOUoyVHh4VEp1eU4w?=
- =?utf-8?B?TXE4Z1NaL1Z4VGRkR2d1RFUwTVZjSkdEYU9maHliK05VbHRLdUVrV0RMaHN6?=
- =?utf-8?B?SkJnNWl0ejBlSVpVVWlZaHcwY05vSGZGalpudUYvWWZoZjhvMkV1OGc2bzZ5?=
- =?utf-8?B?alVzeE1GWFRvNmFxUXcrODY1TEF0dFBudXRzSkNYQTJVYWpOaFR1cjc3TTd4?=
- =?utf-8?B?TkcyenF0ZStvOEovOU45VDY1SG1kMlU3NXB2c0NvLzU3WkhqbXdyVmZmdjEv?=
- =?utf-8?B?b1RuWWhhR1VOcG1uYlZXOWxjWFd1NTFrdWpzSncxakN2bk1mc3FWTGIwaXRO?=
- =?utf-8?B?MjJoNDVBeVpScGFIMnR4QktxTmJ3R2FkYURhWHZPaEFHbVBJWWU0blJOdlE2?=
- =?utf-8?B?bkZndlFzS3JlUXVVQlBkbk55azIvWnZNamEza2tpdE12Z0xTZWNRTUdLdDJN?=
- =?utf-8?B?bnlaVExRSkdjTG03T0l0MlluM1U2SkZBNzFZeHUwWTh5Y1RaNGpiaURZVGlD?=
- =?utf-8?B?ZzdnZGtjT0ZWdHFIRDNjckdjUURmZWw4OVJnY1p2UVdJQllydDQya3gzbmN3?=
- =?utf-8?B?dlVXVCtXeDhSTXNVcGdxT3IrRThaY3RrY0J3TTNHTGVTamtBVTdqYlJvSEhm?=
- =?utf-8?B?bkc3dmUwRkxaYS8xN2RWdWEyUWtBM0VCK09TbExvWFE4YkdOTUtQR2kvWEJY?=
- =?utf-8?B?WXBZbGsvWDF2U3h1ZmRpS2NGQ3g0YUgzVEdnOU5aVVJMbVZ2cGFmNjAvWG1u?=
- =?utf-8?B?bVVkT0ZOWVgwbzlsNjQ1NlFLb2xPWWl2K3RQdG44SStSd0VkQ0x1YzJiRmg4?=
- =?utf-8?B?RDlpcytvcEtiZDJUcGpDRDhseW5KOEo3V1dqdzhkeTRqVi9YMTFIeHFvMXVl?=
- =?utf-8?B?djlxVHVZenZqdUNHMDJDN3R4Nml3MmlyZjJpV1R1SzlhSmxjbDJvRjYwR1B0?=
- =?utf-8?B?VXVkaElnL1J5L2RLcVFTRHpqRXFNc0JUMnFLZlliTmtwY0d6MlhIV0paSmox?=
- =?utf-8?B?UncwazAyUy9NdnBLNCtwbVUzMHRWT2M5Y0NtNTJuK3k0bGhycTNJOWhQMU1w?=
- =?utf-8?B?a0V4MTZITnJvVnRFMmFRdnpwWTJwZHZXYzlCOUNPYlRyM2RUZnlaSW5WYmdX?=
- =?utf-8?B?NXY0aWxlSFlHbCtjaGNsT2Z3SlJPRmVWMlBVQ21EY2NJNjcyeUNDdG9yYVpO?=
- =?utf-8?B?M0JFQTJTaXl4ZFRkYzRPY1JZbWRUcEQrU2VLcm5HT0tldlp3dnQwcEFEdVZn?=
- =?utf-8?B?N2I4TUc1d3NCNE5aQzk5QzdZNm5TTzJpMERPRm9XZ2tUR0hiZ1p6ZzVXUVhE?=
- =?utf-8?B?dWN2ZnYrZUtkTCtYaWRvSjhtVDdOZnJHSFZZQkVGUkNJYW5Yd2FPMlpUK2FR?=
- =?utf-8?B?WGVrWVZzS291cHV0Wm1CTEJiTmxoV0hIR2RHYlFVV2IzNFp0UnZrUkJOZlJr?=
- =?utf-8?B?cG5Ba0hOZlF5R3J0aWZBMmZiRmxTcXhXeHFQc1ZaQkRRKzFqV1dSQU1sVTlR?=
- =?utf-8?B?NVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2280f081-25b7-4c06-c81f-08db3b984b74
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 20:55:49.2453
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RBU5D3tbj6PmJybMk4E/QrsFCfmG5M2WzzC+cfNQ/NxRp+cUEqqXEsR8b7sQXeryG7V94otNvEoZOrpSgzmsl4UdLzbjWocm4zqTUV3ICig=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4853
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -178,82 +76,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dmitry,
 
+ddrokosov@sberdevices.ru wrote on Wed, 12 Apr 2023 22:15:48 +0300:
 
-On 4/12/2023 10:00 AM, Stanislav Fomichev wrote:
-> On 04/12, Song Yoong Siang wrote:
->> Add receive hardware timestamp metadata support via kfunc to XDP receive
->> packets.
->>
->> Suggested-by: Stanislav Fomichev <sdf@google.com>
->> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
->> ---
->>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 +++
->>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 26 ++++++++++++++++++-
->>  2 files changed, 28 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
->> index ac8ccf851708..826ac0ec88c6 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
->> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
->> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
->>  
->>  struct stmmac_xdp_buff {
->>  	struct xdp_buff xdp;
->> +	struct stmmac_priv *priv;
->> +	struct dma_desc *p;
->> +	struct dma_desc *np;
->>  };
->>  
->>  struct stmmac_rx_queue {
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> index f7bbdf04d20c..ed660927b628 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> @@ -5315,10 +5315,15 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->>  
->>  			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
->>  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
->> -					 buf->page_offset, buf1_len, false);
->> +					 buf->page_offset, buf1_len, true);
->>  
->>  			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
->>  				  buf->page_offset;
->> +
->> +			ctx.priv = priv;
->> +			ctx.p = p;
->> +			ctx.np = np;
->> +
->>  			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
->>  			/* Due xdp_adjust_tail: DMA sync for_device
->>  			 * cover max len CPU touch
->> @@ -7071,6 +7076,23 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv, bool enable)
->>  	}
->>  }
->>  
->> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
->> +{
->> +	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
->> +
->> +	*timestamp = 0;
->> +	stmmac_get_rx_hwtstamp(ctx->priv, ctx->p, ctx->np, timestamp);
->> +
-> 
-> [..]
-> 
->> +	if (*timestamp)
-> 
-> Nit: does it make sense to change stmmac_get_rx_hwtstamp to return bool
-> to indicate success/failure? Then you can do:
-> 
-> if (!stmmac_get_rx_hwtstamp())
-> 	reutrn -ENODATA;
+> On Wed, Apr 12, 2023 at 10:04:28PM +0800, Liang Yang wrote:
+> > Hi Miquel and Arseniy,
+> >=20
+> > On 2023/4/12 20:57, Miquel Raynal wrote: =20
+> > > [ EXTERNAL EMAIL ]
+> > >=20
+> > > Hi Arseniy,
+> > >=20
+> > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 15:22:26 +0300:
+> > >  =20
+> > > > On 12.04.2023 15:18, Miquel Raynal wrote: =20
+> > > > > Hi Arseniy,
+> > > > >=20
+> > > > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 13:14:52 +0300=
+: =20
+> > > > > > On 12.04.2023 12:36, Miquel Raynal wrote: =20
+> > > > > > > Hi Arseniy,
+> > > > > > >=20
+> > > > > > > avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +=
+0300: =20
+> > > > > > > > On 12.04.2023 10:44, Miquel Raynal wrote: =20
+> > > > > > > > > Hi Arseniy,
+> > > > > > > > >=20
+> > > > > > > > > AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:=
+58 +0300: =20
+> > > > > > > > > > This NAND reads only few user's bytes in ECC mode (not =
+full OOB), so =20
+> > > > > > > > >=20
+> > > > > > > > > "This NAND reads" does not look right, do you mean "Subpa=
+ge reads do
+> > > > > > > > > not retrieve all the OOB bytes,"? =20
+> > > > > > > > > > fill OOB buffer with zeroes to not return garbage from =
+previous reads
+> > > > > > > > > > to user.
+> > > > > > > > > > Otherwise 'nanddump' utility prints something like this=
+ for just erased
+> > > > > > > > > > page:
+> > > > > > > > > >=20
+> > > > > > > > > > ...
+> > > > > > > > > > 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff f=
+f ff
+> > > > > > > > > >    OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad =
+d3 be
+> > > > > > > > > >    OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e =
+88 6e
+> > > > > > > > > >    OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 =
+7c ff
+> > > > > > > > > >    OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa =
+2f 5e
+> > > > > > > > > >=20
+> > > > > > > > > > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.r=
+u>
+> > > > > > > > > > ---
+> > > > > > > > > >   drivers/mtd/nand/raw/meson_nand.c | 5 +++++
+> > > > > > > > > >   1 file changed, 5 insertions(+)
+> > > > > > > > > >=20
+> > > > > > > > > > diff --git a/drivers/mtd/nand/raw/meson_nand.c b/driver=
+s/mtd/nand/raw/meson_nand.c
+> > > > > > > > > > index f84a10238e4d..f2f2472cb511 100644
+> > > > > > > > > > --- a/drivers/mtd/nand/raw/meson_nand.c
+> > > > > > > > > > +++ b/drivers/mtd/nand/raw/meson_nand.c
+> > > > > > > > > > @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub=
+(struct nand_chip *nand,
+> > > > > > > > > >   static int meson_nfc_read_page_raw(struct nand_chip *=
+nand, u8 *buf,
+> > > > > > > > > >   				   int oob_required, int page)
+> > > > > > > > > >   {
+> > > > > > > > > > +	struct mtd_info *mtd =3D nand_to_mtd(nand);
+> > > > > > > > > >   	u8 *oob_buf =3D nand->oob_poi;
+> > > > > > > > > >   	int ret;
+> > > > > > > > > > +	memset(oob_buf, 0, mtd->oobsize); =20
+> > > > > > > > >=20
+> > > > > > > > > I'm surprised raw reads do not read the entire OOB? =20
+> > > > > > > >=20
+> > > > > > > > Yes! Seems in case of raw access (what i see in this driver=
+) number of OOB bytes read
+> > > > > > > > still depends on ECC parameters: for each portion of data c=
+overed with ECC code we can
+> > > > > > > > read it's ECC code and "user bytes" from OOB - it is what i=
+ see by dumping DMA buffer by
+> > > > > > > > printk(). For example I'm working with 2K NAND pages, each =
+page has 2 x 1K ECC blocks.
+> > > > > > > > For each ECC block I have 16 OOB bytes which I can access b=
+y read/write. Each 16 bytes
+> > > > > > > > contains 2 bytes of user's data and 14 bytes ECC codes. So =
+when I read page in raw mode
+> > > > > > > > controller returns 32 bytes (2 x (2 + 14)) of OOB. While OO=
+B is reported as 64 bytes. =20
+> > > > > > >=20
+> > > > > > > In all modes, when you read OOB, you should get the full OOB.=
+ The fact
+> > > > > > > that ECC correction is enabled or disabled does not matter. I=
+f the NAND
+> > > > > > > features OOB sections of 64 bytes, you should get the 64 byte=
+s.
+> > > > > > >=20
+> > > > > > > What happens sometimes, is that some of the bytes are not pro=
+tected
+> > > > > > > against bitflips, but the policy is to return the full buffer=
+. =20
+> > > > > >=20
+> > > > > > Ok, so to clarify case for this NAND controller:
+> > > > > > 1) In both ECC and raw modes i need to return the same raw OOB =
+data (e.g. user bytes
+> > > > > >     + ECC codes)? =20
+> > > > >=20
+> > > > > Well, you need to cover the same amount of data, yes. But in the =
+ECC
+> > > > > case the data won't be raw (at least not all of it). =20
+> > > >=20
+> > > > So "same amount of data", in ECC mode current implementation return=
+s only user OOB bytes (e.g.
+> > > > OOB data excluding ECC codes), in raw it returns user bytes + ECC c=
+odes. IIUC correct
+> > > > behaviour is to always return user bytes + ECC codes as OOB data ev=
+en in ECC mode ? =20
+> > >=20
+> > > If the page are 2k+64B you should read 2k+64B when OOB are requested.
+> > >=20
+> > > If the controller only returns 2k+32B, then perform a random read to
+> > > just move the read pointer to mtd->size + mtd->oobsize - 32 and
+> > > retrieve the missing 32 bytes? =20
+> >=20
+> > 1) raw read can read out the whole page data 2k+64B, decided by the len=
+ in
+> > the controller raw read command:
+> > 	cmd =3D (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
+> > after that, the missing oob bytes(not used) can be copied from
+> > meson_chip->data_buf. so the implementation of meson_nfc_read_page_raw(=
+) is
+> > like this if need.
+> > 	{
+> > 		......
+> > 		meson_nfc_read_page_sub(nand, page, 1);
+> > 		meson_nfc_get_data_oob(nand, buf, oob_buf);
+> > 		oob_len =3D (nand->ecc.bytes + 2) * nand->ecc.steps;
+> > 		memcpy(oob_buf + oob_len, meson_chip->data_buf + oob_len, mtd->oobsiz=
+e -
+> > oob_len);
+> >=20
+> > 	}
+> > 2) In ECC mode, the controller can't bring back the missing OOB bytes. =
+it
+> > can read out the user bytes and ecc bytes per meson_ooblayout_ops defin=
+e.
+> >  =20
+>=20
+> How does the Meson controller know the actual NAND flash layout when the
+> OOB is split into protected and unprotected areas, such as Free and ECC
+> areas? If the controller has a static OOB layout, where is the mapping
+> located?
 
-I would make it return the -ENODATA directly since typically bool
-true/false functions have names like "stmmac_has_rx_hwtstamp" or similar
-name that infers you're answering a true/false question.
+It's usually a set of values hardcoded in the driver. It's a per
+geometry set.
 
-That might also let you avoid zeroing the timestamp value first?
+>=20
+> > >=20
+> > > This applies to the two modes, the only difference is:
+> > > - with correction (commonly named "ECC mode"): the user bytes and ECC
+> > >    bytes should be fixed if there are any bitflips
+> > > - without correction (commonly referred as "raw mode"): no correction
+> > >    applies, if there are bitflips, give them
+> > >=20
+> > > Please mind the raw mode can be slow, it's meant for debugging and
+> > > testing, mainly. Page reads however should be fast, so if just moving
+> > > the column pointer works, then do it, otherwise we'll consider
+> > > returning FFs. =20
+>=20
+
 
 Thanks,
-Jake
+Miqu=C3=A8l
