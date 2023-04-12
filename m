@@ -2,91 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9646DFACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAA36DFAD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjDLQGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S230071AbjDLQGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjDLQGL (ORCPT
+        with ESMTP id S229558AbjDLQGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:06:11 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EB99F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:06:09 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CDigTE000728;
-        Wed, 12 Apr 2023 11:05:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=1egRiWwJZHL4D5nNXNTaNkMcKT6CJ8pERWDuG7iwTJ4=;
- b=LJC53kd7M7ZiWR7Dw+R3KrRSGFKyCG/vAzQpGXlFm/6UrK0IBplfSPehXfkZ1vZ3Wy9h
- 3zrD2LFczD7kseBrxydow78reiPtF8IZ5jfH1ptLFNVFrfdO2cb93BWJleV/n3p8OLzD
- BMr08M8v590gmuKpOW3+Hm9sITDGjnrqr//RJs8INBjrRd9DOszggrZJnFxu8n3C39xM
- HQqpJurDANEZ4TPs62OaOOa4BxeVtDHrJGcJPxXRlyrVxCDcitpylGvrOx48DClmyej3
- 1NlCCkLEYC2cC2PcO673MA80YBq1LS6hGRSvwwarqi/t/yQWBmqxWfUrL7+1UJKJbNWG gw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pu5p3p8ae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 11:05:40 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 12 Apr
- 2023 11:05:38 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Wed, 12 Apr 2023 11:05:38 -0500
-Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.238.103])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 745D811D3;
-        Wed, 12 Apr 2023 16:05:38 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v1] ALSA: hda/realtek: Add quirks for Lenovo Z13/Z16 Gen2
-Date:   Wed, 12 Apr 2023 17:05:31 +0100
-Message-ID: <20230412160531.182007-1-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: QMHOwoeDJ7euvOaN51StQEcDjDv_te6B
-X-Proofpoint-GUID: QMHOwoeDJ7euvOaN51StQEcDjDv_te6B
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 12:06:46 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D719F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:06:45 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8b46f399so30605127b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681315604;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qOZ3tRdzr0hGyj65SmYqR8EOiBJrMHU9wHV0sWwy2Pc=;
+        b=dMmMg50RH6pfkUoOxPzCVX7IU5ikGtbDFWmi2r45KgXj3VCwZ1lQFQ0bIIx1lIKc50
+         d1WFq5ChEvU+YNUSCURdJK2alRsAFNduI2SihG0yD1+2CBU/p3WMVxRopmIfzG55ooVv
+         HzaorBxvGSvBalSCOiMk8iBKIJL3W2uYkrjRACRJWafTyIaGMdzo01QjKtqsqFxFHv20
+         +fVbNuhtLK3PsF1eFNMHGRfbPXvGJL/j8HAohE2fRqQTs74Y48KXU7jHNwIVkJze/8GX
+         cEgdk9j0CRkn9iMUPQquIVeBv+4ewh6v/U8cBwSst+bZ2H2Ou1yJa8aOjt7VEPELxbY6
+         q6Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681315604;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qOZ3tRdzr0hGyj65SmYqR8EOiBJrMHU9wHV0sWwy2Pc=;
+        b=OMlTc4mHC7ILVCJUpz97URp5fIpLOYYdbEx345rn2KotlMj1BphelJiTHCRIq7z1DE
+         959Y/7Pr+vkAeFIhghqINGyXxfj9pEEkc1leB7NTmIeb+Ox2izgPG8LegEtZ44zf7H9O
+         L+Nl1x8/CaaA5rmWkIJx9A3Yp2gSHKx9SCxpvok3sypA/BStsNmgEmfYpSktLHfdVNSe
+         z7nkF7/mRHpC9789An47/rNpFUo4t0v5gXkkeUq718Hgrwqf+g0nkGEQueWegRViZkad
+         8TDAeQS0UXl+ENfmn7m8gltkJPKPkORGKEMSMRNwPW1d445kOItU0eJyWktGDBhJYIna
+         1XNw==
+X-Gm-Message-State: AAQBX9eV4NaSOkzwawCpT3SOlKAW3E2mqA1CSwLM7mFqQCke5Bbsf9zt
+        uv1RKS6oAxpxoSh1KwBLUpsSHDQ=
+X-Google-Smtp-Source: AKy350alO6Bi7nwBbBUyvXEpvPDdFjOYyG+3EN768sevyKcN5qXz8S1F1xuMmrr51w4VCv+w61ymJ58=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a25:d988:0:b0:997:c919:4484 with SMTP id
+ q130-20020a25d988000000b00997c9194484mr7803210ybg.6.1681315604689; Wed, 12
+ Apr 2023 09:06:44 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 09:06:42 -0700
+In-Reply-To: <402a3c73-d26d-3619-d69a-c90eb3f0e9ee@redhat.com>
+Mime-Version: 1.0
+References: <168098183268.96582.7852359418481981062.stgit@firesoul>
+ <168098188134.96582.7870014252568928901.stgit@firesoul> <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+ <402a3c73-d26d-3619-d69a-c90eb3f0e9ee@redhat.com>
+Message-ID: <ZDbXEqQc3MpKPmGv@google.com>
+Subject: Re: [PATCH bpf V7 1/7] selftests/bpf: xdp_hw_metadata default disable bpf_printk
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These Lenovo laptops use Realtek HDA codec combined with
-2xCS35L41 Amplifiers using I2C with External Boost.
+On 04/12, Jesper Dangaard Brouer wrote:
+>=20
+> On 12/04/2023 00.42, Stanislav Fomichev wrote:
+> > On Sat, Apr 8, 2023 at 12:24=E2=80=AFPM Jesper Dangaard Brouer
+> > <brouer@redhat.com> wrote:
+> > >=20
+> > > The tool xdp_hw_metadata can be used by driver developers
+> > > implementing XDP-hints kfuncs.  The tool transfers the
+> > > XDP-hints via metadata information to an AF_XDP userspace
+> > > process. When everything works the bpf_printk calls are
+> > > unncesssary.  Thus, disable bpf_printk by default, but
+> > > make it easy to reenable for driver developers to use
+> > > when debugging their driver implementation.
+> > >=20
+> > > This also converts bpf_printk "forwarding UDP:9091 to AF_XDP"
+> > > into a code comment.  The bpf_printk's that are important
+> > > to the driver developers is when bpf_xdp_adjust_meta fails.
+> > > The likely mistake from driver developers is expected to
+> > > be that they didn't implement XDP metadata adjust support.
+> > >=20
+> > > Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> > > ---
+> > >   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   16 +++++++++=
++++++--
+> > >   1 file changed, 14 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/to=
+ols/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> > > index 4c55b4d79d3d..980eb60d8e5b 100644
+> > > --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> > > +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> > > @@ -5,6 +5,19 @@
+> > >   #include <bpf/bpf_helpers.h>
+> > >   #include <bpf/bpf_endian.h>
+> > >=20
+> > > +/* Per default below bpf_printk() calls are disabled.  Can be
+> > > + * reenabled manually for convenience by XDP-hints driver developer,
+> > > + * when troublshooting the drivers kfuncs implementation details.
+> > > + *
+> > > + * Remember BPF-prog bpf_printk info output can be access via:
+> > > + *  /sys/kernel/debug/tracing/trace_pipe
+> > > + */
+> > > +//#define DEBUG        1
+> > > +#ifndef DEBUG
+> > > +#undef  bpf_printk
+> > > +#define bpf_printk(fmt, ...) ({})
+> > > +#endif
+> >=20
+> > Are you planning to eventually do somethike similar to what I've
+> > mentioned in [0]? If not, should I try to send a patch?
+>=20
+> See next patch:
+>  - [PATCH bpf V7 2/7] selftests/bpf: Add counters to xdp_hw_metadata
+>=20
+> where I add these counters :-)
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/pci/hda/patch_realtek.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index f554db1e7e9a4..3b9f077a227f7 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9689,6 +9689,9 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x22f1, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x22f2, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x22f3, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x2318, "Thinkpad Z13 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x2319, "Thinkpad Z16 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x231a, "Thinkpad Z16 Gen2", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x30bb, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
- 	SND_PCI_QUIRK(0x17aa, 0x30e2, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
- 	SND_PCI_QUIRK(0x17aa, 0x310c, "ThinkCentre Station", ALC294_FIXUP_LENOVO_MIC_LOCATION),
--- 
-2.34.1
-
+Oh, nice, let me take a look. I was assuming v7 is mostly the same as
+v6..
+=20
+> >=20
+> > 0: https://lore.kernel.org/netdev/CAKH8qBupRYEg+SPMTMb4h532GESG7P1QdaFJ=
+-+zrbARVN9xrdA@mail.gmail.com/
+> >=20
+>=20
