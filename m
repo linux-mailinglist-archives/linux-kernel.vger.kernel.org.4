@@ -2,137 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73936DECBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA7D6DECBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjDLHjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S229932AbjDLHkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDLHjc (ORCPT
+        with ESMTP id S229553AbjDLHjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:39:32 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E26DD2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:39:30 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C7053100018;
-        Wed, 12 Apr 2023 07:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681285168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=17BPQPrbGfoG/9Y+BnpABrCjBoUgqhojyRjXMZSD+8c=;
-        b=PfRltgJ1Ic+5NX5hMrhg2PjLHxVBR8qIDRKeEQUmT9+oRHTMJXbAourYqKl0z5uG6K6TuD
-        DcbxHoMVNnY3Jaol01OwcUCkcakHD+Glp6SQ22R2TPCE/9hINgQfScuE3msXJb6Oh7Xp4P
-        owEbhQEurMr67d639FR00rh9BlpPievAzMuoB08vtA3/wG/Fzy4Cs3uW1hTpo0kSe5Jyw7
-        s5zTNYiRtFxhVC9GlMqR0idX7pLB09VCPy9d06roQ5swBkAHoUb2jJARoVWH4n8elGKeFh
-        WT7MW9yG9I2DFhK9bjqwgwms9dnr1Zx+Y1XIcGWbqYGXb+jR7fC+eIl9mO/n6g==
-Date:   Wed, 12 Apr 2023 09:39:25 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/5] mtd: rawnand: meson: check buffer length
-Message-ID: <20230412093925.4718ac6f@xps-13>
-In-Reply-To: <20230412061700.1492474-4-AVKrasnov@sberdevices.ru>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-4-AVKrasnov@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Apr 2023 03:39:33 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43BBE56
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:39:31 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-180-BM_HQVsgMWedE-uoB0ILog-1; Wed, 12 Apr 2023 08:39:29 +0100
+X-MC-Unique: BM_HQVsgMWedE-uoB0ILog-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 12 Apr
+ 2023 08:39:26 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 12 Apr 2023 08:39:26 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Ahern' <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        "Breno Leitao" <leitao@debian.org>
+CC:     Willem de Bruijn <willemb@google.com>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "leit@fb.com" <leit@fb.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
+        "mptcp@lists.linux.dev" <mptcp@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>,
+        "matthieu.baerts@tessares.net" <matthieu.baerts@tessares.net>,
+        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>
+Subject: RE: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Thread-Topic: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Thread-Index: AQHZbIo9yiioZyVNEkW7nkcDZ6Um0a8nR9fA
+Date:   Wed, 12 Apr 2023 07:39:26 +0000
+Message-ID: <d25962b44b2d4204a7251d97c331fcf8@AcuMS.aculab.com>
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+ <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+ <ZDVLyi1PahE0sfci@gmail.com>
+ <75e3c434-eb8b-66e5-5768-ca0f906979a1@kernel.org>
+ <67831406-8d2f-feff-f56b-d0f002a95d96@kernel.dk>
+ <ea36790d-b2fe-0b4d-1bfc-be7b20b1614b@kernel.org>
+ <b56c03b3-d948-2fdf-bc5d-635ecfdf1592@kernel.dk>
+ <a9858183-8f69-7aff-51ac-122f627ba66f@kernel.org>
+In-Reply-To: <a9858183-8f69-7aff-51ac-122f627ba66f@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+RnJvbTogRGF2aWQgQWhlcm4NCj4gU2VudDogMTEgQXByaWwgMjAyMyAxNjoyOA0KLi4uLg0KPiBD
+aHJpc3RvcGgncyBwYXRjaCBzZXQgYSBmZXcgeWVhcnMgYmFjayB0aGF0IHJlbW92ZWQgc2V0X2Zz
+IGJyb2tlIHRoZQ0KPiBhYmlsaXR5IHRvIGRvIGluLWtlcm5lbCBpb2N0bCBhbmQge3MsZ31zZXRz
+b2Nrb3B0IGNhbGxzLiBJIGRpZCBub3QNCj4gZm9sbG93IHRoYXQgY2hhbmdlOyB3YXMgaXQgYSBk
+ZWxpYmVyYXRlIGludGVudCB0byBub3QgYWxsb3cgdGhlc2UNCj4gaW4ta2VybmVsIGNhbGxzIHZz
+IHdhbnRpbmcgdG8gcmVtb3ZlIHRoZSBzZXRfZnM/IGUuZy4sIGNhbiB3ZSBhZGQgYQ0KPiBraW9j
+dGwgdmFyaWFudCBmb3IgaW4ta2VybmVsIHVzZSBvZiB0aGUgQVBJcz8NCg0KSSB0aGluayB0aGF0
+IHdhcyBhIHNpZGUgZWZmZWN0LCBhbmQgd2l0aCBubyBpbi10cmVlIGluLWtlcm5lbA0KdXNlcnMg
+KGFwYXJ0IGZyb20gbGltaXRlZCBjYWxscyBpbiBicGYpIGl0IHdhcyBkZWVtZWQgYWNjZXB0YWJs
+ZS4NCihJdCBpcyBhIFBJVEEgZm9yIGFueSBjb2RlIHRyeWluZyB0byB1c2UgU0NUUCBpbiBrZXJu
+ZWwuKQ0KDQpPbmUgcHJvYmxlbSBpcyB0aGF0IG5vdCBhbGwgc29ja29wdCBjYWxscyBwYXNzIHRo
+ZSBjb3JyZWN0IGxlbmd0aC4NCkFuZCBzb21lIG9mIHRoZW0gY2FuIGhhdmUgdmVyeSBsb25nIGJ1
+ZmZlcnMuDQpOb3QgdG8gbWVudGlvbiB0aGUgb25lcyB0aGF0IGFyZSByZWFkLW1vZGlmeS13cml0
+ZS4NCg0KQSBwbGF1c2libGUgc29sdXRpb24gaXMgdG8gcGFzcyBhICdmYXQgcG9pbnRlcicgdGhh
+dCBjb250YWlucw0Kc29tZSwgb3IgYWxsLCBvZjoNCgktIEEgdXNlcnNwYWNlIGJ1ZmZlciBwb2lu
+dGVyLg0KCS0gQSBrZXJuZWwgYnVmZmVyIHBvaW50ZXIuDQoJLSBUaGUgbGVuZ3RoIHN1cHBsaWVk
+IGJ5IHRoZSB1c2VyLg0KCS0gVGhlIGxlbmd0aCBvZiB0aGUga2VybmVsIGJ1ZmZlci4NCgk9IFRo
+ZSBudW1iZXIgb2YgYnl0ZXMgdG8gY29weSBvbiBjb21wbGV0aW9uLg0KRm9yIHNpbXBsZSB1c2Vy
+IHJlcXVlc3RzIHRoZSBzeXNjYWxsIGVudHJ5L2V4aXQgY29kZQ0Kd291bGQgY29weSB0aGUgZGF0
+YSB0byBhIHNob3J0IG9uLXN0YWNrIGJ1ZmZlci4NCktlcm5lbCB1c2VycyBqdXN0IHBhc3MgdGhl
+IGtlcm5lbCBhZGRyZXNzLg0KT2RkIHJlcXVlc3RzIGNhbiBqdXN0IHVzZSB0aGUgdXNlciBwb2lu
+dGVyLg0KDQpQcm9iYWJseSBuZWVkcyBhY2Nlc3NvcnMgdGhhdCBhZGQgaW4gYW4gb2Zmc2V0Lg0K
+DQpJdCBtaWdodCBhbHNvIGJlIHRoYXQgc29tZSBvZiB0aGUgcHJvYmxlbWF0aWMgc29ja29wdA0K
+d2VyZSBpbiBkZWNuZXQgLSBub3cgcmVtb3ZlZC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQg
+QWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVz
+LCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:57 +0300:
-
-> With this chip, buffer length is limited by hardware, so check it before
-> command execution to avoid length trim.
-
-What is "this chip"? Are you talking about the controller itself? Is
-there any specific SoC version targeted?
-
->=20
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
-on_nand.c
-> index 45b53d420aed..f84a10238e4d 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -543,6 +543,9 @@ static int meson_nfc_read_buf(struct nand_chip *nand,=
- u8 *buf, int len)
->  	u32 cmd;
->  	u8 *info;
-> =20
-> +	if (len > NFC_CMD_RAW_LEN)
-> +		return -EINVAL;
-> +
->  	info =3D kzalloc(PER_INFO_BYTE, GFP_KERNEL);
->  	if (!info)
->  		return -ENOMEM;
-> @@ -571,6 +574,9 @@ static int meson_nfc_write_buf(struct nand_chip *nand=
-, u8 *buf, int len)
->  	int ret =3D 0;
->  	u32 cmd;
-> =20
-> +	if (len > NFC_CMD_RAW_LEN)
-> +		return -EINVAL;
-> +
->  	ret =3D meson_nfc_dma_buffer_setup(nand, buf, len, NULL,
->  					 0, DMA_TO_DEVICE);
->  	if (ret)
-> @@ -1269,6 +1275,7 @@ static int meson_nand_attach_chip(struct nand_chip =
-*nand)
->  	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
->  	struct mtd_info *mtd =3D nand_to_mtd(nand);
->  	int nsectors =3D mtd->writesize / 1024;
-> +	int raw_writesize;
->  	int ret;
-> =20
->  	if (!mtd->name) {
-> @@ -1280,6 +1287,13 @@ static int meson_nand_attach_chip(struct nand_chip=
- *nand)
->  			return -ENOMEM;
->  	}
-> =20
-> +	raw_writesize =3D mtd->writesize + mtd->oobsize;
-> +	if (raw_writesize > NFC_CMD_RAW_LEN) {
-> +		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
-> +			raw_writesize, NFC_CMD_RAW_LEN);
-> +		return -EINVAL;
-> +	}
-> +
->  	if (nand->bbt_options & NAND_BBT_USE_FLASH)
->  		nand->bbt_options |=3D NAND_BBT_NO_OOB;
-> =20
-
-
-Thanks,
-Miqu=C3=A8l
