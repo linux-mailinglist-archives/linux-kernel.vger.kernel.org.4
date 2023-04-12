@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BE16DFCA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAA36DFCA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjDLRZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S230194AbjDLRZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjDLRZB (ORCPT
+        with ESMTP id S229477AbjDLRZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:25:01 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6034EEA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:24:48 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-242cb01a788so1163760a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681320287; x=1683912287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KKaO1cc6CIWs24NhirNiWA4O/KpNriiBwvpslyVSCVQ=;
-        b=MsEoUCC18gKG1ugjbCxJ5Vx4mbZWgAFiWn/rhfnzm0/G8l5mqdKOCM228ApK7QX9nM
-         +xHXuWtUg4/t30Nniyc2ShYa4wXVS8sFlmZ44iyj9B/4Bc3R11kC1yAL2+yCzLED0GSZ
-         4HtmBEFABZ8YRJhYCojZL/9JQrSY6M4+XAF4bGSiY4TDZMUn7fIzvIR106FucO9apqo/
-         iGn+E7EhcdJopQEYUjXVknP+4EP1UEcLCUYTmr3Yarlwg+/GQ+bql7rEuFrqK6nJs0Ql
-         SXoYcmVnbTFJ8GSt5825hwFUWLuLx64B0tuJtuFTDa+dKAAwIyxmNvDJ9fnaI1D7yg6X
-         Gx+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681320287; x=1683912287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKaO1cc6CIWs24NhirNiWA4O/KpNriiBwvpslyVSCVQ=;
-        b=OZyou7SluqtHUBhMG3SMNjTKyvA2wqV23DFRygPexwDEt2U68PElUWYmp3Uiyxljdb
-         Y+yACzPJNo8OYkid0QeIqfQygif5QCFF8IQBcOfoofI+OOqEYUtp+j2AFZiNuj82mAfc
-         9QEyaTebrcJ6dc08tlPH2klEuC2rs8zIVxe5FUIvqJu9tvzJqhlOXNOKyAluV0hNSRq2
-         CEDOnKJicgCVneCotVe4cwoNGRIJ9ebjyJp8DGeNgYW5yOlvnUVsjbrFnKo/HW3k9+vK
-         wEOkmEfZMnMlUUoqPOg+ZDNLVPZBJv3ga4uNiOtKeuOVjxPI3ISizO42h9z3JJAjv/dO
-         VsMg==
-X-Gm-Message-State: AAQBX9einF+kJrq+/MLmVu8FEi2B0JzZJjp2wGD5958z6JghpdVB8zJ4
-        7UoZd6ABOLMyhoQRSF04s/YprA==
-X-Google-Smtp-Source: AKy350YjXfbDAUqe4ubJKlFmaiXA1YMXlc2SqhXABMWU6ZcIT2xvPP8lzqJAt142+eKBSK4on1KvTw==
-X-Received: by 2002:a17:90a:357:b0:246:60ed:742d with SMTP id 23-20020a17090a035700b0024660ed742dmr2681959pjf.0.1681320287640;
-        Wed, 12 Apr 2023 10:24:47 -0700 (PDT)
-Received: from [10.200.10.123] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090aab0200b00246a7401d23sm1735143pjq.41.2023.04.12.10.24.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 10:24:47 -0700 (PDT)
-Message-ID: <60a168b7-2e86-26b0-a903-fab38b74411d@bytedance.com>
+        Wed, 12 Apr 2023 13:25:35 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DF32D59;
+        Wed, 12 Apr 2023 10:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681320333; x=1712856333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fg6uGIM3FM+B+1guXhrCn+MxDSVjY3zwLFWXWk63VL8=;
+  b=eQP/ZMR1APpIs6Pq9ia47D6oxRFvizp3vOnBmtUiAIQinEP/o9QhH5jN
+   k/WwKOmtzg4AR5viSxV8koWKijVpveyMg1OliGrPMeVmQFHIvCcbn0J04
+   28/g9vFrgFLjSYMsbRUF3xmx9ebNuXjLziu3/p8NOkWzrPhNqfycU09dX
+   3MXQ7WufYFBFVCb6D9oKuCbX+MypJ0F7tSO4mqFEvMlDX9OXJsl/AtHgv
+   ceED+bcdTc2+2GWmjUscZJTkc41dKe2q/YfOR7nmf7a7LZCeQjKgaQrJg
+   xl03gabS83bLXzxKnVD9B9xeDUqUGXlLY3DnqKsyDke2M2NQQROdK7+Fg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="406794192"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="406794192"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:25:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719468741"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="719468741"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 10:25:20 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmeDf-000XwN-0G;
+        Wed, 12 Apr 2023 17:25:19 +0000
 Date:   Thu, 13 Apr 2023 01:24:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, libaokun1@huawei.com
+Subject: Re: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return
+ void
+Message-ID: <202304130044.d3iOG59z-lkp@intel.com>
+References: <20230412124126.2286716-7-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] x86: make __get_wchan() use arch_stack_walk()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     keescook@chromium.org, dave.hansen@linux.intel.com, bp@alien8.de,
-        mingo@redhat.com, tglx@linutronix.de, rostedt@goodmis.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
- <20230330081552.54178-3-zhengqi.arch@bytedance.com>
- <20230408050822.ezdbhc6j7zuvutrm@treble>
- <20230412131533.GH628377@hirez.programming.kicks-ass.net>
- <20230412132327.GA629496@hirez.programming.kicks-ass.net>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230412132327.GA629496@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412124126.2286716-7-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,51 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Baokun,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412124126.2286716-7-libaokun1%40huawei.com
+patch subject: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return void
+config: x86_64-randconfig-a002-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130044.d3iOG59z-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+        git checkout 87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130044.d3iOG59z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/inode.c:1640:7: warning: variable 'reserved' set but not used [-Wunused-but-set-variable]
+           bool reserved = false;
+                ^
+   1 warning generated.
 
 
-On 2023/4/12 21:23, Peter Zijlstra wrote:
-> On Wed, Apr 12, 2023 at 03:15:33PM +0200, Peter Zijlstra wrote:
->> On Fri, Apr 07, 2023 at 10:08:22PM -0700, Josh Poimboeuf wrote:
->>> On Thu, Mar 30, 2023 at 04:15:52PM +0800, Qi Zheng wrote:
->>>> Make __get_wchan() use arch_stack_walk() directly to
->>>> avoid open-coding of unwind logic.
->>>>
->>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>>
->>> Can we just have a shared version of __get_wchan() for all
->>> CONFIG_ARCH_STACKWALK arches?
->>
->> Didn't I do that a while back ? I can't seem to actually find the
->> patch-set though :/
-> 
-> Could be this series:
-> 
->    https://lkml.kernel.org/r/20211022150933.883959987@infradead.org
+vim +/reserved +1640 fs/ext4/inode.c
 
-Oh, I vaguely remember the beginning because I was trying to fix
-get_wchan() not supporting ORC unwinder on x86 [1], and then you sent a
-patch set, and the patch [2] in this patch set tried to implement the
-shared version of __get_wchan().
+df22291ff0fde0 Aneesh Kumar K.V 2008-09-08  1623  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1624  /*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1625   * ext4_insert_delayed_block - adds a delayed block to the extents status
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1626   *                             tree, incrementing the reserved cluster/block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1627   *                             count or making a pending reservation
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1628   *                             where needed
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1629   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1630   * @inode - file containing the newly added block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1631   * @lblk - logical block to be added
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1632   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1633   * Returns 0 on success, negative error code on failure.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1634   */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1635  static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1636  {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1637  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+87f992eeab9cd8 Baokun Li        2023-04-12  1638  	int ret = 0;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1639  	bool allocated = false;
+6fed83957f21ef Jeffle Xu        2021-08-23 @1640  	bool reserved = false;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1641  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1642  	/*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1643  	 * If the cluster containing lblk is shared with a delayed,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1644  	 * written, or unwritten extent in a bigalloc file system, it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1645  	 * already been accounted for and does not need to be reserved.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1646  	 * A pending reservation must be made for the cluster if it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1647  	 * shared with a written or unwritten extent and doesn't already
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1648  	 * have one.  Written and unwritten extents can be purged from the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1649  	 * extents status tree if the system is under memory pressure, so
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1650  	 * it's necessary to examine the extent tree if a search of the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1651  	 * extents status tree doesn't get a match.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1652  	 */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1653  	if (sbi->s_cluster_ratio == 1) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1654  		ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1655  		if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1656  			goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1657  		reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1658  	} else {   /* bigalloc */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1659  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1660  			if (!ext4_es_scan_clu(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1661  					      &ext4_es_is_mapped, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1662  				ret = ext4_clu_mapped(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1663  						      EXT4_B2C(sbi, lblk));
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1664  				if (ret < 0)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1665  					goto errout;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1666  				if (ret == 0) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1667  					ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1668  					if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1669  						goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1670  					reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1671  				} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1672  					allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1673  				}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1674  			} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1675  				allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1676  			}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1677  		}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1678  	}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1679  
+87f992eeab9cd8 Baokun Li        2023-04-12  1680  	ext4_es_insert_delayed_block(inode, lblk, allocated);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1681  errout:
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1682  	return ret;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1683  }
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1684  
 
-[1]. https://lore.kernel.org/all/20211008111626.271115116@infradead.org/
-[2]. https://lore.kernel.org/all/20211008111626.392918519@infradead.org/
-
-> 
-> And this here:
-> 
->    https://lore.kernel.org/lkml/CAHk-=wjHbKfck1Ws4Y0pUZ7bxdjU9eh2WK0EFsv65utfeVkT9Q@mail.gmail.com/
-> 
-> might be why I dropped it.. I can't remember.
-
-Didn't realize I had replied to this email before.
-
-But I also don't see why you dropped it. Looks like you have fixed the
-UAF problem.
-
-So do we still need to implement a shared version of __get_wchan()?
-If we still need it, do I need to send it again? Or just pick your
-previous patch directly? Both are fine to me. :)
-
-Thanks,
-Qi
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
