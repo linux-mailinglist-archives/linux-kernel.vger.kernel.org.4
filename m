@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817296DFCA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280C86DFCA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjDLRYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S231548AbjDLRYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjDLRYP (ORCPT
+        with ESMTP id S229638AbjDLRYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:24:15 -0400
+        Wed, 12 Apr 2023 13:24:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6051726
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933FE1BE4
         for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:24:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADD356111D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF47FC433EF;
-        Wed, 12 Apr 2023 17:24:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDDB631A2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 17:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4965DC433A1;
+        Wed, 12 Apr 2023 17:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1681320254;
-        bh=CX6YilH/8zhE+Vf2j+TcQaxBuh4IeLrz7u3P6BNYfYk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qc50VmGZ/7VDTYwBHSrLm7/8uBLi1WqEnaFsx3TbGt1ZXMiu0zsxjaiDz8oJ9dz8+
-         cV0XzDTt2gmhNV8nVbkxIm8+s6fokkdogYkU+pyeFog43sg5mkxSdMoKh+K6B1Yfja
-         ydGau+Nn2G2dc5yJwUXXYF/tM7rE07Eace5PZ303vgwj6heR/wcpSVxp5vAAhbvh9U
-         Ms378hdJ3+r0kdTF4odtqYhjSh2RadTz6RyPFylCySx1U/NkquWh3w+oPj+RT6Fhg1
-         IuIssaUDvgPQcdc2jmue6Ip78Wauu6FSS3nEXFaJZSJ1KpeTsCfAIbzRHh/cE97M9c
-         rZV1dpj8YJaCA==
+        bh=yZE3NaZNWGex7AsabXWKzco4PSx2Xxsuc1liFr6+lK8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rFCA96UFwB7JCZC7odAG2lpfvCiX8M3sewQ1lShv0FAI3+MNVHqaX0W1BDBo8Kb7E
+         0IpsEtpCXVH1vazJj1HTAN4sdg63WbLJVv4jTNRaaZMIujhZY4A3rEDLhbTWvPUGhK
+         xMcFecgN+MkYpu7qjz9m5beWzFPIbCjZwdAy282+/v/c4ZM1IqjVptDsEuqj4/EfnX
+         E/jfiWgXL3Mnaa30JRfcKvhM4GP//PgXaEktaB8nG8xmBhAFxXUsmhVpEsAoIlK1eY
+         tJl4n9rb2EvZSCLauXSmGaf5j6+wH+9Y5s+YWICWGCsDQdsuLNHDdsHhrTO3hijVkf
+         HmFIUWOZ5sDZA==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>, frederic@kernel.org,
         paulmck@kernel.org, keescook@chromium.org
-Subject: [PATCH 0/3] noinstr fixes
-Date:   Wed, 12 Apr 2023 10:24:05 -0700
-Message-Id: <cover.1681320026.git.jpoimboe@kernel.org>
+Subject: [PATCH 1/3] context_tracking: Fix KCSAN noinstr violation
+Date:   Wed, 12 Apr 2023 10:24:06 -0700
+Message-Id: <dc93f45abdec90c171108b4b590b7fff5790963c.1681320026.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1681320026.git.jpoimboe@kernel.org>
+References: <cover.1681320026.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -53,18 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a few noinstr violations reported by objtool.
+With KCSAN enabled, even empty inline stubs can be out-of-lined.
 
-Josh Poimboeuf (3):
-  context_tracking: Fix KCSAN noinstr violation
-  sched: Fix KCSAN noinstr violation
-  lkdtm/stackleak: Fix noinstr violation
+Force the context_tracking_guest_exit() stub inline.
 
- drivers/misc/lkdtm/stackleak.c   | 6 ++++++
+Fixes the following warnings:
+
+  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1be: call to context_tracking_guest_exit() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: svm_vcpu_enter_exit+0x85: call to context_tracking_guest_exit() leaves .noinstr.text section
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
  include/linux/context_tracking.h | 2 +-
- include/linux/sched/task_stack.h | 2 +-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index d4afa8508a80..5ae3abd767b4 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -97,7 +97,7 @@ static inline int exception_enter(void) { return 0; }
+ static inline void exception_exit(enum ctx_state prev_ctx) { }
+ static inline int ct_state(void) { return -1; }
+ static __always_inline bool context_tracking_guest_enter(void) { return false; }
+-static inline void context_tracking_guest_exit(void) { }
++static __always_inline void context_tracking_guest_exit(void) { }
+ #define CT_WARN_ON(cond) do { } while (0)
+ #endif /* !CONFIG_CONTEXT_TRACKING_USER */
+ 
 -- 
 2.39.2
 
