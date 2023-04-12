@@ -2,198 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853EB6DED0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34A16DED16
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjDLHz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S229745AbjDLH7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjDLHz4 (ORCPT
+        with ESMTP id S229531AbjDLH7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:55:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF55C3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681286154; x=1712822154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L4GRltKsC62Qcydnf2jlGg6qLDDSoBJwtyiadtuogUc=;
-  b=z2pDQDv/s+4oidr72Ok4FseUekdLwUoKfBjf3Gw+UObv4M5GC0ygJy+C
-   ZolvU8yDTosK3mCQ/ngUxnTZWD8Z+uNCgILt3LRHxuI96RtPhue0tTQlb
-   sQCEAiVdPI59eJ8R1K4Ipnpzy/zCIfuAB0SHPM9RzhHKaQisVDpDd2Pjt
-   y/M5e4/oAH7cCppXOfrMd1y7FAJdmJr5Iu2UocSVY2QiOFLUiw/77aIZf
-   ba8dlKqerdRBILDoBgwbZ61MbZZ9puA+2E6ch61OVCkCeLDbzcqslQC3e
-   flObQNTebHAtbi5xpy6yGGjHX3PeaD42w8B2FAC/BpHRbQWbo5ja0uuri
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,338,1673938800"; 
-   d="asc'?scan'208";a="220513235"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Apr 2023 00:55:54 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Apr 2023 00:55:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Apr 2023 00:55:49 -0700
-Date:   Wed, 12 Apr 2023 08:55:34 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-CC:     <linux-kernel@vger.kernel.org>, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 2/3] cacheinfo: Check cache properties are present in
- DT
-Message-ID: <20230412-cone-mousiness-23326e149592@wendy>
-References: <20230412071809.12670-1-pierre.gondois@arm.com>
- <20230412071809.12670-3-pierre.gondois@arm.com>
+        Wed, 12 Apr 2023 03:59:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28883138
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681286298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zjQ1TJWbIPwilwTgfQ/RtAH10ukmLWPiORRxbKkLh3A=;
+        b=ZNYsyT5tD5ciNAfytDiJZNeFoF4uDLDeO/FFvlCB9m6y9cKY/fXNfAGdQvoSDdbBVdgcOn
+        caz9LFoJhk/quxZbFEqDZtlCFzUb2f09HLet05CFBubRbJszPndCeZqFOM8S1zOknNnygG
+        Sk1/pLnxREBB6s0CkSH0YEo6dXqBd3M=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-507-ykc-yXxMPZWLK0l7iYrS1Q-1; Wed, 12 Apr 2023 03:58:17 -0400
+X-MC-Unique: ykc-yXxMPZWLK0l7iYrS1Q-1
+Received: by mail-wr1-f71.google.com with SMTP id j6-20020adfa546000000b002d58b4b7698so1581723wrb.19
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:58:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681286296; x=1683878296;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zjQ1TJWbIPwilwTgfQ/RtAH10ukmLWPiORRxbKkLh3A=;
+        b=K3M91erL4pjHEJQ9jJyXGebiOBw3s12e1PKW9Dijye3Z98avUfFfCLOnJtZ0S1t2jk
+         bZqgVIcN1lP5EtS+hVY2W9atN4WoUvphZBRcgGXXZP8M/vQdoqtbmu701EGvptE59OGf
+         R1l/L9KAU/xG1QmkLxMHeYUrpIZlqV6we/h5t2yZnFph3mMwm5PHotjn/zj3xYglOACZ
+         jKVSs+ZHBKORSBDzeL43OeOlXZ1+dJKKa53Dx6mQqfARZkw0Qqyz+fOZ/UNmX/DxDNVY
+         BaAo6Q9UB2aY/5Ur9Agk/KX0FJVVn5k5rLAovwfFbTJ17KW7UfiXS78CeHgeYrwBPXDY
+         voyQ==
+X-Gm-Message-State: AAQBX9fpwwEOk4sk11JoXPdCyWour8aREMjPYONiBp51WQZ8C2Avnk7/
+        eSVqUQ1URjqh+nJggQbEnOMAT6RK30Z92zea76s4XYdCcBqWC6aLCivmsZ1pdyZ7YOfeaY4W5kG
+        XGDMPHYvqoTDjEjih8obZMB3gdmneWaiR
+X-Received: by 2002:adf:f28f:0:b0:2d1:9c50:5746 with SMTP id k15-20020adff28f000000b002d19c505746mr3807989wro.12.1681286296161;
+        Wed, 12 Apr 2023 00:58:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a8RtnbnqlJPtjhTYzbkGi+1dUdGHSmBOkt5INe/PdMi75idUMdVkOgACCGhJCtvZtIy+ZIYw==
+X-Received: by 2002:adf:f28f:0:b0:2d1:9c50:5746 with SMTP id k15-20020adff28f000000b002d19c505746mr3807980wro.12.1681286295853;
+        Wed, 12 Apr 2023 00:58:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4b00:c6fa:b613:dbdc:ab? (p200300cbc7024b00c6fab613dbdc00ab.dip0.t-ipconnect.de. [2003:cb:c702:4b00:c6fa:b613:dbdc:ab])
+        by smtp.gmail.com with ESMTPSA id a15-20020a5d4d4f000000b002cfe685bfd6sm16548101wru.108.2023.04.12.00.58.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 00:58:15 -0700 (PDT)
+Message-ID: <34202ae5-efee-9345-c3de-544304d1ebb4@redhat.com>
+Date:   Wed, 12 Apr 2023 09:58:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tpBqFoyWWsu1/B9s"
-Content-Disposition: inline
-In-Reply-To: <20230412071809.12670-3-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RESEND] mm/vmscan: simplify shrink_node()
+Content-Language: en-US
+To:     Haifeng Xu <haifeng.xu@shopee.com>, akpm@linux-foundation.org
+Cc:     willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230411061757.12041-1-haifeng.xu@shopee.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230411061757.12041-1-haifeng.xu@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---tpBqFoyWWsu1/B9s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Pierre!
-
-On Wed, Apr 12, 2023 at 09:18:05AM +0200, Pierre Gondois wrote:
-> If a Device Tree (DT) is used, the presence of cache properties is
-> assumed. Not finding any is not considered. For arm64 platforms,
-> cache information can be fetched from the clidr_el1 register.
-> Checking whether cache information is available in the DT
-> allows to switch to using clidr_el1.
->=20
-> init_of_cache_level()
-> \-of_count_cache_leaves()
-> will assume there a 2 cache leaves (L1 data/instruction caches), which
-> can be different from clidr_el1 information.
->=20
-> cache_setup_of_node() tries to read cache properties in the DT.
-> If there are none, this is considered a success. Knowing no
-> information was available would allow to switch to using clidr_el1.
-
-Hmm, w/ this series I am still seeing a:
-[    0.306736] Early cacheinfo failed, ret =3D -22
-
-Not finding any cacheinfo is totally valid, right?
-
-A basic RISC-V QEMU setup is sufficient to reproduce, for instance:
-| $(qemu) \
-| 	-m 2G -smp 5 \
-| 	-M virt -nographic \
-| 	-kernel $(vmlinux_bin)
-
-Cheers,
-Conor.
-
-> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count =
-cache leaves")
-> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@sp=
-ud/
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+On 11.04.23 08:17, Haifeng Xu wrote:
+> The difference between sc->nr_reclaimed and nr_reclaimed is computed
+> three times. Introduce a new variable to record the value, so it only
+> needs to be computed once.
+> 
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
 > ---
->  drivers/base/cacheinfo.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->=20
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index e7ad6aba5f97..6749dc6ebf50 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -78,6 +78,9 @@ bool last_level_cache_is_shared(unsigned int cpu_x, uns=
-igned int cpu_y)
->  }
-> =20
->  #ifdef CONFIG_OF
-> +
-> +static bool of_check_cache_nodes(struct device_node *np);
-> +
->  /* OF properties to query for a given cache type */
->  struct cache_type_info {
->  	const char *size_prop;
-> @@ -205,6 +208,11 @@ static int cache_setup_of_node(unsigned int cpu)
->  		return -ENOENT;
->  	}
-> =20
-> +	if (!of_check_cache_nodes(np)) {
-> +		of_node_put(np);
-> +		return -ENOENT;
-> +	}
-> +
->  	prev =3D np;
-> =20
->  	while (index < cache_leaves(cpu)) {
-> @@ -229,6 +237,25 @@ static int cache_setup_of_node(unsigned int cpu)
->  	return 0;
->  }
-> =20
-> +static bool of_check_cache_nodes(struct device_node *np)
-> +{
-> +	struct device_node *next;
-> +
-> +	if (of_property_present(np, "cache-size")   ||
-> +	    of_property_present(np, "i-cache-size") ||
-> +	    of_property_present(np, "d-cache-size") ||
-> +	    of_property_present(np, "cache-unified"))
-> +		return true;
-> +
-> +	next =3D of_find_next_cache_node(np);
-> +	if (next) {
-> +		of_node_put(next);
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static int of_count_cache_leaves(struct device_node *np)
->  {
->  	unsigned int leaves =3D 0;
-> @@ -260,6 +287,9 @@ int init_of_cache_level(unsigned int cpu)
->  	struct device_node *prev =3D NULL;
->  	unsigned int levels =3D 0, leaves, level;
-> =20
-> +	if (!of_check_cache_nodes(np))
-> +		goto err_out;
-> +
->  	leaves =3D of_count_cache_leaves(np);
->  	if (leaves > 0)
->  		levels =3D 1;
-> --=20
-> 2.25.1
->=20
 
---tpBqFoyWWsu1/B9s
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDZj6wAKCRB4tDGHoIJi
-0gzZAQCtwuxJautzYqFuN7VC/ZYl6n7d0LPrNnGsMKUqwAi5aQEAyhOatu3EX+Mn
-zZYrA/9ULoFq3teGuZ56XdEU0BrIJAg=
-=GpdU
------END PGP SIGNATURE-----
+-- 
+Thanks,
 
---tpBqFoyWWsu1/B9s--
+David / dhildenb
+
