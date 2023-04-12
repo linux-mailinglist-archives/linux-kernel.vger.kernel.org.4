@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8901A6DE9E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF1E6DE9EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjDLDdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 23:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S229578AbjDLDhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 23:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLDdm (ORCPT
+        with ESMTP id S229481AbjDLDhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 23:33:42 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749F030CA
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 20:33:40 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso10292921pjp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 20:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681270420; x=1683862420;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0uORCuChqwLHpOxIbmgNJnio3yJBiEdHJ+lWbTU5t64=;
-        b=EY+T4dWr20dwDkfIfDkqK5o56CYiz4LwEfmJpb0SPfOVQcgdlDGRxPoPhzpe9nhs2I
-         X9zx1XtdEqsX00yIlgoI2O0Ks8eXdahMZqMEx3gLZsRCQn5gurfFQz1abmI9Bfv2soDk
-         W/HP3vprqx5lDD5w6TDWcqIcK++O6cI0L2P2T680tHYlcb9qMRS1HIRfhqEy/2OH0qEk
-         itiifvd2SbG5hYD+Nae+/tiey7VoNdNQaa3jFoc3KEroqGSCIDTNnx1z9OQAMdVnvo5g
-         WFqks0Z96WiMP/SBm5URB89pPkclBWGqHfp9Q7P+Iu2TiIfbi6018Wk5bcDznWouaRv+
-         9V1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681270420; x=1683862420;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0uORCuChqwLHpOxIbmgNJnio3yJBiEdHJ+lWbTU5t64=;
-        b=UTjhShyP6jgf2NijdmXQFa8O+x95uKpQU01Wy3X8NqaRe9QcrZZoCLpH6clzP8JgV+
-         zl3IL9lIRwCxv+3zXoprnL4TF8xvLUhNkgofi2IAp+Am67TSNZFbPtOyJkmVGClalcZA
-         gGFQy7DXQIcNTz4YFN/iqQGFdZu8QP16Xq+VM7ZmGSXfI/djNFCDuPJjCuebZeQ9zE0v
-         UDKHozPc5VHex9IsGCWz4jvYNXh5LzvU3HdnD2z/WphrX24VTA5dKp96tXyszUTBfEuB
-         aQOoiVBCBqT61FvPNf6BeR4jnsC9zB6M21wLBKJL1NGSLjDWET0OEJl0u+Yv4OYREOxk
-         XyKg==
-X-Gm-Message-State: AAQBX9dpVEN/etWBenifF94d74zXr9jInQlzXE0+xVy4k5tgG3m/oHgt
-        sZVrZs5vILOLq+gquHgDVzXmtZCILuU=
-X-Google-Smtp-Source: AKy350ZbJZZCiKk16AIojU3xiHZrRyc+NyDKl5JXSo7FSKABAywGcw8P2iH+mr9t5BQYq8pkjyruSw==
-X-Received: by 2002:a17:90b:1a85:b0:23d:10f2:bda2 with SMTP id ng5-20020a17090b1a8500b0023d10f2bda2mr22489817pjb.30.1681270419930;
-        Tue, 11 Apr 2023 20:33:39 -0700 (PDT)
-Received: from mi-HP-Pro-Tower-480-G9-PCI-Desktop-PC.. ([43.224.245.246])
-        by smtp.gmail.com with ESMTPSA id bf2-20020a170902b90200b001a64ed4621csm2930603plb.182.2023.04.11.20.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 20:33:39 -0700 (PDT)
-From:   Chuang Zhang <zhangchuang1909@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, cmllamas@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        zhangchuang3 <zhangchuang3@xiaomi.com>
-Subject: [PATCH] BINDER:Allow tracing of binder_txn_latency_free
-Date:   Wed, 12 Apr 2023 11:33:32 +0800
-Message-Id: <20230412033332.342521-1-zhangchuang1909@gmail.com>
+        Tue, 11 Apr 2023 23:37:05 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89AE30C8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 20:37:04 -0700 (PDT)
+Received: from foreverowl-virtual-machine.localdomain ([10.12.170.216])
+        (user=m202071378@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33C3ZdbP003695-33C3ZdbS003695
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 12 Apr 2023 11:35:39 +0800
+From:   YAN SHI <m202071378@hust.edu.cn>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     YAN SHI <m202071378@hust.edu.cn>,
+        kernel test robot <lkp@intel.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] Regulator: stm32-pwr: fix of_iomap leak
+Date:   Wed, 12 Apr 2023 11:35:29 +0800
+Message-Id: <20230412033529.18890-1-m202071378@hust.edu.cn>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-AUTH-USER: m202071378@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangchuang3 <zhangchuang3@xiaomi.com>
+Smatch reports:
+drivers/regulator/stm32-pwr.c:166 stm32_pwr_regulator_probe() warn:
+'base' from of_iomap() not released on lines: 151,166.
 
-The author forgot to EXPORT and need Export
-binder_txn_latency_free trace point.
+In stm32_pwr_regulator_probe(), base is not released
+when devm_kzalloc() fails to allocate memory or
+devm_regulator_register() fails to register a new regulator device,
+which may cause a leak.
 
-Signed-off-by: zhangchuang3 <zhangchuang3@xiaomi.com>
+To fix this issue, replace of_iomap() with 
+devm_platform_ioremap_resource(). devm_platform_ioremap_resource() 
+is a specialized function for platform devices.
+It allows 'base' to be automatically released whether the probe
+function succeeds or fails.
+
+Besides, use IS_ERR(base) instead of !base 
+as the return value of devm_platform_ioremap_resource() 
+can either be a pointer to the remapped memory or 
+an ERR_PTR() encoded error code if the operation fails.
+
+Fixes: dc62f951a6a8 ("regulator: stm32-pwr: Fix return value check in stm32_pwr_regulator_probe()")
+Signed-off-by: YAN SHI <m202071378@hust.edu.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304111750.o2643eJN-lkp@intel.com/
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
- drivers/android/binder.c | 1 +
- 1 file changed, 1 insertion(+)
+The issue is found by static analysis, and the patch remains untest.
+---
+v1->v2: Remove unused variable 'np'.
+ drivers/regulator/stm32-pwr.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index fb56bfc45096..320cf08805d4 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -6604,5 +6604,6 @@ device_initcall(binder_init);
+diff --git a/drivers/regulator/stm32-pwr.c b/drivers/regulator/stm32-pwr.c
+index 2a42acb7c24e..e5dd4db6403b 100644
+--- a/drivers/regulator/stm32-pwr.c
++++ b/drivers/regulator/stm32-pwr.c
+@@ -129,17 +129,16 @@ static const struct regulator_desc stm32_pwr_desc[] = {
  
- #define CREATE_TRACE_POINTS
- #include "binder_trace.h"
-+EXPORT_TRACEPOINT_SYMBOL_GPL(binder_txn_latency_free);
+ static int stm32_pwr_regulator_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
+ 	struct stm32_pwr_reg *priv;
+ 	void __iomem *base;
+ 	struct regulator_dev *rdev;
+ 	struct regulator_config config = { };
+ 	int i, ret = 0;
  
- MODULE_LICENSE("GPL v2");
+-	base = of_iomap(np, 0);
+-	if (!base) {
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base)) {
+ 		dev_err(&pdev->dev, "Unable to map IO memory\n");
+-		return -ENOMEM;
++		return PTR_ERR(base);
+ 	}
+ 
+ 	config.dev = &pdev->dev;
 -- 
 2.34.1
 
