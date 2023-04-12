@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10ADD6DF7D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41266DF7E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDLN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S229882AbjDLOBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjDLN6x (ORCPT
+        with ESMTP id S229799AbjDLOBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:58:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B383F0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qYl5ekyLj7iQo8GlRLOVDEB8fB577eS6HixCK1lG4No=; b=orZuSzpUOPEWh+QSjssey7Xg2/
-        p9j7M+8XFzvErQ6S1ZCL/QeuBlghz2x/b/Omg2ky4zfBLABZk69RLHLO8UUvslAHzXGD88ljeRMjR
-        mZrMyz0N3QN0J6o5XNMOHYI3puAbM9f4FhasfVMiy/1xh+m3OQ7VE67ETaMNxEpRpHRppKocpChUW
-        kuGGzlSqctuTiLjhQQrM2+PQ+NUySa93PkDMxzHyJyE8ePCzxBU/76ox5pWSZm5wpr3kbfxV29WSy
-        gdCxBi/hmC2e2PzE5IBo/+53aYn4zeGCCGhUTSvNFQRxOPS5uojmR9zu+uBl5YmFudX2yuSIRH2+4
-        uWmoldYg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmazV-00DwJs-1P;
-        Wed, 12 Apr 2023 13:58:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5FC73300274;
-        Wed, 12 Apr 2023 15:58:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1B67F2095F655; Wed, 12 Apr 2023 15:58:28 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 15:58:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Nitin Tekchandani <nitin.tekchandani@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Yu Chen <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
-Message-ID: <20230412135828.GB629496@hirez.programming.kicks-ass.net>
-References: <20230327053955.GA570404@ziqianlu-desk2>
- <20230412115936.GC628377@hirez.programming.kicks-ass.net>
+        Wed, 12 Apr 2023 10:01:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8265BBC;
+        Wed, 12 Apr 2023 07:01:15 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CBpQua006625;
+        Wed, 12 Apr 2023 14:00:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Kx0xEj5ibby/4YuMZ3PzpN3/KHRATd6Xy9DE1Qil7Eg=;
+ b=pWvt5t4AolRa+kNa+YAy8QoAx8BEVTRWGjhXobGpXKn/5pRELhoDoIGG+JS8sqew1giZ
+ 1v5UaHzPFZ7ZyE0gMHd3wRvXDPttwEtl4P6DcXN8Tv0xcXIQXOAn8YYVZ0I24dKvbZCv
+ l3ewPyy3FR+5UjJz9nOilLPxFbKtc4562d2tZM7pVvuSL33240tnjMNSPE8addpDv7Mi
+ bzAMWx/+o79rsOLGu+nPwyuH3JwPJfabn25FnPSyHqe/X4kmgGO0l4F2f0Ig4sZJOzul
+ Jh2jAAzw8gt4FkfXeW4vArFEnfXDxC3A/66Fjdr7y3nekDD1ne7r5r9yc7wwar3/9vNW cA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqnq0xjy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 14:00:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CE0YPW022752
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 14:00:34 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
+ 2023 07:00:33 -0700
+Message-ID: <4e81bfdc-c20a-9e54-7d1f-40bd9f91c758@quicinc.com>
+Date:   Wed, 12 Apr 2023 08:00:33 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412115936.GC628377@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
+Content-Language: en-US
+To:     <daniel@ffwll.ch>
+CC:     <sfr@canb.auug.org.au>, <greg@kroah.com>, <ogabbay@kernel.org>,
+        <jacek.lawrynowicz@linux.intel.com>, <quic_pkanojiy@quicinc.com>,
+        <mani@kernel.org>, <airlied@redhat.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>
+References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xD7agUj8X9ud9rybRARwnD0uaoLZloVG
+X-Proofpoint-GUID: xD7agUj8X9ud9rybRARwnD0uaoLZloVG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_05,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ phishscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxlogscore=962
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120123
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:59:36PM +0200, Peter Zijlstra wrote:
-> On Mon, Mar 27, 2023 at 01:39:55PM +0800, Aaron Lu wrote:
-> > When using sysbench to benchmark Postgres in a single docker instance
-> > with sysbench's nr_threads set to nr_cpu, it is observed there are times
-> > update_cfs_group() and update_load_avg() shows noticeable overhead on
-> > cpus of one node of a 2sockets/112core/224cpu Intel Sapphire Rapids:
-> > 
-> >     10.01%     9.86%  [kernel.vmlinux]        [k] update_cfs_group
-> >      7.84%     7.43%  [kernel.vmlinux]        [k] update_load_avg
-> > 
-> > While cpus of the other node normally sees a lower cycle percent:
-> > 
-> >      4.46%     4.36%  [kernel.vmlinux]        [k] update_cfs_group
-> >      4.02%     3.40%  [kernel.vmlinux]        [k] update_load_avg
-> > 
-> > Annotate shows the cycles are mostly spent on accessing tg->load_avg
-> > with update_load_avg() being the write side and update_cfs_group() being
-> > the read side.
-> > 
-> > The reason why only cpus of one node has bigger overhead is: task_group
-> > is allocated on demand from a slab and whichever cpu happens to do the
-> > allocation, the allocated tg will be located on that node and accessing
-> > to tg->load_avg will have a lower cost for cpus on the same node and
-> > a higer cost for cpus of the remote node.
-> > 
-> > Tim Chen told me that PeterZ once mentioned a way to solve a similar
-> > problem by making a counter per node so do the same for tg->load_avg.
+On 4/12/2023 7:57 AM, Jeffrey Hugo wrote:
+> This reverts commit 566fc96198b4bb07ca6806386956669881225271.
 > 
-> Yeah, I send him a very similar patch (except horrible) some 5 years ago
-> for testing.
+> This exposes a userspace API that is still under debate.  Revert the
+> change before the uAPI gets exposed to avoid making a mistake.  QAIC is
+> otherwise still functional.
 > 
-> > After this change, the worst number I saw during a 5 minutes run from
-> > both nodes are:
-> > 
-> >      2.77%     2.11%  [kernel.vmlinux]        [k] update_load_avg
-> >      2.72%     2.59%  [kernel.vmlinux]        [k] update_cfs_group
-> 
-> Nice!
-> 
-> > Another observation of this workload is: it has a lot of wakeup time
-> > task migrations and that is the reason why update_load_avg() and
-> > update_cfs_group() shows noticeable cost. Running this workload in N
-> > instances setup where N >= 2 with sysbench's nr_threads set to 1/N nr_cpu,
-> > task migrations on wake up time are greatly reduced and the overhead from
-> > the two above mentioned functions also dropped a lot. It's not clear to
-> > me why running in multiple instances can reduce task migrations on
-> > wakeup path yet.
-> 
-> If there is *any* idle time, we're rather agressive at moving tasks to
-> idle CPUs in an attempt to avoid said idle time. If you're running at
-> about the number of CPUs there will be a fair amount of idle time and
-> hence significant migrations.
-> 
-> When you overload, there will no longer be idle time and hence no more
-> migrations.
-> 
-> > Reported-by: Nitin Tekchandani <nitin.tekchandani@intel.com>
-> > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
-> 
-> If you want to make things more complicated you can check
-> num_possible_nodes()==1 on boot and then avoid the indirection, but
+> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+> ---
 
-... finishing emails is hard :-)
+Daniel,
 
-I think I meant to say we should check if there's measurable overhead on
-single-node systems before we go overboard or somesuch.
+Assuming you find this acceptable, would you please merge it?
 
+Sorry, but I'm still working through an internal process for my drm-misc 
+commit access.  I anticipate having that resolved prior to future changes.
 
+-Jeff
