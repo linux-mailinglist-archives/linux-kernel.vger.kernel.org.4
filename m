@@ -2,220 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E75D6DF1E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8387C6DF1E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDLKYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S230111AbjDLKZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDLKYr (ORCPT
+        with ESMTP id S229877AbjDLKZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:24:47 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7497911B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:24:44 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso54225e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681295083; x=1683887083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxun6ZVm+ttJejAjpxCebQILRWh3ItaNHDjL2I+kovw=;
-        b=vZlFw6Qh8QV93J5XVFpRDYwwe3qvBJl2dGvAsl8YA4myXVIFlmjj7aDWnrK7OH4BT5
-         fKCpZYkXjXDzsjryjJZRy+DtN2Hbhdal7GlqSvEY1C46/7/QRCdyJFMh0+ZQXkY2aUrD
-         BcSVSUyXzUhoX4IZYkAev7mIHTmrLICSEu10sGRTcMoEREO/1lB+aQPfITFSkytn5iAz
-         /hLB06CUrCk4I3obgQU3PzTXxWaiw0HyLqNlhDbL7pAvtwwfsfGYdkcAz+Y8OOLQ/vIE
-         6Tj48GSto68nguo/L5XX4xPleOOo0xGWIzC5W/thZoXALAKa6Mxw8P6fxMaRD8Dgqcoh
-         ZxLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681295083; x=1683887083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qxun6ZVm+ttJejAjpxCebQILRWh3ItaNHDjL2I+kovw=;
-        b=h7ym4TDsisMRNQYI9hgj/h8bmRoNlpSY+MrPo4ECI26a//FI/X+YoDoZ7Fb6p79TYX
-         KxiBnFDJcGcuQJhuxxWU6RGoOS9vzgZ2lGssPUDU1PxYV7ObUzb2tj8eWfga4wEfvHR7
-         PImTE2J74tpKBhW26RnhJWd04qkxc0+O1DSJ837VjKzlW+DWBtJCPTdbTUTG3KY0p/hq
-         5xW/Q6ba8SNVvJTxeHy7f8j9mjVWLk55WoILw3dsRW+9O1Ekj9hVL3iWGQfEN/MGjS6D
-         X7du9VOB+bgpMSvu6OuhKKe19WEAnU2qOzDoqyClVK+x9WV4POAKOdLDQFMXN+TpoNRR
-         pl2Q==
-X-Gm-Message-State: AAQBX9ciKRpYKEZh13ojHQJK+svXRphPVAwuvzAqgwtJ3Ii4tKeDWfwV
-        si4XTQQEF4/zP6AgkTFlVegcScezdlqNoPvwLiWhQQ==
-X-Google-Smtp-Source: AKy350bHxVQq/8UVMu5U97LLFyEkw0iLPISoHvuakkOLyQlL/Rp9DQdgQl0m77rxSmjh8W2KAdI+C8ABbwqe7JbelJQ=
-X-Received: by 2002:a05:600c:4450:b0:3f0:9e90:a20d with SMTP id
- v16-20020a05600c445000b003f09e90a20dmr86835wmn.6.1681295082838; Wed, 12 Apr
- 2023 03:24:42 -0700 (PDT)
+        Wed, 12 Apr 2023 06:25:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793746A78
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:25:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 36CD31F6E6;
+        Wed, 12 Apr 2023 10:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681295102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XG+1Xbp26fkiUaredRvGGa6A0c7Rq35i97tuNyl6amg=;
+        b=m9EsDvKXKDw4Vwnc2asfsGFpOKEd+1INnddJi7BkPNMWzjbZ4EJVqXsIiF00I+lZcBu5cY
+        uE1VzwtwrYgrVLTLh+wAM+H2GXWavYQ5xYY0CeRGDsYgISXVmnwy7twlzTbAbTEDixLYxc
+        z+NE8NbzCDyNGZBuH6eMgFOEqxVE9ac=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7478132C7;
+        Wed, 12 Apr 2023 10:25:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6m5ENv2GNmTCGAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 12 Apr 2023 10:25:01 +0000
+Message-ID: <5e75d8ed-6950-1c16-02eb-1894b90bfffc@suse.com>
+Date:   Wed, 12 Apr 2023 12:25:01 +0200
 MIME-Version: 1.0
-References: <00000000000080a2d405f8aea527@google.com> <ZC8Nqs9ZSqMKbHa9@phenom.ffwll.local>
-In-Reply-To: <ZC8Nqs9ZSqMKbHa9@phenom.ffwll.local>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Wed, 12 Apr 2023 12:24:30 +0200
-Message-ID: <CANp29Y4V7LsaJk0h3GyWV-chE8YkwM2qX33_hy9ZF5si8ZLdDg@mail.gmail.com>
-Subject: Re: [syzbot] [dri?] WARNING in vkms_get_vblank_timestamp
-To:     syzbot <syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com>,
-        airlied@gmail.com, dri-devel@lists.freedesktop.org,
-        hamohammed.sa@gmail.com, linux-kernel@vger.kernel.org,
-        melissa.srw@gmail.com, rodrigosiqueiramelo@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Cc:     daniel@ffwll.ch
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v5 07/15] x86/mtrr: replace vendor tests in MTRR code
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Kelley <mikelley@microsoft.com>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-8-jgross@suse.com>
+ <20230412084541.GIZDZvtcMnWYJ7Kh6a@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230412084541.GIZDZvtcMnWYJ7Kh6a@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------rP2bLboDrdHC193A0qrLsOJM"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 8:59=E2=80=AFPM Daniel Vetter <daniel@ffwll.ch> wrot=
-e:
->
-> On Thu, Apr 06, 2023 at 10:57:48AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    4b0f4525dc4f Add linux-next specific files for 20230331
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D13ea0159c80=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D85cc4b935a1=
-f7194
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D75cc0f9f7e632=
-4dd2501
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15cb3659c=
-80000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/8d06bb015df3/d=
-isk-4b0f4525.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/6a1c1ebf3724/vmli=
-nux-4b0f4525.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/4bb2b8d6cd7d=
-/bzImage-4b0f4525.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com
->
-> Should be fixed with f2c7ca890182 ("drm/atomic-helper: Don't set deadline
-> for modesets"). And maybe also 6f1ccbf07453 ("drm/vblank: Fix for drivers
-> that do not drm_vblank_init()").
->
-> Would be great if you can confirm. The regression was introduced in
-> d39e48ca80c0 ("drm/atomic-helper: Set fence deadline for vblank") if my
-> guess is correct.
-> -Daniel
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------rP2bLboDrdHC193A0qrLsOJM
+Content-Type: multipart/mixed; boundary="------------iiZEXn4fxKbVh50FCppWvlMP";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Michael Kelley <mikelley@microsoft.com>
+Message-ID: <5e75d8ed-6950-1c16-02eb-1894b90bfffc@suse.com>
+Subject: Re: [PATCH v5 07/15] x86/mtrr: replace vendor tests in MTRR code
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-8-jgross@suse.com>
+ <20230412084541.GIZDZvtcMnWYJ7Kh6a@fat_crate.local>
+In-Reply-To: <20230412084541.GIZDZvtcMnWYJ7Kh6a@fat_crate.local>
 
-Let's ask the bot to retest the reproducer
+--------------iiZEXn4fxKbVh50FCppWvlMP
+Content-Type: multipart/mixed; boundary="------------Hc8jQcf2jMXpMCZsnrmmikk2"
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.gi=
-t
-master
+--------------Hc8jQcf2jMXpMCZsnrmmikk2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->
-> >
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 6019 at drivers/gpu/drm/vkms/vkms_crtc.c:103 vkms_=
-get_vblank_timestamp+0x1cf/0x240 drivers/gpu/drm/vkms/vkms_crtc.c:103
-> > Modules linked in:
-> > CPU: 1 PID: 6019 Comm: syz-executor.1 Not tainted 6.3.0-rc4-next-202303=
-31-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 03/02/2023
-> > RIP: 0010:vkms_get_vblank_timestamp+0x1cf/0x240 drivers/gpu/drm/vkms/vk=
-ms_crtc.c:103
-> > Code: ce 73 fc e8 53 e9 63 fc 4c 89 e1 48 ba 00 00 00 00 00 fc ff df 48=
- c1 e9 03 80 3c 11 00 75 65 49 89 04 24 eb c4 e8 b1 ce 73 fc <0f> 0b eb bb =
-e8 d8 80 c6 fc e9 de fe ff ff e8 0e 81 c6 fc e9 78 fe
-> > RSP: 0018:ffffc9000b3873d8 EFLAGS: 00010293
-> > RAX: 0000000000000000 RBX: 0000004e19fc6e8a RCX: 0000000000000000
-> > RDX: ffff8880756257c0 RSI: ffffffff850f429f RDI: 0000000000000006
-> > RBP: ffff88801dc84000 R08: 0000000000000006 R09: 0000004e19fc6e8a
-> > R10: 0000004e19fc6e8a R11: 0000000000000000 R12: ffffc9000b387540
-> > R13: 0000004e19fc6e8a R14: 0000000000004e20 R15: ffffffff850f40d0
-> > FS:  00007f5372809700(0000) GS:ffff8880b9900000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00000000202fc000 CR3: 0000000027361000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  drm_crtc_get_last_vbltimestamp+0x102/0x1a0 drivers/gpu/drm/drm_vblank.=
-c:877
-> >  drm_crtc_next_vblank_start+0x13f/0x2b0 drivers/gpu/drm/drm_vblank.c:10=
-06
-> >  set_fence_deadline drivers/gpu/drm/drm_atomic_helper.c:1531 [inline]
-> >  drm_atomic_helper_wait_for_fences+0x1b4/0x780 drivers/gpu/drm/drm_atom=
-ic_helper.c:1578
-> >  drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:2007 [inl=
-ine]
-> >  drm_atomic_helper_commit+0x1bd/0x370 drivers/gpu/drm/drm_atomic_helper=
-.c:1979
-> >  drm_atomic_commit+0x20a/0x300 drivers/gpu/drm/drm_atomic.c:1503
-> >  drm_client_modeset_commit_atomic+0x69b/0x7e0 drivers/gpu/drm/drm_clien=
-t_modeset.c:1045
-> >  drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_clien=
-t_modeset.c:1148
-> >  pan_display_atomic drivers/gpu/drm/drm_fb_helper.c:1690 [inline]
-> >  drm_fb_helper_pan_display+0x28f/0x970 drivers/gpu/drm/drm_fb_helper.c:=
-1750
-> >  fb_pan_display+0x2fb/0x6c0 drivers/video/fbdev/core/fbmem.c:924
-> >  bit_update_start+0x49/0x1f0 drivers/video/fbdev/core/bitblit.c:387
-> >  fbcon_switch+0xbcf/0x1380 drivers/video/fbdev/core/fbcon.c:2169
-> >  redraw_screen+0x2bd/0x740 drivers/tty/vt/vt.c:965
-> >  fbcon_modechanged+0x526/0x620 drivers/video/fbdev/core/fbcon.c:2704
-> >  fbcon_update_vcs+0x3e/0x50 drivers/video/fbdev/core/fbcon.c:2749
-> >  do_fb_ioctl+0x6d7/0x740 drivers/video/fbdev/core/fbmem.c:1125
-> >  fb_ioctl+0xeb/0x150 drivers/video/fbdev/core/fbmem.c:1202
-> >  vfs_ioctl fs/ioctl.c:51 [inline]
-> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
-> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
-> >  __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f5371a8c0f9
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89=
- f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 =
-ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f5372809168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > RAX: ffffffffffffffda RBX: 00007f5371bac050 RCX: 00007f5371a8c0f9
-> > RDX: 0000000020000000 RSI: 0000000000004601 RDI: 0000000000000005
-> > RBP: 00007f5371ae7b39 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffd0e5e571f R14: 00007f5372809300 R15: 0000000000022000
-> >  </TASK>
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/ZC8Nqs9ZSqMKbHa9%40phenom.ffwll.local.
+T24gMTIuMDQuMjMgMTA6NDUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gU2F0LCBB
+cHIgMDEsIDIwMjMgYXQgMDg6MzY6NDRBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IE1vZGVybiBDUFVzIGFsbCBzaGFyZSB0aGUgc2FtZSBNVFJSIGludGVyZmFjZSBpbXBs
+ZW1lbnRlZCB2aWENCj4+IGdlbmVyaWNfbXRycl9vcHMuDQo+Pg0KPj4gQXQgc2V2ZXJhbCBw
+bGFjZXMgaW4gTVRSUiBjb2RlIHRoaXMgZ2VuZXJpYyBpbnRlcmZhY2UgaXMgZGVkdWNlZCB2
+aWENCj4+IGlzX2NwdShJTlRFTCkgdGVzdHMsIHdoaWNoIGlzIG9ubHkgd29ya2luZyBkdWUg
+dG8gWDg2X1ZFTkRPUl9JTlRFTA0KPj4gYmVpbmcgMCAodGhlIGlzX2NwdSgpIG1hY3JvIGlz
+IHRlc3RpbmcgbXRycl9pZi0+dmVuZG9yLCB3aGljaCBpc24ndA0KPj4gZXhwbGljaXRseSBz
+ZXQgaW4gZ2VuZXJpY19tdHJyX29wcykuDQo+Pg0KPj4gRml4IHRoYXQgYnkgcmVwbGFjaW5n
+IHRoZSBpc19jcHUoSU5URUwpIHRlc3RzIHdpdGggdGVzdGluZyBmb3IgbXRycl9pZg0KPj4g
+dG8gYmUgJmdlbmVyaWNfbXRycl9vcHMuDQo+IA0KPiBSZXBsYWNlIHdpdGg6DQo+IA0KPiAi
+VGVzdCB0aGUgZ2VuZXJpYyBDUFUgZmVhdHVyZSBYODZfRkVBVFVSRV9NVFJSIGluc3RlYWQu
+Ig0KPiANCj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5j
+IGIvYXJjaC94ODYva2VybmVsL2NwdS9tdHJyL210cnIuYw0KPj4gaW5kZXggMWMxOWQ2N2Rk
+YWIzLi40NmFhZTY5ZDI1OWUgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1
+L210cnIvbXRyci5jDQo+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5j
+DQo+PiBAQCAtMTA4LDE0ICsxMDgsMTIgQEAgc3RhdGljIGludCBoYXZlX3dyY29tYih2b2lk
+KQ0KPj4gICAvKiAgVGhpcyBmdW5jdGlvbiByZXR1cm5zIHRoZSBudW1iZXIgb2YgdmFyaWFi
+bGUgTVRSUnMgICovDQo+PiAgIHN0YXRpYyB2b2lkIF9faW5pdCBzZXRfbnVtX3Zhcl9yYW5n
+ZXMoYm9vbCB1c2VfZ2VuZXJpYykNCj4+ICAgew0KPj4gLQl1bnNpZ25lZCBsb25nIGNvbmZp
+ZyA9IDAsIGR1bW15Ow0KPj4gKwl1bnNpZ25lZCBsb25nIGNvbmZpZywgZHVtbXk7DQo+PiAg
+IA0KPj4gICAJaWYgKHVzZV9nZW5lcmljKQ0KPj4gICAJCXJkbXNyKE1TUl9NVFJSY2FwLCBj
+b25maWcsIGR1bW15KTsNCj4+IC0JZWxzZSBpZiAoaXNfY3B1KEFNRCkgfHwgaXNfY3B1KEhZ
+R09OKSkNCj4+IC0JCWNvbmZpZyA9IDI7DQo+PiAtCWVsc2UgaWYgKGlzX2NwdShDWVJJWCkg
+fHwgaXNfY3B1KENFTlRBVVIpKQ0KPj4gLQkJY29uZmlnID0gODsNCj4+ICsJZWxzZQ0KPj4g
+KwkJY29uZmlnID0gbXRycl9pZi0+dmFyX3JlZ3M7DQo+PiAgIA0KPj4gICAJbnVtX3Zhcl9y
+YW5nZXMgPSBjb25maWcgJiBNVFJSX0NPTkZJR19OVU1fVkFSX01BU0s7DQo+PiAgIH0NCj4g
+DQo+ICBGcm9tIHByZXZpb3VzIHJldmlldyB3aGljaCB5b3UndmUgbWlzc2VkIHRvIGluY29y
+cG9yYXRlOg0KPiANCj4gIlNpbmNlIHlvdSdyZSB0b3VjaGluZyB0aGlzIGZ1bmN0aW9uLCB5
+b3UgbWlnaHQgc2ltcGx5IGV4cGFuZCBpdHMgYm9keSBpbg0KPiBpdHMgb25seSBjYWxsIHNp
+dGUgaW4gbXRycl9icF9pbml0KCksIHB1dCBhIGNvbW1lbnQgYWJvdmUgdGhlIGV4cGFuZGVk
+DQo+IGNvZGUgYW5kIHJlbW92ZSB0aGF0IGZ1bmN0aW9uLg0KPiANCj4gVGhhdCBpcywgaWYg
+d2UncmUgZ29pbmcgdG8gZG8gdGhlIC0+dmFyX3JlZ3MgdGhpbmcuIg0KPiANCg0KT2gsIHNv
+cnJ5LiBXaWxsIGRvIGl0Lg0KDQoNCkp1ZXJnZW4NCg==
+--------------Hc8jQcf2jMXpMCZsnrmmikk2
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------Hc8jQcf2jMXpMCZsnrmmikk2--
+
+--------------iiZEXn4fxKbVh50FCppWvlMP--
+
+--------------rP2bLboDrdHC193A0qrLsOJM
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQ2hv0FAwAAAAAACgkQsN6d1ii/Ey98
+sAgAg2B/LB2qGeNC9eYHsAPK94utR4kq/M9RZUhtZksmeCYUh3OFz5oWRdoHocpLaxBm8unWBmMj
+NczqWai0hGVpWJllbQb7Hq3ERyrxvCmqk81WnMKYFkUbX8D98bNNHR6d48/wTMyEO+nunX1AohGj
+m3/3kSPFOG9ErxgupVBiHFjVrXUuQ2QcBvlmJ+cTOHnvVApIbddn9Qh0wXpoIMchUFlKuLdjukQC
+jVK7Ma6HHNSLtKgxcZ+7w7RSe/HFaLyv7rZQMWvhwLnmTHDbsHSZ+G6U3eGNESYYHvaLEkWLQ/uj
+GNa3KdwUuYYIKaakReH4iFolNzV44g2Kw+uWWvo6UQ==
+=fwIo
+-----END PGP SIGNATURE-----
+
+--------------rP2bLboDrdHC193A0qrLsOJM--
