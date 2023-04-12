@@ -2,134 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087736DF6E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6126DF6E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjDLNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S230291AbjDLNWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjDLNVV (ORCPT
+        with ESMTP id S229484AbjDLNWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:21:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B27B810C2;
-        Wed, 12 Apr 2023 06:20:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0D16D75;
-        Wed, 12 Apr 2023 06:21:40 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB12E3F73F;
-        Wed, 12 Apr 2023 06:20:54 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 14:20:48 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
-        Tushar.Khandelwal@arm.com, viresh.kumar@linaro.org,
-        jassisinghbrar@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mailbox : arm,mhuv2: Allow for more RX
- interrupts
-Message-ID: <ZDawMI0d2vv/rrRh@e120937-lin>
-References: <20230329153936.394911-1-cristian.marussi@arm.com>
- <20230329153936.394911-2-cristian.marussi@arm.com>
- <20230329174431.yga3c233sazimane@bogus>
- <ZCVIVhtSLKTHs+to@e120937-lin>
- <20230412131521.GA1830888-robh@kernel.org>
+        Wed, 12 Apr 2023 09:22:08 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170958A75;
+        Wed, 12 Apr 2023 06:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681305714; x=1712841714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tq0l1fHeAs4nVKmblmjii4w6uTzZLvcJhUEt4dDgpHY=;
+  b=aA9tIMEHo9MXk1x8VSqQqJKUBn0EeGobQSvl3/yttqfclJ32jUmM/LOw
+   uX8NsdJLGV0HDtgo92T8/4LH2NQ5YTmc9H/pZvqOQZqvSnU9ATZKiIfLH
+   ZCG1KUWWfYbkSowU2dlCeHcK2AmnhgMbVp9GbUvjLM8WdpMV3jGK56kZV
+   CXcHFLq5iMm9jJ0RFQxRVtrYEWX9YQomZyW4cTh4b6BktSgVY57JlmqPq
+   PYPB7NSJEkUYhWqmdl2xXi9zTYjfPvkUwnc0ZFD0FGTq2hHFfk0467PnH
+   Mme/qt0yTlf6dSCEvqPJxdbKk/dwp4yxMiw8i/PO2UgceeHQ3dQP4Hjhy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332589997"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332589997"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:21:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639230005"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="639230005"
+Received: from chanse1-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.80])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:21:31 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/22] selftests/resctrl: Fixes, cleanups, and rewritten CAT test
+Date:   Wed, 12 Apr 2023 16:21:00 +0300
+Message-Id: <20230412132122.29452-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412131521.GA1830888-robh@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 08:15:21AM -0500, Rob Herring wrote:
-> On Thu, Mar 30, 2023 at 09:29:23AM +0100, Cristian Marussi wrote:
-> > On Wed, Mar 29, 2023 at 06:44:31PM +0100, Sudeep Holla wrote:
-> > > On Wed, Mar 29, 2023 at 04:39:35PM +0100, Cristian Marussi wrote:
-> > > > The ARM MHUv2 Receiver block can indeed support more interrupts, up to the
-> > > > maximum number of available channels, but anyway no more than the maximum
-> > > > number of supported interrupt for an AMBA device.
-> > > > 
-> > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > > > ---
-> > > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > > > Cc: devicetree@vger.kernel.org
-> > > > 
-> > > >  .../devicetree/bindings/mailbox/arm,mhuv2.yaml      | 13 +++++++++----
-> > > >  1 file changed, 9 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml b/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
-> > > > index a4f1fe63659a..5a57f4e2a623 100644
-> > > > --- a/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
-> > > > +++ b/Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml
-> > > > @@ -69,10 +69,15 @@ properties:
-> > > >  
-> > > >    interrupts:
-> > > >      description: |
-> > > > -      The MHUv2 controller always implements an interrupt in the "receiver"
-> > > > -      mode, while the interrupt in the "sender" mode was not available in the
-> > > > -      version MHUv2.0, but the later versions do have it.
-> > > > -    maxItems: 1
-> > > > +      The MHUv2 controller always implements at least an interrupt in the
-> > > > +      "receiver" mode, while the interrupt in the "sender" mode was not
-> > > > +      available in the version MHUv2.0, but the later versions do have it.
-> > > > +      In "receiver" mode, beside a single combined interrupt, there could be
-> > > > +      multiple interrupts, up to the number of implemented channels but anyway
-> > > > +      no more than the maximum number of interrupts potentially supported by
-> > > > +      AMBA.
-> > > > +    minItems: 1
-> > > > +    maxItems: 9
-> > > 
-> > 
-> > Hi,
-> > 
-> > > I am not sure 9 is the correct value here. IIUC it is just what Linux defines
-> > > as AMBA_NR_IRQS. Looking at the history it was bumped from 2 to 9 for use
-> > > by PL330 DMA driver. I couldn't find anything to relate this 9 in any
-> > > AMBA or other related specification.
-> > > 
-> > 
-> > Yes, I could not find either where the 9 comes from, but it is what
-> > currently each amba device is limited to, at the software level, in terms of
-> > interrupts that can be detected.
-> 
-> IIRC, the PL330 can have an interrupt per context with up to 8 contexts 
-> and then 1 global interrupt.
-> 
-> > 
-> > > Ideally I would say we don't know what the max here. We just have a platform
-> > > implementing 2 interrupts now. Do we for with 2 for now and change it if some
-> > > new users require more in the future ?
-> > > 
-> > 
-> > By the spec seems to me that the maximum number of interrupts are equal to
-> > the maximum possible channels (124), or one combined interrupt.
-> > 
-> > But these in turn, as said, are capped by the AMBA_NR_IRQS and I have
-> > only seen one system using 2. (for which I need this series to work)
-> > 
-> > > I will leave that to the DT maintainers but 9 is simply random based on Linux
-> > > code so I would rather choose some other random number with a better reasoning
-> > > than 9 as AMBA code in the kernel is limiting it to 9.
-> > > 
-> > 
-> > Agreed. Aiming to describe any possible hw in the DT, I would say 124 at
-> > this point. (even though implausible not to use the combined interrupt
-> > at that point...)
-> 
-> Then use 124, but please describe how you get that in the description.
-> 
+Here is a series with some fixes and cleanups to resctrl selftests and
+rewrite of CAT test into something that really tests CAT working or not
+condition.
 
-Ok, thanks, I'll do.
-Cristian
+I know that this series will conflict with some of patches from
+Shaopeng Tan that so far have not made it into the kselftest tree. Due
+to CAT test rewrite done in this series, some of those patches would no
+longer be relevant anyway but some of them are still very valid (I've
+not tried to reinvent the fixes in Shaopeng's series in this series).
+
+Ilpo Järvinen (22):
+  selftests/resctrl: Add resctrl.h into build deps
+  selftests/resctrl: Check also too low values for CBM bits
+  selftests/resctrl: Make span unsigned long everywhere
+  selftests/resctrl: Express span in bytes
+  selftests/resctrl: Remove duplicated preparation for span arg
+  selftests/resctrl: Don't use variable argument list for ->setup()
+  selftests/resctrl: Remove "malloc_and_init_memory" param from
+    run_fill_buf()
+  selftests/resctrl: Split run_fill_buf() to alloc, work, and dealloc
+    helpers
+  selftests/resctrl: Remove start_buf local variable from buffer alloc
+    func
+  selftests/resctrl: Don't pass test name to fill_buf
+  selftests/resctrl: Add flush_buffer() to fill_buf
+  selftests/resctrl: Remove test type checks from cat_val()
+  selftests/resctrl: Refactor get_cbm_mask()
+  selftests/resctrl: Create cache_alloc_size() helper
+  selftests/resctrl: Replace count_bits with count_consecutive_bits()
+  selftests/resctrl: Exclude shareable bits from schemata in CAT test
+  selftests/resctrl: Pass the real number of tests to show_cache_info()
+  selftests/resctrl: Move CAT/CMT test global vars to func they are used
+  selftests/resctrl: Read in less obvious order to defeat prefetch
+    optimizations
+  selftests/resctrl: Split measure_cache_vals() function
+  selftests/resctrl: Split show_cache_info() to test specific and
+    generic parts
+  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
+
+ tools/testing/selftests/resctrl/Makefile      |   2 +-
+ tools/testing/selftests/resctrl/cache.c       | 154 ++++++------
+ tools/testing/selftests/resctrl/cat_test.c    | 221 +++++++++---------
+ tools/testing/selftests/resctrl/cmt_test.c    |  60 +++--
+ tools/testing/selftests/resctrl/fill_buf.c    | 107 +++++----
+ tools/testing/selftests/resctrl/mba_test.c    |   8 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  16 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  28 ++-
+ .../testing/selftests/resctrl/resctrl_tests.c |  34 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c |   4 +-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 160 ++++++++++---
+ 11 files changed, 447 insertions(+), 347 deletions(-)
+
+-- 
+2.30.2
 
