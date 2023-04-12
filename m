@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878936DF548
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4CD6DF54A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjDLMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S229807AbjDLMcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjDLMbO (ORCPT
+        with ESMTP id S229521AbjDLMcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:31:14 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DA8106;
-        Wed, 12 Apr 2023 05:31:02 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so4120118wmq.5;
-        Wed, 12 Apr 2023 05:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681302660; x=1683894660;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LH8FUEh+YJu8DH3rQ9pd4R0sfMJTPR3+WipwFABmNG4=;
-        b=SKj8hts1928ziujgAoLnuqVkvDvGcPZx36SBJHxw+/0D/ZFODDY4QCuDaPwslggRoY
-         AL0fHbhDZ54IiymSNRpgOcztfTVCMYJBahVeQxJRhHfMUx1zzQkD5fAr1uhNC8NkJj+2
-         TlI+Xs2wdnQ4C2SbpWPLQAgzPsSE96He+YrPPhFhhWu7QXZIA7tL25TZaWLHKmmfolOT
-         mgk5iGo1cZD7lug3KA6VJnE9zKrDfk0tJNM1YvwkgmiDXk29Cjt9H6nW/pcdYSMAbLPj
-         FwqojBdj6zG94Wa5EDAvxojVaN46+6GMtSP1CZ/UqkOysvuH+mRZNQ5kNfJvr74I9E9u
-         j1cQ==
+        Wed, 12 Apr 2023 08:32:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C75C119
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681302663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=blrnCpTcS5ZianZmqVUuhTTwLp6B2ozOa080drqpcNk=;
+        b=Cw//rO04eo5eAjBLrZJQS9PbqTWLI47o+Ou0K27uEtYX3lcYqe89m1jiGfF+CKKv5Zfq31
+        K0dP1pAB1oVOKun7Z2OOezJukDx7Wxyf0Z60SOEX978cP6cwavXrwfr7jHIaxIezvTIEN4
+        WLyHwmm0wjRsuWQFC6JTZp+G8uepqfU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-244-dQVSWA5FPnywJevIVqrG8A-1; Wed, 12 Apr 2023 08:31:02 -0400
+X-MC-Unique: dQVSWA5FPnywJevIVqrG8A-1
+Received: by mail-wm1-f72.google.com with SMTP id u14-20020a05600c19ce00b003f0331154b1so15324350wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:31:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1681302660; x=1683894660;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LH8FUEh+YJu8DH3rQ9pd4R0sfMJTPR3+WipwFABmNG4=;
-        b=76P81HEHbm6IJIqMchUb4xioqh+6gbFBLo5LyLmYen5kCJtUiEHMxyInXv9MsvtoQK
-         /Cgj5/bTmQDz9krvr4mbgVLiM1AZFM5TBk+q3heJ7vVOOOm2pTic00juYIZHzE3+0Z5/
-         EUq402WFN0wz6qvujo+nqBGuJo+YzuK2up3ht/n8lo1pew7fSAZ1Wr7eFfEBOLfF7T8/
-         fx1NySHclWA18w54tElSlzPKFDLuQh7oP9576yENuYDKCVKq8mVoEIkDyxASpmUbGBYG
-         uXtiG0ZmXDz7NXAYNEAIlIhOccZHvBaTblEKMDontID5Gbn0g+oIiCrJQ/xodBFBSy+D
-         VdCw==
-X-Gm-Message-State: AAQBX9fxzQOEvo3EFKZC7JBsSEXh9aNP0Vz0IseK2xMDIzh5WXYB19PA
-        ToC//fKYOdMkbv9f8dT3jGg=
-X-Google-Smtp-Source: AKy350bn9uF0IQIwzgop3ifBPq286Rptgb8qr/QNLk/Ydb6m3Rimef/MNKrhRejMvnS2eP3FRuoY/A==
-X-Received: by 2002:a05:600c:21c4:b0:3f0:4428:9444 with SMTP id x4-20020a05600c21c400b003f044289444mr11979874wmj.10.1681302660547;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=blrnCpTcS5ZianZmqVUuhTTwLp6B2ozOa080drqpcNk=;
+        b=Av57tHzNRzKxKf/rohyNffyk41rPCJbNoqKmW+ZbtgJdrRtBWtycDGTlgcYznHvn3L
+         S25RLXFyaXubzYS60gdBnYb5mqtpVRcniGN2y8T3Bk95d7wGQmIfXBjnR2eOwHK5C7NQ
+         NgfdlsSaF9TQVxP8rI+0XIInAhPxJlwhnhpF6aUqaKHvNQwYvpivc7AcbYymtvZ2k9gK
+         X5rYKf5c5ebzoXnAzYwBAOLeofRsIlE9hAcFX6EBP3yOhrPSHQrhh0VhszOK7iBxeWYO
+         bF9Xf7YRtpCjs4SQkKLVLYUHGLR2TVfouO7fn+PvW/nC9AldJzGp2iCCUqJEEUfolDvi
+         jmwA==
+X-Gm-Message-State: AAQBX9efeLfp4p93EbVUH89qphnCtJqU00oti0s/ewYZUc3/nalysV/d
+        RUDGFI1aTd62LwUayk+LKhg/6aJJ+IcvxrRmuMjXh32uOD+Av5BnfR9aNaEhkErXAp2jro/acyK
+        1tAz0dw7JXgPFKB65r5P3sGLX
+X-Received: by 2002:a7b:c389:0:b0:3ed:3268:5f35 with SMTP id s9-20020a7bc389000000b003ed32685f35mr1999660wmj.18.1681302660620;
         Wed, 12 Apr 2023 05:31:00 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c3-20020adffb43000000b002de99432fc8sm17058331wrs.49.2023.04.12.05.30.58
+X-Google-Smtp-Source: AKy350b4K/3OVCcip+JnxiMy5/dD33dZGeMKTqg1Z1LDfrRMSsp30yfO/Pr8lzVdPaorZJ0aIgTe/w==
+X-Received: by 2002:a7b:c389:0:b0:3ed:3268:5f35 with SMTP id s9-20020a7bc389000000b003ed32685f35mr1999645wmj.18.1681302660313;
+        Wed, 12 Apr 2023 05:31:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4b00:c6fa:b613:dbdc:ab? (p200300cbc7024b00c6fab613dbdc00ab.dip0.t-ipconnect.de. [2003:cb:c702:4b00:c6fa:b613:dbdc:ab])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05600c4f9400b003ed51cdb94csm2313468wmq.26.2023.04.12.05.30.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 12 Apr 2023 05:30:59 -0700 (PDT)
-Message-ID: <40b46002-fad7-9751-fc2c-5d96a5ce6b75@gmail.com>
-Date:   Wed, 12 Apr 2023 14:30:57 +0200
+Message-ID: <b5df5cac-5258-7f5c-d386-6b17391b080e@redhat.com>
+Date:   Wed, 12 Apr 2023 14:30:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 01/27] dt-bindings: pwm: Add compatible for MediaTek
- MT6795
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm: huge_memory: Replace obsolete memalign() with
+ posix_memalign()
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-2-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230412112739.160376-2-angelogioacchino.delregno@collabora.com>
+To:     Deming Wang <wangdeming@inspur.com>, akpm@linux-foundation.org,
+        shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230412104502.1836-1-wangdeming@inspur.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230412104502.1836-1-wangdeming@inspur.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add a compatible string for MediaTek Helio X10 MT6795's display PWM
-> block: this is the same as MT8173.
+On 12.04.23 12:45, Deming Wang wrote:
+> memalign() is obsolete according to its manpage.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Replace memalign() with posix_memalign()
+> 
+> As a pointer is passed into posix_memalign(), initialize *one_page
+> to NULL to silence a warning about the function's return value being
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Where is the initialization to NULL done below?
 
+> used as uninitialized (which is not valid anyway because the error
+> is properly checked before p is returned).
+
+"p" ?
+
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 > ---
->   Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml b/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
-> index 0088bc8e7c54..153e146df7d4 100644
-> --- a/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
-> +++ b/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
-> @@ -22,7 +22,9 @@ properties:
->             - mediatek,mt8173-disp-pwm
->             - mediatek,mt8183-disp-pwm
->         - items:
-> -          - const: mediatek,mt8167-disp-pwm
-> +          - enum:
-> +              - mediatek,mt6795-disp-pwm
-> +              - mediatek,mt8167-disp-pwm
->             - const: mediatek,mt8173-disp-pwm
->         - items:
->             - enum:
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index cbb5e6893cbf..94c7dffc4d7d 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -96,10 +96,10 @@ void split_pmd_thp(void)
+>   	char *one_page;
+>   	size_t len = 4 * pmd_pagesize;
+>   	size_t i;
+> +	int ret;
+>   
+> -	one_page = memalign(pmd_pagesize, len);
+> -
+> -	if (!one_page) {
+> +	ret = posix_memalign((void **)&one_page, pmd_pagesize, len);
+> +	if (ret < 0) {
+>   		printf("Fail to allocate memory\n");
+>   		exit(EXIT_FAILURE);
+>   	}
+
+-- 
+Thanks,
+
+David / dhildenb
+
