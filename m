@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBE46DFBA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD95D6DFBA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjDLQp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S229516AbjDLQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjDLQo4 (ORCPT
+        with ESMTP id S229873AbjDLQpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:44:56 -0400
+        Wed, 12 Apr 2023 12:45:03 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EDC86B5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9BE977B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317828;
+        s=mimecast20190719; t=1681317831;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BeK25Zk7G/NLwTDOVvJddw9Gyk0/O/quMsTWu17keu8=;
-        b=XThYpklB4bklmMInCgZIjFHqgHf737RL0Gw2udByEypz4t8T7Frgv/4Mz7lyWNHO1yyemj
-        xR0shRsmVAhDLWSzbMwFLnddnQDJHGiosBQgFhieRipGvb8u86NO61/26xVh+pA0lp8qCO
-        DjQfcaW9+XOY8tARAlL4IAzF9Xy0NS8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=q6fb7dGe8Qh9zpC1XHTDp4auTsAlmohzusSG+yhHPLI=;
+        b=JDRit7WOzUsZLUWMU+pHu93i8EbKOUTZ8EJmmPEn9yI8rmE+d1PsKh5H+rYP3XnY5GHtd4
+        gtfySFhFZfdUCd+mMJTEupWj/AmPqsSTDuYaCMmCxTLAAG+EGWGYZubxOYSjVc+elc3vhQ
+        H7tV51F/FYXYIQdxp3W5af9XF3mzhOI=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-7gir-xTMNLGQbhjdwHwwFQ-1; Wed, 12 Apr 2023 12:43:47 -0400
-X-MC-Unique: 7gir-xTMNLGQbhjdwHwwFQ-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3e699015faeso3544121cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:47 -0700 (PDT)
+ us-mta-643-_cxnZK6MPr2gGqv57ODuMg-1; Wed, 12 Apr 2023 12:43:50 -0400
+X-MC-Unique: _cxnZK6MPr2gGqv57ODuMg-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74acb477be6so2310485a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:43:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317825; x=1683909825;
+        d=1e100.net; s=20221208; t=1681317829; x=1683909829;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BeK25Zk7G/NLwTDOVvJddw9Gyk0/O/quMsTWu17keu8=;
-        b=hkziREXSODP7lIrvTNVcw9PM+HJ/JMQWyehUT3u+mR412MvY+I4c9gcjkdRUXK/3Fl
-         UXAIVMSPNWqU/quxzIlX3W4/I/3kLbg3CcdUptPod9SeWzL/jiyWm2Ri7a6z1YvwIOSq
-         g2VljJydAD5EQD/1XtT2jnOVJQr+mu0V+IyFA3jyFHqoDf9oAkOuoKImZBXOLP3Wqh0L
-         mKwOPDGes5jm0q9NsW1CXYOVsk3Y1VEeWysalgO19cwDu79CDt8iqPepHJC+QseV4fqd
-         jz3ko+z8DmOdcSIfZa1m+MW5ftGhr2+dzKOf7PQjU4bXhEqiXc/GnNk6VUbvg3O9HyX1
-         4EBw==
-X-Gm-Message-State: AAQBX9ekRjlkiPHR8z4STOiiedRtaF9W57WZu+JmsYRUrrj2H+wTsawe
-        aBYaFIT+Ags16BVZ9l8Kn7zOVK14qLkpfMenPBnn8CVfS/yh+IdHPMY9k1dwxV3HQkbV1T26oVM
-        qcWfHRSotBzK+/JrxhtwJpApBskh+hk8D/eNMAJuXYVbapGenxCqsPORv9vXWxccucH44Jp+gng
-        phnj7OGQ==
-X-Received: by 2002:a05:622a:1891:b0:3e4:eb39:eb8b with SMTP id v17-20020a05622a189100b003e4eb39eb8bmr4000953qtc.5.1681317825559;
-        Wed, 12 Apr 2023 09:43:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yl7mWL/S9YEy9zUWOoxCG4PHHcn5sGAnl7GyY2m0LveJWRNpcSER8LkzrTOjY9Kd6J0F5tgw==
-X-Received: by 2002:a05:622a:1891:b0:3e4:eb39:eb8b with SMTP id v17-20020a05622a189100b003e4eb39eb8bmr4000915qtc.5.1681317825147;
-        Wed, 12 Apr 2023 09:43:45 -0700 (PDT)
+        bh=q6fb7dGe8Qh9zpC1XHTDp4auTsAlmohzusSG+yhHPLI=;
+        b=BnJICVU/msEcEC6OzdtpGiZzp7/3fRPu9hiysijvi1zXodHxrSkARamRFUjS3n55F8
+         R+GLws2c52KIPxkD088vf5kAmr3ZrzK7FY/QbvbI5IOc1yH3iUvqGU9mFqDB0qmT4T5a
+         VcP3RTsMNaUONDXcia5G3+mNesnB5MVBMMWYahe/wj/87NjjBGTSFctuTqhz/LtO2j4N
+         Fm+hyD0Y7tEKbKMmRRLzfTS6E7zt4XViEYvsLDCYcYB9T2h8YY+/2Bb0c04nbibindIc
+         PINiWpFHsGEeQ49pS4ntwrqo2pBMNaJUMpNh0qX8SYEabxV979EB352S+tMvA+CkRUjW
+         SKzA==
+X-Gm-Message-State: AAQBX9exEPvER/e+z6cAIVRdsIPKfzb2ppcFQRUJRP5gEUf5ipFAEP94
+        citSrbE6NbbDa4OmGPufJuMzrXCGt7LM80wp8ES64Uw85EkXGMWOR7K7AxmgQKdTQwzNjWASoKA
+        KXGAQ6vL9yMcccE1kDVYpy0fSm2FyM/8AThp51TQ4cdt7dYEFB943eBMgRLBHDUxMlzEFBvLBmn
+        AaAIw/WQ==
+X-Received: by 2002:a05:6214:410e:b0:5e8:e227:982e with SMTP id kc14-20020a056214410e00b005e8e227982emr4492241qvb.3.1681317829026;
+        Wed, 12 Apr 2023 09:43:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bUncXTyJW92k3ESgGa7qeDhT/mpGdY2qSDyncYCia8CnYIFPtqWX76/SVSSYIWo1RN9ImdVA==
+X-Received: by 2002:a05:6214:410e:b0:5e8:e227:982e with SMTP id kc14-20020a056214410e00b005e8e227982emr4492202qvb.3.1681317828637;
+        Wed, 12 Apr 2023 09:43:48 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id i18-20020ac860d2000000b003e45a39ed74sm4353141qtm.81.2023.04.12.09.43.42
+        by smtp.gmail.com with ESMTPSA id w23-20020ac86b17000000b003e6948a8966sm3274810qts.21.2023.04.12.09.43.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:43:44 -0700 (PDT)
+        Wed, 12 Apr 2023 09:43:47 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -67,9 +67,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Mike Rapoport <rppt@linux.vnet.ibm.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v2 20/31] selftests/mm: Let uffd_handle_page_fault() take wp parameter
-Date:   Wed, 12 Apr 2023 12:43:41 -0400
-Message-Id: <20230412164341.328618-1-peterx@redhat.com>
+Subject: [PATCH v2 21/31] selftests/mm: Allow allocate_area() to fail properly
+Date:   Wed, 12 Apr 2023 12:43:45 -0400
+Message-Id: <20230412164345.328659-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
 References: <20230412163922.327282-1-peterx@redhat.com>
@@ -85,197 +85,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the handler optionally apply WP bit when resolving page faults for
-either missing or minor page faults.  This moves towards removing global
-test_uffdio_wp outside of the common code.
+Mostly to detect hugetlb allocation errors and skip hugetlb tests when
+pages are not allocated.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/uffd-common.c | 17 +++++++++--------
- tools/testing/selftests/mm/uffd-common.h |  6 ++++--
- tools/testing/selftests/mm/uffd-stress.c | 16 ++++++++++------
- 3 files changed, 23 insertions(+), 16 deletions(-)
+ tools/testing/selftests/mm/uffd-common.c | 47 +++++++++++++++++-------
+ tools/testing/selftests/mm/uffd-common.h |  4 +-
+ 2 files changed, 36 insertions(+), 15 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index e746405aa8f3..daa2a95408e6 100644
+index daa2a95408e6..bc6c5c38d6dd 100644
 --- a/tools/testing/selftests/mm/uffd-common.c
 +++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -353,7 +353,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- 		err("clear WP failed: address=0x%"PRIx64, (uint64_t)start);
+@@ -44,10 +44,15 @@ static void anon_release_pages(char *rel_area)
+ 		err("madvise(MADV_DONTNEED) failed");
  }
  
--static void continue_range(int ufd, __u64 start, __u64 len)
-+static void continue_range(int ufd, __u64 start, __u64 len, bool wp)
+-static void anon_allocate_area(void **alloc_area, bool is_src)
++static int anon_allocate_area(void **alloc_area, bool is_src)
  {
- 	struct uffdio_continue req;
- 	int ret;
-@@ -361,7 +361,7 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
--	if (test_uffdio_wp)
-+	if (wp)
- 		req.mode |= UFFDIO_CONTINUE_MODE_WP;
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+ 			   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (*alloc_area == MAP_FAILED) {
++		*alloc_area = NULL;
++		return -errno;
++	}
++	return 0;
+ }
  
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
-@@ -429,7 +429,8 @@ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args)
- 				    area_dst_alias));
- 		for (b = 0; b < page_size; ++b)
- 			area[b] = ~area[b];
--		continue_range(uffd, msg->arg.pagefault.address, page_size);
-+		continue_range(uffd, msg->arg.pagefault.address, page_size,
-+			       args->apply_wp);
- 		args->minor_faults++;
- 	} else {
- 		/*
-@@ -459,7 +460,7 @@ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args)
- 		offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
- 		offset &= ~(page_size-1);
- 
--		if (copy_page(uffd, offset))
-+		if (copy_page(uffd, offset, args->apply_wp))
- 			args->missing_faults++;
+ static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
+@@ -65,7 +70,7 @@ static void hugetlb_release_pages(char *rel_area)
  	}
  }
-@@ -555,7 +556,7 @@ static void wake_range(int ufd, unsigned long addr, unsigned long len)
- 			addr), exit(1);
- }
  
--int __copy_page(int ufd, unsigned long offset, bool retry)
-+int __copy_page(int ufd, unsigned long offset, bool retry, bool wp)
+-static void hugetlb_allocate_area(void **alloc_area, bool is_src)
++static int hugetlb_allocate_area(void **alloc_area, bool is_src)
  {
- 	struct uffdio_copy uffdio_copy;
+ 	off_t size = nr_pages * page_size;
+ 	off_t offset = is_src ? 0 : size;
+@@ -77,14 +82,16 @@ static void hugetlb_allocate_area(void **alloc_area, bool is_src)
+ 			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
+ 			   (is_src ? 0 : MAP_NORESERVE),
+ 			   mem_fd, offset);
+-	if (*alloc_area == MAP_FAILED)
+-		err("mmap of hugetlbfs file failed");
++	if (*alloc_area == MAP_FAILED) {
++		*alloc_area = NULL;
++		return -errno;
++	}
  
-@@ -564,7 +565,7 @@ int __copy_page(int ufd, unsigned long offset, bool retry)
- 	uffdio_copy.dst = (unsigned long) area_dst + offset;
- 	uffdio_copy.src = (unsigned long) area_src + offset;
- 	uffdio_copy.len = page_size;
--	if (test_uffdio_wp)
-+	if (wp)
- 		uffdio_copy.mode = UFFDIO_COPY_MODE_WP;
- 	else
- 		uffdio_copy.mode = 0;
-@@ -587,7 +588,7 @@ int __copy_page(int ufd, unsigned long offset, bool retry)
- 	return 0;
+ 	if (map_shared) {
+ 		area_alias = mmap(NULL, size, PROT_READ | PROT_WRITE,
+ 				  MAP_SHARED, mem_fd, offset);
+ 		if (area_alias == MAP_FAILED)
+-			err("mmap of hugetlb file alias failed");
++			return -errno;
+ 	}
+ 
+ 	if (is_src) {
+@@ -96,6 +103,7 @@ static void hugetlb_allocate_area(void **alloc_area, bool is_src)
+ 		*alloc_area_alias = area_alias;
+ 
+ 	close(mem_fd);
++	return 0;
  }
  
--int copy_page(int ufd, unsigned long offset)
-+int copy_page(int ufd, unsigned long offset, bool wp)
+ static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset)
+@@ -112,7 +120,7 @@ static void shmem_release_pages(char *rel_area)
+ 		err("madvise(MADV_REMOVE) failed");
+ }
+ 
+-static void shmem_allocate_area(void **alloc_area, bool is_src)
++static int shmem_allocate_area(void **alloc_area, bool is_src)
  {
--	return __copy_page(ufd, offset, false);
-+	return __copy_page(ufd, offset, false, wp);
+ 	void *area_alias = NULL;
+ 	size_t bytes = nr_pages * page_size, hpage_size = read_pmd_pagesize();
+@@ -132,15 +140,20 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
+ 
+ 	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+ 			   mem_fd, offset);
+-	if (*alloc_area == MAP_FAILED)
+-		err("mmap of memfd failed");
++	if (*alloc_area == MAP_FAILED) {
++		*alloc_area = NULL;
++		return -errno;
++	}
+ 	if (test_collapse && *alloc_area != p)
+ 		err("mmap of memfd failed at %p", p);
+ 
+ 	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+ 			  mem_fd, offset);
+-	if (area_alias == MAP_FAILED)
+-		err("mmap of memfd alias failed");
++	if (area_alias == MAP_FAILED) {
++		munmap(*alloc_area, bytes);
++		*alloc_area = NULL;
++		return -errno;
++	}
+ 	if (test_collapse && area_alias != p_alias)
+ 		err("mmap of anonymous memory failed at %p", p_alias);
+ 
+@@ -150,6 +163,7 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
+ 		area_dst_alias = area_alias;
+ 
+ 	close(mem_fd);
++	return 0;
  }
+ 
+ static void shmem_alias_mapping(__u64 *start, size_t len, unsigned long offset)
+@@ -282,14 +296,19 @@ static void uffd_test_ctx_clear(void)
+ 	munmap_area((void **)&area_remap);
+ }
+ 
+-void uffd_test_ctx_init(uint64_t features)
++int uffd_test_ctx_init(uint64_t features)
+ {
+ 	unsigned long nr, cpu;
++	int ret;
+ 
+ 	uffd_test_ctx_clear();
+ 
+-	uffd_test_ops->allocate_area((void **)&area_src, true);
+-	uffd_test_ops->allocate_area((void **)&area_dst, false);
++	ret = uffd_test_ops->allocate_area((void **)&area_src, true);
++	if (ret)
++		return ret;
++	ret = uffd_test_ops->allocate_area((void **)&area_dst, false);
++	if (ret)
++		return ret;
+ 
+ 	userfaultfd_open(&features);
+ 
+@@ -337,6 +356,8 @@ void uffd_test_ctx_init(uint64_t features)
+ 	for (cpu = 0; cpu < nr_cpus; cpu++)
+ 		if (pipe2(&pipefd[cpu * 2], O_CLOEXEC | O_NONBLOCK))
+ 			err("pipe");
++
++	return 0;
+ }
+ 
+ void wp_range(int ufd, __u64 start, __u64 len, bool wp)
 diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index f8d2ad178827..0ec07d025cfe 100644
+index 0ec07d025cfe..9479a0649d7f 100644
 --- a/tools/testing/selftests/mm/uffd-common.h
 +++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -72,6 +72,8 @@
- /* Userfaultfd test statistics */
- struct uffd_args {
- 	int cpu;
-+	/* Whether apply wr-protects when installing pages */
-+	bool apply_wp;
- 	unsigned long missing_faults;
- 	unsigned long wp_faults;
- 	unsigned long minor_faults;
-@@ -104,8 +106,8 @@ void userfaultfd_open(uint64_t *features);
+@@ -80,7 +80,7 @@ struct uffd_args {
+ };
+ 
+ struct uffd_test_ops {
+-	void (*allocate_area)(void **alloc_area, bool is_src);
++	int (*allocate_area)(void **alloc_area, bool is_src);
+ 	void (*release_pages)(char *rel_area);
+ 	void (*alias_mapping)(__u64 *start, size_t len, unsigned long offset);
+ 	void (*check_pmd_mapping)(void *p, int expect_nr_hpages);
+@@ -101,7 +101,7 @@ extern uffd_test_ops_t hugetlb_uffd_test_ops;
+ extern uffd_test_ops_t *uffd_test_ops;
+ 
+ void uffd_stats_report(struct uffd_args *args, int n_cpus);
+-void uffd_test_ctx_init(uint64_t features);
++int uffd_test_ctx_init(uint64_t features);
+ void userfaultfd_open(uint64_t *features);
  int uffd_read_msg(int ufd, struct uffd_msg *msg);
  void wp_range(int ufd, __u64 start, __u64 len, bool wp);
- void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args);
--int __copy_page(int ufd, unsigned long offset, bool retry);
--int copy_page(int ufd, unsigned long offset);
-+int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
-+int copy_page(int ufd, unsigned long offset, bool wp);
- void *uffd_poll_thread(void *arg);
- 
- #define TEST_ANON	1
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index ce7251ab93ef..747d588c0d69 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -96,6 +96,7 @@ static void uffd_stats_reset(struct uffd_args *args, unsigned long n_cpus)
- 
- 	for (i = 0; i < n_cpus; i++) {
- 		args[i].cpu = i;
-+		args[i].apply_wp = test_uffdio_wp;
- 		args[i].missing_faults = 0;
- 		args[i].wp_faults = 0;
- 		args[i].minor_faults = 0;
-@@ -155,7 +156,7 @@ static void *locking_thread(void *arg)
- 
- static int copy_page_retry(int ufd, unsigned long offset)
- {
--	return __copy_page(ufd, offset, true);
-+	return __copy_page(ufd, offset, true, test_uffdio_wp);
- }
- 
- pthread_mutex_t uffd_read_mutex = PTHREAD_MUTEX_INITIALIZER;
-@@ -308,7 +309,7 @@ static void sighndl(int sig, siginfo_t *siginfo, void *ptr)
-  * This also tests UFFD_FEATURE_EVENT_FORK event along with the signal
-  * feature. Using monitor thread, verify no userfault events are generated.
-  */
--static int faulting_process(int signal_test)
-+static int faulting_process(int signal_test, bool wp)
- {
- 	unsigned long nr;
- 	unsigned long long count;
-@@ -343,7 +344,7 @@ static int faulting_process(int signal_test)
- 					if (steps == 1) {
- 						/* This is a MISSING request */
- 						steps++;
--						if (copy_page(uffd, offset))
-+						if (copy_page(uffd, offset, wp))
- 							signalled++;
- 					} else {
- 						/* This is a WP request */
-@@ -507,6 +508,7 @@ static int userfaultfd_events_test(void)
- 			  true, test_uffdio_wp, false))
- 		err("register failure");
- 
-+	args.apply_wp = test_uffdio_wp;
- 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &args))
- 		err("uffd_poll_thread create");
- 
-@@ -515,7 +517,7 @@ static int userfaultfd_events_test(void)
- 		err("fork");
- 
- 	if (!pid)
--		exit(faulting_process(0));
-+		exit(faulting_process(0, test_uffdio_wp));
- 
- 	waitpid(pid, &err, 0);
- 	if (err)
-@@ -551,11 +553,12 @@ static int userfaultfd_sig_test(void)
- 			  true, test_uffdio_wp, false))
- 		err("register failure");
- 
--	if (faulting_process(1))
-+	if (faulting_process(1, test_uffdio_wp))
- 		err("faulting process failed");
- 
- 	uffd_test_ops->release_pages(area_dst);
- 
-+	args.apply_wp = test_uffdio_wp;
- 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &args))
- 		err("uffd_poll_thread create");
- 
-@@ -564,7 +567,7 @@ static int userfaultfd_sig_test(void)
- 		err("fork");
- 
- 	if (!pid)
--		exit(faulting_process(2));
-+		exit(faulting_process(2, test_uffdio_wp));
- 
- 	waitpid(pid, &err, 0);
- 	if (err)
-@@ -628,6 +631,7 @@ static int userfaultfd_minor_test(void)
- 		       page_size);
- 	}
- 
-+	args.apply_wp = test_uffdio_wp;
- 	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &args))
- 		err("uffd_poll_thread create");
- 
 -- 
 2.39.1
 
