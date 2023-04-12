@@ -2,79 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51F46DFA5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FD46DFA6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjDLPhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S229830AbjDLPjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjDLPhg (ORCPT
+        with ESMTP id S231546AbjDLPj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:37:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7A283E3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:37:30 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681313848;
+        Wed, 12 Apr 2023 11:39:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDA65B9E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681313912;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3KOK2E2+YL0UWZuMxIugWW/8u560Xs4Osw19RDEBOc=;
-        b=jJKraW6sibyV19gFvOdSg/5yJbD6XCrhTn/9AosBMVHK+hr1IUMi2d56CHi4QGDf5CEaEq
-        PzmGZMGZjcdYcDZLQZDltUhPS+yZDUtP0MMT43bzcC5AX9sYO0+G4CeR5ZjxAzrYLEemyu
-        F8VZTjrR5VPrqbErETPifdMPyKKNigvES7yMboQ1m501TOX60p7fE2ghdj5MmLDgqhsv9n
-        glICORo8KtB71L5THRv+lNrZZPBFCX2ZVuxXfNGKrlXrZWbGK9A/MjHOcos8CIPbPtvaM1
-        HkTKlyJZ2h0xLC/lMGiFfG1tXsqaIpOerJYNwiSE0CwO2eXjLtFz8uxCWIijLA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681313848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3KOK2E2+YL0UWZuMxIugWW/8u560Xs4Osw19RDEBOc=;
-        b=EY8KgjIqD4lzsVy1JVTclcJnAREGgvIFTNOVYzfEz5HAU8G988gz5Wdo1w7gqZaxENeA63
-        darbyuPS1kMwFoBA==
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, johan+linaro@kernel.org, isaku.yamahata@intel.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@intel.com
-Subject: Re: [PATCH v2] x86/ioapic: Don't return 0 from
- arch_dynirq_lower_bound()
-In-Reply-To: <20230328144834.GA17868@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1679988604-20308-1-git-send-email-ssengar@linux.microsoft.com>
- <3D028B51-35D7-435F-B912-DC5C0D6C36C6@zytor.com>
- <20230328144834.GA17868@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Date:   Wed, 12 Apr 2023 17:37:27 +0200
-Message-ID: <87v8i1yuvc.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tcf4K424VGDcdSaKtEm81lLzwyCEljjvVM6IbOXUCaM=;
+        b=UmStSnvd2lNBnmwBgQdL70HdgC9IuoEnvL6guVS4UQqB/78QCcrH+oZ9jFgmtq4ThcBRNK
+        fSWU345VvISK8v192bPKAmLRQ+jRHP4O1ashgSOwnBTQw9vpMUvmXY0pmBH6KQTmrHjfx5
+        D0cVVBEpFF0QeJK9m5rz3w+2LjgX8iY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-FVXzpNDZO22DpHreHszLow-1; Wed, 12 Apr 2023 11:38:28 -0400
+X-MC-Unique: FVXzpNDZO22DpHreHszLow-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D30DC185A7A4;
+        Wed, 12 Apr 2023 15:38:27 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A7CB40C6E70;
+        Wed, 12 Apr 2023 15:38:27 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Date:   Wed, 12 Apr 2023 11:37:53 -0400
+Message-Id: <20230412153758.3088111-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28 2023 at 07:48, Saurabh Singh Sengar wrote:
-> On Tue, Mar 28, 2023 at 06:59:04AM -0700, H. Peter Anvin wrote:
->> 
->> Is there any reason why this variable can't be initialized to a fixed nonzero number, like 16?
->
-> Yes, initializing gst_top to any non-zero value should fix this issue.
-> At first I thought to intialize gst_top to 1.
+This patch series introduces a new "isolcpus" partition type to the
+existing list of {member, root, isolated} types. The primary reason
+of adding this new "isolcpus" partition is to facilitate the
+distribution of isolated CPUs down the cgroup v2 hierarchy.
 
-That works only in your case. Some boot time registrations of IO_APICs
-use gsi_top as the base. So initializing gsi_top to N would move IOAPIC[0]
-interrupts out to irq N... and make the legacy interrupts fail.
+The other non-member partition types have the limitation that their
+parents have to be valid partitions too. It will be hard to create a
+partition a few layers down the hierarchy.
 
-That whole IOAPIC registration could do with some major cleanup, but
-that's a different story.
+It is relatively rare to have applications that require creation of
+a separate scheduling domain (root). However, it is more common to
+have applications that require the use of isolated CPUs (isolated),
+e.g. DPDK. One can use the "isolcpus" or "nohz_full" boot command options
+to get that statically. Of course, the "isolated" partition is another
+way to achieve that dynamically.
 
-Thanks,
+Modern container orchestration tools like Kubernetes use the cgroup
+hierarchy to manage different containers. If a container needs to use
+isolated CPUs, it is hard to get those with existing set of cpuset
+partition types. With this patch series, a new "isolcpus" partition
+can be created to hold a set of isolated CPUs that can be pull into
+other "isolated" partitions.
 
-        tglx
+The "isolcpus" partition is special that there can have at most one
+instance of this in a system. It serves as a pool for isolated CPUs
+and cannot hold tasks or sub-cpusets underneath it. It is also not
+cpu-exclusive so that the isolated CPUs can be distributed down the
+sibling hierarchies, though those isolated CPUs will not be useable
+until the partition type becomes "isolated".
+
+Once isolated CPUs are needed in a cgroup, the administrator can write
+a list of isolated CPUs into its "cpuset.cpus" and change its partition
+type to "isolated" to pull in those isolated CPUs from the "isolcpus"
+partition and use them in that cgroup. That will make the distribution
+of isolated CPUs to cgroups that need them much easier.
+
+In the future, we may be able to extend this special "isolcpus" partition
+type to support other isolation attributes like those that can be
+specified with the "isolcpus" boot command line and related options.
+
+Waiman Long (5):
+  cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE
+    handling
+  cgroup/cpuset: Add a new "isolcpus" paritition root state
+  cgroup/cpuset: Make isolated partition pull CPUs from isolcpus
+    partition
+  cgroup/cpuset: Documentation update for the new "isolcpus" partition
+  cgroup/cpuset: Extend test_cpuset_prs.sh to test isolcpus partition
+
+ Documentation/admin-guide/cgroup-v2.rst       |  89 ++-
+ kernel/cgroup/cpuset.c                        | 548 +++++++++++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 376 ++++++++----
+ 3 files changed, 789 insertions(+), 224 deletions(-)
+
+-- 
+2.31.1
+
