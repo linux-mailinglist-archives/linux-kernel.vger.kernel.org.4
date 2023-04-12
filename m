@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCCE6DF251
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA1E6DF255
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjDLK4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S229573AbjDLK5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjDLK4N (ORCPT
+        with ESMTP id S229536AbjDLK5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:56:13 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACB26A69
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:56:11 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C9Ft8P001546;
-        Wed, 12 Apr 2023 12:55:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=A+lMTa0nB7HohOca8aARuO3o3kfnPHCwrPixYCAy+Cc=;
- b=6zNuOrcdJpp999pZetREP/7mwIM30FfwC/aIbyQzH5FmhijimSA2YIksbLKS8ZwBgaRg
- iMsxV/FykoB7vhp0XVUc0r5t9wlYzAVALYbZ/MbAUOXGKEGEUvuwjYIoCAx0D41ERtB2
- Hhc8nNI0Gc53V/5uKLyH9Q04F5/bajFUBHgHLIdInco3Iz4izzlZTNLjzV0bopJgsrU6
- Ixxyw+RLdZivw0jfPILr0UjXPvM7Gjn7hKA+Xx++6h/spyjtRpjJEaYcMmmMf9csmIbr
- B6kT8FDZcUoZ8oDLa1R9KKHdKR1ho5lMRYHcYP2MzcToB94dORvjuLCNuV/p2sRKh16b wQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pw8b0pgrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 12:55:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D06A510002A;
-        Wed, 12 Apr 2023 12:55:57 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CA2C92128D0;
-        Wed, 12 Apr 2023 12:55:57 +0200 (CEST)
-Received: from localhost (10.252.10.182) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 12 Apr
- 2023 12:55:57 +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [RESEND PATCH 2/2] mfd: stmfx: Nullify stmfx->vdd in case of error
-Date:   Wed, 12 Apr 2023 12:55:42 +0200
-Message-ID: <20230412105542.1231131-3-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230412105542.1231131-1-amelie.delaunay@foss.st.com>
-References: <20230412105542.1231131-1-amelie.delaunay@foss.st.com>
+        Wed, 12 Apr 2023 06:57:02 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8086376B7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:57:00 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f08b6a9f8aso55185e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681297019; x=1683889019;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y2nt7ejQK3jr9r1+vnQD1e3FmdrT042GNN9tIEQMZ1E=;
+        b=t7IOWsunQ1sr66lSoyGmmloi1T7w/NIIGJTgTYknCs01CRxFh0HkL+XaWQZeJTATMh
+         r6QHRJc3LNXb8iHN0R505gFWgcLgHKVpuJhHIpIF2SsQ3b9Jmoxr/agsV8XqsLsIDZFX
+         Z+qpDunVqPcRk9zrzNmHnwNHHc4P2VKyUcseK+zcEp8O3lL9H/0XmOMvsSznsUqbmX5J
+         PsrZ9Nk7fMzmQrgKayfGs0Fh21dySgLR0Vc/qGE5rmjQTtJWCjXLnGieu8CdAO1PrPgl
+         zyVhFPsa2WNucdD87EcMD/7aI+bqug13OCFd+dkQmTPqH7/BKllfO0Fd9yt1rJabNLA7
+         sz5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681297019; x=1683889019;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y2nt7ejQK3jr9r1+vnQD1e3FmdrT042GNN9tIEQMZ1E=;
+        b=WisuLMxOvQKfwl4CRAeixb33BfUWBnnxaJjLAH9QCdzE/h46e1EgdOrJDJGT6XZiuC
+         Zzf7EOr1E7dFQk3DfLE4doPmzUbz8AVP6POc9o7tEbq9KzfhWSKQ591qABB/1IktST3K
+         rCZN0HJglE/E1vg+CvADQFK6AM6F4DKkZthC4X2q/DzhCKbA96LH2s+65z2YJS71ESlR
+         jmhno8qDoCBIrtccHl9S/oQsZq8Fz1xMT7FTB716a8vTbb7nqJS6buBX+Q2QPocGn+4r
+         3Dq2KHCEB3oy8uIc87ZuTKaWofEItnUnEuKhYOOBFRvKVKT0AqE4jZ6JaF+XnYdrAb3d
+         U+ig==
+X-Gm-Message-State: AAQBX9dOIJH5HwVerVpT9+1nlctkMKzpPzibbWpu87nsxL4fzyaajL6n
+        nS7Iuk65pWLAtjTORQIAgQZPUEVd9VksNe8BB6iuwA==
+X-Google-Smtp-Source: AKy350ZR5xCsHi5eVXAzVMAg74DbXOVxZwSG6Tj6+e2urajU4bQH/MinMa3dSR5ARaqb2khKmss74CtU7opeYyoeB+U=
+X-Received: by 2002:a05:600c:5405:b0:3df:f3cb:e8ce with SMTP id
+ he5-20020a05600c540500b003dff3cbe8cemr393512wmb.7.1681297018926; Wed, 12 Apr
+ 2023 03:56:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.10.182]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_03,2023-04-12_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <CANp29Y4V7LsaJk0h3GyWV-chE8YkwM2qX33_hy9ZF5si8ZLdDg@mail.gmail.com>
+ <000000000000e9e5a905f9214d8c@google.com>
+In-Reply-To: <000000000000e9e5a905f9214d8c@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Wed, 12 Apr 2023 12:56:47 +0200
+Message-ID: <CANp29Y4UGZpm6JadD0+5kWFZn1DuL54VWN4QT+2CnaryeqWBXg@mail.gmail.com>
+Subject: Re: [syzbot] [dri?] WARNING in vkms_get_vblank_timestamp
+To:     syzbot <syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+        linux-kernel@vger.kernel.org, melissa.srw@gmail.com,
+        rodrigosiqueiramelo@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nullify stmfx->vdd in case devm_regulator_get_optional() returns an error.
-And simplify code by returning an error only if return code is not -ENODEV,
-which means there is no vdd regulator and it is not an issue.
+Let's close the bug on syzbot so that the bot can report similar bugs
+in the future:
 
-Fixes: d75846ed08e6 ("mfd: stmfx: Fix dev_err_probe() call in stmfx_chip_init()")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/mfd/stmfx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+#syz fix: drm/atomic-helper: Don't set deadline for modesets
 
-diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
-index bfe89df27611..76188212c66e 100644
---- a/drivers/mfd/stmfx.c
-+++ b/drivers/mfd/stmfx.c
-@@ -330,9 +330,8 @@ static int stmfx_chip_init(struct i2c_client *client)
- 	stmfx->vdd = devm_regulator_get_optional(&client->dev, "vdd");
- 	ret = PTR_ERR_OR_ZERO(stmfx->vdd);
- 	if (ret) {
--		if (ret == -ENODEV)
--			stmfx->vdd = NULL;
--		else
-+		stmfx->vdd = NULL;
-+		if (ret != -ENODEV)
- 			return dev_err_probe(&client->dev, ret, "Failed to get VDD regulator\n");
- 	}
- 
--- 
-2.25.1
-
+On Wed, Apr 12, 2023 at 12:45=E2=80=AFPM syzbot
+<syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot has tested the proposed patch and the reproducer did not trigger a=
+ny issue:
+>
+> Reported-and-tested-by: syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail=
+.com
+>
+> Tested on:
+>
+> commit:         7d8214bb Add linux-next specific files for 20230412
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1387763dc8000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D923e20c1867d7=
+c1c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D75cc0f9f7e6324d=
+d2501
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+>
+> Note: no patches were applied.
+> Note: testing is done by a robot and is best-effort only.
