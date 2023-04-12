@@ -2,47 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97D46DF5BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11C56DF5AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjDLMmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231573AbjDLMlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjDLMmR (ORCPT
+        with ESMTP id S229906AbjDLMlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:42:17 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF737AAE;
-        Wed, 12 Apr 2023 05:42:08 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PxMh724xXz17Rrt;
-        Wed, 12 Apr 2023 20:38:31 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
- 2023 20:42:04 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
-        <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH v3 3/8] ext4: use __GFP_NOFAIL if allocating extents_status cannot fail
-Date:   Wed, 12 Apr 2023 20:41:21 +0800
-Message-ID: <20230412124126.2286716-4-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230412124126.2286716-1-libaokun1@huawei.com>
-References: <20230412124126.2286716-1-libaokun1@huawei.com>
+        Wed, 12 Apr 2023 08:41:39 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD24B6E9A;
+        Wed, 12 Apr 2023 05:41:26 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id w24so1154894wra.10;
+        Wed, 12 Apr 2023 05:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681303285; x=1683895285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AEHj125fFUHVqVSYxI2Iu4R8mwBu9xLsNlhlcbmp5rM=;
+        b=llEetynzd9UPHbqm2DuZ2+4h9Q3PCWFOLHFsb0vOSnJYPAfCAO1R3XNmoKZJMwhBQC
+         vILAF7oLkx35oAn4QQZ8feiPlgHUZyVqzYlVPvviSyOOaIXVD6/sdEW7kIDfuIu36t1Q
+         BV3+QEpyAceCpr/CqnR2DQTdlps3ia+YVy+hXsNBIjJNSOnwwno7+vnUilo8JJuidsOx
+         xF+jP1kAslYKyhJ65RH2Wh4UWQ0PDszOh+n7iT3D099hxVe/Dh5QPmuLZJA9ADqi/Egk
+         +t+fgzr6O2apGbnbPnFhV3cikLdph/xyWZXNgCgnQXK6rogqkwqP0NQ4UEO/PLWc0wmV
+         xnNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681303285; x=1683895285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEHj125fFUHVqVSYxI2Iu4R8mwBu9xLsNlhlcbmp5rM=;
+        b=Hgnd9GLyz1+RWCtNAwAN09m8xOxKv7KOf4Peh5us/gRq+g21Tg+L6I+gkMK844mJTa
+         mJMjR3XAHYCDU8LJ0ixGleNBJnsYctiC+BOiRfLuoD8V8LI6iRT2N8UKnQI5DNaSYgu0
+         SIq2WYTGKhTafgKbdAZcEo11IUEW5tiRwZkFIXAqlhCAo/MuHCf3S6HcSnBgXIl6VYEi
+         NSBraqVj1WaiNRgfPqOUdf2UxbC3ArnDPJphhm7wnw+B3cjuUeV98foeIGhJkXXOXPTS
+         +fogQ2vZx2iR2qBqGmGjPLKND+LlvC/kdaF/yj/hJuHZU4YKdHs8Mk+XVjoI93tXNY/r
+         +++Q==
+X-Gm-Message-State: AAQBX9ebdHiyZ+6NIV2krt7HBjxXReejLAFfe43DKY+DyADtRePip4EJ
+        oosAK+jhq1q/2O2cNCd1h3Q=
+X-Google-Smtp-Source: AKy350aT31kI3WrPlyJemwrlllp01mZSGvhWt0uUtaz7CCjWzacgDuOrFbxL5IdxxVlheLDNfhc0UA==
+X-Received: by 2002:a05:6000:11d1:b0:2f4:e8e3:ef62 with SMTP id i17-20020a05600011d100b002f4e8e3ef62mr1002128wrx.65.1681303285246;
+        Wed, 12 Apr 2023 05:41:25 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id u11-20020a5d514b000000b002cefcac0c62sm17220111wrt.9.2023.04.12.05.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 05:41:24 -0700 (PDT)
+Message-ID: <7466cf12-9411-cb35-8e8b-fa50f5efe492@gmail.com>
+Date:   Wed, 12 Apr 2023 14:41:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 22/27] arm64: dts: mediatek: mt6795: Copyright header
+ additions
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-23-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230412112739.160376-23-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,64 +89,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If extent status tree update fails, we have inconsistency between what is
-stored in the extent status tree and what is stored on disk. And that can
-cause even data corruption issues in some cases.
 
-For extents that cannot be dropped we use __GFP_NOFAIL to allocate memory.
-And with the above logic, the undo operation in __es_remove_extent that
-may cause inconsistency if the split extent fails is unnecessary, so we
-remove it as well.
 
-Suggested-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
-V2->V3:
-	Define helper as a preparatory patch and simplify the code.
+On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
+> I have added more than 800 lines to this devicetree: adding myself to
+> the copyright header.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> index 29ca9a7bf0b3..a4c950b65006 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
+> @@ -2,6 +2,9 @@
+>   /*
+>    * Copyright (c) 2015 MediaTek Inc.
+>    * Author: Mars.C <mars.cheng@mediatek.com>
+> + *
+> + * Copyright (C) 2023 Collabora Ltd.
+> + *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
- fs/ext4/extents_status.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Indentation?
 
-diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-index f9dab2510bdc..a7c3200f9cbe 100644
---- a/fs/ext4/extents_status.c
-+++ b/fs/ext4/extents_status.c
-@@ -464,10 +464,15 @@ static inline int ext4_es_must_keep(struct extent_status *es)
- 
- static struct extent_status *
- ext4_es_alloc_extent(struct inode *inode, ext4_lblk_t lblk, ext4_lblk_t len,
--		     ext4_fsblk_t pblk)
-+		     ext4_fsblk_t pblk, int nofail)
- {
- 	struct extent_status *es;
--	es = kmem_cache_alloc(ext4_es_cachep, GFP_ATOMIC);
-+	gfp_t gfp_flags = GFP_ATOMIC;
-+
-+	if (nofail)
-+		gfp_flags |= __GFP_NOFAIL;
-+
-+	es = kmem_cache_alloc(ext4_es_cachep, gfp_flags);
- 	if (es == NULL)
- 		return NULL;
- 	es->es_lblk = lblk;
-@@ -804,7 +809,7 @@ static int __es_insert_extent(struct inode *inode, struct extent_status *newes)
- 	}
- 
- 	es = ext4_es_alloc_extent(inode, newes->es_lblk, newes->es_len,
--				  newes->es_pblk);
-+				  newes->es_pblk, ext4_es_must_keep(newes));
- 	if (!es)
- 		return -ENOMEM;
- 	rb_link_node(&es->rb_node, parent, p);
-@@ -1361,8 +1366,6 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
- 						    ext4_es_status(&orig_es));
- 			err = __es_insert_extent(inode, &newes);
- 			if (err) {
--				es->es_lblk = orig_es.es_lblk;
--				es->es_len = orig_es.es_len;
- 				if ((err == -ENOMEM) &&
- 				    __es_shrink(EXT4_SB(inode->i_sb),
- 							128, EXT4_I(inode)))
--- 
-2.31.1
+BTW from what I understand the copyright will be by your employer, Collabora not 
+you, but I'm not an legal expert :)
 
+>    */
+>   
+>   #include <dt-bindings/interrupt-controller/irq.h>
