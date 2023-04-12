@@ -2,219 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6026DE892
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174A56DE89E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjDLAuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 20:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59148 "EHLO
+        id S229640AbjDLBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDLAuF (ORCPT
+        with ESMTP id S229459AbjDLBAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 20:50:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DA630FF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681260603; x=1712796603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zG3bK+4nghoXrgsY2rov2EDt5iV2SjCPvgOpENQ+qr8=;
-  b=Hp/Li+Joty4ozpk1EubStpFAfLXsghVvrrNTBd1LQB0WEq4h5ITKwq/R
-   WoA6Dzb+FHuJdwSHE2bYElASBI5ELhMsY2v0sn3AzmEyoxnLvpvmmuMpz
-   PEcA02eFYVqgMFATxybEUeRvfiFYqceFoRXaG6zkiwj1oOwHJKRPqQmIL
-   sRLKa64cBpckZK+PuSDyS4rVhgBsDOjDNu1CWIlFYrrW64x18MIRWkuiO
-   26Zw442oCdjoo5qYDEo6WVdC9EnVsesDtvH6qjsodMQs2uevkBJnHyTAY
-   yyFJeFP3wOJ4FgEXPevF+P3HFPrBJyoLsEg//VpI42hCiNDdMh7qiwj3u
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346445398"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="346445398"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 17:50:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="758045016"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="758045016"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.39.92])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 17:50:02 -0700
-Date:   Tue, 11 Apr 2023 17:50:00 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: octeon: remove typedef declaration for enums
-Message-ID: <ZDYAOBq7+8r/kJaf@aschofie-mobl2>
-References: <20230411175121.GA71709@koolguy>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411175121.GA71709@koolguy>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 11 Apr 2023 21:00:22 -0400
+X-Greylist: delayed 570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Apr 2023 18:00:20 PDT
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1BFE73;
+        Tue, 11 Apr 2023 18:00:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3273:10b0:7023:7419:46f0:9cf3])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 4D92E280392;
+        Wed, 12 Apr 2023 08:50:45 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
+        Ding Hui <dinghui@sangfor.com.cn>
+Subject: [RFC PATCH net] sfc: Fix use-after-free due to selftest_work
+Date:   Wed, 12 Apr 2023 08:50:13 +0800
+Message-Id: <20230412005013.30456-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSB9OVkJIQkxDT05IGU1KSVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTEhBSksZS0FMS0lIQUxPSkJBT00dS0FCGB1IWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Tid: 0a8772f18d0d2eb1kusn4d92e280392
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NCo6FDo5KT0VOCgNNhkNSSoT
+        Lw4aFAhVSlVKTUNKSU1LTU9NSklIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxIQUpLGUtBTEtJSEFMT0pCQU9NHUtBQhgdSFlXWQgBWUFIQkNINwY+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 07:51:21PM +0200, Dalvin-Ehinoma Noah Aiguobas wrote:
-> Fix checkpatch.pl warning for enums in drivers/staging/octeon/octeon-stubs.h:
+There is a use-after-free scenario that is:
 
-This line above is still leading to a checkpatch warning.
-If you are not seeing, then perhaps you are not running checkpatch
-on the HEAD commit, or on your formatted patch file. Either will
-show it.
+When netif_running() is false, user set mac address or vlan tag to VF,
+the xxx_set_vf_mac() or xxx_set_vf_vlan() will invoke efx_net_stop()
+and efx_net_open(), since netif_running() is false, the port will not
+start and keep port_enabled false, but selftest_worker is scheduled
+in efx_net_open().
 
-> cvmx_helper_interface_mode_t,
-> cvmx_spi_mode_t,
-> cvmx_pow_wait_t,
-> cvmx_pko_lock_t,
-> cvmx_pko_status_t
-> 
-> Change typedef cvmx_helper_interface_mode_t to
-> enum cvmx_helper_interface_mode in ethernet.c
-> 
-> Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-> ---
-> Changes in v2:
-> -Remove Alignment fixes from previous version.
-> 
->  drivers/staging/octeon/ethernet.c     |  2 +-
->  drivers/staging/octeon/octeon-stubs.h | 39 +++++++++++++--------------
->  2 files changed, 20 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/staging/octeon/ethernet.c b/drivers/staging/octeon/ethernet.c
-> index 9eee28f2940c..023b107e077a 100644
-> --- a/drivers/staging/octeon/ethernet.c
-> +++ b/drivers/staging/octeon/ethernet.c
-> @@ -798,7 +798,7 @@ static int cvm_oct_probe(struct platform_device *pdev)
->  
->  	num_interfaces = cvmx_helper_get_number_of_interfaces();
->  	for (interface = 0; interface < num_interfaces; interface++) {
-> -		cvmx_helper_interface_mode_t imode =
-> +		enum cvmx_helper_interface_mode imode =
->  		    cvmx_helper_interface_get_mode(interface);
->  		int num_ports = cvmx_helper_ports_on_interface(interface);
->  		int port;
-> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-> index 3e7b92cd2e35..58708a7f727a 100644
-> --- a/drivers/staging/octeon/octeon-stubs.h
-> +++ b/drivers/staging/octeon/octeon-stubs.h
-> @@ -213,14 +213,14 @@ enum cvmx_fau_op_size {
->  	CVMX_FAU_OP_SIZE_64 = 3
->  };
->  
-> -typedef enum {
-> +enum cvmx_spi_mode {
->  	CVMX_SPI_MODE_UNKNOWN = 0,
->  	CVMX_SPI_MODE_TX_HALFPLEX = 1,
->  	CVMX_SPI_MODE_RX_HALFPLEX = 2,
->  	CVMX_SPI_MODE_DUPLEX = 3
-> -} cvmx_spi_mode_t;
-> +};
->  
-> -typedef enum {
-> +enum cvmx_helper_interface_mode {
->  	CVMX_HELPER_INTERFACE_MODE_DISABLED,
->  	CVMX_HELPER_INTERFACE_MODE_RGMII,
->  	CVMX_HELPER_INTERFACE_MODE_GMII,
-> @@ -231,20 +231,20 @@ typedef enum {
->  	CVMX_HELPER_INTERFACE_MODE_PICMG,
->  	CVMX_HELPER_INTERFACE_MODE_NPI,
->  	CVMX_HELPER_INTERFACE_MODE_LOOP,
-> -} cvmx_helper_interface_mode_t;
-> +};
->  
-> -typedef enum {
-> +enum cvmx_pow_wait {
->  	CVMX_POW_WAIT = 1,
->  	CVMX_POW_NO_WAIT = 0,
-> -} cvmx_pow_wait_t;
-> +};
->  
-> -typedef enum {
-> +enum cvmx_pko_lock {
->  	CVMX_PKO_LOCK_NONE = 0,
->  	CVMX_PKO_LOCK_ATOMIC_TAG = 1,
->  	CVMX_PKO_LOCK_CMD_QUEUE = 2,
-> -} cvmx_pko_lock_t;
-> +};
->  
-> -typedef enum {
-> +enum cvmx_pko_status {
->  	CVMX_PKO_SUCCESS,
->  	CVMX_PKO_INVALID_PORT,
->  	CVMX_PKO_INVALID_QUEUE,
-> @@ -252,7 +252,7 @@ typedef enum {
->  	CVMX_PKO_NO_MEMORY,
->  	CVMX_PKO_PORT_ALREADY_SETUP,
->  	CVMX_PKO_CMD_QUEUE_INIT_ERROR
-> -} cvmx_pko_status_t;
-> +};
->  
->  enum cvmx_pow_tag_type {
->  	CVMX_POW_TAG_TYPE_ORDERED   = 0L,
-> @@ -1265,8 +1265,7 @@ static inline void cvmx_pko_get_port_status(uint64_t port_num, uint64_t clear,
->  					    cvmx_pko_port_status_t *status)
->  { }
->  
-> -static inline cvmx_helper_interface_mode_t cvmx_helper_interface_get_mode(int
-> -								   interface)
-> +static inline enum cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int interface)
->  {
->  	return 0;
->  }
-> @@ -1342,11 +1341,11 @@ static inline unsigned int cvmx_get_core_num(void)
->  }
->  
->  static inline void cvmx_pow_work_request_async_nocheck(int scr_addr,
-> -						       cvmx_pow_wait_t wait)
-> +						       enum cvmx_pow_wait wait)
->  { }
->  
->  static inline void cvmx_pow_work_request_async(int scr_addr,
-> -					       cvmx_pow_wait_t wait)
-> +					       enum cvmx_pow_wait wait)
->  { }
->  
->  static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
-> @@ -1356,13 +1355,13 @@ static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
->  	return wqe;
->  }
->  
-> -static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
-> +static inline struct cvmx_wqe *cvmx_pow_work_request_sync(enum cvmx_pow_wait wait)
->  {
->  	return (void *)(unsigned long)wait;
->  }
->  
->  static inline int cvmx_spi_restart_interface(int interface,
-> -					cvmx_spi_mode_t mode, int timeout)
-> +				       enum cvmx_spi_mode mode, int timeout)
->  {
->  	return 0;
->  }
-> @@ -1381,12 +1380,12 @@ static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interfac
->  }
->  
->  static inline void cvmx_pko_send_packet_prepare(uint64_t port, uint64_t queue,
-> -						cvmx_pko_lock_t use_locking)
-> +						enum cvmx_pko_lock use_locking)
->  { }
->  
-> -static inline cvmx_pko_status_t cvmx_pko_send_packet_finish(uint64_t port,
-> -		uint64_t queue, union cvmx_pko_command_word0 pko_command,
-> -		union cvmx_buf_ptr packet, cvmx_pko_lock_t use_locking)
-> +static inline enum cvmx_pko_status cvmx_pko_send_packet_finish(uint64_t port,
-> +		    uint64_t queue, union cvmx_pko_command_word0 pko_command,
-> +		    union cvmx_buf_ptr packet, enum cvmx_pko_lock use_locking)
->  {
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
+If we remove the device before selftest_worker run, the efx is freed,
+then we will get a UAF in run_timer_softirq() like this:
+
+[ 1178.907941] ==================================================================
+[ 1178.907948] BUG: KASAN: use-after-free in run_timer_softirq+0xdea/0xe90
+[ 1178.907950] Write of size 8 at addr ff11001f449cdc80 by task swapper/47/0
+[ 1178.907950]
+[ 1178.907953] CPU: 47 PID: 0 Comm: swapper/47 Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
+[ 1178.907954] Hardware name: SANGFOR X620G40/WI2HG-208T1061A, BIOS SPYH051032-U01 04/01/2022
+[ 1178.907955] Call Trace:
+[ 1178.907956]  <IRQ>
+[ 1178.907960]  dump_stack+0x71/0xab
+[ 1178.907963]  print_address_description+0x6b/0x290
+[ 1178.907965]  ? run_timer_softirq+0xdea/0xe90
+[ 1178.907967]  kasan_report+0x14a/0x2b0
+[ 1178.907968]  run_timer_softirq+0xdea/0xe90
+[ 1178.907971]  ? init_timer_key+0x170/0x170
+[ 1178.907973]  ? hrtimer_cancel+0x20/0x20
+[ 1178.907976]  ? sched_clock+0x5/0x10
+[ 1178.907978]  ? sched_clock_cpu+0x18/0x170
+[ 1178.907981]  __do_softirq+0x1c8/0x5fa
+[ 1178.907985]  irq_exit+0x213/0x240
+[ 1178.907987]  smp_apic_timer_interrupt+0xd0/0x330
+[ 1178.907989]  apic_timer_interrupt+0xf/0x20
+[ 1178.907990]  </IRQ>
+[ 1178.907991] RIP: 0010:mwait_idle+0xae/0x370
+
+I am thinking about several ways to fix the issue:
+
+[1] In this RFC, I cancel the selftest_worker unconditionally in
+efx_pci_remove().
+
+[2] Add a test condition, only invoke efx_selftest_async_start() when
+efx->port_enabled is true in efx_net_open().
+
+[3] Move invoking efx_selftest_async_start() from efx_net_open() to
+efx_start_all() or efx_start_port(), that matching cancel action in
+efx_stop_port().
+
+[4] However, I also notice that in efx_ef10_set_mac_address(), the
+efx_net_open() depends on original port_enabled, but others are not,
+if we change all efx_net_open() depends on old state like
+efx_ef10_set_mac_address() does, the UAF can also be fixed in theory.
+
+But I'm not sure which is better, is there any suggestions? Thanks.
+
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+ drivers/net/ethernet/sfc/efx.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/sfc/efx.c b/drivers/net/ethernet/sfc/efx.c
+index 884d8d168862..dd0b2363eed1 100644
+--- a/drivers/net/ethernet/sfc/efx.c
++++ b/drivers/net/ethernet/sfc/efx.c
+@@ -876,6 +876,8 @@ static void efx_pci_remove(struct pci_dev *pci_dev)
+ 	efx->state = STATE_UNINIT;
+ 	rtnl_unlock();
+ 
++	efx_selftest_async_cancel(efx);
++
+ 	if (efx->type->sriov_fini)
+ 		efx->type->sriov_fini(efx);
+ 
+-- 
+2.17.1
+
