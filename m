@@ -2,215 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7D66DF2A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE766DF2B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjDLLKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S229700AbjDLLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDLLKo (ORCPT
+        with ESMTP id S229562AbjDLLLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:10:44 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058006EA5;
-        Wed, 12 Apr 2023 04:10:19 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id q5so14069254ybk.7;
-        Wed, 12 Apr 2023 04:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681297810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=chKAIM4ZxxQVL8Xid6ujCOrtYPL9y4QPjMJ/OigHilk=;
-        b=nU/I7mboOTPCQqM4XPuxWrMb0lfd5MpHHU1F2gzx9H0Md857K1Sms/0Dmw3g2UjMPA
-         azq9eMvskSskpkHs6DdwT+qdC6JEHLmmu/hwNId1aFImiKTDtBydjXXSgeSllRqvKbyt
-         3xpMnZsAN/knei+Rfj7CvvETRm06iRGm8TyVlanOZMevwX+NVLMYXQ1BWutyV2Yd0Ljo
-         n+KEkMI3nAu5ih3xMGAPXzmAeYKhXxchwMid0maejPmfhKBgvY7T8j5N6BZEHW6whU16
-         5omAJbGTdM7IsTIoxcs+4AIqZ7H6Oapd0Nnjr8SHgKF4qoOOoQ2mGFd4ZMqAO7onPRsq
-         hAng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681297810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=chKAIM4ZxxQVL8Xid6ujCOrtYPL9y4QPjMJ/OigHilk=;
-        b=Z0J31zOI3Lam5F+uvPn969/EY/hIn2q3sfumVmAVii7gJrXsQw5N1AHCJGjyMjx7qF
-         i/C9BCO2SITSD2GkWSDXUWIwa4ohjw/5XFQgQkBbxFI5oQMwxXcXBkcEwcjpq4dwGv8q
-         Q2GbOYF/Hxw+AxjvNHcz/LLDUBbTErn0MAecUmjN3S8kqf+x2PE4PQnUEg5H9NNzFpOv
-         zplHMOmI5q6RaX3z3FQgo06gNINrj2l5TDEPWP4qmr7kn24HVqFTsGFWWvYjyVcEuGaR
-         PwSoPpwvQ6ddKFrqLJoBDr6du/3TCfJ98njK1yuo/++BaU5FfeQ7fQN/SAZ6R8ii41js
-         +Kuw==
-X-Gm-Message-State: AAQBX9dtgHgEjgNKytH2Gh+3r+ApMOxd1zRPehxXrLJ6ZG2aZVlcn0bP
-        w6ebjaBl3av3EPzTP7j2dpcELuU1Axfq92KfhDc=
-X-Google-Smtp-Source: AKy350YJeoWcJSKxKNPdLiHTnHz11u4bZUO+tYRek3nCmaFVkqul25T/YbSECDpDc9xM3E98GqMYtAynfPTUATsEyhw=
-X-Received: by 2002:a25:73c2:0:b0:b8f:3e29:fb9a with SMTP id
- o185-20020a2573c2000000b00b8f3e29fb9amr894425ybc.6.1681297809723; Wed, 12 Apr
- 2023 04:10:09 -0700 (PDT)
+        Wed, 12 Apr 2023 07:11:43 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA127EC2;
+        Wed, 12 Apr 2023 04:11:14 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33CB9kHeA001894, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33CB9kHeA001894
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Wed, 12 Apr 2023 19:09:46 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 12 Apr 2023 19:10:07 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 12 Apr 2023 19:10:07 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Wed, 12 Apr 2023 19:10:07 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
+Thread-Topic: [PATCH v2 2/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,parkmode-disable-hs-quirk' quirk
+Thread-Index: AQHZbDd6gxCuA7crRky4J7/Z72smRa8m+xOAgACJj2A=
+Date:   Wed, 12 Apr 2023 11:10:07 +0000
+Message-ID: <f775fb3674d446feab7dbfeb04e3987a@realtek.com>
+References: <20230411053550.16360-1-stanley_chang@realtek.com>
+ <20230411053550.16360-2-stanley_chang@realtek.com>
+ <42476475-3de1-49e8-4cfe-a9b3d98df8be@kernel.org>
+In-Reply-To: <42476475-3de1-49e8-4cfe-a9b3d98df8be@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230411054543.21278-1-wedsonaf@gmail.com> <20230411054543.21278-11-wedsonaf@gmail.com>
- <ZDXOVXFlq7eXRTIS@boqun-archlinux>
-In-Reply-To: <ZDXOVXFlq7eXRTIS@boqun-archlinux>
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-Date:   Wed, 12 Apr 2023 08:09:58 -0300
-Message-ID: <CANeycqo0bdXwuEMEbx8HREmTYGmBqG1EuT-jNMyZk304krOx1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 11/13] rust: lock: add `Guard::do_unlocked`
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023 at 18:18, Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> On Tue, Apr 11, 2023 at 02:45:41AM -0300, Wedson Almeida Filho wrote:
-> > From: Wedson Almeida Filho <walmeida@microsoft.com>
-> >
-> > It releases the lock, executes some function provided by the caller,
-> > then reacquires the lock. This is preparation for the implementation of
-> > condvars, which will sleep after between unlocking and relocking.
-> >
-> > We need an explicit `relock` method for primitives like `SpinLock` that
-> > have an irqsave variant: we use the guard state to determine if the lock
-> > was originally acquired with the regular `lock` function or
-> > `lock_irqsave`.
-> >
-> > Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> > ---
-> > v1 -> v2: No changes
-> > v2 -> v3: No changes
-> > v3 -> v4: No changes
-> >
-> >  rust/kernel/sync/lock.rs          | 25 +++++++++++++++++++++++++
-> >  rust/kernel/sync/lock/spinlock.rs | 17 +++++++++++++++--
-> >  2 files changed, 40 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-> > index 819b8ea5ba2b..cde57756795f 100644
-> > --- a/rust/kernel/sync/lock.rs
-> > +++ b/rust/kernel/sync/lock.rs
-> > @@ -22,6 +22,9 @@ pub mod spinlock;
-> >  ///
-> >  /// - Implementers must ensure that only one thread/CPU may access the protected data once the lock
-> >  /// is owned, that is, between calls to `lock` and `unlock`.
-> > +/// - Implementers must also ensure that `relock` uses the same locking method as the original
-> > +/// lock operation. For example, it should disable interrupts if [`IrqSaveBackend::lock_irqsave`]
-> > +/// is used.
-> >  pub unsafe trait Backend {
-> >      /// The state required by the lock.
-> >      type State;
-> > @@ -55,6 +58,17 @@ pub unsafe trait Backend {
-> >      ///
-> >      /// It must only be called by the current owner of the lock.
-> >      unsafe fn unlock(ptr: *mut Self::State, guard_state: &Self::GuardState);
-> > +
-> > +    /// Reacquires the lock, making the caller its owner.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// Callers must ensure that `state` comes from a previous call to [`Backend::lock`] (or
->
-> I think you mean
->
-> "Callers must ensure that `guard_state` comes ..."
->
-> , right?
-
-That's right, thanks for spotting this!
-
-I renamed the parameter names (based on your feedback :)) but didn't
-update the comment accordingly. Will do.
-
-> Regards,
-> Boqun
->
-> > +    /// variant) that has been unlocked with [`Backend::unlock`] and will be relocked now.
-> > +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> > +        // SAFETY: The safety requirements ensure that the lock is initialised.
-> > +        *guard_state = unsafe { Self::lock(ptr) };
-> > +    }
-> >  }
-> >
-> >  /// The "backend" of a lock that supports the irq-save variant.
-> > @@ -164,6 +178,17 @@ pub struct Guard<'a, T: ?Sized, B: Backend> {
-> >  // SAFETY: `Guard` is sync when the data protected by the lock is also sync.
-> >  unsafe impl<T: Sync + ?Sized, B: Backend> Sync for Guard<'_, T, B> {}
-> >
-> > +impl<T: ?Sized, B: Backend> Guard<'_, T, B> {
-> > +    #[allow(dead_code)]
-> > +    pub(crate) fn do_unlocked(&mut self, cb: impl FnOnce()) {
-> > +        // SAFETY: The caller owns the lock, so it is safe to unlock it.
-> > +        unsafe { B::unlock(self.lock.state.get(), &self.state) };
-> > +        cb();
-> > +        // SAFETY: The lock was just unlocked above and is being relocked now.
-> > +        unsafe { B::relock(self.lock.state.get(), &mut self.state) };
-> > +    }
-> > +}
-> > +
-> >  impl<T: ?Sized, B: Backend> core::ops::Deref for Guard<'_, T, B> {
-> >      type Target = T;
-> >
-> > diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-> > index 34dec09a97c0..e2a2f68e6d93 100644
-> > --- a/rust/kernel/sync/lock/spinlock.rs
-> > +++ b/rust/kernel/sync/lock/spinlock.rs
-> > @@ -4,6 +4,7 @@
-> >  //!
-> >  //! This module allows Rust code to use the kernel's `spinlock_t`.
-> >
-> > +use super::IrqSaveBackend;
-> >  use crate::bindings;
-> >
-> >  /// Creates a [`SpinLock`] initialiser with the given name and a newly-created lock class.
-> > @@ -95,7 +96,8 @@ pub type SpinLock<T> = super::Lock<T, SpinLockBackend>;
-> >  /// A kernel `spinlock_t` lock backend.
-> >  pub struct SpinLockBackend;
-> >
-> > -// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
-> > +// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. `relock` uses the
-> > +// same scheme as `unlock` to figure out which locking method was used originally.
-> >  unsafe impl super::Backend for SpinLockBackend {
-> >      type State = bindings::spinlock_t;
-> >      type GuardState = Option<core::ffi::c_ulong>;
-> > @@ -127,13 +129,24 @@ unsafe impl super::Backend for SpinLockBackend {
-> >              None => unsafe { bindings::spin_unlock(ptr) },
-> >          }
-> >      }
-> > +
-> > +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> > +        let _ = match guard_state {
-> > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> > +            // initialised.
-> > +            None => unsafe { Self::lock(ptr) },
-> > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> > +            // initialised.
-> > +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
-> > +        };
-> > +    }
-> >  }
-> >
-> >  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
-> >  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
-> >  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
-> >  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
-> > -unsafe impl super::IrqSaveBackend for SpinLockBackend {
-> > +unsafe impl IrqSaveBackend for SpinLockBackend {
-> >      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
-> >          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
-> >          // memory, and that it has been initialised before.
-> > --
-> > 2.34.1
-> >
+PiBPbiAxMS8wNC8yMDIzIDA3OjM1LCBTdGFubGV5IENoYW5nIHdyb3RlOg0KPiA+IEFkZCBhIG5l
+dyAnc25wcyxwYXJrbW9kZS1kaXNhYmxlLWhzLXF1aXJrJyBEVCBxdWlyayB0byBkd2MzIGNvcmUg
+Zm9yDQo+ID4gZGlzYWJsZSB0aGUgaGlnaC1zcGVlZCBwYXJrbW9kZS4NCj4gPg0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IFN0YW5sZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+ID4g
+LS0tDQo+ID4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Ivc25wcyxkd2Mz
+LnlhbWwgfCA1ICsrKysrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4g
+DQo+IE5BSywgc28gR3JlZyB3b24ndCBwaWNrIGl0IHVwIHRvbyBmYXN0LiA6KQ0KPiANCj4gUGxl
+YXNlIHVzZSBzY3JpcHRzL2dldF9tYWludGFpbmVycy5wbCB0byBnZXQgYSBsaXN0IG9mIG5lY2Vz
+c2FyeSBwZW9wbGUgYW5kIGxpc3RzDQo+IHRvIENDLiAgSXQgbWlnaHQgaGFwcGVuLCB0aGF0IGNv
+bW1hbmQgd2hlbiBydW4gb24gYW4gb2xkZXIga2VybmVsLCBnaXZlcw0KPiB5b3Ugb3V0ZGF0ZWQg
+ZW50cmllcy4gIFRoZXJlZm9yZSBwbGVhc2UgYmUgc3VyZSB5b3UgYmFzZSB5b3VyIHBhdGNoZXMg
+b24NCj4gcmVjZW50IExpbnV4IGtlcm5lbC4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6
+dG9mDQo+IA0KDQpDQyBtb3JlIG1haW50YWluZXJzIGJ5IHVzaW5nIHNjcmlwdHMvZ2V0X21haW50
+YWluZXJzLnBsDQoNClRoYW5rcywNClN0YW5sZXkNCg==
