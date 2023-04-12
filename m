@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8A6DFF8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3996DFF91
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjDLUUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S230024AbjDLUVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDLUUc (ORCPT
+        with ESMTP id S229997AbjDLUU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:20:32 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9AD6E92
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:20:31 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f69fb5cafso70060757b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 13:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681330830;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9ZxJh3TAe5K3gzUNy1jfSfsgplGS4KJVghK4pqaL44=;
-        b=RqkXxES0OfNwPYeIL/5G35UUzVo7uQxrnlPEEdikcqpHvn47El4pqOr8wYq89tVYpi
-         HLr5cEJ4JWQ/jdmfCM1YLMqTvSOQEdrI0K4uTEPItrANTfRQE6q78sTohPcxUfDxnoId
-         GKILHRa3UsQE7QIiLjy4676jyAbppyl2apcFdIrdT81Z/GSUrMUojJAk/Mt1Efkqv12C
-         LPSsNJi7gAahp0cgj6peliWo6ySRByBOpX6bsVdkpPfFNoztlWanLgJgl6nQu7EcgYix
-         chFoSfKibQihVpxlLXIXEwFdvvwXm8FGIbFg35F607LmD80apOHuKs82vYA1iA7OSUxc
-         VO4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681330830;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9ZxJh3TAe5K3gzUNy1jfSfsgplGS4KJVghK4pqaL44=;
-        b=ia5+R6Y9cKfmc4G+c4TBzx3Zc1PN21EomJ7VUAAaCmqh2sW6NpQN2wVLt224sDYzKs
-         LvdYs08gbYG6uz4jjfHcgmWSR390xDlNr80cD/NDX+5+SWkix+wO6252dFKaqE8ElvC+
-         pkzqo02PuXsgTqFjhWB4mnvGVpaJJAbrTXMw2c8UZ2ywO4yx0Ob6csx3wRhCz9botobr
-         asr5SWOtkJiDHq3AxCaXFT5FBGnkLsSsfsRz8o3CgTZVySH7pN/OlCT7FnBoIqrVfAPM
-         PpLcYj4bydOXuimer7XFxy0iFUhF91sIahdpXNwpPSKtG9iKYSJLlGLeuZ4+BSDwLx/E
-         ZjUg==
-X-Gm-Message-State: AAQBX9d7VOWqxvDlmsj7524JlYlx98ZXjkDR8COc1yn7UAqOkUvDMTN5
-        1Sl4CDFoFKFmbHzkQRGqZNiULDTQ66oLgA==
-X-Google-Smtp-Source: AKy350YQOCReGiGW58DM+oddgfzjHmmemt6sUL2CI3v1hQw0K6lwaYBsWidBXZzu5MdRQSQMY/CmhofzLYKttg==
-X-Received: from rohitner.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:413])
- (user=rohitner job=sendgmr) by 2002:a81:a74a:0:b0:54c:7a1:ef50 with SMTP id
- e71-20020a81a74a000000b0054c07a1ef50mr9024881ywh.6.1681330830221; Wed, 12 Apr
- 2023 13:20:30 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 13:20:09 -0700
-In-Reply-To: <20230412202009.3750955-1-rohitner@google.com>
-Mime-Version: 1.0
-References: <20230412202009.3750955-1-rohitner@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230412202009.3750955-2-rohitner@google.com>
-Subject: [PATCH v2 1/1] spi: spi-loopback-test: Add module param for iteration length
-From:   Rohit Ner <rohitner@google.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, joychakr@google.com,
-        Rohit Ner <rohitner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 16:20:58 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EB6E92;
+        Wed, 12 Apr 2023 13:20:53 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 59F841F54F;
+        Wed, 12 Apr 2023 22:20:51 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 22:20:49 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8250-elish-*: Fix panel compatibles
+Message-ID: <ec2rxutblwlm2wxm6e4zlu3v5d3f6l2eqxjafq2emky6t2kvgt@3u2lo4e53ixs>
+References: <20230412-topic-elish_compat-v1-1-4e03f95d5410@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412-topic-elish_compat-v1-1-4e03f95d5410@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI test framework is designed to run each test case for
-a list of lengths.
-Introduce a module parameter to limit the iterations
-to a single value among the list of lengths.
+On 2023-04-12 21:47:20, Konrad Dybcio wrote:
+> The fallback compatible was missing, resulting in dtbs_check failing.
+> Fix it.
+> 
+> Fixes: 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Signed-off-by: Rohit Ner <rohitner@google.com>
----
- drivers/spi/spi-loopback-test.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+As usual: Krzysztof already sent these:
 
-diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index 313106eb8d40..675a73cf1579 100644
---- a/drivers/spi/spi-loopback-test.c
-+++ b/drivers/spi/spi-loopback-test.c
-@@ -53,6 +53,12 @@ module_param(no_cs, int, 0);
- MODULE_PARM_DESC(no_cs,
- 		 "if set Chip Select (CS) will not be used");
- 
-+/* run tests only for a specific length */
-+static int run_only_iter_len = -1;
-+module_param(run_only_iter_len, int, 0);
-+MODULE_PARM_DESC(run_only_iter_len,
-+		 "only run tests for a length of this number in iterate_len list");
-+
- /* run only a specific test */
- static int run_only_test = -1;
- module_param(run_only_test, int, 0);
-@@ -1033,6 +1039,8 @@ int spi_test_run_test(struct spi_device *spi, const struct spi_test *test,
- 
- 	for (idx_len = 0; idx_len < SPI_TEST_MAX_ITERATE &&
- 	     (len = test->iterate_len[idx_len]) != -1; idx_len++) {
-+		if ((run_only_iter_len > -1) && len != run_only_iter_len)
-+			continue;
- 		FOR_EACH_ALIGNMENT(tx_align) {
- 			FOR_EACH_ALIGNMENT(rx_align) {
- 				/* and run the iteration */
--- 
-2.40.0.577.gac1e443424-goog
+    https://lore.kernel.org/linux-arm-msm/20230408130809.52319-2-krzysztof.kozlowski@linaro.org/T/#u
 
+> ---
+> foo b4 requires i put something here
+
+What?
+
+> ---
+>  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts  | 2 +-
+>  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+> index 8b2ae39950ff..de6101ddebe7 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+> @@ -13,6 +13,6 @@ / {
+>  };
+>  
+>  &display_panel {
+> -	compatible = "xiaomi,elish-boe-nt36523";
+> +	compatible = "xiaomi,elish-boe-nt36523", "novatek,nt36523";
+>  	status = "okay";
+>  };
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
+> index a4d5341495cf..4cffe9c703df 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
+> @@ -13,6 +13,6 @@ / {
+>  };
+>  
+>  &display_panel {
+> -	compatible = "xiaomi,elish-csot-nt36523";
+> +	compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
+>  	status = "okay";
+>  };
+> 
+> ---
+> base-commit: 7d8214bba44c1aa6a75921a09a691945d26a8d43
+> change-id: 20230412-topic-elish_compat-73c4511957a5
+> 
+> Best regards,
+> -- 
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
