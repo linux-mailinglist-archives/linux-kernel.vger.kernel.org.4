@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6AB6DF5C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896BB6DF5AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbjDLMmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S229784AbjDLMlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjDLMmT (ORCPT
+        with ESMTP id S229492AbjDLMll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:42:19 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48D67EC8;
-        Wed, 12 Apr 2023 05:42:09 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PxMjJ6LwzzKxnV;
-        Wed, 12 Apr 2023 20:39:32 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Apr
- 2023 20:42:07 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
-        <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH v3 8/8] ext4: make ext4_zeroout_es return void
-Date:   Wed, 12 Apr 2023 20:41:26 +0800
-Message-ID: <20230412124126.2286716-9-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230412124126.2286716-1-libaokun1@huawei.com>
-References: <20230412124126.2286716-1-libaokun1@huawei.com>
+        Wed, 12 Apr 2023 08:41:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E929646B1;
+        Wed, 12 Apr 2023 05:41:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FB8FD75;
+        Wed, 12 Apr 2023 05:42:19 -0700 (PDT)
+Received: from [10.57.55.240] (unknown [10.57.55.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 422CA3F73F;
+        Wed, 12 Apr 2023 05:41:29 -0700 (PDT)
+Message-ID: <71167f33-1e54-53ed-0101-c7293149d89b@arm.com>
+Date:   Wed, 12 Apr 2023 13:41:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
+Content-Language: en-GB
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Yicong Yang <yangyicong@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        yangyicong@hisilicon.com, linuxarm@huawei.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+ <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
+ <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
+ <20230406111607.00007be5@Huawei.com>
+ <20230406124040.GD392176@hirez.programming.kicks-ass.net>
+ <20230406174445.0000235c@Huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230406174445.0000235c@Huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After ext4_es_insert_extent returns void, the return value in
-ext4_zeroout_es is also unnecessary, so make it return void too.
+On 2023-04-06 17:44, Jonathan Cameron wrote:
+> On Thu, 6 Apr 2023 14:40:40 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+>> On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
+>>
+>>> In the long run I agree it would be good.  Short term there are more instances of
+>>> struct pmu that don't have parents than those that do (even after this series).
+>>> We need to figure out what to do about those before adding checks on it being
+>>> set.
+>>
+>> Right, I don't think you've touched *any* of the x86 PMUs for example,
+>> and getting everybody that boots an x86 kernel a warning isn't going to
+>> go over well :-)
+>>
+> 
+> It was tempting :) "Warning: Parentless PMU: try a different architecture."
+> 
+> I'd love some inputs on what the x86 PMU devices parents should be?
+> CPU counters in general tend to just spin out of deep in the architecture code.
+> 
+> My overall favorite is an l2 cache related PMU that is spun up in
+> arch/arm/kernel/irq.c init_IRQ()
+> 
+> I'm just not going to try and figure out why...
 
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
-V2->V3:
-	New added.
+I think that's simply because the PMU support was hung off the existing 
+PL310 configuration code, which still supports non-DT boardfiles. The 
+PMU shouldn't strictly need to be registered that early, it would just 
+be a bunch more work to ensure that a platform device is available for 
+it to bind to as a regular driver model driver, which wasn't justifiable 
+at the time.
 
- fs/ext4/extents.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index d555ed924f37..6c3080830b00 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -3123,7 +3123,7 @@ void ext4_ext_release(struct super_block *sb)
- #endif
- }
- 
--static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
-+static void ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
- {
- 	ext4_lblk_t  ee_block;
- 	ext4_fsblk_t ee_pblock;
-@@ -3134,11 +3134,10 @@ static int ext4_zeroout_es(struct inode *inode, struct ext4_extent *ex)
- 	ee_pblock = ext4_ext_pblock(ex);
- 
- 	if (ee_len == 0)
--		return 0;
-+		return;
- 
- 	ext4_es_insert_extent(inode, ee_block, ee_len, ee_pblock,
- 			      EXTENT_STATUS_WRITTEN);
--	return 0;
- }
- 
- /* FIXME!! we need to try to merge to left or right after zero-out  */
-@@ -3288,7 +3287,7 @@ static int ext4_split_extent_at(handle_t *handle,
- 			err = ext4_ext_dirty(handle, inode, path + path->p_depth);
- 			if (!err)
- 				/* update extent status tree */
--				err = ext4_zeroout_es(inode, &zero_ex);
-+				ext4_zeroout_es(inode, &zero_ex);
- 			/* If we failed at this point, we don't know in which
- 			 * state the extent tree exactly is so don't try to fix
- 			 * length of the original extent as it may do even more
-@@ -3641,9 +3640,8 @@ static int ext4_ext_convert_to_initialized(handle_t *handle,
- out:
- 	/* If we have gotten a failure, don't zero out status tree */
- 	if (!err) {
--		err = ext4_zeroout_es(inode, &zero_ex1);
--		if (!err)
--			err = ext4_zeroout_es(inode, &zero_ex2);
-+		ext4_zeroout_es(inode, &zero_ex1);
-+		ext4_zeroout_es(inode, &zero_ex2);
- 	}
- 	return err ? err : allocated;
- }
--- 
-2.31.1
-
+Thanks,
+Robin.
