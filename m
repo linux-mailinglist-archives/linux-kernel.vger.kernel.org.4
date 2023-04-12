@@ -2,127 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B683B6DFE40
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022036DFE33
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjDLTAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S229708AbjDLS72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjDLTAN (ORCPT
+        with ESMTP id S230309AbjDLS7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:00:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A3D40F9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681325957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LsekIlFf4oq6puv8x/mUu67gc6GF1RbRh4gmOlexPQc=;
-        b=PgWqlA8/B2PLmptUp0OoVjPxl9mBfE4+riy55F912/OEXf1SThCCPx+/kuJbWYCxU/KyDu
-        +jMGZ4heaJjqJ1btiTijPmp4jwGZ/mxVt2PrpimC6hhv8CplGy4nazBW/4cXRk7O9ePMxf
-        pvjkHnrpR/MNdORGUH0aG3xJFr5PJLA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-65LbHk3IPrqmD7NF7qmB5A-1; Wed, 12 Apr 2023 14:59:15 -0400
-X-MC-Unique: 65LbHk3IPrqmD7NF7qmB5A-1
-Received: by mail-qk1-f199.google.com with SMTP id c128-20020ae9ed86000000b0074690a17414so6569452qkg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:59:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681325954; x=1683917954;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LsekIlFf4oq6puv8x/mUu67gc6GF1RbRh4gmOlexPQc=;
-        b=VJWxMj3xp4peebFaAORVOIs3y/7g2MBddADzQ/nKbrOP1SXOHWm4roF+PmvZhOluJ7
-         TUrpFQbVsd7Ui91MOrS8ryHuiyYmeBgSlfpXht/mBCuf0pdJtLwhoMqvjEuWcn8A8IUu
-         QZDYwgjgsQXa0RXTyP6UP43tIGsQS1tQ8OlXh8muzy+kwINitJlNnxpHHtzfOlWf8gJk
-         RDAGoSzcCUPVadutiTJclVN8b176uHQSvHmkfYGNvonPVcoT5BdpL6bO1RIbF7poWkHn
-         znT2bUpqBEqup+RGegtHVyCesL2gyYFPIOJ9TcSPB83WFhDjp7CvVD9z5jNLULlgxKPA
-         OCdg==
-X-Gm-Message-State: AAQBX9fJrgXkHm83WekIwqi71nehzJkuGDp2G8k/iiNabt9OhaopFw8z
-        7KpkyiSVQZHL7se+QU1m0S3kY/ow92WFHjvJuUIxWxaTgijzohoHhE7ofhfO36PzTw+jrqUu+ZW
-        OgcRY2QDcysyRsq9AGlOJgPfNqynyubmk6beEYZCqHv9OrsR8slL3BBHYZMA8Rvl9CQpCzoj1gx
-        hj6XGhSE8=
-X-Received: by 2002:ac8:4e4d:0:b0:3db:8942:cbd2 with SMTP id e13-20020ac84e4d000000b003db8942cbd2mr4578830qtw.61.1681325954640;
-        Wed, 12 Apr 2023 11:59:14 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Ytfd6UQO/faje7ao9Zj5NDNkMuJuG88zVCdvJHUYSS4EtUT4r/Rek/sPM2QLubhJt+hrIQtQ==
-X-Received: by 2002:ac8:4e4d:0:b0:3db:8942:cbd2 with SMTP id e13-20020ac84e4d000000b003db8942cbd2mr4578811qtw.61.1681325954332;
-        Wed, 12 Apr 2023 11:59:14 -0700 (PDT)
-Received: from thinkpad-p1.kanata.rendec.net (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id k21-20020ac86055000000b003d3a34d2eb2sm4417558qtm.41.2023.04.12.11.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 11:59:13 -0700 (PDT)
-From:   Radu Rendec <rrendec@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 3/3] cacheinfo: Allow early level detection when DT/ACPI info is missing/broken
-Date:   Wed, 12 Apr 2023 14:57:59 -0400
-Message-Id: <20230412185759.755408-4-rrendec@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230412185759.755408-1-rrendec@redhat.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
+        Wed, 12 Apr 2023 14:59:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656D859C5;
+        Wed, 12 Apr 2023 11:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681325923; x=1712861923;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cOvRvmdOcjKTKaPRHIwZSdM4gnUfgayLyPINRcDqfls=;
+  b=BLjKJIyYu3tlGo61zpBMRSE3gmFh5kd9F/KJrp5pT6sgGdOYnPcz16Bb
+   4iR7K1refLU29H7qhq+MPx4dAbity4B5Qu8aEc/ZsWc1rigsY1KCsnrI5
+   FCRo3vCiQ79CPaClDThFA/CCLLF2JDECbnFAht9o6yjbNChuKTDm1mgeo
+   UjBzIQ4iaDb8XwGPdkMOkBPyLpubVcZjuw3Mi6TK+DGZ6FEGEMpIEEL9D
+   ashgzWHWkRYe897ax4snBN507unz49DehhZJ3gNYEiwKeiXocq8iBaWH9
+   8/6UOqz7MfxxD5FRy3fR29yR08HGWkKeO1QOug+VljVnkQDmFWZwq6cuz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="346671144"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="346671144"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:58:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="721702816"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="721702816"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2023 11:58:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmffh-000Xzr-0p;
+        Wed, 12 Apr 2023 18:58:21 +0000
+Date:   Thu, 13 Apr 2023 02:58:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shikemeng@huaweicloud.com
+Subject: Re: [PATCH v2 19/19] ext4: add first unit test for
+ ext4_mb_new_blocks_simple in mballoc
+Message-ID: <202304130200.eNNpj54h-lkp@intel.com>
+References: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent work enables cacheinfo memory for secondary CPUs to be allocated
-early, while still running on the primary CPU. That allows cacheinfo
-memory to be allocated safely on RT kernels. To make that work, the
-number of cache levels/leaves must be defined in the device tree or ACPI
-tables. Further work adds a path for early detection of the number of
-cache levels/leaves, which makes it possible to allocate the cacheinfo
-memory early without requiring extra DT/ACPI information.
+Hi Kemeng,
 
-This patch addresses a specific issue with ACPI systems with no PPTT. In
-that case, parse_acpi_topology() returns an error code, which in turn
-makes init_cpu_topology() return early, before fetch_cache_info() is
-called. In that case, the early cache level detection doesn't run.
+kernel test robot noticed the following build warnings:
 
-The solution is to simply remove the "return" statement and let the code
-flow fall through to calling fetch_cache_info().
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on next-20230412]
+[cannot apply to linus/master v6.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Radu Rendec <rrendec@redhat.com>
-Reported-by: Pierre Gondois <pierre.gondois@arm.com>
-Link: https://lore.kernel.org/all/dea94484-797f-3034-7b86-6d88801c0d91@arm.com/
-Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
----
- drivers/base/arch_topology.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412172833.2317696-20-shikemeng%40huaweicloud.com
+patch subject: [PATCH v2 19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
+config: loongarch-randconfig-r004-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130200.eNNpj54h-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+        git checkout 3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash fs/
 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index b1c1dd38ab01..147fb7d4af96 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -835,10 +835,10 @@ void __init init_cpu_topology(void)
- 	if (ret) {
- 		/*
- 		 * Discard anything that was parsed if we hit an error so we
--		 * don't use partial information.
-+		 * don't use partial information. But do not return yet to give
-+		 * arch-specific early cache level detection a chance to run.
- 		 */
- 		reset_cpu_topology();
--		return;
- 	}
- 
- 	for_each_possible_cpu(cpu) {
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130200.eNNpj54h-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   fs/ext4/mballoc.c: In function 'ext4_mb_mark_group_bb':
+   fs/ext4/mballoc.c:3752:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+    3752 |         handle_t *handle = mc->handle;
+         |         ^~~~~~~~
+   In file included from fs/ext4/mballoc.c:6523:
+   fs/ext4/mballoc-test.c: At top level:
+>> fs/ext4/mballoc-test.c:153:1: warning: no previous prototype for 'ext4_read_block_bitmap_nowait_stub' [-Wmissing-prototypes]
+     153 | ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ext4/mballoc-test.c:162:5: warning: no previous prototype for 'ext4_wait_block_bitmap_stub' [-Wmissing-prototypes]
+     162 | int ext4_wait_block_bitmap_stub(struct super_block *sb,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ext4/mballoc-test.c:169:25: warning: no previous prototype for 'ext4_get_group_desc_stub' [-Wmissing-prototypes]
+     169 | struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ext4/mballoc-test.c:181:5: warning: no previous prototype for 'ext4_mb_mark_group_bb_stub' [-Wmissing-prototypes]
+     181 | int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/ext4_read_block_bitmap_nowait_stub +153 fs/ext4/mballoc-test.c
+
+   151	
+   152	struct buffer_head *
+ > 153	ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
+   154					   bool ignore_locked)
+   155	{
+   156		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+   157	
+   158		get_bh(&grp_ctx->bitmap_bh);
+   159		return &grp_ctx->bitmap_bh;
+   160	}
+   161	
+ > 162	int ext4_wait_block_bitmap_stub(struct super_block *sb,
+   163					ext4_group_t block_group,
+   164					struct buffer_head *bh)
+   165	{
+   166		return 0;
+   167	}
+   168	
+ > 169	struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
+   170						     ext4_group_t block_group,
+   171						     struct buffer_head **bh)
+   172	{
+   173		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+   174	
+   175		if (bh != NULL)
+   176			*bh = &grp_ctx->gd_bh;
+   177	
+   178		return &grp_ctx->desc;
+   179	}
+   180	
+ > 181	int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
+   182				       ext4_group_t group, ext4_grpblk_t blkoff,
+   183				       ext4_grpblk_t len, int flags)
+   184	{
+   185		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
+   186		struct buffer_head *bitmap_bh = &grp_ctx->bitmap_bh;
+   187	
+   188		if (mc->state)
+   189			mb_set_bits(bitmap_bh->b_data, blkoff, len);
+   190		else
+   191			mb_clear_bits(bitmap_bh->b_data, blkoff, len);
+   192	
+   193		return 0;
+   194	}
+   195	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
