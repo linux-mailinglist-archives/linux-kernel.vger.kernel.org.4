@@ -2,82 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DB96DF6D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178F96DF6DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjDLNSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
+        id S230181AbjDLNUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjDLNSJ (ORCPT
+        with ESMTP id S229817AbjDLNUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:18:09 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F578685;
-        Wed, 12 Apr 2023 06:17:42 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id r27so14714491lfe.0;
-        Wed, 12 Apr 2023 06:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681305457; x=1683897457;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJNseHInBA06Y1/kAI+AeNvfvSA+GDihSjog6d0uzjA=;
-        b=pfgEVXHRDAZsgfM1kyQpiviU3dnAd0OQvuJ1+9cSMFh9KZPIKLGwHN3aBiMRBy3HMQ
-         m1ovUiqjr6pI5DXPWuu0ZhDva1y1+HhDvkwCdwsXZZDGENGhWsptBn330MGbTXsI682W
-         OrwJ5wUyzmPhdkcOOH3FKoNdcWZ7IVVtPhaeeeZVLyw4ipuvxhwxALSb4Al2mt1yEaz5
-         O7A6V6eUpM8iCqXWEG6aTPp5/p7DY39kak1B0+9HNHEhcfYPvm+NliUCZ3S+iuIH3CLR
-         CQ+F+dQ221dHTxpizF7kEhnb7/T9SZrmO8/60E9FJrfIEfwh/pOTAUrRLBDrRleyU0n8
-         vJdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681305457; x=1683897457;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJNseHInBA06Y1/kAI+AeNvfvSA+GDihSjog6d0uzjA=;
-        b=J0ithj+r5FuQUUYed4rFX2nEoBA2E7x41EJ30mhxm5dKP/CDwjmXIrEY5e7DBhHwx5
-         OSoxQoFf2iXUgkTwJ4vW2NFzyed9ban0Ez7KCVNttWlq/Qx9eZTOEHJ/3Bvnb25ZBrSH
-         C9WK9GmHeYQidcV9/x0XFH7qypYeBAhxY7O6uA3MkVm0iktwUAOMOLtXZAMxCLX3Nz/W
-         bC0bgb0byIRVtgQLdTSVV9n99Ud9yukyznwZtyBq+x9s/Ij84MSk2eX97uUHvXCYYd24
-         kP1Tqce+73m6js/CXomSbot3zhSJkt9brHvPV/sWCuQV38Ytx3WgFc4p6hmAytFQP7DG
-         cMdQ==
-X-Gm-Message-State: AAQBX9d6JZjFhT+Bk5HeavoHcEN0qrFKD7WsPbulgAZxgNNmRkqeH1Ib
-        9BmgJcmUykfBNsoAHZMMs/8=
-X-Google-Smtp-Source: AKy350ZX4ftXM8gR3xNB7N59ZEOR4vhkIz/z45Oy4wqqRNzrv7fWgV3TceKEWOypHibkJaIfQmxNmg==
-X-Received: by 2002:a19:a403:0:b0:4dc:8192:c5e6 with SMTP id q3-20020a19a403000000b004dc8192c5e6mr3557243lfc.13.1681305456458;
-        Wed, 12 Apr 2023 06:17:36 -0700 (PDT)
-Received: from pc636 (host-90-235-5-238.mobileonline.telia.com. [90.235.5.238])
-        by smtp.gmail.com with ESMTPSA id a4-20020ac25204000000b004d86808fd33sm3050583lfl.15.2023.04.12.06.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 06:17:36 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 12 Apr 2023 15:17:33 +0200
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rcu/kvfree: Prevents cache growing when the
- backoff_page_cache_fill is set
-Message-ID: <ZDavbUL11UsQvxPP@pc636>
-References: <20230406001238.647536-1-qiang1.zhang@intel.com>
- <ZC5MoREk30MIt79u@pc636>
- <8da4b48a-820c-461f-9dc0-a5afaf335177@paulmck-laptop>
- <PH0PR11MB58809B44F396B7C074BDC704DA919@PH0PR11MB5880.namprd11.prod.outlook.com>
- <9427c261-0395-4e03-8f93-2e0588fadd1f@paulmck-laptop>
- <ZDEfFcEhirm443xE@pc636>
- <PH0PR11MB58805AC5772BECAF65AD4365DA9B9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <ZDalzl1CTQ9VEPDw@pc636>
+        Wed, 12 Apr 2023 09:20:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D2AE8682
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:20:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E656D75;
+        Wed, 12 Apr 2023 06:21:10 -0700 (PDT)
+Received: from [10.34.100.129] (pierre123.nice.arm.com [10.34.100.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D4723F73F;
+        Wed, 12 Apr 2023 06:20:23 -0700 (PDT)
+Message-ID: <b87130ba-b3c2-825c-0e2c-634e8aee8d5c@arm.com>
+Date:   Wed, 12 Apr 2023 15:20:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDalzl1CTQ9VEPDw@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/3] cacheinfo: Check sib_leaf in
+ cache_leaves_are_shared()
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Jeremy Linton <jeremy.linton@arm.com>
+References: <20230412071809.12670-1-pierre.gondois@arm.com>
+ <20230412071809.12670-2-pierre.gondois@arm.com>
+ <20230412-viewpoint-refutable-a31f3657093c@wendy>
+ <d7a36615-896b-0f13-a1f6-761715ce460f@arm.com>
+ <20230412-hut-unused-21d683fcb8b0@wendy>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20230412-hut-unused-21d683fcb8b0@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,119 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 02:36:30PM +0200, Uladzislau Rezki wrote:
-> On Wed, Apr 12, 2023 at 04:18:20AM +0000, Zhang, Qiang1 wrote:
-> > > On Thu, Apr 06, 2023 at 11:11:37PM +0000, Zhang, Qiang1 wrote:
-> > > > >>On Thu, Apr 06, 2023 at 06:37:53AM +0200, Uladzislau Rezki wrote:
-> > > > > On Thu, Apr 06, 2023 at 08:12:38AM +0800, Zqiang wrote:
-> > > > > > Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
-> > > > > > executed before kfree_rcu_monitor() to drain page cache, if the bnode
-> > > > > > structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
-> > > > > > page cache again in kfree_rcu_monitor(), this commit add a check
-> > > > > > for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
-> > > > > > if the krcp structure's->backoff_page_cache_fill is set, prevent page
-> > > > > > cache growing.
-> > > > > > 
-> > > > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > > > > > ---
-> > > > > >  kernel/rcu/tree.c | 2 ++
-> > > > > >  1 file changed, 2 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > > index 9cc0a7766fd2..f25430ae1936 100644
-> > > > > > --- a/kernel/rcu/tree.c
-> > > > > > +++ b/kernel/rcu/tree.c
-> > > > > > @@ -2907,6 +2907,8 @@ static inline bool
-> > > > > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
-> > > > > >  	struct kvfree_rcu_bulk_data *bnode)
-> > > > > >  {
-> > > > > > +	if (atomic_read(&krcp->backoff_page_cache_fill))
-> > > > > > +		return false;
-> > > > > >  	// Check the limit.
-> > > > > >  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
-> > > > > >  		return false;
-> > > > > > -- 
-> > > > > > 2.32.0
-> > > > > >
-> > > > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > >
-> > > > >Thank you both!
-> > > > >
-> > > > >One question, though.  Might it be better to instead modify the "for"
-> > > > >loop in fill_page_cache_func() to start at krcp->nr_bkv_objs instead
-> > > > >of starting at zero?  That way, we still provide a single page under
-> > > > >low-memory conditions, but provide rcu_min_cached_objs of them if memory
-> > > > >is plentiful.
-> > > > >
-> > > > >Alternatively, if we really don't want to allow any pages at all under
-> > > > >low-memory conditions, shouldn't the fill_page_cache_func() set nr_pages
-> > > > >to zero (instead of the current 1) when the krcp->backoff_page_cache_fill
-> > > > >flag is set?  
-> > > > 
-> > > > Hi, Paul
-> > > > 
-> > > > If the krcp->backoff_page_cache_fill is true, the put_cached_bnode () return false,
-> > > > the allocated single page will also be freed in fill_page_cache_func().
-> > > > 
-> > > > or it would be better not to allocate under memory pressure.
-> > > 
-> > > That was my thought.  ;-)
-> > > 
-> > > > How about like this?
-> > > > 
-> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > index 9cc0a7766fd2..94aedbc3da36 100644
-> > > > --- a/kernel/rcu/tree.c
-> > > > +++ b/kernel/rcu/tree.c
-> > > > @@ -2907,6 +2907,8 @@ static inline bool
-> > > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
-> > > >         struct kvfree_rcu_bulk_data *bnode)
-> > > >  {
-> > > > +       if (atomic_read(&krcp->backoff_page_cache_fill))
-> > > > +               return false;
-> > > >         // Check the limit.
-> > > >         if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
-> > > >                 return false;
-> > > > @@ -3220,7 +3222,7 @@ static void fill_page_cache_func(struct work_struct *work)
-> > > >         int i;
-> > > > 
-> > > >         nr_pages = atomic_read(&krcp->backoff_page_cache_fill) ?
-> > > > -               1 : rcu_min_cached_objs;
-> > > > +               0 : rcu_min_cached_objs;
-> > > > 
-> > > >         for (i = 0; i < nr_pages; i++) {
-> > > 
-> > > The other question is why this loop does not allow for any pages
-> > > that might already be allocated, thus perhaps looking like this:
-> > > 
-> > > 		for (i = krcp->nr_bkv_objs; i < nr_pages; i++) {
-> > > 
-> > > Or do we somehow know that krcp->nr_bkv_objs is equal to zero?  (I am not
-> > > seeing this, but I do feel the need to ask.)
-> > > 
-> > >Usually we start from zero, this is when a ptr. was not added into
-> > >a bulk array, due to no memory reason for a single argument and no
-> > >cache pages anymore for double argument.
-> > >
-> > >In the fill page function, the limit is checked by the put_cached_bnode() itself
-> > >so it stops prefetch once nr_bkv_objs contains desired value.
-> > >
-> > 
-> > If the krcp->nr_bkv_objs is updated in kfree_rcu_work() and happens before invoke fill_page_cache_func(),
-> > when invoke fill_page_cache_func(), we start from zero,  will allocate page and hold krcp->lock,
-> > fill krcp->bkvcache,  but if krcp->nr_bkv_objs already equal to rcu_min_cached_objs,  this page will
-> > be freed and exit loop,  this allocate page seems like a meaningless operation. 
-> > 
-> > I also want to ask if starting from krcp->nr_bkv_objs is necessary?
-> > 
-> At least it does not break anything. The example like you described can
-> occur. So starting from the krcp->nr_bkv_objs is worth to do.
-> 
-> So, if it happens it would be good of you could simulate it and update
-> the commit message accordingly.
-> 
-A small nit, the krcp->nr_bkv_objs can not be accessed without a lock.
-So it must then accessed using READ_ONCE()/WRITE_ONCE() helpers.
 
---
-Uladzislau Rezki
+
+On 4/12/23 14:47, Conor Dooley wrote:
+> On Wed, Apr 12, 2023 at 02:34:11PM +0200, Pierre Gondois wrote:
+>> Hello Conor,
+>>
+>> On 4/12/23 13:27, Conor Dooley wrote:
+>>> On Wed, Apr 12, 2023 at 09:18:04AM +0200, Pierre Gondois wrote:
+>>>> If 'this_leaf' is a L2 cache (or higher) and 'sib_leaf' is a L1 cache,
+>>>> the caches are detected as shared. Indeed, cache_leaves_are_shared()
+>>>> only checks the cache level of 'this_leaf' when 'sib_leaf''s cache
+>>>> level should also be checked.
+>>>
+>>> I have to say, I'm a wee bit confused reading this patch - although it's
+>>> likely that I have just confused myself here.
+>>>
+>>> The comment reads "For non DT/ACPI systems, assume unique level 1 caches,
+>>> system-wide shared caches for all other levels".
+>>> Does this mean all level 1 caches are unique & all level N caches are
+>>> shared with all other level N caches, but not with level M caches?
+>>> (M != N; M, N > 1)
+>>
+>> I think the real answer to your question is in the last paragraph,
+>> but just in case:
+>>
+>> Each CPU manages the list of cacheinfo struct it has access to,
+>> and this list is per-CPU.
+>> cache_shared_cpu_map_setup() checks whether two cacheinfo struct are
+>> representing the same cache (for 2 CPU lists). If yes, their
+>> shared_cpu_map is updated.
+>>
+>> If there is DT/ACPI information, a cacheid/fw_token is associated
+>> with each cacheinfo struct. This allows to easily check when two
+>> struct are representing the same cache.
+>>
+>> Otherwise it is assumed here that L1 caches are private (so not shared)
+>> and other L2-N caches are shared, i.e. the interface below advertise the
+>> cache as available from other CPUs.
+>> /sys/devices/system/cpu/cpu0/cache/indexX/shared_cpu_list
+> 
+> Another silly question:
+> For two caches of level M & N; M != N; M, N > 1 should they be detected
+> as shared in the absence of any information in DT/ACPI?
+> The comment (to me) reads as if they should not, but it is rather vague.
+
+I think they should. The naming of cache_leaves_are_shared() might be
+misleading. The function is more trying to find out if 2 cache leaves struct
+are representing the same cache. So maybe renaming the function to
+cache_leaves_identical() might be better ?
+
+In cache_shared_cpu_map_setup(), cache_leaves_are_shared() is used called
+on each cache leaf a sibling CPU in order to try to find a matching cache leaf.
+It loops until a match is detected.
+
+If there is a DT/ACPI, cache leaves have an id/fw_token allowing to uniquely
+identify them, and trying to find a matching leaf makes sense.
+If there is no DT/ACPI, it is not possible to identify whether 2 cache leaves
+are representing the same cache. The desired behaviour is just:
+- If this_leaf or sib_leaf is a L1 cache, then the caches are not identical
+   (or shared if we use this wording)
+So the meaning of cache_leaves_identical() is a bit bent for this
+configuration.
+
+> 
+>>
+>>>
+>>> Is this patches goal to make sure that if this_leaf is level 2 and
+>>> sib_leaf is level 1 that these are not detected as shared, since level
+>>> one caches are meant to be unique?
+>>
+>> Yes exact.
+>>
+>>>
+>>> The previous logic checked only this_leaf's level, and declared things
+>>> shared if this_leaf is not a level 1 cache.
+>>> What happens here if this_leaf->level == 1 and sib_leaf->level == 2?
+>>> That'll be detected as shared, in a contradiction of the comment above
+>>> it, no?
+>>
+>> Yes, there is a contradiction. The condition should be '&&':
+>>    (this_leaf->level != 1) && (sib_leaf->level != 1)
+>> I made a bad rebase and the corrected code ended up in PATCH 3/3.
+>> Sorry for that. I ll correct it in the v3.
+> 
+> Good to know I am not losing my marbles, I was trying to reconcile the
+> intent with the patch & without the explicit statement of what was wrong
+> in the commit message I found it hard!
+
+Ok, I ll try to add more details in the commit message to be clearer.
+
+Regards,
+Pierre
+
+> 
+>> Thanks for the review,
+> 
+> nw chief.
