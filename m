@@ -2,239 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4836A6DFA45
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802AA6DFA4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjDLPdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S230031AbjDLPfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjDLPdY (ORCPT
+        with ESMTP id S229694AbjDLPfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:33:24 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E969E5BA0;
-        Wed, 12 Apr 2023 08:33:21 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p8so11845920plk.9;
-        Wed, 12 Apr 2023 08:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681313601; x=1683905601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1+I+BkK88saPfQ4NI6f6baJd0LfyYvQ7yABMz5aGWDU=;
-        b=INVSlDtd44zEUtZ3d5zo+oLxVZFMwUUQiwKBAuc9Z4Pa1nAXWQZpjrbXdpdflvODrZ
-         O7CbpT00ewJ0t0sEXpBQ3R5hPAGfMlOqoSOW1QjtJZPJaG319xwsERB088Z6jx4uC9BW
-         PfQtP5idCc67K2uUKsfM3djV7KyI5i4q/Wma1DRhvRLU05U1KusykLb16tEB11xaAc1g
-         jItF3VTUGEs3AYfVpr+CJujnZLX7ZoGAlxedODCep3vcl4TU+ZsQeO6mLBcyBWEznYl0
-         bQ8dV1ZFI6bUrIJXqGbYPQ+XfynnGeERLYLz0P1wU/z3v08oK+f53Sn6xV3UHmluSTMR
-         vj8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681313601; x=1683905601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1+I+BkK88saPfQ4NI6f6baJd0LfyYvQ7yABMz5aGWDU=;
-        b=oBCDANi2Tdct5UcJIRAsN2sTB3+qEO4EsI7CNDvM/OndgZojiclRANrshFirqi/mqc
-         u20Rgfy/+9eLOR+/zvJsV5Za3XA+FY0NbTL+x187fCkGBg/TEJJVHRJsMVmhQU+p+E1C
-         WMmJ/cCmsFFvFzjN7fY5xvx49i1SS2m+R/Dj2ACruyKXHvKusOcO/FqUX2Di0mL6IiI7
-         eR2AQKEA6X4CAI0ziMOgnW4DQJ4urZ/mNFCnD08v14t6nap7+atkkLEbNIOraF1hL1om
-         KXywreETium6BcoFlgNcHBcaUjTq8gDagIaOrAuZHxBnKIW+dPadM0Kei/8q5rSIfcbe
-         krkA==
-X-Gm-Message-State: AAQBX9dOSOrrb5MZb1KpcNOBO1ztT4z7LXC2A1PPbkFKE12fJ0biy2dF
-        7I8WwMe6hvL4iVQX3cTOvZM=
-X-Google-Smtp-Source: AKy350b05dL6SBPRrvLyJspW9POGw+QNcUjzoQpunL3WSpCkGduptTKUTdzZPNsQ/pG3tQSqY4zTRw==
-X-Received: by 2002:a17:90b:48c9:b0:246:57f6:44b5 with SMTP id li9-20020a17090b48c900b0024657f644b5mr3455515pjb.12.1681313601373;
-        Wed, 12 Apr 2023 08:33:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jw6-20020a170903278600b0019682e27995sm11797888plb.223.2023.04.12.08.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:33:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 08:33:19 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-Cc:     robh+dt@kernel.org, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 3/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
-Message-ID: <31bff772-b005-4aeb-85b8-ecd5b6847907@roeck-us.net>
-References: <20230412052305.1369521-1-lakshmiy@us.ibm.com>
- <20230412052305.1369521-4-lakshmiy@us.ibm.com>
+        Wed, 12 Apr 2023 11:35:40 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D359D3;
+        Wed, 12 Apr 2023 08:35:11 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CDuwAP011904;
+        Wed, 12 Apr 2023 11:34:18 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3pu5687k7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 11:34:17 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 33CFYE0B017828
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 12 Apr 2023 11:34:14 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 12 Apr
+ 2023 11:34:13 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 12 Apr 2023 11:34:13 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 33CFXucv019897;
+        Wed, 12 Apr 2023 11:33:58 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v2 0/2] Hwmon driver for MAX31827 temperature switch
+Date:   Wed, 12 Apr 2023 18:33:30 +0300
+Message-ID: <20230412153334.181852-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412052305.1369521-4-lakshmiy@us.ibm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: ytevDmHDrQgOkN9R7dUEIKcEiH-2py2b
+X-Proofpoint-ORIG-GUID: ytevDmHDrQgOkN9R7dUEIKcEiH-2py2b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_07,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 clxscore=1011 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304120137
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:23:03AM -0500, Lakshmi Yadlapati wrote:
-> Add the driver to support ACBEL FSG032 power supply.
-> 
-> Change-Id: Ief984325fe3fa0ed042e1d00e34ff579b45e1c81
-> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
-> ---
->  drivers/hwmon/pmbus/Kconfig        |  9 +++
->  drivers/hwmon/pmbus/Makefile       |  1 +
->  drivers/hwmon/pmbus/acbel-fsg032.c | 95 ++++++++++++++++++++++++++++++
->  3 files changed, 105 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 59d9a7430499..270b6336b76d 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -27,6 +27,15 @@ config SENSORS_PMBUS
->  	  This driver can also be built as a module. If so, the module will
->  	  be called pmbus.
->  
-> +config SENSORS_ACBEL_FSG032
-> +	tristate "ACBEL FSG032 Power Supply"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for the ACBEL
-> +	  FSG032 Power Supply.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called acbel-fsg032.
-> +
->  config SENSORS_ADM1266
->  	tristate "Analog Devices ADM1266 Sequencer"
->  	select CRC8
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 3ae019916267..84ee960a6c2d 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -5,6 +5,7 @@
->  
->  obj-$(CONFIG_PMBUS)		+= pmbus_core.o
->  obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
-> +obj-$(CONFIG_SENSORS_ACBEL_FSG032) += acbel-fsg032.o
->  obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
-> diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
-> new file mode 100644
-> index 000000000000..f160f45c7ac5
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/acbel-fsg032.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright 2023 IBM Corp.
-> + */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/device.h>
-> +#include <linux/fs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include "pmbus.h"
-> +
-> +static const struct i2c_device_id acbel_fsg032_id[] = {
-> +	{ "acbel_fsg032" },
-> +	{}
-> +};
-> +
-> +static struct pmbus_driver_info acbel_fsg032_info = {
-> +	.pages = 1,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-> +		   PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
-> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
-> +		   PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_VOUT |
-> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP |
-> +		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_FAN12,
-> +};
-> +
-> +static int acbel_fsg032_probe(struct i2c_client *client)
-> +{
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct device *dev = &client->dev;
-> +	struct dentry *debugfs;
-> +	int rc;
-> +
-> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> +	if (rc < 0) {
-> +		dev_err(dev, "Failed to read PMBUS_MFR_ID\n");
-> +		return rc;
-> +	}
-> +	if (strncmp(buf, "ACBEL", 5)) {
-> +		buf[rc] = '\0';
-> +		dev_err(dev, "Manufacturer '%s' not supported\n", buf);
-> +		return -ENODEV;
-> +	}
-> +
-> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +	if (rc < 0) {
-> +		dev_err(dev, "Failed to read PMBUS_MFR_MODEL\n");
-> +		return rc;
-> +	}
-> +
-> +	if (strncmp(buf, "FSG032", 6)) {
-> +		buf[rc] = '\0';
-> +		dev_err(dev, "Model '%s' not supported\n", buf);
-> +		return -ENODEV;
-> +	}
-> +
-> +	rc = pmbus_do_probe(client, &acbel_fsg032_info);
-> +	if (rc)
-> +		return rc;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +	if (!debugfs)
-> +		return rc;
-> +
-> +	/* ccin is not available, create a symlink from the
-> +	 * mfr_serial to ccin as required by hwmon */
+There are new functionalities: max_alarm, min_alarm and update_interval.
 
-There is no such hwmon requirement (hwmon neither knows nor
-cares about "ccin"), and this is not a valid multi-line comment.
-Please drop this change.
+Modified enable attribute: it switches between 1Hz periodic conversions
+and shutdown mode.
 
-If some userspace code is looking for a debugfs file named "ccin",
-change it to read "mfr_serial" instead of "ccin" if "ccin" is
-not available. Hacking a kernel driver to meet some arbitrary
-userspace requirement is not acceptable.
+When requesting a temperature read in shutdown mode 1shot is triggered,
+the driver waits until the conversion is completed and then displays the
+read value.
 
-Thanks,
-Guenter
+Added new write_alarm_val function which puts the device in shutdown
+mode, modifies the value of an alarm attribute and the reenables the
+device with the previous configurations. I used more bitwise operations
+in this functions instead of regmap_update_bits, because this way only 2
+write and 2 read operations are performed. With regmap_update_bits 3
+write operations and 2 read operations would be performed.
 
-> +	debugfs_create_symlink("ccin", debugfs, "mfr_serial");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id acbel_fsg032_of_match[] = {
-> +	{ .compatible = "acbel,fsg032" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, acbel_fsg032_of_match);
-> +
-> +static struct i2c_driver acbel_fsg032_driver = {
-> +	.driver = {
-> +		.name = "acbel-fsg032",
-> +		.of_match_table = acbel_fsg032_of_match,
-> +	},
-> +	.probe_new = acbel_fsg032_probe,
-> +	.id_table = acbel_fsg032_id,
-> +};
-> +
-> +module_i2c_driver(acbel_fsg032_driver);
-> +
-> +MODULE_AUTHOR("Lakshmi Yadlapati");
-> +MODULE_DESCRIPTION("PMBus driver for AcBel Power System power supplies");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-> -- 
-> 2.37.2
-> 
+Added support for the other 2 chips from the datasheet: max31828,
+max31829.
+
+Added documentation for the driver. 
+
+Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max31827-max31829.pdf
+
+*** BLURB HERE ***
+
+Daniel Matyas (2):
+  dt-bindings: hwmon: add MAX31827
+  hwmon: max31827: add MAX31827 driver
+
+ .../bindings/hwmon/adi,max31827.yaml          |  51 +++
+ Documentation/hwmon/max31827.rst              |  88 +++++
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31827.c                      | 324 ++++++++++++++++++
+ 6 files changed, 484 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+ create mode 100644 Documentation/hwmon/max31827.rst
+ create mode 100644 drivers/hwmon/max31827.c
+
+-- 
+2.34.1
+
