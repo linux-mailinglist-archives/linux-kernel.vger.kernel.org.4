@@ -2,247 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688FA6DED08
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853EB6DED0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjDLHzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S229867AbjDLHz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLHza (ORCPT
+        with ESMTP id S229532AbjDLHz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:55:30 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC3B1FD5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:55:27 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f0968734f6so798815e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:55:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681286126;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MjkjPiJds6NhU+s5Yx2pUX02cx7dy7w1B7Hx/2j4ki8=;
-        b=lowDSLhpYz5oAZVa6OxVSMTPZBY2GiCr24O1uNalYXG3eKNBAOYxCiWqUpmkcn77oJ
-         QmDsidgKsWFNtDe0iS3VPBd4GWNjawEI50qkjOEGXGecLqTzn6YaQs4sjJkU59yjh+G/
-         aJhze9GyXDwgGIwCURAA0Bm+4xpnoxynRkO5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681286126;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MjkjPiJds6NhU+s5Yx2pUX02cx7dy7w1B7Hx/2j4ki8=;
-        b=ev1PXu/J/dU5vQxh1iDfkjo8ThramS4JysXMTDrBKzAj67fylm4ThIN6S0J8qH0tku
-         WbC6h6bvXRv2HLx5YxEtSUMtYCzUuknCm+u7WFTr5enbHm48sldW5VlYy+SKrrg6U6lJ
-         PWaH1dET7d/GHEqavTM2JkfK1Z/E1whyYkv4/r/b7QBQpSJXaagcZup6sucid2ll3nZ9
-         NBzBpRn4gn5gDtD9CAzsPt8AEJTfcWrtg7KMSZKw2dWdiHctt3XLXz1dEyFs49zgFJNW
-         FuIGZuLq1gxFN4a+Kv+5hTcXt0AKVcPcdCazj8t66RLwic41vNSlXDX7F8Q7r/chfdBx
-         rSlA==
-X-Gm-Message-State: AAQBX9cujBd3Gv34qHqu92Ycim8w1c5ZsnAgar3HPS30qiqfDGo/WGvp
-        bdOF4ldzmHLID0WwEXpBl2IMGA==
-X-Google-Smtp-Source: AKy350YCD507ti6nJXcEWhQIA1OyqKMoRsMgrjJuXF/qJiryLyQVzwc6kBcMRP8haoB6i2piKpF90Q==
-X-Received: by 2002:adf:f107:0:b0:2c7:660:9284 with SMTP id r7-20020adff107000000b002c706609284mr1303777wro.0.1681286126393;
-        Wed, 12 Apr 2023 00:55:26 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id b16-20020adfe310000000b002f27a6a49d0sm5371170wrj.10.2023.04.12.00.55.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 00:55:25 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 09:55:23 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/7] drm: Add common fdinfo helper
-Message-ID: <ZDZj63TsCo/gd1pC@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230411225725.2032862-1-robdclark@gmail.com>
- <20230411225725.2032862-2-robdclark@gmail.com>
+        Wed, 12 Apr 2023 03:55:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF55C3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681286154; x=1712822154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L4GRltKsC62Qcydnf2jlGg6qLDDSoBJwtyiadtuogUc=;
+  b=z2pDQDv/s+4oidr72Ok4FseUekdLwUoKfBjf3Gw+UObv4M5GC0ygJy+C
+   ZolvU8yDTosK3mCQ/ngUxnTZWD8Z+uNCgILt3LRHxuI96RtPhue0tTQlb
+   sQCEAiVdPI59eJ8R1K4Ipnpzy/zCIfuAB0SHPM9RzhHKaQisVDpDd2Pjt
+   y/M5e4/oAH7cCppXOfrMd1y7FAJdmJr5Iu2UocSVY2QiOFLUiw/77aIZf
+   ba8dlKqerdRBILDoBgwbZ61MbZZ9puA+2E6ch61OVCkCeLDbzcqslQC3e
+   flObQNTebHAtbi5xpy6yGGjHX3PeaD42w8B2FAC/BpHRbQWbo5ja0uuri
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,338,1673938800"; 
+   d="asc'?scan'208";a="220513235"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Apr 2023 00:55:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 12 Apr 2023 00:55:51 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 12 Apr 2023 00:55:49 -0700
+Date:   Wed, 12 Apr 2023 08:55:34 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, Radu Rendec <rrendec@redhat.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v2 2/3] cacheinfo: Check cache properties are present in
+ DT
+Message-ID: <20230412-cone-mousiness-23326e149592@wendy>
+References: <20230412071809.12670-1-pierre.gondois@arm.com>
+ <20230412071809.12670-3-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tpBqFoyWWsu1/B9s"
 Content-Disposition: inline
-In-Reply-To: <20230411225725.2032862-2-robdclark@gmail.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230412071809.12670-3-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 03:56:06PM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Handle a bit of the boiler-plate in a single case, and make it easier to
-> add some core tracked stats.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+--tpBqFoyWWsu1/B9s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks a lot for kicking this off. A few polish comments below, with those
-addressed:
+Hey Pierre!
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Wed, Apr 12, 2023 at 09:18:05AM +0200, Pierre Gondois wrote:
+> If a Device Tree (DT) is used, the presence of cache properties is
+> assumed. Not finding any is not considered. For arm64 platforms,
+> cache information can be fetched from the clidr_el1 register.
+> Checking whether cache information is available in the DT
+> allows to switch to using clidr_el1.
+>=20
+> init_of_cache_level()
+> \-of_count_cache_leaves()
+> will assume there a 2 cache leaves (L1 data/instruction caches), which
+> can be different from clidr_el1 information.
+>=20
+> cache_setup_of_node() tries to read cache properties in the DT.
+> If there are none, this is considered a success. Knowing no
+> information was available would allow to switch to using clidr_el1.
 
+Hmm, w/ this series I am still seeing a:
+[    0.306736] Early cacheinfo failed, ret =3D -22
+
+Not finding any cacheinfo is totally valid, right?
+
+A basic RISC-V QEMU setup is sufficient to reproduce, for instance:
+| $(qemu) \
+| 	-m 2G -smp 5 \
+| 	-M virt -nographic \
+| 	-kernel $(vmlinux_bin)
+
+Cheers,
+Conor.
+
+> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count =
+cache leaves")
+> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@sp=
+ud/
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 > ---
->  drivers/gpu/drm/drm_file.c | 39 ++++++++++++++++++++++++++++++++++++++
->  include/drm/drm_drv.h      |  7 +++++++
->  include/drm/drm_file.h     |  4 ++++
->  3 files changed, 50 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-> index a51ff8cee049..37dfaa6be560 100644
-> --- a/drivers/gpu/drm/drm_file.c
-> +++ b/drivers/gpu/drm/drm_file.c
-> @@ -148,6 +148,7 @@ bool drm_dev_needs_global_mutex(struct drm_device *dev)
->   */
->  struct drm_file *drm_file_alloc(struct drm_minor *minor)
->  {
-> +	static atomic_t ident = ATOMIC_INIT(0);
-
-Maybe make this atomic64_t just to be sure?
-
->  	struct drm_device *dev = minor->dev;
->  	struct drm_file *file;
->  	int ret;
-> @@ -156,6 +157,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
->  	if (!file)
->  		return ERR_PTR(-ENOMEM);
->  
-> +	/* Get a unique identifier for fdinfo: */
-> +	file->client_id = atomic_inc_return(&ident) - 1;
->  	file->pid = get_pid(task_pid(current));
->  	file->minor = minor;
->  
-> @@ -868,6 +871,42 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e)
+>  drivers/base/cacheinfo.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>=20
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index e7ad6aba5f97..6749dc6ebf50 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -78,6 +78,9 @@ bool last_level_cache_is_shared(unsigned int cpu_x, uns=
+igned int cpu_y)
 >  }
->  EXPORT_SYMBOL(drm_send_event);
->  
-> +/**
-> + * drm_fop_show_fdinfo - helper for drm file fops
-> + * @seq_file: output stream
-> + * @f: the device file instance
-> + *
-> + * Helper to implement fdinfo, for userspace to query usage stats, etc, of a
-> + * process using the GPU.
-
-Please mention drm_driver.show_fd_info here too.
-
-> + */
-> +void drm_fop_show_fdinfo(struct seq_file *m, struct file *f)
-> +{
-> +	struct drm_file *file = f->private_data;
-> +	struct drm_device *dev = file->minor->dev;
-> +	struct drm_printer p = drm_seq_file_printer(m);
+> =20
+>  #ifdef CONFIG_OF
 > +
-> +	/*
-> +	 * ******************************************************************
-> +	 * For text output format description please see drm-usage-stats.rst!
-> +	 * ******************************************************************
-
-Maybe move this into the kerneldoc comment above (perhaps with an
-IMPORTANT: tag or something, and make it an actual link)?
-
-Also in the drm-usage-stats.rst please put a link to this function and
-that is must be used for implementing fd_info.
-
-> +	 */
+> +static bool of_check_cache_nodes(struct device_node *np);
 > +
-> +	drm_printf(&p, "drm-driver:\t%s\n", dev->driver->name);
-> +	drm_printf(&p, "drm-client-id:\t%u\n", file->client_id);
-> +
-> +	if (dev_is_pci(dev->dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev->dev);
-> +
-> +		drm_printf(&p, "drm-pdev:\t%04x:%02x:%02x.%d\n",
-> +			   pci_domain_nr(pdev->bus), pdev->bus->number,
-> +			   PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+>  /* OF properties to query for a given cache type */
+>  struct cache_type_info {
+>  	const char *size_prop;
+> @@ -205,6 +208,11 @@ static int cache_setup_of_node(unsigned int cpu)
+>  		return -ENOENT;
+>  	}
+> =20
+> +	if (!of_check_cache_nodes(np)) {
+> +		of_node_put(np);
+> +		return -ENOENT;
 > +	}
 > +
-> +	if (dev->driver->show_fdinfo)
-> +		dev->driver->show_fdinfo(&p, file);
+>  	prev =3D np;
+> =20
+>  	while (index < cache_leaves(cpu)) {
+> @@ -229,6 +237,25 @@ static int cache_setup_of_node(unsigned int cpu)
+>  	return 0;
+>  }
+> =20
+> +static bool of_check_cache_nodes(struct device_node *np)
+> +{
+> +	struct device_node *next;
+> +
+> +	if (of_property_present(np, "cache-size")   ||
+> +	    of_property_present(np, "i-cache-size") ||
+> +	    of_property_present(np, "d-cache-size") ||
+> +	    of_property_present(np, "cache-unified"))
+> +		return true;
+> +
+> +	next =3D of_find_next_cache_node(np);
+> +	if (next) {
+> +		of_node_put(next);
+> +		return true;
+> +	}
+> +
+> +	return false;
 > +}
-> +EXPORT_SYMBOL(drm_fop_show_fdinfo);
-
-Bit a bikeshed, but for consistency drop the _fop_? We don't have it for
-any of the other drm fops and git grep doesn't show a naming conflict.
-
 > +
->  /**
->   * mock_drm_getfile - Create a new struct file for the drm device
->   * @minor: drm minor to wrap (e.g. #drm_device.primary)
-> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
-> index 5b86bb7603e7..a883c6d3bcdf 100644
-> --- a/include/drm/drm_drv.h
-> +++ b/include/drm/drm_drv.h
-> @@ -401,6 +401,13 @@ struct drm_driver {
->  			       struct drm_device *dev, uint32_t handle,
->  			       uint64_t *offset);
->  
-> +	/**
-> +	 * @fdinfo:
-> +	 *
-> +	 * Print device specific fdinfo.  See drm-usage-stats.rst.
-
-Please make this a link. I like links in kerneldoc :-)
-
-> +	 */
-> +	void (*show_fdinfo)(struct drm_printer *p, struct drm_file *f);
+>  static int of_count_cache_leaves(struct device_node *np)
+>  {
+>  	unsigned int leaves =3D 0;
+> @@ -260,6 +287,9 @@ int init_of_cache_level(unsigned int cpu)
+>  	struct device_node *prev =3D NULL;
+>  	unsigned int levels =3D 0, leaves, level;
+> =20
+> +	if (!of_check_cache_nodes(np))
+> +		goto err_out;
 > +
->  	/** @major: driver major number */
->  	int major;
->  	/** @minor: driver minor number */
-> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> index 0d1f853092ab..dfa995b787e1 100644
-> --- a/include/drm/drm_file.h
-> +++ b/include/drm/drm_file.h
-> @@ -258,6 +258,9 @@ struct drm_file {
->  	/** @pid: Process that opened this file. */
->  	struct pid *pid;
->  
-> +	/** @client_id: A unique id for fdinfo */
-> +	u32 client_id;
-> +
->  	/** @magic: Authentication magic, see @authenticated. */
->  	drm_magic_t magic;
->  
-> @@ -437,6 +440,7 @@ void drm_send_event(struct drm_device *dev, struct drm_pending_event *e);
->  void drm_send_event_timestamp_locked(struct drm_device *dev,
->  				     struct drm_pending_event *e,
->  				     ktime_t timestamp);
-> +void drm_fop_show_fdinfo(struct seq_file *m, struct file *f);
->  
->  struct file *mock_drm_getfile(struct drm_minor *minor, unsigned int flags);
->  
-> -- 
-> 2.39.2
-> 
+>  	leaves =3D of_count_cache_leaves(np);
+>  	if (leaves > 0)
+>  		levels =3D 1;
+> --=20
+> 2.25.1
+>=20
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--tpBqFoyWWsu1/B9s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDZj6wAKCRB4tDGHoIJi
+0gzZAQCtwuxJautzYqFuN7VC/ZYl6n7d0LPrNnGsMKUqwAi5aQEAyhOatu3EX+Mn
+zZYrA/9ULoFq3teGuZ56XdEU0BrIJAg=
+=GpdU
+-----END PGP SIGNATURE-----
+
+--tpBqFoyWWsu1/B9s--
