@@ -2,183 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABEC6DF615
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D616DF624
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjDLMtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S231601AbjDLMup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDLMte (ORCPT
+        with ESMTP id S229946AbjDLMuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:49:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047349000;
-        Wed, 12 Apr 2023 05:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gHtUC9ZbjIgk4RPtGtrL1TvESI1pfT3DgBqtzWNBp54=; b=pqfu+JncaaA7vblGM3GJBfOy9A
-        N7fAck3Zn11IGydLgB79oD3a8b51X6bqgbojBDx2Ln7Hebk/OwuSo8T8TLukC8vMTtXBONbZZG7yO
-        NbXdsw2c5u2OGB8x2SqJyee0epR/RmH4vG77Z3rkFR1dZF5UY0eMIIBViyEzGzeTiyUEWxErx8pPw
-        l5bL5s1xm27Nx8g9qK5O4U5cUwztL3GbLLJNU10MziHfWZqPWSq7MQkUXVFSwZah+DCKP0ondB4YV
-        4AtYm1cB3u8Ion6I4g4QqPTFXevX/joGg6bpF4cW34NQl2SMVDz0AX8YW3a7nHUti9zQgN3s566Uw
-        4EVDdCPA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmZsx-00DvZw-2N;
-        Wed, 12 Apr 2023 12:47:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 82744300274;
-        Wed, 12 Apr 2023 14:47:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14174235CC4A0; Wed, 12 Apr 2023 14:47:36 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 14:47:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhao Gongyi <zhaogongyi@bytedance.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] mm: slub: annotate kmem_cache_node->list_lock as
- raw_spinlock
-Message-ID: <20230412124735.GE628377@hirez.programming.kicks-ass.net>
-References: <20230411130854.46795-1-zhengqi.arch@bytedance.com>
- <c6ea3b17-a89c-6f66-5c86-967f1da601b4@suse.cz>
- <ccaf5e8e-3457-a2cf-b6eb-794cbf1b46f5@bytedance.com>
- <f54cfeb9-f1c3-e656-d344-4cbf97a7c28a@suse.cz>
- <932bf921-a076-e166-4f95-1adb24d544cf@bytedance.com>
- <ZDZG6wlWIE4dzd4W@Boquns-Mac-mini.local>
- <PH0PR11MB58805856C1C47D49D1BA8092DA9B9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <e6a21ac6-939c-c686-387b-20f81ba5be53@suse.cz>
+        Wed, 12 Apr 2023 08:50:17 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2071.outbound.protection.outlook.com [40.107.22.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535A29F;
+        Wed, 12 Apr 2023 05:49:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jwQVAFCjtwrbnaApOPFK6LFOhqErZw/7pq8kVxub8G7NeDXd+EbbILgT2RnHwxc7Lbjd4td8IBaLtFf9F8FbFbj+xDfllq7ZGHcTxa6Xjyx7XwJiIBAq6Yycypu/b4kLF/Z6vN7ZSxDvztXBbkWhlGn9XehQ/IjmFi+GZhEOs0joKlHb3PO9ctLqKg0UpHjnYu/miu2flrrx5LbA9b0EEPllxPu2XhlzzlM2HL1ftTEIvXA6W7Pu4ojw7f63ooeFwE4XfbdEvV8G4j2I2E8I2NgXgGcqhMx+XpYHHxYjAf0q7jemUBWQh70Vu+pBZ6xa9JapHluAqeM2uMBmdKqANA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x0dzRqtPSO85rjzAqEo8rc0SJ1W5x9A0rEVVF5pPY4M=;
+ b=Q6xBlLrddJwcw+XrdVXmSCPrXNvzoecTIxegDOlflIPiMj2etAQhBewoLl6kdxzSC+2lV5QNP6KT5hCPG9PgNTVYRZXlvhdgdV1hzxo6tq8fPi8vH81FbojYLZLuRNNIZtEzVvCloXhemQXGDnJ4M0QyidfTkeQ2i06BRTN+IkzX/xQMS8jC9/gAmoOMj1eajXEgUa1b6fqXwym97lWz3guzBPqGSk1KmglIdv1U20rwP19XqUHSREVdkqngTlQNiACNtBOYsyHyxcWr6qbnIwo0nHT53bqrR1N8hlxQEOaCt0RE/zE9zcsZEfGG0OJWIN7SMlf/+MvCUh6Pd5bhhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x0dzRqtPSO85rjzAqEo8rc0SJ1W5x9A0rEVVF5pPY4M=;
+ b=P/wrJAh+dFMmvFN90M1G93o6RIPXvdelEWjYmItZy7oiP08Ngiwu0+7zIS80iv8MvUAqzviYk2Td6t9EVNl0HIz9D48FhM+T1I/l5pjn4hpVhaMILAEFxZIEDmvKkWlUgPbp43RlUXq60m6JhHdFlFjzK5nibugzyTZhcx3k0xM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AM7PR04MB6888.eurprd04.prod.outlook.com (2603:10a6:20b:107::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
+ 2023 12:47:59 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::55b1:d2dd:4327:912b]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::55b1:d2dd:4327:912b%5]) with mapi id 15.20.6298.028; Wed, 12 Apr 2023
+ 12:47:59 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Colin Foster <colin.foster@in-advantage.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 7/8] net: mscc: ocelot: strengthen type of "int i" in ocelot_stats.c
+Date:   Wed, 12 Apr 2023 15:47:36 +0300
+Message-Id: <20230412124737.2243527-8-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230412124737.2243527-1-vladimir.oltean@nxp.com>
+References: <20230412124737.2243527-1-vladimir.oltean@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0701CA0056.eurprd07.prod.outlook.com
+ (2603:10a6:800:5f::18) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6a21ac6-939c-c686-387b-20f81ba5be53@suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM7PR04MB6888:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f8d8014-7a77-4d6c-be60-08db3b54252e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xQlkxqbmf112VmdEIT63tOyXzcG3sJ99GN/6ABkm31zkjXij2B7LKRvEWxXzla6EkXIs6t4n3M4DIRN+82RjbDCok4D9/bcjP5FdrVMqeKdYUm+7RdhDYXLI5I0TZ8lnLRtZYj1Nevt0vK98kWeTIOb09EiY/Rw2D7/Q/biZ+tzQ0AaTbly+T+dm//qOj1GiDqFCLIvPx7XGC/e+YRViMqOHzBvTEX0JVEheS6YA7Z1DYMHV4eJncJs+nKFxXUFWm+qB/adVgu3Iy7ZG+eO2+bLmsJlu/B8mB9GFWyE3l9d2KCgdHzGhZ9RQMh9eTJhErDDGi6RlP++FXSeeeTaH3z0jsRqMHE+3xAUAqxGKz3bnljjvVI5IuvxrT/OZoGNrsJp4RNCNWF2C75qKqDlZu2fC9vADm7X7ToLvBlCAfTf5tx0u7LtcSPgUXrEwYCPMzqfLPozowI/nif6nJWwVaq/elTV/KX3Kw8soNmygnatF40ns7ZF2zhJdtJjoNp/r/Ylk9e1dLjNPSlH5/VzmmtJkr67yXTrQsCLz0SX4YQnyqcelaXh81zmzfNM6MFB3C6aDo89/AclRYOe8yJLA/qacYmtihB/xBZXlzRSUovLOWdFLUSMlU2tCjavWjW9E
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(451199021)(478600001)(52116002)(86362001)(83380400001)(6512007)(36756003)(38350700002)(2616005)(38100700002)(316002)(2906002)(1076003)(6506007)(26005)(54906003)(44832011)(186003)(5660300002)(66476007)(6486002)(6666004)(6916009)(8936002)(66556008)(41300700001)(8676002)(7416002)(66946007)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iVgiBARO8K1FAnB8J8k5WgUB+N2YZ9XSbwMOPCEGw3yJVat1Qy4KsHETJGy4?=
+ =?us-ascii?Q?01rk/0Eti9vFD73GpVnj20AcZyQm+1HIdvubt4hx/O160CfJkE0DOlhLi1qo?=
+ =?us-ascii?Q?uADAzflMUZ+meEiObxcCOIkTBKqy/n7qZa8h8iyH3WhNcx1X2aRCS0Hx/vKv?=
+ =?us-ascii?Q?L4MLj8NBg7dcH4CHjEVXUNsFu1E2aEA367z3oX5iyue+Mz1ZzXxABipUTPux?=
+ =?us-ascii?Q?zdIUgzcHyBycfVcJ5MunhvnbksJxCspEQqa67p9ZTp+kjLjMwSzsHua8eJCp?=
+ =?us-ascii?Q?VvY6brokHTFVQkL8DwEzMngFCqKMKNMHmjEyMVGDJVbluOndevXmpIIe32fB?=
+ =?us-ascii?Q?kXFZaiSXJMQ5qOfMVe4tIV+PXY31HqOHSjq2xpCJj7b6Il5Xls1dEI7mR9R/?=
+ =?us-ascii?Q?7TyETIjd2HIONnzzb9jjamOEjNmZUs7wkZS5MCWDaW/ZeqM+K8dfQ4T+Oe0t?=
+ =?us-ascii?Q?CmeDaELZEzcxk6NFaC4Pj/mG3PbEZhk5r8U4waXy7daRTB8uYUpj4vwik5MR?=
+ =?us-ascii?Q?twR/S8wLo/+CQ7GxwDt+uzniChLcNMSzc6u1PD1CkBdXXEJnYZ7lWQ9NvApN?=
+ =?us-ascii?Q?q0kqGC0NklEaylQrAf9BsHcqVSqJ4XDk4l+6rTqX+RKXHYWV4Fsm+gF+wYgM?=
+ =?us-ascii?Q?dI6O8Bt3sFjri58QSP1A99H+GAeDs7lTMfIzjBJr6ILabxpu4xOHtjKLNHas?=
+ =?us-ascii?Q?wXlisowA/rXWPRam4ydF3tyKcubMOEIXYOkdXMbl0+I0wHY/lblsSbU+boAg?=
+ =?us-ascii?Q?SKUzGQZrTaxwVSsCgNds158u7Ukd2yISOWkv67D762XjXZr4dnWTdTmAwqrs?=
+ =?us-ascii?Q?7QYJt73T04gxKXHOWfUnp3G7l3n+B4hH3fK4g+VcJRxcBoO5VPKebV1OPFD5?=
+ =?us-ascii?Q?+1O7TR7hoI0E/TGryslJN2nrNZlH4Q9Y6WQpuPGPY2lRLE3dliuIu0v2FOZA?=
+ =?us-ascii?Q?iJG3txLKaQ3966LWC3lnHl+2dPFqj/+nvy2O6IKaozdmy00M7UqUw3mkcpSl?=
+ =?us-ascii?Q?BZty4G8NIVzrEZDPlVL1RDPoXo8L0pBMcS8SGifzXxkkQMPCJXRK40Kq43HG?=
+ =?us-ascii?Q?bUwIfH0tVd1+ToIuYh4imkR95C4ZThBHwzT50VWtMAwszVjPuJwK6b+Sov56?=
+ =?us-ascii?Q?ynTmCi+DhmdU9V6JZs8J2LFC49gyuIastwJB2urZnL+BhNdxImcgB78Z1QDp?=
+ =?us-ascii?Q?CbpBuk8NBnAUB51CscorDsFJFf6UrHEaRbQcNt+oCx0wfNwnFGvAlaHmTkuz?=
+ =?us-ascii?Q?dp/BedgqHuDACCm5qVAJLNMQa1HI+Y24xLYj13RxcBG91wdW+jFQYJH9pAGH?=
+ =?us-ascii?Q?YWuWWqvvP8bfF7h7Mpa+LhXSzrSC/ioDyREmU+tuBqc8Q6zYoamLsuhdDQUF?=
+ =?us-ascii?Q?3QMLm/xUHnwK0xIRROuWG1KS0CdWlhM8D3vk/4AQ8apAfrHpcoU9D56pmwP3?=
+ =?us-ascii?Q?Bzs45PEaRiKnqRKASflf6D43y7/aT2id54OgPfnYfUKn2QVHRvWgMAv/yGEu?=
+ =?us-ascii?Q?Cna0zuzIJVgscFXUYrQDjTZNZY0skbuxDbG20AJydzEQSgWveiJee8/keDUb?=
+ =?us-ascii?Q?Nk85z+KgTArOipn9HOKKpICee3/751loNjyAMEPDVOy2mmW5NeCvYBR0o00u?=
+ =?us-ascii?Q?HA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f8d8014-7a77-4d6c-be60-08db3b54252e
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 12:47:59.2064
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iaRinoSMQnHBn+96J6O8PhbLgYHZSx/2MzdLdVqEr8Jr8pI2nxc3i6LhjQrmOLruG/5TVSoiiW/Fof0Tc0AS8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6888
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 08:50:29AM +0200, Vlastimil Babka wrote:
+The "int i" used to index the struct ocelot_stat_layout array actually
+has a specific type: enum ocelot_stat. Use it, so that the WARN()
+comment from ocelot_prepare_stats_regions() makes more sense.
 
-> > --- a/lib/debugobjects.c
-> > +++ b/lib/debugobjects.c
-> > @@ -562,10 +562,10 @@ __debug_object_init(void *addr, const struct debug_obj_descr *descr, int onstack
-> >         unsigned long flags;
-> > 
-> >         /*
-> > -        * On RT enabled kernels the pool refill must happen in preemptible
-> > +        * The pool refill must happen in preemptible
-> >          * context:
-> >          */
-> > -       if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())
-> > +       if (preemptible())
-> >                 fill_pool();
-> 
-> +CC Peterz
-> 
-> Aha so this is in fact another case where the code is written with
-> actual differences between PREEMPT_RT and !PREEMPT_RT in mind, but
-> CONFIG_PROVE_RAW_LOCK_NESTING always assumes PREEMPT_RT?
-
-Ooh, tricky, yes. PROVE_RAW_LOCK_NESTING always follows the PREEMP_RT
-rules and does not expect trickery like the above.
-
-Something like the completely untested below might be of help..
-
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
-diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
-index d22430840b53..f3120d6a7d9e 100644
---- a/include/linux/lockdep_types.h
-+++ b/include/linux/lockdep_types.h
-@@ -33,6 +33,7 @@ enum lockdep_wait_type {
- enum lockdep_lock_type {
- 	LD_LOCK_NORMAL = 0,	/* normal, catch all */
- 	LD_LOCK_PERCPU,		/* percpu */
-+	LD_LOCK_WAIT,		/* annotation */
- 	LD_LOCK_MAX,
- };
+ drivers/net/ethernet/mscc/ocelot_stats.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/mscc/ocelot_stats.c b/drivers/net/ethernet/mscc/ocelot_stats.c
+index a381e326cb2b..e82c9d9d0ad3 100644
+--- a/drivers/net/ethernet/mscc/ocelot_stats.c
++++ b/drivers/net/ethernet/mscc/ocelot_stats.c
+@@ -395,7 +395,7 @@ static void ocelot_check_stats_work(struct work_struct *work)
+ void ocelot_get_strings(struct ocelot *ocelot, int port, u32 sset, u8 *data)
+ {
+ 	const struct ocelot_stat_layout *layout;
+-	int i;
++	enum ocelot_stat i;
  
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 50d4863974e7..a4077f5bb75b 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -2279,8 +2279,9 @@ static inline bool usage_skip(struct lock_list *entry, void *mask)
- 	 * As a result, we will skip local_lock(), when we search for irq
- 	 * inversion bugs.
- 	 */
--	if (entry->class->lock_type == LD_LOCK_PERCPU) {
--		if (DEBUG_LOCKS_WARN_ON(entry->class->wait_type_inner < LD_WAIT_CONFIG))
-+	if (entry->class->lock_type != LD_LOCK_NORMAL) {
-+		if (entry->class->lock_type == LD_LOCK_PERCPU &&
-+		    DEBUG_LOCKS_WARN_ON(entry->class->wait_type_inner < LD_WAIT_CONFIG))
- 			return false;
+ 	if (sset != ETH_SS_STATS)
+ 		return;
+@@ -442,7 +442,8 @@ static void ocelot_port_stats_run(struct ocelot *ocelot, int port, void *priv,
+ int ocelot_get_sset_count(struct ocelot *ocelot, int port, int sset)
+ {
+ 	const struct ocelot_stat_layout *layout;
+-	int i, num_stats = 0;
++	enum ocelot_stat i;
++	int num_stats = 0;
  
- 		return true;
-@@ -4752,7 +4753,8 @@ static int check_wait_context(struct task_struct *curr, struct held_lock *next)
+ 	if (sset != ETH_SS_STATS)
+ 		return -EOPNOTSUPP;
+@@ -461,8 +462,8 @@ static void ocelot_port_ethtool_stats_cb(struct ocelot *ocelot, int port,
+ 					 void *priv)
+ {
+ 	const struct ocelot_stat_layout *layout;
++	enum ocelot_stat i;
+ 	u64 *data = priv;
+-	int i;
  
- 	for (; depth < curr->lockdep_depth; depth++) {
- 		struct held_lock *prev = curr->held_locks + depth;
--		u8 prev_inner = hlock_class(prev)->wait_type_inner;
-+		struct lock_class *class = hlock_class(prev);
-+		u8 prev_inner = class->wait_type_inner;
+ 	layout = ocelot_get_stats_layout(ocelot);
  
- 		if (prev_inner) {
- 			/*
-@@ -4762,6 +4764,12 @@ static int check_wait_context(struct task_struct *curr, struct held_lock *next)
- 			 * Also due to trylocks.
- 			 */
- 			curr_inner = min(curr_inner, prev_inner);
-+
-+			/*
-+			 * Allow override for annotations.
-+			 */
-+			if (unlikely(class->lock_type == LD_LOCK_WAIT))
-+				curr_inner = prev_inner;
- 		}
- 	}
+@@ -890,7 +891,7 @@ static int ocelot_prepare_stats_regions(struct ocelot *ocelot)
+ 	struct ocelot_stats_region *region = NULL;
+ 	const struct ocelot_stat_layout *layout;
+ 	enum ocelot_reg last = 0;
+-	int i;
++	enum ocelot_stat i;
  
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index df86e649d8be..fae71ef72a16 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -565,8 +565,16 @@ __debug_object_init(void *addr, const struct debug_obj_descr *descr, int onstack
- 	 * On RT enabled kernels the pool refill must happen in preemptible
- 	 * context:
- 	 */
--	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible()) {
-+		static lockdep_map dep_map = {
-+			.name = "wait-type-override",
-+			.wait_type_inner = LD_WAIT_SLEEP,
-+			.lock_type = LD_LOCK_WAIT,
-+		};
-+		lock_map_acquire(&dep_map);
- 		fill_pool();
-+		lock_map_release(&dep_map);
-+	}
+ 	INIT_LIST_HEAD(&ocelot->stats_regions);
  
- 	db = get_bucket((unsigned long) addr);
- 
+-- 
+2.34.1
+
