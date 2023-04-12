@@ -2,86 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DC66DF1EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF256DF1D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjDLK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S231368AbjDLKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjDLK0I (ORCPT
+        with ESMTP id S231270AbjDLKSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:26:08 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 03:26:04 PDT
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E468184;
-        Wed, 12 Apr 2023 03:26:04 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.141.245])
-        by APP-05 (Coremail) with SMTP id zQCowADHzMylhTZkxMRvEQ--.61397S2;
-        Wed, 12 Apr 2023 18:19:17 +0800 (CST)
-From:   sunying@nj.iscas.ac.cn
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Ying Sun <sunying@nj.iscas.ac.cn>
-Subject: [PATCH] trace/recordmcount: add the necessary dependencies
-Date:   Wed, 12 Apr 2023 18:18:40 +0800
-Message-Id: <20230412101840.13601-1-sunying@nj.iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
+        Wed, 12 Apr 2023 06:18:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356474C19;
+        Wed, 12 Apr 2023 03:18:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E91851F6E6;
+        Wed, 12 Apr 2023 10:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681294722; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dmOoVTX9gnkxDiayDDxZ3/kFfYy1jXxF5rFN0OslPTw=;
+        b=Sl8f1FB88uVYTGKvQafE7wbnuyk6f/agFZhs8d3xV05EK82NvvFtJfWf2mvoz9w02dfciv
+        o6dF9fs7U/L+yOztrkDFCIs9TBHoJuVoPbi4L1kWTho6aXAyDZNQrD+wVDCh/CoHz1O+96
+        9+ylqlNLlaTaPq4WzRJE2i/GUYPpaCc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681294722;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dmOoVTX9gnkxDiayDDxZ3/kFfYy1jXxF5rFN0OslPTw=;
+        b=6qmzC9hDi+At7IJOlAKpnaTHZLlBildG4atf+bFVwwTrrgCSZgL3zanbacnydQZM67JdB7
+        Mg+jhoJUK6nD2fDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8969139EE;
+        Wed, 12 Apr 2023 10:18:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n0hRNIKFNmR4FQAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 12 Apr 2023 10:18:42 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5BB3EA0732; Wed, 12 Apr 2023 12:18:42 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 12:18:42 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, jack@suse.com,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com>,
+        syzbot <syzbot+aacb82fca60873422114@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] [fs?] possible deadlock in quotactl_fd
+Message-ID: <20230412101842.m6vr26eqnfjaftdr@quack3>
+References: <000000000000f1a9d205f909f327@google.com>
+ <000000000000ee3a3005f909f30a@google.com>
+ <20230411-sendung-apokalypse-05af1adb8889@brauner>
+ <20230411105542.6dee4qf2tgt5scwx@quack3>
+ <20230411-stich-tonart-8da033e58554@brauner>
+ <20230411-skandal-global-379ddaf6e66a@brauner>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHzMylhTZkxMRvEQ--.61397S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1xuw43tF45urWDJw47Jwb_yoW3uwc_X3
-        y8W3W8Gr4DZryv9rWUWFs3uF1aqaykXFWvka4UtrZrJw1DKr13G3Z8JFn8JrZrG3sxuF13
-        ZrWfXrs3tF1fujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIkFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC
-        0wCY02Avz4vE14v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUdb1nUUUUU=
-X-Originating-IP: [124.16.141.245]
-X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411-skandal-global-379ddaf6e66a@brauner>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ying Sun <sunying@nj.iscas.ac.cn>
+On Tue 11-04-23 16:01:16, Christian Brauner wrote:
+> On Tue, Apr 11, 2023 at 03:40:25PM +0200, Christian Brauner wrote:
+> > On Tue, Apr 11, 2023 at 12:55:42PM +0200, Jan Kara wrote:
+> > > On Tue 11-04-23 12:11:52, Christian Brauner wrote:
+> > > > On Mon, Apr 10, 2023 at 11:53:46PM -0700, syzbot wrote:
+> > > > > Hello,
+> > > > > 
+> > > > > syzbot found the following issue on:
+> > > > > 
+> > > > > HEAD commit:    0d3eb744aed4 Merge tag 'urgent-rcu.2023.04.07a' of git://g..
+> > > > > git tree:       upstream
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=11798e4bc80000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
+> > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > > 
+> > > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > > > 
+> > > > > Downloadable assets:
+> > > > > disk image: https://storage.googleapis.com/syzbot-assets/a02928003efa/disk-0d3eb744.raw.xz
+> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/7839447005a4/vmlinux-0d3eb744.xz
+> > > > > kernel image: https://storage.googleapis.com/syzbot-assets/d26ab3184148/bzImage-0d3eb744.xz
+> > > > > 
+> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > Reported-by: syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com
+> > > > > 
+> > > > > ======================================================
+> > > > > WARNING: possible circular locking dependency detected
+> > > > > 6.3.0-rc6-syzkaller-00016-g0d3eb744aed4 #0 Not tainted
+> > > > > ------------------------------------------------------
+> > > > > syz-executor.3/11858 is trying to acquire lock:
+> > > > > ffff88802a3bc0e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
+> > > > > 
+> > > > > but task is already holding lock:
+> > > > > ffff88802a3bc460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
+> > > > > 
+> > > > > which lock already depends on the new lock.
+> > > > > 
+> > > > > 
+> > > > > the existing dependency chain (in reverse order) is:
+> > > > > 
+> > > > > -> #1 (sb_writers#4){.+.+}-{0:0}:
+> > > > >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+> > > > >        __sb_start_write include/linux/fs.h:1477 [inline]
+> > > > >        sb_start_write include/linux/fs.h:1552 [inline]
+> > > > >        write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
+> > > > >        ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
+> > > > >        __ext4_remount fs/ext4/super.c:6543 [inline]
+> > > > >        ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
+> > > > >        reconfigure_super+0x40c/0xa30 fs/super.c:956
+> > > > >        vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+> > > > >        __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
+> > > > >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> > > > >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > > 
+> > > > > -> #0 (&type->s_umount_key#31){++++}-{3:3}:
+> > > > >        check_prev_add kernel/locking/lockdep.c:3098 [inline]
+> > > > >        check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+> > > > >        validate_chain kernel/locking/lockdep.c:3832 [inline]
+> > > > >        __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+> > > > >        lock_acquire kernel/locking/lockdep.c:5669 [inline]
+> > > > >        lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+> > > > >        down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+> > > > >        __do_sys_quotactl_fd+0x174/0x3f0 fs/quota/quota.c:997
+> > > > >        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > >        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> > > > >        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > > 
+> > > > > other info that might help us debug this:
+> > > > > 
+> > > > >  Possible unsafe locking scenario:
+> > > > > 
+> > > > >        CPU0                    CPU1
+> > > > >        ----                    ----
+> > > > >   lock(sb_writers#4);
+> > > > >                                lock(&type->s_umount_key#31);
+> > > > >                                lock(sb_writers#4);
+> > > > >   lock(&type->s_umount_key#31);
+> > > > > 
+> > > > >  *** DEADLOCK ***
+> > > > 
+> > > > Hmkay, I understand how this happens, I think:
+> > > > 
+> > > > fsconfig(FSCONFIG_CMD_RECONFIGURE)                      quotactl_fd(Q_QUOTAON/Q_QUOTAOFF/Q_XQUOTAON/Q_XQUOTAOFF)
+> > > > 							-> mnt_want_write(f.file->f_path.mnt);
+> > > > -> down_write(&sb->s_umount);                              -> __sb_start_write(sb, SB_FREEZE_WRITE) 
+> > > > -> reconfigure_super(fc);
+> > > >    -> ext4_multi_mount_protect()
+> > > >       -> __sb_start_write(sb, SB_FREEZE_WRITE)         -> down_write(&sb->s_umount);
+> > > > -> up_write(&sb->s_umount);
+> > > 
+> > > Thanks for having a look!
+> > > 
+> > > > I have to step away from the computer now for a bit but naively it seem
+> > > > that the locking order for quotactl_fd() should be the other way around.
+> > > > 
+> > > > But while I'm here, why does quotactl_fd() take mnt_want_write() but
+> > > > quotactl() doesn't? It seems that if one needs to take it both need to
+> > > > take it.
+> > > 
+> > > Couple of notes here:
+> > > 
+> > > 1) quotactl() handles the filesystem freezing by grabbing the s_umount
+> > > semaphore, checking the superblock freeze state (it cannot change while
+> > > s_umount is held) and proceeding if fs is not frozen. This logic is hidden
+> > > in quotactl_block().
+> > > 
+> > > 2) The proper lock ordering is indeed freeze-protection -> s_umount because
+> > > that is implicitely dictated by how filesystem freezing works. If you grab
+> > 
+> > Yep.
+> 
+> One final thought about this. quotactl() and quotactl_fd() could do the
+> same thing though, right? quotactl() could just be made to use the same
+> locking scheme as quotactl_fd(). Not saying it has to, but the code
+> would probably be easier to understand/maintain if both would use the same.
 
-HAVE_C_RECORDMCOUNT is used only if the condition
-"ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT" is met in the Makefile,
-adding a dependency constraint on this configuration option
- to prevent it from being set ‘y' but not taking effect.
+Yes, that would be nice. But quotactl(2) gets a block device as an
+argument, needs to translate that to a superblock (user_get_super()) and
+only then we could use sb_start_write() to protect from fs freezing - but
+we already hold s_umount from user_get_super() so we can't do that due to
+lock ordering. That's why handling the freeze protection is so contrived in
+quotactl(2). We used to have variant of user_get_super() that guaranteed
+returning thawed superblock but Christoph didn't like it and only quota
+code was using it so stuff got opencoded in the quota code instead (see
+commit 60b498852bf2 ("fs: remove get_super_thawed and
+get_super_exclusive_thawed").
 
-Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
-Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
----
- kernel/trace/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 8cf97fa4a4b3..69bb70b6bdd7 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -94,6 +94,7 @@ config HAVE_OBJTOOL_NOP_MCOUNT
- 
- config HAVE_C_RECORDMCOUNT
- 	bool
-+	depends on FTRACE_MCOUNT_USE_RECORDMCOUNT
- 	help
- 	  C version of recordmcount available?
- 
+								Honza
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
