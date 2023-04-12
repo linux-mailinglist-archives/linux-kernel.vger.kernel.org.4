@@ -2,124 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA676DF6A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A0D6DF691
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjDLNNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S230116AbjDLNLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjDLNMn (ORCPT
+        with ESMTP id S230034AbjDLNK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:12:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE2B83FC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:12:33 -0700 (PDT)
+        Wed, 12 Apr 2023 09:10:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CB17D98;
+        Wed, 12 Apr 2023 06:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681305153; x=1712841153;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pHDdNub1XE313y0o+udCKvVcUwWqzEfrQeWMSLbvAXY=;
-  b=ZL9lgEd8+bItdMUwfIhu27E741I3LSug9fuv3Xzu8c6wsEU7s/q7Mxsz
-   PSJUvaLYNxeYNlpv9r3XTKtXvf3mwcPiVSAYmFLUQf5ilx0HOxVSZSTez
-   tjD0wjtpO4h+HrAkTco2gfVqztHz5VL4VqHLzdcL+elmV/JED6mmGVQPb
-   UMv5YBhC0WQgzXYQC1w5R1u/AI59+zkUVcBsVhr88J0wYTzcBY8WELXl9
-   X04w8QKfprcWwUWvFwlyvC9ipXk5Fo395dkN/O0tun8Dy41c/r2gF73vE
-   MXb4bY7xBUuTfj3qrTot1ZiQk69/hbHK32EUQkrEw28RrAfwrnAC5AFyl
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332586538"
+  t=1681305039; x=1712841039;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=BRXVLSuXsvz0CRk3kP+DzHsqIj3BzwxOiuq0hpkZpXs=;
+  b=Av9oH+d3Z8zjTKqqPz2yr6NuH3/fCUOcovZeKZAjUZeQV8np99wK5HNS
+   Q+SOkDLbb1ttYDD/alrR8YckE0RmzCk0L0EemHcxnAMybUou0cnGCKKax
+   HNqq/zCITPh2lwuqu022GaAMXGNfZTEtCQp/ceZyNJxUzTNTPQ+vytsnp
+   MvOau4e6YsS2WLI9+MARSvkmWwfKxE+j/PYimTdFCEPLioBsqUYrwghic
+   M1nQbGR++WHstG8Utd7QeQA14fXSW6lxj6bQOIhHuFdlpoK2oLVMjc066
+   4nQYhAYW/s1/EcNALf6T5Is8Fyh47MoGI9Sc6YQymc2V3XcWxiUoJLXJq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="343895014"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332586538"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:10:35 -0700
+   d="scan'208";a="343895014"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:10:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="721563470"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="758224063"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="721563470"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.215.58]) ([10.254.215.58])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:10:32 -0700
-Message-ID: <cbf041c7-119b-e23a-185d-288194629324@linux.intel.com>
-Date:   Wed, 12 Apr 2023 21:10:30 +0800
+   d="scan'208";a="758224063"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.212.63])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:10:35 -0700
+Message-ID: <ef06dc89-2de2-7607-2938-a5d76875310b@intel.com>
+Date:   Wed, 12 Apr 2023 16:10:31 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     baolu.lu@linux.intel.com, Vinod Koul <vkoul@kernel.org>,
-        Tina Zhang <tina.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/17] iommu/vt-d: Fix operand size in bitwise operation
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
- <20230411064815.31456-12-baolu.lu@linux.intel.com>
- <ec1536af68e6478a9b10a0d884cc988d@AcuMS.aculab.com>
- <6d9ed10d-12ee-792f-fc34-60a8e432c5d2@linux.intel.com>
- <b6ab9a30960d41c9b42e5880b89277e3@AcuMS.aculab.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH V7 13/23] mmc: sdhci-uhs2: add set_timeout()
+To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
+        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>
+References: <20230331105546.13607-1-victor.shih@genesyslogic.com.tw>
+ <20230331105546.13607-14-victor.shih@genesyslogic.com.tw>
 Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <b6ab9a30960d41c9b42e5880b89277e3@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230331105546.13607-14-victor.shih@genesyslogic.com.tw>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/12 15:11, David Laight wrote:
-> From: Baolu Lu
->> Sent: 12 April 2023 02:32
->>
->> On 4/12/23 5:22 AM, David Laight wrote:
->>>> Sent: 11 April 2023 07:48
->>>>
->>>> From: Tina Zhang<tina.zhang@intel.com>
->>>>
->>>> The patch fixes the klocwork issues that operands in a bitwise operation
->>>> have different size at line 1692 of dmar.c, line 1898 and line 1907 of
->>>> iommu.c.
->>> Why is this any kind of thing that needs fixing?
->>
->> This description is a bit misleading. Actually I queued it as a cleanup
->> patch.
+On 31/03/23 13:55, Victor Shih wrote:
+> This is a UHS-II version of sdhci's set_timeout() operation.
 > 
-> Hopefully without 'fix' anywhere in the description.
-> Otherwise the scripts will pick it for a back-port.
-
-Fair enough.I will refine the commit message like below:
-
-iommu/vt-d: Make size of operands same in bitwise operations
-
-The addresses the following issue reported by klocwork tool:
-
-  - operands of different size in bitwise operations
-
-Suggested-by: Yongwei Ma <yongwei.ma@intel.com>
-Signed-off-by: Tina Zhang <tina.zhang@intel.com>
-
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+> ---
+>  drivers/mmc/host/sdhci-uhs2.c | 72 +++++++++++++++++++++++++++++++++++
+>  drivers/mmc/host/sdhci-uhs2.h |  1 +
+>  2 files changed, 73 insertions(+)
 > 
->>> -		val |= (1 << 11) | 1;
->>> +		val |= BIT_ULL(11) | BIT_ULL(0);
-> 
-> More problematic it what is bit 11 anyway?
+> diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
+> index 388d87537847..e2e9ce51b768 100644
+> --- a/drivers/mmc/host/sdhci-uhs2.c
+> +++ b/drivers/mmc/host/sdhci-uhs2.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/module.h>
+>  #include <linux/iopoll.h>
+> +#include <linux/bitfield.h>
+>  
+>  #include "sdhci.h"
+>  #include "sdhci-uhs2.h"
+> @@ -144,6 +145,77 @@ static void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
+>  	}
+>  }
+>  
+> +static u8 sdhci_calc_timeout_uhs2(struct sdhci_host *host, u8 *cmd_res, u8 *dead_lock)
+> +{
+> +	u8 count;
+> +	unsigned int cmd_res_timeout, dead_lock_timeout, current_timeout;
+> +	/* timeout in us */
+> +	cmd_res_timeout = 5 * 1000;
+> +	dead_lock_timeout = 1 * 1000 * 1000;
 
-There is already a comment at the top of the code explaining the meaning
-of these bits. Because this is not a newly added code, it is not
-displayed in this patch.
+Initialization should be combined with declaration,
+and by descending line length looks neater i.e.
 
-         /*
-          * Set DW=1 and QS=1 in IQA_REG when Scalable Mode capability
-          * is present.
-          */
-         if (ecap_smts(iommu->ecap))
-                 val |= BIT_ULL(11) | BIT_ULL(0);
+	unsigned int dead_lock_timeout = 1 * 1000 * 1000;
+	unsigned int cmd_res_timeout = 5 * 1000;
+	unsigned int current_timeout;
+	u8 count;
 
-Best regards,
-baolu
+> +
+> +	/*
+> +	 * Figure out needed cycles.
+> +	 * We do this in steps in order to fit inside a 32 bit int.
+> +	 * The first step is the minimum timeout, which will have a
+> +	 * minimum resolution of 6 bits:
+> +	 * (1) 2^13*1000 > 2^22,
+> +	 * (2) host->timeout_clk < 2^16
+> +	 *     =>
+> +	 *     (1) / (2) > 2^6
+> +	 */
+> +	count = 0;
+> +	current_timeout = (1 << 13) * 1000 / host->timeout_clk;
+> +	while (current_timeout < cmd_res_timeout) {
+> +		count++;
+> +		current_timeout <<= 1;
+> +		if (count >= 0xF)
+> +			break;
+> +	}
+> +
+> +	if (count >= 0xF) {
+> +		DBG("%s: Too large timeout 0x%x requested for CMD_RES!\n",
+> +		    mmc_hostname(host->mmc), count);
+> +		count = 0xE;
+> +	}
+> +	*cmd_res = count;
+> +
+> +	count = 0;
+> +	current_timeout = (1 << 13) * 1000 / host->timeout_clk;
+> +	while (current_timeout < dead_lock_timeout) {
+> +		count++;
+> +		current_timeout <<= 1;
+> +		if (count >= 0xF)
+> +			break;
+> +	}
+> +
+> +	if (count >= 0xF) {
+> +		DBG("%s: Too large timeout 0x%x requested for DEADLOCK!\n",
+> +		    mmc_hostname(host->mmc), count);
+> +		count = 0xE;
+> +	}
+> +	*dead_lock = count;
+> +
+> +	return count;
+> +}
+> +
+> +static void __sdhci_uhs2_set_timeout(struct sdhci_host *host)
+> +{
+> +	u8 cmd_res, dead_lock;
+> +
+> +	sdhci_calc_timeout_uhs2(host, &cmd_res, &dead_lock);
+> +	cmd_res |= FIELD_PREP(SDHCI_UHS2_TIMER_CTRL_DEADLOCK_MASK, dead_lock);
+> +	sdhci_writeb(host, cmd_res, SDHCI_UHS2_TIMER_CTRL);
+> +}
+> +
+> +void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd)
+> +{
+> +	__sdhci_set_timeout(host, cmd);
+> +
+> +	if (sdhci_uhs2_mode(host))
+> +		__sdhci_uhs2_set_timeout(host);
+> +}
+> +EXPORT_SYMBOL_GPL(sdhci_uhs2_set_timeout);
+> +
+>  /*****************************************************************************\
+>   *                                                                           *
+>   * MMC callbacks                                                             *
+> diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs2.h
+> index 6834893eee85..fc03a178b676 100644
+> --- a/drivers/mmc/host/sdhci-uhs2.h
+> +++ b/drivers/mmc/host/sdhci-uhs2.h
+> @@ -180,5 +180,6 @@ struct sdhci_host;
+>  void sdhci_uhs2_dump_regs(struct sdhci_host *host);
+>  bool sdhci_uhs2_mode(struct sdhci_host *host);
+>  void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask);
+> +void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd);
+
+Really should forward declare 'struct mmc_command' as was done
+for 'struct sdhci_host'
+
+>  
+>  #endif /* __SDHCI_UHS2_H */
+
