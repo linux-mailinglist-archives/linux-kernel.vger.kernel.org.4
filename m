@@ -2,174 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022036DFE33
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AED06DFE34
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDLS72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S230209AbjDLS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjDLS7J (ORCPT
+        with ESMTP id S230364AbjDLS7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:59:09 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656D859C5;
-        Wed, 12 Apr 2023 11:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681325923; x=1712861923;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cOvRvmdOcjKTKaPRHIwZSdM4gnUfgayLyPINRcDqfls=;
-  b=BLjKJIyYu3tlGo61zpBMRSE3gmFh5kd9F/KJrp5pT6sgGdOYnPcz16Bb
-   4iR7K1refLU29H7qhq+MPx4dAbity4B5Qu8aEc/ZsWc1rigsY1KCsnrI5
-   FCRo3vCiQ79CPaClDThFA/CCLLF2JDECbnFAht9o6yjbNChuKTDm1mgeo
-   UjBzIQ4iaDb8XwGPdkMOkBPyLpubVcZjuw3Mi6TK+DGZ6FEGEMpIEEL9D
-   ashgzWHWkRYe897ax4snBN507unz49DehhZJ3gNYEiwKeiXocq8iBaWH9
-   8/6UOqz7MfxxD5FRy3fR29yR08HGWkKeO1QOug+VljVnkQDmFWZwq6cuz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="346671144"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="346671144"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:58:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="721702816"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="721702816"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 Apr 2023 11:58:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmffh-000Xzr-0p;
-        Wed, 12 Apr 2023 18:58:21 +0000
-Date:   Thu, 13 Apr 2023 02:58:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shikemeng@huaweicloud.com
-Subject: Re: [PATCH v2 19/19] ext4: add first unit test for
- ext4_mb_new_blocks_simple in mballoc
-Message-ID: <202304130200.eNNpj54h-lkp@intel.com>
-References: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
+        Wed, 12 Apr 2023 14:59:17 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24AE40F9;
+        Wed, 12 Apr 2023 11:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1681325925; i=j.neuschaefer@gmx.net;
+        bh=arIfURks3B5Vf0o5lhr2f1M0B+uljezROcQ5CKR6D/E=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=eWiyNxmoZOwn4VwHHTvzv4fpyPOqxFCOIcHOYZvrFaeq1IgeGafY+jvDDR0meDtmj
+         8Zv+0oaRuFibuDC11bFwo8x5/Sf3HJ02wpA/svSnjaE7CWZHsiym96z5xGpwgctTab
+         HEGqShUa3I/P/a7SlK1cPSrb0RVJoeHMlznjXPpI0Bi8UKsQaE08UN6MeyCW84vtie
+         hmrjH2RrD2Ql7b29gb9tTs9KvxRy9BBX05fY6pDGbsCi9xFMKsklq4oQS0CeA7qtPP
+         U8WkrszAi2x0d62SIh8HupyCdCF3qsXGJp8qL8xs6DiIr8jy2gj4qNW5muwY1YgwR4
+         UgXsdC9hxt3qg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5fMY-1pjtSp1GKA-007AXT; Wed, 12
+ Apr 2023 20:58:45 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     devicetree@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: leds: Fix reference to definition of default-state
+Date:   Wed, 12 Apr 2023 20:58:31 +0200
+Message-Id: <20230412185831.3788056-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:wM6RI3iIKG+IrVeFv3Ib4KMo0RqAbtrXYms789K8O8DPkDGwkUa
+ tIspzwJ2UF1UmTzqzHiTD5ROVW8PmZml6UR4uBliT2bkFukQlynH2+XvadcK6hFzi74loO1
+ GRYqxJc9HCKcM1j+0U6hbmRoLmioTFP9UD9wZXA62RTKz2VtE3Np8O9Be4xAg3lzwcf2UQf
+ sB5JQZ0RHdMKKVJdenx6Q==
+UI-OutboundReport: notjunk:1;M01:P0:ODxp1wdoa4Y=;WAS43g9EzKnP9KcfgqGL4hLnuz7
+ PqRCXyNktVwpi1w18L5VPf2astLGQHzolRNZG72Dc9c5mY3nD6/O7IhjDb6qyd9Qp5TeoFpE4
+ taoZlT5B55VuVdzmwf1CtfjhS3qSBSfpmLikpmU8UoR+mx4JbF1/2sPAkxVeevubpzvVHBKjI
+ Vie1DCTAAzGIToekyfBx5ri20ZbjDi86kMqLcva5J1I0UXmFr5ByRfJ0mSOntxf6Fz+f7jx2r
+ r+pF+gWdfAGUHO2xCQxjEhanLDm/C/advY2ar94iHD0maSw1rVGSfyBB1uuijsY8L39UH7mL1
+ xV86pxx6oo/K+RU4Hk6x/Ez67XWJj4yTP2nZWKf+ihF4s/8GMOEwd1pGcbsQlw6Oh3W8DjMkb
+ qIk6HGdFONDJR3KD/E9xf/ZiwNhA4e7UXKUwTZjImk/mmsByRbfr5YBkWqgTnXkqlTm2Y2CHl
+ ibrTVO03wOuesPbPNqNVQCrh4Wq8Fvu9NzDf4AZc5qmUq/w5H8uX03/MQmgrzNqJK0+jznd6L
+ IVDgs45HQsBFAVfAe3Nxqft+/+Z3M4iAae5geJsUFSNOf7e0kJ+gjtCGfFBmJzFg6csW6TLFX
+ u35/E7CcWsv35hGTYTnFDGeNYaxPoIrBb8usJzWPFbOCyU7lVYvbhJSxXkzX8hBTfIy/jfNRU
+ IbuYHfVMo/e8PYcjA3hmiI6DlZwNlXZPvZ3eMnoEcRGgGXZiakYoSLoCtAh+vYBFA5y6VcCxb
+ oEFrpOGKFHP3c0emLd8wiivljJWhjRIeVNfJvTNYt8Ng+LWouJaF1K1FBhnRrcOqjGnUx/kEi
+ aH4xl4g6QN4w2nxNz37ubxB2DG0Gfb/mJfylADgF2vpIz5o6ucO+03tyPBwaCTQAAjRfEuQ1K
+ gAjVYxE/AYvDBj4o004zqR7H0iTbQ2jr4L1RYgVqZNTP5WXFc3XhNVS4oB7Tikl34J+2O6qso
+ OZU+rA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kemeng,
+At least since the YAML conversion, the default-state property is
+described in leds/common.yaml, so there's no need to point to another
+file for its definition.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Acked-by: Rob Herring <robh@kernel.org>
+=2D--
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on next-20230412]
-[cannot apply to linus/master v6.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+v3:
+- Rebase on v6.3-rc6
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230412172833.2317696-20-shikemeng%40huaweicloud.com
-patch subject: [PATCH v2 19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
-config: loongarch-randconfig-r004-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130200.eNNpj54h-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
-        git checkout 3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash fs/
+v2:
+- https://lore.kernel.org/lkml/20221008131918.1235397-1-j.neuschaefer@gmx.=
+net/
+- Add Rob's ACK
+- Rebase on Marek Vasut's patch in -next
+=2D--
+ Documentation/devicetree/bindings/leds/common.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130200.eNNpj54h-lkp@intel.com/
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Document=
+ation/devicetree/bindings/leds/common.yaml
+index 15e3f6645682e..c9b0dde44986c 100644
+=2D-- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -83,8 +83,7 @@ properties:
+       - enum:
+             # LED will act as a back-light, controlled by the framebuffer=
+ system
+           - backlight
+-            # LED will turn on (but for leds-gpio see "default-state" pro=
+perty in
+-            # Documentation/devicetree/bindings/leds/leds-gpio.yaml)
++            # LED will turn on (see also "default-state" property)
+           - default-on
+             # LED "double" flashes at a load average based rate
+           - heartbeat
+=2D-
+2.39.2
 
-All warnings (new ones prefixed by >>):
-
-   fs/ext4/mballoc.c: In function 'ext4_mb_mark_group_bb':
-   fs/ext4/mballoc.c:3752:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-    3752 |         handle_t *handle = mc->handle;
-         |         ^~~~~~~~
-   In file included from fs/ext4/mballoc.c:6523:
-   fs/ext4/mballoc-test.c: At top level:
->> fs/ext4/mballoc-test.c:153:1: warning: no previous prototype for 'ext4_read_block_bitmap_nowait_stub' [-Wmissing-prototypes]
-     153 | ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/ext4/mballoc-test.c:162:5: warning: no previous prototype for 'ext4_wait_block_bitmap_stub' [-Wmissing-prototypes]
-     162 | int ext4_wait_block_bitmap_stub(struct super_block *sb,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/ext4/mballoc-test.c:169:25: warning: no previous prototype for 'ext4_get_group_desc_stub' [-Wmissing-prototypes]
-     169 | struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~
->> fs/ext4/mballoc-test.c:181:5: warning: no previous prototype for 'ext4_mb_mark_group_bb_stub' [-Wmissing-prototypes]
-     181 | int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/ext4_read_block_bitmap_nowait_stub +153 fs/ext4/mballoc-test.c
-
-   151	
-   152	struct buffer_head *
- > 153	ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
-   154					   bool ignore_locked)
-   155	{
-   156		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-   157	
-   158		get_bh(&grp_ctx->bitmap_bh);
-   159		return &grp_ctx->bitmap_bh;
-   160	}
-   161	
- > 162	int ext4_wait_block_bitmap_stub(struct super_block *sb,
-   163					ext4_group_t block_group,
-   164					struct buffer_head *bh)
-   165	{
-   166		return 0;
-   167	}
-   168	
- > 169	struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
-   170						     ext4_group_t block_group,
-   171						     struct buffer_head **bh)
-   172	{
-   173		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-   174	
-   175		if (bh != NULL)
-   176			*bh = &grp_ctx->gd_bh;
-   177	
-   178		return &grp_ctx->desc;
-   179	}
-   180	
- > 181	int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-   182				       ext4_group_t group, ext4_grpblk_t blkoff,
-   183				       ext4_grpblk_t len, int flags)
-   184	{
-   185		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
-   186		struct buffer_head *bitmap_bh = &grp_ctx->bitmap_bh;
-   187	
-   188		if (mc->state)
-   189			mb_set_bits(bitmap_bh->b_data, blkoff, len);
-   190		else
-   191			mb_clear_bits(bitmap_bh->b_data, blkoff, len);
-   192	
-   193		return 0;
-   194	}
-   195	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
