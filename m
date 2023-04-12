@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88356DFDCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CD36DFDD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDLSmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S230094AbjDLSoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDLSmW (ORCPT
+        with ESMTP id S229998AbjDLSoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:42:22 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978971715;
-        Wed, 12 Apr 2023 11:42:19 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1842eb46746so14776441fac.4;
-        Wed, 12 Apr 2023 11:42:19 -0700 (PDT)
+        Wed, 12 Apr 2023 14:44:03 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D65440E1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:44:02 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id z3so4132802qvs.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 11:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681324939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rowzVR1gSPrUpoTXZ7EcM+hK67GNvWWmaXuXO5DMFKA=;
-        b=Zx5PK02vvl1ksSoh/UgIMwVyHk8LzJc4opI+uj/OXc992zjzwat4nrNOelmCDYcfty
-         ltaCqPnP1ExOEZ/8hsKB6tMCp//+u5zvPfI8wr6VgU+0D9M4LHZu/mE8aQPESSFGBsJm
-         DDRfK0WSekzIce64pvG7kMFptRF5GauY/TIvB3vgLmN2Fqw1srxy06Cnvtbhm8u+XhpK
-         nYC4SJjT8+4HhG4j+w3/pg3ipVfgOKLG9Wxp/KXz5knkhnxyHTUEVezoFSkBoBui2lwU
-         WV35JKy8OUadRFuFw4h5BSnAyDIHNHhbMXQCejIWLi0gM1VXydIHnCnXEbncQW6bw/zB
-         Gesw==
+        d=ndufresne-ca.20221208.gappssmtp.com; s=20221208; t=1681325041; x=1683917041;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NA3yKE/A/kXoMe2VU/QiDPUbIiNd9/qULMU5+xukd6U=;
+        b=T96QhM5Sh+19QAqixHf79oSq09AeNY57s1bb9hNgC1Fjdlfd+Lk9MayayE6mffYJ7+
+         92/xlz+ghBXN+hpjI2YWV4wgPGFVyNVPhTSHBe17VgzAENIaAyOZdFv0nlM5U/q7QvUk
+         LGWGdDIEvpN8UsXExM8Z74bi+XuMf72JY3Z8CI2zUMDkImIm8AA21IXU2qPuvHfepNYr
+         RJCQ1dm8j/TPvS49mvv1Ax8VxFjAwJF5VyAh5UMRrGrgOO1f0RdTmhoK0Tx02Aw0sXyJ
+         pqIlb4q/3rWhIFb2I/pcBbv1grpU0kbkpCRefnDTbSdtaVzc+NUNj1yqB4MWImjmYb+V
+         8jvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681324939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rowzVR1gSPrUpoTXZ7EcM+hK67GNvWWmaXuXO5DMFKA=;
-        b=Obhso1uqvq4qS0LPCpS8Zk3YTVYhOjXalaM1fSGNoHPMegEFQciuTpNKUnWZoZzdmD
-         VxfXNO03HnXeUFBuW6augItDXAsB8lLfheapLbVW2cTOk6tor2SEJg3184vWVyPim5qK
-         V5iJHSiAmnDmeef6I3F/MHhUVgslYPUWRsJ0VbIXPoW5XKxTO7/antopGRpG4EBLBUZo
-         iJ8aU7RRLQ/Fu+e127vKUAh9Fxj7YLWX/c4OvcsV7G7e7o7i3jPzuGqnyjfqVy2saHKi
-         gvwHIfRj/AIjyNcNYG6nbHuUeNZx+gSpOM4JK2RlaZVzB3kYQh8lzAnVtqbsru8JvvbI
-         Bh+g==
-X-Gm-Message-State: AAQBX9c8b5vnsmMvhYMfgskdPUwJrTq8lHLtZZdiiBz5XCP/xnhn9oCi
-        hbUW1bpyI77BIc6/IieEE5chfdu0FjUnHsmtxKpcLS6r
-X-Google-Smtp-Source: AKy350aJqYzIM0I6sty+TARLrJ3STJ3j4+D7EjgIYedUvEov2aLHuEcIkz3UEXKUJE3y4F2VxvmGsD9//rh7E/rb2WM=
-X-Received: by 2002:a05:6870:524b:b0:186:d9e3:e279 with SMTP id
- o11-20020a056870524b00b00186d9e3e279mr1204389oai.5.1681324938794; Wed, 12 Apr
- 2023 11:42:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230411225725.2032862-1-robdclark@gmail.com> <20230411225725.2032862-7-robdclark@gmail.com>
- <29a8d9aa-c6ea-873f-ce0b-fb8199b13068@linux.intel.com> <CAF6AEGsZsMx+Vy+4UQSx3X7w_QNvvjLqWxx=PnCLAOC9f-X2CQ@mail.gmail.com>
- <ZDb1phnddSne79iN@phenom.ffwll.local>
-In-Reply-To: <ZDb1phnddSne79iN@phenom.ffwll.local>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 12 Apr 2023 11:42:07 -0700
-Message-ID: <CAF6AEGvBeDVM12ac0j_PKSdcY83hNDhyrQs9-=h=dx_7AoMXLw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] drm: Add fdinfo memory stats
-To:     Rob Clark <robdclark@gmail.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>
+        d=1e100.net; s=20221208; t=1681325041; x=1683917041;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NA3yKE/A/kXoMe2VU/QiDPUbIiNd9/qULMU5+xukd6U=;
+        b=Arpaf/TZrKQcP4IxpOVLKiuRgaYYlry+TL+jxswsM9urXxvgaGFjZkBbp3Kc7boQwt
+         7idnu6gp0hZ22anXa8hPoCJq7nzJ8diXi4lkFFWD1tRd1vOKBsEfTVq+AlAAT9pMlW7X
+         vHnODT4iRvXcdXb/1MA3D6g6pZLzLx76pbfde6zE57b1wwVhTBuPtM2C4dh++CmALp4c
+         kpcxeijcZy2JnJhK6utFjQx7+4w1On/8ssYDpVaXvncANLFqYoOKnYFUgcfCISLSQMOF
+         IrRg4qUT3ojeMjfl+/cdaYu/qBt5v/CtYv6N262tKqMST0MsE3Z61WbwVWcR7CE5qYKQ
+         lE5Q==
+X-Gm-Message-State: AAQBX9dR0AmIZMb+divuUck8XX6aRx+RxkTViONiTwODjpatJVv0EKfU
+        n6hAE0yNawhUEdPlMF7JPhrZxQ==
+X-Google-Smtp-Source: AKy350Y3OC9A50D1pW6cq4oVehWpe37l+cmYeLQ8rIj8dC+wF1vYlypEuM8OFvq1g0Zqah6s+Gwivw==
+X-Received: by 2002:ad4:4eef:0:b0:5a3:725e:425c with SMTP id dv15-20020ad44eef000000b005a3725e425cmr27210024qvb.2.1681325041277;
+        Wed, 12 Apr 2023 11:44:01 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain ([2606:6d00:15:199e::580])
+        by smtp.gmail.com with ESMTPSA id m10-20020ad44b6a000000b005dd8b9345cesm4987525qvx.102.2023.04.12.11.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 11:44:00 -0700 (PDT)
+Message-ID: <3fa75b5748022c63dfb75ff82e1d4a84d58a296a.camel@ndufresne.ca>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Deborah Brouwer <deborah.brouwer@collabora.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@collabora.com
+Date:   Wed, 12 Apr 2023 14:44:00 -0400
+In-Reply-To: <20230412025834.GA301301@mit.edu>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+         <ZDSRSWhWsN34MghQ@xps>
+         <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
+         <20230412025834.GA301301@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,351 +80,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 11:17=E2=80=AFAM Daniel Vetter <daniel@ffwll.ch> wr=
-ote:
->
-> On Wed, Apr 12, 2023 at 10:59:54AM -0700, Rob Clark wrote:
-> > On Wed, Apr 12, 2023 at 7:42=E2=80=AFAM Tvrtko Ursulin
-> > <tvrtko.ursulin@linux.intel.com> wrote:
-> > >
-> > >
-> > > On 11/04/2023 23:56, Rob Clark wrote:
-> > > > From: Rob Clark <robdclark@chromium.org>
-> > > >
-> > > > Add support to dump GEM stats to fdinfo.
-> > > >
-> > > > v2: Fix typos, change size units to match docs, use div_u64
-> > > > v3: Do it in core
-> > > >
-> > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
-> > > > ---
-> > > >   Documentation/gpu/drm-usage-stats.rst | 21 ++++++++
-> > > >   drivers/gpu/drm/drm_file.c            | 76 ++++++++++++++++++++++=
-+++++
-> > > >   include/drm/drm_file.h                |  1 +
-> > > >   include/drm/drm_gem.h                 | 19 +++++++
-> > > >   4 files changed, 117 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/=
-gpu/drm-usage-stats.rst
-> > > > index b46327356e80..b5e7802532ed 100644
-> > > > --- a/Documentation/gpu/drm-usage-stats.rst
-> > > > +++ b/Documentation/gpu/drm-usage-stats.rst
-> > > > @@ -105,6 +105,27 @@ object belong to this client, in the respectiv=
-e memory region.
-> > > >   Default unit shall be bytes with optional unit specifiers of 'KiB=
-' or 'MiB'
-> > > >   indicating kibi- or mebi-bytes.
-> > > >
-> > > > +- drm-shared-memory: <uint> [KiB|MiB]
-> > > > +
-> > > > +The total size of buffers that are shared with another file (ie. h=
-ave more
-> > > > +than a single handle).
-> > > > +
-> > > > +- drm-private-memory: <uint> [KiB|MiB]
-> > > > +
-> > > > +The total size of buffers that are not shared with another file.
-> > > > +
-> > > > +- drm-resident-memory: <uint> [KiB|MiB]
-> > > > +
-> > > > +The total size of buffers that are resident in system memory.
-> > >
-> > > I think this naming maybe does not work best with the existing
-> > > drm-memory-<region> keys.
-> >
-> > Actually, it was very deliberate not to conflict with the existing
-> > drm-memory-<region> keys ;-)
-> >
-> > I wouldn't have preferred drm-memory-{active,resident,...} but it
-> > could be mis-parsed by existing userspace so my hands were a bit tied.
-> >
-> > > How about introduce the concept of a memory region from the start and
-> > > use naming similar like we do for engines?
-> > >
-> > > drm-memory-$CATEGORY-$REGION: ...
-> > >
-> > > Then we document a bunch of categories and their semantics, for insta=
-nce:
-> > >
-> > > 'size' - All reachable objects
-> > > 'shared' - Subset of 'size' with handle_count > 1
-> > > 'resident' - Objects with backing store
-> > > 'active' - Objects in use, subset of resident
-> > > 'purgeable' - Or inactive? Subset of resident.
-> > >
-> > > We keep the same semantics as with process memory accounting (if I go=
-t
-> > > it right) which could be desirable for a simplified mental model.
-> > >
-> > > (AMD needs to remind me of their 'drm-memory-...' keys semantics. If =
-we
-> > > correctly captured this in the first round it should be equivalent to
-> > > 'resident' above. In any case we can document no category is equal to
-> > > which category, and at most one of the two must be output.)
-> > >
-> > > Region names we at most partially standardize. Like we could say
-> > > 'system' is to be used where backing store is system RAM and others a=
-re
-> > > driver defined.
-> > >
-> > > Then discrete GPUs could emit N sets of key-values, one for each memo=
-ry
-> > > region they support.
-> > >
-> > > I think this all also works for objects which can be migrated between
-> > > memory regions. 'Size' accounts them against all regions while for
-> > > 'resident' they only appear in the region of their current placement,=
- etc.
-> >
-> > I'm not too sure how to rectify different memory regions with this,
-> > since drm core doesn't really know about the driver's memory regions.
-> > Perhaps we can go back to this being a helper and drivers with vram
-> > just don't use the helper?  Or??
->
-> I think if you flip it around to drm-$CATEGORY-memory{-$REGION}: then it
-> all works out reasonably consistently?
+Hi Theodore,
 
-That is basically what we have now.  I could append -system to each to
-make things easier to add vram/etc (from a uabi standpoint)..
+Le mardi 11 avril 2023 =C3=A0 22:58 -0400, Theodore Ts'o a =C3=A9crit=C2=A0=
+:
+> And for those distributions that don't currently ship Rust, such as
+> Fedora, if someone could build their own unofficial packages, until we
+> can convince Red Hat to start shipping -their own supported Rust
+> compilers, that might be a great way of bridging that gap.
 
-BR,
--R
+Rust can be installed from package on Fedora. I sense a lot of unverified
+supposition to justify your argument. I don't believe this contribute much =
+to
+the discussion. It takes about 30s to search on your preferred search engin=
+e and
+find the fact the Fedora ships rustc, and the version is very recent.
 
-> And ttm could/should perhaps provide a helper to dump the region specific
-> version of this. Or we lift the concept of regions out of ttm a bit
-> higher, that's kinda needed for cgroups eventually anyway I think.
-> -Daniel
->
-> >
-> > BR,
-> > -R
-> >
-> > > Userspace can aggregate if it wishes to do so but kernel side should =
-not.
-> > >
-> > > > +
-> > > > +- drm-purgeable-memory: <uint> [KiB|MiB]
-> > > > +
-> > > > +The total size of buffers that are purgeable.
-> > > > +
-> > > > +- drm-active-memory: <uint> [KiB|MiB]
-> > > > +
-> > > > +The total size of buffers that are active on one or more rings.
-> > > > +
-> > > >   - drm-cycles-<str> <uint>
-> > > >
-> > > >   Engine identifier string must be the same as the one specified in=
- the
-> > > > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.=
-c
-> > > > index 37dfaa6be560..46fdd843bb3a 100644
-> > > > --- a/drivers/gpu/drm/drm_file.c
-> > > > +++ b/drivers/gpu/drm/drm_file.c
-> > > > @@ -42,6 +42,7 @@
-> > > >   #include <drm/drm_client.h>
-> > > >   #include <drm/drm_drv.h>
-> > > >   #include <drm/drm_file.h>
-> > > > +#include <drm/drm_gem.h>
-> > > >   #include <drm/drm_print.h>
-> > > >
-> > > >   #include "drm_crtc_internal.h"
-> > > > @@ -871,6 +872,79 @@ void drm_send_event(struct drm_device *dev, st=
-ruct drm_pending_event *e)
-> > > >   }
-> > > >   EXPORT_SYMBOL(drm_send_event);
-> > > >
-> > > > +static void print_size(struct drm_printer *p, const char *stat, si=
-ze_t sz)
-> > > > +{
-> > > > +     const char *units[] =3D {"", " KiB", " MiB"};
-> > > > +     unsigned u;
-> > > > +
-> > > > +     for (u =3D 0; u < ARRAY_SIZE(units) - 1; u++) {
-> > > > +             if (sz < SZ_1K)
-> > > > +                     break;
-> > > > +             sz =3D div_u64(sz, SZ_1K);
-> > > > +     }
-> > > > +
-> > > > +     drm_printf(p, "%s:\t%zu%s\n", stat, sz, units[u]);
-> > > > +}
-> > > > +
-> > > > +static void print_memory_stats(struct drm_printer *p, struct drm_f=
-ile *file)
-> > > > +{
-> > > > +     struct drm_gem_object *obj;
-> > > > +     struct {
-> > > > +             size_t shared;
-> > > > +             size_t private;
-> > > > +             size_t resident;
-> > > > +             size_t purgeable;
-> > > > +             size_t active;
-> > > > +     } size =3D {0};
-> > > > +     bool has_status =3D false;
-> > > > +     int id;
-> > > > +
-> > > > +     spin_lock(&file->table_lock);
-> > > > +     idr_for_each_entry (&file->object_idr, obj, id) {
-> > > > +             enum drm_gem_object_status s =3D 0;
-> > > > +
-> > > > +             if (obj->funcs && obj->funcs->status) {
-> > > > +                     s =3D obj->funcs->status(obj);
-> > > > +                     has_status =3D true;
-> > > > +             }
-> > > > +
-> > > > +             if (obj->handle_count > 1) {
-> > > > +                     size.shared +=3D obj->size;
-> > > > +             } else {
-> > > > +                     size.private +=3D obj->size;
-> > > > +             }
-> > > > +
-> > > > +             if (s & DRM_GEM_OBJECT_RESIDENT) {
-> > > > +                     size.resident +=3D obj->size;
-> > > > +             } else {
-> > > > +                     /* If already purged or not yet backed by pag=
-es, don't
-> > > > +                      * count it as purgeable:
-> > > > +                      */
-> > > > +                     s &=3D ~DRM_GEM_OBJECT_PURGEABLE;
-> > >
-> > > Side question - why couldn't resident buffers be purgeable? Did you m=
-ean
-> > > for the if branch check to be active here? But then it wouldn't make
-> > > sense for a driver to report active _and_ purgeable..
-> > >
-> > > > +             }
-> > > > +
-> > > > +             if (!dma_resv_test_signaled(obj->resv, dma_resv_usage=
-_rw(true))) {
-> > > > +                     size.active +=3D obj->size;
-> > > > +
-> > > > +                     /* If still active, don't count as purgeable:=
- */
-> > > > +                     s &=3D ~DRM_GEM_OBJECT_PURGEABLE;
-> > >
-> > > Another side question - I guess this tidies a race in reporting? If s=
-o
-> > > not sure it matters given the stats are all rather approximate.
-> > >
-> > > > +             }
-> > > > +
-> > > > +             if (s & DRM_GEM_OBJECT_PURGEABLE)
-> > > > +                     size.purgeable +=3D obj->size;
-> > > > +     }
-> > >
-> > > One concern I have here is that it is all based on obj->size. That is=
-,
-> > > there is no provision for drivers to implement page level granularity=
-.
-> > > So correct reporting in use cases such as VM BIND in the future would=
-n't
-> > > work unless it was a driver hook to get almost all of the info above.=
- At
-> > > which point common code is just a loop. TBF I don't know if any drive=
-rs
-> > > do sub obj->size backing store granularity today, but I think it is
-> > > sometimes to be sure of before proceeding.
-> > >
-> > > Second concern is what I touched upon in the first reply block - if t=
-he
-> > > common code blindly loops over all objects then on discrete GPUs it
-> > > seems we get an 'aggregate' value here which is not what I think we
-> > > want. We rather want to have the ability for drivers to list stats pe=
-r
-> > > individual memory region.
-> > >
-> > > > +     spin_unlock(&file->table_lock);
-> > > > +
-> > > > +     print_size(p, "drm-shared-memory", size.shared);
-> > > > +     print_size(p, "drm-private-memory", size.private);
-> > > > +     print_size(p, "drm-active-memory", size.active);
-> > > > +
-> > > > +     if (has_status) {
-> > > > +             print_size(p, "drm-resident-memory", size.resident);
-> > > > +             print_size(p, "drm-purgeable-memory", size.purgeable)=
-;
-> > > > +     }
-> > > > +}
-> > > > +
-> > > >   /**
-> > > >    * drm_fop_show_fdinfo - helper for drm file fops
-> > > >    * @seq_file: output stream
-> > > > @@ -904,6 +978,8 @@ void drm_fop_show_fdinfo(struct seq_file *m, st=
-ruct file *f)
-> > > >
-> > > >       if (dev->driver->show_fdinfo)
-> > > >               dev->driver->show_fdinfo(&p, file);
-> > > > +
-> > > > +     print_memory_stats(&p, file);
-> > > >   }
-> > > >   EXPORT_SYMBOL(drm_fop_show_fdinfo);
-> > > >
-> > > > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> > > > index dfa995b787e1..e5b40084538f 100644
-> > > > --- a/include/drm/drm_file.h
-> > > > +++ b/include/drm/drm_file.h
-> > > > @@ -41,6 +41,7 @@
-> > > >   struct dma_fence;
-> > > >   struct drm_file;
-> > > >   struct drm_device;
-> > > > +struct drm_printer;
-> > > >   struct device;
-> > > >   struct file;
-> > > >
-> > > > diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> > > > index 189fd618ca65..213917bb6b11 100644
-> > > > --- a/include/drm/drm_gem.h
-> > > > +++ b/include/drm/drm_gem.h
-> > > > @@ -42,6 +42,14 @@
-> > > >   struct iosys_map;
-> > > >   struct drm_gem_object;
-> > > >
-> > > > +/**
-> > > > + * enum drm_gem_object_status - bitmask of object state for fdinfo=
- reporting
-> > > > + */
-> > > > +enum drm_gem_object_status {
-> > > > +     DRM_GEM_OBJECT_RESIDENT  =3D BIT(0),
-> > > > +     DRM_GEM_OBJECT_PURGEABLE =3D BIT(1),
-> > > > +};
-> > > > +
-> > > >   /**
-> > > >    * struct drm_gem_object_funcs - GEM object functions
-> > > >    */
-> > > > @@ -174,6 +182,17 @@ struct drm_gem_object_funcs {
-> > > >        */
-> > > >       int (*evict)(struct drm_gem_object *obj);
-> > > >
-> > > > +     /**
-> > > > +      * @status:
-> > > > +      *
-> > > > +      * The optional status callback can return additional object =
-state
-> > > > +      * which determines which stats the object is counted against=
-.  The
-> > > > +      * callback is called under table_lock.  Racing against objec=
-t status
-> > > > +      * change is "harmless", and the callback can expect to not r=
-ace
-> > > > +      * against object destruction.
-> > > > +      */
-> > > > +     enum drm_gem_object_status (*status)(struct drm_gem_object *o=
-bj);
-> > >
-> > > Does this needs to be in object funcs and couldn't be consolidated to
-> > > driver level?
-> > >
-> > > Regards,
-> > >
-> > > Tvrtko
-> > >
-> > > > +
-> > > >       /**
-> > > >        * @vm_ops:
-> > > >        *
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+regards,
+Nicolas
