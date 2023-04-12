@@ -2,78 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94996DE904
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2369E6DE908
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjDLBhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S229677AbjDLBia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjDLBht (ORCPT
+        with ESMTP id S229648AbjDLBi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:37:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FBB127;
-        Tue, 11 Apr 2023 18:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681263469; x=1712799469;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ata9j+ZswHLaGP/PHNwL4yocWtHRfpgEJsv6Q2EQZTk=;
-  b=CH19JVrAzctTdPFY6rjbffgTL+NzoBwmsvR/bY7fSQaMsObMZrEZB1Ew
-   ZoF40QNV6Z16K/uMGIG6rRnFCtTNiRCpcCPfwkIAveRQ0HXv8V9mN3Fv4
-   nF3p1HnOn7UUO5/KRrn0LdNJzwzt+HL/GRANRQlgBI1yegxkn735K95S3
-   Aog/X87TKofWvtaT0u4EhNA2C627aNRQDBLqqhksEwSg/wJVvsNdmzEw9
-   xDmfkIW0W4MKtpTHejfqWlwNHfOu1bCuNMMiHVEyELKxcEhAxX/uGiEhv
-   d09lD631Y6zEl3ZPK8KZ12zMDB4SJ2S496/vTq/72wmXZX+qX7eu5OKsM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="343781731"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="343781731"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 18:37:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="812799318"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="812799318"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2023 18:37:43 -0700
-Message-ID: <5882ee52-9657-250d-0474-13edffa7b6b9@linux.intel.com>
-Date:   Wed, 12 Apr 2023 09:37:48 +0800
+        Tue, 11 Apr 2023 21:38:28 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F391726
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:38:27 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id z26so9877671ljq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681263505; x=1683855505;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x4I7A7fTrqw2RjiH+FANl1pHUb1mo4v70F1ZP1YYmH0=;
+        b=eddehjaxa279W/YrUOmm1WgvC8vDX4Tc3sYAKlXKYyV36fw4dQ/qyq+r8+UTYIVkmA
+         9+nD3VH5DqzPAN3u0aJka1TzhZNJ0Mozj2KrChdbZxyRaHskhIAL2Yl4+XW3MpxGifyX
+         TewzYAl4ZckxEtP5KKFLTI/6fnR6+sgtt05Cw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681263505; x=1683855505;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x4I7A7fTrqw2RjiH+FANl1pHUb1mo4v70F1ZP1YYmH0=;
+        b=XyKDosI6NKPr4Sa6VLoMDftWROlKyk9pgCjqH5RhTsaUPItMZ4YPjDCWDZt2MlcGsq
+         GxVoGzKSWyP2sHuC4GCdvlU8pWcd4pKKaZpMvLoHJHSIjavIB8OVJAM2/8ozk7kheqAb
+         RP9f30Nl1xjzPeMzt7/oETSaCUPF6DzT0Hq0NMiyhobRYvAMvgQ75RWoQfZaZizpZX8H
+         RfQLejauzt8yyS0vqLCp8G4tyUsVxbfLroi8avGYgeKk7Od39NjQuxRgzMAC85BoMnXZ
+         Orw7WLUqMEI7uxXThyp1AiscBonWu6EY7zoPQ0SXTgHquF9E5N2vDPUy3OHuLP4EwD0O
+         JOvw==
+X-Gm-Message-State: AAQBX9f/ZSuvqk8YTCJodpZI/oDjVSeuiOkNfaqYfxETW9Th0ao54+S9
+        38bwCcszVBry+vuxGDoM9P7qJD+rs49S9+nMlGV7mw==
+X-Google-Smtp-Source: AKy350ZrQD2Vb2BW3i4nlZswnqh11mfvwRG/pRKEBtPfKm06ImQY4Wy4cFsAYomIBa6rGCRvOo5AoNfsAyZRUXeax+8=
+X-Received: by 2002:a2e:8e96:0:b0:2a7:8402:c934 with SMTP id
+ z22-20020a2e8e96000000b002a78402c934mr1460102ljk.10.1681263505347; Tue, 11
+ Apr 2023 18:38:25 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 11 Apr 2023 18:38:24 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v4 3/7] iommu: Support allocation of global PASIDs outside
- SVA
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
- <20230407180554.2784285-4-jacob.jun.pan@linux.intel.com>
- <BN9PR11MB5276D09F18BA65AD074777948C9A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276D09F18BA65AD074777948C9A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230331091145.737305-5-treapking@chromium.org>
+References: <20230331091145.737305-1-treapking@chromium.org> <20230331091145.737305-5-treapking@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 11 Apr 2023 18:38:24 -0700
+Message-ID: <CAE-0n51E5foFWQAsA73662_5e6XP426wuUCVVmcS5UWwiYpDmw@mail.gmail.com>
+Subject: Re: [PATCH v15 04/10] dt-bindings: display: bridge: anx7625: Add
+ mode-switch support
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Lyude Paul <lyude@redhat.com>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +100,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 4:02 PM, Tian, Kevin wrote:
->> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
->> Sent: Saturday, April 8, 2023 2:06 AM
->> @@ -28,8 +26,8 @@ static int iommu_sva_alloc_pasid(struct mm_struct
->> *mm, ioasid_t min, ioasid_t ma
->>   		goto out;
->>   	}
->>
->> -	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
->> GFP_KERNEL);
->> -	if (ret < min)
->> +	ret = iommu_alloc_global_pasid(min, max);
-> 
-> I wonder whether this can take a device pointer so dev->iommu->max_pasids
-> is enforced inside the alloc function.
+Quoting Pin-yen Lin (2023-03-31 02:11:39)
+> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> index b42553ac505c..604c7391d74f 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> @@ -12,7 +12,8 @@ maintainers:
+>
+>  description: |
+>    The ANX7625 is an ultra-low power 4K Mobile HD Transmitter
+> -  designed for portable devices.
+> +  designed for portable devices. Product brief is available at
+> +  https://www.analogix.com/en/system/files/AA-002291-PB-6-ANX7625_ProductBrief.pdf
+>
+>  properties:
+>    compatible:
+> @@ -112,9 +113,40 @@ properties:
+>                data-lanes: true
+>
+>        port@1:
+> -        $ref: /schemas/graph.yaml#/properties/port
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>          description:
+> -          Video port for panel or connector.
+> +          Video port for panel or connector. Each endpoint connects to a video
+> +          output downstream, and the "data-lanes" property is used to describe
+> +          the pin connections. 0, 1, 2, 3 in "data-lanes" maps to SSRX1, SSTX1,
+> +          SSRX2, SSTX2, respectively.
+> +
+> +        patternProperties:
+> +          "^endpoint@[01]$":
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            properties:
+> +              reg: true
+> +
+> +              remote-endpoint: true
+> +
+> +              data-lanes:
+> +                oneOf:
+> +                  - items:
+> +                      - enum: [0, 1, 2, 3]
+> +
+> +                  - items:
+> +                      - const: 0
+> +                      - const: 1
+> +
+> +                  - items:
+> +                      - const: 2
+> +                      - const: 3
+> +
+> +              mode-switch:
 
-Agreed. Instead of using the open code, it looks better to have a helper
-like dev_iommu_max_pasids().
+Is it possible to not have this property? Can we have the driver for
+this anx device look at the remote-endpoint and if it sees that it is
+not a drm_bridge or panel on the other end, or a DP connector, that it
+should register a typec mode switch (or two depending on the number of
+endpoints in port@1)? Is there any case where that doesn't hold true?
 
-> 
-> and do we even need the min/max parameters? With special pasids reserved
-> then what driver needs is just to get a free pasid from the global space within
-> dev->iommu->max_pasids constraint...
-> 
-> iommu_sva_alloc_pasid() can be reworked to avoid min/max by taking a
-> device pointer too.
+I see these possible scenarios:
 
-Best regards,
-baolu
+1. DPI to DP bridge steering DP to one of two usb-c-connectors
+
+In this case, endpoint@0 is connected to one usb-c-connector and
+endpoint@1 is connected to another usb-c-connector. The input endpoint
+is only connected to DPI. The USB endpoint is not present (although I
+don't see this described in the binding either, so we would need a
+port@2, entirely optional to describe USB3 input). The driver will
+register two mode switches.
+
+2. DPI to DP bridge with USB3 to one usb-c-connector
+
+In this case, endpoint@1 doesn't exist. The SSTX1/2 and SSRX1/2 pins are
+all connected to a usb-c-connector node. The input ports (0 and 2) are
+connected to both DPI and USB. The device acts as both a mode-switch and
+an orientation-switch. It registers both switches. I wonder if there is
+any benefit to describing SBU connections or CC connections? Maybe we
+don't register the orientation-switch if the SBU or CC connection isn't
+described?
+
+3. DPI to DP bridge connected to eDP panel
+
+In this case, endpoint@1 doesn't exist. The USB endpoint is not present
+(port@2). Depending on how the crosspoint should be configured, we'll
+need to use data-lanes in the port@1 endpoint to describe which SSTRX
+pair to use (1 or 2). Or we'll have to use the endpoint's reg property
+to describe which pair to drive DP on. Presumably the default
+configuration is SSRX2/SSTX2 providing 2 lanes of DP to an eDP panel.
+The endpoint@0 in port@1 will be connected to a drm_panel, and the
+driver will be able to detect this properly by checking for the
+existence of an aux-bus node or the return value of
+of_dp_aux_populate_bus().
+
+4. DPI to DP bridge connected to DP connector
+
+This is similar to the eDP panel scenario #3. In this case, endpoint@1
+doesn't exist. The USB endpoint is not present (port@2). Same story
+about port@1 and lane configuration, but we don't have an aux-bus node.
+In this case, the drivers/gpu/drm/bridge/display-connector.c driver will
+probe for the dp-connector node and add a drm_bridge. This anx driver
+will similarly add a drm_bridge, but it needs to look at the node
+connected on port@1:endpoint@0 with drm_of_get_bridge() and check if it
+is a drm_bridge (DP connector) or if it is some type-c thing (connector
+or orientation-switch).
+
+I think having this mode-switch property here lets us avoid calling
+drm_of_get_bridge() unconditionally in anx7625_parse_dt().
+drm_of_get_bridge() will always return -EPROBE_DEFER when this is the
+last drm_bridge in the chain and the other side of the endpoint is a
+type-c thing (scenarios #1 and #2). Maybe we should teach
+drm_of_get_bridge() that a drm_bridge might be connected to a type-c
+device and have it not return -EPROBE_DEFER in that case. Or make some
+new API like drm_of_get_bridge_typec() that checks if the typec
+framework knows about the endpoint in question (as either a typec switch
+or a connector) and returns a NULL bridge pointer. If we had that then I
+think this property is not necessary.
+
+Hopefully the usb-c-connector can always be registered with the typec
+framework? I'm worried that the driver that registers the
+usb-c-connector node may want to form a struct typec_port with
+typec_register_port() and that will get stuck in a similar -EPROBE_DEFER
+loop waiting for this mode-switch to appear. So having this property
+also avoids that problem by telling typec framework to wait until this
+driver can register a mode-switch.
+
+TL;DR: Is this mode-switch property a workaround for probe defer? Can we
+figure out where the mode switch is in software and not have the
+property in DT? If we can it would certainly improve things because
+forgetting to add the property can lead to broken behavior, and we don't
+do anything like this for chains of drm_bridge devices. We just describe
+the display chain and let the kernel figure out which bridge should
+handle hpd, edid reading, or mode detection, etc.
