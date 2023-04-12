@@ -2,223 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4706DF923
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9316DF925
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjDLO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S230287AbjDLO4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDLO42 (ORCPT
+        with ESMTP id S230363AbjDLO4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:56:28 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11B76A6D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:56:03 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a52eca0bedso7314005ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681311363; x=1683903363;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nj+HK1PXhiZUmw4ub4zWzXu/Z00UR5grQJU2WWuB2yk=;
-        b=U4cBIb+r+3TFzkH8HK8PyheNq8FAx17FSHTN3EZbt1Ed0VXFPS+hlTadzYaqO8IPXl
-         Qj9bAn1lsvVyhB/Hov4juKCKNnmRR1NiM12pPgfLvldEwHKBiVzK6loXT/T2jjKp84PM
-         1JyO5DwGErdNljBWhQdo2pcjTIks1FU9VTN2RSkBR4u4E02WtRGZIzJxup2nwVv+gdrO
-         d7CLYC55NHMgeTOl5E1ANBK9Sr2ORM1EN1bNFOtTxZQeclmn4+LR0hL1Yby4L/jLiTMK
-         q6HJHWXb7s72qZMyJDPBjwWx/KpzM2kr1B6uWk2FuUWyY8zQRYQMY6GZRLkAeqXSBHdD
-         CZ6g==
+        Wed, 12 Apr 2023 10:56:36 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436A583F8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:56:12 -0700 (PDT)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 033533F433
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 14:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681311371;
+        bh=OxpzX6kzOmYSsKE6qMLSC1R+x0dOP8fBolvejWA6sqA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=oqXzjZHXkuTNJ6u7Vshjn3zIj3P9zwtNu+T87jGER6izmcogFJ5PckzCz+NEPwMFI
+         ZMdz3vGZMU8RQyeuTOeGZX1/+jpA8L6e8TfyiF9vI8N4bczWl1fWpvSwQd1rKNQxlm
+         I3bPZHcl5uCnhFhgv9aLBIl3Qm8Iso6dbpc3mx/+67Hwzd31GInVlafyjgn0ENTktl
+         t3LvGDFjWfAFNcopt14x0Lniu/xzVAb5cZaB8VZTnZjoyM+81V4b2TTl50bTJu/LgA
+         3IvzOPWXmnRWNqtVzlUICPaHuTMdxzBzUv4RLv4PBXKahn3axZYQP5EFuOpwoXg5y+
+         Kx3DQuYmaVc3Q==
+Received: by mail-yb1-f199.google.com with SMTP id t66-20020a254645000000b00b74680a7904so12544825yba.15
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:56:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681311363; x=1683903363;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nj+HK1PXhiZUmw4ub4zWzXu/Z00UR5grQJU2WWuB2yk=;
-        b=ydQ3EG9NA1ZHZULDYagdpsIiqGbEVLEy1hfj+zLnLfqEQUJFsiEqAlyI6VFBlGTq/8
-         II/uVb2inmu4mL8MKhPx9q9HrVb2LXFBjCNUIaCTDZfgyUwZYhXe/zebQRV+SJrKF1LM
-         DfuYKgtk9geyNLo8xXtZgSeR3lfnr8hXaBRcZzQXVUC1RUTTBRvVm4hEYsSU1OebESGf
-         LPieCDSCEvNZCiNhcTl5mCrn7N3UoYt5MC/pefPrUn81M/Q8JA/Xx/V7hCt1xVG1mAAT
-         37+vei7Z1yo5ki3q+G5XS7+515b9hSGwmeqdKYdfHMfvdt2fi7u85d7XUfusiEhJ4wK0
-         0KLw==
-X-Gm-Message-State: AAQBX9cTIuh9BqQXD9RCjadFFB8q3gmKEaDul9oTq9fFZHj34ZZSGQ/w
-        MqHJ/gxAXheTnFOP8I86RKDVL3kXc0FMm6PlHNFDMI5+vCGyd5mc3vw=
-X-Google-Smtp-Source: AKy350brRxPeOL2bMvV0NLXcDEF/MSHx/y7bf8qaMSYqPXXdJDfKKTNG/2FX8FgrenBEmPFcgmUAp50DCkFxTScbnG8=
-X-Received: by 2002:a05:6a00:15c1:b0:62d:dade:825 with SMTP id
- o1-20020a056a0015c100b0062ddade0825mr1214342pfu.3.1681311363377; Wed, 12 Apr
- 2023 07:56:03 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681311369; x=1683903369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OxpzX6kzOmYSsKE6qMLSC1R+x0dOP8fBolvejWA6sqA=;
+        b=0n6GfuxzJ/I9ZcaMgmJqvww3qAZNp8jHy0izrYgaOpwuyo1w4ynNDHqOtCnpPoCvTc
+         HxzZAMIYUBw+WbDkWZimP5BBkQiQJAYbonb+UXABT4J0PtGcQWVJJM0ZZ9InZX+dX+Xj
+         PDw4+proJ+GZHtGi2lWLsqB1qE53JfpASJznY2840/NeHMt3B9t2AnpRDPi95dyr2PWO
+         W5cZHMBZwT/xdCXMZSfYGG8DwKoc3EzpjlJGCvohA9Klxpgkqjyrr5PCROuik3Yi2YIA
+         LdV0h7DPkeauNQiuIEJYrACS3SZr7BkLXB41p3EAGZdv6E6h0BXIP7mSxf7gnzIvyEky
+         d0nw==
+X-Gm-Message-State: AAQBX9ddwMxm+6yL7OkBOBzJeya9GOz1NGCyhUW/9CQIgebdBEQyD8XP
+        HEPEH4xrWVKYVbY/CcMbKRg3GsShbUyco+LnJhSVY4ZO10BlQepFdT77izPMi93OcYge/3plap+
+        Ucz8XuEVGhrP3CVs+pTCjBFBLZk5ZGtg4xH0YgJudcBBWQ48w9BCmkkgw2Q==
+X-Received: by 2002:a25:76c6:0:b0:b8b:ee74:c9d4 with SMTP id r189-20020a2576c6000000b00b8bee74c9d4mr12272193ybc.12.1681311369262;
+        Wed, 12 Apr 2023 07:56:09 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ayKQid4DrFAszxepNHukT7rDUmpRKfL4/yXe/Auq2u5OoAJAKLAvIupIl1TNxT0UPAazi0OdRaFIcQIia5ivY=
+X-Received: by 2002:a25:76c6:0:b0:b8b:ee74:c9d4 with SMTP id
+ r189-20020a2576c6000000b00b8bee74c9d4mr12272184ybc.12.1681311369029; Wed, 12
+ Apr 2023 07:56:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-9-james.clark@arm.com>
-In-Reply-To: <20230404155121.1824126-9-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 12 Apr 2023 15:55:52 +0100
-Message-ID: <CAJ9a7Vjr73_CcfXULOHPwAQV2sCkeg0Vq4vSBKBiMhEuWE-VRQ@mail.gmail.com>
-Subject: Re: [PATCH v5 08/13] coresight: Simplify connection fixup mechanism
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        suzuki.poulose@arm.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com> <20230411224337.000015ce.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230411224337.000015ce.zhi.wang.linux@gmail.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 12 Apr 2023 16:55:58 +0200
+Message-ID: <CAEivzxd6GFMcW-k_dNKy83bHgPfa7iMivE=kdV-88Vkp28H2WA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: SVM: add some info prints to SEV init
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     pbonzini@redhat.com, Sean Christopherson <seanjc@google.com>,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 16:52, James Clark <james.clark@arm.com> wrote:
+On Tue, Apr 11, 2023 at 9:43=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com>=
+ wrote:
 >
-> There is some duplication between coresight_fixup_device_conns() and
-> coresight_fixup_orphan_conns(). They both do the same thing except for
-> the fact that coresight_fixup_orphan_conns() can't handle iterating over
-> itself.
+> On Tue,  4 Apr 2023 14:26:52 +0200
+> Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com> wrote:
 >
-> By making it able to handle fixing up it's own connections the other
-> function can be removed.
+> > Let's add a few pr_info's to sev_hardware_setup to make SEV/SEV-ES
+> > enabling a little bit handier for users. Right now it's too hard
+> > to guess why SEV/SEV-ES are failing to enable.
+> >
+> > There are a few reasons.
+> > SEV:
+> > - npt is disabled (module parameter)
+>      ^NPT
+> > - CPU lacks some features (sev, decodeassists)
+> > - Maximum SEV ASID is 0
+> >
+> > SEV-ES:
+> > - mmio_caching is disabled (module parameter)
+> > - CPU lacks sev_es feature
+> > - Minimum SEV ASID value is 1 (can be adjusted in BIOS/UEFI)
+> >
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: St=C3=A9phane Graber <stgraber@ubuntu.com>
+> > Cc: kvm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> >  arch/x86/kvm/svm/sev.c | 27 +++++++++++++++++++++------
+> >  1 file changed, 21 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > index a42536a0681a..14cbb8f14c6b 100644
+> > --- a/arch/x86/kvm/svm/sev.c
+> > +++ b/arch/x86/kvm/svm/sev.c
+> > @@ -2168,17 +2168,24 @@ void __init sev_hardware_setup(void)
+> >       bool sev_es_supported =3D false;
+> >       bool sev_supported =3D false;
+> >
+> > -     if (!sev_enabled || !npt_enabled)
+> > +     if (!sev_enabled)
+> >               goto out;
+> >
+> > +     if (!npt_enabled) {
+> > +             pr_info("Failed to enable AMD SEV as it requires Nested P=
+aging to be enabled\n");
+> > +             goto out;
 >
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-core.c | 84 ++++++++------------
->  1 file changed, 32 insertions(+), 52 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 0b738960973b..8d377a59e0be 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1316,42 +1316,46 @@ static int coresight_orphan_match(struct device *dev, void *data)
->  {
->         int i, ret = 0;
->         bool still_orphan = false;
-> -       struct coresight_device *csdev, *i_csdev;
-> +       struct coresight_device *dst_csdev = data;
-> +       struct coresight_device *src_csdev = to_coresight_device(dev);
->         struct coresight_connection *conn;
-> -
-> -       csdev = data;
-> -       i_csdev = to_coresight_device(dev);
-> -
-> -       /* No need to check oneself */
-> -       if (csdev == i_csdev)
-> -               return 0;
-> +       bool fixup_self = (src_csdev == dst_csdev);
->
->         /* Move on to another component if no connection is orphan */
-> -       if (!i_csdev->orphan)
-> +       if (!src_csdev->orphan)
->                 return 0;
->         /*
-> -        * Circle throuch all the connection of that component.  If we find
-> -        * an orphan connection whose name matches @csdev, link it.
-> +        * Circle through all the connections of that component.  If we find
-> +        * an orphan connection whose name matches @dst_csdev, link it.
->          */
-> -       for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
-> -               conn = i_csdev->pdata->out_conns[i];
-> -
-> -               /* We have found at least one orphan connection */
-> -               if (conn->dest_dev == NULL) {
-> -                       /* Does it match this newly added device? */
-> -                       if (conn->dest_fwnode == csdev->dev.fwnode) {
-> -                               ret = coresight_make_links(i_csdev,
-> -                                                          conn, csdev);
-> -                               if (ret)
-> -                                       return ret;
-> -                       } else {
-> -                               /* This component still has an orphan */
-> -                               still_orphan = true;
-> -                       }
-> +       for (i = 0; i < src_csdev->pdata->nr_outconns; i++) {
-> +               conn = src_csdev->pdata->out_conns[i];
-> +
-> +               /* Skip the port if it's already connected. */
-> +               if (conn->dest_dev)
-> +                       continue;
-> +
-> +               /*
-> +                * If we are at the "new" device, which triggered this search,
-> +                * we must find the remote device from the fwnode in the
-> +                * connection.
-> +                */
-> +               if (fixup_self)
-> +                       dst_csdev = coresight_find_csdev_by_fwnode(
-> +                               conn->dest_fwnode);
-> +
-> +               /* Does it match this newly added device? */
-> +               if (dst_csdev && conn->dest_fwnode == dst_csdev->dev.fwnode) {
-> +                       ret = coresight_make_links(src_csdev, conn, dst_csdev);
-> +                       if (ret)
-> +                               return ret;
-> +               } else {
-> +                       /* This component still has an orphan */
-> +                       still_orphan = true;
->                 }
->         }
->
-> -       i_csdev->orphan = still_orphan;
-> +       src_csdev->orphan = still_orphan;
->
->         /*
->          * Returning '0' in case we didn't encounter any error,
-> @@ -1366,28 +1370,6 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
->                          csdev, coresight_orphan_match);
->  }
->
-> -
-> -static int coresight_fixup_device_conns(struct coresight_device *csdev)
-> -{
-> -       int i, ret = 0;
-> -
-> -       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> -               struct coresight_connection *conn = csdev->pdata->out_conns[i];
-> -
-> -               conn->dest_dev =
-> -                       coresight_find_csdev_by_fwnode(conn->dest_fwnode);
-> -               if (conn->dest_dev && conn->dest_dev->has_conns_grp) {
-> -                       ret = coresight_make_links(csdev, conn, conn->dest_dev);
-> -                       if (ret)
-> -                               break;
-> -               } else {
-> -                       csdev->orphan = true;
-> -               }
-> -       }
-> -
-> -       return ret;
-> -}
-> -
->  static int coresight_remove_match(struct device *dev, void *data)
->  {
->         int i;
-> @@ -1595,7 +1577,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->         csdev->subtype = desc->subtype;
->         csdev->ops = desc->ops;
->         csdev->access = desc->access;
-> -       csdev->orphan = false;
-> +       csdev->orphan = true;
->
->         csdev->dev.type = &coresight_dev_type[desc->type];
->         csdev->dev.groups = desc->groups;
-> @@ -1645,8 +1627,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->         registered = true;
->
->         ret = coresight_create_conns_sysfs_group(csdev);
-> -       if (!ret)
-> -               ret = coresight_fixup_device_conns(csdev);
->         if (!ret)
->                 ret = coresight_fixup_orphan_conns(csdev);
->
-> --
-> 2.34.1
->
+> Shouldn't we use pr_err() for error message?
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+I'm not sure. Because technically that's not an error, that is an
+information message about current configuration.
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+
+>
+> > +     }
+> > +
+> >       /*
+> >        * SEV must obviously be supported in hardware.  Sanity check tha=
+t the
+> >        * CPU supports decode assists, which is mandatory for SEV guests=
+ to
+> >        * support instruction emulation.
+> >        */
+> >       if (!boot_cpu_has(X86_FEATURE_SEV) ||
+> > -         WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_DECODEASSISTS)))
+> > +         WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_DECODEASSISTS))) {
+> > +             pr_info("Failed to enable AMD SEV as it requires decodeas=
+sists and sev CPU features\n");
+> >               goto out;
+> > +     }
+> >
+> >       /* Retrieve SEV CPUID information */
+> >       cpuid(0x8000001f, &eax, &ebx, &ecx, &edx);
+> > @@ -2188,8 +2195,10 @@ void __init sev_hardware_setup(void)
+> >
+> >       /* Maximum number of encrypted guests supported simultaneously */
+> >       max_sev_asid =3D ecx;
+> > -     if (!max_sev_asid)
+> > +     if (!max_sev_asid) {
+> > +             pr_info("Failed to enable SEV as the maximum SEV ASID val=
+ue is 0.\n");
+> >               goto out;
+> > +     }
+> >
+> >       /* Minimum ASID value that should be used for SEV guest */
+> >       min_sev_asid =3D edx;
+> > @@ -2234,16 +2243,22 @@ void __init sev_hardware_setup(void)
+> >        * instead relies on #NPF(RSVD) being reflected into the guest as=
+ #VC
+> >        * (the guest can then do a #VMGEXIT to request MMIO emulation).
+> >        */
+> > -     if (!enable_mmio_caching)
+> > +     if (!enable_mmio_caching) {
+> > +             pr_info("Failed to enable SEV-ES as it requires MMIO cach=
+ing to be enabled\n");
+> >               goto out;
+> > +     }
+> >
+> >       /* Does the CPU support SEV-ES? */
+> > -     if (!boot_cpu_has(X86_FEATURE_SEV_ES))
+> > +     if (!boot_cpu_has(X86_FEATURE_SEV_ES)) {
+> > +             pr_info("Failed to enable SEV-ES as it requires sev_es CP=
+U feature\n");
+> >               goto out;
+> > +     }
+> >
+> >       /* Has the system been allocated ASIDs for SEV-ES? */
+> > -     if (min_sev_asid =3D=3D 1)
+> > +     if (min_sev_asid =3D=3D 1) {
+> > +             pr_info("Failed to enable SEV-ES as the minimum SEV ASID =
+value is 1.\n");
+> >               goto out;
+> > +     }
+> >
+> >       sev_es_asid_count =3D min_sev_asid - 1;
+> >       if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
+>
+> As this patch is making sev_hardware_setup()more informative, it would be
+> better to print both ASID range and count (instead of only ASID count in
+> the current code). I was suspecting there seems a bug of ASID range alloc=
+ation
+> in the current code, but I don't have the HW to test yet...
