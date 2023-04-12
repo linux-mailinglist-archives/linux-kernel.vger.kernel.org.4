@@ -2,84 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7486DEBC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CFE6DECA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDLGZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S229924AbjDLHhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjDLGZf (ORCPT
+        with ESMTP id S229895AbjDLHh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:25:35 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0705253;
-        Tue, 11 Apr 2023 23:25:31 -0700 (PDT)
-Received: from C512-C06.localdomain ([10.12.190.72])
-        (user=jiefeng_li@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33C6MidG003133-33C6MidH003133
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 12 Apr 2023 14:22:48 +0800
-From:   Jiefeng Li <jiefeng_li@hust.edu.cn>
-To:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Jiefeng Li <jiefeng_li@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] wifi: mt76: mt7921: fix missing unwind goto in `mt7921u_probe`
-Date:   Wed, 12 Apr 2023 14:22:34 +0800
-Message-Id: <20230412062234.4810-1-jiefeng_li@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Wed, 12 Apr 2023 03:37:29 -0400
+X-Greylist: delayed 1543 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 00:37:28 PDT
+Received: from www.parknparty.com (www.parknparty.com [198.58.112.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EB171996
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:37:28 -0700 (PDT)
+Received: by www.parknparty.com (Postfix, from userid 33)
+        id 7D3435FFB3; Wed, 12 Apr 2023 02:24:58 -0400 (EDT)
+To:     linux-kernel@vger.kernel.org
+Subject: Request for Quotation - Urgently
+Date:   Wed, 12 Apr 2023 02:24:58 -0400
+From:   Hotel <support@parknparty.com>
+Reply-To: trevordupoint@gmail.com
+Message-ID: <4e00c3958541209b2a56c4186d9addf4@www.parknparty.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: jiefeng_li@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`mt7921u_dma_init` can only return zero or negative number according to its
-definition. When it returns non-zero number, there exists an error and this
-function should handle this error rather than return directly.
+Good Morning.
 
-Fixes: 0d2afe09fad5 ("mt76: mt7921: add mt7921u driver")
-Signed-off-by: Jiefeng Li <jiefeng_li@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is discovered by static analysis, and the patch is not tested yet.
----
- drivers/net/wireless/mediatek/mt76/mt7921/usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hope this email finds you well. 
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-index 8fef09ed29c9..70c9bbdbf60e 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-@@ -272,7 +272,7 @@ static int mt7921u_probe(struct usb_interface *usb_intf,
- 
- 	ret = mt7921u_dma_init(dev, false);
- 	if (ret)
--		return ret;
-+		goto error;
- 
- 	hw = mt76_hw(dev);
- 	/* check hw sg support in order to enable AMSDU */
--- 
-2.34.1
+We would like for you to quote us based on the attached document.
+
+ I would appreciate it if you go through the quotation attached and reply me with your quotes accordingly.
+
+Waiting for your earliest response.
+
+Kind regards
 
