@@ -2,74 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E8E6DF1C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A126DF1D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjDLKNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        id S231315AbjDLKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjDLKN2 (ORCPT
+        with ESMTP id S229508AbjDLKSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:13:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D8772B4;
-        Wed, 12 Apr 2023 03:13:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6135B632AF;
-        Wed, 12 Apr 2023 10:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E18DC433EF;
-        Wed, 12 Apr 2023 10:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681294401;
-        bh=cV0F/zXqS3VEU+Ur4CyxSlC/LnTHZyV5cWJ1O1RaC38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AI0T2oh2NykTR0ryA1L9IjPhv7FDeSWxTR8TUUZ2S5K4mm/ikoTgo3jHh/lHcs5uD
-         7V1QdmXYFB/vfe1OqePSd2iRp5TIQmZVxoETgmBwzLIjRag0/ioMBPc7Vy4i3o6540
-         ao2e7FgorzlFIYLsbFlNa5rqx5GpPsHYTCpK1OAY=
-Date:   Wed, 12 Apr 2023 12:13:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hans Petter Selasky <hps@selasky.org>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
-        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
-Message-ID: <2023041243-clarinet-scallion-6fb0@gregkh>
-References: <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
- <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
- <CANiq72m812+L6dc4Qs2wUXW85eBQwgrjWYYKc1MSsqN5AG_sFw@mail.gmail.com>
- <9f896097-8410-4d09-b614-6e792b2160f4@selasky.org>
- <CANiq72mv2uYe1x6cy4zUq8XHhAZcYYpt6hVXMG4yQZeqw1kY7Q@mail.gmail.com>
- <1d50d25c-e64b-01f4-029f-8b40b46848fd@selasky.org>
- <CANiq72mbM+WBcvj1TwU2u9kLz=EucLhLR-a5nzZEDa7VJ0s2_A@mail.gmail.com>
- <ca17f815-5779-d37c-e3f8-2a6c2983fe45@selasky.org>
- <CANiq72mn1nD38DGHpFQzerC=_ifR39Vpbb_PzLv5Q75SdzTxQg@mail.gmail.com>
- <8ff91d0c-624b-2704-24b0-5b7c4ca0db1e@selasky.org>
+        Wed, 12 Apr 2023 06:18:44 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35856558B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:18:42 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 8A4095FD61;
+        Wed, 12 Apr 2023 13:18:40 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1681294720;
+        bh=PP2Y/Il+dezNqPtLgzxWk2KfTtgfTZFcl/FVi9Ukg8I=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=JUawYNHO0kedtMwE4ATrHSnma36lVIFO0H414zIv4o1agtnn6VjqYcrXlLhrC31ZF
+         AU0ra4RbFNMyGaW9Va7ofCBLYdHCSFJOF+H4SR3v2uDjqG3XtU8VMWPrGunpQx+ptl
+         JyrD7XWF2uRHagy/0pYmOdVpG8QaPPmrHYZr9+u4VnWquyktm2eCB1JUqDlz13ZdeA
+         n9RUcm9Y43iSbFGsWrEU8JIqiL+XWiKNPWSeiI5kPhfvogXEsBLI9bA/R24C2U/jI5
+         ZAsyKiUxrZLN5ehbY9GrNLMkcSc3iWHA6HOBCk6TtZE0Otylo2eAgfPOU56Mb8qyAp
+         VPsNm0MB+xaRQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 12 Apr 2023 13:18:40 +0300 (MSK)
+Message-ID: <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
+Date:   Wed, 12 Apr 2023 13:14:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ff91d0c-624b-2704-24b0-5b7c4ca0db1e@selasky.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
+ <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
+ <20230412094400.3c82f631@xps-13>
+ <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
+ <20230412113654.183350d0@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230412113654.183350d0@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 04:12:00 #21090163
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 12:00:59PM +0200, Hans Petter Selasky wrote:
-> That's why the toolchain should be included in the Linux kernel. So that the
-> people using Linux know that the toolchain works as intended when compiling
-> the Linux kernel.
 
-That's not how Linux has ever worked, sorry.  So this is not even a
-valid discussion anymore.
 
-greg k-h
+On 12.04.2023 12:36, Miquel Raynal wrote:
+> Hi Arseniy,
+> 
+> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +0300:
+> 
+>> On 12.04.2023 10:44, Miquel Raynal wrote:
+>>> Hi Arseniy,
+>>>
+>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +0300:
+>>>   
+>>>> This NAND reads only few user's bytes in ECC mode (not full OOB), so  
+>>>
+>>> "This NAND reads" does not look right, do you mean "Subpage reads do
+>>> not retrieve all the OOB bytes,"?
+>>>   
+>>>> fill OOB buffer with zeroes to not return garbage from previous reads
+>>>> to user.
+>>>> Otherwise 'nanddump' utility prints something like this for just erased
+>>>> page:
+>>>>
+>>>> ...
+>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>>>>   OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad d3 be
+>>>>   OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e 88 6e
+>>>>   OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 7c ff
+>>>>   OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa 2f 5e
+>>>>
+>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>> ---
+>>>>  drivers/mtd/nand/raw/meson_nand.c | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>> index f84a10238e4d..f2f2472cb511 100644
+>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
+>>>>  static int meson_nfc_read_page_raw(struct nand_chip *nand, u8 *buf,
+>>>>  				   int oob_required, int page)
+>>>>  {
+>>>> +	struct mtd_info *mtd = nand_to_mtd(nand);
+>>>>  	u8 *oob_buf = nand->oob_poi;
+>>>>  	int ret;
+>>>>  
+>>>> +	memset(oob_buf, 0, mtd->oobsize);  
+>>>
+>>> I'm surprised raw reads do not read the entire OOB?  
+>>
+>> Yes! Seems in case of raw access (what i see in this driver) number of OOB bytes read
+>> still depends on ECC parameters: for each portion of data covered with ECC code we can
+>> read it's ECC code and "user bytes" from OOB - it is what i see by dumping DMA buffer by
+>> printk(). For example I'm working with 2K NAND pages, each page has 2 x 1K ECC blocks.
+>> For each ECC block I have 16 OOB bytes which I can access by read/write. Each 16 bytes
+>> contains 2 bytes of user's data and 14 bytes ECC codes. So when I read page in raw mode
+>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB is reported as 64 bytes.
+> 
+> In all modes, when you read OOB, you should get the full OOB. The fact
+> that ECC correction is enabled or disabled does not matter. If the NAND
+> features OOB sections of 64 bytes, you should get the 64 bytes.
+> 
+> What happens sometimes, is that some of the bytes are not protected
+> against bitflips, but the policy is to return the full buffer.
+
+Ok, so to clarify case for this NAND controller:
+1) In both ECC and raw modes i need to return the same raw OOB data (e.g. user bytes
+   + ECC codes)?
+2) If I have access to only 32 bytes of OOB (in case above), I must report that size
+   of OOB is only 32 bytes during initialization?
+
+Thanks, Arseniy
+
+> 
+>>
+>> Thanks, Arseniy
+>>
+>>>   
+>>>> +
+>>>>  	ret = meson_nfc_read_page_sub(nand, page, 1);
+>>>>  	if (ret)
+>>>>  		return ret;
+>>>> @@ -881,6 +884,8 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
+>>>>  	u8 *oob_buf = nand->oob_poi;
+>>>>  	int ret, i;
+>>>>  
+>>>> +	memset(oob_buf, 0, mtd->oobsize);
+>>>> +
+>>>>  	ret = meson_nfc_read_page_sub(nand, page, 0);
+>>>>  	if (ret)
+>>>>  		return ret;  
+>>>
+>>>
+>>> Thanks,
+>>> Miquèl  
+> 
+> 
+> Thanks,
+> Miquèl
