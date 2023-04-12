@@ -2,255 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD49A6DF23A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBBE6DF249
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjDLKwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S229817AbjDLKzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDLKwM (ORCPT
+        with ESMTP id S229553AbjDLKzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:52:12 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2093.outbound.protection.outlook.com [40.107.255.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CCC65A7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:51:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TogAAFMiNXqK8pGDpFWAMcLelTv3oeRbnEZsDakYhX7mUJtZPMZ3UAO6IoLi9AHIQDJlRi4Sv7sWlZ+js7LDBFZ6ObedD8bx9O2lwzELS8ywdTSPztMxpIW16VFK7X+dsVAjAcBgMuNRSDsuU3wdH0k7ud0gvETul6n4LqeJQjjRPJARbOdmB+s1kLB7x+V6L4fbva9em/hMMPA0ofsI6qAYwCetoqrGoP0ZFP9wI3xNAfYV7BabrwnqEJ00OQIhfTa8/k9iBFa7yZmwXnkSMMP59jflVM6dKEWtGrPDeQ8c4jnfXtL2MZHC3AmxxHGK0XEny+kVizJOmvrb3w46gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ot4aTBd570dddjhGxPqKrbamb7NtoFMBBv9Pc59moGg=;
- b=myvuHpFcTQL90RFewrZrc6qXZCzzcEoYtQcFbrJ62q3gKXvA8kTvRSWAcxAt8XdZ/0071EuRNTqkHGO09Cf4TeWD1piM7T4pimpSO2dI3TTzQ/NrIvJ458nBoEyuJ+qJCpLNzJEovMhcSpux2QU/GxAkgd097RjykBmedvQi4BaJ+ENacLQVS7VCOrL6dssnomqRGNcPIM0vudQg4s6tZ6Eqd6Li5hXxTXmQBj46GyzIqYVY0hptIV+Afck+WXZuwlfXMKyuSu7dutSwdc523wl+7DM1P+D98c5w4zVDY8foTRpV5gyzclqsZTPtlI1MJJRp68+UdWnlbuU7WdSWKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from PS1PR03MB5034.apcprd03.prod.outlook.com (2603:1096:300:7b::17)
- by KL1PR03MB5778.apcprd03.prod.outlook.com (2603:1096:820:6d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.28; Wed, 12 Apr
- 2023 10:51:26 +0000
-Received: from PS1PR03MB5034.apcprd03.prod.outlook.com
- ([fe80::c56f:c862:ff8e:909]) by PS1PR03MB5034.apcprd03.prod.outlook.com
- ([fe80::c56f:c862:ff8e:909%5]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
- 10:51:25 +0000
-Message-ID: <4baac18b-c223-d346-503c-f5f9ae49320d@amlogic.com>
-Date:   Wed, 12 Apr 2023 18:51:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v1 4/5] mtd: rawnand: meson: clear OOB buffer before read
+        Wed, 12 Apr 2023 06:55:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DB16A69
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681296889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9alFis21lp3H1PeQGiwFBeiCWEcrStDft1SvCWrv9fk=;
+        b=FQT6jJGu3OYTx1455515yVvDwRtzkD0nmiVHVDt3/PA9u4tf9gSjMbeFKHXmDhBdNpx+R8
+        dAaBXRd80u7yj8mx0ar/l/Gnsi0STW1FaULk4Oexu7TvXuRcuQQuIHqG+Jizwsry0vViZj
+        KSyqPsth4mgQTwblZByG2pYgqAlJu2o=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-160-yoAo0E_WN0-lBqCUFewvkA-1; Wed, 12 Apr 2023 06:54:48 -0400
+X-MC-Unique: yoAo0E_WN0-lBqCUFewvkA-1
+Received: by mail-ed1-f69.google.com with SMTP id c64-20020a509fc6000000b004a26cc7f6cbso6304772edf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:54:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681296887; x=1683888887;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9alFis21lp3H1PeQGiwFBeiCWEcrStDft1SvCWrv9fk=;
+        b=ZNm/sBHyU/Z7aP/8a5MEQ90/7X4kAca1wyqPOkk1D4Gz3m9bOIGP1hCCdn/823oPGc
+         YghH9ZsK43F/sScfLj1Ry2P5X7iw1CllaCGbw5OHdVJHWTbNfQRfY8s9u5GOkpgRgFAM
+         KFBRRad47VtKTbTCW4EhCgwJa3oQktHEZl7LrlhL/qdWf9ZwP8pBXTBmdOAgNiuTiWvF
+         kQFgDK8Hpggbdt0/t3OAPMZrC2j5p+59+dF/1Cq862a/XEdpmNodKjTlvsK4D46pOLSn
+         rPOv+R91a+9GH3EPpixJffKyK4apXAXWzwJ2rhHSC2U8rOL/dI1ZDeRgNGi6Q+OpsnQ1
+         F3ow==
+X-Gm-Message-State: AAQBX9efauflmqZja771nKVrFHCLbuaWHyjrh/26covtCHI4ATitKAra
+        MG1wNKV++sp/AiG8NuST33TifYW19E8l5vSlfETkh/NJqWQJRIWcCcjEOj3BYS7DJH9yxKJEp8X
+        a0MNvWVk1yztR1nnlTJ7E0FUY
+X-Received: by 2002:a17:906:6d16:b0:948:c047:467d with SMTP id m22-20020a1709066d1600b00948c047467dmr5713193ejr.23.1681296887176;
+        Wed, 12 Apr 2023 03:54:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bMaqa5uHrrM7B5IePYN1OMBi6DPhLMgrCl1TykvEZOYX14RUF+y2TD0HStIwcvwi/F7K0XRg==
+X-Received: by 2002:a17:906:6d16:b0:948:c047:467d with SMTP id m22-20020a1709066d1600b00948c047467dmr5713173ejr.23.1681296886799;
+        Wed, 12 Apr 2023 03:54:46 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id g19-20020a1709065d1300b00928e0ea53e5sm7083290ejt.84.2023.04.12.03.54.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 03:54:46 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <402a3c73-d26d-3619-d69a-c90eb3f0e9ee@redhat.com>
+Date:   Wed, 12 Apr 2023 12:54:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH bpf V7 1/7] selftests/bpf: xdp_hw_metadata default disable
+ bpf_printk
 Content-Language: en-US
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-5-AVKrasnov@sberdevices.ru>
- <20230412094400.3c82f631@xps-13>
- <ac4b66da-6a76-c2ec-7e21-31632f3448d5@sberdevices.ru>
- <20230412113654.183350d0@xps-13>
- <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <4eace0a0-f6af-7d99-a52f-7913a2139330@sberdevices.ru>
+To:     Stanislav Fomichev <sdf@google.com>
+References: <168098183268.96582.7852359418481981062.stgit@firesoul>
+ <168098188134.96582.7870014252568928901.stgit@firesoul>
+ <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+In-Reply-To: <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYAPR01CA0158.jpnprd01.prod.outlook.com
- (2603:1096:404:7e::26) To PS1PR03MB5034.apcprd03.prod.outlook.com
- (2603:1096:300:7b::17)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PS1PR03MB5034:EE_|KL1PR03MB5778:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a40906a-af39-4eed-5548-08db3b43dc84
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k6qxRq70soI/81fXl7mT62pQGrErGLbS/nKGNUDxhmRkkzuG4vQd9LPGCeOMiqJedBZknZPjT3swERI3GrMnQALBPfJyKiuiOcZzgLrCMoJFUrpGyHIUIIZKCoCTQKFOb4wjI6mwoUkS0qzEFrXfcGPwdXFIW6jFYBYNOZec0xDqVHRq8Eu88c015Yd2Lkz2JCI55/nTuCnKiK9aFsQZNgba6AqxJ+wlESbMJcqPzZlPkmdjIhHLUWvcg6WuWwKtLEYY7cgo2pyG9zJDtPZG27O6ZDu/+4Y/TJLYsZ/ohDGWlNTTfK28phxnWWdL7jYao/w4ni55YH46MQYHvQRIxcBiJogLKoDmK/6+P7ms3bqaoR2liIyuHuJuaDlkH0El+KiOYLOF9lu1eQKRsHt8pVkPbjCTHy5p0yxz6qOiV+YugfkWxsp9KuiUF3GgU4J7IvUYDB3iXcYWiMYdrGJfWwR24DXGYVCpJj42g1fiBAQ/jv/7zQUFC+veCCeRprsUimRc39VX5DjXJP2yr9CL6U49aD703ZEsOrULoD4Bg36icVNyX8AdZHM20KOQxFFh4m2O8vHIUO6ckJUtE/oUNjW53BLFRS4U7yhSz24VDZW4Vu/t8WIM1EcgDFG9CNI8PG9TNr6nCGnlyqj/b8n8qt86am3qgdErIS2V/BGODqL5l1FvyEC+9/alkoXK7pAL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR03MB5034.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(136003)(39850400004)(366004)(376002)(451199021)(2616005)(83380400001)(66574015)(478600001)(6486002)(52116002)(6666004)(26005)(6506007)(110136005)(186003)(53546011)(54906003)(44832011)(6512007)(38350700002)(2906002)(7416002)(36756003)(5660300002)(38100700002)(4326008)(66946007)(66476007)(66556008)(41300700001)(316002)(8936002)(8676002)(86362001)(31696002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTBPSzFTRTd3ZkRST095OFo4Z2tJd1YzTDh3MVFZRHJLcFB5Z0VNb1NFck03?=
- =?utf-8?B?V3VGUzhpVExORGVjKy9KUlpqbUp0NHE3SWJDZVlMR25EcHdXKy9hK2UrZFJu?=
- =?utf-8?B?NWZRaURXdm5FZ3pXZEI0cUpZcEFYMUVySFcyZTNpUGFZdGk5bStaeFY1dUNH?=
- =?utf-8?B?eFlFWEJDZ0x0b01lbERLNU5mYmNtUTU3U2s1S1orcDk3RlNXNUUxd3JtMVRj?=
- =?utf-8?B?WFh6L3Voa29LR1dUcXNhRzBJRGdrc0xIc3N4bVl2alB4Mll5eHh2bCtqUmhv?=
- =?utf-8?B?aVRuQkFSYTlYejAxV2Jpc0RybnM1c29vQUZ4Z0ZLK0VpTUhLV01TeitidVRE?=
- =?utf-8?B?V2xRdEVPcHVaKzdhc1dpNmNNRVNoVTRjb0ZMNFJvK2tHWjhDUXgzS09jbkls?=
- =?utf-8?B?ejRWSTg3aUE4SWlmc2NXSlBKbm5rRUN0Y05wZmhQbHI0MXdyTlVNZVZTSEs1?=
- =?utf-8?B?WDNyKy9hTzcxL1BtcWxGcXZPMnBEUlJiRmhES0lTaStVSUZJSXVBUjVocVN0?=
- =?utf-8?B?bU1BVkxXZG9xZko1UmswTHZQZkx0VWFRZVVuVGI2Y3FDdmp4MEFLOGtzQklp?=
- =?utf-8?B?emlBNXR0NS9zcWdFSy9MM3MxT1lXNWM1ejVVZkFkcVRTWWNmd2FLT2h2bkI0?=
- =?utf-8?B?TEFoaWl3alloK29jdGR1QUUwSDFKMlE1N2R6SHFnZGMyZkFYNzQ4VVlYc1NE?=
- =?utf-8?B?L2hEWjFRQU9kSDVZSUgyM3ZPUWNpNjFPQnRpRzBqV0puM09Qa0N3VjY0RDVa?=
- =?utf-8?B?VjZvREhOT0RtcjJnR0xJZGl2TEp5MVZJaFQ4UEk5NUlycVBpTVpEVU5RckRy?=
- =?utf-8?B?ZnVXYW5USlJodjR6WmxyY3dGbng2ZmtuSEYxdlJqQzAvTFV0WWdnS2ptNUxF?=
- =?utf-8?B?SkNNOW5NMTYvaSs1cTdmdGpmVGpuVXNyUXZPRTgraGdqVytHL3AyZVdSS0d5?=
- =?utf-8?B?UFhrYnZ6cnBDeThJNnZPQmtLY0VpaEJEczh4YjFkWXhNODhSZmc0Q2dmM1N1?=
- =?utf-8?B?elp0bjVoZ1NvS1h5WXFTemFXY3FpOTlCUDhBeERmS2JRYmJRc0ViYjc2NnlR?=
- =?utf-8?B?TU9JVmdmUnVGbG9HTTZsSWllMU9sZVYzYytSTisrZnhtVWFXd0hKZlVpVGRy?=
- =?utf-8?B?SEJkemJyczR4eXd0SkgydkNRT3dGZi80U1UvY0lneWVXSTlMdlRmOFFZS082?=
- =?utf-8?B?L3lwNk45cjJLVURiRzhjRVU1MlpNWmxwN2FDM0hXSlJPSExDZHVKWHRuRkd4?=
- =?utf-8?B?ZVpEUUlUdXR2WVhaWUVlaHdEWW1lUmRvYlRkSm90SW0vS0FVVGNmZDlKa0J0?=
- =?utf-8?B?bkUrZ1A1N0lqN2M4T041RE81K1N5U0EyZUtHUVBlSG4zQk95c1N1TXY4T1Ew?=
- =?utf-8?B?akNHTDl6cEJJZ2p0YUlNQkVHNHc2Z29CSUx6VXBLTW9aUmxIVkNQckVPeVkx?=
- =?utf-8?B?ZzlUbUlidjVhVC8xUGtQUSsvU0FtWnJoSFF3N3dLUElzNUljeVBjVEdFQlJj?=
- =?utf-8?B?V3ViN08rbnZBUkRwZ1hKT1hhbUZuZXpKNkZtR3piei9CaTE0UVgrU0U0L0tT?=
- =?utf-8?B?SHJ0UU5oYmY0YkFJNkpFVGx5TnVreVAvQjgyeXMwMExaS1hHRGd2SmtrbDdt?=
- =?utf-8?B?NDZla0NVR20xQmdHd2d0TVh6cFp2eFQxQzgyaElhSlJaeTVkRDgycGtNU1oy?=
- =?utf-8?B?MGtvWnpPSWdjVFEwbzdlN0U3TU1NTUJZNVhueVBvRC9JUmIxQThvektTczJn?=
- =?utf-8?B?U0lvdG1GbG02bG45SUpZVjUyTW1mU1pZcHVpenhsNnQyaHNZSm4xcEZKNzZP?=
- =?utf-8?B?MDJZNnNHSUgrTENnbWNBblhHeWhhZEVWeUluc1FZMW5kSEZreWtRRTViREFl?=
- =?utf-8?B?R1had016V1hnZnIyODgzamZ6bjViNGIwaHdlUUh2VTg2amYzWXc0QWFXSGRn?=
- =?utf-8?B?cFFHTk9yTWZuMXZmYXV6dmZBbEtROHYxSWVkQmNyQ2k4d0wvMGc1ZXAyUzVw?=
- =?utf-8?B?bWt5YjdSMDE4dlNuSm5MckxCQ2tlYVVHWGVNOUVPeGxoakUyeVg2S1VNN2hY?=
- =?utf-8?B?UWxHbTZqNEpPWW1SekVqcUxsc0NRZTFKSThjaGpaTksvTWlwaitWN1Bzd3JL?=
- =?utf-8?B?TmRtZkJjdDk4NWpnTW52YVRZS3UzczVOVjdSL1RSc0ZNaDFVcUtzQXBQaWlB?=
- =?utf-8?B?Y0E9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a40906a-af39-4eed-5548-08db3b43dc84
-X-MS-Exchange-CrossTenant-AuthSource: PS1PR03MB5034.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 10:51:25.4665
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1L6AEqTWWvhsXYdUwn4G2Ypfl0s85OOq0RJtTWSAkBFOl8mvmj2j/fiqmXBxNhVOi6tQGfXLAyUgTcSR5q312w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB5778
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy and Miquel,
 
-On 2023/4/12 18:14, Arseniy Krasnov wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> 
-> On 12.04.2023 12:36, Miquel Raynal wrote:
->> Hi Arseniy,
+On 12/04/2023 00.42, Stanislav Fomichev wrote:
+> On Sat, Apr 8, 2023 at 12:24 PM Jesper Dangaard Brouer
+> <brouer@redhat.com> wrote:
 >>
->> avkrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 12:20:55 +0300:
+>> The tool xdp_hw_metadata can be used by driver developers
+>> implementing XDP-hints kfuncs.  The tool transfers the
+>> XDP-hints via metadata information to an AF_XDP userspace
+>> process. When everything works the bpf_printk calls are
+>> unncesssary.  Thus, disable bpf_printk by default, but
+>> make it easy to reenable for driver developers to use
+>> when debugging their driver implementation.
 >>
->>> On 12.04.2023 10:44, Miquel Raynal wrote:
->>>> Hi Arseniy,
->>>>
->>>> AVKrasnov@sberdevices.ru wrote on Wed, 12 Apr 2023 09:16:58 +0300:
->>>>    
->>>>> This NAND reads only few user's bytes in ECC mode (not full OOB), so
->>>>
->>>> "This NAND reads" does not look right, do you mean "Subpage reads do
->>>> not retrieve all the OOB bytes,"?
->>>>    
->>>>> fill OOB buffer with zeroes to not return garbage from previous reads
->>>>> to user.
->>>>> Otherwise 'nanddump' utility prints something like this for just erased
->>>>> page:
->>>>>
->>>>> ...
->>>>> 0x000007f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>    OOB Data: ff ff ff ff 00 00 ff ff 80 cf 22 99 cb ad d3 be
->>>>>    OOB Data: 63 27 ae 06 16 0a 2f eb bb dd 46 74 41 8e 88 6e
->>>>>    OOB Data: 38 a1 2d e6 77 d4 05 06 f2 a5 7e 25 eb 34 7c ff
->>>>>    OOB Data: 38 ea de 14 10 de 9b 40 33 16 6a cc 9d aa 2f 5e
->>>>>
->>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>> ---
->>>>>   drivers/mtd/nand/raw/meson_nand.c | 5 +++++
->>>>>   1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>>> index f84a10238e4d..f2f2472cb511 100644
->>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>>> @@ -858,9 +858,12 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->>>>>   static int meson_nfc_read_page_raw(struct nand_chip *nand, u8 *buf,
->>>>>   				   int oob_required, int page)
->>>>>   {
->>>>> +	struct mtd_info *mtd = nand_to_mtd(nand);
->>>>>   	u8 *oob_buf = nand->oob_poi;
->>>>>   	int ret;
->>>>>   
->>>>> +	memset(oob_buf, 0, mtd->oobsize);
->>>>
->>>> I'm surprised raw reads do not read the entire OOB?
->>>
->>> Yes! Seems in case of raw access (what i see in this driver) number of OOB bytes read
->>> still depends on ECC parameters: for each portion of data covered with ECC code we can
->>> read it's ECC code and "user bytes" from OOB - it is what i see by dumping DMA buffer by
->>> printk(). For example I'm working with 2K NAND pages, each page has 2 x 1K ECC blocks.
->>> For each ECC block I have 16 OOB bytes which I can access by read/write. Each 16 bytes
->>> contains 2 bytes of user's data and 14 bytes ECC codes. So when I read page in raw mode
->>> controller returns 32 bytes (2 x (2 + 14)) of OOB. While OOB is reported as 64 bytes.
+>> This also converts bpf_printk "forwarding UDP:9091 to AF_XDP"
+>> into a code comment.  The bpf_printk's that are important
+>> to the driver developers is when bpf_xdp_adjust_meta fails.
+>> The likely mistake from driver developers is expected to
+>> be that they didn't implement XDP metadata adjust support.
 >>
->> In all modes, when you read OOB, you should get the full OOB. The fact
->> that ECC correction is enabled or disabled does not matter. If the NAND
->> features OOB sections of 64 bytes, you should get the 64 bytes.
+>> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>> ---
+>>   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   16 ++++++++++++++--
+>>   1 file changed, 14 insertions(+), 2 deletions(-)
 >>
->> What happens sometimes, is that some of the bytes are not protected
->> against bitflips, but the policy is to return the full buffer.
+>> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> index 4c55b4d79d3d..980eb60d8e5b 100644
+>> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> @@ -5,6 +5,19 @@
+>>   #include <bpf/bpf_helpers.h>
+>>   #include <bpf/bpf_endian.h>
+>>
+>> +/* Per default below bpf_printk() calls are disabled.  Can be
+>> + * reenabled manually for convenience by XDP-hints driver developer,
+>> + * when troublshooting the drivers kfuncs implementation details.
+>> + *
+>> + * Remember BPF-prog bpf_printk info output can be access via:
+>> + *  /sys/kernel/debug/tracing/trace_pipe
+>> + */
+>> +//#define DEBUG        1
+>> +#ifndef DEBUG
+>> +#undef  bpf_printk
+>> +#define bpf_printk(fmt, ...) ({})
+>> +#endif
 > 
-> Ok, so to clarify case for this NAND controller:
-> 1) In both ECC and raw modes i need to return the same raw OOB data (e.g. user bytes
->     + ECC codes)?
-> 2) If I have access to only 32 bytes of OOB (in case above), I must report that size
->     of OOB is only 32 bytes during initialization?
-> 
-> Thanks, Arseniy
+> Are you planning to eventually do somethike similar to what I've
+> mentioned in [0]? If not, should I try to send a patch?
 
-Yes. it should return all the OOB data. i make a mistake on raw read and 
-there is wrong code in meson_nfc_read_page_raw().
-	meson_nfc_get_data_oob(nand, buf, oob_buf);
-changed to:
-	if (oob_required)
-		memcpy(oob_buf, buf + mtd->writesize, mtd->oobsize)
+See next patch:
+  - [PATCH bpf V7 2/7] selftests/bpf: Add counters to xdp_hw_metadata
 
-for the ECC mode, i define the meson_ooblayout_ops in host driver.
+where I add these counters :-)
 
 > 
->>
->>>
->>> Thanks, Arseniy
->>>
->>>>    
->>>>> +
->>>>>   	ret = meson_nfc_read_page_sub(nand, page, 1);
->>>>>   	if (ret)
->>>>>   		return ret;
->>>>> @@ -881,6 +884,8 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
->>>>>   	u8 *oob_buf = nand->oob_poi;
->>>>>   	int ret, i;
->>>>>   
->>>>> +	memset(oob_buf, 0, mtd->oobsize);
->>>>> +
->>>>>   	ret = meson_nfc_read_page_sub(nand, page, 0);
->>>>>   	if (ret)
->>>>>   		return ret;
->>>>
->>>>
->>>> Thanks,
->>>> Miquèl
->>
->>
->> Thanks,
->> Miquèl
+> 0: https://lore.kernel.org/netdev/CAKH8qBupRYEg+SPMTMb4h532GESG7P1QdaFJ-+zrbARVN9xrdA@mail.gmail.com/
 > 
 
--- 
-Thanks,
-Liang
