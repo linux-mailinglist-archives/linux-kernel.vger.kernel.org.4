@@ -2,170 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34926DFBF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12B66DFBFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjDLQ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S230230AbjDLQ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjDLQ4e (ORCPT
+        with ESMTP id S230161AbjDLQ5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:56:34 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CA59ECB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:56:07 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6345d4c8b25so777633b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681318563;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5aQP8BO2zo9XrojS0bD6j1oYwbTGaaKe2CEIkMg+Cc=;
-        b=oVLoNRJYCUybQHOCGDc1/+VV+Wd3aSZ7iKoewHhOxr1x7l07u7jhjgNxGtvZ+BZiGP
-         c0df6kLIh/auurIKDofimLBIjub63gz2i2tflYknIZNj2NnK506IT3EyqDEs7OBDGJOw
-         Du1gx6ak04OGqUV5ei38bvHmLTob16K6WNbOzXVmiZCC6zqQc5aP40cItoZfBTFJxJiR
-         Oj7oWnxeVM3mdxoWqLd4ZHyFIzGKvXmkUTBFIJzsVjT/MUQkrsa9QNrCYmRFOXRLWd9b
-         TEA6YsK/kVrHl8IF0FY22x7gwd2A6zHfKONJF6sMgQaCSt1EUuPHDQUfPHyBBvBBj1Nf
-         kzrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681318563;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5aQP8BO2zo9XrojS0bD6j1oYwbTGaaKe2CEIkMg+Cc=;
-        b=LKTW0A97TErqPtHxb5VVK2/nEMoEwu/0wQa1wLyKKEmJJgT01LIZnYpveXAUEguXuy
-         zcQmpMxb0yTs/mUgBKtopRW/c+Z7fBcfgMiog1qIRM0uTq0uhUgZQHsWaKR19bOeCqzI
-         bGTnkrTywVwkda0sRibwhZMJqhAvvwJQyFrGxa75DM7pEFNwS0ahxXFtIdGxA6ix/UcR
-         0Ed3ss/bc+n8M7nTmd0ppX23TyLTrqJg+aAcC4f7KDrXizEgJXME8Y1g4od3r5bhPB+e
-         P4KxIN919SdLkdu2K+EAGSnVwDRRiPDAgks2qV7jWAYRtzQZJOX+gEftmd/8u2r+cHSW
-         LRVQ==
-X-Gm-Message-State: AAQBX9decoLWvj2/m83NVo1xKqEeC/+Z4X2JZnVvWouB2W3roHrS1rE9
-        ynHMyAB4fRUnlszTwmB0u7Kjlc0=
-X-Google-Smtp-Source: AKy350a13a5HToDhjS1k1UbKJ/IVQbgV0gzzJs4B82pMPsxUQcRF3Po0gAx3EgHJsgANJfb6CfMCn/I=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:2d15:b0:62d:afc6:c152 with SMTP id
- fa21-20020a056a002d1500b0062dafc6c152mr569870pfb.5.1681318563183; Wed, 12 Apr
- 2023 09:56:03 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 09:56:01 -0700
-In-Reply-To: <168130336725.150247.12193228778654006957.stgit@firesoul>
-Mime-Version: 1.0
-References: <168130333143.150247.11159481574477358816.stgit@firesoul> <168130336725.150247.12193228778654006957.stgit@firesoul>
-Message-ID: <ZDbiofWhQhFEfIsr@google.com>
-Subject: Re: [PATCH bpf V8 2/7] selftests/bpf: Add counters to xdp_hw_metadata
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     bpf@vger.kernel.org,
-        "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
-        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
-        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
-        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 12:57:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6775076BB;
+        Wed, 12 Apr 2023 09:56:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C84633BD;
+        Wed, 12 Apr 2023 16:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128B9C433D2;
+        Wed, 12 Apr 2023 16:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681318614;
+        bh=7sNwtUtvHwFJqLlrY6hXeBl/C/V+/yCFZfC2xHM6jtc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=noTkHizbzGsV1rdMjY8GEVn+pJ376VD0mzSeQH+AiXz814SDMFFCDURI1FPJd5qLH
+         JjUDqkHkN624/Fn/MpwUFGH7kpVEC2A/QXUoIxAKAP2hqA1+5BGMowE5xvM/fJfDde
+         G/TtsvQzu/bITiVQ1BWXLK7vIWLxNFiQHf17Shfkh/PZQQnKwE/Znfdr0LkEZFs9sE
+         HYgX4T1empUUM6MW8PUWsCf3zhd6VPDzLV8iWaEtkRr8dxE0lif1rsD34S7fOXrV4H
+         LbYo9C+svJIHPTcOmMNIK8OWCGmcpLtaKpeVbfL47uhEI0DxaTSXG9x7cud0zoNnHy
+         REwwzSdLVkiGg==
+Date:   Wed, 12 Apr 2023 09:56:52 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the block tree
+Message-ID: <20230412165652.umuiemo7ifnhr2nz@treble>
+References: <20230327162630.wmxpycxhllt4clpt@treble>
+ <20230328104719.65133586@canb.auug.org.au>
+ <20230412073416.73a8ea1a@canb.auug.org.au>
+ <20230411215518.u2fgi7napfcwyuce@treble>
+ <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
+ <20230412001400.yraku5fwsjdchxvk@treble>
+ <20230412114400.GB628377@hirez.programming.kicks-ass.net>
+ <20230412162517.gji52t34zlvcu5bh@treble>
+ <6527c6fa-8908-1d8d-2f9e-bb7636a27874@kernel.dk>
+ <c4d8e079-91bd-62e8-7725-b03802398c83@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c4d8e079-91bd-62e8-7725-b03802398c83@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/12, Jesper Dangaard Brouer wrote:
-> Add counters for skipped, failed and redirected packets.
-> The xdp_hw_metadata program only redirects UDP port 9091.
-> This helps users to quickly identify then packets are
-> skipped and identify failures of bpf_xdp_adjust_meta.
+On Wed, Apr 12, 2023 at 10:44:11AM -0600, Jens Axboe wrote:
+> On 4/12/23 10:35 AM, Jens Axboe wrote:
+> > On 4/12/23 10:25?AM, Josh Poimboeuf wrote:
+> >> On Wed, Apr 12, 2023 at 01:44:00PM +0200, Peter Zijlstra wrote:
+> >>> On Tue, Apr 11, 2023 at 05:14:00PM -0700, Josh Poimboeuf wrote:
+> >>>
+> >>>> Peter, what do you think, should we make track uaccess state across
+> >>>> function boundaries?
+> >>>
+> >>> So IIRC the goal was to explicitly dis-allow that. You want minimal code
+> >>> executed with STAC and hence disallow calling stuff.
+> >>
+> >> I guess I was wondering if we could make an exception for calls to
+> >> static IPA-optimized functions, so we wouldn't have to scramble to "fix"
+> >> compiler optimizations.
+> >>
+> >> But for now, yeah let's just keep it simple.
+> >>
+> >> Jens, can you confirm this works?  I added __noclone instead of removing
+> >> static.
+> > 
+> > Yep, works for me.
 > 
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> ---
->  .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   15 +++++++++++++--
->  tools/testing/selftests/bpf/xdp_hw_metadata.c      |    4 +++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> index b0104763405a..a07ef7534013 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> @@ -25,6 +25,10 @@ struct {
->  	__type(value, __u32);
->  } xsk SEC(".maps");
->  
-> +volatile __u64 pkts_skip = 0;
-> +volatile __u64 pkts_fail = 0;
-> +volatile __u64 pkts_redir = 0;
-> +
->  extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
->  					 __u64 *timestamp) __ksym;
->  extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
-> @@ -59,16 +63,21 @@ int rx(struct xdp_md *ctx)
->  			udp = NULL;
->  	}
->  
-> -	if (!udp)
-> +	if (!udp) {
-> +		pkts_skip++;
->  		return XDP_PASS;
-> +	}
->  
->  	/* Forwarding UDP:9091 to AF_XDP */
-> -	if (udp->dest != bpf_htons(9091))
-> +	if (udp->dest != bpf_htons(9091)) {
-> +		pkts_skip++;
->  		return XDP_PASS;
-> +	}
->  
->  	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
->  	if (ret != 0) {
+> Want me to slap that patch on top of the branch that has the commit
+> that causes it?
 
-[..]
+Yes, please.  Thanks!
 
->  		bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
-
-Maybe let's remove these completely? Merge patch 1 and 2, remove printk,
-add counters. We can add more counters in the future if the existing
-ones are not enough.. WDYT?
-
-> +		pkts_fail++;
->  		return XDP_PASS;
->  	}
->  
-> @@ -78,6 +87,7 @@ int rx(struct xdp_md *ctx)
->  
->  	if (meta + 1 > data) {
->  		bpf_printk("bpf_xdp_adjust_meta doesn't appear to work");
-> +		pkts_fail++;
->  		return XDP_PASS;
->  	}
->  
-> @@ -91,6 +101,7 @@ int rx(struct xdp_md *ctx)
->  	else
->  		meta->rx_hash = 0; /* Used by AF_XDP as not avail signal */
->  
-> +	pkts_redir++;
->  	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
->  }
->  
-> diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> index 1c8acb68b977..3b942ef7297b 100644
-> --- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> @@ -212,7 +212,9 @@ static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd)
->  	while (true) {
->  		errno = 0;
->  		ret = poll(fds, rxq + 1, 1000);
-> -		printf("poll: %d (%d)\n", ret, errno);
-> +		printf("poll: %d (%d) skip=%llu fail=%llu redir=%llu\n",
-> +		       ret, errno, bpf_obj->bss->pkts_skip,
-> +		       bpf_obj->bss->pkts_fail, bpf_obj->bss->pkts_redir);
->  		if (ret < 0)
->  			break;
->  		if (ret == 0)
-> 
-> 
+-- 
+Josh
