@@ -2,85 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C56B6DFB05
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581536DFAD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjDLQP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S229887AbjDLQI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjDLQPV (ORCPT
+        with ESMTP id S229791AbjDLQIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:15:21 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 09:15:10 PDT
-Received: from out-53.mta0.migadu.com (out-53.mta0.migadu.com [IPv6:2001:41d0:1004:224b::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542AE6A68
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:15:09 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681315717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3bKPEl8cLlrZ/2VwDkHe7tcZKUdIgYwqtpZzpBiFHDM=;
-        b=cnCBC4FwQKZKslE1NCHQUuxO6RB9n5wldYgPudjea9JE6Vc63s5tmmAc54YAodnGf2xIif
-        JXRFme7vMTMpK53ZoJ/9FULSDVDyiQaQ1s5jHSz54tRERNJ7pnZ8JQnprkAtNqnicgFZyi
-        ijnKHZEWNJ3pDH0outC5ygYPvdwfRWA=
-From:   chengming.zhou@linux.dev
-To:     axboe@kernel.dk, tj@kernel.org
-Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH 2/2] blk-throttle: only enable blk-stat when BLK_DEV_THROTTLING_LOW
-Date:   Thu, 13 Apr 2023 00:07:54 +0800
-Message-Id: <20230412160754.1981705-2-chengming.zhou@linux.dev>
-In-Reply-To: <20230412160754.1981705-1-chengming.zhou@linux.dev>
-References: <20230412160754.1981705-1-chengming.zhou@linux.dev>
+        Wed, 12 Apr 2023 12:08:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEB66A68
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:08:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4138F636C2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:08:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DED6C433EF;
+        Wed, 12 Apr 2023 16:08:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681315701;
+        bh=8XI4VwX95L0aDd5aZfR4XLw/V4QhNPw/aWXcf8kuWVA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nvruxvKHd7lTHzaainaw/rcOvL1cB+msXQGIwwJMdiXF6DS+qiScPwmjLT7AeN6e3
+         YKiBXJxocqpa8nLtvoJOesaGOdULmPEIagNRsx1b8kOZ9ayF8UvFyL98l+r4aGIy72
+         h8HC6Ls3rzvHcoQeWcEkiXmk3s0zX+UgoyRelhUg+GpJgSN46cEd0gAGFfeNFVRt5J
+         oTeyk+CRAXS2IcexL1AoJKOZKPgL0MGHuu7z0nYbXruqZKi+J/R461jFek4SMxaZ6G
+         ckvmuIN95v8e+b/YmOiovuWlS4UxKMAlSoG+0F5fnHy9QCLXRUEgOcQqtOWGl7A2Rg
+         QhBsQ2PrW59yQ==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 1/2] f2fs: remove set|get_private_inline to clean up
+Date:   Wed, 12 Apr 2023 09:08:09 -0700
+Message-Id: <20230412160810.1534632-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+2049d4fcb057 ("f2fs: avoid multiple node page writes due to inline_data")
+introduced flushing inline_data when flushing node pages.
 
-blk_throtl_register() will unconditionally enable blk-stat for gendisk
-when register, even when we have no BLK_DEV_THROTTLING_LOW config.
+b763f3bedc2d ("f2fs: restructure f2fs page.private layout")
+Replace PageChecked with PagePrivate
 
-Since the kernel always has only BLK_DEV_THROTTLING config and the
-BLK_DEV_THROTTLING_LOW config is still in EXPERIMENTAL state, we can
-just skip blk-stat when !BLK_DEV_THROTTLING_LOW.
+But, it turned out the bit was not cleared in corner case.
+Let's revert the original hack and rely on the generic write path to flush
+inline_data.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Fixes: 2049d4fcb057 ("f2fs: avoid multiple node page writes due to inline_data")
+Fixes: b763f3bedc2d ("f2fs: restructure f2fs page.private layout")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- block/blk-throttle.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/f2fs/data.c   |  2 --
+ fs/f2fs/f2fs.h   |  9 ++-------
+ fs/f2fs/inline.c |  2 --
+ fs/f2fs/inode.c  |  4 ----
+ fs/f2fs/node.c   | 52 ------------------------------------------------
+ 5 files changed, 2 insertions(+), 67 deletions(-)
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 47e9d8be68f3..3c07c9cfa70a 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -2439,11 +2439,12 @@ void blk_throtl_register(struct gendisk *disk)
- #ifndef CONFIG_BLK_DEV_THROTTLING_LOW
- 	/* if no low limit, use previous default */
- 	td->throtl_slice = DFL_THROTL_SLICE_HD;
--#endif
- 
-+#else
- 	td->track_bio_latency = !queue_is_mq(q);
- 	if (!td->track_bio_latency)
- 		blk_stat_enable_accounting(q);
-+#endif
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 5a3636b70f48..14cd647d727d 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3389,8 +3389,6 @@ static int prepare_write_begin(struct f2fs_sb_info *sbi,
+ 		if (pos + len <= MAX_INLINE_DATA(inode)) {
+ 			f2fs_do_read_inline_data(page, ipage);
+ 			set_inode_flag(inode, FI_DATA_EXIST);
+-			if (inode->i_nlink)
+-				set_page_private_inline(ipage);
+ 			goto out;
+ 		}
+ 		err = f2fs_convert_inline_page(&dn, page);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index ede38bcef80e..200fb2243e8a 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1382,9 +1382,8 @@ static inline void f2fs_clear_bit(unsigned int nr, char *addr);
+  * bit 0	PAGE_PRIVATE_NOT_POINTER
+  * bit 1	PAGE_PRIVATE_DUMMY_WRITE
+  * bit 2	PAGE_PRIVATE_ONGOING_MIGRATION
+- * bit 3	PAGE_PRIVATE_INLINE_INODE
+- * bit 4	PAGE_PRIVATE_REF_RESOURCE
+- * bit 5-	f2fs private data
++ * bit 3	PAGE_PRIVATE_REF_RESOURCE
++ * bit 4-	f2fs private data
+  *
+  * Layout B: lowest bit should be 0
+  * page.private is a wrapped pointer.
+@@ -1393,7 +1392,6 @@ enum {
+ 	PAGE_PRIVATE_NOT_POINTER,		/* private contains non-pointer data */
+ 	PAGE_PRIVATE_DUMMY_WRITE,		/* data page for padding aligned IO */
+ 	PAGE_PRIVATE_ONGOING_MIGRATION,		/* data page which is on-going migrating */
+-	PAGE_PRIVATE_INLINE_INODE,		/* inode page contains inline data */
+ 	PAGE_PRIVATE_REF_RESOURCE,		/* dirty page has referenced resources */
+ 	PAGE_PRIVATE_MAX
+ };
+@@ -1432,17 +1430,14 @@ static inline void clear_page_private_##name(struct page *page) \
  }
  
- #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ PAGE_PRIVATE_GET_FUNC(nonpointer, NOT_POINTER);
+-PAGE_PRIVATE_GET_FUNC(inline, INLINE_INODE);
+ PAGE_PRIVATE_GET_FUNC(gcing, ONGOING_MIGRATION);
+ PAGE_PRIVATE_GET_FUNC(dummy, DUMMY_WRITE);
+ 
+ PAGE_PRIVATE_SET_FUNC(reference, REF_RESOURCE);
+-PAGE_PRIVATE_SET_FUNC(inline, INLINE_INODE);
+ PAGE_PRIVATE_SET_FUNC(gcing, ONGOING_MIGRATION);
+ PAGE_PRIVATE_SET_FUNC(dummy, DUMMY_WRITE);
+ 
+ PAGE_PRIVATE_CLEAR_FUNC(reference, REF_RESOURCE);
+-PAGE_PRIVATE_CLEAR_FUNC(inline, INLINE_INODE);
+ PAGE_PRIVATE_CLEAR_FUNC(gcing, ONGOING_MIGRATION);
+ PAGE_PRIVATE_CLEAR_FUNC(dummy, DUMMY_WRITE);
+ 
+diff --git a/fs/f2fs/inline.c b/fs/f2fs/inline.c
+index 4638fee16a91..c9ede493f8cc 100644
+--- a/fs/f2fs/inline.c
++++ b/fs/f2fs/inline.c
+@@ -188,7 +188,6 @@ int f2fs_convert_inline_page(struct dnode_of_data *dn, struct page *page)
+ 
+ 	/* clear inline data and flag after data writeback */
+ 	f2fs_truncate_inline_inode(dn->inode, dn->inode_page, 0);
+-	clear_page_private_inline(dn->inode_page);
+ clear_out:
+ 	stat_dec_inline_inode(dn->inode);
+ 	clear_inode_flag(dn->inode, FI_INLINE_DATA);
+@@ -267,7 +266,6 @@ int f2fs_write_inline_data(struct inode *inode, struct page *page)
+ 	set_inode_flag(inode, FI_APPEND_WRITE);
+ 	set_inode_flag(inode, FI_DATA_EXIST);
+ 
+-	clear_page_private_inline(dn.inode_page);
+ 	f2fs_put_dnode(&dn);
+ 	return 0;
+ }
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index cf4327ad106c..336f92afb7e7 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -699,10 +699,6 @@ void f2fs_update_inode(struct inode *inode, struct page *node_page)
+ 
+ 	__set_inode_rdev(inode, ri);
+ 
+-	/* deleted inode */
+-	if (inode->i_nlink == 0)
+-		clear_page_private_inline(node_page);
+-
+ 	init_idisk_time(inode);
+ #ifdef CONFIG_F2FS_CHECK_FS
+ 	f2fs_inode_chksum_set(F2FS_I_SB(inode), node_page);
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index bd1dad523796..8bdcf80ca07a 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -1479,42 +1479,6 @@ struct page *f2fs_get_node_page_ra(struct page *parent, int start)
+ 	return __get_node_page(sbi, nid, parent, start);
+ }
+ 
+-static void flush_inline_data(struct f2fs_sb_info *sbi, nid_t ino)
+-{
+-	struct inode *inode;
+-	struct page *page;
+-	int ret;
+-
+-	/* should flush inline_data before evict_inode */
+-	inode = ilookup(sbi->sb, ino);
+-	if (!inode)
+-		return;
+-
+-	page = f2fs_pagecache_get_page(inode->i_mapping, 0,
+-					FGP_LOCK|FGP_NOWAIT, 0);
+-	if (!page)
+-		goto iput_out;
+-
+-	if (!PageUptodate(page))
+-		goto page_out;
+-
+-	if (!PageDirty(page))
+-		goto page_out;
+-
+-	if (!clear_page_dirty_for_io(page))
+-		goto page_out;
+-
+-	ret = f2fs_write_inline_data(inode, page);
+-	inode_dec_dirty_pages(inode);
+-	f2fs_remove_dirty_inode(inode);
+-	if (ret)
+-		set_page_dirty(page);
+-page_out:
+-	f2fs_put_page(page, 1);
+-iput_out:
+-	iput(inode);
+-}
+-
+ static struct page *last_fsync_dnode(struct f2fs_sb_info *sbi, nid_t ino)
+ {
+ 	pgoff_t index;
+@@ -1918,14 +1882,6 @@ void f2fs_flush_inline_data(struct f2fs_sb_info *sbi)
+ 				/* someone wrote it for us */
+ 				goto continue_unlock;
+ 			}
+-
+-			/* flush inline_data, if it's async context. */
+-			if (page_private_inline(page)) {
+-				clear_page_private_inline(page);
+-				unlock_page(page);
+-				flush_inline_data(sbi, ino_of_node(page));
+-				continue;
+-			}
+ 			unlock_page(page);
+ 		}
+ 		folio_batch_release(&fbatch);
+@@ -2000,14 +1956,6 @@ int f2fs_sync_node_pages(struct f2fs_sb_info *sbi,
+ 			if (!do_balance)
+ 				goto write_node;
+ 
+-			/* flush inline_data */
+-			if (page_private_inline(page)) {
+-				clear_page_private_inline(page);
+-				unlock_page(page);
+-				flush_inline_data(sbi, ino_of_node(page));
+-				goto lock_node;
+-			}
+-
+ 			/* flush dirty inode */
+ 			if (IS_INODE(page) && flush_dirty_inode(page))
+ 				goto lock_node;
 -- 
-2.39.2
+2.40.0.577.gac1e443424-goog
 
