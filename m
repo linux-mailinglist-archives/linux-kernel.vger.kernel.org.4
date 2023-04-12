@@ -2,263 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E746DFC69
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2DF6DFC6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjDLRNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S230218AbjDLROG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjDLRNu (ORCPT
+        with ESMTP id S229521AbjDLROC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:13:50 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E11456A49;
-        Wed, 12 Apr 2023 10:13:45 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:51896.1777638467
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 51B631002F8;
-        Thu, 13 Apr 2023 01:13:38 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 97ff2f879d314c82867112943024633f for maarten.lankhorst@linux.intel.com;
-        Thu, 13 Apr 2023 01:13:41 CST
-X-Transaction-ID: 97ff2f879d314c82867112943024633f
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <42f16d0d-4e1a-a016-f4cc-af24efa75f1c@189.cn>
-Date:   Thu, 13 Apr 2023 01:13:37 +0800
-MIME-Version: 1.0
+        Wed, 12 Apr 2023 13:14:02 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2045.outbound.protection.outlook.com [40.107.100.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70510C4;
+        Wed, 12 Apr 2023 10:13:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jq+AjTnY8cdNNUDSQBAUvs6EC31FX+oIFYhUDyhOwIkuaX4SF6ob+bBmuiH5lsgF3seXa/Va6Bub7kBoNQa0miNBw1R5bNbHQxslri0Wj9+i0HBjHuOrdN0jQVsOA46jyczn+4+9vSwoZop59UcNDuYtYp3BwqMEq4jv4t9QZxexigB2h52pTKqvebFfzW0+ouG634Kb8rbxI7gkXAt+CvfLzPUh/rxi+aflR1kfFOfxWyebtNkPNOwU2d/M4htUY8CQn1nQa3y/wL5cqLoBTeemIK7Ry52gUx7PoTc6fUCZ4cywSYB57orE2xbPGAs+kC/R8t/c6b1GL1ELB//Xuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=25b8WE+UaYE8ug8Jc8Vd5jei/S/838X2ewL0zV3cKxI=;
+ b=IfLSqoNbd9K4ZbdrlOicqAiJYrkBO5Tpd2PcSE3GjBMc0TtqWiHkzKKN3c25O0abHqP8acZMWTmfLgvfiHz8yrv3MlOV8Q/SBtbCN3OduiEh+35sGfYFmdo5bTiJm09HYjLdpEC/sgyooxr9KmOKeXPsDcJZtHpNCVZXx7yIl77yFHRrYlpOQj6I0yPTXMecjf40qpGkQQ1p6oNzoAeCI1F48WGHuLrUUIh4f5imwGzNsIT1LDpVHQfC3kNM74ca6Oh5PgqdhjAO0/Qhb0Ah3Kr0S7xi/JvGy93nZH0eGei01xfNhIu7Axmejq7sZwlC3pa315NDSyDkALlKOvQ1fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=25b8WE+UaYE8ug8Jc8Vd5jei/S/838X2ewL0zV3cKxI=;
+ b=MKp6BUbZmgaB1MpDLEgqnf7mquKX/bo0KPY9sjAV2X5cubn01oEoKIUBDKHjozOSObPv/SslJQNThyRMnB/JKZifcIoc0SCsgPQGQ49iiC9OIYTtn4xGCObOG4XUUzu0/5/ows03pNaxgyBp6qzRkTC3axFiZBHiY1bg3cWnStM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by MW3PR12MB4410.namprd12.prod.outlook.com (2603:10b6:303:5b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.28; Wed, 12 Apr
+ 2023 17:13:52 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::faa7:21a2:a446:973b]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::faa7:21a2:a446:973b%6]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
+ 17:13:51 +0000
+Message-ID: <e41399a4-c6d7-2b79-3f87-1a0efa64dffa@amd.com>
+Date:   Wed, 12 Apr 2023 13:13:49 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/fbdev-generic: fix potential out-of-bounds access
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230409132110.494630-1-15330273260@189.cn>
- <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
+ Thunderbird/102.10.0
+Cc:     yazen.ghannam@amd.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, terry.bowman@amd.com
+Subject: Re: [PATCH] i2c: piix4: Print FCH::PM::S5_RESET_STATUS
 Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <ZDV0Te65tSh4Q/vc@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jean Delvare <jdelvare@suse.de>
+References: <20230407203720.18184-1-yazen.ghannam@amd.com>
+ <20230412185358.4d6427ce@endymion.delvare>
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20230412185358.4d6427ce@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR10CA0024.namprd10.prod.outlook.com
+ (2603:10b6:408:143::15) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MW3PR12MB4410:EE_
+X-MS-Office365-Filtering-Correlation-Id: 083d9bc8-1431-4fa2-fd28-08db3b7949a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dIgljkJGzPMWSJHC9sQQ0zE4FooED8OOrJaXUkDA0Z+zZmkDQLsdvAhD+lfMPP4LBQzWGjdgFGpgbg5BqfTk8+8kTDN8pYKjX42tTx/RdSfAgTMzGIjVH5qyOvIw6uGD0jIjix3BqnWVEdeilQn5H5FoR9mhVeaRqnOfH6TaPH+EUeUChs7If1T3vKw0Zv5Vk9p5hbdFmtcir4HJeCnwmB9WllYkU4dB9wE1t4udDuY+H77mMs1B9PvMtbineIKyaStRUWOE507RZB1MA72vYgdplZuj2/9byXxAmAbxjYflZtMR35dyTYELRPa81UsrBO2tFJpb50d3Oz4BfmaYY40ugJHo7XI5kL8jJ9dsugWacvFavgVA13W5e/QCTi2TzziQV4DZZbM/OBJNtMQNYI5ivMCldL2M+4gQwwbgUZZ825sedYFwqzgDJbl1jxo2UIPp//1VcCmHJgdxGMbSKzACSdAlJRE+PfqF46Mkm2x6L3wDtKNCE/2rTIlSzavChhXvrhu454Xl3y8lss4LDhGx9DB2Dbz4RS35J2q+1QiRpQgtDh69d6oz4nYM+UaK20EGQK2BGSrOCDl4AH8AEM15fW/S6eJGcftr4lbhPm51NX4J6PsQAnJz08KNG+2pz++JLBw/cLKl4jvP8CAAfQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199021)(31686004)(36756003)(38100700002)(5660300002)(2906002)(44832011)(6512007)(86362001)(4326008)(8936002)(316002)(8676002)(31696002)(66946007)(6916009)(66556008)(41300700001)(66476007)(2616005)(83380400001)(186003)(53546011)(6506007)(26005)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXJPL2E2aWFMSENjbVRFS3h2RS9hcG5id0dpZjk1TUhETHJiY1g5V2ZRNFd3?=
+ =?utf-8?B?TExRKzlaVVg4VFdsM2Zob0E1Q09ncDdWUzdhaHQyZHBjMkFxVFRHL1NEdG5I?=
+ =?utf-8?B?ZjJreEFwcTJxMjJYdVRkSTBvT2JHLzhvNGlMNTFFMWJFY1l1Q0sxNXNDOTNV?=
+ =?utf-8?B?bmVWNUQ4OVp2OUJoYjJMKzBmS2pEcnBsRFNxTDVWRmhtc0kzRjJBOFR3a3JE?=
+ =?utf-8?B?ZWtxZHpBWERjTVplc0hYekNvQ0tlK3VLSE40VmhNS25xMkNHLzJUaVU3MW9Z?=
+ =?utf-8?B?QjlZUEJZS2pqVDgwYWNSQUxoRCtmNlM2TDRMSDR3eUZkN0hKeWdiaWRYMVpB?=
+ =?utf-8?B?eE12c2hpTDFUMlZCSEZsK2hXV1paNkpVVTYyT20zWU1IQVZJVzJVNkFYeTZH?=
+ =?utf-8?B?TndoV2ZHcldnV3BBNlJMdnZNZmgraUJDSGVSNWNpK0t3cE5DTURmR2dMS0Vz?=
+ =?utf-8?B?c3N6L3dUdmlRVXZRSFRlZkFrbDcxOVBxbVk3bmVpOEpIaVNUcGdiV0ZxUDJ0?=
+ =?utf-8?B?N0NHRFc5dmtjSE9ieVBwcDF2Q2FUNGxDUFBwd0hPZEdjNWZ2VlRlTG5yZWhD?=
+ =?utf-8?B?Smg0TlBKZUwwSFREL1RVbVFIZHlXQjMvY2RTbUNlWFh1enRPZ0ZwRTMxQmVy?=
+ =?utf-8?B?OVFsSnkwYVdGaFBJamhjQ2ttNFR1KzNqYnBHbVByTGp6R1IrMFlIaDRIMHBp?=
+ =?utf-8?B?N2c1OWRzMmlhNXkyU2lSRDByRUx0L1hvN2pZeDhCb0hYaGViOWQ5K1ZpT0Qy?=
+ =?utf-8?B?bTU0emd0VXIxcUNzZCsxMktvdS8wRzdlQy9JY0tiL2liQmpEWlpkclBpUW9y?=
+ =?utf-8?B?aEZkWkJvWklrb0RkQzV5Wm9RMktxVkVMUEk3YXNobjUwcW50c0VSVVhQMEVp?=
+ =?utf-8?B?bnU0ZVBFNXp4VHVFVVVmZktYYVRNMDAwNUlSYUZBNWhuWHN5bjY0cE1sY2tU?=
+ =?utf-8?B?WDFaQ0NvOUlZTzNpN1RQL1ZRL3k2TWJCeFlvY3VrNDE0U0F1VkZhTEFqNFZn?=
+ =?utf-8?B?YUp1SGFZaU9yVjdOeU9oM29UY2huOTZ4SFZEQmNZR1U4alR2STR4OXp4Q1Vh?=
+ =?utf-8?B?b0ZIcDhDYVk4bWlZUVZzL1pUblFkNUhIR2lTbThlZGlGSDF1YzRXT3Z3S3p0?=
+ =?utf-8?B?RE1JQUZCWVJmK1ZVYjhBa1lYbVdibHdpaTVjU3llMVF0S2l3TnF0VWFRY0tT?=
+ =?utf-8?B?Vm1yeDlIK3d6MmM0NjJMdjV1bkJwMTYvNVROQTdPSjVDbUF2Y0RrU2RVL3BB?=
+ =?utf-8?B?QklGQXp6d1UyWi9ZMnJaYzdSbVE1elNSK3VDZWpKRFFTc0w4UUJpSTZrUmlH?=
+ =?utf-8?B?M2svbFIxNGRDWFRHYWpvcmR3UE51QjBVMFNOczZVa2w5ZWVYS1JHS2dTVjhF?=
+ =?utf-8?B?akxyRkRHeURONVYyMWVmT0l4RE1GLytpb210ekl3QUdIZmU0V2JGbFY3UFAy?=
+ =?utf-8?B?ZitiRUs4OXc3VkRCVS9ia2lGU1JIanVtYTNGSG0vajVGcG9BN0FHbFhQR0xU?=
+ =?utf-8?B?UzlTSnJEc3RqQXFZMEI1dmk5Q0lBQ2s0clMyQVM5dXV1dXBrd2t4blNFdG5B?=
+ =?utf-8?B?WXlXVi9oNEh2dDg1aTZWRjVTMTJjQjlOVklRL2w2aE1uazcrRW1xSUZLYVNk?=
+ =?utf-8?B?UE5oT1krQW5nY3kvV21KVDBCNE0vcFR3eDJ1cGF5ODlqRURURXZKQkhUN0V0?=
+ =?utf-8?B?MmFwaEg4cmNtcm90bnZnd0Rtb2o0VDBjdk1WcTcvVkNjNzlWU285Zmx2b3JJ?=
+ =?utf-8?B?TGh1OERvdzJnZE55anY5bnZRRnI3by9yaUVqOEg0NFhZNFJyNCt0emxrazlF?=
+ =?utf-8?B?QUd0SkhGUERPS2NweFF3cDVpL1VobXhJbHR1ZVBCcnlqcUpGNkt1Y2ZBZkNs?=
+ =?utf-8?B?WHF2VFRBRGM0TVp2TndLaE8yZXhSVEtZYnNqRTBPQmVXdm5qeVV5dHRnODlI?=
+ =?utf-8?B?MlhlVlZ3Uk5hTFI3NzArdDJ0UnF1UGtRQ1o1UUZ1R0lGaWFSM1JCZTk1UzA4?=
+ =?utf-8?B?OFpONTEweVVCdy92S0c3LzBoY0E5UFVPNVhUeEdxRnE3MS8wUklVREI3ZWRY?=
+ =?utf-8?B?RjNJRjRrT0x3d0pvVDdSVmQ3azhuTUlKVTZTeDlQckQ3MVg3d2xMaWpxbDhR?=
+ =?utf-8?Q?cxXOhPfsqfxYbWOpK4+t3tm2k?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 083d9bc8-1431-4fa2-fd28-08db3b7949a9
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 17:13:51.7770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fkBRvJXF3LwSCp4CPzBLJy8R52XbsFlWB2nHPf9KzeM2wKa9tWGhmH7Eu1UbwTiCKz+AlCZxFQrzYJrPrSWYEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4410
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/4/11 22:53, Daniel Vetter wrote:
-> On Sun, Apr 09, 2023 at 09:21:10PM +0800, Sui Jingfeng wrote:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
+On 4/12/23 12:53, Jean Delvare wrote:
+> Hi Yazen,
+> 
+> On Fri, 07 Apr 2023 15:37:20 -0500, Yazen Ghannam wrote:
+>> The following register contains bits that indicate the cause for the
+>> previous reset.
 >>
->> We should setting the screen buffer size according to the screen's actual
->> size, rather than the size of the GEM object backing the front framebuffer.
->> The size of GEM buffer is page size aligned, while the size of active area
->> of a specific screen is *NOT* necessarily page size aliged. For example,
->> 1680x1050, 1600x900, 1440x900, 800x6000 etc. In those case, the damage rect
->> computed by drm_fb_helper_memory_range_to_clip() goes out of bottom bounds
->> of the display.
+>>         PMx000000C0 (FCH::PM::S5_RESET_STATUS)
 >>
->> Run fbdev test of IGT on a x86+ast2400 platform with 1680x1050 resolution
->> will cause the system hang with the following call trace:
+>> This is helpful for debug, etc., and it only needs to be read once from
+>> a single FCH within the system. The register definition is AMD-specific.
 >>
->>    Oops: 0000 [#1] PREEMPT SMP PTI
->>    [IGT] fbdev: starting subtest eof
->>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>    [IGT] fbdev: starting subtest nullptr
+>> Print it when the FCH MMIO space is first mapped. This register is not
+>> related to I2C functionality, but read it here to leverage the existing
+>> mapping.
 >>
->>    RIP: 0010:memcpy_erms+0xa/0x20
->>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
->>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>    Call Trace:
->>     <TASK>
->>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>     process_one_work+0x21f/0x430
->>     worker_thread+0x4e/0x3c0
->>     ? __pfx_worker_thread+0x10/0x10
->>     kthread+0xf4/0x120
->>     ? __pfx_kthread+0x10/0x10
->>     ret_from_fork+0x2c/0x50
->>     </TASK>
->>    CR2: ffffa17d40e0b000
->>    ---[ end trace 0000000000000000 ]---
+>> Use an "info" log level so that it is printed every boot without requiring
+>> the user to enable debug messages. This is beneficial when debugging
+>> issues that cause spontaneous reboots and are hard to reproduce.
 >>
->> We also add trival code in this patch to restrict the damage rect beyond
->> the last line of the framebuffer.
-> Nice catch!
-  :)
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 >> ---
->>   drivers/gpu/drm/drm_fb_helper.c     | 2 +-
->>   drivers/gpu/drm/drm_fbdev_generic.c | 2 ++
->>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>  drivers/i2c/busses/i2c-piix4.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
 >>
->> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
->> index 64458982be40..a2b749372759 100644
->> --- a/drivers/gpu/drm/drm_fb_helper.c
->> +++ b/drivers/gpu/drm/drm_fb_helper.c
->> @@ -645,7 +645,7 @@ static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off,
->>   	u32 x1 = 0;
->>   	u32 y1 = off / info->fix.line_length;
->>   	u32 x2 = info->var.xres;
->> -	u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->> +	u32 y2 = min_t(u32, DIV_ROUND_UP(end, info->fix.line_length), info->var.yres);
-> So for additional robustness I think it'd be good if we change the entire
-> computation here to use drm_framebuffer data and not fb_info data, because
-> fundamentally that's what the drm kms code consumes. It should all match
-> anyway, but I think it makes the code more obviously correct.
->
-> So in the entire function instead of looking at fb_info->fix we should
-> probably look at
->
-> 	struct drm_fb_helper *helper = info->par;
->
-> And then helper->fb->pitches[0] and helper->fb->height.
->
-> If you agree would be great if you can please respin with that (and the
-> commit message augmented to explain why we do the change)?
-
-Yes, I'm agree.
-
-Thank you for guidance, I will refine this patch with `helper = info->par`.
-
-I will send a v2 when I finished.
-
->>   
->>   	if ((y2 - y1) == 1) {
->>   		/*
->> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
->> index 8e5148bf40bb..a6daecb5f640 100644
->> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->> @@ -95,6 +95,8 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
->>   	fb_helper->fb = buffer->fb;
->>   
->>   	screen_size = buffer->gem->size;
-> I guess you forgot to remove this line here?
-
-Yes, this line should be removed in this patch. I overlooked this, sorry.
-
-> Also I'm not understanding
-> why this matters, I think you're fix only needs the above chunk, not this
-> one? If I got this right then please drop this part, there's drivers which
-> only use drm_fb_helper.c but not drm_fbdev_generic.c, and from what I can
-> tell they all still set the gem buffer size here.
->
-> If otoh we need this too, then there's a few more places that need to be
-> fixed.
-
-I think we need this line, otherwise wrapped around will be happen.
-
-Because I found that the value of variable`y1` will be larger in number 
-than the variable `y2` by 1,
-
-which are computed  in drm_fb_helper_memory_range_to_clip().
-
-
-This phenomenon will emerged on platforms with large page size or
-
-non page size divisiable display resolution case. Take the LoongArch and 
-Mips as an example,
-
-the default page size is 16KB(to avoid cache alias).  Even with the most 
-frequently used
-
-1920x1080 screen, the screen_size can not be divided exactly.
-
-The total size of the shadow buffer is 1920x1080x4 bytes, 1920x1080x4 / 
-16384 = 506.25
-
-TTM manage the vram in the term of pages, so TTM will allocate 507 pages 
-for us.
-
-507x16384 = 8306688 bytes.
-
-
-drm_fb_helper_memory_range_to_clip() will be called when running fbdev 
-eof test in the IGT.
-
-with 8306688 as its second parameter. while 8306688 / (1920x4) = 1081, 
-this cause y1 out of bound.
-
-Simply restrict y2 with a min_t() function yeild 1080 in this case, but 
-y2 - y1 cause *wrap around* here.
-
-because they are both unsigned number.
-
-
-drm_rect_init() function cast this unsigned int type to int type in end 
-of drm_fb_helper_memory_range_to_clip(),
-
-but the last argument of drm_fb_helper_damage() function is a u32 type,
-
-it cast the return value of  drm_rect_height(&damage_area) back to 
-unsigned type.
-
-Yet, another wrapped around with truncation happened in 
-drm_fb_helper_add_damage_clip()
-
-called by subsequent drm_fb_helper_damage() function.
-
-I finally got reject by drm_fbdev_generic_helper_fb_dirty() with follow 
-code:
-
-```
-
-     /* Call damage handlers only if necessary */
-     if (!(clip->x1 < clip->x2 && clip->y1 < clip->y2))
-         return 0;
-
-```
-
-On x86-64 platform, because 1920x1080x4 dumb buffer is lucky, it be 
-divided exactly by 4KB(page size).
-
-But other resolution will not as luck as this one. Right, fbdev test 
-will be pasted, but wrap around
-
-happens many time.
-
-Therefore, as long as a larger buffer is allowed to exposed to the 
-user-space.
-
-A chance is given to the user-space,  to go beyond of the bottom bound 
-of the actual active display area.
-
-I not sure if this is intended, I feel it should not be allowable by 
-intuition.
-
->> +	screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+>> index 809fbd014cd6..043b29f1e33c 100644
+>> --- a/drivers/i2c/busses/i2c-piix4.c
+>> +++ b/drivers/i2c/busses/i2c-piix4.c
+>> @@ -100,6 +100,7 @@
+>>  
+>>  #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
+>>  #define SB800_PIIX4_FCH_PM_SIZE			8
+>> +#define SB800_PIIX4_FCH_PM_S5_RESET_STATUS	0xC0
+>>  
+>>  /* insmod parameters */
+>>  
+>> @@ -200,6 +201,9 @@ static int piix4_sb800_region_request(struct device *dev,
+>>  
+>>  		mmio_cfg->addr = addr;
+>>  
+>> +		addr += SB800_PIIX4_FCH_PM_S5_RESET_STATUS;
+>> +		pr_info_once("S5_RESET_STATUS = 0x%08x", ioread32(addr));
 >> +
->>   	screen_buffer = vzalloc(screen_size);
->>   	if (!screen_buffer) {
->>   		ret = -ENOMEM;
-> Cheers, Daniel
->
->> -- 
->> 2.25.1
->>
+>>  		return 0;
+>>  	}
+>>  
+> 
+> I'm skeptical. For one thing, the register you read is outside of the
+> mapped MMIO area. SB800_PIIX4_FCH_PM_SIZE is 8 which is less than 0xC0.
+> 
+
+Hi Jean,
+
+Ah sorry, I overlooked that.
+
+> For another, printing an hexadecimal value which is AMD-specific is not
+> going to be really helpful in practice. Is there public documentation
+> available to decode the value?
+> 
+
+Yes, this register is listed in public documentation. But I expect this value
+is only helpful to hardware debug folks. The intent is to have this
+information available without requiring any system changes by the user.
+
+> Lastly, I can't see why this should happen in
+> piix4_sb800_region_request() which is going to called repeatedly at
+> runtime, rather than in piix4_setup_sb800_smba() which is only called
+> once when the driver is loaded. If this goes in the i2c-piix4 driver at
+> all... sp5100_tco might be more suitable as that driver is at least
+> somewhat related to system reset.
+> 
+> Looks like a hack really, and while I understand it is cheap, it would
+> seem cleaner to put that code in its own platform/x86 driver. Or
+> arch/x86/kernel/quirks.c maybe.
+> 
+
+Yes, that's fair. I'll check out these other places and see if there's a
+better fit.
+
+Thank you!
+
+-Yazen
