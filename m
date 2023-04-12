@@ -2,44 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BC66DF21F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6871B6DF224
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjDLKpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S230013AbjDLKpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjDLKpM (ORCPT
+        with ESMTP id S229939AbjDLKpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:45:12 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D15BB6;
-        Wed, 12 Apr 2023 03:45:09 -0700 (PDT)
-Received: from unicom146.biz-email.net
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id IGG00003;
-        Wed, 12 Apr 2023 18:45:03 +0800
-Received: from localhost.localdomain.com (10.200.104.82) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.21; Wed, 12 Apr 2023 18:45:05 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <akpm@linux-foundation.org>, <shuah@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] mm: huge_memory: Replace obsolete memalign() with posix_memalign()
-Date:   Wed, 12 Apr 2023 06:45:02 -0400
-Message-ID: <20230412104502.1836-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Apr 2023 06:45:24 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEB483D6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id d20-20020a056e020c1400b003261821bf26so1978989ile.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:45:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681296320; x=1683888320;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=phEY5JrOJ7bL5ArsZNO3g5AGRU38lwvq/bBXqMuMhoE=;
+        b=bRYWPuHPEfpIcqbq0Jm1zTRnDdG44YsnGtQvpnHTnMK7kGcPV+b5Wb1YSCf7Z3kEwp
+         63Q/Bj0gKf+Pq8pphWMN+EXih35Ljj5ZpaLX5UxrANGiMysQ4WREcdvNVDcT8/W1yBux
+         nEcFfXQ2nm43mRVYLkmFjVQ00oXVINk6f44NBzC6MBdNqEyaHSzJ2ATUY5xHUpnkCCDC
+         T85yFB8fHD5H7UW1sF0xUqZg7njLGNYC3G7AkJJzgHdtpEtoWCGAc+JNamZwkJIccrJ5
+         BGfrnY+ZUDeaj0gMNIUEGU2jmw6JJFm638OVkt/nlcXdvMC4i6AZvPS6MuhUNptYLUSJ
+         t4BA==
+X-Gm-Message-State: AAQBX9dT8SZYkeR4x4xdHyfh0AC3A9xVDWJaeU/ZxkjHPlN8aQ50bdQS
+        QclZG5jpJfF0bbWgKtupCwE+p367rU4pP6Hm27mXofE8ofAX
+X-Google-Smtp-Source: AKy350aR0QR/aDQVYs8GizD8CoW+L/wGtwuimNdmVHFR7PfEhhEkF8gxpwLZewDyHDj+7GWzYDufYaJm4Wg70QLjap7CPIAaIUKm
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   2023412184503ad0aa4e8d89a0fbe2ece5da72dc0b0a0
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Received: by 2002:a5e:8905:0:b0:744:f5bb:6e60 with SMTP id
+ k5-20020a5e8905000000b00744f5bb6e60mr5494942ioj.1.1681296319962; Wed, 12 Apr
+ 2023 03:45:19 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 03:45:19 -0700
+In-Reply-To: <CANp29Y4V7LsaJk0h3GyWV-chE8YkwM2qX33_hy9ZF5si8ZLdDg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e9e5a905f9214d8c@google.com>
+Subject: Re: [syzbot] [dri?] WARNING in vkms_get_vblank_timestamp
+From:   syzbot <syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com>
+To:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+        linux-kernel@vger.kernel.org, melissa.srw@gmail.com,
+        nogikh@google.com, rodrigosiqueiramelo@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,38 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-memalign() is obsolete according to its manpage.
+Hello,
 
-Replace memalign() with posix_memalign()
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-As a pointer is passed into posix_memalign(), initialize *one_page
-to NULL to silence a warning about the function's return value being
-used as uninitialized (which is not valid anyway because the error
-is properly checked before p is returned).
+Reported-and-tested-by: syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Tested on:
 
-diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-index cbb5e6893cbf..94c7dffc4d7d 100644
---- a/tools/testing/selftests/mm/split_huge_page_test.c
-+++ b/tools/testing/selftests/mm/split_huge_page_test.c
-@@ -96,10 +96,10 @@ void split_pmd_thp(void)
- 	char *one_page;
- 	size_t len = 4 * pmd_pagesize;
- 	size_t i;
-+	int ret;
- 
--	one_page = memalign(pmd_pagesize, len);
--
--	if (!one_page) {
-+	ret = posix_memalign((void **)&one_page, pmd_pagesize, len);
-+	if (ret < 0) {
- 		printf("Fail to allocate memory\n");
- 		exit(EXIT_FAILURE);
- 	}
--- 
-2.27.0
+commit:         7d8214bb Add linux-next specific files for 20230412
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1387763dc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=923e20c1867d7c1c
+dashboard link: https://syzkaller.appspot.com/bug?extid=75cc0f9f7e6324dd2501
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
