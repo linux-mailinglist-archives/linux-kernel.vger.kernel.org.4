@@ -2,168 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53956DFC22
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED3E6DFC28
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDLRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S231524AbjDLRBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjDLRBW (ORCPT
+        with ESMTP id S231150AbjDLRBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:01:22 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C10A5F7;
-        Wed, 12 Apr 2023 10:00:58 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id m18so11991180plx.5;
-        Wed, 12 Apr 2023 10:00:58 -0700 (PDT)
+        Wed, 12 Apr 2023 13:01:33 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB94206
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:01:14 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id f2so3654481pjs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681318855; x=1683910855;
+        d=linaro.org; s=google; t=1681318872;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dOUB+QPUYu+JnmuWrA27H2YSYy0s0VbYHTMePFeWbQs=;
-        b=Zd8jcPFYrRAnuE3xa2zuGzGmfFa1cNZ/9ucjgMq/rOlGf8iXR+Lh5ZXKDI4ZgoiSGA
-         Ulplo4L0Zh4NYsFUvW0CmFe1OQfpLB1DGxsMkuMD25MwKLqmGpWA66dtmReszvpKbeeO
-         Gj39ThLSDLFONXQwDdX9Ehr8W2vE+5RAGWS42fNokfqMZwpX6qpLKydEu5dQN/gFsxSl
-         eFtpP20+uLzLzw7cfuRHUwWBeg0WXfwt+5R4iX/5FyGJpBiMejLeuJvC8fYVLexDnV2w
-         LQNxJr+26xxV59Uc5c/9PgUV8fDP3CnrIus2S92NFPckggb+wBukNFq2je5k6SzjgFjI
-         SOGw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pfUsMfkrejVXr5qJizoytRX5TpIEEU2cEnidL9qtDPI=;
+        b=wYiC7zU09HzT5NwU6kVUFeXU5eGu/ear7WFELkED0oHU9+asu/YX8c1hxHuOwY/5Yt
+         r/ADbqytIgvlGPpgtJdPDa68WehaZFMZimJjpGObFMQrIt+3x7S4yPNH4b9q/z54xyne
+         o7mu2G/EZHJsTfs2zimGZccO1A31Kum5g18LB3viozu0AmZiNqI4VRaCqgG1eLeTyBt7
+         OQdC12oBUak1lSXsvUOZMIRIyzBoqIwNxqC+8+cYhNv2r6PzkvzHY2lhVy45vvjuZ/K+
+         g6b8t48tnMa4Gc0Ztj/TllWL+3PtpB53HArPqnMtE2BxLgD9jPBEvfWRkcHHS6qEVEYC
+         545w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681318855; x=1683910855;
+        d=1e100.net; s=20221208; t=1681318872;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dOUB+QPUYu+JnmuWrA27H2YSYy0s0VbYHTMePFeWbQs=;
-        b=fpUIlBD+iORVFIrwJ2xWHRoZdOPsC2r69EO2zhtqqOAuf8w4ANS+s4dTyAaGJMUMvm
-         7VHPazYLWuVx7JhAWGsCI7miuqrwVv3b5Kxg666DcfFjBobEDSSMz54kMHzZ/8eKY/wx
-         1xBiQH71ttZArCpcAl/+w+VMuMp2gsZTKaS7J8nZ/q37hqc4/PpDd5UzexK2cpmG8YOK
-         5Ghl7VvxOT4oHGdnfqFI8GvKv5Q3/sQO0lIC0ir2nqau6/UeM+Fx6tWjuM7azy+m85q8
-         zX2YITNqvN+RpdWVR9KjGpqZf76LiGqczgTB9DWlonTD2Auyy9Kl/7CdozCfF5di83XD
-         HblA==
-X-Gm-Message-State: AAQBX9f3/rLvuAPQOpu5JcL4xeHQNjCC87SURZPQnaluzUdnQRyJrbkY
-        24TlP/rNXQG5J7nH67kys4o=
-X-Google-Smtp-Source: AKy350ZLLNlPoHdUDGm3k13i3kAASt397OAt7a6YgZknLYZRZdo++hAJOX+USd4HYFs4ze8a9LLUlw==
-X-Received: by 2002:a17:902:f551:b0:1a6:6c58:d36e with SMTP id h17-20020a170902f55100b001a66c58d36emr4298484plf.66.1681318854805;
-        Wed, 12 Apr 2023 10:00:54 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x17-20020a1709027c1100b001a51402dea1sm9930229pll.20.2023.04.12.10.00.54
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pfUsMfkrejVXr5qJizoytRX5TpIEEU2cEnidL9qtDPI=;
+        b=hMYnb1cHOB5BOXaSo5gnCISZG76C+siPEwCGT0Kfwiz6ufjmkNSPm4pnrbwg/TKurC
+         mVEmj9c9TeRb+J7V5HciAoHQF0dGPoIAjdYhWw+J6zQZSJMX2MaAg7Vo6pGJbHAsnuw+
+         8wfnNeBqGmIloQPdq8E5j3N0+p2VnC5wgweuGQSYDvKIZ1HHmEQBJEqwfEp/dL8WjIIq
+         MqKNi/UjroeVY0NOlszSeA+9NDyMUNoPuHMiWPBqQ/FKUoYVVC5AyBWzwbliU7KPuwtL
+         hBIIQITfb8nL1EvIUux6C47fREePDxjOVwvsEvHrm8kujcHQP4j0XdoJdSs1eHLfXAES
+         ef2g==
+X-Gm-Message-State: AAQBX9cpqefjAhCOSyoXC/b80aqFB1P0N8hm0MaSOKnEMTjQ1xafP2rc
+        BsnP6eZaNcY1hTX6Gb7juF5l06lfaGdOiGBxGoM=
+X-Google-Smtp-Source: AKy350bMg24lIg9DtnYv9P2T+iChkvOJJYeIXN0OleXUmzE+GwTjGgC/2dfRuQ61VwWLyEJ8A+ReCw==
+X-Received: by 2002:a17:902:e749:b0:1a6:61b5:9e78 with SMTP id p9-20020a170902e74900b001a661b59e78mr5729967plf.20.1681318872311;
+        Wed, 12 Apr 2023 10:01:12 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:1cd7:1135:5e45:5f77])
+        by smtp.gmail.com with ESMTPSA id p6-20020a1709026b8600b001a04ff0e2eesm11749209plk.58.2023.04.12.10.01.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 10:00:54 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Apr 2023 07:00:52 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, jack@suse.cz, dennis@kernel.org,
-        adilger.kernel@dilger.ca, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, houtao1@huawei.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] writeback, cgroup: fix null-ptr-deref write in
- bdi_split_work_to_wbs
-Message-ID: <ZDbjxJcGysw6EEhg@slm.duckdns.org>
-References: <20230410130826.1492525-1-libaokun1@huawei.com>
+        Wed, 12 Apr 2023 10:01:11 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 11:01:09 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v8 2/4] soc: ti: pruss: Add
+ pruss_{request,release}_mem_region() API
+Message-ID: <20230412170109.GB86761@p14s>
+References: <20230412103012.1754161-1-danishanwar@ti.com>
+ <20230412103012.1754161-3-danishanwar@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230410130826.1492525-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230412103012.1754161-3-danishanwar@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 09:08:26PM +0800, Baokun Li wrote:
-> KASAN report null-ptr-deref:
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x5c5/0x7b0
-> Write of size 8 at addr 0000000000000000 by task sync/943
-> CPU: 5 PID: 943 Comm: sync Tainted: 6.3.0-rc5-next-20230406-dirty #461
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x7f/0xc0
->  print_report+0x2ba/0x340
->  kasan_report+0xc4/0x120
->  kasan_check_range+0x1b7/0x2e0
->  __kasan_check_write+0x24/0x40
->  bdi_split_work_to_wbs+0x5c5/0x7b0
->  sync_inodes_sb+0x195/0x630
->  sync_inodes_one_sb+0x3a/0x50
->  iterate_supers+0x106/0x1b0
->  ksys_sync+0x98/0x160
-> [...]
-> ==================================================================
+On Wed, Apr 12, 2023 at 04:00:10PM +0530, MD Danish Anwar wrote:
+> From: "Andrew F. Davis" <afd@ti.com>
 > 
-> The race that causes the above issue is as follows:
+> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
+> to the PRUSS platform driver to allow client drivers to acquire and release
+> the common memory resources present within a PRU-ICSS subsystem. This
+> allows the client drivers to directly manipulate the respective memories,
+> as per their design contract with the associated firmware.
 > 
->            cpu1                     cpu2
-> -------------------------|-------------------------
-> inode_switch_wbs
->  INIT_WORK(&isw->work, inode_switch_wbs_work_fn)
->  queue_rcu_work(isw_wq, &isw->work)
->  // queue_work async
->   inode_switch_wbs_work_fn
->    wb_put_many(old_wb, nr_switched)
->     percpu_ref_put_many
->      ref->data->release(ref)
->      cgwb_release
->       queue_work(cgwb_release_wq, &wb->release_work)
->       // queue_work async
->        &wb->release_work
->        cgwb_release_workfn
->                             ksys_sync
->                              iterate_supers
->                               sync_inodes_one_sb
->                                sync_inodes_sb
->                                 bdi_split_work_to_wbs
->                                  kmalloc(sizeof(*work), GFP_ATOMIC)
->                                  // alloc memory failed
->         percpu_ref_exit
->          ref->data = NULL
->          kfree(data)
->                                  wb_get(wb)
->                                   percpu_ref_get(&wb->refcnt)
->                                    percpu_ref_get_many(ref, 1)
->                                     atomic_long_add(nr, &ref->data->count)
->                                      atomic64_add(i, v)
->                                      // trigger null-ptr-deref
-> 
-> bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
-> If the allocation of new work fails, the on-stack fallback will be used and
-> the reference count of the current wb is increased afterwards. If cgroup
-> writeback membership switches occur before getting the reference count and
-> the current wb is released as old_wd, then calling wb_get() or wb_put()
-> will trigger the null pointer dereference above.
-> 
-> This issue was introduced in v4.3-rc7 (see fix tag1). Both sync_inodes_sb()
-> and __writeback_inodes_sb_nr() calls to bdi_split_work_to_wbs() can trigger
-> this issue. For scenarios called via sync_inodes_sb(), originally commit
-> 7fc5854f8c6e ("writeback: synchronize sync(2) against cgroup writeback
-> membership switches") reduced the possibility of the issue by adding
-> wb_switch_rwsem, but in v5.14-rc1 (see fix tag2) removed the
-> "inode_io_list_del_locked(inode, old_wb)" from inode_switch_wbs_work_fn()
-> so that wb->state contains WB_has_dirty_io, thus old_wb is not skipped
-> when traversing wbs in bdi_split_work_to_wbs(), and the issue becomes
-> easily reproducible again.
-> 
-> To solve this problem, percpu_ref_exit() is called under RCU protection
-> to avoid race between cgwb_release_workfn() and bdi_split_work_to_wbs().
-> Moreover, replace wb_get() with wb_tryget() in bdi_split_work_to_wbs(),
-> and skip the current wb if wb_tryget() fails because the wb has already
-> been shutdown.
-> 
-> Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
-> Fixes: f3b6a6df38aa ("writeback, cgroup: keep list of inodes attached to bdi_writeback")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Co-developed-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Andrew F. Davis <afd@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  drivers/soc/ti/pruss.c       | 77 ++++++++++++++++++++++++++++++++++++
+>  include/linux/pruss_driver.h | 22 +++++++++++
+>  2 files changed, 99 insertions(+)
+>
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-Thanks.
-
--- 
-tejun
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 3fac92df8790..8ada3758b31a 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -92,6 +92,82 @@ void pruss_put(struct pruss *pruss)
+>  }
+>  EXPORT_SYMBOL_GPL(pruss_put);
+>  
+> +/**
+> + * pruss_request_mem_region() - request a memory resource
+> + * @pruss: the pruss instance
+> + * @mem_id: the memory resource id
+> + * @region: pointer to memory region structure to be filled in
+> + *
+> + * This function allows a client driver to request a memory resource,
+> + * and if successful, will let the client driver own the particular
+> + * memory region until released using the pruss_release_mem_region()
+> + * API.
+> + *
+> + * Return: 0 if requested memory region is available (in such case pointer to
+> + * memory region is returned via @region), an error otherwise
+> + */
+> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+> +			     struct pruss_mem_region *region)
+> +{
+> +	if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&pruss->lock);
+> +
+> +	if (pruss->mem_in_use[mem_id]) {
+> +		mutex_unlock(&pruss->lock);
+> +		return -EBUSY;
+> +	}
+> +
+> +	*region = pruss->mem_regions[mem_id];
+> +	pruss->mem_in_use[mem_id] = region;
+> +
+> +	mutex_unlock(&pruss->lock);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
+> +
+> +/**
+> + * pruss_release_mem_region() - release a memory resource
+> + * @pruss: the pruss instance
+> + * @region: the memory region to release
+> + *
+> + * This function is the complimentary function to
+> + * pruss_request_mem_region(), and allows the client drivers to
+> + * release back a memory resource.
+> + *
+> + * Return: 0 on success, an error code otherwise
+> + */
+> +int pruss_release_mem_region(struct pruss *pruss,
+> +			     struct pruss_mem_region *region)
+> +{
+> +	int id;
+> +
+> +	if (!pruss || !region)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&pruss->lock);
+> +
+> +	/* find out the memory region being released */
+> +	for (id = 0; id < PRUSS_MEM_MAX; id++) {
+> +		if (pruss->mem_in_use[id] == region)
+> +			break;
+> +	}
+> +
+> +	if (id == PRUSS_MEM_MAX) {
+> +		mutex_unlock(&pruss->lock);
+> +		return -EINVAL;
+> +	}
+> +
+> +	pruss->mem_in_use[id] = NULL;
+> +
+> +	mutex_unlock(&pruss->lock);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
+> +
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> @@ -294,6 +370,7 @@ static int pruss_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	pruss->dev = dev;
+> +	mutex_init(&pruss->lock);
+>  
+>  	child = of_get_child_by_name(np, "memories");
+>  	if (!child) {
+> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
+> index cb40c2b31045..c8f2e53b911b 100644
+> --- a/include/linux/pruss_driver.h
+> +++ b/include/linux/pruss_driver.h
+> @@ -9,6 +9,7 @@
+>  #ifndef _PRUSS_DRIVER_H_
+>  #define _PRUSS_DRIVER_H_
+>  
+> +#include <linux/mutex.h>
+>  #include <linux/remoteproc/pruss.h>
+>  #include <linux/types.h>
+>  #include <linux/err.h>
+> @@ -41,6 +42,8 @@ struct pruss_mem_region {
+>   * @cfg_base: base iomap for CFG region
+>   * @cfg_regmap: regmap for config region
+>   * @mem_regions: data for each of the PRUSS memory regions
+> + * @mem_in_use: to indicate if memory resource is in use
+> + * @lock: mutex to serialize access to resources
+>   * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
+>   * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
+>   */
+> @@ -49,6 +52,8 @@ struct pruss {
+>  	void __iomem *cfg_base;
+>  	struct regmap *cfg_regmap;
+>  	struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
+> +	struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
+> +	struct mutex lock; /* PRU resource lock */
+>  	struct clk *core_clk_mux;
+>  	struct clk *iep_clk_mux;
+>  };
+> @@ -57,6 +62,10 @@ struct pruss {
+>  
+>  struct pruss *pruss_get(struct rproc *rproc);
+>  void pruss_put(struct pruss *pruss);
+> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+> +			     struct pruss_mem_region *region);
+> +int pruss_release_mem_region(struct pruss *pruss,
+> +			     struct pruss_mem_region *region);
+>  
+>  #else
+>  
+> @@ -67,6 +76,19 @@ static inline struct pruss *pruss_get(struct rproc *rproc)
+>  
+>  static inline void pruss_put(struct pruss *pruss) { }
+>  
+> +static inline int pruss_request_mem_region(struct pruss *pruss,
+> +					   enum pruss_mem mem_id,
+> +					   struct pruss_mem_region *region)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int pruss_release_mem_region(struct pruss *pruss,
+> +					   struct pruss_mem_region *region)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  #endif /* CONFIG_TI_PRUSS */
+>  
+>  #endif	/* _PRUSS_DRIVER_H_ */
+> -- 
+> 2.34.1
+> 
