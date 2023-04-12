@@ -2,86 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712D76DFC13
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D276DFC17
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 19:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDLRAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 13:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S230290AbjDLRAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 13:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjDLRAS (ORCPT
+        with ESMTP id S230099AbjDLRAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:00:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B110493FE;
-        Wed, 12 Apr 2023 09:59:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 333526377F;
-        Wed, 12 Apr 2023 16:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0685AC433EF;
-        Wed, 12 Apr 2023 16:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681318796;
-        bh=waL1SUStoZYoO7jMUcgEhhUZnXTPiR4HX3xLSQqTvB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nj3lE1TsmBurSn1IxeNk9HCoQTJjmeSjZDCF6F4SDJgsLJvlnv1KsBDkWQg1BXLHL
-         Q9QTZccm4JtJ2NCp3HXrx5sioJxS5DWjrDHgcJkRl1BaNPs+bJhW443y+h+ctKb+Hj
-         Sv70nuch0Wz7Vua1IpkvuZ8kiyC82KD7lHKKjLnJRAdH3tPprlZ0xf/ZE4MKGyJ8hr
-         F/MWJaWrxf50ZiQQ5biQ40MdFfHwRFes+VkqgEp7UWokKzGdpYnTiyd5ncJuXQCs3W
-         e5VTJp6CrYaj5DKyxwPRI1wDQmB7TVN+xWghLePXgeJLtOC7jgiLh5g/J58WH9zfHJ
-         EjLTFj2ZH3sWQ==
-Date:   Wed, 12 Apr 2023 22:29:52 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     fancer.lancer@gmail.com,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v9 0/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <ZDbjiMq3fWtUhci9@matsya>
-References: <20230324021420.73401-1-cai.huoqing@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324021420.73401-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Apr 2023 13:00:37 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01C59017
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:00:09 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id s18-20020a170902ea1200b001a1f4137086so6912053plg.14
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 10:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681318805;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kpKB7SqPD1WEJcm5mP/ZS9AV7kRHrr2cruyzGPdJnmY=;
+        b=0dJ9X7z1jh25oYOHdd+ljdJXvOW0dD6zhgL9qARYaY8+1ZTVplJLk+y5Aqe0axj3f7
+         rVda5IIvH/u9Mqx1YM4d0qjJrdRXlxwNLJlT3miGS7NcBeAWuFzmKipOZKiFXsHiIL6T
+         CaKVTz/SjKtNGnp7avxMqpahnjuoTUT2P5T8gW/+RyXl9cT27GQpQ51fkvGdzeQQl5cD
+         +fQ5My91JFTUE3tWCvY92nPuUsiGOO+mEOjRSnKlR/K+ZOhQwo6p0Yt8Zeb3AIof9tx9
+         0Pt0VWQRjjZjTU1US/MsJ9d5y5H4C3VMfArkbKJhdzLnma7r7K7IN7gX3VGgvRhe2V/N
+         q8OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681318805;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kpKB7SqPD1WEJcm5mP/ZS9AV7kRHrr2cruyzGPdJnmY=;
+        b=aYaM1/OFdvgFvhPFxDlf2sscHkJwZVAQIZWJ0GGEHAw23QgQEQvz95TEGHg8IgLHCv
+         SPF5J7clKgaHi/rlKe5MZiVFPYURFDAmxY01uRb5KucrmHeqtO8DT5MHt09ybkOFjRF2
+         QoZFJKzyrmatfK2Foa++ktwHG84mhHhDyPk58NUQOSBGJ2epxeSBmFT/RCdXw9cHZwQ/
+         uLi5uaMiyg6oTblnIsI6ozoaXFENmCqMQ61UuMVaJlUzyVPIqCoMdwjBrfwmSV8zHaUa
+         zRMgrHThGJobmZyhYBaWWccTwQepu7DovLsBUSoZXDWb96/Df+o6A6j8uzqJJ3MvFxvp
+         Weig==
+X-Gm-Message-State: AAQBX9e32in9AePlNFjqyvIak4YSSWp854ysaAfVxx+GFLZJZCDeTj7x
+        UT4ISs+wTE1G3Oh1AgR3VjhdY2Y=
+X-Google-Smtp-Source: AKy350bqCRuf2+nw6G4Xo/+RMWx8JZZGxbP78hg7vN5q2J6hphsLxNUKDMeaTSlnL3vx8TUht7eSaik=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a65:60c2:0:b0:51a:52b1:1b70 with SMTP id
+ r2-20020a6560c2000000b0051a52b11b70mr775383pgv.10.1681318805239; Wed, 12 Apr
+ 2023 10:00:05 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 10:00:03 -0700
+In-Reply-To: <20230412094235.589089-4-yoong.siang.song@intel.com>
+Mime-Version: 1.0
+References: <20230412094235.589089-1-yoong.siang.song@intel.com> <20230412094235.589089-4-yoong.siang.song@intel.com>
+Message-ID: <ZDbjkwGS5L9wdS5h@google.com>
+Subject: Re: [PATCH net-next v3 3/4] net: stmmac: add Rx HWTS metadata to XDP
+ receive pkt
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Song Yoong Siang <yoong.siang.song@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-03-23, 10:14, Cai Huoqing wrote:
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
+On 04/12, Song Yoong Siang wrote:
+> Add receive hardware timestamp metadata support via kfunc to XDP receive
+> packets.
 > 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 +++
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 26 ++++++++++++++++++-
+>  2 files changed, 28 insertions(+), 1 deletion(-)
 > 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.The same applies when
-> youhave multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are aligned to byte.
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> index ac8ccf851708..826ac0ec88c6 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
+>  
+>  struct stmmac_xdp_buff {
+>  	struct xdp_buff xdp;
+> +	struct stmmac_priv *priv;
+> +	struct dma_desc *p;
+> +	struct dma_desc *np;
+>  };
+>  
+>  struct stmmac_rx_queue {
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index f7bbdf04d20c..ed660927b628 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5315,10 +5315,15 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  
+>  			xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
+>  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
+> -					 buf->page_offset, buf1_len, false);
+> +					 buf->page_offset, buf1_len, true);
+>  
+>  			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
+>  				  buf->page_offset;
+> +
+> +			ctx.priv = priv;
+> +			ctx.p = p;
+> +			ctx.np = np;
+> +
+>  			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
+>  			/* Due xdp_adjust_tail: DMA sync for_device
+>  			 * cover max len CPU touch
+> @@ -7071,6 +7076,23 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv, bool enable)
+>  	}
+>  }
+>  
+> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
+> +{
+> +	const struct stmmac_xdp_buff *ctx = (void *)_ctx;
+> +
+> +	*timestamp = 0;
+> +	stmmac_get_rx_hwtstamp(ctx->priv, ctx->p, ctx->np, timestamp);
+> +
 
-It fails to apply, pls rebase and resend
+[..]
 
--- 
-~Vinod
+> +	if (*timestamp)
+
+Nit: does it make sense to change stmmac_get_rx_hwtstamp to return bool
+to indicate success/failure? Then you can do:
+
+if (!stmmac_get_rx_hwtstamp())
+	reutrn -ENODATA;
