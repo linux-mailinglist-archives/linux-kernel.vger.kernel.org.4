@@ -2,155 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178F96DF6DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7286DF6EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjDLNUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S231239AbjDLNWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjDLNUr (ORCPT
+        with ESMTP id S229932AbjDLNWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:20:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D2AE8682
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:20:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E656D75;
-        Wed, 12 Apr 2023 06:21:10 -0700 (PDT)
-Received: from [10.34.100.129] (pierre123.nice.arm.com [10.34.100.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D4723F73F;
-        Wed, 12 Apr 2023 06:20:23 -0700 (PDT)
-Message-ID: <b87130ba-b3c2-825c-0e2c-634e8aee8d5c@arm.com>
-Date:   Wed, 12 Apr 2023 15:20:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/3] cacheinfo: Check sib_leaf in
- cache_leaves_are_shared()
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 12 Apr 2023 09:22:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086009EFD;
+        Wed, 12 Apr 2023 06:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681305718; x=1712841718;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=OPaJB6Rawo57Mhn6OmatsXFomMBlxxHp8ieaH0gHRmY=;
+  b=VtKrLYLj8uGU7d3BG0JEPsoqP4EVhKXdkmhRoUqJwgf6tHqVWdnsDdmH
+   LWzxxlfDhiGywy8/JcMDqILowYza/TG7BgJRrH+fwB/8Fstp9rqG1pSOR
+   tOPn2Rho8ZadCxrcztZUdJcc7rdzhSs7CO1k8El2x+fzip9+ndpSdCBxA
+   z3jLGETF7tR6DeQ/BRC3NlNdzSk6oepxvhSlxbuq4zzwnxKUxAs/ipN/B
+   HcEDpw+WYArhsVP3S83wDwyN7CKUTHkEVg0FzmHQgRnNv5ti7gIxDvW/L
+   EC9Sf4AAg6BjXdoOOH3nJw7nh6NmV4lyNWu+kzc5+c1JFVnboP+HUaxeF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="345683541"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="345683541"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:20:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719373457"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="719373457"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 06:20:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pmaOo-00Fx3H-0Q;
+        Wed, 12 Apr 2023 16:20:34 +0300
+Date:   Wed, 12 Apr 2023 16:20:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Donald Hunter <donald.hunter@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Jeremy Linton <jeremy.linton@arm.com>
-References: <20230412071809.12670-1-pierre.gondois@arm.com>
- <20230412071809.12670-2-pierre.gondois@arm.com>
- <20230412-viewpoint-refutable-a31f3657093c@wendy>
- <d7a36615-896b-0f13-a1f6-761715ce460f@arm.com>
- <20230412-hut-unused-21d683fcb8b0@wendy>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230412-hut-unused-21d683fcb8b0@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
+ with igb
+Message-ID: <ZDawIXBd7gcA8DCk@smile.fi.intel.com>
+References: <20230410213754.GA4064490@bhelgaas>
+ <m27cuih96y.fsf@gmail.com>
+ <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+nLP6rh3pdK3-5a8-mjR=dF48i-Z8d8u7N=fuYoCk92A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/12/23 14:47, Conor Dooley wrote:
-> On Wed, Apr 12, 2023 at 02:34:11PM +0200, Pierre Gondois wrote:
->> Hello Conor,
->>
->> On 4/12/23 13:27, Conor Dooley wrote:
->>> On Wed, Apr 12, 2023 at 09:18:04AM +0200, Pierre Gondois wrote:
->>>> If 'this_leaf' is a L2 cache (or higher) and 'sib_leaf' is a L1 cache,
->>>> the caches are detected as shared. Indeed, cache_leaves_are_shared()
->>>> only checks the cache level of 'this_leaf' when 'sib_leaf''s cache
->>>> level should also be checked.
->>>
->>> I have to say, I'm a wee bit confused reading this patch - although it's
->>> likely that I have just confused myself here.
->>>
->>> The comment reads "For non DT/ACPI systems, assume unique level 1 caches,
->>> system-wide shared caches for all other levels".
->>> Does this mean all level 1 caches are unique & all level N caches are
->>> shared with all other level N caches, but not with level M caches?
->>> (M != N; M, N > 1)
->>
->> I think the real answer to your question is in the last paragraph,
->> but just in case:
->>
->> Each CPU manages the list of cacheinfo struct it has access to,
->> and this list is per-CPU.
->> cache_shared_cpu_map_setup() checks whether two cacheinfo struct are
->> representing the same cache (for 2 CPU lists). If yes, their
->> shared_cpu_map is updated.
->>
->> If there is DT/ACPI information, a cacheid/fw_token is associated
->> with each cacheinfo struct. This allows to easily check when two
->> struct are representing the same cache.
->>
->> Otherwise it is assumed here that L1 caches are private (so not shared)
->> and other L2-N caches are shared, i.e. the interface below advertise the
->> cache as available from other CPUs.
->> /sys/devices/system/cpu/cpu0/cache/indexX/shared_cpu_list
+On Tue, Apr 11, 2023 at 02:02:03PM -0500, Rob Herring wrote:
+> On Tue, Apr 11, 2023 at 7:53 AM Donald Hunter <donald.hunter@gmail.com> wrote:
+> > Bjorn Helgaas <helgaas@kernel.org> writes:
+> > > On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
+> > >> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
+> > >> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >> > > >
+> > >> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
+> > >> > > > because it apparently has an ACPI firmware node, and there's something
+> > >> > > > we don't expect about its status?
+> > >> > >
+> > >> > > Yes they are built-in, to my knowledge.
+> > >> > >
+> > >> > > > Hopefully Rob will look at this.  If I were looking, I would be
+> > >> > > > interested in acpidump to see what's in the DSDT.
+> > >> > >
+> > >> > > I can get an acpidump. Is there a preferred way to share the files, or just
+> > >> > > an email attachment?
+> > >> >
+> > >> > I think by default acpidump produces ASCII that can be directly
+> > >> > included in email.  http://vger.kernel.org/majordomo-info.html says
+> > >> > 100K is the limit for vger mailing lists.  Or you could open a report
+> > >> > at https://bugzilla.kernel.org and attach it there, maybe along with a
+> > >> > complete dmesg log and "sudo lspci -vv" output.
+> > >>
+> > >> Apologies for the delay, I was unable to access the machine while travelling.
+> > >>
+> > >> https://bugzilla.kernel.org/show_bug.cgi?id=217317
+> > >
+> > > Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
+> > > with this in the kernel parameters:
+> > >
+> > >   dyndbg="file drivers/acpi/* +p"
+> > >
+> > > and collect the entire dmesg log?
+> >
+> > Added to the bugzilla report.
 > 
-> Another silly question:
-> For two caches of level M & N; M != N; M, N > 1 should they be detected
-> as shared in the absence of any information in DT/ACPI?
-> The comment (to me) reads as if they should not, but it is rather vague.
+> Rafael, Andy, Any ideas why fwnode_device_is_available() would return
+> false for a built-in PCI device with a ACPI device entry? The only
+> thing I see in the log is it looks like the parent PCI bridge/bus
+> doesn't have ACPI device entry (based on "[    0.913389] pci_bus
+> 0000:07: No ACPI support"). For DT, if the parent doesn't have a node,
+> then the child can't. Not sure on ACPI.
 
-I think they should. The naming of cache_leaves_are_shared() might be
-misleading. The function is more trying to find out if 2 cache leaves struct
-are representing the same cache. So maybe renaming the function to
-cache_leaves_identical() might be better ?
+Thanks for the Cc'ing. I haven't checked anything yet, but from the above it
+sounds like a BIOS issue. If PCI has no ACPI companion tree, then why the heck
+one of the devices has the entry? I'm not even sure this is allowed by ACPI
+specification, but as I said, I just solely used the above mail.
 
-In cache_shared_cpu_map_setup(), cache_leaves_are_shared() is used called
-on each cache leaf a sibling CPU in order to try to find a matching cache leaf.
-It loops until a match is detected.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-If there is a DT/ACPI, cache leaves have an id/fw_token allowing to uniquely
-identify them, and trying to find a matching leaf makes sense.
-If there is no DT/ACPI, it is not possible to identify whether 2 cache leaves
-are representing the same cache. The desired behaviour is just:
-- If this_leaf or sib_leaf is a L1 cache, then the caches are not identical
-   (or shared if we use this wording)
-So the meaning of cache_leaves_identical() is a bit bent for this
-configuration.
 
-> 
->>
->>>
->>> Is this patches goal to make sure that if this_leaf is level 2 and
->>> sib_leaf is level 1 that these are not detected as shared, since level
->>> one caches are meant to be unique?
->>
->> Yes exact.
->>
->>>
->>> The previous logic checked only this_leaf's level, and declared things
->>> shared if this_leaf is not a level 1 cache.
->>> What happens here if this_leaf->level == 1 and sib_leaf->level == 2?
->>> That'll be detected as shared, in a contradiction of the comment above
->>> it, no?
->>
->> Yes, there is a contradiction. The condition should be '&&':
->>    (this_leaf->level != 1) && (sib_leaf->level != 1)
->> I made a bad rebase and the corrected code ended up in PATCH 3/3.
->> Sorry for that. I ll correct it in the v3.
-> 
-> Good to know I am not losing my marbles, I was trying to reconcile the
-> intent with the patch & without the explicit statement of what was wrong
-> in the commit message I found it hard!
-
-Ok, I ll try to add more details in the commit message to be clearer.
-
-Regards,
-Pierre
-
-> 
->> Thanks for the review,
-> 
-> nw chief.
