@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3F26DEB92
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1186DEB8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjDLGKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S229536AbjDLGJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 02:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDLGKT (ORCPT
+        with ESMTP id S229451AbjDLGJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:10:19 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3ABB8;
-        Tue, 11 Apr 2023 23:10:17 -0700 (PDT)
+        Wed, 12 Apr 2023 02:09:15 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20953A82;
+        Tue, 11 Apr 2023 23:09:13 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=noJ1jaCd9YKCpCJw9lqUODTOzjOWOirq/UTrBzwwyPZydeqWRGpLkpqMIcCENevtYK3bIDNqQMrnR4y4x1MgygqzO8XAGQCwkBQcWFC23nIPn0JRJDJEEKXxhS0+XZ24JvvYXcXds8jBdZKGKqPF+S1ZMMF6vP9JA8AeDtjBtyxzAA5C2Rxx+1RMtaaS9gGm0j34XDN9xXsNHw6cNbwSXpbt+xUckQysFk7qx/hs06Kq3H/vKQj9jALGouKpLHTzkntiX46nUxJvsOSuFkdSiO9wfUqf/GE2a9EUFu2nHrXLwnARXsCXtvIMS4cwPFJyroSTiftkwqgasmPRXRzrWg==
+ b=kV3GIp1Zy2t+1sRWVu4XXxwagXGX2vZvxzd0PrcyoLKMe8485VF8x0+r56hKAEVI079ZgfWMT3RwKCYaDfJxEAo9d2070qFbRWz7b0tCjTy1nIloLtiCUFERuszBc8+R9G3E16UPZ7uu7xKbXPTCEGem+CGfkdOa7v1aRsuV67xs+ZBchnw8CpUuM7XfKVDWviHV1U8xHDg4YGIm938UCjAi4J0HmOijt9tI61pakAraGu22lbr0hjwu0pEbLeFp0n9yRaAfXet+m5T/K2ZzFXo1stz2Wt278ikFdOLFU7SXh3Ru6GFq+36NrGkiKWDB5KmbOqP5PwSm9y2mMKJPKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d4CUJPoV+E8moH1rMSd5KP3VQr0hiYEXtnk3vDxyXM4=;
- b=kXkxRniX6dPiCvi8F3dPCkOabRsizwdJBYgAmw4OCAklYbHSR1+/WdzL0KbMQXuboEqr33Ek0ldKU/Phf8vfO69Zvr8rgenhzfmoc/yTcGSRIN9Ez4Jb5iyR92G7SCQHoQDvsxuCaJ8PnILpV8ukxo0A2WozpDnKZwaphLvREVLvmJcmiPtf1E+MVzrv2KMba+RGy1E3Z2UzGPMTQ/zkrp4K3MOOik7ZUzTCYug/nL/P7Q+qZz4s8Qg4fh/EJr3ahGYujbj4iWCMCZqrEw8qr9Vtr2OnWQ4fn1wjEpZoP0c2BEqIFnx+fiO3z/BLpbu/jZxdJqm0/NotsKDBuyloXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=zc6jiPmXwX5xNdCX1tgrCXHJSGYZ0qNWo+39BPRLkIE=;
+ b=hmB27agSaOqWgPyEy/ZouE04o3NCJoASxNH4aHYzj9xfVAEVY3A/b+7FTo4xRZC71yuxAoSFTRAAkk2oNMe1aGUhIjEC78OI9eypoU6dOTObcfl9Zaxwf/O6PwXtLgAS4ntncBE478vkOLXEzmidHKbxE/RO84hJSUnKGZ/YjiPCpSh0u2xFqgJa3LtdSoA0rli8xNgB9mIpVXazzn7eiEacIkQTAZPmsYW+zEg8mKmpE52G2hIBaByWTxWkMb8tgf47VMOry8xlAM4fs1jgVj3gkRTImH/nUJ2pZP/WCdczYTK82rZsySdx2pDS+UvP4NAaPa1zJhUoW1X198/gpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d4CUJPoV+E8moH1rMSd5KP3VQr0hiYEXtnk3vDxyXM4=;
- b=hGFfpYA0/B/eFObRXuoqGY35B2hnvv16RKFglFbWfj+BwwBkBqQwSYXWoq4Kanp3acoVJ7FOZE/DR8TjEh+nA5ApKYI4o9fV8iujhevLGv5zR7VlWVh+lJ60oIhpFai1TfuNr2YUB6+jZMTGK3VZt+1Fe18QQVAbVAzE5oWxnyQ=
-Received: from DS7PR03CA0313.namprd03.prod.outlook.com (2603:10b6:8:2b::18) by
- BL3PR12MB6594.namprd12.prod.outlook.com (2603:10b6:208:38d::13) with
+ bh=zc6jiPmXwX5xNdCX1tgrCXHJSGYZ0qNWo+39BPRLkIE=;
+ b=IANeCaNcZkiRS9RNlNtheyCmBhmzCWVwsEqXIKmpd4tFKjIp6/ldvNkFszLi7euOOlBymSP65uwY5mvjovULo/LTl4iIzkn+809azmrzgywcqBC1LyGfLHnrGUGFiY1XjYXS1gxF9ZxbI7anenlWmqOE6NdEJw+MB0nVM7OTyjM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by SA0PR12MB7461.namprd12.prod.outlook.com (2603:10b6:806:24b::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 06:10:15 +0000
-Received: from DM6NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::88) by DS7PR03CA0313.outlook.office365.com
- (2603:10b6:8:2b::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
- Transport; Wed, 12 Apr 2023 06:10:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT063.mail.protection.outlook.com (10.13.172.219) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.30 via Frontend Transport; Wed, 12 Apr 2023 06:10:14 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 12 Apr
- 2023 01:09:31 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 11 Apr
- 2023 23:09:30 -0700
-Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 12 Apr 2023 01:09:27 -0500
-From:   Piyush Mehta <piyush.mehta@amd.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
-        <siva.durga.prasad.paladugu@amd.com>,
-        <linux-arm-kernel@lists.infradead.org>, <git@amd.com>,
-        Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH] dt-bindings: usb: dwc3: xilinx: Add interrupt-names to include hibernation interrupt
-Date:   Wed, 12 Apr 2023 11:38:43 +0530
-Message-ID: <20230412060843.149283-1-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+ 2023 06:09:11 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::d1cf:3d4a:4882:7fd3%4]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
+ 06:09:11 +0000
+Date:   Wed, 12 Apr 2023 11:38:52 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, g@blr-5cg13462pl.amd.com
+Cc:     ray.huang@amd.com, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joel@joelfernandes.org,
+        gautham.shenoy@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq/schedutil: Add fast_switch callback check
+Message-ID: <ZDZK9Jpjj6ysOJmg@BLR-5CG13462PL.amd.com>
+References: <20230410095045.14872-1-wyes.karny@amd.com>
+ <20230410095250.14908-1-wyes.karny@amd.com>
+ <CAJZ5v0jH4uatAR7HiGY_MYASOcdwxvwkUZaMCHcznd-0idLCUA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
+In-Reply-To: <CAJZ5v0jH4uatAR7HiGY_MYASOcdwxvwkUZaMCHcznd-0idLCUA@mail.gmail.com>
+X-ClientProxiedBy: PN3PR01CA0162.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:c8::6) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT063:EE_|BL3PR12MB6594:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2fc48877-69ad-4b1f-f43a-08db3b1c9511
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SA0PR12MB7461:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3699b388-cb2f-4207-398c-08db3b1c6eaf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +JcxkIF0SceoexCxEAmBtX+FbFvwtim+hZDUjzVAS3Uih6Q8keUc3YTWIYwxq0UTkB2crcPy0Km1Oe3fw/4lmqCUbNtYnd+M9iHt00C6d6VAZ6B4vOr7eb1CetNo6oOtqd+8igFd0cDul11OpDbMVZU9X/R5APBkIRe5dpQKMOWq5qoatY9cdAqUsOkhEDJMaSxn+fblov3wBrezSpbfGsR/djUyl7KsqMEyamoY0b4hjr7+YoFltFLpCA0deKKIw7YMfM4WMT/0trXZIxriBYdjDta81GOUm+iL3Fmbaj1EO0R/adn8UJRg+eOhlsapr2I2iAbSUZQeSZN37dz8PZSE5krKnxieJX+BHuaJqjApxG6DMgHVcbA4qppnTlJV+12se2gAk1Xx8NGs3QeqDVeBooCAYJjWHlgPmCTp2AE/FfzwWIjuK9+NEO9lZcmoL3gsWJdl6GelqV3r1zslnTA02B0mggOm7WiptrUY3hTpPORcrCTLvatybs6Cqjstt9pqppD2+Qax927sf95Agg1CSUmNwdWqcr+3d2FqrP5m0XvgKlCMsKBPokPeuKgbkTBgDUeG+lL8yDnuSbv9/t57GFjLUckdw+vnc6zpRksyziOaAm1lFYW4xHFsUQvElfM7hTDjmbvh44tPaPZ7uHh6nEKaR8OuOVhZ9arLz7bD83DYID4w5BGVDb3cPJbQX/ythsnhXLAlH6lTv29mrfjhtQwBKmCQa3NpHWCK8bBRwaqPTJhOESJr8mBgRdu8/kUVIYOgxCorbySnGYUcpw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(478600001)(82310400005)(26005)(1076003)(54906003)(186003)(110136005)(8936002)(82740400003)(41300700001)(8676002)(316002)(70206006)(966005)(70586007)(4326008)(6666004)(36756003)(86362001)(40480700001)(356005)(81166007)(44832011)(2616005)(36860700001)(47076005)(2906002)(426003)(336012)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Ji4BTlP3bbrVh/G4CXUo/NVTNtsSnFucyqWnN46ZyDQS/XO2+1jrrOx/t+3TSZzieGwJ59mLFpGzWckcXWfhMCpmTiES44Jl2euYOO43MtKatMyHue0+AymN4gTVAEcUMHDxuLkRiQAQ0J7seygInmpbonFVr/55+hJJdbcfrRKyy9O1BpTdMMAo7vr6AU3/k5//ccwRtqcRNyOv3OjVGbVfJhUimafNCD9/niXvJTTadJJ5eWnjXFsALo8RLmOskm2dFPAj5LzqTRFXGO7n1uBIl5AstP6jDYFWMMnJlmI9bM+ExqneC9rk9UI6qNe1tdnHk7fXA/Zfm1ts3bSpE88jNzKA6OZZ237mxz32ntV24qa94WPbXZtdhfZT0xhsnnhPV0hPCgjL9J+EeU8i39j8hiY1RgbsMUaCeibiLrts7BZJSgvR5hxAxNcqOTqrj5ITMz++dTOcD7RNViKFVPf54k90O/31BP/i9/NS20M9tkAFWHGqiUhPvdCbKdAvkuNTIih87U3dn1WjNDYdo5Ca6GMjG5NmZXo1vRukN0kb/y0TYDHSAcE4ByEyBtj8u4BUCKaFpvcaEXpe4gOr9f6PLHJctn54evOLxluu7Bw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199021)(6666004)(8936002)(66899021)(44832011)(7416002)(6486002)(5660300002)(86362001)(66476007)(66946007)(8676002)(4326008)(66556008)(478600001)(38100700002)(53546011)(2906002)(83380400001)(6506007)(6512007)(186003)(41300700001)(316002)(26005)(309714004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVJIdGdDTVh5ejBOamt3SERibWNCa0QxWktCRWlCYjV4NFIrYjkzcGJiZEdV?=
+ =?utf-8?B?WjFpSGF2N0VWODRoa2JnTXJSR1B4eTNZMW5JQmFpOEtzYkUzZXVUVGhRcXZB?=
+ =?utf-8?B?MFlqM2lnSUJxQWl6K2hMd2dVTWI5ZzEyaEVYNkZXQUpseE1YSTlGeEVzeThQ?=
+ =?utf-8?B?TFZKREpCSTVWNUU0V3pKMWVldVJLMGlJMFpYOVJ4QXRDa01vZkpFZEZ5LzBP?=
+ =?utf-8?B?anVUa3lyNUZCMkE2cE43L1loSHJ5STEwdzU2TytINkJINnpzOHRUYnp2eGtY?=
+ =?utf-8?B?cjViVk5nbW1HVUt4MkVKUk9adzNrUVJwMWJjQnp5dVRueC9ucWdQRUV4Qk9J?=
+ =?utf-8?B?WFQxQnNMWElwVXRNb0N3L1JmWHdjVmsyVlpmd2cvUmhrV1NQemloRVhmNFNM?=
+ =?utf-8?B?VnRCVWFDN0tpWlduSkVheU9wMHB6YnBldFJDaHRZamZOOVFFOE9nOHowenRT?=
+ =?utf-8?B?bnZxYU1iaTN0SEFZZGZIMXc4YXRFTCtDdXJTT0NBUjZuaFN3QWdHTHJTRmVS?=
+ =?utf-8?B?ZmtFODVGTlFxNzFWWm1YZDI4aVlSSEl0dDA3bmdDNkFjSEg2UWxCQ2IzREpP?=
+ =?utf-8?B?WWhkaGdVdmhtb2U1SmZ2cGMzTmY5akx4bG5ZbzFUZyt2TUhRT0tyZC9sdWRw?=
+ =?utf-8?B?S3lVNC9PcER1N002bWFMTlQ1K3pKSGpBNFhEdUlLZVdLcUtxNzRBdStjckFU?=
+ =?utf-8?B?SDZ4R0hBQ3NVajBhVTJ1a3Jkdk0rUGNGWmhFYm5uNUhIWmdPajdUdXhtRThn?=
+ =?utf-8?B?VDJ5bU9FR3R6cWxNcUl5T3VQanA3ZXlDSWJucGJkZVlEOFVzQkVGTXpTaTd6?=
+ =?utf-8?B?Z0V2emloS0U2T0g0NWl1NFdRbk1DNHZCSTB3aFlmMHdDVHU4NU9XYjRFVXdS?=
+ =?utf-8?B?RDgzWnN1U1kyb0JRdTVPdEQycUdVVVYxWWZPakQ0K3V4cE5jLzZlNno1NDR1?=
+ =?utf-8?B?UDZKcUtqeFEwY1BVd2h1d0lpTWxadUJhZVFQakpNWnVsYU9XazZIN2FCcC9E?=
+ =?utf-8?B?VW5sbERVQnFLMjlCMmRSWkltdGE1Z0ZtMlUwdThwSkVYTHROQzBVb09rZXpW?=
+ =?utf-8?B?ZlYvL0x4eHlpYW94Ny9xYmRyQm8yeGdhZGZ1eFBiWWFpM0hCZDgxc2xFcXQr?=
+ =?utf-8?B?ZXR2aS84d3UrSUNleHA1eEwxekhIaVA3NDNIVUt5YXdhclozdFlLWFJLOUJC?=
+ =?utf-8?B?eWl4bkNrVTc3TFV0SjFianduQys3MDl3bzkxZ2VKdzQyaGU2Vmd0NkltYjZY?=
+ =?utf-8?B?a3o3QlpxR3V1NUlsUkZDK2kwUXJyQjYwWW1YelZGRHg0ZE9XV09oVnVkb2RC?=
+ =?utf-8?B?cmtiRENZZnQ4akdSdGxZb3loWGh5ZFhHMk8wanY0ejc1L3hINGZWSDhyY1Zl?=
+ =?utf-8?B?N01xQXJtbURWajBhekdBQ3g4dTc4M1BtZk1XRWplRHRvOWxxdE5hWFR2Vkdy?=
+ =?utf-8?B?amtId1ptN2krTlBpRWw3N2tWa1I5bHNxNHBNbGt4YWhhYXk5a0VqZVhleTJr?=
+ =?utf-8?B?aUdBYTRHelk4MUNPQlg5akRJUmNZNE9LdXRLVkZwT0U5Z1Q5MEV1Vmdsc0M2?=
+ =?utf-8?B?VG5pSkh4c2kzMmpHOU9IMUZaMHgyVkU3aG5EYkwyYWlGVmtIc3JHNFBGeWVu?=
+ =?utf-8?B?SkMzaHlhOTBmb2ZLMTA5MFd0c0svZ0YyZXB5dzJaOWQyaCtWZStTWUhDL0Z2?=
+ =?utf-8?B?WVhhOXNqNjVlRndCdHBIcGJtTkhNa05HajBraDJBaWwxNnhKNVF1MWpERnBi?=
+ =?utf-8?B?cXFPbEZpNVlSN0xkUHpaa1lmUnk2VFVGRmdUeEovWUhib0gyd3Nid3cvejli?=
+ =?utf-8?B?RzAwc0YrVXBtSG1lZkZCQlpDRG1lV1l6Yk1BbFZlS0Z4UUxlTVBzWHhMWDd6?=
+ =?utf-8?B?SlM4b3pSa2VCZ0tiTytqMHhrZDU5SzBNeGRURVB0NStvZEpJelozMmxVdHZK?=
+ =?utf-8?B?aEhPTWFib3NBbU5GdzU1c1V6QlRLbnNjQkFBUHJBdjYza0IyVzNNcjUzRzls?=
+ =?utf-8?B?ZU5EcThHQnNPbUNROUp0bUNwMHV4YnNNcFhoa3EvMHYxalhNT04xK280WDdM?=
+ =?utf-8?B?SVBuTUpxaTZyUkJGaVFOclFSeWJQYU1iZWs0NklxeDk3ZW1PVWVHZC85RjRZ?=
+ =?utf-8?Q?qhUyDCEZJjahJzz75EHSs1Rxp?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 06:10:14.8224
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3699b388-cb2f-4207-398c-08db3b1c6eaf
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 06:09:10.8333
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fc48877-69ad-4b1f-f43a-08db3b1c9511
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6594
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U1bFOYOnt54TYgkR20ALgmQUe7HqsPY9iz+W2XHyrqUTyUzZ1yjZ5TjtIZzBWdLsQkKQfsj9twZ1+SD/PVT15Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7461
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -105,45 +129,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
-Added host mode interrupts and "usb-wakeup" interrupt-names optional
-property in the binding schema to capture remote-wakeup and connect/
-disconnect event in the hibernation state.
+Hi Rafael,
 
-Xilinx dwc3-core uses "host" and "otg" interrupts interrupt-names DT
-properties from dwc3-core.
+On 11 Apr 17:55, Rafael J. Wysocki wrote:
+> On Mon, Apr 10, 2023 at 11:53 AM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > The set value of `fast_switch_enabled` flag doesn't guarantee that
+> > fast_switch callback is set. For some drivers such as amd_pstate, the
+> > adjust_perf callback is used but it still sets `fast_switch_possible`
+> > flag. This is not wrong because this flag doesn't imply fast_switch
+> > callback is set, it implies whether the driver can guarantee that
+> > frequency can be changed on any CPU sharing the policy and that the
+> > change will affect all of the policy CPUs without the need to send any
+> > IPIs or issue callbacks from the notifier chain.  Therefore add an extra
+> > NULL check before calling fast_switch in sugov_update_single_freq
+> > function.
+> >
+> > Ideally `sugov_update_single_freq` function should not be called with
+> > amd_pstate. But in a corner case scenario, when aperf/mperf overflow
+> > occurs, kernel disables frequency invariance calculation which causes
+> > schedutil to fallback to sugov_update_single_freq which currently relies
+> > on the fast_switch callback.
+> 
+> Yes, it does.  Which is why that callback must be provided if the
+> driver sets fast_switch_enabled.
+> 
+> Overall, adjust_perf is optional, but fast_switch_enabled can only be
+> set if fast_switch is actually present.
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
----
-Note:
-- Xilinx uses dwc3-cores interrupt-names DT property.
-  Link:
-  Xilinx-dwc3 core: https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml#L129
-  dwc3-core: https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/usb/snps%2Cdwc3.yaml#L42
----
- Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Then should the below logic be changed in sugov_start function?
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-index 098b73134a1b..abc32db2448a 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-@@ -44,6 +44,15 @@ properties:
-       - const: bus_clk
-       - const: ref_clk
- 
-+  interrupts:
-+    items:
-+      - description: Handle to the line usb-wakeup used to wake
-+          up the host processor.
-+
-+  interrupt-names:
-+    items:
-+      - const: usb-wakeup
-+
-   resets:
-     description:
-       A list of phandles for resets listed in reset-names.
--- 
-2.25.1
+'''
+        else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+                 uu = sugov_update_single_perf;
+'''
 
+This logic restricts the selection of adjust_perf function based on
+fast_switch_enabled flag. If this fast_switch_enabled check is removed
+then amd_pstate driver can disable this flag and shedutil can select
+adjust_perf without this dependency.
+
+Thanks,
+Wyes
+> 
+> Please fix the driver.
+> 
+> >
+> > Normal flow:
+> >   sugov_update_single_perf
+> >     cpufreq_driver_adjust_perf
+> >       cpufreq_driver->adjust_perf
+> >
+> > Error case flow:
+> >   sugov_update_single_perf
+> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+> >       cpufreq_driver_fast_switch
+> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+> >
+> > Fix this NULL pointer dereference issue by doing a NULL check.
+> >
+> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/cpufreq/cpufreq.c        | 11 +++++++++++
+> >  include/linux/cpufreq.h          |  1 +
+> >  kernel/sched/cpufreq_schedutil.c |  2 +-
+> >  3 files changed, 13 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6d8fd3b8dcb5..364d31b55380 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2138,6 +2138,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >  }
+> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >
+> > +/**
+> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
+> > + *
+> > + * Return 'true' if the ->fast_switch callback is present for the
+> > + * current driver or 'false' otherwise.
+> > + */
+> > +bool cpufreq_driver_has_fast_switch(void)
+> > +{
+> > +       return !!cpufreq_driver->fast_switch;
+> > +}
+> > +
+> >  /**
+> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+> >   * @cpu: Target CPU.
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 65623233ab2f..8a9286fc718b 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
+> >  /* Pass a target to the cpufreq driver */
+> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >                                         unsigned int target_freq);
+> > +bool cpufreq_driver_has_fast_switch(void);
+> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
+> >                                 unsigned long min_perf,
+> >                                 unsigned long target_perf,
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index e3211455b203..a1c449525ac2 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -364,7 +364,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+> >          * concurrently on two different CPUs for the same target and it is not
+> >          * necessary to acquire the lock in the fast switch case.
+> >          */
+> > -       if (sg_policy->policy->fast_switch_enabled) {
+> > +       if (sg_policy->policy->fast_switch_enabled && cpufreq_driver_has_fast_switch()) {
+> >                 cpufreq_driver_fast_switch(sg_policy->policy, next_f);
+> >         } else {
+> >                 raw_spin_lock(&sg_policy->update_lock);
+> > --
+> > 2.34.1
+> >
