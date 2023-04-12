@@ -2,122 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9016DEC4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE60C6DEC4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjDLHMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S229773AbjDLHOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjDLHMr (ORCPT
+        with ESMTP id S229451AbjDLHOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:12:47 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FB73584
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:12:37 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230412071232epoutp01d5e26fb35a3601ce058d5ac1d8ec5583~VHnuotIwH1658516585epoutp01A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:12:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230412071232epoutp01d5e26fb35a3601ce058d5ac1d8ec5583~VHnuotIwH1658516585epoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681283552;
-        bh=O/zeu0IMNnIo8BkHHfaGAMiYGuHwPxRRxQNOfP/rWFw=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=mgdp2iKSt8bdMFqwl9COg03VSvoyPx3BVJUIsD4igxzjfxFotEeUZV43d4jPGbO/K
-         HSOIa7sQQfjg1aEkxe9uKveb7Iw297FpoCS3o0h3E2m8pTemiVhJ/wsN0KNoms8WE1
-         s0XuCGGvTRpnj5uxcB3ti+aAdhFbsJFWaixsuHZw=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230412071231epcas2p2f6e82092c76730f33ac1214ba0b8508c~VHnt_Gkaf2003620036epcas2p2q;
-        Wed, 12 Apr 2023 07:12:31 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PxDRz0gSRz4x9Pq; Wed, 12 Apr
-        2023 07:12:31 +0000 (GMT)
-X-AuditID: b6c32a48-023fa700000025b2-3c-643659de9b0c
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2E.1C.09650.ED956346; Wed, 12 Apr 2023 16:12:30 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH 2/2] nvme-pci: fix metadata mapping length
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "hch@lst.de" <hch@lst.de>
-CC:     "kbusch@kernel.org" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "chaitanya.kulkarni@wdc.com" <chaitanya.kulkarni@wdc.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230412065736.GB20550@lst.de>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230412071230epcms2p145d53bfc8e40eede25f282b80247218c@epcms2p1>
-Date:   Wed, 12 Apr 2023 16:12:30 +0900
-X-CMS-MailID: 20230412071230epcms2p145d53bfc8e40eede25f282b80247218c
+        Wed, 12 Apr 2023 03:14:00 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD20F1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:13:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id f26so20248390ejb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681283638;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SSb8+3GCZjbScMcwhrVNFlcYVQrPjCh+ouHXg2g6vWE=;
+        b=t8Xz7E9XCnpbOXwsyz8O03mqMBfcFwjo2T++uD1k1tMQBk9dKFNXnMGnukEG9HYhF/
+         1qi9GWSfbcc+9hH4qhyLqkp8FQ0JXB0np7ELNbdnONnU6t84N6OW0Gv3FOQgcq602yCL
+         WAJWZEg6Oq4JFPsDHPGu3hy2XteM3p8fIza8T7ZId+gvpejruoMew5pw3CHfNtehRLin
+         Gh6MWQfuTqJtRpVqa+6QfJHqjfA/8SomnkmlcjgDC8xR1jmC8NRn0BqRi95L+hyA0R5U
+         t86TwDKpHzTYRR0EWV8LREIdklHIKBiLRVQJDYJ13lyFY7Ot66wfsBB/rDiWnohhGbQO
+         jBOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681283638;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SSb8+3GCZjbScMcwhrVNFlcYVQrPjCh+ouHXg2g6vWE=;
+        b=hkqi+TIJdaU3f+c8RDWVdJcohVtmJNwbLRJcbGIoY/lHL08urXHf+CU0HXW50x2pdg
+         lN/w4RbTd70mU8wkccXJV31R6rPPlR4eTyRW6NaGSTtdCG9Tp7uU/A0giSBboyXZkPOS
+         aPOMH3vePCkNDgSPrL0jsu9q+ZRfghdz79uH+W1cWZ8TDp7RUQce8Is/NyGF6M52wywX
+         4sb51GAzLEfGq2DXMBU1Cc/dtoky0/bkSnnAI/2VOFXoYqEwXDQblw2NLPR2+m+IioK/
+         feLyFc1jma9pUcCrG35y7fEpw/AW7ihiKyUXoaTBT9Wg2EgsietQFgBM4XSMtBB8BtZs
+         lGaQ==
+X-Gm-Message-State: AAQBX9e2tov7W0hafR71tmqscP7BrZH5w9TBl3GpgLfy/Gle4nerfBXu
+        R8ioCAkV4JcyCohXLd+QIgVOh5veMG4Ng1J4Eqg=
+X-Google-Smtp-Source: AKy350YvNxNAcnAmDGZ1SZtTtgBgAJyImltMTkW5Dfa1JOksPBss0D9cjHcRM6QSzXZzwziyoC5owg==
+X-Received: by 2002:a17:907:1686:b0:930:f953:962c with SMTP id hc6-20020a170907168600b00930f953962cmr16169593ejc.1.1681283637718;
+        Wed, 12 Apr 2023 00:13:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
+        by smtp.gmail.com with ESMTPSA id n14-20020a1709065dae00b009334219656dsm6900701ejv.56.2023.04.12.00.13.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 00:13:57 -0700 (PDT)
+Message-ID: <77cadd45-0b15-af1a-9eab-ebe0b3241473@linaro.org>
+Date:   Wed, 12 Apr 2023 09:13:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] ARM: dts: mvebu: Add device tree binding for
+ Marvell Armada 38x
+Content-Language: en-US
+To:     Tony Dinh <mibodhi@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20230412025737.20280-1-mibodhi@gmail.com>
+ <20230412025737.20280-2-mibodhi@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412025737.20280-2-mibodhi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmqe69SLMUg09nrS3+7znGZjHr9msW
-        i5eHNC1Wrj7KZDHp0DVGi8u75rBZzF/2lN1i+fF/TBbrXr9nceD0mNj8jt3j/L2NLB6bVnWy
-        eWxeUu+x+2YDm8fHp7dYPPq2rGL0+LxJzqP9QDdTAGdUtk1GamJKapFCal5yfkpmXrqtkndw
-        vHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0IlKCmWJOaVAoYDE4mIlfTubovzSklSFjPzi
-        Elul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMifdWMBX8Zq1YemgSYwPjc5YuRg4O
-        CQETif1HKrsYuTiEBHYwSix7v4sNJM4rICjxd4dwFyMnh7CAo0Tz/OtMILaQgJLEuTWzGEFK
-        hAUMJG71moOE2QT0JH4umQHWKSIgK3FlRT3IRGaBz0wS/d/2sYHUSAjwSsxof8oCYUtLbF++
-        lRHE5hTQkfh+u5EZIq4h8WNZL5QtKnFz9Vt2GPv9sfmMELaIROu9s1A1ghIPfu6GiktKHDr0
-        lQ3iq3yJDQcCIcI1Em+XH4Aq0Ze41rER7AReAV+J3cuXgNksAqoS77/tYIWocZH4+3IPmM0s
-        IC+x/e0cZpCRzAKaEut36UNMV5Y4cosFooJPouPwX3aYBxs2/sbK3jHvCRNEq5rEoiajCYzK
-        sxCBPAvJqlkIqxYwMq9iFEstKM5NTy02KjCBR2tyfu4mRnA61fLYwTj77Qe9Q4xMHIyHGCU4
-        mJVEeH+4mKYI8aYkVlalFuXHF5XmpBYfYjQFenIis5Rocj4woeeVxBuaWBqYmJkZmhuZGpgr
-        ifN+7FBOERJITyxJzU5NLUgtgulj4uCUamDa8HKWwCGe0juZIlr2ZxYuuddj9kYk5/Pxr7Ez
-        V5ptmHA5YvaXowUfDpVVfFs4Y//f6aX3A5XMPJjCr9qYW1n3R9Z9OrKp7FHvhRVrjCqSuw4w
-        LXGdoNHq2f1H64P16eUrnD6feH+Qn82getrUut3T7EqW8lz6OZ+5bMPml2+/3I41ysxqFzg0
-        aadkdAKvZeFV1t89bn++mm4q2dU2Z3/JV9VLXyo+27Ps+Vyb2OvBm8upZvX9jFO2WOD0W2kX
-        PlpUiE7j7X7D/il58d/Y/T9OfL/k2J84NfzZxK9fRZQDT3+S7p386Xf1B4EZgbn31SUtrO79
-        0J726duKh1oZJ55dz9rFsfjkHuf279/7DTaYHlRiKc5INNRiLipOBABwqtrwMAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230412052443epcms2p836b669a12c4e81368bec2cd340656f73
-References: <20230412065736.GB20550@lst.de>
-        <20230412052443epcms2p836b669a12c4e81368bec2cd340656f73@epcms2p8>
-        <CGME20230412052443epcms2p836b669a12c4e81368bec2cd340656f73@epcms2p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Even if the memory allocated for integrity is physically continuous,
->> struct bio_vec is composed separately for each page size.
->> In order not to use the blk_rq_map_integrity_sg(), the length of the
->> DMA mapping should be the total size of integrity payload.
+On 12/04/2023 04:57, Tony Dinh wrote:
+> Add device tree binding for Marvell Armada 38x.
 > 
-> Hmm, looking outside the bio_vec is pretty nasty.
+> Signed-off-by: Tony Dinh <mibodhi@gmail.com>
+
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
+This is not DTS. These are bindings.
+
+> ---
 > 
-> I think the problem here is that bio_integrity_add_page should
-> just add to the existing bvec, similar to bio_add_page and friends.
+> Changes in v2:
+> - Add marvell,38x.yaml. For now, add this binding to the Marvell
+> directory to keep it consistent with other Marvell yaml files.
+> At a later date and a separate patch, consolidate the Marvell
+> yaml files into  marvell.yaml.
+> 
+>  .../bindings/arm/marvell/armada-38x.yaml      | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
 
-I agree with you.
-I think the problem is bio_integrity_add_page().
-If it is modified, sg functions for blk-integrity should also 
-be modified.
+marvell,armada-38x.yaml
 
-If you think the blk-integrity modification is better, 
-I will send an mail to block mailing after modifying it.
+Or just squash it with existing armada bindings... Keeping one binding
+per one SoC group is a bit a lot.
 
-Best Regards.
-Jinyoung.
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml b/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
+> new file mode 100644
+> index 000000000000..096bd46d932a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
+> @@ -0,0 +1,27 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/marvell/marvell,38x.yaml#
+
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+
+Best regards,
+Krzysztof
+
