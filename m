@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB5B6DF5D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503296DF5DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjDLMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S229965AbjDLMoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjDLMnc (ORCPT
+        with ESMTP id S229786AbjDLMo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:43:32 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612869EC9;
-        Wed, 12 Apr 2023 05:42:56 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 4A87424E01A;
-        Wed, 12 Apr 2023 20:42:37 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 20:42:37 +0800
-Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 20:42:36 +0800
-Message-ID: <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
-Date:   Wed, 12 Apr 2023 20:42:34 +0800
+        Wed, 12 Apr 2023 08:44:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8E48A71
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681303369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MSTd3POftj4h2e704fIbWzCftjTruaveQ7UYCHjIbM4=;
+        b=FiL9ooVFf3wfNGZFpPHRidiTjZlKZ2PzIRzNgib4GYTAaDuBZEVKKBNEa3zuBcPA9f90GM
+        w/gr2Rctr6rIlJuXutK5CdhbTlndKKr0mTaNbN9Kzed0RGTByyvzvAwOamPpuiKgqyY447
+        E2Y+NFr/XlotxdasaKoLC331tLj7xZ4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-246-Yfzo9jGINE6dMV-7IA32FQ-1; Wed, 12 Apr 2023 08:42:40 -0400
+X-MC-Unique: Yfzo9jGINE6dMV-7IA32FQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D5B5811E7C;
+        Wed, 12 Apr 2023 12:42:39 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 48B011121320;
+        Wed, 12 Apr 2023 12:42:38 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 1EA04307372E8;
+        Wed, 12 Apr 2023 14:42:37 +0200 (CEST)
+Subject: [PATCH bpf V8 0/7] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
+        leon@kernel.org, linux-rdma@vger.kernel.org
+Date:   Wed, 12 Apr 2023 14:42:37 +0200
+Message-ID: <168130333143.150247.11159481574477358816.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.176]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+but doesn't provide information on the RSS hash type (part of 6.3-rc).
+
+This patchset proposal is to change the function call signature via adding
+a pointer value argument for providing the RSS hash type.
+
+Patchset also disables all bpf_printk's from xdp_hw_metadata program
+that we expect driver developers to use. Instead counters are introduced
+for relaying e.g. skip and fail info to end-user, this can be further
+debugged by re-enabling bpf_printk (when driver devel troubleshoot).
+
+---
+
+Jesper Dangaard Brouer (7):
+      selftests/bpf: xdp_hw_metadata default disable bpf_printk
+      selftests/bpf: Add counters to xdp_hw_metadata
+      xdp: rss hash types representation
+      mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
 
 
-On 2023/4/12 19:34, Krzysztof Kozlowski wrote:
-> On 12/04/2023 10:45, Changhuang Liang wrote:
->> StarFive SoCs like the jh7110 use a MIPI D-PHY RX controller based on
->> a M31 IP. Add a binding for it.
-> 
-> So this is D-PHY? Or the other patch is D-PHY? The naming is quite
-> confusing and your commit msgs are not helping here.
-> 
-> Also the power domain phandle here adds to the confusion.
-> 
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+ drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+ drivers/net/veth.c                            | 10 ++-
+ include/linux/mlx5/device.h                   | 14 ++++-
+ include/linux/netdevice.h                     |  3 +-
+ include/net/xdp.h                             | 47 ++++++++++++++
+ net/core/xdp.c                                | 10 ++-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+ .../selftests/bpf/progs/xdp_hw_metadata.c     | 42 ++++++++++---
+ .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+ .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 10 ++-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  4 ++
+ 14 files changed, 213 insertions(+), 30 deletions(-)
 
-Yes, this is DPHY, DPHY has rx and tx, and last version we are discussing that 
-use power domain replace syscon:
-https://lore.kernel.org/all/5dc4ddc2-9d15-ebb2-38bc-8a544ca67e0d@starfivetech.com/
+--
 
->>
->> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->> ---
->>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 85 +++++++++++++++++++
->>  1 file changed, 85 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
->>
-[...]
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +  lane_maps:
-> 
-> Why did this appear? Underscores are not allowed. It looks like you
-> re-implement some standard property.
-> 
-
-Will change to lane-maps.
-Yes, according to Vinod advice, lane mapping table use device tree
-to parse makes sense.
-
->> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->> +    description:
->> +      D-PHY rx controller physical lanes and logic lanes mapping table.
->> +    items:
->> +      - description: logic lane index point to physical lane clock lane 0
->> +      - description: logic lane index point to physical lane data lane 0
->> +      - description: logic lane index point to physical lane data lane 1
->> +      - description: logic lane index point to physical lane data lane 2
->> +      - description: logic lane index point to physical lane data lane 3
->> +      - description: logic lane index point to physical lane clock lane 1
->> +
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
