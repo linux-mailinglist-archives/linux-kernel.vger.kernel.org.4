@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAE26DFE4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81286DFE4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjDLTD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S230204AbjDLTD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjDLTDt (ORCPT
+        with ESMTP id S229819AbjDLTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 15:03:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634A519AD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:03:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255CA30EE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:03:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F32C763871
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9879AC433A0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF20B63873
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCB8C4339C;
         Wed, 12 Apr 2023 19:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681326226;
-        bh=xaXnGfbC/VMDQDGu1YDrIHmJbcCkfgf/aMjvRsvTeLI=;
+        s=k20201202; t=1681326227;
+        bh=Xo5lcU2wwdD++yBcxh/rdhi4q0XegKdBxgS1Acd6DXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qLyqRwZ7Cm9rjuMjVK1mOv2LqbY4qSfm/yt2qOzI90jMhIHqgq3Ne5OXSfZj5MnfC
-         /G9y/FHQz5d2PLw0bF5VWTTAthGhPRPxoBpO+1f1ZzzDnPcLclndGWA2e5eC6nbWU5
-         tKJ8Jl5bhwLJ2D0jboWiZimpuyS92Mss683UZM8Qz+owmWnqpp9lFOgsckrwPOonmt
-         gLNYTiI2BWey0p+J4oSdLlrU4WZhr/hoY38iDSJmW4vSZCHfap0N0AA+YanzZY4jzV
-         //2ty/m4b9zemQ/58plj+1OcX8fQdafga5hgJcAAOV14c2ktHILY7a8B1nT7ja+n4L
-         kOa8ttD6I5loQ==
+        b=lFvGhjCArhUk17ZwpAZ2Cf1o25V9jEG+7qU4R3iudzxd8iV+aoNl7mhWtmBBZktd/
+         AKT1KDS2LiTMpz0CvOffjMBVbT7Kx+Raj8v15hky+B/cK1xI23MHJyFY6dDv46xkYz
+         3pBRG+uEbDqYqMAyq+BpUS10MOcdKbO9k2IE+CJkU4xCe218coEA2FnlIJHDNLwvjs
+         9lqHEkFygxFoIY5/eN0yTANF3EqJ49ZGqFmsSJiKeP/2TpxLuSeMf2pkjm0a8GO24q
+         VK0n5WcYd/Vkp08wWC3y9dxP0dDhoWZnOz07UuCOk8sbFnfvK8INdOhT7Q8kwUs31m
+         vrp+KhpZ9sIjQ==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 4/9] objtool: Add symbol iteration helpers
-Date:   Wed, 12 Apr 2023 12:03:19 -0700
-Message-Id: <59023e5886ab125aa30702e633be7732b1acaa7e.1681325924.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 5/9] objtool: Add verbose option for disassembling affected functions
+Date:   Wed, 12 Apr 2023 12:03:20 -0700
+Message-Id: <4cadacc719db1e792c335309056960ca6f71139e.1681325924.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1681325924.git.jpoimboe@kernel.org>
 References: <cover.1681325924.git.jpoimboe@kernel.org>
@@ -55,219 +55,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add [sec_]for_each_sym() and use them.
+When a warning is associated with a function, add an option to
+disassemble that function.
+
+This makes it easier for reporters to submit the information needed to
+diagnose objtool warnings.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c               | 98 ++++++++++++-----------------
- tools/objtool/elf.c                 |  2 +-
- tools/objtool/include/objtool/elf.h |  9 +++
- 3 files changed, 51 insertions(+), 58 deletions(-)
+ tools/objtool/Documentation/objtool.txt |  5 ++
+ tools/objtool/builtin-check.c           |  5 ++
+ tools/objtool/check.c                   | 77 +++++++++++++++++++++++++
+ tools/objtool/include/objtool/builtin.h |  1 +
+ 4 files changed, 88 insertions(+)
 
+diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
+index 8e53fc6735ef..4d6c5acde7a3 100644
+--- a/tools/objtool/Documentation/objtool.txt
++++ b/tools/objtool/Documentation/objtool.txt
+@@ -244,6 +244,11 @@ To achieve the validation, objtool enforces the following rules:
+ Objtool warnings
+ ----------------
+ 
++NOTE: When requesting help with an objtool warning, please recreate with
++OBJTOOL_VERBOSE=1 (e.g., "make OBJTOOL_VERBOSE=1") and send the full
++output, including any disassembly below the warning, to the objtool
++maintainers.
++
+ For asm files, if you're getting an error which doesn't make sense,
+ first make sure that the affected code follows the above rules.
+ 
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 7c175198d09f..5e21cfb7661d 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -93,6 +93,7 @@ static const struct option check_options[] = {
+ 	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
+ 	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
+ 	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
++	OPT_BOOLEAN('v', "verbose", &opts.verbose, "verbose warnings"),
+ 
+ 	OPT_END(),
+ };
+@@ -118,6 +119,10 @@ int cmd_parse_options(int argc, const char **argv, const char * const usage[])
+ 		parse_options(envc, envv, check_options, env_usage, 0);
+ 	}
+ 
++	env = getenv("OBJTOOL_VERBOSE");
++	if (env && !strcmp(env, "1"))
++		opts.verbose = true;
++
+ 	argc = parse_options(argc, argv, check_options, usage, 0);
+ 	if (argc != 1)
+ 		usage_with_options(usage, check_options);
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index de0d0234527d..d1d47baa252c 100644
+index d1d47baa252c..bc9dd69c9a45 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -470,7 +470,7 @@ static int decode_instructions(struct objtool_file *file)
+@@ -4509,6 +4509,81 @@ static int validate_reachable_instructions(struct objtool_file *file)
+ 	return warnings;
+ }
  
- //		printf("%s: last chunk used: %d\n", sec->name, (int)idx);
- 
--		list_for_each_entry(func, &sec->symbol_list, list) {
-+		sec_for_each_sym(sec, func) {
- 			if (func->type != STT_NOTYPE && func->type != STT_FUNC)
- 				continue;
- 
-@@ -924,7 +924,7 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
- 
- static int create_cfi_sections(struct objtool_file *file)
- {
--	struct section *sec, *s;
-+	struct section *sec;
- 	struct symbol *sym;
- 	unsigned int *loc;
- 	int idx;
-@@ -937,19 +937,14 @@ static int create_cfi_sections(struct objtool_file *file)
- 	}
- 
- 	idx = 0;
--	for_each_sec(file, s) {
--		if (!s->text)
-+	for_each_sym(file, sym) {
-+		if (sym->type != STT_FUNC)
- 			continue;
- 
--		list_for_each_entry(sym, &s->symbol_list, list) {
--			if (sym->type != STT_FUNC)
--				continue;
--
--			if (strncmp(sym->name, "__cfi_", 6))
--				continue;
-+		if (strncmp(sym->name, "__cfi_", 6))
-+			continue;
- 
--			idx++;
--		}
-+		idx++;
- 	}
- 
- 	sec = elf_create_section(file->elf, ".cfi_sites", 0, sizeof(unsigned int), idx);
-@@ -957,28 +952,23 @@ static int create_cfi_sections(struct objtool_file *file)
- 		return -1;
- 
- 	idx = 0;
--	for_each_sec(file, s) {
--		if (!s->text)
-+	for_each_sym(file, sym) {
-+		if (sym->type != STT_FUNC)
- 			continue;
- 
--		list_for_each_entry(sym, &s->symbol_list, list) {
--			if (sym->type != STT_FUNC)
--				continue;
--
--			if (strncmp(sym->name, "__cfi_", 6))
--				continue;
-+		if (strncmp(sym->name, "__cfi_", 6))
-+			continue;
- 
--			loc = (unsigned int *)sec->data->d_buf + idx;
--			memset(loc, 0, sizeof(unsigned int));
-+		loc = (unsigned int *)sec->data->d_buf + idx;
-+		memset(loc, 0, sizeof(unsigned int));
- 
--			if (elf_add_reloc_to_insn(file->elf, sec,
--						  idx * sizeof(unsigned int),
--						  R_X86_64_PC32,
--						  s, sym->offset))
--				return -1;
-+		if (elf_add_reloc_to_insn(file->elf, sec,
-+					  idx * sizeof(unsigned int),
-+					  R_X86_64_PC32,
-+					  sym->sec, sym->offset))
-+			return -1;
- 
--			idx++;
--		}
-+		idx++;
- 	}
- 
- 	return 0;
-@@ -2205,23 +2195,20 @@ static int add_func_jump_tables(struct objtool_file *file,
-  */
- static int add_jump_table_alts(struct objtool_file *file)
- {
--	struct section *sec;
- 	struct symbol *func;
- 	int ret;
- 
- 	if (!file->rodata)
- 		return 0;
- 
--	for_each_sec(file, sec) {
--		list_for_each_entry(func, &sec->symbol_list, list) {
--			if (func->type != STT_FUNC)
--				continue;
-+	for_each_sym(file, func) {
-+		if (func->type != STT_FUNC)
-+			continue;
- 
--			mark_func_jump_tables(file, func);
--			ret = add_func_jump_tables(file, func);
--			if (ret)
--				return ret;
--		}
-+		mark_func_jump_tables(file, func);
-+		ret = add_func_jump_tables(file, func);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return 0;
-@@ -2533,30 +2520,27 @@ static bool is_profiling_func(const char *name)
- 
- static int classify_symbols(struct objtool_file *file)
- {
--	struct section *sec;
- 	struct symbol *func;
- 
--	for_each_sec(file, sec) {
--		list_for_each_entry(func, &sec->symbol_list, list) {
--			if (func->bind != STB_GLOBAL)
--				continue;
-+	for_each_sym(file, func) {
-+		if (func->bind != STB_GLOBAL)
-+			continue;
- 
--			if (!strncmp(func->name, STATIC_CALL_TRAMP_PREFIX_STR,
--				     strlen(STATIC_CALL_TRAMP_PREFIX_STR)))
--				func->static_call_tramp = true;
-+		if (!strncmp(func->name, STATIC_CALL_TRAMP_PREFIX_STR,
-+			     strlen(STATIC_CALL_TRAMP_PREFIX_STR)))
-+			func->static_call_tramp = true;
- 
--			if (arch_is_retpoline(func))
--				func->retpoline_thunk = true;
-+		if (arch_is_retpoline(func))
-+			func->retpoline_thunk = true;
- 
--			if (arch_is_rethunk(func))
--				func->return_thunk = true;
-+		if (arch_is_rethunk(func))
-+			func->return_thunk = true;
- 
--			if (arch_ftrace_match(func->name))
--				func->fentry = true;
-+		if (arch_ftrace_match(func->name))
-+			func->fentry = true;
- 
--			if (is_profiling_func(func->name))
--				func->profiling_func = true;
--		}
-+		if (is_profiling_func(func->name))
-+			func->profiling_func = true;
- 	}
- 
- 	return 0;
-@@ -4222,7 +4206,7 @@ static int validate_section(struct objtool_file *file, struct section *sec)
- 	struct symbol *func;
- 	int warnings = 0;
- 
--	list_for_each_entry(func, &sec->symbol_list, list) {
-+	sec_for_each_sym(sec, func) {
- 		if (func->type != STT_FUNC)
- 			continue;
- 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 6806ce01d933..500e92979a31 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -474,7 +474,7 @@ static int read_symbols(struct elf *elf)
- 
- 	/* Create parent/child links for any cold subfunctions */
- 	list_for_each_entry(sec, &elf->sections, list) {
--		list_for_each_entry(sym, &sec->symbol_list, list) {
-+		sec_for_each_sym(sec, sym) {
- 			char pname[MAX_NAME_LEN + 1];
- 			size_t pnamelen;
- 			if (sym->type != STT_FUNC)
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index a668173a5869..78e2d0fc21ca 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -189,4 +189,13 @@ struct symbol *find_func_containing(struct section *sec, unsigned long offset);
- #define for_each_sec(file, sec)						\
- 	list_for_each_entry(sec, &file->elf->sections, list)
- 
-+#define sec_for_each_sym(sec, sym)					\
-+	list_for_each_entry(sym, &sec->symbol_list, list)
++/* 'funcs' is a space-separated list of function names */
++static int disas_funcs(const char *funcs)
++{
++	const char *objdump_str, *cross_compile;
++	int size, ret;
++	char *cmd;
 +
-+#define for_each_sym(file, sym)						\
-+	for (struct section *__sec, *__fake = (struct section *)1;	\
-+	     __fake; __fake = NULL)					\
-+		for_each_sec(file, __sec)				\
-+			sec_for_each_sym(__sec, sym)
++	cross_compile = getenv("CROSS_COMPILE");
 +
- #endif /* _OBJTOOL_ELF_H */
++	objdump_str = "%sobjdump -wdr %s | gawk -M -v _funcs='%s' '"
++			"BEGIN { split(_funcs, funcs); }"
++			"/^$/ { func_match = 0; }"
++			"/<.*>:/ { "
++				"f = gensub(/.*<(.*)>:/, \"\\\\1\", 1);"
++				"for (i in funcs) {"
++					"if (funcs[i] == f) {"
++						"func_match = 1;"
++						"base = strtonum(\"0x\" $1);"
++						"break;"
++					"}"
++				"}"
++			"}"
++			"{"
++				"if (func_match) {"
++					"addr = strtonum(\"0x\" $1);"
++					"printf(\"%%04x \", addr - base);"
++					"print;"
++				"}"
++			"}' 1>&2";
++
++	/* fake snprintf() to calculate the size */
++	size = snprintf(NULL, 0, objdump_str, cross_compile, objname, funcs) + 1;
++	if (size <= 0) {
++		WARN("objdump string size calculation failed");
++		return -1;
++	}
++
++	cmd = malloc(size);
++
++	/* real snprintf() */
++	snprintf(cmd, size, objdump_str, cross_compile, objname, funcs);
++	ret = system(cmd);
++	if (ret) {
++		WARN("disassembly failed: %d", ret);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int disas_warned_funcs(struct objtool_file *file)
++{
++	struct symbol *sym;
++	char *funcs = NULL, *tmp;
++
++	for_each_sym(file, sym) {
++		if (sym->warned) {
++			if (!funcs) {
++				funcs = malloc(strlen(sym->name) + 1);
++				strcpy(funcs, sym->name);
++			} else {
++				tmp = malloc(strlen(funcs) + strlen(sym->name) + 2);
++				sprintf(tmp, "%s %s", funcs, sym->name);
++				free(funcs);
++				funcs = tmp;
++			}
++		}
++	}
++
++	if (funcs)
++		disas_funcs(funcs);
++
++	return 0;
++}
++
+ int check(struct objtool_file *file)
+ {
+ 	int ret, warnings = 0;
+@@ -4646,6 +4721,8 @@ int check(struct objtool_file *file)
+ 		warnings += ret;
+ 	}
+ 
++	if (opts.verbose)
++		disas_warned_funcs(file);
+ 
+ 	if (opts.stats) {
+ 		printf("nr_insns_visited: %ld\n", nr_insns_visited);
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index 2a108e648b7a..fcca6662c8b4 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -37,6 +37,7 @@ struct opts {
+ 	bool no_unreachable;
+ 	bool sec_address;
+ 	bool stats;
++	bool verbose;
+ };
+ 
+ extern struct opts opts;
 -- 
 2.39.2
 
