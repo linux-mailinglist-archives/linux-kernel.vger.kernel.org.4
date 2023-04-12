@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AD76DFB96
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5AB6DFB97
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjDLQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S230493AbjDLQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDLQnf (ORCPT
+        with ESMTP id S230378AbjDLQnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:43:35 -0400
+        Wed, 12 Apr 2023 12:43:41 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD7A7D86
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:42:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CA7ED7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317750;
+        s=mimecast20190719; t=1681317754;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9w4FTeM4b1xfAgG4y96DPCrYEWea1Mc83v+smBNR1Gs=;
-        b=X2ed2FD99jiNWvs0VoEgrMr8NFsHxsbfUYEgHcebia94OWpovljBSDdck4d/W2PJQarvBa
-        GXJQRXMDnfpkjJnzeNbP+lHXPXlhgwTikC5en5eb/AETXSQu8Q0RaNFIVi4kEBmTlepUpB
-        JIkOVvc8FaobEJ173dRGgt5ACk1Dzeg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=9VoJC4PMtOZChfNpsShin+Q92n+br8Q3f1O4OPEN8PE=;
+        b=LMnTkc8ogIha95Cp15TODO8WtDFGZq5myfIqOH/S7nV47vmLlIaiL4fZABS5fcY3AuG0v9
+        CRODK2E2EPMoEDCaRVULMvvlMiKZAzu1e9dBWNmCvK8GwW30P1aYALNbi7VuLx38JwyD9Z
+        3cgLZmxCbeA1i2BqcecNQ9e/rnXUJj8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-478-zzNHV1rjMxyKINPfiEgw2Q-1; Wed, 12 Apr 2023 12:42:28 -0400
-X-MC-Unique: zzNHV1rjMxyKINPfiEgw2Q-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74a25fcda05so77596285a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:42:28 -0700 (PDT)
+ us-mta-518-0yPeB1l5Nqeyve5oksbMLA-1; Wed, 12 Apr 2023 12:42:33 -0400
+X-MC-Unique: 0yPeB1l5Nqeyve5oksbMLA-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-5ef4122d2dbso1350526d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:42:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317747; x=1683909747;
+        d=1e100.net; s=20221208; t=1681317751; x=1683909751;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9w4FTeM4b1xfAgG4y96DPCrYEWea1Mc83v+smBNR1Gs=;
-        b=bqaC5+jCyPvCOAd8FnsDXxbVFyJTSR1uhWL2tsbup6MnPNXWWcPadIg8NAEXWSuHix
-         gRTqJyfVwYdVhqQimzBYVUohh6FOUVd3uPBdXOGjO6udQbx+l8rT0jbLv9PENSyjZzi5
-         zssPEOTl3cwqNNDssQsMEvS1kEF+cPV7uMKIEetFaWeMHYiQRe6VrhUJQjhmlEBpjOYW
-         FTX1NkOCLGdGoY+fwfioBy8XRlUbgg0uEZNFOYWbiE7ZQneftvwpjOBuAQtNimB2qe/o
-         WAKsqPaxsIdszM6p8HzBSaDHX5C6hZyV+je3TDbRhVWnpdxgtzX9FvbVkHU9/qybm56T
-         qzlA==
-X-Gm-Message-State: AAQBX9eq5K6LkEHw2GdSP+TxhMCUezvH9gwxsEJmiwLN6rN58w+Jq+9x
-        OnKKV4z7vhtvqGl1f/GqLx0TfD023fQkHNxtBw8fEut4F05pavSjPe+KiF6S6AUOKEOlgLUvAta
-        K1ymFwAgIgqCrkUpr5LOVogFhlEHtkeWrfe+29wZ/C2trtbg046hM9h8i0ILKZ1ZduTFd2xQaTp
-        XKMe/LkA==
-X-Received: by 2002:ac8:5cc8:0:b0:3e6:707e:d3b1 with SMTP id s8-20020ac85cc8000000b003e6707ed3b1mr5012782qta.0.1681317747187;
-        Wed, 12 Apr 2023 09:42:27 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YVvSHn+CiNqMbEanS4Hm6vnJ4+dDPCuFu7aqhBaI35sD13aR8Lht4vPI828Te9foEW+WzjQg==
-X-Received: by 2002:ac8:5cc8:0:b0:3e6:707e:d3b1 with SMTP id s8-20020ac85cc8000000b003e6707ed3b1mr5012723qta.0.1681317746702;
-        Wed, 12 Apr 2023 09:42:26 -0700 (PDT)
+        bh=9VoJC4PMtOZChfNpsShin+Q92n+br8Q3f1O4OPEN8PE=;
+        b=dMUy3gs4BYEjDhUpuPYiA1u6gBm+S3vgc9BnxI+OHzZNPNCTczYuiXgkDWxMcr91oO
+         89ySgtiFh8KBpKaKbmQM/6lkrSuqq1m6TdB6A8xXFsfI9cG0xdKVYuSHkf3WK5fYQJIg
+         y7jIgwu3KyR8Kkly2wJfEdW4P6EmPpp5zRIPZaoF+YNWhY0xOIQ40QoOdy98wwxqDiRZ
+         hjQTV24LqxTlnbdSPcVvYtyS8XqdKbU9yrtIPZUZu1Bj+yEMWIOHbHhkuUIlTK2+WUbT
+         NH6AqACVxdvg9xphmc2/8eUvLHZZqz/5qzJY+hakL1cGjSR9EXFtaW3kWJFiySedJYBK
+         Zt/A==
+X-Gm-Message-State: AAQBX9eW7OtmT/VWHaPO98FkPETh+nbR/aJ9MDhL6DpJyZKh7h7e7tbm
+        1xuJFPM7ifVKJ6cTeiYmB15Ymu4C43E0G6nfHetvSS3gBuijWq9f9+ttBoIgNvYXlZYGTRxVhVt
+        vRt7u29ZryiipGLo3/CWeAW8KreFWzEbkNTuL+yEASjzpRAnHqmttLD8emB7mibo2wKqKCBL0gy
+        TMKAiqmg==
+X-Received: by 2002:a05:6214:4105:b0:5de:5da:b873 with SMTP id kc5-20020a056214410500b005de05dab873mr4439636qvb.3.1681317751517;
+        Wed, 12 Apr 2023 09:42:31 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bKIhyvFE421MNKeiw66bcLbViwoq88DKthBLMNBPxf9F5dEOECVmGzHn09x9YPggLZEnerFA==
+X-Received: by 2002:a05:6214:4105:b0:5de:5da:b873 with SMTP id kc5-20020a056214410500b005de05dab873mr4439540qvb.3.1681317750348;
+        Wed, 12 Apr 2023 09:42:30 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id c24-20020ac85198000000b003e3c23dd2cfsm4353889qtn.84.2023.04.12.09.42.24
+        by smtp.gmail.com with ESMTPSA id j188-20020a3787c5000000b00749fa9e12e9sm4778767qkd.124.2023.04.12.09.42.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:42:25 -0700 (PDT)
+        Wed, 12 Apr 2023 09:42:29 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -68,9 +68,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
         peterx@redhat.com, Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH v2 07/31] selftests/mm: Merge default_huge_page_size() into one
-Date:   Wed, 12 Apr 2023 12:42:23 -0400
-Message-Id: <20230412164223.328134-1-peterx@redhat.com>
+Subject: [PATCH v2 08/31] selftests/mm: Use PM_* macros in vm_utils.h
+Date:   Wed, 12 Apr 2023 12:42:27 -0400
+Message-Id: <20230412164227.328145-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
 References: <20230412163922.327282-1-peterx@redhat.com>
@@ -86,178 +86,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There're already 3 same definitions of the three functions.  Move it into
-vm_util.[ch].
+We've got the macros in uffd-stress.c, move it over and use it in
+vm_util.h.
 
 Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/hugetlb-madvise.c | 25 +-------------------
- tools/testing/selftests/mm/thuge-gen.c       | 19 +--------------
- tools/testing/selftests/mm/userfaultfd.c     | 24 -------------------
- tools/testing/selftests/mm/vm_util.c         | 21 ++++++++++++++++
- tools/testing/selftests/mm/vm_util.h         |  1 +
- 5 files changed, 24 insertions(+), 66 deletions(-)
+ tools/testing/selftests/mm/userfaultfd.c |  8 --------
+ tools/testing/selftests/mm/vm_util.c     | 16 ++++------------
+ tools/testing/selftests/mm/vm_util.h     |  8 ++++++++
+ 3 files changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 9a127a8fe176..28426e30d9bc 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -18,6 +18,7 @@
- #include <unistd.h>
- #include <sys/mman.h>
- #include <fcntl.h>
-+#include "vm_util.h"
- 
- #define MIN_FREE_PAGES	20
- #define NR_HUGE_PAGES	10	/* common number of pages to map/allocate */
-@@ -35,30 +36,6 @@
- unsigned long huge_page_size;
- unsigned long base_page_size;
- 
--/*
-- * default_huge_page_size copied from mlock2-tests.c
-- */
--unsigned long default_huge_page_size(void)
--{
--	unsigned long hps = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
--
--	if (!f)
--		return 0;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "Hugepagesize:       %lu kB", &hps) == 1) {
--			hps <<= 10;
--			break;
--		}
--	}
--
--	free(line);
--	fclose(f);
--	return hps;
--}
--
- unsigned long get_free_hugepages(void)
- {
- 	unsigned long fhp = 0;
-diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-index 361ef7192cc6..380ab5f0a534 100644
---- a/tools/testing/selftests/mm/thuge-gen.c
-+++ b/tools/testing/selftests/mm/thuge-gen.c
-@@ -24,6 +24,7 @@
- #include <unistd.h>
- #include <stdarg.h>
- #include <string.h>
-+#include "vm_util.h"
- 
- #define err(x) perror(x), exit(1)
- 
-@@ -74,24 +75,6 @@ void find_pagesizes(void)
- 	globfree(&g);
- }
- 
--unsigned long default_huge_page_size(void)
--{
--	unsigned long hps = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
--	if (!f)
--		return 0;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "Hugepagesize:       %lu kB", &hps) == 1) {
--			hps <<= 10;
--			break;
--		}
--	}
--	free(line);
--	return hps;
--}
--
- void show(unsigned long ps)
- {
- 	char buf[100];
 diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index a96d126cb40e..4cc80a0e8955 100644
+index 4cc80a0e8955..7e841f7e2884 100644
 --- a/tools/testing/selftests/mm/userfaultfd.c
 +++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -1703,30 +1703,6 @@ static int userfaultfd_stress(void)
- 		|| userfaultfd_events_test() || userfaultfd_minor_test();
+@@ -1389,14 +1389,6 @@ static int userfaultfd_minor_test(void)
+ 	return stats.missing_faults != 0 || stats.minor_faults != nr_pages;
  }
  
--/*
-- * Copied from mlock2-tests.c
-- */
--unsigned long default_huge_page_size(void)
--{
--	unsigned long hps = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
+-#define BIT_ULL(nr)                   (1ULL << (nr))
+-#define PM_SOFT_DIRTY                 BIT_ULL(55)
+-#define PM_MMAP_EXCLUSIVE             BIT_ULL(56)
+-#define PM_UFFD_WP                    BIT_ULL(57)
+-#define PM_FILE                       BIT_ULL(61)
+-#define PM_SWAP                       BIT_ULL(62)
+-#define PM_PRESENT                    BIT_ULL(63)
 -
--	if (!f)
--		return 0;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "Hugepagesize:       %lu kB", &hps) == 1) {
--			hps <<= 10;
--			break;
--		}
--	}
--
--	free(line);
--	fclose(f);
--	return hps;
--}
--
- static void set_test_type(const char *type)
+ static int pagemap_open(void)
  {
- 	if (!strcmp(type, "anon")) {
+ 	int fd = open("/proc/self/pagemap", O_RDONLY);
 diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 85411ee7ff8b..7ffad87aa7e8 100644
+index 7ffad87aa7e8..54d227d6f70a 100644
 --- a/tools/testing/selftests/mm/vm_util.c
 +++ b/tools/testing/selftests/mm/vm_util.c
-@@ -180,3 +180,24 @@ int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+@@ -25,25 +25,17 @@ uint64_t pagemap_get_entry(int fd, char *start)
  
- 	return -1;
+ bool pagemap_is_softdirty(int fd, char *start)
+ {
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	// Check if dirty bit (55th bit) is set
+-	return entry & 0x0080000000000000ull;
++	return pagemap_get_entry(fd, start) & PM_SOFT_DIRTY;
  }
-+
-+unsigned long default_huge_page_size(void)
-+{
-+	unsigned long hps = 0;
-+	char *line = NULL;
-+	size_t linelen = 0;
-+	FILE *f = fopen("/proc/meminfo", "r");
-+
-+	if (!f)
-+		return 0;
-+	while (getline(&line, &linelen, f) > 0) {
-+		if (sscanf(line, "Hugepagesize:       %lu kB", &hps) == 1) {
-+			hps <<= 10;
-+			break;
-+		}
-+	}
-+
-+	free(line);
-+	fclose(f);
-+	return hps;
-+}
+ 
+ bool pagemap_is_swapped(int fd, char *start)
+ {
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	return entry & 0x4000000000000000ull;
++	return pagemap_get_entry(fd, start) & PM_SWAP;
+ }
+ 
+ bool pagemap_is_populated(int fd, char *start)
+ {
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	/* Present or swapped. */
+-	return entry & 0xc000000000000000ull;
++	return pagemap_get_entry(fd, start) & (PM_PRESENT | PM_SWAP);
+ }
+ 
+ unsigned long pagemap_get_pfn(int fd, char *start)
+@@ -51,7 +43,7 @@ unsigned long pagemap_get_pfn(int fd, char *start)
+ 	uint64_t entry = pagemap_get_entry(fd, start);
+ 
+ 	/* If present (63th bit), PFN is at bit 0 -- 54. */
+-	if (entry & 0x8000000000000000ull)
++	if (entry & PM_PRESENT)
+ 		return entry & 0x007fffffffffffffull;
+ 	return -1ul;
+ }
 diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 6edeb531afc6..d7163fff8fb7 100644
+index d7163fff8fb7..d9fadddb5c69 100644
 --- a/tools/testing/selftests/mm/vm_util.h
 +++ b/tools/testing/selftests/mm/vm_util.h
-@@ -35,6 +35,7 @@ bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size);
- bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size);
- bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size);
- int64_t allocate_transhuge(void *ptr, int pagemap_fd);
-+unsigned long default_huge_page_size(void);
+@@ -6,6 +6,14 @@
+ #include <string.h> /* ffsl() */
+ #include <unistd.h> /* _SC_PAGESIZE */
  
- /*
-  * On ppc64 this will only work with radix 2M hugepage size
++#define BIT_ULL(nr)                   (1ULL << (nr))
++#define PM_SOFT_DIRTY                 BIT_ULL(55)
++#define PM_MMAP_EXCLUSIVE             BIT_ULL(56)
++#define PM_UFFD_WP                    BIT_ULL(57)
++#define PM_FILE                       BIT_ULL(61)
++#define PM_SWAP                       BIT_ULL(62)
++#define PM_PRESENT                    BIT_ULL(63)
++
+ extern unsigned int __page_size;
+ extern unsigned int __page_shift;
+ 
 -- 
 2.39.1
 
