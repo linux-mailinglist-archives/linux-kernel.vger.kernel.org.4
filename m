@@ -2,251 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AF56DF8A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510EE6DF8A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjDLOgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S231636AbjDLOg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjDLOfz (ORCPT
+        with ESMTP id S231691AbjDLOgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:35:55 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686B903A;
-        Wed, 12 Apr 2023 07:35:33 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id ld14so9576749qvb.13;
-        Wed, 12 Apr 2023 07:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681310132; x=1683902132;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZHkcIU7rc3ebfaK8LBPNnKR0o/dDri4Ykk2Lt1sdDxc=;
-        b=lnTFwKmjT4HteMYgDgpyDfifNh4fEwpWx1sGbpanoJvBVNU2usgiSQtu/1/FOgJjz8
-         C3XfiGZtufrjKtNvlnTuH+AoLhvUqKylYk7Gds3Q22PmVHhf4fkFQ4dJOTAaNR85b+HQ
-         BB6p1iWHoR1FtsS2Kr2+GdPfa40xolMUCvRnvAND7EMWTQ2K+pkwULMK8bKcKpHJLccf
-         toKW1qexK1S4vDX7AbuFZ3jguuEOpZ+xoa9U3WZ/KFXgQTB+ltQ0HNigqIGLxjO0GoHK
-         Gd9eO6/aeaCQKXWnevUN+JOuYVnSXDksB0RMMIE/kMFU8CXv6IqVNSDyMWck6PeffV2x
-         mohw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681310132; x=1683902132;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZHkcIU7rc3ebfaK8LBPNnKR0o/dDri4Ykk2Lt1sdDxc=;
-        b=PbPPlmuQSn+o1soejC5USZ4HNv3LODVgRO0PNTr5SYWubtrkjlZprU4y9xe4BF7J7U
-         +hcmDBGLSUdzjjN+0sS4h7AlkfXRT/Nh6pdEgGjPA/6LbAc/fcIyhP/qU+mE9DsAueLN
-         2JyMSqN117u1RLJC0TkL8WnYz/50fOrN3eXwqkTNSe78F6mvJ1XRIUiR826LLbQ3IMGB
-         1SZsCrrzIE79dEOPcsMkRqcWe+cEtgDhr7ipUZSQ99RsKGPIJuUGPxe35HNKXlP7sai/
-         5RuBaMMHqnMQC6IASwbvO0brdUNvdXhjAWpkwV3wE/NqFw46BJz4rOJEzDbj7xz+4SiJ
-         /hSA==
-X-Gm-Message-State: AAQBX9evLvEWVi0YaMBGrokgzg85d/qlUqDfQ+u0JbluUld3DiYwdJ9b
-        53Y0Y9XTM1eyQFFPb7v1vvU=
-X-Google-Smtp-Source: AKy350YF5VGAX6u7avFkWoscCQE0TC9bRSdNMax3xT7GNZDlhSlwsDNUbxA8sxKQDtmMIg5w8aLHpg==
-X-Received: by 2002:a05:6214:f2f:b0:5e6:aa6a:1b with SMTP id iw15-20020a0562140f2f00b005e6aa6a001bmr28302024qvb.49.1681310132522;
-        Wed, 12 Apr 2023 07:35:32 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id mb4-20020a056214550400b005dd8b934585sm4870364qvb.29.2023.04.12.07.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:35:31 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4828727C0054;
-        Wed, 12 Apr 2023 10:35:30 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 12 Apr 2023 10:35:31 -0400
-X-ME-Sender: <xms:ssE2ZOHWm-D6f07-5N-6isWgKr9hqqrYnvDmwLSeEIiagFLmqRnHcg>
-    <xme:ssE2ZPW_yiKF8w7yPzi7QnvJvfMto08y4nGc1uUPXndD2rbcU6Jra4oMcTr6lY4uM
-    OYTVv6AvQ9lWgDQRQ>
-X-ME-Received: <xmr:ssE2ZIIxBlzT1WmbsIiQoDqJbrrTGagKmJjbMlYh6fqH9fK_rqhO89ToTXBO0YYm1vup9y8RxlH_eE7V1rhqxvuAtJELEORUWjw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeeitdefvefhteeklefgtefhgeelkeefffelvdevhfehueektdevhfettddv
-    teevvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:ssE2ZIFM2WO5Y-um_ggwBVVpGwVwESHnCxUWyguYQ0NqxgOEN-TniA>
-    <xmx:ssE2ZEU9cV-2Bcrx3oUUG3mwektPsUjyVF2TRP9y8BXJrTS66MH9tg>
-    <xmx:ssE2ZLOwxTLu4fZ3AO_yV1gXh-uORnfOdCA_4c5XEikL0EOPrDde6g>
-    <xmx:ssE2ZIp-jNDzlE_11AeAIzslqmo7d9wW5CPhYylVg7YRhmZItLycfg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Apr 2023 10:35:30 -0400 (EDT)
-Date:   Wed, 12 Apr 2023 07:35:28 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v4 11/13] rust: lock: add `Guard::do_unlocked`
-Message-ID: <ZDbBsBIZwMhbquRG@Boquns-Mac-mini.local>
-References: <20230411054543.21278-1-wedsonaf@gmail.com>
- <20230411054543.21278-11-wedsonaf@gmail.com>
- <ZDZOzzMvvxr4rsW4@Boquns-Mac-mini.local>
- <CANeycqqpR6Gs5Qb_pc2j_QV-JAc8xR360vth6We8xWU1GU5ASA@mail.gmail.com>
+        Wed, 12 Apr 2023 10:36:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7AC9745;
+        Wed, 12 Apr 2023 07:35:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7229562D9C;
+        Wed, 12 Apr 2023 14:35:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B94C433EF;
+        Wed, 12 Apr 2023 14:35:46 +0000 (UTC)
+Message-ID: <2c3105d4-2e60-e77a-df5d-e2a7e37c6f4a@xs4all.nl>
+Date:   Wed, 12 Apr 2023 16:35:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANeycqqpR6Gs5Qb_pc2j_QV-JAc8xR360vth6We8xWU1GU5ASA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 00/14] Adjust the dma-ranges for MTK IOMMU
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        nfraprado@collabora.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        jianjiao.zeng@mediatek.com, Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com
+References: <20230411093144.2690-1-yong.wu@mediatek.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230411093144.2690-1-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 08:07:40AM -0300, Wedson Almeida Filho wrote:
-> On Wed, 12 Apr 2023 at 03:25, Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > On Tue, Apr 11, 2023 at 02:45:41AM -0300, Wedson Almeida Filho wrote:
-> > [...]
-> > > +
-> > > +    unsafe fn relock(ptr: *mut Self::State, guard_state: &mut Self::GuardState) {
-> > > +        let _ = match guard_state {
-> > > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> > > +            // initialised.
-> > > +            None => unsafe { Self::lock(ptr) },
-> > > +            // SAFETY: The safety requiments of this function ensure that `ptr` has been
-> > > +            // initialised.
-> > > +            Some(_) => unsafe { Self::lock_irqsave(ptr) },
-> > > +        };
-> > > +    }
-> > >  }
-> > >
-> >
-> > One thing I'm little worried about the above is that we don't store back
-> > the new GuardState into `guard_state`, the particular case I'm worried
-> > about is as follow:
-> >
-> >         // IRQ is enabled.
-> >         // Disabling IRQ
-> >         unsafe { bindings::local_irq_disable(); }
-> >
-> >         let mut g = unsafe { SpinLockBackend::lock(&mut lock as *mut _) };
-> >         // `g` records irq state is "irq disabled"
-> >
-> >         unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
-> >         // restore into "irq disabled" mode.
-> >         // IRQ is disabled.
-> >
-> >         // Enabling IRQ
-> >         unsafe { bindings::local_irq_enable(); }
-> >         // IRQ is enabled.
-> >
-> >         unsafe { SpinLockBackend::relock(&mut lock as *mut _, &mut g) }
-> >         // `g` still records irq state is "irq disabled"
+On 11/04/2023 11:31, Yong Wu wrote:
+> After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+> controllers"), the dma-ranges is not allowed for dts leaf node.
+> but we still would like to separate the different masters into
+> different iova regions. Thus we adjust the internal flow, separate
+> the 16GB iova range by the master HW larbid/portid and add the
+> dma-ranges property in the parent "soc" node. This also could avoid
+> the users forget/abuse the iova regions.
 > 
-> Yes, that's by design. If you want it to record the new "irq enabled"
-> state, then you should call `lock()`, not `relock()`.
+> The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
+> a fatal issue, it could also work well at 0-4GB iova. thus I don't
+> add "Fixes:" tag.
 > 
-> >         unsafe { SpinLockBackend::unlock(&mut lock as *mut _, &g); }
-> >         // restore into "irq disabled" mode.
-> >         // IRQ is disabled.
-> >
-> >
-> > This looks pretty scary to me, I would expect `relock()` updates the
-> > latest GuardState to the guard. Any reason it's implemented this way?
-> 
-> A `relock()` followed by an `unlock()` takes the state back to how it
-> was when `lock()` was originally called: this is precisely why
-> `relock()` exists.
-> 
-> Consider the following case:
-> 
-> ```
-> local_disable_irq();
-> let mut guard = spinlock.lock();
+> In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+> be in its special patchset. and the previous mt8173/mt8183...support
+> 0-4GB only, no need this function.
 
-I think you meant `spinlock.lock_irqsave()` here, right?
-
-> 
-> guard.do_unlocked(|| {
->     local_irq_enable();
->     schedule();
-> });
-> 
-> drop(guard);
-> ```
-> 
-> What would you expect the state to be? It's meant to be the state
-
-I understand your point but I would expect people to code like:
-
-```
-local_disable_irq();
-let mut guard = spinlock.lock(); // or lock_irqsave(), doesn't matter
-
-guard.do_unlocked(|| {
-    local_irq_enable();
-    schedule();
-    local_irq_disable();
-});
-
-drop(guard);
-```
-
-And the closure in do_unlocked() can also be something like:
-```
-	guard.do_unlocked(|| {
-	    local_irq_enabled();
-	    let _g = ScopeGuard::new(|| {
-	        local_irq_disabled();
-	    });
-
-	    schedule();
-
-	    if (some_cond) {
-	    	return; // return early
-	    }
-
-	    if (other_cond) {
-	    	return;
-	    }
-	})
-
-```
-
-One benefit (other that code looks symmetric) is we can use the same
-closure in other place. Also it helps klint since we keep the irq
-enablement state change as local as possible: we can go ahead and
-require irq enabled state should not be changed between the closure in
-do_unlock().
-
-Maybe I'm missing something, but the current `relock` semantics is
-really tricky to get ;-)
+I've Acked patches 10 and 11 as well. I assume this series will be merged
+through the iommu subsystem? If not, and I need to take the media patches,
+then please let me know!
 
 Regards,
-Boqun
 
-> right before `spinlock.lock()` was called, that's what the guard
-> represents.
+	Hans
+
 > 
-> If you want to preserve a new state, then you don't want `relock()`,
-> you just want a new `lock()` call.
+> Change note:
+> v7: Remove the change about mediatek,vcodec-subdev-decoder.yaml since
+>     this was merged at:
+>     https://lore.kernel.org/all/98c48690-631d-1086-9b7c-004c61cc8dbb@xs4all.nl/
 > 
-> > Regards,
-> > Boqun
-> >
-> > >  // SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion. We use the `irqsave`
-> > >  // variant of the C lock acquisition functions to disable interrupts and retrieve the original
-> > >  // interrupt state, and the `irqrestore` variant of the lock release functions to restore the state
-> > >  // in `unlock` -- we use the guard context to determine which method was used to acquire the lock.
-> > > -unsafe impl super::IrqSaveBackend for SpinLockBackend {
-> > > +unsafe impl IrqSaveBackend for SpinLockBackend {
-> > >      unsafe fn lock_irqsave(ptr: *mut Self::State) -> Self::GuardState {
-> > >          // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
-> > >          // memory, and that it has been initialised before.
-> > > --
-> > > 2.34.1
-> > >
+> v6: https://lore.kernel.org/linux-mediatek/20230403091337.26745-1-yong.wu@mediatek.com/
+>    Add three patches for set dma-mask for iommu master devices.
+> 
+> v5: Nothing change. Just rebase on v6.3-rc1.
+> 
+> v4: https://lore.kernel.org/linux-mediatek/20230215062544.8677-1-yong.wu@mediatek.com/
+>     Improve the comment in the code from AngeloGioacchino.
+> 
+> v3: https://lore.kernel.org/linux-mediatek/20230214031114.926-1-yong.wu@mediatek.com/
+>    Add a new patch only for comment more in the code.
+> 
+> v2: https://lore.kernel.org/linux-mediatek/20230208053643.28249-1-yong.wu@mediatek.com/
+>    a) Base on next-20230206 since mt8195 jpeg node is applied which affect
+>       this patch.
+>    b) Reword the commit message [1/10][2/10] to explain effect.
+> 
+> v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
+>    Base on v6.2-rc3.
+> 
+> Yong Wu (14):
+>   dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+>   dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+>   iommu/mediatek: Improve comment for the current region/bank
+>   iommu/mediatek: Get regionid from larb/port id
+>   iommu/mediatek: mt8192: Add iova_region_larb_msk
+>   iommu/mediatek: mt8195: Add iova_region_larb_msk
+>   iommu/mediatek: mt8186: Add iova_region_larb_msk
+>   iommu/mediatek: Add a gap for the iova regions
+>   iommu/mediatek: Set dma_mask for the master devices
+>   media: mtk-jpegdec: Remove the setting for dma_mask
+>   media: mediatek: vcodec: Remove the setting for dma_mask
+>   arm64: dts: mt8195: Remove the unnecessary dma-ranges
+>   arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+>   arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+> 
+>  .../media/mediatek,mt8195-jpegdec.yaml        |   7 -
+>  .../media/mediatek,mt8195-jpegenc.yaml        |   7 -
+>  .../media/mediatek,vcodec-decoder.yaml        |   5 -
+>  .../media/mediatek,vcodec-encoder.yaml        |   5 -
+>  .../bindings/media/mediatek-jpeg-encoder.yaml |   5 -
+>  arch/arm64/boot/dts/mediatek/mt8186.dtsi      |   1 +
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   4 +-
+>  drivers/iommu/mtk_iommu.c                     | 145 ++++++++++++++----
+>  .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   3 -
+>  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   8 -
+>  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   3 -
+>  11 files changed, 117 insertions(+), 76 deletions(-)
+> 
+
