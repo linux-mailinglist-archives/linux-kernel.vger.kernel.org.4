@@ -2,283 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452A66DF8E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3456DF8E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjDLOs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S231461AbjDLOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjDLOsZ (ORCPT
+        with ESMTP id S231514AbjDLOtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:48:25 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2375270D;
-        Wed, 12 Apr 2023 07:48:23 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id w19so7832845oiv.13;
-        Wed, 12 Apr 2023 07:48:23 -0700 (PDT)
+        Wed, 12 Apr 2023 10:49:52 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024A3C39
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:49:50 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id l65so5662258pge.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:49:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681310903; x=1683902903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qS3hYdnU5xcu/lAn2aqBm7KdfQRCnBBjsCUZoLhBBfU=;
-        b=POaB9YWgM7l/cRCo6XVrBEokLH6J+732xazwRJ800/Wm8kKGkHt+cXEDpVZe+7Hrex
-         gEsDuepH63O2t1hisRhlrszgcYa2uAHsCazTz/2H0aALnNbXYCV4DFQ1100Vy30fO6by
-         PiCBR9vzzjDqTKEuDoPXAFL1nBZhKMRlIawHIfe2bDE6OILaj922WSzubrrQTlVKqA01
-         h2cXiNPBDtbRQVKEBKZK7pWQNT9lS4PQukvwN5vv/UiufNBi+HjXbVlIOwavNF3fuCs6
-         xYJky3g3y8pW7EJGyctwnEBr9OoEX1RR6t3FbqTQFk4qrxlu66JjOb9kUJ5SGj+EjLUC
-         CnfQ==
+        d=linaro.org; s=google; t=1681310989; x=1683902989;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ztWidINP8YwO0bC7WtdIk0SX/61cpqWYB08wbt883N0=;
+        b=aL3cgURGEeDn/oolDseqJs8fZiEv4cmAH17BPAeSfd5YpAa0cMjRT5SMUHswgNKcON
+         Lnw973g5Z6TQ1QVujZ+f0E3CSESCkQ8LoEIGFMlf8oJgY/hAUuJec33Y6Og2DypBTT/v
+         SMTrZrBQnm3O5lNagP45FcZHn+Wk56BbOo4DZ6X/z+6X2G8LaInLq2+lnjPo05ttSrdT
+         zwE1VZb5EaCHZW/8nNCVsGO762RBUkpM5K7hpsKlrZdLf+Klkx9tTUR995ix//mJ+IFs
+         TJ5ci81bm2n9et0BCf1gCQhJCpA08M308PZaFZ99dWyzqyK0hwKIQO1hciDXeudsWjc7
+         jBtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681310903; x=1683902903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qS3hYdnU5xcu/lAn2aqBm7KdfQRCnBBjsCUZoLhBBfU=;
-        b=hBk8YgOktuVCtj1Xy0C/at0o1mTHeJZl8XXnQOe76m+AGxQaHviejFnukYJu/vXD33
-         ydYZP0Ry3pWslNsqoJ0si83E3eswH9ykUDQyrmVRdoUxyjdUlNBjEc4TKhSMrmlx45Lm
-         rITmMAD9ka0xR2jDAZj1r7HPdwb/t8PZpQaoRsilpLS7N0d/9QyjQpuYFTuLHRpUEA+g
-         bzM4WM3zyvMlIj/lwjUhG9AN1OUtx1W3FAka92bu4Xx4nLHPJT838wjEr33fSIjAXSTQ
-         eaakxRZW5r3KkqpuDQ5bwAeH6nGsOUPG6L7u6yMhUQD50WqacO5zaNgUOsdRb09RtBhj
-         QGrQ==
-X-Gm-Message-State: AAQBX9cwRqethR4qqeaMzj5G3ps5mFn6gX1Ddri316y7q5iIrEtAMy+J
-        Y6I6r70KceQYpND2ty3POX/jqApi3XM=
-X-Google-Smtp-Source: AKy350ajcMhrsW3Y9OTaNeua1UqYHDpv2ZC5wZflKYTxLIZ7tUkJV7Y1k4oNnLhQ7pk+VNWkn/4jGg==
-X-Received: by 2002:aca:2203:0:b0:38b:f0a7:9ce1 with SMTP id b3-20020aca2203000000b0038bf0a79ce1mr1036133oic.52.1681310903125;
-        Wed, 12 Apr 2023 07:48:23 -0700 (PDT)
-Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:ba9a:13a3:70d3:912])
-        by smtp.gmail.com with ESMTPSA id o2-20020a0568080bc200b0038413a012dasm6667894oik.4.2023.04.12.07.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:48:22 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v9] HP BIOSCFG driver - Documentation
-Date:   Wed, 12 Apr 2023 09:48:21 -0500
-Message-Id: <20230412144821.5716-1-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1681310989; x=1683902989;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ztWidINP8YwO0bC7WtdIk0SX/61cpqWYB08wbt883N0=;
+        b=511Z7dnoHWyXSKupgM3XqcOGciyaBqDtXjF+Fn9rm8QEvZ2TSqe/+bSxrhNZDBdF6L
+         6+gvSA/agCd3umFPax3jrxJLU416Z6I4RHE3uxrBnpptSC1MntwnlINEqOh+59DgjeNJ
+         YYqbDDWYm05fB4oyccqM2bYkYsDjRi7yPi+yUdIUHesVqSJSKY4Mgyf12h3EtZpsTWYx
+         oXOys8Ftkxggi8jd6vwd7sFOCmgNMNGHpy+mQ2JM6jmxJZwnAfc3SXiImu4f7oNOxQdF
+         JlFIyla2V/3FwWgOlXQht76EsnfGw6X3rZTw7nvxGLuipfmQ9jqv5J8kkHB/kzRCH2oC
+         g4/g==
+X-Gm-Message-State: AAQBX9cWMmYgMkyqGbKqvIhHgagNVvbvET/gr/wg/TBZ0QZrVvJR3OnB
+        m4wAiBiOuhnnBLRx9DBQDyhbMTVsMCwvqxVCZkFfaQ==
+X-Google-Smtp-Source: AKy350ZXeVRg5T7pUUiUGmJRsFm530punBegVDumEruYsSxBp0rdMDxOwrMdaLg660flmPhLoTF/+7y8VfJDhIA65Z4=
+X-Received: by 2002:a63:d741:0:b0:518:98f1:2467 with SMTP id
+ w1-20020a63d741000000b0051898f12467mr1948928pgi.11.1681310989475; Wed, 12 Apr
+ 2023 07:49:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-8-james.clark@arm.com>
+In-Reply-To: <20230404155121.1824126-8-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 12 Apr 2023 15:49:37 +0100
+Message-ID: <CAJ9a7VhGw2NSCNUyY9yF6XWVXvrk7M4BmxV9p5c7wFs+JG22_A@mail.gmail.com>
+Subject: Re: [PATCH v5 07/13] coresight: Store pointers to connections rather
+ than an array of them
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        suzuki.poulose@arm.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HP BIOS Configuration driver purpose is to provide a driver supporting
-the latest sysfs class firmware attributes framework allowing the user
-to change BIOS settings and security solutions on HP Inc.’s commercial
-notebooks.
+On Tue, 4 Apr 2023 at 16:52, James Clark <james.clark@arm.com> wrote:
+>
+> This will allow the same connection object to be referenced via the
+> input connection list in a later commit rather than duplicating them.
+>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/hwtracing/coresight/coresight-core.c  | 47 ++++++++++---------
+>  .../hwtracing/coresight/coresight-platform.c  | 19 ++++++--
+>  drivers/hwtracing/coresight/coresight-priv.h  |  1 +
+>  .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
+>  include/linux/coresight.h                     |  5 +-
+>  5 files changed, 44 insertions(+), 30 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 91274e7e6944..0b738960973b 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -119,7 +119,7 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
+>         struct coresight_connection *conn;
+>
+>         for (i = 0; i < parent->pdata->nr_outconns; i++) {
+> -               conn = &parent->pdata->out_conns[i];
+> +               conn = parent->pdata->out_conns[i];
+>                 if (conn->dest_dev == csdev)
+>                         return conn->dest_port;
+>         }
+> @@ -137,7 +137,7 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
+>         struct coresight_connection *conn;
+>
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> -               conn = &csdev->pdata->out_conns[i];
+> +               conn = csdev->pdata->out_conns[i];
+>                 if (conn->dest_dev == child)
+>                         return conn->src_port;
+>         }
+> @@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct coresight_device *csdev)
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>                 struct coresight_device *child_dev;
+>
+> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child_dev)
+>                         sink = coresight_find_enabled_sink(child_dev);
+>                 if (sink)
+> @@ -722,7 +722,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>                 struct coresight_device *child;
+>
+> -               child = csdev->pdata->out_conns[i].dest_dev;
+> +               child = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>                         if (!coresight_get_ref(child))
+>                                 goto err;
+> @@ -733,7 +733,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+>         for (i--; i >= 0; i--) {
+>                 struct coresight_device *child;
+>
+> -               child = csdev->pdata->out_conns[i].dest_dev;
+> +               child = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>                         coresight_put_ref(child);
+>         }
+> @@ -752,7 +752,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>                 struct coresight_device *child;
+>
+> -               child = csdev->pdata->out_conns[i].dest_dev;
+> +               child = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+>                         coresight_put_ref(child);
+>         }
+> @@ -794,7 +794,7 @@ static int _coresight_build_path(struct coresight_device *csdev,
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>                 struct coresight_device *child_dev;
+>
+> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child_dev &&
+>                     _coresight_build_path(child_dev, sink, path) == 0) {
+>                         found = true;
+> @@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device *csdev, int *depth)
+>                 struct coresight_device *child_dev, *sink = NULL;
+>                 int child_depth = curr_depth;
+>
+> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
+> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
+>                 if (child_dev)
+>                         sink = coresight_find_sink(child_dev, &child_depth);
+>
+> @@ -1334,7 +1334,7 @@ static int coresight_orphan_match(struct device *dev, void *data)
+>          * an orphan connection whose name matches @csdev, link it.
+>          */
+>         for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
+> -               conn = &i_csdev->pdata->out_conns[i];
+> +               conn = i_csdev->pdata->out_conns[i];
+>
+>                 /* We have found at least one orphan connection */
+>                 if (conn->dest_dev == NULL) {
+> @@ -1372,7 +1372,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+>         int i, ret = 0;
+>
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+> -               struct coresight_connection *conn = &csdev->pdata->out_conns[i];
+> +               struct coresight_connection *conn = csdev->pdata->out_conns[i];
+>
+>                 conn->dest_dev =
+>                         coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+> @@ -1406,15 +1406,12 @@ static int coresight_remove_match(struct device *dev, void *data)
+>          * a connection whose name matches @csdev, remove it.
+>          */
+>         for (i = 0; i < iterator->pdata->nr_outconns; i++) {
+> -               conn = &iterator->pdata->out_conns[i];
+> +               conn = iterator->pdata->out_conns[i];
+>
+> -               if (conn->dest_dev == NULL)
+> -                       continue;
+> -
+> -               if (csdev->dev.fwnode == conn->dest_fwnode) {
+> +               /* Child_dev being set signifies that the links were made */
+> +               if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
+>                         iterator->orphan = true;
+>                         coresight_remove_links(iterator, conn);
+> -
+>                         conn->dest_dev = NULL;
+>                         /* No need to continue */
+>                         break;
+> @@ -1534,22 +1531,26 @@ void coresight_write64(struct coresight_device *csdev, u64 val, u32 offset)
+>   * to the output port of this device.
+>   */
+>  void coresight_release_platform_data(struct coresight_device *csdev,
+> +                                    struct device *dev,
+>                                      struct coresight_platform_data *pdata)
+>  {
+>         int i;
+> -       struct coresight_connection *conns = pdata->out_conns;
+> +       struct coresight_connection **conns = pdata->out_conns;
+>
+>         for (i = 0; i < pdata->nr_outconns; i++) {
+>                 /* If we have made the links, remove them now */
+> -               if (csdev && conns[i].dest_dev)
+> -                       coresight_remove_links(csdev, &conns[i]);
+> +               if (csdev && conns[i]->dest_dev)
+> +                       coresight_remove_links(csdev, conns[i]);
+>                 /*
+>                  * Drop the refcount and clear the handle as this device
+>                  * is going away
+>                  */
+> -               fwnode_handle_put(conns[i].dest_fwnode);
+> -               conns[i].dest_fwnode = NULL;
+> +               fwnode_handle_put(conns[i]->dest_fwnode);
+> +               conns[i]->dest_fwnode = NULL;
+> +               devm_kfree(dev, conns[i]);
+>         }
+> +       devm_kfree(dev, pdata->out_conns);
+> +       devm_kfree(dev, pdata);
+>         if (csdev)
+>                 coresight_remove_conns_sysfs_group(csdev);
+>  }
+> @@ -1666,7 +1667,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>
+>  err_out:
+>         /* Cleanup the connection information */
+> -       coresight_release_platform_data(NULL, desc->pdata);
+> +       coresight_release_platform_data(NULL, desc->dev, desc->pdata);
+>         return ERR_PTR(ret);
+>  }
+>  EXPORT_SYMBOL_GPL(coresight_register);
+> @@ -1679,7 +1680,7 @@ void coresight_unregister(struct coresight_device *csdev)
+>                 cti_assoc_ops->remove(csdev);
+>         coresight_remove_conns(csdev);
+>         coresight_clear_default_sink(csdev);
+> -       coresight_release_platform_data(csdev, csdev->pdata);
+> +       coresight_release_platform_data(csdev, csdev->dev.parent, csdev->pdata);
+>         device_unregister(&csdev->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(coresight_unregister);
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index 8c2029336161..9c05f787278b 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -37,7 +37,7 @@ coresight_add_out_conn(struct device *dev,
+>          * Warn on any existing duplicate output port.
+>          */
+>         for (i = 0; i < pdata->nr_outconns; ++i) {
+> -               conn = &pdata->out_conns[i];
+> +               conn = pdata->out_conns[i];
+>                 /* Output == -1 means ignore the port for example for helpers */
+>                 if (conn->src_port != -1 &&
+>                     conn->src_port == new_conn->src_port) {
+> @@ -54,8 +54,19 @@ coresight_add_out_conn(struct device *dev,
+>         if (!pdata->out_conns)
+>                 return ERR_PTR(-ENOMEM);
+>
+> -       pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+> -       return &pdata->out_conns[pdata->nr_outconns - 1];
+> +       conn = devm_kmalloc(dev, sizeof(struct coresight_connection),
+> +                           GFP_KERNEL);
+> +       if (!conn)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       /*
+> +        * Copy the new connection into the allocation, save the pointer to the
+> +        * end of the connection array and also return it in case it needs to be
+> +        * used right away.
+> +        */
+> +       *conn = *new_conn;
+> +       pdata->out_conns[pdata->nr_outconns - 1] = conn;
+> +       return conn;
+>  }
+>  EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+>
+> @@ -863,7 +874,7 @@ coresight_get_platform_data(struct device *dev)
+>  error:
+>         if (!IS_ERR_OR_NULL(pdata))
+>                 /* Cleanup the connection information */
+> -               coresight_release_platform_data(NULL, pdata);
+> +               coresight_release_platform_data(NULL, dev, pdata);
+>         return ERR_PTR(ret);
+>  }
+>  EXPORT_SYMBOL_GPL(coresight_get_platform_data);
+> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> index 788ff19c60f6..65ae6d161c57 100644
+> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> @@ -207,6 +207,7 @@ static inline void *coresight_get_uci_data(const struct amba_id *id)
+>  }
+>
+>  void coresight_release_platform_data(struct coresight_device *csdev,
+> +                                    struct device *dev,
+>                                      struct coresight_platform_data *pdata);
+>  struct coresight_device *
+>  coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
+> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> index 61234cb8052a..1bbe5410a23d 100644
+> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> @@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
+>                 return NULL;
+>
+>         for (i = 0; i < etr->pdata->nr_outconns; i++) {
+> -               tmp = etr->pdata->out_conns[i].dest_dev;
+> +               tmp = etr->pdata->out_conns[i]->dest_dev;
+>                 if (tmp && coresight_is_catu_device(tmp))
+>                         return tmp;
+>         }
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index 12fdbd03e2f7..abf36a37fdb0 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -104,14 +104,15 @@ union coresight_dev_subtype {
+>   *
+>   * @nr_inconns: Number of elements for the input connections.
+>   * @nr_outconns: Number of elements for the output connections.
+> - * @out_conns: Array of nr_outconns connections from this component.
+> + * @out_conns: Array of nr_outconns pointers to connections from this
+> + *            component.
+>   */
+>  struct coresight_platform_data {
+>         int high_inport;
+>         int high_outport;
+>         int nr_inconns;
+>         int nr_outconns;
+> -       struct coresight_connection *out_conns;
+> +       struct coresight_connection **out_conns;
+>  };
+>
+>  /**
+> --
+> 2.34.1
+>
 
-Many features of HP Commercial notebooks can be managed using Windows
-Management Instrumentation (WMI). WMI is an implementation of Web-Based
-Enterprise Management (WBEM) that provides a standards-based interface
-for changing and monitoring system settings. HP BIOSCFG driver provides
-a native Linux solution and the exposed features facilitates the
-migration to Linux environments.
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
-The Linux security features to be provided in hp-bioscfg driver enables
-managing the BIOS settings and security solutions via sysfs, a virtual
-filesystem that can be used by user-mode applications. The new
-documentation cover HP-specific firmware sysfs attributes such Secure
-Platform Management and Sure Start. Each section provides security
-feature description and identifies sysfs directories and files exposed
-by the driver.
-
-Many HP Commercial notebooks include a feature called Secure Platform
-Management (SPM), which replaces older password-based BIOS settings
-management with public key cryptography. PC secure product management
-begins when a target system is provisioned with cryptographic keys
-that are used to ensure the integrity of communications between system
-management utilities and the BIOS.
-
-HP Commercial notebooks have several BIOS settings that control its
-behaviour and capabilities, many of which are related to security.
-To prevent unauthorized changes to these settings, the system can
-be configured to use a cryptographic signature-based authorization
-string that the BIOS will use to verify authorization to modify the
-setting.
-
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
----
-Based on the latest platform-drivers-x86.git/for-next
-
-History
-
-Version 9
-	Includes only sysfs-class-firmware-attributes documentation
-
-Version 8
-	Includes only sysfs-class-firmware-attributes documentation
-
-Version 7
-	Includes only sysfs-class-firmware-attributes documentation
-
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
----
-Based on the latest platform-drivers-x86.git/for-next
----
- .../testing/sysfs-class-firmware-attributes   | 108 +++++++++++++++++-
- 1 file changed, 106 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-index 4cdba3477176..d9bfef9f2f2b 100644
---- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
-+++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-@@ -22,6 +22,12 @@ Description:
- 			- integer: a range of numerical values
- 			- string
- 
-+		HP specific types
-+		-----------------
-+			- ordered-list - a set of ordered list valid values
-+			- sure-start - report audit logs read from BIOS
-+
-+
- 		All attribute types support the following values:
- 
- 		current_value:
-@@ -126,6 +132,44 @@ Description:
- 					value will not be effective through sysfs until this rule is
- 					met.
- 
-+		HP specific class extensions
-+		------------------------------
-+
-+		On HP systems the following additional attributes are available:
-+
-+		"ordered-list"-type specific properties:
-+
-+		elements:
-+					A file that can be read to obtain the possible
-+					list of values of the <attr>. Values are separated using
-+					semi-colon (``;``). The order individual elements are listed
-+					according to their priority.  An Element listed first has the
-+					highest priority. Writing the list in a different order to
-+					current_value alters the priority order for the particular
-+					attribute.
-+
-+		"sure-start"-type specific properties:
-+
-+		audit_log_entries:
-+					A read-only file that returns the events in the log.
-+					Values are separated using semi-colon (``;``)
-+
-+					Audit log entry format
-+
-+					Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
-+					Byte 16-127: Unused
-+
-+		audit_log_entry_count:
-+					A read-only file that returns the number of existing audit log events available to be read.
-+					Values are separated using comma (``,``)
-+
-+					[No of entries],[log entry size],[Max number of entries supported]
-+
-+					log entry size identifies audit log size for the current BIOS version.
-+					The current size is 16 bytes but it can be to up to 128 bytes long
-+					in future BIOS versions.
-+
-+
- What:		/sys/class/firmware-attributes/*/authentication/
- Date:		February 2021
- KernelVersion:	5.11
-@@ -206,7 +250,7 @@ Description:
- 		Drivers may emit a CHANGE uevent when a password is set or unset
- 		userspace may check it again.
- 
--		On Dell and Lenovo systems, if Admin password is set, then all BIOS attributes
-+		On Dell, Lenovo and HP systems, if Admin password is set, then all BIOS attributes
- 		require password validation.
- 		On Lenovo systems if you change the Admin password the new password is not active until
- 		the next boot.
-@@ -296,6 +340,15 @@ Description:
- 						echo "signature" > authentication/Admin/signature
- 						echo "password" > authentication/Admin/certificate_to_password
- 
-+		HP specific class extensions
-+		--------------------------------
-+
-+		On HP systems the following additional settings are available:
-+
-+		role: enhanced-bios-auth:
-+					This role is specific to Secure Platform Management (SPM) attribute.
-+					It requires configuring an endorsement (kek) and signing certificate (sk).
-+
- 
- What:		/sys/class/firmware-attributes/*/attributes/pending_reboot
- Date:		February 2021
-@@ -311,7 +364,7 @@ Description:
- 			==	=========================================
- 			0	All BIOS attributes setting are current
- 			1	A reboot is necessary to get pending BIOS
--			        attribute changes applied
-+				attribute changes applied
- 			==	=========================================
- 
- 		Note, userspace applications need to follow below steps for efficient
-@@ -364,3 +417,54 @@ Description:
- 		use it to enable extra debug attributes or BIOS features for testing purposes.
- 
- 		Note that any changes to this attribute requires a reboot for changes to take effect.
-+
-+
-+		HP specific class extensions - Secure Platform Manager (SPM)
-+		--------------------------------
-+
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/kek
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'kek' Key-Encryption-Key is a write-only file that can be used to configure the
-+		RSA public key that will be used by the BIOS to verify
-+		signatures when setting the signing key.  When written,
-+		the bytes should correspond to the KEK certificate
-+		(x509 .DER format containing an OU).  The size of the
-+		certificate must be less than or equal to 4095 bytes.
-+
-+
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/sk
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'sk' Signature Key is a write-only file that can be used to configure the RSA
-+		public key that will be used by the BIOS to verify signatures
-+		when configuring BIOS settings and security features.  When
-+		written, the bytes should correspond to the modulus of the
-+		public key.  The exponent is assumed to be 0x10001.
-+
-+
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/status
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'status' is a read-only file that returns ASCII text reporting
-+		the status information.
-+
-+		  State:  Not Provisioned / Provisioned / Provisioning in progress
-+		  Version:  Major.   Minor
-+		  Feature Bit Mask: <16-bit unsigned number display in hex>
-+		  SPM Counter: <16-bit unsigned number display in base 10>
-+		  Signing Key Public Key Modulus (base64): <256 bytes in base64>
-+		  KEK Public Key Modulus (base64): <256 bytes in base64>
-+
-+
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/statusbin
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'statusbin' is a read-only file that returns 'status' information
-+		in binary format. This file provides a mechanism for components
-+		downstream (e.g. Recovery Agent) can read the status and public
-+		key modulus.
-
- 
-2.34.1
-
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
