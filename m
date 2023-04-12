@@ -2,20 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA3A6DF845
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08D06DF848
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjDLOVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S231547AbjDLOVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjDLOVL (ORCPT
+        with ESMTP id S231522AbjDLOVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:21:11 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 07:21:09 PDT
+        Wed, 12 Apr 2023 10:21:37 -0400
 Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79723183
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:21:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C20E4EE2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:21:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
         q=dns/txt; i=@phytec.de; t=1681308364; x=1683900364;
         h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
@@ -23,14 +22,14 @@ DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
         bh=WrFn9iDbaV5x+FOAg2G6WdULkedjfTsa5Xa3aWRozy8=;
-        b=ln7NV5u4bPOkbVIEo4bVSySZ1QkcNe16fZW1WSzLKfCNTcZ/pS57pIUyAATD23PO
-        lRD1Ki/V0SzbJ7c+jgBfQsPhM/G1pWbmXJBRrTOhxDgWRyW1KzIk0dQGwO5eB72s
-        QoUgO3c208CwvmNyc7799BVuGoGOMGo6n7NYaBpeQdE=;
-X-AuditID: ac14000a-917fe70000007ecb-cc-6436bacc0738
+        b=IBpcbNBXD9A3EIRibIH+N4b7+dYw876xem/NV5o3q121u+e9Sa7pOYVY7C/m18ku
+        OEuQwI5pukVHMEUxe3BnVgP71xQY96gOXGJOk9uOOdMirXDZdfeyQy2TJB2up9rN
+        oC8M6s9CB8AgblK22FXmNmo3zY2+Vx8y+aJ2EaMICrU=;
+X-AuditID: ac14000a-923ff70000007ecb-cd-6436bacc40ea
 Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
         (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id B4.6A.32459.CCAB6346; Wed, 12 Apr 2023 16:06:04 +0200 (CEST)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 55.6A.32459.CCAB6346; Wed, 12 Apr 2023 16:06:04 +0200 (CEST)
 Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
  (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 12 Apr
@@ -41,29 +40,32 @@ To:     <upstream@lists.phytec.de>, <linux-kernel@vger.kernel.org>,
 CC:     <riku.voipio@iki.fi>, <krzysztof.kozlowski+dt@linaro.org>,
         <robh+dt@kernel.org>, <lee@kernel.org>, <pavel@ucw.cz>
 Subject: [PATCH v3] dt-bindings: leds: Convert PCA9532 to dtschema
-Date:   Wed, 12 Apr 2023 16:05:51 +0200
-Message-ID: <20230412140552.451527-1-w.egorov@phytec.de>
+Date:   Wed, 12 Apr 2023 16:05:52 +0200
+Message-ID: <20230412140552.451527-2-w.egorov@phytec.de>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230412140552.451527-1-w.egorov@phytec.de>
+References: <20230412140552.451527-1-w.egorov@phytec.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [172.25.0.11]
 X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
  (172.25.0.12)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsWyRpKBR/fMLrMUg3+TBSzmHznHatH34iGz
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPLMWRmVeSWpSXmKPExsWyRpKBR/fMLrMUgzmX5S3mHznHatH34iGz
         xY62hSwWl3fNYbPY+mYdo8XdU0fZLE5uuMRm0br3CLtF9zt1B06Pw18XsnhsWtXJ5nHn2h42
         j/7uFlaPFau/s3t83iQXwBbFZZOSmpNZllqkb5fAlfF6zQfmgkWaFYu3NbM2MK6S72Lk5JAQ
-        MJGYu+IJUxcjF4eQwBImiX2XL7JDOE8YJSasmcACUsUmoC5xZ8M3VhBbRKBG4venX4wgNrNA
-        uUT7l5lADRwcwgJOElsOe4GEWQRUJTau7mMHsXkFLCTab+9jgVgmLzHz0neouKDEyZlPWCDG
-        yEs0b53NDGFLSBx88QLMFgKKv7i0HK532rnXzBB2qMTWL9uZJjAKzEIyahaSUbOQjFrAyLyK
-        USg3Mzk7tSgzW68go7IkNVkvJXUTIyj0RRi4djD2zfE4xMjEwXiIUYKDWUmE94eLaYoQb0pi
-        ZVVqUX58UWlOavEhRmkOFiVx3vs9TIlCAumJJanZqakFqUUwWSYOTqkGxlCO2ku3Mk0/fLFp
-        PrYyT2xKSOuFttO/PZ9N3L3hjAGfyOvjXf+PJMwwTdwZXOVj+oIv4V7/HbV9EsdeZpsuZT67
-        chPTRP2yFbV6LdvPfKrn+ZmwqNXC4vEX8SWTIyauWm1++dMSMYcbBk/UjPY9t19gtVM0fXJW
-        yKJ/d9j0b4vk7spSeGa18aQSS3FGoqEWc1FxIgDqLQHcawIAAA==
+        MJHovt7PBGILCSxhktj+K7uLkQvIfsIoMWHNBBaQBJuAusSdDd9YQWwRgRqJ359+MYLYzALl
+        Eu1fZrJ3MXJwCAs4SWw57AUSZhFQlTi0ahdYCa+AhcS+2zfYIXbJS8y89B3M5hSwlHg1v40R
+        Yq+FROfB++wQ9YISJ2c+YYEYLy/RvHU2M4QtIXHwxQtmiHp5iReXlrPAzJx27jUzhB0qsfXL
+        dqYJjEKzkIyahWTULCSjFjAyr2IUys1Mzk4tyszWK8ioLElN1ktJ3cQIihQRBq4djH1zPA4x
+        MnEwHmKU4GBWEuH94WKaIsSbklhZlVqUH19UmpNafIhRmoNFSZz3fg9TopBAemJJanZqakFq
+        EUyWiYNTqoExU/le5x+R+ZpeR4TvWRddzjRPsuRmn1zMWnxvwjLDoxyv19TNXHlukr7+2+P5
+        KVEvHnCoxm7zulmWcYv1Y4d/KkcG++IzJ3dWcshYL6t3vbh6+/yvD3YkyS34vtzUOFCw9F1W
+        dEHtnBvRc2eneD4wqyj9uW1X8DndpO6PrRPu2zC31UlrHfyjxFKckWioxVxUnAgAXA5zOoIC
+        AAA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
