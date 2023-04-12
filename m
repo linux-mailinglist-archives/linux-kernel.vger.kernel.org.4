@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157446DFB89
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550F96DFB8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjDLQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S230194AbjDLQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDLQmH (ORCPT
+        with ESMTP id S230163AbjDLQmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:42:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF38E65A7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:41:21 -0700 (PDT)
+        Wed, 12 Apr 2023 12:42:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF6E65BF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317681;
+        s=mimecast20190719; t=1681317683;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w5yugiaVpJpS0wWKD2pcIMAyJ75fmPDFVn927vHr9+E=;
-        b=WgkLcxA6Y1Jj3D7o8ueoQB9ncfjX4iUBWTW6/enRg2Pnknf+2O17Y90/EDXFayb2zNiZBI
-        oXcp7Q1H6pIYNFazD12k4vEeGIQCDyrimbOQaoUmLuNKjFpllkjQM3aEj3iPjROXxeaEKj
-        7JBE2eiogDJdgFiYQaDaM8JZjmG4Xaw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=UoyMoOjoICnnEVcPuqz2r5voAg7rax1INu5Vpam+Fw4=;
+        b=DsW8QCLTxgKgqLWuKHN+nmBVuozPrIYOj/xyX0lhKIAY3mERfnJvMml8ao+lblCWGt+VDc
+        VZ91yPhSNp5+3NAa32+egWsR4q1LkB1x8Qtjj+mlKYwpREkIhIf0xMgKwAUYBDyIuaPYIr
+        pxmxwchFZDpRK4bkeeXgeQ4izaKghp4=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-vT4JTqURPv-Owv7_JHLZRw-1; Wed, 12 Apr 2023 12:41:19 -0400
-X-MC-Unique: vT4JTqURPv-Owv7_JHLZRw-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74a90355636so62093285a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:41:19 -0700 (PDT)
+ us-mta-407-bYdX4MbmP5GstWRWDxWnVg-1; Wed, 12 Apr 2023 12:41:22 -0400
+X-MC-Unique: bYdX4MbmP5GstWRWDxWnVg-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-5ea572ef499so7654656d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:41:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317677; x=1683909677;
+        d=1e100.net; s=20221208; t=1681317681; x=1683909681;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w5yugiaVpJpS0wWKD2pcIMAyJ75fmPDFVn927vHr9+E=;
-        b=gwG/DUZCHUXeYO76dCE2jvseAKraoJmOdKA61mj65Vfot+Ni48B9NOUnCnAQX3c57k
-         I6Y4Tnl7Qv4uY5ZmIz/qUqvn932KF8EwayDk1LJ5ayUyMvtPCk5KkDO5U5Z6uH16R7d7
-         HabnUbQRrLV9iOA8AkkPeyPlwlTOBNSJGAaMHboC/zqiV0FfLsxJoNYeemodtrb8ut0X
-         sfl3bxtkjQhdYLfv2yxJEcsazY0AnagSpiUO47HODlOGNkI6QQqmYN+OTmKvvOy1gKqY
-         CGvrybWT7qURvZ1mAnVz0bA34o6VzhYENPuOherWKJMz3oNotkqmmnLbEc9RhWqVuhDz
-         MR9A==
-X-Gm-Message-State: AAQBX9cgbAqBBRVSwRzDQfNhGysMp3qrujwRnxzusiSmX+vGbtk4QefD
-        0Ydx3UTsti45/n/t29svT0gz/0VPLFJwGsSAyZzkdco6TepQuaFvCmHNYMlYE6LBrBmKdVDXLMA
-        mEmMFhDikQdZgus1OcBW0VRMg4ABL+HboVL13O46re2/ldBo5kdLhD2DD0EefBfsPxBGsQpi4tj
-        +tY4lTkg==
-X-Received: by 2002:a05:622a:1a90:b0:3e6:3af1:de7a with SMTP id s16-20020a05622a1a9000b003e63af1de7amr29098350qtc.4.1681317677642;
-        Wed, 12 Apr 2023 09:41:17 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bD6Pmxf/AxQhIwMuyaltxKV9vhvPtNoQ3AUSJK9HVNe+thswQyIiI14+qGQAnxvBEVwKx7FA==
-X-Received: by 2002:a05:622a:1a90:b0:3e6:3af1:de7a with SMTP id s16-20020a05622a1a9000b003e63af1de7amr29098310qtc.4.1681317677196;
-        Wed, 12 Apr 2023 09:41:17 -0700 (PDT)
+        bh=UoyMoOjoICnnEVcPuqz2r5voAg7rax1INu5Vpam+Fw4=;
+        b=aHDfNcKXHZisfoZS/iY7v/w3uhmsfOJQXDlSa3NV7URX6xhjz6bBSdCXVu5GN2B4EI
+         uHUhmvOxmoQ05kYKu38PxItx2ebWvPm5MOIXbsH/bTT2xYRWeacuS4MMdxSpMZLW4hpi
+         AFMN6ZrWD8953wvbGyua1/qB8nsUUdBPQX8z96fJd2U6DmIgKzC6AwA91Qq+2ed9IQuf
+         1XLEFR5Po/+VhlvrMbi2UnSN/E0yClZRNzAzjTCokgWbc3KAy/WF1aSMrss0vZReJn+9
+         Iqy+kQRInnm00XW6DuYp9sax5Y0EmN9RTsTZ1oeFQj9rBQGniLZ7meath7PStV9VcqCl
+         aCLQ==
+X-Gm-Message-State: AAQBX9f+UP/ll6eZbAIsbZBpV0a171X0PnmBF5ivnfdOHYkTCqEYSun5
+        yjgsW8hQ1NKMH/BeFK+BhrUJ0SjIzJGfTdO5Ept4m1pPeepke8ExXymD1+laTN4w5L0/sEl+47K
+        sKUiRpWu2VTIbuhq4F4EVd1q+COxm66xq+1HJ9KUHOddR5za7FiOW95Mp54ozZTFdwGyxQXprnh
+        qfvsJ/8w==
+X-Received: by 2002:a05:6214:5290:b0:5ed:c96e:ca4a with SMTP id kj16-20020a056214529000b005edc96eca4amr14516826qvb.1.1681317681037;
+        Wed, 12 Apr 2023 09:41:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y/BM9d0qYWbe4XaYzBW72Y+CI5qbpGOBnAbMVn6e6u5jNfJhaRd9I8cUGoJsnTVOpur+A1Jw==
+X-Received: by 2002:a05:6214:5290:b0:5ed:c96e:ca4a with SMTP id kj16-20020a056214529000b005edc96eca4amr14516789qvb.1.1681317680716;
+        Wed, 12 Apr 2023 09:41:20 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05620a22e900b007486d9fa1d7sm4785768qki.95.2023.04.12.09.41.15
+        by smtp.gmail.com with ESMTPSA id d125-20020a37b483000000b007426ec97253sm4741159qkf.111.2023.04.12.09.41.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:41:16 -0700 (PDT)
+        Wed, 12 Apr 2023 09:41:19 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Axel Rasmussen <axelrasmussen@google.com>,
@@ -68,9 +68,9 @@ Cc:     Axel Rasmussen <axelrasmussen@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
         Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH v2 02/31] selftests/mm: Update .gitignore with two missing tests
-Date:   Wed, 12 Apr 2023 12:41:14 -0400
-Message-Id: <20230412164114.327709-1-peterx@redhat.com>
+Subject: [PATCH v2 03/31] selftests/mm: Dump a summary in run_vmtests.sh
+Date:   Wed, 12 Apr 2023 12:41:17 -0400
+Message-Id: <20230412164117.327720-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
 References: <20230412163922.327282-1-peterx@redhat.com>
@@ -86,23 +86,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dump a summary after running whatever test specified.  Useful for human
+runners to identify any kind of failures (besides exit code).
+
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/mm/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 1f8c36a9fa10..347277f2adc3 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -36,3 +36,5 @@ split_huge_page_test
- ksm_tests
- local_config.h
- local_config.mk
-+ksm_functional_tests
-+mdwe_test
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index c0f93b668c0c..ddf40f883747 100644
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -5,6 +5,9 @@
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
++count_pass=0
++count_fail=0
++count_skip=0
+ exitcode=0
+ 
+ usage() {
+@@ -149,11 +152,14 @@ run_test() {
+ 		"$@"
+ 		local ret=$?
+ 		if [ $ret -eq 0 ]; then
++			count_pass=$(( count_pass + 1 ))
+ 			echo "[PASS]"
+ 		elif [ $ret -eq $ksft_skip ]; then
++			count_skip=$(( count_skip + 1 ))
+ 			echo "[SKIP]"
+ 			exitcode=$ksft_skip
+ 		else
++			count_fail=$(( count_fail + 1 ))
+ 			echo "[FAIL]"
+ 			exitcode=1
+ 		fi
+@@ -279,4 +285,6 @@ CATEGORY="soft_dirty" run_test ./soft-dirty
+ # COW tests
+ CATEGORY="cow" run_test ./cow
+ 
++echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}"
++
+ exit $exitcode
 -- 
 2.39.1
 
