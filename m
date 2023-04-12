@@ -2,152 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0686DEAE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682246DEAE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 07:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjDLFQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 01:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S229548AbjDLFSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 01:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLFQ4 (ORCPT
+        with ESMTP id S229450AbjDLFSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 01:16:56 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3441BD9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 22:16:51 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230412051644epoutp01c443b6bb49bdc413d575fa6d3d594563~VGCnvevu80418504185epoutp01U
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:16:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230412051644epoutp01c443b6bb49bdc413d575fa6d3d594563~VGCnvevu80418504185epoutp01U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681276604;
-        bh=b0Tl3wa1A0rsyeO1OYkPsDbplQjwdowp8kNaOSgtlvc=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=LrQXJKbze31urzXZTdZsyJjyC/4bcY1UC1t8RCjUmdSD9ZaBusXC1ZD1v2E7RkOgd
-         izEvcq/GFyMC8iIYjfHbtzVg7dklKbVtAxv0Ogb9q6UXsZi3W980yv/Z/qp7Lv/7jU
-         NfB55l+As47uAvdQ+FRI0I/e1yxGyxKU/PiqBih0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230412051643epcas2p48563904c3edf7f1cee2ea3f40804209f~VGCm8veog1406114061epcas2p4V;
-        Wed, 12 Apr 2023 05:16:43 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Px9tM0kt0z4x9Py; Wed, 12 Apr
-        2023 05:16:43 +0000 (GMT)
-X-AuditID: b6c32a45-e13fa700000026e9-c6-64363eba8ae4
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AD.76.09961.ABE36346; Wed, 12 Apr 2023 14:16:42 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH 0/2] Fix NVMe metadata mapping size for integrity
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "kbusch@kernel.org" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "chaitanya.kulkarni@wdc.com" <chaitanya.kulkarni@wdc.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e@epcms2p6>
-Date:   Wed, 12 Apr 2023 14:16:42 +0900
-X-CMS-MailID: 20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e
+        Wed, 12 Apr 2023 01:18:12 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592044222;
+        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id l18so9551727wrb.9;
+        Tue, 11 Apr 2023 22:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681276690; x=1683868690;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
+        b=ZUkM5oKdb4ookaFWsqWFvBmCxeDBYZLd9D3FiN+0Qi6TRnV/WdccjioIPAL6mpJPVj
+         0qEhyYsF22F3JOqC3cVWagGijDx0dgPoETlo1DSREi1iD/6uL3Hd9waeInofJd7BnjhT
+         ONSfjWVDSDLSLJOxksqouG/urMhIUrp2Ja+UOZ5XxWEEBSd4hPSWP5EOKkc/7ucNLIJf
+         UeuIGdcocv3My7QQenqZulTkxPaybkjUPOKoi2IB0Vfto5kq09sBH2fEHfyTgzvNJAvU
+         Hc6av23QV9yv7Jl/8GcCt1/C6H46kaOsURijs0vMx45xhxJZBAiILjcso9Zyz0XTqhOS
+         LBLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681276690; x=1683868690;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=23jw4wGKLELZol6xO6kwjfhk3S68zzLUVSsJHxPhCD8=;
+        b=W33KBEVN8oddDjBcVOhkOwnPQib+Ce/uohR+WWvfBxtZkB945OokGTSfuHs/VBZ5DG
+         woXtdTXr+Bp5KuzYXN0TXA5opIrq8+MYtp3JFcmRY1e4gfIAGTN+h3h2aZV+FhyBRXVW
+         WtFUjcZ6yfBgzVDO2b2wCpZPxzy/TeF3iJVDzaTnQyoKuZh+sF6JFu0XTfI1Fw2d+P7h
+         UOHxpDWZOlOYS9WVh+7RaxJPz778drGb/OxLfPgb50wA05/f5Tgy40cFI3aEdc674NHa
+         ZmwFmkgDw6BMp9MFL7S5K3RjwR4ira05Tz/UfyI1yfr2ywRjVgeniT0zoJH4+OM1J2y6
+         lJdQ==
+X-Gm-Message-State: AAQBX9fyjZShJ4AME9tWLPQnF854+BE/RDsClbY71wx/xvr5h3Ujn/GS
+        hRMrxZuGBFtLIqSM25xNSTRrkvZRWJjJSQ==
+X-Google-Smtp-Source: AKy350b01aD4wQXPQCnVvryxDWQadGDFF+swBMFZwGRtWEWz7Eh1hiBU4r4t1USDzKLxOWAAvukKKQ==
+X-Received: by 2002:a5d:6804:0:b0:2c8:f78:2772 with SMTP id w4-20020a5d6804000000b002c80f782772mr10177676wru.19.1681276689567;
+        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
+Received: from [192.168.0.22] ([87.116.164.178])
+        by smtp.gmail.com with ESMTPSA id h16-20020a5d5490000000b002c8476dde7asm16113421wrv.114.2023.04.11.22.18.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 22:18:09 -0700 (PDT)
+Message-ID: <9d8194bc-34d0-bbe9-825b-2b7635056a10@gmail.com>
+Date:   Wed, 12 Apr 2023 07:18:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Fix alignment of function
+ call params
+To:     Guenter Roeck <linux@roeck-us.net>
+References: <20230409183549.12683-1-savicaleksa83@gmail.com>
+ <c24a071e-b191-4626-8edc-1658a01d80ef@roeck-us.net>
+ <5f24cb94-d7f1-f8b0-71f0-2b39a89bb2dc@gmail.com>
+ <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <07419415-3087-48e6-955a-b5024d943e07@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmhe5uO7MUg14fi/97jrFZzLr9msXi
-        5SFNi5WrjzJZ9PZvZbOYdOgao8XlXXPYLOYve8puse71exYHTo+Jze/YPc7f28jisWlVJ5vH
-        5iX1HrtvNrB59G1ZxejxeZOcR/uBbqYAjqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwND
-        XUNLC3MlhbzE3FRbJRefAF23zByg45QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5
-        BeYFesWJucWleel6eaklVoYGBkamQIUJ2RkvlnUzFzwVqNjbv4KxgXEjbxcjJ4eEgIlE98UZ
-        bF2MXBxCAjsYJW4enM/UxcjBwSsgKPF3hzBIjbCAo8SMNZ/ZQWwhASWJc2tmMYKUCAsYSNzq
-        NQcJswnoSfxcAjFGROAik0Rb1wtmiPm8EjPan7JA2NIS25dvZYSwNSR+LOuFqhGVuLn6LTuM
-        /f7YfKgaEYnWe2ehagQlHvzcDRWXlDh06CsbyA0SAvkSGw4EQoRrJN4uPwBVoi9xrWMjC8Qn
-        vhLH7+eCmCwCqhKLp0VDNLpIbH/sClLMLCAvsf3tHGaQMLOApsT6XfoQFcoSR26xQFTwSXQc
-        /ssO81HDxt9Y2TvmPWGCaFWTWNRkBBGWkfh6eD5UiYfE9hf3mScwKs5CBPEsJCfMQjhhASPz
-        Kkax1ILi3PTUYqMCQ3isJufnbmIEJ1At1x2Mk99+0DvEyMTBeIhRgoNZSYT3h4tpihBvSmJl
-        VWpRfnxRaU5q8SFGU6DXJzJLiSbnA1N4Xkm8oYmlgYmZmaG5kamBuZI4r7TtyWQhgfTEktTs
-        1NSC1CKYPiYOTqkGppQns4qE30S8f7XKcl1jefmuLZvFfqZWGrLNePOrhP9bpciOsgu2dZLX
-        f0z2zQu6kPAmLvNXpJBa3j1G3dWbZ7wMWpL15pFO2NWpm/YaLxZJPqOR/K1248125dzu5nkv
-        XkZP9nqZ+KVOlsl222KZiY8fF+rb2FWVvpp8bcmRaVe6GkNmXfwW+7zdaXWobcCiIu9P72/O
-        +1nFdORzGsPZvHT+qbaFomnPKneE1qybM/nake8nzf4oXLZvOZ4mf7jQqdtI9928isNcUa/W
-        aC73td3qXR1fOcV6wTer3nnrFNWzdt2539EcHWJxMZL/tYtW6detTivSBawl+uad3LSeYc70
-        bXOt7T3cZ/hm7Tov8FSJpTgj0VCLuag4EQAhNEtSKQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e
-References: <CGME20230412051642epcms2p648d91f72aba5647bbccd6d4d6333224e@epcms2p6>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the case of NVMe, it has an integrity payload consisting of one segment.
-So, rather than configuring SG_LIST, it was changed by direct DMA mapping.
+On 2023-04-11 22:19:21 GMT+02:00, Guenter Roeck wrote:
+> On Tue, Apr 11, 2023 at 08:26:32PM +0200, Aleksa Savic wrote:
+>> On 2023-04-10 18:53:08 GMT+02:00, Guenter Roeck wrote:
+>>>
+>>> I am not sure I understand how this would improve readability.
+>>> It seems to accomplish the opposite. Sure, I know, checkpatch --strict
+>>> complains, but that is still better than unreadable code just to make
+>>> checkpatch happy.
+>>>
+>>> Guenter
+>>
+>> Both seemed fine to me, the idea was to fix the checkpatch warning.
+>> If it's OK for it to complain about this, plus the changes would make it
+>> harder to read, please ignore this patch.
+>>
+> 
+> checkpatch is useful, but not in situations where following its guidance
+> results in code which is diffficult to read. I run checkpatch --strict when
+> applying patches, so I do notice when it complains. If I want a report
+> to be addressed, I'll say that (such as, for example, when people are
+> overly generous with empty lines). If not, you can assume that I am ok with
+> the report and find it more important to have readable code than being
+> checkpatch-clean.
+> 
+> Guenter
 
-The page-merge is not performed for the struct bio_vec when creating 
-a integrity payload in block.
-As a result, when creating an integrity paylaod beyond one page, each 
-struct bio_vec is generated, and its bv_len does not exceed the PAGESIZE.
+That clears it up, thanks!
 
-To solve this problem, DMA mapping for metadata was modified to use the 
-total segment size of the integrity payload.
-
-
-Tested like this:
-
-- Format (support pi type 1)
-$ sudo nvme format /dev/nvme2n1 --force -n 1 -i 1 -p 0 -m 0 -l 1 -r
-
-- Run FIO
-[global]
-ioengine=libaio
-group_reporting
-
-[job]
-bs=512k
-iodepth=256
-rw=write
-numjobs=8
-direct=1
-runtime=10s
-filename=/dev/nvme2n1
-
-- Result
-...
-[   93.496218] nvme2n1: I/O Cmd(0x1) @ LBA 62464, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
-[   93.496227] protection error, dev nvme2n1, sector 62464 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
-[   93.538788] nvme2n1: I/O Cmd(0x1) @ LBA 6144, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
-[   93.538798] protection error, dev nvme2n1, sector 6144 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
-[   93.566231] nvme2n1: I/O Cmd(0x1) @ LBA 124928, 1024 blocks, I/O Error (sct 0x0 / sc 0x4)
-[   93.566241] I/O error, dev nvme2n1, sector 124928 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
-[   93.694147] nvme2n1: I/O Cmd(0x1) @ LBA 64512, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
-[   93.694155] protection error, dev nvme2n1, sector 64512 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
-[   93.694299] nvme2n1: I/O Cmd(0x1) @ LBA 5120, 1024 blocks, I/O Error (sct 0x2 / sc 0x82) MORE
-[   93.694305] protection error, dev nvme2n1, sector 5120 op 0x1:(WRITE) flags 0x18800 phys_seg 3 prio class 2
-...
-
-Jinyoung Choi (2):
-  blk-integrity: add rq_integrity_payload_size helper
-  nvme-pci: fix metadata mapping length
-
- drivers/nvme/host/pci.c       | 9 ++++++---
- include/linux/blk-integrity.h | 7 +++++++
- 2 files changed, 13 insertions(+), 3 deletions(-)
-
--- 
-2.34.1
+Aleksa
