@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14696DF7B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB3D6DF7BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjDLNwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S230160AbjDLNwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjDLNwd (ORCPT
+        with ESMTP id S229769AbjDLNwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:52:33 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C87819BE;
-        Wed, 12 Apr 2023 06:52:31 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aebd0.dynamic.kabel-deutschland.de [95.90.235.208])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E4B1960027FE8;
-        Wed, 12 Apr 2023 15:52:27 +0200 (CEST)
-Message-ID: <9f1fd864-8b8e-72a9-abad-0f9eeffcbdc3@molgen.mpg.de>
-Date:   Wed, 12 Apr 2023 15:52:27 +0200
+        Wed, 12 Apr 2023 09:52:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CF519BE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:52:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sg7so40443759ejc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1681307569; x=1683899569;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6UePRKxgzqqhv0WlMFum5WhT8Fo7qQq0HQsLtF573Ck=;
+        b=nNjqd5iAbQJvG1BOO2ScAd8XxlysS0/k6N6xZoBrsOnwZiCxolUsWjUzeojO9Bw/BA
+         Q/YxqlyLYlP/QnraJ9W1MM7DjQPP2yd3h/w28kk+zee3irMayubbsOs1XWitUfr9H4n8
+         fPPBQVcFVDEIN9WNmA24dIRWyVwqfNeBEtEqQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681307569; x=1683899569;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6UePRKxgzqqhv0WlMFum5WhT8Fo7qQq0HQsLtF573Ck=;
+        b=YILWB6Q1NpmQ/JlGUTDxq6k5PSO+PgGrR9HOMJpVNXSQDrQxe618KJIWPSTIs7Ff7Q
+         FI0lCWRmrJTqtxspq3q6k8m7GMPCiBi+CFCMkvjUSQOXJi++qafcpFYKkD5/RtyWREET
+         Zig46UkLraH2JAi/CN+cg5woAPoX/5EZAWF2FeweyNNJtGXTwOs3Z+VPAhGOSCimaS75
+         i1/BIUhaN+5W28HrvHPw6CMr7MqguvCppQRt2a+GqIm7XJy4mr1TsTtS5FVZA01IS5Mx
+         em4Xq46RrzDG3I1D9OphpGTc31ATH65NcfH728M03hAbzeXNXZq2QetKvpFOBiQ87sGj
+         yH0g==
+X-Gm-Message-State: AAQBX9ey0Jlu/zBIa+u+Bzj2sNHMPhcUsGOmU2opNV9fa9yoDdzD4ODN
+        xsFXmmKnis+vuSRHPHj5EA+GQVnbXmAjfwk7j9gdeA==
+X-Google-Smtp-Source: AKy350akVDMxSYmf1op8qd/cRmhdUF+2E8mr/Y5rK3scyaFV3IDiLFABZDIDUsam4fuTMbxVVnF0LQsl/7CPk9Lm6Gg=
+X-Received: by 2002:a17:907:d609:b0:92b:ec37:e4b7 with SMTP id
+ wd9-20020a170907d60900b0092bec37e4b7mr1322484ejc.14.1681307569396; Wed, 12
+ Apr 2023 06:52:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] ACPI: resource: Skip IRQ override on ASUS ExpertBook
- B1502CBA
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Cc:     Lorenzo Grasso <lore982@yahoo.com>, Tamim Khan <tamim@fusetak.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230411183144.6932-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000d5a93805f8930638@google.com>
+In-Reply-To: <000000000000d5a93805f8930638@google.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 12 Apr 2023 15:52:37 +0200
+Message-ID: <CAJfpegsGjFQX9t_NS8-oiE0K8Y0xEmr60VXMg6d4HQCCXOrOXg@mail.gmail.com>
+Subject: Re: [syzbot] Monthly fuse report
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+list69b50efce6f847334104@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+On Wed, 5 Apr 2023 at 11:00, syzbot
+<syzbot+list69b50efce6f847334104@syzkaller.appspotmail.com> wrote:
+>
+> Hello fuse maintainers/developers,
+>
+> This is a 30-day syzbot report for the fuse subsystem.
+> All related reports/information can be found at:
+> https://syzkaller.appspot.com/upstream/s/fuse
+>
+> During the period, 0 new issues were detected and 0 were fixed.
+> In total, 8 issues are still open and 34 have been fixed so far.
+>
+> Some of the still happening issues:
+>
+> Crashes Repro Title
+> 146     Yes   INFO: task hung in fuse_simple_request
+>               https://syzkaller.appspot.com/bug?extid=46fe899420456e014d6b
+> 26      Yes   INFO: task hung in lookup_slow (3)
+>               https://syzkaller.appspot.com/bug?extid=7cfc6a4f6b025f710423
+> 13      Yes   INFO: task hung in walk_component (5)
+>               https://syzkaller.appspot.com/bug?extid=8fba0e0286621ce71edd
 
+Hi Dmitry,
 
-Just for the record, I am adding the Tested-by line. Lorenzo tried to 
-send it themselves, but even text/plain were rejected by LKML as they 
-are using Yahoo Mail.
+These all look like non-kernel deadlocks.
 
-     linux-kernel@vger.kernel.org>: host 23.128.96.18[23.128.96.18] 
-said: 553 5.7.1
-         Hello [23.128.96.19], for your MAIL FROM address 
-<lore982@yahoo.com> policy
-         analysis reported: Your address is not liked source for email 
-(in reply to
-         MAIL FROM command)
+AFAIR syzbot was taught about breaking these by "umount -f" or "echo 1
+> /sys/fs/fuse/connections/$DEV/abort", right?
 
-Am 11.04.23 um 20:31 schrieb Paul Menzel:
-> Like the ASUS ExpertBook B2502CBA and various ASUS Vivobook laptops, the
-> ASUS ExpertBook B1502CBA has an ACPI DSDT table that describes IRQ 1 as
-> ActiveLow while the kernel overrides it to Edge_High.
-> 
->      $ sudo dmesg | grep DMI
->      DMI: ASUSTeK COMPUTER INC. ASUS EXPERTBOOK B1502CBA_B1502CBA/B1502CBA, BIOS B1502CBA.300 01/18/2023
->      $ grep -A 40 PS2K dsdt.dsl | grep IRQ -A 1
->                      IRQ (Level, ActiveLow, Exclusive, )
->                          {1}
-> 
-> This prevents the keyboard from working. To fix this issue, add this laptop
-> to the skip_override_table so that the kernel does not override IRQ 1.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217323
-> Cc: lore982@yahoo.com
-> Cc: Tamim Khan <tamim@fusetak.com>
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+I wonder why they are still triggering a report then.
 
-Tested-by: Lorenzo Grasso <lore982@yahoo.com>
-
-[…]
-
-
-Kind regards,
-
-Paul
+Thanks,
+Miklos
