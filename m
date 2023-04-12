@@ -2,301 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49AB6DFD74
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D00D6DFD76
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 20:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjDLS0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 14:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S229913AbjDLS0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 14:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjDLS0X (ORCPT
+        with ESMTP id S229881AbjDLS0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:26:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A20E65;
-        Wed, 12 Apr 2023 11:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681323982; x=1712859982;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CbJbKQR4Bt91iN9hPbSpM/8oNk9XkiF5Z4SMfqwZycs=;
-  b=GqiMpgUp410hIefA6/IO6K9gWhlWdqzvtUCLv11LrLGNWroRhSL5/3pk
-   7l3Al8IXKSS/t7yHoYbZ1ii3UQ8jAUOuQjfkFx2UV8TeSFNivPPeUSPGX
-   hw8SkSueJ1xJM8IRr+azA5g1aN+KMptjkYIhkS2ksbbD1Ejm5wyDn8Ciz
-   fevWSjf2/Kyn9FLMzh12LPeYM0OuoCrJCzFb1ClcqVrAV7uv4C5uslcrY
-   KuW2TxynetCUp+MxQr59z/8MRx9h6ipV2Se6Pzkv/lxXlhUuEdN+Jeb97
-   fJ95eaQSuhFi9hQ8XmA+UHc+o5unOt35aH6467+gm3rNkE5MHWQMG/JuJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="371835887"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="371835887"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:26:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719499846"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="719499846"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 11:26:21 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 11:26:21 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 11:26:21 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 12 Apr 2023 11:26:21 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 12 Apr 2023 11:26:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OSTvox52Nd32+awadmfO3rRWKivnRF/yYDaWq5zwEnp7kRljM4M9MgQM16zqSR5MP2t0YpA954UgS0PWsyF4hZ01FvQJukX0waQYnF79PxRAavnKFWSBNb1UGv51NLoH+/M0WvsoStcl54NjriMyEwn7oqd1MHy1sG8E2j3Qf59JkzCoBHgEkpqRfA/sJNS/oDO5S0X0DsW+3Gl8+AHppJTSSf9BcKDSWQdp9XQpJkG2yNlyI59Wr0sNw4402jWcQ8EVTYNjflkMNE8fA0BL5MyeSel4x9nQmG1FJYT4OTNmuS/J44gMHJK5i/q5TKjVxiK5jFBVEy6h8KmTJE5RxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oHPCH4Tv+YlVVFmfoApeZN6/B//hEorOfafMV7ApypU=;
- b=gOnmFDwHSZwApvd89033uFgZCV3OwIAuQeEXQBdYvrbIITYjLZyp1ExjSNv845cD1tOOHd+7YI7lYESgiMcZ1Fo6iOIgJxRbuiBPz2oEOjlO1qFlwdPV+3D4zoscGbSEP+OxwtltHJpceet8BQdtN1CsUZ8H48YbvR5Y2AERcCuyJbRQgiOrCO75EDEgnJrGz6SNKDlELpFodofh5nxxklD3jrBPM4N0cACDl2TilAkSCqt8+WskdPBZtgU5iTe8UapXVVBGxEQRQjgYgk2x0jMwXsirHnsMankoEOzNX95F6czNXo+azUnq60iOFSFEj3mvg31v+hb8oxTaq3oqtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by PH7PR11MB5817.namprd11.prod.outlook.com (2603:10b6:510:13a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 18:26:18 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::5dfc:6a16:20d9:6948]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::5dfc:6a16:20d9:6948%5]) with mapi id 15.20.6298.030; Wed, 12 Apr 2023
- 18:26:18 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "Kang, Shan" <shan.kang@intel.com>
-Subject: RE: [PATCH v8 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to
- generate FRED stack frames
-Thread-Topic: [PATCH v8 33/33] KVM: x86/vmx: refactor VMX_DO_EVENT_IRQOFF to
- generate FRED stack frames
-Thread-Index: AQHZa4iiYR92PWeRCEi6WbUcy97+Bq8lFcEAgALhuRA=
-Date:   Wed, 12 Apr 2023 18:26:17 +0000
-Message-ID: <SA1PR11MB6734897C0BC0FC7481333E29A89B9@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-34-xin3.li@intel.com> <ZDSEjhGV9D90J6Bx@google.com>
-In-Reply-To: <ZDSEjhGV9D90J6Bx@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|PH7PR11MB5817:EE_
-x-ms-office365-filtering-correlation-id: e5701316-e41a-4739-b772-08db3b83683a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tVxk3e6Nk0gyNIIkLweoyhg/Dm2+sPqzou/GdWGKPISUuDUv7vkJ/DLd82hyB45oHIxPlIowPUrWQ9HKYIKu5YXriq8QtOBFEVZoPA3a6Lx4CMTB8Dv8ppjcdVajK6/nchr05ToLeB0QnweRtmn1i0vlnNB3RQZFrvxTbCy3NJQD+prbsTVLELR5DDdFiIGMUz+j+fWPofFYHtuxPixZpuDHPwTG+dQZSh9YguoYb6i6cZhF5Q7iI1RlWoBAKeqEY0EKTVK0Vd96hD41YZYwx+Lyc6S6HR4mnuCAZ70z5myT1aqbabRfcH7S6PP2J0EtrApGtepA62W+BfzBJefS6RWFGS1LedTwduXiZ6LsjS6xum0c3UXsQ+n5Lw/So5AMD1Iuh+sD119NT/im0T64vx3DlDQjvPRc46o5TiCDst2zmWU5cIKbs1S9RZk1l5Pi+EvE4vjXpzSBw/3qos3RgKWKVT8lxw4YdV1FstlrykacnQC9FwLOQRTEYXXqJpRfCQmSWJpSoIEbNRcdNlGkc2ZTI2mezIYvp2llkHearHyJXNCXN+urI+AuqOpcggFdIgh8DhnRkotlMQ5Zo46VE2Zf+tqV+3+xrRzo4oYspCotp9hJOnQQe/ih7d7Y0Ayb
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199021)(186003)(41300700001)(122000001)(4326008)(6916009)(66446008)(64756008)(55016003)(66476007)(66556008)(76116006)(86362001)(9686003)(66946007)(82960400001)(316002)(6506007)(54906003)(478600001)(26005)(71200400001)(5660300002)(7696005)(52536014)(83380400001)(33656002)(7416002)(38100700002)(38070700005)(2906002)(8676002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+guFN0IGHLxJFWcoQcRl08oyKF6Rvg9RFVqq5SRwy/irhG88ldQzyQZ0So0B?=
- =?us-ascii?Q?ng7Ay8ZbqqZOBde+ws/puaNYXX2LrdcoDlT7E9b7GzVAC5ZVxsR8NywjECvo?=
- =?us-ascii?Q?ytWJzOsCe9pxFbnS9Rgk9gHgy59k8tT2Nz8u69pjHj4ErnPl0Qv5kB1hAYWC?=
- =?us-ascii?Q?W7Jp0hYdwhKG9RgfQBvj1tKT2cgOhJoMBq9Q6p00xE740aC954XF0LKsav/L?=
- =?us-ascii?Q?wRjf+5zd0pyppngxi/FYruW2A0uAsAV+O1/4fPI8vRA3ArxEPoHB0de2sypm?=
- =?us-ascii?Q?ANO1D0cvZBh5hCALM8a2MX6n0KOGxfJwhL5u/3mfiJVYx8pKnO1ZtBU7ubc+?=
- =?us-ascii?Q?QgFC4Vjz594wH0MgWopO8PrBLX2AlsSNoWRVl5eLyjDW1MDIRiLJr0waeTFR?=
- =?us-ascii?Q?wPGYc4s5BvDOYloeZ6TR1tIm2oXTRDd1EpkwqgwQuaDXafPD+dlj1GzGp0ak?=
- =?us-ascii?Q?XVt8jM0+3+e8IIjFK7TqSnXPeStB6bEIhVcZYP1IBl35jMn06iOitiL/MbSx?=
- =?us-ascii?Q?exPQ0B9CeBCJSZ0jejhupYmZMyEWoHqRT+dNfpHLeHS8JbkrLnzhDp44NGfI?=
- =?us-ascii?Q?A94NzpkdTh5fZZJA1kwt+kXNSSovnWjPLVnvGQ10NSxqDaKpknwiosWMLR0B?=
- =?us-ascii?Q?+wU4iUIaXETKln6TH9hjfwPpVrV1dwTFsWphzALl+HR0WhFIadpq8y4VHN0D?=
- =?us-ascii?Q?rxNrUMZNtWiPeRcbK2GPGFbCQtiT7X5A2dUrLSsmRWtMwZiaU20DhOuyVWUu?=
- =?us-ascii?Q?wHI0zfLJ1788bNEmOV0JHj2zWkoZy8MNGGV1PeXzudKC6O/2kZWJfPGb2aoE?=
- =?us-ascii?Q?phSZKulT/0uWV3n8F2Y/cBoFeJoyXSI/u9jN8qsFiN/Dy6ymezKRwnDp3vXj?=
- =?us-ascii?Q?ESRirHrq6mQ6sf+AsIlLd7zUwAqhCOOJ50djmEeSIccudaVl2hx3ZPb3nnW9?=
- =?us-ascii?Q?zEQnTnAPbsLFN6bHWC42gfuqkrbCIhAIXi5zJAP/bPE5k68TqrJPMusXwK04?=
- =?us-ascii?Q?rnPipERWOZbM10HiTsl4NV8JnL/oqVbceSXOCePHMpm4ct7wE3g3TwikGIo7?=
- =?us-ascii?Q?7Tf+q1UblP9WmWK7lLv/O7XjrBSm7AgYmbT0i0azFA9jvEhJ1qPuPxZqPwyq?=
- =?us-ascii?Q?pZ5tkOIQPANurA2kONaQ8SwLNzXfO9RP+LNOWacaK+8VhNqeB32rHfHDyzKl?=
- =?us-ascii?Q?uLaTLktktdiO8101FsrNJsP9xO62qhx8Q8plEUJvnm5n3cIt2j6Hj3YfFepc?=
- =?us-ascii?Q?7tTvKd0YW1TKwlq+8msWw1+Sc74MzQtRb1ejAz8EG5Q12ZI0zfve7db3QUFK?=
- =?us-ascii?Q?mSSL8Jp3VyK4LuD98joTftYElv1VvVyMtXDxtgMvKaFmDfj++fOkg1zQek2j?=
- =?us-ascii?Q?PF1UG69+dyzXj0z6W5DS7nqaaScGuIVmyaPFsBN3sDUbVYhTDaWJYhOlL3vT?=
- =?us-ascii?Q?ytrjs1l5gmiXFL61XudeQzZzNW/o+kYdKa3+qgFoJhWfuT5dwnMG97adF9Qb?=
- =?us-ascii?Q?0VeXNpk4JIBYUhBoTzNjsIdmZ7T7t1mgxys2DTcekFE4jaRWm/mfLvrkGGF6?=
- =?us-ascii?Q?4HtT3RrKG8C8M+nXWys=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Apr 2023 14:26:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F41B59C6;
+        Wed, 12 Apr 2023 11:26:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v9so17798999pjk.0;
+        Wed, 12 Apr 2023 11:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681323996; x=1683915996;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qe4SS5MwqgNNblasLyBUlGHPWf5yZ2STwXpKEpxvmgk=;
+        b=D6xcB4D7MIBRR03l3RpjS/l27LEHg1viozYtwZQliZiaIVrC1xMrJpPnq8o1gzm14I
+         JinmTIp358cI33pWMrORKQjFCOlJXwjAlLcNb5AnbynV6VZyjfLzDiWsLBViXVvEnLF4
+         X9S/aXCudZ/20PGfQpYuRUbeRjP2nQ5kAcU5U2HcC/vzbH+MdXAWWMOwtDIsV6J6utNz
+         JnD2Jd/YQmdasVSwJXw1J+yGtQcbhRmpXeOQLBQCzXWB1LM58DLi1p0FhFMlCEBCnlKi
+         UM9H/rWDEcR6vfqsvyrKzg/07TW1DYjzNfX2+WXz47oV2qD6pQ3+mgdb1AQrsRpVHYOf
+         bHXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681323996; x=1683915996;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qe4SS5MwqgNNblasLyBUlGHPWf5yZ2STwXpKEpxvmgk=;
+        b=dDhCeT+C/SGiMAn+KHBYrv6TnlGIrHuYa9wMciU0NLwUp1Q0iRC5rzQQ5d2+zOiotd
+         502SWJ+BB4V9mDq0b+1nRwxsp2XLiOqKMyANXRmiKSFW+FCzBnwawLgBRtuwX7o71pzr
+         grHfqL+RhlW5/XiH+v0vZFV9Bpds1uFa98vPL/pU0NyN91oIBEHEK35T0T94hVDSbkSP
+         nUnknBWpvedF7koS1J3vmfeIx7Lt7PX4rOiQaqRRtIfSsWT1txq70WSIpEO4xfhti5RA
+         OSxNOB15GSWwL7cgeGYdbrfhjfGHlZQHZxcoqCW/+VghhS5F/Q9bq5s5rDfqgiipARNp
+         /AWA==
+X-Gm-Message-State: AAQBX9cwZoX4QK/+SNBW5vG941YrcpJ4Lgr2qWY2MR0sxZYBavOD377E
+        YFxXKUDJF5lP3NXMwp/V5ajuKGyDazg=
+X-Google-Smtp-Source: AKy350ZY15V6gkegcb0Q7rjtO2w8QTHnGTN1o6Fr4iEddJn3QSOwS1OoAKOb2SPug3kfMTM2pb/XiA==
+X-Received: by 2002:a05:6a20:4a29:b0:e8:d62c:4aa9 with SMTP id fr41-20020a056a204a2900b000e8d62c4aa9mr15718758pzb.24.1681323995446;
+        Wed, 12 Apr 2023 11:26:35 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id j16-20020a62e910000000b006258dd63a3fsm12017502pfh.56.2023.04.12.11.26.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 11:26:35 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 12 Apr 2023 08:26:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>
+Subject: Re: [PATCH v4 0/5] cgroup/cpuset: Fix CLONE_INTO_CGROUP problem &
+ other issues
+Message-ID: <ZDb32V9xcWOi2_CL@slm.duckdns.org>
+References: <20230411133601.2969636-1-longman@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5701316-e41a-4739-b772-08db3b83683a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 18:26:17.8136
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: U9Vpmh2gAwvaoHchzU0KfF6RX9wmXsBNwvLHR8ow7dEr0TEOAg5wjA1tjiPP2hlge2W1iiromkpgkMoxqK6YuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5817
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411133601.2969636-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 09:35:56AM -0400, Waiman Long wrote:
+>  v4:
+>   - Add missing rcu_read_lock/unlock to cpuset_cancel_fork() in patch 3.
+>   - Add patch 5 to reduce performance impact for the
+>     non-CLONE_INTO_CGROUP case.
+> 
+>  v3:
+>   - Update patches 2 & 3 to put task_cs() call under rcu_read_lock().
+> 
+>  v2:
+>   - Drop v1 patch 3
+>   - Add a new patch to fix an issue in cpuset_cancel_attach() and
+>     another patch to add cpuset_can_fork() and cpuset_cacnel_fork()
+>     methods.
+> 
+> The first patch in this series fixes a problem in
+> cpuset_cancel_attach(). Patches 2 and 3 fixes the CLONE_INTO_CGROUP
+> problem in cpuset. Patch 4 is a minor fix. The last patch is a
+> performance optimization patch for the non-CLONE_INTO_CGROUP case.
 
-> And then this is equally gross.  Rather than funnel FRED+legacy into a si=
-ngle
-> function only to split them back out, just route FRED into its own asm su=
-broutine.
-> The common bits are basically the creation/destruction of the stack frame=
- and
-> the CALL itself, i.e. the truly interesting bits are what's different.
+Applied 1-4 to cgroup/for-6.3-fixes w/ stable cc'd. Given that the fixes are
+a bit involved, the breakages have been there for quite a while and the
+cpuset code has changed quite a bit, backporting might not be trivial tho.
+Let's see how that goes.
 
-I try to catch up with you but am still confused.
+Thanks.
 
-Because a FRED stack frame always contains an error code pushed after RIP,
-the FRED entry code doesn't push any error code.
-
-Thus I introduced a trampoline code, which is called to have the return
-instruction address pushed first. Then the trampoline code pushes an error
-code (0 for both IRQ and NMI) and jumps to fred_entrypoint_kernel() for NMI
-handling or calls external_interrupt() for IRQ handling.
-
-The return RIP is used to return from fred_entrypoint_kernel(), but not
-external_interrupt().
-
-
-> Pretty much all of the #ifdeffery goes away, the helpers just need #ifdef=
-s to play
-> nice with CONFIG_X86_FRED=3Dn.  E.g. something like the below as a starti=
-ng point
-> (it most definitely doesn't compile, and most definitely isn't 100% corre=
-ct).
->=20
-> ---
->  arch/x86/kvm/vmx/vmenter.S | 72
-> ++++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/vmx.c     | 19 ++++++++--
->  2 files changed, 88 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S inde=
-x
-> 631fd7da2bc3..a6929c78e038 100644
-> --- a/arch/x86/kvm/vmx/vmenter.S
-> +++ b/arch/x86/kvm/vmx/vmenter.S
-> @@ -2,12 +2,14 @@
->  #include <linux/linkage.h>
->  #include <asm/asm.h>
->  #include <asm/bitsperlong.h>
-> +#include <asm/fred.h>
->  #include <asm/kvm_vcpu_regs.h>
->  #include <asm/nospec-branch.h>
->  #include <asm/percpu.h>
->  #include <asm/segment.h>
->  #include "kvm-asm-offsets.h"
->  #include "run_flags.h"
-> +#include "../../entry/calling.h"
->=20
->  #define WORD_SIZE (BITS_PER_LONG / 8)
->=20
-> @@ -31,6 +33,62 @@
->  #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
->  #endif
->=20
-> +#ifdef CONFIG_X86_FRED
-> +.macro VMX_DO_FRED_EVENT_IRQOFF call_target cs_val
-> +	/*
-> +	 * Unconditionally create a stack frame, getting the correct RSP on the
-> +	 * stack (for x86-64) would take two instructions anyways, and RBP can
-> +	 * be used to restore RSP to make objtool happy (see below).
-> +	 */
-> +	push %_ASM_BP
-> +	mov %_ASM_SP, %_ASM_BP
-> +
-> +	/*
-> +	 * Don't check the FRED stack level, the call stack leading to this
-> +	 * helper is effectively constant and shallow (relatively speaking).
-> +	 *
-> +	 * Emulate the FRED-defined redzone and stack alignment (128 bytes and
-> +	 * 64 bytes respectively).
-> +	 */
-> +	sub $(FRED_CONFIG_REDZONE_AMOUNT << 6), %rsp
-> +	and $FRED_STACK_FRAME_RSP_MASK, %rsp
-> +
-> +	/*
-> +	* A FRED stack frame has extra 16 bytes of information pushed at the
-> +	* regular stack top compared to an IDT stack frame.
-> +	*/
-> +	push $0         /* Reserved by FRED, must be 0 */
-> +	push $0         /* FRED event data, 0 for NMI and external interrupts *=
-/
-> +	shl $32, %rax
-> +	orq $__KERNEL_DS | $FRED_64_BIT_MODE, %ax
-> +	push %rax	/* Vector (from the "caller") and DS */
-> +
-> +	push %rbp
-> +	pushf
-> +	push \cs_val
-
-We need to push the RIP of the next instruction here. Or are you suggesting
-we don't need to care about it because it may not be used to return from th=
-e
-callee?
-
-As mentioned above, the return RIP is used when returning from NMI handling=
-.
-
-Or I totally missed a key idea to build a FRED stack frame?
-
-Thanks!
-  Xin
-
-> +	push $0 /* FRED error code, 0 for NMI and external interrupts */
-> +	PUSH_REGS
-> +
-> +	/* Load @pt_regs */
-> +	movq    %rsp, %_ASM_ARG1
-> +
-> +	call \call_target
-> +
-> +	POP_REGS
-> +
-> +	/*
-> +	 * "Restore" RSP from RBP, even though IRET has already unwound RSP
-> to
-> +	 * the correct value.  objtool doesn't know the callee will IRET and,
-> +	 * without the explicit restore, thinks the stack is getting walloped.
-> +	 * Using an unwind hint is problematic due to x86-64's dynamic
-> alignment.
-> +	 */
-> +	mov %_ASM_BP, %_ASM_SP
-> +	pop %_ASM_BP
-> +	RET
-> +.endm
-> +#endif
-> +
-
+-- 
+tejun
