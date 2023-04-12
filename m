@@ -2,84 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC506DF554
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1526DF59D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjDLMeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S231666AbjDLMjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjDLMeM (ORCPT
+        with ESMTP id S230334AbjDLMja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:34:12 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E491BE6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:34:11 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id sh8so28337906ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681302850; x=1683894850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r2cn52JN3eRMerScMtCLlq4G/DaFFVVSR4HFPD0rXaU=;
-        b=V2tdHLT8z0rzP1cIETJ1rUDrJ+pVt8os5+RVxclF2NIA9QFHWIVsDJVIcl7e5aSMmV
-         7rc93+5f8U9MHcxd+3QFFi/A20o/2Ktmv063Xw/X3f005opiPA/44UGQT9eucY/3Xpr0
-         Y0f7EWuVtSIDH1gqkJWKBOre8PKGyeg1GnJ2c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681302850; x=1683894850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r2cn52JN3eRMerScMtCLlq4G/DaFFVVSR4HFPD0rXaU=;
-        b=AACpycG8cmfwavpCO427xvMbx3o2LfwpSCi4xh7YIf6ZMWOt5j1Wni79mS1XvJanrm
-         3DcfLPfYgixwoXCzZDZnNTIK74vsv47RW87aTBeYar8TfPJsduSZCKCNhqUncuhOVEKV
-         FP/Obnkhp0XxIKRWr6LIaZsw53ZXCZ+I+CMe13C8a0X0x2MbZrNUJHsYXOstgJODDZMP
-         66Zta0wXxBUQv33j7H7Bc4FyppcOjcBmQVtvfWzYbBB7XHYpn5w8AShx6HLI0c35Kw3+
-         hBEpwJAkDHaTc11rne20hYxuJbBzUvGswN1dc/hTxgVW7QIdfqJ9NQrN3v3LwpIC/84s
-         9Xfw==
-X-Gm-Message-State: AAQBX9cTIt/ySXdDiZjpin5MnOEbt2dhXel+beW+WwiaF5G4ZA8Zwzxf
-        P+WgV7VNemrJXq0uAys52bBdefJ9M99LsGOpsczsRg==
-X-Google-Smtp-Source: AKy350aPE23MhQg8qWazNdMKTEkcF1JPMzvLnz5WOiZUlgpc8Ua3OiDxBIJMV1kWwPXkUpnZFLhl3Z/MKekHvmIgyHU=
-X-Received: by 2002:a17:906:ed1:b0:8f1:4c6a:e72 with SMTP id
- u17-20020a1709060ed100b008f14c6a0e72mr6150913eji.0.1681302849823; Wed, 12 Apr
- 2023 05:34:09 -0700 (PDT)
+        Wed, 12 Apr 2023 08:39:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F14B868D;
+        Wed, 12 Apr 2023 05:39:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D1C16341B;
+        Wed, 12 Apr 2023 12:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7770FC433D2;
+        Wed, 12 Apr 2023 12:38:58 +0000 (UTC)
+Message-ID: <f133f378-4e4b-8747-4c0c-58caca861c4b@xs4all.nl>
+Date:   Wed, 12 Apr 2023 14:38:56 +0200
 MIME-Version: 1.0
-References: <20230411130025.19704-1-kal.conley@dectris.com> <CAJ8uoz3W8uHQANJ2hxVydCbz7-d=kO9KKn_iBLX3wsWy-OGUvQ@mail.gmail.com>
-In-Reply-To: <CAJ8uoz3W8uHQANJ2hxVydCbz7-d=kO9KKn_iBLX3wsWy-OGUvQ@mail.gmail.com>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Wed, 12 Apr 2023 14:38:54 +0200
-Message-ID: <CAHApi-nXHzwmGmQUkbH=6aP1Dob=s2SSB91zjGScHNcRjMy8kA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] xsk: Elide base_addr comparison in xp_unaligned_validate_desc
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [v9] media: mediatek: vcodec: support stateless AV1 decoder
+Content-Language: en-US
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230412033022.7766-1-xiaoyong.lu@mediatek.com>
+ <00a8fb79-580e-5389-f03f-abb7bba9f092@xs4all.nl>
+In-Reply-To: <00a8fb79-580e-5389-f03f-abb7bba9f092@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Thanks Kal! Just checking again that you ran the xsk selftests on your
-> change and that it passed? If so, here is my ack.
->
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
->
+On 12/04/2023 14:22, Hans Verkuil wrote:
+> On 12/04/2023 05:30, Xiaoyong Lu wrote:
+>> Add mediatek av1 decoder linux driver which use the stateless API in
+>> MT8195.
+>>
+>> Signed-off-by: Xiaoyong Lu<xiaoyong.lu@mediatek.com>
+>> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Hmm, I get this compile error:
+> 
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c: In function ‘vdec_av1_slice_setup_uh’:
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:48:58: error: ‘V4L2_AV1_FRAME_FLAG_UNIFORM_TILE_SPACING’ undeclared (first use in this function); did you mean
+> ‘V4L2_AV1_TILE_INFO_FLAG_UNIFORM_TILE_SPACING’?
+>    48 | #define FH_FLAG(x, name)                (!!((x)->flags & V4L2_AV1_FRAME_FLAG_##name))
+>       |                                                          ^~~~~~~~~~~~~~~~~~~~
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:1322:41: note: in expansion of macro ‘FH_FLAG’
+>  1322 |         uh->uniform_tile_spacing_flag = FH_FLAG(ctrl_fh, UNIFORM_TILE_SPACING);
+>       |                                         ^~~~~~~
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:48:58: note: each undeclared identifier is reported only once for each function it appears in
+>    48 | #define FH_FLAG(x, name)                (!!((x)->flags & V4L2_AV1_FRAME_FLAG_##name))
+>       |                                                          ^~~~~~~~~~~~~~~~~~~~
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:1322:41: note: in expansion of macro ‘FH_FLAG’
+>  1322 |         uh->uniform_tile_spacing_flag = FH_FLAG(ctrl_fh, UNIFORM_TILE_SPACING);
+>       |                                         ^~~~~~~
+> 
+> This flag was renamed from V4L2_AV1_FRAME_FLAG_UNIFORM_TILE_SPACING to
+> V4L2_AV1_TILE_INFO_FLAG_UNIFORM_TILE_SPACING in v5 of the AV1 uAPI.
+> 
+> So this suggests to me that you are testing with an old version of the AV1
+> uAPI. The correct one is v7:
+> 
+> https://patchwork.linuxtv.org/project/linux-media/patch/20230306161850.492072-1-daniel.almeida@collabora.com/
+> 
+> You have to compile and test with that v7 patch since that's the version we
+> want to merge.
 
-yep, I ran the tests and they PASSED.
+smatch also gave this error:
+
+vdec_av1_req_lat_if.c:2121 vdec_av1_slice_lat_decode() error: we previously assumed 'pfc' could be null (see line 2056)
+
+Regards,
+
+	Hans
