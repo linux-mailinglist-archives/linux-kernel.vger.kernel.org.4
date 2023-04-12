@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E776DF75B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2966DF761
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjDLNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S229992AbjDLNiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDLNhT (ORCPT
+        with ESMTP id S229521AbjDLNiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:37:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551071703
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681306583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ewXy379Ae29fQc/OJYG3QVSYdaG46iuKGeWsmru53A=;
-        b=U+syPHqQ4QIl1735h+1kBN77nMAgk7l4pJgHv2+9WC6sN2RR/BTSDZpGG4iPxGyTN1nVNn
-        GapgtaPJ3UINTIphtBxmtNH0PofOgYDn4IwEHAenVZNyilTfPuV1q+he95cPDF7hVhFemD
-        Zg3oBgzOmSIcCxIoliDSmnZOlB51hOo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-619-UhsBAvYFNDmYRysHut8OmQ-1; Wed, 12 Apr 2023 09:36:22 -0400
-X-MC-Unique: UhsBAvYFNDmYRysHut8OmQ-1
-Received: by mail-qt1-f200.google.com with SMTP id x9-20020ac85f09000000b003e4ecb5f613so2994794qta.21
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:36:22 -0700 (PDT)
+        Wed, 12 Apr 2023 09:38:04 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2340F2;
+        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id bj35so4378019qkb.7;
+        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681306682; x=1683898682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
+        b=B/jjBNSTypcC+joaCW6KBpHZMJp0zGfpqOXg+zBPIJ4NWlwYrPSMxjdSJy75T7U+3W
+         U3p3HotHjbkZlaRKmFC8qc1Afx6oeTJ5uQpH2hG5w6sceSXtWvhwqD0ty4GTJOrTqqUL
+         idO/30jacGJYN69+SVScPsn3OHD9k8oRdDeFIGHLcMZu3eu8rF9Xwdo+4T1+slcDtYsU
+         YH0NOP8VGLe82rREMYx2QH+7wkX8dWpsJjPbWWLufPzhXmFeBT9DiKG3mgcWZ9nD2lka
+         J4Q7aWlsb6BWQEoFbqY6WJkyrIjqnRCGYJf4CUJlNWaYPJ0je3GRhXlmjShv2pC79kPd
+         uijw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681306582; x=1683898582;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ewXy379Ae29fQc/OJYG3QVSYdaG46iuKGeWsmru53A=;
-        b=Cz4PtZjnHTukwE/Frx0v6c7gIY7dUknJOBm6s6S2BrFktIVqx4i0KYleG13pyQJ5RT
-         QJMUav8hZBkfSoNJB7CYch1jvOu0RmGfWaO9QRgL3fc49KnFkpzxbv5RmgkYJnhDjk7/
-         WtP20v2HRHqZFy+fEs2YWgel/1ULqvsVwgVWlkV9JmvfuyZdXOqZkNOhpZIWLtfNJ1Rs
-         HFl6F6kwOqaA1KpzYt0aZ2sNXFyQWSyrqmVeQ2rX8reQBiBCtqO64SCF0jZ8kgcSUNlH
-         SI7hC3Ycf3Z8Q8nJ0n+zdMaCQ3UMsCmGvSeUSD+Mo2BmV1Rw2kltcH2y+aD5lwwIonSU
-         GOsA==
-X-Gm-Message-State: AAQBX9fGZZX+Q8nUfTwrhKD7pZB/3V2iCfc+fYwx+DBsreLSsWeakDrS
-        rvXjTemQVKGlV2YGAXJ10bQ+cVxgyY9i/zY7WvBdhUGLFrz4pA9r7yWNcgO6HO0STljbCAX7AJE
-        TNaDnr2IGGx755fyHXAqnynYY
-X-Received: by 2002:ac8:5c05:0:b0:3e4:f002:2b6e with SMTP id i5-20020ac85c05000000b003e4f0022b6emr28307300qti.32.1681306582010;
-        Wed, 12 Apr 2023 06:36:22 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YyZakv16OmdCaib4fyStvbl02JokYTyFrIjcpCov1kK+TXwjvTomfRXeP9cHOs285MySvRIA==
-X-Received: by 2002:ac8:5c05:0:b0:3e4:f002:2b6e with SMTP id i5-20020ac85c05000000b003e4f0022b6emr28307277qti.32.1681306581718;
-        Wed, 12 Apr 2023 06:36:21 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id w25-20020ac843d9000000b003e693d92781sm3263730qtn.70.2023.04.12.06.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 06:36:21 -0700 (PDT)
-Message-ID: <e0ee22ee5a60f45b39fe420c517db68cb83b850d.camel@redhat.com>
-Subject: Re: [PATCH v3 2/2] cacheinfo: Add arm64 early level initializer
- implementation
-From:   Radu Rendec <rrendec@redhat.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 12 Apr 2023 09:36:19 -0400
-In-Reply-To: <20230412114011.4gexyfnl6hu236kp@bogus>
-References: <20230406233926.1670094-1-rrendec@redhat.com>
-         <20230406233926.1670094-3-rrendec@redhat.com>
-         <20230412114011.4gexyfnl6hu236kp@bogus>
+        d=1e100.net; s=20210112; t=1681306682; x=1683898682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
+        b=b6gBQOYwn0iv6j28deCPgMLLksHtVWvph94bSzJdnLF+eBjV2wF3XjmJ1prFZrdHYU
+         Ac9Fa6HZR3LHWVeJhKeiBG6V1DZ8iBpipYwJVQkgDQPfWcYmKdmIe63FQ28dq99VOFgW
+         a3oxs0sgKdKVhxjubS5iuqkBkJmhLG4hgBwNQ38zte8uuroy1kajWTCk+pFqOtgQzm+y
+         Yw7sTMLu0XTVzVrjTzav8PlihjuCCwGHu9SWNQs0oL4+UjvJelfxqBwMYlhJBn9uZ74+
+         XKFGLGy7nlmcGZHZFvfYZtbWrlVlDifU/zvJaorRO5FrfPeXPMl19toEN4Ut4qiIpZQU
+         R7bA==
+X-Gm-Message-State: AAQBX9dmLvbkbOCHa4I7kp452wdamYNpIBB1ZuEgl0I08sBI5+YjTpIL
+        UuYqCkyVnuicMXHfpa4M+Y11A4uSHw/Pvk9zUYM=
+X-Google-Smtp-Source: AKy350bQZX93U7KKOQF4PJTiOvTycKd+ntmsVru9e/foHUOInkoawqILTSPuq4LXHeg8osg4IFMokyT1/kYfdkvFekQ=
+X-Received: by 2002:a05:620a:4482:b0:746:83cd:8d1d with SMTP id
+ x2-20020a05620a448200b0074683cd8d1dmr2165203qkp.6.1681306681702; Wed, 12 Apr
+ 2023 06:38:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230405141710.3551-1-ubizjak@gmail.com> <20230405141710.3551-4-ubizjak@gmail.com>
+ <20230412113231.GA628377@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230412113231.GA628377@hirez.programming.kicks-ass.net>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Wed, 12 Apr 2023 15:37:50 +0200
+Message-ID: <CAFULd4aCNNcyQm3Av+KkWVXuU9Cb0G5H5cFmqVR_T5LwCW=YJA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] locking/arch: Wire up local_try_cmpxchg
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,113 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-04-12 at 12:40 +0100, Sudeep Holla wrote:
-> On Thu, Apr 06, 2023 at 07:39:26PM -0400, Radu Rendec wrote:
-> > This patch adds an architecture specific early cache level detection
-> > handler for arm64. This is basically the CLIDR_EL1 based detection that
-> > was previously done (only) in init_cache_level().
-> >=20
-> > This is part of a patch series that attempts to further the work in
-> > commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU")=
-.
-> > Previously, in the absence of any DT/ACPI cache info, architecture
-> > specific cache detection and info allocation for secondary CPUs would
-> > happen in non-preemptible context during early CPU initialization and
-> > trigger a "BUG: sleeping function called from invalid context" splat on
-> > an RT kernel.
-> >=20
-> > This patch does not solve the problem completely for RT kernels. It
-> > relies on the assumption that on most systems, the CPUs are symmetrical
-> > and therefore have the same number of cache leaves. The cacheinfo memor=
-y
-> > is allocated early (on the primary CPU), relying on the new handler. If
-> > later (when CLIDR_EL1 based detection runs again on the secondary CPU)
-> > the initial assumption proves to be wrong and the CPU has in fact more
-> > leaves, the cacheinfo memory is reallocated, and that still triggers a
-> > splat on an RT kernel.
-> >=20
-> > In other words, asymmetrical CPU systems *must* still provide cacheinfo
-> > data in DT/ACPI to avoid the splat on RT kernels (unless secondary CPUs
-> > happen to have less leaves than the primary CPU). But symmetrical CPU
-> > systems (the majority) can now get away without the additional DT/ACPI
-> > data and rely on CLIDR_EL1 based detection.
-> >=20
-> > Signed-off-by: Radu Rendec <rrendec@redhat.com>
-> > ---
-> > =C2=A0arch/arm64/kernel/cacheinfo.c | 32 ++++++++++++++++++++++++------=
---
-> > =C2=A01 file changed, 24 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinf=
-o.c
-> > index c307f69e9b55..520d17e4ebe9 100644
-> > --- a/arch/arm64/kernel/cacheinfo.c
-> > +++ b/arch/arm64/kernel/cacheinfo.c
-> > @@ -38,21 +38,37 @@ static void ci_leaf_init(struct cacheinfo *this_lea=
-f,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0this_leaf->type =3D typ=
-e;
-> > =C2=A0}
-> > =C2=A0
-> > -int init_cache_level(unsigned int cpu)
-> > +static void detect_cache_level(unsigned int *level, unsigned int *leav=
-es)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int ctype, level, l=
-eaves;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int fw_level, ret;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cpu_cacheinfo *this_c=
-pu_ci =3D get_cpu_cacheinfo(cpu);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int ctype;
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (level =3D 1, leaves =3D=
- 0; level <=3D MAX_CACHE_LEVEL; level++) {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ctype =3D get_cache_type(level);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (*level =3D 1, *leaves =
-=3D 0; *level <=3D MAX_CACHE_LEVEL; (*level)++) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ctype =3D get_cache_type(*level);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ctype =3D=3D CACHE_TYPE_NOCACHE) {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0level-=
--;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(*leve=
-l)--;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-break;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Separate instruction and data caches */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0leaves +=3D (ctype =3D=3D CACHE_TYPE_SEPARATE) ? 2 : 1=
-;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0*leaves +=3D (ctype =3D=3D CACHE_TYPE_SEPARATE) ? 2 : =
-1;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+On Wed, Apr 12, 2023 at 1:33=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Wed, Apr 05, 2023 at 04:17:08PM +0200, Uros Bizjak wrote:
+> > diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/as=
+m/local.h
+> > index bc4bd19b7fc2..45492fb5bf22 100644
+> > --- a/arch/powerpc/include/asm/local.h
+> > +++ b/arch/powerpc/include/asm/local.h
+> > @@ -90,6 +90,17 @@ static __inline__ long local_cmpxchg(local_t *l, lon=
+g o, long n)
+> >       return t;
+> >  }
+> >
+> > +static __inline__ bool local_try_cmpxchg(local_t *l, long *po, long n)
+> > +{
+> > +     long o =3D *po, r;
+> > +
+> > +     r =3D local_cmpxchg(l, o, n);
+> > +     if (unlikely(r !=3D o))
+> > +             *po =3D r;
+> > +
+> > +     return likely(r =3D=3D o);
 > > +}
->=20
-> I prefer to use locals and assign the value to keep it simple/easy to fol=
-low.
-> Compiler can/will optimise this anyway. But I am fine either way.
+> > +
+>
+> Why is the ppc one different from the rest? Why can't it use the
+> try_cmpxchg_local() fallback and needs to have it open-coded?
 
-To be honest, I was on the fence about this and decided to go with the
-pointers, but now that you brought it up, I changed my mind :)
+Please note that ppc directly defines local_cmpxchg that bypasses
+cmpxchg_local/arch_cmpxchg_local machinery. The patch takes the same
+approach for local_try_cmpxchg, because fallbacks are using
+arch_cmpxchg_local definitions.
 
-If I keep the original names for the locals and use something else for
-the arguments, the patch will look cleaner and it will be obvious for
-anyone looking at it that the algorithm for counting the levels/leaves
-is unchanged.
+PPC should be converted to use arch_cmpxchg_local (to also enable
+instrumentation), but this is not the scope of the proposed patchset.
 
-Best regards,
-Radu
-
-> I need Will's(or Catalin's)=C2=A0 ack if I have to take the changes via
-> Greg's tree.
->=20
-
+Uros.
