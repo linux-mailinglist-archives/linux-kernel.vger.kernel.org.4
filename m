@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81286DFE4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4D16DFE4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjDLTD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S230033AbjDLTEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjDLTDt (ORCPT
+        with ESMTP id S229841AbjDLTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 15:03:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255CA30EE
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96CBE6F
         for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 12:03:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF20B63873
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCB8C4339C;
-        Wed, 12 Apr 2023 19:03:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11EAC6387F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 19:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD80C433EF;
+        Wed, 12 Apr 2023 19:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1681326227;
-        bh=Xo5lcU2wwdD++yBcxh/rdhi4q0XegKdBxgS1Acd6DXo=;
+        bh=ALLHXWLy6y39aAaEiGHQFmrawumL94Hfe6ZlVC/BQUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFvGhjCArhUk17ZwpAZ2Cf1o25V9jEG+7qU4R3iudzxd8iV+aoNl7mhWtmBBZktd/
-         AKT1KDS2LiTMpz0CvOffjMBVbT7Kx+Raj8v15hky+B/cK1xI23MHJyFY6dDv46xkYz
-         3pBRG+uEbDqYqMAyq+BpUS10MOcdKbO9k2IE+CJkU4xCe218coEA2FnlIJHDNLwvjs
-         9lqHEkFygxFoIY5/eN0yTANF3EqJ49ZGqFmsSJiKeP/2TpxLuSeMf2pkjm0a8GO24q
-         VK0n5WcYd/Vkp08wWC3y9dxP0dDhoWZnOz07UuCOk8sbFnfvK8INdOhT7Q8kwUs31m
-         vrp+KhpZ9sIjQ==
+        b=aStfXEpTrgz7R5gGwQpVWCMa1e/aFwS0LM8H2J0mdNSdYpbXavmcZtOxgVFbFpU8s
+         vLQT4p9dMG2o903/IMeW3fY17wQh51/QR8X4zc512DYPheoP4Wqtar8Ah7KDTJetKS
+         rqv2mdZJV3/PfYwz2anB86tac0IFJzJZAvgBX6QfpZK+43o/yOe2oIwGtArCUgcYdX
+         jgAgQhD1Lub4/h32jSgH+q6JPUr+KVy8gnFYY/VMPuYYQPSZDZUXnA9hzXqEMKIadw
+         NhMT7HmI7X84gsO9hiuIcRTvn1NAcOFfRqGqsENcQP3Qor9n5rdeJiujmGh3xeqvWC
+         6h4subfi9ayvw==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 5/9] objtool: Add verbose option for disassembling affected functions
-Date:   Wed, 12 Apr 2023 12:03:20 -0700
-Message-Id: <4cadacc719db1e792c335309056960ca6f71139e.1681325924.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 6/9] objtool: Include backtrace in verbose mode
+Date:   Wed, 12 Apr 2023 12:03:21 -0700
+Message-Id: <6a11522b7d2fdb713ec80a89fe8cb199ddb511b6.1681325924.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1681325924.git.jpoimboe@kernel.org>
 References: <cover.1681325924.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,166 +55,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a warning is associated with a function, add an option to
-disassemble that function.
-
-This makes it easier for reporters to submit the information needed to
-diagnose objtool warnings.
+Include backtrace in verbose mode.  This makes it easy to gather all the
+information needed for diagnosing objtool warnings.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/Documentation/objtool.txt |  5 ++
- tools/objtool/builtin-check.c           |  5 ++
- tools/objtool/check.c                   | 77 +++++++++++++++++++++++++
- tools/objtool/include/objtool/builtin.h |  1 +
- 4 files changed, 88 insertions(+)
+ tools/objtool/Documentation/objtool.txt |  4 ++--
+ tools/objtool/check.c                   | 26 ++++++++++---------------
+ tools/objtool/include/objtool/warn.h    | 14 +++++++------
+ 3 files changed, 20 insertions(+), 24 deletions(-)
 
 diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
-index 8e53fc6735ef..4d6c5acde7a3 100644
+index 4d6c5acde7a3..5a69c207a10e 100644
 --- a/tools/objtool/Documentation/objtool.txt
 +++ b/tools/objtool/Documentation/objtool.txt
-@@ -244,6 +244,11 @@ To achieve the validation, objtool enforces the following rules:
- Objtool warnings
- ----------------
+@@ -246,8 +246,8 @@ Objtool warnings
  
-+NOTE: When requesting help with an objtool warning, please recreate with
-+OBJTOOL_VERBOSE=1 (e.g., "make OBJTOOL_VERBOSE=1") and send the full
-+output, including any disassembly below the warning, to the objtool
-+maintainers.
-+
+ NOTE: When requesting help with an objtool warning, please recreate with
+ OBJTOOL_VERBOSE=1 (e.g., "make OBJTOOL_VERBOSE=1") and send the full
+-output, including any disassembly below the warning, to the objtool
+-maintainers.
++output, including any disassembly or backtrace below the warning, to the
++objtool maintainers.
+ 
  For asm files, if you're getting an error which doesn't make sense,
  first make sure that the affected code follows the above rules.
- 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 7c175198d09f..5e21cfb7661d 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -93,6 +93,7 @@ static const struct option check_options[] = {
- 	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
- 	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
- 	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
-+	OPT_BOOLEAN('v', "verbose", &opts.verbose, "verbose warnings"),
- 
- 	OPT_END(),
- };
-@@ -118,6 +119,10 @@ int cmd_parse_options(int argc, const char **argv, const char * const usage[])
- 		parse_options(envc, envv, check_options, env_usage, 0);
- 	}
- 
-+	env = getenv("OBJTOOL_VERBOSE");
-+	if (env && !strcmp(env, "1"))
-+		opts.verbose = true;
-+
- 	argc = parse_options(argc, argv, check_options, usage, 0);
- 	if (argc != 1)
- 		usage_with_options(usage, check_options);
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index d1d47baa252c..bc9dd69c9a45 100644
+index bc9dd69c9a45..b9e5e0e9c1ee 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -4509,6 +4509,81 @@ static int validate_reachable_instructions(struct objtool_file *file)
- 	return warnings;
- }
+@@ -3654,8 +3654,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
  
-+/* 'funcs' is a space-separated list of function names */
-+static int disas_funcs(const char *funcs)
-+{
-+	const char *objdump_str, *cross_compile;
-+	int size, ret;
-+	char *cmd;
-+
-+	cross_compile = getenv("CROSS_COMPILE");
-+
-+	objdump_str = "%sobjdump -wdr %s | gawk -M -v _funcs='%s' '"
-+			"BEGIN { split(_funcs, funcs); }"
-+			"/^$/ { func_match = 0; }"
-+			"/<.*>:/ { "
-+				"f = gensub(/.*<(.*)>:/, \"\\\\1\", 1);"
-+				"for (i in funcs) {"
-+					"if (funcs[i] == f) {"
-+						"func_match = 1;"
-+						"base = strtonum(\"0x\" $1);"
-+						"break;"
-+					"}"
-+				"}"
-+			"}"
-+			"{"
-+				"if (func_match) {"
-+					"addr = strtonum(\"0x\" $1);"
-+					"printf(\"%%04x \", addr - base);"
-+					"print;"
-+				"}"
-+			"}' 1>&2";
-+
-+	/* fake snprintf() to calculate the size */
-+	size = snprintf(NULL, 0, objdump_str, cross_compile, objname, funcs) + 1;
-+	if (size <= 0) {
-+		WARN("objdump string size calculation failed");
-+		return -1;
-+	}
-+
-+	cmd = malloc(size);
-+
-+	/* real snprintf() */
-+	snprintf(cmd, size, objdump_str, cross_compile, objname, funcs);
-+	ret = system(cmd);
-+	if (ret) {
-+		WARN("disassembly failed: %d", ret);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int disas_warned_funcs(struct objtool_file *file)
-+{
-+	struct symbol *sym;
-+	char *funcs = NULL, *tmp;
-+
-+	for_each_sym(file, sym) {
-+		if (sym->warned) {
-+			if (!funcs) {
-+				funcs = malloc(strlen(sym->name) + 1);
-+				strcpy(funcs, sym->name);
-+			} else {
-+				tmp = malloc(strlen(funcs) + strlen(sym->name) + 2);
-+				sprintf(tmp, "%s %s", funcs, sym->name);
-+				free(funcs);
-+				funcs = tmp;
-+			}
-+		}
-+	}
-+
-+	if (funcs)
-+		disas_funcs(funcs);
-+
-+	return 0;
-+}
-+
- int check(struct objtool_file *file)
+ 				ret = validate_branch(file, func, alt->insn, state);
+ 				if (ret) {
+-					if (opts.backtrace)
+-						BT_FUNC("(alt)", insn);
++					BT_INSN(insn, "(alt)");
+ 					return ret;
+ 				}
+ 			}
+@@ -3700,8 +3699,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+ 				ret = validate_branch(file, func,
+ 						      insn->jump_dest, state);
+ 				if (ret) {
+-					if (opts.backtrace)
+-						BT_FUNC("(branch)", insn);
++					BT_INSN(insn, "(branch)");
+ 					return ret;
+ 				}
+ 			}
+@@ -3799,8 +3797,8 @@ static int validate_unwind_hint(struct objtool_file *file,
  {
- 	int ret, warnings = 0;
-@@ -4646,6 +4721,8 @@ int check(struct objtool_file *file)
- 		warnings += ret;
+ 	if (insn->hint && !insn->visited && !insn->ignore) {
+ 		int ret = validate_branch(file, insn_func(insn), insn, *state);
+-		if (ret && opts.backtrace)
+-			BT_FUNC("<=== (hint)", insn);
++		if (ret)
++			BT_INSN(insn, "<=== (hint)");
+ 		return ret;
  	}
  
-+	if (opts.verbose)
-+		disas_warned_funcs(file);
+@@ -3858,8 +3856,7 @@ static int validate_unret(struct objtool_file *file, struct instruction *insn)
  
- 	if (opts.stats) {
- 		printf("nr_insns_visited: %ld\n", nr_insns_visited);
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 2a108e648b7a..fcca6662c8b4 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -37,6 +37,7 @@ struct opts {
- 	bool no_unreachable;
- 	bool sec_address;
- 	bool stats;
-+	bool verbose;
- };
+ 				ret = validate_unret(file, alt->insn);
+ 				if (ret) {
+-				        if (opts.backtrace)
+-						BT_FUNC("(alt)", insn);
++					BT_INSN(insn, "(alt)");
+ 					return ret;
+ 				}
+ 			}
+@@ -3885,10 +3882,8 @@ static int validate_unret(struct objtool_file *file, struct instruction *insn)
+ 				}
+ 				ret = validate_unret(file, insn->jump_dest);
+ 				if (ret) {
+-					if (opts.backtrace) {
+-						BT_FUNC("(branch%s)", insn,
+-							insn->type == INSN_JUMP_CONDITIONAL ? "-cond" : "");
+-					}
++					BT_INSN(insn, "(branch%s)",
++						insn->type == INSN_JUMP_CONDITIONAL ? "-cond" : "");
+ 					return ret;
+ 				}
  
- extern struct opts opts;
+@@ -3910,8 +3905,7 @@ static int validate_unret(struct objtool_file *file, struct instruction *insn)
+ 
+ 			ret = validate_unret(file, dest);
+ 			if (ret) {
+-				if (opts.backtrace)
+-					BT_FUNC("(call)", insn);
++				BT_INSN(insn, "(call)");
+ 				return ret;
+ 			}
+ 			/*
+@@ -4195,8 +4189,8 @@ static int validate_symbol(struct objtool_file *file, struct section *sec,
+ 	state->uaccess = sym->uaccess_safe;
+ 
+ 	ret = validate_branch(file, insn_func(insn), insn, *state);
+-	if (ret && opts.backtrace)
+-		BT_FUNC("<=== (sym)", insn);
++	if (ret)
++		BT_INSN(insn, "<=== (sym)");
+ 	return ret;
+ }
+ 
+diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
+index 4ef9b278e5fd..856ea8bc10d7 100644
+--- a/tools/objtool/include/objtool/warn.h
++++ b/tools/objtool/include/objtool/warn.h
+@@ -61,12 +61,14 @@ static inline char *offstr(struct section *sec, unsigned long offset)
+ 		insn->sym->warned = 1;					\
+ })
+ 
+-#define BT_FUNC(format, insn, ...)			\
+-({							\
+-	struct instruction *_insn = (insn);		\
+-	char *_str = offstr(_insn->sec, _insn->offset); \
+-	WARN("  %s: " format, _str, ##__VA_ARGS__);	\
+-	free(_str);					\
++#define BT_INSN(insn, format, ...)				\
++({								\
++	if (opts.verbose || opts.backtrace) {			\
++		struct instruction *_insn = (insn);		\
++		char *_str = offstr(_insn->sec, _insn->offset); \
++		WARN("  %s: " format, _str, ##__VA_ARGS__);	\
++		free(_str);					\
++	}							\
+ })
+ 
+ #define WARN_ELF(format, ...)				\
 -- 
 2.39.2
 
