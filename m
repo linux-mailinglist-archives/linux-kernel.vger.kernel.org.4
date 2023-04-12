@@ -2,142 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E696DF21B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349CF6DF274
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDLKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S229735AbjDLLBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjDLKly (ORCPT
+        with ESMTP id S229650AbjDLLBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:41:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F996A76
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:41:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 12 Apr 2023 07:01:21 -0400
+X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 04:01:20 PDT
+Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692A17292
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:01:20 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B2CC52195D;
-        Wed, 12 Apr 2023 10:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681296111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qORcrIdBgTd6N3Ng5bWVL93iviLNLM8ytHL/iEw+y1E=;
-        b=tll98gAJ4PBYuuJblGT3bQTrcize3AXLB86X/BE3z46RbRj6az/IkE9vtA3F8V4XllLfBz
-        FKgQKz4aY9oahSA0ue9QWwRaAp1hbkHNI83EAXRvwR/7cwiEfbdUDBQbhNWsDDzJEkhKr2
-        izPIq2ctZFtma5fABC7ObRIhNzaZLWw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681296111;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qORcrIdBgTd6N3Ng5bWVL93iviLNLM8ytHL/iEw+y1E=;
-        b=veHbgvGOYpdoyrweJpndxK/nR+6BALDmQjqNpPGDHor1aYk+XMVgcPGxI81C6Vn7hpKX5v
-        IOTXkQ82MPDbcrDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BC54132C7;
-        Wed, 12 Apr 2023 10:41:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L+YAJu+KNmTCIAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 12 Apr 2023 10:41:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 1F497A0732; Wed, 12 Apr 2023 12:41:51 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 12:41:51 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "Teterevkov, Ivan" <Ivan.Teterevkov@amd.com>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "jglisse@redhat.com" <jglisse@redhat.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: find_get_page() VS pin_user_pages()
-Message-ID: <20230412104151.hkl5navnaoc7l7ob@quack3>
-References: <PH0PR12MB5606D4611050BC8B1CC430FEF09A9@PH0PR12MB5606.namprd12.prod.outlook.com>
- <87mt3ehti4.fsf@nvidia.com>
- <MW5PR12MB55984F39C8CECADDFE7548F2F09B9@MW5PR12MB5598.namprd12.prod.outlook.com>
+        by mx1.veeam.com (Postfix) with ESMTPS id 5E49F410B4;
+        Wed, 12 Apr 2023 06:44:03 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx1-2022; t=1681296243;
+        bh=TPNFqwLjRJ0dSpelUvGaISC1WZt9udnm/M5g6U8mfho=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=Jpb8mQX0tWPhAyC1eUZUt5p5BKcZObgs+b8rksCcYb9kgV/bhPACDz2ybdMU7fHbD
+         rKc02SQyUElrSx/P2moawjLbDIcR1lPCQnl1bRJ/AM0Er82gEZn+MOIdvX6hYuHbfO
+         TMaGu2Zj6hm1txK79Hfzij6tu7JDOIDSD9WthyTLuukW+fSoPSeePCYvZTyoNxrJQg
+         BlIWPLhcW06CmqJPl+ZDTtX+U+HRwgQmVXsuYaqYIlz/ERk1uvYNktDW8zPHYlJH7c
+         Wt72/OL8nsYim8iO4HeXtbcqqnz5lO2aG04x6BllElCSXLxUc88kqekrJZckD6hOah
+         OEnLHTcj0Vryg==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 12 Apr
+ 2023 12:43:56 +0200
+Message-ID: <50d131e3-7528-2064-fbe6-65482db46ae4@veeam.com>
+Date:   Wed, 12 Apr 2023 12:43:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MW5PR12MB55984F39C8CECADDFE7548F2F09B9@MW5PR12MB5598.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 02/11] block: Block Device Filtering Mechanism
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>
+CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <snitzer@kernel.org>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <willy@infradead.org>, <kch@nvidia.com>,
+        <martin.petersen@oracle.com>, <vkoul@kernel.org>,
+        <ming.lei@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-3-sergei.shtepa@veeam.com>
+ <793db44e-9e6d-d118-3f88-cdbffc9ad018@molgen.mpg.de>
+ <ZDT9PjLeQgjVA16P@infradead.org>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <ZDT9PjLeQgjVA16P@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: colmbx01.amust.local (172.31.112.31) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2924031554647062
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-04-23 09:04:33, Teterevkov, Ivan wrote:
-> From: Alistair Popple <apopple@nvidia.com> 
+
+
+On 4/11/23 08:25, Christoph Hellwig wrote:
+> Subject:
+> Re: [PATCH v3 02/11] block: Block Device Filtering Mechanism
+> From:
+> Christoph Hellwig <hch@infradead.org>
+> Date:
+> 4/11/23, 08:25
 > 
-> > "Teterevkov, Ivan" <Ivan.Teterevkov@amd.com> writes:
-> > 
-> > > Hello folks,
-> > >
-> > > I work with an application which aims to share memory in the userspace and
-> > > interact with the NIC DMA. The memory allocation workflow begins in the
-> > > userspace, which creates a new file backed by 2MiB hugepages with
-> > > memfd_create(MFD_HUGETLB, MFD_HUGE_2MB) and fallocate(). Then the userspace
-> > > makes an IOCTL to the kernel module with the file descriptor and size so that
-> > > the kernel module can get the struct page with find_get_page(). Then the kernel
-> > > module calls dma_map_single(page_address(page)) for NIC, which concludes the
-> > > datapath. The allocated memory may (significantly) outlive the originating
-> > > userspace application. The hugepages stay mapped with NIC, and the kernel
-> > > module wants to continue using them and map to other applications that come and
-> > > go with vm_mmap().
-> > >
-> > > I am studying the pin_user_pages*() family of functions, and I wonder if the
-> > > outlined workflow requires it. The hugepages do not page out, but they can move
-> > > as they may be allocated with GFP_HIGHUSER_MOVABLE. However, find_get_page()
-> > > must increment the page reference counter without mapping and prevent it from
-> > > moving. In particular, https://docs.kernel.org/mm/page_migration.html:
-> > 
-> > I'm not super familiar with the memfd_create()/find_get_page() workflow
-> > but is there some reason you're not using pin_user_pages*(FOLL_LONGTERM)
-> > to get the struct page initially? You're description above sounds
-> > exactly the use case pin_user_pages() was designed for because it marks
-> > the page as being writen to by DMA, makes sure it's not in a movable
-> > zone, etc.
-> > 
+> To:
+> Donald Buczek <buczek@molgen.mpg.de>
+> CC:
+> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 > 
-> The biggest obstacle with the application workflow is that the memory
-> allocation is mostly kernel-driven. The kernel module may want to tell DMA
-> about the hugepages before the userspace application maps it into its address
-> space, so the kernel module does not have the starting user address at hand.
+> 
+> On Sat, Apr 08, 2023 at 05:30:19PM +0200, Donald Buczek wrote:
+>> Maybe detach the old filter and attach the new one instead? An atomic replace might be usefull and it wouldn't complicate the code to do that instead. If its the same filter, maybe just return success and don't go through ops->detach and ops->attach?
+> I don't think a replace makes any sense.  We might want multiple
+> filters eventually, but unless we have a good use case for even just
+> more than a single driver we can deal with that once needed.  The
+> interface is prepared to support multiple attached filters already.
+> 
 
-I'm a bit confused. Above you write that:
 
-"The memory allocation workflow begins in the userspace, which creates a new
-file backed by 2MiB hugepages with memfd_create(MFD_HUGETLB, MFD_HUGE_2MB)
-and fallocate(). Then the userspace makes an IOCTL to the kernel module
-with the file descriptor and size so that the kernel module can get the
-struct page with find_get_page()."
+Thank you Donald for your comment. It got me thinking.
 
-So the memory allocation actually does happen from fallocate(2) as far as I
-can tell. What guys are suggesting is that instead of passing the prepared
-'fd' to ioctl(2), your application should mmap the file and pass the
-address of the mmapped area. That's how things are usually done and it also
-gives userspace more freedom over how it prepares buffers for DMA. Also then
-pin_user_pages() comes as a natural API to use in the driver.
+Despite the fact that only one filter is currently offered for the kernel,
+I think that out-of-tree filters of block devices may appear very soon.
+It would be good to think about it in advance.
+And, I agree with Christophe, we would not like to redo the blk-filter interface
+when new filters appear in the tree.
 
-Now I'm not sure whether changing the ioctl(2) is still an option for you.
-If not, then you have to resort to some kind of workaround as you
-mentioned. But still pin_user_pages(FOLL_LONGTERM) is definitely the API
-you should be using for telling the kernel you are going to DMA into these
-pages and want to hold onto them for a long time.
+We can consider a block device as a resource that two actor want to take over.
+There are two possible behavioral strategies:
+1. If one owner occupies a resource, then for other actors, the ownership
+request will end with a refusal. The owner will not lose his resource.
+2. Any actor can take away a resource from the owner and inform him about its
+loss using a callback.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I think the first strategy is safer. When calling ioctl BLKFILTER_ATTACH, the
+kernel informs the actor that the resource is busy.
+Of course, there is still an option to grab someone else's occupied resource.
+To do this, he will have to call ioctl BLKFILTER_DETACH, specifying the name
+of the filter that needs to be detached. It is assumed that such detached
+should be performed by the same actor that attached it there.
+
+If we replace the owner at each ioctl BLKFILTER_ATTACH, then we can get a
+situation of competition between two actors. At the same time, they won't
+even get a message that something is going wrong.
+
+An example from life. The user compares different backup tools. Install one,
+then another. Each uses its own filter (And why not? this is technically
+possible).
+With the first strategy, the second tool will make it clear to the user that
+it cannot work, since the resource is already occupied by another.
+The user will have to experiment first with one tool, uninstall it, and then
+experiment with another.
+With the second strategy, both tools will unload each other's filters. In the
+best case, this will lead to disruption of their work. At a minimum, blksnap,
+when detached, will reset the change tracker and each backup will perform a
+full read of the block device. As a result, the user will receive distorted
+data, the system will not work as planned, although there will be no error
+message.
+
