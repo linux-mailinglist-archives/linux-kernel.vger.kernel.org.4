@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ED96DEACB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EB86DEACC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjDLEx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        id S229535AbjDLEyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDLExS (ORCPT
+        with ESMTP id S229452AbjDLEyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F3C55BD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:52:54 -0700 (PDT)
+        Wed, 12 Apr 2023 00:54:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6788ADA;
+        Tue, 11 Apr 2023 21:54:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8061A62DF2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC99C433D2;
-        Wed, 12 Apr 2023 04:52:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C1A62DF0;
+        Wed, 12 Apr 2023 04:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9EDC433EF;
+        Wed, 12 Apr 2023 04:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681275173;
-        bh=tBKou5eZiQRLKIUxQunvsX1cbH8KIFfhzoyODEPVwEY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GTv5n/BFPQuZE4tgfuBcw+k0fyYtjjzg4nI2zlE8N/3LWT2PH51HZi35BfZlsl+W+
-         Nn4uPbSmMEkWjz3jga2460zwqwniBRNEA56PorbNOHSz7U9cfI9BOqNGVmUxiBMrSL
-         bPJ8ybVIVEwyvImMJwQP7nGIr0s/JpLfHbG+u/q/YtBbTcUpcGcE2bhogaStz9jSem
-         OsNVMiTPfg4Atg8YhputFGjJpB14a/xqY8exLiY0AlDj8rtOG32hT+25uYZ3yI5dWg
-         tshoNn4LAxbLsnYGWCzvHCDItiAFqU/fbSwCeIGRtBJ3nsSkNa+xSQPF07bjJq/kDU
-         VbL1/lfM7N59A==
-Date:   Wed, 12 Apr 2023 10:22:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Tina Zhang <tina.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/17] dmaengine: idxd: Add enable/disable device IOPF
- feature
-Message-ID: <ZDY5IYL5NMGEOihl@matsya>
-References: <20230411064815.31456-1-baolu.lu@linux.intel.com>
- <20230411064815.31456-2-baolu.lu@linux.intel.com>
+        s=k20201202; t=1681275275;
+        bh=5dzqspqBqW9N0X1M96v/Nc4a0ynkDyFPXVvD+yHp/tg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=QpS13f7eTWFWAZQybWf2+gKbEU3zT90WUQbawMyM8C0DZAYea9GZmP10G4udzXs2C
+         vYFtMRdQpxWNXbxXomW0KVP5ZDLJ7AA5l96ybkCM9xK+pw4jIyD18CRqCV1Qe56ddj
+         /zQo04M4zCi0HYRetLOKLi1gMl+gbmVKnxA2GA3N1CIZ05/0ycFsIaTGfGHpmwGC7k
+         QZ0/E7ZwK+KrtN/HQftmGvI5L1EDUXSf1CJry+Oiqq2pP6pecl6JGGCBZ0exmHhxrn
+         4iwg2KNSgFSC53kr6el2V3q4VgJRenvhMe0iNhOSQNPPyyGlEB6z708qc73sVRB7c+
+         w2F/luw/BCd4Q==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C730D1540478; Tue, 11 Apr 2023 21:54:34 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 21:54:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     zhouzhouyi@gmail.com
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org, lance@osuosl.org
+Subject: Re: [PATCH] rcu/torture replace wait_event with
+ wait_event_interruptible
+Message-ID: <0e334497-fbc1-49f7-87ef-8dbf6d25d6a7@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411064815.31456-2-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1681264483-5208-1-git-send-email-zhouzhouyi@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,104 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-23, 14:47, Lu Baolu wrote:
-> The iommu subsystem requires IOMMU_DEV_FEAT_IOPF must be enabled before
-> and disabled after IOMMU_DEV_FEAT_SVA, if device's I/O page faults rely
-> on the IOMMU. Add explicit IOMMU_DEV_FEAT_IOPF enabling/disabling in this
-> driver.
+On Wed, Apr 12, 2023 at 09:54:43AM +0800, zhouzhouyi@gmail.com wrote:
+> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
 > 
-> At present, missing IOPF enabling/disabling doesn't cause any real issue,
-> because the IOMMU driver places the IOPF enabling/disabling in the path
-> of SVA feature handling. But this may change.
-
-Acked-by: Vinod Koul <vkoul@kernel.org>
-
+> In kfree_rcu_test, kfree_scale_shutdown will be detected as hung task
+> if kfree_loops is too big. Replace wait_event with wait_event_interruptible
+> to avoid false positive.
 > 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Link: https://lore.kernel.org/r/20230324120234.313643-2-baolu.lu@linux.intel.com
+> Tested in the PPC VM of Open Source Lab of Oregon State University.
+> 
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>                
 > ---
->  drivers/dma/idxd/init.c | 31 +++++++++++++++++++++++++------
->  1 file changed, 25 insertions(+), 6 deletions(-)
+>  kernel/rcu/rcuscale.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 640d3048368e..09ef62aa0635 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -516,6 +516,27 @@ static void idxd_disable_system_pasid(struct idxd_device *idxd)
->  	idxd->sva = NULL;
->  }
->  
-> +static int idxd_enable_sva(struct pci_dev *pdev)
-> +{
-> +	int ret;
-> +
-> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +	if (ret)
-> +		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +
-> +	return ret;
-> +}
-> +
-> +static void idxd_disable_sva(struct pci_dev *pdev)
-> +{
-> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +}
-> +
->  static int idxd_probe(struct idxd_device *idxd)
+> diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+> index 91fb5905a008..b37eec94957c 100644
+> --- a/kernel/rcu/rcuscale.c
+> +++ b/kernel/rcu/rcuscale.c
+> @@ -771,7 +771,7 @@ kfree_scale_cleanup(void)
+>  static int
+>  kfree_scale_shutdown(void *arg)
 >  {
->  	struct pci_dev *pdev = idxd->pdev;
-> @@ -530,7 +551,7 @@ static int idxd_probe(struct idxd_device *idxd)
->  	dev_dbg(dev, "IDXD reset complete\n");
+> -	wait_event(shutdown_wq,
+> +	wait_event_interruptible(shutdown_wq,
+
+Good catch!!!
+
+Would wait_event_idle() work in this case?  The _interruptible()
+variant indicates that wakeups due to things like POSIX signals is
+permitted.
+
+							Thanx, Paul
+
+>  		   atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
 >  
->  	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
-> -		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
-> +		if (idxd_enable_sva(pdev)) {
->  			dev_warn(dev, "Unable to turn on user SVA feature.\n");
->  		} else {
->  			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
-> @@ -578,21 +599,19 @@ static int idxd_probe(struct idxd_device *idxd)
->  	if (device_pasid_enabled(idxd))
->  		idxd_disable_system_pasid(idxd);
->  	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(pdev);
->  	return rc;
->  }
->  
->  static void idxd_cleanup(struct idxd_device *idxd)
->  {
-> -	struct device *dev = &idxd->pdev->dev;
-> -
->  	perfmon_pmu_remove(idxd);
->  	idxd_cleanup_interrupts(idxd);
->  	idxd_cleanup_internals(idxd);
->  	if (device_pasid_enabled(idxd))
->  		idxd_disable_system_pasid(idxd);
->  	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(idxd->pdev);
->  }
->  
->  static int idxd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> @@ -710,7 +729,7 @@ static void idxd_remove(struct pci_dev *pdev)
->  	pci_free_irq_vectors(pdev);
->  	pci_iounmap(pdev, idxd->reg_base);
->  	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(pdev);
->  	pci_disable_device(pdev);
->  	destroy_workqueue(idxd->wq);
->  	perfmon_pmu_remove(idxd);
+>  	smp_mb(); /* Wake before output. */
 > -- 
 > 2.34.1
-
--- 
-~Vinod
+> 
