@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD88B6DE926
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51146DE928
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjDLBxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S229585AbjDLBxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDLBxa (ORCPT
+        with ESMTP id S229483AbjDLBxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:53:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8F11704
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:25 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Px5Lw0DbCzDsg4;
-        Wed, 12 Apr 2023 09:52:40 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 09:53:22 +0800
-Subject: Re: [PATCH] ubi: fastmap: Reserve PEBs and init fm_work when fastmap
- is used.
-To:     Xiaobing Luo <luoxiaobing0926@gmail.com>, <richard@nod.at>,
-        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>
-CC:     <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230411154634.149350-1-luoxiaobing0926@gmail.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <cc9f9239-22b8-a00b-c46f-1b9ea8cd7395@huawei.com>
-Date:   Wed, 12 Apr 2023 09:53:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Tue, 11 Apr 2023 21:53:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249FB46B2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b148e5612so18778b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681264415; x=1683856415;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0SnqQIljvz1tajKaEvbLAMwlyXQb8cIHckmA2OZDWW8=;
+        b=CND9D0XmZP1gszIphTaSLP9DJoYMhlmH+DfxtECjOsBt7mr24xmb3S2koTvH0+Z+n3
+         W800eQ3n93/13n9nkapdlgZ09fX8Ra8zOEiE3tqc0darBRD9AQ0cExU2fp6QkK6Tr9Jv
+         ioSQAK5GC6unGVaGCh2JyAX90hEy+z5V/sNd45aNsGTaibvzKLc465mFnmhcfNHCHiW/
+         wbR6N6oTtGdIHd09gheIS0Y5rG/w0uQ5Kk79V6OlRtfxaRSBg9SwIK1RFnUznA2uM9+b
+         7D0/Wv8DR6lr4r/93Xt7+ixvAfZ7hswvOIXYkMuMNCZW72WdG2vWY5XdnHB9cJSx4gwl
+         6vWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681264415; x=1683856415;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0SnqQIljvz1tajKaEvbLAMwlyXQb8cIHckmA2OZDWW8=;
+        b=4yHvIVZ3DwS/wcsTfcSq8sA/Bj48m4K8jJG+vkNgQ5YcSA7kyNUfnUbnUCt9v7uPYz
+         oqIOYwjYi36A8w3RGOOkPQGjVheqk9Yk9CxA0b4iLMz4RtamDyl1CNLbxvOkE4yiJAum
+         +ZUlxFYPQ3deqbKXlt9GKgi2MjAUo2DiUFKknCmam1aNYc+lOawzMcOpN88ELG1Nx68X
+         JNbGAuZdxJsyhSDZGBRjAvmnrmVEcM0lDArJC0Rp/isWYTGP9GodLTQW5WMhL1jt2Q3p
+         rYECtpO/QUbnhdzjwy4zqUY19A6AkzlgA2CXpdIiI8XUZK0HJXYB4IYoN233J4y2suSf
+         dyZQ==
+X-Gm-Message-State: AAQBX9fOM+7Cn+BVgSovFAet/FP/OgVqhB6ctVnxgEx0jDTasugM4u4S
+        3QyUJ6aPD/wBoOQCDy0GpbcFYeITdMYIVEDfUvE=
+X-Google-Smtp-Source: AKy350YfQjvaWZoeOEggrBvoc62fzGDf+FZD2kAzryoJLvRgLqpIl59sIs7h8FfU2bq3/YSSirbYAA==
+X-Received: by 2002:a05:6a20:3c8b:b0:e9:1dd:dafc with SMTP id b11-20020a056a203c8b00b000e901dddafcmr20341955pzj.4.1681264415227;
+        Tue, 11 Apr 2023 18:53:35 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 6-20020a630006000000b004fbd91d9716sm282807pga.15.2023.04.11.18.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 18:53:34 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
+References: <cover.1680782016.git.asml.silence@gmail.com>
+Subject: Re: [PATCH v2 0/8] optimise resheduling due to deferred tw
+Message-Id: <168126441455.57506.14487418062992045458.b4-ty@kernel.dk>
+Date:   Tue, 11 Apr 2023 19:53:34 -0600
 MIME-Version: 1.0
-In-Reply-To: <20230411154634.149350-1-luoxiaobing0926@gmail.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,74 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaobing
-> Don't reserve the two fastmap PEBs when fastmap is disabled, then we can
-> use the two PEBs in small ubi device.
-> And don't init the fm_work when fastmap is disabled.
-> 
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
-> ---
->   drivers/mtd/ubi/build.c      | 3 ++-
->   drivers/mtd/ubi/fastmap-wl.c | 2 +-
->   drivers/mtd/ubi/wl.c         | 6 +++++-
->   3 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-> index ad025b2ee417..a98a717b0e66 100644
-> --- a/drivers/mtd/ubi/build.c
-> +++ b/drivers/mtd/ubi/build.c
-> @@ -1120,7 +1120,8 @@ int ubi_detach_mtd_dev(int ubi_num, int anyway)
->   		kthread_stop(ubi->bgt_thread);
->   
->   #ifdef CONFIG_MTD_UBI_FASTMAP
-> -	cancel_work_sync(&ubi->fm_work);
-> +	if (!ubi->fm_disabled)
-> +		cancel_work_sync(&ubi->fm_work);
->   #endif
->   	ubi_debugfs_exit_dev(ubi);
->   	uif_close(ubi);
-> diff --git a/drivers/mtd/ubi/fastmap-wl.c b/drivers/mtd/ubi/fastmap-wl.c
-> index 863f571f1adb..b3df17a782c7 100644
-> --- a/drivers/mtd/ubi/fastmap-wl.c
-> +++ b/drivers/mtd/ubi/fastmap-wl.c
-> @@ -344,7 +344,7 @@ static struct ubi_wl_entry *get_peb_for_wl(struct ubi_device *ubi)
->   		/* We cannot update the fastmap here because this
->   		 * function is called in atomic context.
->   		 * Let's fail here and refill/update it as soon as possible. */
-> -		if (!ubi->fm_work_scheduled) {
-> +		if (!ubi->fm_work_scheduled && !ubi->fm_disabled) {
->   			ubi->fm_work_scheduled = 1;
->   			schedule_work(&ubi->fm_work);
->   		}
 
-I think we should keep the fm_work even fm_disabled is true. UBI is 
-running with fastmap scheme as long as CONFIG_MTD_UBI_FASTMAP is 
-enabled, 'ubi->fm_disabled' is just used to control whether to 
-persistence fastmap metadata on flash. Free wear-leveling pebs 
-consuming/producing model still depend on following process:
-Consuming: get_peb_for_wl -> pool->pebs[pool->used++]
-Producing: ubi->fm_work -> update_fastmap_work_fn -> ubi_refill_pools -> 
-wl_pool->used = 0
-If we disable 'ubi->fm_work' when ubi->fm_disabled becomes true, 
-wear-leveing work will fail to get free wl peb until someone try to get 
-free peb by ubi_wl_get_peb().
-
-> diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
-> index 26a214f016c1..8906db89808f 100644
-> --- a/drivers/mtd/ubi/wl.c
-> +++ b/drivers/mtd/ubi/wl.c
-> @@ -1908,7 +1908,11 @@ int ubi_wl_init(struct ubi_device *ubi, struct ubi_attach_info *ai)
->   	ubi_assert(ubi->good_peb_count == found_pebs);
->   
->   	reserved_pebs = WL_RESERVED_PEBS;
-> -	ubi_fastmap_init(ubi, &reserved_pebs);
-> +
-> +#ifdef CONFIG_MTD_UBI_FASTMAP
-> +	if (!ubi->fm_disabled)
-> +		ubi_fastmap_init(ubi, &reserved_pebs);
-> +#endif
->   
->   	if (ubi->avail_pebs < reserved_pebs) {
->   		ubi_err(ubi, "no enough physical eraseblocks (%d, need %d)",
+On Thu, 06 Apr 2023 14:20:06 +0100, Pavel Begunkov wrote:
+> io_uring extensively uses task_work, but when a task is waiting
+> every new queued task_work batch will try to wake it up and so
+> cause lots of scheduling activity. This series optimises it,
+> specifically applied for rw completions and send-zc notifications
+> for now, and will helpful for further optimisations.
 > 
+> Quick testing shows similar to v1 results, numbers from v1:
+> For my zc net test once in a while waiting for a portion of buffers
+> I've got 10x descrease in the number of context switches and 2x
+> improvement in CPU util (17% vs 8%). In profiles, io_cqring_work()
+> got down from 40-50% of CPU to ~13%.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/8] io_uring: move pinning out of io_req_local_work_add
+      commit: ab1c590f5c9b96d8d8843d351aed72469f8f2ef0
+[2/8] io_uring: optimie local tw add ctx pinning
+      commit: d73a572df24661851465c821d33c03e70e4b68e5
+[3/8] io_uring: refactor __io_cq_unlock_post_flush()
+      commit: c66ae3ec38f946edb1776d25c1c8cd63803b8ec3
+[4/8] io_uring: add tw add flags
+      commit: 8501fe70ae9855076ffb03a3670e02a7b3437304
+[5/8] io_uring: inline llist_add()
+      commit: 5150940079a3ce94d7474f6f5b0d6276569dc1de
+[6/8] io_uring: reduce scheduling due to tw
+      commit: 8751d15426a31baaf40f7570263c27c3e5d1dc44
+[7/8] io_uring: refactor __io_cq_unlock_post_flush()
+      commit: c66ae3ec38f946edb1776d25c1c8cd63803b8ec3
+[8/8] io_uring: optimise io_req_local_work_add
+      commit: 360cd42c4e95ff06d8d7b0a54e42236c7e7c187f
+
+Best regards,
+-- 
+Jens Axboe
+
+
 
