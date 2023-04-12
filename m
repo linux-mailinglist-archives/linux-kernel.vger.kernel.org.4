@@ -2,993 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576BB6DFAA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8056DFAA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjDLP6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S231484AbjDLP6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDLP6P (ORCPT
+        with ESMTP id S229575AbjDLP6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:58:15 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677FC2D63
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:58:11 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ud9so29882138ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681315090; x=1683907090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UMTJYjaZiTSIVjT1MHD8/dNGWrWQ/8gmWIk6TQwr0M=;
-        b=LIBY2qAtJ9Ne+3+sfWPztj01NK7DSFuXAJFPqHf90SxOcMVD6FhwpuJwimmpFDTmSx
-         0XK4OpHGVHs91G/QislRPgP5WSbwovpqJGK3fEcxK8LEmouZcXZodlBd+FyqV6MZOQ5d
-         6aj6+Xt3gcc2Nk2CD8Svolh5yV0Zpscd+TslIhacxfwQw91R3mEMLUo4zofKFRYRbq+i
-         N2aFhzOnvmqyPjqCjT7cy0Wi68UnHaMHlf4P60PIFI/2Rfh52EzAwe+Ab3faMwZeQTF6
-         oRGgHBWI+MeFspX1bMPP1cKsS1lEe00jMuxcvNCr0HdJ3aWBjxzWfVUJGaBNLGPhBVx6
-         TCtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681315090; x=1683907090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9UMTJYjaZiTSIVjT1MHD8/dNGWrWQ/8gmWIk6TQwr0M=;
-        b=3217fcQZj7LtDUewezw3LlWwcvVyG6SxbhMI0HkqqdWG33Sgsq4Qrj/TeOHkfu6l9v
-         kjdG4syZtNmrU0TTIBkzeLTw/6rJGaWV/AGUM7wW5RM8ce4v3qZs2F9lbvHORKVc/uCT
-         eTU2tie59c4dsVxyRwz0cdX2jCFN8/6VRcKRaYy20WutmMF/SwnGxQ67+fdYoj1c8T1A
-         3VpMJs4XKr/gRheRE67BRQ/q3WM6jYJlONLe+HzMCLEjlyz1qD0jSJAkidpp6uDIx50Y
-         Qc/Eug5sJF7W8MJSTP8RjSjV8DMAffW//QOdqVgZ2/LZD7ljEB45afmyPZKA4SFMv9OX
-         WEXA==
-X-Gm-Message-State: AAQBX9fcSobcmc9LTTmFG2Z+j9vDHPys9zGoBzqgiM4kddbatzKs64Ap
-        63zp9+PzsMjgD5q9PHxyigJiMCbecBX7X0i9UbqXGg==
-X-Google-Smtp-Source: AKy350bZ0xsz+L51B2g2t2mzA0nE01RqwlNr0p1oPx+xoGxWABhq9OpGBjYggbn5ifpf4dxyCtUuZAzXyyWtuA3AGWI=
-X-Received: by 2002:a17:907:168b:b0:94e:1014:3114 with SMTP id
- hc11-20020a170907168b00b0094e10143114mr3663032ejc.14.1681315089486; Wed, 12
- Apr 2023 08:58:09 -0700 (PDT)
+        Wed, 12 Apr 2023 11:58:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4C93C2A;
+        Wed, 12 Apr 2023 08:58:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC02632DC;
+        Wed, 12 Apr 2023 15:58:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973B1C433EF;
+        Wed, 12 Apr 2023 15:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681315122;
+        bh=Sz1fajTEnTSRD31WR8VDCczBSAJtygp8Yr5Rf0oACkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bYNrSxXAnH2t/pEIJxou6eRtCBAE6tSYuNM66nrW22jXhdMPXufnQRX/oHRvrS7DK
+         hZsKN3AZzvkhRLlYncPG7l4vP2L1ANtK8eFXXAFvkm02OHvDuyZXxNy9vlVenKnbXb
+         H+n9f3d3D2x4Wn8GvwTHiQCtWaJ0vrF8h5Mx4tIrmOihcck+PBzmSnn6iZ51EHYaV6
+         finHmGGcEtIsftHJIGVPpRfgkMXA0yaPievdUjVlhmdNOCTL4wuA+TR2aO90Usdtkg
+         NCibMzUm3vEXpQifdd8Sfl+ywzoagNhkKqlczSuBpduZbfCl+g6UkfqQBNy2gTjKCd
+         fy9lzhW5ExSjA==
+Date:   Wed, 12 Apr 2023 16:58:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] tools/nolibc: implement fd-based FILE streams
+Message-ID: <f28e3c85-84a4-4b30-a3f5-c2efad311fe7@sirena.org.uk>
+References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
+ <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
 MIME-Version: 1.0
-References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-11-james.clark@arm.com>
-In-Reply-To: <20230404155121.1824126-11-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 12 Apr 2023 16:57:15 +0100
-Message-ID: <CAJ9a7VhepgJx2uwKbOi+egTCvNMeFkQ+z3kmF2WF7jb6NEzHdg@mail.gmail.com>
-Subject: Re: [PATCH v5 10/13] coresight: Make refcount a property of the connection
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        suzuki.poulose@arm.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3BwlXs+yCitnNnmA"
+Content-Disposition: inline
+In-Reply-To: <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
+X-Cookie: Brain off-line, please wait.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 16:52, James Clark <james.clark@arm.com> wrote:
->
-> This removes the need to do an additional lookup for the total number
-> of ports used and also removes the need to allocate an array of
-> refcounts which is just another representation of a connection array.
->
-> This was only used for link type devices, for regular devices a single
-> refcount on the coresight device is used.
->
-> There is a both an input and output refcount in case two link type
-> devices are connected together so that they don't overwrite each other's
-> counts.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-core.c  | 116 ++++++------------
->  drivers/hwtracing/coresight/coresight-etb10.c |  10 +-
->  .../hwtracing/coresight/coresight-funnel.c    |  26 ++--
->  .../hwtracing/coresight/coresight-platform.c  | 109 +---------------
->  .../coresight/coresight-replicator.c          |  23 ++--
->  .../hwtracing/coresight/coresight-tmc-etf.c   |  24 ++--
->  .../hwtracing/coresight/coresight-tmc-etr.c   |  12 +-
->  drivers/hwtracing/coresight/coresight-tpda.c  |  23 ++--
->  drivers/hwtracing/coresight/coresight-tpiu.c  |   4 +-
->  drivers/hwtracing/coresight/ultrasoc-smb.c    |   8 +-
->  include/linux/coresight.h                     |  14 ++-
->  11 files changed, 126 insertions(+), 243 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index a0a0ea2c626b..939b7fb751b5 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -112,40 +112,24 @@ struct coresight_device *coresight_get_percpu_sink(int cpu)
->  }
->  EXPORT_SYMBOL_GPL(coresight_get_percpu_sink);
->
-> -static int coresight_find_link_inport(struct coresight_device *csdev,
-> -                                     struct coresight_device *parent)
-> +static struct coresight_connection *
-> +coresight_find_out_connection(struct coresight_device *src_dev,
-> +                             struct coresight_device *dest_dev)
->  {
->         int i;
->         struct coresight_connection *conn;
->
-> -       for (i = 0; i < parent->pdata->nr_outconns; i++) {
-> -               conn = parent->pdata->out_conns[i];
-> -               if (conn->dest_dev == csdev)
-> -                       return conn->dest_port;
-> +       for (i = 0; i < src_dev->pdata->nr_outconns; i++) {
-> +               conn = src_dev->pdata->out_conns[i];
-> +               if (conn->dest_dev == dest_dev)
-> +                       return conn;
->         }
->
-> -       dev_err(&csdev->dev, "couldn't find inport, parent: %s, child: %s\n",
-> -               dev_name(&parent->dev), dev_name(&csdev->dev));
-> +       dev_err(&src_dev->dev,
-> +               "couldn't find output connection, src_dev: %s, dest_dev: %s\n",
-> +               dev_name(&src_dev->dev), dev_name(&dest_dev->dev));
->
-> -       return -ENODEV;
-> -}
-> -
-> -static int coresight_find_link_outport(struct coresight_device *csdev,
-> -                                      struct coresight_device *child)
-> -{
-> -       int i;
-> -       struct coresight_connection *conn;
-> -
-> -       for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> -               conn = csdev->pdata->out_conns[i];
-> -               if (conn->dest_dev == child)
-> -                       return conn->src_port;
-> -       }
-> -
-> -       dev_err(&csdev->dev, "couldn't find outport, parent: %s, child: %s\n",
-> -               dev_name(&csdev->dev), dev_name(&child->dev));
-> -
-> -       return -ENODEV;
-> +       return ERR_PTR(-ENODEV);
->  }
->
->  static inline u32 coresight_read_claim_tags(struct coresight_device *csdev)
-> @@ -352,24 +336,24 @@ static int coresight_enable_link(struct coresight_device *csdev,
->  {
->         int ret = 0;
->         int link_subtype;
-> -       int inport, outport;
-> +       struct coresight_connection *inconn, *outconn;
->
->         if (!parent || !child)
->                 return -EINVAL;
->
-> -       inport = coresight_find_link_inport(csdev, parent);
-> -       outport = coresight_find_link_outport(csdev, child);
-> +       inconn = coresight_find_out_connection(parent, csdev);
-> +       outconn = coresight_find_out_connection(csdev, child);
->         link_subtype = csdev->subtype.link_subtype;
->
-> -       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG && inport < 0)
-> -               return inport;
-> -       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT && outport < 0)
-> -               return outport;
-> +       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG && IS_ERR(inconn))
-> +               return PTR_ERR(inconn);
-> +       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT && IS_ERR(outconn))
-> +               return PTR_ERR(outconn);
->
->         if (link_ops(csdev)->enable) {
->                 ret = coresight_control_assoc_ectdev(csdev, true);
->                 if (!ret) {
-> -                       ret = link_ops(csdev)->enable(csdev, inport, outport);
-> +                       ret = link_ops(csdev)->enable(csdev, inconn, outconn);
->                         if (ret)
->                                 coresight_control_assoc_ectdev(csdev, false);
->                 }
-> @@ -385,33 +369,36 @@ static void coresight_disable_link(struct coresight_device *csdev,
->                                    struct coresight_device *parent,
->                                    struct coresight_device *child)
->  {
-> -       int i, nr_conns;
-> +       int i;
->         int link_subtype;
-> -       int inport, outport;
-> +       struct coresight_connection *inconn, *outconn;
->
->         if (!parent || !child)
->                 return;
->
-> -       inport = coresight_find_link_inport(csdev, parent);
-> -       outport = coresight_find_link_outport(csdev, child);
-> +       inconn = coresight_find_out_connection(parent, csdev);
-> +       outconn = coresight_find_out_connection(csdev, child);
->         link_subtype = csdev->subtype.link_subtype;
->
-> -       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
-> -               nr_conns = csdev->pdata->high_inport;
-> -       } else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
-> -               nr_conns = csdev->pdata->high_outport;
-> -       } else {
-> -               nr_conns = 1;
-> -       }
-> -
->         if (link_ops(csdev)->disable) {
-> -               link_ops(csdev)->disable(csdev, inport, outport);
-> +               link_ops(csdev)->disable(csdev, inconn, outconn);
->                 coresight_control_assoc_ectdev(csdev, false);
->         }
->
-> -       for (i = 0; i < nr_conns; i++)
-> -               if (atomic_read(&csdev->refcnt[i]) != 0)
-> +       if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
-> +               for (i = 0; i < csdev->pdata->nr_inconns; i++)
-> +                       if (atomic_read(&csdev->pdata->in_conns[i]->dest_refcnt) !=
-> +                           0)
-> +                               return;
-> +       } else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
-> +               for (i = 0; i < csdev->pdata->nr_outconns; i++)
-> +                       if (atomic_read(&csdev->pdata->out_conns[i]->src_refcnt) !=
-> +                           0)
-> +                               return;
-> +       } else {
-> +               if (atomic_read(&csdev->refcnt) != 0)
->                         return;
-> +       }
->
->         csdev->enable = false;
->  }
-> @@ -435,7 +422,7 @@ static int coresight_enable_source(struct coresight_device *csdev,
->                 csdev->enable = true;
->         }
->
-> -       atomic_inc(csdev->refcnt);
-> +       atomic_inc(&csdev->refcnt);
->
->         return 0;
->  }
-> @@ -450,7 +437,7 @@ static int coresight_enable_source(struct coresight_device *csdev,
->   */
->  static bool coresight_disable_source(struct coresight_device *csdev)
->  {
-> -       if (atomic_dec_return(csdev->refcnt) == 0) {
-> +       if (atomic_dec_return(&csdev->refcnt) == 0) {
->                 if (source_ops(csdev)->disable)
->                         source_ops(csdev)->disable(csdev, NULL);
->                 coresight_control_assoc_ectdev(csdev, false);
-> @@ -1094,7 +1081,7 @@ int coresight_enable(struct coresight_device *csdev)
->                  * source is already enabled.
->                  */
->                 if (subtype == CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE)
-> -                       atomic_inc(csdev->refcnt);
-> +                       atomic_inc(&csdev->refcnt);
->                 goto out;
->         }
->
-> @@ -1308,7 +1295,6 @@ static void coresight_device_release(struct device *dev)
->         struct coresight_device *csdev = to_coresight_device(dev);
->
->         fwnode_handle_put(csdev->dev.fwnode);
-> -       kfree(csdev->refcnt);
->         kfree(csdev);
->  }
->
-> @@ -1537,9 +1523,6 @@ void coresight_release_platform_data(struct coresight_device *csdev,
->  struct coresight_device *coresight_register(struct coresight_desc *desc)
->  {
->         int ret;
-> -       int link_subtype;
-> -       int nr_refcnts = 1;
-> -       atomic_t *refcnts = NULL;
->         struct coresight_device *csdev;
->         bool registered = false;
->
-> @@ -1549,25 +1532,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->                 goto err_out;
->         }
->
-> -       if (desc->type == CORESIGHT_DEV_TYPE_LINK ||
-> -           desc->type == CORESIGHT_DEV_TYPE_LINKSINK) {
-> -               link_subtype = desc->subtype.link_subtype;
-> -
-> -               if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG)
-> -                       nr_refcnts = desc->pdata->high_inport;
-> -               else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT)
-> -                       nr_refcnts = desc->pdata->high_outport;
-> -       }
-> -
-> -       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
-> -       if (!refcnts) {
-> -               ret = -ENOMEM;
-> -               kfree(csdev);
-> -               goto err_out;
-> -       }
-> -
-> -       csdev->refcnt = refcnts;
-> -
->         csdev->pdata = desc->pdata;
->
->         csdev->type = desc->type;
-> diff --git a/drivers/hwtracing/coresight/coresight-etb10.c b/drivers/hwtracing/coresight/coresight-etb10.c
-> index eb99c445015a..fa80039e0821 100644
-> --- a/drivers/hwtracing/coresight/coresight-etb10.c
-> +++ b/drivers/hwtracing/coresight/coresight-etb10.c
-> @@ -163,7 +163,7 @@ static int etb_enable_sysfs(struct coresight_device *csdev)
->                 drvdata->mode = CS_MODE_SYSFS;
->         }
->
-> -       atomic_inc(csdev->refcnt);
-> +       atomic_inc(&csdev->refcnt);
->  out:
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
->         return ret;
-> @@ -199,7 +199,7 @@ static int etb_enable_perf(struct coresight_device *csdev, void *data)
->          * use for this session.
->          */
->         if (drvdata->pid == pid) {
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->                 goto out;
->         }
->
-> @@ -217,7 +217,7 @@ static int etb_enable_perf(struct coresight_device *csdev, void *data)
->                 /* Associate with monitored process. */
->                 drvdata->pid = pid;
->                 drvdata->mode = CS_MODE_PERF;
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->         }
->
->  out:
-> @@ -356,7 +356,7 @@ static int etb_disable(struct coresight_device *csdev)
->
->         spin_lock_irqsave(&drvdata->spinlock, flags);
->
-> -       if (atomic_dec_return(csdev->refcnt)) {
-> +       if (atomic_dec_return(&csdev->refcnt)) {
->                 spin_unlock_irqrestore(&drvdata->spinlock, flags);
->                 return -EBUSY;
->         }
-> @@ -447,7 +447,7 @@ static unsigned long etb_update_buffer(struct coresight_device *csdev,
->         spin_lock_irqsave(&drvdata->spinlock, flags);
->
->         /* Don't do anything if another tracer is using this sink */
-> -       if (atomic_read(csdev->refcnt) != 1)
-> +       if (atomic_read(&csdev->refcnt) != 1)
->                 goto out;
->
->         __etb_disable_hw(drvdata);
-> diff --git a/drivers/hwtracing/coresight/coresight-funnel.c b/drivers/hwtracing/coresight/coresight-funnel.c
-> index b363dd6bc510..b8e150e45b27 100644
-> --- a/drivers/hwtracing/coresight/coresight-funnel.c
-> +++ b/drivers/hwtracing/coresight/coresight-funnel.c
-> @@ -74,8 +74,9 @@ static int dynamic_funnel_enable_hw(struct funnel_drvdata *drvdata, int port)
->         return rc;
->  }
->
-> -static int funnel_enable(struct coresight_device *csdev, int inport,
-> -                        int outport)
-> +static int funnel_enable(struct coresight_device *csdev,
-> +                        struct coresight_connection *in,
-> +                        struct coresight_connection *out)
->  {
->         int rc = 0;
->         struct funnel_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> @@ -83,18 +84,19 @@ static int funnel_enable(struct coresight_device *csdev, int inport,
->         bool first_enable = false;
->
->         spin_lock_irqsave(&drvdata->spinlock, flags);
-> -       if (atomic_read(&csdev->refcnt[inport]) == 0) {
-> +       if (atomic_read(&in->dest_refcnt) == 0) {
->                 if (drvdata->base)
-> -                       rc = dynamic_funnel_enable_hw(drvdata, inport);
-> +                       rc = dynamic_funnel_enable_hw(drvdata, in->dest_port);
->                 if (!rc)
->                         first_enable = true;
->         }
->         if (!rc)
-> -               atomic_inc(&csdev->refcnt[inport]);
-> +               atomic_inc(&in->dest_refcnt);
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
->
->         if (first_enable)
-> -               dev_dbg(&csdev->dev, "FUNNEL inport %d enabled\n", inport);
-> +               dev_dbg(&csdev->dev, "FUNNEL inport %d enabled\n",
-> +                       in->dest_port);
->         return rc;
->  }
->
-> @@ -117,23 +119,25 @@ static void dynamic_funnel_disable_hw(struct funnel_drvdata *drvdata,
->         CS_LOCK(drvdata->base);
->  }
->
-> -static void funnel_disable(struct coresight_device *csdev, int inport,
-> -                          int outport)
-> +static void funnel_disable(struct coresight_device *csdev,
-> +                          struct coresight_connection *in,
-> +                          struct coresight_connection *out)
->  {
->         struct funnel_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->         unsigned long flags;
->         bool last_disable = false;
->
->         spin_lock_irqsave(&drvdata->spinlock, flags);
-> -       if (atomic_dec_return(&csdev->refcnt[inport]) == 0) {
-> +       if (atomic_dec_return(&in->dest_refcnt) == 0) {
->                 if (drvdata->base)
-> -                       dynamic_funnel_disable_hw(drvdata, inport);
-> +                       dynamic_funnel_disable_hw(drvdata, in->dest_port);
->                 last_disable = true;
->         }
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
->
->         if (last_disable)
-> -               dev_dbg(&csdev->dev, "FUNNEL inport %d disabled\n", inport);
-> +               dev_dbg(&csdev->dev, "FUNNEL inport %d disabled\n",
-> +                       in->dest_port);
->  }
->
->  static const struct coresight_ops_link funnel_link_ops = {
-> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> index 257ad48925a1..3e2e135cb8f6 100644
-> --- a/drivers/hwtracing/coresight/coresight-platform.c
-> +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> @@ -146,41 +146,6 @@ static inline bool of_coresight_legacy_ep_is_input(struct device_node *ep)
->         return of_property_read_bool(ep, "slave-mode");
->  }
->
-> -static void of_coresight_get_ports_legacy(const struct device_node *node,
-> -                                         int *nr_inconns, int *nr_outconns)
-> -{
-> -       struct device_node *ep = NULL;
-> -       struct of_endpoint endpoint;
-> -       int in = 0, out = 0;
-> -
-> -       /*
-> -        * Avoid warnings in of_graph_get_next_endpoint()
-> -        * if the device doesn't have any graph connections
-> -        */
-> -       if (!of_graph_is_present(node))
-> -               return;
-> -       do {
-> -               ep = of_graph_get_next_endpoint(node, ep);
-> -               if (!ep)
-> -                       break;
-> -
-> -               if (of_graph_parse_endpoint(ep, &endpoint))
-> -                       continue;
-> -
-> -               if (of_coresight_legacy_ep_is_input(ep)) {
-> -                       in = (endpoint.port + 1 > in) ?
-> -                               endpoint.port + 1 : in;
-> -               } else {
-> -                       out = (endpoint.port + 1) > out ?
-> -                               endpoint.port + 1 : out;
-> -               }
-> -
-> -       } while (ep);
-> -
-> -       *nr_inconns = in;
-> -       *nr_outconns = out;
-> -}
-> -
->  static struct device_node *of_coresight_get_port_parent(struct device_node *ep)
->  {
->         struct device_node *parent = of_graph_get_port_parent(ep);
-> @@ -196,59 +161,12 @@ static struct device_node *of_coresight_get_port_parent(struct device_node *ep)
->         return parent;
->  }
->
-> -static inline struct device_node *
-> -of_coresight_get_input_ports_node(const struct device_node *node)
-> -{
-> -       return of_get_child_by_name(node, "in-ports");
-> -}
-> -
->  static inline struct device_node *
->  of_coresight_get_output_ports_node(const struct device_node *node)
->  {
->         return of_get_child_by_name(node, "out-ports");
->  }
->
-> -static inline int
-> -of_coresight_count_ports(struct device_node *port_parent)
-> -{
-> -       int i = 0;
-> -       struct device_node *ep = NULL;
-> -       struct of_endpoint endpoint;
-> -
-> -       while ((ep = of_graph_get_next_endpoint(port_parent, ep))) {
-> -               /* Defer error handling to parsing */
-> -               if (of_graph_parse_endpoint(ep, &endpoint))
-> -                       continue;
-> -               if (endpoint.port + 1 > i)
-> -                       i = endpoint.port + 1;
-> -       }
-> -
-> -       return i;
-> -}
-> -
-> -static void of_coresight_get_ports(const struct device_node *node,
-> -                                  int *nr_inconns, int *nr_outconns)
-> -{
-> -       struct device_node *input_ports = NULL, *output_ports = NULL;
-> -
-> -       input_ports = of_coresight_get_input_ports_node(node);
-> -       output_ports = of_coresight_get_output_ports_node(node);
-> -
-> -       if (input_ports || output_ports) {
-> -               if (input_ports) {
-> -                       *nr_inconns = of_coresight_count_ports(input_ports);
-> -                       of_node_put(input_ports);
-> -               }
-> -               if (output_ports) {
-> -                       *nr_outconns = of_coresight_count_ports(output_ports);
-> -                       of_node_put(output_ports);
-> -               }
-> -       } else {
-> -               /* Fall back to legacy DT bindings parsing */
-> -               of_coresight_get_ports_legacy(node, nr_inconns, nr_outconns);
-> -       }
-> -}
-> -
->  static int of_coresight_get_cpu(struct device *dev)
->  {
->         int cpu;
-> @@ -351,13 +269,6 @@ static int of_get_coresight_platform_data(struct device *dev,
->         bool legacy_binding = false;
->         struct device_node *node = dev->of_node;
->
-> -       /* Get the number of input and output port for this component */
-> -       of_coresight_get_ports(node, &pdata->high_inport, &pdata->high_outport);
-> -
-> -       /* If there are no output connections, we are done */
-> -       if (!pdata->high_outport)
-> -               return 0;
-> -
->         parent = of_coresight_get_output_ports_node(node);
->         /*
->          * If the DT uses obsoleted bindings, the ports are listed
-> @@ -365,6 +276,12 @@ static int of_get_coresight_platform_data(struct device *dev,
->          * ports.
->          */
->         if (!parent) {
-> +               /*
-> +                * Avoid warnings in of_graph_get_next_endpoint()
-> +                * if the device doesn't have any graph connections
-> +                */
-> +               if (!of_graph_is_present(node))
-> +                       return 0;
->                 legacy_binding = true;
->                 parent = node;
->                 dev_warn_once(dev, "Uses obsolete Coresight DT bindings\n");
-> @@ -751,7 +668,6 @@ static int acpi_coresight_parse_graph(struct device *dev,
->         struct coresight_connection conn, zero_conn = {};
->         struct coresight_connection *new_conn;
->
-> -       pdata->nr_inconns = pdata->nr_outconns = 0;
->         graph = acpi_get_coresight_graph(adev);
->         if (!graph)
->                 return -ENOENT;
-> @@ -770,22 +686,9 @@ static int acpi_coresight_parse_graph(struct device *dev,
->                         return dir;
->
->                 if (dir == ACPI_CORESIGHT_LINK_MASTER) {
-> -                       if (conn.src_port >= pdata->high_outport)
-> -                               pdata->high_outport = conn.src_port + 1;
->                         new_conn = coresight_add_out_conn(dev, pdata, &conn);
->                         if (IS_ERR(new_conn))
->                                 return PTR_ERR(new_conn);
-> -               } else {
-> -                       WARN_ON(pdata->high_inport == conn.dest_port + 1);
-> -                       /*
-> -                        * We do not track input port connections for a device.
-> -                        * However we need the highest port number described,
-> -                        * which can be recorded now and reuse this connection
-> -                        * record for an output connection. Hence, do not move
-> -                        * the ptr for input connections
-> -                        */
-> -                       if (conn.dest_port >= pdata->high_inport)
-> -                               pdata->high_inport = conn.dest_port + 1;
->                 }
->         }
->
-> diff --git a/drivers/hwtracing/coresight/coresight-replicator.c b/drivers/hwtracing/coresight/coresight-replicator.c
-> index 4dd50546d7e4..b6be73034996 100644
-> --- a/drivers/hwtracing/coresight/coresight-replicator.c
-> +++ b/drivers/hwtracing/coresight/coresight-replicator.c
-> @@ -114,8 +114,9 @@ static int dynamic_replicator_enable(struct replicator_drvdata *drvdata,
->         return rc;
->  }
->
-> -static int replicator_enable(struct coresight_device *csdev, int inport,
-> -                            int outport)
-> +static int replicator_enable(struct coresight_device *csdev,
-> +                            struct coresight_connection *in,
-> +                            struct coresight_connection *out)
->  {
->         int rc = 0;
->         struct replicator_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> @@ -123,15 +124,15 @@ static int replicator_enable(struct coresight_device *csdev, int inport,
->         bool first_enable = false;
->
->         spin_lock_irqsave(&drvdata->spinlock, flags);
-> -       if (atomic_read(&csdev->refcnt[outport]) == 0) {
-> +       if (atomic_read(&out->src_refcnt) == 0) {
->                 if (drvdata->base)
-> -                       rc = dynamic_replicator_enable(drvdata, inport,
-> -                                                      outport);
-> +                       rc = dynamic_replicator_enable(drvdata, in->dest_port,
-> +                                                      out->src_port);
->                 if (!rc)
->                         first_enable = true;
->         }
->         if (!rc)
-> -               atomic_inc(&csdev->refcnt[outport]);
-> +               atomic_inc(&out->src_refcnt);
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
->
->         if (first_enable)
-> @@ -168,17 +169,19 @@ static void dynamic_replicator_disable(struct replicator_drvdata *drvdata,
->         CS_LOCK(drvdata->base);
->  }
->
-> -static void replicator_disable(struct coresight_device *csdev, int inport,
-> -                              int outport)
-> +static void replicator_disable(struct coresight_device *csdev,
-> +                              struct coresight_connection *in,
-> +                              struct coresight_connection *out)
->  {
->         struct replicator_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->         unsigned long flags;
->         bool last_disable = false;
->
->         spin_lock_irqsave(&drvdata->spinlock, flags);
-> -       if (atomic_dec_return(&csdev->refcnt[outport]) == 0) {
-> +       if (atomic_dec_return(&out->src_refcnt) == 0) {
->                 if (drvdata->base)
-> -                       dynamic_replicator_disable(drvdata, inport, outport);
-> +                       dynamic_replicator_disable(drvdata, in->dest_port,
-> +                                                  out->src_port);
->                 last_disable = true;
->         }
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etf.c b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> index 14d3c1472455..79d8c64eac49 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> @@ -206,7 +206,7 @@ static int tmc_enable_etf_sink_sysfs(struct coresight_device *csdev)
->          * touched.
->          */
->         if (drvdata->mode == CS_MODE_SYSFS) {
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->                 goto out;
->         }
->
-> @@ -229,7 +229,7 @@ static int tmc_enable_etf_sink_sysfs(struct coresight_device *csdev)
->         ret = tmc_etb_enable_hw(drvdata);
->         if (!ret) {
->                 drvdata->mode = CS_MODE_SYSFS;
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->         } else {
->                 /* Free up the buffer if we failed to enable */
->                 used = false;
-> @@ -284,7 +284,7 @@ static int tmc_enable_etf_sink_perf(struct coresight_device *csdev, void *data)
->                  * use for this session.
->                  */
->                 if (drvdata->pid == pid) {
-> -                       atomic_inc(csdev->refcnt);
-> +                       atomic_inc(&csdev->refcnt);
->                         break;
->                 }
->
-> @@ -293,7 +293,7 @@ static int tmc_enable_etf_sink_perf(struct coresight_device *csdev, void *data)
->                         /* Associate with monitored process. */
->                         drvdata->pid = pid;
->                         drvdata->mode = CS_MODE_PERF;
-> -                       atomic_inc(csdev->refcnt);
-> +                       atomic_inc(&csdev->refcnt);
->                 }
->         } while (0);
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
-> @@ -338,7 +338,7 @@ static int tmc_disable_etf_sink(struct coresight_device *csdev)
->                 return -EBUSY;
->         }
->
-> -       if (atomic_dec_return(csdev->refcnt)) {
-> +       if (atomic_dec_return(&csdev->refcnt)) {
->                 spin_unlock_irqrestore(&drvdata->spinlock, flags);
->                 return -EBUSY;
->         }
-> @@ -357,7 +357,8 @@ static int tmc_disable_etf_sink(struct coresight_device *csdev)
->  }
->
->  static int tmc_enable_etf_link(struct coresight_device *csdev,
-> -                              int inport, int outport)
-> +                              struct coresight_connection *in,
-> +                              struct coresight_connection *out)
->  {
->         int ret = 0;
->         unsigned long flags;
-> @@ -370,7 +371,7 @@ static int tmc_enable_etf_link(struct coresight_device *csdev,
->                 return -EBUSY;
->         }
->
-> -       if (atomic_read(&csdev->refcnt[0]) == 0) {
-> +       if (atomic_read(&csdev->refcnt) == 0) {
->                 ret = tmc_etf_enable_hw(drvdata);
->                 if (!ret) {
->                         drvdata->mode = CS_MODE_SYSFS;
-> @@ -378,7 +379,7 @@ static int tmc_enable_etf_link(struct coresight_device *csdev,
->                 }
->         }
->         if (!ret)
-> -               atomic_inc(&csdev->refcnt[0]);
-> +               atomic_inc(&csdev->refcnt);
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
->
->         if (first_enable)
-> @@ -387,7 +388,8 @@ static int tmc_enable_etf_link(struct coresight_device *csdev,
->  }
->
->  static void tmc_disable_etf_link(struct coresight_device *csdev,
-> -                                int inport, int outport)
-> +                                struct coresight_connection *in,
-> +                                struct coresight_connection *out)
->  {
->         unsigned long flags;
->         struct tmc_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> @@ -399,7 +401,7 @@ static void tmc_disable_etf_link(struct coresight_device *csdev,
->                 return;
->         }
->
-> -       if (atomic_dec_return(&csdev->refcnt[0]) == 0) {
-> +       if (atomic_dec_return(&csdev->refcnt) == 0) {
->                 tmc_etf_disable_hw(drvdata);
->                 drvdata->mode = CS_MODE_DISABLED;
->                 last_disable = true;
-> @@ -487,7 +489,7 @@ static unsigned long tmc_update_etf_buffer(struct coresight_device *csdev,
->         spin_lock_irqsave(&drvdata->spinlock, flags);
->
->         /* Don't do anything if another tracer is using this sink */
-> -       if (atomic_read(csdev->refcnt) != 1)
-> +       if (atomic_read(&csdev->refcnt) != 1)
->                 goto out;
->
->         CS_UNLOCK(drvdata->base);
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> index 1bbe5410a23d..689ba6abc70b 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> @@ -1209,7 +1209,7 @@ static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
->          * touched, even if the buffer size has changed.
->          */
->         if (drvdata->mode == CS_MODE_SYSFS) {
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->                 goto out;
->         }
->
-> @@ -1226,7 +1226,7 @@ static int tmc_enable_etr_sink_sysfs(struct coresight_device *csdev)
->         ret = tmc_etr_enable_hw(drvdata, drvdata->sysfs_buf);
->         if (!ret) {
->                 drvdata->mode = CS_MODE_SYSFS;
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->         }
->  out:
->         spin_unlock_irqrestore(&drvdata->spinlock, flags);
-> @@ -1535,7 +1535,7 @@ tmc_update_etr_buffer(struct coresight_device *csdev,
->         spin_lock_irqsave(&drvdata->spinlock, flags);
->
->         /* Don't do anything if another tracer is using this sink */
-> -       if (atomic_read(csdev->refcnt) != 1) {
-> +       if (atomic_read(&csdev->refcnt) != 1) {
->                 spin_unlock_irqrestore(&drvdata->spinlock, flags);
->                 goto out;
->         }
-> @@ -1647,7 +1647,7 @@ static int tmc_enable_etr_sink_perf(struct coresight_device *csdev, void *data)
->          * use for this session.
->          */
->         if (drvdata->pid == pid) {
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->                 goto unlock_out;
->         }
->
-> @@ -1657,7 +1657,7 @@ static int tmc_enable_etr_sink_perf(struct coresight_device *csdev, void *data)
->                 drvdata->pid = pid;
->                 drvdata->mode = CS_MODE_PERF;
->                 drvdata->perf_buf = etr_perf->etr_buf;
-> -               atomic_inc(csdev->refcnt);
-> +               atomic_inc(&csdev->refcnt);
->         }
->
->  unlock_out:
-> @@ -1690,7 +1690,7 @@ static int tmc_disable_etr_sink(struct coresight_device *csdev)
->                 return -EBUSY;
->         }
->
-> -       if (atomic_dec_return(csdev->refcnt)) {
-> +       if (atomic_dec_return(&csdev->refcnt)) {
->                 spin_unlock_irqrestore(&drvdata->spinlock, flags);
->                 return -EBUSY;
->         }
-> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
-> index f712e112ecff..8d2b9d29237d 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpda.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
-> @@ -54,18 +54,20 @@ static void __tpda_enable(struct tpda_drvdata *drvdata, int port)
->         CS_LOCK(drvdata->base);
->  }
->
-> -static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
-> +static int tpda_enable(struct coresight_device *csdev,
-> +                      struct coresight_connection *in,
-> +                      struct coresight_connection *out)
->  {
->         struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->
->         spin_lock(&drvdata->spinlock);
-> -       if (atomic_read(&csdev->refcnt[inport]) == 0)
-> -               __tpda_enable(drvdata, inport);
-> +       if (atomic_read(&in->dest_refcnt) == 0)
-> +               __tpda_enable(drvdata, in->dest_port);
->
-> -       atomic_inc(&csdev->refcnt[inport]);
-> +       atomic_inc(&in->dest_refcnt);
->         spin_unlock(&drvdata->spinlock);
->
-> -       dev_dbg(drvdata->dev, "TPDA inport %d enabled.\n", inport);
-> +       dev_dbg(drvdata->dev, "TPDA inport %d enabled.\n", in->dest_port);
->         return 0;
->  }
->
-> @@ -82,18 +84,19 @@ static void __tpda_disable(struct tpda_drvdata *drvdata, int port)
->         CS_LOCK(drvdata->base);
->  }
->
-> -static void tpda_disable(struct coresight_device *csdev, int inport,
-> -                          int outport)
-> +static void tpda_disable(struct coresight_device *csdev,
-> +                        struct coresight_connection *in,
-> +                        struct coresight_connection *out)
->  {
->         struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->
->         spin_lock(&drvdata->spinlock);
-> -       if (atomic_dec_return(&csdev->refcnt[inport]) == 0)
-> -               __tpda_disable(drvdata, inport);
-> +       if (atomic_dec_return(&in->dest_refcnt) == 0)
-> +               __tpda_disable(drvdata, in->dest_port);
->
->         spin_unlock(&drvdata->spinlock);
->
-> -       dev_dbg(drvdata->dev, "TPDA inport %d disabled\n", inport);
-> +       dev_dbg(drvdata->dev, "TPDA inport %d disabled\n", in->dest_port);
->  }
->
->  static const struct coresight_ops_link tpda_link_ops = {
-> diff --git a/drivers/hwtracing/coresight/coresight-tpiu.c b/drivers/hwtracing/coresight/coresight-tpiu.c
-> index b0179f761c98..59eac93fd6bb 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpiu.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpiu.c
-> @@ -73,7 +73,7 @@ static int tpiu_enable(struct coresight_device *csdev, enum cs_mode mode,
->                        void *__unused)
->  {
->         tpiu_enable_hw(&csdev->access);
-> -       atomic_inc(csdev->refcnt);
-> +       atomic_inc(&csdev->refcnt);
->         dev_dbg(&csdev->dev, "TPIU enabled\n");
->         return 0;
->  }
-> @@ -96,7 +96,7 @@ static void tpiu_disable_hw(struct csdev_access *csa)
->
->  static int tpiu_disable(struct coresight_device *csdev)
->  {
-> -       if (atomic_dec_return(csdev->refcnt))
-> +       if (atomic_dec_return(&csdev->refcnt))
->                 return -EBUSY;
->
->         tpiu_disable_hw(&csdev->access);
-> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> index a2ced0b3c3cd..e9a32a97fbee 100644
-> --- a/drivers/hwtracing/coresight/ultrasoc-smb.c
-> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> @@ -106,7 +106,7 @@ static int smb_open(struct inode *inode, struct file *file)
->                 goto out;
->         }
->
-> -       if (atomic_read(drvdata->csdev->refcnt)) {
-> +       if (atomic_read(&drvdata->csdev->refcnt)) {
->                 ret = -EBUSY;
->                 goto out;
->         }
-> @@ -290,7 +290,7 @@ static int smb_enable(struct coresight_device *csdev, enum cs_mode mode,
->         if (ret)
->                 goto out;
->
-> -       atomic_inc(csdev->refcnt);
-> +       atomic_inc(&csdev->refcnt);
->
->         dev_dbg(&csdev->dev, "Ultrasoc SMB enabled\n");
->  out:
-> @@ -311,7 +311,7 @@ static int smb_disable(struct coresight_device *csdev)
->                 goto out;
->         }
->
-> -       if (atomic_dec_return(csdev->refcnt)) {
-> +       if (atomic_dec_return(&csdev->refcnt)) {
->                 ret = -EBUSY;
->                 goto out;
->         }
-> @@ -411,7 +411,7 @@ static unsigned long smb_update_buffer(struct coresight_device *csdev,
->         mutex_lock(&drvdata->mutex);
->
->         /* Don't do anything if another tracer is using this sink. */
-> -       if (atomic_read(csdev->refcnt) != 1)
-> +       if (atomic_read(&csdev->refcnt) != 1)
->                 goto out;
->
->         smb_disable_hw(drvdata);
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index e9c52c5ca7f3..b97edd24f3ec 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -111,8 +111,6 @@ union coresight_dev_subtype {
->   *            unloaded the connection leaves an empty slot.
->   */
->  struct coresight_platform_data {
-> -       int high_inport;
-> -       int high_outport;
->         int nr_inconns;
->         int nr_outconns;
->         struct coresight_connection **out_conns;
-> @@ -205,6 +203,8 @@ struct coresight_connection {
->         struct coresight_device *dest_dev;
->         struct coresight_sysfs_link *link;
->         struct coresight_device *src_dev;
-> +       atomic_t src_refcnt;
-> +       atomic_t dest_refcnt;
->  };
->
->  /**
-> @@ -256,7 +256,7 @@ struct coresight_device {
->         const struct coresight_ops *ops;
->         struct csdev_access access;
->         struct device dev;
-> -       atomic_t *refcnt;
-> +       atomic_t refcnt;
->         bool orphan;
->         bool enable;    /* true only if configured as part of a path */
->         /* sink specific fields */
-> @@ -341,8 +341,12 @@ struct coresight_ops_sink {
->   * @disable:   disables flow between iport and oport.
->   */
->  struct coresight_ops_link {
-> -       int (*enable)(struct coresight_device *csdev, int iport, int oport);
-> -       void (*disable)(struct coresight_device *csdev, int iport, int oport);
-> +       int (*enable)(struct coresight_device *csdev,
-> +                     struct coresight_connection *in,
-> +                     struct coresight_connection *out);
-> +       void (*disable)(struct coresight_device *csdev,
-> +                       struct coresight_connection *in,
-> +                       struct coresight_connection *out);
->  };
->
->  /**
-> --
-> 2.34.1
->
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+--3BwlXs+yCitnNnmA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+On Sun, Apr 02, 2023 at 06:04:36PM +0000, Thomas Wei=DFschuh wrote:
+
+> This enables the usage of the stream APIs with arbitrary filedescriptors.
+>=20
+> It will be used by a future testcase.
+
+This breaks the explicit use of standard streams:
+
+> -static __attribute__((unused)) FILE* const stdin  =3D (FILE*)-3;
+> -static __attribute__((unused)) FILE* const stdout =3D (FILE*)-2;
+> -static __attribute__((unused)) FILE* const stderr =3D (FILE*)-1;
+> +static __attribute__((unused)) FILE* const stdin  =3D (FILE*)(intptr_t)~=
+STDIN_FILENO;
+> +static __attribute__((unused)) FILE* const stdout =3D (FILE*)(intptr_t)~=
+STDOUT_FILENO;
+> +static __attribute__((unused)) FILE* const stderr =3D (FILE*)(intptr_t)~=
+STDERR_FILENO;
+
+Nothing in this change (or anything else in the series AFAICT) causes
+STDx_FILENO to be declared so we get errors like below in -next when a
+kselftest is built with this version of nolibc:
+
+clang --target=3Daarch64-linux-gnu -fintegrated-as -Werror=3Dunknown-warnin=
+g-option -Werror=3Dignored-optimization-argument -Werror=3Doption-ignored -=
+Werror=3Dunused-command-line-argument --target=3Daarch64-linux-gnu -fintegr=
+ated-as -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
+	-include ../../../../include/nolibc/nolibc.h -I../..\
+	-static -ffreestanding -Wall za-fork.c /tmp/kci/linux/build/kselftest/arm6=
+4/fp/za-fork-asm.o -o /tmp/kci/linux/build/kselftest/arm64/fp/za-fork
+In file included from <built-in>:1:
+In file included from ./../../../../include/nolibc/nolibc.h:97:
+In file included from ./../../../../include/nolibc/arch.h:25:
+=2E/../../../../include/nolibc/arch-aarch64.h:176:35: warning: unknown attr=
+ibute 'optimize' ignored [-Wunknown-attributes]
+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(v=
+oid)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from <built-in>:1:
+In file included from ./../../../../include/nolibc/nolibc.h:102:
+=2E/../../../../include/nolibc/stdio.h:33:71: error: use of undeclared iden=
+tifier 'STDIN_FILENO'
+static __attribute__((unused)) FILE* const stdin  =3D (FILE*)(intptr_t)~STD=
+IN_FILENO;
+                                                                      ^
+=2E/../../../../include/nolibc/stdio.h:34:71: error: use of undeclared iden=
+tifier 'STDOUT_FILENO'
+static __attribute__((unused)) FILE* const stdout =3D (FILE*)(intptr_t)~STD=
+OUT_FILENO;
+                                                                      ^
+=2E/../../../../include/nolibc/stdio.h:35:71: error: use of undeclared iden=
+tifier 'STDERR_FILENO'
+static __attribute__((unused)) FILE* const stderr =3D (FILE*)(intptr_t)~STD=
+ERR_FILENO;
+                                                                      ^
+1 warning and 3 errors generated.
+
+The kselftest branch itself is fine, the issues manifest when it is
+merged with the nolibc branch.  I'm not quite sure what the implicit
+include that's been missed here is?
+
+--3BwlXs+yCitnNnmA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ21SwACgkQJNaLcl1U
+h9AZBQf8DJal6OJHifjyunW7cVsIhwp8/OXNFwIY1HNl3CXYXE+TRKeeNvmfl7UI
+sVbKzqryTerbl/BMnbN1HuPUCLtuVGv+CQJ0ZWIRwUN98lhKc/yYU9cMJPbgJesC
+S9mnVucGFqXMpvItJaoPZjdWyUZ7rOJVM/DkBbw3Lxv6sisI6sQC4Scg92v62q36
+ZJTW7p7Esc+HKR5L5ny1DCujCRt4UPRz3xExhZj6OmjfjcTCPkK/vIJjoVCadkOb
+r18/bQa4PamCc+To2qbe2qribqwrBLVEiFKaDUSnLC7tGW3E4pFtQFcH33fyikEW
+gp34TTiAVcKwgIqZi65VbYMGIaIXwA==
+=95Ju
+-----END PGP SIGNATURE-----
+
+--3BwlXs+yCitnNnmA--
