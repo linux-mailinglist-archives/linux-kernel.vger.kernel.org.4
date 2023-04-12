@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA4C6DF39D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BBA6DF3A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjDLL33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S231631AbjDLL3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjDLL2v (ORCPT
+        with ESMTP id S231405AbjDLL3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:28:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DA98A78;
-        Wed, 12 Apr 2023 04:28:14 -0700 (PDT)
+        Wed, 12 Apr 2023 07:29:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A8B8A49;
+        Wed, 12 Apr 2023 04:28:16 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65634660322C;
-        Wed, 12 Apr 2023 12:28:12 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C6A0066058AD;
+        Wed, 12 Apr 2023 12:28:13 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681298893;
-        bh=FBEtOJ4WIs2BY9QNkotVKZUvt7CQzM53jFa4FvLuaOU=;
+        s=mail; t=1681298895;
+        bh=GDKZQ67J0y6mdLDj0BABrBY5g8TxhLW2mBwCl/mxgGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DoAp7wTIj1oqZn671PpiSDWzBbaVQ4ovQGo02MLSH9jh2QhQzCG/mpRMzm0xRzhrr
-         v9+b7inz9dkg+vX6tWhbS93utWRW+io95SFdVmlDy/JZ1Oypsn7EF3Zo9KxnWrqQN5
-         Ih9qxPG5xZ6/xcjq+KpEWcpHf5SRXFI7GTDfCuKthurFADfPnKBEyLjEV/794Ui4fB
-         FFxpuexeNlO4cpeYi+AsEGgPtSGgsrGJ97cHLaOVhv73lN9BStPj/13Tju1jXh/NMr
-         ehMlB9AcJcIqYo0loEHD9jY9AOOK9/NgAh41AsuP5iYysfQWtfB3kaz3PffcnP9a9E
-         zYnotGletuYNA==
+        b=USPyrLGQvib/VqoSxzNh1ByE6Zrr7sFSutJabzc9WhYYc/x/VpCTGKKAOEc0UMOuK
+         Rnt7i8WXOD5hJhzh1o95KJm9bkyeCFrDnxuskXkmJq4952fh+xYaJUDRHzuw8V1oHC
+         EUnmGBIayDtvV9txyr1hCII0h5UHXhlF1Vi5gW2deQlk1MD9MmlBcuOs/7BPpy7RRI
+         cjkKdSYHQ69s6yN4h+91GhmNywZq/EYwq5EvsT5TnkgPvy8QQ3FmqC2ZqDjR9iqM67
+         2j2McbHXbS4IiXpjR306aI3y39j5RSfy783/BSAU2LHTWjdinnUpXQ8DwjIJ5V4jIa
+         405BvuAl3FcFA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -48,9 +48,9 @@ Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
         linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
         kernel@collabora.com, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH 20/27] arm64: dts: mediatek: mt6795: Add tertiary PWM node
-Date:   Wed, 12 Apr 2023 13:27:32 +0200
-Message-Id: <20230412112739.160376-21-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 21/27] arm64: dts: mediatek: mt6795: Add PMIC Wrapper node
+Date:   Wed, 12 Apr 2023 13:27:33 +0200
+Message-Id: <20230412112739.160376-22-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
 References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
@@ -65,46 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PWM at 0x11006000 is the tertiary PWM; unlike PWM0, PWM1, this is
-not display specific and can be used as a generic PWM controller.
-
-This node is left disabled as usage is board-specific.
+Add the pwrap node: this is used to communicate with the PMIC(s).
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt6795.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-index cf45cb4ad3d2..50d9276d18c6 100644
+index 50d9276d18c6..29ca9a7bf0b3 100644
 --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-@@ -583,6 +583,25 @@ uart3: serial@11005000 {
- 			status = "disabled";
+@@ -391,6 +391,17 @@ timer: timer@10008000 {
+ 			clocks = <&system_clk>, <&clk32k>;
  		};
  
-+		pwm2: pwm@11006000 {
-+			compatible = "mediatek,mt6795-pwm";
-+			reg = <0 0x11006000 0 0x1000>;
-+			#pwm-cells = <2>;
-+			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_LOW>;
-+			clocks = <&topckgen CLK_TOP_PWM_SEL>,
-+				 <&pericfg CLK_PERI_PWM>,
-+				 <&pericfg CLK_PERI_PWM1>,
-+				 <&pericfg CLK_PERI_PWM2>,
-+				 <&pericfg CLK_PERI_PWM3>,
-+				 <&pericfg CLK_PERI_PWM4>,
-+				 <&pericfg CLK_PERI_PWM5>,
-+				 <&pericfg CLK_PERI_PWM6>,
-+				 <&pericfg CLK_PERI_PWM7>;
-+			clock-names = "top", "main", "pwm1", "pwm2", "pwm3",
-+				      "pwm4", "pwm5", "pwm6", "pwm7";
-+			status = "disabled";
++		pwrap: pwrap@1000d000 {
++			compatible = "mediatek,mt6795-pwrap";
++			reg = <0 0x1000d000 0 0x1000>;
++			reg-names = "pwrap";
++			interrupts = <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&infracfg MT6795_INFRA_RST0_PMIC_WRAP_RST>;
++			reset-names = "pwrap";
++			clocks = <&topckgen CLK_TOP_PMICSPI_SEL>, <&clk26m>;
++			clock-names = "spi", "wrap";
 +		};
 +
- 		i2c0: i2c@11007000 {
- 			compatible = "mediatek,mt6795-i2c", "mediatek,mt8173-i2c";
- 			reg = <0 0x11007000 0 0x70>, <0 0x11000100 0 0x80>;
+ 		sysirq: intpol-controller@10200620 {
+ 			compatible = "mediatek,mt6795-sysirq",
+ 				     "mediatek,mt6577-sysirq";
 -- 
 2.40.0
 
