@@ -2,97 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8135A6E000F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95306E0013
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDLUm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 16:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S229728AbjDLUoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjDLUmX (ORCPT
+        with ESMTP id S229520AbjDLUoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:42:23 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F655A6;
-        Wed, 12 Apr 2023 13:42:21 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id c3so13869731pjg.1;
-        Wed, 12 Apr 2023 13:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681332141; x=1683924141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hrGdj/3WbwRLbkahszebFkZlQTjkcJtsMISJZ10lO4w=;
-        b=cI1zi8A14YQhBRaOoL4hsaR2csmTkaOcqorFKK2MiPllgQu5VIwM69VCTz+NxEh/Mv
-         +yYVs1mbA/CVhfsqs5bKoeC6Ma5tJJBZ+j4bXXPdeELSgfKWZKNoslgV5B1IUhHkZlGy
-         R2zLUsNtELIsKxDDsObALptH+ZsPEitP5XkTpgZ0jJVfviAl8BYGjat+JBYZjjOLEHwR
-         LDcCY/JW2vGAgjUprFZTEbALE3QqteuBZN7oNqzx8D7A99R3Cz2St1upI283weaGpfPb
-         8wV978F5BEPSmOm+MZMz1jufd+9rIvogCPte9yG5wxws2AayY4QaO7bdllLwKbMGMnfj
-         QtLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681332141; x=1683924141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hrGdj/3WbwRLbkahszebFkZlQTjkcJtsMISJZ10lO4w=;
-        b=LSPG8w1tti0034w5tGLTdz2ulno3VmE1OJons4bEslx3glX5derMXt5BqhU/6+72zj
-         UuQi/piZMIGBVYO7GSBiNezFoUcec90iv6wWb160YnezPuFIcAEq8KKQy4ecmNJw1T1b
-         G0BH4rSNTyl8p++uE58VAjAxKlIUW4RimAn7MVMnPR3JMhvNptnH0rnSl77mifZaQw7m
-         8hlITvZ0QH0wFflhATTXaQ8O7IZRhDB++eyZDfCkIQ7jz/d220E3qVGzJlOkHusJke95
-         HayrAaAYQkcZD1IBkz+J+I+U5ePCTfKf0jDePRa7oEboMbmRdV8sXhXVZcbP29rsh0qu
-         hxCg==
-X-Gm-Message-State: AAQBX9dME6I+13hNjWLfoJHmhc1J7b6nWWxf6RAMRtplGW38+2rBqK8J
-        bW75tb9IEtsSZBb1P3t36mA=
-X-Google-Smtp-Source: AKy350ZKPSULNZM3xD2rdhPgTNbPI3QhcErrtJTRgC9ofaaVn1+XtfOUou156nrG0Vkr5ZDiyEHbOA==
-X-Received: by 2002:a17:902:d709:b0:1a1:b174:836c with SMTP id w9-20020a170902d70900b001a1b174836cmr151120ply.16.1681332141012;
-        Wed, 12 Apr 2023 13:42:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p19-20020a170902a41300b0019a87ede846sm11941622plq.285.2023.04.12.13.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 13:42:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 13:42:19 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/173] 6.2.11-rc1 review
-Message-ID: <f04fab6f-3381-46e1-a9f6-f0d9fbf84f63@roeck-us.net>
-References: <20230412082838.125271466@linuxfoundation.org>
+        Wed, 12 Apr 2023 16:44:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5987E4EC5;
+        Wed, 12 Apr 2023 13:44:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E89AD622CC;
+        Wed, 12 Apr 2023 20:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C8BC433EF;
+        Wed, 12 Apr 2023 20:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681332247;
+        bh=aoAHy7DEiYr/xln2kAunwsb8zReQcW/Oo/qN/Fl7/8k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VDKWuY8vNj6YxhcCZ+ic86Utd60bh/CErc5li9e+X7YBlPXuQHxBoOIAX9RBDBL6u
+         qSJoAisF4GNfADV3HeQznFPynj3k8PoLmxZb4mvepSgi52FtL6x0yFYiOBNfVQlRwE
+         5awcIAvR64OUZP2q6prjoJZvh+BOg/YFkeuPqJMMlewGLEHf6nwKjUwFNuFhJxWM14
+         o+XlU7sxPeRxGpuAKmxX/IycKhfxqmfNficR3WZpSR6+1sop50DL/gyoidBjwMxpEP
+         oQngrjxAkCUV46Hx5oiWm7EK8FvKl1gakHTBxpIh/wC3ydVliozftnvDfBoqu44HkM
+         DtVzz6YWRI19Q==
+Date:   Wed, 12 Apr 2023 21:44:03 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: [RFC PATCH 0/2] Support for Avago APDS9306 Ambient Light Sensor
+Message-ID: <20230412214403.5c053ed6@jic23-huawei>
+In-Reply-To: <eefdbad5-35ed-04c6-0955-87c99a4d345d@tweaklogic.com>
+References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
+        <20230411144031.000077c7@Huawei.com>
+        <eefdbad5-35ed-04c6-0955-87c99a4d345d@tweaklogic.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412082838.125271466@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 10:32:06AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.11 release.
-> There are 173 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 12 Apr 2023 12:46:49 +0800
+Subhajit Ghosh <subhajit.ghosh@tweaklogic.com> wrote:
+
+> Hi Jonathan,
+> Thank you for getting back.
 > 
-> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
-> Anything received after that time might be too late.
+> > Hi Subhajit,
+> > 
+> > No need to sign off a cover letter.  The content isn't captured in the
+> > git tree anyway.
+> > 
+> > For an RFC, I'd expect to see a clear statement in the cover letter of
+> > why it is an RFC rather than a formal patch submission.  What specifically
+> > are you looking for comments on?
+> > 
+> > Point us in the right direction and we might answer the questions quicker.
+> > 
+> > Thanks,
+> > 
+> > Jonathan  
+> Thank you for clearing it up.
+> Next version of RFC I will put specific reasons.
+> Before submitting a formal patch I wanted to check if my implementation of
+> single reads of ALS data raw values from userspace when interrupts are
+> enabled is the right thing to do or not. Also wanted to check if my event
+> related userspace ABI implementation is in line with IIO subsystem.
+> I will put it into better words in the next cover letter.
+> 
+> Can you also help me out with the git tree I should use to format the
+> patches? As per my understanding it is the subsystem maintainer tree
+> and the main branch but the macros and functions which you have suggested
+> in other reviews are available in Linux mainline.
+
+For a new driver it rarely matters and I'd advise simply using
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+which is the mainline tree.  Please base either on the previous
+release (currently 6.2) or rc1 of the current release (v6.3-rc1)
+if doing this.
+
+If you need a feature that has only been applied in the same cycle, or
+are building on recent work that has been applied to the iio tree then
+for fixes you want:
+https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git fixes-togreg
+for new stuff you want:
+https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+
+The IIO tree routes through Greg KH's char-misc tree so will see the togreg
+branch move forwards to be based on that as Greg takes pull requests from me.
+Usually this happens once or twice a kernel cycle.  Don't worry too much about
+this. If it should affect a patch because some changes crossed I'll generally
+fix it up whilst applying whichever gets applied second and ask the
+authors to check I didn't make a mistake.
+
+Joanthan
+> 
+> Regards,
+> Subhajit Ghosh
 > 
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
