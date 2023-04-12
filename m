@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077CC6E0254
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E7D6E025A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjDLXLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 19:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S229894AbjDLXNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDLXLa (ORCPT
+        with ESMTP id S229838AbjDLXNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 19:11:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199A10CE;
-        Wed, 12 Apr 2023 16:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=Nxv7nWXdf7av7cxyh9xS1LvUe4PBtCtEiU6h+boNPdY=; b=bOZTS1tYJKP+HpSO1b8EOjH2lk
-        EUxPl6IxufomX1XkdO7/s1fCgWR55A6/E7eg8tC2XiBkiWfgZCSz/EXOwfZ8oC3TH4SEcoA1uK3K5
-        OqgkYfDxTTMKGLlajk3aH2qK6MvDvVllvqokJa908ckga+tS8PK9qM2kM1Hv7JmQWEBvtbk1UR32u
-        CW6LmFHfPUf9s+5KwYicSyXyYp8dWMXQMtfsYRhMQD4BI3HnE37d0u8J6/HkYCwPX5AgdvaihE1as
-        RUnQ44l8Zwh3IaxkBJvf4AZwCHGBk/QQqYc4ovpCzIo/mVW3MDyEC6cE6Sh8sN7XF6lDS8xKfH2hn
-        03sKu/Gw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmjcc-004bcN-18;
-        Wed, 12 Apr 2023 23:11:26 +0000
-Message-ID: <c718a490-028d-2682-9ad7-8256d16504bf@infradead.org>
-Date:   Wed, 12 Apr 2023 16:11:25 -0700
+        Wed, 12 Apr 2023 19:13:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF21BE1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 16:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681341171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqjVx8DdVE7yyHJKc/GaG9WLw8shGI6NpWmfl69SUoE=;
+        b=bOyUPGtujdSlzeygurislRRvLpTQ85GAd4UMhkuI8lKbgCkz8XcxkgER+OEFor7Hl1WTOR
+        bKSGT/QXqa/DR1Dfu+z+2H+kf2QV7g0apQGxL2b0iYEoZ+ITLRzzkTteE4zG07bYx5tmnE
+        2zA32RAXw35Q1iCH1Y2+0FKeUZEtPDM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-578-RzSsyzYVPU2T4nYnBVXo7Q-1; Wed, 12 Apr 2023 19:12:47 -0400
+X-MC-Unique: RzSsyzYVPU2T4nYnBVXo7Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D72A7101A550;
+        Wed, 12 Apr 2023 23:12:45 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 78B9A2166B26;
+        Wed, 12 Apr 2023 23:12:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <ZDbO3haK/1+7xdRC@infradead.org>
+References: <ZDbO3haK/1+7xdRC@infradead.org> <20230411160902.4134381-1-dhowells@redhat.com> <20230411160902.4134381-5-dhowells@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v6 04/18] mm: Make the page_frag_cache allocator use per-cpu
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
-Content-Language: en-US
-To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
-        Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-References: <Y95MRZZz3yC5lETB@jo-einhundert>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y95MRZZz3yC5lETB@jo-einhundert>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <399349.1681341160.1@warthog.procyon.org.uk>
+Date:   Thu, 13 Apr 2023 00:12:40 +0100
+Message-ID: <399350.1681341160@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Christoph Hellwig <hch@infradead.org> wrote:
 
-On 2/4/23 04:15, Jó Ágila Bitsch wrote:
-> Added documentation to new struct members for WebUSB:
-> * bcd_webusb_version
-> * b_webusb_vendor_code
-> * landing_page
-> * use_webusb
-> to avoid warnings in the build of htmldocs
+> On Tue, Apr 11, 2023 at 05:08:48PM +0100, David Howells wrote:
+> > Make the page_frag_cache allocator have a separate allocation bucket for
+> > each cpu to avoid racing.  This means that no lock is required, other than
+> > preempt disablement, to allocate from it, though if a softirq wants to
+> > access it, then softirq disablement will need to be added.
+> ...
+> Let me ask a third time as I've not got an answer the last two times:
+
+Sorry about that.  I think the problem is that the copy of the message from
+you directly to me arrives after the first copy that comes via a mailing list
+and google then deletes the direct one - as obviously no one could possibly
+want duplicates, right? :-/ - and so you usually get consigned to the
+linux-kernel or linux-fsdevel mailing list folder.
+
+> > Make the NVMe, mediatek and GVE drivers pass in NULL to page_frag_cache()
+> > and use the default allocation buckets rather than defining their own.
 > 
-> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
-> ---
-> V0 -> V1: added Reported-By and Fixes Tags
-> V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
->           also post to linux-usb
-> 
->  include/linux/usb/composite.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-> index 91d22c3ed458..7ef8cea67f50 100644
-> --- a/include/linux/usb/composite.h
-> +++ b/include/linux/usb/composite.h
-> @@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
->   * @qw_sign: qwSignature part of the OS string
->   * @b_vendor_code: bMS_VendorCode part of the OS string
->   * @use_os_string: false by default, interested gadgets set it
-> + * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-> + * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-> + * @landing_page: empty by default, landing page to announce in WebUSB
-> + * @use_webusb:: false by default, interested gadgets set it
+> why are these callers treated different from the others?
 
-Please drop one ':' above so that kernel-doc does not complain:
+There are only four users of struct page_frag_cache, the one these patches
+modify::
 
-include/linux/usb/composite.h:523: warning: Function parameter or member 'use_webusb' not described in 'usb_composite_dev'
+ (1) GVE.
+ (2) Mediatek.
+ (3) NVMe.
+ (4) skbuff.
 
->   * @os_desc_config: the configuration to be used with OS descriptors
->   * @setup_pending: true when setup request is queued but not completed
->   * @os_desc_pending: true when os_desc request is queued but not completed
+Note that things are slightly confused by there being three very similarly
+named frag allocators (page_frag and page_frag_1k in addition to
+page_frag_cache) and the __page_frag_cache_drain() function gets used for
+things other than just page_frag_cache.
 
-Thanks.
--- 
-~Randy
+I've replaced the single allocation buckets with per-cpu allocation buckets
+for (1), (2) and (3) so that no locking[*] is required other than pinning it
+to the cpu temporarily - but I can't test them as I don't have hardware.
+
+[*] Note that what's upstream doesn't have locking, and I'm not sure all the
+    users of it are SMP-safe.
+
+That leaves (4).
+
+Upstream, skbuff.c creates two separate per-cpu frag caches and I've elected
+to retain that, except that the per-cpu bits are now inside the frag allocator
+as I'm not entirely sure of the reason that there's a separate napi frag cache
+to the netdev_alloc_cache.
+
+The general page_frag_cache allocator is used by skb_splice_from_iter() if it
+encounters a page it can't take a ref on, so it has been tested through that
+using sunrpc, sunrpc+siw and cifs+siw.
+
+> Can you show any performance numbers?
+
+As far as I can tell, it doesn't make any obvious difference to directly
+pumping data through TCP or TLS over TCP or transferring data over a network
+filesystem such as sunrpc or cifs using siw/TCP.  I've tested this between two
+machines over a 1G and a 10G link.
+
+I can generate some actual numbers tomorrow.
+
+
+Actually, I probably can drop these patches 2-4 from this patchset and just
+use the netdev_alloc_cache in skb_splice_from_iter() for now.  Since that
+copies unspliceable data, I no longer need to allocate frags in the next layer
+up.
+
+David
+
