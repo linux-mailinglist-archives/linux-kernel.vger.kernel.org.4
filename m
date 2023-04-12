@@ -2,141 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841BD6DEBF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 08:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF3C6DEFF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjDLGkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 02:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S229804AbjDLI7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDLGks (ORCPT
+        with ESMTP id S229734AbjDLI7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 02:40:48 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2537C10B;
-        Tue, 11 Apr 2023 23:40:44 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id ABF62FF806;
-        Wed, 12 Apr 2023 06:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681281643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0inNdIAr829fr5K7PpU7etdJAAGCFNAmGQoieYPHcMs=;
-        b=Kf6wrkZVYcGH40qojFViQ1U6OtDYwiD3KoDZyfc7LKCwqKFh0RSWyZFJWaN3XKFpAzd+od
-        zMR4e2JrTgwnWyapS3bA6zmXOrZ++EB1+ZJAC8kbQ6a+UCXr0znrcB5ike8QnOTySXMAwi
-        Eygdi0gAppNGzFzR+QxdUCrjcHjeGqqWgv3hkfkskEW/KSRN+5ex8E7tdPryUW7G2Zv0lA
-        O+tDBtJJjeuzbOcaLPY0/nxanMaRYdF0qthFaLeyl9QQNuu41JoWIPGs6LdAkO10+kty6L
-        RsVE1ZseC8SBwX++ZknMgAscxKqszVhUtclZo+5GFgXBSKNB9MELY13MGrpK4w==
-Date:   Wed, 12 Apr 2023 10:38:12 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
-        "alexis.lothore@bootlin.com" <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH net v5 1/3] net: phylink: add phylink_expects_phy()
- method
-Message-ID: <20230412103812.45e52ab5@pc-288.home>
-In-Reply-To: <20230330091404.3293431-2-michael.wei.hong.sit@intel.com>
-References: <20230330091404.3293431-1-michael.wei.hong.sit@intel.com>
-        <20230330091404.3293431-2-michael.wei.hong.sit@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Wed, 12 Apr 2023 04:59:21 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE219EEB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:58:56 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C8AjLt020009;
+        Wed, 12 Apr 2023 08:38:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=kkZrMLK/r0rdbcYrFkrFsudkt/LnSZc4oyMDBQLpPng=;
+ b=Gox/YptxQJxgvWO7l41k4K5DOOQPtR2ZMpruyWPhwHA8DfQA1RTDzr+LB78llJk9R+gT
+ 0vk0YOe+aYJvqOzayGz9vz4bN95jKp5nygyLDQd3BFVgwfRjF1Wclvq5kMbseI7irZOD
+ 98aPZnfnwEMexVnbtl0o0oHRcKQH3I5QJrD3+PuF9RlCsr9iksxp10RJymqyDAe+oYv6
+ aYuLHWcIKq25VhUwq+3XYt8SV1WITQ9xxiSa5+Laar2sbxoRQrh+AWjskhdBgEC6y/ri
+ 5m0aX+wLC6BFMdtcZAqqxjCizZIKrPjn6mJF80+oOhxMlnIHv8ihFVG6uhfAjv1V/vxb hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwqmbvkw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 08:38:53 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33C8Rf74022033;
+        Wed, 12 Apr 2023 08:38:52 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwqmbvkuv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 08:38:52 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C40B5l013830;
+        Wed, 12 Apr 2023 08:38:50 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3pu0fvsvtf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 08:38:50 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C8cmbS66257268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 08:38:48 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE2F62004B;
+        Wed, 12 Apr 2023 08:38:47 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC5D720040;
+        Wed, 12 Apr 2023 08:38:43 +0000 (GMT)
+Received: from [9.43.75.6] (unknown [9.43.75.6])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Apr 2023 08:38:43 +0000 (GMT)
+Message-ID: <3e9833e0-4069-5a75-c7e2-94b8f2aacfa8@linux.ibm.com>
+Date:   Wed, 12 Apr 2023 14:08:42 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v21 2/7] crash: add generic infrastructure for crash
+ hotplug support
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20230404180326.6890-1-eric.devolder@oracle.com>
+ <20230404180326.6890-3-eric.devolder@oracle.com>
+ <ZC6nWzPuIWOxmvv2@MiWiFi-R3L-srv>
+ <80767ccc-ffd4-9cb9-44e4-a8d4f0e13853@oracle.com>
+Content-Language: en-US
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <80767ccc-ffd4-9cb9-44e4-a8d4f0e13853@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: D83uTd-vTQXzizU20BeSmHHJxr49GL3x
+X-Proofpoint-GUID: YrG-2yIYPIiDy-ClUiREl0pY4b5Sua7J
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_02,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 clxscore=1011 phishscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120078
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
 
-On Thu, 30 Mar 2023 17:14:02 +0800
-Michael Sit Wei Hong <michael.wei.hong.sit@intel.com> wrote:
+On 06/04/23 21:40, Eric DeVolder wrote:
+>
+>
+> On 4/6/23 06:04, Baoquan He wrote:
+>> On 04/04/23 at 02:03pm, Eric DeVolder wrote:
+>> ......
+>>> +static void crash_handle_hotplug_event(unsigned int hp_action, 
+>>> unsigned int cpu)
+>>> +{
+>>> +    struct kimage *image;
+>>> +
+>>> +    /* Obtain lock while changing crash information */
+>>> +    if (!kexec_trylock()) {
+>>> +        pr_info("kexec_trylock() failed, elfcorehdr may be 
+>>> inaccurate\n");
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    /* Check kdump is not loaded */
+>>> +    if (!kexec_crash_image)
+>>> +        goto out;
+>>> +
+>>> +    image = kexec_crash_image;
+>>> +
+>>> +    if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+>>> +        hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+>>> +        pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+>>> +    else
+>>> +        pr_debug("hp_action %u\n", hp_action);
+>>
+>> Seems we passed in the cpu number just for printing here. Wondering why
+>> we don't print out hot added/removed memory ranges. Is the cpu number
+>> printing necessary?
+>>
+> Baoquan,
+>
+> Ah, actually until recently it was used to track the 'offlinecpu' in 
+> this function, but tglx pointed out that was un-necessary. That 
+> resulted in dropping the code in this function dealing with 
+> offlinecpu, leaving this as its only use in this function.
+>
+> The printing of cpu number is not necessary, but helpful; I use it for 
+> debugging.
+>
+> The printing of memory range is also not necessary, but in order to do 
+> that, should we choose to do so, requires passing in the memory range 
+> to this function. This patch series did do this early on, and by v7 I 
+> dropped it at your urging 
+> (https://lore.kernel.org/lkml/20220401183040.1624-1-eric.devolder@oracle.com/). 
+> At the time, I provided it since I considered this generic 
+> infrastructure, but I could not defend it since x86 didn't need it. 
+> However, PPC now needs this, and is now carrying this as part of PPC 
+> support of CRASH_HOTPLUG 
+> (https://lore.kernel.org/linuxppc-dev/20230312181154.278900-6-sourabhjain@linux.ibm.com/T/#u).
+>
+> If you'd rather I pickup the memory range handling again, I can do 
+> that. I think I'd likely change this function to be:
+>
+>   void crash_handle_hotplug_event(unsigned int hp_action, unsigned int 
+> cpu,
+>      struct memory_notify *mhp);
+>
+> where on a CPU op the 'cpu' parameter would be valid and 'mhp' NULL, 
+> and on a memory op,
+> the 'mhp' would be valid and 'cpu' parameter invalid(0).
+>
+> I'd likely then stuff these two parameters into struct kimage so that 
+> it can be utilized by arch-specific handler, if needed.
+>
+> And of course, would print out the memory range for debug purposes.
 
-> Provide phylink_expects_phy() to allow MAC drivers to check if it
-> is expecting a PHY to attach to. Since fixed-linked setups do not
-> need to attach to a PHY.
->=20
-> Provides a boolean value as to if the MAC should expect a PHY.
-> Returns true if a PHY is expected.
+I think passing memory_notify as parameter is a better approach compare 
+to adding the
+same into struct kimage. Because once the crash hotplug event is served 
+the memory_notify
+object is not useful.
 
-I'm currently working on the TSE rework for dwmac_socfpga, and I
-noticed one regression since this patch, when using an SFP, see details
-below :
+- Sourabh
 
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-> ---
->  drivers/net/phy/phylink.c | 19 +++++++++++++++++++
->  include/linux/phylink.h   |  1 +
->  2 files changed, 20 insertions(+)
->=20
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 1a2f074685fa..30c166b33468 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -1586,6 +1586,25 @@ void phylink_destroy(struct phylink *pl)
->  }
->  EXPORT_SYMBOL_GPL(phylink_destroy);
-> =20
-> +/**
-> + * phylink_expects_phy() - Determine if phylink expects a phy to be
-> attached
-> + * @pl: a pointer to a &struct phylink returned from phylink_create()
-> + *
-> + * When using fixed-link mode, or in-band mode with 1000base-X or
-> 2500base-X,
-> + * no PHY is needed.
-> + *
-> + * Returns true if phylink will be expecting a PHY.
-> + */
-> +bool phylink_expects_phy(struct phylink *pl)
-> +{
-> +	if (pl->cfg_link_an_mode =3D=3D MLO_AN_FIXED ||
-> +	    (pl->cfg_link_an_mode =3D=3D MLO_AN_INBAND &&
-> +	     phy_interface_mode_is_8023z(pl->link_config.interface)))
-
-=46rom the discussion, at one point Russell mentionned [1] :
-"If there's a sfp bus, then we don't expect a PHY from the MAC driver
-(as there can only be one PHY attached), and as phylink_expects_phy()
-is for the MAC driver to use, we should be returning false if
-pl->sfp_bus !=3D NULL."
-
-This makes sense and indeed adding the relevant check solves the issue.
-
-Am I correct in assuming this was an unintentional omission from this
-patch, or was the pl->sfp_bus check dropped on purpose ?
-
-> +		return false;
-> +	return true;
-> +}
-> +EXPORT_SYMBOL_GPL(phylink_expects_phy);
-
-Thanks,
-
-Maxime
-
-[1] :
-https://lore.kernel.org/netdev/ZCQJWcdfmualIjvX@shell.armlinux.org.uk/
