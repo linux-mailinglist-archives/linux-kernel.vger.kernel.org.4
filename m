@@ -2,153 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166DF6DF807
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D5B6DF80F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjDLOKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S231409AbjDLOLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDLOKA (ORCPT
+        with ESMTP id S231317AbjDLOL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:10:00 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F84E49
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:09:58 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 68600582A85;
-        Wed, 12 Apr 2023 10:09:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 12 Apr 2023 10:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681308597; x=1681315797; bh=+6
-        c91CjmYIxtUqQXd3hOvEtB9DdbEY6oIma7Y8N/Mjo=; b=ib7pWYB1n6aJSdrpJQ
-        fY5o9y+RlaIb0qfrmsZSmlILn6qzjK9sSETdoq0/hb36Y4zhDs7vUX8e/m3CX8cP
-        aiRH2h0Bv0MYH4qsODXwgzQYDD2p5a7gZQvi5GMY2MCHoSGiN8GZ5f78iOohcV6J
-        vgAsGGKmlt0Dsl3YFMGXHlUnjA1XTET8FHRQ06Z87e4JInI2XyMbXEi2l6Kfszzd
-        DLR88XpeOdzXVuqOWfJWsTnWRH8vCvYdVQ5eXC9MoNsDrinFg7GwnyCBxkTu7BN1
-        hWGYHHcprJJeYU7A9R5MfecL+sfwZjCV3iMo3V3JmyrAhjEsOfMmL93ohOCj1okf
-        JzkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681308597; x=1681315797; bh=+6c91CjmYIxtU
-        qQXd3hOvEtB9DdbEY6oIma7Y8N/Mjo=; b=KJ7yfzAf7FGIldi78fa7VdpD4gtBS
-        +wv58kmjpp1ujCZD9slNbsIFzGgIAll3f6UpPJ7KfsngSI+3WSBqC6xK9enuFBVl
-        3pq37O8Uch5OJokDOImpb0TfUwgZzSBVm47bzA29iMVenfXZ1R/AZLKA/dlpwiqP
-        f/S79HmOwJAZ0IWVIyND9NU2rL/LCmyB8YfqIkhFP4qDLtFs0b8uIGouvJ1sVyLe
-        PBGZN/v+mdJXlEWE4dY1AptiSEBeYABovZijA4/PtVOV9A9zEtXtdRSfVD98a/3g
-        6vJShHBPDrIOvIrkWQG2p4wEwg3uQvPruFkIMzeWqHmxBUsUgbUbGMXSA==
-X-ME-Sender: <xms:tLs2ZJpBTlMGip7gemGbWvS9eqAkGh2wXIx8bMNT1LeL3DSXkPu_MA>
-    <xme:tLs2ZLpmMBXeDvXkyrXUopU5fEFJOI7ur0jDGeHSH1sfH0njaU1XLNGdGDazS_zza
-    u-wwavp-4MqQqeqncI>
-X-ME-Received: <xmr:tLs2ZGMxv3iyT60FneNHurZn82fdudL1lj5CBeUHNTERRHmWXpWfVDq_RVW-dYLp5GnGaw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:tLs2ZE5l7tWY-V0RnN7o93rPkSLvTkU0SVwIBEKbVR2efbWVKcy1oA>
-    <xmx:tLs2ZI76sIllvjSJjroOScwTSXL_PRFl53guYRdscUSLb3XosmGxGg>
-    <xmx:tLs2ZMjeREEh2x1jCp2OZO5chhrGzVhDAZbN5spQAtGljPt1R06IAg>
-    <xmx:tbs2ZO68eIfU8Qj4ZKOWun3RY5gW_kwFiGEUawEvKMr8BiNld2NLDA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Apr 2023 10:09:56 -0400 (EDT)
-Date:   Wed, 12 Apr 2023 16:09:54 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Beranek <romanberanek@icloud.com>
-Cc:     Frank Oltmanns <frank@oltmanns.dev>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-Message-ID: <qrjzn5dy7qasjubovofyzsazakiqpsjyyt2av6kfbqq7mqcdqe@bvs2egtopbqs>
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev>
- <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
- <20230329195802.veybo3367zifw77n@penduick>
- <CROTQHUM88W0.2URPO95U5ZMS5@void.crly.cz>
- <pu3vdz4gnkwgn4thg6tndbnvfroevpnq75bqbfv7yyrh4gkv63@xxl3dsjf2ih3>
- <CRULBWW4VCWG.3KS7HX7P1G4P6@void.crly.cz>
+        Wed, 12 Apr 2023 10:11:28 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937322708
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:11:08 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id jx2-20020a17090b46c200b002469a9ff94aso9852015pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681308668;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/08sgLNHl+fvsLpz2QvFxww3IWnM9URQXV0BTGByAnM=;
+        b=ah3FfTCwtmlj6FL1p8yzw2jYC7yFw0+4YehGEEbWBum7kI6Rd8emsG3gTnRLPIDlzh
+         ATgUdGcX4JxsAU42Ffd9/mElLT1w8zU8H/mkPAnLKxngubSiYHWJMjyc6BnmshadOED1
+         LZRA0eOhn+4dYVysVIEjabVJqL7TfXQi4aW/yK5TwlI6V/GsuIqGPPVchpGQD6LGlPuA
+         XyFSWOr6h00KIKAOv2ek3wwmT02wxHTToefvZLeXFZAMqdN8GEAmtubIAZcQMmiGqZ7R
+         IjkMW4IB3+IzCJYsfTEj/31H02aplIOF8P5doPfLi6S/Tqk3AdLW2ZOz6rI2P4JmHPkR
+         rHIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681308668;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/08sgLNHl+fvsLpz2QvFxww3IWnM9URQXV0BTGByAnM=;
+        b=Rjfv/d8fw61xn3yJcXBqxEgRKGmvBhhagPb2ewWbcHa2oax9hJ/tN7SVGOqUuWLO8R
+         0uKUUZpbWTN/f0qwfxNYX75dN5mFhgcW9y9lE6V7F9JUlS3uivX3+tY0LP0c4xtGCoiC
+         PosaMfyDjevsQR+KqXeKQO3cytMN/aITXw+O6HE9hbk6DQdZpJ4A6HOtRRv7CBSlswaV
+         uGKoa0LaRZLPpxREYJ1vMw7AYrOp5XTc5Rga/wLa+DPiMQrom0kW7D2P3880NLTQmtaB
+         hPwenO3/3ta8mkbnk0HXS8WLLswr3fMpXl6aJhU3Lpeod1myWeZbQZi9fcK77k+I6qtR
+         uzHA==
+X-Gm-Message-State: AAQBX9cd7D8tptLrIKW/4rZ++M13AVES+swsAyN8CTvnCbgJbSOdyMIj
+        TMWXDxNEwMvrdWkPvwfizZ1R3A==
+X-Google-Smtp-Source: AKy350YdZubU5x7WHR5Ra7lyb5gK5DZdvAGIACucw2eA1QSl4JVAZfxjZzWbzpgx+BaceamCCqKDzw==
+X-Received: by 2002:a17:90b:1d04:b0:23d:3913:bc26 with SMTP id on4-20020a17090b1d0400b0023d3913bc26mr21902907pjb.2.1681308667917;
+        Wed, 12 Apr 2023 07:11:07 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.253])
+        by smtp.gmail.com with ESMTPSA id gz2-20020a17090b0ec200b00246aa8b0e8csm1503359pjb.55.2023.04.12.07.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:11:07 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Gang Li <ligang.bdlg@bytedance.com>
+Subject: [PATCH v6 1/2] sched/numa: use static_branch_inc/dec for sched_numa_balancing
+Date:   Wed, 12 Apr 2023 22:10:52 +0800
+Message-Id: <20230412141053.59498-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20230412140701.58337-1-ligang.bdlg@bytedance.com>
+References: <20230412140701.58337-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gw23oqhzikhjtwgb"
-Content-Disposition: inline
-In-Reply-To: <CRULBWW4VCWG.3KS7HX7P1G4P6@void.crly.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+per-process numa balancing use static_branch_inc/dec() to count
+how many enables in sched_numa_balancing. So here must be converted
+to inc/dec too.
 
---gw23oqhzikhjtwgb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: linux-api@vger.kernel.org
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+Acked-by: John Hubbard <jhubbard@nvidia.com>
+---
+ kernel/sched/core.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-On Wed, Apr 12, 2023 at 09:14:59AM +0200, Roman Beranek wrote:
-> On Wed Apr 5, 2023 at 5:03 PM CEST, Maxime Ripard wrote:
-> > On Wed, Apr 05, 2023 at 02:34:11PM +0200, Roman Beranek wrote:
-> > > It turns out however that the new dclk rates can't be set exactly as
-> > > requested without touching pll-video0*, tcon0 now therefore gets
-> > > reparented from pll-mipi to pll-video0-2x which, as it further turns
-> > > out, breaks DSI. While simply forbidding the video0-2x mux option see=
-ms
-> > > to me as the right way to go because there's not much use for it with
-> > > non-DSI interfaces either besides the opportunity to power pll-mipi
-> > > down, I'd like to run by you first.
-> >
-> > Sounds reasonable
->=20
-> Okay, I'm unsure of how to denote that in the code however. Should I
-> just comment the parent out of the table and put an explanation in
-> a comment nearby? Or just erase it? I couldn't find an applicable
-> precedent.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 94be4eebfa53..99cc1d5821a1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4501,21 +4501,15 @@ DEFINE_STATIC_KEY_FALSE(sched_numa_balancing);
+ 
+ int sysctl_numa_balancing_mode;
+ 
+-static void __set_numabalancing_state(bool enabled)
+-{
+-	if (enabled)
+-		static_branch_enable(&sched_numa_balancing);
+-	else
+-		static_branch_disable(&sched_numa_balancing);
+-}
+-
+ void set_numabalancing_state(bool enabled)
+ {
+-	if (enabled)
++	if (enabled) {
+ 		sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
+-	else
++		static_branch_enable(&sched_numa_balancing);
++	} else {
+ 		sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
+-	__set_numabalancing_state(enabled);
++		static_branch_disable(&sched_numa_balancing);
++	}
+ }
+ 
+ #ifdef CONFIG_PROC_SYSCTL
+@@ -4549,8 +4543,14 @@ static int sysctl_numa_balancing(struct ctl_table *table, int write,
+ 		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+ 		    (state & NUMA_BALANCING_MEMORY_TIERING))
+ 			reset_memory_tiering();
+-		sysctl_numa_balancing_mode = state;
+-		__set_numabalancing_state(state);
++		if (sysctl_numa_balancing_mode != state) {
++			if (state == NUMA_BALANCING_DISABLED)
++				static_branch_dec(&sched_numa_balancing);
++			else if (sysctl_numa_balancing_mode == NUMA_BALANCING_DISABLED)
++				static_branch_inc(&sched_numa_balancing);
++
++			sysctl_numa_balancing_mode = state;
++		}
+ 	}
+ 	return err;
+ }
+-- 
+2.20.1
 
-I think that forcing the parent at boot, and adding the
-CLK_SET_RATE_NOREPARENT flag should be enough.
-
-> > > * As pll-mipi doesn't have CLK_SET_RATE_PARENT flag set, pll-video0
-> > >   retains its boot-time rate of 294 MHz set by sunxi-dw-hdmi driver
-> > >   in u-boot. Why 294 MHz (as opposed to the default rate of 297 MHz)?
-> > >   The driver actually asks for 297 MHz, clock_set_pll3 rounds it to
-> > >   294 MHz though because it limits itself to 6 MHz steps.
-> >
-> > We could also address that though
->=20
-> Should I include it in v2 of the series, or leave it for later?
-
-I guess you can include it into this one too
-
-Maxime
-
---gw23oqhzikhjtwgb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZDa7sgAKCRDj7w1vZxhR
-xcbdAQDlABOUSRin2TeBWh2nNqjI2tuMlU0bJZQjxFS9a+mQiQEAv5twOP7R+ugi
-y49VRW9d7AF34brzpVy7yy+Tzffp1A8=
-=0sQH
------END PGP SIGNATURE-----
-
---gw23oqhzikhjtwgb--
