@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A15A6DE87F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF506DE884
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjDLA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 20:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S229688AbjDLAeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 20:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjDLA0c (ORCPT
+        with ESMTP id S229498AbjDLAeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 20:26:32 -0400
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E92D3;
-        Tue, 11 Apr 2023 17:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oi+javVlViAf4EjInPqqFRpG+lPC235NHVxTYPy83Pc=; b=qGtIBd8qoTQvC9rbTN1JeCR3qW
-        UVut0/l1N/MsnfNw4HUr00Qd9GxECbA3IRCRBsLaxF1jDR5T4SwN1BHsI51FzSOG5p/H07zZMLcqq
-        vVBtg3p+/emgHINNlEVJXzwT3a7/QAyVOdErLabINOTj0no0nDzETKo9PLvVR/CGhofmGr/kS4Ep8
-        8hKX1BQPoL9u74G+8I17P23jiKbUNpLHqv8MDTByX6LcZXV6z3PBIiLk1KuDO+8MZ/t4aN3AA9t02
-        FQVmDOVdOS755tEs4MR5UT29UdaOyrpT9UzkUwM+Py6nW2XaQB8+IqcvWNP0mf69J5O5wef3FdaYT
-        lpwBy6Vg==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1pmOJb-00GhHJ-UI; Wed, 12 Apr 2023 00:26:24 +0000
-Date:   Wed, 12 Apr 2023 02:26:21 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] PCI: brcmstb: Set PCIe transaction completion
- timeout
-Message-ID: <20230412002621.nuxkiflumz4vbang@mraw.org>
-Organization: Debian
-References: <20230411165919.23955-1-jim2101024@gmail.com>
- <20230411165919.23955-4-jim2101024@gmail.com>
+        Tue, 11 Apr 2023 20:34:03 -0400
+Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759CE56
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:34:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1157939|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.137556-0.240017-0.622427;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.SDMc3LD_1681259636;
+Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.SDMc3LD_1681259636)
+          by smtp.aliyun-inc.com;
+          Wed, 12 Apr 2023 08:33:57 +0800
+From:   Victor Hassan <victor@allwinnertech.com>
+To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
+        jindong.yue@nxp.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tick/broadcast: Do not set oneshot_mask except was_periodic was true
+Date:   Wed, 12 Apr 2023 08:34:25 +0800
+Message-Id: <20230412003425.11323-1-victor@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zhilsb22jfyf7zcz"
-Content-Disposition: inline
-In-Reply-To: <20230411165919.23955-4-jim2101024@gmail.com>
-X-Debian-User: kibi
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If a broadcast timer is registered after the system switched to oneshot
+mode, a hang_task err could occur like that:
 
---zhilsb22jfyf7zcz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+INFO: task kworker/u15:0:7 blocked for more than 120 seconds.
+      Tainted: G            E     5.15.41-android13-8-00002-xxx #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u16:0   state:D stack: 9808 pid:  7 ppid: 2 flags:0x00000008
+Workqueue: events_unbound deferred_probe_work_func.cfi_jt
+Call trace:
+ __switch_to+0y240/0x490
+ __schedule+0x620/0xafc
+ schedule+0x110/0x204
+ schedule_hrtimeout_range_clock+0x9c/0x118
+ usleep_range_state+0x150/0x1ac
+ _regulator_do_enable+0x528/0x878
+ set_machine_constraints+0x6a0/0xf2c
+ regulator_register+0x3ac/0x7ac
+ devm_regulator_register+0xbc/0x120
+ pmu_ext_regulator_probe+0xb0/0x1b4 [pmu_ext_regulator]
+ platform_probe+0x70/0x194
+ really_probe+0x320/0x68c
+ __driver_probe_device+0x204/0x260
+ driver_probe_device+0x48/0x1e0
 
-Hi Jim,
+When the new broadcast timer was registered after the system switched
+to oneshot mode, the broadcast timer was not used as periodic. If the
+oneshot mask was set incorrectly, all cores which did not enter cpu_idle
+state can't enter cpu_idle normally, causing the hrtimer mechanism to
+break. Like:
 
-Jim Quinlan <jim2101024@gmail.com> (2023-04-11):
-> Since the STB PCIe HW will cause a CPU abort on a PCIe transaction
-> completion timeout abort, we might as well extend the default timeout
-> limit.  Further, different devices and systems may requires a larger or
-> smaller amount commensurate with their L1SS exit time, so the property
-> "brcm,completion-abort-us" may be used to set a custom timeout value.
-   ^^^^^^^^^^^^^^^^^^^^^^^^
+* CPU 1 stop its tick, next event is in one hour. It calls
+  tick_broadcast_enter() and goes to sleep.
+* CPU 1 gets an interrupt that enqueues a new timer expiring in the next jiffy
+  (note it's not yet actually programmed in the tick device)
+* CPU 1 call tick_broadcast_exit().
+* CPU 0 registers new broadcast device and sets CPU 1 in tick_broadcast_oneshot_mask
+* CPU 0 runs the broadcast callback, sees that the next timer for CPU 1
+  is in one hour (because the recently enqueued timer for CPU 1 hasn't been programmed
+  yet), so it programs the broadcast to that 1 hour deadline.
+* CPU 1 runs tick_nohz_idle_stop_tick() which eventually writes and program
+  dev->next_event to next jiffy
+* CPU 1 runs into cpuidle_enter_state(), and tick_broadcast_enter() is ignored because
+  the CPU is already in tick_broadcast_oneshot_mask, so the dev->next_event
+  change isn't propagated to broadcast.
+* CPU 1 goes to sleep for 1 hour.
 
-> +	ret =3D of_property_read_u32(pcie->np, "brcm,completion-timeout-us",
-> +				   &timeout_us);
-> +	if (ret && ret !=3D -EINVAL)
-> +		dev_err(pcie->dev, "malformed/invalid 'brcm,completion-timeout-us'\n");
+This patch fixes the issue by moving the update action about oneshot
+mask to a more strict conditions. The tick_broadcast_setup_oneshot would
+be called in two typical condition, and they all will work.
 
-v2 renames brcm,completion-abort-msecs into brcm,completion-timeout-us
-but the commit message mentions the half-way brcm,completion-abort-us
-property instead.
+1. tick_handle_periodic -> tick_broadcast_setup_oneshot
 
-(Also spotted =E2=80=9Cimmplementation=E2=80=9D in 2/3 but I thought I'd sp=
-are everyone
-an extra mail.)
+The origin broadcast was periodic, so it can set the oneshot_mask bits
+for those waiting for periodic broadcast and program the broadcast timer
+to fire.
 
+2. tick_install_broadcast_device -> tick_broadcast_setup_oneshot
 
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
+The origin broadcast was oneshot, so the cores which enter the cpu_idle
+already used the oneshot_mask bits. It is unnecessary to update the
+oneshot_mask.
 
---zhilsb22jfyf7zcz
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 9c336c9935cf ("tick/broadcast: Allow late registered device to enter oneshot mode")
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmQ1+qkACgkQ/5FK8MKz
-VSDR9A//SGkUb7J8cgwWLrNmjetx04cvntLjkLt8/1iwZAGeEfIbD4VoeAxedneM
-ZcsuIW9DwkS9pnU/TBhyuTAMQ0F+fTX4EeunPSmE6jjLUPffDD2Z7Pqlygblq59r
-+n2i17q26DP4ol6Vq7yKMmhPjldfI9SaImL+DzOsMITGG/D46vTmXJh8cbKEEpAw
-yZ163qBDJYnz5WI6fNbV/fU0NfIi2DiNHSDE1wWG5yEkAThchGGDXFabJIXuVWT4
-mQfflVQtniOLIohENmJQNRdG+AdveTBTXZ3N6vriFJR0E64rUcno89PKRSdLuyv9
-z7ihC+3AWGhZoIszb3R21bqU5kKJH/u62E9GB4BsQX/WwkGZD4bhUxExFak1ohaI
-HmHtG9Hwr8+ddUkQuNAT2MLyI0mav98fDkL5KN7gnmlRzCnlFp2BiJCdmdmvt6HB
-3BjRhfZSDNtv+vJIOUqYUUIS3DQ91Bj2e7TL9FuO99MDTzFKKjJ03A0A5xJxg2Sj
-qqegAd9kXWZuYD2OGJuVGFGEpt10ff0+Kpd2dHUfWXwjOkucMEJYi5pUR6QDrs28
-mLnO+llKJmf1W/3Idsci5yPNB7EjJfpMBsHspz+zzQD5EliZH5Nud98nL0jvKs4U
-zUagyQ8qTk6CLy8XkqZAOizzuNvpyfIv8uROm035MjGn2HRZzDc=
-=VjoP
------END PGP SIGNATURE-----
+Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+---
+ kernel/time/tick-broadcast.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---zhilsb22jfyf7zcz--
+diff --git a/kernel/time/tick-broadcast.c b/kernel/time/tick-broadcast.c
+index 93bf2b4e47e5..fdbbba487978 100644
+--- a/kernel/time/tick-broadcast.c
++++ b/kernel/time/tick-broadcast.c
+@@ -1041,12 +1041,13 @@ static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
+ 		 */
+ 		cpumask_copy(tmpmask, tick_broadcast_mask);
+ 		cpumask_clear_cpu(cpu, tmpmask);
+-		cpumask_or(tick_broadcast_oneshot_mask,
+-			   tick_broadcast_oneshot_mask, tmpmask);
+ 
+ 		if (was_periodic && !cpumask_empty(tmpmask)) {
+ 			ktime_t nextevt = tick_get_next_period();
+ 
++			cpumask_or(tick_broadcast_oneshot_mask,
++				   tick_broadcast_oneshot_mask, tmpmask);
++
+ 			clockevents_switch_state(bc, CLOCK_EVT_STATE_ONESHOT);
+ 			tick_broadcast_init_next_event(tmpmask, nextevt);
+ 			tick_broadcast_set_event(bc, cpu, nextevt);
+-- 
+2.29.0
+
