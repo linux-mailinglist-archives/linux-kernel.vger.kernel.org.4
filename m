@@ -2,383 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDD06DF097
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D16E6DF095
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjDLJir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S231549AbjDLJiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjDLJil (ORCPT
+        with ESMTP id S231545AbjDLJiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:38:41 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2112.outbound.protection.outlook.com [40.107.117.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131E42D77
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:37:55 -0700 (PDT)
+        Wed, 12 Apr 2023 05:38:22 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2087.outbound.protection.outlook.com [40.107.6.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C8272B;
+        Wed, 12 Apr 2023 02:38:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WpP2Ot3py3jT6fEX/fasDsNPny/v561SHPoJ1TEKubLfwhXNLFwTggAU4dHLY+iRX2C25tUqzcbQ1wbyOx/9KiayCLo7QfFTNHq2kS8QUbEnI0PbJvPqoL/dXV/mk2o2KE1CDcZII6F/eB1/N+zqD0XF8wamnlRXnPZlZxI0Ha1UdGcNR61tpPHkPUz+oxHlfnfMwrqUwKKekZVIxVPyJr9kwzIIH3vBQTNfeT9rQoBTrhkE0nYGEFEKL3dg/PwJQu27d2GWjO2tmHwq0E2w4zcwsvJBD1xL1F0B0tbT57fZfyhyRdiNqnGk4ZDOuGJD+h4Jr2gA9Haprkg4xCxEvQ==
+ b=nUyLf5myGEF91xmf6IFPF+dCIxOusFeO0FjDIYd99vhwUlUpjcsGr0Y+Vinwf+G4dgbnWrlW98vdWY/JGBpNV9NejO17zpPCJAFR3W1ZYLSmKA+dWIi+v2l1ulGS5nmKzivzy4Jpf55Bms8pf7pAG4TKYM7gorkqwK4CyUWQUQimExy3NpfHa34VrzGs2Y+3hB5knsNRD+pnK9pAiPozcWRGbeSmThlWmaiiD9D4qy/l8EhIaK77Ynl81VgbGrgZyzgtGv4CYyFcOEyc8OWr5IQ7i48jPImovkISKmP4ZnKJ1m0o+8FXHEkIsZwadC2Nk/Rn0upQ8yry54DdTlw+GQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qfqNWVSGsRBEOU+wqQ7Y5SyI+gwOzm1geZKlrD5ECc8=;
- b=UYXeC2SsUCgurW93uqtpRTmKWSa4XEkz4g5936qY8YnoMSKsdjLij+oBMFuBe0OJz29ohojmknHVm717AB53zxVvA6ybMfVYI283Dh7U1Qs3bSYhEOS2vzOfbuUcw4JqqpZOsDcrrolEI51ZmFnNNzHVJZ8j+AV7FrUeB9wrBjvJNZKs/VnH3H5fUlfQ3koUTIFD38ukEZCxh0P9rc1Vy35GfPqmAt6YAHrctnxqJQIkrkPxR9HHbt87DtnZnMpE4if+QpShehiZF3v5Z381CQvwsC46HOPP916dWtK6CDuLZfU/MwqBVJwZt5tkg6S8sJh3amPFI9z4nvJYLiaeYw==
+ bh=xutPr+iq4ZK7OGZWcQTjn9eYeVHA/OArr05YIjIo2ws=;
+ b=DPDq0MaUPLeTnoNctVQsoMJ/5GSSE1lu02Jj4ISzO95WbBQA9e8RijEdCOuM30JeccZftK4x80OArkplSn++dWhyEIbtdIjAPOqNLzvg9la2zj9rrEHyjhwWoQTBhxN27dQqc0lz8jsaVXKOpHuBs4auyLoGXyzL5Wr5nNRxa6JEJz3SR1vbkIVPbXR9z4bWBbTCM2/tOxJeVnrnx8THnjR5IRhHpwpjnB9Bmm31Vxx7pYF8i+FIgRu2Mfuve/52iPTJBzpKqxjJ/dnN4PsK69DhOVjSQCT5fWCmR98p40KfLeJnyZ5u86oGnM8NBrhYGSTt/ixwZaoLbc4hR8Bo1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from PS1PR03MB5034.apcprd03.prod.outlook.com (2603:1096:300:7b::17)
- by SEZPR03MB7076.apcprd03.prod.outlook.com (2603:1096:101:ef::8) with
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xutPr+iq4ZK7OGZWcQTjn9eYeVHA/OArr05YIjIo2ws=;
+ b=OEYDa+gaB/ACFq8YbCG9wozuVJowhbUZ38JoVzBtfCWxgx57t3Z2+D9IowFJmcMZKfljthWo2SbTKLKMk1GSf6ZS5HJHIkCJZBIH734tPwIAwhU2OJWzQCJE0TXEtwUcyOTzRVM5bMjo7ziRJL7sBSuEwjLdcRo2lthTzGFlHJ4=
+Received: from AM0PR04MB6004.eurprd04.prod.outlook.com (2603:10a6:208:11a::11)
+ by AM7PR04MB6822.eurprd04.prod.outlook.com (2603:10a6:20b:108::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 09:37:51 +0000
-Received: from PS1PR03MB5034.apcprd03.prod.outlook.com
- ([fe80::c56f:c862:ff8e:909]) by PS1PR03MB5034.apcprd03.prod.outlook.com
- ([fe80::c56f:c862:ff8e:909%5]) with mapi id 15.20.6277.036; Wed, 12 Apr 2023
- 09:37:50 +0000
-Message-ID: <889cf54e-584c-9bee-2106-633155897324@amlogic.com>
-Date:   Wed, 12 Apr 2023 17:37:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v1 1/5] mtd: rawnand: meson: fix NAND access for
- read/write
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-Cc:     oxffffaa@gmail.com, kernel@sberdevices.ru,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 12 Apr
+ 2023 09:38:13 +0000
+Received: from AM0PR04MB6004.eurprd04.prod.outlook.com
+ ([fe80::8735:c480:4ac7:165c]) by AM0PR04MB6004.eurprd04.prod.outlook.com
+ ([fe80::8735:c480:4ac7:165c%6]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
+ 09:38:13 +0000
+From:   Gaurav Jain <gaurav.jain@nxp.com>
+To:     Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "leonard.crestez@nxp.com" <leonard.crestez@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: RE: [PATCH v2] crypto: caam - refactor RNG initialization
+Thread-Topic: [PATCH v2] crypto: caam - refactor RNG initialization
+Thread-Index: AQHZZ6oPDInr9kDS5keXCwUtD489v68ndVZA
+Date:   Wed, 12 Apr 2023 09:38:13 +0000
+Message-ID: <AM0PR04MB600442AEC79685A66AEF71A9E79B9@AM0PR04MB6004.eurprd04.prod.outlook.com>
+References: <20230320073848.697473-1-meenakshi.aggarwal@nxp.com>
+ <20230405103306.1763491-1-meenakshi.aggarwal@nxp.com>
+In-Reply-To: <20230405103306.1763491-1-meenakshi.aggarwal@nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20230412061700.1492474-2-AVKrasnov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TYCP286CA0195.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:382::13) To PS1PR03MB5034.apcprd03.prod.outlook.com
- (2603:1096:300:7b::17)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6004:EE_|AM7PR04MB6822:EE_
+x-ms-office365-filtering-correlation-id: b55a7901-9891-4350-7819-08db3b39a2fb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: X4Tp9zvkl4QyIlqKkXPIBC0BVuzKuFUi00Gm0TEKpzOKEu2i5annekS4W+6it/f0If2pRWlDGsoCn0deBqyxO4yJCksx0UOfjnUNVcxhylUOPK5dAsDNdufrjzivNkOxXGOk9zHq7JHXmmHpHm1kYV9uZygVd/U479W70csJoBWf6Vj75iVaLZHmRbOUyAHo8eakhB9TJzV1KBBKkIwsiGPl3cbR6Lt/pr8HDNdMz1oXIntPsv8IVmCRGzICHKouXwD5tofqF5uCNo/BpQgzZHfBhWZL83fvi2iADhHqBba0wEX60MxqEsv6CoHGcM53JChvLXeV5JdL40sVi9aRU2SeWjvExiueH8U84bE7lA6yVlXpoyH2LCnuiB0+QVQvolyeushdXuMlJp/8hQf6+QqdgvOwjh8NMPNctoavPVXUbWSOTahRfFVZiViXxlqR8Ugozy0l5PvAMXZ0l0ZSijsRisOrQ6EuSW9kaCbLagKCUpQ1/NCxSb+yO+DBEps6DE/kOUo3UneBQmPFFAZufGAnC9krg1cgOIGo6+GPV/6r3JB34iAEIDN/vlW4APo1+FBiQoNdr82e5JKSMg8DRu8zDM3659AHeTXKlPaBz5B5x+F9EAHgASgMwYg+T3uTD0niqqmiKZ/KqTXsQ30BpA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6004.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(76116006)(83380400001)(478600001)(71200400001)(7696005)(26005)(186003)(6506007)(6636002)(53546011)(110136005)(55236004)(9686003)(41300700001)(2906002)(44832011)(52536014)(30864003)(33656002)(5660300002)(38100700002)(122000001)(921005)(66556008)(66476007)(66446008)(66946007)(64756008)(8936002)(38070700005)(316002)(55016003)(86362001)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jHJajv2bbHByr2fqn8Z06GA6OxBxgtENqlYoSQehShSk8KsL+PrlilEbqvvZ?=
+ =?us-ascii?Q?MMEQ0eV+2cY3ly6LxCm+EjrTraQY1cLhOarnZDMsld4p1bJSSc6lSshfchHj?=
+ =?us-ascii?Q?z0igRbS94eMJisUTxvfQYJ5BfsNp4BTLu5lPaXkGOir6IJZ5rxOXPukMKJZo?=
+ =?us-ascii?Q?LI3cTaJRKr2Sn+Mec6D4rHRWFdV0lhkVMf/p0n3MhIUXg6dIuHzsdNUd/kmw?=
+ =?us-ascii?Q?eMXETJebXO2Jjk7AeMbPStgU3pb7Re2OwPUTGd1xYhM6nnpZNZ3x9GSI9xy+?=
+ =?us-ascii?Q?EKQTqcCx57KrCC3a5mqDbqHqKh6MBbPzZEbdvVvOogRPHhxfI3x5eY59gRSb?=
+ =?us-ascii?Q?I01SiF147bfIFDnjJbwki7ydiRzO+t2c8et36RbqJ9dqvMBdrTdfNLX3l+DF?=
+ =?us-ascii?Q?tc0hE1yifCxoFMde2iPg2aPHmKU9GZ1+OFpkGA4Gy0BL6j0BxnjPhS5wEkQq?=
+ =?us-ascii?Q?ayp0Zhfq/p0TQ4L1DepSRJb9AF11/4/k+50eUk7g7DD/QcXAPrtw3XKL3hpv?=
+ =?us-ascii?Q?+LiR+8aA0EWSMhuArJWaKPc+Lm0YJ+EvbyYlcMZWhGtd6rvMyMLn/vR4xYXi?=
+ =?us-ascii?Q?GuTrZ6z0qbDxQ8uSWid254/6e5mfJIqvdlC8NS6UeGENeLJdZpAIGye0jVzI?=
+ =?us-ascii?Q?VG53QrDy2OyKo/h5Vg/MjlrtpkPII36APlDiz6Uh/tiAumfvbC6dx3MtsW7j?=
+ =?us-ascii?Q?ULWq2tHoFZNu/OuKDBZahTglwEsztK2UoCZeiFoZ1It1tq+JJaqpyh7MpD9v?=
+ =?us-ascii?Q?8DRE2z33TaMDPPAfylH9T79/fm4a5Nzh3v/gG945l/I2drnT0zm1ClOmKtFv?=
+ =?us-ascii?Q?sX/ZuUWyRmdzFB810/13SqHdqCU6DOBNkLWlRyK53lJcvVsQsl7VGtMxijMn?=
+ =?us-ascii?Q?Njp4C5Cb5zFCpCFvlDlHolk5pYlIhdPaVtuMPnJRaCkhPRCENxvv32++6V61?=
+ =?us-ascii?Q?C0Pv19a9PtmH5ouVjh4NYTr5DdDfkfvg+za/UuFnFrMMIfcOLwlAHczSqEBZ?=
+ =?us-ascii?Q?eD5jTt6nOC2+6OI/q9me0rVZeGpruncbb8AHaqFgb8s25iiE7KLi14kGIN0A?=
+ =?us-ascii?Q?5oUBQEYJI3hdn03+YuBhTQtTiA0IyS9elSMyBslgJ7RKNBDbuaiqNDwbKfYJ?=
+ =?us-ascii?Q?CQuADYhQwT4VLsGsnTCv2MFjbyFHaTyv7UCr02oxUktIPaBQrYqoOa0hU50K?=
+ =?us-ascii?Q?1yCYTlrgPTUKUkVsqC1xz2zR6E15GAC8QD1SVC+YVnJXomHo9+Z8St0NGOSs?=
+ =?us-ascii?Q?Or1CWXClHpgF87d3jT82oIXzgM4K4Du1jpLA8+nxEW862rlBajcjzVDq8XpS?=
+ =?us-ascii?Q?865DsH6Z0MJqso7deBSsXkfCW+ax4MG740fIJ4dngWiCehw8lnO+V1HteEcx?=
+ =?us-ascii?Q?0BCroyE0ijbjlgNdD5YqKbVf2Kjq9QF3nOa1vJulqfZT+TVRIRKkKTsh6d16?=
+ =?us-ascii?Q?bo2Jxb4WV6JhtE4IZ7Z0vA9fmDTJ2IAD8d2G7sYqgz/P+DudlJMrVBt5iMHX?=
+ =?us-ascii?Q?437ZZHqmoua5lFOl1y8P83dEYg0BTKinmsM4G4Tw4R8V7EUjpVcHec70RfC1?=
+ =?us-ascii?Q?DbcdnJqGQSicH5JgYS0+Ukepl+hDIDVDvLdQOnUq?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PS1PR03MB5034:EE_|SEZPR03MB7076:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8594eda7-65b7-43d1-8fb2-08db3b39944b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mkhxArGm1hXd5N9I+zXlo+coitbHTE+s4cfVhUJxv1uEzHnR6tSbFuo+F0xCgyNVrHXDzdyG010bnEswB/+v8TAkssqq1QhrsWa1qbnEjvKrS+cOQha7EMD7CUHv5Df3DcSnwAcn5+SZCDlubcpZpCP55L64CGBY45Q5k5GwYrioVvlhZqDG3sF3qUR3dW713EY77xh3Rbs/tOKzksZGAq4dqxJlX+BI+3Ur8DiMRd8DKGWkVkBKQX3zER6SphkYmka6nkZAfxhV2F9fC3QMvE865NBJ8FWunm1YuShHxoRLGSujydHSW6lwH7jl4C9n8KPyU4FemE8kPF1ZTZAtMdDpiqZXRs+m5ACeqpM3fy3/5TuEBaKL8VK49HRjVOWaSZ3ZkgootfO7MIbPRZkWwAtbkaWy8mAT0DKTge8RTsm4bPJnIeIoxzfUcsBonHAl12FxtIXC450XeLfg6tBmYAheXC2d8RLwXx2qAQUpjMOpzu7Fo3vnacHzmxXCePKPY2zzOIefJi35J7h0poob1nK4KhbNAAbQck3cwTDAzecrz6JbsWgRaTDpKkIyW9mB0NhefS0JQGQuBR2a0Nqqk/8iRGMKjOyK6WV5eKMCCBXlEV0MHDhY7i79LMg0S/7K29icxeJfGx/NOEZ5GlNw/ykAs3DE9hUC/8S+UO7iC2w7W0xi8zgjI4XYf4NbZcT4A1sua8LiA5+yx0gLnetLTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR03MB5034.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(346002)(366004)(136003)(39850400004)(451199021)(478600001)(52116002)(6512007)(26005)(5660300002)(6506007)(186003)(66556008)(6486002)(6636002)(53546011)(110136005)(316002)(2906002)(44832011)(66946007)(4326008)(41300700001)(7416002)(6666004)(8936002)(8676002)(66476007)(38100700002)(921005)(38350700002)(31696002)(83380400001)(36756003)(2616005)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEtsb2FKZjljM05sYlNtbjI1WHZKZmh4b2VhcDFHSU1rYVc5NzVGdnpkU2Vq?=
- =?utf-8?B?QzlMMjcrU3NrTnBzQnhXcEJlVmNxQVNVRXhNdkZ2WWJiWHhVd1lGOTdEZVdI?=
- =?utf-8?B?UDh1RllmVFFlWDRQRHVtOHVjS1IzNGZ3eHJTU08wUVFWeDFhM1NhOC9LTndt?=
- =?utf-8?B?ZXdsa1dKUFlzd0YvU1hOZEpESEYrZUJOdUdEZ200TmVYZnhKeFBmeFBKSE5Q?=
- =?utf-8?B?eXdCUGFlMlUyZS9PbGZVVkJkT0hrSnJKNithQjJnMjYvb0VKZGJDS0tBb1BG?=
- =?utf-8?B?UUtYNi9IVmljdXFqQmZ3Q2hqek1uQnRYVUJVcnFWMjN5TVVFME1SR2lRNlJW?=
- =?utf-8?B?NlFDQmJMa21UTmhmV3JBU0ZkKzBRaXE2azU3Y25iVW0vaDFvQ2w3a0E4RzNN?=
- =?utf-8?B?L1YwaXgwckRtcEhyZ1JIMUZnL1FDK1Fvays1Ny9UYTdXa2RFbGljbThJcklB?=
- =?utf-8?B?WUhBbU1tQjRQdlU4dWF1c0cweHY0c0JveitsZnVsa3dpWmw0aGtoUXJKV04z?=
- =?utf-8?B?bjZUa0hYWk1aRyszZ2JBTndJcmpyaWZHbXAwbUhwNlI3V0Y3L21YT0pCZGFi?=
- =?utf-8?B?YkorUDh1SSs1R1p5cnBQbjVlMWlmb2xmenJPaWx3bE8xaWZ6dG53eDZIT1c5?=
- =?utf-8?B?bnpPWnlEY3NqWXF2b0QranVaRVVSbEFPUjlNb01waEViSDFXZlU5czAvTFNh?=
- =?utf-8?B?ZURsaEJnMW9CbWhMc0xVNzczWFM0bG1sQnFnY2dPRll3Umc4TGc0SXNjWTN2?=
- =?utf-8?B?blVVbG9wWEx1UUoxRkNaL2orbVZHS25YNFRDbFlmdVh3anVXZyt5VDI4dUFV?=
- =?utf-8?B?ZjhBNk5TS0lNSG9PeVl4Zmxha3ZnNytPUWd3Y2ZjOHVhenZlbStvS0FhTTNa?=
- =?utf-8?B?SEt4aU5DWnFUWjdyQzZYQmRJNldsb3ZzK3ZNRzhyNFlPc0RLMGkxcy9OL0d0?=
- =?utf-8?B?UUswZnlFcUROdGs1Sy9TdFNaeUJuQ3A0NVBObVJ4N2pUekFOZ3VPRjlKWDNK?=
- =?utf-8?B?UVZRaDJ6WU1pUkYxQTI3ZGM5NW4vYTFXVHNmeDhIcllZWlREanQvY0lHM2Uy?=
- =?utf-8?B?a0JIV0J1Z2ovVVdaeW8wTzNWd1hhTjdPU1dMTTJjR2tzamR5VXNoR3ZCb3ZY?=
- =?utf-8?B?UWV0UnFzZzF2bkFDN0NlbnN4ZlZlcFdlZVRJeDgxTUFEcDVwV0dWZkVFSWlQ?=
- =?utf-8?B?QkRrSnVSamd1bVBvUmo1dFcrckhSSUtVTnZWR3NOWkQ5eFJWd0dOamhjVjNX?=
- =?utf-8?B?MVUvcHhtM0gzSy9uTm85MTh6YWoySGdBbTJlMVFiRTE4NzVGQ1RCZUdSenZx?=
- =?utf-8?B?ZlFGT1FrUG9HdzhaOGxMdGRrZStnMjA5SDNEbkZjcktSSVpGd0RSWVV6eEtn?=
- =?utf-8?B?aTVkdmFmbytrOTRhcnNyQ002YmxLTElnVlBNb0dWenZIeUYzdVZsamNNends?=
- =?utf-8?B?M3JiclNGZEV5ZmpOcU5Va1ZsRm5laThMcUlLek51WGhPbTNjTmpDTjlDM1dh?=
- =?utf-8?B?R09jalVXeFZQcStoUVVMWHdpM255TjVteHBybW40Y2R2eFpyKzVpWmlDMFdw?=
- =?utf-8?B?RVJSWEs2L0pYV1JldkNINWx4YXE3VitScmFMTzBvRzdhMEgrYkdPZXFRYUhY?=
- =?utf-8?B?U2l5bmVDejVHZ2VSTUJEYkhFWmxFNlR2TnkxbDJlUUtJeDAwaGcrekMzbnYy?=
- =?utf-8?B?bENDN3B1OENlZ1pQYm5iWjBoU1JGNjNOR1Noc1hTdk1ZM3RXcStlWk8vbmlO?=
- =?utf-8?B?Skp4bEkwQ2tjN2s4amI0OFRCZmx0TlFiMkpVVWY2T055NnpEYi9GRU03ODA5?=
- =?utf-8?B?d2ExTEZRVUZuQW8wVkVWbG5RWmFGM01kUHdlblhhK3ZPUGhiS1ArY3kxNjFB?=
- =?utf-8?B?RXhvNWtlMUplNEUxMWM2elNJbUNYd0VBWEcyWmY4OWZUWVVXbXM0OE1XbGdB?=
- =?utf-8?B?a0lBZElwTWw5WWJTNXBMOUZBNzV3WWlRNzNidGpTMjBJd2NvV294eGFTeVJD?=
- =?utf-8?B?UEJ1bjV0L1RON3N6QS9zUG1NSDgwWVhhY25QYkdIQnpheW56dFR5NHdaYWtM?=
- =?utf-8?B?RmZ6ZmVJN3NBR3diYzFhRllKWjhqNHZYc3dVeFMrUW15RzZPdmkzMS85aWQ3?=
- =?utf-8?Q?1UIXeLe6gibagM/+9OlGtCQ67?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8594eda7-65b7-43d1-8fb2-08db3b39944b
-X-MS-Exchange-CrossTenant-AuthSource: PS1PR03MB5034.apcprd03.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 09:37:50.3106
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6004.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b55a7901-9891-4350-7819-08db3b39a2fb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 09:38:13.6316
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T4d4L3JcyJaMkdTi8GmPtHIOFESXCubIlAxU/8Qg+R+se2Ljhbr5LJ2j+x75BlKd9Znvdez60xgIkEKhYJN0Yw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB7076
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PRxr7RZ996gsIHDIubH/4FCnAVsKUJum2tv0sovVzacWG26cn1xooUv1ynQiIbwYdIFQ//8ffeNcuAzgrfNuIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6822
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+HI
 
-Thanks for pointing out this problem. also comment inline.
-
-On 2023/4/12 14:16, Arseniy Krasnov wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> This fixes read/write functionality. New command sequences were ported
-> from old vendor's driver. Without this patch driver works unstable. This
-> change is tested with 'nanddump'/'nandwrite' utilities and mounting
-> JFFS2 filesystem on AXG family (A113X SoC).
-> 
-> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> -----Original Message-----
+> From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Sent: Wednesday, April 5, 2023 4:03 PM
+> To: Horia Geanta <horia.geanta@nxp.com>; Varun Sethi <V.Sethi@nxp.com>;
+> Pankaj Gupta <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>;
+> herbert@gondor.apana.org.au; davem@davemloft.net; linux-
+> crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
+> leonard.crestez@nxp.com; Aisheng Dong <aisheng.dong@nxp.com>
+> Cc: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Subject: [PATCH v2] crypto: caam - refactor RNG initialization
+>=20
+> From: Horia GeantA <horia.geanta@nxp.com>
+>=20
+> RNG (re-)initialization will be needed on pm resume path, thus refactor t=
+he
+> corresponding code out of the probe callback.
+>=20
+> Signed-off-by: Horia GeantA <horia.geanta@nxp.com>
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
 > ---
->   drivers/mtd/nand/raw/meson_nand.c | 116 ++++++++++++++++++++++++++----
->   1 file changed, 101 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index 074e14225c06..256c37c76526 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -26,6 +26,7 @@
->   #define NFC_CMD_IDLE		(0xc << 14)
->   #define NFC_CMD_CLE		(0x5 << 14)
->   #define NFC_CMD_ALE		(0x6 << 14)
-> +#define NFC_CMD_DRD		(0x8 << 14)
->   #define NFC_CMD_ADL		((0 << 16) | (3 << 20))
->   #define NFC_CMD_ADH		((1 << 16) | (3 << 20))
->   #define NFC_CMD_AIL		((2 << 16) | (3 << 20))
-> @@ -84,6 +85,7 @@
->   
->   #define DMA_BUSY_TIMEOUT	0x100000
->   #define CMD_FIFO_EMPTY_TIMEOUT	1000
-> +#define DEVICE_READY_TIMEOUT	1000
->   
->   #define MAX_CE_NUM		2
->   
-> @@ -255,8 +257,26 @@ static void meson_nfc_select_chip(struct nand_chip *nand, int chip)
->   	}
->   }
->   
-> +static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
-> +				     unsigned int timeout_ms)
-> +{
-> +	u32 cmd_size = 0;
-> +	int ret;
+> changes in v2:
+> 	Rebased on "page 0" patches
+>=20
+> NOTE: This patch depends on "page 0" patches, which are under  review on
+> mailing list.
+>=20
+>  drivers/crypto/caam/ctrl.c   | 201 ++++++++++++++++++-----------------
+>  drivers/crypto/caam/intern.h |   1 +
+>  2 files changed, 104 insertions(+), 98 deletions(-)
+>=20
+> diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c inde=
+x
+> 9c5a035e1b96..852d538cfc25 100644
+> --- a/drivers/crypto/caam/ctrl.c
+> +++ b/drivers/crypto/caam/ctrl.c
+> @@ -342,13 +342,12 @@ static int instantiate_rng(struct device *ctrldev, =
+int
+> state_handle_mask,
+>  /*
+>   * kick_trng - sets the various parameters for enabling the initializati=
+on
+>   *	       of the RNG4 block in CAAM
+> - * @pdev - pointer to the platform device
+> + * @dev - pointer to the controller device
+>   * @ent_delay - Defines the length (in system clocks) of each entropy sa=
+mple.
+>   */
+> -static void kick_trng(struct platform_device *pdev, int ent_delay)
+> +static void kick_trng(struct device *dev, int ent_delay)
+>  {
+> -	struct device *ctrldev =3D &pdev->dev;
+> -	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(ctrldev);
+> +	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(dev);
+>  	struct caam_ctrl __iomem *ctrl;
+>  	struct rng4tst __iomem *r4tst;
+>  	u32 val;
+> @@ -589,6 +588,100 @@ static void caam_remove_debugfs(void *root)
+>  	debugfs_remove_recursive(root);
+>  }
+>=20
+> +static int caam_ctrl_rng_init(struct device *dev) {
+> +	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(dev);
+> +	struct caam_ctrl __iomem *ctrl =3D ctrlpriv->ctrl;
+> +	int ret, gen_sk, ent_delay =3D RTSDCTL_ENT_DLY_MIN;
+> +	u8 rng_vid;
 > +
-> +	/* wait cmd fifo is empty */
-> +	ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
-> +					 !NFC_CMD_GET_SIZE(cmd_size),
-> +					 10, timeout_ms * 1000);
-> +	if (ret)
-> +		dev_err(nfc->dev, "wait for empty CMD FIFO timed out\n");
+> +	if (ctrlpriv->era < 10) {
+> +		struct caam_perfmon __iomem *perfmon;
 > +
-> +	return ret;
+> +		perfmon =3D ctrlpriv->total_jobrs ?
+> +			  (struct caam_perfmon *)&ctrlpriv->jr[0]->perfmon :
+> +			  (struct caam_perfmon *)&ctrl->perfmon;
+> +
+> +		rng_vid =3D (rd_reg32(&perfmon->cha_id_ls) &
+> +			   CHA_ID_LS_RNG_MASK) >> CHA_ID_LS_RNG_SHIFT;
+> +	} else {
+> +		struct version_regs __iomem *vreg;
+> +
+> +		vreg =3D ctrlpriv->total_jobrs ?
+> +			(struct version_regs __iomem *)&ctrlpriv->jr[0]->vreg :
+> +			(struct version_regs __iomem *)&ctrl->vreg;
+> +
+> +		rng_vid =3D (rd_reg32(&vreg->rng) & CHA_VER_VID_MASK) >>
+> +			  CHA_VER_VID_SHIFT;
+> +	}
+> +
+> +	/*
+> +	 * If SEC has RNG version >=3D 4 and RNG state handle has not been
+> +	 * already instantiated, do RNG instantiation
+> +	 * In case of SoCs with Management Complex, RNG is managed by MC
+> f/w.
+> +	 */
+> +	if (!(ctrlpriv->mc_en && ctrlpriv->pr_support) && rng_vid >=3D 4) {
+> +		ctrlpriv->rng4_sh_init =3D
+> +			rd_reg32(&ctrl->r4tst[0].rdsta);
+> +		/*
+> +		 * If the secure keys (TDKEK, JDKEK, TDSK), were already
+> +		 * generated, signal this to the function that is instantiating
+> +		 * the state handles. An error would occur if RNG4 attempts
+> +		 * to regenerate these keys before the next POR.
+> +		 */
+> +		gen_sk =3D ctrlpriv->rng4_sh_init & RDSTA_SKVN ? 0 : 1;
+> +		ctrlpriv->rng4_sh_init &=3D RDSTA_MASK;
+> +		do {
+> +			int inst_handles =3D
+> +				rd_reg32(&ctrl->r4tst[0].rdsta) & RDSTA_MASK;
+> +			/*
+> +			 * If either SH were instantiated by somebody else
+> +			 * (e.g. u-boot) then it is assumed that the entropy
+> +			 * parameters are properly set and thus the function
+> +			 * setting these (kick_trng(...)) is skipped.
+> +			 * Also, if a handle was instantiated, do not change
+> +			 * the TRNG parameters.
+> +			 */
+> +			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
+> +				dev_info(dev,
+> +					 "Entropy delay =3D %u\n",
+> +					 ent_delay);
+> +				kick_trng(dev, ent_delay);
+> +				ent_delay +=3D 400;
+> +			}
+> +			/*
+> +			 * if instantiate_rng(...) fails, the loop will rerun
+> +			 * and the kick_trng(...) function will modify the
+> +			 * upper and lower limits of the entropy sampling
+> +			 * interval, leading to a successful initialization of
+> +			 * the RNG.
+> +			 */
+> +			ret =3D instantiate_rng(dev, inst_handles,
+> +					      gen_sk);
+> +			if (ret =3D=3D -EAGAIN)
+> +				/*
+> +				 * if here, the loop will rerun,
+> +				 * so don't hog the CPU
+> +				 */
+> +				cpu_relax();
+> +		} while ((ret =3D=3D -EAGAIN) && (ent_delay <
+> RTSDCTL_ENT_DLY_MAX));
+> +		if (ret) {
+> +			dev_err(dev, "failed to instantiate RNG");
+> +			return ret;
+> +		}
+> +		/*
+> +		 * Set handles initialized by this module as the complement of
+> +		 * the already initialized ones
+> +		 */
+> +		ctrlpriv->rng4_sh_init =3D ~ctrlpriv->rng4_sh_init & RDSTA_MASK;
+> +
+> +		/* Enable RDB bit so that RNG works faster */
+> +		clrsetbits_32(&ctrl->scfgr, 0, SCFGR_RDBENABLE);
+> +	}
+> +
+> +	return 0;
 > +}
 > +
->   static void meson_nfc_cmd_idle(struct meson_nfc *nfc, u32 time)
->   {
-> +	meson_nfc_wait_cmd_finish(nfc, 0);
-> +
->   	writel(nfc->param.chip_select | NFC_CMD_IDLE | (time & 0x3ff),
->   	       nfc->reg_base + NFC_REG_CMD);
->   }
-> @@ -308,23 +328,9 @@ static void meson_nfc_drain_cmd(struct meson_nfc *nfc)
->   	 */
->   	meson_nfc_cmd_idle(nfc, 0);
->   	meson_nfc_cmd_idle(nfc, 0);
-> +	meson_nfc_wait_cmd_finish(nfc, 1000);
->   }
->   
-> -static int meson_nfc_wait_cmd_finish(struct meson_nfc *nfc,
-> -				     unsigned int timeout_ms)
+>  #ifdef CONFIG_FSL_MC_BUS
+>  static bool check_version(struct fsl_mc_version *mc_version, u32 major,
+>  			  u32 minor, u32 revision)
+> @@ -609,17 +702,10 @@ static bool check_version(struct fsl_mc_version
+> *mc_version, u32 major,  }  #endif
+>=20
+> -static bool needs_entropy_delay_adjustment(void)
 > -{
-> -	u32 cmd_size = 0;
-> -	int ret;
-> -
-> -	/* wait cmd fifo is empty */
-> -	ret = readl_relaxed_poll_timeout(nfc->reg_base + NFC_REG_CMD, cmd_size,
-> -					 !NFC_CMD_GET_SIZE(cmd_size),
-> -					 10, timeout_ms * 1000);
-> -	if (ret)
-> -		dev_err(nfc->dev, "wait for empty CMD FIFO time out\n");
-> -
-> -	return ret;
+> -	if (of_machine_is_compatible("fsl,imx6sx"))
+> -		return true;
+> -	return false;
 > -}
->   
->   static int meson_nfc_wait_dma_finish(struct meson_nfc *nfc)
->   {
-> @@ -631,6 +637,48 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->   	return 0;
->   }
->   
-> +static uint8_t meson_nfc_read_byte(struct nand_chip *nand)
-> +{
-> +	struct meson_nfc *nfc = nand_get_controller_data(nand);
-> +
-> +	writel(NFC_CMD_DRD, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
-> +	meson_nfc_drain_cmd(nfc);
-> +
-> +	return readl(nfc->reg_base + NFC_REG_BUF);
-> +}
-> +
-> +static int meson_nfc_wait_dev_ready(struct nand_chip *nand)
-> +{
-> +	struct meson_nfc *nfc = nand_get_controller_data(nand);
-> +	u32 cs = nfc->param.chip_select;
-> +	unsigned long cnt = 0;
-> +
-> +	meson_nfc_drain_cmd(nfc);
-> +
-> +	writel(cs | NFC_CMD_CLE | NAND_CMD_STATUS, nfc->reg_base + NFC_REG_CMD);
-> +
-> +	/* 10 ms. */
-> +	while (cnt < DEVICE_READY_TIMEOUT) {
-> +		uint8_t status;
-> +
-> +		status = meson_nfc_read_byte(nand);
-> +
-> +		if (status & NAND_STATUS_READY)
-> +			break;
-> +
-> +		usleep_range(10, 11);
-> +		cnt++;
-> +	}
-> +
-> +	if (cnt == DEVICE_READY_TIMEOUT) {
-> +		dev_err(nfc->dev, "device ready timeout\n");
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int meson_nfc_write_page_sub(struct nand_chip *nand,
->   				    int page, int raw)
->   {
-> @@ -643,6 +691,10 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->   	u32 cmd;
->   	int ret;
->   
-> +	ret = meson_nfc_wait_dev_ready(nand);
-> +	if (ret)
-> +		return ret;
-> +
->   	meson_nfc_select_chip(nand, nand->cur_cs);
->   
->   	data_len =  mtd->writesize + mtd->oobsize;
-> @@ -667,12 +719,20 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->   				     NFC_CMD_SCRAMBLER_DISABLE);
->   	}
->   
-> +	ret = meson_nfc_wait_dma_finish(nfc);
-> +	if (ret)
-> +		return ret;
-> +
->   	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->   	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->   	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
->   
->   	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
->   
-> +	ret = meson_nfc_wait_dev_ready(nand);
-> +	if (ret)
-> +		return ret;
-> +
->   	return ret;
->   }
->   
-> @@ -720,6 +780,21 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
->   	} while (!ret);
->   }
->   
-> +static inline int meson_nfc_send_read(struct nand_chip *nand)
-> +{
-> +	struct meson_nfc *nfc = nand_get_controller_data(nand);
-> +	u32 cs = nfc->param.chip_select;
-> +	int ret;
-> +
-> +	ret = meson_nfc_wait_dev_ready(nand);
-> +	if (ret)
-> +		return ret;
-> +
-> +	writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
-> +
-> +	return 0;
-> +}
-> +
+This will break the RNG on i.MX6SX platform.
+Please rework this.
 
-it already calls meson_nfc_queue_rb() in 
-meson_nfc_rw_cmd_prepare_and_execute(). Could you implements this in 
-meson_nfc_queue_rb()? and we can use the irq method.
-also without Ready/Busy pin, the meson_nfc_queue_rb() should change like 
-below:
-	......
-	#define NFC_CMD_RB_INT	((0xb << 10) | BIT(18))
+Regards
+Gaurav Jain
 
-	meson_nfc_cmd_idle(nfc, 0);
-	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
-	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-	meson_nfc_cmd_idle(nfc, 5);
-	cmd = NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
-	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> -
+>  /* Probe routine for CAAM top (controller) level */  static int caam_pro=
+be(struct
+> platform_device *pdev)  {
+> -	int ret, ring, gen_sk, ent_delay =3D RTSDCTL_ENT_DLY_MIN;
+> +	int ret, ring;
+>  	u64 caam_id;
+>  	const struct soc_device_attribute *imx_soc_match;
+>  	struct device *dev;
+> @@ -629,10 +715,8 @@ static int caam_probe(struct platform_device *pdev)
+>  	struct caam_perfmon __iomem *perfmon;
+>  	struct dentry *dfs_root;
+>  	u32 scfgr, comp_params;
+> -	u8 rng_vid;
+>  	int pg_size;
+>  	int BLOCK_OFFSET =3D 0;
+> -	bool pr_support =3D false;
+>  	bool reg_access =3D true;
+>=20
+>  	ctrlpriv =3D devm_kzalloc(&pdev->dev, sizeof(*ctrlpriv), GFP_KERNEL);
+> @@ -768,7 +852,8 @@ static int caam_probe(struct platform_device *pdev)
+>=20
+>  		mc_version =3D fsl_mc_get_version();
+>  		if (mc_version)
+> -			pr_support =3D check_version(mc_version, 10, 20, 0);
+> +			ctrlpriv->pr_support =3D check_version(mc_version, 10,
+> 20,
+> +							     0);
+>  		else
+>  			return -EPROBE_DEFER;
+>  	}
+> @@ -859,9 +944,6 @@ static int caam_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  	}
+>=20
+> -	if (!reg_access)
+> -		goto report_live;
+> -
+>  	comp_params =3D rd_reg32(&perfmon->comp_parms_ls);
+>  	ctrlpriv->blob_present =3D !!(comp_params & CTPR_LS_BLOB);
+>=20
+> @@ -871,8 +953,6 @@ static int caam_probe(struct platform_device *pdev)
+>  	 * check both here.
+>  	 */
+>  	if (ctrlpriv->era < 10) {
+> -		rng_vid =3D (rd_reg32(&perfmon->cha_id_ls) &
+> -			   CHA_ID_LS_RNG_MASK) >> CHA_ID_LS_RNG_SHIFT;
+>  		ctrlpriv->blob_present =3D ctrlpriv->blob_present &&
+>  			(rd_reg32(&perfmon->cha_num_ls) &
+> CHA_ID_LS_AES_MASK);
+>  	} else {
+> @@ -882,91 +962,16 @@ static int caam_probe(struct platform_device *pdev)
+>  			(struct version_regs __iomem *)&ctrlpriv->jr[0]->vreg :
+>  			(struct version_regs __iomem *)&ctrl->vreg;
+>=20
+> -		rng_vid =3D (rd_reg32(&vreg->rng) & CHA_VER_VID_MASK) >>
+> -			   CHA_VER_VID_SHIFT;
+>  		ctrlpriv->blob_present =3D ctrlpriv->blob_present &&
+>  			(rd_reg32(&vreg->aesa) &
+> CHA_VER_MISC_AES_NUM_MASK);
+>  	}
+>=20
+> -	/*
+> -	 * If SEC has RNG version >=3D 4 and RNG state handle has not been
+> -	 * already instantiated, do RNG instantiation
+> -	 * In case of SoCs with Management Complex, RNG is managed by MC
+> f/w.
+> -	 */
+> -	if (!(ctrlpriv->mc_en && pr_support) && rng_vid >=3D 4) {
+> -		ctrlpriv->rng4_sh_init =3D
+> -			rd_reg32(&ctrl->r4tst[0].rdsta);
+> -		/*
+> -		 * If the secure keys (TDKEK, JDKEK, TDSK), were already
+> -		 * generated, signal this to the function that is instantiating
+> -		 * the state handles. An error would occur if RNG4 attempts
+> -		 * to regenerate these keys before the next POR.
+> -		 */
+> -		gen_sk =3D ctrlpriv->rng4_sh_init & RDSTA_SKVN ? 0 : 1;
+> -		ctrlpriv->rng4_sh_init &=3D RDSTA_MASK;
+> -		do {
+> -			int inst_handles =3D
+> -				rd_reg32(&ctrl->r4tst[0].rdsta) &
+> -								RDSTA_MASK;
+> -			/*
+> -			 * If either SH were instantiated by somebody else
+> -			 * (e.g. u-boot) then it is assumed that the entropy
+> -			 * parameters are properly set and thus the function
+> -			 * setting these (kick_trng(...)) is skipped.
+> -			 * Also, if a handle was instantiated, do not change
+> -			 * the TRNG parameters.
+> -			 */
+> -			if (needs_entropy_delay_adjustment())
+> -				ent_delay =3D 12000;
+> -			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
+> -				dev_info(dev,
+> -					 "Entropy delay =3D %u\n",
+> -					 ent_delay);
+> -				kick_trng(pdev, ent_delay);
+> -				ent_delay +=3D 400;
+> -			}
+> -			/*
+> -			 * if instantiate_rng(...) fails, the loop will rerun
+> -			 * and the kick_trng(...) function will modify the
+> -			 * upper and lower limits of the entropy sampling
+> -			 * interval, leading to a successful initialization of
+> -			 * the RNG.
+> -			 */
+> -			ret =3D instantiate_rng(dev, inst_handles,
+> -					      gen_sk);
+> -			/*
+> -			 * Entropy delay is determined via TRNG
+> characterization.
+> -			 * TRNG characterization is run across different
+> voltages
+> -			 * and temperatures.
+> -			 * If worst case value for ent_dly is identified,
+> -			 * the loop can be skipped for that platform.
+> -			 */
+> -			if (needs_entropy_delay_adjustment())
+> -				break;
+> -			if (ret =3D=3D -EAGAIN)
+> -				/*
+> -				 * if here, the loop will rerun,
+> -				 * so don't hog the CPU
+> -				 */
+> -				cpu_relax();
+> -		} while ((ret =3D=3D -EAGAIN) && (ent_delay <
+> RTSDCTL_ENT_DLY_MAX));
+> -		if (ret) {
+> -			dev_err(dev, "failed to instantiate RNG");
+> +	if (reg_access) {
+> +		ret =3D caam_ctrl_rng_init(dev);
+> +		if (ret)
+>  			return ret;
+> -		}
+> -		/*
+> -		 * Set handles initialized by this module as the complement of
+> -		 * the already initialized ones
+> -		 */
+> -		ctrlpriv->rng4_sh_init =3D ~ctrlpriv->rng4_sh_init & RDSTA_MASK;
+> -
+> -		/* Enable RDB bit so that RNG works faster */
+> -		clrsetbits_32(&ctrl->scfgr, 0, SCFGR_RDBENABLE);
+>  	}
+>=20
+> -report_live:
+> -	/* NOTE: RTIC detection ought to go here, around Si time */
+> -
+>  	caam_id =3D (u64)rd_reg32(&perfmon->caam_id_ms) << 32 |
+>  		  (u64)rd_reg32(&perfmon->caam_id_ls);
+>=20
+> diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h =
+index
+> 86ed1b91c22d..b4f7bf77f487 100644
+> --- a/drivers/crypto/caam/intern.h
+> +++ b/drivers/crypto/caam/intern.h
+> @@ -95,6 +95,7 @@ struct caam_drv_private {
+>  	u8 blob_present;	/* Nonzero if BLOB support present in device */
+>  	u8 mc_en;		/* Nonzero if MC f/w is active */
+>  	u8 optee_en;		/* Nonzero if OP-TEE f/w is active */
+> +	bool pr_support;        /* RNG prediction resistance available */
+>  	int secvio_irq;		/* Security violation interrupt number */
+>  	int virt_en;		/* Virtualization enabled in CAAM */
+>  	int era;		/* CAAM Era (internal HW revision) */
+> --
+> 2.25.1
 
-	ret = wait_for_completion_timeout(&nfc->completion,
-					  msecs_to_jiffies(timeout_ms));
-	if (ret == 0)
-		ret = -1;
-
-	writel(cs | NFC_CMD_CLE | NAND_CMD_READ0, nfc->reg_base + NFC_REG_CMD);
-	......
-	
->   static int meson_nfc_read_page_sub(struct nand_chip *nand,
->   				   int page, int raw)
->   {
-> @@ -734,10 +809,18 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->   	data_len =  mtd->writesize + mtd->oobsize;
->   	info_len = nand->ecc.steps * PER_INFO_BYTE;
->   
-> +	ret = meson_nfc_wait_dev_ready(nand);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = meson_nfc_rw_cmd_prepare_and_execute(nand, page, DIRREAD);
->   	if (ret)
->   		return ret;
->   
-> +	ret = meson_nfc_send_read(nand);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = meson_nfc_dma_buffer_setup(nand, meson_chip->data_buf,
->   					 data_len, meson_chip->info_buf,
->   					 info_len, DMA_FROM_DEVICE);
-> @@ -754,6 +837,9 @@ static int meson_nfc_read_page_sub(struct nand_chip *nand,
->   	}
->   
->   	ret = meson_nfc_wait_dma_finish(nfc);
-> +	if (ret)
-> +		return ret;
-> +
->   	meson_nfc_check_ecc_pages_valid(nfc, nand, raw);
->   
->   	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_FROM_DEVICE);
-
--- 
-Thanks,
-Liang
