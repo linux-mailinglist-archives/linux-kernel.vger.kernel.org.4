@@ -2,71 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2446DF06F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E216DEF74
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjDLJat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S231336AbjDLIvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjDLJag (ORCPT
+        with ESMTP id S231356AbjDLIuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:30:36 -0400
-X-Greylist: delayed 953 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 02:30:19 PDT
-Received: from ssh249.corpemail.net (ssh249.corpemail.net [210.51.61.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C758083E6;
-        Wed, 12 Apr 2023 02:30:18 -0700 (PDT)
-Received: from unicom145.biz-email.net
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id IEJ00104;
-        Wed, 12 Apr 2023 16:48:04 +0800
-Received: from localhost.localdomain.com (10.73.43.242) by
- jtjnmail201611.home.langchao.com (10.100.2.11) with Microsoft SMTP Server id
- 15.1.2507.21; Wed, 12 Apr 2023 16:48:03 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <ulf.hansson@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] mmc: vub300: remove unreachable code
-Date:   Wed, 12 Apr 2023 04:47:58 -0400
-Message-ID: <20230412084758.2673-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Wed, 12 Apr 2023 04:50:54 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C089746;
+        Wed, 12 Apr 2023 01:50:38 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33C8nbgf024977;
+        Wed, 12 Apr 2023 03:49:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681289377;
+        bh=jbvGTc2zQFGXJn4sFTD++tPXW6H86WKnMQp0kwWWGkY=;
+        h=From:To:CC:Subject:Date;
+        b=MAdTE5VhAzc1HAnR7FtS4/v5Y6Uc75HNToRQTJsbnxjGnrHmdj33119LEv2Valk45
+         Vkezo+ns1FtWqUl4h/EfBD3zqSBVjmzbgfr/937wp1IvFRdgzSZ/yiRfc5Q8XFWxp/
+         aoKqZRqfEq24pyfVbggJQeEucV8YLjPgqYwV4jvQ=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33C8nbRP004958
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 12 Apr 2023 03:49:37 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 12
+ Apr 2023 03:49:37 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 12 Apr 2023 03:49:37 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33C8naHk118305;
+        Wed, 12 Apr 2023 03:49:36 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <b-kapoor@ti.com>, <jm@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j721s2: Add support for CAN instances 3 and 5 in main domain
+Date:   Wed, 12 Apr 2023 14:19:35 +0530
+Message-ID: <20230412084935.699791-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.73.43.242]
-tUid:   2023412164804bd112bb7f71eefd5a56a73e62553a68c
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function sched_partition_show cannot execute return, delete the
-invalid code.
+CAN instances 3 and 5 in the main domain are brought on the common
+processor board through header J27 and J28. The CAN High and Low lines
+from the SoC are routed through a mux on the SoM. The select lines need
+to be set for the CAN signals to get connected to the transceivers on
+the common processor board. Threfore, add respective mux, transceiver
+dt nodes to add support for these CAN instances.
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
 ---
- drivers/mmc/host/vub300.c | 2 --
- 1 file changed, 2 deletions(-)
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 46 +++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 12 +++++
+ 2 files changed, 58 insertions(+)
 
-diff --git a/drivers/mmc/host/vub300.c b/drivers/mmc/host/vub300.c
-index 72f65f32abbc..e4c4bfac3763 100644
---- a/drivers/mmc/host/vub300.c
-+++ b/drivers/mmc/host/vub300.c
-@@ -1341,8 +1341,6 @@ static void __download_offload_pseudocode(struct vub300_mmc_host *vub300,
- 		return;
- 	}
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index a7aa6cf08acd..f07663bbea16 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -27,6 +27,8 @@ aliases {
+ 		can0 = &main_mcan16;
+ 		can1 = &mcu_mcan0;
+ 		can2 = &mcu_mcan1;
++		can3 = &main_mcan3;
++		can4 = &main_mcan5;
+ 	};
  
--	return;
--
- copy_error_message:
- 	strncpy(vub300->vub_name, "SDIO pseudocode download failed",
- 		sizeof(vub300->vub_name));
+ 	evm_12v0: fixedregulator-evm12v0 {
+@@ -107,6 +109,22 @@ transceiver2: can-phy2 {
+ 		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
+ 	};
+ 
++	transceiver3: can-phy3 {
++		compatible = "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp2 7 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux0 1>;
++	};
++
++	transceiver4: can-phy4 {
++		compatible = "ti,tcan1042";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux1 1>;
++	};
+ };
+ 
+ &main_pmx0 {
+@@ -144,6 +162,20 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+ 			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
+ 		>;
+ 	};
++
++	main_mcan3_pins_default: main-mcan3-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x080, PIN_INPUT, 0) /* (U26) MCASP0_AXR4.MCAN3_RX */
++			J721S2_IOPAD(0x07c, PIN_OUTPUT, 0) /* (T27) MCASP0_AXR3.MCAN3_TX */
++		>;
++	};
++
++	main_mcan5_pins_default: main-mcan5-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x03c, PIN_INPUT, 0) /* (U27) MCASP0_AFSX.MCAN5_RX */
++			J721S2_IOPAD(0x038, PIN_OUTPUT, 0) /* (AB28) MCASP0_ACLKX.MCAN5_TX */
++		>;
++	};
+ };
+ 
+ &wkup_pmx0 {
+@@ -309,3 +341,17 @@ &mcu_mcan1 {
+ 	pinctrl-0 = <&mcu_mcan1_pins_default>;
+ 	phys = <&transceiver2>;
+ };
++
++&main_mcan3 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan3_pins_default>;
++	phys = <&transceiver3>;
++};
++
++&main_mcan5 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan5_pins_default>;
++	phys = <&transceiver4>;
++};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+index 6930efff8a5a..0b9926a64382 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+@@ -31,6 +31,18 @@ secure_ddr: optee@9e800000 {
+ 		};
+ 	};
+ 
++	mux0: mux-controller0 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 1 GPIO_ACTIVE_HIGH>;
++	};
++
++    mux1: mux-controller1 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
++	};
++
+ 	transceiver0: can-phy0 {
+ 		/* standby pin has been grounded by default */
+ 		compatible = "ti,tcan1042";
 -- 
-2.27.0
+2.34.1
 
