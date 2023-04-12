@@ -2,86 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C326DECC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3821F6DECC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 09:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjDLHki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 03:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S229536AbjDLHlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 03:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjDLHkf (ORCPT
+        with ESMTP id S229504AbjDLHle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 03:40:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D0340CA;
-        Wed, 12 Apr 2023 00:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B852562EE3;
-        Wed, 12 Apr 2023 07:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2014BC4339C;
-        Wed, 12 Apr 2023 07:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681285219;
-        bh=kzbDUOkw/dCJanRJR/vJc3tdbCAyGrnanls2wsewees=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bUjbDw3gsOoMlNByjE9KcEonqeqjc0fWDu4O1AXlIXWLmg9mRz8/ZKnd69AEhyxTY
-         EWY3GZmMqCJligefYyrNnAABL6MmztbYnyPnMNmfKFRv3ldTV2kW4T/9PNrbAfT9jx
-         fe0FA/1RimgBmY2EvrdLGT9uG/RW1XrdTSUflCAtSVkCIGw7v6t2w9M3Q/HmEpAswB
-         DiYfMytRkqJz82qKQHjukErS5/EhzALZAnf9FVZP1l/bjc48l4fTXgoisBJWPIPHbC
-         9N0b1qYmmXkCx8Imrb7FVDRZkNnOb3DKriD5y+iRnDna4SdggoVm6Y5RkklS1h91dD
-         zJ6XunbxPtS5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05968E5244E;
-        Wed, 12 Apr 2023 07:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 12 Apr 2023 03:41:34 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B2219F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 00:41:33 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 13F6782C5E; Wed, 12 Apr 2023 08:41:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1681285287; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=iSZrmH/fA2V9Vz5TJX+XlQgCv5pZkJN4+dn7zi2y5tCGk/iQpJK6Mxs3whzJ/DmzC
+         wnyKvzBaNbJ/CDIGOhi95V7QtCxKlzE7rUCMH1EIez9mOWJ0A1siTsB8RtZ+Oi0pYU
+         XrmhFA4mOdLvFGzseGANlDnCU9TqiVIvSWXsHlREA3wIy7X7N5RNN+ug1EjS/K07kq
+         PgUir8bBgCwJc4T/lwNAWLIHHVmPZ0BujW8padqVAiDWtQGOTimIFtizlismHmPA7E
+         QE9o8uiaAV6JdfNAi9BXMhl1gjY92wWPu94F78EXiP6E0plbOeQ917voWfBtP+z9k+
+         ZrK9OCB27zY3Q==
+Received: by mail.lokoho.com for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:40:53 GMT
+Message-ID: <20230412074501-0.1.59.1u72p.0.8o9le3kqtg@lokoho.com>
+Date:   Wed, 12 Apr 2023 07:40:53 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] qlcnic: check pci_reset_function result
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168128521901.2410.5881347463116720583.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Apr 2023 07:40:19 +0000
-References: <20230407071849.309516-1-den-plotnikov@yandex-team.ru>
-In-Reply-To: <20230407071849.309516-1-den-plotnikov@yandex-team.ru>
-To:     Denis Plotnikov <den-plotnikov@yandex-team.ru>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        anirban.chakraborty@qlogic.com, sony.chacko@qlogic.com,
-        GR-Linux-NIC-Dev@marvell.com, helgaas@kernel.org,
-        simon.horman@corigine.com, manishc@marvell.com,
-        shshaikh@marvell.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Dzie=C5=84 dobry,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-On Fri,  7 Apr 2023 10:18:49 +0300 you wrote:
-> Static code analyzer complains to unchecked return value.
-> The result of pci_reset_function() is unchecked.
-> Despite, the issue is on the FLR supported code path and in that
-> case reset can be done with pcie_flr(), the patch uses less invasive
-> approach by adding the result check of pci_reset_function().
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> [...]
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Here is the summary with links:
-  - [net-next,v2] qlcnic: check pci_reset_function result
-    https://git.kernel.org/netdev/net/c/7573099e10ca
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
+Pozdrawiam
+Adam Charachuta
