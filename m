@@ -2,306 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DD16DE9B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B816DE9BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDLC7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 22:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S229520AbjDLC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 22:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDLC67 (ORCPT
+        with ESMTP id S229507AbjDLC7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 22:58:59 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A22E4EE2;
-        Tue, 11 Apr 2023 19:58:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VfuNtIo_1681268322;
-Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VfuNtIo_1681268322)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Apr 2023 10:58:44 +0800
-Message-ID: <aabfd6dc-5b8f-707d-75bb-59f4000c32f9@linux.alibaba.com>
-Date:   Wed, 12 Apr 2023 10:58:41 +0800
+        Tue, 11 Apr 2023 22:59:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B487D4482
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 19:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681268334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qARMtEZ0RiQtHOJb7ePJUZ0m60eyXWotzhsryqgO/vo=;
+        b=PMH2S1QhYp0qoHjUisziCe0+xeNhe0t+6shnigQp606mOIqkpn7IhN1KXeFUSOHp429Wia
+        d69EHQaUohS7tcxx3fJNyw3BEjCi/TKgvfwLZBngSD54C2T8QbjsjUaN5Gs10bgiKw1rOz
+        z3RBmi2BjlrkvB3eUUNQ29NvEQxrrao=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-nuHn94c1OY-FTW1BBqmwVA-1; Tue, 11 Apr 2023 22:58:48 -0400
+X-MC-Unique: nuHn94c1OY-FTW1BBqmwVA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 352992807D62;
+        Wed, 12 Apr 2023 02:58:48 +0000 (UTC)
+Received: from [10.22.33.155] (unknown [10.22.33.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BF9E1202701E;
+        Wed, 12 Apr 2023 02:58:47 +0000 (UTC)
+Message-ID: <5e7d733c-7272-d202-c80a-f8e8f23478d0@redhat.com>
+Date:   Tue, 11 Apr 2023 22:58:47 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] ACPI: APEI: handle synchronous exceptions in task
- work
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC][PATCH] locking/rwsem: Add __sched annotation to
+ __down_read_common()
 Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>, tanxiaofei@huawei.com,
-        mawupeng1@huawei.com, tony.luck@intel.com, naoya.horiguchi@nec.com
-Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, justin.he@arm.com,
-        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
-        baolin.wang@linux.alibaba.com, bp@alien8.de,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
-        linmiaohe@huawei.com, lvying6@huawei.com, rafael@kernel.org,
-        xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20230411104842.37079-3-xueshuai@linux.alibaba.com>
- <84fd1fad-604e-0835-2813-199195aaab69@huawei.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <84fd1fad-604e-0835-2813-199195aaab69@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+To:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Tim Murray <timmurray@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, kernel-team@android.com,
+        stable@vger.kernel.org
+References: <20230412023839.2869114-1-jstultz@google.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230412023839.2869114-1-jstultz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/11/23 22:38, John Stultz wrote:
+> Apparently despite it being marked inline, the compiler
+> may not inline __down_read_common() which makes it difficult
+> to identify the cause of lock contention, as the blocked
+> function will always be listed as __down_read_common().
+>
+> So this patch adds __sched annotation to the function so
+> the calling function will instead be listed.
+>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Murray <timmurray@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: kernel-team@android.com
+> Cc: stable@vger.kernel.org
+> Fixes: c995e638ccbb ("locking/rwsem: Fold __down_{read,write}*()")
+> Reported-by: Tim Murray <timmurray@google.com>
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+>   kernel/locking/rwsem.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+> index acb5a50309a1..cde2f22e65a8 100644
+> --- a/kernel/locking/rwsem.c
+> +++ b/kernel/locking/rwsem.c
+> @@ -1240,7 +1240,7 @@ static struct rw_semaphore *rwsem_downgrade_wake(struct rw_semaphore *sem)
+>   /*
+>    * lock for reading
+>    */
+> -static inline int __down_read_common(struct rw_semaphore *sem, int state)
+> +static inline __sched int __down_read_common(struct rw_semaphore *sem, int state)
+>   {
+>   	int ret = 0;
+>   	long count;
 
-
-On 2023/4/11 PM10:28, Kefeng Wang wrote:
-> 
-> 
-> On 2023/4/11 18:48, Shuai Xue wrote:
->> Hardware errors could be signaled by synchronous interrupt, e.g.  when an
->> error is detected by a background scrubber, or signaled by synchronous
->> exception, e.g. when an uncorrected error is consumed. Both synchronous and
->> asynchronous error are queued and handled by a dedicated kthread in
->> workqueue.
->>
->> commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
->> synchronous errors") keep track of whether memory_failure() work was
->> queued, and make task_work pending to flush out the workqueue so that the
->> work for synchronous error is processed before returning to user-space.
->> The trick ensures that the corrupted page is unmapped and poisoned. And
->> after returning to user-space, the task starts at current instruction which
->> triggering a page fault in which kernel will send SIGBUS to current process
->> due to VM_FAULT_HWPOISON.
->>
->> However, the memory failure recovery for hwpoison-aware mechanisms does not
->> work as expected. For example, hwpoison-aware user-space processes like
->> QEMU register their customized SIGBUS handler and enable early kill mode by
->> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
->> the process by sending a SIGBUS signal in memory failure with wrong
->> si_code: the actual user-space process accessing the corrupt memory
->> location, but its memory failure work is handled in a kthread context, so
->> it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
->> process instead of BUS_MCEERR_AR in kill_proc().
->>
->> To this end, separate synchronous and asynchronous error handling into
->> different paths like X86 platform does:
->>
->> - valid synchronous errors: queue a task_work to synchronously send SIGBUS
->>    before ret_to_user.
->> - valid asynchronous errors: queue a work into workqueue to asynchronously
->>    handle memory failure.
->> - abnormal branches such as invalid PA, unexpected severity, no memory
->>    failure config support, invalid GUID section, OOM, etc.
->>
->> Then for valid synchronous errors, the current context in memory failure is
->> exactly belongs to the task consuming poison data and it will send SIBBUS
->> with proper si_code.
->>
->> Fixes: 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous errors")
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 91 +++++++++++++++++++++++++++-------------
->>   include/acpi/ghes.h      |  3 --
->>   mm/memory-failure.c      | 13 ------
->>   3 files changed, 61 insertions(+), 46 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index c479b85899f5..4b70955e25f9 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -452,28 +452,51 @@ static void ghes_clear_estatus(struct ghes *ghes,
->>   }
->>     /*
->> - * Called as task_work before returning to user-space.
->> - * Ensure any queued work has been done before we return to the context that
->> - * triggered the notification.
->> + * struct sync_task_work - for synchronous RAS event
->> + *
->> + * @twork:                callback_head for task work
->> + * @pfn:                  page frame number of corrupted page
->> + * @flags:                fine tune action taken
->> + *
->> + * Structure to pass task work to be handled before
->> + * ret_to_user via task_work_add().
->>    */
->> -static void ghes_kick_task_work(struct callback_head *head)
->> +struct sync_task_work {
->> +    struct callback_head twork;
->> +    u64 pfn;
->> +    int flags;
->> +};
->> +
->> +static void memory_failure_cb(struct callback_head *twork)
->>   {
->> -    struct acpi_hest_generic_status *estatus;
->> -    struct ghes_estatus_node *estatus_node;
->> -    u32 node_len;
->> +    int ret;
->> +    struct sync_task_work *twcb =
->> +        container_of(twork, struct sync_task_work, twork);
->>   -    estatus_node = container_of(head, struct ghes_estatus_node, task_work);
->> -    if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->> -        memory_failure_queue_kick(estatus_node->task_work_cpu);
->> +    ret = memory_failure(twcb->pfn, twcb->flags);
->> +    kfree(twcb);
->>   -    estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->> -    node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
->> -    gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
->> +    if (!ret)
->> +        return;
->> +
->> +    /*
->> +     * -EHWPOISON from memory_failure() means that it already sent SIGBUS
->> +     * to the current process with the proper error info,
-> 
-> This should be part of the comments of function memory_failure(),
-> 
->> +     * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
->> +     *
-> and this part is already there
->> +     * In both cases, no further processing is required.
->> +     */
-> so, after that, I think we could drop this comment, also the same comment in x86's kill_me_maybe().
-
-Ok, I will add comments on return value of memory_failure() and drop both this
-comment and that in kill_me_maybe() out.
-
-> 
->> +    if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->> +        return;
->> +
->> +    pr_err("Memory error not recovered");
->> +    force_sig(SIGBUS);
->>   }
->>     static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>   {
->>       unsigned long pfn;
->> +    struct sync_task_work *twcb;
->>         if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->>           return false;
->> @@ -486,6 +509,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>           return false;
->>       }
->>   +    if (flags == MF_ACTION_REQUIRED && current->mm) {
->> +        twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
->> +        if (!twcb)
->> +            return false;
->> +
->> +        twcb->pfn = pfn;
->> +        twcb->flags = flags;
->> +        init_task_work(&twcb->twork, memory_failure_cb);
->> +        task_work_add(current, &twcb->twork, TWA_RESUME);
->> +        return true;
->> +    }
->> +
->>       memory_failure_queue(pfn, flags);
->>       return true;
->>   }
->> @@ -1000,9 +1035,8 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>       struct ghes_estatus_node *estatus_node;
->>       struct acpi_hest_generic *generic;
->>       struct acpi_hest_generic_status *estatus;
->> -    bool task_work_pending;
->> +    bool queued, sync;
->>       u32 len, node_len;
->> -    int ret;
->>         llnode = llist_del_all(&ghes_estatus_llist);
->>       /*
->> @@ -1015,27 +1049,25 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>           estatus_node = llist_entry(llnode, struct ghes_estatus_node,
->>                          llnode);
->>           estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->> +        sync = is_hest_sync_notify(estatus_node->ghes);
->>           len = cper_estatus_len(estatus);
->>           node_len = GHES_ESTATUS_NODE_LEN(len);
->> -        task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
->> +
->> +        queued = ghes_do_proc(estatus_node->ghes, estatus) > +        /*
->> +         * If no memory failure work is queued for abnormal synchronous
->> +         * errors, do a force kill.
->> +         */
->> +        if (sync && !queued)
->> +            force_sig(SIGBUS);
-> 
-> It's better to move this part into function ghes_do_proc(), because there is already an is_hest_sync_notify(), and no need return value,
-> so make ghes_do_proc() a void function, Apart from this,
-
-Good idea. I will do this and send a new version.
-
-> 
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-Thank you.
+Change inline to __always_inline instead of adding __sched. 
+__down_read_common() is not supposed to be a standalone function.
 
 Cheers,
-Shuai
+Longman
 
-> 
->> +
->>           if (!ghes_estatus_cached(estatus)) {
->>               generic = estatus_node->generic;
->>               if (ghes_print_estatus(NULL, generic, estatus))
->>                   ghes_estatus_cache_add(generic, estatus);
->>           }
->> -
->> -        if (task_work_pending && current->mm) {
->> -            estatus_node->task_work.func = ghes_kick_task_work;
->> -            estatus_node->task_work_cpu = smp_processor_id();
->> -            ret = task_work_add(current, &estatus_node->task_work,
->> -                        TWA_RESUME);
->> -            if (ret)
->> -                estatus_node->task_work.func = NULL;
->> -        }
->> -
->> -        if (!estatus_node->task_work.func)
->> -            gen_pool_free(ghes_estatus_pool,
->> -                      (unsigned long)estatus_node, node_len);
->> +        gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
->> +                  node_len);
->>             llnode = next;
->>       }
->> @@ -1096,7 +1128,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
->>         estatus_node->ghes = ghes;
->>       estatus_node->generic = ghes->generic;
->> -    estatus_node->task_work.func = NULL;
->>       estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>         if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
->> diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
->> index 3c8bba9f1114..e5e0c308d27f 100644
->> --- a/include/acpi/ghes.h
->> +++ b/include/acpi/ghes.h
->> @@ -35,9 +35,6 @@ struct ghes_estatus_node {
->>       struct llist_node llnode;
->>       struct acpi_hest_generic *generic;
->>       struct ghes *ghes;
->> -
->> -    int task_work_cpu;
->> -    struct callback_head task_work;
->>   };
->>     struct ghes_estatus_cache {
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index fae9baf3be16..6ea8c325acb3 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2355,19 +2355,6 @@ static void memory_failure_work_func(struct work_struct *work)
->>       }
->>   }
->>   -/*
->> - * Process memory_failure work queued on the specified CPU.
->> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
->> - */
->> -void memory_failure_queue_kick(int cpu)
->> -{
->> -    struct memory_failure_cpu *mf_cpu;
->> -
->> -    mf_cpu = &per_cpu(memory_failure_cpu, cpu);
->> -    cancel_work_sync(&mf_cpu->work);
->> -    memory_failure_work_func(&mf_cpu->work);
->> -}
->> -
->>   static int __init memory_failure_init(void)
->>   {
->>       struct memory_failure_cpu *mf_cpu;
