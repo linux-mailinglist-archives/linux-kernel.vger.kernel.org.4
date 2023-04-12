@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109216DF927
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4622F6DF92C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjDLO5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S230200AbjDLO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDLO5U (ORCPT
+        with ESMTP id S229532AbjDLO5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:57:20 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644116A6B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:57:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f1ffb8ccfso92779367b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681311423; x=1683903423;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxuSmrxcS5kvb5ro9G9wLKGBPlYViuLgcSx+dZgTw44=;
-        b=vbh+sD6bSGK2jMfoJ/XyWWBWb258PuGE9SbBVYhyrammk8fHt+mzkhJr4NPIIobVOp
-         DnMtl3q99fCA0Jx4JRr2cqcOrRqOzO7K1mTcU45QX6JNnJbJUEIqzwAJA1153kODFif+
-         uGKr5cmUHodF9Z0qhJ4C0OF0XzISTXEyvOWGuVzj5rwgLzWLKh7wrcdsNTPYVuTnxZtr
-         dytsavvmD9UgtURE+8gFZiqP94OpeoOw32aOen7lUcLcM1t7ZbK1sCM9ldTSOdyfm8BZ
-         XQmOWQmi4fk3Gf95quFDdBaMlThOVLKt/3u5m5+4G31t60uahVsktM+ClGYuBHepi4BW
-         85qQ==
+        Wed, 12 Apr 2023 10:57:47 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC247696;
+        Wed, 12 Apr 2023 07:57:36 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id w19so7854941oiv.13;
+        Wed, 12 Apr 2023 07:57:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681311423; x=1683903423;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxuSmrxcS5kvb5ro9G9wLKGBPlYViuLgcSx+dZgTw44=;
-        b=y9lW4Tfcd0Edr37o5iDcmiNUI1wEicmiafYZmToG6Y0XWa4u2O7S9QA8hHMKSEuS5r
-         G3rAdptWYpnoEPa/vOq0oZXPC1Xw60jw680asVdITJ5c+439BDLQPryvFSUHZXsgpKEh
-         iMMOWPmky+Xu+9kZC3CM1TtiYaVboaoL7HzxhJOJBD7EJFmX44wzDp0Rutdd8xQBZ0SQ
-         mzZYyH4jiN1wn9RuPi8olV3uonkXp1L3cx3slQLBcryKZnEqaC0RshX11nje7UXIUHPd
-         4Mpd0xDyLhfQFqeIFz0Lh703GPoqLbfnzoa0a+o0VLW7kz/bAi/aHMI3+zx6nlPJHa/g
-         qdiw==
-X-Gm-Message-State: AAQBX9dziUgA5CV2u7KBN4VYemdHaGnDzQqYR0rS0zyjUscUK3/vj4W7
-        muwWlH8+AqUMuCxGCaem1odZNlR8tXA=
-X-Google-Smtp-Source: AKy350a4ZuucXx2qirsNP0iItyLkiWlkZZ6EeKErOwzoigS1mEf9dDAD6gNZTKrWlhKqxdLhM/IjVG0ojf0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae46:0:b0:54e:edf3:b48f with SMTP id
- g6-20020a81ae46000000b0054eedf3b48fmr2040578ywk.5.1681311423706; Wed, 12 Apr
- 2023 07:57:03 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 07:57:02 -0700
-In-Reply-To: <1c9bebd63b25f2789b4064748c30c4590bbc2c7d.camel@intel.com>
-Mime-Version: 1.0
-References: <20230405005911.423699-1-seanjc@google.com> <d0af618169ebc17722e7019ca620ec22ee0b49c3.camel@intel.com>
- <ZC4qF90l77m3X1Ir@google.com> <1c9bebd63b25f2789b4064748c30c4590bbc2c7d.camel@intel.com>
-Message-ID: <ZDbGvic9qmplVRT8@google.com>
-Subject: Re: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1681311456; x=1683903456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iMxXEh/refxEn2BVLKI2zG+gF/jaetDaYeI4Maspl7s=;
+        b=3V1ECEK4nUXZsIDs14ektY4ee1VpMmpa0cFA5BdoJnVXNsvEQA7uVA4l9UMiywkssm
+         X8+l9DFGfJ15LiZrZ1fkIO4HlD232eEzv648P1DKlmfO0fgliW7rci89O93NjsjL2Qrv
+         kH4704CUJhE3yGNM9QAG4wTfkpErnsBi5InGD9WIku4Hq1zGQK+TxVDKdBM2GK89bosJ
+         5fUJhld9Mnnaw8oULKjfbe5LSE2nuqq+VSvZxBiSVbj1wF5NRS2JT4WqdeBN9rqOfWS7
+         0H/rw6a4ZspvGOsYzC6S17NeVRT05uDRkdQmtSbwpdzhWJn+Qh9ryhCf/H/U3esQzDYT
+         qOXw==
+X-Gm-Message-State: AAQBX9ctcNnKzdWcbGOkkFURkNiPEaRXLJkjzSscXmg0GIfzraU/ALhW
+        kIMaub3aM4V11Q26wKiBMg==
+X-Google-Smtp-Source: AKy350aqIqgD6ZUzUetWYjloDIl1Z+9gM07oApCpq4K8/QG9Y/jPsecHAHyYaHOlNFpjRXG8NcayTw==
+X-Received: by 2002:a05:6808:281:b0:38b:a6be:7a57 with SMTP id z1-20020a056808028100b0038ba6be7a57mr3172426oic.28.1681311455736;
+        Wed, 12 Apr 2023 07:57:35 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o2-20020a0568080bc200b0038413a012dasm6677495oik.4.2023.04.12.07.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:57:35 -0700 (PDT)
+Received: (nullmailer pid 2357068 invoked by uid 1000);
+        Wed, 12 Apr 2023 14:57:34 -0000
+Date:   Wed, 12 Apr 2023 09:57:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: media: qcom,sdm845-venus-v2: Allow
+ interconnect properties
+Message-ID: <168131145406.2357008.9122812908931031702.robh@kernel.org>
+References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
+ <20230407-topic-msm_dtb-v1-1-6efb4196f51f@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407-topic-msm_dtb-v1-1-6efb4196f51f@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023, Kai Huang wrote:
-> On Wed, 2023-04-05 at 19:10 -0700, Sean Christopherson wrote:
-> > On Wed, Apr 05, 2023, Huang, Kai wrote:
-> > > On Tue, 2023-04-04 at 17:59 -0700, Sean Christopherson wrote:
-> > > > *** WARNING *** ABI breakage.
-> > > > 
-> > > > Stop adjusting the guest's CPUID info for the allowed XFRM (a.k.a. XCR0)
-> > > > for SGX enclaves.  Past me didn't understand the roles and responsibilities
-> > > > between userspace and KVM with respect to CPUID leafs, i.e. I thought I was
-> > > > being helpful by having KVM adjust the entries.
-> > > 
-> > > Actually I am not clear about this topic.
-> > > 
-> > > So the rule is KVM should never adjust CPUID entries passed from userspace?
-> > 
-> > Yes, except for true runtime entries where a CPUID leaf is dynamic based on other
-> > CPU state, e.g. CR4 bits, MISC_ENABLES in the MONITOR/MWAIT case, etc.
-> > 
-> > > What if the userspace passed the incorrect CPUID entries?  Should KVM sanitize
-> > > those CPUID entries to ensure there's no insane configuration?  My concern is if
-> > > we allow guest to be created with insane CPUID configurations, the guest can be
-> > > confused and behaviour unexpectedly.
-> > 
-> > It is userspace's responsibility to provide a sane, correct setup.  The one
-> > exception is that KVM rejects KVM_SET_CPUID{2} if userspace attempts to define an
-> > unsupported virtual address width, the argument being that a malicious userspace
-> > could attack KVM by coercing KVM into stuff a non-canonical address into e.g. a
-> > VMCS field.
+
+On Fri, 07 Apr 2023 15:28:31 +0200, Konrad Dybcio wrote:
+> Allow the interconnect properties, which have been in use for ages.
 > 
-> Sorry could you elaborate an example of such attack? :)
-
-Hrm, I was going to say that userspace could shove a noncanonical address in
-MSR_FS/GS_BASE and trigger an unexpected VM-Fail (VMX) or ??? behavior on VMLOAD
-(I don't think SVM consistency checks FS/GS.base).  But is_noncanonical_address()
-queries CR4.LA57, not the address width from CPUID.0x80000008, which makes sense
-enumearing 57 bits of virtual address space on a CPU without LA57 would also allow
-shoving a bad value into hardware.
-
-So even that example is bogus, i.e. commit dd598091de4a ("KVM: x86: Warn if guest
-virtual address space is not 48-bits") really shouldn't have gone in.
-
-> > The reason for KVM punting to userspace is that it's all but impossible to define
-> > what is/isn't sane.  A really good example would be an alternative we (Google)
-> > considered for the "smaller MAXPHYADDR" fiasco, the underlying problem being that
-> > migrating a vCPU with MAXPHYADDR=46 to a system with MAXPHYADDR=52 will incorrectly
-> > miss reserved bit #PFs.
-> > 
-> > Rather than teach KVM to try and deal with smaller MAXPHYADDRs, an idea we considered
-> > was to instead enumerate guest.MAXPHYADDR=52 on platforms with host.MAXPHYADDR=46 in
-> > anticipation of eventual migration.  So long as userspace doesn't actually enumerate
-> > memslots in the illegal address space, KVM would be able to treat such accesses as
-> > emulated MMIO, and would only need to intercept #PF(RSVD).
-> > 
-> > Circling back to "what's sane", enumerating guest.MAXPHYADDR > host.MAXPHYADDR
-> > definitely qualifies as insane since it really can't work correctly, but in our
-> > opinion it was far superior to running with allow_smaller_maxphyaddr=true.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> I guess everyone wants performance.
 
-Performance was a secondary concern, functional correctness was the main issue.
-We were concerned that KVM would end up terminating healthy/sane guests due to
-KVM's emulator being incomplete, i.e. if KVM failed to emulate an instruction in
-the EPT violation handler when GPA > guest.MAXPHYADDR.  That, and SVM sets the
-Accessed bit in the guest PTE before the NPT exit, i.e. KVM can't emulate a
-smaller guest.MAXPHYADDR without creating an architectural violation from the
-guest's perspective (a PTE with reserved bits should never set A/D bits).
+Acked-by: Rob Herring <robh@kernel.org>
+
