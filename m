@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4916DF71F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463FC6DF715
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjDLNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S230010AbjDLNZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjDLNYv (ORCPT
+        with ESMTP id S230388AbjDLNYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:24:51 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899259ED0;
-        Wed, 12 Apr 2023 06:24:23 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w13so28228580oik.2;
-        Wed, 12 Apr 2023 06:24:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681305786; x=1683897786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7nW6mawiUuyYszKT+ZrkBThDfGBOABkC1FpPQVvJWI=;
-        b=XcT9DruApjzDiS139B4vZXzxQ2d/u4KE8o8WqcnOhetJ4P2o/23swtdE647D9AiSFN
-         cSkQZh6Z+lzgzKdGpkxeMRRbbbWexlA5bDqNuhFIr0uSd8eVqrieUmbjIocaH7C5UjH8
-         eK0HHldjlxWM958Tleh2nVDUjTq+VWypkAhR3CJKKhf4i8QTz0GwDviTpGp9IEmto5T1
-         aOmhkInlkM4TyGlk6W9l7BayBQAWmJ7XUo6IjA4gHm65h8xN+/5vKBiPmXUUPZanDGBm
-         DCnEVEaVRxv9bWn+HJ1vDQCFZYafIi4hyQ3IrGCxseT83RCIRYu0OehvSPMWMlSAtPXa
-         96dg==
-X-Gm-Message-State: AAQBX9enuxb3l1CMWGrIMzzsHITjRJnC8y9Mx/RIQCOiB85ZuoVw7xB1
-        8fnO6uQHJc89ZnxHU8ZpJ2xh3VxkuA==
-X-Google-Smtp-Source: AKy350Ze5ahkO+i51YqIaIv90DMIyhWWgOpcR5PQ65mfFvNAEbx1vXIzAmE9jG1S0P8ZzwcVpdix5g==
-X-Received: by 2002:a05:6808:3a7:b0:389:2d2b:4b05 with SMTP id n7-20020a05680803a700b003892d2b4b05mr6088608oie.5.1681305784977;
-        Wed, 12 Apr 2023 06:23:04 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fe6-20020a0568082b0600b00387372f548asm6562499oib.16.2023.04.12.06.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 06:23:04 -0700 (PDT)
-Received: (nullmailer pid 2007502 invoked by uid 1000);
-        Wed, 12 Apr 2023 13:23:03 -0000
-Date:   Wed, 12 Apr 2023 08:23:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski@linaro.org,
-        neil.armstrong@linaro.org, djakov@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org, rfoss@kernel.org,
-        linux-kernel@vger.kernel.org, agross@kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vladimir.zapolskiy@linaro.org, konrad.dybcio@linaro.org,
-        bhupesh.linux@gmail.com
-Subject: Re: [PATCH v6 05/11] dt-bindings: qcom-qce: Fix compatible
- combinations for SM8150 and IPQ4019 SoCs
-Message-ID: <168130578228.2007207.11606069055162808337.robh@kernel.org>
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-6-bhupesh.sharma@linaro.org>
+        Wed, 12 Apr 2023 09:24:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E245272
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZOpVsBLi+QPCjVijyE4qoD9CwMV07gYwgw6yzHIKbL4=; b=C9rIX4ON3O2xfHHNQbIz10igWB
+        HRO1ciN9LO1/OsPlWUUYIa27fkMUQ8Hq2untQ2+p/BzyqMazMDE45kW8l6oIZrFdx8/J32V7XBlmt
+        Y+1r5rplAALwNUBjdR9pJdUBIREyJ+JoOMgGwG/Kg3JLJpOIpE2wkI6vCv8Q8AVhVXgBtepY6q1kr
+        uoTwngsEexnSknqEJKcWfDlpbfks7KTtDuvMEm8evIjTtTKEuVzfJBc3HYMfbqzYrHR+T/5IbF8ie
+        Px82+T9dh5AyvRiM8v8u6JPk1x9erF52OP7LcPZ8juLKk3hkaY/MbN3md3NX8iYEvjdod8egxaryI
+        pDPZjnIQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmaRc-006tjv-Fp; Wed, 12 Apr 2023 13:23:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 80A203002A6;
+        Wed, 12 Apr 2023 15:23:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6795625E5A3B1; Wed, 12 Apr 2023 15:23:27 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 15:23:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, keescook@chromium.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, rostedt@goodmis.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86: make __get_wchan() use arch_stack_walk()
+Message-ID: <20230412132327.GA629496@hirez.programming.kicks-ass.net>
+References: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
+ <20230330081552.54178-3-zhengqi.arch@bytedance.com>
+ <20230408050822.ezdbhc6j7zuvutrm@treble>
+ <20230412131533.GH628377@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405072836.1690248-6-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230412131533.GH628377@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 05 Apr 2023 12:58:30 +0530, Bhupesh Sharma wrote:
-> Currently the compatible list available in 'qce' dt-bindings does not
-> support SM8150 and IPQ4019 SoCs directly which may lead to potential
-> 'dtbs_check' error(s).
+On Wed, Apr 12, 2023 at 03:15:33PM +0200, Peter Zijlstra wrote:
+> On Fri, Apr 07, 2023 at 10:08:22PM -0700, Josh Poimboeuf wrote:
+> > On Thu, Mar 30, 2023 at 04:15:52PM +0800, Qi Zheng wrote:
+> > > Make __get_wchan() use arch_stack_walk() directly to
+> > > avoid open-coding of unwind logic.
+> > > 
+> > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > 
+> > Can we just have a shared version of __get_wchan() for all
+> > CONFIG_ARCH_STACKWALK arches?
 > 
-> Fix the same.
-> 
-> Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP")
-> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+> Didn't I do that a while back ? I can't seem to actually find the
+> patch-set though :/
 
-Acked-by: Rob Herring <robh@kernel.org>
+Could be this series:
 
+  https://lkml.kernel.org/r/20211022150933.883959987@infradead.org
+
+And this here:
+
+  https://lore.kernel.org/lkml/CAHk-=wjHbKfck1Ws4Y0pUZ7bxdjU9eh2WK0EFsv65utfeVkT9Q@mail.gmail.com/
+
+might be why I dropped it.. I can't remember.
