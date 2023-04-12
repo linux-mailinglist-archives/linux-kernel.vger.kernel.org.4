@@ -2,89 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D335C6DEF64
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BA96DEF96
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjDLIuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S231392AbjDLIwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjDLIuN (ORCPT
+        with ESMTP id S231375AbjDLIwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:50:13 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017188A58
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:49:48 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id gb34so27085828ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681289358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GXiGiAF3mJm/6hgfCTKaagk5zrHngr0ItbqxTgvmii8=;
-        b=mW1D1jvAyFqiJnuxqmBE40PQsB6E/ciQ8crs7TWk7I/CpaKLyL39C9gdbRfEVYV9KA
-         YkzveDSmYZ1Kq/h64/Mv5KKyJQQsSfX+gfnL2i/vE1oINpM2UaUUUXWbT4MPXSYRdCE3
-         RzcOKHAH6sAW+Yv9groUVbJrBuY2B6Ng6R4s1Z8vt8wK6cTAcYIMvMVKkZ1ICrFJTYCk
-         1o7008mDj68dnGDQPz5NM30c/ZVhvMHtVq5mmsJgDw6Tb8+DOy/DVEKoJcWZE4Zz/ZTI
-         jQwL4Ulp1eji1lwhBtlqyb8qieeOtu71r7hPJJMc7EaxvoO119oLrkEa8CijdhVROq6C
-         qibA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681289358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GXiGiAF3mJm/6hgfCTKaagk5zrHngr0ItbqxTgvmii8=;
-        b=S/zVYyFTaP3ECUQyoRG702dbV2MWybJQur7kBJkRp7t+kNnfQomD5eH8zNGdf1O95D
-         WLWxRgisSQVo9QWMW/AW8tnly2suOJIZ5oSqwRDyg4QdNuYLaJTpNmZonipvEud26KjN
-         w7Jwxw6TVj0dHW3HNkUWoTO2oB91+l3JnYcXZnopIpxeNUOARMVZY+9oCpAu/8LT/EMb
-         t1BROPhxVRtHNPvEVhX7qyYuy+U/xVN3I4piDxrSuqE5lbUCxXvoLl9QQSMpIvniaGO6
-         /5MyT4EtK37c0bSrFL4K/L7gG10cBxa22C/uaF12VnI45ZA+Cou6eKCSBZ/Ng8zAPPKk
-         /WnA==
-X-Gm-Message-State: AAQBX9e6hhKZRCCCP0xudEoEuCRGgycW7CbFV4m8yF17e8OYrFCFih2F
-        vUKPLTC86T1IgXc4wJJcgn35yBCbtIulrTNAE0U=
-X-Google-Smtp-Source: AKy350aonQuINRVoZBdNIRp5k/+iTxbe085iISMQDF1/o+RSzs78iZn4aQ4I9E5uICTAMMyjmj6qNw==
-X-Received: by 2002:a17:906:c78a:b0:947:eafc:a738 with SMTP id cw10-20020a170906c78a00b00947eafca738mr5025769ejb.60.1681288366167;
-        Wed, 12 Apr 2023 01:32:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8fa0:9989:3f72:b14f? ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
-        by smtp.gmail.com with ESMTPSA id rv12-20020a1709068d0c00b0094e5fd589f9sm427786ejc.19.2023.04.12.01.32.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 01:32:45 -0700 (PDT)
-Message-ID: <a22dff0a-56e6-be1b-10b2-ce3b31f420c5@linaro.org>
-Date:   Wed, 12 Apr 2023 10:32:44 +0200
+        Wed, 12 Apr 2023 04:52:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972369EDB;
+        Wed, 12 Apr 2023 01:51:44 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PxGC20ghWzrb0d;
+        Wed, 12 Apr 2023 16:31:26 +0800 (CST)
+Received: from [10.67.103.232] (10.67.103.232) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 12 Apr 2023 16:32:49 +0800
+Message-ID: <3a8ae180-5a0f-7996-58de-edb0e370e4f5@huawei.com>
+Date:   Wed, 12 Apr 2023 16:32:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 5/7] dt-bindings: usb: Add StarFive JH7110 USB Bindings
- YAML schemas
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-References: <20230406015216.27034-1-minda.chen@starfivetech.com>
- <20230406015216.27034-6-minda.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406015216.27034-6-minda.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH V9 02/10] arm64/perf: Add BRBE registers and fields
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <mark.rutland@arm.com>
+CC:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        <linux-perf-users@vger.kernel.org>
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+ <20230315051444.1683170-3-anshuman.khandual@arm.com>
+From:   Yang Shen <shenyang39@huawei.com>
+In-Reply-To: <20230315051444.1683170-3-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.232]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,122 +58,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 03:52, Minda Chen wrote:
-> StarFive JH7110 platforms USB have a wrapper module around
-> the Cadence USBSS-DRD controller. Add binding information doc
-> for that.
-
-That's one of the most redundant subjects I saw. You basically used four
-words for one meaning. These are not exactly synonyms, but they all are
-either imprecise or meaning the same.
-
-Subject: drop second/last, redundant "Bindings YAML schemas". The
-"dt-bindings" prefix is already stating that these are bindings.
 
 
-
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+在 2023/3/15 13:14, Anshuman Khandual 写道:
+> This adds BRBE related register definitions and various other related field
+> macros there in. These will be used subsequently in a BRBE driver which is
+> being added later on.
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  .../bindings/usb/starfive,jh7110-usb.yaml     | 136 ++++++++++++++++++
->  1 file changed, 136 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> new file mode 100644
-> index 000000000000..c8b30b583854
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>   arch/arm64/include/asm/sysreg.h | 103 +++++++++++++++++++++
+>   arch/arm64/tools/sysreg         | 159 ++++++++++++++++++++++++++++++++
+>   2 files changed, 262 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 9e3ecba3c4e6..b3bc03ee22bd 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -165,6 +165,109 @@
+>   #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
+>   #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
+>   
+> +#define __SYS_BRBINFO(n)		sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 0))
+> +#define __SYS_BRBSRC(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 1))
+> +#define __SYS_BRBTGT(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 2))
 > +
-> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controller
+> +#define SYS_BRBINF0_EL1			__SYS_BRBINFO(0)
+> +#define SYS_BRBINF1_EL1			__SYS_BRBINFO(1)
+> +#define SYS_BRBINF2_EL1			__SYS_BRBINFO(2)
+> +#define SYS_BRBINF3_EL1			__SYS_BRBINFO(3)
+> +#define SYS_BRBINF4_EL1			__SYS_BRBINFO(4)
+> +#define SYS_BRBINF5_EL1			__SYS_BRBINFO(5)
+> +#define SYS_BRBINF6_EL1			__SYS_BRBINFO(6)
+> +#define SYS_BRBINF7_EL1			__SYS_BRBINFO(7)
+> +#define SYS_BRBINF8_EL1			__SYS_BRBINFO(8)
+> +#define SYS_BRBINF9_EL1			__SYS_BRBINFO(9)
+> +#define SYS_BRBINF10_EL1		__SYS_BRBINFO(10)
+> +#define SYS_BRBINF11_EL1		__SYS_BRBINFO(11)
+> +#define SYS_BRBINF12_EL1		__SYS_BRBINFO(12)
+> +#define SYS_BRBINF13_EL1		__SYS_BRBINFO(13)
+> +#define SYS_BRBINF14_EL1		__SYS_BRBINFO(14)
+> +#define SYS_BRBINF15_EL1		__SYS_BRBINFO(15)
+> +#define SYS_BRBINF16_EL1		__SYS_BRBINFO(16)
+> +#define SYS_BRBINF17_EL1		__SYS_BRBINFO(17)
+> +#define SYS_BRBINF18_EL1		__SYS_BRBINFO(18)
+> +#define SYS_BRBINF19_EL1		__SYS_BRBINFO(19)
+> +#define SYS_BRBINF20_EL1		__SYS_BRBINFO(20)
+> +#define SYS_BRBINF21_EL1		__SYS_BRBINFO(21)
+> +#define SYS_BRBINF22_EL1		__SYS_BRBINFO(22)
+> +#define SYS_BRBINF23_EL1		__SYS_BRBINFO(23)
+> +#define SYS_BRBINF24_EL1		__SYS_BRBINFO(24)
+> +#define SYS_BRBINF25_EL1		__SYS_BRBINFO(25)
+> +#define SYS_BRBINF26_EL1		__SYS_BRBINFO(26)
+> +#define SYS_BRBINF27_EL1		__SYS_BRBINFO(27)
+> +#define SYS_BRBINF28_EL1		__SYS_BRBINFO(28)
+> +#define SYS_BRBINF29_EL1		__SYS_BRBINFO(29)
+> +#define SYS_BRBINF30_EL1		__SYS_BRBINFO(30)
+> +#define SYS_BRBINF31_EL1		__SYS_BRBINFO(31)
+> +
+> +#define SYS_BRBSRC0_EL1			__SYS_BRBSRC(0)
+> +#define SYS_BRBSRC1_EL1			__SYS_BRBSRC(1)
+> +#define SYS_BRBSRC2_EL1			__SYS_BRBSRC(2)
+> +#define SYS_BRBSRC3_EL1			__SYS_BRBSRC(3)
+> +#define SYS_BRBSRC4_EL1			__SYS_BRBSRC(4)
+> +#define SYS_BRBSRC5_EL1			__SYS_BRBSRC(5)
+> +#define SYS_BRBSRC6_EL1			__SYS_BRBSRC(6)
+> +#define SYS_BRBSRC7_EL1			__SYS_BRBSRC(7)
+> +#define SYS_BRBSRC8_EL1			__SYS_BRBSRC(8)
+> +#define SYS_BRBSRC9_EL1			__SYS_BRBSRC(9)
+> +#define SYS_BRBSRC10_EL1		__SYS_BRBSRC(10)
+> +#define SYS_BRBSRC11_EL1		__SYS_BRBSRC(11)
+> +#define SYS_BRBSRC12_EL1		__SYS_BRBSRC(12)
+> +#define SYS_BRBSRC13_EL1		__SYS_BRBSRC(13)
+> +#define SYS_BRBSRC14_EL1		__SYS_BRBSRC(14)
+> +#define SYS_BRBSRC15_EL1		__SYS_BRBSRC(15)
+> +#define SYS_BRBSRC16_EL1		__SYS_BRBSRC(16)
+> +#define SYS_BRBSRC17_EL1		__SYS_BRBSRC(17)
+> +#define SYS_BRBSRC18_EL1		__SYS_BRBSRC(18)
+> +#define SYS_BRBSRC19_EL1		__SYS_BRBSRC(19)
+> +#define SYS_BRBSRC20_EL1		__SYS_BRBSRC(20)
+> +#define SYS_BRBSRC21_EL1		__SYS_BRBSRC(21)
+> +#define SYS_BRBSRC22_EL1		__SYS_BRBSRC(22)
+> +#define SYS_BRBSRC23_EL1		__SYS_BRBSRC(23)
+> +#define SYS_BRBSRC24_EL1		__SYS_BRBSRC(24)
+> +#define SYS_BRBSRC25_EL1		__SYS_BRBSRC(25)
+> +#define SYS_BRBSRC26_EL1		__SYS_BRBSRC(26)
+> +#define SYS_BRBSRC27_EL1		__SYS_BRBSRC(27)
+> +#define SYS_BRBSRC28_EL1		__SYS_BRBSRC(28)
+> +#define SYS_BRBSRC29_EL1		__SYS_BRBSRC(29)
+> +#define SYS_BRBSRC30_EL1		__SYS_BRBSRC(30)
+> +#define SYS_BRBSRC31_EL1		__SYS_BRBSRC(31)
+> +
+> +#define SYS_BRBTGT0_EL1			__SYS_BRBTGT(0)
+> +#define SYS_BRBTGT1_EL1			__SYS_BRBTGT(1)
+> +#define SYS_BRBTGT2_EL1			__SYS_BRBTGT(2)
+> +#define SYS_BRBTGT3_EL1			__SYS_BRBTGT(3)
+> +#define SYS_BRBTGT4_EL1			__SYS_BRBTGT(4)
+> +#define SYS_BRBTGT5_EL1			__SYS_BRBTGT(5)
+> +#define SYS_BRBTGT6_EL1			__SYS_BRBTGT(6)
+> +#define SYS_BRBTGT7_EL1			__SYS_BRBTGT(7)
+> +#define SYS_BRBTGT8_EL1			__SYS_BRBTGT(8)
+> +#define SYS_BRBTGT9_EL1			__SYS_BRBTGT(9)
+> +#define SYS_BRBTGT10_EL1		__SYS_BRBTGT(10)
+> +#define SYS_BRBTGT11_EL1		__SYS_BRBTGT(11)
+> +#define SYS_BRBTGT12_EL1		__SYS_BRBTGT(12)
+> +#define SYS_BRBTGT13_EL1		__SYS_BRBTGT(13)
+> +#define SYS_BRBTGT14_EL1		__SYS_BRBTGT(14)
+> +#define SYS_BRBTGT15_EL1		__SYS_BRBTGT(15)
+> +#define SYS_BRBTGT16_EL1		__SYS_BRBTGT(16)
+> +#define SYS_BRBTGT17_EL1		__SYS_BRBTGT(17)
+> +#define SYS_BRBTGT18_EL1		__SYS_BRBTGT(18)
+> +#define SYS_BRBTGT19_EL1		__SYS_BRBTGT(19)
+> +#define SYS_BRBTGT20_EL1		__SYS_BRBTGT(20)
+> +#define SYS_BRBTGT21_EL1		__SYS_BRBTGT(21)
+> +#define SYS_BRBTGT22_EL1		__SYS_BRBTGT(22)
+> +#define SYS_BRBTGT23_EL1		__SYS_BRBTGT(23)
+> +#define SYS_BRBTGT24_EL1		__SYS_BRBTGT(24)
+> +#define SYS_BRBTGT25_EL1		__SYS_BRBTGT(25)
+> +#define SYS_BRBTGT26_EL1		__SYS_BRBTGT(26)
+> +#define SYS_BRBTGT27_EL1		__SYS_BRBTGT(27)
+> +#define SYS_BRBTGT28_EL1		__SYS_BRBTGT(28)
+> +#define SYS_BRBTGT29_EL1		__SYS_BRBTGT(29)
+> +#define SYS_BRBTGT30_EL1		__SYS_BRBTGT(30)
+> +#define SYS_BRBTGT31_EL1		__SYS_BRBTGT(31)
+> +
+>   #define SYS_MIDR_EL1			sys_reg(3, 0, 0, 0, 0)
+>   #define SYS_MPIDR_EL1			sys_reg(3, 0, 0, 0, 5)
+>   #define SYS_REVIDR_EL1			sys_reg(3, 0, 0, 0, 6)
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index dd5a9c7e310f..d74d9dbe18a7 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -924,6 +924,165 @@ UnsignedEnum	3:0	BT
+>   EndEnum
+>   EndSysreg
+>   
+> +
+> +SysregFields BRBINFx_EL1
+> +Res0	63:47
+> +Field	46	CCU
+> +Field	45:32	CC
+> +Res0	31:18
+> +Field	17	LASTFAILED
+> +Field	16	T
+> +Res0	15:14
+> +Enum	13:8		TYPE
 
-What do you wrap here? Are you sure this is a wrapper? I think this is
-just USB controller?
+Hi Anshuman,
 
-> +
-> +maintainers:
-> +  - Minda Chen <minda.chen@starfivetech.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-usb
-> +
-> +  reg:
-> +    items:
-> +      - description: OTG controller registers
-> +      - description: XHCI Host controller registers
-> +      - description: DEVICE controller registers
-> +
-> +  reg-names:
-> +    items:
-> +      - const: otg
-> +      - const: xhci
-> +      - const: dev
-> +
-> +  interrupts:
-> +    items:
-> +      - description: XHCI host controller interrupt
-> +      - description: Device controller interrupt
-> +      - description: OTG/DRD controller interrupt
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: host
-> +      - const: peripheral
-> +      - const: otg
-> +
-> +  clocks:
-> +    items:
-> +      - description: lpm clock
-> +      - description: stb clock
-> +      - description: apb clock
-> +      - description: axi clock
-> +      - description: utmi apb clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lpm
-> +      - const: stb
-> +      - const: apb
-> +      - const: axi
-> +      - const: utmi_apb
-> +
-> +  resets:
-> +    items:
-> +      - description: PWRUP reset
-> +      - description: APB clock reset
-> +      - description: AXI clock reset
-> +      - description: UTMI_APB clock reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: pwrup
-> +      - const: apb
-> +      - const: axi
-> +      - const: utmi
-> +
-> +  starfive,stg-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
+I met a problem when built kernel which was based on 6.3-rc1. Here is 
+the error log:
+     GEN     Makefile
+     GEN     arch/arm64/include/generated/asm/sysreg-defs.h
+Error at 936: unexpected Enum (inside SysregFields)
 
-Same problem as for other patches.
+I think this is because the 'SysregFields' doesn't support the 'Enum' 
+type region.
+And this problem can be fixed when I roll back this part to v7.
 
-> +        - description: phandle to System Register Controller stg_syscon node.
-> +        - description: register offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of STG_SYSCONSAIF__SYSCFG register for USB.
+Do I need to apply some patches or do some other configures?
+
+Thanks,
+Yang
+
+> +	0b000000	UNCOND_DIR
+> +	0b000001	INDIR
+> +	0b000010	DIR_LINK
+> +	0b000011	INDIR_LINK
+> +	0b000101	RET_SUB
+> +	0b000111	RET_EXCPT
+> +	0b001000	COND_DIR
+> +	0b100001	DEBUG_HALT
+> +	0b100010	CALL
+> +	0b100011	TRAP
+> +	0b100100	SERROR
+> +	0b100110	INST_DEBUG
+> +	0b100111	DATA_DEBUG
+> +	0b101010	ALGN_FAULT
+> +	0b101011	INST_FAULT
+> +	0b101100	DATA_FAULT
+> +	0b101110	IRQ
+> +	0b101111	FIQ
+> +	0b111001	DEBUG_EXIT
+> +EndEnum
+> +Enum	7:6	EL
+> +	0b00	EL0
+> +	0b01	EL1
+> +	0b10	EL2
+> +	0b11	EL3
+> +EndEnum
+> +Field	5	MPRED
+> +Res0	4:2
+> +Enum	1:0	VALID
+> +	0b00	NONE
+> +	0b01	TARGET
+> +	0b10	SOURCE
+> +	0b11	FULL
+> +EndEnum
+> +EndSysregFields
 > +
-
-
-Best regards,
-Krzysztof
+> +Sysreg	BRBCR_EL1	2	1	9	0	0
+> +Res0	63:24
+> +Field	23 	EXCEPTION
+> +Field	22 	ERTN
+> +Res0	21:9
+> +Field	8 	FZP
+> +Res0	7
+> +Enum	6:5	TS
+> +	0b01	VIRTUAL
+> +	0b10	GST_PHYSICAL
+> +	0b11	PHYSICAL
+> +EndEnum
+> +Field	4	MPRED
+> +Field	3	CC
+> +Res0	2
+> +Field	1	E1BRE
+> +Field	0	E0BRE
+> +EndSysreg
+> +
+> +Sysreg	BRBFCR_EL1	2	1	9	0	1
+> +Res0	63:30
+> +Enum	29:28	BANK
+> +	0b0	FIRST
+> +	0b1	SECOND
+> +EndEnum
+> +Res0	27:23
+> +Field	22	CONDDIR
+> +Field	21	DIRCALL
+> +Field	20	INDCALL
+> +Field	19	RTN
+> +Field	18	INDIRECT
+> +Field	17	DIRECT
+> +Field	16	EnI
+> +Res0	15:8
+> +Field	7	PAUSED
+> +Field	6	LASTFAILED
+> +Res0	5:0
+> +EndSysreg
+> +
+> +Sysreg	BRBTS_EL1	2	1	9	0	2
+> +Field	63:0	TS
+> +EndSysreg
+> +
+> +Sysreg	BRBINFINJ_EL1	2	1	9	1	0
+> +Res0	63:47
+> +Field	46	CCU
+> +Field	45:32	CC
+> +Res0	31:18
+> +Field	17	LASTFAILED
+> +Field	16	T
+> +Res0	15:14
+> +Enum	13:8		TYPE
+> +	0b000000	UNCOND_DIR
+> +	0b000001	INDIR
+> +	0b000010	DIR_LINK
+> +	0b000011	INDIR_LINK
+> +	0b000100	RET_SUB
+> +	0b000100	RET_SUB
+> +	0b000111	RET_EXCPT
+> +	0b001000	COND_DIR
+> +	0b100001	DEBUG_HALT
+> +	0b100010	CALL
+> +	0b100011	TRAP
+> +	0b100100	SERROR
+> +	0b100110	INST_DEBUG
+> +	0b100111	DATA_DEBUG
+> +	0b101010	ALGN_FAULT
+> +	0b101011	INST_FAULT
+> +	0b101100	DATA_FAULT
+> +	0b101110	IRQ
+> +	0b101111	FIQ
+> +	0b111001	DEBUG_EXIT
+> +EndEnum
+> +Enum	7:6	EL
+> +	0b00	EL0
+> +	0b01	EL1
+> +	0b10	EL2
+> +	0b11	EL3
+> +EndEnum
+> +Field	5	MPRED
+> +Res0	4:2
+> +Enum	1:0	VALID
+> +	0b00	NONE
+> +	0b01	TARGET
+> +	0b10	SOURCE
+> +	0b00	FULL
+> +EndEnum
+> +EndSysreg
+> +
+> +Sysreg	BRBSRCINJ_EL1	2	1	9	1	1
+> +Field	63:0 ADDRESS
+> +EndSysreg
+> +
+> +Sysreg	BRBTGTINJ_EL1	2	1	9	1	2
+> +Field	63:0 ADDRESS
+> +EndSysreg
+> +
+> +Sysreg	BRBIDR0_EL1	2	1	9	2	0
+> +Res0	63:16
+> +Enum	15:12	CC
+> +	0b101	20_BIT
+> +EndEnum
+> +Enum	11:8	FORMAT
+> +	0b0	0
+> +EndEnum
+> +Enum	7:0		NUMREC
+> +	0b1000		8
+> +	0b10000		16
+> +	0b100000	32
+> +	0b1000000	64
+> +EndEnum
+> +EndSysreg
+> +
+>   Sysreg	ID_AA64ZFR0_EL1	3	0	0	4	4
+>   Res0	63:60
+>   UnsignedEnum	59:56	F64MM
 
