@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432216DF02F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1DB6DF038
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjDLJV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S229822AbjDLJXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDLJVz (ORCPT
+        with ESMTP id S229801AbjDLJXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:21:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78DF6EAE;
-        Wed, 12 Apr 2023 02:21:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Apr 2023 05:23:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9161B4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:23:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4315E63208;
-        Wed, 12 Apr 2023 09:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F319C433EF;
-        Wed, 12 Apr 2023 09:21:49 +0000 (UTC)
-Message-ID: <83086c6a-27fc-444c-b3c4-e4a8c6c46988@xs4all.nl>
-Date:   Wed, 12 Apr 2023 11:21:47 +0200
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B05591F890;
+        Wed, 12 Apr 2023 09:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681291408; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9fMYDJZDgUQAkG8XezrdJzHQ/H+XHFOp2dBJyvFZng=;
+        b=srRAZkGNHFWybWCUH/9iHfY36CH4iNoSYiYJRuBfDoudIVOmtt5MgU7Ec8Tkvwp+50aiTe
+        NA6iHiEjlqIxVAEWMuo1ZAq+rJUEcPHYS8ATBjmlilIpaL8BOX3+lOLxMHVuqO088QIpNs
+        3LJJzy8nYFgNyTnUWMNnml6O9l/duf8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FC3D13498;
+        Wed, 12 Apr 2023 09:23:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hZ9xIJB4NmSFeAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 12 Apr 2023 09:23:28 +0000
+Date:   Wed, 12 Apr 2023 11:23:27 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     "jstultz@google.com" <jstultz@google.com>,
+        "tjmercier@google.com" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: [PATCH v3] dma-buf/heaps: system_heap: avoid too much allocation
+Message-ID: <ZDZ4j7UdBt32j28J@dhcp22.suse.cz>
+References: <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
+ <20230410073228.23043-1-jaewon31.kim@samsung.com>
+ <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p7>
+ <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 00/20] Add Tegra20 parallel video input capture
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     linux-tegra@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-References: <20230407133852.2850145-1-luca.ceresoli@bootlin.com>
- <20230412111610.2fbfdf7b@booty>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230412111610.2fbfdf7b@booty>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2023 11:16, Luca Ceresoli wrote:
-> Hello Hans,
+On Wed 12-04-23 17:57:26, Jaewon Kim wrote:
+> >Sorry for being late. I know there was some pre-existing discussion
+> >around that but I didn't have time to participate.
+> >
+> >On Mon 10-04-23 16:32:28, Jaewon Kim wrote:
+> >> @@ -350,6 +350,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+> >>  	struct page *page, *tmp_page;
+> >>  	int i, ret = -ENOMEM;
+> >>  
+> >> +	if (len / PAGE_SIZE > totalram_pages())
+> >> +		return ERR_PTR(-ENOMEM);
+> >> +
+> >
+> >This is an antipattern imho. Check 7661809d493b ("mm: don't allow
+> >oversized kvmalloc() calls") how kvmalloc has dealt with a similar
 > 
-> On Fri,  7 Apr 2023 15:38:32 +0200
-> Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
+> Hello Thank you for the information.
 > 
->> New in v5: dropped the patch that was removing lots of the logic behind
->> enum_format, after discussion with Hans. The rest is unmodified except for
->> rebasing and fixing a couple typos in comments.
->>
->> Full details follow.
->>
->> Tegra20 and other Tegra SoCs have a video input (VI) peripheral that can
->> receive from either MIPI CSI-2 or parallel video (called respectively "CSI"
->> and "VIP" in the documentation). The kernel currently has a staging driver
->> for Tegra210 CSI capture. This patch set adds support for Tegra20 VIP
->> capture.
->>
->> Unfortunately I had no real documentation available to base this work on.
->> I only had a working downstream 3.1 kernel, so I started with the driver
->> found there and heavily reworked it to fit into the mainline tegra-video
->> driver structure. The existing code appears written with the intent of
->> being modular and allow adding new input mechanisms and new SoCs while
->> keeping a unique VI core module. However its modularity and extensibility
->> was not enough to add Tegra20 VIP support, so I added some hooks to turn
->> hard-coded behaviour into per-SoC or per-bus customizable code. There are
->> also a fix, some generic cleanups and DT bindings.
->>
->> Quick tour of the patches:
->>
->>  * Device tree bindings
->>
->>    01. dt-bindings: display: tegra: add Tegra20 VIP
->>    02. dt-bindings: display: tegra: vi: add 'vip' property and example
->>
->>  * Minor improvements to logging, comments, cleanups
->>
->>    03. staging: media: tegra-video: improve documentation of tegra_video_format fields
->>    04. staging: media: tegra-video: document tegra_channel_get_remote_source_subdev
->>    05. staging: media: tegra-video: fix typos in comment
->>    06. staging: media: tegra-video: improve error messages
->>    07. staging: media: tegra-video: slightly simplify cleanup on errors
->>    08. staging: media: tegra-video: move private struct declaration to C file
->>    09. staging: media: tegra-video: move tegra210_csi_soc to C file
->>    10. staging: media: tegra-video: remove unneeded include
->>
->>  * Preparation to make the VI module generic enough to host Tegra20 and VIP
->>
->>    11. staging: media: tegra-video: Kconfig: allow TPG only on Tegra210
->>    12. staging: media: tegra-video: move tegra_channel_fmt_align to a per-soc op
->>    13. staging: media: tegra-video: move default format to soc-specific data
->>    14. staging: media: tegra-video: move MIPI calibration calls from VI to CSI
->>    15. staging: media: tegra-video: add a per-soc enable/disable op
->>    16. staging: media: tegra-video: move syncpt init/free to a per-soc op
->>    17. staging: media: tegra-video: add syncpts for Tegra20 to struct tegra_vi
->>    18. staging: media: tegra-video: add hooks for planar YUV and H/V flip
->>    19. staging: media: tegra-video: add H/V flip controls
->>
->>  * Implementation of VIP and Tegra20
->>
->>    20. staging: media: tegra-video: add support for Tegra20 parallel input
->>
->> Enjoy!
->>
->> Changed in v5:
->> - removed patch 3 as requested by Hans Verkuil; now the driver is kept
->>   video-node-centric and the enum_format logic is unchanged
->> - rebased on top of that
->> - trivial fixes (typos)
+> I tried to search the macro of INT_MAX.
 > 
-> According to your review of v4, removing patch 3 was the only change
-> required, and I didn't do anything else, and there have been no big
-> changes since v1 anyway, so I was wondering whether this series has any
-> hope to make it for 6.4...
+> include/vdso/limits.h
+> #define INT_MAX         ((int)(~0U >> 1))
+> 
+> AFAIK the dma-buf system heap user can request that huge size more than 2GB.
 
-It's borderline. I first need to test it again, and I can do that Friday
-at the earliest (if I find the time). I'll try, but no promises...
+Do you have any pointers? This all is unreclaimable memory, right? How
+are those users constrained to not go overboard?
 
-Regards,
+> So
+> I think totalram_pages() is better than INT_MAX in this case.
+> 
+> >issue. totalram_pages doesn't really tell you anything about incorrect
+> >users. You might be on a low memory system where the request size is
+> >sane normally, it just doesn't fit into memory on that particular
+> >machine.
+> 
+> Sorry maybe I'm not fully understand what you meant. User may requested
+> a huge size like 3GB on 2GB ram device. But I think that should be rejected
+> because it is bigger than the device ram size.
 
-	Hans
+Even totalram_pages/10 can be just unfeasible amount of data to be
+allocated without a major disruption. totalram_pages is no measure of
+the memory availability.
+If you want to have a ballpark estimation then si_mem_available might be
+something you are looking for. But I thought the sole purpose of this
+patch is to catch obviously buggy callers (like sign overflow lenght
+etc) rather than any memory consumption sanity check.
+
+-- 
+Michal Hocko
+SUSE Labs
