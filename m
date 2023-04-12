@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE89B6DF976
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642BC6DF97A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDLPNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S230214AbjDLPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDLPNr (ORCPT
+        with ESMTP id S229612AbjDLPOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:13:47 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C609A19A0;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id kh6so10146786plb.0;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681312423; x=1683904423;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sztLFyS4uvBBtM8IY9tVKFzpMMoTq4vlM6dKfrxG2Y8=;
-        b=nEPsbrR6mISEAN/2Bqwb5kiIGN2vKr9TeFPUv1Sg5Tj7/ZnnSQl4MIj474xgl0XxTu
-         kSzuJTcc9cKsUJda+snt4SW+5XP3NZCEhd/Oj6aIGJheJQCtJJ8A0ILzZwlRFd4wZX1d
-         W3k78e8u2+1w6zad4UYbSxlB9gJaGuM30Vc8/Tx//gwupTAdeXaR2aW7aQsIwS5uSFQF
-         MbHXXjYJAaDC2xnFyBPSSS2oWMTqhbyCWoAfKpAkfVQlHDadcU5n72HszeJWNLxlKsJC
-         Q7KX8exrL3cXw04+dhcLeFzgqn8wv5BSorzl/ItQk4jcBmXvTYuQMIBPPpdk2X9weX7N
-         idrA==
+        Wed, 12 Apr 2023 11:14:09 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C5361AB;
+        Wed, 12 Apr 2023 08:14:07 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id ec6so1216399oib.8;
+        Wed, 12 Apr 2023 08:14:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312423; x=1683904423;
+        d=1e100.net; s=20210112; t=1681312446; x=1683904446;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sztLFyS4uvBBtM8IY9tVKFzpMMoTq4vlM6dKfrxG2Y8=;
-        b=MgmiD54+zggJnDpPmqwXYCS7Zcj5p091tsRZPqIA4ZTiVBYQ873Iqbq0ZjFzdMXj9Q
-         RS5lri9iSrDphcLDHqvRDtyhdemXW7zVeiYqe84ey8bgWQu8i+g3R4riP6fu0E+I2+1K
-         t9i1FYucYnTKHPO0ju4qQ/+vrEn5F7FTjlqFzpeeImKFDP/rYbcRMU4G8rmZGhv32K22
-         8tv35NqPsNHB5qjaabU3DtGmAvKLONgJ0xZHKNeR+98NGtsuDMoD5uOR1D+SEHQXGRm1
-         RDZNZiBS7T7kzxjNNh/x23lvY9Ksht7XhMHgejS232oDwQW9Z7e08R/GhmExCW9pN2nn
-         PDGA==
-X-Gm-Message-State: AAQBX9eOAB8/a+LWt8RBXktVV54S+bPH49tLBn151NFR1GA/T9K4+rYN
-        BlL0AATjXc6c82k39g546Ak=
-X-Google-Smtp-Source: AKy350bD3FxvTt2LckWFVO+Cd0ejFuK8YxUtabTfRk4Ikq2MR7d9TxAt6QxE2u3Tspmsi81ZQAcbWA==
-X-Received: by 2002:a17:90a:6042:b0:23a:177b:5bfa with SMTP id h2-20020a17090a604200b0023a177b5bfamr9740788pjm.22.1681312423254;
-        Wed, 12 Apr 2023 08:13:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a5-20020a17090abe0500b002407c8f89aasm1602811pjs.24.2023.04.12.08.13.42
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rLO2+mslMgJt7oEF3zMGiAxK8M13LsE3IAK5PmmHYrE=;
+        b=REdxege8GbEImPRAQkS0OO5WEFvoRRMAky64e292PwPk1rOkhZrx1h7GRC7ACLZfeV
+         JexmRqJTXAy1jugUzqRm1r8p8yrKRbKic6v8m95X0i2yk4o6bUV/OiMEH7dpf51WAFUU
+         gib6EQIRjIcDS/bBq0nX+wM8U1RzNwTM5ZLDEQwVgs3WcHC/Eo4bdNEmySGc0dBPZDIk
+         3VQP1IYyGiELonJTv+Hn8nwHR2abIVPPrj5pzG6lrzfwBTRtz32LqQWsSB+S3NRY7NSE
+         lPKNsAVr/0zFthKXhfDbHWls+VOuCT07PA0tQn8s7CgmF4errynLx8Twf8NDNKv/lDCD
+         WLfA==
+X-Gm-Message-State: AAQBX9fzxcqPx6I+5mmvtdVI82PhBiTAhewC6k1q/fnngy24heuWSPS0
+        LpZzPANnly3N3gNiVf8BVg==
+X-Google-Smtp-Source: AKy350Z/1Wya1b06p9v1jxp3a5/8Dsk/0yLxaZGXg6Xk+G947KmvJd2M/mU6HaijGWztsLvxUWZp1w==
+X-Received: by 2002:aca:d743:0:b0:386:9720:77da with SMTP id o64-20020acad743000000b00386972077damr6060729oig.26.1681312445919;
+        Wed, 12 Apr 2023 08:14:05 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id en12-20020a056808394c00b003898ebb8be0sm6699276oib.48.2023.04.12.08.14.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:13:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Apr 2023 08:13:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
-Message-ID: <d3e35ca5-9924-4831-a18c-ab128c936c95@roeck-us.net>
-References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
- <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+        Wed, 12 Apr 2023 08:14:05 -0700 (PDT)
+Received: (nullmailer pid 2446977 invoked by uid 1000);
+        Wed, 12 Apr 2023 15:14:04 -0000
+Date:   Wed, 12 Apr 2023 10:14:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gabriel.fernandez@st.com, gabriel.fernandez@foss.st.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: rcc: stm32: Fix STM32MP13 include file
+Message-ID: <20230412151404.GA2372294-robh@kernel.org>
+References: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328150335.90238-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 05:03:34PM +0200, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add regulator events corresponding to regulator error in regulator flag
-> map.
-> Also capture the same in pmbus_regulator_get_flags.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+On Fri, Apr 07, 2023 at 08:15:33PM +0200, Patrick Delaunay wrote:
+> Minor cosmetic change, aligned with files in U-Boot:
+> - change obsolete SPDX id : GPL-2.0+
+> - use correct address gabriel.fernandez@foss.st.com
+> - remove extra space
 
-Applied to hwmon-next.
+Make the subject reflect the purpose: 'Sync with u-boot copy'
 
-Thanks,
-Guenter
+> 
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> ---
+> 
+>  include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
+>  include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
+> index 02befd25edce..da4cb7567430 100644
+> --- a/include/dt-bindings/clock/stm32mp13-clks.h
+> +++ b/include/dt-bindings/clock/stm32mp13-clks.h
+> @@ -1,7 +1,7 @@
+> -/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
+> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
+>  /*
+>   * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
+> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
+> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+>   */
+>  
+>  #ifndef _DT_BINDINGS_STM32MP13_CLKS_H_
+> @@ -64,7 +64,7 @@
+>  #define CK_MCO1		38
+>  #define CK_MCO2		39
+>  
+> -/*  IP clocks */
+> +/* IP clocks */
+>  #define SYSCFG		40
+>  #define VREF		41
+>  #define DTS		42
+> diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
+> index 934864e90da6..1b83a01de8f0 100644
+> --- a/include/dt-bindings/reset/stm32mp13-resets.h
+> +++ b/include/dt-bindings/reset/stm32mp13-resets.h
+> @@ -1,7 +1,7 @@
+> -/* SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
+> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
+
+Really, the Linux copy came first, so you should use its license. Your 
+company's lawyers are good with GPLv3 and then v4?
+
+>  /*
+>   * Copyright (C) STMicroelectronics 2018 - All Rights Reserved
+> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
+> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+>   */
+>  
+>  #ifndef _DT_BINDINGS_STM32MP13_RESET_H_
+> -- 
+> 2.25.1
+> 
