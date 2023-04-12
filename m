@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085BC6DF8AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082E96DF87E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjDLOh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S230112AbjDLOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjDLOhQ (ORCPT
+        with ESMTP id S229536AbjDLOar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:37:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134418A4A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681310207; x=1712846207;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0SbRgH4B9R0dme4WybUJVxhIP/3Kp+V3KcyD6V1aOXw=;
-  b=JOr+Sp2LvbCZ2ISuu4MGWcWxgxEWznGyWHkhNiw2EJwzE1ENTNoz66OZ
-   fgLXvhaz+ukZGIkh3WqjAfRXg3b7ItdJUdu2Fc2YAdSvurs60w0ljvLCr
-   1qvTs+knlhIJhQvLuouf38ZX6yUMubGYwoUxwBIfZY/B/ZbAkYz2L+3vJ
-   kNytzyvE37TFvkX940TmRS4OPy1tmrv9Jan9PtOvmzhjgYIdcTBao+0tR
-   FGDZLZOH/t+3208z5Fm89HQm1DntPhOYq2y+wz8VvicuTo2Didq1DsZQ3
-   fDaV5tVPerwHQ3wjRTzn8PhKjp5P23KJ+0GhCaN7tRqHACyCjmE+3QtHc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="342669878"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="342669878"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:35:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719392833"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="719392833"
-Received: from johnmusg-mobl.amr.corp.intel.com (HELO [10.255.230.24]) ([10.255.230.24])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:35:20 -0700
-Message-ID: <ab569bc4-df47-819a-4a72-1e1ab696f9b2@intel.com>
-Date:   Wed, 12 Apr 2023 07:35:20 -0700
+        Wed, 12 Apr 2023 10:30:47 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D77192
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:30:45 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id jg21so29016327ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1681309844; x=1683901844;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hV5Ne4/31d5bZz3cd3WidbbAZPsQ2K5R5VgJmtESd3c=;
+        b=Ef3ZNyIwfn2tgIn5VYdodtKoHofTHBF48vSKjvDgvzzyd7icYtwHpA8gR9eWcXBzE4
+         uMsgHSi7oGwf2Z5CYEWmvPh2f1WFFVM2zu98iJObrG71TI0vefPpJXtdZ4g0+8pizmJa
+         7kEP6uY+ScqoziGvRMQWQQ2rjDj/GaJnHz3qA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681309844; x=1683901844;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hV5Ne4/31d5bZz3cd3WidbbAZPsQ2K5R5VgJmtESd3c=;
+        b=1ysd4xn4kR3YDmj3TkXBfnTiWRMOP7x8T8MMLwrPuWa/EZygJaWbPxjVRGmkD8Pvbz
+         UpVX2tzIaSrcJNZql/hNI7+zIGsyyzx22UrRF3UFTlFGhikWQUPYQJ3leSkWZO4nR6nm
+         XK4FerNCZgwNDEWV9i7MbK3pyj1W5Z3atz+gsTwR0P8PJ635epwFGO/vb7UnRFH28V7m
+         Q8lQEEdmZKpWV1pqpTRixf0Ba+s1PpiyQ3YmsrsQ41nqR9FGSq+VUzKt8ZhHMA/wFOXu
+         V9e6PKTtJOSyPW1u7p5t38fYQLQP2hg65ccZpGJDJCg9w/9Y4tDpMyXQdlzAKpR1cJnN
+         cN6A==
+X-Gm-Message-State: AAQBX9evDkFOT2eBImR+ytwwIpnokGV6F6Q/4pArH+Lvzz9EQyZHg7wu
+        77pwnsszWqBaxzgXp29piQd0hdULG2Rq+3MEdVUYkg==
+X-Google-Smtp-Source: AKy350Yt4SeQfT6MmpPED1unBq6lSFhE49tsPdIDsDUP8eL1G0arDIPgCt7yuQGlyQRpwnW9Oj6ijxAmPvq0B8EgHvI=
+X-Received: by 2002:a17:907:d310:b0:931:6f5b:d27d with SMTP id
+ vg16-20020a170907d31000b009316f5bd27dmr1417968ejc.0.1681309843846; Wed, 12
+ Apr 2023 07:30:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] x86/fpu/xstate: Add more diagnostic information on
- inconsistent xstate sizes
-Content-Language: en-US
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Chintan M Patel <chintan.m.patel@intel.com>,
-        Thiago Macieira <thiago.macieira@intel.com>
-References: <20230405183942.734019-1-fenghua.yu@intel.com>
- <113918f9-0e44-3d46-8b48-028277ec26bb@intel.com>
- <c716e021-99ad-2cb7-44c0-ec8393a3440d@intel.com>
- <2af114b9-2737-70e5-f534-e60416b52246@intel.com>
- <50e67263-33ba-9921-1bc2-a37b99bc2459@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <50e67263-33ba-9921-1bc2-a37b99bc2459@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230410120629.642955-1-kal.conley@dectris.com>
+ <20230410120629.642955-3-kal.conley@dectris.com> <CAJ8uoz0NczOxbs7xqwC4B9YDP5fN1oECBi53yHoaZbvTxcm_fg@mail.gmail.com>
+In-Reply-To: <CAJ8uoz0NczOxbs7xqwC4B9YDP5fN1oECBi53yHoaZbvTxcm_fg@mail.gmail.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Wed, 12 Apr 2023 16:35:27 +0200
+Message-ID: <CAHApi-kp5FVfHm4tVObbOz7yu6o7PjaFLw8XgLB0OFY=pSuaKg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/4] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/23 18:21, Fenghua Yu wrote:
-> In other words, splitting max_features into XCR0 and IA32_XSS and
-> showing them individually provide more useful debug info than one single
-> max_features value.
-> 
-> Does it make sense?
+> > -       pool->unaligned = unaligned;
+> >         pool->frame_len = umem->chunk_size - umem->headroom -
+> >                 XDP_PACKET_HEADROOM;
+> > +       pool->unaligned = unaligned;
+>
+> nit: This change is not necessary.
 
-Not to me.
+Do you mind if we keep it? It makes the assignments better match the
+order in the struct declaration.
 
->> I still expect some acknowledgment of what is coded here for the
->> kernel calculation details.
-> 
-> The kernel calculation is shown in
-> +        print_xstate_offset_size();
-> +        pr_info("x86/fpu: total size: %u bytes\n", size);
-> 
-> Isn't that detailed enough to show offset and size of each xstate and
-> sum of sizes?
-> 
-> After that,
-> +    pr_info("x86/fpu: kernel_size from CPUID.0xd.0x%x:EBX: %u bytes\n",
-> +               compacted ? 1 : 0, kernel_size);
-> shows how kernel_size is calculated from CPUID?
-> 
-> Using the above debug info, a real platform CPUID issue is shown clearly.
-> 
-> What other details are needed?
+> > -static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map)
+> > +static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map, u32 page_size)
+> >  {
+> >         u32 i;
+> >
+> > -       for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
+> > -               if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
+> > +       for (i = 0; i + 1 < dma_map->dma_pages_cnt; i++) {
+>
+> I think the previous version is clearer than this new one.
 
-I was kinda hoping this would be a simple, non-controversial patch that
-would get us better debugging info the next time that the microcode or a
-bad VMM screws up.  This patch isn't turning out to be as simple as I hoped.
-
-I was wrong.  Let's just drop this.
-
+I like using `i + 1` since it matches the subscript usage. I'm used to
+writing it like this for SIMD code where subtraction may wrap if the
+length is unsigned, that doesn't matter in this case though. I can
+restore the old way if you want.
