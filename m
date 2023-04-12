@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88976DF520
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B706DF522
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDLMZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S229521AbjDLM0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjDLMZo (ORCPT
+        with ESMTP id S229804AbjDLMZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:25:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4666A72;
-        Wed, 12 Apr 2023 05:25:25 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9654D66031FE;
-        Wed, 12 Apr 2023 13:25:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681302323;
-        bh=nOzVvK8/OyHfK5HYRJf+IGjzqcFAOxs4Ytqo8/2OFHE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gc5Sv4kln7oHqMmSFcbKpVlJr9p4dZCxlmGJ4Es9BFR46g2r+b2xBLEzNHzFLhhG8
-         IXvgIoT5hFEspmvfGw+/xDeoXu0IIvuUCJapa5OF819dxmsTKl6cND7O41TT0O1gR3
-         j8bKsIPt5hNutKvG/2EnBF0uB0LOGwuE14vW1Je/hKSyB3A6s+Hx0OY0VOXB3kksWa
-         6C3UFT7c4/yZa0M4Vn52L5rEabjPkny4iM9DPZrCLBS7mRpznbhzVxV+RMmPWmxHeQ
-         z5+6NzIAwxQnvSmLbruXInqHUZ4Yc2DFxIdo0/1aCuWMr5tJpJnELbYVep4USUW/Vo
-         Kkqca5ONCjZEQ==
-Message-ID: <9f12a544-1acd-e98b-ae33-6c63ea72eb68@collabora.com>
-Date:   Wed, 12 Apr 2023 14:25:20 +0200
+        Wed, 12 Apr 2023 08:25:57 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ACB6EB4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:25:48 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id e127so11452294ybf.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681302347;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LzEJi/6tk5pX3rvqtM/K9Qaj9JOxZrENkpR1kkXBZPQ=;
+        b=kDnPZlvLJSZYe+hwhFyhgyU32uWIOLpQi4A56nIKAoa1TeQBve/7lDXHLvTG784CeG
+         Vum5wVuUUHMtNCC1+3G7ULX+l+U2e1rqxjktNitrhPFLIefGdDKOWeFxPtUJlWhqziSF
+         tmmTtW958l3xW8+nIS4PXrh2a6TRG0Sxl3uM0oe31mOXB7XZp1Qr7ZSJLRp7g5YJWv9W
+         d3heyP/d2SdvPwRDEK4oC9Mk3ZXw9UP0LYH8UJrYaL5qlatHEbSsCjj4IDeoJmI9QgX3
+         XujJ4E/VnJeLq6vts00w8m9WN/kRTEfTMhPpCR77OIOStX3OVqYl7X+bjatx+AILlp80
+         n3lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681302347;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LzEJi/6tk5pX3rvqtM/K9Qaj9JOxZrENkpR1kkXBZPQ=;
+        b=nU/KChOyYTpzSgSUIqgC32n0TGqyH2h2NuEh3GifxATYvhv6Uy4Y9TriCxSjrwrKgs
+         XGHDV8VKvtgF5eZXMkgX2dSDkhqYcMRcYzS7K0ZjihgY4c31gpNNxmOXF8QvB0IzbSMe
+         9nBMJ9mONnioQjrKnkFS31xPn2y/9Y7cUINp43OK+Zy4fLELaWxEMn2SJq/OcQDNtDqT
+         HkJBkgq04cDx/WowEabLt1WHmk+GclTFZtH9LLHlzTe94zE2IPQmgMe/KMr7wjffi+6M
+         tGPPbuJgrTQKMs6kxo/kJ74ut4HivFQD+x8aOIK7S1P0O+638GsIblkESah3AcKY5Fae
+         o4lA==
+X-Gm-Message-State: AAQBX9eoFpu/SXYlFkrGp81VKb3vufTlgxBGTcCHmbBlVLUrjbnyX+0u
+        y/EFOOCb66Ml6rOqdZlXbmrfrB/4hNMOziX62H6H+w==
+X-Google-Smtp-Source: AKy350Z57GqlLPmgNyWi6f+oWxoeGVJGf2h3wEN6OCQUkS1SjB47iWQWadUytlSXX6mM/d+2zS38SfwgnSiHTAw2iZI=
+X-Received: by 2002:a25:7347:0:b0:b8f:892:3967 with SMTP id
+ o68-20020a257347000000b00b8f08923967mr4301303ybc.4.1681302347611; Wed, 12 Apr
+ 2023 05:25:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [v9] media: mediatek: vcodec: support stateless AV1 decoder
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230412033022.7766-1-xiaoyong.lu@mediatek.com>
- <00a8fb79-580e-5389-f03f-abb7bba9f092@xs4all.nl>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <00a8fb79-580e-5389-f03f-abb7bba9f092@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <CACRpkda8qTuCmF_RDjtp26k_DMpME=0wAPjejh4ODkUr9SxVqg@mail.gmail.com>
+ <20230412024406.62187-1-haibo.li@mediatek.com>
+In-Reply-To: <20230412024406.62187-1-haibo.li@mediatek.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 12 Apr 2023 14:25:36 +0200
+Message-ID: <CACRpkdaYcdjkXpUZywK=oyFQdp0FWeD2sjz2ZrSYtjrBo6u+sw@mail.gmail.com>
+Subject: Re: [PATCH] ARM:unwind:fix unwind abort for uleb128 case
+To:     Haibo Li <haibo.li@mediatek.com>
+Cc:     a.anurag@samsung.com, alexander.sverdlin@nokia.com,
+        angelogioacchino.delregno@collabora.com, ardb@kernel.org,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux@armlinux.org.uk, matthias.bgg@gmail.com,
+        rmk+kernel@armlinux.org.uk, xiaoming.yu@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/04/23 14:22, Hans Verkuil ha scritto:
-> On 12/04/2023 05:30, Xiaoyong Lu wrote:
->> Add mediatek av1 decoder linux driver which use the stateless API in
->> MT8195.
->>
->> Signed-off-by: Xiaoyong Lu<xiaoyong.lu@mediatek.com>
->> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> Hmm, I get this compile error:
-> 
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c: In function ‘vdec_av1_slice_setup_uh’:
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:48:58: error: ‘V4L2_AV1_FRAME_FLAG_UNIFORM_TILE_SPACING’ undeclared (first use in this function); did you mean
-> ‘V4L2_AV1_TILE_INFO_FLAG_UNIFORM_TILE_SPACING’?
->     48 | #define FH_FLAG(x, name)                (!!((x)->flags & V4L2_AV1_FRAME_FLAG_##name))
->        |                                                          ^~~~~~~~~~~~~~~~~~~~
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:1322:41: note: in expansion of macro ‘FH_FLAG’
->   1322 |         uh->uniform_tile_spacing_flag = FH_FLAG(ctrl_fh, UNIFORM_TILE_SPACING);
->        |                                         ^~~~~~~
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:48:58: note: each undeclared identifier is reported only once for each function it appears in
->     48 | #define FH_FLAG(x, name)                (!!((x)->flags & V4L2_AV1_FRAME_FLAG_##name))
->        |                                                          ^~~~~~~~~~~~~~~~~~~~
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c:1322:41: note: in expansion of macro ‘FH_FLAG’
->   1322 |         uh->uniform_tile_spacing_flag = FH_FLAG(ctrl_fh, UNIFORM_TILE_SPACING);
->        |                                         ^~~~~~~
-> 
-> This flag was renamed from V4L2_AV1_FRAME_FLAG_UNIFORM_TILE_SPACING to
-> V4L2_AV1_TILE_INFO_FLAG_UNIFORM_TILE_SPACING in v5 of the AV1 uAPI.
-> 
-> So this suggests to me that you are testing with an old version of the AV1
-> uAPI. The correct one is v7:
-> 
-> https://patchwork.linuxtv.org/project/linux-media/patch/20230306161850.492072-1-daniel.almeida@collabora.com/
-> 
-> You have to compile and test with that v7 patch since that's the version we
-> want to merge.
+On Wed, Apr 12, 2023 at 4:44=E2=80=AFAM Haibo Li <haibo.li@mediatek.com> wr=
+ote:
 
-I was about to say the same.
+> > Since we're decoding a 32 bit unsigned long maybe break the loop after =
+max
+> > 5 bytes (35 bits)? Or are we sure this will not happen?
 
-Please Xiaoyong, update your patch and resend.
+> in case of some corrupted memory containing say 0xff 0xff 0xff ...,the lo=
+op breaks after
+> max 4 bytes(decode as max 28 bits)
 
-Thanks,
-Angelo
+You're obviously right, I must have been too tired to understand the
+=3D=3Dsizeof() break;
 
+Thanks!
+Linus Walleij
