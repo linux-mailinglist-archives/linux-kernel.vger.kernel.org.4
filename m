@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51146DE928
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D766DE92B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjDLBxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S229624AbjDLBxy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Apr 2023 21:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjDLBxh (ORCPT
+        with ESMTP id S229559AbjDLBxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:53:37 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249FB46B2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:36 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b148e5612so18778b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681264415; x=1683856415;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0SnqQIljvz1tajKaEvbLAMwlyXQb8cIHckmA2OZDWW8=;
-        b=CND9D0XmZP1gszIphTaSLP9DJoYMhlmH+DfxtECjOsBt7mr24xmb3S2koTvH0+Z+n3
-         W800eQ3n93/13n9nkapdlgZ09fX8Ra8zOEiE3tqc0darBRD9AQ0cExU2fp6QkK6Tr9Jv
-         ioSQAK5GC6unGVaGCh2JyAX90hEy+z5V/sNd45aNsGTaibvzKLc465mFnmhcfNHCHiW/
-         wbR6N6oTtGdIHd09gheIS0Y5rG/w0uQ5Kk79V6OlRtfxaRSBg9SwIK1RFnUznA2uM9+b
-         7D0/Wv8DR6lr4r/93Xt7+ixvAfZ7hswvOIXYkMuMNCZW72WdG2vWY5XdnHB9cJSx4gwl
-         6vWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681264415; x=1683856415;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0SnqQIljvz1tajKaEvbLAMwlyXQb8cIHckmA2OZDWW8=;
-        b=4yHvIVZ3DwS/wcsTfcSq8sA/Bj48m4K8jJG+vkNgQ5YcSA7kyNUfnUbnUCt9v7uPYz
-         oqIOYwjYi36A8w3RGOOkPQGjVheqk9Yk9CxA0b4iLMz4RtamDyl1CNLbxvOkE4yiJAum
-         +ZUlxFYPQ3deqbKXlt9GKgi2MjAUo2DiUFKknCmam1aNYc+lOawzMcOpN88ELG1Nx68X
-         JNbGAuZdxJsyhSDZGBRjAvmnrmVEcM0lDArJC0Rp/isWYTGP9GodLTQW5WMhL1jt2Q3p
-         rYECtpO/QUbnhdzjwy4zqUY19A6AkzlgA2CXpdIiI8XUZK0HJXYB4IYoN233J4y2suSf
-         dyZQ==
-X-Gm-Message-State: AAQBX9fOM+7Cn+BVgSovFAet/FP/OgVqhB6ctVnxgEx0jDTasugM4u4S
-        3QyUJ6aPD/wBoOQCDy0GpbcFYeITdMYIVEDfUvE=
-X-Google-Smtp-Source: AKy350YfQjvaWZoeOEggrBvoc62fzGDf+FZD2kAzryoJLvRgLqpIl59sIs7h8FfU2bq3/YSSirbYAA==
-X-Received: by 2002:a05:6a20:3c8b:b0:e9:1dd:dafc with SMTP id b11-20020a056a203c8b00b000e901dddafcmr20341955pzj.4.1681264415227;
-        Tue, 11 Apr 2023 18:53:35 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 6-20020a630006000000b004fbd91d9716sm282807pga.15.2023.04.11.18.53.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 18:53:34 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
-References: <cover.1680782016.git.asml.silence@gmail.com>
-Subject: Re: [PATCH v2 0/8] optimise resheduling due to deferred tw
-Message-Id: <168126441455.57506.14487418062992045458.b4-ty@kernel.dk>
-Date:   Tue, 11 Apr 2023 19:53:34 -0600
+        Tue, 11 Apr 2023 21:53:53 -0400
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7A54C07
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:53:47 -0700 (PDT)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id EE183140A95;
+        Wed, 12 Apr 2023 01:53:45 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 7192032;
+        Wed, 12 Apr 2023 01:53:43 +0000 (UTC)
+Message-ID: <2b966f46a5f60de629681527bb00401830118947.camel@perches.com>
+Subject: Re: [RFC PATCH] checkpatch: Support __initconst combined with
+ struct definition
+From:   Joe Perches <joe@perches.com>
+To:     Andy Shevchenko <andy@kernel.org>,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc:     Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
+Date:   Tue, 11 Apr 2023 18:53:42 -0700
+In-Reply-To: <ZDVixjH5qLoy1jTW@smile.fi.intel.com>
+References: <20230301094320.15954-1-bjorn@kernel.org>
+         <ZDVixjH5qLoy1jTW@smile.fi.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 7192032
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Rspamd-Server: rspamout01
+X-Stat-Signature: sy964tf6dhz9dnt7e8zigqqwn7xz8i3m
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19GLVU+nzrGdem+UwEVe+zM911VbiL4lys=
+X-HE-Tag: 1681264423-285885
+X-HE-Meta: U2FsdGVkX19GwP+aELnsxhseFU2M32tOO4PjvNCwiMPweENuspWK00zanBENykIOMWfhhEpA1DpKCsnbQUZdGw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 06 Apr 2023 14:20:06 +0100, Pavel Begunkov wrote:
-> io_uring extensively uses task_work, but when a task is waiting
-> every new queued task_work batch will try to wake it up and so
-> cause lots of scheduling activity. This series optimises it,
-> specifically applied for rw completions and send-zc notifications
-> for now, and will helpful for further optimisations.
+On Tue, 2023-04-11 at 16:38 +0300, Andy Shevchenko wrote:
+> On Wed, Mar 01, 2023 at 10:43:20AM +0100, Björn Töpel wrote:
+> > From: Björn Töpel <bjorn@rivosinc.com>
+> > 
+> > Checkpatch sometimes report a false positive for __initconst. E.g., for the
+> > following snippet:
+> > 
+> >  | static const struct strspn_test {
+> >  | 	const char str[16];
+> >  | 	const char accept[16];
+> >  | 	const char reject[16];
+> >  | 	unsigned a;
+> >  | 	unsigned r;
+> >  | } tests[] __initconst = {
+> >  | 	{ "foobar", "", "", 0, 6 },
+> >  | 	{ "abba", "abc", "ABBA", 4, 4 },
+> >  | 	{ "abba", "a", "b", 1, 1 },
+> >  | 	{ "", "abc", "abc", 0, 0},
+> >  | };
+> > 
+> > checkpatch would report:
+> > 
+> >  | ERROR: Use of __initconst requires a separate use of const
+> >  | #190: FILE: ./test_string.c:190:
+> >  | +	} tests[] __initconst = {
+> > 
+> > Improve the reporting by trying harder to find the 'const'.
 > 
-> Quick testing shows similar to v1 results, numbers from v1:
-> For my zc net test once in a while waiting for a portion of buffers
-> I've got 10x descrease in the number of context switches and 2x
-> improvement in CPU util (17% vs 8%). In profiles, io_cqring_work()
-> got down from 40-50% of CPU to ~13%.
-> 
-> [...]
+> Joe, what do you think about this?
 
-Applied, thanks!
+I think the ctx_block_outer_rev  function doesn't handle patch
+context blocks and the loop at best needs to be changed to include
 
-[1/8] io_uring: move pinning out of io_req_local_work_add
-      commit: ab1c590f5c9b96d8d8843d351aed72469f8f2ef0
-[2/8] io_uring: optimie local tw add ctx pinning
-      commit: d73a572df24661851465c821d33c03e70e4b68e5
-[3/8] io_uring: refactor __io_cq_unlock_post_flush()
-      commit: c66ae3ec38f946edb1776d25c1c8cd63803b8ec3
-[4/8] io_uring: add tw add flags
-      commit: 8501fe70ae9855076ffb03a3670e02a7b3437304
-[5/8] io_uring: inline llist_add()
-      commit: 5150940079a3ce94d7474f6f5b0d6276569dc1de
-[6/8] io_uring: reduce scheduling due to tw
-      commit: 8751d15426a31baaf40f7570263c27c3e5d1dc44
-[7/8] io_uring: refactor __io_cq_unlock_post_flush()
-      commit: c66ae3ec38f946edb1776d25c1c8cd63803b8ec3
-[8/8] io_uring: optimise io_req_local_work_add
-      commit: 360cd42c4e95ff06d8d7b0a54e42236c7e7c187f
+	last if $rawlines[$line] =~ /^@/);.
 
-Best regards,
--- 
-Jens Axboe
+And the loop parsing couldn't handle structs with embedded
+unions or structs.
 
-
+I also think that checkpatch will always have false negatives
+and false positives and this might not be that useful as likely
+most compilers should now be able to identify this as well.
 
