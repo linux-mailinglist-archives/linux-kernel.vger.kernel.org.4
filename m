@@ -2,109 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C4C6DEA34
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF466DEA0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjDLEMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S229677AbjDLDz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 23:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLEMM (ORCPT
+        with ESMTP id S229517AbjDLDzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:12:12 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2127.outbound.protection.outlook.com [40.107.117.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D4A1989
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:12:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PYKsNZndpWOcHRKoENyTL0PVOFWqAoo1R0oLAbM47d/YmhCTgwq0zlgN6cRM0rGN5TN5ZkRBSb4P6K0ZE6fzaFcfNHAJqerTAxx4PGAo+O8sjIdx/tFCLgYlsStRCc6Y0Cn7jJcWUWZljzVHUL1TQ1F44qpKICfSjdNwYDZEJju/fZa2qF5B6gtpFb3Gcd5YeC8L2yJvbWgPyXlMrD8/RbnYNXOUD9BSyzm+MFZqL0836NbZxecXNJbTmEBAYrrLrHvCqRrYIVEyYTnb/W/EjOPG2N0pmYhsNn8Z1PBFmEJ5FNYfcwDkR4CyzEPot4/FqB2GFEREIu1mwWzPbwLkmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cRixI1QTEPcUZ6ZF/jBdS6RZiN23k9KQkGs6woANuvY=;
- b=SquRVkGnpS5rvlerYmbSOm1/SquiLmH8RReWppEbHPVhWFbctmV/59zBS7LtC02nfP043Z6KggmDf5R7s8HfFXkf+MgqTNlma4a3GhUk9YvF/O8LP3/TSSbb0/OpQzzKVZCc5xS5gMsCoyv+MRV5hKo5Tn4Aoiloh/SATi66gUPNWj/kO15E59Zy6WAPZ1jOKs2t3xmCF8iIUV78aCHugJPMqgSAz2AHENq+WA4xnXQ9eJfDK8J+RAJt3eZ9evGgeKrWQjydxgk7/TSLe7mg1ohr3xEc3lDXyZbO5PhnKgW9k/j0bdCaLIX3VzBs0Buue/DN+yS9JG3tqV9l+w+Taw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cRixI1QTEPcUZ6ZF/jBdS6RZiN23k9KQkGs6woANuvY=;
- b=qwTczu+bXwMmoxvhfWvfe5z5dnJQsNQFri21kXWdjJGjn3MOTP9gwOdhs8f2UjdoK3ZuNXio82CEiT7C7rE2YOpsMlinOh2ZmhGFSTqrvzPYoxGgqMvBDxhb4SGqwbvr5QqF1xSexa8UAWGebo54AMPU8WA3Hw89ueLC65pttK28hyMdUzjqWb1N7KG0N9OeGSUAybj7gZPKeSdnCt3enY1dAsAD/0AWTjYZfFyKSGPII6NIRtNcNc7ofos8Bkqg4XWOyzWG9r/njsCh/Ad73hgEpXjZkCd/Qki+7A/6nilEcD0JhKxMtQEn58PZhnJTZOxT+yxU/7i1kerOa7A0UQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB5366.apcprd06.prod.outlook.com (2603:1096:101:7e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Wed, 12 Apr
- 2023 04:12:05 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.038; Wed, 12 Apr 2023
- 04:12:05 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] f2fs: introduce F2FS_SBI_RW_ATTR macro
-Date:   Wed, 12 Apr 2023 11:49:40 +0800
-Message-Id: <20230412034940.41943-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0038.apcprd02.prod.outlook.com
- (2603:1096:4:196::22) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 11 Apr 2023 23:55:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB93A44B1;
+        Tue, 11 Apr 2023 20:55:52 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Px80V54y7zSrbc;
+        Wed, 12 Apr 2023 11:51:54 +0800 (CST)
+Received: from [10.67.100.236] (10.67.100.236) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 12 Apr 2023 11:55:50 +0800
+Message-ID: <3dda3629-3623-ad63-9d9d-73706aacbcc0@huawei.com>
+Date:   Wed, 12 Apr 2023 11:55:50 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB5366:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1df07305-9611-457e-2def-08db3b0c1313
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UlEvkSihMZfho9C8cxVWt+J1xT7d73W4Jigbk/fXuRxCBvrArUak4Jiqk0zj/+dJh5nNEDfC1YAEZP8NOaPqhPeQcYfBZaveQA9vser7tC2eh25OXumBCAMO3szQ9Wxrju3SsN6I26iDr1hyXwxcRSdEw2/YYuQJlsQijIzoN9eksiGVs1gRtpLUsKWDDP1s9FgSKfEa+FK5shj2J1qha4vHeQSbcJm5F5lKhSB6M4IptP8Gjd4aObp7DwUoyDOVsJ/BdBoMts95lSeI3dfhMtczhCkUvE2wKiKkUbb1pWVYZaNtB/zXJvhgsW/c8fdKpPw+8R+ej9YnXCO8+Zc509U0vx0CdQphmdk9q7PthweQRPnQIkjdtHxC2DuOV13PH7KiunZbo5bcNxHzrtSHpaQHk7G896EoRNkxctDFOpEkKh8awj9edr5VkNJYfIsfLD+8Za/1aXCVIVM86sACzhHjMPa0a9mzRvYsEHfQTt42JoZJcoUXrXgB9jMj6eRXtxImCQIChybJqa8q+OynSHOgGESdbXSNPvA+fL5I0nvQcAp2YiA7n06BTeXOUk5YSuLD1VdT1rDiVNtPkTj7qp1BF92WgIPTlA/8kAf4dT0ZDJucTrf3tqGocL4HYsrQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(451199021)(52116002)(8676002)(4326008)(66946007)(66556008)(66476007)(5660300002)(186003)(86362001)(83380400001)(6666004)(41300700001)(110136005)(316002)(8936002)(2906002)(36756003)(26005)(478600001)(6512007)(6506007)(1076003)(6486002)(2616005)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E/PkfKWycbuZVdQH6M/SeLlaASL6TE7osjBvCM18FdMTFnc6clEff2qiAQm0?=
- =?us-ascii?Q?zxEmGDRhVu9dcOoy+kCImWccwfpX+6OMgHnb3ZjylJ/QfMdXYx5baHFusf7o?=
- =?us-ascii?Q?VIL924AhypriOL7nMwfAWtuHbQqGHqxykQZT69TiJsUXYK9OnzYkHIhHv84E?=
- =?us-ascii?Q?3Ut2k9q+HieHafq4ck/HHDfmnAIxBSrKj0XriwegCrdbkhwzbior5BNmk2w5?=
- =?us-ascii?Q?+LsMR1UKbulcmkGY+rXqrckuNlW+7pYPWGBeoP8GdRHNVLvQSGuA9o9tfz44?=
- =?us-ascii?Q?euMKB8T/hbVdoK2hM6GZGPRvYe4BnZN1G4UKE91aQx4bsnLmpVG/GbPvz06X?=
- =?us-ascii?Q?iKaf48StYO0SUfr3SW/NfhssXv/hr66iU54TAstzYf6+znYPH4fMfBUsJMwu?=
- =?us-ascii?Q?hAIcPNIKvfLQobGfgflsRcAYfeRIdfdCW6uurt+ROE4mXtNPYbd2RUdDVgqU?=
- =?us-ascii?Q?tAtLw8f+CcoZS3SFr4cPu+sBKZee1cTvqppvWQAhLaShuLER0/l7cY98RlGj?=
- =?us-ascii?Q?rG094AEPSAxuFqKtLePZ4jhCxct7zn9WDrV5MaSknNWkkJ/GMZTP0f5AWdZ0?=
- =?us-ascii?Q?K+lueGkv2Xk1cbCe9LyiMHC7JBubTGr6kT+EWvPYcht7FLlw5WkpCsfEgK2o?=
- =?us-ascii?Q?kpCwUAEdT0H5ALz3bKG8JTr3GxoJuYtsj8U3cMb7FxLI+68pqHVKtp0Ga7Vg?=
- =?us-ascii?Q?VVoFQQPnH7akgNoKPNgFx9VDL+h3AZDKLiuTCmVZxdu8vUk5aoR0EYLsaC9R?=
- =?us-ascii?Q?2oDNtzRx/Hnqb8cMoCbhJ4GdD4wKGfTjzJAwhAdVDn0vN6lbtaQBkhEMNhPJ?=
- =?us-ascii?Q?HO1bFndn37fP54HT4ZUI0NKUzCo6G53h2l9ccy35z99IVKCdI8Y3wdG/bO4t?=
- =?us-ascii?Q?RBqWEagRpegGEVsw6SYOLLwnj3wR3sGxijuUcfyt9AkFtYKnnjM+EZzWzo6h?=
- =?us-ascii?Q?CHmQYvARlfxkf8L/+kxXBjewyPXbRDiD5hOEhrAXTBuUkaCD3b7cNsiy0d0i?=
- =?us-ascii?Q?xMZA0EQOLCxjvYkGEJ2k8mxIEj14kBfPGpjK3gEzSLJMXfhfa0N5qByRorzF?=
- =?us-ascii?Q?723zbAnJbyhb7OGw5BmYQeUX82s18nm8xXDTymkA0rH26Wb27TAOdf8YlqgH?=
- =?us-ascii?Q?l/0KC6ypNYSnHcWrbA0FD07ax0Ij4aSd7Sro5hUH5iEzuHMESFhu0KpTfVmk?=
- =?us-ascii?Q?5TH1artc2BwkYYil3nnaNvQWCOqCnbnab499i7XFWlAbz+LMyUg22hQ/qrmu?=
- =?us-ascii?Q?5ErzWgRYIsxuPIOmNW/Upp/PZCKc3nW0qrfZ6u3nBVJQy1oFBm873/89FRK9?=
- =?us-ascii?Q?HkwE/354AOS16BPUdB2uMS0RyBjZjCsbpP5slV6cLh0PJHOiYpgsCkDNmMtU?=
- =?us-ascii?Q?YbSIAzBtAOy3R4Phg2Jpj1t64J145M6nRQ0f+RCI4BdMg7oI8CnN/l7PFIIU?=
- =?us-ascii?Q?DfEZoPoXpaJctXxoXgfwTu8PNz0VHpgee1rmE4OiHmNHSEShGQyeL4uxicze?=
- =?us-ascii?Q?OXHwbCZiExJ2ld893IV8rVfMO/bJbXvHAizb7wEYoh71Daad0kOKNHnQsB5A?=
- =?us-ascii?Q?lQvg33qk+htqWUAQh34LpD3dBNTNg75VapCOztNq?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1df07305-9611-457e-2def-08db3b0c1313
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 04:12:05.1146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bqx9jATmutWCIyQ6LgeU+qwBVzIyX87PuO3sco/eGtmlkr26yJ2VwXrrrizbQalcYCfGxg8+Jp4EhDxdRV7G2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5366
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v5 1/2] ACPI: APEI: set memory failure flags as
+ MF_ACTION_REQUIRED on synchronous events
+To:     Shuai Xue <xueshuai@linux.alibaba.com>, <mawupeng1@huawei.com>,
+        <tony.luck@intel.com>, <naoya.horiguchi@nec.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <justin.he@arm.com>,
+        <akpm@linux-foundation.org>, <ardb@kernel.org>,
+        <ashish.kalra@amd.com>, <baolin.wang@linux.alibaba.com>,
+        <bp@alien8.de>, <cuibixuan@linux.alibaba.com>,
+        <dave.hansen@linux.intel.com>, <james.morse@arm.com>,
+        <jarkko@kernel.org>, <lenb@kernel.org>, <linmiaohe@huawei.com>,
+        <lvying6@huawei.com>, <rafael@kernel.org>, <xiexiuqi@huawei.com>,
+        <zhuo.song@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20230411104842.37079-2-xueshuai@linux.alibaba.com>
+From:   Xiaofei Tan <tanxiaofei@huawei.com>
+In-Reply-To: <20230411104842.37079-2-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.100.236]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,136 +59,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the readable and writable f2fs_attr with struct_type of F2FS_SBI type,
-let's directly use the F2FS_SBI_RW_ATTR macro.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/sysfs.c | 73 +++++++++++++++++++++++++------------------------
- 1 file changed, 37 insertions(+), 36 deletions(-)
+Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 8ea05340bad9..4d6263e556fa 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -850,13 +850,16 @@ static struct f2fs_attr f2fs_attr_##_name = {			\
- 	.offset = offsetof(struct _struct_name, _elname),       \
- }
- 
-+#define  F2FS_SBI_RW_ATTR(name, elname)				\
-+	F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, name, elname)	\
-+
- F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_urgent_sleep_time,
- 							urgent_sleep_time);
- F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_min_sleep_time, min_sleep_time);
- F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_max_sleep_time, max_sleep_time);
- F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_no_gc_sleep_time, no_gc_sleep_time);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle, gc_mode);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent, gc_mode);
-+F2FS_SBI_RW_ATTR(gc_idle, gc_mode);
-+F2FS_SBI_RW_ATTR(gc_urgent, gc_mode);
- F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, reclaim_segments, rec_prefree_segments);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_small_discards, max_discards);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_request);
-@@ -878,31 +881,29 @@ F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ram_thresh, ram_thresh);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ra_nid_pages, ra_nid_pages);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, dirty_nats_ratio, dirty_nats_ratio);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, max_roll_forward_node_blocks, max_rf_node_blocks);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_victim_search, max_victim_search);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, migration_granularity, migration_granularity);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, dir_level, dir_level);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, cp_interval, interval_time[CP_TIME]);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, idle_interval, interval_time[REQ_TIME]);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, discard_idle_interval,
--					interval_time[DISCARD_TIME]);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle_interval, interval_time[GC_TIME]);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info,
--		umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
-+F2FS_SBI_RW_ATTR(max_victim_search, max_victim_search);
-+F2FS_SBI_RW_ATTR(migration_granularity, migration_granularity);
-+F2FS_SBI_RW_ATTR(dir_level, dir_level);
-+F2FS_SBI_RW_ATTR(cp_interval, interval_time[CP_TIME]);
-+F2FS_SBI_RW_ATTR(idle_interval, interval_time[REQ_TIME]);
-+F2FS_SBI_RW_ATTR(discard_idle_interval, interval_time[DISCARD_TIME]);
-+F2FS_SBI_RW_ATTR(gc_idle_interval, interval_time[GC_TIME]);
-+F2FS_SBI_RW_ATTR(umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
- #ifdef CONFIG_F2FS_IOSTAT
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_enable, iostat_enable);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
-+F2FS_SBI_RW_ATTR(iostat_enable, iostat_enable);
-+F2FS_SBI_RW_ATTR(iostat_period_ms, iostat_period_ms);
- #endif
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
-+F2FS_SBI_RW_ATTR(readdir_ra, readdir_ra);
-+F2FS_SBI_RW_ATTR(max_io_bytes, max_io_bytes);
-+F2FS_SBI_RW_ATTR(gc_pin_file_thresh, gc_pin_file_threshold);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
- #ifdef CONFIG_F2FS_FAULT_INJECTION
- F2FS_RW_ATTR(FAULT_INFO_RATE, f2fs_fault_info, inject_rate, inject_rate);
- F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
- #endif
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_remaining_trials, gc_remaining_trials);
-+F2FS_SBI_RW_ATTR(data_io_flag, data_io_flag);
-+F2FS_SBI_RW_ATTR(node_io_flag, node_io_flag);
-+F2FS_SBI_RW_ATTR(gc_remaining_trials, gc_remaining_trials);
- F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
- F2FS_GENERAL_RO_ATTR(dirty_segments);
- F2FS_GENERAL_RO_ATTR(free_segments);
-@@ -956,11 +957,11 @@ F2FS_FEATURE_RO_ATTR(casefold);
- F2FS_FEATURE_RO_ATTR(readonly);
- #ifdef CONFIG_F2FS_FS_COMPRESSION
- F2FS_FEATURE_RO_ATTR(compression);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_written_block, compr_written_block);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_saved_block, compr_saved_block);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_new_inode, compr_new_inode);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_percent, compress_percent);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_watermark, compress_watermark);
-+F2FS_SBI_RW_ATTR(compr_written_block, compr_written_block);
-+F2FS_SBI_RW_ATTR(compr_saved_block, compr_saved_block);
-+F2FS_SBI_RW_ATTR(compr_new_inode, compr_new_inode);
-+F2FS_SBI_RW_ATTR(compress_percent, compress_percent);
-+F2FS_SBI_RW_ATTR(compress_watermark, compress_watermark);
- #endif
- F2FS_FEATURE_RO_ATTR(pin_file);
- 
-@@ -970,22 +971,22 @@ F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_candidate_count, max_candidate_cou
- F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_weight, age_weight);
- F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_threshold, age_threshold);
- 
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, seq_file_ra_mul, seq_file_ra_mul);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_segment_mode, gc_segment_mode);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_reclaimed_segments, gc_reclaimed_segs);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_chunk, max_fragment_chunk);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_hole, max_fragment_hole);
-+F2FS_SBI_RW_ATTR(seq_file_ra_mul, seq_file_ra_mul);
-+F2FS_SBI_RW_ATTR(gc_segment_mode, gc_segment_mode);
-+F2FS_SBI_RW_ATTR(gc_reclaimed_segments, gc_reclaimed_segs);
-+F2FS_SBI_RW_ATTR(max_fragment_chunk, max_fragment_chunk);
-+F2FS_SBI_RW_ATTR(max_fragment_hole, max_fragment_hole);
- 
- /* For atomic write */
- F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, current_atomic_write, current_atomic_write);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, peak_atomic_write, peak_atomic_write);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, committed_atomic_block, committed_atomic_block);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block);
-+F2FS_SBI_RW_ATTR(peak_atomic_write, peak_atomic_write);
-+F2FS_SBI_RW_ATTR(committed_atomic_block, committed_atomic_block);
-+F2FS_SBI_RW_ATTR(revoked_atomic_block, revoked_atomic_block);
- 
- /* For block age extent cache */
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, last_age_weight, last_age_weight);
-+F2FS_SBI_RW_ATTR(hot_data_age_threshold, hot_data_age_threshold);
-+F2FS_SBI_RW_ATTR(warm_data_age_threshold, warm_data_age_threshold);
-+F2FS_SBI_RW_ATTR(last_age_weight, last_age_weight);
- 
- #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
- static struct attribute *f2fs_attrs[] = {
--- 
-2.35.1
-
+在 2023/4/11 18:48, Shuai Xue 写道:
+> There are two major types of uncorrected recoverable (UCR) errors :
+>
+> - Action Required (AR): The error is detected and the processor already
+>    consumes the memory. OS requires to take action (for example, offline
+>    failure page/kill failure thread) to recover this uncorrectable error.
+>
+> - Action Optional (AO): The error is detected out of processor execution
+>    context. Some data in the memory are corrupted. But the data have not
+>    been consumed. OS is optional to take action to recover this
+>    uncorrectable error.
+>
+> The essential difference between AR and AO errors is that AR is a
+> synchronous event, while AO is an asynchronous event. The hardware will
+> signal a synchronous exception (Machine Check Exception on X86 and
+> Synchronous External Abort on Arm64) when an error is detected and the
+> memory access has been architecturally executed.
+>
+> When APEI firmware first is enabled, a platform may describe one error
+> source for the handling of synchronous errors (e.g. MCE or SEA notification
+> ), or for handling asynchronous errors (e.g. SCI or External Interrupt
+> notification). In other words, we can distinguish synchronous errors by
+> APEI notification. For AR errors, kernel will kill current process
+> accessing the poisoned page by sending SIGBUS with BUS_MCEERR_AR. In
+> addition, for AO errors, kernel will notify the process who owns the
+> poisoned page by sending SIGBUS with BUS_MCEERR_AO in early kill mode.
+> However, the GHES driver always sets mf_flags to 0 so that all UCR errors
+> are handled as AO errors in memory failure.
+>
+> To this end, set memory failure flags as MF_ACTION_REQUIRED on synchronous
+> events.
+>
+> Fixes: ba61ca4aab47 ("ACPI, APEI, GHES: Add hardware memory error recovery support")'
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>   drivers/acpi/apei/ghes.c | 29 +++++++++++++++++++++++------
+>   1 file changed, 23 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 34ad071a64e9..c479b85899f5 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -101,6 +101,20 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
+>   	return ghes->generic->header.type == ACPI_HEST_TYPE_GENERIC_ERROR_V2;
+>   }
+>   
+> +/*
+> + * A platform may describe one error source for the handling of synchronous
+> + * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
+> + * or External Interrupt). On x86, the HEST notifications are always
+> + * asynchronous, so only SEA on ARM is delivered as a synchronous
+> + * notification.
+> + */
+> +static inline bool is_hest_sync_notify(struct ghes *ghes)
+> +{
+> +	u8 notify_type = ghes->generic->notify.type;
+> +
+> +	return notify_type == ACPI_HEST_NOTIFY_SEA;
+> +}
+> +
+>   /*
+>    * This driver isn't really modular, however for the time being,
+>    * continuing to use module_param is the easiest way to remain
+> @@ -477,7 +491,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
+>   }
+>   
+>   static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+> -				       int sev)
+> +				       int sev, bool sync)
+>   {
+>   	int flags = -1;
+>   	int sec_sev = ghes_severity(gdata->error_severity);
+> @@ -491,7 +505,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>   	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+>   		flags = MF_SOFT_OFFLINE;
+>   	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
+> -		flags = 0;
+> +		flags = sync ? MF_ACTION_REQUIRED : 0;
+>   
+>   	if (flags != -1)
+>   		return ghes_do_memory_failure(mem_err->physical_addr, flags);
+> @@ -499,9 +513,11 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>   	return false;
+>   }
+>   
+> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
+> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
+> +				       int sev, bool sync)
+>   {
+>   	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+> +	int flags = sync ? MF_ACTION_REQUIRED : 0;
+>   	bool queued = false;
+>   	int sec_sev, i;
+>   	char *p;
+> @@ -526,7 +542,7 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+>   		 * and don't filter out 'corrected' error here.
+>   		 */
+>   		if (is_cache && has_pa) {
+> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
+> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
+>   			p += err_info->length;
+>   			continue;
+>   		}
+> @@ -647,6 +663,7 @@ static bool ghes_do_proc(struct ghes *ghes,
+>   	const guid_t *fru_id = &guid_null;
+>   	char *fru_text = "";
+>   	bool queued = false;
+> +	bool sync = is_hest_sync_notify(ghes);
+>   
+>   	sev = ghes_severity(estatus->error_severity);
+>   	apei_estatus_for_each_section(estatus, gdata) {
+> @@ -664,13 +681,13 @@ static bool ghes_do_proc(struct ghes *ghes,
+>   			atomic_notifier_call_chain(&ghes_report_chain, sev, mem_err);
+>   
+>   			arch_apei_report_mem_error(sev, mem_err);
+> -			queued = ghes_handle_memory_failure(gdata, sev);
+> +			queued = ghes_handle_memory_failure(gdata, sev, sync);
+>   		}
+>   		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
+>   			ghes_handle_aer(gdata);
+>   		}
+>   		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
+> -			queued = ghes_handle_arm_hw_error(gdata, sev);
+> +			queued = ghes_handle_arm_hw_error(gdata, sev, sync);
+>   		} else {
+>   			void *err = acpi_hest_get_payload(gdata);
+>   
