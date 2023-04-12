@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433956DEAAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6991E6DEAB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjDLEmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S229546AbjDLErI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDLEmB (ORCPT
+        with ESMTP id S229507AbjDLErF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:42:01 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924112D50;
-        Tue, 11 Apr 2023 21:41:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px96B5wYCz4xDH;
-        Wed, 12 Apr 2023 14:41:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681274515;
-        bh=WOpYuRsAmoJ1ACqu6zUqXraoZTYHhLr7sNyyBFq5vsw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JRXzrsp8hOCd/VpGxs88eDJf08zahFmUEElad83SGyzXfie22iJhiTh0yBff7Kst+
-         0+lfmKUSE6B0Y3+qDL2NUOqr7sINvxUUVThTA5picgsm+k48ZUjXKo+WCl4MwACjrD
-         x7y3S8wj+mTyVWgFKwcWQgOCJvzBQk9fyZGq80du8abHJpo+r2nMPtTyXBhEUtPkXE
-         9BRBFLHX+HAYE14kYnY2Ft3bUQluwj/mdcO4eC54XsCCGH8PrKxQ9OtyvbGXG5jN+m
-         v4VBc1yum/Z6mFhMeAkhKzOv7bc2FkElP2C6+8Yb2Vb0avH6RG+HDst6BvmNC5B/ZP
-         brnRVGso/MB2A==
-Date:   Wed, 12 Apr 2023 14:41:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the amdgpu tree
-Message-ID: <20230412144153.4cb2c40b@canb.auug.org.au>
+        Wed, 12 Apr 2023 00:47:05 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E805D469D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:46:56 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 60-20020a17090a09c200b0023fcc8ce113so13298562pjo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 21:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tweaklogic.com; s=google; t=1681274816; x=1683866816;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+bx1peOWUY+EguIhN3+HEV80l+NpcfNfRNogKL9pYa8=;
+        b=TYD6k5TkH0f+f2VcgwjIMuLUw5PF7L9qlFK7nKXfGEzzYqg5yocLOj1NQcTK3AlAX8
+         7L49b8EJyccPPe9AEmNfHPbpp9gwhlxoNTDCh0SE1hZc6MyxITgRVf7vXAHMExP+UADL
+         dlSuONYrS5XVbWrjQ2wBV/vTEO137v89cT9dkfhh4QNwnjBK2IgJHRgEo+sMqHdnQIXb
+         J01mLe7aZYR537STAD/H0nm6pewLefxODOua1AMHGwSXynhqlckI5SFYTlRwMFWzpF+s
+         DjYo6pyAbx8fB4OIo6s1D7zEEreKB/Urtle6rqgWkKeAbOMUehI2F1eh3X8b6ZrwliIr
+         s5ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681274816; x=1683866816;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+bx1peOWUY+EguIhN3+HEV80l+NpcfNfRNogKL9pYa8=;
+        b=r5rEhpaJfpclr8pBBRDlpSRnVEYmHTgS63JSJ00kKL3kcbn4dyEyRuGdIduyGyVCnp
+         yE9cTu8GYPhNR6LHpPsxAz3MqKTcAuOOeMTueu+80ySFjUyY6e4Xr1twNqZRZc3arll6
+         vaDjymz13j49f3cbAGZ0HKDrxmA3NhtzqSVAww0FvDhNSlyZR87LVqcIJ18CPFoto7FO
+         QrlUDj3e8YV7cer3/e1wlKTJQCSkt9KpMfQe1zP/LoVvyBOrBL0JJJQ3m/fl1O/FPopM
+         AN6ykki9n/8yKqXM7J16mnQoDTtgrKZUVC6uDefn/Ax1gHrVj4nipIQwIni9hHFrT+XF
+         6i1g==
+X-Gm-Message-State: AAQBX9eQLfAppd04LQQSi82lMb8IVHcOtlR6zNi87HUB1FyNkGlVM/2q
+        ZhPorw9jMLn9j0kCOr3nfqciiA==
+X-Google-Smtp-Source: AKy350bg2rc3G/bZAa2f5cAlYhqK3olpjYj+ekBeQ1nXB59cT5PADukrzvEam2VsqAsPQONrpjRcZw==
+X-Received: by 2002:a17:903:2943:b0:1a4:f156:a1e3 with SMTP id li3-20020a170903294300b001a4f156a1e3mr12911958plb.58.1681274816319;
+        Tue, 11 Apr 2023 21:46:56 -0700 (PDT)
+Received: from [10.240.2.163] ([124.148.245.238])
+        by smtp.gmail.com with ESMTPSA id f2-20020a170902860200b001a258041049sm5509039plo.32.2023.04.11.21.46.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 21:46:55 -0700 (PDT)
+Message-ID: <eefdbad5-35ed-04c6-0955-87c99a4d345d@tweaklogic.com>
+Date:   Wed, 12 Apr 2023 12:46:49 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6nqvJVZKqYTObGCewEJ9BxY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 0/2] Support for Avago APDS9306 Ambient Light Sensor
+Content-Language: en-US
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
+ <20230411144031.000077c7@Huawei.com>
+From:   Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+In-Reply-To: <20230411144031.000077c7@Huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6nqvJVZKqYTObGCewEJ9BxY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Jonathan,
+Thank you for getting back.
 
-Hi all,
+> Hi Subhajit,
+> 
+> No need to sign off a cover letter.  The content isn't captured in the
+> git tree anyway.
+> 
+> For an RFC, I'd expect to see a clear statement in the cover letter of
+> why it is an RFC rather than a formal patch submission.  What specifically
+> are you looking for comments on?
+> 
+> Point us in the right direction and we might answer the questions quicker.
+> 
+> Thanks,
+> 
+> Jonathan
+Thank you for clearing it up.
+Next version of RFC I will put specific reasons.
+Before submitting a formal patch I wanted to check if my implementation of
+single reads of ALS data raw values from userspace when interrupts are
+enabled is the right thing to do or not. Also wanted to check if my event
+related userspace ABI implementation is in line with IIO subsystem.
+I will put it into better words in the next cover letter.
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced these warnings:
+Can you also help me out with the git tree I should use to format the
+patches? As per my understanding it is the subsystem maintainer tree
+and the main branch but the macros and functions which you have suggested
+in other reviews are available in Linux mainline.
 
-drivers/gpu/drm/amd/display/dc/dc.h:882: warning: Function parameter or mem=
-ber 'fpo_vactive_margin_us' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:882: warning: Function parameter or mem=
-ber 'disable_fpo_vactive' not described in 'dc_debug_options'
+Regards,
+Subhajit Ghosh
 
-Introduced by commit
-
-  0289e0ed1b9a ("drm/amd/display: Add FPO + VActive support")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6nqvJVZKqYTObGCewEJ9BxY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ2NpIACgkQAVBC80lX
-0GxyxQf/RSTv9apYAJ368+IYkwZaXnRiqVICinuXQDH2zuJ6EVXw1MLQtHCgirtv
-uH7T2k01jV7DeCVpVvoD58FvENH6rObIceglZJBsDiaGZ9v6D6OIH+U0t0v1TKo9
-qLI2o3LmvBbL5DSRpLUikfW0ZzTkL1wm7+xVK7X2Zt1fbPDm3v+dxI9enzOw/QQv
-jHRUNczpZQ/ozE5zvmncoYJmcsfGKAMFqkp/0rMBM/WV02Q+WKAJBwsBahKtF5Ec
-vruA0YlGT2ZTylPlsmDJ0R/QuqQARW5zPpm8UyeyqXVx/ojVLC4u25aJpfxK7kPo
-amUATNU1I5BPt6fkuUCzTFX8L39l+Q==
-=8NYv
------END PGP SIGNATURE-----
-
---Sig_/6nqvJVZKqYTObGCewEJ9BxY--
