@@ -2,224 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA7F6DE9C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77D56DE9C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 05:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjDLDDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 23:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229622AbjDLDE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 23:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDLDD1 (ORCPT
+        with ESMTP id S229631AbjDLDEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 23:03:27 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F7A2134;
-        Tue, 11 Apr 2023 20:03:25 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E1E1724E207;
-        Wed, 12 Apr 2023 11:03:23 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 11:03:24 +0800
-Received: from [192.168.125.82] (113.72.145.176) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 12 Apr
- 2023 11:03:22 +0800
-Message-ID: <5f9ee37a-cd22-16cf-4083-a102902ba5ea@starfivetech.com>
-Date:   Wed, 12 Apr 2023 11:03:21 +0800
+        Tue, 11 Apr 2023 23:04:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DF810C3;
+        Tue, 11 Apr 2023 20:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681268692; x=1712804692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b//hPJS1hC0YIPOTddaIA/snfSK/csSj0RmEjRTlyS8=;
+  b=g5J6si4A/RyprAG0EI+AuGHGnTaYgdCpanhzAb35nBjTVmeTOQitoXCu
+   hXO/uVn5yS8+CFmUKuS0ZhqOf8qCbrUQObaNbzF0UFH+KI/jfntE92QCJ
+   wrQcxHlOYQ9Z0LkLGx0OeP8axT/MX8Ry3SEhAydvHLwuqCJJ8Fw0gpKKB
+   xgeg1ztUEdfIOfFN2idwzSf9vOPA29IGjmOasvVN4IMoKXbgfWgm6n31I
+   wJLrabYWKRclU+/KWPKE6vYFkzAvR2pDTpDcmpXSSJr6dGMhagu+vQ9d2
+   fVClW8vSoAOVX2Sem+6/7pQUaM9dyhgIiTHcyZn+z88ljzabM4fltG/YP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="324148208"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="324148208"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 20:04:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="639046232"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="639046232"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2023 20:04:48 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmQmu-000X8t-0M;
+        Wed, 12 Apr 2023 03:04:48 +0000
+Date:   Wed, 12 Apr 2023 11:04:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, terry.bowman@amd.com,
+        rrichter@amd.com, linux-kernel@vger.kernel.org, bhelgaas@google.com
+Subject: Re: [PATCH v3 4/6] cxl/pci: Add RCH downstream port error logging
+Message-ID: <202304121055.UceD86D7-lkp@intel.com>
+References: <20230411180302.2678736-5-terry.bowman@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 3/7] soc: starfive: Modify ioremap to regmap
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20230411064743.273388-1-changhuang.liang@starfivetech.com>
- <20230411064743.273388-4-changhuang.liang@starfivetech.com>
- <20230411-sanctuary-impotent-92964df67a26@spud>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230411-sanctuary-impotent-92964df67a26@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.176]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411180302.2678736-5-terry.bowman@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Terry,
 
+kernel test robot noticed the following build errors:
 
-On 2023/4/12 4:26, Conor Dooley wrote:
-> On Mon, Apr 10, 2023 at 11:47:39PM -0700, Changhuang Liang wrote:
->> Modify ioremap to regmap, easy to simplify code.
-> 
-> This doesn't simplify anything, adding regmap to the mix actually makes
-> it less obvious what is going on here & it's not even fewer LoC:
-> 1 file changed, 23 insertions(+), 20 deletions(-)
-> 
-> Please write a commit message that explains the real motivation for
-> this change.
-> 
-> Thanks,
-> Conor.
-> 
+[auto build test ERROR on ca712e47054678c5ce93a0e0f686353ad5561195]
 
-When a new pmu is introduced later, they can use the same member 
-"struct regmap *base" in "struct jh71xx_pmu". I will add more
-commit message later.
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230412-020957
+base:   ca712e47054678c5ce93a0e0f686353ad5561195
+patch link:    https://lore.kernel.org/r/20230411180302.2678736-5-terry.bowman%40amd.com
+patch subject: [PATCH v3 4/6] cxl/pci: Add RCH downstream port error logging
+config: riscv-randconfig-r014-20230410 (https://download.01.org/0day-ci/archive/20230412/202304121055.UceD86D7-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7f1c5cefb1e75bd709dc35c7f5e3e29dd5df65e1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230412-020957
+        git checkout 7f1c5cefb1e75bd709dc35c7f5e3e29dd5df65e1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
->>
->> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->> ---
->>  drivers/soc/starfive/jh71xx_pmu.c | 43 +++++++++++++++++--------------
->>  1 file changed, 23 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
->> index 7d5f50d71c0d..306218c83691 100644
->> --- a/drivers/soc/starfive/jh71xx_pmu.c
->> +++ b/drivers/soc/starfive/jh71xx_pmu.c
->> @@ -6,13 +6,13 @@
->>   */
->>  
->>  #include <linux/interrupt.h>
->> -#include <linux/io.h>
->> -#include <linux/iopoll.h>
->> +#include <linux/mfd/syscon.h>
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->>  #include <linux/of_device.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/pm_domain.h>
->> +#include <linux/regmap.h>
->>  #include <dt-bindings/power/starfive,jh7110-pmu.h>
->>  
->>  /* register offset */
->> @@ -59,7 +59,7 @@ struct jh71xx_pmu_match_data {
->>  struct jh71xx_pmu {
->>  	struct device *dev;
->>  	const struct jh71xx_pmu_match_data *match_data;
->> -	void __iomem *base;
->> +	struct regmap *base;
->>  	struct generic_pm_domain **genpd;
->>  	struct genpd_onecell_data genpd_data;
->>  	int irq;
->> @@ -75,11 +75,14 @@ struct jh71xx_pmu_dev {
->>  static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_on)
->>  {
->>  	struct jh71xx_pmu *pmu = pmd->pmu;
->> +	unsigned int val;
->>  
->>  	if (!mask)
->>  		return -EINVAL;
->>  
->> -	*is_on = readl(pmu->base + JH71XX_PMU_CURR_POWER_MODE) & mask;
->> +	regmap_read(pmu->base, JH71XX_PMU_CURR_POWER_MODE, &val);
->> +
->> +	*is_on = val & mask;
->>  
->>  	return 0;
->>  }
->> @@ -130,7 +133,7 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
->>  		encourage_hi = JH71XX_PMU_SW_ENCOURAGE_DIS_HI;
->>  	}
->>  
->> -	writel(mask, pmu->base + mode);
->> +	regmap_write(pmu->base, mode, mask);
->>  
->>  	/*
->>  	 * 2.Write SW encourage command sequence to the Software Encourage Reg (offset 0x44)
->> @@ -140,21 +143,21 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
->>  	 *   Then write the lower bits of the command sequence, followed by the upper
->>  	 *   bits. The sequence differs between powering on & off a domain.
->>  	 */
->> -	writel(JH71XX_PMU_SW_ENCOURAGE_ON, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
->> -	writel(encourage_lo, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
->> -	writel(encourage_hi, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
->> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, JH71XX_PMU_SW_ENCOURAGE_ON);
->> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_lo);
->> +	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_hi);
->>  
->>  	spin_unlock_irqrestore(&pmu->lock, flags);
->>  
->>  	/* Wait for the power domain bit to be enabled / disabled */
->>  	if (on) {
->> -		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
->> -						val, val & mask,
->> -						1, JH71XX_PMU_TIMEOUT_US);
->> +		ret = regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POWER_MODE,
->> +						      val, val & mask,
->> +						      1, JH71XX_PMU_TIMEOUT_US);
->>  	} else {
->> -		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
->> -						val, !(val & mask),
->> -						1, JH71XX_PMU_TIMEOUT_US);
->> +		ret = regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POWER_MODE,
->> +						      val, !(val & mask),
->> +						      1, JH71XX_PMU_TIMEOUT_US);
->>  	}
->>  
->>  	if (ret) {
->> @@ -190,14 +193,14 @@ static void jh71xx_pmu_int_enable(struct jh71xx_pmu *pmu, u32 mask, bool enable)
->>  	unsigned long flags;
->>  
->>  	spin_lock_irqsave(&pmu->lock, flags);
->> -	val = readl(pmu->base + JH71XX_PMU_TIMER_INT_MASK);
->> +	regmap_read(pmu->base, JH71XX_PMU_TIMER_INT_MASK, &val);
->>  
->>  	if (enable)
->>  		val &= ~mask;
->>  	else
->>  		val |= mask;
->>  
->> -	writel(val, pmu->base + JH71XX_PMU_TIMER_INT_MASK);
->> +	regmap_write(pmu->base, JH71XX_PMU_TIMER_INT_MASK, val);
->>  	spin_unlock_irqrestore(&pmu->lock, flags);
->>  }
->>  
->> @@ -206,7 +209,7 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void *data)
->>  	struct jh71xx_pmu *pmu = data;
->>  	u32 val;
->>  
->> -	val = readl(pmu->base + JH71XX_PMU_INT_STATUS);
->> +	regmap_read(pmu->base, JH71XX_PMU_INT_STATUS, &val);
->>  
->>  	if (val & JH71XX_PMU_INT_SEQ_DONE)
->>  		dev_dbg(pmu->dev, "sequence done.\n");
->> @@ -220,8 +223,8 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void *data)
->>  		dev_err(pmu->dev, "p-channel fail event.\n");
->>  
->>  	/* clear interrupts */
->> -	writel(val, pmu->base + JH71XX_PMU_INT_STATUS);
->> -	writel(val, pmu->base + JH71XX_PMU_EVENT_STATUS);
->> +	regmap_write(pmu->base, JH71XX_PMU_INT_STATUS, val);
->> +	regmap_write(pmu->base, JH71XX_PMU_EVENT_STATUS, val);
->>  
->>  	return IRQ_HANDLED;
->>  }
->> @@ -271,7 +274,7 @@ static int jh71xx_pmu_probe(struct platform_device *pdev)
->>  	if (!pmu)
->>  		return -ENOMEM;
->>  
->> -	pmu->base = devm_platform_ioremap_resource(pdev, 0);
->> +	pmu->base = device_node_to_regmap(np);
->>  	if (IS_ERR(pmu->base))
->>  		return PTR_ERR(pmu->base);
->>  
->> -- 
->> 2.25.1
->>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304121055.UceD86D7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   riscv64-linux-ld: riscv64-linux-ld: DWARF error: could not find abbrev number 463040
+   drivers/cxl/core/pci.o: in function `.L0 ':
+   pci.c:(.text+0x1ae2): undefined reference to `cper_print_aer'
+>> riscv64-linux-ld: pci.c:(.text+0x1afa): undefined reference to `cper_print_aer'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
