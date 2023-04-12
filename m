@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1246DE8CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0CD6DE8DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 03:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDLBWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 21:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S229490AbjDLB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 21:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjDLBW2 (ORCPT
+        with ESMTP id S229509AbjDLB2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 21:22:28 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF223A9E;
-        Tue, 11 Apr 2023 18:22:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px4gs0Th5z4x84;
-        Wed, 12 Apr 2023 11:22:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681262538;
-        bh=XhOrU+QFWcb+CVANp9ratxZSEqdjnqay4In+Rbto5+I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EJ6xW+ViyMy/3l95STmnF2XsHDzfs6v3XJ65nsMjXlz2b+cIJ0WZxcbSBghzkNhIY
-         y4WQyMc5T2B014GaSVJuc+yOWKxcAx1WsGrScj/Y4rstQW8SEP+dZTdp65zBkFKCyu
-         koNlBmgtk15pUMQy0aU1+iLuOUA91mssXJgi1i5CxRqMftXOzDLd95DEsO5wdVNLjX
-         TXkbXLE/EH9nKNngCEXxTfTep1uSb7pXTpoFTkkY+BuqC8Iich5gJ8JWeJIlkbKIdG
-         neOj1Bxbs7IT9UnlAC0Pq+xa+lPPflSLbtzcZj7Bp9hZuf/iIkS5EeoQmrWfycJbit
-         Nm/prWt0Jrjqg==
-Date:   Wed, 12 Apr 2023 11:22:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm tree with the powerpc tree
-Message-ID: <20230412112213.59365041@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/60om+LnrpZ0CbC8sc7Il/5w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Apr 2023 21:28:55 -0400
+X-Greylist: delayed 348 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Apr 2023 18:28:54 PDT
+Received: from st43p00im-ztbu10073601.me.com (st43p00im-ztbu10073601.me.com [17.58.63.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEDB3594
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 18:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1681262584;
+        bh=5lYEMcGNaDjCakbfqg3dZSHw5YYijll0DV6pUU4IwUQ=;
+        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
+        b=atT1omM/juMY7qst5KCgYsE6VaDU9lY5T+rr6QEqEViHM+OS2qQL8LwuyIe7a9Mpm
+         1UBL2YqmM4xmqD/xSJfIzVz7PmkjxvSOBcEsoIE/UQkOFAcd/LfEee3O/9im9b1dnl
+         4UracAxZZ8NNMIjFcgjL6IoYGD1Q9vQtqtsVPYRimlHooPEqc/HvIYMT9XTh+FkCQ1
+         YyATazRM8rb1SN7g03dIXN1bdogviM+cFb/8W4WABoZjnaX1BKLUyQCUd5L2S8SpNI
+         OAXQM8UUStujT1JHMzhmsklmNMW8eDRshhkwvMMnRNzZn1daAqltxZsq/9I/zscDLW
+         l/PqMUceJJ44Q==
+Received: from localhost (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+        by st43p00im-ztbu10073601.me.com (Postfix) with ESMTPSA id 923FD180C17;
+        Wed, 12 Apr 2023 01:23:01 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 12 Apr 2023 03:22:59 +0200
+Message-Id: <CRUDUEL17ER4.1R8WRNNB5CJ35@void.crly.cz>
+Cc:     "Frank Oltmanns" <frank@oltmanns.dev>,
+        "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Samuel Holland" <samuel@sholland.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <icenowy@aosc.io>
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+From:   "Roman Beranek" <romanberanek@icloud.com>
+To:     =?utf-8?q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        "Maxime Ripard" <maxime@cerno.tech>
+X-Mailer: aerc 0.14.0
+References: <20230320161636.24411-1-romanberanek@icloud.com>
+ <20230329195802.veybo3367zifw77n@penduick>
+ <CROTQHUM88W0.2URPO95U5ZMS5@void.crly.cz>
+ <2219295.iZASKD2KPV@jernej-laptop>
+In-Reply-To: <2219295.iZASKD2KPV@jernej-laptop>
+X-Proofpoint-GUID: g1DkOftfS7myPiNQXtcxfcmsJmiyUcmX
+X-Proofpoint-ORIG-GUID: g1DkOftfS7myPiNQXtcxfcmsJmiyUcmX
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.883,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F08:2020-02-14=5F02,2022-06-21=5F08,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=24 bulkscore=0 mlxlogscore=51
+ malwarescore=0 adultscore=0 clxscore=1011 spamscore=24 mlxscore=24
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2304120009
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/60om+LnrpZ0CbC8sc7Il/5w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat Apr 8, 2023 at 9:07 AM CEST, Jernej =C5=A0krabec wrote:
+> Dne sreda, 05. april 2023 ob 14:34:11 CEST je Roman Beranek napisal(a):
+> > While simply forbidding the video0-2x mux option seems
+> > to me as the right way to go because there's not much use for it with
+> > non-DSI interfaces either besides the opportunity to power pll-mipi
+> > down, I'd like to run by you first.
+>
+> It's been a long time since I looked at A64 HDMI clocks, but IIRC, pll-vi=
+deo0=20
+> is the only useful source for HDMI PHY (as opposed to HDMI controller.)
+> So question remains how to properly support both displays at the same tim=
+e.
+>
 
-Hi all,
+Correct.
 
-Today's linux-next merge of the drm tree got a conflict in:
+> Have you ever tried to make HDMI and DSI work at the same time? This is o=
+ne of=20
+> issues of the PinePhone IIUC.
+>
 
-  drivers/gpu/drm/amd/display/Kconfig
+Yes, I have. Prusa3D's SL1 printer, on which I previously worked on,
+uses both outputs simultaneously. I had encountered the same reparenting
+problem back then but since I hadn't been able to identify it,
+I resorted to fiddling with the DSI pixelclock until it worked.=20
 
-between commit:
+DSI & HDMI co-existence is yet another reasoni though for forbidding
+the pll-video-2x parent. megi's kernel includes Mr. Zheng's commit which
+does the same.
 
-  78f0929884d4 ("powerpc/64: Always build with 128-bit long double")
+<https://github.com/megous/linux/commit/7374d57>
 
-from the powerpc tree and commit:
-
-  4652ae7a51b7 ("drm/amd/display: Rename DCN config to FP")
-
-from the drm tree.
-
-I fixed it up (I used the powerpc version - with "(PPC64 && ALTIVEC)")
-and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/60om+LnrpZ0CbC8sc7Il/5w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ2B8YACgkQAVBC80lX
-0GxzBAf+Lg//lxSU8q+Rc5ntDb5otOp2iFJrWaVe1Q233Y12PERCK4EyuK18LIr4
-x1W0O/2YNMfLrOw8ptMSYsSLQIm7Z1NbpotR3w/0mNaR2utwEbKYf4N/sd8R2p1u
-mkCAX1apB7e/P54o6fOq12/dj4cEFdnnR83OlULTGEp/JyRyKm2W3sHzrf8Mp1aF
-t1BIS7cwYu970Tz+W0U3cVEljay9mdscGOYBdiw3L9+s9D2AWv+ocOboj/7aDZtK
-goNTeHu8/h+CQCFc/ulDaBdWk52b/uy+kbSKDNy1rulbNNs7jA+3PxNs/+dOIwsA
-qPBJveVZlPWhkQ66ZdZZ9/5LoBr3TQ==
-=MaU1
------END PGP SIGNATURE-----
-
---Sig_/60om+LnrpZ0CbC8sc7Il/5w--
+Best wishes
+Roman Beranek
