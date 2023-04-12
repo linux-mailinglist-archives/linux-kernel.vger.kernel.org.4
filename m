@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D67F6DF2A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D046DF2D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjDLLJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S229964AbjDLLOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDLLJi (ORCPT
+        with ESMTP id S229945AbjDLLJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Apr 2023 07:09:38 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50A940F2;
-        Wed, 12 Apr 2023 04:09:31 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j11so14123852wrd.2;
-        Wed, 12 Apr 2023 04:09:31 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F186E6E9A;
+        Wed, 12 Apr 2023 04:09:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id g5so13867310wrb.5;
+        Wed, 12 Apr 2023 04:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681297770; x=1683889770;
+        d=gmail.com; s=20221208; t=1681297771; x=1683889771;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qNB/LQ+2e9RHIyw+KYF13k6Gi/pRgp/ViMk5z3IzBHc=;
-        b=WQ69rz8q6X+JyFAUjanXhwu/mRXMiyt7GZGBGt7XH1QHkiERrN8f3ABhNmldinKAlq
-         dg9iT14yNwIkFbiXbbPX0w16xP9yP4R6vVRefM3bYBusGVhqLx9f7NgSZXEt6hJHJtEI
-         EakYmLp3foSOHOZplcghljf2jdy582o0eF5G5bitDM9Mg9zt7P0f0CBuFhytkEnfZcVX
-         mRvQH0qFPuJtx9wxWZjiM1C4NDIlbcI3AU1F6l88Me6xrycml/YlqplzGD+MgmwND5gU
-         k2dnDI7a/H4Dy9GNjOd3SmsXbov89Rvfe4wpni5YERHQeuydytgauVV/kBpAT4cfgoQB
-         kx4g==
+        bh=nB3sPVEcrgu6W+ilG7iG45RRlHi0fVznqs8qRjeeZzA=;
+        b=nG67AZDgYKdJnkqDzdBqL7IETA6Nq75bT/jKzTrBr0Rp8gJDxALJsSSAbhwkH/+mr9
+         C/UfJ9aEvNz4Bic4fi+Xz/nZH+6/rajKZuQEo+934ySYt/Hp/pM01sfrd/ejBeb2Zaej
+         efWKvkx2OjdciaTTIaH+ZZ3bXbg1tZXeFUHsjjzxl+xkbVLf50bDYx6BVlj+qQTuFoeW
+         lnG20h5N1VxrmIWlhuMB3EWvjzlhsEd4SrQp9fqEW5Dx4JIShONrkjvt+HsnXu3zMRZJ
+         KoLA912TXPOJL/D5SB/8G6IZcLcRC8q4KH+W9Jl845Hwba5FVro/vgPciPrNMkXfCfYb
+         6B0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681297770; x=1683889770;
+        d=1e100.net; s=20210112; t=1681297771; x=1683889771;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qNB/LQ+2e9RHIyw+KYF13k6Gi/pRgp/ViMk5z3IzBHc=;
-        b=PE4pjIelmQpiQmkR/+L0uGZqjxi7r65AG1tL2JMk4HtZrMEZwu+xWQ7Go52YPDl8TI
-         B5srf2ADhKLupZHUIWkVzTYZfphMtFtPcpt4NdFtnXXfjWd88wVbaeHpiY7dKYI6oUAo
-         HEnhkt7Plt43MubPLR/Oq8muXJ3lF+jjoIk9T/dfrQzQWt2hdTF8CjlRyPhEvisAYrFu
-         ABHemi4D0rpyyl7sLuf8ThBc6ipbyaXRC4wy3kkD36Z2Rb4QztsSbi7EUh3vMSkKeVVS
-         I5FW8AcIbO3aR7WtPkA38vBU3nBlJYMqzrDRMZeWpsjsvFhUBFSHZObuwxNsChc4gbF5
-         AuMg==
-X-Gm-Message-State: AAQBX9f8y+z6Y7hkTdkeLoFaNMXOGVPm4PERYklxhGbx/0dCewRkUGSr
-        5Bu2X/KzQB4Ji9opz+iIY4E=
-X-Google-Smtp-Source: AKy350bjr5oy+T5nmH45qUBnTg6YXw4JZRXUIf1+/TsA7aLMoGRkhF2d67bEO8MCIXMR4NUkolJRdQ==
-X-Received: by 2002:a5d:6e03:0:b0:2f2:7e53:db65 with SMTP id h3-20020a5d6e03000000b002f27e53db65mr1779957wrz.7.1681297770072;
-        Wed, 12 Apr 2023 04:09:30 -0700 (PDT)
+        bh=nB3sPVEcrgu6W+ilG7iG45RRlHi0fVznqs8qRjeeZzA=;
+        b=wjWkDhcFoxfoveALMLII2cE3LRA9idgzhVgOITYlgnrzfLyIjjmFkVgzBbckFCD9YC
+         1kY45tltYO6esaW6DoczlojrQIJ5yszCuGe+MWceV1AWYFc1IOPVAMg3n/10mgLN9w8j
+         B1ifHDHDv3mjzaOgc9iQ/CQvsffO3wO7YH07eZShNSZ60DL9cY6sjDIzVqCMKVK44nmS
+         aQ+ozXmPISo/PjHCqAIWNEQ/cyjQwfmMjkgnMS1nK04HsyCtl1EpMjMfZl+RajN1RQYW
+         yC5tYoTNPL/H0RjoGTpBkn75YQkpotti638WeLKuMDbRMSsTFNYAYcBBsQy+WVx769Jb
+         DiXg==
+X-Gm-Message-State: AAQBX9cjS+EFac4ypli7rt4r5jM9b9kGIothMQMBOz6f8WAr2YvOVVDb
+        9ClEzc/8flOvcRcvVyK77ds=
+X-Google-Smtp-Source: AKy350baFT53FrVZDDIYkVxi/WMtlVuaA05Nl+WNWc4qmRoasQeQvrWT71zHJavpnqvcSwx3li5Y1w==
+X-Received: by 2002:a5d:6189:0:b0:2ce:9d06:58c6 with SMTP id j9-20020a5d6189000000b002ce9d0658c6mr1637641wru.53.1681297771385;
+        Wed, 12 Apr 2023 04:09:31 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:783d:9280:20c4:db22])
-        by smtp.gmail.com with ESMTPSA id l13-20020a5d668d000000b002e61e002943sm16863582wru.116.2023.04.12.04.09.28
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d668d000000b002e61e002943sm16863582wru.116.2023.04.12.04.09.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 04:09:29 -0700 (PDT)
+        Wed, 12 Apr 2023 04:09:30 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Arnd Bergmann <arnd@arndb.de>,
@@ -69,9 +69,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v8 5/7] cache: Add L2 cache management for Andes AX45MP RISC-V core
-Date:   Wed, 12 Apr 2023 12:08:58 +0100
-Message-Id: <20230412110900.69738-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v8 6/7] riscv: errata: Hookup the Andes AX45MP non-coherent handling
+Date:   Wed, 12 Apr 2023 12:08:59 +0100
+Message-Id: <20230412110900.69738-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230412110900.69738-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20230412110900.69738-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -79,7 +79,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,394 +89,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I/O Coherence Port (IOCP) provides an AXI interface for connecting
-external non-caching masters, such as DMA controllers. The accesses
-from IOCP are coherent with D-Caches and L2 Cache.
-
-IOCP is a specification option and is disabled on the Renesas RZ/Five
-SoC due to this reason IP blocks using DMA will fail.
-
-The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-block that allows dynamic adjustment of memory attributes in the runtime.
-It contains a configurable amount of PMA entries implemented as CSR
-registers to control the attributes of memory locations in interest.
-Below are the memory attributes supported:
-* Device, Non-bufferable
-* Device, bufferable
-* Memory, Non-cacheable, Non-bufferable
-* Memory, Non-cacheable, Bufferable
-* Memory, Write-back, No-allocate
-* Memory, Write-back, Read-allocate
-* Memory, Write-back, Write-allocate
-* Memory, Write-back, Read and Write-allocate
-
-More info about PMA (section 10.3):
-Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-
-As a workaround for SoCs with IOCP disabled CMO needs to be handled by
-software. Firstly OpenSBI configures the memory region as
-"Memory, Non-cacheable, Bufferable" and passes this region as a global
-shared dma pool as a DT node. With DMA_GLOBAL_POOL enabled all DMA
-allocations happen from this region and synchronization callbacks are
-implemented to synchronize when doing DMA transactions.
-
-Example PMA region passes as a DT node from OpenSBI:
-    reserved-memory {
-        #address-cells = <2>;
-        #size-cells = <2>;
-        ranges;
-
-        pma_resv0@58000000 {
-            compatible = "shared-dma-pool";
-            reg = <0x0 0x58000000 0x0 0x08000000>;
-            no-map;
-            linux,dma-default;
-        };
-    };
+Hookup the Andes AX45MP non-coherent handling by updating the
+ALT_CMO_OP() macro which will be used by dma-noncoherent.c for
+non-coherent platforms.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
-v7 -> v8
-* Dropped function pointer usage
-* Now exporting the functions for clean/inval/flush
-* Switched to using early_initcall instead of arch_initcall
-* Dropped entry for "include/cache" from MAINTAINERS
-* Dropped dependency of RISCV on AX45MP_L2_CACHE
-* Returning error in case of cache line mismatch
-* Renamed clean/inval/flush functions
-
-v6 -> v7
-* Implemented flush callback
-* Dropped using riscv_dma_noncoherent_cmo_ops
-
-v5 -> v6
-* Moved driver to cache folder
-* Switched to new API for CMO
-
-v4 -> v5
-* Dropped code for configuring L2 cache
-* Dropped code for configuring PMA
-* Updated commit message
-* Added comments
-* Changed static branch enable/disable order
-
-RFC v3 -> v4
-* Made use of runtime patching instead of compile time
-* Now just exposing single function ax45mp_no_iocp_cmo() for CMO handling
-* Added a check to make sure cache line size is always 64 bytes
-* Renamed folder rzf -> rzfive
-* Improved Kconfig description
-* Dropped L2 cache configuration
-* Dropped unnecessary casts
-* Fixed comments pointed by Geert.
+v7->v8
+* New patch
 ---
- MAINTAINERS                  |   7 ++
- drivers/Kconfig              |   2 +
- drivers/Makefile             |   1 +
- drivers/cache/Kconfig        |  10 ++
- drivers/cache/Makefile       |   3 +
- drivers/cache/ax45mp_cache.c | 222 +++++++++++++++++++++++++++++++++++
- 6 files changed, 245 insertions(+)
- create mode 100644 drivers/cache/Kconfig
- create mode 100644 drivers/cache/Makefile
- create mode 100644 drivers/cache/ax45mp_cache.c
+ arch/riscv/include/asm/cacheflush.h  |  9 ++++++++
+ arch/riscv/include/asm/errata_list.h | 33 ++++++++++++++++++++++------
+ 2 files changed, 35 insertions(+), 7 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3afd45f71043..9afd39a23524 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19898,6 +19898,13 @@ S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
- F:	drivers/staging/
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index 8091b8bf4883..a8503cc04fdb 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -59,6 +59,15 @@ void riscv_noncoherent_supported(void);
+ static inline void riscv_noncoherent_supported(void) {}
+ #endif
  
-+STANDALONE CACHE CONTROLLER DRIVERS
-+M:	Conor Dooley <conor@kernel.org>
-+L:	linux-riscv@lists.infradead.org
-+S:	Maintained
-+T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-+F:	drivers/cache
-+
- STARFIRE/DURALAN NETWORK DRIVER
- M:	Ion Badulescu <ionut@badula.org>
- S:	Odd Fixes
-diff --git a/drivers/Kconfig b/drivers/Kconfig
-index 968bd0a6fd78..44abd2cba3a3 100644
---- a/drivers/Kconfig
-+++ b/drivers/Kconfig
-@@ -15,6 +15,8 @@ source "drivers/base/Kconfig"
++#ifdef CONFIG_AX45MP_L2_CACHE
++extern asmlinkage void ax45mp_dma_cache_wback_inv(void *vaddr, unsigned long size);
++extern asmlinkage void ax45mp_dma_cache_wback(void *vaddr, unsigned long size);
++extern asmlinkage void ax45mp_dma_cache_inv(void *vaddr, unsigned long size);
++#else
++static inline void ax45mp_dma_cache_wback_inv(void *vaddr, unsigned long size) {}
++static inline void ax45mp_dma_cache_wback(void *vaddr, unsigned long size) {}
++static inline void ax45mp_dma_cache_inv(void *vaddr, unsigned long size) {}
++#endif
+ /*
+  * Bits in sys_riscv_flush_icache()'s flags argument.
+  */
+diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+index e2ecd01bfac7..8e9811c14ba3 100644
+--- a/arch/riscv/include/asm/errata_list.h
++++ b/arch/riscv/include/asm/errata_list.h
+@@ -122,9 +122,13 @@ asm volatile(ALTERNATIVE(						\
+ #define THEAD_flush_A0	".long 0x0275000b"
+ #define THEAD_SYNC_S	".long 0x0190000b"
  
- source "drivers/bus/Kconfig"
++#define ANDESTECH_AX45MP_clean	"call ax45mp_dma_cache_wback"
++#define ANDESTECH_AX45MP_inval	"call ax45mp_dma_cache_inv"
++#define ANDESTECH_AX45MP_flush	"call ax45mp_dma_cache_wback_inv"
++
+ #define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
+-asm volatile(ALTERNATIVE_2(						\
+-	__nops(6),							\
++asm volatile(ALTERNATIVE_3(						\
++	__nops(11),							\
+ 	"mv a0, %1\n\t"							\
+ 	"j 2f\n\t"							\
+ 	"3:\n\t"							\
+@@ -132,7 +136,7 @@ asm volatile(ALTERNATIVE_2(						\
+ 	"add a0, a0, %0\n\t"						\
+ 	"2:\n\t"							\
+ 	"bltu a0, %2, 3b\n\t"						\
+-	"nop", 0, RISCV_ISA_EXT_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,	\
++	__nops(6), 0, RISCV_ISA_EXT_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,	\
+ 	"mv a0, %1\n\t"							\
+ 	"j 2f\n\t"							\
+ 	"3:\n\t"							\
+@@ -140,12 +144,27 @@ asm volatile(ALTERNATIVE_2(						\
+ 	"add a0, a0, %0\n\t"						\
+ 	"2:\n\t"							\
+ 	"bltu a0, %2, 3b\n\t"						\
+-	THEAD_SYNC_S, THEAD_VENDOR_ID,					\
+-			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
++	THEAD_SYNC_S "\n\t"						\
++	__nops(5), THEAD_VENDOR_ID,					\
++			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO,	\
++	"addi sp,sp,-16\n\t"						\
++	"sd s0,0(sp)\n\t"						\
++	"sd ra,8(sp)\n\t"						\
++	"addi s0,sp,16\n\t"						\
++	"mv a1,%4\n\t"							\
++	"mv a0,%3\n\t"							\
++	ANDESTECH_AX45MP_##_op "\n\t"					\
++	"ld ra,8(sp)\n\t"						\
++	"ld s0,0(sp)\n\t"						\
++	"addi sp,sp,16\n\t",						\
++	ANDESTECH_VENDOR_ID, ERRATA_ANDESTECH_NO_IOCP,			\
++		CONFIG_ERRATA_ANDES)					\
+ 	: : "r"(_cachesize),						\
+ 	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
+-	    "r"((unsigned long)(_start) + (_size))			\
+-	: "a0")
++	    "r"((unsigned long)(_start) + (_size)),			\
++	    "r"((void *)(_start)),					\
++	    "r"((unsigned long)(_size))					\
++	: "a0", "a1")
  
-+source "drivers/cache/Kconfig"
-+
- source "drivers/connector/Kconfig"
- 
- source "drivers/firmware/Kconfig"
-diff --git a/drivers/Makefile b/drivers/Makefile
-index 20b118dca999..db5a8115093f 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -11,6 +11,7 @@ ifdef building_out_of_srctree
- MAKEFLAGS += --include-dir=$(srctree)
- endif
- 
-+obj-y				+= cache/
- obj-y				+= irqchip/
- obj-y				+= bus/
- 
-diff --git a/drivers/cache/Kconfig b/drivers/cache/Kconfig
-new file mode 100644
-index 000000000000..b97269cbd149
---- /dev/null
-+++ b/drivers/cache/Kconfig
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+menu "Cache Drivers"
-+
-+config AX45MP_L2_CACHE
-+	bool "Andes Technology AX45MP L2 Cache controller"
-+	depends on RISCV_DMA_NONCOHERENT
-+	help
-+	  Support for the L2 cache controller on Andes Technology AX45MP platforms.
-+
-+endmenu
-diff --git a/drivers/cache/Makefile b/drivers/cache/Makefile
-new file mode 100644
-index 000000000000..2012e7fb978d
---- /dev/null
-+++ b/drivers/cache/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_AX45MP_L2_CACHE) += ax45mp_cache.o
-diff --git a/drivers/cache/ax45mp_cache.c b/drivers/cache/ax45mp_cache.c
-new file mode 100644
-index 000000000000..cfc40b967c55
---- /dev/null
-+++ b/drivers/cache/ax45mp_cache.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * non-coherent cache functions for Andes AX45MP
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corp.
-+ */
-+
-+#include <linux/cacheflush.h>
-+#include <linux/cacheinfo.h>
-+#include <linux/dma-direction.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+
-+/* L2 cache registers */
-+#define AX45MP_L2C_REG_CTL_OFFSET		0x8
-+
-+#define AX45MP_L2C_REG_C0_CMD_OFFSET		0x40
-+#define AX45MP_L2C_REG_C0_ACC_OFFSET		0x48
-+#define AX45MP_L2C_REG_STATUS_OFFSET		0x80
-+
-+/* D-cache operation */
-+#define AX45MP_CCTL_L1D_VA_INVAL		0 /* Invalidate an L1 cache entry */
-+#define AX45MP_CCTL_L1D_VA_WB			1 /* Write-back an L1 cache entry */
-+
-+/* L2 CCTL status */
-+#define AX45MP_CCTL_L2_STATUS_IDLE		0
-+
-+/* L2 CCTL status cores mask */
-+#define AX45MP_CCTL_L2_STATUS_C0_MASK		0xf
-+
-+/* L2 cache operation */
-+#define AX45MP_CCTL_L2_PA_INVAL			0x8 /* Invalidate an L2 cache entry */
-+#define AX45MP_CCTL_L2_PA_WB			0x9 /* Write-back an L2 cache entry */
-+
-+#define AX45MP_L2C_REG_PER_CORE_OFFSET		0x10
-+#define AX45MP_CCTL_L2_STATUS_PER_CORE_OFFSET	4
-+
-+#define AX45MP_L2C_REG_CN_CMD_OFFSET(n)	\
-+	(AX45MP_L2C_REG_C0_CMD_OFFSET + ((n) * AX45MP_L2C_REG_PER_CORE_OFFSET))
-+#define AX45MP_L2C_REG_CN_ACC_OFFSET(n)	\
-+	(AX45MP_L2C_REG_C0_ACC_OFFSET + ((n) * AX45MP_L2C_REG_PER_CORE_OFFSET))
-+#define AX45MP_CCTL_L2_STATUS_CN_MASK(n)	\
-+	(AX45MP_CCTL_L2_STATUS_C0_MASK << ((n) * AX45MP_CCTL_L2_STATUS_PER_CORE_OFFSET))
-+
-+#define AX45MP_CCTL_REG_UCCTLBEGINADDR_NUM	0x80b
-+#define AX45MP_CCTL_REG_UCCTLCOMMAND_NUM	0x80c
-+
-+#define AX45MP_CACHE_LINE_SIZE			64
-+
-+struct ax45mp_priv {
-+	void __iomem *l2c_base;
-+	u32 ax45mp_cache_line_size;
-+};
-+
-+static struct ax45mp_priv ax45mp_priv;
-+
-+/* L2 Cache operations */
-+static inline uint32_t ax45mp_cpu_l2c_get_cctl_status(void)
-+{
-+	return readl(ax45mp_priv.l2c_base + AX45MP_L2C_REG_STATUS_OFFSET);
-+}
-+
-+static void ax45mp_cpu_cache_operation(unsigned long start, unsigned long end,
-+				       unsigned long line_size, unsigned int l1_op,
-+				       unsigned int l2_op)
-+{
-+	void __iomem *base = ax45mp_priv.l2c_base;
-+	int mhartid = smp_processor_id();
-+	unsigned long pa;
-+
-+	while (end > start) {
-+		csr_write(AX45MP_CCTL_REG_UCCTLBEGINADDR_NUM, start);
-+		csr_write(AX45MP_CCTL_REG_UCCTLCOMMAND_NUM, l1_op);
-+
-+		pa = virt_to_phys((void *)start);
-+		writel(pa, base + AX45MP_L2C_REG_CN_ACC_OFFSET(mhartid));
-+		writel(l2_op, base + AX45MP_L2C_REG_CN_CMD_OFFSET(mhartid));
-+		while ((ax45mp_cpu_l2c_get_cctl_status() &
-+			AX45MP_CCTL_L2_STATUS_CN_MASK(mhartid)) !=
-+			AX45MP_CCTL_L2_STATUS_IDLE)
-+			;
-+
-+		start += line_size;
-+	}
-+}
-+
-+/* Write-back L1 and L2 cache entry */
-+static inline void ax45mp_cpu_dcache_wb_range(unsigned long start, unsigned long end,
-+					      unsigned long line_size)
-+{
-+	ax45mp_cpu_cache_operation(start, end, line_size,
-+				   AX45MP_CCTL_L1D_VA_WB,
-+				   AX45MP_CCTL_L2_PA_WB);
-+}
-+
-+/* Invalidate the L1 and L2 cache entry */
-+static inline void ax45mp_cpu_dcache_inval_range(unsigned long start, unsigned long end,
-+						 unsigned long line_size)
-+{
-+	ax45mp_cpu_cache_operation(start, end, line_size,
-+				   AX45MP_CCTL_L1D_VA_INVAL,
-+				   AX45MP_CCTL_L2_PA_INVAL);
-+}
-+
-+void ax45mp_dma_cache_inv(void *vaddr, unsigned long size)
-+{
-+	unsigned long start = (unsigned long)vaddr;
-+	char cache_buf[2][AX45MP_CACHE_LINE_SIZE];
-+	unsigned long end = start + size;
-+	unsigned long old_start = start;
-+	unsigned long old_end = end;
-+	unsigned long line_size;
-+	unsigned long flags;
-+
-+	if (unlikely(start == end))
-+		return;
-+
-+	line_size = ax45mp_priv.ax45mp_cache_line_size;
-+
-+	memset(&cache_buf, 0x0, sizeof(cache_buf));
-+	start = start & (~(line_size - 1));
-+	end = ((end + line_size - 1) & (~(line_size - 1)));
-+
-+	local_irq_save(flags);
-+	if (unlikely(start != old_start))
-+		memcpy(&cache_buf[0][0], (void *)start, line_size);
-+
-+	if (unlikely(end != old_end))
-+		memcpy(&cache_buf[1][0], (void *)(old_end & (~(line_size - 1))), line_size);
-+
-+	ax45mp_cpu_dcache_inval_range(start, end, line_size);
-+
-+	if (unlikely(start != old_start))
-+		memcpy((void *)start, &cache_buf[0][0], (old_start & (line_size - 1)));
-+
-+	local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_GPL(ax45mp_dma_cache_inv);
-+
-+void ax45mp_dma_cache_wback(void *vaddr, unsigned long size)
-+{
-+	unsigned long start = (unsigned long)vaddr;
-+	unsigned long end = start + size;
-+	unsigned long line_size;
-+	unsigned long flags;
-+
-+	line_size = ax45mp_priv.ax45mp_cache_line_size;
-+	start = start & (~(line_size - 1));
-+	local_irq_save(flags);
-+	ax45mp_cpu_dcache_wb_range(start, end, line_size);
-+	local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_GPL(ax45mp_dma_cache_wback);
-+
-+void ax45mp_dma_cache_wback_inv(void *vaddr, unsigned long size)
-+{
-+	ax45mp_dma_cache_wback(vaddr, size);
-+	ax45mp_dma_cache_inv(vaddr, size);
-+}
-+EXPORT_SYMBOL_GPL(ax45mp_dma_cache_wback_inv);
-+
-+static int ax45mp_get_l2_line_size(struct device_node *np)
-+{
-+	int ret;
-+
-+	ret = of_property_read_u32(np, "cache-line-size", &ax45mp_priv.ax45mp_cache_line_size);
-+	if (ret) {
-+		pr_err("Failed to get cache-line-size, defaulting to 64 bytes\n");
-+		return ret;
-+	}
-+
-+	if (ax45mp_priv.ax45mp_cache_line_size != AX45MP_CACHE_LINE_SIZE) {
-+		pr_err("Expected cache-line-size to be 64 bytes (found:%u)\n",
-+		       ax45mp_priv.ax45mp_cache_line_size);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ax45mp_cache_ids[] = {
-+	{ .compatible = "andestech,ax45mp-cache" },
-+	{ /* sentinel */ }
-+};
-+
-+static int __init ax45mp_cache_init(void)
-+{
-+	struct device_node *np;
-+	struct resource res;
-+	int ret;
-+
-+	np = of_find_matching_node(NULL, ax45mp_cache_ids);
-+	if (!of_device_is_available(np))
-+		return -ENODEV;
-+
-+	ret = of_address_to_resource(np, 0, &res);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * If IOCP is present on the Andes AX45MP core riscv_cbom_block_size
-+	 * will be 0 for sure, so we can definitely rely on it. If
-+	 * riscv_cbom_block_size = 0 we don't need to handle CMO using SW any
-+	 * more so we just return success here and only if its being set we
-+	 * continue further in the probe path.
-+	 */
-+	if (!riscv_cbom_block_size)
-+		return 0;
-+
-+	ax45mp_priv.l2c_base = ioremap(res.start, resource_size(&res));
-+	if (!ax45mp_priv.l2c_base)
-+		return -ENOMEM;
-+
-+	ret = ax45mp_get_l2_line_size(np);
-+	if (ret) {
-+		iounmap(ax45mp_priv.l2c_base);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+early_initcall(ax45mp_cache_init);
+ #define THEAD_C9XX_RV_IRQ_PMU			17
+ #define THEAD_C9XX_CSR_SCOUNTEROF		0x5c5
 -- 
 2.25.1
 
