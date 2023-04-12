@@ -2,352 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3456DF8E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A286DF8E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjDLOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S231521AbjDLOu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjDLOtw (ORCPT
+        with ESMTP id S229621AbjDLOu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:49:52 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024A3C39
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:49:50 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id l65so5662258pge.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681310989; x=1683902989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ztWidINP8YwO0bC7WtdIk0SX/61cpqWYB08wbt883N0=;
-        b=aL3cgURGEeDn/oolDseqJs8fZiEv4cmAH17BPAeSfd5YpAa0cMjRT5SMUHswgNKcON
-         Lnw973g5Z6TQ1QVujZ+f0E3CSESCkQ8LoEIGFMlf8oJgY/hAUuJec33Y6Og2DypBTT/v
-         SMTrZrBQnm3O5lNagP45FcZHn+Wk56BbOo4DZ6X/z+6X2G8LaInLq2+lnjPo05ttSrdT
-         zwE1VZb5EaCHZW/8nNCVsGO762RBUkpM5K7hpsKlrZdLf+Klkx9tTUR995ix//mJ+IFs
-         TJ5ci81bm2n9et0BCf1gCQhJCpA08M308PZaFZ99dWyzqyK0hwKIQO1hciDXeudsWjc7
-         jBtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681310989; x=1683902989;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ztWidINP8YwO0bC7WtdIk0SX/61cpqWYB08wbt883N0=;
-        b=511Z7dnoHWyXSKupgM3XqcOGciyaBqDtXjF+Fn9rm8QEvZ2TSqe/+bSxrhNZDBdF6L
-         6+gvSA/agCd3umFPax3jrxJLU416Z6I4RHE3uxrBnpptSC1MntwnlINEqOh+59DgjeNJ
-         YYqbDDWYm05fB4oyccqM2bYkYsDjRi7yPi+yUdIUHesVqSJSKY4Mgyf12h3EtZpsTWYx
-         oXOys8Ftkxggi8jd6vwd7sFOCmgNMNGHpy+mQ2JM6jmxJZwnAfc3SXiImu4f7oNOxQdF
-         JlFIyla2V/3FwWgOlXQht76EsnfGw6X3rZTw7nvxGLuipfmQ9jqv5J8kkHB/kzRCH2oC
-         g4/g==
-X-Gm-Message-State: AAQBX9cWMmYgMkyqGbKqvIhHgagNVvbvET/gr/wg/TBZ0QZrVvJR3OnB
-        m4wAiBiOuhnnBLRx9DBQDyhbMTVsMCwvqxVCZkFfaQ==
-X-Google-Smtp-Source: AKy350ZXeVRg5T7pUUiUGmJRsFm530punBegVDumEruYsSxBp0rdMDxOwrMdaLg660flmPhLoTF/+7y8VfJDhIA65Z4=
-X-Received: by 2002:a63:d741:0:b0:518:98f1:2467 with SMTP id
- w1-20020a63d741000000b0051898f12467mr1948928pgi.11.1681310989475; Wed, 12 Apr
- 2023 07:49:49 -0700 (PDT)
+        Wed, 12 Apr 2023 10:50:27 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09B523C39;
+        Wed, 12 Apr 2023 07:50:26 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.246.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9DAC221779BE;
+        Wed, 12 Apr 2023 07:50:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9DAC221779BE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681311025;
+        bh=a2g85I/zkHv3WQbT0/vKcSSQ7JahFwxJtyq1yZd7bgc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BNkPDiKCL7z3QB+MvMHPzZboIzRe+XN/3O+Gr4IpvKSwjDzp1T84ZfUcv/HvUfNXs
+         izKXgALT10encUMNTX2ikNoB0uJb4Jc1nPtTjEb3foAusUhcKYFgJUtYSwLWQdX1bY
+         icwwW3djsWFqQygVX3X/GL5JPiBK8EjhT4gx8qfA=
+Message-ID: <a7e45ab5-c583-9077-5747-9a3d3b7274e7@linux.microsoft.com>
+Date:   Wed, 12 Apr 2023 09:50:23 -0500
 MIME-Version: 1.0
-References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-8-james.clark@arm.com>
-In-Reply-To: <20230404155121.1824126-8-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 12 Apr 2023 15:49:37 +0100
-Message-ID: <CAJ9a7VhGw2NSCNUyY9yF6XWVXvrk7M4BmxV9p5c7wFs+JG22_A@mail.gmail.com>
-Subject: Re: [PATCH v5 07/13] coresight: Store pointers to connections rather
- than an array of them
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
-        suzuki.poulose@arm.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
+ <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
+ <ZDVft9kysWMfTiZW@FVFF77S0Q05N> <20230412041752.i4raswvrnacnjjgy@treble>
+ <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
+ <20230412050106.7v4s3lalg43i6ciw@treble>
+Content-Language: en-US
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <20230412050106.7v4s3lalg43i6ciw@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 at 16:52, James Clark <james.clark@arm.com> wrote:
->
-> This will allow the same connection object to be referenced via the
-> input connection list in a later commit rather than duplicating them.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-core.c  | 47 ++++++++++---------
->  .../hwtracing/coresight/coresight-platform.c  | 19 ++++++--
->  drivers/hwtracing/coresight/coresight-priv.h  |  1 +
->  .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
->  include/linux/coresight.h                     |  5 +-
->  5 files changed, 44 insertions(+), 30 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 91274e7e6944..0b738960973b 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -119,7 +119,7 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
->         struct coresight_connection *conn;
->
->         for (i = 0; i < parent->pdata->nr_outconns; i++) {
-> -               conn = &parent->pdata->out_conns[i];
-> +               conn = parent->pdata->out_conns[i];
->                 if (conn->dest_dev == csdev)
->                         return conn->dest_port;
->         }
-> @@ -137,7 +137,7 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
->         struct coresight_connection *conn;
->
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> -               conn = &csdev->pdata->out_conns[i];
-> +               conn = csdev->pdata->out_conns[i];
->                 if (conn->dest_dev == child)
->                         return conn->src_port;
->         }
-> @@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct coresight_device *csdev)
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 struct coresight_device *child_dev;
->
-> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
-> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child_dev)
->                         sink = coresight_find_enabled_sink(child_dev);
->                 if (sink)
-> @@ -722,7 +722,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 struct coresight_device *child;
->
-> -               child = csdev->pdata->out_conns[i].dest_dev;
-> +               child = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
->                         if (!coresight_get_ref(child))
->                                 goto err;
-> @@ -733,7 +733,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
->         for (i--; i >= 0; i--) {
->                 struct coresight_device *child;
->
-> -               child = csdev->pdata->out_conns[i].dest_dev;
-> +               child = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
->                         coresight_put_ref(child);
->         }
-> @@ -752,7 +752,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 struct coresight_device *child;
->
-> -               child = csdev->pdata->out_conns[i].dest_dev;
-> +               child = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
->                         coresight_put_ref(child);
->         }
-> @@ -794,7 +794,7 @@ static int _coresight_build_path(struct coresight_device *csdev,
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 struct coresight_device *child_dev;
->
-> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
-> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child_dev &&
->                     _coresight_build_path(child_dev, sink, path) == 0) {
->                         found = true;
-> @@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device *csdev, int *depth)
->                 struct coresight_device *child_dev, *sink = NULL;
->                 int child_depth = curr_depth;
->
-> -               child_dev = csdev->pdata->out_conns[i].dest_dev;
-> +               child_dev = csdev->pdata->out_conns[i]->dest_dev;
->                 if (child_dev)
->                         sink = coresight_find_sink(child_dev, &child_depth);
->
-> @@ -1334,7 +1334,7 @@ static int coresight_orphan_match(struct device *dev, void *data)
->          * an orphan connection whose name matches @csdev, link it.
->          */
->         for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
-> -               conn = &i_csdev->pdata->out_conns[i];
-> +               conn = i_csdev->pdata->out_conns[i];
->
->                 /* We have found at least one orphan connection */
->                 if (conn->dest_dev == NULL) {
-> @@ -1372,7 +1372,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
->         int i, ret = 0;
->
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> -               struct coresight_connection *conn = &csdev->pdata->out_conns[i];
-> +               struct coresight_connection *conn = csdev->pdata->out_conns[i];
->
->                 conn->dest_dev =
->                         coresight_find_csdev_by_fwnode(conn->dest_fwnode);
-> @@ -1406,15 +1406,12 @@ static int coresight_remove_match(struct device *dev, void *data)
->          * a connection whose name matches @csdev, remove it.
->          */
->         for (i = 0; i < iterator->pdata->nr_outconns; i++) {
-> -               conn = &iterator->pdata->out_conns[i];
-> +               conn = iterator->pdata->out_conns[i];
->
-> -               if (conn->dest_dev == NULL)
-> -                       continue;
-> -
-> -               if (csdev->dev.fwnode == conn->dest_fwnode) {
-> +               /* Child_dev being set signifies that the links were made */
-> +               if (csdev->dev.fwnode == conn->dest_fwnode && conn->dest_dev) {
->                         iterator->orphan = true;
->                         coresight_remove_links(iterator, conn);
-> -
->                         conn->dest_dev = NULL;
->                         /* No need to continue */
->                         break;
-> @@ -1534,22 +1531,26 @@ void coresight_write64(struct coresight_device *csdev, u64 val, u32 offset)
->   * to the output port of this device.
->   */
->  void coresight_release_platform_data(struct coresight_device *csdev,
-> +                                    struct device *dev,
->                                      struct coresight_platform_data *pdata)
->  {
->         int i;
-> -       struct coresight_connection *conns = pdata->out_conns;
-> +       struct coresight_connection **conns = pdata->out_conns;
->
->         for (i = 0; i < pdata->nr_outconns; i++) {
->                 /* If we have made the links, remove them now */
-> -               if (csdev && conns[i].dest_dev)
-> -                       coresight_remove_links(csdev, &conns[i]);
-> +               if (csdev && conns[i]->dest_dev)
-> +                       coresight_remove_links(csdev, conns[i]);
->                 /*
->                  * Drop the refcount and clear the handle as this device
->                  * is going away
->                  */
-> -               fwnode_handle_put(conns[i].dest_fwnode);
-> -               conns[i].dest_fwnode = NULL;
-> +               fwnode_handle_put(conns[i]->dest_fwnode);
-> +               conns[i]->dest_fwnode = NULL;
-> +               devm_kfree(dev, conns[i]);
->         }
-> +       devm_kfree(dev, pdata->out_conns);
-> +       devm_kfree(dev, pdata);
->         if (csdev)
->                 coresight_remove_conns_sysfs_group(csdev);
->  }
-> @@ -1666,7 +1667,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->
->  err_out:
->         /* Cleanup the connection information */
-> -       coresight_release_platform_data(NULL, desc->pdata);
-> +       coresight_release_platform_data(NULL, desc->dev, desc->pdata);
->         return ERR_PTR(ret);
->  }
->  EXPORT_SYMBOL_GPL(coresight_register);
-> @@ -1679,7 +1680,7 @@ void coresight_unregister(struct coresight_device *csdev)
->                 cti_assoc_ops->remove(csdev);
->         coresight_remove_conns(csdev);
->         coresight_clear_default_sink(csdev);
-> -       coresight_release_platform_data(csdev, csdev->pdata);
-> +       coresight_release_platform_data(csdev, csdev->dev.parent, csdev->pdata);
->         device_unregister(&csdev->dev);
->  }
->  EXPORT_SYMBOL_GPL(coresight_unregister);
-> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> index 8c2029336161..9c05f787278b 100644
-> --- a/drivers/hwtracing/coresight/coresight-platform.c
-> +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> @@ -37,7 +37,7 @@ coresight_add_out_conn(struct device *dev,
->          * Warn on any existing duplicate output port.
->          */
->         for (i = 0; i < pdata->nr_outconns; ++i) {
-> -               conn = &pdata->out_conns[i];
-> +               conn = pdata->out_conns[i];
->                 /* Output == -1 means ignore the port for example for helpers */
->                 if (conn->src_port != -1 &&
->                     conn->src_port == new_conn->src_port) {
-> @@ -54,8 +54,19 @@ coresight_add_out_conn(struct device *dev,
->         if (!pdata->out_conns)
->                 return ERR_PTR(-ENOMEM);
->
-> -       pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
-> -       return &pdata->out_conns[pdata->nr_outconns - 1];
-> +       conn = devm_kmalloc(dev, sizeof(struct coresight_connection),
-> +                           GFP_KERNEL);
-> +       if (!conn)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       /*
-> +        * Copy the new connection into the allocation, save the pointer to the
-> +        * end of the connection array and also return it in case it needs to be
-> +        * used right away.
-> +        */
-> +       *conn = *new_conn;
-> +       pdata->out_conns[pdata->nr_outconns - 1] = conn;
-> +       return conn;
->  }
->  EXPORT_SYMBOL_GPL(coresight_add_out_conn);
->
-> @@ -863,7 +874,7 @@ coresight_get_platform_data(struct device *dev)
->  error:
->         if (!IS_ERR_OR_NULL(pdata))
->                 /* Cleanup the connection information */
-> -               coresight_release_platform_data(NULL, pdata);
-> +               coresight_release_platform_data(NULL, dev, pdata);
->         return ERR_PTR(ret);
->  }
->  EXPORT_SYMBOL_GPL(coresight_get_platform_data);
-> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
-> index 788ff19c60f6..65ae6d161c57 100644
-> --- a/drivers/hwtracing/coresight/coresight-priv.h
-> +++ b/drivers/hwtracing/coresight/coresight-priv.h
-> @@ -207,6 +207,7 @@ static inline void *coresight_get_uci_data(const struct amba_id *id)
->  }
->
->  void coresight_release_platform_data(struct coresight_device *csdev,
-> +                                    struct device *dev,
->                                      struct coresight_platform_data *pdata);
->  struct coresight_device *
->  coresight_find_csdev_by_fwnode(struct fwnode_handle *r_fwnode);
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> index 61234cb8052a..1bbe5410a23d 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> @@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
->                 return NULL;
->
->         for (i = 0; i < etr->pdata->nr_outconns; i++) {
-> -               tmp = etr->pdata->out_conns[i].dest_dev;
-> +               tmp = etr->pdata->out_conns[i]->dest_dev;
->                 if (tmp && coresight_is_catu_device(tmp))
->                         return tmp;
->         }
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index 12fdbd03e2f7..abf36a37fdb0 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -104,14 +104,15 @@ union coresight_dev_subtype {
->   *
->   * @nr_inconns: Number of elements for the input connections.
->   * @nr_outconns: Number of elements for the output connections.
-> - * @out_conns: Array of nr_outconns connections from this component.
-> + * @out_conns: Array of nr_outconns pointers to connections from this
-> + *            component.
->   */
->  struct coresight_platform_data {
->         int high_inport;
->         int high_outport;
->         int nr_inconns;
->         int nr_outconns;
-> -       struct coresight_connection *out_conns;
-> +       struct coresight_connection **out_conns;
->  };
->
->  /**
-> --
-> 2.34.1
->
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+On 4/12/23 00:01, Josh Poimboeuf wrote:
+> On Tue, Apr 11, 2023 at 11:48:21PM -0500, Madhavan T. Venkataraman wrote:
+>>
+>>
+>> On 4/11/23 23:17, Josh Poimboeuf wrote:
+>>> On Tue, Apr 11, 2023 at 02:25:11PM +0100, Mark Rutland wrote:
+>>>>> By your own argument, we cannot rely on the compiler as compiler implementations,
+>>>>> optimization strategies, etc can change in ways that are incompatible with any
+>>>>> livepatch implementation.
+>>>>
+>>>> That's not quite my argument.
+>>>>
+>>>> My argument is that if we assume some set of properties that compiler folk
+>>>> never agreed to (and were never made aware of), then compiler folk are well
+>>>> within their rights to change the compiler such that it doesn't provide those
+>>>> properties, and it's very likely that such expectation will be broken. We've
+>>>> seen that happen before (e.g. with jump tables).
+>>>>
+>>>> Consequently I think we should be working with compiler folk to agree upon some
+>>>> solution, where compiler folk will actually try to maintain the properties we
+>>>> depend upon (and e.g. they could have tests for). That sort of co-design has
+>>>> worked well so far (e.g. with things like kCFI).
+>>>>
+>>>> Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
+>>>
+>>> That was the goal of my talk at LPC last year:
+>>>
+>>>   https://lpc.events/event/16/contributions/1392/
+>>>
+>>> We discussed having the compiler annotate the tricky bits of control
+>>> flow, mainly jump tables and noreturns.  It's still on my TODO list to
+>>> prototype that.
+>>>
+>>> Another alternative which has been suggested in the past by Indu and
+>>> others is for objtool to use DWARF/sframe as an input to help guide it
+>>> through the tricky bits.
+>>>
+>>
+>> I read through the SFrame spec file briefly. It looks like I can easily adapt my
+>> version 1 of the livepatch patchset which was based on DWARF to SFrame. If the compiler
+>> folks agree to properly support and maintain SFrame, then I could send the next version
+>> of the patchset based on SFrame.
+>>
+>> But I kinda need a clear path forward before I implement anything. I request the arm64
+>> folks to comment on the above approach. Would it be useful to initiate an email discussion
+>> with the compiler folks on what they plan to do to support SFrame? Or, should this all
+>> happen face to face in some forum like LPC?
+> 
+> SFrame is basically a simplified version of DWARF unwind, using it as an
+> input to objtool is going to have the same issues I mentioned below (and
+> as was discussed with your v1).
+> 
+
+Yes. It is a much simplified version of DWARF. So, I am hoping that the compiler folks
+can provide the feature with a reliability guarantee. DWARF is too complex.
+
+Madhavan
+
+>>> That seems more fragile -- as Madhavan mentioned, GCC-generated DWARF
+>>> has some reliability issues -- and also defeats some of the benefits of
+>>> reverse-engineering in the first place (we've found many compiler bugs
+>>> and other surprising kernel-compiler interactions over the years).
+>>>
+>>> Objtool's understanding of the control flow graph has been really
+>>> valuable for reasons beyond live patching (e.g., noinstr and uaccess
+>>> validation), it's definitely worth finding a way to make that more
+>>> sustainable.
+> 
