@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B7E6E0F7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 16:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077CC6E0254
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjDMOBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Apr 2023 10:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S229874AbjDLXLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjDMOBq (ORCPT
+        with ESMTP id S229498AbjDLXLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Apr 2023 10:01:46 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBA211A;
-        Thu, 13 Apr 2023 07:01:45 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso13663741wmo.0;
-        Thu, 13 Apr 2023 07:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681394504; x=1683986504;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uOHTamwKNL40GhmSChgfj+zLAbo8CbA29L61cgq0bpE=;
-        b=G845KAhU6xI8AzEGleuaSgyKc/tkw+0l10Pgl2ql2iERI016euWl0ztj2Jtku9EWjE
-         XzgnPXYm2rJ5Z6MWj7nAYfC0TKlTVvu7bv4z2MqcWqrmetcjpIngUnp/cep2byHpZyYy
-         wlgwVKJvF7k2/EDrncZLO2rFwkZAogjbddoEBeGYvu6o0Qt2ztmcWk4RNW8DLOcKnIK3
-         wfWN5QSsuK82eE17Ihl+xdy7oZFgAyCUMSRmAUTwxWQ7A1LgOU7NiKfhUcyIPRxR7+WT
-         w79ZWayhGjAHDH+kh6FgI26OuDeliCOPiPiMeY81WyzZd8y0tmrAOQb0oo6BPUmj+3d6
-         OJ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681394504; x=1683986504;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uOHTamwKNL40GhmSChgfj+zLAbo8CbA29L61cgq0bpE=;
-        b=AthJ9/Sotjs+isjPGgkGbArTZNjrRsrD+9EBCQqbz+b5/KRqULw8Bkihm8OZMdckgr
-         qLGfvHVz4S87cBU3bUwWbA6WYmN5Xh7Qw5CQ3k1ixDDlNwQe40Plgp3tWGd6jVwV3rLy
-         kyW5nfe/k4KtcLRejrkAiDcxnRZQB92mQeCvEhVWXIb+e29Hk4L6ER5FODtm8vTyfMsO
-         trrQ1wg5O1OtZhpKidxtbk303ClWXZkh3SvWkHctDTvAnvcsVITSb0PT+UafeMPF5WCT
-         5TndlXBy6EK1AkwABqsy7ZILNmNSxhM01K6dJOdbgp5btEEW6ePLesOmso5g0kP9KHfI
-         356A==
-X-Gm-Message-State: AAQBX9c/O4odkYGUSvMy/hzMFeeNBCWBVlhxkJXCPTzMUmO4vLYqJnix
-        50uYQYFxFfQ1EqYbfF1onns=
-X-Google-Smtp-Source: AKy350aCOeLGVdCGwcMkMytZAVJF3k2hKosfOFGhq5NwBEjscTYcs49JjHc5JD4A851zKXAccyv3nw==
-X-Received: by 2002:a05:600c:2304:b0:3f0:7f07:e617 with SMTP id 4-20020a05600c230400b003f07f07e617mr1969779wmo.8.1681394503378;
-        Thu, 13 Apr 2023 07:01:43 -0700 (PDT)
-Received: from Ansuel-xps. (host-87-7-13-196.retail.telecomitalia.it. [87.7.13.196])
-        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003f09fe8312csm1909489wmi.20.2023.04.13.07.01.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 07:01:42 -0700 (PDT)
-Message-ID: <64380b46.7b0a0220.978a.1eb4@mx.google.com>
-X-Google-Original-Message-ID: <ZDc6lf4+qd0Fm2j+@Ansuel-xps.>
-Date:   Thu, 13 Apr 2023 01:11:17 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [net-next PATCH v6 06/16] net: phy: phy_device: Call into the
- PHY driver to set LED brightness
-References: <20230327141031.11904-1-ansuelsmth@gmail.com>
- <20230327141031.11904-7-ansuelsmth@gmail.com>
- <202ae4b9-8995-474a-1282-876078e15e47@gmail.com>
+        Wed, 12 Apr 2023 19:11:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199A10CE;
+        Wed, 12 Apr 2023 16:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=Nxv7nWXdf7av7cxyh9xS1LvUe4PBtCtEiU6h+boNPdY=; b=bOZTS1tYJKP+HpSO1b8EOjH2lk
+        EUxPl6IxufomX1XkdO7/s1fCgWR55A6/E7eg8tC2XiBkiWfgZCSz/EXOwfZ8oC3TH4SEcoA1uK3K5
+        OqgkYfDxTTMKGLlajk3aH2qK6MvDvVllvqokJa908ckga+tS8PK9qM2kM1Hv7JmQWEBvtbk1UR32u
+        CW6LmFHfPUf9s+5KwYicSyXyYp8dWMXQMtfsYRhMQD4BI3HnE37d0u8J6/HkYCwPX5AgdvaihE1as
+        RUnQ44l8Zwh3IaxkBJvf4AZwCHGBk/QQqYc4ovpCzIo/mVW3MDyEC6cE6Sh8sN7XF6lDS8xKfH2hn
+        03sKu/Gw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmjcc-004bcN-18;
+        Wed, 12 Apr 2023 23:11:26 +0000
+Message-ID: <c718a490-028d-2682-9ad7-8256d16504bf@infradead.org>
+Date:   Wed, 12 Apr 2023 16:11:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202ae4b9-8995-474a-1282-876078e15e47@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
+Content-Language: en-US
+To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
+        Greg KH <greg@kroah.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+References: <Y95MRZZz3yC5lETB@jo-einhundert>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Y95MRZZz3yC5lETB@jo-einhundert>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:57:51AM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 3/27/2023 7:10 AM, Christian Marangi wrote:
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > 
-> > Linux LEDs can be software controlled via the brightness file in /sys.
-> > LED drivers need to implement a brightness_set function which the core
-> > will call. Implement an intermediary in phy_device, which will call
-> > into the phy driver if it implements the necessary function.
-> > 
-> > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> > +	int (*led_brightness_set)(struct phy_device *dev,
-> > +				  u32 index, enum led_brightness value);
-> 
-> I think I would have made this an u8, 4 billion LEDs, man, that's a lot!
+Hi,
 
-If andrew is ok we can still consider to reduce it. (but just to joke
-about it... A MAN CAN DREAM OF A FULL HD SCREEN ON THEIR OWN SPECIAL
-PORT)
+On 2/4/23 04:15, Jó Ágila Bitsch wrote:
+> Added documentation to new struct members for WebUSB:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
+> 
+> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+> ---
+> V0 -> V1: added Reported-By and Fixes Tags
+> V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
+>           also post to linux-usb
+> 
+>  include/linux/usb/composite.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+> index 91d22c3ed458..7ef8cea67f50 100644
+> --- a/include/linux/usb/composite.h
+> +++ b/include/linux/usb/composite.h
+> @@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+>   * @qw_sign: qwSignature part of the OS string
+>   * @b_vendor_code: bMS_VendorCode part of the OS string
+>   * @use_os_string: false by default, interested gadgets set it
+> + * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
+> + * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
+> + * @landing_page: empty by default, landing page to announce in WebUSB
+> + * @use_webusb:: false by default, interested gadgets set it
 
+Please drop one ':' above so that kernel-doc does not complain:
+
+include/linux/usb/composite.h:523: warning: Function parameter or member 'use_webusb' not described in 'usb_composite_dev'
+
+>   * @os_desc_config: the configuration to be used with OS descriptors
+>   * @setup_pending: true when setup request is queued but not completed
+>   * @os_desc_pending: true when os_desc request is queued but not completed
+
+Thanks.
 -- 
-	Ansuel
+~Randy
