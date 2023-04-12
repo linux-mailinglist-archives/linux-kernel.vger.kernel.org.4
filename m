@@ -2,287 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594F16DF1CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DC66DF1EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjDLKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S229862AbjDLK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjDLKSB (ORCPT
+        with ESMTP id S229873AbjDLK0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:18:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7965730FF;
-        Wed, 12 Apr 2023 03:17:59 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qa44so27146136ejc.4;
-        Wed, 12 Apr 2023 03:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681294678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PcDUlmxRY10X0YHmhy/Fi+Rk8z1h3TiNmSt5ErLw9W4=;
-        b=DGfPyUoDRTIQzp1lmPfZIF7Ok/pIl6tEBRG4Fz9fac09VFqNNEQFoztcxaUPunqdA0
-         iujWFxf9VBvUzff6T33wh6G7mrq3dZK54zcmaUMm5Oegj2OzfQSQpEinN2TLVu/3mOwY
-         TFQzRTk5YZ7kGXA6lYAG3D19pmHk/AabQrtra3tb5zlEDq0X8LeQV1u3x27KzokkTwra
-         XM0le3PAkgp7p8vbVMQmK/WhMDNCCAyd6rCQ20dso1NT0TPtmAucC43ilWNXMfyz+4I8
-         k6C48JpiFfJN9SG57JzH2O5iRRvx/HqqCcNFUnN2qjxgIuVjMZaOWYxbURmrBRjTQ8lw
-         vczw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681294678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PcDUlmxRY10X0YHmhy/Fi+Rk8z1h3TiNmSt5ErLw9W4=;
-        b=jrm4Hf6BSGUku21QekAiYrrFpNkp8zgfi1gELUeW2zJkJBpy+EaDOrdUUblVSg2t8A
-         Ey0/S9mSf3DPj5s4O25e+KYqBWdfhMY83+eKDX6LcfN4mZPJQK/lNkyqPLJM9xSLQP3G
-         o/n9Ifcl4P8+7/VyI1iH+4cWchu92LtdniEVQZfxP9czedqz8HXnqagsaOFLCSrO/gBq
-         yNpl/RbafsMMrGREmlU66fJRU3t8MJYPhQMe1YO06v+wT8DQp7cquJ6ifMvwuEIGUUVN
-         BoQT5tQEtYttLZR6mfQeQt5MIjdkuoWob1kUK5Jew55rQbPyxesniPjGp7p5oLljaU3e
-         2JDg==
-X-Gm-Message-State: AAQBX9ete9IHQPTesDopQqbptlvV9/aOg71WbDtdbZbeCyWF+9PgeH1d
-        xr1lbHGIvTD7qP9ndKYRnWtq8MHpI23oJ+bujFg=
-X-Google-Smtp-Source: AKy350a/P8S0sd/XT625mO06xi/NHGq3G+kmgZqDIKpER/L+xgfhmjOBoRRCob3Y7jllm2lR+6dyFPfl1+c481gx7Hw=
-X-Received: by 2002:a17:906:9f0c:b0:949:87e1:5b32 with SMTP id
- fy12-20020a1709069f0c00b0094987e15b32mr2986699ejc.9.1681294677803; Wed, 12
- Apr 2023 03:17:57 -0700 (PDT)
+        Wed, 12 Apr 2023 06:26:08 -0400
+X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Apr 2023 03:26:04 PDT
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E468184;
+        Wed, 12 Apr 2023 03:26:04 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.141.245])
+        by APP-05 (Coremail) with SMTP id zQCowADHzMylhTZkxMRvEQ--.61397S2;
+        Wed, 12 Apr 2023 18:19:17 +0800 (CST)
+From:   sunying@nj.iscas.ac.cn
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Ying Sun <sunying@nj.iscas.ac.cn>
+Subject: [PATCH] trace/recordmcount: add the necessary dependencies
+Date:   Wed, 12 Apr 2023 18:18:40 +0800
+Message-Id: <20230412101840.13601-1-sunying@nj.iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230406111142.74410-1-minda.chen@starfivetech.com> <20230406111142.74410-2-minda.chen@starfivetech.com>
-In-Reply-To: <20230406111142.74410-2-minda.chen@starfivetech.com>
-From:   Bin Meng <bmeng.cn@gmail.com>
-Date:   Wed, 12 Apr 2023 18:17:46 +0800
-Message-ID: <CAEUhbmVC6cx78G=-3FON8=B2rFOn4aU5z58gxeVY4t_U6k7eOA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] dt-binding: pci: add JH7110 PCIe dt-binding documents.
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pci@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Kevin Xie <kevin.xie@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHzMylhTZkxMRvEQ--.61397S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1xuw43tF45urWDJw47Jwb_yoW3uwc_X3
+        y8W3W8Gr4DZryv9rWUWFs3uF1aqaykXFWvka4UtrZrJw1DKr13G3Z8JFn8JrZrG3sxuF13
+        ZrWfXrs3tF1fujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIkFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+        Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC
+        0wCY02Avz4vE14v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
+        9x0JUdb1nUUUUU=
+X-Originating-IP: [124.16.141.245]
+X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 7:59=E2=80=AFPM Minda Chen <minda.chen@starfivetech.=
-com> wrote:
->
-> Add PCIe controller driver dt-binding documents
-> for StarFive JH7110 SoC platform.
->
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../bindings/pci/starfive,jh7110-pcie.yaml    | 163 ++++++++++++++++++
->  1 file changed, 163 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/starfive,jh7110=
--pcie.yaml
->
-> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.y=
-aml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> new file mode 100644
-> index 000000000000..fa4829766195
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> @@ -0,0 +1,163 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/starfive,jh7110-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 PCIe 2.0 host controller
-> +
-> +maintainers:
-> +  - Minda Chen <minda.chen@starfivetech.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/pci-bus.yaml#
-> +  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-pcie
+From: Ying Sun <sunying@nj.iscas.ac.cn>
 
-Since this is a PLDA IP that is likely to be reused by other vendors,
-should this indicate the PLDA in the string?
+HAVE_C_RECORDMCOUNT is used only if the condition
+"ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT" is met in the Makefile,
+adding a dependency constraint on this configuration option
+ to prevent it from being set ‘y' but not taking effect.
 
-Or the file name should be renamed to something like the synopsis dw-pcie?
+Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
+Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
+---
+ kernel/trace/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: reg
-> +      - const: config
-> +
-> +  msi-parent: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 4
-> +
-> +  clock-names:
-> +    items:
-> +      - const: noc
-> +      - const: tl
-> +      - const: axi_mst0
-> +      - const: apb
-> +
-> +  resets:
-> +    items:
-> +      - description: AXI MST0 reset
-> +      - description: AXI SLAVE reset
-> +      - description: AXI SLAVE0 reset
-> +      - description: PCIE BRIDGE reset
-> +      - description: PCIE CORE reset
-> +      - description: PCIE APB reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: mst0
-> +      - const: slv0
-> +      - const: slv
-> +      - const: brg
-> +      - const: core
-> +      - const: apb
-> +
-> +  starfive,stg-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle to System Register Controller stg_syscon =
-node.
-> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG regist=
-er for PCIe.
-> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG regist=
-er for PCIe.
-> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG regist=
-er for PCIe.
-> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG regist=
-er for PCIe.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offs=
-et
-> +      of STG_SYSCONSAIF__SYSCFG register for PCIe. Total 4 regsisters of=
-fset
-> +      for PCIe.
-> +
-> +  pwren-gpios:
-> +    description: Should specify the GPIO for controlling the PCI bus dev=
-ice power on.
-> +    maxItems: 1
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  interrupt-controller:
-> +    type: object
-> +    properties:
-> +      '#address-cells':
-> +        const: 0
-> +
-> +      '#interrupt-cells':
-> +        const: 1
-> +
-> +      interrupt-controller: true
-> +
-> +    required:
-> +      - '#address-cells'
-> +      - '#interrupt-cells'
-> +      - interrupt-controller
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - reg
-> +  - reg-names
-> +  - "#interrupt-cells"
-> +  - interrupts
-> +  - interrupt-map-mask
-> +  - interrupt-map
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - msi-controller
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    bus {
-> +        #address-cells =3D <2>;
-> +        #size-cells =3D <2>;
-> +
-> +        pcie0: pcie@2B000000 {
-> +            compatible =3D "starfive,jh7110-pcie";
-> +            #address-cells =3D <3>;
-> +            #size-cells =3D <2>;
-> +            #interrupt-cells =3D <1>;
-> +            reg =3D <0x0 0x2B000000 0x0 0x1000000>,
-> +                  <0x9 0x40000000 0x0 0x10000000>;
-> +            reg-names =3D "reg", "config";
-> +            device_type =3D "pci";
-> +            starfive,stg-syscon =3D <&stg_syscon 0xc0 0xc4 0x130 0x1b8>;
-> +            bus-range =3D <0x0 0xff>;
-> +            ranges =3D <0x82000000  0x0 0x30000000  0x0 0x30000000 0x0 0=
-x08000000>,
-> +                     <0xc3000000  0x9 0x00000000  0x9 0x00000000 0x0 0x4=
-0000000>;
-> +            interrupt-parent =3D <&plic>;
-> +            interrupts =3D <56>;
-> +            interrupt-map-mask =3D <0x0 0x0 0x0 0x7>;
-> +            interrupt-map =3D <0x0 0x0 0x0 0x1 &pcie_intc0 0x1>,
-> +                            <0x0 0x0 0x0 0x2 &pcie_intc0 0x2>,
-> +                            <0x0 0x0 0x0 0x3 &pcie_intc0 0x3>,
-> +                            <0x0 0x0 0x0 0x4 &pcie_intc0 0x4>;
-> +            msi-parent =3D <&pcie0>;
-> +            msi-controller;
-> +            clocks =3D <&syscrg 86>,
-> +                     <&stgcrg 10>,
-> +                     <&stgcrg 8>,
-> +                     <&stgcrg 9>;
-> +            clock-names =3D "noc", "tl", "axi_mst0", "apb";
-> +            resets =3D <&stgcrg 11>,
-> +                     <&stgcrg 12>,
-> +                     <&stgcrg 13>,
-> +                     <&stgcrg 14>,
-> +                     <&stgcrg 15>,
-> +                     <&stgcrg 16>;
-> +
-> +            pcie_intc0: interrupt-controller {
-> +                #address-cells =3D <0>;
-> +                #interrupt-cells =3D <1>;
-> +                interrupt-controller;
-> +            };
-> +        };
-> +    };
-> --
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 8cf97fa4a4b3..69bb70b6bdd7 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -94,6 +94,7 @@ config HAVE_OBJTOOL_NOP_MCOUNT
+ 
+ config HAVE_C_RECORDMCOUNT
+ 	bool
++	depends on FTRACE_MCOUNT_USE_RECORDMCOUNT
+ 	help
+ 	  C version of recordmcount available?
+ 
+-- 
+2.25.1
 
-Regards,
-Bin
