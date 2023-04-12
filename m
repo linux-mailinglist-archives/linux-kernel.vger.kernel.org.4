@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244826E02A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BEC6E02B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Apr 2023 01:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjDLXkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 19:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S229886AbjDLXuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 19:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDLXkT (ORCPT
+        with ESMTP id S229498AbjDLXuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 19:40:19 -0400
+        Wed, 12 Apr 2023 19:50:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF394;
-        Wed, 12 Apr 2023 16:40:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FD35BB1;
+        Wed, 12 Apr 2023 16:49:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 513E363A22;
-        Wed, 12 Apr 2023 23:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4AAAC4339B;
-        Wed, 12 Apr 2023 23:40:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B6F63960;
+        Wed, 12 Apr 2023 23:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CB0C433D2;
+        Wed, 12 Apr 2023 23:49:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681342817;
-        bh=iim5VEphjW0ZKMsI/9k3ZI2Hlqw0HfANnEn+Cgp/CTE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kmhn96UN4Ws/OwRmHgixGznU3nO2T044ESmIy2qbNCQTUdBn0Hje0ddwxws1Ds0AP
-         9M1XF222LUifeMMJUaXKNJB53tf5QzLwHKfD2PT5ViKPY8m/DngjP8owcp32WAGp2l
-         JMnubOFfT8ndTqc7YMTTZ1vKzmtccXXyV0jMqGdMsit/gjG3oEHkPbZfNLQCfBMCam
-         ZMv/nGC/2rXIHG+yUFVNgfc1pVp6Bge2QLiTKNwciXngrW6cgxyhoOsq6YQWEQe2Up
-         qCFnzV7UbtSCuOTXO2PHRMRjGrNVoC3huR+bw0l5sEz7IfHGuiipAPjAMdV6CgXSpK
-         GHklUH/KFMahw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88354C395C5;
-        Wed, 12 Apr 2023 23:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1681343398;
+        bh=etFLsyG8PVeKyRqsFsAJuWcitukhr35OF8YfzA/B/uU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Fle6YnhfkktHgpS1y/dn4mT0ZAM5p33qQSEQi8QbgGPAm5fG6uKAY9FFEC/IbmCN7
+         CIHA5LAjdfY655R7Mynd7XzgmreQYEmtA8nVP+gvFqh6QK2BFwc1JBiAfxPTIu5jUT
+         50lIYsq0OsimWrwVt9821nkP3of+FNJeXqOK+2+jFPNBmMySdzEIkC7dubciRcoIgx
+         yl8XltKZ/hP7o+OX353n0LXv3kf7rvVqSIkSxrALCazSJ22WoWHEiynHy3qwNntzCs
+         RYtXqHd5Vh+gzpL6xRtpJcab70ksIiTcyD2y+ZfRk6eDl9vbwIydwtiB73dqxh6lR3
+         Hj3ShvQ2ZMU7w==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 00/11] Sprinkle more __noreturn
+Date:   Wed, 12 Apr 2023 16:49:30 -0700
+Message-Id: <cover.1681342859.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf,
- sockmap: fix deadlocks in the sockhash and sockmap
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168134281755.14415.12895311674672248237.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Apr 2023 23:40:17 +0000
-References: <20230406122622.109978-1-liuxin350@huawei.com>
-In-Reply-To: <20230406122622.109978-1-liuxin350@huawei.com>
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        hsinweih@uci.edu, linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,32 +60,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+v2:
+- improve commit logs
+- reorder patches: patches 1-6 are prereqs for patch 7
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Add some more __noreturn annotations.
 
-On Thu, 6 Apr 2023 20:26:22 +0800 you wrote:
-> When huang uses sched_switch tracepoint, the tracepoint
-> does only one thing in the mounted ebpf program, which
-> deletes the fixed elements in sockhash ([0])
-> 
-> It seems that elements in sockhash are rarely actively
-> deleted by users or ebpf program. Therefore, we do not
-> pay much attention to their deletion. Compared with hash
-> maps, sockhash only provides spin_lock_bh protection.
-> This causes it to appear to have self-locking behavior
-> in the interrupt context.
-> 
-> [...]
+Many of these have been flushed out by kernel IBT support which made
+objtool vmlinux validation much more common.
 
-Here is the summary with links:
-  - [bpf-next] bpf, sockmap: fix deadlocks in the sockhash and sockmap
-    https://git.kernel.org/bpf/bpf-next/c/ed17aa92dc56
+These annotations are generally a good thing as they improve readability
+and code generation.
 
-You are awesome, thank you!
+Guilherme G. Piccoli (1):
+  x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+
+Josh Poimboeuf (10):
+  init: Mark [arch_call_]rest_init() __noreturn
+  init: Mark start_kernel() __noreturn
+  x86/head: Mark *_start_kernel() __noreturn
+  arm64/cpu: Mark cpu_park_loop() and friends __noreturn
+  cpu: Mark panic_smp_self_stop() __noreturn
+  cpu: Mark nmi_panic_self_stop() __noreturn
+  objtool: Include weak functions in global_noreturns check
+  btrfs: Mark btrfs_assertfail() __noreturn
+  x86/cpu: Mark {hlt,resume}_play_dead() __noreturn
+  scsi: message: fusion: Mark mpt_halt_firmware() __noreturn
+
+ arch/arm/kernel/smp.c              |  2 +-
+ arch/arm64/include/asm/exception.h |  4 ++--
+ arch/arm64/include/asm/smp.h       |  7 +++----
+ arch/arm64/kernel/entry-common.c   |  2 +-
+ arch/arm64/kernel/smp.c            | 10 ++++++----
+ arch/arm64/kernel/traps.c          |  3 +--
+ arch/powerpc/kernel/setup_64.c     |  2 +-
+ arch/s390/kernel/setup.c           |  2 +-
+ arch/x86/hyperv/ivm.c              |  2 +-
+ arch/x86/include/asm/mshyperv.h    |  2 +-
+ arch/x86/include/asm/reboot.h      |  1 -
+ arch/x86/include/asm/setup.h       |  6 +++---
+ arch/x86/include/asm/smp.h         |  2 +-
+ arch/x86/kernel/head32.c           |  2 +-
+ arch/x86/kernel/head64.c           |  4 ++--
+ arch/x86/kernel/reboot.c           |  2 +-
+ arch/x86/kernel/smpboot.c          |  2 +-
+ arch/x86/power/cpu.c               |  2 +-
+ drivers/message/fusion/mptbase.c   |  2 +-
+ drivers/message/fusion/mptbase.h   |  2 +-
+ fs/btrfs/messages.c                |  2 +-
+ fs/btrfs/messages.h                |  2 +-
+ include/linux/smp.h                |  4 ++--
+ include/linux/start_kernel.h       |  6 +++---
+ init/main.c                        |  6 +++---
+ kernel/panic.c                     |  4 ++--
+ tools/objtool/check.c              | 20 ++++++++++++++++----
+ 27 files changed, 58 insertions(+), 47 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
