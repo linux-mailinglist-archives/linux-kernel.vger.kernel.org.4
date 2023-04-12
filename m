@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650BC6DF4C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547386DF4C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjDLMLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S229950AbjDLMLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDLMLg (ORCPT
+        with ESMTP id S229671AbjDLMLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:11:36 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DD2B4;
-        Wed, 12 Apr 2023 05:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681301495; x=1712837495;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ewT/IrLeXzhwmk8e73q3/ULj13sZtuYMfUJ09TlK3Rs=;
-  b=mP7D6/EWOW7Nj1eRrJ251nO0kIpSGJlAVBjYkd9cAOC3vkz/5jRWa6Mq
-   KuTL0W1P/EI2qvVt1OzdWGALYqSSDIZIIPbbkW17rVE5pgnEy7T/SzDDl
-   o8sqAENnxzlPKJ/kcLfdAEIdkKr6JsCmO3aiKk88lNq80w9LYYnKCmNIx
-   DGXvLhgGvlAzilsfSHp9XnHN0vThviQdLhjsrd19/XvxZ/BaKVMhC3nri
-   H2BNdlSw/mWO7O9ip+rwAJrv7GqnV118y/Vj9+8ElHw5i7Uyf5uTCfNtT
-   N5E1UjpAKUYKbykgKg0ylPY4th5C4Hr8+jDQdvWVPkdlvRgbxaoyWPQjy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="346550590"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="346550590"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:11:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="688934157"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="688934157"
-Received: from amurkovx-mobl.ger.corp.intel.com (HELO [10.213.229.123]) ([10.213.229.123])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 05:11:28 -0700
-Message-ID: <98bb3388-d671-dcf3-0247-649a702b5e11@linux.intel.com>
-Date:   Wed, 12 Apr 2023 13:10:22 +0100
+        Wed, 12 Apr 2023 08:11:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA7EB3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681301463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7LSuDPeEIJ3aNmuAEBuRgkzCKJ5eoNSlQ7XYoj+AElo=;
+        b=Nc6XkWtxZywWLnhgpTuWRcrIv0o5ViUEMdFxH/VMCd/zapNwooUF4DW7N+9xEbqrEfisZv
+        Q42LsxKEcbC10P1CnwfhWeOr56BiFEDUlraLqMt8x/aXwdyA1tMxZv6+zebWiIAcHjfPKZ
+        tW0UXZFcv0Q4LY5zox0oiT93LGw1ahQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-401-R4f4V4tLMyiJOkqtc4FdMw-1; Wed, 12 Apr 2023 08:10:59 -0400
+X-MC-Unique: R4f4V4tLMyiJOkqtc4FdMw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 257B48996E1;
+        Wed, 12 Apr 2023 12:10:59 +0000 (UTC)
+Received: from [10.22.32.168] (unknown [10.22.32.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AD7DC1121320;
+        Wed, 12 Apr 2023 12:10:58 +0000 (UTC)
+Message-ID: <84e5f6d5-3217-e1cf-6a3f-c337a6737e5d@redhat.com>
+Date:   Wed, 12 Apr 2023 08:10:58 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 0/7] drm: fdinfo memory stats
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
-        <etnaviv@lists.freedesktop.org>, Evan Quan <evan.quan@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Sean Paul <sean@poorly.run>,
-        Shashank Sharma <shashank.sharma@amd.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>
-References: <20230411225725.2032862-1-robdclark@gmail.com>
- <bbbbbf34-2ea5-5344-30db-f976c5198d75@amd.com>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] locking/rwsem: Add __always_inline annotation to
+ __down_read_common()
 Content-Language: en-US
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <bbbbbf34-2ea5-5344-30db-f976c5198d75@amd.com>
+To:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Tim Murray <timmurray@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, kernel-team@android.com,
+        stable@vger.kernel.org
+References: <20230412023839.2869114-1-jstultz@google.com>
+ <20230412035905.3184199-1-jstultz@google.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230412035905.3184199-1-jstultz@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,34 +71,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/11/23 23:59, John Stultz wrote:
+> Apparently despite it being marked inline, the compiler
+> may not inline __down_read_common() which makes it difficult
+> to identify the cause of lock contention, as the blocked
+> function will always be listed as __down_read_common().
+>
+> So this patch adds __always_inline annotation to the
+> function to force it to be inlines so the calling function
+> will be listed.
+>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Murray <timmurray@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: kernel-team@android.com
+> Cc: stable@vger.kernel.org
+> Fixes: c995e638ccbb ("locking/rwsem: Fold __down_{read,write}*()")
+> Reported-by: Tim Murray <timmurray@google.com>
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+> v2: Reworked to use __always_inline instead of __sched as
+>      suggested by Waiman Long
+> ---
+>   kernel/locking/rwsem.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+> index acb5a50309a1..e99eef8ea552 100644
+> --- a/kernel/locking/rwsem.c
+> +++ b/kernel/locking/rwsem.c
+> @@ -1240,7 +1240,7 @@ static struct rw_semaphore *rwsem_downgrade_wake(struct rw_semaphore *sem)
+>   /*
+>    * lock for reading
+>    */
+> -static inline int __down_read_common(struct rw_semaphore *sem, int state)
+> +static __always_inline int __down_read_common(struct rw_semaphore *sem, int state)
+>   {
+>   	int ret = 0;
+>   	long count;
+Reviewed-by: Waiman Long <longman@redhat.com>
 
-On 12/04/2023 10:34, Christian König wrote:
-> Am 12.04.23 um 00:56 schrieb Rob Clark:
->> From: Rob Clark <robdclark@chromium.org>
->>
->> Similar motivation to other similar recent attempt[1].  But with an
->> attempt to have some shared code for this.  As well as documentation.
->>
->> It is probably a bit UMA-centric, I guess devices with VRAM might want
->> some placement stats as well.  But this seems like a reasonable start.
->>
->> Basic gputop support: https://patchwork.freedesktop.org/series/116236/
->> And already nvtop support: https://github.com/Syllo/nvtop/pull/204
->>
->> [1] https://patchwork.freedesktop.org/series/112397/
-> 
-> I think the extra client id looks a bit superfluous since the ino of the 
-> file should already be unique and IIRC we have been already using that one.
-
-Do you mean file_inode(struct drm_file->filp)->i_ino ? That one would be 
-the same number for all clients which open the same device node so 
-wouldn't work.
-
-I also don't think the atomic_add_return for client id works either, 
-since it can alias on overflow.
-
-In i915 I use an xarray and __xa_alloc_cyclic.
-
-Regards,
-
-Tvrtko
