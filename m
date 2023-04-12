@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EE16DFE8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAB26DFE8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 21:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDLTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 15:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229742AbjDLTOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 15:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDLTOe (ORCPT
+        with ESMTP id S229733AbjDLTOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:14:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8505BB1;
-        Wed, 12 Apr 2023 12:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1681326839; i=j.neuschaefer@gmx.net;
-        bh=T3r05AvByQ78pgr1f+lKaqtb69c4CJPLVX+ymwewCz0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=BMDmPowP9+uvcrSgaSX3EcRgQBsMoAV4dSlY2URUK6PSdUTENrBQ3WVLDpyKF+I7e
-         sD6cUSF3TqA3yddz9KCUrVUQXlx50ilGMnA2JLiHcPzjLUM6JRCzPXrvEU2JmWtkB1
-         oVoQALEjco2fA7BFx4SvPtC2PbH1r8O8Ya2oicg2mBZYWDN1pMG82+6Cq705JjJPm7
-         sKTGbLNlXQ3vEIRvWl5y2nnhv/M6vWKXAZmyjQ8R86tJGymBi/IWzaFrIysn2L0ce9
-         4ZJqapG0/788qtp8tTcRnVyhuikYCCyI0DvuDsPoS8oJnCniaStsHqY5Pj9KTpAIWu
-         henKw6Jdd+H3Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s4r-1pkklt3ghD-0022df; Wed, 12
- Apr 2023 21:13:59 +0200
-Date:   Wed, 12 Apr 2023 21:13:56 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v5 3/6] dt-bindings: clock: Add Nuvoton WPCM450
- clock/reset controller
-Message-ID: <ZDcC9JBidzfu94NW@probook>
-References: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
- <20221104161850.2889894-4-j.neuschaefer@gmx.net>
- <20221209202120.0AFACC433D2@smtp.kernel.org>
+        Wed, 12 Apr 2023 15:14:50 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2E55FCF;
+        Wed, 12 Apr 2023 12:14:49 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id fv6so293518qtb.9;
+        Wed, 12 Apr 2023 12:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681326888; x=1683918888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sWnu6RVyhi4uzC7Ry2QjeXJ1CWSfmQfPfbgbdIGcaFA=;
+        b=kh5JKCDo9SPvWTnKK2hPJ25n8o1kiO7ZCmp7IglmcT9z29vxB/VwDDRKYAF7rsAbFz
+         d1ttDHBhehAPT1cY8kSR4csY5PpIfm/42SgmXtzDSFAN0TfyxSgGAdHFRHuMczL2qucH
+         K4QAEbRyX6DOLUQdINZFf9tOcYVnxAsR3nAfpinH599MSXcqvW2bLHW62Tv/K87WOCer
+         1n+2LDs/RP34oOlmw0zBLgPECiubajQqlZn6SlnYSZ2Ol0sSECCW0dPxRZttlsF+QNTG
+         R6vHl7hfZOqzBHkeIsNjlfqnVcDLVQz04whuospxr3uTz5oUblOXtiv0GPYmouPhnvuq
+         yu5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681326888; x=1683918888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sWnu6RVyhi4uzC7Ry2QjeXJ1CWSfmQfPfbgbdIGcaFA=;
+        b=exlerfFlGdwdAon3vXIgkjP7MtuBRN+YCL3r+eVGj/BKLoWkN1wZAyRti+MjQGkN/c
+         0davhkmpA2AosHM2zAbhsUlbcmOycwI+vRKFmHfczAhl+yoKn3kiBBUjO7cG6purvLPR
+         aYK+BfKacT/GYkyTwl1l5rR7RgpirAoEzRtKDy3w9eQlDH9F/NhPKVfFijKYMO+oshCv
+         Yd4y0gHsiIJ+EjutEkutRRVmHH6YIdKH0Zmn8vCGxo9qjaMDHggaUvWv5E8WtzuidInj
+         bh6UagGOFGqe4t3gn8KRivFRQ0jJEFMnQnUZYt+S6CKjeeL80r028tBTDYgw0tIEWrec
+         dJ7Q==
+X-Gm-Message-State: AAQBX9dtOwuHHVhSmIoD9/nvSHm5nYZkfaNTGvB4OMSUyov0yZgGeUUI
+        d/9ksieU5xsMTLsVRnnudBTsWeSkZP0=
+X-Google-Smtp-Source: AKy350ZVLQ44IG1f4rg4LVxAu2yzZPrUV+qRRm01OWAVrErTfgleOHgyvR3VdeBTIueBQA508uxBWA==
+X-Received: by 2002:a05:622a:88:b0:3e8:8f:3140 with SMTP id o8-20020a05622a008800b003e8008f3140mr7799511qtw.24.1681326888132;
+        Wed, 12 Apr 2023 12:14:48 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac872c5000000b003c033b23a9asm4398905qtp.12.2023.04.12.12.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 12:14:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C673F27C0054;
+        Wed, 12 Apr 2023 15:14:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 12 Apr 2023 15:14:46 -0400
+X-ME-Sender: <xms:JgM3ZBdBPwa1GuuV-wzKK07S-qzaWy5f1XluchjD7yb2RFizR1UbRg>
+    <xme:JgM3ZPN8k7jp6Uk4f_ZzNzOZ9mvmpx_ysKV8stXlZURiF32psyW7QAekxJBpW1piX
+    6iexbw825m2gMU11g>
+X-ME-Received: <xmr:JgM3ZKjdcvqlITLXh5Q3tp7YouNMi60vMnDyEt8J-jnphZrFRF9Fr5zlAxvMOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:JgM3ZK-80CEJzK3qJSFfa3L_5-5EGp9hZGDpSPtWGfQII9a4vfUHeA>
+    <xmx:JgM3ZNtU_d5IKGewScMoYMweHq_cIsH5W9Nf3pcIHxIBr1TXymOVBA>
+    <xmx:JgM3ZJF_5DDkWNLILnJDSvbMLK-iS3iu275v5irHr0IIspXE70zw_A>
+    <xmx:JgM3ZGG_ktda9njN0jQo2DkEm0n_leFjhdqFMPJ4QJ5uO1RsHwMKBw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Apr 2023 15:14:46 -0400 (EDT)
+Date:   Wed, 12 Apr 2023 12:14:44 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v4 04/13] locking/spinlock: introduce
+ spin_lock_init_with_key
+Message-ID: <ZDcDJKgi4f3OF05d@boqun-archlinux>
+References: <20230411054543.21278-1-wedsonaf@gmail.com>
+ <20230411054543.21278-4-wedsonaf@gmail.com>
+ <CANeycqqM5o_4gj2rT=8yV0NGTRWY=jTA6HT4F2Esho-WAJCPOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NpfuWbq9gkMhlu2M"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209202120.0AFACC433D2@smtp.kernel.org>
-X-Provags-ID: V03:K1:jUhIJfNgdC6wpEPx0keI2q2HMSs6qQtOBLXprOGbFfn5tkVL2Le
- D4mUx7y9IdovWAByCWzmeqOc/Jda5pRaQeNLOBlbXCyJ6kfiuhlK136i0yzPEdWy+PmdHQA
- g/YcNZCdyosbqrpM8xaMk6vPRgapkJSGCNbZQpbn6mo1XziL7xFM2Q/LtrGcXz7LtLQJZqb
- i9OAiRhoyf+BgC8bGgFWQ==
-UI-OutboundReport: notjunk:1;M01:P0:aCI64BL1rgk=;TL2u7xYyP8bK5xqtVfvB7EBtY5T
- Gw7znmdjLs8JpkvMQFwfxDU8G8fLi47mDtkSmJzJtYQoSFOlRTgLOILJduh01l4p/hf5Ypi4P
- sxF5bGN4WfEhhaGfnuFIT2pcQJkaHqygv+MLvRXEeUT4yOx7NiZeUpOqNF9nKfoUGn4m8PB8u
- qWIzHFJyarkEcZGRgEY/gDbR93z8LW73zNWiXkJjDWdI62izJ/pm7ZxZEeaGl2uK7XH9BLH2Z
- fFFMcjQnVxgj2N8xfeuK8pbbp5++95p2HOPPHlnBnZuqql8e+XzkPljyFRtulxIrR6L7G5phy
- teL9XySDInzWUojCzPLV9TC3QyOKtCQ/yt5uXjFEcbo4U5zLCAW9ys6YYnfQ1EviXCc2GoOru
- S2cXsa7diI0rAGPyVhNVMqZUK3SozdU/XlM6MhN23EQA7OdoJmnrLhhGeUinwfVZJmBlHgT8b
- +TUQlKpPp7ZCZ0sBcKSDatfAF+fyKi5DweIw4IxSutCtmavrh3BE3s7y6eAW7IEmlJliJwOXW
- gwa5kSbNvP879KKFDngK8OpGoneGx0N40FmM4ICEuJcbIPcWg2UActy442702QD29EpZj5qAW
- 1UiVCrOVNBJrvFsdSdhVnNvUiu2jxy7ixO8Dv/O7OPcUBg0JOX70p1UNKdqxYaj6PjH9LDSjt
- V8ueMb/dmvvAWQlIJQBGL/02JdlmVI99vDvmg0BMNsdM+aHx2VCg9PVEEie0amBJdUNj/Xnol
- DIRdCLxnpcjIBfgxZA/MmQhuw/dhQuI6HuL68HCvY10EZ5o2RxUBsWWQBTMLypUVy2AilStJc
- vjgsgtuNSMQE7YwPjY+4R/m1cYln8xsO8Ztm/XSg/iFDoGeowZXZ0Ztx6Ng8LOgtut+3/0zIw
- tH+jWbCo3nO0udRfne7yiuwrAWHNnaksJzBFRmVXfEWabRJkRqpIj1tqOSaW9Qjf7X9BOIHdj
- I5jfaQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CANeycqqM5o_4gj2rT=8yV0NGTRWY=jTA6HT4F2Esho-WAJCPOQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,51 +110,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 11, 2023 at 03:05:07PM -0300, Wedson Almeida Filho wrote:
+> On Tue, 11 Apr 2023 at 02:46, Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+> >
+> > From: Wedson Almeida Filho <walmeida@microsoft.com>
+> >
+> > Rust cannot call C macros, so it has its own macro to create a new lock
+> > class when a spin lock is initialised. This new function allows Rust
+> > code to pass the lock class it generates to the C implementation.
+> >
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Waiman Long <longman@redhat.com>
+> > Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 
---NpfuWbq9gkMhlu2M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
 
-Hi,
-
-On Fri, Dec 09, 2022 at 12:21:17PM -0800, Stephen Boyd wrote:
-> Quoting Jonathan Neusch=C3=A4fer (2022-11-04 09:18:47)
-> > The Nuvoton WPCM450 SoC has a combined clock and reset controller.
-> > Add a devicetree binding for it, as well as definitions for the bit
-> > numbers used by it.
-> >=20
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > > ---
->=20
-> Applied to clk-next
+> > v1 -> v2: No changes
+> > v2 -> v3: No changes
+> > v3 -> v4: No changes
+> >
+> >  include/linux/spinlock.h | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+> > index be48f1cb1878..cdc92d095133 100644
+> > --- a/include/linux/spinlock.h
+> > +++ b/include/linux/spinlock.h
+> > @@ -327,12 +327,17 @@ static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+> >
+> >  #ifdef CONFIG_DEBUG_SPINLOCK
+> >
+> > +static inline void spin_lock_init_with_key(spinlock_t *lock, const char *name,
+> > +                                          struct lock_class_key *key)
+> > +{
+> > +       __raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
+> > +}
+> > +
+> >  # define spin_lock_init(lock)                                  \
+> >  do {                                                           \
+> >         static struct lock_class_key __key;                     \
+> >                                                                 \
+> > -       __raw_spin_lock_init(spinlock_check(lock),              \
+> > -                            #lock, &__key, LD_WAIT_CONFIG);    \
+> > +       spin_lock_init_with_key(lock, #lock, &__key);           \
+> >  } while (0)
+> 
+> Peter, the code above is just factoring out spin lock init when
+> lockdep is enabled to take a lock class key.
+> 
+> Would you be able to review it?
+> 
+> If it's ok with you, we'd like to carry it through the rust tree
+> because we have code that depends on it.
 
-I don't see this patch in clk/linux.git's clk-next branch. Did it get
-lost somehow?
+Same ask here ;-) Peter, do you think it's Ok to take it via rust tree?
+Thanks!
 
+Regards,
+Boqun
 
-Best regards,
-Jonathan
-
---NpfuWbq9gkMhlu2M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQ3AtAACgkQCDBEmo7z
-X9sIKRAAiN2ZmLRYACFaEh3bwfcujm/d3XGjZwlH08eGmyruyMebk/PfHKBWvAkT
-Fy4gl2t3YBljBGEK/T/TXymbEYALVNV2hIubLWjy35GCj+q/be0a1Ko3zIQTJY7P
-xG6ldUH6deZOCSeyVc5VB/z+fZY1x5rMB3ZJJCLxYj6SQPjcxBuLVdIfkQExTmp6
-uNf8Uxc7LMAZJ1IBfUoyTnfCgJZ5rNwSOhUQ9sDYwBKdi8lJHVR7ZQtGZPg3tKMx
-BK/PP04jvsV/1BlncBsp7WVemVjaMRdJRG71mMU+Rm5Gl5//ZyyBdx1bxouPXqMZ
-+hpDpvXXJ8CDGVprURGaM3U9zcR6P43RfldCwocHqNLnz4b3a11ONboiN18mujds
-bB5XTWXBC7LeN+q0WC7Pv6soVK0EnQzaze+ts8Bf0DoPpTFvphwTvLlEMLYwSFeP
-w2y7iH8nxWDQjxSpgrly1YdR6/ivLbnqzTWAgPEInJAT1jsVdDJM/ARza3T/WGaB
-0wVAJR8A2fJz3iAwR54/LQ5av90kGQMT+Vmslzmpfrye0EW0gIuOY2iiWidcUlcz
-q3kAwaN6iAILBRhko5ihBznj7fTGBBRd6//0aaP6Cr39c+N+e7dmq0cLSqgjRZjI
-lL64RXXcalaOanGUa1C7lVLR8lt4pmwnNWx1GUdJonrZwTvomLA=
-=diBx
------END PGP SIGNATURE-----
-
---NpfuWbq9gkMhlu2M--
+> 
+> Thanks,
+> -Wedson
+> 
+> >
+> >  #else
+> > --
+> > 2.34.1
+> >
