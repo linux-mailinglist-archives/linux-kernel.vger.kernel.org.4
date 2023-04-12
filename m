@@ -2,382 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BA96DEF96
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30636DEDF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbjDLIwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S230024AbjDLIjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjDLIwL (ORCPT
+        with ESMTP id S230088AbjDLIio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:52:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972369EDB;
-        Wed, 12 Apr 2023 01:51:44 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PxGC20ghWzrb0d;
-        Wed, 12 Apr 2023 16:31:26 +0800 (CST)
-Received: from [10.67.103.232] (10.67.103.232) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 12 Apr 2023 16:32:49 +0800
-Message-ID: <3a8ae180-5a0f-7996-58de-edb0e370e4f5@huawei.com>
-Date:   Wed, 12 Apr 2023 16:32:48 +0800
+        Wed, 12 Apr 2023 04:38:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073FD83CF;
+        Wed, 12 Apr 2023 01:37:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AC5062FEE;
+        Wed, 12 Apr 2023 08:36:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31999C433D2;
+        Wed, 12 Apr 2023 08:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681288563;
+        bh=giJj1lEtTYcfsE+p55VnCGgKLIPJxrhfhyB++ty+deI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KEFKv/2g0o1HiAgYTaZlQXmJnUCfRJjn4UvHOopeXftrZSOukP20TCqxMd7pQ7I+F
+         LOJQy6MJ35c1wpvzbbxdlgH/Hb6qW6fdtKJOolz7EAxJylzi8qocFwVatDpVoO56KG
+         uPSDyQmwwIycmgNNbQZIoM5UcO+kTVhbvSrIqA1Q=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.15 00/93] 5.15.107-rc1 review
+Date:   Wed, 12 Apr 2023 10:33:01 +0200
+Message-Id: <20230412082823.045155996@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH V9 02/10] arm64/perf: Add BRBE registers and fields
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <mark.rutland@arm.com>
-CC:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        <linux-perf-users@vger.kernel.org>
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <20230315051444.1683170-3-anshuman.khandual@arm.com>
-From:   Yang Shen <shenyang39@huawei.com>
-In-Reply-To: <20230315051444.1683170-3-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.107-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.107-rc1
+X-KernelTest-Deadline: 2023-04-14T08:28+00:00
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.232]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the start of the stable review cycle for the 5.15.107 release.
+There are 93 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
+
+Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.107-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.107-rc1
+
+Alistair Popple <apopple@nvidia.com>
+    mm: take a page reference when removing device exclusive entries
+
+Robert Foss <robert.foss@linaro.org>
+    drm/bridge: lt9611: Fix PLL being unable to lock
+
+Rongwei Wang <rongwei.wang@linux.alibaba.com>
+    mm/swap: fix swap_info_struct race between swapoff and get_swap_pages()
+
+Zheng Yejian <zhengyejian1@huawei.com>
+    ring-buffer: Fix race while reader and writer are on the same page
+
+Karol Herbst <kherbst@redhat.com>
+    drm/nouveau/disp: Support more modes by checking with lower bpc
+
+Boris Brezillon <boris.brezillon@collabora.com>
+    drm/panfrost: Fix the panfrost_mmu_map_fault_addr() error path
+
+Yafang Shao <laoar.shao@gmail.com>
+    mm: vmalloc: avoid warn_alloc noise caused by fatal signal
+
+Jason Montleon <jmontleo@redhat.com>
+    ASoC: hdac_hdmi: use set_stream() instead of set_tdm_slots()
+
+Steven Rostedt (Google) <rostedt@goodmis.org>
+    tracing: Free error logs of tracing instances
+
+Michal Sojka <michal.sojka@cvut.cz>
+    can: isotp: isotp_ops: fix poll() to not report false EPOLLOUT events
+
+Oleksij Rempel <linux@rempel-privat.de>
+    can: j1939: j1939_tp_tx_dat_new(): fix out-of-bounds memory access
+
+Christian Brauner <brauner@kernel.org>
+    fs: drop peer group ids under namespace lock
+
+Zheng Yejian <zhengyejian1@huawei.com>
+    ftrace: Fix issue that 'direct->addr' not restored in modify_ftrace_direct()
+
+John Keeping <john@metanate.com>
+    ftrace: Mark get_lock_parent_ip() __always_inline
+
+Kan Liang <kan.liang@linux.intel.com>
+    perf/core: Fix the same task check in perf_event_set_output
+
+Thiago Rafael Becker <tbecker@redhat.com>
+    cifs: sanitize paths in cifs_update_super_prepath.
+
+Steve French <stfrench@microsoft.com>
+    smb3: lower default deferred close timeout to address perf regression
+
+Steve French <stfrench@microsoft.com>
+    smb3: allow deferred close timeout to be configurable
+
+Zhong Jinghua <zhongjinghua@huawei.com>
+    scsi: iscsi_tcp: Check that sock is valid before iscsi_set_param()
+
+Li Zetao <lizetao1@huawei.com>
+    scsi: qla2xxx: Fix memory leak in qla2x00_probe_one()
+
+Nuno Sá <nuno.sa@analog.com>
+    iio: adc: ad7791: fix IRQ flags
+
+Steve Clevenger <scclevenger@os.amperecomputing.com>
+    coresight-etm4: Fix for() loop drvdata->nr_addr_cmp range bug
+
+Suzuki K Poulose <suzuki.poulose@arm.com>
+    coresight: etm4x: Do not access TRCIDR1 for identification
+
+Jeremy Soller <jeremy@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo X370SNW
+
+Marios Makassikis <mmakassikis@freebox.fr>
+    ksmbd: do not call kvmalloc() with __GFP_NORETRY | __GFP_NO_WARN
+
+Geert Uytterhoeven <geert+renesas@glider.be>
+    dt-bindings: serial: renesas,scif: Fix 4th IRQ for 4-IRQ SCIFs
+
+Ryusuke Konishi <konishi.ryusuke@gmail.com>
+    nilfs2: fix sysfs interface lifetime
+
+Ryusuke Konishi <konishi.ryusuke@gmail.com>
+    nilfs2: fix potential UAF of struct nilfs_sc_info in nilfs_segctor_thread()
+
+Sherry Sun <sherry.sun@nxp.com>
+    tty: serial: fsl_lpuart: avoid checking for transfer complete when UARTCTRL_SBK is asserted in lpuart32_tx_empty
+
+Biju Das <biju.das.jz@bp.renesas.com>
+    tty: serial: sh-sci: Fix Rx on RZ/G2L SCI
+
+Biju Das <biju.das.jz@bp.renesas.com>
+    tty: serial: sh-sci: Fix transmit end interrupt handler
+
+Kai-Heng Feng <kai.heng.feng@canonical.com>
+    iio: light: cm32181: Unregister second I2C client if present
+
+William Breathitt Gray <william.gray@linaro.org>
+    iio: dac: cio-dac: Fix max DAC write value check for 12-bit
+
+Lars-Peter Clausen <lars@metafoo.de>
+    iio: adc: ti-ads7950: Set `can_sleep` flag for GPIO chip
+
+Arnd Bergmann <arnd@arndb.de>
+    iio: adis16480: select CONFIG_CRC32
+
+Bjørn Mork <bjorn@mork.no>
+    USB: serial: option: add Quectel RM500U-CN modem
+
+Enrico Sau <enrico.sau@gmail.com>
+    USB: serial: option: add Telit FE990 compositions
+
+RD Babiera <rdbabiera@google.com>
+    usb: typec: altmodes/displayport: Fix configure initial pin assignment
+
+Kees Jan Koster <kjkoster@kjkoster.org>
+    USB: serial: cp210x: add Silicon Labs IFS-USB-DATACABLE IDs
+
+Heikki Krogerus <heikki.krogerus@linux.intel.com>
+    usb: dwc3: pci: add support for the Intel Meteor Lake-S
+
+Pawel Laszczak <pawell@cadence.com>
+    usb: cdnsp: Fixes error: uninitialized symbol 'len'
+
+D Scott Phillips <scott@os.amperecomputing.com>
+    xhci: also avoid the XHCI_ZERO_64B_REGS quirk with a passthrough iommu
+
+Wayne Chang <waynec@nvidia.com>
+    usb: xhci: tegra: fix sleep in atomic call
+
+Masahiro Yamada <masahiroy@kernel.org>
+    kbuild: refactor single builds of *.ko
+
+Shailend Chand <shailend@google.com>
+    gve: Secure enough bytes in the first TX desc for all TCP pkts
+
+Andy Roulin <aroulin@nvidia.com>
+    ethtool: reset #lanes when lanes is omitted
+
+Lingyu Liu <lingyu.liu@intel.com>
+    ice: Reset FDIR counter in FDIR init stage
+
+Simei Su <simei.su@intel.com>
+    ice: fix wrong fallback logic for FDIR
+
+Dai Ngo <dai.ngo@oracle.com>
+    NFSD: callback request does not use correct credential for AUTH_SYS
+
+Jeff Layton <jlayton@kernel.org>
+    sunrpc: only free unix grouplist after RCU settles
+
+Corinna Vinschen <vinschen@redhat.com>
+    net: stmmac: fix up RX flow hash indirection table when setting channels
+
+Siddharth Vadapalli <s-vadapalli@ti.com>
+    net: ethernet: ti: am65-cpsw: Fix mdio cleanup in probe
+
+Dhruva Gole <d-gole@ti.com>
+    gpio: davinci: Add irq chip flag to skip set wake
+
+Mark Pearson <mpearson-lenovo@squebb.ca>
+    platform/x86: think-lmi: Clean up display of current_value on Thinkstation
+
+Mark Pearson <mpearson-lenovo@squebb.ca>
+    platform/x86: think-lmi: Fix memory leaks when parsing ThinkStation WMI strings
+
+Armin Wolf <W_Armin@gmx.de>
+    platform/x86: think-lmi: Fix memory leak when showing current settings
+
+Ziyang Xuan <william.xuanziyang@huawei.com>
+    ipv6: Fix an uninit variable access bug in __ip6_make_skb()
+
+Sricharan Ramabadhran <quic_srichara@quicinc.com>
+    net: qrtr: Do not do DEL_SERVER broadcast after DEL_CLIENT
+
+Xin Long <lucien.xin@gmail.com>
+    sctp: check send stream number after wait_for_sndbuf
+
+Gustav Ekelund <gustaek@axis.com>
+    net: dsa: mv88e6xxx: Reset mv88e6393x force WD event bit
+
+Jakub Kicinski <kuba@kernel.org>
+    net: don't let netpoll invoke NAPI if in xmit context
+
+Eric Dumazet <edumazet@google.com>
+    icmp: guard against too small mtu
+
+Chuck Lever <chuck.lever@oracle.com>
+    NFSD: Avoid calling OPDESC() with ops->opnum == OP_ILLEGAL
+
+Ziyang Xuan <william.xuanziyang@huawei.com>
+    net: qrtr: Fix a refcount bug in qrtr_recvmsg()
+
+Luca Weiss <luca@z3ntu.xyz>
+    net: qrtr: combine nameservice into main module
+
+Felix Fietkau <nbd@nbd.name>
+    wifi: mac80211: fix invalid drv_sta_pre_rcu_remove calls for non-uploaded sta
+
+Nico Boehr <nrb@linux.ibm.com>
+    KVM: s390: pv: fix external interruption loop not always detected
+
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+    pwm: sprd: Explicitly set .polarity in .get_state()
+
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+    pwm: cros-ec: Explicitly set .polarity in .get_state()
+
+Mohammed Gamal <mgamal@redhat.com>
+    Drivers: vmbus: Check for channel allocation before looking up relids
+
+Randy Dunlap <rdunlap@infradead.org>
+    gpio: GPIO_REGMAP: select REGMAP instead of depending on it
+
+Tonghao Zhang <tong@infragraf.org>
+    bpf: hash map, avoid deadlock with suitable hash mask
+
+Christian König <christian.koenig@amd.com>
+    drm/amdgpu: fix amdgpu_job_free_resources v2
+
+Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+    drm/amdgpu: Prevent race between late signaled fences and GPU reset.
+
+Matthew Howell <matthew.howell@sealevel.com>
+    serial: exar: Add support for Sealevel 7xxxC serial cards
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    serial: 8250_exar: derive nr_ports from PCI ID for Acces I/O cards
+
+Daniil Tatianin <d-tatianin@yandex-team.ru>
+    iavf/iavf_main: actually log ->src mask when talking about it
+
+Jacob Keller <jacob.e.keller@intel.com>
+    iavf: return errno code instead of status code
+
+Hans de Goede <hdegoede@redhat.com>
+    platform/x86: int3472/discrete: Ensure the clk/power enable pins are in output mode
+
+Hans de Goede <hdegoede@redhat.com>
+    platform/x86: int3472: Split into 2 drivers
+
+Mustafa Ismail <mustafa.ismail@intel.com>
+    RDMA/irdma: Do not request 2-level PBLEs for CQ alloc
+
+Brian Foster <bfoster@redhat.com>
+    NFSD: pass range end to vfs_fsync_range() instead of count
+
+Chuck Lever <chuck.lever@oracle.com>
+    NFSD: Fix sparse warning
+
+Li Zetao <ocfs2-devel@oss.oracle.com>
+    ocfs2: fix memory leak in ocfs2_mount_volume()
+
+Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
+    ocfs2: rewrite error handling of ocfs2_fill_super
+
+Heming Zhao via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
+    ocfs2: ocfs2_mount_volume does cleanup job before return error
+
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: ccache: fix missing of_node_put() in sifive_ccache_init()
+
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: ccache: fix missing free_irq() in error path in sifive_ccache_init()
+
+Yang Yingliang <yangyingliang@huawei.com>
+    soc: sifive: ccache: fix missing iounmap() in error path in sifive_ccache_init()
+
+Ben Dooks <ben.dooks@sifive.com>
+    soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
+
+Ben Dooks <ben.dooks@sifive.com>
+    soc: sifive: ccache: reduce printing on init
+
+Zong Li <zong.li@sifive.com>
+    soc: sifive: ccache: determine the cache level from dts
+
+Greentime Hu <greentime.hu@sifive.com>
+    soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
 
 
-在 2023/3/15 13:14, Anshuman Khandual 写道:
-> This adds BRBE related register definitions and various other related field
-> macros there in. These will be used subsequently in a BRBE driver which is
-> being added later on.
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   arch/arm64/include/asm/sysreg.h | 103 +++++++++++++++++++++
->   arch/arm64/tools/sysreg         | 159 ++++++++++++++++++++++++++++++++
->   2 files changed, 262 insertions(+)
->
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index 9e3ecba3c4e6..b3bc03ee22bd 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -165,6 +165,109 @@
->   #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
->   #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
->   
-> +#define __SYS_BRBINFO(n)		sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 0))
-> +#define __SYS_BRBSRC(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 1))
-> +#define __SYS_BRBTGT(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 2))
-> +
-> +#define SYS_BRBINF0_EL1			__SYS_BRBINFO(0)
-> +#define SYS_BRBINF1_EL1			__SYS_BRBINFO(1)
-> +#define SYS_BRBINF2_EL1			__SYS_BRBINFO(2)
-> +#define SYS_BRBINF3_EL1			__SYS_BRBINFO(3)
-> +#define SYS_BRBINF4_EL1			__SYS_BRBINFO(4)
-> +#define SYS_BRBINF5_EL1			__SYS_BRBINFO(5)
-> +#define SYS_BRBINF6_EL1			__SYS_BRBINFO(6)
-> +#define SYS_BRBINF7_EL1			__SYS_BRBINFO(7)
-> +#define SYS_BRBINF8_EL1			__SYS_BRBINFO(8)
-> +#define SYS_BRBINF9_EL1			__SYS_BRBINFO(9)
-> +#define SYS_BRBINF10_EL1		__SYS_BRBINFO(10)
-> +#define SYS_BRBINF11_EL1		__SYS_BRBINFO(11)
-> +#define SYS_BRBINF12_EL1		__SYS_BRBINFO(12)
-> +#define SYS_BRBINF13_EL1		__SYS_BRBINFO(13)
-> +#define SYS_BRBINF14_EL1		__SYS_BRBINFO(14)
-> +#define SYS_BRBINF15_EL1		__SYS_BRBINFO(15)
-> +#define SYS_BRBINF16_EL1		__SYS_BRBINFO(16)
-> +#define SYS_BRBINF17_EL1		__SYS_BRBINFO(17)
-> +#define SYS_BRBINF18_EL1		__SYS_BRBINFO(18)
-> +#define SYS_BRBINF19_EL1		__SYS_BRBINFO(19)
-> +#define SYS_BRBINF20_EL1		__SYS_BRBINFO(20)
-> +#define SYS_BRBINF21_EL1		__SYS_BRBINFO(21)
-> +#define SYS_BRBINF22_EL1		__SYS_BRBINFO(22)
-> +#define SYS_BRBINF23_EL1		__SYS_BRBINFO(23)
-> +#define SYS_BRBINF24_EL1		__SYS_BRBINFO(24)
-> +#define SYS_BRBINF25_EL1		__SYS_BRBINFO(25)
-> +#define SYS_BRBINF26_EL1		__SYS_BRBINFO(26)
-> +#define SYS_BRBINF27_EL1		__SYS_BRBINFO(27)
-> +#define SYS_BRBINF28_EL1		__SYS_BRBINFO(28)
-> +#define SYS_BRBINF29_EL1		__SYS_BRBINFO(29)
-> +#define SYS_BRBINF30_EL1		__SYS_BRBINFO(30)
-> +#define SYS_BRBINF31_EL1		__SYS_BRBINFO(31)
-> +
-> +#define SYS_BRBSRC0_EL1			__SYS_BRBSRC(0)
-> +#define SYS_BRBSRC1_EL1			__SYS_BRBSRC(1)
-> +#define SYS_BRBSRC2_EL1			__SYS_BRBSRC(2)
-> +#define SYS_BRBSRC3_EL1			__SYS_BRBSRC(3)
-> +#define SYS_BRBSRC4_EL1			__SYS_BRBSRC(4)
-> +#define SYS_BRBSRC5_EL1			__SYS_BRBSRC(5)
-> +#define SYS_BRBSRC6_EL1			__SYS_BRBSRC(6)
-> +#define SYS_BRBSRC7_EL1			__SYS_BRBSRC(7)
-> +#define SYS_BRBSRC8_EL1			__SYS_BRBSRC(8)
-> +#define SYS_BRBSRC9_EL1			__SYS_BRBSRC(9)
-> +#define SYS_BRBSRC10_EL1		__SYS_BRBSRC(10)
-> +#define SYS_BRBSRC11_EL1		__SYS_BRBSRC(11)
-> +#define SYS_BRBSRC12_EL1		__SYS_BRBSRC(12)
-> +#define SYS_BRBSRC13_EL1		__SYS_BRBSRC(13)
-> +#define SYS_BRBSRC14_EL1		__SYS_BRBSRC(14)
-> +#define SYS_BRBSRC15_EL1		__SYS_BRBSRC(15)
-> +#define SYS_BRBSRC16_EL1		__SYS_BRBSRC(16)
-> +#define SYS_BRBSRC17_EL1		__SYS_BRBSRC(17)
-> +#define SYS_BRBSRC18_EL1		__SYS_BRBSRC(18)
-> +#define SYS_BRBSRC19_EL1		__SYS_BRBSRC(19)
-> +#define SYS_BRBSRC20_EL1		__SYS_BRBSRC(20)
-> +#define SYS_BRBSRC21_EL1		__SYS_BRBSRC(21)
-> +#define SYS_BRBSRC22_EL1		__SYS_BRBSRC(22)
-> +#define SYS_BRBSRC23_EL1		__SYS_BRBSRC(23)
-> +#define SYS_BRBSRC24_EL1		__SYS_BRBSRC(24)
-> +#define SYS_BRBSRC25_EL1		__SYS_BRBSRC(25)
-> +#define SYS_BRBSRC26_EL1		__SYS_BRBSRC(26)
-> +#define SYS_BRBSRC27_EL1		__SYS_BRBSRC(27)
-> +#define SYS_BRBSRC28_EL1		__SYS_BRBSRC(28)
-> +#define SYS_BRBSRC29_EL1		__SYS_BRBSRC(29)
-> +#define SYS_BRBSRC30_EL1		__SYS_BRBSRC(30)
-> +#define SYS_BRBSRC31_EL1		__SYS_BRBSRC(31)
-> +
-> +#define SYS_BRBTGT0_EL1			__SYS_BRBTGT(0)
-> +#define SYS_BRBTGT1_EL1			__SYS_BRBTGT(1)
-> +#define SYS_BRBTGT2_EL1			__SYS_BRBTGT(2)
-> +#define SYS_BRBTGT3_EL1			__SYS_BRBTGT(3)
-> +#define SYS_BRBTGT4_EL1			__SYS_BRBTGT(4)
-> +#define SYS_BRBTGT5_EL1			__SYS_BRBTGT(5)
-> +#define SYS_BRBTGT6_EL1			__SYS_BRBTGT(6)
-> +#define SYS_BRBTGT7_EL1			__SYS_BRBTGT(7)
-> +#define SYS_BRBTGT8_EL1			__SYS_BRBTGT(8)
-> +#define SYS_BRBTGT9_EL1			__SYS_BRBTGT(9)
-> +#define SYS_BRBTGT10_EL1		__SYS_BRBTGT(10)
-> +#define SYS_BRBTGT11_EL1		__SYS_BRBTGT(11)
-> +#define SYS_BRBTGT12_EL1		__SYS_BRBTGT(12)
-> +#define SYS_BRBTGT13_EL1		__SYS_BRBTGT(13)
-> +#define SYS_BRBTGT14_EL1		__SYS_BRBTGT(14)
-> +#define SYS_BRBTGT15_EL1		__SYS_BRBTGT(15)
-> +#define SYS_BRBTGT16_EL1		__SYS_BRBTGT(16)
-> +#define SYS_BRBTGT17_EL1		__SYS_BRBTGT(17)
-> +#define SYS_BRBTGT18_EL1		__SYS_BRBTGT(18)
-> +#define SYS_BRBTGT19_EL1		__SYS_BRBTGT(19)
-> +#define SYS_BRBTGT20_EL1		__SYS_BRBTGT(20)
-> +#define SYS_BRBTGT21_EL1		__SYS_BRBTGT(21)
-> +#define SYS_BRBTGT22_EL1		__SYS_BRBTGT(22)
-> +#define SYS_BRBTGT23_EL1		__SYS_BRBTGT(23)
-> +#define SYS_BRBTGT24_EL1		__SYS_BRBTGT(24)
-> +#define SYS_BRBTGT25_EL1		__SYS_BRBTGT(25)
-> +#define SYS_BRBTGT26_EL1		__SYS_BRBTGT(26)
-> +#define SYS_BRBTGT27_EL1		__SYS_BRBTGT(27)
-> +#define SYS_BRBTGT28_EL1		__SYS_BRBTGT(28)
-> +#define SYS_BRBTGT29_EL1		__SYS_BRBTGT(29)
-> +#define SYS_BRBTGT30_EL1		__SYS_BRBTGT(30)
-> +#define SYS_BRBTGT31_EL1		__SYS_BRBTGT(31)
-> +
->   #define SYS_MIDR_EL1			sys_reg(3, 0, 0, 0, 0)
->   #define SYS_MPIDR_EL1			sys_reg(3, 0, 0, 0, 5)
->   #define SYS_REVIDR_EL1			sys_reg(3, 0, 0, 0, 6)
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index dd5a9c7e310f..d74d9dbe18a7 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -924,6 +924,165 @@ UnsignedEnum	3:0	BT
->   EndEnum
->   EndSysreg
->   
-> +
-> +SysregFields BRBINFx_EL1
-> +Res0	63:47
-> +Field	46	CCU
-> +Field	45:32	CC
-> +Res0	31:18
-> +Field	17	LASTFAILED
-> +Field	16	T
-> +Res0	15:14
-> +Enum	13:8		TYPE
+-------------
 
-Hi Anshuman,
+Diffstat:
 
-I met a problem when built kernel which was based on 6.3-rc1. Here is 
-the error log:
-     GEN     Makefile
-     GEN     arch/arm64/include/generated/asm/sysreg-defs.h
-Error at 936: unexpected Enum (inside SysregFields)
+ .../devicetree/bindings/serial/renesas,scif.yaml   |   4 +-
+ Makefile                                           |  20 +-
+ arch/s390/kvm/intercept.c                          |  32 ++-
+ drivers/edac/Kconfig                               |   2 +-
+ drivers/edac/sifive_edac.c                         |  12 +-
+ drivers/gpio/Kconfig                               |   2 +-
+ drivers/gpio/gpio-davinci.c                        |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |   4 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c          |  18 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c            |  10 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h           |   1 +
+ drivers/gpu/drm/bridge/lontium-lt9611.c            |   1 +
+ drivers/gpu/drm/nouveau/dispnv50/disp.c            |  32 +++
+ drivers/gpu/drm/nouveau/nouveau_dp.c               |   8 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c            |   1 +
+ drivers/hv/connection.c                            |   4 +
+ drivers/hwtracing/coresight/coresight-etm4x-core.c |  24 +-
+ drivers/hwtracing/coresight/coresight-etm4x.h      |  20 +-
+ drivers/iio/adc/ad7791.c                           |   2 +-
+ drivers/iio/adc/ti-ads7950.c                       |   1 +
+ drivers/iio/dac/cio-dac.c                          |   4 +-
+ drivers/iio/imu/Kconfig                            |   1 +
+ drivers/iio/light/cm32181.c                        |  12 +
+ drivers/infiniband/hw/irdma/verbs.c                |  15 +-
+ drivers/net/dsa/mv88e6xxx/chip.c                   |   2 +-
+ drivers/net/dsa/mv88e6xxx/global2.c                |  20 ++
+ drivers/net/dsa/mv88e6xxx/global2.h                |   1 +
+ drivers/net/ethernet/google/gve/gve.h              |   2 +
+ drivers/net/ethernet/google/gve/gve_tx.c           |  12 +-
+ drivers/net/ethernet/intel/iavf/iavf_main.c        |  22 +-
+ drivers/net/ethernet/intel/ice/ice_virtchnl_fdir.c |  23 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   6 +-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c           |   6 +-
+ drivers/platform/x86/intel/int3472/Makefile        |   9 +-
+ ...472_clk_and_regulator.c => clk_and_regulator.c} |   5 +-
+ drivers/platform/x86/intel/int3472/common.c        |  54 +++++
+ .../{intel_skl_int3472_common.h => common.h}       |   3 -
+ .../{intel_skl_int3472_discrete.c => discrete.c}   |  32 ++-
+ .../x86/intel/int3472/intel_skl_int3472_common.c   | 106 --------
+ .../{intel_skl_int3472_tps68470.c => tps68470.c}   |  23 +-
+ drivers/platform/x86/think-lmi.c                   |  20 +-
+ drivers/pwm/pwm-cros-ec.c                          |   1 +
+ drivers/pwm/pwm-sprd.c                             |   1 +
+ drivers/scsi/iscsi_tcp.c                           |   3 +-
+ drivers/scsi/qla2xxx/qla_os.c                      |   1 +
+ drivers/soc/sifive/Kconfig                         |   6 +-
+ drivers/soc/sifive/Makefile                        |   2 +-
+ drivers/soc/sifive/sifive_ccache.c                 | 266 +++++++++++++++++++++
+ drivers/soc/sifive/sifive_l2_cache.c               | 237 ------------------
+ drivers/tty/serial/8250/8250_exar.c                |  51 ++--
+ drivers/tty/serial/fsl_lpuart.c                    |   8 +-
+ drivers/tty/serial/sh-sci.c                        |  10 +-
+ drivers/usb/cdns3/cdnsp-ep0.c                      |   3 +-
+ drivers/usb/dwc3/dwc3-pci.c                        |   4 +
+ drivers/usb/host/xhci-tegra.c                      |   6 +-
+ drivers/usb/host/xhci.c                            |   6 +-
+ drivers/usb/serial/cp210x.c                        |   1 +
+ drivers/usb/serial/option.c                        |  10 +
+ drivers/usb/typec/altmodes/displayport.c           |   6 +-
+ fs/cifs/cifsfs.c                                   |   1 +
+ fs/cifs/connect.c                                  |   2 +
+ fs/cifs/file.c                                     |   4 +-
+ fs/cifs/fs_context.c                               |  22 +-
+ fs/cifs/fs_context.h                               |  11 +
+ fs/cifs/misc.c                                     |   2 +-
+ fs/ksmbd/connection.c                              |   5 +-
+ fs/namespace.c                                     |   2 +-
+ fs/nfsd/nfs4callback.c                             |   4 +-
+ fs/nfsd/nfs4proc.c                                 |   7 +-
+ fs/nfsd/nfs4xdr.c                                  |   4 +-
+ fs/nilfs2/segment.c                                |   3 +-
+ fs/nilfs2/super.c                                  |   2 +
+ fs/nilfs2/the_nilfs.c                              |  12 +-
+ fs/ocfs2/journal.c                                 |   2 +-
+ fs/ocfs2/journal.h                                 |   1 +
+ fs/ocfs2/super.c                                   | 105 ++++----
+ include/linux/ftrace.h                             |   2 +-
+ include/soc/sifive/sifive_ccache.h                 |  16 ++
+ include/soc/sifive/sifive_l2_cache.h               |  16 --
+ kernel/bpf/hashtab.c                               |   4 +-
+ kernel/events/core.c                               |   2 +-
+ kernel/trace/ftrace.c                              |  15 +-
+ kernel/trace/ring_buffer.c                         |  13 +-
+ kernel/trace/trace.c                               |   1 +
+ mm/memory.c                                        |  16 +-
+ mm/swapfile.c                                      |   3 +-
+ mm/vmalloc.c                                       |   8 +-
+ net/can/isotp.c                                    |  17 +-
+ net/can/j1939/transport.c                          |   5 +-
+ net/core/netpoll.c                                 |  19 +-
+ net/ethtool/linkmodes.c                            |   7 +-
+ net/ipv4/icmp.c                                    |   5 +
+ net/ipv6/ip6_output.c                              |   7 +-
+ net/mac80211/sta_info.c                            |   3 +-
+ net/qrtr/Makefile                                  |   3 +-
+ net/qrtr/{qrtr.c => af_qrtr.c}                     |   2 +
+ net/qrtr/ns.c                                      |  15 +-
+ net/sctp/socket.c                                  |   4 +
+ net/sunrpc/svcauth_unix.c                          |  17 +-
+ sound/pci/hda/patch_realtek.c                      |   1 +
+ sound/soc/codecs/hdac_hdmi.c                       |  17 +-
+ 101 files changed, 968 insertions(+), 639 deletions(-)
 
-I think this is because the 'SysregFields' doesn't support the 'Enum' 
-type region.
-And this problem can be fixed when I roll back this part to v7.
-
-Do I need to apply some patches or do some other configures?
-
-Thanks,
-Yang
-
-> +	0b000000	UNCOND_DIR
-> +	0b000001	INDIR
-> +	0b000010	DIR_LINK
-> +	0b000011	INDIR_LINK
-> +	0b000101	RET_SUB
-> +	0b000111	RET_EXCPT
-> +	0b001000	COND_DIR
-> +	0b100001	DEBUG_HALT
-> +	0b100010	CALL
-> +	0b100011	TRAP
-> +	0b100100	SERROR
-> +	0b100110	INST_DEBUG
-> +	0b100111	DATA_DEBUG
-> +	0b101010	ALGN_FAULT
-> +	0b101011	INST_FAULT
-> +	0b101100	DATA_FAULT
-> +	0b101110	IRQ
-> +	0b101111	FIQ
-> +	0b111001	DEBUG_EXIT
-> +EndEnum
-> +Enum	7:6	EL
-> +	0b00	EL0
-> +	0b01	EL1
-> +	0b10	EL2
-> +	0b11	EL3
-> +EndEnum
-> +Field	5	MPRED
-> +Res0	4:2
-> +Enum	1:0	VALID
-> +	0b00	NONE
-> +	0b01	TARGET
-> +	0b10	SOURCE
-> +	0b11	FULL
-> +EndEnum
-> +EndSysregFields
-> +
-> +Sysreg	BRBCR_EL1	2	1	9	0	0
-> +Res0	63:24
-> +Field	23 	EXCEPTION
-> +Field	22 	ERTN
-> +Res0	21:9
-> +Field	8 	FZP
-> +Res0	7
-> +Enum	6:5	TS
-> +	0b01	VIRTUAL
-> +	0b10	GST_PHYSICAL
-> +	0b11	PHYSICAL
-> +EndEnum
-> +Field	4	MPRED
-> +Field	3	CC
-> +Res0	2
-> +Field	1	E1BRE
-> +Field	0	E0BRE
-> +EndSysreg
-> +
-> +Sysreg	BRBFCR_EL1	2	1	9	0	1
-> +Res0	63:30
-> +Enum	29:28	BANK
-> +	0b0	FIRST
-> +	0b1	SECOND
-> +EndEnum
-> +Res0	27:23
-> +Field	22	CONDDIR
-> +Field	21	DIRCALL
-> +Field	20	INDCALL
-> +Field	19	RTN
-> +Field	18	INDIRECT
-> +Field	17	DIRECT
-> +Field	16	EnI
-> +Res0	15:8
-> +Field	7	PAUSED
-> +Field	6	LASTFAILED
-> +Res0	5:0
-> +EndSysreg
-> +
-> +Sysreg	BRBTS_EL1	2	1	9	0	2
-> +Field	63:0	TS
-> +EndSysreg
-> +
-> +Sysreg	BRBINFINJ_EL1	2	1	9	1	0
-> +Res0	63:47
-> +Field	46	CCU
-> +Field	45:32	CC
-> +Res0	31:18
-> +Field	17	LASTFAILED
-> +Field	16	T
-> +Res0	15:14
-> +Enum	13:8		TYPE
-> +	0b000000	UNCOND_DIR
-> +	0b000001	INDIR
-> +	0b000010	DIR_LINK
-> +	0b000011	INDIR_LINK
-> +	0b000100	RET_SUB
-> +	0b000100	RET_SUB
-> +	0b000111	RET_EXCPT
-> +	0b001000	COND_DIR
-> +	0b100001	DEBUG_HALT
-> +	0b100010	CALL
-> +	0b100011	TRAP
-> +	0b100100	SERROR
-> +	0b100110	INST_DEBUG
-> +	0b100111	DATA_DEBUG
-> +	0b101010	ALGN_FAULT
-> +	0b101011	INST_FAULT
-> +	0b101100	DATA_FAULT
-> +	0b101110	IRQ
-> +	0b101111	FIQ
-> +	0b111001	DEBUG_EXIT
-> +EndEnum
-> +Enum	7:6	EL
-> +	0b00	EL0
-> +	0b01	EL1
-> +	0b10	EL2
-> +	0b11	EL3
-> +EndEnum
-> +Field	5	MPRED
-> +Res0	4:2
-> +Enum	1:0	VALID
-> +	0b00	NONE
-> +	0b01	TARGET
-> +	0b10	SOURCE
-> +	0b00	FULL
-> +EndEnum
-> +EndSysreg
-> +
-> +Sysreg	BRBSRCINJ_EL1	2	1	9	1	1
-> +Field	63:0 ADDRESS
-> +EndSysreg
-> +
-> +Sysreg	BRBTGTINJ_EL1	2	1	9	1	2
-> +Field	63:0 ADDRESS
-> +EndSysreg
-> +
-> +Sysreg	BRBIDR0_EL1	2	1	9	2	0
-> +Res0	63:16
-> +Enum	15:12	CC
-> +	0b101	20_BIT
-> +EndEnum
-> +Enum	11:8	FORMAT
-> +	0b0	0
-> +EndEnum
-> +Enum	7:0		NUMREC
-> +	0b1000		8
-> +	0b10000		16
-> +	0b100000	32
-> +	0b1000000	64
-> +EndEnum
-> +EndSysreg
-> +
->   Sysreg	ID_AA64ZFR0_EL1	3	0	0	4	4
->   Res0	63:60
->   UnsignedEnum	59:56	F64MM
 
