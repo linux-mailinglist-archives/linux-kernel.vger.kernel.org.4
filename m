@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3B76DE878
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE166DE87B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 02:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjDLAW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 20:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S229549AbjDLAYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 20:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjDLAWz (ORCPT
+        with ESMTP id S229503AbjDLAYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 20:22:55 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B12D50
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:22:54 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id n10-20020a056e02100a00b00325c9240af7so6997772ilj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 17:22:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681258973; x=1683850973;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vDeAciAGUu2Os6CWnaMgil2ftdLPgpp4On5AN0OJS54=;
-        b=QJAXIakQV7RBEMvL35sXiujoVBH9k5jzfImKfnVXZrzikfZzBz5ZIuPSinmILeJYxp
-         5MoXjBhbzd3gKoEm8qJJJcqlVK8+rMKJz7JtBymv5NGthxEYxpihL4U9dT7hEcedaxhQ
-         XdkgaN1Yhdm41YaGtezhaqYWSiPX8DuRnlUVUlS9tUgO7oZEmZwbT/DB0JE1+HgJFD43
-         SUvaI+QAoXe2gsl3e5zw+aNKZoqI27oFI66n1q5M8dZujwaaKoecp+00ONeKR+pRgULq
-         urvPB4OihRXdY5MjaaTnabUGw3DuREKQ0KtvBnJYxnUwKTmNfyEKsCm2WH261n7np+v9
-         soog==
-X-Gm-Message-State: AAQBX9cwqs82HOU8qwiUYbI4gcA4C9qqaHLg5C3ve1l/YMAHRS7IPTML
-        R8+3WYjzD33e/ekZl7So95NUIrIM7dtJJIALXXO1K26HY4U2
-X-Google-Smtp-Source: AKy350YgxTXf6utG/kdS74PL6xy/zu7P/KDgHxM+D3LuJXG9FwV7icfcPsCi6s29J2jEglm/WwQI4j5lFw4/y/pQloQzBLonRuOi
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1090:b0:328:49a2:216 with SMTP id
- r16-20020a056e02109000b0032849a20216mr539989ilj.4.1681258973361; Tue, 11 Apr
- 2023 17:22:53 -0700 (PDT)
-Date:   Tue, 11 Apr 2023 17:22:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e1fc7905f9189b86@google.com>
-Subject: [syzbot] [net?] WARNING in xfrm_policy_fini (2)
-From:   syzbot <syzbot+b3346cca0c23c839e787@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 11 Apr 2023 20:24:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA62BC;
+        Tue, 11 Apr 2023 17:24:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1C9A623FB;
+        Wed, 12 Apr 2023 00:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0641C433EF;
+        Wed, 12 Apr 2023 00:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681259049;
+        bh=nJI8/B7eg9JVcOqRr7nH0nG3Zqh+Z58VIDLD98553HI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uFf8tLrIjK/gPzPxin8KfK7izbWHwWmbLJcPv+9w8re77Qp3yiVXrtD0cZasJQOEc
+         AwjDUqiU+QjVKO9nI/uJCsD6XB+Bw8yKLPPWQEtfKYJKI+GQu805KFyY+0eMX8uFzB
+         jXTGpmajcgpEh9YND8KhTdBnTy4OZKks3Wft3B5Q=
+Date:   Tue, 11 Apr 2023 17:24:08 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Ruben Ayrapetyan <ruben.ayrapetyan@arm.com>
+Subject: Re: [PATCH RESEND] uapi/linux/const.h: Prefer ISO-friendly
+ __typeof__
+Message-Id: <20230411172408.46a5b13a6cab27dda0c822b2@linux-foundation.org>
+In-Reply-To: <20230411213946.GA1803920@pevik>
+References: <20230411092747.3759032-1-kevin.brodsky@arm.com>
+        <20230411210537.GA1800481@pevik>
+        <20230411213946.GA1803920@pevik>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 11 Apr 2023 23:39:46 +0200 Petr Vorel <pvorel@suse.cz> wrote:
 
-syzbot found the following issue on:
+> > Hi Kevin,
+> 
+> > > typeof is (still) a GNU extension, which means that it cannot be
+> > > used when building ISO C (e.g. -std=c99). It should therefore be
+> > > avoided in uapi headers in favour of the ISO-friendly __typeof__.
+> 
+> > IMHO UAPI are built with -std=c90 -Wall -Werror=implicit-function-declaration
+> > (see usr/include/Makefile).
+> > But one or the other, you're right both require __typeof__.
+> 
+> > "If you are writing a header file that must work when included in ISO C
+> > programs, write __typeof__ instead of typeof."
+> > https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Typeof.html
+> 
+> > Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> > Tested-by: Petr Vorel <pvorel@suse.cz>
+> 
+> IMHO problem was introduced when -std=c90 was added (back then the code was in
+> include/uapi/linux/kernel.h).
 
-HEAD commit:    e28531143b25 net: ethernet: mtk_eth_soc: mtk_ppe: prefer n..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=163c0ac5c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3bc1f699d6e9cb0
-dashboard link: https://syzkaller.appspot.com/bug?extid=b3346cca0c23c839e787
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Well...  what actually _is_ the problem?  Presumably build issues under
+some circumstances.  Could we please see an instance of those issues
+and a description of the circumstances under which they occur?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> Fixes: d6fc9fcbaa65 ("kbuild: compile-test exported headers to ensure they are self-contained")
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6ff439efecb6/disk-e2853114.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/280d508d228c/vmlinux-e2853114.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/af98eb5ab0e4/bzImage-e2853114.xz
+Might need a cc:stable, depending on the answers to the above.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b3346cca0c23c839e787@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 41 at net/xfrm/xfrm_policy.c:4176 xfrm_policy_fini+0x2f2/0x3c0 net/xfrm/xfrm_policy.c:4176
-Modules linked in:
-CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.3.0-rc5-syzkaller-01242-ge28531143b25 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Workqueue: netns cleanup_net
-RIP: 0010:xfrm_policy_fini+0x2f2/0x3c0 net/xfrm/xfrm_policy.c:4176
-Code: cd f8 0f 0b 8b 74 24 04 e9 56 fe ff ff e8 a6 a1 cd f8 0f 0b e9 e1 fd ff ff e8 9a a1 cd f8 0f 0b e9 02 ff ff ff e8 8e a1 cd f8 <0f> 0b e9 76 fd ff ff e8 d2 ea 1e f9 e9 8d fe ff ff 48 89 ef e8 e5
-RSP: 0018:ffffc90000b27bd8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88807945b980 RCX: 0000000000000000
-RDX: ffff8880177b57c0 RSI: ffffffff88b53632 RDI: 0000000000000000
-RBP: ffff88807945cd00 R08: 0000000000000001 R09: ffffffff914e0b8f
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff8e28cb40
-R13: ffffc90000b27ca0 R14: dffffc0000000000 R15: fffffbfff1c5196c
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f60f8cb7378 CR3: 000000000c571000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- xfrm_net_exit+0x1d/0x60 net/xfrm/xfrm_policy.c:4240
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
- cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
