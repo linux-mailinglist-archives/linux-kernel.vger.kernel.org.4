@@ -2,131 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636386DEABB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED056DEAC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 06:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjDLEu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 00:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S229633AbjDLEwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 00:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjDLEuz (ORCPT
+        with ESMTP id S229485AbjDLEwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:50:55 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DA5C3C31;
-        Tue, 11 Apr 2023 21:50:54 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.246.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F231D21779AE;
-        Tue, 11 Apr 2023 21:50:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F231D21779AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681275053;
-        bh=irme9tjLIGSNXVQJQv9HwipL1iU0htwwfKVdz27MR0w=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=gut4QOYuQCPjH9mjktK+7AnzzdGgS52GrQLgmSqiZuHvNJrV77Yn2DgYxegCHq+R6
-         z5Hr775PMCMj+UsmjRA/RAeDpjbZoxJ2Loba4XvuOZvT5D6Y1OJd49YjsQi4qlgsIr
-         oORO/e9KHH1WKwxBGT2/OYHONBk6Hx25+e+YB2QM=
-Message-ID: <8b7b779b-6552-c637-9a84-4dbc95fd0c07@linux.microsoft.com>
-Date:   Tue, 11 Apr 2023 23:50:51 -0500
+        Wed, 12 Apr 2023 00:52:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17DA3C31;
+        Tue, 11 Apr 2023 21:52:01 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxMMzwODZkjvQaAA--.41767S3;
+        Wed, 12 Apr 2023 12:52:00 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxjb7qODZk+RogAA--.60030S2;
+        Wed, 12 Apr 2023 12:51:58 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v7 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Wed, 12 Apr 2023 12:51:50 +0800
+Message-Id: <20230412045152.4694-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
- pointer validation
-Content-Language: en-US
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
- <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
- <ZDVft9kysWMfTiZW@FVFF77S0Q05N> <20230412041752.i4raswvrnacnjjgy@treble>
- <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
-In-Reply-To: <c7e1df79-1506-4502-035b-24ddf6848311@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-22.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxjb7qODZk+RogAA--.60030S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoW5urWUpF
+        W5Cas8Kr4DtF4xArs3Jay7uFyrZ3yrXrZrXay3twsruryDZ34UZr1vqF15ZrZrAFsIvFyx
+        XFyvgrs5Ga4UZwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1VWlDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
 
-On 4/11/23 23:48, Madhavan T. Venkataraman wrote:
-> 
-> 
-> On 4/11/23 23:17, Josh Poimboeuf wrote:
->> On Tue, Apr 11, 2023 at 02:25:11PM +0100, Mark Rutland wrote:
->>>> By your own argument, we cannot rely on the compiler as compiler implementations,
->>>> optimization strategies, etc can change in ways that are incompatible with any
->>>> livepatch implementation.
->>>
->>> That's not quite my argument.
->>>
->>> My argument is that if we assume some set of properties that compiler folk
->>> never agreed to (and were never made aware of), then compiler folk are well
->>> within their rights to change the compiler such that it doesn't provide those
->>> properties, and it's very likely that such expectation will be broken. We've
->>> seen that happen before (e.g. with jump tables).
->>>
->>> Consequently I think we should be working with compiler folk to agree upon some
->>> solution, where compiler folk will actually try to maintain the properties we
->>> depend upon (and e.g. they could have tests for). That sort of co-design has
->>> worked well so far (e.g. with things like kCFI).
->>>
->>> Ideally we'd have people in the same room to have a discussion (e.g. at LPC).
->>
->> That was the goal of my talk at LPC last year:
->>
->>   https://lpc.events/event/16/contributions/1392/
->>
->> We discussed having the compiler annotate the tricky bits of control
->> flow, mainly jump tables and noreturns.  It's still on my TODO list to
->> prototype that.
->>
->> Another alternative which has been suggested in the past by Indu and
->> others is for objtool to use DWARF/sframe as an input to help guide it
->> through the tricky bits.
->>
-> 
-> I read through the SFrame spec file briefly. It looks like I can easily adapt my
-> version 1 of the livepatch patchset which was based on DWARF to SFrame. If the compiler
-> folks agree to properly support and maintain SFrame, then I could send the next version
-> of the patchset based on SFrame.
-> 
-> But I kinda need a clear path forward before I implement anything. I request the arm64
-> folks to comment on the above approach. Would it be useful to initiate an email discussion
-> with the compiler folks on what they plan to do to support SFrame? Or, should this all
-> happen face to face in some forum like LPC?
-> 
-> Madhavan
-> 
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-Just to be clear. This is not to replace Objtool as it has other uses as well, not just
-reliable stack trace. I am trying to solve the reliable stack trace issue alone with
-SFrame.
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  41 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  31 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 292 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  72 +++++
+ drivers/spi/spi-loongson-plat.c               |  47 +++
+ drivers/spi/spi-loongson.h                    |  41 +++
+ 8 files changed, 537 insertions(+)
 
-Madhavan
+-- 
+2.20.1
 
->> That seems more fragile -- as Madhavan mentioned, GCC-generated DWARF
->> has some reliability issues -- and also defeats some of the benefits of
->> reverse-engineering in the first place (we've found many compiler bugs
->> and other surprising kernel-compiler interactions over the years).
->>
->> Objtool's understanding of the control flow graph has been really
->> valuable for reasons beyond live patching (e.g., noinstr and uaccess
->> validation), it's definitely worth finding a way to make that more
->> sustainable.
->>
