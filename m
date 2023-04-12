@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDCC6DF966
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EDE6DF968
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjDLPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
+        id S230392AbjDLPMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbjDLPMM (ORCPT
+        with ESMTP id S230345AbjDLPM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:12:12 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4765AA
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:12:08 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id my14-20020a17090b4c8e00b0024708e8e2ddso995517pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681312328; x=1683904328;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G+2dE/XzSoYgXLKmNcRjV06GDc4+0/b0Vl1y/hE9n7M=;
-        b=aeDFGpvbhptI26N7c0q6p8N0elzrhrH4jXsXeTNEjUyEmrYyXyguS0uqTeAQjP4Xiu
-         qdW1W55Dxz+ZLoGpJW6kOy66QNh2ekD+py7oe7R6tIR1j5Y/Cvcgeo8T0l2JKRmHvNLJ
-         j1WZnXp081ZVJbRr2ZvT1E4bX7MyYb2M8Ki3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312328; x=1683904328;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+2dE/XzSoYgXLKmNcRjV06GDc4+0/b0Vl1y/hE9n7M=;
-        b=n5aCXVVTQzSvWjOgHhhgmDHuutsPJ9Vh7kLDIdGiOtIltVeKqilhkNvqCK761cSYGA
-         HT8b61XOadgDKi9nvNPG9gQcXbq9ljVGDN4OOK7iOkrQf/vM6G9yjoJoiSL01nlivEEw
-         NBCOlkE47UU/RZrzv0sj6feyunG18pW3jWSFrfWLpKHKySmqDOq3nClFbeXh61I3O98s
-         +el0CnfJDI2fiS9nnkglk+zIVudAPdJVweCjsWXZRFhTczqwCo2U63VT0RxdVQjekWDp
-         v06k5cf1e8zlUkAY+OgRml08i+HKChd69nBEnwhQmuOAij/aatdZE1CowTjlAvcYvv23
-         pksA==
-X-Gm-Message-State: AAQBX9dLgw2QaYgKY82p8pkL5YTo0n0ucANuRZBGvRvrl0SQyaFMWRxm
-        obQMZjI2U45p0HnNdGaUMQbD3PR9GCYlQXAlM3w=
-X-Google-Smtp-Source: AKy350YBEJPE8oxKW+WKrzBNuJQ82N/lSby57TJKNApeGFAafpixV3EqtqR6r0kXgUhHbCjyxU4xFA==
-X-Received: by 2002:a05:6a20:b047:b0:db:6026:4393 with SMTP id dx7-20020a056a20b04700b000db60264393mr18616114pzb.59.1681312327946;
-        Wed, 12 Apr 2023 08:12:07 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u20-20020aa78494000000b005a8bf239f5csm5518679pfn.193.2023.04.12.08.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:12:07 -0700 (PDT)
-Message-ID: <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
-X-Google-Original-Message-ID: <202304120811.@keescook>
-Date:   Wed, 12 Apr 2023 08:12:06 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-hardening@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
-References: <20230407215406.768464-1-ndesaulniers@google.com>
- <20230407215824.GA1524475@dev-arch.thelio-3990X>
- <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
+        Wed, 12 Apr 2023 11:12:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29A59F3;
+        Wed, 12 Apr 2023 08:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681312345; x=1712848345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ritMmFWx/EQv07wbQLyVpyzAhqQ3TR59ZTTAlw28V1U=;
+  b=HpX3rBGFBZegClLCDiVFZ0SxwbHIqBtl54RkivxGdnG7yWna0jVF4lCk
+   Nl3jY+7tsxUPatN6erCIvJt0UGw0lHtgeC9vCk7zEsZdiUBUPCA8bqg6/
+   bB9/h8qRFMhGdCFj1agufCimDjPsmNaFtKa4GuJbkdRynWrKm4d5nzqEa
+   puDQXQtprt2AklENjigoYgEv1gwQIED/6Djv2wWmyN8lVQMIF01BrAI+i
+   gXkqYhkX6WP+I/gXDs89g8YUkq5aXYwV52KKdlY0SVx0D35XBymKczF3B
+   xrXEBHxvjVpiBuBtciezH7LLQ7e1Bgy0ZTNW5j8B8SDL4C1ONgoM7xGBz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="341419660"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="341419660"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 08:12:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="682501553"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="682501553"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 08:12:22 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id D0A5611F78C;
+        Wed, 12 Apr 2023 18:12:19 +0300 (EEST)
+Date:   Wed, 12 Apr 2023 18:12:19 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Michael Riesch <michael.riesch@wolfvision.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Riesch via B4 Relay 
+        <devnull+michael.riesch.wolfvision.net@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org
+Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
+ group status controls for zoom and focus
+Message-ID: <ZDbKU5kwcb7RGeCo@kekkonen.localdomain>
+References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+ <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+ <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
+ <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
+ <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
+ <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
+ <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 05:12:24PM -0700, Fangrui Song wrote:
-> On Fri, Apr 7, 2023 at 2:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
-> > > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
-> > > Clang 3.2.  The minimum supported version of these according to
-> > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
-> > > this cc-option check.
-> > >
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > As an aside, we should really consider having some standard format of
-> > comment around cc-option checks so that we can easily remove them when
-> > they become stale...
-> >
-> > > ---
-> > > Masahiro, Kees: get_maintainer.pl leaves much to be desired for this
-> > > file. Can one of you please pick this up?
-> > >
-> > >  lib/Kconfig.ubsan | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> > > index fd15230a703b..0e7ad0782399 100644
-> > > --- a/lib/Kconfig.ubsan
-> > > +++ b/lib/Kconfig.ubsan
-> > > @@ -15,7 +15,6 @@ if UBSAN
-> > >  config UBSAN_TRAP
-> > >       bool "On Sanitizer warnings, abort the running kernel code"
-> > >       depends on !COMPILE_TEST
-> > > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
-> > >       help
-> > >         Building kernels with Sanitizer features enabled tends to grow
-> > >         the kernel size by around 5%, due to adding all the debugging
-> > > --
-> > > 2.40.0.577.gac1e443424-goog
-> > >
-> >
-> 
-> -fsanitize-undefined-trap-on-error is a legacy option from 2013 when
-> -fcatch-undefined-behavior instead of -fsanitize=undefined enabled
-> UBSan.
-> On the Clang side, http://reviews.llvm.org/D10464 added
-> -fsanitize-trap= in June 2015.
-> It's best to use -fsanitize-trap=undefined and avoid uses of
-> -fsanitize-undefined-trap-on-error.
+Hi Dave, Michael,
 
-But that's Clang-only. -fsanitize-undefined-trap-on-error works for both
-GCC and Clang.
+On Wed, Apr 12, 2023 at 02:55:56PM +0100, Dave Stevenson wrote:
+> > > If the ranges aren't updated, where should that out-of-range lens
+> > > movement leave the lens?
+> >
+> > This is up to the hardware controller, but I would guess it typically
+> > stops one step before disaster. Wherever that may be, the error
+> > condition and the current position can be read out via this new STATUS
+> > control.
+> >
+> > Does this sound good so far?
+> 
+> Sounds reasonable, but I'm not the gatekeeper (that would be Sakari or
+> Laurent), and I'm just expressing my views based on the lenses I've
+> encountered.
+> All of my lenses have a single drive for focus, a single drive for
+> zoom, and where there are multiple elements they are all connected
+> mechanically. Your setup sounds far more complex and is likely to need
+> a more extensive driver, but it'd be nice to not unnecessarily
+> overcomplicate the interface.
+
+Could we also have a driver that uses these new controls?
+
+The controls themselves appear reasonable to me as well. I guess there are
+changes to be made based on the discussion?
 
 -- 
-Kees Cook
+Regards,
+
+Sakari Ailus
