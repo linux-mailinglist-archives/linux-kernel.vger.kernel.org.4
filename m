@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642BC6DF97A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B90D6DF97F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjDLPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S230367AbjDLPOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDLPOJ (ORCPT
+        with ESMTP id S229977AbjDLPOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:14:09 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C5361AB;
-        Wed, 12 Apr 2023 08:14:07 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id ec6so1216399oib.8;
-        Wed, 12 Apr 2023 08:14:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681312446; x=1683904446;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rLO2+mslMgJt7oEF3zMGiAxK8M13LsE3IAK5PmmHYrE=;
-        b=REdxege8GbEImPRAQkS0OO5WEFvoRRMAky64e292PwPk1rOkhZrx1h7GRC7ACLZfeV
-         JexmRqJTXAy1jugUzqRm1r8p8yrKRbKic6v8m95X0i2yk4o6bUV/OiMEH7dpf51WAFUU
-         gib6EQIRjIcDS/bBq0nX+wM8U1RzNwTM5ZLDEQwVgs3WcHC/Eo4bdNEmySGc0dBPZDIk
-         3VQP1IYyGiELonJTv+Hn8nwHR2abIVPPrj5pzG6lrzfwBTRtz32LqQWsSB+S3NRY7NSE
-         lPKNsAVr/0zFthKXhfDbHWls+VOuCT07PA0tQn8s7CgmF4errynLx8Twf8NDNKv/lDCD
-         WLfA==
-X-Gm-Message-State: AAQBX9fzxcqPx6I+5mmvtdVI82PhBiTAhewC6k1q/fnngy24heuWSPS0
-        LpZzPANnly3N3gNiVf8BVg==
-X-Google-Smtp-Source: AKy350Z/1Wya1b06p9v1jxp3a5/8Dsk/0yLxaZGXg6Xk+G947KmvJd2M/mU6HaijGWztsLvxUWZp1w==
-X-Received: by 2002:aca:d743:0:b0:386:9720:77da with SMTP id o64-20020acad743000000b00386972077damr6060729oig.26.1681312445919;
-        Wed, 12 Apr 2023 08:14:05 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id en12-20020a056808394c00b003898ebb8be0sm6699276oib.48.2023.04.12.08.14.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 08:14:05 -0700 (PDT)
-Received: (nullmailer pid 2446977 invoked by uid 1000);
-        Wed, 12 Apr 2023 15:14:04 -0000
-Date:   Wed, 12 Apr 2023 10:14:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gabriel.fernandez@st.com, gabriel.fernandez@foss.st.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: rcc: stm32: Fix STM32MP13 include file
-Message-ID: <20230412151404.GA2372294-robh@kernel.org>
-References: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
+        Wed, 12 Apr 2023 11:14:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBBC7EEA
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 08:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l0xucI8HSm2rAbmozA4KK4Oskg2uJhGgLoTrZxLS5go=; b=XOLP+lIHcnCQmM6hCFjaSb6rTI
+        7NYFAE1AyPDNlE0Ee/qPRKbHYFRwF7C41+PEjeAFtPFp4myX6Zb3gMwUZbRuNbZk3a0s8K6TW6olD
+        NSS1hZUc0QIUAovWgGSsRWyOoiMEXnJ5tV5chsYrf454dY2hi6RW8smhKqGbj7b9yhRNdhEjov/7p
+        v3PROueny297lJWTN6MXdDS6dfplewG3ow841KA29sRavbVGHShYjqymehKJrud+DsmgBzaU5SlSD
+        5pf+fmw9mL6OWowX3P38uoT5lIkq8FXVlhFz2p+NmNVR735zdPf/0NTm8HmFGHkLiYLCbOkeqKhsh
+        6+1KGDgQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmcAz-006yX9-3p; Wed, 12 Apr 2023 15:14:25 +0000
+Date:   Wed, 12 Apr 2023 16:14:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "xiaosong.ma" <Xiaosong.Ma@unisoc.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        yuming.han@unisoc.com, ke.wang@unisoc.com
+Subject: Re: [PATCH V2] fs: perform the check when page without mapping but
+ page->mapping contains junk or random bitscribble
+Message-ID: <ZDbK0Wr2uerk/7C5@casper.infradead.org>
+References: <1681091102-31907-1-git-send-email-Xiaosong.Ma@unisoc.com>
+ <ZDVPkljntjCr9/nX@casper.infradead.org>
+ <20230411171536.2e53b4b7507304d5618aa24e@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230411171536.2e53b4b7507304d5618aa24e@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 08:15:33PM +0200, Patrick Delaunay wrote:
-> Minor cosmetic change, aligned with files in U-Boot:
-> - change obsolete SPDX id : GPL-2.0+
-> - use correct address gabriel.fernandez@foss.st.com
-> - remove extra space
-
-Make the subject reflect the purpose: 'Sync with u-boot copy'
-
+On Tue, Apr 11, 2023 at 05:15:36PM -0700, Andrew Morton wrote:
+> On Tue, 11 Apr 2023 13:16:18 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> ---
+> > On Mon, Apr 10, 2023 at 09:45:02AM +0800, xiaosong.ma wrote:
+> > > perform the check in dump_mapping() to print warning info and avoid crash with invalid non-NULL page->mapping.
+> > > For example, a panic with following backtraces show dump_page will show wrong info and panic when the bad page
+> > > is non-NULL mapping and page->mapping is 0x80000000000.
+> > > 
+> > >     crash_arm64> bt
+> > >     PID: 232    TASK: ffffff80e8c2c340  CPU: 0   COMMAND: "Binder:232_2"
+> > >      #0 [ffffffc013e5b080] sysdump_panic_event$b2bce43a479f4f7762201bfee02d7889 at ffffffc0108d7c2c
+> > >      #1 [ffffffc013e5b0c0] atomic_notifier_call_chain at ffffffc010300228
+> > >      #2 [ffffffc013e5b2c0] panic at ffffffc0102c926c
+> > >      #3 [ffffffc013e5b370] die at ffffffc010267670
+> > >      #4 [ffffffc013e5b3a0] die_kernel_fault at ffffffc0102808a4
+> > >      #5 [ffffffc013e5b3d0] __do_kernel_fault at ffffffc010280820
+> > >      #6 [ffffffc013e5b410] do_bad_area at ffffffc01028059c
+> > >      #7 [ffffffc013e5b440] do_translation_fault$4df5decbea5d08a63349aa36f07426b2 at ffffffc0111149c8
+> > >      #8 [ffffffc013e5b470] do_mem_abort at ffffffc0100a4488
+> > >      #9 [ffffffc013e5b5e0] el1_ia at ffffffc0100a6c00
+> > >      #10 [ffffffc013e5b5f0] __dump_page at ffffffc0104beecc
+> > 
+> > This doesn't show a crash in dump_mapping(), it shows a crash in
+> > __dump_page().
 > 
->  include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
->  include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> um, yes.
 > 
-> diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
-> index 02befd25edce..da4cb7567430 100644
-> --- a/include/dt-bindings/clock/stm32mp13-clks.h
-> +++ b/include/dt-bindings/clock/stm32mp13-clks.h
-> @@ -1,7 +1,7 @@
-> -/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
-> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
->  /*
->   * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
-> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
->   */
->  
->  #ifndef _DT_BINDINGS_STM32MP13_CLKS_H_
-> @@ -64,7 +64,7 @@
->  #define CK_MCO1		38
->  #define CK_MCO2		39
->  
-> -/*  IP clocks */
-> +/* IP clocks */
->  #define SYSCFG		40
->  #define VREF		41
->  #define DTS		42
-> diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
-> index 934864e90da6..1b83a01de8f0 100644
-> --- a/include/dt-bindings/reset/stm32mp13-resets.h
-> +++ b/include/dt-bindings/reset/stm32mp13-resets.h
-> @@ -1,7 +1,7 @@
-> -/* SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
-> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
+> But if page->mapping is corrupted, where does __dump_page() dereference it?
 
-Really, the Linux copy came first, so you should use its license. Your 
-company's lawyers are good with GPLv3 and then v4?
+I don't see anywhere that it does, so I'm suspicious that we have the
+correct diagnosis here.
 
->  /*
->   * Copyright (C) STMicroelectronics 2018 - All Rights Reserved
-> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
-> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
->   */
->  
->  #ifndef _DT_BINDINGS_STM32MP13_RESET_H_
-> -- 
-> 2.25.1
+> The initial patch
+> (https://lkml.kernel.org/r/1680587425-4683-1-git-send-email-Xiaosong.Ma@unisoc.com)
+> prevented __dump_page() from calling dump_mapping() if page->mapping is
+> bad, and that presumably fixed things.
+
+Right, but doesn't the _existing_ get_kernel_nofault(host, &mapping->host)
+already prevent us from blindly dereferencing a bad mapping pointer?
+
+> > > -	if (get_kernel_nofault(host, &mapping->host) ||
+> > > +	if (get_kernel_nofault(mapping, &mapping) ||
+> > > +	    get_kernel_nofault(host, &mapping->host) ||
+> > 
+> > This patch makes no sense.  Essentially, you're saying
+> > 	mapping = &mapping
+> > which is obviously wrong.
 > 
+> We're checking for mapping==junk, so this could be 
+> 
+> 	get_kernel_nofault(tmp, mapping)
+
+Why will that be better than get_kernel_nofault(host, &mapping->host)?
+I see no tangible difference between get_kernel_nofault(0x8000'0000) and
+get_kernel_nofault(0x8000'0084) (or whatever the offset is).
+
+> or go direct to copy_from_kernel_nofault().  We used to have a
+> probe_kernel_address() for this...
+> 
+> So confusion reigns.  I think making dump_mapping() tolerant of a wild
+> mapping pointer makes sense, but I don't think we actually know why the
+> reporter's kernel crashed.
+
+In my mind dump_mapping() is already tolerant of a wild page->mapping
+pointer.  I think the problem is something entirely different.
