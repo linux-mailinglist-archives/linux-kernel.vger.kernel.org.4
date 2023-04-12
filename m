@@ -2,261 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934F16DEDDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEE56DEDDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 10:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjDLIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 04:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S230315AbjDLIcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 04:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjDLIbo (ORCPT
+        with ESMTP id S230313AbjDLIbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:31:44 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28E12769B;
-        Wed, 12 Apr 2023 01:30:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8Axu5cxbDZkTiIbAA--.42239S3;
-        Wed, 12 Apr 2023 16:30:41 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC74fbDZkdKwgAA--.35751S32;
-        Wed, 12 Apr 2023 16:30:40 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn
-Subject: [PATCH v6 30/30] LoongArch: KVM: Supplement kvm document about loongarch-specific part
-Date:   Wed, 12 Apr 2023 16:30:23 +0800
-Message-Id: <20230412083023.1693910-31-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230412083023.1693910-1-zhaotianrui@loongson.cn>
-References: <20230412083023.1693910-1-zhaotianrui@loongson.cn>
+        Wed, 12 Apr 2023 04:31:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A626E80
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 01:30:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 93EAA2195D;
+        Wed, 12 Apr 2023 08:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681288243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=160/wOz2lKVq/akp63/PN7iWO9CrkLbK/cMM6WYNLxo=;
+        b=Q2Bp4qlVj2tQgaClNvLEWSAjp3AfLprD+fmmYo/qP4l/hRaBMk+rFYCNhaCSssKaZH/B/V
+        l9BzMqfP6eAxUCUc2SpVFi2tsCNgoE22nVslCVvyL9937sL/TV2IMiZ0EL4mD3D0CMslIO
+        fcsfVC7yZIYQVNYcItho1VCW0eaxPGc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 500FD132C7;
+        Wed, 12 Apr 2023 08:30:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hJLsETNsNmRpXQAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 12 Apr 2023 08:30:43 +0000
+Message-ID: <f5333fac-4946-5677-d9fb-9699876eae61@suse.com>
+Date:   Wed, 12 Apr 2023 10:30:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxC74fbDZkdKwgAA--.35751S32
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3AFyUuF4rtFW3WrW3uFWrGrg_yoW7Cw4UpF
-        ZIk3yfKr48try7t347J34jqry3GFyxtF47Ca4ftr1xC3Wjyw1kJrnFyrW8JFWUC348AF18
-        AFy0yw47CFyUAw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6x
-        kF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
-        6r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWDJVCq3wCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7xRiTKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
+ software defined MTRRs
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-5-jgross@suse.com>
+ <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
+ <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
+ <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
+ <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
+ <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dHWoLrmI5ZDjzOzvkUud3m4y"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Supplement kvm document about loongarch-specific part, such as add
-api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
-etc.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dHWoLrmI5ZDjzOzvkUud3m4y
+Content-Type: multipart/mixed; boundary="------------uVE0rvsAvjNoLfGT8Pok0YXq";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <f5333fac-4946-5677-d9fb-9699876eae61@suse.com>
+Subject: Re: [PATCH v5 04/15] x86/mtrr: support setting MTRR state for
+ software defined MTRRs
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-5-jgross@suse.com>
+ <20230411132040.GHZDVeqCqATbbgzdXK@fat_crate.local>
+ <BYAPR21MB168853F1DD1B76FACC1CFFFBD79A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <6febc91b-e0ac-5b14-5bb5-98dc017440ae@suse.com>
+ <20230411142633.GBZDVuGU6HaVYxlCJ6@fat_crate.local>
+ <8c00966b-2739-4479-ff50-d5841baeb32d@suse.com>
+ <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
+In-Reply-To: <20230411171549.GCZDWVxcJxEKXU7TDy@fat_crate.local>
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- Documentation/virt/kvm/api.rst | 71 +++++++++++++++++++++++++++++-----
- 1 file changed, 62 insertions(+), 9 deletions(-)
+--------------uVE0rvsAvjNoLfGT8Pok0YXq
+Content-Type: multipart/mixed; boundary="------------V633FJ2BOVig1Rir7NPnxQt8"
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index a5c803f39832..84c26a577559 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -416,6 +416,12 @@ Reads the general purpose registers from the vcpu.
- 	__u64 pc;
-   };
- 
-+  /* loongarch */
-+  struct kvm_regs {
-+        unsigned long gpr[32];
-+        unsigned long pc;
-+  };
-+
- 
- 4.12 KVM_SET_REGS
- -----------------
-@@ -506,7 +512,7 @@ translation mode.
- ------------------
- 
- :Capability: basic
--:Architectures: x86, ppc, mips, riscv
-+:Architectures: x86, ppc, mips, riscv, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_interrupt (in)
- :Returns: 0 on success, negative on failure.
-@@ -592,6 +598,14 @@ b) KVM_INTERRUPT_UNSET
- 
- This is an asynchronous vcpu ioctl and can be invoked from any thread.
- 
-+LOONGARCH:
-+^^^^^^^^^^
-+
-+Queues an external interrupt to be injected into the virtual CPU. A negative
-+interrupt number dequeues the interrupt.
-+
-+This is an asynchronous vcpu ioctl and can be invoked from any thread.
-+
- 
- 4.17 KVM_DEBUG_GUEST
- --------------------
-@@ -737,7 +751,7 @@ signal mask.
- ----------------
- 
- :Capability: basic
--:Architectures: x86
-+:Architectures: x86, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_fpu (out)
- :Returns: 0 on success, -1 on error
-@@ -746,7 +760,7 @@ Reads the floating point state from the vcpu.
- 
- ::
- 
--  /* for KVM_GET_FPU and KVM_SET_FPU */
-+  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
-   struct kvm_fpu {
- 	__u8  fpr[8][16];
- 	__u16 fcw;
-@@ -761,12 +775,22 @@ Reads the floating point state from the vcpu.
- 	__u32 pad2;
-   };
- 
-+  /* loongarch: for KVM_GET_FPU and KVM_SET_FPU */
-+  struct kvm_fpu {
-+        __u32 fcsr;
-+        __u32 none;
-+        __u64 fcc;
-+        struct kvm_fpureg {
-+                __u64 val64[4];
-+        }fpr[32];
-+  };
-+
- 
- 4.23 KVM_SET_FPU
- ----------------
- 
- :Capability: basic
--:Architectures: x86
-+:Architectures: x86, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_fpu (in)
- :Returns: 0 on success, -1 on error
-@@ -775,7 +799,7 @@ Writes the floating point state to the vcpu.
- 
- ::
- 
--  /* for KVM_GET_FPU and KVM_SET_FPU */
-+  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
-   struct kvm_fpu {
- 	__u8  fpr[8][16];
- 	__u16 fcw;
-@@ -790,6 +814,16 @@ Writes the floating point state to the vcpu.
- 	__u32 pad2;
-   };
- 
-+  /* loongarch: for KVM_GET_FPU and KVM_SET_FPU */
-+  struct kvm_fpu {
-+        __u32 fcsr;
-+        __u32 none;
-+        __u64 fcc;
-+        struct kvm_fpureg {
-+                __u64 val64[4];
-+        }fpr[32];
-+  };
-+
- 
- 4.24 KVM_CREATE_IRQCHIP
- -----------------------
-@@ -1387,7 +1421,7 @@ documentation when it pops into existence).
- -------------------
- 
- :Capability: KVM_CAP_ENABLE_CAP
--:Architectures: mips, ppc, s390, x86
-+:Architectures: mips, ppc, s390, x86, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_enable_cap (in)
- :Returns: 0 on success; -1 on error
-@@ -1442,7 +1476,7 @@ for vm-wide capabilities.
- ---------------------
- 
- :Capability: KVM_CAP_MP_STATE
--:Architectures: x86, s390, arm64, riscv
-+:Architectures: x86, s390, arm64, riscv, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_mp_state (out)
- :Returns: 0 on success; -1 on error
-@@ -1460,7 +1494,7 @@ Possible values are:
- 
-    ==========================    ===============================================
-    KVM_MP_STATE_RUNNABLE         the vcpu is currently running
--                                 [x86,arm64,riscv]
-+                                 [x86,arm64,riscv,loongarch]
-    KVM_MP_STATE_UNINITIALIZED    the vcpu is an application processor (AP)
-                                  which has not yet received an INIT signal [x86]
-    KVM_MP_STATE_INIT_RECEIVED    the vcpu has received an INIT signal, and is
-@@ -1516,11 +1550,14 @@ For riscv:
- The only states that are valid are KVM_MP_STATE_STOPPED and
- KVM_MP_STATE_RUNNABLE which reflect if the vcpu is paused or not.
- 
-+On loongarch, the KVM_MP_STATE_RUNNABLE state is only used which reflect the
-+vcpu is runnable.
-+
- 4.39 KVM_SET_MP_STATE
- ---------------------
- 
- :Capability: KVM_CAP_MP_STATE
--:Architectures: x86, s390, arm64, riscv
-+:Architectures: x86, s390, arm64, riscv, loongarch
- :Type: vcpu ioctl
- :Parameters: struct kvm_mp_state (in)
- :Returns: 0 on success; -1 on error
-@@ -1538,6 +1575,9 @@ For arm64/riscv:
- The only states that are valid are KVM_MP_STATE_STOPPED and
- KVM_MP_STATE_RUNNABLE which reflect if the vcpu should be paused or not.
- 
-+On loongarch, the KVM_MP_STATE_RUNNABLE state is only used which reflect the
-+vcpu is runnable.
-+
- 4.40 KVM_SET_IDENTITY_MAP_ADDR
- ------------------------------
- 
-@@ -2839,6 +2879,19 @@ Following are the RISC-V D-extension registers:
-   0x8020 0000 0600 0020 fcsr      Floating point control and status register
- ======================= ========= =============================================
- 
-+LoongArch registers are mapped using the lower 32 bits. The upper 16 bits of
-+that is the register group type.
-+
-+LoongArch csr registers are used to control guest cpu or get status of guest
-+cpu, and they have the following id bit patterns::
-+
-+  0x9030 0000 0001 00 <reg:5> <sel:3>   (64-bit)
-+
-+LoongArch KVM control registers are used to implement some new defined functions
-+such as set vcpu counter or reset vcpu, and they have the following id bit patterns::
-+
-+  0x9030 0000 0002 <reg:16>
-+
- 
- 4.69 KVM_GET_ONE_REG
- --------------------
--- 
-2.31.1
+--------------V633FJ2BOVig1Rir7NPnxQt8
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+T24gMTEuMDQuMjMgMTk6MTUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBB
+cHIgMTEsIDIwMjMgYXQgMDU6NTc6MDdQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IFNob3J0IGFuc3dlcjogWW91IGFza2VkIG1lIHRvIGFkZCBpdCBpbiBWMiBvZiB0aGUg
+c2VyaWVzLg0KPj4NCj4+IExvbmdlciBhbnN3ZXI6IFNFVl9TTlAgZ3Vlc3RzIGFuZCBURFgg
+Z3Vlc3RzIHdvdWxkIGNhdXNlICNWRSB3aGVuIHdyaXRpbmcNCj4+ICAgIE1UUlIgTVNScy4N
+Cj4gDQo+IEFoLCBzb3JyeS4gTGV0J3MgZXh0ZW5kIHRoZSBjb21tZW50IHRoZW4gYW5kIHVz
+ZSB5b3VyIG9yaWdpbmFsIGNoZWNrOg0KPiANCj4gICAgICAgICAvKg0KPiAgICAgICAgICAq
+IE9ubHkgYWxsb3dlZCBmb3Igc3BlY2lhbCB2aXJ0dWFsaXphdGlvbiBjYXNlczoNCj4gICAg
+ICAgICAgKiAtIHdoZW4gcnVubmluZyBhcyBIeXBlci1WLCBTRVYtU05QIGd1ZXN0IHVzaW5n
+IHZUT00NCj4gICAgICAgICAgKiAtIHdoZW4gcnVubmluZyBhcyBYZW4gUFYgZ3Vlc3QNCj4g
+ICAgICAgICAgKiAtIHdoZW4gcnVubmluZyBhcyBTRVYtU05QIG9yIFRTWCBndWVzdCB0byBh
+dm9pZCB1bm5lY2Vzc2FyeQ0KPiAJKiAgIFZNTSBjb21tdW5pY2F0aW9uL1ZpcnR1YWxpemF0
+aW9uIGV4Y2VwdGlvbnMgKCNWQywgI1ZFKQ0KPiAgICAgICAgICAqLw0KPiAJaWYgKCFodl9p
+c19pc29sYXRpb25fc3VwcG9ydGVkKCkgJiYNCj4gCSAgICAhY3B1X2ZlYXR1cmVfZW5hYmxl
+ZChYODZfRkVBVFVSRV9YRU5QVikgJiYNCj4gCSAgICAhY2NfcGxhdGZvcm1faGFzKENDX0FU
+VFJfR1VFU1RfU0VWX1NOUCkgJiYNCj4gCSAgICAhY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZf
+RkVBVFVSRV9URFhfR1VFU1QpKQ0KPiAJCXJldHVybjsNCg0KT2theS4NCg0KDQpKdWVyZ2Vu
+DQoNCg==
+--------------V633FJ2BOVig1Rir7NPnxQt8
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------V633FJ2BOVig1Rir7NPnxQt8--
+
+--------------uVE0rvsAvjNoLfGT8Pok0YXq--
+
+--------------dHWoLrmI5ZDjzOzvkUud3m4y
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQ2bDIFAwAAAAAACgkQsN6d1ii/Ey+2
+bggAlgCATaBhcJ8tohGr5l+u+zkI8EJt8Neir5kwVJpk/OeWndxpLqrTH7Yih/vh5OlYn3Pgjmnp
+iF8zMpBJzE7Pp8vwoGfMUpglk902ug7WV7/B+6/sq2EOVlY+ym56GDsmlpa+hhsnB1z57LtkBdtv
+lHRI8kBSrAXDbmLf4qYBZuonZZEQw7Z2dhPuXpWqV0S6X4MdX3beiJVNw2174Fi4O0wYEqnnAPyl
+Ft3AzTWDstMvCdh2hg18sXYPAL+hPghAC1rapNBR/X9RSdEK2WlTLcsIlSDLJdO2oXFSH34k+YOZ
+cgOCMvNtsPoOs+hGCuJauSAdZxmIpelg+rhrB4ZRqw==
+=Oi3H
+-----END PGP SIGNATURE-----
+
+--------------dHWoLrmI5ZDjzOzvkUud3m4y--
