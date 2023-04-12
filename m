@@ -2,164 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FE76DF618
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6906DF62D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjDLMuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S231519AbjDLMv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjDLMti (ORCPT
+        with ESMTP id S231485AbjDLMvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:49:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED367A87
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681303750; x=1712839750;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fZVuhf+4L5nnMWg4MOZqeSNE0R5ZaLEsjp8xfZsQoYc=;
-  b=iEM3AAtUHj5vZFDHYSHOZswOekbAKjY6jPoUNbGEmCRJF+XlEglMW1JT
-   4DtLcQys6pOwIfl8RqYOzCXf8F+DQM/VPj7gutltdxWJpyCz/QKpuXlEU
-   eaRc5Zn7ij8YsNVr8Lt6tJaWJOEYCPOUn5DI3bEchvfx44YOtSDPdlaeI
-   OSTkb3J9sgIJnc6ddIyLpDStAEOU5y2q+Z1slzRfktPTLICHg6eXvZ5Zr
-   mt+vv0WzCiUVx54SLaEVbJvIyThW5yMOLjJyBtrC4gjciKBVF4MJuh5LI
-   iM8j9nvViETPshFriJI/moEPvPNqYtuPDkgl+e77hjkks+yNJhQY94v0u
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,339,1673938800"; 
-   d="asc'?scan'208";a="209218019"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Apr 2023 05:47:57 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 12 Apr 2023 05:47:56 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 12 Apr 2023 05:47:54 -0700
-Date:   Wed, 12 Apr 2023 13:47:39 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-CC:     <linux-kernel@vger.kernel.org>, Radu Rendec <rrendec@redhat.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: Re: [PATCH v2 1/3] cacheinfo: Check sib_leaf in
- cache_leaves_are_shared()
-Message-ID: <20230412-hut-unused-21d683fcb8b0@wendy>
-References: <20230412071809.12670-1-pierre.gondois@arm.com>
- <20230412071809.12670-2-pierre.gondois@arm.com>
- <20230412-viewpoint-refutable-a31f3657093c@wendy>
- <d7a36615-896b-0f13-a1f6-761715ce460f@arm.com>
+        Wed, 12 Apr 2023 08:51:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9B3E67;
+        Wed, 12 Apr 2023 05:51:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 901216347C;
+        Wed, 12 Apr 2023 12:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E720EC4339C;
+        Wed, 12 Apr 2023 12:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681303820;
+        bh=cB07st6xmfnNAjG3gTahjDFnN/n1huuNtFfo9gnhBEY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q7Rmc8f1u04NKMPlTME4lPTsDQIRlahQuoW+2iyf2X2+6O67Po92ybWVMAknYn4/4
+         ccRsxe1qxv5BOiIzgny0JEBA2irFNQAuUyE7YVEVq/edeUCeb8MgsMIo1YLED3kBpr
+         HdghfgHPL5GZ8igrDCQmLze4hkaAOToLwuNKQp0KF1e+OJM9yq2xB8MfYEXiCkIYK7
+         5N0TJLt70g0bdjECOriqHffTqLXq0u1ilQF0N5MjI9tLvcIDK5mgIG8ZPLkvSVDOcN
+         fzjrQteq7hgjj1jO2o+iA71KBXbpk4AYxRI3YEmLj+P7k4sKaouFDhQ+YL59Z+raRt
+         M7NrR37WyOVYQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pmZvX-0002vd-D0; Wed, 12 Apr 2023 14:50:20 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH] serial: fix TIOCSRS485 locking
+Date:   Wed, 12 Apr 2023 14:48:11 +0200
+Message-Id: <20230412124811.11217-1-johan@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oLQO1TaK6ViWJelZ"
-Content-Disposition: inline
-In-Reply-To: <d7a36615-896b-0f13-a1f6-761715ce460f@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---oLQO1TaK6ViWJelZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The RS485 multipoint addressing support for some reason added a new
+ADDRB termios cflag which is (only!) updated from one of the RS485
+ioctls.
 
-On Wed, Apr 12, 2023 at 02:34:11PM +0200, Pierre Gondois wrote:
-> Hello Conor,
->=20
-> On 4/12/23 13:27, Conor Dooley wrote:
-> > On Wed, Apr 12, 2023 at 09:18:04AM +0200, Pierre Gondois wrote:
-> > > If 'this_leaf' is a L2 cache (or higher) and 'sib_leaf' is a L1 cache,
-> > > the caches are detected as shared. Indeed, cache_leaves_are_shared()
-> > > only checks the cache level of 'this_leaf' when 'sib_leaf''s cache
-> > > level should also be checked.
-> >=20
-> > I have to say, I'm a wee bit confused reading this patch - although it's
-> > likely that I have just confused myself here.
-> >=20
-> > The comment reads "For non DT/ACPI systems, assume unique level 1 cache=
-s,
-> > system-wide shared caches for all other levels".
-> > Does this mean all level 1 caches are unique & all level N caches are
-> > shared with all other level N caches, but not with level M caches?
-> > (M !=3D N; M, N > 1)
->=20
-> I think the real answer to your question is in the last paragraph,
-> but just in case:
->=20
-> Each CPU manages the list of cacheinfo struct it has access to,
-> and this list is per-CPU.
-> cache_shared_cpu_map_setup() checks whether two cacheinfo struct are
-> representing the same cache (for 2 CPU lists). If yes, their
-> shared_cpu_map is updated.
->=20
-> If there is DT/ACPI information, a cacheid/fw_token is associated
-> with each cacheinfo struct. This allows to easily check when two
-> struct are representing the same cache.
->=20
-> Otherwise it is assumed here that L1 caches are private (so not shared)
-> and other L2-N caches are shared, i.e. the interface below advertise the
-> cache as available from other CPUs.
-> /sys/devices/system/cpu/cpu0/cache/indexX/shared_cpu_list
+Make sure to take the termios rw semaphore for the right ioctl (i.e.
+set, not get).
 
-Another silly question:
-For two caches of level M & N; M !=3D N; M, N > 1 should they be detected
-as shared in the absence of any information in DT/ACPI?
-The comment (to me) reads as if they should not, but it is rather vague.
+Fixes: ae50bb275283 ("serial: take termios_rwsem for ->rs485_config() & pass termios as param")
+Cc: stable@vger.kernel.org	# 6.0
+Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
 
->=20
-> >=20
-> > Is this patches goal to make sure that if this_leaf is level 2 and
-> > sib_leaf is level 1 that these are not detected as shared, since level
-> > one caches are meant to be unique?
->=20
-> Yes exact.
->=20
-> >=20
-> > The previous logic checked only this_leaf's level, and declared things
-> > shared if this_leaf is not a level 1 cache.
-> > What happens here if this_leaf->level =3D=3D 1 and sib_leaf->level =3D=
-=3D 2?
-> > That'll be detected as shared, in a contradiction of the comment above
-> > it, no?
->=20
-> Yes, there is a contradiction. The condition should be '&&':
->   (this_leaf->level !=3D 1) && (sib_leaf->level !=3D 1)
-> I made a bad rebase and the corrected code ended up in PATCH 3/3.
-> Sorry for that. I ll correct it in the v3.
+I did not have time to review the multipoint addressing patches at the
+time and only skimmed the archives now, but I can't seem to find any
+motivation for why a precious termios bit was seemingly wasted on ADDRB
+when it is only updated from the RS485 ioctls.
 
-Good to know I am not losing my marbles, I was trying to reconcile the
-intent with the patch & without the explicit statement of what was wrong
-in the commit message I found it hard!
+I hope it wasn't done just to simplify the implementation of
+tty_get_frame_size()? Or was it a left-over from the RFC which
+apparently actually used termios to enable this feature?
 
-> Thanks for the review,
+Should we consider dropping the Linux-specific ADDRB bit again?
 
-nw chief.
+Johan
 
---oLQO1TaK6ViWJelZ
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+ drivers/tty/serial/serial_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDaoawAKCRB4tDGHoIJi
-0hyeAPj39Sa1sga0eipXhsdbCWKA9HqpCkFqTOKBXtDdlLi4AQCsogwzFxJOiAZL
-ENvb7+be3Jd5sudn9OHPO2TedRCLDg==
-=jwas
------END PGP SIGNATURE-----
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 2bd32c8ece39..728cb72be066 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1552,7 +1552,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+ 		goto out;
+ 
+ 	/* rs485_config requires more locking than others */
+-	if (cmd == TIOCGRS485)
++	if (cmd == TIOCSRS485)
+ 		down_write(&tty->termios_rwsem);
+ 
+ 	mutex_lock(&port->mutex);
+@@ -1595,7 +1595,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+ 	}
+ out_up:
+ 	mutex_unlock(&port->mutex);
+-	if (cmd == TIOCGRS485)
++	if (cmd == TIOCSRS485)
+ 		up_write(&tty->termios_rwsem);
+ out:
+ 	return ret;
+-- 
+2.39.2
 
---oLQO1TaK6ViWJelZ--
