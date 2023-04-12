@@ -2,128 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC996DF8D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1286DF8CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjDLOjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S231377AbjDLOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjDLOjh (ORCPT
+        with ESMTP id S231685AbjDLOkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:39:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8C59775;
-        Wed, 12 Apr 2023 07:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681310349; x=1712846349;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DZ+4bqcOwGArNUff5c6q4WqLlSztJS1TSKOKE8pP2P4=;
-  b=NFbU0lN+kFFYJzZWK1MCEbKb2no7YqwKEIWRwS7KDi53b2LPGdu8FctW
-   l2xKHCT5iidqRjo9WKgGC1iRerBI2hx50nUVC/HTDH1Rg+/IziP8dfnBN
-   A+ZqsSWKbmlZuWkup7Tm677S8V0+fL1dH3tt6fZdSRKLpAkgyAM8An4CI
-   fBfLoZbm0VaGoqfhMvKz445dxpuxiJuhV5Hmh7TYCcX6bHh8uL23sXDQd
-   DM7VuRZOl7XH+AYTb2MEBe+YEVtwDYcbTNLGKJOvaOmiMqQ5ukl5n2V//
-   TAwm50863EWsDVxRa6ikkYhTdiLpKc+QjWcvTq3Bymj+Y+2snqeitP0L8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324277258"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="324277258"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:39:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639258064"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="639258064"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:39:05 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 7EF49120D2E;
-        Wed, 12 Apr 2023 17:39:02 +0300 (EEST)
-Date:   Wed, 12 Apr 2023 17:39:02 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
-        hverkuil@xs4all.nl
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
-Message-ID: <ZDbChgZJHVaaX3/x@kekkonen.localdomain>
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
- <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
- <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
- <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
- <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
- <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
- <ZDaa+qhoZxZ5ymxL@kekkonen.localdomain>
- <8fe5c9c5-6eb0-86ae-9e5d-fbaa72be25fe@wolfvision.net>
- <ZDaemghP0HQSw3Fo@kekkonen.localdomain>
- <77d91964-de0a-8bd4-12d9-bc16110cfa7c@wolfvision.net>
+        Wed, 12 Apr 2023 10:40:09 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C789ECC
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:39:45 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e127so11948807ybf.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681310382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1pKFL1ied8XK1n0xf5sr2x4G8CCMOMqbda58ygnphsg=;
+        b=tz7PxQgn6gzQz8HEG3T6gvJ1HxHfF3bb8fwFZIv6Cn/XdL2siEFBe9pzWmztQ8VsoO
+         +9lTgLTZPHW5NhSVSX33SjwYogn7QD4PDjD7d874V8InAIaf+8PLFCxl5L/cxX5/Herq
+         M8BKWoAUmKF5bMqjjiKWYA6tDGpJDEa7WBTjQtRL6VZ3lm5EI8Msj33G6WJgVRw5IdEf
+         Z+WUOexqL5HPy+trtcMaB+LyVliDjjquWbzM50gPknAA004/W4eIlAisQ/57c+cefLNr
+         b195g1wLW7xO3QCNuthF0ycpEYOLhZlgMJVVNB+ImGcQGiBT6b/zyu6PfTMWwEI+2TqK
+         sicA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681310382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1pKFL1ied8XK1n0xf5sr2x4G8CCMOMqbda58ygnphsg=;
+        b=7bRMbcRDcuMIQpHBUw0Vh1FmhmlOwNdV4sH6ButUdy0wN04Fna5Gd+xok028rqH7tl
+         zERcw4UQ6g9Mf8Wt63PPSLjgYxegQEegobsxIGG+CnZJVxEOP8QfZOAK7mha+xcfht2/
+         gR/y67osDqa4HMDvr9mBj4xZXRhSp18oxRCPsbOpw1R7exqqOlGN9ttgBfHrahvWbVqq
+         zAeaNTdeYQsrqZCLShAoTb4bstQ34256pfGIVNVeXA8zJ8dJdtx/WITlK6ZiceSs+Jvi
+         sXokM9xhM2/PoM34gIHJliHNobTl+t720kaeBzKBJzUSG6MVZwuZtX6roYwaWQXbByfG
+         9TTQ==
+X-Gm-Message-State: AAQBX9c6QEE9EQE+su/ZceUOi2RFgzA9lal0pMxWbJaOYzraaSJe6TOG
+        zL/WjHTwdhzZ4TqQT8ecvjcVv56Z9Tjn4bNHYDi72g==
+X-Google-Smtp-Source: AKy350bM2d+cGoRLEt4LS9dBT2iR+dDtIsW8oTA5rF12QIkmhn/JAZ3KqEkmO1U+uTtlgBXN4JBf6viLTfXuUR782MA=
+X-Received: by 2002:a25:ada1:0:b0:b67:412e:a81e with SMTP id
+ z33-20020a25ada1000000b00b67412ea81emr16250857ybi.17.1681310382532; Wed, 12
+ Apr 2023 07:39:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77d91964-de0a-8bd4-12d9-bc16110cfa7c@wolfvision.net>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com>
+In-Reply-To: <CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 12 Apr 2023 16:39:05 +0200
+Message-ID: <CAG_fn=V57m0om5HUHHFOQr9R9TWHtfm4+jO96Smf+Q+XjRkxtQ@mail.gmail.com>
+Subject: Re: Possible incorrect handling of fault injection inside KMSAN instrumentation
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Marius Fleischer <fleischermarius@googlemail.com>,
+        Priyanka Bose <its.priyanka.bose@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Sat, Apr 8, 2023 at 5:51=E2=80=AFPM Dipanjan Das <mail.dipanjan.das@gmai=
+l.com> wrote:
+>
+> Hi,
 
-On Wed, Apr 12, 2023 at 03:43:26PM +0200, Michael Riesch wrote:
-> Hi Sakari,
-> 
-> On 4/12/23 14:05, Sakari Ailus wrote:
-> > Hi Michael,
-> > 
-> > On Wed, Apr 12, 2023 at 01:57:36PM +0200, Michael Riesch wrote:
-> >> Hi Sakari,
-> >>
-> >> On 4/12/23 13:50, Sakari Ailus wrote:
-> >>> Hi Michael,
-> >>>
-> >>> On Wed, Apr 12, 2023 at 10:00:26AM +0200, Michael Riesch wrote:
-> >>>>  - Different controls: If moving = (V4L2_CID_FOCUS_ABSOLUTE == current),
-> >>>>    then what happens if the application performs a
-> >>>>    V4L2_CID_FOCUS_RELATIVE with -3? current should reach 39,
-> >>>>    V4L2_CID_FOCUS_ABSOLUTE is still at 42, the lens is still moving from
-> >>>>    the application's point of view.
-> >>>
-> >>> Would there be a reason to implement both of these controls in a single
-> >>> driver? AFAIU, the relative one should be used if there absolute value
-> >>> isn't known to the driver.
-> >>
-> >> Probably not, but on the other hand there is nothing the prevents a
-> >> driver developer from doing so, right? Point is that should there be a
-> >> driver which does implement both controls, we are in trouble AFAIU.
-> > 
-> > I think the documentation should be improved in this regard.
-> 
-> The documentation of which control exactly? And what items should be added?
+Hi Dipanjan, thanks a lot for the elaborate analysis!
 
-Both V4L2_CID_FOCUS_ABSOLUTE and V4L2_CID_FOCUS_RELATIVE. For the former,
-the sentence "Positive values set the focus closer to the camera, negative
-values towards infinity." doesn't make much sense in the context. For the
-latter, what I mentioned earlier, i.e. this should be only implemented if
-the absolute value isn't known. It's not a driver's job to do simple
-arithmetics for the user space.
 
-In fact, it appears that no driver is using V4L2_CID_FOCUS_RELATIVE at the
-moment. So we could as well deprecate it (or remove from documentation
-altogether).
+> kmsan's allocation of shadow or origin memory in
+> kmsan_vmap_pages_range_noflush() fails silently due to fault injection
+> (FI). KMSAN sort of =E2=80=9Cswallows=E2=80=9D the allocation failure, an=
+d moves on.
+> When either of them is later accessed while updating the metadata,
+> there are no checks to test the validity of the respective pointers,
+> which results in a page fault.
 
--- 
-Kind regards,
+You are absolutely right.
 
-Sakari Ailus
+> Our conclusions/Questions:
+>
+> - Should KMSAN fail silently? Probably not. Otherwise, the
+> instrumentation always needs to check whether shadow/origin memory
+> exists.
+
+KMSAN shouldn't fail silently in any case.
+kmsan_vmap_pages_range_noflush() used to have KMSAN_WARN_ON() to catch
+such cases, but unfortunately I've failed to check the return values
+of the kcalloc() calls.
+
+> - Should KMSAN even be tested using fault injection? We are not sure.
+
+At least our deployment of KMSAN on syzbot uses fault injection, so
+having the two play well together is important.
+
+> On one hand, the primary purpose of FI should be testing the
+> application code. But also, inducing faults inside instrumentation
+> clearly helps to find mistakes in that, too.
+
+At first I had an idea of having a special GFP flag that prohibits
+fault injections for the tool's allocations.
+But this would just shift the allocations failures right, making them
+harder to detect, because they will occur less often.
+We'd better handle the failures properly instead.
+
+> - What is a fix for this? Should a failure in the KMSAN
+> instrumentation be propagated up so that the kernel allocator
+> (vzalloc() in this case) can =E2=80=9Cpretend=E2=80=9D to fail, too?
+
+Yes, I think so.
+Here are two patches that fix the problem:
+ - https://github.com/google/kmsan/commit/b793a6d5a1c1258326b0f53d6e3ac8aa3=
+eeb3499
+- for kmsan_vmap_pages_range_noflush();
+ - https://github.com/google/kmsan/commit/cb9e33e0cd7ff735bc302ff69c02274f2=
+4060cff
+- for kmsan_ioremap_page_range()
+
+Can you please try them out?
+
+Alex
