@@ -2,122 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1DB6DF038
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFF96DF03A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 11:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjDLJXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 05:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S229935AbjDLJXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 05:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjDLJXb (ORCPT
+        with ESMTP id S229882AbjDLJXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:23:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9161B4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 02:23:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B05591F890;
-        Wed, 12 Apr 2023 09:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681291408; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f9fMYDJZDgUQAkG8XezrdJzHQ/H+XHFOp2dBJyvFZng=;
-        b=srRAZkGNHFWybWCUH/9iHfY36CH4iNoSYiYJRuBfDoudIVOmtt5MgU7Ec8Tkvwp+50aiTe
-        NA6iHiEjlqIxVAEWMuo1ZAq+rJUEcPHYS8ATBjmlilIpaL8BOX3+lOLxMHVuqO088QIpNs
-        3LJJzy8nYFgNyTnUWMNnml6O9l/duf8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FC3D13498;
-        Wed, 12 Apr 2023 09:23:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hZ9xIJB4NmSFeAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 12 Apr 2023 09:23:28 +0000
-Date:   Wed, 12 Apr 2023 11:23:27 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Subject: Re: [PATCH v3] dma-buf/heaps: system_heap: avoid too much allocation
-Message-ID: <ZDZ4j7UdBt32j28J@dhcp22.suse.cz>
-References: <ZDZqYTSHBNGLq0zI@dhcp22.suse.cz>
- <20230410073228.23043-1-jaewon31.kim@samsung.com>
- <CGME20230410073304epcas1p4cf3079b096994d69472b7801bd530bc7@epcms1p7>
- <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
+        Wed, 12 Apr 2023 05:23:47 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126916195;
+        Wed, 12 Apr 2023 02:23:46 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PxHMK080qz4f4nhq;
+        Wed, 12 Apr 2023 17:23:41 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+ceDZkj7KVGg--.31485S3;
+        Wed, 12 Apr 2023 17:23:42 +0800 (CST)
+Subject: Re: [PATCH -next v5 1/6] md: pass a md_thread pointer to
+ md_register_thread()
+To:     Logan Gunthorpe <logang@deltatee.com>, Song Liu <song@kernel.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230410113559.1610455-1-yukuai1@huaweicloud.com>
+ <20230410113559.1610455-2-yukuai1@huaweicloud.com>
+ <CAPhsuW7rUQ9KFxCQw-iAAA64=x==b-Qu0nnp32TXn-85Okb00w@mail.gmail.com>
+ <daa344fe-9d8d-16f9-aded-513f250928b9@huaweicloud.com>
+ <CAPhsuW7bBaVsneBHYqwN3yd5k3sg6ZUFqEJad3yOD0=N-e411g@mail.gmail.com>
+ <f67e8d9b-dae8-fced-ce7b-b0f8fff2d127@deltatee.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <04a9522e-f0bb-5452-2ff4-4bb8017eb26b@huaweicloud.com>
+Date:   Wed, 12 Apr 2023 17:23:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412085726epcms1p7d2bec2526e47bd10a3b6ea6a113c9cc3@epcms1p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f67e8d9b-dae8-fced-ce7b-b0f8fff2d127@deltatee.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCHgR+ceDZkj7KVGg--.31485S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
+        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-04-23 17:57:26, Jaewon Kim wrote:
-> >Sorry for being late. I know there was some pre-existing discussion
-> >around that but I didn't have time to participate.
-> >
-> >On Mon 10-04-23 16:32:28, Jaewon Kim wrote:
-> >> @@ -350,6 +350,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
-> >>  	struct page *page, *tmp_page;
-> >>  	int i, ret = -ENOMEM;
-> >>  
-> >> +	if (len / PAGE_SIZE > totalram_pages())
-> >> +		return ERR_PTR(-ENOMEM);
-> >> +
-> >
-> >This is an antipattern imho. Check 7661809d493b ("mm: don't allow
-> >oversized kvmalloc() calls") how kvmalloc has dealt with a similar
-> 
-> Hello Thank you for the information.
-> 
-> I tried to search the macro of INT_MAX.
-> 
-> include/vdso/limits.h
-> #define INT_MAX         ((int)(~0U >> 1))
-> 
-> AFAIK the dma-buf system heap user can request that huge size more than 2GB.
+Hi,
 
-Do you have any pointers? This all is unreclaimable memory, right? How
-are those users constrained to not go overboard?
+在 2023/04/11 23:46, Logan Gunthorpe 写道:
 
-> So
-> I think totalram_pages() is better than INT_MAX in this case.
+>>>> Can we do something like:
+>>>>
+>>>> struct md_thread __rcu *md_register_thread(void (*run) (struct md_thread *),
+>>>>                  struct mddev *mddev, const char *name)
+>>>
+>>> I think this is not necessary, if we don't want to change api, we must
+>>> use rcu_assign_pointer for each caller to set md_thread.
+>>
+>> I think it is better to use rcu_assign_pointer at the caller side.
 > 
-> >issue. totalram_pages doesn't really tell you anything about incorrect
-> >users. You might be on a low memory system where the request size is
-> >sane normally, it just doesn't fit into memory on that particular
-> >machine.
+> I agree.
 > 
-> Sorry maybe I'm not fully understand what you meant. User may requested
-> a huge size like 3GB on 2GB ram device. But I think that should be rejected
-> because it is bigger than the device ram size.
+> Logan
+> .
+> 
+I'll remove this patch, and use rcu_assign_pointer() in the caller
+directly in the next version.
 
-Even totalram_pages/10 can be just unfeasible amount of data to be
-allocated without a major disruption. totalram_pages is no measure of
-the memory availability.
-If you want to have a ballpark estimation then si_mem_available might be
-something you are looking for. But I thought the sole purpose of this
-patch is to catch obviously buggy callers (like sign overflow lenght
-etc) rather than any memory consumption sanity check.
+Thanks,
+Kuai
 
--- 
-Michal Hocko
-SUSE Labs
