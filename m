@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBAD6DF42B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3D86DF430
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDLLsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S229840AbjDLLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjDLLsn (ORCPT
+        with ESMTP id S230024AbjDLLts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:48:43 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6057292
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:48:32 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso52430a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 04:48:32 -0700 (PDT)
+        Wed, 12 Apr 2023 07:49:48 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1BC1BF;
+        Wed, 12 Apr 2023 04:49:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63397c54c5aso1471566b3a.3;
+        Wed, 12 Apr 2023 04:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681300111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XqtIJq4x9Uv7VCE+MyW77kD2bT9oscWHgTmXIM6GLQk=;
-        b=FPY4+f7tj3sg1W11InhRGfg9nZ5Cz3zpKN6ctM079y4mUyOSskibQeyWdXfGX7JeSQ
-         7nkT9WL6NyZw3SM06NXy9uYreD5IiAHZPT8TsUgBswRjsonNkzjsCaCZpHic510BXSUX
-         q0ORzId2Nj4h1jyBkAVyM4sztArDsEwzZug32DXwVTliE8+eKXymHjvARQBxrciBBOxj
-         Y1E4/p6J+zJXVVbcEo/00N4foRKKfxNb5+WGqkRUMAZaBS3g4TFq7Y+jHguf3NGtjexD
-         Y2z34xyPm/pisxFnSDzqwhj1jccX5V9NCG7h7E2VE0dc2kBXpn9jSzw0jOGlq9zEm8Ep
-         uDjg==
+        d=gmail.com; s=20221208; t=1681300179; x=1683892179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LU0NNrMj/8UlufToqKjMQMv6WJwb/IxRYgWWMch67x4=;
+        b=qQOOyq6X4rTR64+g/4bntpfaKV6cLyGhlNoOUbD064dkffw6SlmvZEHgDYzMo0FNZ8
+         OmaGl+MgxC1vMKI2HHaHwlpC2J3sCp1f1OlRQsQ9ripvMe607ZMF/SB7utiA6ohV/H83
+         UFABZfVVKKIM+ynX6b+uDbQB/3sTRtONtrbNvJhEJJEBP70mb5CckJM1jPV4HX6mI2ts
+         JH380mtDSf6WdKzJh2DfXaF7IsYP7GvT8f65g66c9H1cWNds1agqtGNFcW05IFUyIX8j
+         xYggBo4BWcCYfpMMYEyyAHfGg+N8BlNZUMEl42anHcwTU/8SnYJ9plb44rEZ6NtPJv5g
+         1uug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681300111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XqtIJq4x9Uv7VCE+MyW77kD2bT9oscWHgTmXIM6GLQk=;
-        b=PUiIsg59YDp7mMQtu+JY16QczN0T9xhdft9Q3l9onkXiDGmVqrok363PPOqB5fU0c+
-         /SPCCPh6rDl06o6dnDXvyZ6+Zce0MwndIDsgYewRDHGx9BBWhUJcBX2O0SkCvz5d7rAJ
-         y6plBKrsnbExQ0t7zxCKtcS5XIR/ZjWMwOFkcalAigFg0ZpGrYnDDgcabprF51tn8bRt
-         +TSzVfdiha35MFuAiSYKQlrGxddf/4a8UWMELwCWJnc1q50wI19S8M1aKnuCBP6QYHAw
-         oi/kkoM7WAWT5qSVTfzprChdnQRSj3D7HX+Dy7Vm/JP874ytkQkKOYoMiILB/txURlwy
-         Qm2A==
-X-Gm-Message-State: AAQBX9c9kYPpaEkC4DRvf+TGQ8FjgxvX1oct+U7KaKZ5zlLm9oRL8H38
-        ni/0H4G4BHalT6C/krMKo4ltFw==
-X-Google-Smtp-Source: AKy350b7cz5vjLHb/9D8rj0cNeu9uSqOi5BImza/oeo+JiY19jPp3Jowdae9Q9ee5HMrllTS0qpaPQ==
-X-Received: by 2002:aa7:d795:0:b0:504:943e:14b2 with SMTP id s21-20020aa7d795000000b00504943e14b2mr4746641edq.28.1681300111030;
-        Wed, 12 Apr 2023 04:48:31 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:8fa0:9989:3f72:b14f])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090617c100b00930b13f6abdsm7217128eje.98.2023.04.12.04.48.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 04:48:30 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] pinctrl: dt-bindings: qcom: unevaluatedProperties cleanup for v6.4
-Date:   Wed, 12 Apr 2023 13:48:28 +0200
-Message-Id: <20230412114828.64043-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1681300179; x=1683892179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LU0NNrMj/8UlufToqKjMQMv6WJwb/IxRYgWWMch67x4=;
+        b=JmxCdnV2ER/aD9sIHm8OtHSgENSu7rVVH5JZWaG08TQRxqlO781ZyC5El2Bj/OSGwh
+         l3lt4epy5dQD++PxhcGekGWMABvZIhSpkcOSb4ZeOTX/WgoPumH92X579+qhq/f17bVy
+         OysyqzZ7OmYJ0iGXwmQrVRaUSMNKEfPKTNTlkqVGxjZQLZamFQoXNSaee4//ISPIeeXg
+         K9r7qU9ZyvZo9I2ih0JGzEWKTtb+L3+POl7OqdKRplYHcYSrqeM3PNlqIZSHlghhl9RT
+         QwGrfFSIU4KxIK9VeKKydBIzukYr7v/3DXlR5bAChc8B/CZy3XnBnJI6qfVc+JJ9UFWs
+         g5Mg==
+X-Gm-Message-State: AAQBX9dwAYaUQ9d8MBZAA/bMP17fB7cNPiqeXhyYnT2lXGv9Le9lGISr
+        7VzQQBhtLNSRzoglf9rSoqk=
+X-Google-Smtp-Source: AKy350bFdYFz3IJL5nYzhZwjE0U1hAgIOeONbwcpftGqIbO4iVn75S8Kxf4U9HiU4tdSCCAdE1MDFg==
+X-Received: by 2002:a05:6a00:2da1:b0:63b:20f3:a8c9 with SMTP id fb33-20020a056a002da100b0063b20f3a8c9mr96761pfb.29.1681300179503;
+        Wed, 12 Apr 2023 04:49:39 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:8589:ba50:9cee:d1f4? ([2600:8802:b00:4a48:8589:ba50:9cee:d1f4])
+        by smtp.gmail.com with ESMTPSA id c5-20020a62e805000000b0063b1d65cc6dsm441287pfi.127.2023.04.12.04.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 04:49:38 -0700 (PDT)
+Message-ID: <78c18cdb-5757-8d30-e2a6-414f09505cc6@gmail.com>
+Date:   Wed, 12 Apr 2023 04:49:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: brcmstb: Add two optional props
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230411165919.23955-1-jim2101024@gmail.com>
+ <20230411165919.23955-2-jim2101024@gmail.com>
+ <5a28e520-63e4-dbcf-5b3e-e5097f02dea2@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <5a28e520-63e4-dbcf-5b3e-e5097f02dea2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,103 +94,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-are available in the Git repository at:
+On 4/12/2023 1:09 AM, Krzysztof Kozlowski wrote:
+> On 11/04/2023 18:59, Jim Quinlan wrote:
+>> Regarding "brcm,enable-l1ss":
+>>
+>>    The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SOCs --
+>>    requires the driver probe() to deliberately place the HW one of three
+>>    CLKREQ# modes:
+>>
+>>    (a) CLKREQ# driven by the RC unconditionally
+>>    (b) CLKREQ# driven by the EP for ASPM L0s, L1
+>>    (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
+>>
+>>    The HW+driver can tell the difference between downstream devices that
+>>    need (a) and (b), but does not know when to configure (c).  Further, the
+>>    HW may cause a CPU abort on boot if guesses wrong regarding the need for
+>>    (c).  So we introduce the boolean "brcm,enable-l1ss" property to indicate
+>>    that (c) is desired.  Setting this property only makes sense when the
+>>    downstream device is L1SS-capable and the OS is configured to activate
+>>    this mode (e.g. policy==superpowersave).
+>>
+>>    This property is already present in the Raspian version of Linux, but the
+>>    upstream driver implementaion that will follow adds more details and
+> 
+> typo, implementation
+> 
+>>    discerns between (a) and (b).
+>>
+>> Regarding "brcm,completion-timeout-us"
+>>
+>>    Our HW will cause a CPU abort if the L1SS exit time is longer than the
+>>    PCIe transaction completion abort timeout.  We've been asked to make this
+>>    configurable, so we are introducing "brcm,completion-timeout-us".
+>>
+>> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> 
+> What happened here? Where is the changelog?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/qcom-pinctrl-6.4
+It is in the cover letter:
 
-for you to fetch changes up to 152674ab2e98bfd8677117314a77d223a2a1bedf:
+https://lore.kernel.org/all/20230411165919.23955-1-jim2101024@gmail.com/
 
-  dt-bindings: pinctrl: qcom,sm8550-tlmm: simplify with unevaluatedProperties (2023-04-12 10:59:11 +0200)
-
-----------------------------------------------------------------
-Qualcomm pinctrl Devicetree bindings changes for v6.4
-
-Cleanup and improvement of the bindings to use "unevaluatedProperties"
-instead of "additionalProperties", which allows to accept all the
-properties already parsed by referenced common qcom,tlmm-common.yaml
-schema.
-
-That common qcom,tlmm-common.yaml binding is going to remove
-"input-enable" property, thus using "unevaluatedProperties" allows such
-change to propagate to other bindings automatically.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (36):
-      dt-bindings: pinctrl: qcom,ipq5332-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,ipq6018: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,ipq8074: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,mdm9607-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,mdm9615: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8226: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8660: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8909-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8916: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8953: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8960: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8974: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8976: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8994: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8996: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,msm8998: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,qcs404: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,qdu1000-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sa8775p-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sc7180-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sc7280-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sc8180x-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sdm630: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sdm670-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sdm845: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sdx55: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sdx65-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm6115-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm6125-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm6350-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm6375-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm8150: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm8250: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm8350-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm8450-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm8550-tlmm: simplify with unevaluatedProperties
-
- .../devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,ipq6018-pinctrl.yaml   | 10 +---------
- .../devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,mdm9607-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml   | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml   | 10 +---------
- .../devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8996-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml   | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,qdu1000-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml    | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,sc8180x-tlmm.yaml      | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml       | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sdx55-pinctrl.yaml     | 10 +---------
- .../devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml        | 10 +---------
- .../devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml       | 10 +---------
- .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml       | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml       | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,sm6375-tlmm.yaml       | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml    | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sm8350-tlmm.yaml       | 13 +------------
- .../devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml       | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml       | 11 +----------
- 36 files changed, 36 insertions(+), 362 deletions(-)
+but it does not look like the cover letter was copied to you or Rob.
+-- 
+Florian
