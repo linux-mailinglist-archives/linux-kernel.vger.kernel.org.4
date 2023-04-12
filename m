@@ -2,377 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ABA6DFBAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824326DFBA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjDLQqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S229867AbjDLQpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjDLQq1 (ORCPT
+        with ESMTP id S231362AbjDLQoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:46:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA89902D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681317854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tbgfGOfUxiSSCaOkyoncCcfniesjTCna7R8zm3hOkOs=;
-        b=duvuodg2x0wt0HDYybwz9/l/IcS641UITDwRSkPt+gJtKSkNbKcKjGBMPIVBl9ksnaFUZy
-        8Lx5UWCCn0wqmnQ5vyEIcJcrEeOIiQxgCnADi4CMX/GRxjuuaaVy9KS31b54Lv5F7mO0I+
-        gyxNs6IuwRPhCYYwRe6urMN0+lO9xjw=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-424-AgXypREeOCWeOHaAYZ7C3w-1; Wed, 12 Apr 2023 12:44:12 -0400
-X-MC-Unique: AgXypREeOCWeOHaAYZ7C3w-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-74a904f38f3so86471285a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 09:44:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681317850; x=1683909850;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tbgfGOfUxiSSCaOkyoncCcfniesjTCna7R8zm3hOkOs=;
-        b=bJPoKERMnQQyh5juNXTVgQXlScLpBxCeFx1Vw0frgEHCWL762uBXud2Sk9/2og0FRK
-         mrbTR3ySZRk5ozvxJQP+ztoqFJIk7pHndnDBhuWDPo2zd30u1gnoTc0FavnULOFfxV2n
-         sPQk2Iqq2nwerPOCrW7lezsM01K5h/vTKZ0hQehwtzaFYB/DYN3eKX/E674T1CJOzccq
-         4hb2q4pScE9Ni4hIBIoQheLka8QMmgCM87qNf+ssK6UcWHrGjJj4iKo7HCUgWTo9BFt4
-         G9JCV+QZM4//U91nknmPnos5fB/nUp7p+YdZFWwmiPgn+E5Ucr18ZMgghHOFi1Qy/5V2
-         w0cA==
-X-Gm-Message-State: AAQBX9dplgnP+H/ANr8wszO8bmjXv2zgBld6G6BEWMOOXerKT4Idnx5W
-        VV/oUbid03Pxeld9sirIWtWWoUiEwlQXo1cvA+RVNNTzZ77osjA9oZy5uOAeLtYBY/7ZkBgsIln
-        hUuOSMpKKh3DTFyir4+4IHFlrL8lX48pvZrRYdvB8d9K73dLkSWb2p8koYWl8UMBElqmf61QWgb
-        gnHoZrCw==
-X-Received: by 2002:a05:6214:528e:b0:5a5:e941:f33d with SMTP id kj14-20020a056214528e00b005a5e941f33dmr4707113qvb.3.1681317850560;
-        Wed, 12 Apr 2023 09:44:10 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YgYkqzXY4OPOAVlwyIH89dfszaQ4CVLKQFhdriMwZPec01lMU25gulp094+Es9DxvsBiKi5Q==
-X-Received: by 2002:a05:6214:528e:b0:5a5:e941:f33d with SMTP id kj14-20020a056214528e00b005a5e941f33dmr4707078qvb.3.1681317850234;
-        Wed, 12 Apr 2023 09:44:10 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id b4-20020a0cfb44000000b005dd8b93457csm2915318qvq.20.2023.04.12.09.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:44:09 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
-        peterx@redhat.com, Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v2 26/31] selftests/mm: Move zeropage test into uffd unit tests
-Date:   Wed, 12 Apr 2023 12:44:04 -0400
-Message-Id: <20230412164404.328815-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230412163922.327282-1-peterx@redhat.com>
-References: <20230412163922.327282-1-peterx@redhat.com>
+        Wed, 12 Apr 2023 12:44:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0DC83DA;
+        Wed, 12 Apr 2023 09:44:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4335A60BC9;
+        Wed, 12 Apr 2023 16:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F78C433D2;
+        Wed, 12 Apr 2023 16:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681317852;
+        bh=NYMpdWKijNTKUJTvOHW69ko7yQoyS64ISQbBDv7RnVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=funbCDrYYgj3QHdngt+ehRvaUi6Z0gCdC5trabL90JDqaux9Kq5hMdfsvNchRa1Xh
+         gBwsOFILb6QTUS8Ul8eEJxYp8m2qh3hrjZ9B3a7xh6Vy3Nyy3XDYNrmDlN29sJQEed
+         nIdiMntYsaD6cLFToCMJbJTZkiU3gJ6WKJgs9EpdCG4l1TrD0pcL3Fpomi2NRMnUP7
+         GilID6n504eCL+L6/a7S0kBCs8RbDiV1sYa+3lqPkohCH8TF0r7UMOMJRIvreEPc57
+         f8ZO0xbwdqbTmIApLs+/9D9/il5LTNxtm+ByraXd9JaUrN/pGIst758RYpdN1oLQsI
+         B1r8qzxsfQomg==
+Date:   Wed, 12 Apr 2023 22:14:08 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv2 5/7] phy: phy-rockchip-inno-usb2: add rk3588 phy tuning
+ support
+Message-ID: <ZDbf2At0EakD09af@matsya>
+References: <20230403202307.120562-1-sebastian.reichel@collabora.com>
+ <20230403202307.120562-6-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403202307.120562-6-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplifies it a bit along the way, e.g., drop the never used offset
-field (which was always the 1st page so offset=0).
+On 03-04-23, 22:23, Sebastian Reichel wrote:
+> On RK3588 some registers need to be tweaked to support waking up from
+> suspend when a USB device is plugged into a port from a suspended PHY.
+> Without this change USB devices only work when they are plugged at
+> boot time.
+> 
+> Apart from that it optimizes settings to avoid devices toggling
+> between fullspeed and highspeed mode.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+> 
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> index 3a78c5bf11d4..9f6d09da7fbd 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> @@ -33,6 +33,8 @@
+>  #define SCHEDULE_DELAY		(60 * HZ)
+>  #define OTG_SCHEDULE_DELAY	(2 * HZ)
+>  
+> +struct rockchip_usb2phy;
+> +
+>  enum rockchip_usb2phy_port_id {
+>  	USB2PHY_PORT_OTG,
+>  	USB2PHY_PORT_HOST,
+> @@ -163,6 +165,7 @@ struct rockchip_usb2phy_port_cfg {
+>   * struct rockchip_usb2phy_cfg - usb-phy configuration.
+>   * @reg: the address offset of grf for usb-phy config.
+>   * @num_ports: specify how many ports that the phy has.
+> + * @phy_tuning: phy default parameters tuning.
+>   * @clkout_ctl: keep on/turn off output clk of phy.
+>   * @port_cfgs: usb-phy port configurations.
+>   * @chg_det: charger detection registers.
+> @@ -170,6 +173,7 @@ struct rockchip_usb2phy_port_cfg {
+>  struct rockchip_usb2phy_cfg {
+>  	unsigned int	reg;
+>  	unsigned int	num_ports;
+> +	int (*phy_tuning)(struct rockchip_usb2phy *rphy);
+>  	struct usb2phy_reg	clkout_ctl;
+>  	const struct rockchip_usb2phy_port_cfg	port_cfgs[USB2PHY_NUM_PORTS];
+>  	const struct rockchip_chg_det_reg	chg_det;
+> @@ -1400,6 +1404,12 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+>  		goto disable_clks;
+>  	}
+>  
+> +	if (rphy->phy_cfg->phy_tuning) {
+> +		ret = rphy->phy_cfg->phy_tuning(rphy);
+> +		if (ret)
+> +			goto disable_clks;
+> +	}
+> +
+>  	index = 0;
+>  	for_each_available_child_of_node(np, child_np) {
+>  		struct rockchip_usb2phy_port *rport = &rphy->ports[index];
+> @@ -1468,6 +1478,55 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int rk3588_usb2phy_tuning(struct rockchip_usb2phy *rphy)
+> +{
+> +	int ret = 0;
 
-Introduce uffd_register_with_ioctls() out of uffd_register() to detect
-uffdio_register.ioctls got returned.  Check that automatically when testing
-UFFDIO_ZEROPAGE on different types of memory (and kernel).
+superfluous init
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/mm/uffd-stress.c     | 94 +-------------------
- tools/testing/selftests/mm/uffd-unit-tests.c | 93 +++++++++++++++++++
- tools/testing/selftests/mm/vm_util.c         | 14 ++-
- tools/testing/selftests/mm/vm_util.h         |  2 +
- 4 files changed, 108 insertions(+), 95 deletions(-)
+> +	bool usb3otg = false;
+> +	/*
+> +	 * utmi_termselect = 1'b1 (en FS terminations)
+> +	 * utmi_xcvrselect = 2'b01 (FS transceiver)
+> +	 */
+> +	int suspend_cfg = 0x14;
+> +
+> +	if (rphy->phy_cfg->reg == 0x0000 || rphy->phy_cfg->reg == 0x4000) {
+> +		/* USB2 config for USB3_0 and USB3_1 */
+> +		suspend_cfg |= 0x01; /* utmi_opmode = 2'b01 (no-driving) */
+> +		usb3otg = true;
+> +	} else if (rphy->phy_cfg->reg == 0x8000 || rphy->phy_cfg->reg == 0xc000) {
+> +		/* USB2 config for USB2_0 and USB2_1 */
+> +		suspend_cfg |= 0x00; /* utmi_opmode = 2'b00 (normal) */
+> +	} else {
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Deassert SIDDQ to power on analog block */
+> +	ret = regmap_write(rphy->grf, 0x0008, GENMASK(29, 29) | 0x0000);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Do reset after exit IDDQ mode */
+> +	ret = rockchip_usb2phy_reset(rphy);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* suspend configuration */
+> +	ret |= regmap_write(rphy->grf, 0x000c, GENMASK(20, 16) | suspend_cfg);
+> +
+> +	/* HS DC Voltage Level Adjustment 4'b1001 : +5.89% */
+> +	ret |= regmap_write(rphy->grf, 0x0004, GENMASK(27, 24) | 0x0900);
+> +
+> +	/* HS Transmitter Pre-Emphasis Current Control 2'b10 : 2x */
+> +	ret |= regmap_write(rphy->grf, 0x0008, GENMASK(20, 19) | 0x0010);
+> +
+> +	if (!usb3otg)
+> +		return ret;
+> +
+> +	/* Pullup iddig pin for USB3_0 OTG mode */
+> +	ret |= regmap_write(rphy->grf, 0x0010, GENMASK(17, 16) | 0x0003);
+> +
+> +	return ret;
+> +}
+> +
+>  static const struct rockchip_usb2phy_cfg rk3228_phy_cfgs[] = {
+>  	{
+>  		.reg = 0x760,
+> @@ -1785,6 +1844,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+>  	{
+>  		.reg = 0x0000,
+>  		.num_ports	= 1,
+> +		.phy_tuning	= rk3588_usb2phy_tuning,
+>  		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+>  		.port_cfgs	= {
+>  			[USB2PHY_PORT_OTG] = {
+> @@ -1821,6 +1881,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+>  	{
+>  		.reg = 0x4000,
+>  		.num_ports	= 1,
+> +		.phy_tuning	= rk3588_usb2phy_tuning,
+>  		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+>  		.port_cfgs	= {
+>  			[USB2PHY_PORT_OTG] = {
+> @@ -1857,6 +1918,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+>  	{
+>  		.reg = 0x8000,
+>  		.num_ports	= 1,
+> +		.phy_tuning	= rk3588_usb2phy_tuning,
+>  		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+>  		.port_cfgs	= {
+>  			[USB2PHY_PORT_HOST] = {
+> @@ -1877,6 +1939,7 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+>  	{
+>  		.reg = 0xc000,
+>  		.num_ports	= 1,
+> +		.phy_tuning	= rk3588_usb2phy_tuning,
+>  		.clkout_ctl	= { 0x0000, 0, 0, 1, 0 },
+>  		.port_cfgs	= {
+>  			[USB2PHY_PORT_HOST] = {
+> -- 
+> 2.39.2
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index ce51180238d8..d78f88850011 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -109,15 +109,6 @@ static inline uint64_t uffd_minor_feature(void)
- 		return 0;
- }
- 
--static int my_bcmp(char *str1, char *str2, size_t n)
--{
--	unsigned long i;
--	for (i = 0; i < n; i++)
--		if (str1[i] != str2[i])
--			return 1;
--	return 0;
--}
--
- static void *locking_thread(void *arg)
- {
- 	unsigned long cpu = (unsigned long) arg;
-@@ -273,89 +264,6 @@ static int stress(struct uffd_args *args)
- 	return 0;
- }
- 
--static void retry_uffdio_zeropage(int ufd,
--				  struct uffdio_zeropage *uffdio_zeropage,
--				  unsigned long offset)
--{
--	uffd_test_ops->alias_mapping(&uffdio_zeropage->range.start,
--				     uffdio_zeropage->range.len,
--				     offset);
--	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
--		if (uffdio_zeropage->zeropage != -EEXIST)
--			err("UFFDIO_ZEROPAGE error: %"PRId64,
--			    (int64_t)uffdio_zeropage->zeropage);
--	} else {
--		err("UFFDIO_ZEROPAGE error: %"PRId64,
--		    (int64_t)uffdio_zeropage->zeropage);
--	}
--}
--
--static int __uffdio_zeropage(int ufd, unsigned long offset)
--{
--	struct uffdio_zeropage uffdio_zeropage;
--	int ret;
--	bool has_zeropage = !(test_type == TEST_HUGETLB);
--	__s64 res;
--
--	if (offset >= nr_pages * page_size)
--		err("unexpected offset %lu", offset);
--	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
--	uffdio_zeropage.range.len = page_size;
--	uffdio_zeropage.mode = 0;
--	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
--	res = uffdio_zeropage.zeropage;
--	if (ret) {
--		/* real retval in ufdio_zeropage.zeropage */
--		if (has_zeropage)
--			err("UFFDIO_ZEROPAGE error: %"PRId64, (int64_t)res);
--		else if (res != -EINVAL)
--			err("UFFDIO_ZEROPAGE not -EINVAL");
--	} else if (has_zeropage) {
--		if (res != page_size) {
--			err("UFFDIO_ZEROPAGE unexpected size");
--		} else {
--			retry_uffdio_zeropage(ufd, &uffdio_zeropage,
--					      offset);
--			return 1;
--		}
--	} else
--		err("UFFDIO_ZEROPAGE succeeded");
--
--	return 0;
--}
--
--static int uffdio_zeropage(int ufd, unsigned long offset)
--{
--	return __uffdio_zeropage(ufd, offset);
--}
--
--/* exercise UFFDIO_ZEROPAGE */
--static int userfaultfd_zeropage_test(void)
--{
--	printf("testing UFFDIO_ZEROPAGE: ");
--	fflush(stdout);
--
--	uffd_test_ctx_init(0);
--
--	if (uffd_register(uffd, area_dst, nr_pages * page_size,
--			  true, test_uffdio_wp, false))
--		err("register failure");
--
--	if (area_dst_alias) {
--		/* Needed this to test zeropage-retry on shared memory */
--		if (uffd_register(uffd, area_dst_alias, nr_pages * page_size,
--				  true, test_uffdio_wp, false))
--			err("register failure");
--	}
--
--	if (uffdio_zeropage(uffd, 0))
--		if (my_bcmp(area_dst, zeropage, page_size))
--			err("zeropage is not zero");
--
--	printf("done.\n");
--	return 0;
--}
--
- static int userfaultfd_stress(void)
- {
- 	void *area;
-@@ -467,7 +375,7 @@ static int userfaultfd_stress(void)
- 		uffd_stats_report(args, nr_cpus);
- 	}
- 
--	return userfaultfd_zeropage_test();
-+	return 0;
- }
- 
- static void set_test_type(const char *type)
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 94549696f4b2..160bd8ccda55 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -660,7 +660,100 @@ static void uffd_events_wp_test(void)
- 	uffd_events_test_common(true);
- }
- 
-+static void retry_uffdio_zeropage(int ufd,
-+				  struct uffdio_zeropage *uffdio_zeropage)
-+{
-+	uffd_test_ops->alias_mapping(&uffdio_zeropage->range.start,
-+				     uffdio_zeropage->range.len,
-+				     0);
-+	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
-+		if (uffdio_zeropage->zeropage != -EEXIST)
-+			err("UFFDIO_ZEROPAGE error: %"PRId64,
-+			    (int64_t)uffdio_zeropage->zeropage);
-+	} else {
-+		err("UFFDIO_ZEROPAGE error: %"PRId64,
-+		    (int64_t)uffdio_zeropage->zeropage);
-+	}
-+}
-+
-+static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
-+{
-+	struct uffdio_zeropage uffdio_zeropage = { 0 };
-+	int ret;
-+	__s64 res;
-+
-+	uffdio_zeropage.range.start = (unsigned long) area_dst;
-+	uffdio_zeropage.range.len = page_size;
-+	uffdio_zeropage.mode = 0;
-+	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
-+	res = uffdio_zeropage.zeropage;
-+	if (ret) {
-+		/* real retval in ufdio_zeropage.zeropage */
-+		if (has_zeropage)
-+			err("UFFDIO_ZEROPAGE error: %"PRId64, (int64_t)res);
-+		else if (res != -EINVAL)
-+			err("UFFDIO_ZEROPAGE not -EINVAL");
-+	} else if (has_zeropage) {
-+		if (res != page_size)
-+			err("UFFDIO_ZEROPAGE unexpected size");
-+		else
-+			retry_uffdio_zeropage(ufd, &uffdio_zeropage);
-+		return true;
-+	} else
-+		err("UFFDIO_ZEROPAGE succeeded");
-+
-+	return false;
-+}
-+
-+/*
-+ * Registers a range with MISSING mode only for zeropage test.  Return true
-+ * if UFFDIO_ZEROPAGE supported, false otherwise. Can't use uffd_register()
-+ * because we want to detect .ioctls along the way.
-+ */
-+static bool
-+uffd_register_detect_zeropage(int uffd, void *addr, uint64_t len)
-+{
-+	uint64_t ioctls = 0;
-+
-+	if (uffd_register_with_ioctls(uffd, addr, len, true,
-+				      false, false, &ioctls))
-+		err("zeropage register fail");
-+
-+	return ioctls & (1 << _UFFDIO_ZEROPAGE);
-+}
-+
-+/* exercise UFFDIO_ZEROPAGE */
-+static void uffd_zeropage_test(void)
-+{
-+	bool has_zeropage;
-+	int i;
-+
-+	has_zeropage = uffd_register_detect_zeropage(uffd, area_dst, page_size);
-+	if (area_dst_alias)
-+		/* Ignore the retval; we already have it */
-+		uffd_register_detect_zeropage(uffd, area_dst_alias, page_size);
-+
-+	if (do_uffdio_zeropage(uffd, has_zeropage))
-+		for (i = 0; i < page_size; i++)
-+			if (area_dst[i] != 0)
-+				err("data non-zero at offset %d\n", i);
-+
-+	if (uffd_unregister(uffd, area_dst, page_size))
-+		err("unregister");
-+
-+	if (area_dst_alias && uffd_unregister(uffd, area_dst_alias, page_size))
-+		err("unregister");
-+
-+	uffd_test_pass();
-+}
-+
- uffd_test_case_t uffd_tests[] = {
-+	{
-+		.name = "zeropage",
-+		.uffd_fn = uffd_zeropage_test,
-+		.mem_targets = MEM_ALL,
-+		.uffd_feature_required = 0,
-+	},
- 	{
- 		.name = "pagemap",
- 		.uffd_fn = uffd_pagemap_test,
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 1bc0ceb01adb..9b06a5034808 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -198,8 +198,9 @@ unsigned long default_huge_page_size(void)
- 	return hps;
- }
- 
--int uffd_register(int uffd, void *addr, uint64_t len,
--		  bool miss, bool wp, bool minor)
-+/* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
-+int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
-+			      bool miss, bool wp, bool minor, uint64_t *ioctls)
- {
- 	struct uffdio_register uffdio_register = { 0 };
- 	uint64_t mode = 0;
-@@ -218,10 +219,19 @@ int uffd_register(int uffd, void *addr, uint64_t len,
- 
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
- 		ret = -errno;
-+	else if (ioctls)
-+		*ioctls = uffdio_register.ioctls;
- 
- 	return ret;
- }
- 
-+int uffd_register(int uffd, void *addr, uint64_t len,
-+		  bool miss, bool wp, bool minor)
-+{
-+	return uffd_register_with_ioctls(uffd, addr, len,
-+					 miss, wp, minor, NULL);
-+}
-+
- int uffd_unregister(int uffd, void *addr, uint64_t len)
- {
- 	struct uffdio_range range = { .start = (uintptr_t)addr, .len = len };
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 634eb2f41145..b950bd16083a 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -52,6 +52,8 @@ int uffd_open_dev(unsigned int flags);
- int uffd_open_sys(unsigned int flags);
- int uffd_open(unsigned int flags);
- int uffd_get_features(uint64_t *features);
-+int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
-+			      bool miss, bool wp, bool minor, uint64_t *ioctls);
- 
- /*
-  * On ppc64 this will only work with radix 2M hugepage size
 -- 
-2.39.1
-
+~Vinod
