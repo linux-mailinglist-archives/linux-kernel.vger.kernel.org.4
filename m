@@ -2,161 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810616DF84B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51736DF84E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjDLOW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S230371AbjDLOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjDLOWY (ORCPT
+        with ESMTP id S229714AbjDLOWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:22:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D18849C2;
-        Wed, 12 Apr 2023 07:22:20 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CDCcfZ002529;
-        Wed, 12 Apr 2023 14:22:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=A6rkTKdrp8pWYrTITfHeeRZBDsC4+SFAsWLmky1OPHA=;
- b=k/zW38eNGmfyTt2lmRjcaRALhfG8zGZeKEKK090AuweShwtd8mzfNhUPhbysKX0lCZ69
- sJJyIFR0JE0k92c8FARjeW0F8a111VxLmy0LB6g3ExbtphWtv0O/x6iUvMYN2Ra0bT1M
- cCSAW+owArd0LLIYAlaRMTWvFZq0Sa5Mn4qG4rpt9gXNOzEQEoA1oBP/t4xphXW1OzCn
- fK1YExp1CdVMJcZHlPn0WgA4QhozHs4APeyU3D/KtjGt90HjWuOjHy1x6Jnhugf7n+kX
- nuJ7ZHYFckaakZLlAmiCx9aIZJRgSRJ0epe1btAwkjwp0BNJ6Qpshgf6vUiIN6YtxmZZ Vw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqens19h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:22:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CEM8NP011605
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:22:08 GMT
-Received: from [10.50.1.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 07:22:04 -0700
-Message-ID: <d260f351-1cf1-aecc-e8f5-d0877ed04ab6@quicinc.com>
-Date:   Wed, 12 Apr 2023 19:52:01 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wed, 12 Apr 2023 10:22:35 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E9F5BB0;
+        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1842f69fe1fso13819117fac.11;
+        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681309353; x=1683901353;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VPvHP5zKEhV3wpPCaaJd0A6PHj3TqrNkW4J6dKPRAfw=;
+        b=5lQq/Nejs25Vk0ZcsNlVd/GDTYBvHlzp0fhJkmhrIwKRhF0PQXQnyz5iC5gdAqHO07
+         9V13/a+1FOIJ0Okav0LPeTBoAWPLJxsP0H3aYgYTaPmQjQ+sZHP+PpUz3Z4XH5/uvxM6
+         Yb/zeu+uDxZc1B080IMzGqUDgkTOM1lWEszuyDK1uKMEoZgoebFznNBIdlFkUzCDnMWh
+         Xf92p7MEYfJMqhrbeyb8pFUzSgTnHUzYJi29fSR/KASueuu4C1Fawsw5xV0mtXyvtu7c
+         IH7ZmGgJ5CNUCndtspQkG0sr7/O24w9MlbphBREZ7KypUuuydow7A9rXgEzunJBNuNPo
+         aasw==
+X-Gm-Message-State: AAQBX9dw53FkZiBCCsR8E1Eej7J59cvOHZ1a/hcQzAbsmlVuj4Gwvi/n
+        rxqV5ltY4aZh9ZXIxnew0j6+9pr2Ww==
+X-Google-Smtp-Source: AKy350ZCtkbbDRKlzPF0Ss6Eh8n2Yi3YFFtYIpvQFEmGPtALYaJH/WAqtHFfG07hJhh36HiOUhzpAQ==
+X-Received: by 2002:a05:6870:a713:b0:17a:b026:dacc with SMTP id g19-20020a056870a71300b0017ab026daccmr9345535oam.52.1681309353118;
+        Wed, 12 Apr 2023 07:22:33 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z7-20020a056870e14700b001842bb0a01csm172819oaa.27.2023.04.12.07.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:22:32 -0700 (PDT)
+Received: (nullmailer pid 2309359 invoked by uid 1000);
+        Wed, 12 Apr 2023 14:22:32 -0000
+Date:   Wed, 12 Apr 2023 09:22:32 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
- <5eeeb46e9b3f61656a37cb77c2ad6a04e383c16d.1680874520.git.quic_schowdhu@quicinc.com>
- <20230407154132.dpguz24f6rukyujq@ripper>
- <8cf793df-b676-bbb4-0601-5647d58bb2b3@quicinc.com>
- <7e180b96-6f47-6b25-8751-01b5186c8c71@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <7e180b96-6f47-6b25-8751-01b5186c8c71@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RaIiqXVUvlEMlkFQilcFQS4ByNlfVERI
-X-Proofpoint-ORIG-GUID: RaIiqXVUvlEMlkFQilcFQS4ByNlfVERI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_06,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120126
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add RPM Master stats
+Message-ID: <20230412142232.GA2305202-robh@kernel.org>
+References: <20230405-topic-master_stats-v2-0-51c304ecb610@linaro.org>
+ <20230405-topic-master_stats-v2-1-51c304ecb610@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405-topic-master_stats-v2-1-51c304ecb610@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 06, 2023 at 04:49:17PM +0200, Konrad Dybcio wrote:
+> The RPM MSG RAM contains per-RPM-master (e.g. APPS, ADSP etc.) sleep
+> statistics. They let one assess which core is actively preventing the
+> system from entering a true low-power mode.
 
-
-On 4/12/2023 1:47 PM, Krzysztof Kozlowski wrote:
-> On 10/04/2023 08:48, Souradeep Chowdhury wrote:
->>
->>
->> On 4/7/2023 9:11 PM, Bjorn Andersson wrote:
->>> On Fri, Apr 07, 2023 at 07:34:36PM +0530, Souradeep Chowdhury wrote:
->>>> All of Qualcomm's proprietary Android boot-loaders capture boot time
->>>> stats, like the time when the bootloader started execution and at what
->>>> point the bootloader handed over control to the kernel etc. in the IMEM
->>>> region. This information is captured in a specific format by this driver
->>>> by mapping a structure to the IMEM memory region and then accessing the
->>>> members of the structure to print the information. This information is
->>>> useful in verifying if the existing boot KPIs have regressed or not.
->>>> A sample log in SM8450(waipio) device is as follows:-
->>>>
->>>> KPI: Pre ABL Time = 3s
->>>> KPI: ABL Time = 14s
->>>
->>> Why are these in whole seconds?
->>
->> This is to give a granular view of time.
->>
->>>
->>>> KPI: Kernel MPM timestamp = 890206
->>>
->>> And why is this presented in cycles?
->>
->> This timestamp is used as an intermediate value for calculating one of
->> the KPIs. Can be changed to seconds as well for consistency.
->>
->>>
->>>>
->>>> The Module Power Manager(MPM) sleep counter starts ticking at the PBL
->>>> stage and the timestamp generated by the sleep counter is logged by
->>>> the Qualcomm proprietary bootloader(ABL) at two points-> First when it
->>>> starts execution which is logged here as "Pre ABL Time" and the second
->>>> when it is about to load the kernel logged as "ABL Time". Both are
->>>> logged in the unit of seconds.
->>>
->>> We have a policy to not taint the kernel log with "useless" information,
->>> for kernel developers this seems to add no value and for end users
->>> there's no benefit to this.
->>>
->>>> The current kernel timestamp is
->>>> printed by the boot_stats driver as well.
->>>>
->>>
->>> Why?
->>
->> Same as stated above.
-> 
-> You did not answer. The question is "why do you think printing this
-> during boot is suitable for wide usage?". I don't find answer "give a
-> granular view of time" anyway related.
-> 
-> Please come with rationale why such printing should be used in Linux
-> kernel at all, given that as Bjorn said - we do not print
-> debugging/profiling information.
-> 
-> You should probably come with a debugfs interface for this.
-
-Ack. The debugfs interface for this will be present in the next version.
+Just curious, is that a debug thing or something the OS uses?
 
 > 
-> Best regards,
-> Krzysztof
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/soc/qcom/rpm-master-stats.yaml        | 53 ++++++++++++++++++++++
+
+qcom,rpm-master-stats.yaml
+
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml b/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml
+> new file mode 100644
+> index 000000000000..d2d6a2a39fef
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/rpm-master-stats.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. (QTI) RPM Master Stats
+> +
+> +maintainers:
+> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
+> +
+> +description:
+> +  Per-RPM-Master (e.g. APSS, ADSP, etc.) sleep statistics.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,rpm-master-stats
+> +
+> +  qcom,rpm-msg-ram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Phandle to an RPM MSG RAM slice containing the master stats
+> +    minItems: 1
+> +    maxItems: 5
+> +
+> +  qcom,master-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description: RPM Master name
+> +    minItems: 1
+> +    maxItems: 5
+> +
+> +required:
+> +  - compatible
+> +  - qcom,rpm-msg-ram
+> +  - qcom,master-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    stats {
+> +      compatible = "qcom,rpm-master-stats";
+> +      qcom,rpm-msg-ram = <&apss_master_stats>,
+> +                         <&mpss_master_stats>,
+> +                         <&adsp_master_stats>,
+> +                         <&cdsp_master_stats>,
+> +                         <&tz_master_stats>;
+> +      qcom,master-names = "APSS",
+> +                          "MPSS",
+> +                          "ADSP",
+> +                          "CDSP",
+> +                          "TZ";
+> +    };
+> +...
+> 
+> -- 
+> 2.40.0
 > 
