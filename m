@@ -2,148 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9716DF837
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159676DF83B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjDLOS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S231515AbjDLOUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjDLOS4 (ORCPT
+        with ESMTP id S230081AbjDLOUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:18:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB058449C;
-        Wed, 12 Apr 2023 07:18:55 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CA9KF5016590;
-        Wed, 12 Apr 2023 14:18:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=A3rtY/+rMuLAW7o8CwDLtu8ApOMjjqatmbeuFdqpedY=;
- b=AKYnLl7YDsF9l68dMWFqfYcVbsRkE/6XdHlCzLp61Xm3bf+/97sFZ2cj0/iZNK8Vd9Iy
- bdLELIPqnfZpZ17QkbzIMwHpjAiuYw4EwhiQ17QOFIKHDikEYLfOIGyPdtKMWujR4Qai
- 5k+HupWAcqCwVUjf/Gal/jcm0b5Oz6apFn+1d+9OghslRpgN8FWJDz6nCpPpnwomqBkG
- idx40wNf4hCq/Grul1+QZujN2R4WIml/MPyj5LyIdy+ClSB+WSzNVJ8MfpP7a9BYVFEP
- 8HW1/QrD2sgR9MLPLZFlxwavEiEbJ2NgmtT6gdTEceU17KEdNu2wfY7U4t4qdCSolbxE Uw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwchbt7m2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:18:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CEIhUH010999
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:18:43 GMT
-Received: from [10.50.1.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 07:18:38 -0700
-Message-ID: <d53b793a-5e9d-071e-8842-d8c0845e22c1@quicinc.com>
-Date:   Wed, 12 Apr 2023 19:47:49 +0530
+        Wed, 12 Apr 2023 10:20:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EDD44B9;
+        Wed, 12 Apr 2023 07:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681309215; x=1712845215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dAApaBOmjnGI+B8dl1J1ZbNF3a5taTtRMYO+AejGQt4=;
+  b=E5MLwxlGPAX55SaE8DCCY9nWS+QxXVbys//547KZ8aeC9tEV6aZeVx1d
+   kLfBJd4PGYFFI6RpaVVNGma6LXdKIKcWlQesBnQypCh+iN/tz65gp6Nq+
+   tf2Kmx965jZJYS8o4yALpeT0nsZ6kpy0FYbBCI2nvuTmZITxr0jhOzDqC
+   csWinMzEaRcc2Y5tzM0ar8ibO1e5RGVlH/0VXoPeyFl/OzZ7aW0GUetho
+   vnjUqz2mbyHDP1twghZM9eKxq6Px6OBE9LFgfGuclwchm+shqlRImBsSs
+   KxkTKM6KzErghrQY3WbaVg24MOI+pMXvituPOD0hrmlD5itplnDT7Q6/+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="328019954"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="328019954"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:20:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="753544041"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="753544041"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2023 07:20:12 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmbKV-000XmB-19;
+        Wed, 12 Apr 2023 14:20:11 +0000
+Date:   Wed, 12 Apr 2023 22:19:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, libaokun1@huawei.com
+Subject: Re: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return
+ void
+Message-ID: <202304122234.3Meeshf9-lkp@intel.com>
+References: <20230412124126.2286716-7-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
- <96601c1f9e433ef8fbc608d5ca09365b9c0d8132.1680874520.git.quic_schowdhu@quicinc.com>
- <e1f83f5f-c139-c1b2-5e42-00fce804e548@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <e1f83f5f-c139-c1b2-5e42-00fce804e548@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: KSQ3ilWMLl3KT8oZJfN20uVn6w4_lnDb
-X-Proofpoint-GUID: KSQ3ilWMLl3KT8oZJfN20uVn6w4_lnDb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_06,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 suspectscore=0 adultscore=0 spamscore=0
- impostorscore=0 malwarescore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120126
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412124126.2286716-7-libaokun1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Baokun,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412124126.2286716-7-libaokun1%40huawei.com
+patch subject: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return void
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230412/202304122234.3Meeshf9-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+        git checkout 87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/ext4/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304122234.3Meeshf9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   fs/ext4/inode.c: In function 'ext4_insert_delayed_block':
+>> fs/ext4/inode.c:1640:14: warning: variable 'reserved' set but not used [-Wunused-but-set-variable]
+    1640 |         bool reserved = false;
+         |              ^~~~~~~~
 
 
-On 4/12/2023 1:45 PM, Krzysztof Kozlowski wrote:
-> On 07/04/2023 16:04, Souradeep Chowdhury wrote:
->> All Qualcomm bootloaders log useful timestamp information related
->> to bootloader stats in the IMEM region. Add the child node within
->> IMEM for the boot stat region containing register address and
->> compatible string.
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   .../devicetree/bindings/sram/qcom,imem.yaml         | 21 +++++++++++++++++++++
->>   1 file changed, 21 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> index 665c06e..9998d65 100644
->> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> @@ -26,6 +26,7 @@ properties:
->>             - qcom,sdm845-imem
->>             - qcom,sdx55-imem
->>             - qcom,sdx65-imem
->> +          - qcom,sm8450-imem
->>         - const: syscon
->>         - const: simple-mfd
->>   
->> @@ -48,6 +49,26 @@ patternProperties:
->>       $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->>       description: Peripheral image loader relocation region
->>   
->> +  "^boot-stat@[0-9a-f]+$":
-> 
-> Konrad,
-> Just like for RPM Master stats, didn't we want to call these just "stats"?
-> 
-> https://lore.kernel.org/linux-arm-msm/20230405-topic-master_stats-v2-1-51c304ecb610@linaro.org
-> 
->> +    type: object
->> +    description:
->> +      Imem region dedicated for storing timestamps related
->> +      information regarding bootstats.
-> 
-> Description is okay, but you ignored the rest.
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
-> 
-> Thank you.
+vim +/reserved +1640 fs/ext4/inode.c
 
-Ack. Will be implemented in the next version.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+df22291ff0fde0 Aneesh Kumar K.V 2008-09-08  1623  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1624  /*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1625   * ext4_insert_delayed_block - adds a delayed block to the extents status
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1626   *                             tree, incrementing the reserved cluster/block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1627   *                             count or making a pending reservation
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1628   *                             where needed
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1629   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1630   * @inode - file containing the newly added block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1631   * @lblk - logical block to be added
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1632   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1633   * Returns 0 on success, negative error code on failure.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1634   */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1635  static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1636  {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1637  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+87f992eeab9cd8 Baokun Li        2023-04-12  1638  	int ret = 0;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1639  	bool allocated = false;
+6fed83957f21ef Jeffle Xu        2021-08-23 @1640  	bool reserved = false;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1641  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1642  	/*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1643  	 * If the cluster containing lblk is shared with a delayed,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1644  	 * written, or unwritten extent in a bigalloc file system, it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1645  	 * already been accounted for and does not need to be reserved.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1646  	 * A pending reservation must be made for the cluster if it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1647  	 * shared with a written or unwritten extent and doesn't already
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1648  	 * have one.  Written and unwritten extents can be purged from the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1649  	 * extents status tree if the system is under memory pressure, so
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1650  	 * it's necessary to examine the extent tree if a search of the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1651  	 * extents status tree doesn't get a match.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1652  	 */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1653  	if (sbi->s_cluster_ratio == 1) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1654  		ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1655  		if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1656  			goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1657  		reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1658  	} else {   /* bigalloc */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1659  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1660  			if (!ext4_es_scan_clu(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1661  					      &ext4_es_is_mapped, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1662  				ret = ext4_clu_mapped(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1663  						      EXT4_B2C(sbi, lblk));
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1664  				if (ret < 0)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1665  					goto errout;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1666  				if (ret == 0) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1667  					ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1668  					if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1669  						goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1670  					reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1671  				} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1672  					allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1673  				}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1674  			} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1675  				allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1676  			}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1677  		}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1678  	}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1679  
+87f992eeab9cd8 Baokun Li        2023-04-12  1680  	ext4_es_insert_delayed_block(inode, lblk, allocated);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1681  errout:
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1682  	return ret;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1683  }
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1684  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
