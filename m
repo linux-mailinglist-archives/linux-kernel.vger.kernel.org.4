@@ -2,187 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852F96DE998
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8382B6DE99B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 04:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjDLCmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Apr 2023 22:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S229628AbjDLCoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Apr 2023 22:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjDLCmt (ORCPT
+        with ESMTP id S229450AbjDLCoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Apr 2023 22:42:49 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C8E170F;
-        Tue, 11 Apr 2023 19:42:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=afQtD2r02i9AtV2zWI6oNW90q7P5e9KOrRXDe8WWR0pijWQQ/p5x4zkNJXm928kklou1oG6wxxbx3EJizxPZzymiG9eAmlxCa7x5L9+lQud+63Q9H6QZzthKYHf+OgsNuSip+lzzm8vnd7NY6Q8UgJBDAtGoJU11Y0saVL7ZJd7zasUY2pnjDBXx63piphrX11zsbw0lEnXcR3RV1uEXu3ySh6p7JXsLUTNOSNhznf9iXdZS3ASgj9TbYe5zWEh/1qk6tX8PlJMw6g4lLckmmijeobF9b/dURffROrAejnLZ4O4MBG0N8F3DyIKv9PKtgTqGjGXFrHBYznz8FZKrFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0jVUqqZs3KFvvwOHmyhUo02DFgq1SRcJsQZ+iMYj8H4=;
- b=mAHcBY3pXtV7KMaB9XTCVz3xauQCPY4s6SHalWde1mYvgIfP5OCi4MOluyzGNUkKrz71C4EU1nYYlONz8qsiUUW85oiQsw8jnFdfNJlXcF23T7QQ8LRYANe6IxkLb50D1Rcw5ta13XWCejbBXwqaRGnQIIHHHGMRbBHlt8HRTIvLWeb77i/CuBg9178e2VI2KooHKw8dGO0DSVhBsT+6VNYaycxR92F/Xrc6n6O65vgE/YImmRZJcpDvFhTeJ69Vz2MeY978gWca57ZWRTorHyWDYSgGRO/Qo3zezTjzMR8phaYdoP0pz8KMoluO918K6NTU0abLRxQp6CuwJDf+0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0jVUqqZs3KFvvwOHmyhUo02DFgq1SRcJsQZ+iMYj8H4=;
- b=Q4nY0iSnr2MV7I/v4+I9ueC3tzqQmmkz9mJF6Oq2cjts4Wgj7RLd+fTZyZUlr+1Gn9YQOO39MscVFPBKSmPXRFEq/CSDU9qCDZ6hl42NCCNhgf4d++J4eyrSFTO98v/UcRioPgQN4+5bLw/Xxlnp5DN6aOlDZ/poGVKMBoLYI7U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=labundy.com;
-Received: from DM5PR0801MB3767.namprd08.prod.outlook.com (2603:10b6:4:7c::37)
- by MN2PR08MB6397.namprd08.prod.outlook.com (2603:10b6:208:1aa::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 12 Apr
- 2023 02:42:43 +0000
-Received: from DM5PR0801MB3767.namprd08.prod.outlook.com
- ([fe80::5dc4:3327:28d3:af7f]) by DM5PR0801MB3767.namprd08.prod.outlook.com
- ([fe80::5dc4:3327:28d3:af7f%3]) with mapi id 15.20.6277.035; Wed, 12 Apr 2023
- 02:42:42 +0000
-Date:   Tue, 11 Apr 2023 21:42:25 -0500
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Fred Treven <fred.treven@cirrus.com>, dmitry.torokhov@gmail.com,
-        ben.bright@cirrus.com, james.ogletree@cirrus.com, lee@kernel.org,
-        jdelvare@suse.de, joel@jms.id.au, cy_huang@richtek.com,
-        rdunlap@infradead.org, eajames@linux.ibm.com, ping.bai@nxp.com,
-        msp@baylibre.com, arnd@arndb.de, bartosz.golaszewski@linaro.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH 1/2] Input: cs40l26: Support for CS40L26 Boosted Haptic
- Amplifier
-Message-ID: <ZDYakQMOPsPTbGe0@nixie71>
-References: <SupportforCS40L26BoostedHapticAmplifier>
- <1680819415-28806-1-git-send-email-fred.treven@cirrus.com>
- <ZDI0p5Rkp74SzJCv@nixie71>
- <20230410085634.GV68926@ediswmail.ad.cirrus.com>
- <ZDSqfHemG8pKj1k7@nixie71>
- <20230411092708.GX68926@ediswmail.ad.cirrus.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411092708.GX68926@ediswmail.ad.cirrus.com>
-X-ClientProxiedBy: DS7PR03CA0151.namprd03.prod.outlook.com
- (2603:10b6:5:3b2::6) To DM5PR0801MB3767.namprd08.prod.outlook.com
- (2603:10b6:4:7c::37)
+        Tue, 11 Apr 2023 22:44:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06447103
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Apr 2023 19:44:12 -0700 (PDT)
+X-UUID: e5c02beed8db11eda9a90f0bb45854f4-20230412
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=H5FYrATT4VGI92VQEIJH6GiQshptGEG+Fy5j9MIU3tA=;
+        b=Q4KHGIPpwzYgs69hcIX9w3wgLWh0fGeHQ4RgWfuSQ9huTN0aYo0rDqKG96QNIO4vSgMOY05az+JEKJ+kBWNz4ess3hmUKzzslc1cwWsXkyXco0P2AQh2E0wUsMcoZRTw8os1NFujcF7ODX/PISfsIz98Xcn3fp7JPUETliVUtAY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:1521a4d0-e889-4c92-a3fb-78ba5dd5f796,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.22,REQID:1521a4d0-e889-4c92-a3fb-78ba5dd5f796,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:120426c,CLOUDID:4b2fa8ea-db6f-41fe-8b83-13fe7ed1ef52,B
+        ulkID:2304120532092V9NDB9G,BulkQuantity:7,Recheck:0,SF:17|19|48|29|28|102,
+        TC:nil,Content:0|-5,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil
+        ,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-UUID: e5c02beed8db11eda9a90f0bb45854f4-20230412
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <haibo.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 800472532; Wed, 12 Apr 2023 10:44:08 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 12 Apr 2023 10:44:07 +0800
+Received: from mszsdtlt102.gcn.mediatek.inc (10.16.4.142) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Wed, 12 Apr 2023 10:44:06 +0800
+From:   Haibo Li <haibo.li@mediatek.com>
+To:     <linus.walleij@linaro.org>
+CC:     <a.anurag@samsung.com>, <alexander.sverdlin@nokia.com>,
+        <angelogioacchino.delregno@collabora.com>, <ardb@kernel.org>,
+        <catalin.marinas@arm.com>, <haibo.li@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <matthias.bgg@gmail.com>, <rmk+kernel@armlinux.org.uk>,
+        <xiaoming.yu@mediatek.com>
+Subject: Re: [PATCH] ARM:unwind:fix unwind abort for uleb128 case
+Date:   Wed, 12 Apr 2023 10:44:06 +0800
+Message-ID: <20230412024406.62187-1-haibo.li@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CACRpkda8qTuCmF_RDjtp26k_DMpME=0wAPjejh4ODkUr9SxVqg@mail.gmail.com>
+References: <CACRpkda8qTuCmF_RDjtp26k_DMpME=0wAPjejh4ODkUr9SxVqg@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR0801MB3767:EE_|MN2PR08MB6397:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb9db6ac-e1cb-4995-6c8b-08db3aff915e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 51gbqJxeLyfC/yQzC28lksXcf+zq7bT3sn9EuNxkkyPu3EP2+f7DMwr+sZ93OjW2EJo/3/0nT/+CC4L5VMkDspc4EhgC1Z/L2z24yOSUmoNlddRLBQ4ltXroh1n474z5tBp0TE0miuyOEoqZt2gXZm4y3s9l/elTJXW5i5mcoVTVyuvuSK1qrUCm83drmB1GxOSUVyaXid2hke70Xtasgb7nRWiS56jyYdmuFaaC9IyN1K7okdpcU3BtpFL93J4bhlues5DNgB7LcVuQS4vdBQ34tPzWzFKlduSaUcBIzhaCp8pUKSQjiz7DD+VtezwAD9ginDThUBCVskirqzgM1xKE3tSSBW7u9Ch32ke/r/Wfuw+AOaz3hGU9wXhrQ/KAalEiulG3ABrCVgckR8fPkyEqBWVVzFA9NHLJmPSaq5ZkknqjELW/2f8lpPuu3BNq5N9BGISpZ7nMmLN+MEVQi/oE6usZTnRcO3gtCuoKi3k5HVKhsxgwPzRZE3r1RYYBmL/efu1HhHBTSg+FIWaK7ON27Uye0BeXUZuKT45wWOvm+NR0kruJAo4qjTJbalTH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0801MB3767.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39830400003)(346002)(396003)(366004)(376002)(451199021)(6666004)(83380400001)(186003)(66556008)(26005)(66899021)(86362001)(66946007)(6506007)(9686003)(6512007)(38100700002)(2906002)(6916009)(8676002)(4326008)(41300700001)(478600001)(33716001)(316002)(5660300002)(7416002)(66476007)(6486002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?clnSItqOYBybgze9cEvvJo897+eoJWoE6lCLriRnvPPP6qC1RGOIYW6D+/5j?=
- =?us-ascii?Q?twKPKwQ++f15uVR5sts59dR6ZzhB9MeV82s067ZQK+vm/lyoQT7qjAeIdOaJ?=
- =?us-ascii?Q?g5+V17pGSCaH2qZznY+yzBYsbLYw3mQ5JY809yaLzsqn4VefM7EivMhjSLfM?=
- =?us-ascii?Q?ll3ts+xkLbbeVk+5wi0Rmt8sPobP5tJVZf9y9jeQEkxcGGnut4jTWM3YeNhi?=
- =?us-ascii?Q?o6eH1fI3FBStGi6VlqfCl7Jw4D0LhykYFSewhtxqaYrOBJYJcVWcU0frIGS6?=
- =?us-ascii?Q?+xGnzz+L6zQPVRsZFr8VXiI6YSs+U3lqISrCjkrjRbOgGJ+jq6qoSkbFhjgF?=
- =?us-ascii?Q?WwsjlzeOWP5+8by0NVsUUM3TjexKD2vn2vLSE+dngmqvY5u520FFa1v0jz0M?=
- =?us-ascii?Q?/dINkmXy4UPgPKKtGrbrVtB2xDrzHzVTy8Yw0bOMO64EQO1YJH8Csg0PX8gi?=
- =?us-ascii?Q?yzmfjlPXn9FIz5sBdOiXoKGvLuMCA0bLQTGM92FKS2a24s/Btu2YSk8Wi2Lx?=
- =?us-ascii?Q?aYh0hVcUCO8jxFeFUjWcEzKqp3V1Xlhxt8ldRrS/q7+0kzC3J/C9VK4YYhx6?=
- =?us-ascii?Q?IzuyCyGirgWNRc2+bQDAfdgrzXaiobLsnR7hThTTc3iwNboOxZoDb7BLib+c?=
- =?us-ascii?Q?QDvzpdzhUwws6IBpMyfZunmdXaqNhcZk4fa42oR73NxQegrfuvOGM5wPQp0N?=
- =?us-ascii?Q?Bc4/2ZnMQ7msR3o0PkZhjc/d8iFm0/EpO2UkNPJFuZX70LXjLolFsRs4qBLM?=
- =?us-ascii?Q?FfhPaVbDSRnoR2Rh/yAldCgaHBdEcO5eWmffok3tQbGEirTtVqNz/8aTjWAK?=
- =?us-ascii?Q?RmGA5Lxg0R4Tn/BwfIUItInwrDffCnPNfa9cyXIrsX1VefihxbOo/i6MTWjQ?=
- =?us-ascii?Q?5L/usI6+Fjz1xzqvKBmfW+WOLaWhf4b4626emzlFFRctRajnl4Fnu7ssIYDc?=
- =?us-ascii?Q?J6QZhBbScOzYpDYFikYTJ6DsZe/PR8l6HY/3Tz53hLMc7KqgTqoYScwqG+1n?=
- =?us-ascii?Q?X4rI+GhwyGVhcE37EYW6RHeGxxdG16cjw4ul5plXWcLhWJzaSYxw+6Bf3xpj?=
- =?us-ascii?Q?A/Anu3tFir7Sl17V+7yt/iqELyHsr0PhDBGsp/eZBqnTeAmeU/qOo1/L/bYX?=
- =?us-ascii?Q?rP0oGB+iYg9n5dJaeVQL+rGkj7vrdH2ef6diychKpoqEhIEh6xg3rwHFa24m?=
- =?us-ascii?Q?Yu0eekH3+cpboseB8SQy147SS5N93d6XMc4CFIPMHC/isZQQUe3vB/DJ/Q5/?=
- =?us-ascii?Q?N/l277/4BVrGlCRJfoyJZydahyjoRQtHW+2344SUEy7D7l4/UbIpnjkcgn0l?=
- =?us-ascii?Q?r8COhshTmVj11Awxjkqcskm/L0tX85C4Dv7Q3SDnTySAxlfV3kPqytShbKKV?=
- =?us-ascii?Q?M+l8+QPM7ZIctwKIUQFQMDRZxjTqsx+O5IymLNBsWToRQ1YVQvKD4v8m+tCS?=
- =?us-ascii?Q?rm44CH9nLqobmt2Hm41v9YzE0Loz7kSaJrfj7cuHy3KvADH9M7WK9oYl11RS?=
- =?us-ascii?Q?ihyH4nxLEI/qHVmfoYyYVC8jCQepnBSciU3rdlaxTqZ9c4efBHHws3aXChCJ?=
- =?us-ascii?Q?5N7JC0VqhkDH5wTO/C4v0p6DHDG4s7SqAKGDyXQR?=
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb9db6ac-e1cb-4995-6c8b-08db3aff915e
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0801MB3767.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 02:42:42.6815
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E285GV5JAEFmczgiHO9H/l5fnCwcaUv5umh1BsObdjiysYGMXwXpj8ONueXnYKkvzmOJslhhqd9cu8p5FVLp8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR08MB6397
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Charles,
-
-On Tue, Apr 11, 2023 at 09:27:08AM +0000, Charles Keepax wrote:
-> On Mon, Apr 10, 2023 at 07:31:56PM -0500, Jeff LaBundy wrote:
-> > On Mon, Apr 10, 2023 at 08:56:34AM +0000, Charles Keepax wrote:
-> > > On Sat, Apr 08, 2023 at 10:44:39PM -0500, Jeff LaBundy wrote:
-> > > I would far rather not have every single attempt to communicate
-> > > with the device wrapped in a retry if the communication failed
-> > > incase the device is hibernating. It seems much cleaner, and less
-> > > likely to risk odd behaviour, to know we have brought the device
-> > > out of hibernation.
-> 
-> > A common way to deal with this is that of [1], where the bus calls
-> > are simply wrapped with all retry logic limited to two places (read
-> > and write). These functions could also print the register address
-> > in case of failure, solving the problem of having dozens of custom
-> > error messages thorughout the driver.
-> 
-> I suspect this really comes down to a matter of taste, but my
-> thoughts would be that the code is shorter that way, but not
-> necessarily simpler. This feels far more error prone and likely
-> to encounter issues where the device hibernates at a time someone
-> hadn't properly thought through. I am far more comfortable with
-> the device is blocked from hibernating whilst the driver is
-> actively engaged with it and it keeps any special handling for
-> exiting hibernate in one place.
-
-Fair enough. I do concede that having this control in the driver as
-opposed to DSP FW is more nimble and makes it easier to respond to
-customer issues; I'm sure your battle scars will agree :)
-
-> 
-> > Does the current implementation at least allow the device to hibernate
-> > while the system is otherwise active, as opposed to _only_ during
-> > runtime suspend? If so, that's still a marked improvement from L25
-> > era where customers rightfully pointed out that the downstream driver
-> > was not making efficient use of hibernation. ;)
-> 
-> I am not entirely sure I follow this one, yes the device can only
-> hibernate whilst it is runtime suspended. But I don't understand
-> why that is a problem being runtime resumed implies this device
-> is active, not the system is otherwise active. I am not sure if
-> I am missing your point or there is some confusion here between
-> runtime and system suspend. The device can only hibernate during
-> runtime suspend, but the only thing that determines being runtime
-> resumed is activity on this device so in general it shouldn't be
-> hibernating at that point anyway.
-
-D'oh! I meant to say suspend suspend; I'm aligned.
-
-> 
-> > I don't feel particularly strongly about it, so if the current
-> > implementation will stay, perhaps consider a few comments in this
-> > area to describe how the device's state is managed.
-> > 
-> 
-> I certainly never object to adding some comments.
-> 
-> Thanks,
-> Charles
-
-Kind regards,
-Jeff LaBundy
+> On Fri, Apr 7, 2023 at 5:33 AM Haibo Li <haibo.li@mediatek.com> wrote:=0D
+> =0D
+> > When unwind instruction is 0xb2,the subsequent instructions=0D
+> > are uleb128 bytes.=0D
+> > For now,it uses only the first uleb128 byte in code.=0D
+> >=0D
+> > For vsp increments of 0x204~0x400,use one uleb128 byte like below:=0D
+> > 0xc06a00e4 <unwind_test_work>: 0x80b27fac=0D
+> >   Compact model index: 0=0D
+> >   0xb2 0x7f vsp =3D vsp + 1024=0D
+> >   0xac      pop {r4, r5, r6, r7, r8, r14}=0D
+> >=0D
+> > For vsp increments larger than 0x400,use two uleb128 bytes like below:=
+=0D
+> > 0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c=0D
+> >   Compact model index: 1=0D
+> >   0xb2 0x81 0x01 vsp =3D vsp + 1032=0D
+> >   0xac      pop {r4, r5, r6, r7, r8, r14}=0D
+> > The unwind works well since the decoded uleb128 byte is also 0x81.=0D
+> >=0D
+> > For vsp increments larger than 0x600,use two uleb128 bytes like below:=
+=0D
+> > 0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c=0D
+> >   Compact model index: 1=0D
+> >   0xb2 0x81 0x02 vsp =3D vsp + 1544=0D
+> >   0xac      pop {r4, r5, r6, r7, r8, r14}=0D
+> > In this case,the decoded uleb128 result is 0x101(vsp=3D0x204+(0x101<<2)=
+).=0D
+> > While the uleb128 used in code is 0x81(vsp=3D0x204+(0x81<<2)).=0D
+> > The unwind aborts at this frame since it gets incorrect vsp.=0D
+> >=0D
+> > To fix this,add uleb128 decode to cover all the above case.=0D
+> >=0D
+> > Signed-off-by: Haibo Li <haibo.li@mediatek.com>=0D
+> =0D
+> [Added people such as Catalin, Ard and Anurag who wrote the lion's=0D
+> share of actual algorithms in this file]=0D
+> =0D
+> I would just link the wikipedia in the patch commit log actually:=0D
+> =0D
+> Link:https://en.wikipedia.org/wiki/LEB128=0D
+> =0D
+> for poor souls like me who need a primer on this encoding.=0D
+> =0D
+> It's great if you also have a reference to the spec where you=0D
+> found this, but I take your word for that this appears in code.=0D
+> Did compilers always emit this? Then we should have a Cc stable=0D
+> to this patch. Unfortunately the link in the top of the file is dead.=0D
+Yes.I also study uleb128 enc/dec format from this link.=0D
+In experiment,Both Clang and GCC produces unwind instructions using ULEB128=
+=0D
+> =0D
+> > +static unsigned long unwind_decode_uleb128(struct unwind_ctrl_block=0D
+> *ctrl)=0D
+> =0D
+> So this decodes max an unsigned long? Are we sure that will always=0D
+> suffice?=0D
+For now,the maximum thread size of arm is 16KB(KASAN on).=0D
+From below experiment(worse case while impossible),two uleb128 bytes is suf=
+ficent for 16KB stack.=0D
+0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c=0D
+  Compact model index: 1=0D
+  0xb2 0xff 0x1e vsp =3D vsp + 16384=0D
+  0xac      pop {r4, r5, r6, r7, r8, r14}=0D
+From below experiment,the code picks maximum 4 uleb128 encoded bytes,=0D
+correspoding to vsp increments of 1073742336,the unwind_decode_uleb128 retu=
+rns 0xFFFFFFF.=0D
+So unsigned long is suffice.=0D
+0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c=0D
+  Compact model index: 1=0D
+  0xb2 0xff 0xff 0xff 0x7f vsp =3D vsp + 1073742336=0D
+  0xac      pop {r4, r5, r6, r7, r8, r14}=0D
+> =0D
+> > +{=0D
+> > +       unsigned long result =3D 0;=0D
+> > +       unsigned long insn;=0D
+> > +       unsigned long bytes =3D 0;=0D
+> > +=0D
+> > +       do {=0D
+> > +               insn =3D unwind_get_byte(ctrl);=0D
+> > +               result |=3D (insn & 0x7f) << (bytes * 7);=0D
+> > +               bytes++;=0D
+> > +               if (bytes =3D=3D sizeof(result))=0D
+> > +                       break;=0D
+> > +       } while (!!(insn & 0x80));=0D
+> =0D
+> I suppose the documentation is in the commit message, but something terse=
+=0D
+> and nice that make us understand this code would be needed here as well.=
+=0D
+> Could you fold in a comment of how the do {} while-loop works and th expe=
+cted=0D
+> outcome? Something like:=0D
+> =0D
+> "unwind_get_byte() will advance ctrl one instruction at a time, we loop=0D
+> until we get an instruction byte where bit 7 is not set."=0D
+> =0D
+I will add a comment in later patch.=0D
+> Is there a risk that this will loop forever or way too long if it happens=
+=0D
+> to point at some corrupted memory containing say 0xff 0xff 0xff ...?=0D
+> =0D
+> Since we're decoding a 32 bit unsigned long maybe break the loop after ma=
+x=0D
+> 5 bytes (35 bits)? Or are we sure this will not happen?=0D
+in case of some corrupted memory containing say 0xff 0xff 0xff ...,the loop=
+ breaks after =0D
+max 4 bytes(decode as max 28 bits)=0D
+> =0D
+> > @@ -361,7 +376,7 @@ static int unwind_exec_insn(struct=0D
+> unwind_ctrl_block *ctrl)=0D
+> >                 if (ret)=0D
+> >                         goto error;=0D
+> >         } else if (insn =3D=3D 0xb2) {=0D
+> > -               unsigned long uleb128 =3D unwind_get_byte(ctrl);=0D
+> > +               unsigned long uleb128 =3D unwind_decode_uleb128(ctrl);=
+=0D
+> =0D
+> Is unsigned long always enough? We are sure?=0D
+For the patch,it can cover single frame up to 1073742336 Bytes.So it is eno=
+ugh.=0D
+>=0D
+> Yours,=0D
+> Linus Walleij=0D
