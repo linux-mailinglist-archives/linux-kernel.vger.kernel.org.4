@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D327C6E29D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Apr 2023 20:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DC26DFFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 22:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjDNSHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Apr 2023 14:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S230187AbjDLUbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 16:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNSHp (ORCPT
+        with ESMTP id S230031AbjDLUbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:07:45 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 020DE83CB;
-        Fri, 14 Apr 2023 11:07:43 -0700 (PDT)
-Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 202C42179263;
-        Fri, 14 Apr 2023 11:07:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 202C42179263
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681495663;
-        bh=vrTl5Ep5devbVecjQ6jAI5gZaBXZaMXlbw5ZKByZUZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OLR94xfw4mfXwonzEA8XTEXGARFL/FomL1UtMFLtChA6mRBwBbI7M2wqo5Hn35QmD
-         qgdYXzkWrT/+m9wWm/fA6EZoFvX6zxOuenxKDip0xvOzdZjW+D3T7KlQvRITLnZecY
-         NHBohp/XeamzyyXQ/vSteUenpSDBNAWyudrT5nL4=
-Date:   Wed, 12 Apr 2023 13:31:38 -0700
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/hyperv: Expose an helper to map PCI interrupts
-Message-ID: <20230412203138.GA1782@skinsburskii.localdomain>
-References: <168079806973.14175.17999267023207421381.stgit@skinsburskii.localdomain>
- <168079870998.14175.16015623662679754647.stgit@skinsburskii.localdomain>
- <87o7nrzy9e.ffs@tglx>
- <20230412161951.GA894@skinsburskii.localdomain>
- <20230412163616.GA1535@skinsburskii.localdomain>
- <878reuzzuz.ffs@tglx>
+        Wed, 12 Apr 2023 16:31:50 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751FA1BD1;
+        Wed, 12 Apr 2023 13:31:49 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 86034203C2;
+        Wed, 12 Apr 2023 22:31:47 +0200 (CEST)
+Date:   Wed, 12 Apr 2023 22:31:46 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] dt-bindings: iio: adc: Require generic `channel`
+ name for channel nodes
+Message-ID: <c653un4emxud34gpo5np7jtnhsym5thpivjwcgpm2vsft2q2qj@s66thxonibjc>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>, 
+        Jonathan Cameron <jic23@kernel.org>, phone-devel@vger.kernel.org, 
+        ~postmarketos/upstreaming@lists.sr.ht, 
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+        Martin Botka <martin.botka@somainline.org>, Jami Kettunen <jami.kettunen@somainline.org>, 
+        Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh+dt@kernel.org>, 
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andy Gross <agross@kernel.org>, 
+        Bjorn Andersson <andersson@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+        linux-arm-msm@vger.kernel.org
+References: <20230410202917.247666-1-marijn.suijten@somainline.org>
+ <20230410202917.247666-6-marijn.suijten@somainline.org>
+ <20230412212756.0b4b69f3@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <878reuzzuz.ffs@tglx>
-X-Spam-Status: No, score=-18.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230412212756.0b4b69f3@jic23-huawei>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 09:28:52AM +0200, Thomas Gleixner wrote:
-> Stanislav!
+On 2023-04-12 21:27:56, Jonathan Cameron wrote:
+> On Mon, 10 Apr 2023 22:29:17 +0200
+> Marijn Suijten <marijn.suijten@somainline.org> wrote:
 > 
-> On Wed, Apr 12 2023 at 09:36, Stanislav Kinsburskii wrote:
-> > On Wed, Apr 12, 2023 at 09:19:51AM -0700, Stanislav Kinsburskii wrote:
-> >> > > +	affinity = irq_data_get_effective_affinity_mask(data);
-> >> > > +	cpu = cpumask_first_and(affinity, cpu_online_mask);
-> >> > 
-> >> > The effective affinity mask of MSI interrupts consists only of online
-> >> > CPUs, to be accurate: it has exactly one online CPU set.
-> >> > 
-> >> > But even if it would have only offline CPUs then the result would be:
-> >> > 
-> >> >     cpu = nr_cpu_ids
-> >> > 
-> >> > which is definitely invalid. While a disabled vector targeted to an
-> >> > offline CPU is not necessarily invalid.
-> >
-> > Although this patch only tosses the code and doens't make any functional
-> > changes, I guess if the fix for the used cpu id is required, it has to
-> > be in a separated patch.
+> > As discussed in [1] it is more convenient to use a generic `channel`
+> > node name for ADC channels while storing a friendly - board-specific
+> > instead of PMIC-specific - name in the label, if/when desired to
+> > overwrite the channel description already contained (but previously
+> > unused) in the driver [2].
+> > 
+> > The same `channel` node name pattern has also been set in
+> > iio/adc/adc.yaml, but this generic binding is not inherited as base for
+> > qcom,spmi-vadc bindings due to not having any other generic elements in
+> > common, besides the node name rule and reg property.
+> > 
+> > Replace the .* name pattern with the `channel` literal, but leave the
+> > label property optional for bindings to choose to fall back a channel
+> > label hardcoded in the driver [2] instead.
+> > 
+> > [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+> > [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > 
-> Correct, but if the interrupt _is_ masked at the MSI level then the
-> hypervisor must not deliver an interrupt at all.
+> There are various ways we could pick up this patch set...
+> a) Binding changes via individual subsystem trees,
+> b) All in on go.
 > 
-> The point is that it is valid to target a masked MSI entry to an offline
-> CPU under the assumption that the hardware/emulation respects the
-> masking. Whether that's a good idea or not is a different question.
+> I think it's late to guarantee to land the changes from (a) in the coming merge window
+> so if someone else is willing to do (b) then
 > 
-> The kernel as of today does not do that. It targets unused but
-> configured MSI[-x] entries towards MANAGED_IRQ_SHUTDOWN_VECTOR on CPU0
-> for various reasons, one of them being paranoia.
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> But in principle there is nothing wrong with that and it should either
-> succeed or being rejected at the software level and not expose a
-> completely invalid CPU number to the hypercall in the first place.
-> 
-> So if you want to be defensive, then keep the _and(), but then check the
-> result for being valid and emit something useful like a pr_warn_once()
-> instead of blindly handing the invalid result to the hypercall and then
-> have that reject it with some undecipherable error code.
-> 
-> Actually it would not necessarily reach the hypercall because before
-> that it dereferences cpumask_of(nr_cpu_ids) here:
-> 
-> 	nr_bank = cpumask_to_vpset(&(intr_desc->target.vp_set),	cpumask_of(cpu));
-> 
-> and explode with a kernel pagefault. If not it will read some random
-> adjacent data and try to create a vp_set from it. Neither of that is
-> anywhere close to correct.
-> 
+> Otherwise we can do (a) early in next cycle.  Feel free to poke me if we are doing (b)
+> and I seem to have forgotten to pick up this patch!
 
-Thank you Thomas.
-I sent a patch to address the problmes you highlighted:
+Thanks!  I hope we don't get many conflicts (+ new bindings adhering to
+the old(er) formats) otherwise I'll resend if we do (a).  Around what
+time would be good, rc2?
 
-"x86/hyperv: Fix IRQ effective cpu discovery for the interrupts unmasking"
+[..]
 
-I'll update this series after that patch is merged.
-
-Thanks,
-Stanislav
-
-> Thanks,
-> 
->         tglx
+- Marijn
