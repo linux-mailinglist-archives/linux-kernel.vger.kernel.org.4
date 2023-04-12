@@ -2,169 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14CA6DF59E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAF36DF5A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 14:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjDLMkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 08:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
+        id S230321AbjDLMkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 08:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjDLMkE (ORCPT
+        with ESMTP id S231625AbjDLMki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:40:04 -0400
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDED88A4A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 05:39:35 -0700 (PDT)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 12 Apr
- 2023 15:39:08 +0300
-Received: from [192.168.211.128] (10.0.253.138) by Ex16-01.fintech.ru
- (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Wed, 12 Apr
- 2023 15:39:08 +0300
-Message-ID: <5d5b0b94-4dd4-2a95-a777-521b65f6f053@fintech.ru>
-Date:   Wed, 12 Apr 2023 05:39:04 -0700
+        Wed, 12 Apr 2023 08:40:38 -0400
+Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EE17EC6;
+        Wed, 12 Apr 2023 05:40:10 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.veeam.com (Postfix) with ESMTPS id 6DA9D406BD;
+        Wed, 12 Apr 2023 08:39:53 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx2-2022; t=1681303193;
+        bh=ZsREK7Jdmk5/bS3HMVbcUFFY2ynvc5y6DHn+evYJiIo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=SF1B2Nsiq0/ZYmAlZBDyu/yXVj4ytwYuY9AoNhXvBgiaH8IE40FJ4JlV48QH9GdDv
+         pUjp74EqI4D+JZ0wS4FEdluiM7kmxAE4QJk6ZhqpzlyPh/bP8zC7r+0aSNLtEXSd+o
+         x4B/tQxvhhSUPdD0O8zmgyBc4FOBTwEqzyurcj+uW9Dx2aRLX0Tu/BRAa17m3gXvc/
+         J94mZl/i0GdKZxPlxoevDUQWnSmNkOGTlTziVuVI6YJW8h4eYq+DdfFWYbB5ZnmhdG
+         E2Er8Q6vWJmYxHdn8ePQrmQwtUzesurwtRqsWW1oXZ1Eev70c7Bs23amGor+1ACAqp
+         LDmrV+4zVNOAg==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 12 Apr
+ 2023 14:39:50 +0200
+Message-ID: <62b90944-724d-093a-2e83-c7665d5dbd54@veeam.com>
+Date:   Wed, 12 Apr 2023 14:39:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] radeon: avoid double free in ci_dpm_init()
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-CC:     "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-References: <20230403182808.8699-1-n.zhandarovich@fintech.ru>
- <BL1PR12MB51446866BAE5945297315399F79A9@BL1PR12MB5144.namprd12.prod.outlook.com>
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 01/11] documentation: Block Device Filtering Mechanism
 Content-Language: en-US
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-In-Reply-To: <BL1PR12MB51446866BAE5945297315399F79A9@BL1PR12MB5144.namprd12.prod.outlook.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, <axboe@kernel.dk>,
+        <hch@infradead.org>, <corbet@lwn.net>, <snitzer@kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <willy@infradead.org>, <kch@nvidia.com>,
+        <martin.petersen@oracle.com>, <vkoul@kernel.org>,
+        <ming.lei@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-2-sergei.shtepa@veeam.com> <ZDOY4tWY9wjPDb/c@debian.me>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <ZDOY4tWY9wjPDb/c@debian.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.253.138]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2924031554647062
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks, Bagas!
 
-
-On 4/11/23 14:11, Deucher, Alexander wrote:
-> [Public]
-> 
->> -----Original Message-----
->> From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
->> Sent: Monday, April 3, 2023 2:28 PM
->> To: Deucher, Alexander <Alexander.Deucher@amd.com>
->> Cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>; Koenig, Christian
->> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
->> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; amd-
->> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
->> kernel@vger.kernel.org; lvc-project@linuxtesting.org
->> Subject: [PATCH] radeon: avoid double free in ci_dpm_init()
->>
->> There are several calls to ci_dpm_fini() in ci_dpm_init() when there occur
->> errors in functions like r600_parse_extended_power_table().
->> This is harmful as it can lead to double free situations: for instance,
->> r600_parse_extended_power_table() will call for
->> r600_free_extended_power_table() as will ci_dpm_fini(), both of which will
->> try to free resources.
->> Other drivers do not call *_dpm_fini functions from their respective
->> *_dpm_init calls - neither should cpm_dpm_init().
->>
->> Fix this by removing extra calls to ci_dpm_fini().
-> 
-> You can't just drop the calls to fini().  You'll need to properly unwind to avoid leaking memory.
-> 
-> Alex
->>>
->> Found by Linux Verification Center (linuxtesting.org) with static analysis tool
->> SVACE.
->>
->> Fixes: cc8dbbb4f62a ("drm/radeon: add dpm support for CI dGPUs (v2)")
->> Cc: stable@vger.kernel.org
->> Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
->> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
->>
->> ---
->>  drivers/gpu/drm/radeon/ci_dpm.c | 20 +++++---------------
->>  1 file changed, 5 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/radeon/ci_dpm.c
->> b/drivers/gpu/drm/radeon/ci_dpm.c index 8ef25ab305ae..7b77d4c93f1d
->> 100644
->> --- a/drivers/gpu/drm/radeon/ci_dpm.c
->> +++ b/drivers/gpu/drm/radeon/ci_dpm.c
->> @@ -5677,28 +5677,20 @@ int ci_dpm_init(struct radeon_device *rdev)
->>  	pi->pcie_lane_powersaving.min = 16;
->>
->>  	ret = ci_get_vbios_boot_values(rdev, &pi->vbios_boot_state);
->> -	if (ret) {
->> -		ci_dpm_fini(rdev);
->> +	if (ret)
->>  		return ret;
->> -	}
->>
->>  	ret = r600_get_platform_caps(rdev);
->> -	if (ret) {
->> -		ci_dpm_fini(rdev);
->> +	if (ret)
->>  		return ret;
->> -	}
->>
->>  	ret = r600_parse_extended_power_table(rdev);
->> -	if (ret) {
->> -		ci_dpm_fini(rdev);
->> +	if (ret)
->>  		return ret;
->> -	}
->>
->>  	ret = ci_parse_power_table(rdev);
->> -	if (ret) {
->> -		ci_dpm_fini(rdev);
->> +	if (ret)
->>  		return ret;
->> -	}
->>
->>  	pi->dll_default_on = false;
->>  	pi->sram_end = SMC_RAM_END;
->> @@ -5749,10 +5741,8 @@ int ci_dpm_init(struct radeon_device *rdev)
->>  		kcalloc(4,
->>  			sizeof(struct
->> radeon_clock_voltage_dependency_entry),
->>  			GFP_KERNEL);
->> -	if (!rdev-
->>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries) {
->> -		ci_dpm_fini(rdev);
->> +	if (!rdev-
->>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries)
->>  		return -ENOMEM;
->> -	}
->>  	rdev->pm.dpm.dyn_state.vddc_dependency_on_dispclk.count = 4;
->>  	rdev-
->>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].clk = 0;
->>  	rdev-
->>> pm.dpm.dyn_state.vddc_dependency_on_dispclk.entries[0].v = 0;
-
-
-I think you are correct when it comes to ensuring we deal with memory
-issues in ci_dpm_init().
-
-However, I could use some direction on how to deal with the problem of
-freeing only previously allocated resources. For instance, once
-ci_parse_power_table() fails, it is not clear what we should and should
-not free.
-
-I wanna point out that in this case I would like to fix both double and
-uninitialized free issues as it can also lead to undefined behavior.
-
-Thanks for your patience,
-Nikita
+I have made changes in my repository.
+Link: https://github.com/SergeiShtepa/linux/commit/d3309add0f355ef09483238868636c5db1258135
