@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25656DF7AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BCA6DF7AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 15:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjDLNux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 09:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S230272AbjDLNu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 09:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjDLNur (ORCPT
+        with ESMTP id S229900AbjDLNux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:50:47 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52F2680
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:50:44 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1878504c22aso276125fac.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 06:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681307444; x=1683899444;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HQ3/PENFcKoGmwx/7SbOyLF8CDNOnHG2xDlRT2NQtrg=;
-        b=gKnoddJ1Vb75/6PaWvNzi6x5dsoJdhTTXzCxM+fmAIC5Ui9132lQ4e2GHWzK4ewuFW
-         EZaIgDCPrzaY71mTyVH+X+VFb5RaUxOYQ5X5KrJLrG6mVS7Ra95J0Mb82TCJFVdD0g7R
-         GDOnH5B3lPAo5ujn2uRXbe9v8KQiekxmfJ+wkP5YL18mtFWOpDopG6UqLZYS+LFGheG3
-         LWsiIVMV0WV9g/wX3SjP1+5MJTjmtaR/IdWI4T79tS85wh0jYZzaYlEOzE6wx1TBCXGr
-         Y6podNB61xNivF8vy9Zku0tzEaaRP+W4J0A5Hq82XQoVa1guYwy6GAsQtWHgaFrUh5bZ
-         x4XQ==
+        Wed, 12 Apr 2023 09:50:53 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3303710FA;
+        Wed, 12 Apr 2023 06:50:52 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id e9so7660226oig.7;
+        Wed, 12 Apr 2023 06:50:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681307444; x=1683899444;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HQ3/PENFcKoGmwx/7SbOyLF8CDNOnHG2xDlRT2NQtrg=;
-        b=ZX/z5GZstQu+FnjsNR7lOxH721FZ7TVgoeRTxQJip1U898ZWYItFyd6aaG7EQ2WepB
-         nqQ7ObcjftAO9+F4RxQLVw4pAQ5063pzyryq2XTpuqnrRufSd2JcwE8sugis5DQBLzRz
-         gGKN6gqLUmyn4L8yrx9IMrkRJ5KNGq3bU+XpmaCmQGTBCnxfL5DYNhk8NzVmGzeZQ952
-         sSY25dOQwVqRdh96QryR4dlW0K+swliYhkwUFihzG7YoPd5L4L2UwvumtRE3ge+VmQ+r
-         46lkEBW5bAZGv68Q94fseoqwuzT8kGGcQasdS8F3ByntU5pfC8Ve6NC3TEf37+xZ9eCW
-         vY9Q==
-X-Gm-Message-State: AAQBX9d2XET4o/bdkHdYeMSjT1OX07Q4w1ii5dcNY8uJaKcoAOxg4lpi
-        SNscnEA33qEAVAFOe6rAHMkUFqLAs83BJiAZYAc=
-X-Google-Smtp-Source: AKy350ZDO3y9JYY8fci+VYwvs1OGLtm3qbgv38UBzCi7KSsByYifkdIl+hRmpHnh5V8CTHR/loq4FEDQtRyAALIVfq8=
-X-Received: by 2002:a05:6870:169d:b0:17e:d308:776f with SMTP id
- j29-20020a056870169d00b0017ed308776fmr6833681oae.1.1681307443841; Wed, 12 Apr
- 2023 06:50:43 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681307451; x=1683899451;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jwAXpbEfRmXIDKyTi3ZF6YzD+QDSgDNiHTH3bIpWqzg=;
+        b=znOXd/GLXOUsQqvBSpanxhKC4McwisSJIy0hhS/fWOiHTmvgn1YPd6l+mU+96+4hLQ
+         97IqhSGHUyCUtm7F1HaOszxWRXNG6ubnji/3KW8vgqnqpGY8ussDHb4iuKonXt1Vp8uA
+         CxFV7eEU93uLzZmiuyg4HlthaoBGIIrxRRl5IcJbmvoqRn1L8+cHzOWcKoNoIG0l0Tie
+         22yY5Os1/94m7Camq3KwkYHTEO7MyPhX1gI0D0OeVGUWYEO5J7Xfl+PwJxCp6rfIMlLf
+         cAUn+hC+qKu/Oi3A7/ZWYMpRiVAp7HBcBP5nXkQnTj3NVm4MJKpExYTlsvGZUpkduow5
+         DPqQ==
+X-Gm-Message-State: AAQBX9e3Ef6sQFJcIXFGkOc5LiqSRuSbXmDfcta5SmmmtBwWdrOv7QoR
+        P4qsqcaoO+fuOCPHdpFNxg==
+X-Google-Smtp-Source: AKy350bxKmOEWrJ6ncOQp1r20edwr0Xo47a81S5dea4KzWyycCb1UJas3zTPVl2emUvfB/wxNwjLTQ==
+X-Received: by 2002:a05:6808:634a:b0:386:d629:81a1 with SMTP id eb10-20020a056808634a00b00386d62981a1mr3244814oib.35.1681307451399;
+        Wed, 12 Apr 2023 06:50:51 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o184-20020acabec1000000b0038998fa6c2bsm6749956oif.33.2023.04.12.06.50.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 06:50:51 -0700 (PDT)
+Received: (nullmailer pid 2223659 invoked by uid 1000);
+        Wed, 12 Apr 2023 13:50:50 -0000
+Date:   Wed, 12 Apr 2023 08:50:50 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     - <xe-linux-external@cisco.com>,
+        Marcin Wierzbicki <mawierzb@cisco.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Walker <dwalker@fifo99.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
+ compatibles
+Message-ID: <20230412135050.GA2219534-robh@kernel.org>
+References: <20230405223028.1268141-2-danielwa@cisco.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:1888:b0:f6:68c1:ffaf with HTTP; Wed, 12 Apr 2023
- 06:50:43 -0700 (PDT)
-From:   Frank Hughes <ccmk137@gmail.com>
-Date:   Wed, 12 Apr 2023 14:50:43 +0100
-Message-ID: <CANqQpXU4HmDVx5CpySVR6xiYnAhxAKp+Oe3g+n8qSwLVGQSLqQ@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405223028.1268141-2-danielwa@cisco.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day,
+On Wed, Apr 05, 2023 at 03:30:27PM -0700, Daniel Walker wrote:
+> Describe the compatible properties for the Cisco CrayAR SoC.
+> 
+> Cc: xe-linux-external@cisco.com
+> Cc: Marcin Wierzbicki <mawierzb@cisco.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Daniel Walker <dwalker@fifo99.com>
 
-I'm Frank Hughes. a former commander during the US Military Mission in
-Iraq. Now that the United States has completed its mission in
-Iraq, I am currently in Syria for more assignments but will
-soon be assigned to the Joint Multinational Readiness Center (JMRC),
-
-During my mission in Iraq, I was able to make the sum of
-$25,000,000.00 Million Dollars. This money came from an oil deal, I'm
-a uniformed person and I have to present someone as my foreign
-partner. I am an American and an intelligence officer. I have 100%
-authentic means of shipping the money through a diplomatic shipping
-company. I just need your acceptance and everything is ready.
+checkpatch.pl complains that the author and Sob emails don't match.
