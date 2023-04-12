@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73386DFAFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5B96DFB07
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 18:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDLQPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 12:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S229615AbjDLQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 12:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjDLQPL (ORCPT
+        with ESMTP id S229561AbjDLQQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044371993;
-        Wed, 12 Apr 2023 09:15:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93E76636DB;
-        Wed, 12 Apr 2023 16:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47877C433EF;
-        Wed, 12 Apr 2023 16:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681316103;
-        bh=1PY7+OsGBN+uCgRUYtBU8jXFz852lXmdaStSRrPi68o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bDDdDbgMIwY2ntwzM2O1KIrFMCN78ube1lhT9aPdwSVOjJDN4h3EF3Dh0h78su7gH
-         GSjafhtiYaeEDKi43zNOEkJOTmHsSrQ0pFRHORK8UmEE3WrQztxAB4jmNEaEMKdfZz
-         3LUb8tJzkhMiUoFdSoibSSc1Puu/W7HJxZd2sa46/NO8YypOiTvzik6Ety/QV5kpDB
-         pdCmF+WZory6u5bHriS3UXxQaMfaFEwZMnpLIbjOVSKJttMczq/7af8W+A4ceBhJXW
-         hekeuiqX3w14iwLreNQ/ZlcZXL4vzPMfdYJ63ISpWHqKlhj4eoxJ2BUt9OWYZ7uXbW
-         olDwBLDUJjD1A==
-Date:   Wed, 12 Apr 2023 21:44:59 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v3 3/5] phy: qualcomm: phy-qcom-qmp-ufs: add definitions
- for sa8775p
-Message-ID: <ZDbZA3AnbTTylFdb@matsya>
-References: <20230411130446.401440-1-brgl@bgdev.pl>
- <20230411130446.401440-4-brgl@bgdev.pl>
+        Wed, 12 Apr 2023 12:16:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE34986BE;
+        Wed, 12 Apr 2023 09:15:46 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CFiWI7004531;
+        Wed, 12 Apr 2023 16:15:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=sOK6hJbrKxjZKrwj6KUDnTZAEUPt4aEnsyZ7H7rfSJQ=;
+ b=s7D+Z91hsE6AwIXXQHDk40T+9pXo5HJuKkT6ylJ4t1nl7SrUUsB+AoBg15eB7Y4c3YWc
+ bvt7ysIlGvbbe61A6LYO0VV+giDnc7gOQSEAcWes5cjn5YUaGSSyTQ42/3hivlurXcBU
+ 1vAH1OeOG7/vB1kG5JkFPxIDXz6eePe1hht8gpvxU2V8ATDOXMcKm4nh5xH7r5d1PSLH
+ uooALwy8gABsOsPdLnK+HDfKFd022YOwV85Yb1K8WgmF0INOOSgxNabmahQ0/uC810OX
+ vUO/EMWi6l/JW49SQoPbJHgzY2oAebvwhmwLdMIqhyKQUKcEyulW2tQvSN7aXGRERDQj 3w== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwxpncmnu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 16:15:32 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33CDSYYo022734;
+        Wed, 12 Apr 2023 16:15:31 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pu0f9y3f0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 16:15:31 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33CGFUrN43451000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 16:15:31 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 84C9058059;
+        Wed, 12 Apr 2023 16:15:30 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BCF25805B;
+        Wed, 12 Apr 2023 16:15:29 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.16.129])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Apr 2023 16:15:29 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v2 0/2] hwmon: (pmbus/core) Add lock and unlock functions
+Date:   Wed, 12 Apr 2023 11:15:24 -0500
+Message-Id: <20230412161526.252294-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411130446.401440-4-brgl@bgdev.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _ShlAKnQHlv9-QdEjJeyXr4pd9KG-F28
+X-Proofpoint-GUID: _ShlAKnQHlv9-QdEjJeyXr4pd9KG-F28
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-12_07,2023-04-12_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 mlxlogscore=667
+ priorityscore=1501 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304120139
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-23, 15:04, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add QMP PHY config for sa8775p and add support for the new compatible.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 38 +++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> index d58822049211..5612282eb378 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> @@ -853,6 +853,41 @@ static const struct qmp_phy_cfg msm8996_ufsphy_cfg = {
->  	.no_pcs_sw_reset	= true,
->  };
->  
-> +
+Debugfs operations may set the page number, which must be done
+atomically with the subsequent i2c operation. Lock the update_lock
+in the debugfs functions and provide a function for pmbus drivers
+to lock and unlock the update_lock.
+Use the new lock/unlock functions in the ibm-cffps driver and make
+some additional improvements.
 
-There was already an empty line, this didnt make sense. Please run
-checkpatch to avoid missing these style issues
+Changes since v1:
+ - No whitespace change in cffps patch.
 
-I have fixed it up and applied
+Eddie James (2):
+  hwmon: (pmbus/core) Add lock and unlock functions
+  hwmon: (pmbus/ibm-cffps) Use default debugfs attributes and lock
+    function
 
-> +static const struct qmp_phy_cfg sa8775p_ufsphy_cfg = {
-> +	.lanes			= 2,
-> +
-> +	.offsets		= &qmp_ufs_offsets,
-> +
-> +	.tbls = {
-> +		.serdes		= sm8350_ufsphy_serdes,
-> +		.serdes_num	= ARRAY_SIZE(sm8350_ufsphy_serdes),
-> +		.tx		= sm8350_ufsphy_tx,
-> +		.tx_num		= ARRAY_SIZE(sm8350_ufsphy_tx),
-> +		.rx		= sm8350_ufsphy_rx,
-> +		.rx_num		= ARRAY_SIZE(sm8350_ufsphy_rx),
-> +		.pcs		= sm8350_ufsphy_pcs,
-> +		.pcs_num	= ARRAY_SIZE(sm8350_ufsphy_pcs),
-> +	},
-> +	.tbls_hs_b = {
-> +		.serdes		= sm8350_ufsphy_hs_b_serdes,
-> +		.serdes_num	= ARRAY_SIZE(sm8350_ufsphy_hs_b_serdes),
-> +	},
-> +	.tbls_hs_g4 = {
-> +		.tx		= sm8350_ufsphy_g4_tx,
-> +		.tx_num		= ARRAY_SIZE(sm8350_ufsphy_g4_tx),
-> +		.rx		= sm8350_ufsphy_g4_rx,
-> +		.rx_num		= ARRAY_SIZE(sm8350_ufsphy_g4_rx),
-> +		.pcs		= sm8350_ufsphy_g4_pcs,
-> +		.pcs_num	= ARRAY_SIZE(sm8350_ufsphy_g4_pcs),
-> +	},
-> +	.clk_list		= sm8450_ufs_phy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(sm8450_ufs_phy_clk_l),
-> +	.vreg_list		= qmp_phy_vreg_l,
-> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> +	.regs			= ufsphy_v5_regs_layout,
-> +};
-> +
->  static const struct qmp_phy_cfg sc8280xp_ufsphy_cfg = {
->  	.lanes			= 2,
->  
-> @@ -1600,6 +1635,9 @@ static const struct of_device_id qmp_ufs_of_match_table[] = {
->  	}, {
->  		.compatible = "qcom,msm8998-qmp-ufs-phy",
->  		.data = &sdm845_ufsphy_cfg,
-> +	}, {
-> +		.compatible = "qcom,sa8775p-qmp-ufs-phy",
-> +		.data = &sa8775p_ufsphy_cfg,
->  	}, {
->  		.compatible = "qcom,sc8180x-qmp-ufs-phy",
->  		.data = &sm8150_ufsphy_cfg,
-> -- 
-> 2.37.2
+ drivers/hwmon/pmbus/ibm-cffps.c  | 272 ++++++++++++++-----------------
+ drivers/hwmon/pmbus/pmbus.h      |   2 +
+ drivers/hwmon/pmbus/pmbus_core.c |  30 ++++
+ 3 files changed, 150 insertions(+), 154 deletions(-)
 
 -- 
-~Vinod
+2.31.1
+
