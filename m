@@ -2,114 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477B6DF1C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006936DF1B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjDLKO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S230380AbjDLKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjDLKO5 (ORCPT
+        with ESMTP id S229947AbjDLKL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:14:57 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07052D73
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:14:55 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6548A5FD61;
-        Wed, 12 Apr 2023 13:14:53 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681294493;
-        bh=syojLji4UO4OZzZa1DKzyOBdJQxEr9LBga4/LUwWp54=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=AsqjhC+ZuNZF9s+691wOoLc2Ms9TdXBrCtbe1z3r4DU9424pHzoR9EJ2vyD5qeyFx
-         RoQtdP+XZlG/xPwgS3vDuneYvqbm+oFCjJ3aY6UNR2PWIPOcU9Z1qdAkNIonADo4GF
-         xi7bBozi1jcO7BN7A/40SZWL5JAWYhFHEKxuecS9RGlEnzBDPZHpx3/bEffxxntC+3
-         g0oqkt35UShx9ksK7X6MPA8a7e+9OfYn0W5F384QzCjQl6w4jCbh5MW8iicWtvNCf2
-         mFnVp9gVquC6FHYDIqXDc2puNdX5zy2cgWTwsdLl9NLvdXi6FR6aueXFsDBLcuqYUh
-         o4RjCPQ87yiUQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 12 Apr 2023 13:14:52 +0300 (MSK)
-Message-ID: <8f8d4a22-11ea-3b30-9b95-f27c5209fe5f@sberdevices.ru>
-Date:   Wed, 12 Apr 2023 13:11:04 +0300
+        Wed, 12 Apr 2023 06:11:27 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF91F1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:11:22 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id n14so35968391plc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681294282; x=1683886282;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E8Dyl4+NdOephBJ8a5CGLrM2Bu7+ex2R8fnMkaTpqs4=;
+        b=mz5OpN3ySFLWfaIDtFk+QVy7GrbLBKNedf9Vu+hPa+TK0mu13m7MrIQ8OEe6pbJAWQ
+         fbNT7LpAG2fd4KTvtHfzUu6jof2ugDDGynUWoavd+e/Jt3PY6P5L+vYcwrabo+RSYWri
+         ILmzz2EOWH/mZlpfbeU2MtvwJUMnUsDeK0FDzNJtDxRnR6SbeaMGJil5T9RGDlncPbib
+         uAC5ZIexDvQORv2cI+I38V/ubGCDciwBgIFDqlFLf5Ia4SOWcFXnIYWEmKKQBgcIi/vy
+         c86DUgPPBy+nlDR9ZeEfbfqxyM6Y9R7QN+6mFnclLLmy/UjO/QlzcGXgQ3uMC2tgB3Ib
+         86NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681294282; x=1683886282;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E8Dyl4+NdOephBJ8a5CGLrM2Bu7+ex2R8fnMkaTpqs4=;
+        b=owsiyeQhALywiQfzNrnvjaQBAoJGnwH2TcMuF/Y9aBSozjnKamlDpzqaXo7wWC4tQK
+         I7jz1c0XTeBIYYRF/vsW9tQSRIdh8/oQvOBt3qtnV+kEKM95PbWMwHwyR9pSh5phQLy3
+         ndf0yOvKPIANGL98KNVTH9WIfsfigLVAA89zjWXSSJLgA25cjGw9kW+Dj51Xgz1l1/Jo
+         D+aYY4u6DigG2THOo6Ys3vr3nxUkwJlXhmiU0Gv29jtxvyGE/cMWD0FKu0RiIymAYvVY
+         PYEwH0vMVrzrS390z3AGQtTNwQGMT/AwPOcYam4iBPzV0c4ovKRimaUFSN0Gj2hI0AEp
+         2Fqw==
+X-Gm-Message-State: AAQBX9cnMj5iaDZBM0+KcSwsqmETUTn9NOdLNUf4AcalkbapdXUr9hI5
+        XRINE+gIDgRewpklY0mFBtLj
+X-Google-Smtp-Source: AKy350ag0nT+T/UdRSRwoJJZyisBeaEREEvNiKolME4G238ayYlNBBq1ZXotsF5BB8/0cI9XV4UrbA==
+X-Received: by 2002:a17:902:ce86:b0:1a6:4532:1159 with SMTP id f6-20020a170902ce8600b001a645321159mr7580106plg.63.1681294281569;
+        Wed, 12 Apr 2023 03:11:21 -0700 (PDT)
+Received: from thinkpad ([117.216.120.128])
+        by smtp.gmail.com with ESMTPSA id iz15-20020a170902ef8f00b001a1dc2be791sm6121654plb.259.2023.04.12.03.11.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 03:11:21 -0700 (PDT)
+Date:   Wed, 12 Apr 2023 15:41:12 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "dt-bindings: PCI: qcom: Add iommu-map properties"
+Message-ID: <20230412101112.GA9463@thinkpad>
+References: <20230411121533.22454-1-manivannan.sadhasivam@linaro.org>
+ <20230411174742.GA3428751-robh@kernel.org>
+ <20230411184231.GA59982@thinkpad>
+ <ZDZouY0PEL64MT6N@lpieralisi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 2/5] mtd: rawnand: meson: replace GENMASK() macro with
- define
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-CC:     "oxffffaa@gmail.com" <oxffffaa@gmail.com>,
-        "kernel@sberdevices.ru" <kernel@sberdevices.ru>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230412061700.1492474-1-AVKrasnov@sberdevices.ru>
- <20230412061700.1492474-3-AVKrasnov@sberdevices.ru>
- <2f89000bdbbb4e2bb7f1dd96c1b498f9@AcuMS.aculab.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <2f89000bdbbb4e2bb7f1dd96c1b498f9@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/12 04:12:00 #21090163
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDZouY0PEL64MT6N@lpieralisi>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12.04.2023 13:06, David Laight wrote:
-> From: Arseniy Krasnov
->> Sent: 12 April 2023 07:17
->> Subject: [PATCH v1 2/5] mtd: rawnand: meson: replace GENMASK() macro with define
->>
-> ...
->>  		len = mtd->writesize + mtd->oobsize;
->> -		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
->> +		cmd = (len & NFC_CMD_RAW_LEN) | scrambler | DMA_DIR(dir);
->>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+On Wed, Apr 12, 2023 at 10:15:53AM +0200, Lorenzo Pieralisi wrote:
+> On Wed, Apr 12, 2023 at 12:12:31AM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Apr 11, 2023 at 12:47:42PM -0500, Rob Herring wrote:
+> > > On Tue, Apr 11, 2023 at 05:45:33PM +0530, Manivannan Sadhasivam wrote:
+> > > > This reverts commit 6ebfa40b63ae65eac20834ef4f45355fc5ef6899.
+> > > > 
+> > > > "iommu-map" property is already documented in commit
+> > > 
+> > > Need the commit hash here.
+> > > 
+> > > > ("dt-bindings: PCI: qcom: Add SM8550 compatible") along with the "iommus"
+> > > > property.
+> > > 
+> > > Shouldn't there be a patch removing "iommus" as discussed?
+> > > 
+> > 
+> > Yeah, that was my intention after the dts patches were merged. And since the
+> > dts patches are in linux-next now, I could finally send the patch.
 > 
-> What is the point of the mask?
-> If the length is too big it just generates a different
-> 'hard to debug' error.
-> If the length can't be too bit there is no point masking it.
-
-Exactly, thanks for pointing!
-
-Thanks, Arseniy
-
+> I don't understand what's the plan here. By the way, instead of merging
+> this revert I just dropped the commit that this patch is reverting from
+> the controller/qcom branch, please have a look to check if everything is
+> what you expect it to be there.
 > 
-> 	David
+
+This is fine. The plan is to remove the "iommus" property from Qcom PCI binding
+since we have removed the usage of that property from devicetree [1]. Initially
+the iommu properties were not documented at all in the binding. But commit,
+"dt-bindings: PCI: qcom: Add SM8550 compatible" added them to the binding to
+satisfy dtbs check. But in parallel, the patch removing "iommus" property from
+dts got merged to qcom tree.
+
+So now we have 2 options here:
+
+1. Amend the commit "dt-bindings: PCI: qcom: Add SM8550 compatible" to remove
+the "iommus" property.
+
+2. I will submit a separate patch removing that property.
+
+Lorenzo, let me know what works for you. Sorry for the mess! Confusion happened
+due to patches getting applied without sync.
+
+- Mani
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6340b391e15094575911ab0d96bfff09deadafba
+
+> Lorenzo
 > 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+> > - Mani
+> > 
+> > > > 
+> > > > So let's revert the commit that just added "iommu-map" to avoid
+> > > > duplication.
+> > > > 
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 2 --
+> > > >  1 file changed, 2 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > > > index 5d236bac99b6..a1318a4ecadf 100644
+> > > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > > > @@ -78,8 +78,6 @@ properties:
+> > > >  
+> > > >    dma-coherent: true
+> > > >  
+> > > > -  iommu-map: true
+> > > > -
+> > > >    interconnects:
+> > > >      maxItems: 2
+> > > >  
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+
+-- 
+மணிவண்ணன் சதாசிவம்
