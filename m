@@ -2,161 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179B56DF1EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE4E6DF204
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 12:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjDLK3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 06:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229660AbjDLKam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 06:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjDLK3s (ORCPT
+        with ESMTP id S229784AbjDLKa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:29:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63DC41726
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 03:29:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D143D75;
-        Wed, 12 Apr 2023 03:30:31 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3FC383F587;
-        Wed, 12 Apr 2023 03:29:46 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org
-Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ilkka@os.amperecomputing.com,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v2] perf/arm-cmn: Fix port detection for CMN-700
-Date:   Wed, 12 Apr 2023 11:29:40 +0100
-Message-Id: <71d129241d4d7923cde72a0e5b4c8d2f6084525f.1681295193.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
+        Wed, 12 Apr 2023 06:30:29 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118776E80;
+        Wed, 12 Apr 2023 03:30:25 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33CAUFws046650;
+        Wed, 12 Apr 2023 05:30:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681295415;
+        bh=0FzCz5eeJRH2yU9foXR8AIy2YrmkIhw88/pWp8ZrEDI=;
+        h=From:To:CC:Subject:Date;
+        b=nFRjoRiXkWRL1ujv2zYSW6eCJCNFujrW/ipxJw2otZ5dd+XXKjgOBx0ahesbK9+qb
+         LiCCWuAMOFrSIPkslnF5/T4nSkTHc7jm6M3lyKvc4bGFqfaJXg9REC0ojcmssPabYE
+         Ut9tze+oLxuSr0dwgqiotOhbgJhxXKMgdwTo4T9w=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33CAUF5Q008413
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 12 Apr 2023 05:30:15 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 12
+ Apr 2023 05:30:14 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 12 Apr 2023 05:30:15 -0500
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33CAUEgs089881;
+        Wed, 12 Apr 2023 05:30:14 -0500
+Received: from localhost (uda0501179.dhcp.ti.com [10.24.69.114])
+        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 33CAUDJv028919;
+        Wed, 12 Apr 2023 05:30:14 -0500
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v8 0/4] Introduce PRU platform consumer API
+Date:   Wed, 12 Apr 2023 16:00:08 +0530
+Message-ID: <20230412103012.1754161-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the "extra device ports" configuration was first added, the
-additional mxp_device_port_connect_info registers were added around the
-existing mxp_mesh_port_connect_info registers. What I missed about
-CMN-700 is that it shuffled them around to remove this discontinuity.
-As such, tweak the definitions and factor out a helper for reading these
-registers so we can deal with this discrepancy easily, which does at
-least allow nicely tidying up the callsites. With this we can then also
-do the nice thing and skip accesses completely rather than relying on
-RES0 behaviour where we know the extra registers aren't defined.
+Hi All,
+The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+(Programmable Real-Time Units, or PRUs) for program execution.
 
-Fixes: 23760a014417 ("perf/arm-cmn: Add CMN-700 support")
-Reported-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+already been merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 
-v2: Get the CI-700 offset value right
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be: 
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
- drivers/perf/arm-cmn.c | 55 ++++++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 26 deletions(-)
+In order to make usage of common PRU resources and allow the consumer drivers 
+to configure the PRU hardware for specific usage the PRU API is introduced.
 
-diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
-index c9689861be3f..28cf5cabbb86 100644
---- a/drivers/perf/arm-cmn.c
-+++ b/drivers/perf/arm-cmn.c
-@@ -57,14 +57,12 @@
- #define CMN_INFO_REQ_VC_NUM		GENMASK_ULL(1, 0)
- 
- /* XPs also have some local topology info which has uses too */
--#define CMN_MXP__CONNECT_INFO_P0	0x0008
--#define CMN_MXP__CONNECT_INFO_P1	0x0010
--#define CMN_MXP__CONNECT_INFO_P2	0x0028
--#define CMN_MXP__CONNECT_INFO_P3	0x0030
--#define CMN_MXP__CONNECT_INFO_P4	0x0038
--#define CMN_MXP__CONNECT_INFO_P5	0x0040
-+#define CMN_MXP__CONNECT_INFO(p)	(0x0008 + 8 * (p))
- #define CMN__CONNECT_INFO_DEVICE_TYPE	GENMASK_ULL(4, 0)
- 
-+#define CMN_MAX_PORTS			6
-+#define CI700_CONNECT_INFO_P2_5_OFFSET	0x10
-+
- /* PMU registers occupy the 3rd 4KB page of each node's region */
- #define CMN_PMU_OFFSET			0x2000
- 
-@@ -396,6 +394,25 @@ static struct arm_cmn_node *arm_cmn_node(const struct arm_cmn *cmn,
- 	return NULL;
- }
- 
-+static u32 arm_cmn_device_connect_info(const struct arm_cmn *cmn,
-+				       const struct arm_cmn_node *xp, int port)
-+{
-+	int offset = CMN_MXP__CONNECT_INFO(port);
-+
-+	if (port >= 2) {
-+		if (cmn->model & (CMN600 | CMN650))
-+			return 0;
-+		/*
-+		 * CI-700 may have extra ports, but still has the
-+		 * mesh_port_connect_info registers in the way.
-+		 */
-+		if (cmn->model == CI700)
-+			offset += CI700_CONNECT_INFO_P2_5_OFFSET;
-+	}
-+
-+	return readl_relaxed(xp->pmu_base - CMN_PMU_OFFSET + offset);
-+}
-+
- static struct dentry *arm_cmn_debugfs;
- 
- #ifdef CONFIG_DEBUG_FS
-@@ -469,7 +486,7 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
- 	y = cmn->mesh_y;
- 	while (y--) {
- 		int xp_base = cmn->mesh_x * y;
--		u8 port[6][CMN_MAX_DIMENSION];
-+		u8 port[CMN_MAX_PORTS][CMN_MAX_DIMENSION];
- 
- 		for (x = 0; x < cmn->mesh_x; x++)
- 			seq_puts(s, "--------+");
-@@ -477,14 +494,9 @@ static int arm_cmn_map_show(struct seq_file *s, void *data)
- 		seq_printf(s, "\n%d    |", y);
- 		for (x = 0; x < cmn->mesh_x; x++) {
- 			struct arm_cmn_node *xp = cmn->xps + xp_base + x;
--			void __iomem *base = xp->pmu_base - CMN_PMU_OFFSET;
- 
--			port[0][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P0);
--			port[1][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P1);
--			port[2][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P2);
--			port[3][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P3);
--			port[4][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P4);
--			port[5][x] = readl_relaxed(base + CMN_MXP__CONNECT_INFO_P5);
-+			for (p = 0; p < CMN_MAX_PORTS; p++)
-+				port[p][x] = arm_cmn_device_connect_info(cmn, xp, p);
- 			seq_printf(s, " XP #%-2d |", xp_base + x);
- 		}
- 
-@@ -2083,18 +2095,9 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
- 		 * from this, since in that case we will see at least one XP
- 		 * with port 2 connected, for the HN-D.
- 		 */
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P0))
--			xp_ports |= BIT(0);
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P1))
--			xp_ports |= BIT(1);
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P2))
--			xp_ports |= BIT(2);
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P3))
--			xp_ports |= BIT(3);
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P4))
--			xp_ports |= BIT(4);
--		if (readq_relaxed(xp_region + CMN_MXP__CONNECT_INFO_P5))
--			xp_ports |= BIT(5);
-+		for (int p = 0; p < CMN_MAX_PORTS; p++)
-+			if (arm_cmn_device_connect_info(cmn, xp, p))
-+				xp_ports |= BIT(p);
- 
- 		if (cmn->multi_dtm && (xp_ports & 0xc))
- 			arm_cmn_init_dtm(dtm++, xp, 1);
+This is the v8 of the old patch series [10].
+
+Changes from v7 [10] to v8:
+*) Addressed Mathieu's comments and moved pruss related API definitions to
+linux/pruss_driver.h
+*) Moved enum pruss_mem, pruss_gp_mux_sel, pruss_gpi_mode, pru_type and struct
+pruss_mem_region from remoteproc/pruss.h to linux/pruss_driver.h as asked by
+Mathieu.
+
+Changes from v6 [9] to v7:
+*) Addressed Simon's comment on patch 3 of this series and dropped unnecassary
+macros from the patch.
+
+Changes from v5 [1] to v6:
+*) Added Reviewed by tags of Roger and Tony to the patches.
+*) Added Acked by tag of Mathieu to patch 2 of this series.
+*) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+*) Added comment to the pruss_get() function documentation mentioning it is
+expected the caller will have done a pru_rproc_get() on @rproc.
+*) Fixed compilation warning "warning: ‘pruss_cfg_update’ defined but not used"
+in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revision
+together. Squashed patch 5 instead of patch 4 with patch 3 because patch 5 uses
+both read() and update() APIs where as patch 4 only uses update() API.
+Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+and used in patch 4 and 5. Now these APIs are introduced as well as used in 
+patch 3.
+
+Changes from v4 [2] to v5:
+*) Addressed Roger's comment to change function argument in API 
+pruss_cfg_xfr_enable(). Instead of asking user to calcualte mask, now user
+will just provide the pru_type and mask will be calcualted inside the API.
+*) Moved enum pru_type from pru_rproc.c to include/linux/remoteproc/pruss.h
+in patch 4 / 5.
+*) Moved enum pruss_gpi_mode from patch 3/5 to patch 4/5 to introduce this
+enum in same patch as the API using it.
+*) Moved enum pruss_gp_mux_sel from patch 3/5 to patch 5/5 to introduce this
+enum in same patch as the API using it.
+*) Created new headefile drivers/soc/ti/pruss.h, private to PRUSS as asked by
+Roger. Moved all private definitions and pruss_cfg_read () / update ()
+APIs to this newly added headerfile.
+*) Renamed include/linux/pruss_driver.h to include/linux/pruss_internal.h as
+suggested by Andrew and Roger.
+
+Changes from v3 [3] to v4:
+*) Added my SoB tags in all patches as earlier SoB tags were missing in few
+patches.
+*) Added Roger's RB tags in 3 patches.
+*) Addressed Roger's comment in patch 4/5 of this series. Added check for 
+   invalid GPI mode in pruss_cfg_gpimode() API.
+*) Removed patch [4] from this series as that patch is no longer required.
+*) Made pruss_cfg_read() and pruss_cfg_update() APIs internal to pruss.c by
+   removing EXPORT_SYMBOL_GPL and making them static. Now these APIs are 
+   internal to pruss.c and PRUSS CFG space is not exposed.
+*) Moved APIs pruss_cfg_gpimode(), pruss_cfg_miirt_enable(), 
+   pruss_cfg_xfr_enable(), pruss_cfg_get_gpmux(), pruss_cfg_set_gpmux() to
+   pruss.c file as they are using APIs pruss_cfg_read / update. 
+   Defined these APIs in pruss.h file as other drivers use these APIs to 
+   perform respective operations.
+
+Changes from v2 to v3:
+*) No functional changes, the old series has been rebased on linux-next (tag:
+next-20230306).
+
+This series depends on another series which is already merged in the remoteproc
+tree [5] and is part of v6.3-rc1. This series and the remoteproc series form 
+the PRUSS consumer API which can be used by consumer drivers to utilize the 
+PRUs.
+
+One example of the consumer driver is the PRU-ICSSG ethernet driver [6],which 
+depends on this series and the remoteproc series [5].
+
+[1] https://lore.kernel.org/all/20230323062451.2925996-1-danishanwar@ti.com/
+[2] https://lore.kernel.org/all/20230313111127.1229187-1-danishanwar@ti.com/
+[3] https://lore.kernel.org/all/20230306110934.2736465-1-danishanwar@ti.com/
+[4] https://lore.kernel.org/all/20230306110934.2736465-6-danishanwar@ti.com/
+[5] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
+[6] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+[7] https://lore.kernel.org/all/20230323062451.2925996-4-danishanwar@ti.com/
+[8] https://lore.kernel.org/all/20230323062451.2925996-6-danishanwar@ti.com/
+[9] https://lore.kernel.org/all/20230331112941.823410-1-danishanwar@ti.com/
+[10] https://lore.kernel.org/all/20230404115336.599430-1-danishanwar@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+Andrew F. Davis (1):
+  soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+
+Suman Anna (2):
+  soc: ti: pruss: Add pruss_cfg_read()/update(),
+    pruss_cfg_get_gpmux()/set_gpmux() APIs
+  soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+    XFR
+
+Tero Kristo (1):
+  soc: ti: pruss: Add pruss_get()/put() API
+
+ drivers/remoteproc/pru_rproc.c |  15 --
+ drivers/soc/ti/pruss.c         | 258 +++++++++++++++++++++++++++++++++
+ drivers/soc/ti/pruss.h         |  88 +++++++++++
+ include/linux/pruss_driver.h   | 123 ++++++++++++++++
+ 4 files changed, 469 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/soc/ti/pruss.h
+
 -- 
-2.39.2.101.g768bb238c484.dirty
+2.34.1
 
