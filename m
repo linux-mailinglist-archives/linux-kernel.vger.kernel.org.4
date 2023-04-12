@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F84B6DF8A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B086DF8A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 16:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjDLOfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 10:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S231667AbjDLOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 10:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjDLOfl (ORCPT
+        with ESMTP id S231665AbjDLOfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 10:35:41 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B2293CD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:35:15 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id u4so7674362qvj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:35:15 -0700 (PDT)
+        Wed, 12 Apr 2023 10:35:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22988A75
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:35:31 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id kh6so10021527plb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Apr 2023 07:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1681310113;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pha/CGTxASjKhJeF/WUk5bsRIts9NaxH9VPPQI0EN78=;
-        b=B8sJHKWhFw5o1rDFmXc4bIV2JKw2Snc8nYR9FnFGTdE0RY0jCBWBOguQZ0742bY06I
-         3/Ip9ADLx1t40u+RBH2tjeGJCyOii3ffWZ8y7LVeG6oRG1ryj73P26zlIlVOSrNfTz0v
-         +0ggR+i8qd6VgxK+jNkpARyl85k7hDNs5qJak=
+        d=linaro.org; s=google; t=1681310130; x=1683902130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/T2PX/8N5au5v5IKSsqV805KkK2JrYq/J/0EAE4ABlA=;
+        b=ROmyi3akSPeRjoB/0/dFHDoxyuHlMREc2c9XQrGHlhuDZ4/TrFQDvxpEbFgq6gBcJB
+         P1Yh7uZEMitLw3Zm44k/bPNpHk9ts1E18mTJZDgbOIx38Oqx9F2GQCXcTPwSWOD8mVzt
+         7tcTKPTiNl3FVEkh9OKFXBlV/yYTRZ7xqTWA6XjptES42mq7/qLaBinW0AiyvPKklvtu
+         VzyAQjyY27IdLIUdpTRT+V/y9M1MtHnrQ5rPYp1DW+Sbmy358b52N4G07RMY1HfY3/M5
+         k3nbDSKnQFR7H4n1Y0e/U/k3YDnKhmzedD3FGXFz/wNrebr7J+j+PPcZe6SRcSEpNP+P
+         LlPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681310113;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pha/CGTxASjKhJeF/WUk5bsRIts9NaxH9VPPQI0EN78=;
-        b=vciMUoX4E1ecw1ClkLPGyaLNN1lsNqk50ut55Q7D6GTbd7hRpFSvfVFXP0ERJPLliZ
-         EoJX8cWjgnyBE7e8HOAqh0jJrY5MZsG0TXRc9RXA9abtAhAN8B4akm6WcfL6qZ3O/NS6
-         84jUJH845upi5WCoiRTDAmAVf9JjYegRE0xs9+nl62wddOPRGTkeFiiHkIbRSJYmSaLO
-         WoNPDP7nKi7fwn1NoC4Qo0xww4VNO2dzyOi/X6ZCsz1Z3Nnw61rDHPRrHf5M1YHQzeLC
-         bLVR4154qNU6EoV3uUgt56qozs+Jiel4wAH8M9GH2lK9ABxgTGyoVX2iGKGZY3Gkl3Te
-         YCAg==
-X-Gm-Message-State: AAQBX9fB/SMmBKU2IswaXS40tZxs+CuVk8SNCwprQwc1v2PJyewxvkRC
-        SvZIS/tps39x67D8dKaX8eN+ow==
-X-Google-Smtp-Source: AKy350YQuhhN5PcByvEcGXji47gE3gsHjXIAun+Dh0NM9xmaPd+Wc5FopRp4tovqx+g0I5pXzD6osg==
-X-Received: by 2002:ad4:574b:0:b0:5ef:519:b06 with SMTP id q11-20020ad4574b000000b005ef05190b06mr6902414qvx.29.1681310113313;
-        Wed, 12 Apr 2023 07:35:13 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id x4-20020a0cfe04000000b005dd8b9345bcsm2923346qvr.84.2023.04.12.07.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:35:12 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 14:35:12 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        mingo@kernel.org, tglx@linutronix.de, rcu@vger.kernel.org,
-        joel@joelfernandes.org, boqun.feng@gmail.com, frederic@kernel.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com, qiang1.zhang@intel.com,
-        rostedt@goodmis.org
-Subject: [GIT PULL] RCU changes for v6.4
-Message-ID: <20230412143512.GA1697547@google.com>
+        d=1e100.net; s=20210112; t=1681310130; x=1683902130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/T2PX/8N5au5v5IKSsqV805KkK2JrYq/J/0EAE4ABlA=;
+        b=uBRPPpoCc1L6CrRAbhCQRRiaTWgSy+f2F0HQxA+pKDv9Qkq4cNk0nxSgTOX9Hkcrll
+         gB5b2kQL0gChDqAFbPToQQqZPo8hvcZfWI3ZqQfJvpbYwsiXhZyvbOOtt7JcQBGTn4Rj
+         fcNu1gZz/TwqBXW6JJi2rB67Y2yEq9IZvOq6DdOa+k3Uv+D9tzt55YvT+NCJ2Rqeq65X
+         7VoNR7CtQKtvLC7Cmvlf1XgjGmK5E/TC+S7YfvKQX9OX7V0romsczhF5qmff+TWJ3SUf
+         Yi7zihryTzM4jtnPirQZKMNM7EaDfQfvg/jSynu59BgAkAJ1GZEuq5pRcmlHAwU09fi4
+         9/Cg==
+X-Gm-Message-State: AAQBX9fOpIBwquu+LloeSMyfZPbAls4z55c1bKsmcjyfVYfCAmofMvSE
+        GpCDTSpRkIxpSO5tUwNoaKa2hjGrYaBR3jE+WvPfWA==
+X-Google-Smtp-Source: AKy350ZWrLYJfF7zWBrkBDk42sYmH9mNSpcqdzupf/vr6KlWzp8z1iZJoxL9Dhdvy0PZPI/1mN+yLdj45WmxA/1mN7E=
+X-Received: by 2002:a17:90a:ae0a:b0:246:a74f:fd73 with SMTP id
+ t10-20020a17090aae0a00b00246a74ffd73mr2111981pjq.6.1681310130194; Wed, 12 Apr
+ 2023 07:35:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230404155121.1824126-1-james.clark@arm.com> <20230404155121.1824126-7-james.clark@arm.com>
+In-Reply-To: <20230404155121.1824126-7-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 12 Apr 2023 15:35:18 +0100
+Message-ID: <CAJ9a7ViGOFfyb2WjvVtmbOy6fxzXqBPeXBkrm54WD6sT5s3PPg@mail.gmail.com>
+Subject: Re: [PATCH v5 06/13] coresight: Dynamically add connections
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        suzuki.poulose@arm.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -68,224 +72,359 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus,
+On Tue, 4 Apr 2023 at 16:52, James Clark <james.clark@arm.com> wrote:
+>
+> Add a function for adding connections dynamically. This also removes
+> the 1:1 mapping between port number and the index into the connections
+> array. The only place this mapping was used was in the warning for
+> duplicate output ports, which has been replaced by a search. Other
+> uses of the port number already use the port member variable.
+>
+> Being able to dynamically add connections will allow other devices like
+> CTI to re-use the connection mechanism despite not having explicit
+> connections described in the DT.
+>
+> The connections array is now no longer sparse, so child_fwnode doesn't
+> need to be checked as all connections have a target node. Because the
+> array is no longer sparse, the high in and out port numbers are required
+> for the refcount arrays. But these will also be removed in a later
+> commit when the refcount is made a property of the connection.
+>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/hwtracing/coresight/coresight-core.c  |  23 ++--
+>  .../hwtracing/coresight/coresight-platform.c  | 124 +++++++++---------
+>  include/linux/coresight.h                     |   8 +-
+>  3 files changed, 77 insertions(+), 78 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index f3dc320b374c..91274e7e6944 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -397,9 +397,9 @@ static void coresight_disable_link(struct coresight_device *csdev,
+>         link_subtype = csdev->subtype.link_subtype;
+>
+>         if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG) {
+> -               nr_conns = csdev->pdata->nr_inconns;
+> +               nr_conns = csdev->pdata->high_inport;
+>         } else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT) {
+> -               nr_conns = csdev->pdata->nr_outconns;
+> +               nr_conns = csdev->pdata->high_outport;
+>         } else {
+>                 nr_conns = 1;
+>         }
+> @@ -1336,9 +1336,6 @@ static int coresight_orphan_match(struct device *dev, void *data)
+>         for (i = 0; i < i_csdev->pdata->nr_outconns; i++) {
+>                 conn = &i_csdev->pdata->out_conns[i];
+>
+> -               /* Skip the port if FW doesn't describe it */
+> -               if (!conn->dest_fwnode)
+> -                       continue;
+>                 /* We have found at least one orphan connection */
+>                 if (conn->dest_dev == NULL) {
+>                         /* Does it match this newly added device? */
+> @@ -1377,8 +1374,6 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+>         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
+>                 struct coresight_connection *conn = &csdev->pdata->out_conns[i];
+>
+> -               if (!conn->dest_fwnode)
+> -                       continue;
+>                 conn->dest_dev =
+>                         coresight_find_csdev_by_fwnode(conn->dest_fwnode);
+>                 if (conn->dest_dev && conn->dest_dev->has_conns_grp) {
+> @@ -1413,7 +1408,7 @@ static int coresight_remove_match(struct device *dev, void *data)
+>         for (i = 0; i < iterator->pdata->nr_outconns; i++) {
+>                 conn = &iterator->pdata->out_conns[i];
+>
+> -               if (conn->dest_dev == NULL || conn->dest_fwnode == NULL)
+> +               if (conn->dest_dev == NULL)
+>                         continue;
+>
+>                 if (csdev->dev.fwnode == conn->dest_fwnode) {
+> @@ -1445,7 +1440,7 @@ static void coresight_remove_conns(struct coresight_device *csdev)
+>          * doesn't have at least one input port, there is no point
+>          * in searching all the devices.
+>          */
+> -       if (csdev->pdata->nr_inconns)
+> +       if (csdev->pdata->high_inport)
+>                 bus_for_each_dev(&coresight_bustype, NULL,
+>                                  csdev, coresight_remove_match);
+>  }
+> @@ -1552,10 +1547,8 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+>                  * Drop the refcount and clear the handle as this device
+>                  * is going away
+>                  */
+> -               if (conns[i].dest_fwnode) {
+> -                       fwnode_handle_put(conns[i].dest_fwnode);
+> -                       conns[i].dest_fwnode = NULL;
+> -               }
+> +               fwnode_handle_put(conns[i].dest_fwnode);
+> +               conns[i].dest_fwnode = NULL;
+>         }
+>         if (csdev)
+>                 coresight_remove_conns_sysfs_group(csdev);
+> @@ -1581,9 +1574,9 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>                 link_subtype = desc->subtype.link_subtype;
+>
+>                 if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_MERG)
+> -                       nr_refcnts = desc->pdata->nr_inconns;
+> +                       nr_refcnts = desc->pdata->high_inport;
+>                 else if (link_subtype == CORESIGHT_DEV_SUBTYPE_LINK_SPLIT)
+> -                       nr_refcnts = desc->pdata->nr_outconns;
+> +                       nr_refcnts = desc->pdata->high_outport;
+>         }
+>
+>         refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index 566cc99a2c34..8c2029336161 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -19,22 +19,45 @@
+>  #include <asm/smp_plat.h>
+>
+>  #include "coresight-priv.h"
+> +
+>  /*
+> - * coresight_alloc_conns: Allocate connections record for each output
+> - * port from the device.
+> + * Add an entry to the connection list and assign @conn's contents to it.
+> + *
+> + * If the output port is already assigned on this device, return -EINVAL
+>   */
+> -static int coresight_alloc_conns(struct device *dev,
+> -                                struct coresight_platform_data *pdata)
+> +struct coresight_connection *
+> +coresight_add_out_conn(struct device *dev,
+> +                      struct coresight_platform_data *pdata,
+> +                      const struct coresight_connection *new_conn)
+>  {
+> -       if (pdata->nr_outconns) {
+> -               pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
+> -                                           sizeof(*pdata->out_conns), GFP_KERNEL);
+> -               if (!pdata->out_conns)
+> -                       return -ENOMEM;
+> +       int i;
+> +       struct coresight_connection *conn;
+> +
+> +       /*
+> +        * Warn on any existing duplicate output port.
+> +        */
+> +       for (i = 0; i < pdata->nr_outconns; ++i) {
+> +               conn = &pdata->out_conns[i];
+> +               /* Output == -1 means ignore the port for example for helpers */
+> +               if (conn->src_port != -1 &&
+> +                   conn->src_port == new_conn->src_port) {
+> +                       dev_warn(dev, "Duplicate output port %d\n",
+> +                                conn->src_port);
+> +                       return ERR_PTR(-EINVAL);
+> +               }
+>         }
+>
+> -       return 0;
+> +       pdata->nr_outconns++;
+> +       pdata->out_conns =
+> +               devm_krealloc_array(dev, pdata->out_conns, pdata->nr_outconns,
+> +                                   sizeof(*pdata->out_conns), GFP_KERNEL);
+> +       if (!pdata->out_conns)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       pdata->out_conns[pdata->nr_outconns - 1] = *new_conn;
+> +       return &pdata->out_conns[pdata->nr_outconns - 1];
+>  }
+> +EXPORT_SYMBOL_GPL(coresight_add_out_conn);
+>
+>  static struct device *
+>  coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
+> @@ -224,7 +247,8 @@ static int of_coresight_parse_endpoint(struct device *dev,
+>         struct device_node *rep = NULL;
+>         struct device *rdev = NULL;
+>         struct fwnode_handle *rdev_fwnode;
+> -       struct coresight_connection *conn;
+> +       struct coresight_connection conn = {};
+> +       struct coresight_connection *new_conn;
+>
+>         do {
+>                 /* Parse the local port details */
+> @@ -251,14 +275,7 @@ static int of_coresight_parse_endpoint(struct device *dev,
+>                         break;
+>                 }
+>
+> -               conn = &pdata->out_conns[endpoint.port];
+> -               if (conn->dest_fwnode) {
+> -                       dev_warn(dev, "Duplicate output port %d\n",
+> -                                endpoint.port);
+> -                       ret = -EINVAL;
+> -                       break;
+> -               }
+> -               conn->src_port = endpoint.port;
+> +               conn.src_port = endpoint.port;
+>                 /*
+>                  * Hold the refcount to the target device. This could be
+>                  * released via:
+> @@ -267,8 +284,14 @@ static int of_coresight_parse_endpoint(struct device *dev,
+>                  * 2) While removing the target device via
+>                  *    coresight_remove_match()
+>                  */
+> -               conn->dest_fwnode = fwnode_handle_get(rdev_fwnode);
+> -               conn->dest_port = rendpoint.port;
+> +               conn.dest_fwnode = fwnode_handle_get(rdev_fwnode);
+> +               conn.dest_port = rendpoint.port;
+> +
+> +               new_conn = coresight_add_out_conn(dev, pdata, &conn);
+> +               if (IS_ERR_VALUE(new_conn)) {
+> +                       fwnode_handle_put(conn.dest_fwnode);
+> +                       return PTR_ERR(new_conn);
+> +               }
+>                 /* Connection record updated */
+>         } while (0);
+>
+> @@ -289,16 +312,12 @@ static int of_get_coresight_platform_data(struct device *dev,
+>         struct device_node *node = dev->of_node;
+>
+>         /* Get the number of input and output port for this component */
+> -       of_coresight_get_ports(node, &pdata->nr_inconns, &pdata->nr_outconns);
+> +       of_coresight_get_ports(node, &pdata->high_inport, &pdata->high_outport);
+>
+>         /* If there are no output connections, we are done */
+> -       if (!pdata->nr_outconns)
+> +       if (!pdata->high_outport)
+>                 return 0;
+>
+> -       ret = coresight_alloc_conns(dev, pdata);
+> -       if (ret)
+> -               return ret;
+> -
+>         parent = of_coresight_get_output_ports_node(node);
+>         /*
+>          * If the DT uses obsoleted bindings, the ports are listed
+> @@ -683,12 +702,14 @@ static int acpi_coresight_parse_link(struct acpi_device *adev,
+>   * connection information and populate the supplied coresight_platform_data
+>   * instance.
+>   */
+> -static int acpi_coresight_parse_graph(struct acpi_device *adev,
+> +static int acpi_coresight_parse_graph(struct device *dev,
+> +                                     struct acpi_device *adev,
+>                                       struct coresight_platform_data *pdata)
+>  {
+> -       int rc, i, nlinks;
+> +       int i, nlinks;
+>         const union acpi_object *graph;
+> -       struct coresight_connection *conns, *ptr;
+> +       struct coresight_connection conn, zero_conn = {};
+> +       struct coresight_connection *new_conn;
+>
+>         pdata->nr_inconns = pdata->nr_outconns = 0;
+>         graph = acpi_get_coresight_graph(adev);
+> @@ -699,30 +720,23 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+>         if (!nlinks)
+>                 return 0;
+>
+> -       /*
+> -        * To avoid scanning the table twice (once for finding the number of
+> -        * output links and then later for parsing the output links),
+> -        * cache the links information in one go and then later copy
+> -        * it to the pdata.
+> -        */
+> -       conns = devm_kcalloc(&adev->dev, nlinks, sizeof(*conns), GFP_KERNEL);
+> -       if (!conns)
+> -               return -ENOMEM;
+> -       ptr = conns;
+>         for (i = 0; i < nlinks; i++) {
+>                 const union acpi_object *link = &graph->package.elements[3 + i];
+>                 int dir;
+>
+> -               dir = acpi_coresight_parse_link(adev, link, ptr);
+> +               conn = zero_conn;
+> +               dir = acpi_coresight_parse_link(adev, link, &conn);
+>                 if (dir < 0)
+>                         return dir;
+>
+>                 if (dir == ACPI_CORESIGHT_LINK_MASTER) {
+> -                       if (ptr->src_port >= pdata->nr_outconns)
+> -                               pdata->nr_outconns = ptr->src_port + 1;
+> -                       ptr++;
+> +                       if (conn.src_port >= pdata->high_outport)
+> +                               pdata->high_outport = conn.src_port + 1;
+> +                       new_conn = coresight_add_out_conn(dev, pdata, &conn);
+> +                       if (IS_ERR(new_conn))
+> +                               return PTR_ERR(new_conn);
+>                 } else {
+> -                       WARN_ON(pdata->nr_inconns == ptr->dest_port + 1);
+> +                       WARN_ON(pdata->high_inport == conn.dest_port + 1);
+>                         /*
+>                          * We do not track input port connections for a device.
+>                          * However we need the highest port number described,
+> @@ -730,25 +744,11 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+>                          * record for an output connection. Hence, do not move
+>                          * the ptr for input connections
+>                          */
+> -                       if (ptr->dest_port >= pdata->nr_inconns)
+> -                               pdata->nr_inconns = ptr->dest_port + 1;
+> +                       if (conn.dest_port >= pdata->high_inport)
+> +                               pdata->high_inport = conn.dest_port + 1;
+>                 }
+>         }
+>
+> -       rc = coresight_alloc_conns(&adev->dev, pdata);
+> -       if (rc)
+> -               return rc;
+> -
+> -       /* Copy the connection information to the final location */
+> -       for (i = 0; conns + i < ptr; i++) {
+> -               int port = conns[i].src_port;
+> -
+> -               /* Duplicate output port */
+> -               WARN_ON(pdata->out_conns[port].dest_fwnode);
+> -               pdata->out_conns[port] = conns[i];
+> -       }
+> -
+> -       devm_kfree(&adev->dev, conns);
+>         return 0;
+>  }
+>
+> @@ -809,7 +809,7 @@ acpi_get_coresight_platform_data(struct device *dev,
+>         if (!adev)
+>                 return -EINVAL;
+>
+> -       return acpi_coresight_parse_graph(adev, pdata);
+> +       return acpi_coresight_parse_graph(dev, adev, pdata);
+>  }
+>
+>  #else
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index b6f444804bf3..12fdbd03e2f7 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -104,9 +104,11 @@ union coresight_dev_subtype {
+>   *
+>   * @nr_inconns: Number of elements for the input connections.
+>   * @nr_outconns: Number of elements for the output connections.
+> - * @out_conns: Sparse array of nr_outconns connections from this component.
+> + * @out_conns: Array of nr_outconns connections from this component.
+>   */
+>  struct coresight_platform_data {
+> +       int high_inport;
+> +       int high_outport;
+>         int nr_inconns;
+>         int nr_outconns;
+>         struct coresight_connection *out_conns;
+> @@ -609,5 +611,9 @@ static inline void coresight_write64(struct coresight_device *csdev, u64 val, u3
+>  extern int coresight_get_cpu(struct device *dev);
+>
+>  struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
+> +struct coresight_connection *
+> +coresight_add_out_conn(struct device *dev,
+> +                      struct coresight_platform_data *pdata,
+> +                      const struct coresight_connection *new_conn);
+>
+>  #endif         /* _LINUX_COREISGHT_H */
+> --
+> 2.34.1
+>
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git tags/rcu.6.4.april5.2023.3
-
-for you to fetch changes up to 8ae99857748bece993962dd8d04e096f9e76731f:
-
-  Merge branches 'rcu/staging-core', 'rcu/staging-docs' and 'rcu/staging-kfree', remote-tracking branches 'paul/srcu-cf.2023.04.04a', 'fbq/rcu/lockdep.2023.03.27a' and 'fbq/rcu/rcutorture.2023.03.20a' into rcu/staging (2023-04-05 13:50:37 +0000)
-
-Highlights of RCU changes for 6.4 include:
-
-1. Updates and additions to MAINTAINERS files, with Boqun being added to the
-   RCU entry and Zqiang being added as an RCU reviewer. I have also
-   transitioned from reviewer to maintainer; however, Paul will be taking
-   over sending RCU pull-requests for the next merge window.
-
-2. Resolution of hotplug warning in nohz code, achieved by fixing
-   cpu_is_hotpluggable() through interaction with the nohz subsystem.
-   Tick dependency modifications by Zqiang, focusing on fixing usage of the
-   TICK_DEP_BIT_RCU_EXP bitmask.
-
-3. Avoid needless calls to the rcu-lazy shrinker for CONFIG_RCU_LAZY=n kernels,
-   fixed by Zqiang.
-
-4. Improvements to rcu-tasks stall reporting by Neeraj.
-
-5. Initial renaming of k[v]free_rcu() to k[v]free_rcu_mightsleep() for
-   increased robustness, affecting several components like mac802154, drbd,
-   vmw_vmci, tracing, and more. A report [1] by Eric Dumazet showed that the
-   API could be unknowingly used in an atomic context, so we'd rather make
-   sure they know what they're asking for by being explicit:
-   [1] https://lore.kernel.org/all/20221202052847.2623997-1-edumazet@google.com/
-
-6. Documentation updates, including corrections to spelling, clarifications
-   in comments, and improvements to the srcu_size_state comments.
-
-7. Better srcu_struct cache locality for readers, by adjusting the size of
-   srcu_struct in support of SRCU usage by Christoph Hellwig.
-
-8. Teach lockdep to detect deadlocks between srcu_read_lock() vs
-   synchronize_srcu() contributed by Boqun. Previously lockdep could not
-   detect such deadlocks, now it can.
-
-9. Integration of rcutorture and rcu-related tools, targeted for v6.4 from
-   Boqun's tree, featuring new SRCU deadlock scenarios, test_nmis module
-   parameter, and more.
-
-10. Miscellaneous changes, various code cleanups and comment improvements.
-
-Thank you for considering these RCU updates for the 6.4 release.
-
-----------------------------------------------------------------
-Bhaskar Chowdhury (1):
-      tools: rcu: Add usage function and check for argument
-
-Boqun Feng (5):
-      locking/lockdep: Introduce lock_sync()
-      rcu: Annotate SRCU's update-side lockdep dependencies
-      locking: Reduce the number of locks in ww_mutex stress tests
-      locking/lockdep: Improve the deadlock scenario print for sync and read lock
-      MAINTAINERS: Add Boqun to RCU entry
-
-Frederic Weisbecker (1):
-      rcu: Further comment and explain the state space of GP sequences
-
-Joel Fernandes (Google) (7):
-      srcu: Clarify comments on memory barrier "E"
-      MAINTAINERS: Change Joel Fernandes from R: to M:
-      MAINTAINERS: Add Zqiang as a RCU reviewer
-      tick/nohz: Fix cpu_is_hotpluggable() by checking with nohz subsystem
-      mac802154: Rename kfree_rcu() to kvfree_rcu_mightsleep()
-      checkpatch: Error out if deprecated RCU API used
-      Merge branches 'rcu/staging-core', 'rcu/staging-docs' and 'rcu/staging-kfree', remote-tracking branches 'paul/srcu-cf.2023.04.04a', 'fbq/rcu/lockdep.2023.03.27a' and 'fbq/rcu/rcutorture.2023.03.20a' into rcu/staging
-
-Neeraj Upadhyay (1):
-      rcu-tasks: Report stalls during synchronize_srcu() in rcu_tasks_postscan()
-
-Paul E. McKenney (35):
-      rcutorture: Add test_nmis module parameter
-      rcutorture: Set CONFIG_BOOTPARAM_HOTPLUG_CPU0 to offline CPU 0
-      rcutorture: Make scenario TREE04 enable lazy call_rcu()
-      torture: Permit kvm-again.sh --duration to default to previous run
-      torture: Enable clocksource watchdog with "tsc=watchdog"
-      rcuscale: Move shutdown from wait_event() to wait_event_idle()
-      refscale: Move shutdown from wait_event() to wait_event_idle()
-      rcutorture: Add SRCU deadlock scenarios
-      rcutorture: Add RCU Tasks Trace and SRCU deadlock scenarios
-      rcutorture: Add srcu_lockdep.sh
-      rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu
-      srcu: Add whitespace to __SRCU_STRUCT_INIT() & __DEFINE_SRCU()
-      srcu: Use static init for statically allocated in-module srcu_struct
-      srcu: Begin offloading srcu_struct fields to srcu_update
-      srcu: Move ->level from srcu_struct to srcu_usage
-      srcu: Move ->srcu_size_state from srcu_struct to srcu_usage
-      srcu: Move ->srcu_cb_mutex from srcu_struct to srcu_usage
-      srcu: Move ->lock initialization after srcu_usage allocation
-      srcu: Move ->lock from srcu_struct to srcu_usage
-      srcu: Move ->srcu_gp_mutex from srcu_struct to srcu_usage
-      srcu: Move grace-period fields from srcu_struct to srcu_usage
-      srcu: Move heuristics fields from srcu_struct to srcu_usage
-      srcu: Move ->sda_is_static from srcu_struct to srcu_usage
-      srcu: Move srcu_barrier() fields from srcu_struct to srcu_usage
-      srcu: Move work-scheduling fields from srcu_struct to srcu_usage
-      srcu: Check for readers at module-exit time
-      srcu: Fix long lines in srcu_get_delay()
-      srcu: Fix long lines in cleanup_srcu_struct()
-      srcu: Fix long lines in srcu_gp_end()
-      srcu: Fix long lines in srcu_funnel_gp_start()
-      rcu: Add comment to rcu_do_batch() identifying rcuoc code path
-      rcu: Remove CONFIG_SRCU
-      mm: Remove "select SRCU"
-      kvm: Remove "select SRCU"
-      arch/x86: Remove "select SRCU"
-
-Pingfan Liu (1):
-      srcu: Add comments for srcu_size_state
-
-Qiuxu Zhuo (1):
-      Documentation/RCU: s/not/note/ in checklist.rst
-
-Randy Dunlap (1):
-      Documentation: RCU: Correct spelling
-
-Uladzislau Rezki (Sony) (9):
-      doc: Update whatisRCU.rst
-      drbd: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-      misc: vmw_vmci: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-      tracing: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-      lib/test_vmalloc.c: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-      net/sysctl: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-      net/mlx5: Rename kfree_rcu() to kfree_rcu_mightsleep()
-      ext4/super: Rename kfree_rcu() to kfree_rcu_mightsleep()
-      rcuscale: Rename kfree_rcu() to kfree_rcu_mightsleep()
-
-Xu Panda (1):
-      rcu/trace: use strscpy() to instead of strncpy()
-
-Yue Hu (1):
-      rcutorture: Eliminate variable n_rcu_torture_boost_rterror
-
-Zheng Yejian (1):
-      rcu: Avoid stack overflow due to __rcu_irq_enter_check_tick() being kprobe-ed
-
-Zqiang (7):
-      rcutorture: Create nocb kthreads only when testing rcu in CONFIG_RCU_NOCB_CPU=y kernels
-      rcu: Fix set/clear TICK_DEP_BIT_RCU_EXP bitmask race
-      rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
-      rcu: Register rcu-lazy shrinker only for CONFIG_RCU_LAZY=y kernels
-      rcu: Remove never-set needwake assignment from rcu_report_qs_rdp()
-      rcu: Permit start_poll_synchronize_rcu_expedited() to be invoked early
-      rcu: Protect rcu_print_task_exp_stall() ->exp_tasks access
-
- .../Expedited-Grace-Periods.rst                    |   6 +-
- .../Memory-Ordering/Tree-RCU-Memory-Ordering.rst   |   2 +-
- Documentation/RCU/RTFP.txt                         |  10 +-
- Documentation/RCU/UP.rst                           |   4 +-
- Documentation/RCU/checklist.rst                    |   2 +-
- Documentation/RCU/lockdep.rst                      |   2 +-
- Documentation/RCU/torture.rst                      |   4 +-
- Documentation/RCU/whatisRCU.rst                    |   6 +-
- MAINTAINERS                                        |   4 +-
- arch/arm64/kvm/Kconfig                             |   1 -
- arch/mips/kvm/Kconfig                              |   1 -
- arch/powerpc/kvm/Kconfig                           |   1 -
- arch/riscv/kvm/Kconfig                             |   1 -
- arch/s390/kvm/Kconfig                              |   1 -
- arch/x86/Kconfig                                   |   2 -
- arch/x86/kvm/Kconfig                               |   1 -
- drivers/base/cpu.c                                 |   3 +-
- drivers/block/drbd/drbd_nl.c                       |   6 +-
- drivers/block/drbd/drbd_receiver.c                 |   4 +-
- drivers/block/drbd/drbd_state.c                    |   2 +-
- drivers/misc/vmw_vmci/vmci_context.c               |   2 +-
- drivers/misc/vmw_vmci/vmci_event.c                 |   2 +-
- .../ethernet/mellanox/mlx5/core/en/tc/int_port.c   |   2 +-
- .../ethernet/mellanox/mlx5/core/en_accel/macsec.c  |   4 +-
- fs/ext4/super.c                                    |   2 +-
- include/linux/lockdep.h                            |   8 +-
- include/linux/notifier.h                           |   5 +-
- include/linux/srcu.h                               |  34 +-
- include/linux/srcutiny.h                           |   6 +-
- include/linux/srcutree.h                           |  94 +++--
- include/linux/tick.h                               |   2 +
- include/trace/events/rcu.h                         |   4 +-
- include/trace/events/timer.h                       |   3 +-
- kernel/locking/lockdep.c                           |  64 ++-
- kernel/locking/test-ww_mutex.c                     |   2 +-
- kernel/rcu/Kconfig                                 |   3 -
- kernel/rcu/rcu.h                                   |  43 +-
- kernel/rcu/rcuscale.c                              |   9 +-
- kernel/rcu/rcutorture.c                            | 234 ++++++++++-
- kernel/rcu/refscale.c                              |   2 +-
- kernel/rcu/srcutiny.c                              |   2 +
- kernel/rcu/srcutree.c                              | 438 ++++++++++++---------
- kernel/rcu/tasks.h                                 |  33 ++
- kernel/rcu/tree.c                                  |  18 +-
- kernel/rcu/tree_exp.h                              |  16 +-
- kernel/rcu/tree_nocb.h                             |   4 +
- kernel/time/tick-sched.c                           |  16 +-
- kernel/trace/trace_osnoise.c                       |   2 +-
- kernel/trace/trace_probe.c                         |   2 +-
- lib/test_vmalloc.c                                 |   2 +-
- mm/Kconfig                                         |   1 -
- net/core/sysctl_net_core.c                         |   4 +-
- net/mac802154/scan.c                               |   4 +-
- scripts/checkpatch.pl                              |   9 +
- tools/rcu/extract-stall.sh                         |  26 +-
- .../testing/selftests/rcutorture/bin/kvm-again.sh  |   2 +-
- .../selftests/rcutorture/bin/srcu_lockdep.sh       |  78 ++++
- tools/testing/selftests/rcutorture/bin/torture.sh  |   6 +-
- .../selftests/rcutorture/configs/rcu/TREE01        |   1 +
- .../selftests/rcutorture/configs/rcu/TREE04        |   1 +
- .../selftests/rcutorture/doc/TREE_RCU-kconfig.txt  |   4 -
- 61 files changed, 915 insertions(+), 342 deletions(-)
- mode change 100644 => 100755 tools/rcu/extract-stall.sh
- create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
