@@ -2,648 +2,866 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6B06DF943
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D1F6DF94E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 17:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjDLPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 11:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        id S231234AbjDLPEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 11:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjDLPCp (ORCPT
+        with ESMTP id S230423AbjDLPEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:02:45 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021018.outbound.protection.outlook.com [52.101.57.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47532DC;
-        Wed, 12 Apr 2023 08:02:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M2g/U+KeW5IEo0JAwkvoK5fWPwn2rNtT3uzS8f9OGbzJ1NtEKmEppjAYh0CnKM+jNCSGpxOtkDdzDXMyd6HOjZBo47JiScf3hAgsgCLYUHMLJ7l9bZ4k4cZ+Cx+F7decT6TpSUY1e8dMSnu2tqBzNfF0U/Lg0E07tY0QsTKGed+srH2wQwUUDD6lfKwBV0kpERlVgEMAK3UkqXfCatD9/NPadtDHjk3wgTp7VXpgfGLMihDGSuGDv1psaiY+fM0IRNeE4zL0MFpGyMvn/G4uQwULGLjjARPm4QS1fLGfxWdwRPBTxb69mV5sLyQXnROYBEkZlf9Y6WBxh5LmtLx99w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Rz6J1qlqD47ATrWFtLAcxBM58Cqe0SCAvaovW9G12k=;
- b=Q9GLA9eal8wPuFfncuEIw00nW/ez7KKV7npxepI25g3W+qovlzEQ3PjXyxDMBEeCpEsPWxRSseKzEYb6WVxxILzdZ0uLUdaQ28YL7V37zIE420VQrvwffQwhD4furHeriKrEg9IWtExudmJ0I5uNPc5BApz5QhS+x2tuCco/L65Y2QPRmPFCImm5/Sbq6zkzpio2aYZ0ASUFZk32UlZGTvZirnMZlADBWomYNXlzqkcWMl+G6h9g7/6azbSrBddhRnRKx5NOABtsaOGfEHE9Skw2e12YDukb2c55AR+quA/EfaiPhO6Z1+ARzYcqpX4hq9EFRCbgW2QAup51fCFr4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0Rz6J1qlqD47ATrWFtLAcxBM58Cqe0SCAvaovW9G12k=;
- b=eOe51BvCxMfC8vkmyS7PR2sMGF5YI5RAZGp1tfTVYmeTP6mRXBl7a6zHrur2KQaXRUv6duBo5jEhXjesQxIoYdgeK5oEeKxCPQXE4uaSzSBBbeQNE3QXaF8j1z176P4dKa1dFYvq+XriIKQ3wxOESWkOHfjq4y+d4qKLwy90O9Y=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by CH3PR21MB4016.namprd21.prod.outlook.com (2603:10b6:610:178::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.4; Wed, 12 Apr
- 2023 15:02:39 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6319.004; Wed, 12 Apr 2023
- 15:02:32 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-CC:     "pangupta@amd.com" <pangupta@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
- guest support on hyperv
-Thread-Topic: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
- guest support on hyperv
-Thread-Index: AQHZZlRT0ThUaqkS0k+wLQND5IeAFa8n0lkw
-Date:   Wed, 12 Apr 2023 15:02:32 +0000
-Message-ID: <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-15-ltykernel@gmail.com>
-In-Reply-To: <20230403174406.4180472-15-ltykernel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9a1229e2-a6ed-4685-b5c2-a5a409036695;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-12T15:00:21Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CH3PR21MB4016:EE_
-x-ms-office365-filtering-correlation-id: 7b7a1c72-724d-425a-44e6-08db3b66f156
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EzKirbmC8DYbbzW/HF2htT+iekCKLapB9zarh7N2Kqr10lyc+UM2RLesdmqt1eQ15mxMTAmRz5AODzAFHWLjqhVuPoTJwDhWoHqkeBRZqBqH8RBaoY9zi5czYSzP4cvCh/g/vUs1CxAZvQl0mHRiPD/S5KMh7Es5qVYMVDUISCJkJtPCUFMtGjgwFvGeUhXd+el0r5Ebk1J+7DTtvsqvx7m0Oi8HGcOMdbX6IiiHykiEhFMo3Yop4evaRA/a0gKyLSPNNcp7flVldzv2cATZTc5hykeNnZ6wSbq/mx36Qwzgt/f6XK5BnXiMGKBGH75lyDHhNIrxLd2OiPM9wqkp0140UBvwITVzqeIYOD5b/3ngNncynkfUrqpu/uG1uWhvSeHPEeVUf2fs515LksX4aTU/rKMLw9i2c1lyfeAAsFH3aw0OgSwt9JqNXImTJOWxqrjNczUger4ZdHGM/adY44Rbh/RRcZdMpdKk+FUEeG6UTK5WFFCdYTL5sGWbTg+Z7huc2L7TgLLD2h8qtiL98j7EjeABTJdaTigdWqs6PbN93hg7nO0s42LpKtczYuy+VWWpmAV2MBRgxAygZLCqdgaAMRSo+m054H9LYvdADM6DVYwj6xQKSxsrrtFUV53ZiO/SVkpxUGMQftkbp4mzS2YUryJLCAojwAwizUnwhcmPeYDIunKLsIWlgj7Qye6G
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199021)(33656002)(38100700002)(122000001)(7406005)(7416002)(5660300002)(52536014)(30864003)(2906002)(786003)(38070700005)(8676002)(55016003)(86362001)(8936002)(4326008)(66556008)(64756008)(66476007)(66946007)(66446008)(82950400001)(82960400001)(41300700001)(921005)(83380400001)(76116006)(26005)(316002)(54906003)(9686003)(110136005)(8990500004)(6506007)(10290500003)(7696005)(186003)(478600001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9674VDfsr7bZfu2vpHPNe2YfhSNUXTLnE7GQWl0JbD6ebq62P1LqYZnr0StF?=
- =?us-ascii?Q?jVKcRtuQ/idyMvLIB3iKVwMcMNLMEMRO7LABPxNurcyLNbYMAErgNjccodEQ?=
- =?us-ascii?Q?R7eJxJDcVYw51kS5m5KBU/sqJvC8++DC3FYgV3GHGOXAqVD7kukkUpsjzzU6?=
- =?us-ascii?Q?1IJmSWYKDgbUa0mgbSpStJ9fx5P2B7PcLymBWGge5dE7+ugkKqafqQnl7t0o?=
- =?us-ascii?Q?9Gf9RUproRkxBDkhjM9fErjDuiXM8UJqbQ2y0Dy/o6i6m6xqiITYvloBC1tk?=
- =?us-ascii?Q?lFNqlMgqMIhCBaQ67iA5CuVIjgCZNBTEHa8NSD7fO9ybK2QAO0/VkeaZwmPT?=
- =?us-ascii?Q?oGSPswqpgNcybK8gGD/s04T8TdugS98g3Bna7x4e9Ro6FkDr0iM78uDg7jfj?=
- =?us-ascii?Q?+zIH8yLixO0N/xLJOwj9B2HyDFf0kQCJbVQX3t9yg0nFSjsPjiXeZ64lKpiT?=
- =?us-ascii?Q?/OltAvOxuzuYDShsfbCho+q1U3n322BMQsciMMBz2f8by73MR4uSgd90w22F?=
- =?us-ascii?Q?rlvm8GcDVJec/YFZ06vHYt2WcsCwb1q4KruHJ0Akygooefy3/jAjhJZkYkVB?=
- =?us-ascii?Q?8B/SCNS/Ad5miplvnTn5OO78bKqQZn85xX1mz3NJTPoefU9slBO1jioI4C4u?=
- =?us-ascii?Q?Us9RLykiYblOZXzLS7GtkB62mNMAoyyYg/pon13KF8z46kdZgiooxhRhokhK?=
- =?us-ascii?Q?YmLmF65/aN5lu1d+SlFvYB70qjzdc0FABxRwvw1AC355RVl2PUc2ksd5Y5m7?=
- =?us-ascii?Q?YYz4yg/rU79ikvp+D9xDk6NgWyQY4yYrNvsG05qx8T8WbChhhGcy/LdS9kh6?=
- =?us-ascii?Q?lVH70PxPaxxJI4PP/z9H7EcwCeC+k8nquuTfvl/47h+ra0s1uF/P1IPFXuA+?=
- =?us-ascii?Q?RO5hrWDtyZWREWsMmZHwCVkS6oLJ4W12KnWBpICQvbonyLXQZ3bUqhxvGnGH?=
- =?us-ascii?Q?ME1ZVW/fq5+mIGAQRB/CzLR8TSQuFSaOf2SOZQoOZWTCCTT23VeaJxVWbsba?=
- =?us-ascii?Q?CrgP7eAkEvZZiNoZVfSoOHo4DZVO/5xCMRaTVQOhcrF5UVC+LAxbMuOFgkPM?=
- =?us-ascii?Q?2rO4OGvfFfzSigntFHf6RWnqPhERDpzgqs2bzTy4aOxUByTkAzFgsNdteOAM?=
- =?us-ascii?Q?b+zEbJp9zBrOrCPJZghbsZsA8Jmvbw6toNgxpxG1hvh+7OmNmcxGvqy7EYvB?=
- =?us-ascii?Q?dsa8+P6aAPMzWnqQGMHD7/52/YgoW6LznF6xkgXkF/op3cWSYZ0QrMkSnoS4?=
- =?us-ascii?Q?o3unQHn/x+Tp9x1UdDgdWSVpnOrjFWZDXw3o5EiqZhKJw/xj6RjWmLIm5KsK?=
- =?us-ascii?Q?NfzK7lmWO3jUKA4Jo6hY15O/r1l3poKscer0gmdUgkTQV/2JZI+GBJ3aCxAJ?=
- =?us-ascii?Q?IhnXIWSd/dHVX13NihX+FY/BbRdC2eRmks1gWO9JJf5stH55rzG5yX0yJ9+5?=
- =?us-ascii?Q?qvZ8F23gonSg34UQ9TLhofdebmS4XpnNL2D7220bPDVXeaNiTHkwpelO9g6p?=
- =?us-ascii?Q?+RobNrpR/RUmWouvFIDRVAOMbIUEXsYaKi9PHES60Y6nKiRZbLXibhHtmYvM?=
- =?us-ascii?Q?6a9KYavg6PtlhvxFvDEN9J9RY1z8BkoHCUJto/+G2AbUalrT0uzN6fQJJvCv?=
- =?us-ascii?Q?MQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Apr 2023 11:04:33 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E945D1BC0;
+        Wed, 12 Apr 2023 08:04:17 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C6rnVm030182;
+        Wed, 12 Apr 2023 10:03:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=peEAA/ebQrHTgjlKna8ZWpAkVUqDQFKe/Ac48y0zRZk=;
+ b=NMIW0SxMe/Q6UI9FERvyFCzPKrFpVaOnicofo9JEybeSIgEklbh5f+jIFsyjIoWH4L1/
+ tRhyzMwoYUGHQmWfgmVGnYZCkVVVD202CFoVtvdHzE5TN90MMPKbBdCG7HorqDGS8wpq
+ OxU/o70YVm01fMN9TPhtCtDQ4mAlWWWsLwcnFn2rh6qBMcS9enkvIf2Dp/NRKl57Q47H
+ ESIrm3e3NGkcwD+40zXmxhWKBlSfMttsNrLHlP5loiojt9VCJf7AuCR4NJqW01DMBsdG
+ FQODpvxm+wDV/nBpZ9nMpp0eggq1WHWzwTEM0322Dl6iDZ5QWSLjdnQpWFDyDNfGerD/ JQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pu4pq73xg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 10:03:30 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 12 Apr
+ 2023 10:03:28 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 12 Apr 2023 10:03:28 -0500
+Received: from [198.90.238.125] (unknown [198.90.238.125])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0FE1045;
+        Wed, 12 Apr 2023 15:03:28 +0000 (UTC)
+Message-ID: <e3704956-e72c-421c-fd65-b8f17b7e2a5a@opensource.cirrus.com>
+Date:   Wed, 12 Apr 2023 16:03:27 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7a1c72-724d-425a-44e6-08db3b66f156
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 15:02:32.4118
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1wc2NFks/GBFN+uyTFsA4q/jvErmEEhtws/m9bH1mCOBgyYe0o6ihf3OvuoDynff/Bsjznl89ipzzLlgdkrHWtKca1/e5g9wRv+ikAj1WIk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR21MB4016
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V7 1/7] spi: Add stacked and parallel memories support in
+ SPI core
+To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "tudor.ambarus@linaro.org" <tudor.ambarus@linaro.org>,
+        "pratyush@kernel.org" <pratyush@kernel.org>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>
+CC:     "git (AMD-Xilinx)" <git@amd.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+        "vitalyr@opensource.cirrus.com" <vitalyr@opensource.cirrus.com>
+References: <20230406065336.10980-1-amit.kumar-mahapatra@amd.com>
+ <20230406065336.10980-2-amit.kumar-mahapatra@amd.com>
+ <007c01d9688d$d770c670$86525350$@opensource.cirrus.com>
+ <BN7PR12MB2802CF25D5ADA9C8F00FCA0DDC9A9@BN7PR12MB2802.namprd12.prod.outlook.com>
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+In-Reply-To: <BN7PR12MB2802CF25D5ADA9C8F00FCA0DDC9A9@BN7PR12MB2802.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: VMAx6vEUK1AXzQqw2p-dXDEtkKqn1FsI
+X-Proofpoint-ORIG-GUID: VMAx6vEUK1AXzQqw2p-dXDEtkKqn1FsI
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, April 3, 2023 10:44 AM
+Hi,
+
+On 11/04/2023 10:07, Mahapatra, Amit Kumar wrote:
+> Hello Stefan,
 >
+>> -----Original Message-----
+>> From: Stefan Binding <sbinding@opensource.cirrus.com>
+>> Sent: Thursday, April 6, 2023 7:14 PM
+>> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>;
+>> broonie@kernel.org; tudor.ambarus@linaro.org; pratyush@kernel.org;
+>> michael@walle.cc; miquel.raynal@bootlin.com; richard@nod.at;
+>> vigneshr@ti.com
+>> Cc: git (AMD-Xilinx) <git@amd.com>; linux-spi@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; linux-mtd@lists.infradead.org;
+>> nicolas.ferre@microchip.com; alexandre.belloni@bootlin.com;
+>> claudiu.beznea@microchip.com; Simek, Michal <michal.simek@amd.com>;
+>> linux-arm-kernel@lists.infradead.org; amitrkcian2002@gmail.com;
+>> patches@opensource.cirrus.com; vitalyr@opensource.cirrus.com
+>> Subject: RE: [PATCH V7 1/7] spi: Add stacked and parallel memories support
+>> in SPI core
+>>
+>> Hi,
+>>
+>>> -----Original Message-----
+>>> From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+>>> Sent: Thursday, April 6, 2023 7:54 AM
+>>> To: broonie@kernel.org; tudor.ambarus@linaro.org; pratyush@kernel.org;
+>>> michael@walle.cc; miquel.raynal@bootlin.com; richard@nod.at;
+>>> vigneshr@ti.com
+>>> Cc: git@amd.com; sbinding@opensource.cirrus.com; linux-
+>>> spi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>>> mtd@lists.infradead.org; nicolas.ferre@microchip.com;
+>>> alexandre.belloni@bootlin.com; claudiu.beznea@microchip.com;
+>>> michal.simek@amd.com; linux-arm-kernel@lists.infradead.org;
+>>> amitrkcian2002@gmail.com; Amit Kumar Mahapatra <amit.kumar-
+>>> mahapatra@amd.com>
+>>> Subject: [PATCH V7 1/7] spi: Add stacked and parallel memories
+>> support
+>>> in SPI core
+>>>
+>>> For supporting multiple CS the SPI device need to be aware of all
+>> the CS
+>>> values. So, the "chip_select" member in the spi_device structure is
+>> now
+>>> an
+>>> array that holds all the CS values.
+>>>
+>>> spi_device structure now has a "cs_index_mask" member. This acts as
+>> an
+>>> index to the chip_select array. If nth bit of spi->cs_index_mask is
+>> set
+>>> then the driver would assert spi->chip_select[n].
+>>>
+>>> In parallel mode all the chip selects are asserted/de-asserted
+>>> simultaneously and each byte of data is stored in both devices, the
+>> even
+>>> bits in one, the odd bits in the other. The split is automatically
+>> handled
+>>> by the GQSPI controller. The GQSPI controller supports a maximum of
+>>> two flashes connected in parallel mode. A SPI_CONTROLLER_MULTI_CS flag
+>>> bit is added in the spi controntroller flags, through ctlr->flags the
+>>> spi
+>> core
+>>> will make sure that the controller is capable of handling multiple
+>> chip
+>>> selects at once.
+>>>
+>>> For supporting multiple CS via GPIO the cs_gpiod member of the
+>>> spi_device structure is now an array that holds the gpio descriptor
+>>> for each chipselect.
+>>>
+>>> Multi CS support using GPIO is not tested due to unavailability of
+>>> necessary hardware setup.
+>>>
+>>> Multi CS configuration with one native CS and one GPIO CS is not
+>>> supported as this configuration could not be tested due to
+>>> unavailability of necessary hardware setup.
+>> I've tested this chain on a released laptop (HP EliteBook 840 G9) which uses
+>> SPI to interface to 2 amps, one amp uses a native CS and the other uses a
+>> GPIO CS, and I noticed that when using this chain, the second amp no longer
+>> works.
+> Thank you for testing this patch series on GPIO CS setup. As I don't have a
+> GPIO CS setup, is it possible for you debug the failure and share more
+> details/logs where the problem is?
+>
+> Regards,
+> Amit
 
-The patch subject prefix of "x86/hyperv/sev:" doesn't make sense.
-There's no pathname like that in the kernel code.  I think it should just b=
-e
-"x86/sev:".
-=20
-> Enable #HV exception to handle interrupt requests from hypervisor.
->=20
-> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
-> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
-> Change since RFC V3:
->        * Check NMI event when irq is disabled.
->        * Remove redundant variable
-> ---
->  arch/x86/include/asm/mem_encrypt.h |   2 +
->  arch/x86/include/uapi/asm/svm.h    |   4 +
->  arch/x86/kernel/sev.c              | 314 ++++++++++++++++++++++++-----
->  arch/x86/kernel/traps.c            |   2 +
->  4 files changed, 266 insertions(+), 56 deletions(-)
->=20
-> diff --git a/arch/x86/include/asm/mem_encrypt.h
-> b/arch/x86/include/asm/mem_encrypt.h
-> index b7126701574c..9299caeca69f 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -50,6 +50,7 @@ void __init early_set_mem_enc_dec_hypercall(unsigned lo=
-ng
-> vaddr, int npages,
->  void __init mem_encrypt_free_decrypted_mem(void);
->=20
->  void __init sev_es_init_vc_handling(void);
-> +void __init sev_snp_init_hv_handling(void);
->=20
->  #define __bss_decrypted __section(".bss..decrypted")
->=20
-> @@ -73,6 +74,7 @@ static inline void __init sme_encrypt_kernel(struct boo=
-t_params
-> *bp) { }
->  static inline void __init sme_enable(struct boot_params *bp) { }
->=20
->  static inline void sev_es_init_vc_handling(void) { }
-> +static inline void sev_snp_init_hv_handling(void) { }
->=20
->  static inline int __init
->  early_set_memory_decrypted(unsigned long vaddr, unsigned long size) { re=
-turn 0; }
-> diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/=
-svm.h
-> index 80e1df482337..828d624a38cf 100644
-> --- a/arch/x86/include/uapi/asm/svm.h
-> +++ b/arch/x86/include/uapi/asm/svm.h
-> @@ -115,6 +115,10 @@
->  #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
->  #define SVM_VMGEXIT_AP_CREATE			1
->  #define SVM_VMGEXIT_AP_DESTROY			2
-> +#define SVM_VMGEXIT_HV_DOORBELL_PAGE		0x80000014
-> +#define SVM_VMGEXIT_GET_PREFERRED_HV_DOORBELL_PAGE	0
-> +#define SVM_VMGEXIT_SET_HV_DOORBELL_PAGE		1
-> +#define SVM_VMGEXIT_QUERY_HV_DOORBELL_PAGE		2
->  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
->  #define SVM_VMGEXIT_TERM_REQUEST		0x8000fffe
->  #define SVM_VMGEXIT_TERM_REASON(reason_set, reason_code)	\
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 6445f5356c45..7fcb3b548215 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -122,6 +122,152 @@ struct sev_config {
->=20
->  static struct sev_config sev_cfg __read_mostly;
->=20
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state);
-> +static noinstr void __sev_put_ghcb(struct ghcb_state *state);
-> +static int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa);
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb);
-> +
-> +union hv_pending_events {
-> +	u16 events;
-> +	struct {
-> +		u8 vector;
-> +		u8 nmi : 1;
-> +		u8 mc : 1;
-> +		u8 reserved1 : 5;
-> +		u8 no_further_signal : 1;
-> +	};
-> +};
-> +
-> +struct sev_hv_doorbell_page {
-> +	union hv_pending_events pending_events;
-> +	u8 no_eoi_required;
-> +	u8 reserved2[61];
-> +	u8 padding[4032];
-> +};
-> +
-> +struct sev_snp_runtime_data {
-> +	struct sev_hv_doorbell_page hv_doorbell_page;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-> +
-> +static inline u64 sev_es_rd_ghcb_msr(void)
-> +{
-> +	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> +}
-> +
-> +static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> +{
-> +	u32 low, high;
-> +
-> +	low  =3D (u32)(val);
-> +	high =3D (u32)(val >> 32);
-> +
-> +	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +}
-> +
-> +struct sev_hv_doorbell_page *sev_snp_current_doorbell_page(void)
-> +{
-> +	return &this_cpu_read(snp_runtime_data)->hv_doorbell_page;
-> +}
-> +
-> +static u8 sev_hv_pending(void)
-> +{
-> +	return sev_snp_current_doorbell_page()->pending_events.events;
-> +}
-> +
-> +#define sev_hv_pending_nmi	\
-> +		sev_snp_current_doorbell_page()->pending_events.nmi
-> +
-> +static void hv_doorbell_apic_eoi_write(u32 reg, u32 val)
-> +{
-> +	if (xchg(&sev_snp_current_doorbell_page()->no_eoi_required, 0) & 0x1)
-> +		return;
-> +
-> +	BUG_ON(reg !=3D APIC_EOI);
-> +	apic->write(reg, val);
-> +}
-> +
-> +static void do_exc_hv(struct pt_regs *regs)
-> +{
-> +	union hv_pending_events pending_events;
-> +
-> +	while (sev_hv_pending()) {
-> +		pending_events.events =3D xchg(
-> +			&sev_snp_current_doorbell_page()->pending_events.events,
-> +			0);
-> +
-> +		if (pending_events.nmi)
-> +			exc_nmi(regs);
-> +
-> +#ifdef CONFIG_X86_MCE
-> +		if (pending_events.mc)
-> +			exc_machine_check(regs);
-> +#endif
-> +
-> +		if (!pending_events.vector)
-> +			return;
-> +
-> +		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
-> +			/* Exception vectors */
-> +			WARN(1, "exception shouldn't happen\n");
-> +		} else if (pending_events.vector =3D=3D FIRST_EXTERNAL_VECTOR) {
-> +			sysvec_irq_move_cleanup(regs);
-> +		} else if (pending_events.vector =3D=3D IA32_SYSCALL_VECTOR) {
-> +			WARN(1, "syscall shouldn't happen\n");
-> +		} else if (pending_events.vector >=3D FIRST_SYSTEM_VECTOR) {
-> +			switch (pending_events.vector) {
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +			case HYPERV_STIMER0_VECTOR:
-> +				sysvec_hyperv_stimer0(regs);
-> +				break;
-> +			case HYPERVISOR_CALLBACK_VECTOR:
-> +				sysvec_hyperv_callback(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_SMP
-> +			case RESCHEDULE_VECTOR:
-> +				sysvec_reschedule_ipi(regs);
-> +				break;
-> +			case IRQ_MOVE_CLEANUP_VECTOR:
-> +				sysvec_irq_move_cleanup(regs);
-> +				break;
-> +			case REBOOT_VECTOR:
-> +				sysvec_reboot(regs);
-> +				break;
-> +			case CALL_FUNCTION_SINGLE_VECTOR:
-> +				sysvec_call_function_single(regs);
-> +				break;
-> +			case CALL_FUNCTION_VECTOR:
-> +				sysvec_call_function(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_X86_LOCAL_APIC
-> +			case ERROR_APIC_VECTOR:
-> +				sysvec_error_interrupt(regs);
-> +				break;
-> +			case SPURIOUS_APIC_VECTOR:
-> +				sysvec_spurious_apic_interrupt(regs);
-> +				break;
-> +			case LOCAL_TIMER_VECTOR:
-> +				sysvec_apic_timer_interrupt(regs);
-> +				break;
-> +			case X86_PLATFORM_IPI_VECTOR:
-> +				sysvec_x86_platform_ipi(regs);
-> +				break;
-> +#endif
-> +			case 0x0:
-> +				break;
-> +			default:
-> +				panic("Unexpected vector %d\n", vector);
-> +				unreachable();
-> +			}
-> +		} else {
-> +			common_interrupt(regs, pending_events.vector);
-> +		}
-> +	}
-> +}
-> +
->  static __always_inline bool on_vc_stack(struct pt_regs *regs)
->  {
->  	unsigned long sp =3D regs->sp;
-> @@ -179,18 +325,19 @@ void noinstr __sev_es_ist_enter(struct pt_regs *reg=
-s)
->  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], new_ist);
->  }
->=20
-> -static void do_exc_hv(struct pt_regs *regs)
-> -{
-> -	/* Handle #HV exception. */
-> -}
-> -
->  void check_hv_pending(struct pt_regs *regs)
->  {
->  	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
->  		return;
->=20
-> -	if ((regs->flags & X86_EFLAGS_IF) =3D=3D 0)
-> +	/* Handle NMI when irq is disabled. */
-> +	if ((regs->flags & X86_EFLAGS_IF) =3D=3D 0) {
-> +		if (sev_hv_pending_nmi) {
-> +			exc_nmi(regs);
-> +			sev_hv_pending_nmi =3D 0;
-> +		}
->  		return;
-> +	}
->=20
->  	do_exc_hv(regs);
->  }
-> @@ -231,68 +378,35 @@ void noinstr __sev_es_ist_exit(void)
->  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)=
-ist);
->  }
->=20
-> -/*
-> - * Nothing shall interrupt this code path while holding the per-CPU
-> - * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> - *
-> - * Callers must disable local interrupts around it.
-> - */
-> -static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +static bool sev_restricted_injection_enabled(void)
-> +{
-> +	return sev_status & MSR_AMD64_SNP_RESTRICTED_INJ;
-> +}
-> +
-> +void __init sev_snp_init_hv_handling(void)
->  {
->  	struct sev_es_runtime_data *data;
-> +	struct ghcb_state state;
->  	struct ghcb *ghcb;
-> +	unsigned long flags;
->=20
->  	WARN_ON(!irqs_disabled());
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) ||
-> !sev_restricted_injection_enabled())
-> +		return;
->=20
->  	data =3D this_cpu_read(runtime_data);
-> -	ghcb =3D &data->ghcb_page;
-> -
-> -	if (unlikely(data->ghcb_active)) {
-> -		/* GHCB is already in use - save its contents */
-> -
-> -		if (unlikely(data->backup_ghcb_active)) {
-> -			/*
-> -			 * Backup-GHCB is also already in use. There is no way
-> -			 * to continue here so just kill the machine. To make
-> -			 * panic() work, mark GHCBs inactive so that messages
-> -			 * can be printed out.
-> -			 */
-> -			data->ghcb_active        =3D false;
-> -			data->backup_ghcb_active =3D false;
-> -
-> -			instrumentation_begin();
-> -			panic("Unable to handle #VC exception! GHCB and Backup
-> GHCB are already in use");
-> -			instrumentation_end();
-> -		}
-> -
-> -		/* Mark backup_ghcb active before writing to it */
-> -		data->backup_ghcb_active =3D true;
->=20
-> -		state->ghcb =3D &data->backup_ghcb;
-> +	local_irq_save(flags);
->=20
-> -		/* Backup GHCB content */
-> -		*state->ghcb =3D *ghcb;
-> -	} else {
-> -		state->ghcb =3D NULL;
-> -		data->ghcb_active =3D true;
-> -	}
-> +	ghcb =3D __sev_get_ghcb(&state);
->=20
-> -	return ghcb;
-> -}
-> +	sev_snp_setup_hv_doorbell_page(ghcb);
->=20
-> -static inline u64 sev_es_rd_ghcb_msr(void)
-> -{
-> -	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> -}
-> -
-> -static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> -{
-> -	u32 low, high;
-> +	__sev_put_ghcb(&state);
->=20
-> -	low  =3D (u32)(val);
-> -	high =3D (u32)(val >> 32);
-> +	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
->=20
-> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +	local_irq_restore(flags);
->  }
->=20
->  static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
-> @@ -553,6 +667,69 @@ static enum es_result vc_slow_virt_to_phys(struct gh=
-cb
-> *ghcb, struct es_em_ctxt
->  /* Include code shared with pre-decompression boot stage */
->  #include "sev-shared.c"
->=20
-> +/*
-> + * Nothing shall interrupt this code path while holding the per-CPU
-> + * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> + *
-> + * Callers must disable local interrupts around it.
-> + */
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +{
-> +	struct sev_es_runtime_data *data;
-> +	struct ghcb *ghcb;
-> +
-> +	WARN_ON(!irqs_disabled());
-> +
-> +	data =3D this_cpu_read(runtime_data);
-> +	ghcb =3D &data->ghcb_page;
-> +
-> +	if (unlikely(data->ghcb_active)) {
-> +		/* GHCB is already in use - save its contents */
-> +
-> +		if (unlikely(data->backup_ghcb_active)) {
-> +			/*
-> +			 * Backup-GHCB is also already in use. There is no way
-> +			 * to continue here so just kill the machine. To make
-> +			 * panic() work, mark GHCBs inactive so that messages
-> +			 * can be printed out.
-> +			 */
-> +			data->ghcb_active        =3D false;
-> +			data->backup_ghcb_active =3D false;
-> +
-> +			instrumentation_begin();
-> +			panic("Unable to handle #VC exception! GHCB and Backup
-> GHCB are already in use");
-> +			instrumentation_end();
-> +		}
-> +
-> +		/* Mark backup_ghcb active before writing to it */
-> +		data->backup_ghcb_active =3D true;
-> +
-> +		state->ghcb =3D &data->backup_ghcb;
-> +
-> +		/* Backup GHCB content */
-> +		*state->ghcb =3D *ghcb;
-> +	} else {
-> +		state->ghcb =3D NULL;
-> +		data->ghcb_active =3D true;
-> +	}
-> +
-> +	return ghcb;
-> +}
-> +
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb)
-> +{
-> +	u64 pa;
-> +	enum es_result ret;
-> +
-> +	pa =3D __pa(sev_snp_current_doorbell_page());
-> +	vc_ghcb_invalidate(ghcb);
-> +	ret =3D vmgexit_hv_doorbell_page(ghcb,
-> +				       SVM_VMGEXIT_SET_HV_DOORBELL_PAGE,
-> +				       pa);
-> +	if (ret !=3D ES_OK)
-> +		panic("SEV-SNP: failed to set up #HV doorbell page");
-> +}
-> +
->  static noinstr void __sev_put_ghcb(struct ghcb_state *state)
->  {
->  	struct sev_es_runtime_data *data;
-> @@ -1281,6 +1458,7 @@ static void snp_register_per_cpu_ghcb(void)
->  	ghcb =3D &data->ghcb_page;
->=20
->  	snp_register_ghcb_early(__pa(ghcb));
-> +	sev_snp_setup_hv_doorbell_page(ghcb);
->  }
->=20
->  void setup_ghcb(void)
-> @@ -1320,6 +1498,11 @@ void setup_ghcb(void)
->  		snp_register_ghcb_early(__pa(&boot_ghcb_page));
->  }
->=20
-> +int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa)
-> +{
-> +	return sev_es_ghcb_hv_call(ghcb, NULL, SVM_VMGEXIT_HV_DOORBELL_PAGE,
-> op, pa);
-> +}
-> +
->  #ifdef CONFIG_HOTPLUG_CPU
->  static void sev_es_ap_hlt_loop(void)
->  {
-> @@ -1393,6 +1576,7 @@ static void __init alloc_runtime_data(int cpu)
->  static void __init init_ghcb(int cpu)
->  {
->  	struct sev_es_runtime_data *data;
-> +	struct sev_snp_runtime_data *snp_data;
->  	int err;
->=20
->  	data =3D per_cpu(runtime_data, cpu);
-> @@ -1404,6 +1588,19 @@ static void __init init_ghcb(int cpu)
->=20
->  	memset(&data->ghcb_page, 0, sizeof(data->ghcb_page));
->=20
-> +	snp_data =3D memblock_alloc(sizeof(*snp_data), PAGE_SIZE);
-> +	if (!snp_data)
-> +		panic("Can't allocate SEV-SNP runtime data");
-> +
-> +	err =3D early_set_memory_decrypted((unsigned long)&snp_data-
-> >hv_doorbell_page,
-> +					 sizeof(snp_data->hv_doorbell_page));
-> +	if (err)
-> +		panic("Can't map #HV doorbell pages unencrypted");
-> +
-> +	memset(&snp_data->hv_doorbell_page, 0, sizeof(snp_data-
-> >hv_doorbell_page));
-> +
-> +	per_cpu(snp_runtime_data, cpu) =3D snp_data;
-> +
->  	data->ghcb_active =3D false;
->  	data->backup_ghcb_active =3D false;
->  }
-> @@ -2044,7 +2241,12 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
->=20
->  static bool hv_raw_handle_exception(struct pt_regs *regs)
->  {
-> -	return false;
-> +	/* Clear the no_further_signal bit */
-> +	sev_snp_current_doorbell_page()->pending_events.events &=3D 0x7fff;
-> +
-> +	check_hv_pending(regs);
-> +
-> +	return true;
->  }
->=20
->  static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index d29debec8134..1aa6cab2394b 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -1503,5 +1503,7 @@ void __init trap_init(void)
->  	cpu_init_exception_handling();
->  	/* Setup traps as cpu_init() might #GP */
->  	idt_setup_traps();
-> +	sev_snp_init_hv_handling();
-> +
->  	cpu_init();
->  }
-> --
-> 2.25.1
+We are willing and able to debug this failure and share the failure logs.
+The first issue that I see is a kernel crash when trying to set the GPIO CS:
 
+[    2.951658] general protection fault, probably for non-canonical 
+address 0xdead000000000122: 0000 [#1] PREEMPT SMP NOPTI
+[    2.951771] CPU: 9 PID: 379 Comm: systemd-udevd Tainted: G       
+A           6.3.0-rc3+ #30
+[    2.951826] Hardware name: HP /896D, BIOS U70 Ver. 89.33.02 10/29/2021
+[    2.951882] RIP: 0010:gpiod_set_value_cansleep+0x21/0xa0
+[    2.951941] Code: 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 48 85 ff 
+74 3e 55 48 89 e5 41 55 41 89 f5 41 54 49 89 fc 48 81 ff 00 f0 ff ff 77 
+2c <48> 8b 3f 48 85 ff 74 53 48 83 bf 68 03 00 00 00 74 34 44 89 ee 4c
+[    2.952043] RSP: 0018:ffffc008c0deb928 EFLAGS: 00010287
+[    2.952080] RAX: 0000000000000001 RBX: ffffa0a489534c00 RCX: 
+0000000000000000
+[    2.952124] RDX: dead000000000122 RSI: 0000000000000001 RDI: 
+dead000000000122
+[    2.952167] RBP: ffffc008c0deb938 R08: 0000000000000000 R09: 
+ffffc008c0deb868
+[    2.952211] R10: ffffffffffffffff R11: 00000000000000b0 R12: 
+dead000000000122
+[    2.952256] R13: 0000000000000001 R14: 0000000000000000 R15: 
+0000000000000000
+[    2.952299] FS:  00007f7fa5b5b880(0000) GS:ffffa0a81f840000(0000) 
+knlGS:0000000000000000
+[    2.952369] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    2.952407] CR2: 000055d648427100 CR3: 000000010e960003 CR4: 
+0000000000770ee0
+[    2.952451] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[    2.952492] DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 
+0000000000000400
+[    2.952533] PKRU: 55555554
+[    2.952561] Call Trace:
+[    2.952579]  <TASK>
+[    2.952598]  spi_set_cs+0x257/0x4a0
+[    2.952630]  spi_setup+0x1a2/0x500
+[    2.952667]  __spi_add_device+0x88/0x160
+[    2.952710]  spi_add_device+0x60/0x90
+[    2.952738]  smi_spi_probe+0x178/0x370 [serial_multi_instantiate]
+[    2.952792]  smi_probe+0xcf/0x110 [serial_multi_instantiate]
+[    2.952854]  platform_probe+0x42/0xb0
+[    2.952885]  really_probe+0x1b2/0x420
+[    2.952914]  __driver_probe_device+0x7e/0x180
+[    2.952947]  driver_probe_device+0x23/0xa0
+[    2.952993]  __driver_attach+0xe4/0x1e0
+[    2.953021]  ? __pfx___driver_attach+0x10/0x10
+[    2.953061]  bus_for_each_dev+0x7a/0xd0
+[    2.953088]  driver_attach+0x1e/0x30
+[    2.953123]  bus_add_driver+0x11c/0x220
+[    2.953150]  driver_register+0x64/0x130
+[    2.953174]  ? __pfx_init_module+0x10/0x10 [serial_multi_instantiate]
+[    2.953221]  __platform_driver_register+0x1e/0x30
+[    2.953251]  smi_driver_init+0x1c/0xff0 [serial_multi_instantiate]
+[    2.953310]  do_one_initcall+0x46/0x220
+[    2.953339]  ? kmalloc_trace+0x2a/0xa0
+[    2.953375]  do_init_module+0x52/0x220
+[    2.953411]  load_module+0x223c/0x2460
+[    2.953450]  __do_sys_finit_module+0xc8/0x140
+[    2.953479]  ? __do_sys_finit_module+0xc8/0x140
+[    2.953510]  __x64_sys_finit_module+0x18/0x20
+[    2.953538]  do_syscall_64+0x38/0x90
+[    2.953574]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[    2.953606] RIP: 0033:0x7f7fa5d7476d
+[    2.953639] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d f3 36 0d 00 f7 d8 64 89 01 48
+[    2.953739] RSP: 002b:00007fff1f8dd3b8 EFLAGS: 00000246 ORIG_RAX: 
+0000000000000139
+[    2.956833] RAX: ffffffffffffffda RBX: 000055d648654ab0 RCX: 
+00007f7fa5d7476d
+[    2.959202] RDX: 0000000000000000 RSI: 00007f7fa5c54ded RDI: 
+0000000000000006
+[    2.961542] RBP: 0000000000020000 R08: 0000000000000000 R09: 
+0000000000000000
+[    2.964312] R10: 0000000000000006 R11: 0000000000000246 R12: 
+00007f7fa5c54ded
+[    2.966694] R13: 0000000000000000 R14: 000055d6483f41a0 R15: 
+000055d648654ab0
+[    2.967668] resource: resource sanity check: requesting [mem 
+0x00000000fedc0000-0x00000000fedcffff], which spans more than pnp 00:04 
+[mem 0xfedc0000-0xfedc7fff]
+[    2.968998]  </TASK>
+[    2.971615] caller igen6_probe+0x178/0x8e0 [igen6_edac] mapping 
+multiple BARs
+[    2.975014] Modules linked in: igen6_edac(+) fjes(-) 
+serial_multi_instantiate(+) int3403_thermal sch_fq_codel 
+int340x_thermal_zone int3400_thermal intel_hid acpi_thermal_rel acpi_tad 
+sparse_keymap acpi_pad mac_hid msr parport_pc ppdev lp parport drm 
+ramoops reed_solomon efi_pstore ip_tables x_tables autofs4 
+spi_pxa2xx_platform dw_dmac dw_dmac_core nvme intel_lpss_pci intel_lpss 
+crc32_pclmul thunderbolt i2c_i801 xhci_pci idma64 nvme_core i2c_smbus 
+virt_dma xhci_pci_renesas video wmi pinctrl_tigerlake
+[    2.987901] ---[ end trace 0000000000000000 ]---
+[    3.157030] RIP: 0010:gpiod_set_value_cansleep+0x21/0xa0
+[    3.159077] Code: 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 48 85 ff 
+74 3e 55 48 89 e5 41 55 41 89 f5 41 54 49 89 fc 48 81 ff 00 f0 ff ff 77 
+2c <48> 8b 3f 48 85 ff 74 53 48 83 bf 68 03 00 00 00 74 34 44 89 ee 4c
+[    3.161461] RSP: 0018:ffffc008c0deb928 EFLAGS: 00010287
+[    3.164005] RAX: 0000000000000001 RBX: ffffa0a489534c00 RCX: 
+0000000000000000
+[    3.166354] RDX: dead000000000122 RSI: 0000000000000001 RDI: 
+dead000000000122
+[    3.168499] RBP: ffffc008c0deb938 R08: 0000000000000000 R09: 
+ffffc008c0deb868
+[    3.170609] R10: ffffffffffffffff R11: 00000000000000b0 R12: 
+dead000000000122
+[    3.172893] R13: 0000000000000001 R14: 0000000000000000 R15: 
+0000000000000000
+[    3.175335] FS:  00007f7fa5b5b880(0000) GS:ffffa0a81f840000(0000) 
+knlGS:0000000000000000
+[    3.180434] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.183356] CR2: 000055d648427100 CR3: 000000010e960003 CR4: 
+0000000000770ee0
+[    3.185107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[    3.186840] DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 
+0000000000000400
+[    3.188647] PKRU: 55555554
+
+Thanks,
+
+Stefan
+
+>
+>> Thanks,
+>> Stefan Binding
+>>
+>>> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-
+>> mahapatra@amd.com>
+>>> ---
+>>>   drivers/spi/spi.c       | 226
+>> ++++++++++++++++++++++++++++------------
+>>>   include/linux/spi/spi.h |  32 ++++--
+>>>   2 files changed, 183 insertions(+), 75 deletions(-)
+>>>
+>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
+>>> 9036d7a50674..04d7322170c4 100644
+>>> --- a/drivers/spi/spi.c
+>>> +++ b/drivers/spi/spi.c
+>>> @@ -612,10 +612,24 @@ static int spi_dev_check(struct device *dev,
+>>> void *data)  {
+>>>   	struct spi_device *spi = to_spi_device(dev);
+>>>   	struct spi_device *new_spi = data;
+>>> +	int idx, nw_idx;
+>>>
+>>> -	if (spi->controller == new_spi->controller &&
+>>> -	    spi_get_chipselect(spi, 0) == spi_get_chipselect(new_spi,
+>> 0))
+>>> -		return -EBUSY;
+>>> +	if (spi->controller == new_spi->controller) {
+>>> +		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
+>>> +			for (nw_idx = 0; nw_idx < SPI_CS_CNT_MAX;
+>>> nw_idx++) {
+>>> +				if ((idx != 0 &&
+>> !spi_get_chipselect(spi,
+>>> idx)) ||
+>>> +				    (nw_idx != 0 &&
+>>> !spi_get_chipselect(spi, nw_idx))) {
+>>> +					continue;
+>>> +				} else if (spi_get_chipselect(spi,
+>> idx) ==
+>>> +				    spi_get_chipselect(new_spi,
+>> nw_idx))
+>>> {
+>>> +					dev_err(dev,
+>>> +						"chipselect %d already
+>>> in use\n",
+>>> +
+>>> 	spi_get_chipselect(new_spi, nw_idx));
+>>> +					return -EBUSY;
+>>> +				}
+>>> +			}
+>>> +		}
+>>> +	}
+>>>   	return 0;
+>>>   }
+>>>
+>>> @@ -629,7 +643,7 @@ static int __spi_add_device(struct spi_device
+>>> *spi)
+>>>   {
+>>>   	struct spi_controller *ctlr = spi->controller;
+>>>   	struct device *dev = ctlr->dev.parent;
+>>> -	int status;
+>>> +	int status, idx;
+>>>
+>>>   	/*
+>>>   	 * We need to make sure there's no other device with this @@ -638,8
+>>> +652,6 @@ static int __spi_add_device(struct spi_device
+>>> *spi)
+>>>   	 */
+>>>   	status = bus_for_each_dev(&spi_bus_type, NULL, spi,
+>> spi_dev_check);
+>>>   	if (status) {
+>>> -		dev_err(dev, "chipselect %d already in use\n",
+>>> -				spi_get_chipselect(spi, 0));
+>>>   		return status;
+>>>   	}
+>>>
+>>> @@ -649,8 +661,10 @@ static int __spi_add_device(struct spi_device
+>>> *spi)
+>>>   		return -ENODEV;
+>>>   	}
+>>>
+>>> -	if (ctlr->cs_gpiods)
+>>> -		spi_set_csgpiod(spi, 0, ctlr-
+>>>> cs_gpiods[spi_get_chipselect(spi, 0)]);
+>>> +	if (ctlr->cs_gpiods) {
+>>> +		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++)
+>>> +			spi_set_csgpiod(spi, idx, ctlr-
+>>>> cs_gpiods[spi_get_chipselect(spi, idx)]);
+>>> +	}
+>>>
+>>>   	/*
+>>>   	 * Drivers may modify this initial i/o setup, but will @@ -690,13
+>>> +704,15 @@ int spi_add_device(struct spi_device *spi)  {
+>>>   	struct spi_controller *ctlr = spi->controller;
+>>>   	struct device *dev = ctlr->dev.parent;
+>>> -	int status;
+>>> +	int status, idx;
+>>>
+>>> -	/* Chipselects are numbered 0..max; validate. */
+>>> -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
+>>> -		dev_err(dev, "cs%d >= max %d\n",
+>>> spi_get_chipselect(spi, 0),
+>>> -			ctlr->num_chipselect);
+>>> -		return -EINVAL;
+>>> +	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
+>>> +		/* Chipselects are numbered 0..max; validate. */
+>>> +		if (spi_get_chipselect(spi, idx) >=
+>> ctlr->num_chipselect) {
+>>> +			dev_err(dev, "cs%d >= max %d\n",
+>>> spi_get_chipselect(spi, idx),
+>>> +				ctlr->num_chipselect);
+>>> +			return -EINVAL;
+>>> +		}
+>>>   	}
+>>>
+>>>   	/* Set the bus ID string */
+>>> @@ -713,12 +729,15 @@ static int spi_add_device_locked(struct
+>>> spi_device *spi)  {
+>>>   	struct spi_controller *ctlr = spi->controller;
+>>>   	struct device *dev = ctlr->dev.parent;
+>>> +	int idx;
+>>>
+>>> -	/* Chipselects are numbered 0..max; validate. */
+>>> -	if (spi_get_chipselect(spi, 0) >= ctlr->num_chipselect) {
+>>> -		dev_err(dev, "cs%d >= max %d\n",
+>>> spi_get_chipselect(spi, 0),
+>>> -			ctlr->num_chipselect);
+>>> -		return -EINVAL;
+>>> +	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
+>>> +		/* Chipselects are numbered 0..max; validate. */
+>>> +		if (spi_get_chipselect(spi, idx) >=
+>> ctlr->num_chipselect) {
+>>> +			dev_err(dev, "cs%d >= max %d\n",
+>>> spi_get_chipselect(spi, idx),
+>>> +				ctlr->num_chipselect);
+>>> +			return -EINVAL;
+>>> +		}
+>>>   	}
+>>>
+>>>   	/* Set the bus ID string */
+>>> @@ -966,58 +985,118 @@ static void spi_res_release(struct
+>>> spi_controller *ctlr, struct spi_message *mes  static void
+>>> spi_set_cs(struct spi_device *spi, bool enable, bool
+>> force)
+>>>   {
+>>>   	bool activate = enable;
+>>> +	u32 cs_num = __ffs(spi->cs_index_mask);
+>>> +	int idx;
+>>>
+>>>   	/*
+>>> -	 * Avoid calling into the driver (or doing delays) if the chip
+>> select
+>>> -	 * isn't actually changing from the last time this was called.
+>>> +	 * In parallel mode all the chip selects are
+>> asserted/de-asserted
+>>> +	 * at once
+>>>   	 */
+>>> -	if (!force && ((enable && spi->controller->last_cs ==
+>>> spi_get_chipselect(spi, 0)) ||
+>>> -		       (!enable && spi->controller->last_cs !=
+>>> spi_get_chipselect(spi, 0))) &&
+>>> -	    (spi->controller->last_cs_mode_high == (spi->mode &
+>>> SPI_CS_HIGH)))
+>>> -		return;
+>>> -
+>>> -	trace_spi_set_cs(spi, activate);
+>>> -
+>>> -	spi->controller->last_cs = enable ? spi_get_chipselect(spi, 0)
+>> : -1;
+>>> -	spi->controller->last_cs_mode_high = spi->mode &
+>>> SPI_CS_HIGH;
+>>> -
+>>> -	if ((spi_get_csgpiod(spi, 0) ||
+>> !spi->controller->set_cs_timing)
+>>> && !activate)
+>>> -		spi_delay_exec(&spi->cs_hold, NULL);
+>>> -
+>>> -	if (spi->mode & SPI_CS_HIGH)
+>>> -		enable = !enable;
+>>> +	if ((spi->cs_index_mask & SPI_PARALLEL_CS_MASK) ==
+>>> SPI_PARALLEL_CS_MASK) {
+>>> +		spi->controller->last_cs_mode_high = spi->mode &
+>>> SPI_CS_HIGH;
+>>> +
+>>> +		if ((spi_get_csgpiod(spi, 0) || !spi->controller-
+>>>> set_cs_timing) && !activate)
+>>> +			spi_delay_exec(&spi->cs_hold, NULL);
+>>> +
+>>> +		if (spi->mode & SPI_CS_HIGH)
+>>> +			enable = !enable;
+>>> +
+>>> +		if (spi_get_csgpiod(spi, 0) && spi_get_csgpiod(spi,
+>> 1)) {
+>>> +			if (!(spi->mode & SPI_NO_CS)) {
+>>> +				/*
+>>> +				 * Historically ACPI has no means of
+>> the
+>>> GPIO polarity and
+>>> +				 * thus the SPISerialBus() resource
+>>> defines it on the per-chip
+>>> +				 * basis. In order to avoid a chain of
+>>> negations, the GPIO
+>>> +				 * polarity is considered being Active
+>>> High. Even for the cases
+>>> +				 * when _DSD() is involved (in the
+>>> updated versions of ACPI)
+>>> +				 * the GPIO CS polarity must be
+>> defined
+>>> Active High to avoid
+>>> +				 * ambiguity. That's why we use
+>> enable,
+>>> that takes SPI_CS_HIGH
+>>> +				 * into account.
+>>> +				 */
+>>> +				if (has_acpi_companion(&spi->dev)) {
+>>> +					for (idx = 0; idx <
+>>> SPI_CS_CNT_MAX; idx++)
+>>> +
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, idx),
+>>> +
+>>> !enable);
+>>> +				} else {
+>>> +					for (idx = 0; idx <
+>>> SPI_CS_CNT_MAX; idx++)
+>>> +						/* Polarity handled by
+>>> GPIO library */
+>>> +
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, idx),
+>>> +
+>>> activate);
+>>> +				}
+>>> +			}
+>>> +			/* Some SPI masters need both GPIO CS &
+>>> slave_select */
+>>> +			if ((spi->controller->flags &
+>>> SPI_MASTER_GPIO_SS) &&
+>>> +			    spi->controller->set_cs)
+>>> +				spi->controller->set_cs(spi, !enable);
+>>> +		} else if (spi->controller->set_cs) {
+>>> +			spi->controller->set_cs(spi, !enable);
+>>> +		}
+>>>
+>>> -	if (spi_get_csgpiod(spi, 0)) {
+>>> -		if (!(spi->mode & SPI_NO_CS)) {
+>>> -			/*
+>>> -			 * Historically ACPI has no means of the GPIO
+>>> polarity and
+>>> -			 * thus the SPISerialBus() resource defines it
+>> on
+>>> the per-chip
+>>> -			 * basis. In order to avoid a chain of
+>> negations,
+>>> the GPIO
+>>> -			 * polarity is considered being Active High.
+>> Even
+>>> for the cases
+>>> -			 * when _DSD() is involved (in the updated
+>>> versions of ACPI)
+>>> -			 * the GPIO CS polarity must be defined Active
+>>> High to avoid
+>>> -			 * ambiguity. That's why we use enable, that
+>>> takes SPI_CS_HIGH
+>>> -			 * into account.
+>>> -			 */
+>>> -			if (has_acpi_companion(&spi->dev))
+>>> -
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, 0), !enable);
+>>> +		if (spi_get_csgpiod(spi, 0) || spi_get_csgpiod(spi, 1)
+>> ||
+>>> +		    !spi->controller->set_cs_timing) {
+>>> +			if (activate)
+>>> +				spi_delay_exec(&spi->cs_setup, NULL);
+>>>   			else
+>>> -				/* Polarity handled by GPIO library */
+>>> -
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, 0), activate);
+>>> +				spi_delay_exec(&spi->cs_inactive,
+>>> NULL);
+>>>   		}
+>>> -		/* Some SPI masters need both GPIO CS & slave_select
+>>> */
+>>> -		if ((spi->controller->flags & SPI_MASTER_GPIO_SS) &&
+>>> -		    spi->controller->set_cs)
+>>> +	} else {
+>>> +		/*
+>>> +		 * Avoid calling into the driver (or doing delays) if
+>> the
+>>> chip select
+>>> +		 * isn't actually changing from the last time this was
+>>> called.
+>>> +		 */
+>>> +		if (!force && ((enable && spi->controller->last_cs ==
+>>> +				spi_get_chipselect(spi, cs_num)) ||
+>>> +				(!enable && spi->controller->last_cs
+>> !=
+>>> +				 spi_get_chipselect(spi, cs_num))) &&
+>>> +		    (spi->controller->last_cs_mode_high ==
+>>> +		     (spi->mode & SPI_CS_HIGH)))
+>>> +			return;
+>>> +
+>>> +		trace_spi_set_cs(spi, activate);
+>>> +
+>>> +		spi->controller->last_cs = enable ?
+>>> spi_get_chipselect(spi, cs_num) : -1;
+>>> +		spi->controller->last_cs_mode_high = spi->mode &
+>>> SPI_CS_HIGH;
+>>> +
+>>> +		if ((spi_get_csgpiod(spi, cs_num) || !spi->controller-
+>>>> set_cs_timing) && !activate)
+>>> +			spi_delay_exec(&spi->cs_hold, NULL);
+>>> +
+>>> +		if (spi->mode & SPI_CS_HIGH)
+>>> +			enable = !enable;
+>>> +
+>>> +		if (spi_get_csgpiod(spi, cs_num)) {
+>>> +			if (!(spi->mode & SPI_NO_CS)) {
+>>> +				/*
+>>> +				 * Historically ACPI has no means of
+>> the
+>>> GPIO polarity and
+>>> +				 * thus the SPISerialBus() resource
+>>> defines it on the per-chip
+>>> +				 * basis. In order to avoid a chain of
+>>> negations, the GPIO
+>>> +				 * polarity is considered being Active
+>>> High. Even for the cases
+>>> +				 * when _DSD() is involved (in the
+>>> updated versions of ACPI)
+>>> +				 * the GPIO CS polarity must be
+>> defined
+>>> Active High to avoid
+>>> +				 * ambiguity. That's why we use
+>> enable,
+>>> that takes SPI_CS_HIGH
+>>> +				 * into account.
+>>> +				 */
+>>> +				if (has_acpi_companion(&spi->dev))
+>>> +
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, cs_num),
+>>> +
+>>> !enable);
+>>> +				else
+>>> +					/* Polarity handled by GPIO
+>>> library */
+>>> +
+>>> 	gpiod_set_value_cansleep(spi_get_csgpiod(spi, cs_num),
+>>> +
+>>> activate);
+>>> +			}
+>>> +			/* Some SPI masters need both GPIO CS &
+>>> slave_select */
+>>> +			if ((spi->controller->flags &
+>>> SPI_MASTER_GPIO_SS) &&
+>>> +			    spi->controller->set_cs)
+>>> +				spi->controller->set_cs(spi, !enable);
+>>> +		} else if (spi->controller->set_cs) {
+>>>   			spi->controller->set_cs(spi, !enable);
+>>> -	} else if (spi->controller->set_cs) {
+>>> -		spi->controller->set_cs(spi, !enable);
+>>> -	}
+>>> +		}
+>>>
+>>> -	if (spi_get_csgpiod(spi, 0) ||
+>> !spi->controller->set_cs_timing) {
+>>> -		if (activate)
+>>> -			spi_delay_exec(&spi->cs_setup, NULL);
+>>> -		else
+>>> -			spi_delay_exec(&spi->cs_inactive, NULL);
+>>> +		if (spi_get_csgpiod(spi, cs_num) || !spi->controller-
+>>>> set_cs_timing) {
+>>> +			if (activate)
+>>> +				spi_delay_exec(&spi->cs_setup, NULL);
+>>> +			else
+>>> +				spi_delay_exec(&spi->cs_inactive,
+>>> NULL);
+>>> +		}
+>>>   	}
+>>>   }
+>>>
+>>> @@ -2246,8 +2325,8 @@ static void of_spi_parse_dt_cs_delay(struct
+>>> device_node *nc,  static int of_spi_parse_dt(struct spi_controller
+>>> *ctlr, struct
+>> spi_device
+>>> *spi,
+>>>   			   struct device_node *nc)
+>>>   {
+>>> -	u32 value;
+>>> -	int rc;
+>>> +	u32 value, cs[SPI_CS_CNT_MAX] = {0};
+>>> +	int rc, idx;
+>>>
+>>>   	/* Mode (clock phase/polarity/etc.) */
+>>>   	if (of_property_read_bool(nc, "spi-cpha")) @@ -2320,13 +2399,21
+>> @@
+>>> static int of_spi_parse_dt(struct spi_controller *ctlr, struct
+>>> spi_device *spi,
+>>>   	}
+>>>
+>>>   	/* Device address */
+>>> -	rc = of_property_read_u32(nc, "reg", &value);
+>>> -	if (rc) {
+>>> +	rc = of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,
+>>> +						 SPI_CS_CNT_MAX);
+>>> +	if (rc < 0 || rc > ctlr->num_chipselect) {
+>>>   		dev_err(&ctlr->dev, "%pOF has no valid 'reg' property
+>> (%d)\n",
+>>>   			nc, rc);
+>>>   		return rc;
+>>> +	} else if ((of_property_read_bool(nc, "parallel-memories")) &&
+>>> +		   (!(ctlr->flags & SPI_CONTROLLER_MULTI_CS))) {
+>>> +		dev_err(&ctlr->dev, "SPI controller doesn't support
+>> multi
+>>> CS\n");
+>>> +		return -EINVAL;
+>>>   	}
+>>> -	spi_set_chipselect(spi, 0, value);
+>>> +	for (idx = 0; idx < rc; idx++)
+>>> +		spi_set_chipselect(spi, idx, cs[idx]);
+>>> +	/* By default set the spi->cs_index_mask as 1 */
+>>> +	spi->cs_index_mask = 0x01;
+>>>
+>>>   	/* Device speed */
+>>>   	if (!of_property_read_u32(nc, "spi-max-frequency", &value)) @@
+>>> -3907,7 +3994,8 @@ static int __spi_validate(struct spi_device *spi,
+>>> struct spi_message *message)
+>>>   	 * cs_change is set for each transfer.
+>>>   	 */
+>>>   	if ((spi->mode & SPI_CS_WORD) && (!(ctlr->mode_bits &
+>>> SPI_CS_WORD) ||
+>>> -					  spi_get_csgpiod(spi, 0))) {
+>>> +					  spi_get_csgpiod(spi, 0) ||
+>>> +					  spi_get_csgpiod(spi, 1))) {
+>>>   		size_t maxsize;
+>>>   		int ret;
+>>>
+>>> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h index
+>>> 873ced6ae4ca..6453b246e0af 100644
+>>> --- a/include/linux/spi/spi.h
+>>> +++ b/include/linux/spi/spi.h
+>>> @@ -19,6 +19,11 @@
+>>>   #include <linux/acpi.h>
+>>>   #include <linux/u64_stats_sync.h>
+>>>
+>>> +/* Max no. of CS supported per spi device */ #define SPI_CS_CNT_MAX 2
+>>> +
+>>> +/* chip select mask */
+>>> +#define SPI_PARALLEL_CS_MASK	(BIT(0) | BIT(1))
+>>>   struct dma_chan;
+>>>   struct software_node;
+>>>   struct ptp_system_timestamp;
+>>> @@ -166,6 +171,7 @@ extern void
+>>> spi_transfer_cs_change_delay_exec(struct spi_message *msg,
+>>>    *	deasserted. If @cs_change_delay is used from @spi_transfer,
+>>> then the
+>>>    *	two delays will be added up.
+>>>    * @pcpu_statistics: statistics for the spi_device
+>>> + * @cs_index_mask: Bit mask of the active chipselect(s) in the
+>>> chipselect array
+>>>    *
+>>>    * A @spi_device is used to interchange data between an SPI slave
+>>>    * (usually a discrete chip) and CPU memory.
+>>> @@ -181,7 +187,7 @@ struct spi_device {
+>>>   	struct spi_controller	*controller;
+>>>   	struct spi_controller	*master;	/* Compatibility layer
+>> */
+>>>   	u32			max_speed_hz;
+>>> -	u8			chip_select;
+>>> +	u8			chip_select[SPI_CS_CNT_MAX];
+>>>   	u8			bits_per_word;
+>>>   	bool			rt;
+>>>   #define SPI_NO_TX	BIT(31)		/* No transmit wire */
+>>> @@ -202,7 +208,7 @@ struct spi_device {
+>>>   	void			*controller_data;
+>>>   	char			modalias[SPI_NAME_SIZE];
+>>>   	const char		*driver_override;
+>>> -	struct gpio_desc	*cs_gpiod;	/* Chip select gpio
+>> desc
+>>> */
+>>> +	struct gpio_desc	*cs_gpiod[SPI_CS_CNT_MAX];	/*
+>> Chip
+>>> select gpio desc */
+>>>   	struct spi_delay	word_delay; /* Inter-word delay */
+>>>   	/* CS delays */
+>>>   	struct spi_delay	cs_setup;
+>>> @@ -212,6 +218,13 @@ struct spi_device {
+>>>   	/* The statistics */
+>>>   	struct spi_statistics __percpu	*pcpu_statistics;
+>>>
+>>> +	/* Bit mask of the chipselect(s) that the driver need to use
+>> from
+>>> +	 * the chipselect array.When the controller is capable to
+>> handle
+>>> +	 * multiple chip selects & memories are connected in parallel
+>>> +	 * then more than one bit need to be set in cs_index_mask.
+>>> +	 */
+>>> +	u32			cs_index_mask : SPI_CS_CNT_MAX;
+>>> +
+>>>   	/*
+>>>   	 * likely need more hooks for more protocol options affecting how
+>>>   	 * the controller talks to each chip, like:
+>>> @@ -268,22 +281,22 @@ static inline void *spi_get_drvdata(const struct
+>>> spi_device *spi)
+>>>
+>>>   static inline u8 spi_get_chipselect(const struct spi_device *spi,
+>> u8 idx)
+>>>   {
+>>> -	return spi->chip_select;
+>>> +	return spi->chip_select[idx];
+>>>   }
+>>>
+>>>   static inline void spi_set_chipselect(struct spi_device *spi, u8
+>> idx, u8
+>>> chipselect)
+>>>   {
+>>> -	spi->chip_select = chipselect;
+>>> +	spi->chip_select[idx] = chipselect;
+>>>   }
+>>>
+>>>   static inline struct gpio_desc *spi_get_csgpiod(const struct
+>> spi_device
+>>> *spi, u8 idx)
+>>>   {
+>>> -	return spi->cs_gpiod;
+>>> +	return spi->cs_gpiod[idx];
+>>>   }
+>>>
+>>>   static inline void spi_set_csgpiod(struct spi_device *spi, u8 idx,
+>> struct
+>>> gpio_desc *csgpiod)
+>>>   {
+>>> -	spi->cs_gpiod = csgpiod;
+>>> +	spi->cs_gpiod[idx] = csgpiod;
+>>>   }
+>>>
+>>>   /**
+>>> @@ -388,6 +401,8 @@ extern struct spi_device
+>>> *spi_new_ancillary_device(struct spi_device *spi, u8 ch
+>>>    * @bus_lock_spinlock: spinlock for SPI bus locking
+>>>    * @bus_lock_mutex: mutex for exclusion of multiple callers
+>>>    * @bus_lock_flag: indicates that the SPI bus is locked for
+>> exclusive use
+>>> + * @multi_cs_cap: indicates that the SPI Controller can
+>> assert/de-assert
+>>> + *	more than one chip select at once.
+>>>    * @setup: updates the device mode and clocking records used by a
+>>>    *	device's SPI controller; protocol code may call this.  This
+>>>    *	must fail if an unrecognized or unsupported mode is requested.
+>>> @@ -554,6 +569,11 @@ struct spi_controller {
+>>>   #define SPI_CONTROLLER_MUST_TX		BIT(4)	/* Requires tx
+>>> */
+>>>
+>>>   #define SPI_MASTER_GPIO_SS		BIT(5)	/* GPIO CS must
+>> select
+>>> slave */
+>>> +	/*
+>>> +	 * The spi-controller has multi chip select capability and can
+>>> +	 * assert/de-assert more than one chip select at once.
+>>> +	 */
+>>> +#define SPI_CONTROLLER_MULTI_CS		BIT(6)
+>>>
+>>>   	/* Flag indicating if the allocation of this struct is devres-
+>>> managed */
+>>>   	bool			devm_allocated;
+>>> --
+>>> 2.17.1
