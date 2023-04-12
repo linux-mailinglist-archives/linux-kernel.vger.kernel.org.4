@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629F76DF3FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376B56DF40B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Apr 2023 13:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjDLLoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Apr 2023 07:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S229840AbjDLLpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Apr 2023 07:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjDLLoT (ORCPT
+        with ESMTP id S229492AbjDLLpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Apr 2023 07:44:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43C661AC;
-        Wed, 12 Apr 2023 04:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+6YsTkN/VzKPkSPgi2ZGWTjCgSAEzfaFQ+F263UxWaU=; b=abopWZ9KoHUCraZKggm31zSdEW
-        burOcAVmE5Tajg5pq/7c+bWr1uUzUZ/olnv9YWZhhP/VelOkbQiLT0AzyzfosFaCnymv+ATaI3AV8
-        j5truGbCMdaFHBNrkTYxHi86AcsN/bb7HTXHJJOc+TuImvIXDZh3eYEHWelV58E/4nBOf6Qbss4aa
-        luZbGiOmDgNTeeUT9D9z58HgIABJwJFQPy/wxG0ZZ1acimn+KVT171gfsFS6hVwwpfAzwuy0AacMg
-        eRKuLCoAebheTmOpzKuQMDTu+z8Vrbypq9zUpKjEFCTbmx1DahZFudcbOq/UIu6T6s0/OclrzqShY
-        aZ3MgbEQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pmYtO-006pO5-7a; Wed, 12 Apr 2023 11:44:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BF8403002A6;
-        Wed, 12 Apr 2023 13:44:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C84212CB2B462; Wed, 12 Apr 2023 13:44:00 +0200 (CEST)
-Date:   Wed, 12 Apr 2023 13:44:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the block tree
-Message-ID: <20230412114400.GB628377@hirez.programming.kicks-ass.net>
-References: <20230327120017.6bb826d7@canb.auug.org.au>
- <20230327162630.wmxpycxhllt4clpt@treble>
- <20230328104719.65133586@canb.auug.org.au>
- <20230412073416.73a8ea1a@canb.auug.org.au>
- <20230411215518.u2fgi7napfcwyuce@treble>
- <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
- <20230412001400.yraku5fwsjdchxvk@treble>
+        Wed, 12 Apr 2023 07:45:38 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA3589C;
+        Wed, 12 Apr 2023 04:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TGkvq
+        8vP47zhOGd0OAIzfEiajGPLc3JGihR2TortqD0=; b=BUp0DsFhPg2iBN8toXe1s
+        SSEcW3YfODlm+dZzQCHC973cT0VCTBJuXN3kRhs5Hd8cvDEz/RRMFs9Bv9weUXGP
+        P897N5Rxl5a9lCWLITAR1HYsonEn7bB1EkjM4MIu+moQ4c7D9PLfbxsQsQJfGfGC
+        Pic8M9T2hI5A1b/ZPOEC+M=
+Received: from VM-0-27-ubuntu.. (unknown [43.134.191.38])
+        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wA3K8mKmTZkyjvwBA--.16313S2;
+        Wed, 12 Apr 2023 19:44:12 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH net] wwan: core: add print for wwan port attach/disconnect
+Date:   Wed, 12 Apr 2023 19:44:02 +0800
+Message-Id: <20230412114402.1119956-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412001400.yraku5fwsjdchxvk@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wA3K8mKmTZkyjvwBA--.16313S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtrWrGFyUXw4DZF1ktw48tFb_yoWkKrgE9w
+        n8ZaykWw4UGFWxtryaqF13ArWS9w4IqFWkJr4FqFZ3Zr98XryfW34fZanrKw1vva15Zry7
+        Wr1DKF4vv34rGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKPfHUUUUUU==
+X-Originating-IP: [43.134.191.38]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNQ9PZGI0cwvb6QAAsN
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 05:14:00PM -0700, Josh Poimboeuf wrote:
+Refer to USB serial device or net device, there is notice to
+let end user know the status of device, like attached or
+disconnected. Add attach/disconnect print for wwan device as
+well. This change works for MHI device and USB device.
 
-> Peter, what do you think, should we make track uaccess state across
-> function boundaries?
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/wwan/wwan_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-So IIRC the goal was to explicitly dis-allow that. You want minimal code
-executed with STAC and hence disallow calling stuff.
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 2e1c01cf00a9..d3ac6c5b0b26 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -492,6 +492,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+ 	if (err)
+ 		goto error_put_device;
+ 
++	dev_info(&wwandev->dev, "%s converter now attached to %s\n",
++		 wwan_port_dev_type.name, port->dev.kobj.name);
+ 	return port;
+ 
+ error_put_device:
+@@ -517,6 +519,9 @@ void wwan_remove_port(struct wwan_port *port)
+ 
+ 	skb_queue_purge(&port->rxq);
+ 	dev_set_drvdata(&port->dev, NULL);
++
++	dev_info(&wwandev->dev, "%s converter now disconnected from %s\n",
++		 wwan_port_dev_type.name, port->dev.kobj.name);
+ 	device_unregister(&port->dev);
+ 
+ 	/* Release related wwan device */
+-- 
+2.34.1
+
